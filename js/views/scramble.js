@@ -47,7 +47,8 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         }
         return _results;
       })();
-      this.user = prompt("What is your name?" + (names.length ? "\n\nExisting: " + (names.join(', ')) : ''), "").toLowerCase();
+      this.user = prompt("What is your name?" + (names.length ? "\n\nExisting: " + (names.join(', ')) : ''), "");
+      if (this.user) this.user = this.user.toLowerCase();
       if (_ref = this.user, __indexOf.call(names, _ref) >= 0) {
         this.level = users[this.user].level;
         this.nativeLevel = users[this.user].nativeLevel;
