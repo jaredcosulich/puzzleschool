@@ -773,6 +773,14 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
     return Scramble;
   })();
   return $.route.add({
+    '': function() {
+      return $('#content').view({
+        name: 'Scramble',
+        data: {
+          level: 1
+        }
+      });
+    },
     'scramble': function() {
       return $('#content').view({
         name: 'Scramble',
