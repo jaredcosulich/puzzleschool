@@ -158,7 +158,6 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       if (activeLevel <= 0) {
         activeLevel = 1;
       }
-      console.log(this.level, this.activeLevel, activeLevel);
       this.options = this["" + this.activeLevel + "Levels"]["level" + activeLevel];
       $('.guesses').removeClass('hidden');
       $('.scrambled').removeClass('hidden');
