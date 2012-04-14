@@ -1316,7 +1316,7 @@ localData = [
     "native": 'you can',
     foreign: 'puoi',
     nativeSentence: 'you can do this',
-    foreignSentence: 'si può fare questo'
+    foreignSentence: 'puòi fare questo'
   }, {
     "native": 'hello',
     foreign: 'ciao',
