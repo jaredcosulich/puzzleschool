@@ -1,5 +1,6 @@
 (function($) {
   return $('document').ready(function() {
+    debugger;
     $('body').view({
       name: 'Main',
       complete: function() {
