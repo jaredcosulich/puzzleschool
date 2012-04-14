@@ -1253,11 +1253,6 @@ localData = [
     nativeSentence: 'let\'s go for a hike outside',
     foreignSentence: 'andiamo a fare una passeggiata fuori'
   }, {
-    "native": 'just',
-    foreign: 'proprio',
-    nativeSentence: 'i have just one cat',
-    foreignSentence: 'solo uno per me'
-  }, {
     "native": 'only one',
     foreign: 'solo uno',
     nativeSentence: 'only one for me',
