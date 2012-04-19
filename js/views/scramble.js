@@ -26,10 +26,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       this.level = _arg.level;
       this.template = this._requireTemplate('templates/scramble.html');
       this.loadUser();
-      this.setOptions();
-      return window.nextLevel = __bind(function() {
-        return this.nextLevel();
-      }, this);
+      return this.setOptions();
     };
     Scramble.prototype.renderView = function() {
       this.el.html(this.template.render());
@@ -874,6 +871,14 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
     return Scramble;
   })();
   return $.route.add({
+    '': function() {
+      return $('#content').view({
+        name: 'Scramble',
+        data: {
+          level: 'top25words'
+        }
+      });
+    },
     'scramble': function() {
       return $('#content').view({
         name: 'Scramble',

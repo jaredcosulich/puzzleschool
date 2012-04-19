@@ -578,6 +578,11 @@
                         
             
     $.route.add
+        '': () ->
+            $('#content').view
+                name: 'Scramble'
+                data: { level: 'top25words' }
+
         'scramble': () ->
             $('#content').view
                 name: 'Scramble'
