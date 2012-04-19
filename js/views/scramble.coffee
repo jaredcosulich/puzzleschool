@@ -4,121 +4,144 @@
     class views.Scramble extends views.Page
         prepare: ({@level}) ->
             @template = @_requireTemplate('templates/scramble.html')
-            @setLevels()
+            @loadUser()
+            @setOptions()
 
         renderView: () ->
             @el.html(@template.render())   
+            @setTitle()
+            @setProgress()
             @bindWindow()
             @bindKeyPress()
-            @setOptions()
             @newScramble()
 
-        setLevels: () ->
-            @level = 0
-
+        loadUser: () ->
             users = $.cookie('users') or {}
-            names = (user.toLowerCase() for user, level of users)
-            @user = prompt("What is your name?#{if names.length then "\n\nExisting: #{names.join(', ')}" else ''}","")
-            @user = @user.toLowerCase if @user
-            if @user in names
-                @level = users[@user].level
-                @nativeLevel = users[@user].nativeLevel
-                @foreignLevel = users[@user].foreignLevel
-                @nativeMediumLevel = users[@user].nativeMediumLevel
-                @foreignMediumLevel = users[@user].foreignMediumLevel
-                @nativeHardLevel = users[@user].nativeHardLevel
-                @foreignHardLevel = users[@user].foreignHardLevel
-                
-            else if @user and @user.length > 0
-                users[@user] = level: @level
-                $.cookie('users', users)
-                
-            for dataType in ['native', 'foreign']
-                @["#{dataType}Level"] = 1 unless @["#{dataType}Level"]
-                levels = @["#{dataType}Levels"] = {}
-                levels.maxLevel = 0 
-
-                copiedData = localData.slice(0)
-                for scrambleInfo in copiedData
-                    copiedData.push(
-                        native: scrambleInfo.nativeSentence
-                        foreign: scrambleInfo.foreignSentence
-                        nativeSentence: scrambleInfo.nativeSentence
-                        foreignSentence: scrambleInfo.foreignSentence
-                    ) if scrambleInfo.nativeSentence and scrambleInfo.native != scrambleInfo.nativeSentence
-                    
-                sortedData = copiedData.sort((a,b) -> b[dataType].length - a[dataType].length)
+            names = (name.toLowerCase() for name, user of users)
+            name = prompt("What is your name?#{if names.length then "\n\nExisting: #{names.join(', ')}" else ''}","")
+            if name && name.length
+                for userName, user of users
+                    @user = user if userName.toLowerCase() == name.toLowerCase()
             
-                while sortedData.length
-                    if !levels["level#{levels.maxLevel}"] or levels["level#{levels.maxLevel}"].length >= 6
-                        levels.maxLevel += 1
-                        levels["level#{levels.maxLevel}"] = []
-                
-                    level = levels["level#{levels.maxLevel}"]
-                    scrambleInfo = sortedData.pop()
-                    level.push(scrambleInfo) if sortedData.length
-                    
-                    for effort in ['Medium', 'Hard']
-                        if not (effortLevels = @["#{dataType}#{effort}Levels"])
-                            @["#{dataType}#{effort}Level"] = 1 
-                            effortLevels = @["#{dataType}#{effort}Levels"] = {}
-                            effortLevels.maxLevel = 0
-
-                        if !effortLevels["level#{effortLevels.maxLevel}"] or effortLevels["level#{effortLevels.maxLevel}"].length >= 6
-                            effortLevels.maxLevel += 1
-                            effortLevels["level#{effortLevels.maxLevel}"] = []
-
-                        effortLevels["level#{effortLevels.maxLevel}"].push(scrambleInfo)
-                     
-                        
-                            
-        takeABreak: () ->
-            @break = (@break or 0) + 3
-            @breakAdjustment = (@breakAdjustment or 0) + 9
-            @setOptions
+            @user = {} unless @user?
+            @user.name = name if name && name.length
+            @user.groups = {} unless @user.groups?
             
-        setOptions: () -> 
-            level = @level
-            
-            grouping = Math.floor(level / 18)
-            mod = level % 18
-            if grouping > 15 or mod >= (15 - grouping)
-                if grouping > 12 && mod - 12 >= (15 - grouping)
-                    @activeLevel = 'foreignHard'
-                else if grouping > 9 && mod - 9 >= (15 - grouping)
-                    @activeLevel = 'nativeHard'
-                else if grouping > 6 && mod - 6 >= (15 - grouping)
-                    @activeLevel = 'foreignMedium'
-                else if grouping > 3 && mod - 3 >= (15 - grouping)
-                    @activeLevel = 'nativeMedium'
-                else
-                    @activeLevel = 'foreign'
+            if @user && @user.lastGroupPlayed?
+                @group = @user.lastGroupPlayed
             else
-                @activeLevel = 'native'
+                @group = 'top25words'
+                @user.lastGroupPlayed = @group
+                @user.groups[@group] = {}
+
+        setOptions: () ->
+            @user.lastGroupPlayed
+            @options = localData[@group].data
+            
+            
+        selectOption: () ->
+            @orderedOptions or= []
+            if @orderedOptionsIndex?
+                @orderedOptionsIndex += 1
+            else
+                @orderedOptionsIndex = 0
+
+            if @orderedOptions[@orderedOptionsIndex]?
+                @setStage() 
+                return @orderedOptions[@orderedOptionsIndex] 
                 
+            optionsToAdd = [[],[],[],[],[],[],[]]            
+            minLevel = 7
+            
+            for option in @options
+                continue if option in @orderedOptions[-4..-1]
+                optionLevel = @user.groups[@group][@scrambleKey(option)] || 1
+                optionsToAdd[optionLevel] or= []
+                optionsToAdd[optionLevel].push(option)
+                minLevel = optionLevel if optionLevel < minLevel
+
+            if minLevel == 7
+                incomplete = (option for option in @orderedOptions[-4..-1] when (@user.groups[@group][@scrambleKey(option)] || 1) < 7)
+                if incomplete.length
+                    @orderedOptions.push(option) for option in incomplete
+                else
+                    @nextLevel()
+                return
+
+            possibleLevels = [minLevel, minLevel]
+            if optionsToAdd[minLevel].length > 4                
+                if optionsToAdd[minLevel].length <  @options.length / (3/2)
+                    possibleLevels.push(minLevel + 1)
+
+                if optionsToAdd[minLevel].length <  @options.length / 2
+                    possibleLevels.push(minLevel + i) for i in [0..1]
+            
+                if optionsToAdd[minLevel].length <  @options.length / 3
+                    possibleLevels.push(minLevel + i) for i in [0..2]
+                
+            level = @random(possibleLevels)
+            level = (level for level, options of optionsToAdd)[0] if not optionsToAdd[level]
+            
+            shuffledOptions = @shuffle(optionsToAdd[level])
+            @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
+
+            switch level  
+                when 6
+                    @activeLevel = 'foreignHard'
+                when 5
+                    @activeLevel = 'nativeHard'
+                when 4
+                    @activeLevel = 'foreignMedium'
+                when 3
+                    @activeLevel = 'nativeMedium'
+                when 2
+                    @activeLevel = 'foreign'
+                when 1
+                    @activeLevel = 'native'
+            
             @activeType = @activeLevel.replace(/Medium/, '').replace(/Hard/, '')
 
             @displayLevel = if @activeType.match(/native/) then 'foreign' else 'native'
             
-            activeLevel = @["#{@activeLevel}Level"]
-            activeLevel -= @breakAdjustment if @break? && @break > 0
-            activeLevel = 1 if activeLevel <= 0
-                
-            console.log(@level, @activeLevel, activeLevel)
-                
-            @options = @["#{@activeLevel}Levels"]["level#{activeLevel}"]
+            @setStage() 
+                            
+            return @orderedOptions[@orderedOptionsIndex]
             
+        setTitle: () ->
+            @$('.header .title .text').html(localData[@group].title)
+            @$('.header .title .subtitle').html(localData[@group].subtitle)
+            
+        setProgress: () ->
+            if not @$('.progress_meter .bar .progress_section').length
+                for scramble, index in localData[@group].data
+                    section = $(document.createElement("DIV"))
+                    section.addClass('progress_section')
+                    section.addClass(@scrambleKey(scramble))
+                    section.css(borderRight: 'none') if (index + 1) == localData[@group].data.length
+                    @$('.progress_meter .bar').append(section)
+            
+            for scramble in localData[@group].data
+                key = @scrambleKey(scramble)
+                level = @user.groups[@group][key]
+                if level?
+                    level = 6 if level > 6
+                    @$(".progress_meter .bar .#{key}}").css(opacity: 1 - ((1/6) * level))
+                else
+                    @$(".progress_meter .bar .#{key}}").css(opacity: 1)
+                    
+        scrambleKey: (scrambleInfo) -> "#{scrambleInfo.native.replace(/\W/g, '_')}-#{scrambleInfo.foreign.replace(/\W/g, '_')}"
+                
+        setStage: () ->
             $('.guesses').removeClass('hidden')
             $('.scrambled').removeClass('hidden')       
             if @activeLevel.match(/Medium/)? or @activeLevel.match(/Hard/)?
                 $('.guesses').addClass('hidden')
                 $('.guesses .hidden_message').show()
-                
+
             if @activeLevel.match(/Hard/)?
                 $('.scrambled').addClass('hidden')       
                 $('.scrambled .hidden_message').show()
-
-
+            
         randomIndex: (array) -> Math.floor(Math.random() * array.length)
             
         random: (array) ->
@@ -127,16 +150,26 @@
             return array[0] if array.length == 1
             return array[@randomIndex(array)]
             
-        newScramble: () ->
-            @lastScrambles or= []
-            @lettersAdded = []
-            @checkLevel()
+        shuffle: (array) ->
+            top = array.length
+            return array if not top
+
+            while(top--) 
+                current = Math.floor(Math.random() * (top + 1))
+                tmp = array[current]
+                array[current] = array[top]
+                array[top] = tmp
+            return array
             
-            for i in [0...4]
-                break if @scrambleInfo && @scrambleInfo.native not in @lastScrambles[-4..-1].map((s) -> s.native)
-                @scrambleInfo = @random(@options)
-                  
-            @lastScrambles.push(@scrambleInfo)
+        newScramble: () ->
+            @answerTimes or= []
+            @answerTimes.push(new Date()) 
+            
+            @lettersAdded = []
+            
+            @scrambleInfo = @selectOption()     
+            @user.groups[@group][@scrambleKey(@scrambleInfo)] or= 1    
+            
             displayWords = @$('.display_words')
             if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
                 sentence = @scrambleInfo["#{@displayLevel}Sentence"]
@@ -144,71 +177,36 @@
                 sentence = @scrambleInfo[@displayLevel]
             sentence = " #{sentence} "
             highlighted = @scrambleInfo[@displayLevel]
-            sentence = sentence.replace(" #{highlighted} ", " <span class='highlighted'>#{highlighted}</span> ")           
-            sentence = sentence.replace(" #{highlighted}?", " <span class='highlighted'>#{highlighted}</span>?")           
+            for boundary in [' ', '?', ',']
+                sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+            
             displayWords.html(sentence)
             
             @createGuesses()
             @createScramble()
-            @startHelpTimer()
+                       
+        saveLevel: () ->
+            @answerTimes.push(new Date())
             
-        startHelpTimer: () ->
-            return
-            clearTimeout(@helpTimeout)
-            @helpTimeout = setTimeout((() =>  
-                return unless (firstMissingGuess = $('.guesses .guess')[0])?                
-                letterPosition = firstMissingGuess.className.indexOf('letter_') + 'letter_'.length
-                letter = firstMissingGuess.className[letterPosition..letterPosition + 1]
-                $(firstMissingGuess).trigger('click')
-                $(@$(".scrambled .#{@containerClassName(firstMissingGuess)} .letter_#{letter}")[0]).trigger('click')
-                if @checkCorrectAnswer() then @next() else @startHelpTimer()                    
-            ), 15000)
-            
-        checkLevel: () ->
-            @answerTimes or= []
-
-            if @break? && @break > 0
-                @break--
-                @breakAdjustment--
-                if @break == 0
-                    @breakAdjustment = 0 
-                    @answerTimes.push(new Date())
-                @setOptions()
-                return
-                
-            @level += 1
-
-            @answerTimes.push(new Date())    
-
-            return if @answerTimes.length == 1
-
             lastAnswerDuration = @answerTimes[@answerTimes.length - 1] - @answerTimes[@answerTimes.length - 2]
-            if lastAnswerDuration < 3000
-                @["#{@activeLevel}Level"] += 4
-            else if lastAnswerDuration < 6000
-                @["#{@activeLevel}Level"] += 3
-            else if lastAnswerDuration < 9000
-                @["#{@activeLevel}Level"] += 2
-            else if lastAnswerDuration < 20000
-                @["#{@activeLevel}Level"] += 1                
-            else if lastAnswerDuration > 30000
-                @takeABreak()
+            if lastAnswerDuration < 2500 * @scrambleInfo.native.length
+                @user.groups[@group][@scrambleKey(@scrambleInfo)] += 1
+
+            @saveUser()
             
-            @setOptions()
-            if @user and @user.length
-                users = $.cookie('users')
-                users[@user].level = @level
-                users[@user]["#{@activeLevel}Level"] = @["#{@activeLevel}Level"]
+        saveUser: () ->
+            if @user and @user.name
+                users = $.cookie('users') or {}
+                users[@user.name.toLowerCase()] = @user
                 $.cookie('users', users)
-                
-                
+            
         createGuesses: () ->
             guesses = @$('.guesses')
             @clearContainer(guesses)
             for group, index in @separateIntoWordGroups(@scrambleInfo[@activeType])
                 container = $(document.createElement("DIV"))
                 container.addClass('container')
-                container.addClass("color#{index + 1}")
+                container.addClass("color#{index + 1}") 
                 guesses.append(container)
 
                 for letter in group 
@@ -246,7 +244,7 @@
                 group.push(letter)                
             return groups
             
-        shuffle: (word) ->
+        shuffleWord: (word) ->
             top = word.length
             return '' if not top
             return word if top == 1
@@ -261,7 +259,7 @@
                 wordArray[top] = tmp
             
             shuffled = wordArray.join('')
-            shuffled = @shuffle(shuffled) if shuffled == word
+            shuffled = @shuffleWord(shuffled) if shuffled == word
             return shuffled
             
         createLetter: (letter) ->
@@ -282,7 +280,7 @@
                 container.addClass("color#{index + 1}")
                 scrambled.append(container)
 
-                for letter in @shuffle(@modifyScramble(group.join(''))) 
+                for letter in @shuffleWord(@modifyScramble(group.join(''))) 
                     container.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
 
                 container.width(container.width())
@@ -311,6 +309,15 @@
                 return unless openGuess?
                 
                 char = String.fromCharCode(e.keyCode)
+                if char in ['e', 'i', 'u', 'o']  
+                    foreignChar = switch char
+                        when 'e' then 'è'
+                        when 'i' then 'ì'
+                        when 'o' then 'ò'
+                        when 'u' then 'ù'
+                        
+                    char = foreignChar if $(openGuess).hasClass("actual_letter_#{foreignChar}")
+                
                 try
                     letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
                     if !letter and @activeLevel.match(/Hard/)?
@@ -416,7 +423,6 @@
                     @dragging.css(position: 'static')
                     @dragging = null
                 
-                @startHelpTimer()
                 containerClass = @containerClassName(letter)
                 if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
                     @replaceLetterWithGuess(letter)
@@ -430,7 +436,6 @@
             startDrag = (e) =>
                 e.preventDefault() if e.preventDefault?
                 @dragging = letter
-                @startHelpTimer()
                 @dragPathX = []
                 @dragPathY = []
                 @dragAdjustmentX = @clientX(e) - letter.offset().left
@@ -487,6 +492,8 @@
             @$('.guesses .letter, .guesses .space').map((html) -> $(html).html()).join('') == (@scrambleInfo[@activeType])
             
         next: () ->
+            @saveLevel()
+            
             correct = $(document.createElement('DIV'))
             if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length
                 correctSentence = @scrambleInfo["#{@activeType}Sentence"] 
@@ -495,8 +502,9 @@
                 
             correctSentence = " #{correctSentence} "
             highlighted = @scrambleInfo[@activeType]
-            correctSentence = correctSentence.replace(" #{highlighted} ", " <span class='highlighted'>#{highlighted}</span> ")           
-            correctSentence = correctSentence.replace(" #{highlighted}?", " <span class='highlighted'>#{highlighted}</span>?")                       
+            for boundary in [' ', '?', ',']
+                correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+            
             correct.html(correctSentence)
             correct.addClass('correct')
             correct.css(opacity: 0)
@@ -505,11 +513,19 @@
             @$('.scrambled .hidden_message').hide()
             @$('.scrambled').css(width: null)
             scrambled.append(correct)
+            
+            displayedSentence = @$('.display_words').html()
+
+            @$('.last_answer').animate
+                opacity: 0
+                duration: 300
+
             correct.animate
                 opacity: 1
                 duration: 500
                 complete: () =>
                     $.timeout 200 + (30 * correctSentence.length), () =>
+                        @setProgress()
                         @$('.foreign_words, .scrambled, .guesses').animate
                             opacity: 0
                             duration: 500
@@ -519,45 +535,127 @@
                                 @$('.foreign_words, .scrambled, .guesses').animate
                                     opacity: 1
                                     duration: 300
+                                    complete: () =>
+                                        # @$('.last_answer').html("#{displayedSentence} = #{correctSentence}")
+                                        # @$('.last_answer').animate
+                                        #     opacity: 1
+                                        #     duration: 300
                         
         clearContainer: (container) -> container.find('.container, .correct, .guess, .letter, .space').remove()
+            
+        nextLevel: () ->
+            @$('#next_level .next_level_link').html(localData[localData[@group].nextLevel].title)
+            @$('.scramble_content').animate
+                opacity: 0
+                duration: 500
+                complete: () =>
+                    @$('#next_level').css
+                        top: 200
+                        left: ($('.scramble').width() - @$('#next_level').width()) / 2
+                    @$('#next_level .next_level_link').bind 'click', () =>
+                        @group = localData[@group].nextLevel
+                        @user.lastGroupPlayed = @group
+                        @user.groups[@group] = {}
+                        @saveUser()
+                        @orderedOptions = []
+                        @setOptions()
+                        @setTitle()
+                        @setProgress()
+                        @$('#next_level').animate
+                            opacity: 0
+                            duration: 500
+                            complete: () =>
+                                @newScramble()
+                                @$('.scramble_content').animate
+                                    opacity: 1
+                                    duration: 500
+                                        
+                        
+                    @$('#next_level').animate
+                        opacity: 1
+                        duration: 1000
+                            
+                        
             
     $.route.add
         'scramble': () ->
             $('#content').view
                 name: 'Scramble'
-                data: { level: 1 }
+                data: { level: 'top25words' }
                 
         'scramble/:level': (level) ->
             $('#content').view
                 name: 'Scramble'
-                data: { level: parseInt(level) }
+                data: { level: level }
 
 )(ender)
 
 
 
-localData = [
-    {native: 'not', foreign: 'non', nativeSentence: 'that\'s not necessary', foreignSentence: 'non è necessario'},
-    {native: 'of', foreign: 'di', nativeSentence: 'memories of a cat', foreignSentence: 'memorie di un gatto'},
-    {native: 'what', foreign: 'che', nativeSentence: 'what luck', foreignSentence: 'che fortuna'},
-    {native: 'is', foreign: 'è', nativeSentence: 'that bird is fat', foreignSentence: 'quell\'uccello è grasso'},
-    {native: 'and', foreign: 'e', nativeSentence: 'big and tall', foreignSentence: 'grande e grosso'},
-    {native: 'for', foreign: 'per', nativeSentence: 'the drinks are for the party', foreignSentence: 'le bevande sono per il partito'},
-    {native: 'are', foreign: 'sono', nativeSentence: 'there are five quotes', foreignSentence: 'ci sono cinque citazioni'},
-    {native: 'i have three blue shirts', foreign: 'ho tre maglie azzurre'},
-    {native: 'i have twenty dollars', foreign: 'ho venti dollari'},
-    {native: 'but', foreign: 'ma', nativeSentence: 'i was going to but i can not', foreignSentence: 'stavo andando ma non posso'},
-    {native: 'he has a big house', foreign: 'ha una grande casa'},
-    {native: 'with', foreign: 'con', nativeSentence: 'i\'m coming with you', foreignSentence: 'vengo con te'},
-    {native: 'if', foreign: 'se', nativeSentence: 'what if he wins?', foreignSentence: 'cosa succede se vince?'},
-    {native: 'there', foreign: 'ci', nativeSentence: 'there are three friends', foreignSentence: 'ci sono tre amici'},
-    {native: 'this', foreign: 'questo', nativeSentence: 'this is great', foreignSentence: 'questo è fantastico'},
-    {native: 'here', foreign: 'qui', nativeSentence: 'come here', foreignSentence: 'vieni qui'},
-    {native: 'you have', foreign: 'hai', nativeSentence: 'you have ten minutes', foreignSentence: 'hai dieci minuti'},
-    {native: 'six', foreign: 'sei', nativeSentence: 'there are six doors', foreignSentence: 'ci sono sei porte'},
-    {native: 'well', foreign: 'bene', nativeSentence: 'are you well?', foreignSentence: 'stai bene?'},
-    {native: 'yes', foreign: 'sì'},
+localData = 
+    top25words: 
+        title: 'Top 25 Words'
+        subtitle: 'The 25 most frequently used Italian words.'
+        nextLevel: 'top25phrases'
+        data: [
+            {native: 'not', foreign: 'non', nativeSentence: 'that\'s not necessary', foreignSentence: 'non è necessario'},
+            {native: 'of', foreign: 'di', nativeSentence: 'memories of a cat', foreignSentence: 'memorie di un gatto'},
+            {native: 'what', foreign: 'che', nativeSentence: 'what luck', foreignSentence: 'che fortuna'},
+            {native: 'is', foreign: 'è', nativeSentence: 'that bird is fat', foreignSentence: 'quell\'uccello è grasso'},
+            {native: 'and', foreign: 'e', nativeSentence: 'big and tall', foreignSentence: 'grande e grosso'},
+            {native: 'the', foreign: 'la', nativeSentence: 'drop the ball now', foreignSentence: 'cadere la palla ora'},
+            {native: 'the', foreign: 'il', nativeSentence: 'there are drinks for the party', foreignSentence: 'ci sono bevande per il partito'},
+            {native: 'a', foreign: 'un', nativeSentence: 'a little more', foreignSentence: 'un po più'},
+            {native: 'for', foreign: 'per', nativeSentence: 'the drinks are for the party', foreignSentence: 'le bevande sono per il partito'},
+            {native: 'are', foreign: 'sono', nativeSentence: 'there are five quotes', foreignSentence: 'ci sono cinque citazioni'},
+            {native: 'i have', foreign: 'ho', nativeSentence: 'i have twenty dollars', foreignSentence: 'ho venti dollari'},
+            {native: 'but', foreign: 'ma', nativeSentence: 'i was going to but i can not', foreignSentence: 'stavo andando ma non posso'},
+            {native: 'he has', foreign: 'ha', nativeSentence: 'he has a big house', foreignSentence: 'ha una grande casa'},
+            {native: 'with', foreign: 'con', nativeSentence: 'i\'m coming with you', foreignSentence: 'vengo con te'},
+            {native: 'what', foreign: 'cosa', nativeSentence: 'what do you like to do?', foreignSentence: 'cosa ti piace fare?'},
+            {native: 'if', foreign: 'se', nativeSentence: 'what if he wins?', foreignSentence: 'cosa succede se vince?'},
+            {native: 'i', foreign: 'io', nativeSentence: 'i am going to the markets', foreignSentence: 'io vado ai mercati'},
+            {native: 'how', foreign: 'come', nativeSentence: 'how are you?', foreignSentence: 'come stai?'}
+            {native: 'there', foreign: 'ci', nativeSentence: 'there are three friends', foreignSentence: 'ci sono tre amici'},
+            {native: 'this', foreign: 'questo', nativeSentence: 'this is great', foreignSentence: 'questo è fantastico'},
+            {native: 'here', foreign: 'qui', nativeSentence: 'come here', foreignSentence: 'vieni qui'},
+            {native: 'you have', foreign: 'hai', nativeSentence: 'you have ten minutes', foreignSentence: 'hai dieci minuti'},
+            {native: 'six', foreign: 'sei', nativeSentence: 'there are six doors', foreignSentence: 'ci sono sei porte'},
+            {native: 'well', foreign: 'bene', nativeSentence: 'are you well?', foreignSentence: 'stai bene?'},
+            {native: 'yes', foreign: 'sì', nativeSentence: 'yes, you can', foreignSentence: 'sì, è possibile'},
+        ]
+    top25phrases: 
+        title: 'Phrases For The Top 25 Words'
+        subtitle: 'Phrases containing the 25 most frequently used Italian words.'
+        data: [
+            {native: 'that\'s not necessary', foreign: 'non è necessario'},
+            {native: 'memories of a cat', foreign: 'memorie di un gatto'},
+            {native: 'what luck', foreign: 'che fortuna'},
+            {native: 'that bird is fat', foreign: 'quell\'uccello è grasso'},
+            {native: 'big and tall', foreign: 'grande e grosso'},
+            {native: 'drop the ball now', foreign: 'cadere la palla ora'},
+            {native: 'there are drinks for the party', foreign: 'ci sono bevande per il partito'},
+            {native: 'a little more', foreign: 'un po più'},
+            {native: 'the drinks are for the party', foreign: 'le bevande sono per il partito'},
+            {native: 'there are five quotes', foreign: 'ci sono cinque citazioni'},
+            {native: 'i have twenty dollars', foreign: 'ho venti dollari'},
+            {native: 'i was going to but i can not', foreign: 'stavo andando ma non posso'},
+            {native: 'he has a big house', foreign: 'ha una grande casa'},
+            {native: 'i\'m coming with you', foreign: 'vengo con te'},
+            {native: 'what do you like to do?', foreign: 'cosa ti piace fare?'},
+            {native: 'what if he wins?', foreign: 'cosa succede se vince?'},
+            {native: 'i am going to the markets', foreign: 'io vado ai mercati'},
+            {native: 'how are you?', foreign: 'come stai?'}
+            {native: 'there are three friends', foreign: 'ci sono tre amici'},
+            {native: 'this is great', foreign: 'questo è fantastico'},
+            {native: 'come here', foreign: 'vieni qui'},
+            {native: 'you have ten minutes', foreign: 'hai dieci minuti'},
+            {native: 'there are six doors', foreign: 'ci sono sei porte'},
+            {native: 'are you well?', foreign: 'stai bene?'},
+            {native: 'yes, you can', foreign: 'sì, è possibile'},
+        ]
+    
+x = [
     {native: 'more', foreign: 'più', nativeSentence: 'a little more', foreignSentence: 'un po più'},
     {native: 'my', foreign: 'mio', nativeSentence: 'my child is seven years old', foreignSentence: 'mio figlio ha sette anni'},
     {native: 'because', foreign: 'perché', nativeSentence: 'because i want to', foreignSentence: 'perché voglio'},

@@ -1,22 +1,36 @@
-<h1 class="red">Scramble Game</h1>
-
-<h2 class='text-center'>Translate the highlighted word(s) by unscrambling the letters below.</h2>
-
-<div class="section display_words text-center"></div>
-<div class="section guesses text-center">
-    <div class='hidden_message'>
-        The blank spaces are hidden, but you can still drag to them.
+<div class='header'>
+    <h1 class="red">Italian Scramble</h1>
+    <div class='progress_meter'>
+        Level Progress
+        <div class='bar'></div>
     </div>
+    <div class='title'><div class='text'></div><small class='subtitle'></small></div>
 </div>
-<div class="section scrambled text-center">
-    <div class='hidden_message'>
-        The scrambled letters are hidden. You'll have to type the answer.
+
+<div class='scramble_content'>
+    <h2 class='clear text-center'>Translate the green word(s)...</h2>
+
+    <div class="section display_words text-center"></div>
+    <div class="section guesses text-center">
+        <div class='hidden_message'>
+            The blank spaces are hidden, but you can still drag to them.
+        </div>
     </div>
+    <div class="section scrambled text-center">
+        <div class='hidden_message'>
+            The scrambled letters are hidden. You'll have to type the answer.
+        </div>
+    </div>
+    <br/>
+    <h2 class='text-center'>... by unscrambling the blue letters.</h2>
+    <div class='text-center small'>(type, click, or drag the letters in to the blue blank spaces)</div>
+    <br/>
+    <h4 class='text-center last_answer'></h4>
+    <textarea id='clickarea'></textarea>
 </div>
-<br/><br/>
-<p class='small text-center'>Type, click, or drag letters</p>
-
-
-
-<textarea id='clickarea'></textarea>
+<div id='next_level'>
+    <h2>Nice Work!</h2>
+    <p>You seem to have mastered this level</p>
+    <p>Time to move on the next level: <a class='next_level_link'></a></p>
+</div>
 <br/>

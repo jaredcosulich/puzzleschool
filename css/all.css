@@ -223,7 +223,7 @@ a:active, a:focus {
 }
 h1 {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 27px;
   line-height: 24px;
   margin-bottom: 24px;
   text-align: center;
@@ -1590,8 +1590,62 @@ form select {
 .story .option:hover, .choosestory .option:hover {
   color: black;
 }
+.scramble#content {
+  padding: 0;
+  position: relative;
+}
+.scramble .header {
+  padding-top: 15px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #eee;
+  border-top-left-radius: 12px;
+  -webkit-border-top-left-radius: 12px;
+  -moz-border-radius-topleft: 12px;
+  border-top-right-radius: 12px;
+  -webkit-border-top-right-radius: 12px;
+  -moz-border-radius-topright: 12px;
+  margin-bottom: 30px;
+}
+.scramble .header h1 {
+  float: left;
+  width: 250px;
+  height: 45px;
+  line-height: 45px;
+  margin-left: 30px;
+}
+.scramble .header .progress_meter {
+  float: right;
+  width: 251px;
+  height: 60px;
+  margin-right: 30px;
+}
+.scramble .header .progress_meter .bar {
+  border: 1px solid #ccc;
+  height: 15px;
+  background-color: white;
+  overflow: hidden;
+}
+.scramble .header .progress_meter .bar .progress_section {
+  width: 9px;
+  border-right: 1px solid #ccc;
+  background-color: #88cc66;
+  height: 15px;
+  float: left;
+}
+.scramble .header .title {
+  font-size: 21px;
+}
+.scramble .header .title small {
+  display: block;
+  font-size: 10px;
+}
 .scramble .display_words .highlighted, .scramble .scrambled .highlighted {
-  background-color: rgba(109, 165, 232, 0.5);
+  background-color: rgba(136, 204, 102, 0.5);
+  padding: 0 3px;
+}
+.scramble .last_answer .highlighted {
+  background-color: rgba(136, 204, 102, 0.25);
   padding: 0 3px;
 }
 .scramble .section {
@@ -1717,6 +1771,13 @@ form select {
 .scramble .guesses.hidden .hidden_message {
   left: 224px;
   top: 12px;
+}
+.scramble #next_level {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  opacity: 0;
+  text-align: center;
 }
 .scramble #clickarea {
   position: absolute;

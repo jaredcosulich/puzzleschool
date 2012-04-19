@@ -1,4 +1,4 @@
-var localData;
+var localData, x;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
   for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
   function ctor() { this.constructor = child; }
@@ -25,141 +25,209 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
     Scramble.prototype.prepare = function(_arg) {
       this.level = _arg.level;
       this.template = this._requireTemplate('templates/scramble.html');
-      return this.setLevels();
+      this.loadUser();
+      this.setOptions();
+      return window.nextLevel = __bind(function() {
+        return this.nextLevel();
+      }, this);
     };
     Scramble.prototype.renderView = function() {
       this.el.html(this.template.render());
+      this.setTitle();
+      this.setProgress();
       this.bindWindow();
       this.bindKeyPress();
-      this.setOptions();
       return this.newScramble();
     };
-    Scramble.prototype.setLevels = function() {
-      var copiedData, dataType, effort, effortLevels, level, levels, names, scrambleInfo, sortedData, user, users, _i, _j, _len, _len2, _ref, _ref2, _results;
-      this.level = 0;
+    Scramble.prototype.loadUser = function() {
+      var name, names, user, userName, users;
       users = $.cookie('users') || {};
       names = (function() {
         var _results;
         _results = [];
-        for (user in users) {
-          level = users[user];
-          _results.push(user.toLowerCase());
+        for (name in users) {
+          user = users[name];
+          _results.push(name.toLowerCase());
         }
         return _results;
       })();
-      this.user = prompt("What is your name?" + (names.length ? "\n\nExisting: " + (names.join(', ')) : ''), "");
-      if (this.user) this.user = this.user.toLowerCase();
-      if (_ref = this.user, __indexOf.call(names, _ref) >= 0) {
-        this.level = users[this.user].level;
-        this.nativeLevel = users[this.user].nativeLevel;
-        this.foreignLevel = users[this.user].foreignLevel;
-        this.nativeMediumLevel = users[this.user].nativeMediumLevel;
-        this.foreignMediumLevel = users[this.user].foreignMediumLevel;
-        this.nativeHardLevel = users[this.user].nativeHardLevel;
-        this.foreignHardLevel = users[this.user].foreignHardLevel;
-      } else if (this.user && this.user.length > 0) {
-        users[this.user] = {
-          level: this.level
-        };
-        $.cookie('users', users);
-      }
-      _ref2 = ['native', 'foreign'];
-      _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        dataType = _ref2[_i];
-        if (!this["" + dataType + "Level"]) {
-          this["" + dataType + "Level"] = 1;
-        }
-        levels = this["" + dataType + "Levels"] = {};
-        levels.maxLevel = 0;
-        copiedData = localData.slice(0);
-        for (_j = 0, _len2 = copiedData.length; _j < _len2; _j++) {
-          scrambleInfo = copiedData[_j];
-          if (scrambleInfo.nativeSentence && scrambleInfo["native"] !== scrambleInfo.nativeSentence) {
-            copiedData.push({
-              "native": scrambleInfo.nativeSentence,
-              foreign: scrambleInfo.foreignSentence,
-              nativeSentence: scrambleInfo.nativeSentence,
-              foreignSentence: scrambleInfo.foreignSentence
-            });
+      name = prompt("What is your name?" + (names.length ? "\n\nExisting: " + (names.join(', ')) : ''), "");
+      if (name && name.length) {
+        for (userName in users) {
+          user = users[userName];
+          if (userName.toLowerCase() === name.toLowerCase()) {
+            this.user = user;
           }
         }
-        sortedData = copiedData.sort(function(a, b) {
-          return b[dataType].length - a[dataType].length;
-        });
-        _results.push((function() {
-          var _results2;
-          _results2 = [];
-          while (sortedData.length) {
-            if (!levels["level" + levels.maxLevel] || levels["level" + levels.maxLevel].length >= 6) {
-              levels.maxLevel += 1;
-              levels["level" + levels.maxLevel] = [];
-            }
-            level = levels["level" + levels.maxLevel];
-            scrambleInfo = sortedData.pop();
-            if (sortedData.length) {
-              level.push(scrambleInfo);
-            }
-            _results2.push((function() {
-              var _k, _len3, _ref3, _results3;
-              _ref3 = ['Medium', 'Hard'];
-              _results3 = [];
-              for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
-                effort = _ref3[_k];
-                if (!(effortLevels = this["" + dataType + effort + "Levels"])) {
-                  this["" + dataType + effort + "Level"] = 1;
-                  effortLevels = this["" + dataType + effort + "Levels"] = {};
-                  effortLevels.maxLevel = 0;
-                }
-                if (!effortLevels["level" + effortLevels.maxLevel] || effortLevels["level" + effortLevels.maxLevel].length >= 6) {
-                  effortLevels.maxLevel += 1;
-                  effortLevels["level" + effortLevels.maxLevel] = [];
-                }
-                _results3.push(effortLevels["level" + effortLevels.maxLevel].push(scrambleInfo));
-              }
-              return _results3;
-            }).call(this));
-          }
-          return _results2;
-        }).call(this));
       }
-      return _results;
-    };
-    Scramble.prototype.takeABreak = function() {
-      this["break"] = (this["break"] || 0) + 3;
-      this.breakAdjustment = (this.breakAdjustment || 0) + 9;
-      return this.setOptions;
+      if (this.user == null) {
+        this.user = {};
+      }
+      if (name && name.length) {
+        this.user.name = name;
+      }
+      if (this.user.groups == null) {
+        this.user.groups = {};
+      }
+      if (this.user && (this.user.lastGroupPlayed != null)) {
+        return this.group = this.user.lastGroupPlayed;
+      } else {
+        this.group = 'top25words';
+        this.user.lastGroupPlayed = this.group;
+        return this.user.groups[this.group] = {};
+      }
     };
     Scramble.prototype.setOptions = function() {
-      var activeLevel, grouping, level, mod;
-      level = this.level;
-      grouping = Math.floor(level / 18);
-      mod = level % 18;
-      if (grouping > 15 || mod >= (15 - grouping)) {
-        if (grouping > 12 && mod - 12 >= (15 - grouping)) {
-          this.activeLevel = 'foreignHard';
-        } else if (grouping > 9 && mod - 9 >= (15 - grouping)) {
-          this.activeLevel = 'nativeHard';
-        } else if (grouping > 6 && mod - 6 >= (15 - grouping)) {
-          this.activeLevel = 'foreignMedium';
-        } else if (grouping > 3 && mod - 3 >= (15 - grouping)) {
-          this.activeLevel = 'nativeMedium';
-        } else {
-          this.activeLevel = 'foreign';
-        }
+      this.user.lastGroupPlayed;
+      return this.options = localData[this.group].data;
+    };
+    Scramble.prototype.selectOption = function() {
+      var i, incomplete, level, minLevel, option, optionLevel, options, optionsToAdd, possibleLevels, shuffledOptions, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
+      this.orderedOptions || (this.orderedOptions = []);
+      if (this.orderedOptionsIndex != null) {
+        this.orderedOptionsIndex += 1;
       } else {
-        this.activeLevel = 'native';
+        this.orderedOptionsIndex = 0;
+      }
+      if (this.orderedOptions[this.orderedOptionsIndex] != null) {
+        this.setStage();
+        return this.orderedOptions[this.orderedOptionsIndex];
+      }
+      optionsToAdd = [[], [], [], [], [], [], []];
+      minLevel = 7;
+      _ref = this.options;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        option = _ref[_i];
+        if (__indexOf.call(this.orderedOptions.slice(-4), option) >= 0) {
+          continue;
+        }
+        optionLevel = this.user.groups[this.group][this.scrambleKey(option)] || 1;
+        optionsToAdd[optionLevel] || (optionsToAdd[optionLevel] = []);
+        optionsToAdd[optionLevel].push(option);
+        if (optionLevel < minLevel) {
+          minLevel = optionLevel;
+        }
+      }
+      if (minLevel === 7) {
+        incomplete = (function() {
+          var _j, _len2, _ref2, _results;
+          _ref2 = this.orderedOptions.slice(-4);
+          _results = [];
+          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+            option = _ref2[_j];
+            if ((this.user.groups[this.group][this.scrambleKey(option)] || 1) < 7) {
+              _results.push(option);
+            }
+          }
+          return _results;
+        }).call(this);
+        if (incomplete.length) {
+          for (_j = 0, _len2 = incomplete.length; _j < _len2; _j++) {
+            option = incomplete[_j];
+            this.orderedOptions.push(option);
+          }
+        } else {
+          this.nextLevel();
+        }
+        return;
+      }
+      possibleLevels = [minLevel, minLevel];
+      if (optionsToAdd[minLevel].length > 4) {
+        if (optionsToAdd[minLevel].length < this.options.length / (3 / 2)) {
+          possibleLevels.push(minLevel + 1);
+        }
+        if (optionsToAdd[minLevel].length < this.options.length / 2) {
+          for (i = 0; i <= 1; i++) {
+            possibleLevels.push(minLevel + i);
+          }
+        }
+        if (optionsToAdd[minLevel].length < this.options.length / 3) {
+          for (i = 0; i <= 2; i++) {
+            possibleLevels.push(minLevel + i);
+          }
+        }
+      }
+      level = this.random(possibleLevels);
+      if (!optionsToAdd[level]) {
+        level = ((function() {
+          var _results;
+          _results = [];
+          for (level in optionsToAdd) {
+            options = optionsToAdd[level];
+            _results.push(level);
+          }
+          return _results;
+        })())[0];
+      }
+      shuffledOptions = this.shuffle(optionsToAdd[level]);
+      _ref2 = shuffledOptions.slice(0, 3);
+      for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+        option = _ref2[_k];
+        this.orderedOptions.push(option);
+      }
+      switch (level) {
+        case 6:
+          this.activeLevel = 'foreignHard';
+          break;
+        case 5:
+          this.activeLevel = 'nativeHard';
+          break;
+        case 4:
+          this.activeLevel = 'foreignMedium';
+          break;
+        case 3:
+          this.activeLevel = 'nativeMedium';
+          break;
+        case 2:
+          this.activeLevel = 'foreign';
+          break;
+        case 1:
+          this.activeLevel = 'native';
       }
       this.activeType = this.activeLevel.replace(/Medium/, '').replace(/Hard/, '');
       this.displayLevel = this.activeType.match(/native/) ? 'foreign' : 'native';
-      activeLevel = this["" + this.activeLevel + "Level"];
-      if ((this["break"] != null) && this["break"] > 0) {
-        activeLevel -= this.breakAdjustment;
+      this.setStage();
+      return this.orderedOptions[this.orderedOptionsIndex];
+    };
+    Scramble.prototype.setTitle = function() {
+      this.$('.header .title .text').html(localData[this.group].title);
+      return this.$('.header .title .subtitle').html(localData[this.group].subtitle);
+    };
+    Scramble.prototype.setProgress = function() {
+      var index, key, level, scramble, section, _i, _len, _len2, _ref, _ref2, _results;
+      if (!this.$('.progress_meter .bar .progress_section').length) {
+        _ref = localData[this.group].data;
+        for (index = 0, _len = _ref.length; index < _len; index++) {
+          scramble = _ref[index];
+          section = $(document.createElement("DIV"));
+          section.addClass('progress_section');
+          section.addClass(this.scrambleKey(scramble));
+          if ((index + 1) === localData[this.group].data.length) {
+            section.css({
+              borderRight: 'none'
+            });
+          }
+          this.$('.progress_meter .bar').append(section);
+        }
       }
-      if (activeLevel <= 0) {
-        activeLevel = 1;
+      _ref2 = localData[this.group].data;
+      _results = [];
+      for (_i = 0, _len2 = _ref2.length; _i < _len2; _i++) {
+        scramble = _ref2[_i];
+        key = this.scrambleKey(scramble);
+        level = this.user.groups[this.group][key];
+        _results.push(level != null ? (level > 6 ? level = 6 : void 0, this.$(".progress_meter .bar ." + key + "}").css({
+          opacity: 1 - ((1 / 6) * level)
+        })) : this.$(".progress_meter .bar ." + key + "}").css({
+          opacity: 1
+        }));
       }
-      this.options = this["" + this.activeLevel + "Levels"]["level" + activeLevel];
+      return _results;
+    };
+    Scramble.prototype.scrambleKey = function(scrambleInfo) {
+      return "" + (scrambleInfo["native"].replace(/\W/g, '_')) + "-" + (scrambleInfo.foreign.replace(/\W/g, '_'));
+    };
+    Scramble.prototype.setStage = function() {
       $('.guesses').removeClass('hidden');
       $('.scrambled').removeClass('hidden');
       if ((this.activeLevel.match(/Medium/) != null) || (this.activeLevel.match(/Hard/) != null)) {
@@ -186,20 +254,27 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       }
       return array[this.randomIndex(array)];
     };
-    Scramble.prototype.newScramble = function() {
-      var displayWords, highlighted, i, sentence, _ref;
-      this.lastScrambles || (this.lastScrambles = []);
-      this.lettersAdded = [];
-      this.checkLevel();
-      for (i = 0; i < 4; i++) {
-        if (this.scrambleInfo && (_ref = this.scrambleInfo["native"], __indexOf.call(this.lastScrambles.slice(-4).map(function(s) {
-          return s["native"];
-        }), _ref) < 0)) {
-          break;
-        }
-        this.scrambleInfo = this.random(this.options);
+    Scramble.prototype.shuffle = function(array) {
+      var current, tmp, top;
+      top = array.length;
+      if (!top) {
+        return array;
       }
-      this.lastScrambles.push(this.scrambleInfo);
+      while (top--) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+      }
+      return array;
+    };
+    Scramble.prototype.newScramble = function() {
+      var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
+      this.answerTimes || (this.answerTimes = []);
+      this.answerTimes.push(new Date());
+      this.lettersAdded = [];
+      this.scrambleInfo = this.selectOption();
+      (_base = this.user.groups[this.group])[_name = this.scrambleKey(this.scrambleInfo)] || (_base[_name] = 1);
       displayWords = this.$('.display_words');
       if ((this.scrambleInfo["" + this.displayLevel + "Sentence"] != null) && this.scrambleInfo["" + this.displayLevel + "Sentence"].length) {
         sentence = this.scrambleInfo["" + this.displayLevel + "Sentence"];
@@ -208,67 +283,29 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       }
       sentence = " " + sentence + " ";
       highlighted = this.scrambleInfo[this.displayLevel];
-      sentence = sentence.replace(" " + highlighted + " ", " <span class='highlighted'>" + highlighted + "</span> ");
-      sentence = sentence.replace(" " + highlighted + "?", " <span class='highlighted'>" + highlighted + "</span>?");
+      _ref = [' ', '?', ','];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        boundary = _ref[_i];
+        sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+      }
       displayWords.html(sentence);
       this.createGuesses();
-      this.createScramble();
-      return this.startHelpTimer();
+      return this.createScramble();
     };
-    Scramble.prototype.startHelpTimer = function() {
-      return;
-      clearTimeout(this.helpTimeout);
-      return this.helpTimeout = setTimeout((__bind(function() {
-        var firstMissingGuess, letter, letterPosition;
-        if ((firstMissingGuess = $('.guesses .guess')[0]) == null) {
-          return;
-        }
-        letterPosition = firstMissingGuess.className.indexOf('letter_') + 'letter_'.length;
-        letter = firstMissingGuess.className.slice(letterPosition, (letterPosition + 1 + 1) || 9e9);
-        $(firstMissingGuess).trigger('click');
-        $(this.$(".scrambled ." + (this.containerClassName(firstMissingGuess)) + " .letter_" + letter)[0]).trigger('click');
-        if (this.checkCorrectAnswer()) {
-          return this.next();
-        } else {
-          return this.startHelpTimer();
-        }
-      }, this)), 15000);
-    };
-    Scramble.prototype.checkLevel = function() {
-      var lastAnswerDuration, users;
-      this.answerTimes || (this.answerTimes = []);
-      if ((this["break"] != null) && this["break"] > 0) {
-        this["break"]--;
-        this.breakAdjustment--;
-        if (this["break"] === 0) {
-          this.breakAdjustment = 0;
-          this.answerTimes.push(new Date());
-        }
-        this.setOptions();
-        return;
-      }
-      this.level += 1;
+    Scramble.prototype.saveLevel = function() {
+      var lastAnswerDuration;
       this.answerTimes.push(new Date());
-      if (this.answerTimes.length === 1) {
-        return;
-      }
       lastAnswerDuration = this.answerTimes[this.answerTimes.length - 1] - this.answerTimes[this.answerTimes.length - 2];
-      if (lastAnswerDuration < 3000) {
-        this["" + this.activeLevel + "Level"] += 4;
-      } else if (lastAnswerDuration < 6000) {
-        this["" + this.activeLevel + "Level"] += 3;
-      } else if (lastAnswerDuration < 9000) {
-        this["" + this.activeLevel + "Level"] += 2;
-      } else if (lastAnswerDuration < 20000) {
-        this["" + this.activeLevel + "Level"] += 1;
-      } else if (lastAnswerDuration > 30000) {
-        this.takeABreak();
+      if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
+        this.user.groups[this.group][this.scrambleKey(this.scrambleInfo)] += 1;
       }
-      this.setOptions();
-      if (this.user && this.user.length) {
-        users = $.cookie('users');
-        users[this.user].level = this.level;
-        users[this.user]["" + this.activeLevel + "Level"] = this["" + this.activeLevel + "Level"];
+      return this.saveUser();
+    };
+    Scramble.prototype.saveUser = function() {
+      var users;
+      if (this.user && this.user.name) {
+        users = $.cookie('users') || {};
+        users[this.user.name.toLowerCase()] = this.user;
         return $.cookie('users', users);
       }
     };
@@ -333,7 +370,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       }
       return groups;
     };
-    Scramble.prototype.shuffle = function(word) {
+    Scramble.prototype.shuffleWord = function(word) {
       var current, letter, shuffled, tmp, top, wordArray;
       top = word.length;
       if (!top) {
@@ -370,7 +407,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       }
       shuffled = wordArray.join('');
       if (shuffled === word) {
-        shuffled = this.shuffle(shuffled);
+        shuffled = this.shuffleWord(shuffled);
       }
       return shuffled;
     };
@@ -395,7 +432,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         container.addClass('container');
         container.addClass("color" + (index + 1));
         scrambled.append(container);
-        _ref2 = this.shuffle(this.modifyScramble(group.join('')));
+        _ref2 = this.shuffleWord(this.modifyScramble(group.join('')));
         for (_i = 0, _len2 = _ref2.length; _i < _len2; _i++) {
           letter = _ref2[_i];
           if (letter.match(/\w|[^\x00-\x80]+/)) {
@@ -449,12 +486,29 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         }
       }, this));
       return $('#clickarea').bind('keypress', __bind(function(e) {
-        var char, letter, openGuess;
+        var char, foreignChar, letter, openGuess;
         openGuess = this.$('.guesses .selected')[0] || this.$(".guesses .guess")[0];
         if (openGuess == null) {
           return;
         }
         char = String.fromCharCode(e.keyCode);
+        if (char === 'e' || char === 'i' || char === 'u' || char === 'o') {
+          foreignChar = (function() {
+            switch (char) {
+              case 'e':
+                return 'è';
+              case 'i':
+                return 'ì';
+              case 'o':
+                return 'ò';
+              case 'u':
+                return 'ù';
+            }
+          })();
+          if ($(openGuess).hasClass("actual_letter_" + foreignChar)) {
+            char = foreignChar;
+          }
+        }
         try {
           letter = $(".scrambled ." + (this.containerClassName(openGuess)) + " .letter_" + char)[0];
           if (!letter && (this.activeLevel.match(/Hard/) != null)) {
@@ -592,7 +646,6 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
           });
           this.dragging = null;
         }
-        this.startHelpTimer();
         containerClass = this.containerClassName(letter);
         if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
           this.replaceLetterWithGuess(letter);
@@ -613,7 +666,6 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
           e.preventDefault();
         }
         this.dragging = letter;
-        this.startHelpTimer();
         this.dragPathX = [];
         this.dragPathY = [];
         this.dragAdjustmentX = this.clientX(e) - letter.offset().left;
@@ -720,7 +772,8 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       }).join('') === this.scrambleInfo[this.activeType];
     };
     Scramble.prototype.next = function() {
-      var correct, correctSentence, highlighted, scrambled;
+      var boundary, correct, correctSentence, displayedSentence, highlighted, scrambled, _i, _len, _ref;
+      this.saveLevel();
       correct = $(document.createElement('DIV'));
       if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
         correctSentence = this.scrambleInfo["" + this.activeType + "Sentence"];
@@ -729,8 +782,11 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       }
       correctSentence = " " + correctSentence + " ";
       highlighted = this.scrambleInfo[this.activeType];
-      correctSentence = correctSentence.replace(" " + highlighted + " ", " <span class='highlighted'>" + highlighted + "</span> ");
-      correctSentence = correctSentence.replace(" " + highlighted + "?", " <span class='highlighted'>" + highlighted + "</span>?");
+      _ref = [' ', '?', ','];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        boundary = _ref[_i];
+        correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+      }
       correct.html(correctSentence);
       correct.addClass('correct');
       correct.css({
@@ -743,11 +799,17 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         width: null
       });
       scrambled.append(correct);
+      displayedSentence = this.$('.display_words').html();
+      this.$('.last_answer').animate({
+        opacity: 0,
+        duration: 300
+      });
       return correct.animate({
         opacity: 1,
         duration: 500,
         complete: __bind(function() {
           return $.timeout(200 + (30 * correctSentence.length), __bind(function() {
+            this.setProgress();
             return this.$('.foreign_words, .scrambled, .guesses').animate({
               opacity: 0,
               duration: 500,
@@ -759,7 +821,8 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
                 this.newScramble();
                 return this.$('.foreign_words, .scrambled, .guesses').animate({
                   opacity: 1,
-                  duration: 300
+                  duration: 300,
+                  complete: __bind(function() {}, this)
                 });
               }, this)
             });
@@ -770,22 +833,52 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
     Scramble.prototype.clearContainer = function(container) {
       return container.find('.container, .correct, .guess, .letter, .space').remove();
     };
+    Scramble.prototype.nextLevel = function() {
+      this.$('#next_level .next_level_link').html(localData[localData[this.group].nextLevel].title);
+      return this.$('.scramble_content').animate({
+        opacity: 0,
+        duration: 500,
+        complete: __bind(function() {
+          this.$('#next_level').css({
+            top: 200,
+            left: ($('.scramble').width() - this.$('#next_level').width()) / 2
+          });
+          this.$('#next_level .next_level_link').bind('click', __bind(function() {
+            this.group = localData[this.group].nextLevel;
+            this.user.lastGroupPlayed = this.group;
+            this.user.groups[this.group] = {};
+            this.saveUser();
+            this.orderedOptions = [];
+            this.setOptions();
+            this.setTitle();
+            this.setProgress();
+            return this.$('#next_level').animate({
+              opacity: 0,
+              duration: 500,
+              complete: __bind(function() {
+                this.newScramble();
+                return this.$('.scramble_content').animate({
+                  opacity: 1,
+                  duration: 500
+                });
+              }, this)
+            });
+          }, this));
+          return this.$('#next_level').animate({
+            opacity: 1,
+            duration: 1000
+          });
+        }, this)
+      });
+    };
     return Scramble;
   })();
   return $.route.add({
-    '': function() {
-      return $('#content').view({
-        name: 'Scramble',
-        data: {
-          level: 1
-        }
-      });
-    },
     'scramble': function() {
       return $('#content').view({
         name: 'Scramble',
         data: {
-          level: 1
+          level: 'top25words'
         }
       });
     },
@@ -793,106 +886,231 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       return $('#content').view({
         name: 'Scramble',
         data: {
-          level: parseInt(level)
+          level: level
         }
       });
     }
   });
 })(ender);
-localData = [
+localData = {
+  top25words: {
+    title: 'Top 25 Words',
+    subtitle: 'The 25 most frequently used Italian words.',
+    nextLevel: 'top25phrases',
+    data: [
+      {
+        "native": 'not',
+        foreign: 'non',
+        nativeSentence: 'that\'s not necessary',
+        foreignSentence: 'non è necessario'
+      }, {
+        "native": 'of',
+        foreign: 'di',
+        nativeSentence: 'memories of a cat',
+        foreignSentence: 'memorie di un gatto'
+      }, {
+        "native": 'what',
+        foreign: 'che',
+        nativeSentence: 'what luck',
+        foreignSentence: 'che fortuna'
+      }, {
+        "native": 'is',
+        foreign: 'è',
+        nativeSentence: 'that bird is fat',
+        foreignSentence: 'quell\'uccello è grasso'
+      }, {
+        "native": 'and',
+        foreign: 'e',
+        nativeSentence: 'big and tall',
+        foreignSentence: 'grande e grosso'
+      }, {
+        "native": 'the',
+        foreign: 'la',
+        nativeSentence: 'drop the ball now',
+        foreignSentence: 'cadere la palla ora'
+      }, {
+        "native": 'the',
+        foreign: 'il',
+        nativeSentence: 'there are drinks for the party',
+        foreignSentence: 'ci sono bevande per il partito'
+      }, {
+        "native": 'a',
+        foreign: 'un',
+        nativeSentence: 'a little more',
+        foreignSentence: 'un po più'
+      }, {
+        "native": 'for',
+        foreign: 'per',
+        nativeSentence: 'the drinks are for the party',
+        foreignSentence: 'le bevande sono per il partito'
+      }, {
+        "native": 'are',
+        foreign: 'sono',
+        nativeSentence: 'there are five quotes',
+        foreignSentence: 'ci sono cinque citazioni'
+      }, {
+        "native": 'i have',
+        foreign: 'ho',
+        nativeSentence: 'i have twenty dollars',
+        foreignSentence: 'ho venti dollari'
+      }, {
+        "native": 'but',
+        foreign: 'ma',
+        nativeSentence: 'i was going to but i can not',
+        foreignSentence: 'stavo andando ma non posso'
+      }, {
+        "native": 'he has',
+        foreign: 'ha',
+        nativeSentence: 'he has a big house',
+        foreignSentence: 'ha una grande casa'
+      }, {
+        "native": 'with',
+        foreign: 'con',
+        nativeSentence: 'i\'m coming with you',
+        foreignSentence: 'vengo con te'
+      }, {
+        "native": 'what',
+        foreign: 'cosa',
+        nativeSentence: 'what do you like to do?',
+        foreignSentence: 'cosa ti piace fare?'
+      }, {
+        "native": 'if',
+        foreign: 'se',
+        nativeSentence: 'what if he wins?',
+        foreignSentence: 'cosa succede se vince?'
+      }, {
+        "native": 'i',
+        foreign: 'io',
+        nativeSentence: 'i am going to the markets',
+        foreignSentence: 'io vado ai mercati'
+      }, {
+        "native": 'how',
+        foreign: 'come',
+        nativeSentence: 'how are you?',
+        foreignSentence: 'come stai?'
+      }, {
+        "native": 'there',
+        foreign: 'ci',
+        nativeSentence: 'there are three friends',
+        foreignSentence: 'ci sono tre amici'
+      }, {
+        "native": 'this',
+        foreign: 'questo',
+        nativeSentence: 'this is great',
+        foreignSentence: 'questo è fantastico'
+      }, {
+        "native": 'here',
+        foreign: 'qui',
+        nativeSentence: 'come here',
+        foreignSentence: 'vieni qui'
+      }, {
+        "native": 'you have',
+        foreign: 'hai',
+        nativeSentence: 'you have ten minutes',
+        foreignSentence: 'hai dieci minuti'
+      }, {
+        "native": 'six',
+        foreign: 'sei',
+        nativeSentence: 'there are six doors',
+        foreignSentence: 'ci sono sei porte'
+      }, {
+        "native": 'well',
+        foreign: 'bene',
+        nativeSentence: 'are you well?',
+        foreignSentence: 'stai bene?'
+      }, {
+        "native": 'yes',
+        foreign: 'sì',
+        nativeSentence: 'yes, you can',
+        foreignSentence: 'sì, è possibile'
+      }
+    ]
+  },
+  top25phrases: {
+    title: 'Phrases For The Top 25 Words',
+    subtitle: 'Phrases containing the 25 most frequently used Italian words.',
+    data: [
+      {
+        "native": 'that\'s not necessary',
+        foreign: 'non è necessario'
+      }, {
+        "native": 'memories of a cat',
+        foreign: 'memorie di un gatto'
+      }, {
+        "native": 'what luck',
+        foreign: 'che fortuna'
+      }, {
+        "native": 'that bird is fat',
+        foreign: 'quell\'uccello è grasso'
+      }, {
+        "native": 'big and tall',
+        foreign: 'grande e grosso'
+      }, {
+        "native": 'drop the ball now',
+        foreign: 'cadere la palla ora'
+      }, {
+        "native": 'there are drinks for the party',
+        foreign: 'ci sono bevande per il partito'
+      }, {
+        "native": 'a little more',
+        foreign: 'un po più'
+      }, {
+        "native": 'the drinks are for the party',
+        foreign: 'le bevande sono per il partito'
+      }, {
+        "native": 'there are five quotes',
+        foreign: 'ci sono cinque citazioni'
+      }, {
+        "native": 'i have twenty dollars',
+        foreign: 'ho venti dollari'
+      }, {
+        "native": 'i was going to but i can not',
+        foreign: 'stavo andando ma non posso'
+      }, {
+        "native": 'he has a big house',
+        foreign: 'ha una grande casa'
+      }, {
+        "native": 'i\'m coming with you',
+        foreign: 'vengo con te'
+      }, {
+        "native": 'what do you like to do?',
+        foreign: 'cosa ti piace fare?'
+      }, {
+        "native": 'what if he wins?',
+        foreign: 'cosa succede se vince?'
+      }, {
+        "native": 'i am going to the markets',
+        foreign: 'io vado ai mercati'
+      }, {
+        "native": 'how are you?',
+        foreign: 'come stai?'
+      }, {
+        "native": 'there are three friends',
+        foreign: 'ci sono tre amici'
+      }, {
+        "native": 'this is great',
+        foreign: 'questo è fantastico'
+      }, {
+        "native": 'come here',
+        foreign: 'vieni qui'
+      }, {
+        "native": 'you have ten minutes',
+        foreign: 'hai dieci minuti'
+      }, {
+        "native": 'there are six doors',
+        foreign: 'ci sono sei porte'
+      }, {
+        "native": 'are you well?',
+        foreign: 'stai bene?'
+      }, {
+        "native": 'yes, you can',
+        foreign: 'sì, è possibile'
+      }
+    ]
+  }
+};
+x = [
   {
-    "native": 'not',
-    foreign: 'non',
-    nativeSentence: 'that\'s not necessary',
-    foreignSentence: 'non è necessario'
-  }, {
-    "native": 'of',
-    foreign: 'di',
-    nativeSentence: 'memories of a cat',
-    foreignSentence: 'memorie di un gatto'
-  }, {
-    "native": 'what',
-    foreign: 'che',
-    nativeSentence: 'what luck',
-    foreignSentence: 'che fortuna'
-  }, {
-    "native": 'is',
-    foreign: 'è',
-    nativeSentence: 'that bird is fat',
-    foreignSentence: 'quell\'uccello è grasso'
-  }, {
-    "native": 'and',
-    foreign: 'e',
-    nativeSentence: 'big and tall',
-    foreignSentence: 'grande e grosso'
-  }, {
-    "native": 'for',
-    foreign: 'per',
-    nativeSentence: 'the drinks are for the party',
-    foreignSentence: 'le bevande sono per il partito'
-  }, {
-    "native": 'are',
-    foreign: 'sono',
-    nativeSentence: 'there are five quotes',
-    foreignSentence: 'ci sono cinque citazioni'
-  }, {
-    "native": 'i have three blue shirts',
-    foreign: 'ho tre maglie azzurre'
-  }, {
-    "native": 'i have twenty dollars',
-    foreign: 'ho venti dollari'
-  }, {
-    "native": 'but',
-    foreign: 'ma',
-    nativeSentence: 'i was going to but i can not',
-    foreignSentence: 'stavo andando ma non posso'
-  }, {
-    "native": 'he has a big house',
-    foreign: 'ha una grande casa'
-  }, {
-    "native": 'with',
-    foreign: 'con',
-    nativeSentence: 'i\'m coming with you',
-    foreignSentence: 'vengo con te'
-  }, {
-    "native": 'if',
-    foreign: 'se',
-    nativeSentence: 'what if he wins?',
-    foreignSentence: 'cosa succede se vince?'
-  }, {
-    "native": 'there',
-    foreign: 'ci',
-    nativeSentence: 'there are three friends',
-    foreignSentence: 'ci sono tre amici'
-  }, {
-    "native": 'this',
-    foreign: 'questo',
-    nativeSentence: 'this is great',
-    foreignSentence: 'questo è fantastico'
-  }, {
-    "native": 'here',
-    foreign: 'qui',
-    nativeSentence: 'come here',
-    foreignSentence: 'vieni qui'
-  }, {
-    "native": 'you have',
-    foreign: 'hai',
-    nativeSentence: 'you have ten minutes',
-    foreignSentence: 'hai dieci minuti'
-  }, {
-    "native": 'six',
-    foreign: 'sei',
-    nativeSentence: 'there are six doors',
-    foreignSentence: 'ci sono sei porte'
-  }, {
-    "native": 'well',
-    foreign: 'bene',
-    nativeSentence: 'are you well?',
-    foreignSentence: 'stai bene?'
-  }, {
-    "native": 'yes',
-    foreign: 'sì'
-  }, {
     "native": 'more',
     foreign: 'più',
     nativeSentence: 'a little more',
