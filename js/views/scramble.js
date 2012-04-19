@@ -213,9 +213,9 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         scramble = _ref2[_i];
         key = this.scrambleKey(scramble);
         level = this.user.groups[this.group][key];
-        _results.push(level != null ? (level > 6 ? level = 6 : void 0, this.$(".progress_meter .bar ." + key + "}").css({
+        _results.push(level != null ? (level > 6 ? level = 6 : void 0, this.$(".progress_meter .bar ." + key).css({
           opacity: 1 - ((1 / 6) * level)
-        })) : this.$(".progress_meter .bar ." + key + "}").css({
+        })) : this.$(".progress_meter .bar ." + key).css({
           opacity: 1
         }));
       }

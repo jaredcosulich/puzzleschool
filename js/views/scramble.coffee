@@ -125,9 +125,9 @@
                 level = @user.groups[@group][key]
                 if level?
                     level = 6 if level > 6
-                    @$(".progress_meter .bar .#{key}}").css(opacity: 1 - ((1/6) * level))
+                    @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/6) * level))
                 else
-                    @$(".progress_meter .bar .#{key}}").css(opacity: 1)
+                    @$(".progress_meter .bar .#{key}").css(opacity: 1)
                     
         scrambleKey: (scrambleInfo) -> "#{scrambleInfo.native.replace(/\W/g, '_')}-#{scrambleInfo.foreign.replace(/\W/g, '_')}"
                 
