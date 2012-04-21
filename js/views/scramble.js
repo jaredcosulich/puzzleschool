@@ -665,8 +665,9 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         this.dragging = letter;
         this.dragPathX = [];
         this.dragPathY = [];
-        this.dragAdjustmentX = this.clientX(e) - letter.offset().left;
-        return this.dragAdjustmentY = this.clientY(e) - letter.offset().top;
+        console.log(this.$('#content').offset().left);
+        this.dragAdjustmentX = this.clientX(e) - letter.offset().left + this.el.offset().left;
+        return this.dragAdjustmentY = this.clientY(e) - letter.offset().top + this.el.offset().top;
       }, this);
       letter = $(letter);
       letter.attr({
@@ -831,12 +832,17 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       return container.find('.container, .correct, .guess, .letter, .space').remove();
     };
     Scramble.prototype.nextLevel = function() {
-      this.$('#next_level .next_level_link').html(localData[localData[this.group].nextLevel].title);
+      var message, nextLevel;
+      nextLevel = localData[localData[this.group].nextLevel];
+      if (nextLevel != null) {
+        this.$('#next_level .next_level_link').html(nextLevel.title);
+        message = this.$('#next_level');
+      }
       return this.$('.scramble_content').animate({
         opacity: 0,
         duration: 500,
         complete: __bind(function() {
-          this.$('#next_level').css({
+          message.css({
             top: 200,
             left: ($('.scramble').width() - this.$('#next_level').width()) / 2
           });

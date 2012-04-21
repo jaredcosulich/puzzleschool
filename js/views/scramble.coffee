@@ -438,8 +438,9 @@
                 @dragging = letter
                 @dragPathX = []
                 @dragPathY = []
-                @dragAdjustmentX = @clientX(e) - letter.offset().left
-                @dragAdjustmentY = @clientY(e) - letter.offset().top
+                console.log(@$('#content').offset().left)
+                @dragAdjustmentX = @clientX(e) - letter.offset().left + @el.offset().left
+                @dragAdjustmentY = @clientY(e) - letter.offset().top + @el.offset().top
                 
             letter = $(letter)
             letter.attr(onclick: 'void(0)', ontouchstart: 'void(0)', ontouchend: 'void(0)', ontouchmove: 'void(0)')
@@ -544,12 +545,16 @@
         clearContainer: (container) -> container.find('.container, .correct, .guess, .letter, .space').remove()
             
         nextLevel: () ->
-            @$('#next_level .next_level_link').html(localData[localData[@group].nextLevel].title)
+            nextLevel = localData[localData[@group].nextLevel]
+            if nextLevel?
+                @$('#next_level .next_level_link').html(nextLevel.title)
+                message = @$('#next_level')
+                
             @$('.scramble_content').animate
                 opacity: 0
                 duration: 500
                 complete: () =>
-                    @$('#next_level').css
+                    message.css
                         top: 200
                         left: ($('.scramble').width() - @$('#next_level').width()) / 2
                     @$('#next_level .next_level_link').bind 'click', () =>
