@@ -642,6 +642,7 @@ localData =
     top25phrases: 
         title: 'Phrases For The Top 25 Words'
         subtitle: 'Phrases containing the 25 most frequently used Italian words.'
+        nextLevel: 'top50words'
         data: [
             {native: 'that\'s not necessary', foreign: 'non è necessario'},
             {native: 'memories of a cat', foreign: 'memorie di un gatto'},
@@ -669,36 +670,72 @@ localData =
             {native: 'are you well?', foreign: 'stai bene?'},
             {native: 'yes, you can', foreign: 'sì, è possibile'},
         ]
+    top50words:
+        title: 'Top 25 - 50 Words'
+        subtitle: 'The most frequently used Italian words (25 - 50).'
+        nextLevel: 'top50phrases'
+        data: [
+            {native: 'more', foreign: 'più', nativeSentence: 'a little more', foreignSentence: 'un po più'},
+            {native: 'my', foreign: 'mio', nativeSentence: 'my child is seven years old', foreignSentence: 'mio figlio ha sette anni'},
+            {native: 'because', foreign: 'perché', nativeSentence: 'because i want to', foreignSentence: 'perché voglio'},
+            {native: 'why', foreign: 'perché', nativeSentence: 'why do you want to go?', foreignSentence: 'perché vuoi andare?'},
+            {native: 'she', foreign: 'lei', nativeSentence: 'she leaves tomorrow', foreignSentence: 'lei parte domani'},
+            {native: 'only', foreign: 'solo', nativeSentence: 'it was only fifteen minutes', foreignSentence: 'era solo quindici minuti'},
+            {native: 'was', foreign: 'era', nativeSentence: 'it was thirty years ago', foreignSentence: 'era trent\'anni fa'},
+            {native: 'all', foreign: 'tutti', nativeSentence: 'all of the king\'s horses', foreignSentence: 'tutti i cavalli del re'},
+            {native: 'so-so', foreign: 'così-così', nativeSentence: 'i am feeling so-so', foreignSentence: 'mi sento così-così'},
+            {native: 'hello', foreign: 'ciao', nativeSentence: 'hello my friend', foreignSentence: 'ciao amico mio'},
+            {native: 'this', foreign: 'questo', nativeSentence: 'this is the best food', foreignSentence: 'questo è il miglior cibo'},
+            {native: 'to do', foreign: 'fare', nativeSentence: 'if you want to do this', foreignSentence: 'se si vuole fare questo'},
+            {native: 'when', foreign: 'quando', nativeSentence: 'when is the show?', foreignSentence: 'quando è lo spettacolo?'},
+            {native: 'now', foreign: 'ora', nativeSentence: 'drop the ball now', foreignSentence: 'cadere la palla ora'},
+            {native: 'you did', foreign: 'hai fatto', nativeSentence: 'you did your best', foreignSentence: 'hai fatto del tuo meglio'},
+            {native: 'to be', foreign: 'essere', nativeSentence: 'i want to be an astronaut', foreignSentence: 'voglio essere un astronauta'},
+            {native: 'never', foreign: 'mai', nativeSentence: 'i have never been to the coast', foreignSentence: 'non sono mai stato alla costa'},
+            {native: 'who', foreign: 'chi', nativeSentence: 'who are you?', foreignSentence: 'chi sei?'},
+            {native: 'or', foreign: 'o', nativeSentence: 'pizza or pasta', foreignSentence: 'pizza o la pasta'},
+            {native: 'all', foreign: 'tutti', nativeSentence: 'he ate all of the cookies', foreignSentence: 'ha mangiato tutti i cookie'},
+            {native: 'very', foreign: 'molto', nativeSentence: 'he is very old', foreignSentence: 'lui è molto vecchio'},
+            {native: 'also', foreign: 'anche', nativeSentence: 'i also need two pencils', foreignSentence: 'ho anche bisogno di due matite'},
+            {native: 'he said', foreign: 'ha detto', nativeSentence: 'he said go left', foreignSentence: 'ha detto andate a sinistra'},
+            {native: 'that', foreign: 'quella', nativeSentence: 'that lady ate my cheese', foreignSentence: 'quella signora mangiato il mio formaggio'},
+            {native: 'nothing', foreign: 'niente', nativeSentence: 'there was nothing there', foreignSentence: 'non c\'era niente'},
+        ]
+    top50Phrases:
+        title: 'Phrases For The Top 25 - 50 Words'
+        subtitle: 'Phrases containing the 25 - 50 most frequently used Italian words.'
+        data: [
+            {native: 'a little more', foreign: 'un po più'},
+            {native: 'my child is seven years old', foreign: 'mio figlio ha sette anni'},
+            {native: 'because i want to', foreign: 'perché voglio'},
+            {native: 'why do you want to go?', foreign: 'perché vuoi andare?'},
+            {native: 'she leaves tomorrow', foreign: 'lei parte domani'},
+            {native: 'it was only fifteen minutes', foreign: 'era solo quindici minuti'},
+            {native: 'it was thirty years ago', foreign: 'era trent\'anni fa'},
+            {native: 'all of the king\'s horses', foreign: 'tutti i cavalli del re'},
+            {native: 'i am feeling so-so', foreign: 'mi sento così-così'},
+            {native: 'hello my friend', foreign: 'ciao amico mio'},
+            {native: 'this is the best food', foreign: 'questo è il miglior cibo'},
+            {native: 'if you want to do this', foreign: 'se si vuole fare questo'},
+            {native: 'when is the show?', foreign: 'quando è lo spettacolo?'},
+            {native: 'drop the ball now', foreign: 'cadere la palla ora'},
+            {native: 'you did your best', foreign: 'hai fatto del tuo meglio'},
+            {native: 'i want to be an astronaut', foreign: 'voglio essere un astronauta'},
+            {native: 'i have never been to the coast', foreign: 'non sono mai stato alla costa'},
+            {native: 'who are you?', foreign: 'chi sei?'},
+            {native: 'pizza or pasta', foreign: 'pizza o la pasta'},
+            {native: 'he ate all of the cookies', foreign: 'ha mangiato tutti i cookie'},
+            {native: 'he is very old', foreign: 'lui è molto vecchio'},
+            {native: 'i also need two pencils', foreign: 'ho anche bisogno di due matite'},
+            {native: 'he said go left', foreign: 'ha detto andate a sinistra'},
+            {native: 'that lady ate my cheese', foreign: 'quella signora mangiato il mio formaggio'},
+            {native: 'there was nothing there', foreign: 'non c\'era niente'},
+        ]
     
 x = [
-    {native: 'more', foreign: 'più', nativeSentence: 'a little more', foreignSentence: 'un po più'},
-    {native: 'my', foreign: 'mio', nativeSentence: 'my child is seven years old', foreignSentence: 'mio figlio ha sette anni'},
-    {native: 'because', foreign: 'perché', nativeSentence: 'because i want to', foreignSentence: 'perché voglio'},
-    {native: 'why', foreign: 'perché', nativeSentence: 'why do you want to go?', foreignSentence: 'perché vuoi andare?'},
-    {native: 'she', foreign: 'lei', nativeSentence: 'she leaves tomorrow', foreignSentence: 'lei parte domani'},
-    {native: 'only', foreign: 'solo', nativeSentence: 'it was only fifteen minutes', foreignSentence: 'era solo quindici minuti'},
-    {native: 'was', foreign: 'era', nativeSentence: 'it was thirty years ago', foreignSentence: 'era trent\'anni fa'},
-    {native: 'all', foreign: 'tutti', nativeSentence: 'all of the king\'s horses', foreignSentence: 'tutti i cavalli del re'},
-    {native: 'so-so', foreign: 'così-così', nativeSentence: 'i am feeling so-so', foreignSentence: 'mi sento così-così'},
-    {native: 'hello', foreign: 'ciao', nativeSentence: 'hello my friend', foreignSentence: 'ciao amico mio'},
-    {native: 'this', foreign: 'questo', nativeSentence: 'this is the best food', foreignSentence: 'questo è il miglior cibo'},
-    {native: 'to do', foreign: 'fare', nativeSentence: 'if you want to do this', foreignSentence: 'se si vuole fare questo'},
-    {native: 'when', foreign: 'quando', nativeSentence: 'when is the show?', foreignSentence: 'quando è lo spettacolo?'},
-    {native: 'now', foreign: 'ora', nativeSentence: 'drop the ball now', foreignSentence: 'cadere la palla ora'},
-    {native: 'you did', foreign: 'hai fatto', nativeSentence: 'you did your best', foreignSentence: 'hai fatto del tuo meglio'},
-    {native: 'to be', foreign: 'essere', nativeSentence: 'i want to be an astronaut', foreignSentence: 'voglio essere un astronauta'},
-    {native: 'never', foreign: 'mai', nativeSentence: 'i have never been to the coast', foreignSentence: 'non sono mai stato alla costa'},
-    {native: 'who', foreign: 'chi', nativeSentence: 'who are you?', foreignSentence: 'chi sei?'},
-    {native: 'or', foreign: 'o', nativeSentence: 'pizza or pasta', foreignSentence: 'pizza o la pasta'},
-    {native: 'all', foreign: 'tutti', nativeSentence: 'he ate all of the cookies', foreignSentence: 'ha mangiato tutti i cookie'},
-    {native: 'very', foreign: 'molto', nativeSentence: 'he is very old', foreignSentence: 'lui è molto vecchio'},
-    {native: 'also', foreign: 'anche', nativeSentence: 'i also need two pencils', foreignSentence: 'ho anche bisogno di due matite'},
-    {native: 'he said', foreign: 'ha detto', nativeSentence: 'he said go left', foreignSentence: 'ha detto andate a sinistra'},
-    {native: 'that', foreign: 'quella', nativeSentence: 'that lady ate my cheese', foreignSentence: 'quella signora mangiato il mio formaggio'},
-    {native: 'nothing', foreign: 'niente', nativeSentence: 'there was nothing there', foreignSentence: 'non c\'era niente'},
     {native: 'thanks', foreign: 'grazie', nativeSentence: 'thanks for the help', foreignSentence: 'grazie per l\'aiuto'},
     {native: 'he', foreign: 'lui', nativeSentence: 'he is eighteen years old', foreignSentence: 'lui ha diciotto anni'},
-    {native: 'i want a new car', foreign: 'voglio una macchina nuova'},
+    {native: 'i want', foreign: 'voglio', nativeSentence: 'i want a new car', foreignSentence: 'voglio una macchina nuova'},
     {native: 'we have a house', foreign: 'abbiamo una casa'},
     {native: 'we have a car', foreign: 'abbiamo un auto'},
     {native: 'we have an oven', foreign: 'abbiamo un forno'},
