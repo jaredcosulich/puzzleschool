@@ -132,15 +132,17 @@
         scrambleKey: (scrambleInfo) -> "#{scrambleInfo.native.replace(/\W/g, '_')}-#{scrambleInfo.foreign.replace(/\W/g, '_')}"
                 
         setStage: () ->
-            $('.guesses').removeClass('hidden')
-            $('.scrambled').removeClass('hidden')       
+            @$('.guesses').removeClass('hidden')
+            @$('.scrambled').removeClass('hidden') 
+            @$('.scramble_content').removeClass('show_keyboard')      
             if @activeLevel.match(/Medium/)? or @activeLevel.match(/Hard/)?
-                $('.guesses').addClass('hidden')
-                $('.guesses .hidden_message').show()
+                @$('.guesses').addClass('hidden')
+                @$('.guesses .hidden_message').show()
 
             if @activeLevel.match(/Hard/)?
-                $('.scrambled').addClass('hidden')       
-                $('.scrambled .hidden_message').show()
+                @$('.scrambled').addClass('hidden')       
+                @$('.scrambled .hidden_message').show()
+                @$('.scramble_content').addClass('show_keyboard')
             
         randomIndex: (array) -> Math.floor(Math.random() * array.length)
             
@@ -308,22 +310,26 @@
                 openGuess = @$('.guesses .selected')[0] or @$(".guesses .guess")[0]
                 return unless openGuess?
                 
-                char = String.fromCharCode(e.keyCode)
-                if char in ['e', 'i', 'u', 'o']  
-                    foreignChar = switch char
-                        when 'e' then 'è'
-                        when 'i' then 'ì'
-                        when 'o' then 'ò'
-                        when 'u' then 'ù'
+                try 
+                    char = String.fromCharCode(e.keyCode).toLowerCase()                
+                    if char in ['e', 'i', 'u', 'o']  
+                        foreignChar = switch char
+                            when 'e' then 'è'
+                            when 'i' then 'ì'
+                            when 'o' then 'ò'
+                            when 'u' then 'ù'
                         
-                    char = foreignChar if $(openGuess).hasClass("actual_letter_#{foreignChar}")
+                        char = foreignChar if $(openGuess).hasClass("actual_letter_#{foreignChar}")
                 
-                try
                     letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
                     if !letter and @activeLevel.match(/Hard/)?
                         if char.match(/\w|[^\x00-\x80]+/)
                             letter = @createLetter(char) 
                             $(".scrambled .#{@containerClassName(openGuess)}").append(letter)
+                    
+                    $.timeout 10, () =>
+                        $('#clickarea').val('')        
+                        $('#clickarea').html('')        
                 catch e
                     return
                     
@@ -438,7 +444,6 @@
                 @dragging = letter
                 @dragPathX = []
                 @dragPathY = []
-                console.log(@$('#content').offset().left)
                 @dragAdjustmentX = @clientX(e) - letter.offset().left + @el.offset().left
                 @dragAdjustmentY = @clientY(e) - letter.offset().top + @el.offset().top
                 

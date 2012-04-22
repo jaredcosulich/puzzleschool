@@ -1590,6 +1590,12 @@ form select {
 .story .option:hover, .choosestory .option:hover {
   color: black;
 }
+.scramble {
+  /* iPad [portrait + landscape] */
+
+  /* iPhone [portrait + landscape] */
+
+}
 .scramble#content {
   padding: 0;
   position: relative;
@@ -1644,13 +1650,10 @@ form select {
   background-color: rgba(136, 204, 102, 0.5);
   padding: 0 3px;
 }
-.scramble .last_answer .highlighted {
-  background-color: rgba(136, 204, 102, 0.25);
-  padding: 0 3px;
-}
 .scramble .section {
-  margin-top: 30px;
   font-size: 30pt;
+  margin: 0;
+  padding: 10px 0;
 }
 .scramble .guesses, .scramble .scrambled {
   clear: left;
@@ -1750,8 +1753,8 @@ form select {
 }
 .scramble .guesses.hidden .hidden_message, .scramble .scrambled.hidden .hidden_message {
   display: block;
-  left: 208px;
-  top: 40px;
+  left: 236px;
+  top: 30px;
 }
 .scramble .guesses .color1 .correct_letter,
 .scramble .guesses .color2 .correct_letter,
@@ -1769,18 +1772,38 @@ form select {
   visibility: visible;
 }
 .scramble .guesses.hidden .hidden_message {
-  left: 224px;
-  top: 12px;
+  left: 250px;
+  top: 24px;
 }
-.scramble #next_level {
+.scramble .floating_message {
   position: absolute;
   top: 100px;
   left: 100px;
   opacity: 0;
   text-align: center;
 }
+.scramble .last_answer .highlighted {
+  background-color: rgba(136, 204, 102, 0.25);
+  padding: 0 3px;
+}
 .scramble #clickarea {
   position: absolute;
   top: -1000px;
   left: -1000px;
+  background-image: url('images/keyboard.gif');
+  width: 50px;
+  height: 17px;
+  display: block;
+  color: gray;
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .show_keyboard #clickarea {
+    top: 284px;
+    left: 450px;
+  }
+}
+@media only screen and (max-device-width: 480px) {
+  .show_keyboard #clickarea {
+    position: static;
+  }
 }

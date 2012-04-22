@@ -225,15 +225,17 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       return "" + (scrambleInfo["native"].replace(/\W/g, '_')) + "-" + (scrambleInfo.foreign.replace(/\W/g, '_'));
     };
     Scramble.prototype.setStage = function() {
-      $('.guesses').removeClass('hidden');
-      $('.scrambled').removeClass('hidden');
+      this.$('.guesses').removeClass('hidden');
+      this.$('.scrambled').removeClass('hidden');
+      this.$('.scramble_content').removeClass('show_keyboard');
       if ((this.activeLevel.match(/Medium/) != null) || (this.activeLevel.match(/Hard/) != null)) {
-        $('.guesses').addClass('hidden');
-        $('.guesses .hidden_message').show();
+        this.$('.guesses').addClass('hidden');
+        this.$('.guesses .hidden_message').show();
       }
       if (this.activeLevel.match(/Hard/) != null) {
-        $('.scrambled').addClass('hidden');
-        return $('.scrambled .hidden_message').show();
+        this.$('.scrambled').addClass('hidden');
+        this.$('.scrambled .hidden_message').show();
+        return this.$('.scramble_content').addClass('show_keyboard');
       }
     };
     Scramble.prototype.randomIndex = function(array) {
@@ -488,25 +490,25 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         if (openGuess == null) {
           return;
         }
-        char = String.fromCharCode(e.keyCode);
-        if (char === 'e' || char === 'i' || char === 'u' || char === 'o') {
-          foreignChar = (function() {
-            switch (char) {
-              case 'e':
-                return 'è';
-              case 'i':
-                return 'ì';
-              case 'o':
-                return 'ò';
-              case 'u':
-                return 'ù';
-            }
-          })();
-          if ($(openGuess).hasClass("actual_letter_" + foreignChar)) {
-            char = foreignChar;
-          }
-        }
         try {
+          char = String.fromCharCode(e.keyCode).toLowerCase();
+          if (char === 'e' || char === 'i' || char === 'u' || char === 'o') {
+            foreignChar = (function() {
+              switch (char) {
+                case 'e':
+                  return 'è';
+                case 'i':
+                  return 'ì';
+                case 'o':
+                  return 'ò';
+                case 'u':
+                  return 'ù';
+              }
+            })();
+            if ($(openGuess).hasClass("actual_letter_" + foreignChar)) {
+              char = foreignChar;
+            }
+          }
           letter = $(".scrambled ." + (this.containerClassName(openGuess)) + " .letter_" + char)[0];
           if (!letter && (this.activeLevel.match(/Hard/) != null)) {
             if (char.match(/\w|[^\x00-\x80]+/)) {
@@ -514,6 +516,10 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
               $(".scrambled ." + (this.containerClassName(openGuess))).append(letter);
             }
           }
+          $.timeout(10, __bind(function() {
+            $('#clickarea').val('');
+            return $('#clickarea').html('');
+          }, this));
         } catch (e) {
           return;
         }
@@ -665,7 +671,6 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         this.dragging = letter;
         this.dragPathX = [];
         this.dragPathY = [];
-        console.log(this.$('#content').offset().left);
         this.dragAdjustmentX = this.clientX(e) - letter.offset().left + this.el.offset().left;
         return this.dragAdjustmentY = this.clientY(e) - letter.offset().top + this.el.offset().top;
       }, this);
