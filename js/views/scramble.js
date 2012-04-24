@@ -192,7 +192,8 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
     };
     Scramble.prototype.setProgress = function() {
       var index, key, level, scramble, section, _i, _len, _len2, _ref, _ref2, _results;
-      if (!this.$('.progress_meter .bar .progress_section').length) {
+      if (!this.$(".progress_meter .bar ." + (this.scrambleKey(localData[this.group].data[0]))).length) {
+        this.$('.progress_meter .bar .progress_section').remove();
         _ref = localData[this.group].data;
         for (index = 0, _len = _ref.length; index < _len; index++) {
           scramble = _ref[index];
@@ -1012,7 +1013,7 @@ localData = {
       }, {
         "native": 'this',
         foreign: 'questo',
-        nativeSentence: 'this is great',
+        nativeSentence: 'this is fantastic',
         foreignSentence: 'questo è fantastico'
       }, {
         "native": 'here',

@@ -112,7 +112,8 @@
             @$('.header .title .subtitle').html(localData[@group].subtitle)
             
         setProgress: () ->
-            if not @$('.progress_meter .bar .progress_section').length
+            if not @$(".progress_meter .bar .#{@scrambleKey(localData[@group].data[0])}").length
+                @$('.progress_meter .bar .progress_section').remove()
                 for scramble, index in localData[@group].data
                     section = $(document.createElement("DIV"))
                     section.addClass('progress_section')
@@ -632,7 +633,7 @@ localData =
             {native: 'i', foreign: 'io', nativeSentence: 'i am going to the markets', foreignSentence: 'io vado ai mercati'},
             {native: 'how', foreign: 'come', nativeSentence: 'how are you?', foreignSentence: 'come stai?'}
             {native: 'there', foreign: 'ci', nativeSentence: 'there are three friends', foreignSentence: 'ci sono tre amici'},
-            {native: 'this', foreign: 'questo', nativeSentence: 'this is great', foreignSentence: 'questo è fantastico'},
+            {native: 'this', foreign: 'questo', nativeSentence: 'this is fantastic', foreignSentence: 'questo è fantastico'},
             {native: 'here', foreign: 'qui', nativeSentence: 'come here', foreignSentence: 'vieni qui'},
             {native: 'you have', foreign: 'hai', nativeSentence: 'you have ten minutes', foreignSentence: 'hai dieci minuti'},
             {native: 'six', foreign: 'sei', nativeSentence: 'there are six doors', foreignSentence: 'ci sono sei porte'},
