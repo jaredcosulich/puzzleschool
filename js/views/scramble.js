@@ -34,13 +34,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       this.setProgress();
       this.bindWindow();
       this.bindKeyPress();
-      this.newScramble();
-      return $('.progress_meter').bind('click', __bind(function() {
-        var users;
-        users = $.cookie('users');
-        users.jared.lastGroupPlayed = 'top25words';
-        return $.cookie('users', users);
-      }, this));
+      return this.newScramble();
     };
     Scramble.prototype.loadUser = function() {
       var name, names, user, userName, users;
@@ -219,7 +213,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         scramble = _ref2[_i];
         key = this.scrambleKey(scramble);
         level = this.user.groups[this.group][key];
-        _results.push(level != null ? (level > 7 ? level = 7 : void 0, this.$(".progress_meter .bar ." + key).css({
+        _results.push(level ? (level > 7 ? level = 7 : void 0, this.$(".progress_meter .bar ." + key).css({
           opacity: 1 - ((1 / 7) * level)
         })) : this.$(".progress_meter .bar ." + key).css({
           opacity: 1

@@ -14,11 +14,6 @@
             @bindWindow()
             @bindKeyPress()
             @newScramble()
-
-            $('.progress_meter').bind 'click', () => 
-                users = $.cookie('users')
-                users.jared.lastGroupPlayed = 'top25words'
-                $.cookie('users', users)
             
         loadUser: () ->
             users = $.cookie('users') or {}
@@ -128,7 +123,7 @@
             for scramble in localData[@group].data
                 key = @scrambleKey(scramble)
                 level = @user.groups[@group][key]
-                if level?
+                if level
                     level = 7 if level > 7
                     @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/7) * level))
                 else
