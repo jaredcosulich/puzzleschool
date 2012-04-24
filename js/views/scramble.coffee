@@ -14,7 +14,7 @@
             @bindWindow()
             @bindKeyPress()
             @newScramble()
-
+            
         loadUser: () ->
             users = $.cookie('users') or {}
             names = (name.toLowerCase() for name, user of users)
@@ -124,8 +124,8 @@
                 key = @scrambleKey(scramble)
                 level = @user.groups[@group][key]
                 if level?
-                    level = 6 if level > 6
-                    @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/6) * level))
+                    level = 7 if level > 7
+                    @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/7) * level))
                 else
                     @$(".progress_meter .bar .#{key}").css(opacity: 1)
                     
