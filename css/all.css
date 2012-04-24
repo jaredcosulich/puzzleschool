@@ -1599,6 +1599,7 @@ form select {
 .scramble#content {
   padding: 0;
   position: relative;
+  margin-bottom: 60px;
 }
 .scramble .header {
   padding-top: 15px;
@@ -1777,8 +1778,8 @@ form select {
 }
 .scramble .floating_message {
   position: absolute;
-  top: 100px;
-  left: 100px;
+  top: -1000px;
+  left: -1000px;
   opacity: 0;
   text-align: center;
 }
