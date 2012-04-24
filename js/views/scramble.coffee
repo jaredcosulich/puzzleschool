@@ -6,6 +6,10 @@
             @template = @_requireTemplate('templates/scramble.html')
             @loadUser()
             @setOptions()
+            $('.progress_meter').bind 'click', () => 
+                users = $.cookie('users')
+                users.jared.lastGroupPlayed = 'top25words'
+                $.cookie('users', users)
 
         renderView: () ->
             @el.html(@template.render())   

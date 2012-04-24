@@ -26,7 +26,13 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       this.level = _arg.level;
       this.template = this._requireTemplate('templates/scramble.html');
       this.loadUser();
-      return this.setOptions();
+      this.setOptions();
+      return $('.progress_meter').bind('click', __bind(function() {
+        var users;
+        users = $.cookie('users');
+        users.jared.lastGroupPlayed = 'top25words';
+        return $.cookie('users', users);
+      }, this));
     };
     Scramble.prototype.renderView = function() {
       this.el.html(this.template.render());
