@@ -2,6 +2,7 @@
     views = require('views')
                    
     class views.Scramble extends views.Page
+        maxLevel: 7
         prepare: ({@level}) ->
             @template = @_requireTemplate('templates/scramble.html')
             @loadUser()
@@ -30,7 +31,7 @@
             if @user && @user.lastGroupPlayed?
                 @group = @user.lastGroupPlayed
             else
-                @group = 'top25words'
+                @group = 'top10words'
                 @user.lastGroupPlayed = @group
                 @user.groups[@group] = {}
 
@@ -51,7 +52,7 @@
                 return @orderedOptions[@orderedOptionsIndex] 
                 
             optionsToAdd = [[],[],[],[],[],[],[]]            
-            minLevel = 7
+            minLevel = @maxLevel
             
             for option in @options
                 continue if option in @orderedOptions[-4..-1]
@@ -60,13 +61,14 @@
                 optionsToAdd[optionLevel].push(option)
                 minLevel = optionLevel if optionLevel < minLevel
 
-            if minLevel == 7
-                incomplete = (option for option in @orderedOptions[-4..-1] when (@user.groups[@group][@scrambleKey(option)] || 1) < 7)
+            if minLevel == @maxLevel
+                incomplete = (option for option in @options when (@user.groups[@group][@scrambleKey(option)] || 1) < @maxLevel)
                 if incomplete.length
                     @orderedOptions.push(option) for option in incomplete
+                    return @orderedOptions[@orderedOptionsIndex]
                 else
                     @nextLevel()
-                return
+                    return false
 
             possibleLevels = [minLevel, minLevel]
             if optionsToAdd[minLevel].length > 4                
@@ -80,7 +82,8 @@
                     possibleLevels.push(minLevel + i) for i in [0..2]
                 
             level = @random(possibleLevels)
-            level = (level for level, options of optionsToAdd)[0] if not optionsToAdd[level]
+            if not optionsToAdd[level] or not optionsToAdd[level].length
+                level = (level for level, options of optionsToAdd when options.length)[0]  
             
             shuffledOptions = @shuffle(optionsToAdd[level])
             @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
@@ -108,8 +111,21 @@
             return @orderedOptions[@orderedOptionsIndex]
             
         setTitle: () ->
-            @$('.header .title .text').html(localData[@group].title)
-            @$('.header .title .subtitle').html(localData[@group].subtitle)
+            @$('.header .title').animate
+                opacity: 0
+                duration: 300
+                complete: () =>
+                    @$('.header .title .text').html(localData[@group].title)
+                    @$('.header .title .subtitle').html(localData[@group].subtitle)
+                    $.timeout 100, () =>
+                        halfWidth = @$('.header').width() / 2 
+                        h1Space = @$('.header h1').width() + parseInt(@$('.header h1').css('marginLeft'))
+                        halfTitleWidth = @$('.header .title').width() / 2
+                        margin = halfWidth - h1Space - halfTitleWidth
+                        @$('.header .title').css(marginLeft: margin)
+                        @$('.header .title').animate
+                            opacity: 1
+                            duration: 300
             
         setProgress: () ->
             if not @$(".progress_meter .bar .#{@scrambleKey(localData[@group].data[0])}").length
@@ -125,8 +141,8 @@
                 key = @scrambleKey(scramble)
                 level = @user.groups[@group][key]
                 if level
-                    level = 7 if level > 7
-                    @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/7) * level))
+                    level = @maxLevel if level > @maxLevel
+                    @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/@maxLevel) * level))
                 else
                     @$(".progress_meter .bar .#{key}").css(opacity: 1)
                     
@@ -170,7 +186,8 @@
             
             @lettersAdded = []
             
-            @scrambleInfo = @selectOption()     
+            @scrambleInfo = @selectOption()
+            return unless @scrambleInfo     
             @user.groups[@group][@scrambleKey(@scrambleInfo)] or= 1    
             
             displayWords = @$('.display_words')
@@ -523,30 +540,40 @@
             
             displayedSentence = @$('.display_words').html()
 
-            @$('.last_answer').animate
-                opacity: 0
-                duration: 300
+            # @$('.last_answer').animate
+            #     opacity: 0
+            #     duration: 300
+
+            nextShown = false
+            showNext = () =>
+                return if nextShown
+                @el.unbind 'click'
+                $('#clickarea').unbind 'keyup'
+                nextShown = true
+                @setProgress()
+                @$('.foreign_words, .scrambled, .guesses').animate
+                    opacity: 0
+                    duration: 500
+                    complete: () =>
+                        @$('.scrambled, .guesses').css(width: null, height: null)
+                        @newScramble()
+                        @$('.foreign_words, .scrambled, .guesses').animate
+                            opacity: 1
+                            duration: 300
+                            complete: () =>
+                                # @$('.last_answer').html("#{displayedSentence} = #{correctSentence}")
+                                # @$('.last_answer').animate
+                                #     opacity: 1
+                                #     duration: 300
 
             correct.animate
                 opacity: 1
                 duration: 500
                 complete: () =>
-                    $.timeout 200 + (30 * correctSentence.length), () =>
-                        @setProgress()
-                        @$('.foreign_words, .scrambled, .guesses').animate
-                            opacity: 0
-                            duration: 500
-                            complete: () =>
-                                @$('.scrambled, .guesses').css(width: null, height: null)
-                                @newScramble()
-                                @$('.foreign_words, .scrambled, .guesses').animate
-                                    opacity: 1
-                                    duration: 300
-                                    complete: () =>
-                                        # @$('.last_answer').html("#{displayedSentence} = #{correctSentence}")
-                                        # @$('.last_answer').animate
-                                        #     opacity: 1
-                                        #     duration: 300
+                    $.timeout 500 + (30 * correctSentence.length), () => showNext()
+                    @el.bind 'click', () => showNext()
+                    $('#clickarea').bind 'keyup', (e) => showNext() if e.keyCode == 13
+            
                         
         clearContainer: (container) -> container.find('.container, .correct, .guess, .letter, .space').remove()
             
@@ -564,11 +591,13 @@
                         top: 200
                         left: ($('.scramble').width() - @$('#next_level').width()) / 2
                     @$('#next_level .next_level_link').bind 'click', () =>
+                        @$('#next_level .next_level_link').unbind 'click'
                         @group = localData[@group].nextLevel
                         @user.lastGroupPlayed = @group
                         @user.groups[@group] = {}
                         @saveUser()
                         @orderedOptions = []
+                        @orderedOptionsIndex = 0
                         @setOptions()
                         @setTitle()
                         @setProgress()
@@ -609,10 +638,10 @@
 
 
 localData = 
-    top25words: 
-        title: 'Top 25 Words'
-        subtitle: 'The 25 most frequently used Italian words.'
-        nextLevel: 'top25phrases'
+    top10words: 
+        title: 'Top 10 Words'
+        subtitle: 'The 10 most frequently used Italian words.'
+        nextLevel: 'top10phrases'
         data: [
             {native: 'not', foreign: 'non', nativeSentence: 'that\'s not necessary', foreignSentence: 'non è necessario'},
             {native: 'of', foreign: 'di', nativeSentence: 'memories of a cat', foreignSentence: 'memorie di un gatto'},
@@ -622,8 +651,30 @@ localData =
             {native: 'the', foreign: 'la', nativeSentence: 'drop the ball now', foreignSentence: 'cadere la palla ora'},
             {native: 'the', foreign: 'il', nativeSentence: 'there are drinks for the party', foreignSentence: 'ci sono bevande per il partito'},
             {native: 'a', foreign: 'un', nativeSentence: 'a little more', foreignSentence: 'un po più'},
-            {native: 'for', foreign: 'per', nativeSentence: 'the drinks are for the party', foreignSentence: 'le bevande sono per il partito'},
+            {native: 'for', foreign: 'per', nativeSentence: 'where is the food for dinner?', foreignSentence: 'dove è il cibo per la cena?'},
             {native: 'are', foreign: 'sono', nativeSentence: 'there are five quotes', foreignSentence: 'ci sono cinque citazioni'},
+        ]
+    top10phrases: 
+        title: 'Phrases For The Top 10 Words'
+        subtitle: 'Phrases containing the 10 most frequently used Italian words.'
+        nextLevel: 'top25words'
+        data: [
+            {native: 'that\'s not necessary', foreign: 'non è necessario'},
+            {native: 'memories of a cat', foreign: 'memorie di un gatto'},
+            {native: 'what luck', foreign: 'che fortuna'},
+            {native: 'that bird is fat', foreign: 'quell\'uccello è grasso'},
+            {native: 'big and tall', foreign: 'grande e grosso'},
+            {native: 'drop the ball now', foreign: 'cadere la palla ora'},
+            {native: 'there are drinks for the party', foreign: 'ci sono bevande per il partito'},
+            {native: 'a little more', foreign: 'un po più'},
+            {native: 'where is the food for dinner?', foreign: 'dove è il cibo per la cena?'},
+            {native: 'there are five quotes', foreign: 'ci sono cinque citazioni'},
+        ]
+    top25words:
+        title: 'Top Words (10 - 25)'
+        subtitle: 'The most frequently used Italian words (10 - 25).'
+        nextLevel: 'top25phrases'        
+        data: [
             {native: 'i have', foreign: 'ho', nativeSentence: 'i have twenty dollars', foreignSentence: 'ho venti dollari'},
             {native: 'but', foreign: 'ma', nativeSentence: 'i was going to but i can not', foreignSentence: 'stavo andando ma non posso'},
             {native: 'he has', foreign: 'ha', nativeSentence: 'he has a big house', foreignSentence: 'ha una grande casa'},
@@ -642,19 +693,9 @@ localData =
         ]
     top25phrases: 
         title: 'Phrases For The Top 25 Words'
-        subtitle: 'Phrases containing the 25 most frequently used Italian words.'
+        subtitle: 'Phrases containing the most frequently used Italian words (10 - 25).'
         nextLevel: 'top50words'
         data: [
-            {native: 'that\'s not necessary', foreign: 'non è necessario'},
-            {native: 'memories of a cat', foreign: 'memorie di un gatto'},
-            {native: 'what luck', foreign: 'che fortuna'},
-            {native: 'that bird is fat', foreign: 'quell\'uccello è grasso'},
-            {native: 'big and tall', foreign: 'grande e grosso'},
-            {native: 'drop the ball now', foreign: 'cadere la palla ora'},
-            {native: 'there are drinks for the party', foreign: 'ci sono bevande per il partito'},
-            {native: 'a little more', foreign: 'un po più'},
-            {native: 'the drinks are for the party', foreign: 'le bevande sono per il partito'},
-            {native: 'there are five quotes', foreign: 'ci sono cinque citazioni'},
             {native: 'i have twenty dollars', foreign: 'ho venti dollari'},
             {native: 'i was going to but i can not', foreign: 'stavo andando ma non posso'},
             {native: 'he has a big house', foreign: 'ha una grande casa'},

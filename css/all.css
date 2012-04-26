@@ -1616,14 +1616,12 @@ form select {
 }
 .scramble .header h1 {
   float: left;
-  width: 250px;
   height: 45px;
   line-height: 45px;
   margin-left: 30px;
 }
 .scramble .header .progress_meter {
   float: right;
-  width: 251px;
   height: 60px;
   margin-right: 30px;
 }
@@ -1641,6 +1639,7 @@ form select {
   float: left;
 }
 .scramble .header .title {
+  float: left;
   font-size: 21px;
 }
 .scramble .header .title small {
