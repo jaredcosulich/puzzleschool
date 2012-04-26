@@ -11,6 +11,7 @@
         renderView: () ->
             @el.html(@template.render())   
             @setTitle()
+            @setFooter()
             @setProgress()
             @bindWindow()
             @bindKeyPress()
@@ -36,9 +37,7 @@
                 @user.groups[@group] = {}
 
         setOptions: () ->
-            @user.lastGroupPlayed
             @options = localData[@group].data
-            
             
         selectOption: () ->
             @orderedOptions or= []
@@ -126,6 +125,18 @@
                         @$('.header .title').animate
                             opacity: 1
                             duration: 300
+
+        setFooter: () ->
+            for levelName, levelData of localData
+                do (levelName, levelData) =>
+                    level = $(document.createElement("DIV"))
+                    level.addClass('level')
+                    level.html("<a>#{levelData.title}</a><br/><small>#{levelData.subtitle}</small>")
+                    level.bind 'click', () =>
+                        @setLevel(levelName)
+                        @newScramble() 
+                        window.scrollTo(0,0)
+                    @$('.levels').append(level)
             
         setProgress: () ->
             if not @$(".progress_meter .bar .#{@scrambleKey(localData[@group].data[0])}").length
@@ -316,7 +327,15 @@
             return word
             
         bindKeyPress: () ->
-            setInterval((() => $('#clickarea')[0].focus()), 100)
+            hasFocus = false
+            $('#clickarea').bind 'focus', () -> hasFocus = true    
+            $('#clickarea').bind 'blur', () -> hasFocus = false    
+
+            $(window).bind 'keypress', (e) =>
+                return if hasFocus
+                $('#clickarea')[0].focus()
+                $('#clickarea').trigger('keypress', e)
+
             $('#clickarea').bind 'keydown', (e) =>
                 if e.keyCode == 8
                     lastLetterAdded = @lettersAdded.pop()
@@ -548,6 +567,7 @@
             showNext = () =>
                 return if nextShown
                 @el.unbind 'click'
+                @el.unbind 'touchstart'
                 $('#clickarea').unbind 'keyup'
                 nextShown = true
                 @setProgress()
@@ -572,6 +592,7 @@
                 complete: () =>
                     $.timeout 500 + (30 * correctSentence.length), () => showNext()
                     @el.bind 'click', () => showNext()
+                    @el.bind 'touchstart', () => showNext()
                     $('#clickarea').bind 'keyup', (e) => showNext() if e.keyCode == 13
             
                         
@@ -592,15 +613,7 @@
                         left: ($('.scramble').width() - @$('#next_level').width()) / 2
                     @$('#next_level .next_level_link').bind 'click', () =>
                         @$('#next_level .next_level_link').unbind 'click'
-                        @group = localData[@group].nextLevel
-                        @user.lastGroupPlayed = @group
-                        @user.groups[@group] = {}
-                        @saveUser()
-                        @orderedOptions = []
-                        @orderedOptionsIndex = 0
-                        @setOptions()
-                        @setTitle()
-                        @setProgress()
+                        @setLevel(localData[@group].nextLevel)
                         @$('#next_level').animate
                             opacity: 0
                             duration: 500
@@ -614,8 +627,17 @@
                     @$('#next_level').animate
                         opacity: 1
                         duration: 1000
-                            
-                        
+        
+        setLevel: (levelName) ->   
+            @group = levelName
+            @user.lastGroupPlayed = @group
+            @user.groups[@group] = {} unless @user.groups[@group]?
+            @saveUser()
+            @orderedOptions = []
+            @orderedOptionsIndex = 0
+            @setOptions()
+            @setTitle()
+            @setProgress()
             
     $.route.add
         '': () ->
@@ -656,7 +678,7 @@ localData =
         ]
     top10phrases: 
         title: 'Phrases For The Top 10 Words'
-        subtitle: 'Phrases containing the 10 most frequently used Italian words.'
+        subtitle: 'Phrases containing the 10 most frequently used Italian words'
         nextLevel: 'top25words'
         data: [
             {native: 'that\'s not necessary', foreign: 'non è necessario'},
@@ -671,8 +693,8 @@ localData =
             {native: 'there are five quotes', foreign: 'ci sono cinque citazioni'},
         ]
     top25words:
-        title: 'Top Words (10 - 25)'
-        subtitle: 'The most frequently used Italian words (10 - 25).'
+        title: 'Top 10 - 25 Words'
+        subtitle: 'The 10 - 25 most frequently used Italian words'
         nextLevel: 'top25phrases'        
         data: [
             {native: 'i have', foreign: 'ho', nativeSentence: 'i have twenty dollars', foreignSentence: 'ho venti dollari'},
@@ -692,8 +714,8 @@ localData =
             {native: 'yes', foreign: 'sì', nativeSentence: 'yes, you can', foreignSentence: 'sì, è possibile'},
         ]
     top25phrases: 
-        title: 'Phrases For The Top 25 Words'
-        subtitle: 'Phrases containing the most frequently used Italian words (10 - 25).'
+        title: 'Phrases For The Top 10 - 25 Words'
+        subtitle: 'Phrases for 10 - 25 most frequently used Italian words'
         nextLevel: 'top50words'
         data: [
             {native: 'i have twenty dollars', foreign: 'ho venti dollari'},
@@ -714,7 +736,7 @@ localData =
         ]
     top50words:
         title: 'Top 25 - 50 Words'
-        subtitle: 'The most frequently used Italian words (25 - 50).'
+        subtitle: 'The 25 - 50 most frequently used Italian words'
         nextLevel: 'top50phrases'
         data: [
             {native: 'more', foreign: 'più', nativeSentence: 'a little more', foreignSentence: 'un po più'},
@@ -745,7 +767,7 @@ localData =
         ]
     top50Phrases:
         title: 'Phrases For The Top 25 - 50 Words'
-        subtitle: 'Phrases containing the 25 - 50 most frequently used Italian words.'
+        subtitle: 'Phrases for the 25 - 50 most frequently used Italian words'
         data: [
             {native: 'a little more', foreign: 'un po più'},
             {native: 'my child is seven years old', foreign: 'mio figlio ha sette anni'},

@@ -33,6 +33,7 @@ var localData, x,
     Scramble.prototype.renderView = function() {
       this.el.html(this.template.render());
       this.setTitle();
+      this.setFooter();
       this.setProgress();
       this.bindWindow();
       this.bindKeyPress();
@@ -79,7 +80,6 @@ var localData, x,
     };
 
     Scramble.prototype.setOptions = function() {
-      this.user.lastGroupPlayed;
       return this.options = localData[this.group].data;
     };
 
@@ -219,6 +219,28 @@ var localData, x,
           });
         }
       });
+    };
+
+    Scramble.prototype.setFooter = function() {
+      var levelData, levelName, _results,
+        _this = this;
+      _results = [];
+      for (levelName in localData) {
+        levelData = localData[levelName];
+        _results.push((function(levelName, levelData) {
+          var level;
+          level = $(document.createElement("DIV"));
+          level.addClass('level');
+          level.html("<a>" + levelData.title + "</a><br/><small>" + levelData.subtitle + "</small>");
+          level.bind('click', function() {
+            _this.setLevel(levelName);
+            _this.newScramble();
+            return window.scrollTo(0, 0);
+          });
+          return _this.$('.levels').append(level);
+        })(levelName, levelData));
+      }
+      return _results;
     };
 
     Scramble.prototype.setProgress = function() {
@@ -531,10 +553,22 @@ var localData, x,
     };
 
     Scramble.prototype.bindKeyPress = function() {
-      var _this = this;
-      setInterval((function() {
-        return $('#clickarea')[0].focus();
-      }), 100);
+      var hasFocus,
+        _this = this;
+      hasFocus = false;
+      $('#clickarea').bind('focus', function() {
+        return hasFocus = true;
+      });
+      $('#clickarea').bind('blur', function() {
+        return hasFocus = false;
+      });
+      $(window).bind('keypress', function(e) {
+        if (hasFocus) {
+          return;
+        }
+        $('#clickarea')[0].focus();
+        return $('#clickarea').trigger('keypress', e);
+      });
       $('#clickarea').bind('keydown', function(e) {
         var guessedLetters, lastLetterAdded;
         if (e.keyCode === 8) {
@@ -885,6 +919,7 @@ var localData, x,
           return;
         }
         _this.el.unbind('click');
+        _this.el.unbind('touchstart');
         $('#clickarea').unbind('keyup');
         nextShown = true;
         _this.setProgress();
@@ -913,6 +948,9 @@ var localData, x,
             return showNext();
           });
           _this.el.bind('click', function() {
+            return showNext();
+          });
+          _this.el.bind('touchstart', function() {
             return showNext();
           });
           return $('#clickarea').bind('keyup', function(e) {
@@ -946,15 +984,7 @@ var localData, x,
           });
           _this.$('#next_level .next_level_link').bind('click', function() {
             _this.$('#next_level .next_level_link').unbind('click');
-            _this.group = localData[_this.group].nextLevel;
-            _this.user.lastGroupPlayed = _this.group;
-            _this.user.groups[_this.group] = {};
-            _this.saveUser();
-            _this.orderedOptions = [];
-            _this.orderedOptionsIndex = 0;
-            _this.setOptions();
-            _this.setTitle();
-            _this.setProgress();
+            _this.setLevel(localData[_this.group].nextLevel);
             return _this.$('#next_level').animate({
               opacity: 0,
               duration: 500,
@@ -973,6 +1003,20 @@ var localData, x,
           });
         }
       });
+    };
+
+    Scramble.prototype.setLevel = function(levelName) {
+      this.group = levelName;
+      this.user.lastGroupPlayed = this.group;
+      if (this.user.groups[this.group] == null) {
+        this.user.groups[this.group] = {};
+      }
+      this.saveUser();
+      this.orderedOptions = [];
+      this.orderedOptionsIndex = 0;
+      this.setOptions();
+      this.setTitle();
+      return this.setProgress();
     };
 
     return Scramble;
@@ -1067,7 +1111,7 @@ localData = {
   },
   top10phrases: {
     title: 'Phrases For The Top 10 Words',
-    subtitle: 'Phrases containing the 10 most frequently used Italian words.',
+    subtitle: 'Phrases containing the 10 most frequently used Italian words',
     nextLevel: 'top25words',
     data: [
       {
@@ -1104,8 +1148,8 @@ localData = {
     ]
   },
   top25words: {
-    title: 'Top Words (10 - 25)',
-    subtitle: 'The most frequently used Italian words (10 - 25).',
+    title: 'Top 10 - 25 Words',
+    subtitle: 'The 10 - 25 most frequently used Italian words',
     nextLevel: 'top25phrases',
     data: [
       {
@@ -1187,8 +1231,8 @@ localData = {
     ]
   },
   top25phrases: {
-    title: 'Phrases For The Top 25 Words',
-    subtitle: 'Phrases containing the most frequently used Italian words (10 - 25).',
+    title: 'Phrases For The Top 10 - 25 Words',
+    subtitle: 'Phrases for 10 - 25 most frequently used Italian words',
     nextLevel: 'top50words',
     data: [
       {
@@ -1241,7 +1285,7 @@ localData = {
   },
   top50words: {
     title: 'Top 25 - 50 Words',
-    subtitle: 'The most frequently used Italian words (25 - 50).',
+    subtitle: 'The 25 - 50 most frequently used Italian words',
     nextLevel: 'top50phrases',
     data: [
       {
@@ -1374,7 +1418,7 @@ localData = {
   },
   top50Phrases: {
     title: 'Phrases For The Top 25 - 50 Words',
-    subtitle: 'Phrases containing the 25 - 50 most frequently used Italian words.',
+    subtitle: 'Phrases for the 25 - 50 most frequently used Italian words',
     data: [
       {
         "native": 'a little more',
