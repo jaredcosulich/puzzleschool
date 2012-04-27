@@ -1,1 +1,1 @@
-web: coffee src/server/server.coffee
+web: coffee /src/server/server.coffee
