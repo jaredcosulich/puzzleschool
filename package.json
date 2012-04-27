@@ -4,5 +4,12 @@
     "version": "0.0.1",
     "devDependencies": {
         "coffee-script": "latest"
+    },    
+    "dependencies": {
+        "bcrypt": "*",
+        "cookies": "*",
+        "dynode": "*",
+        "line": "*"
     }
+
 }
