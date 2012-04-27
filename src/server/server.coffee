@@ -10,4 +10,4 @@ router.init ->
     server = http.createServer (request, response) ->
         router.handle(request, response)
             
-    server.listen(process.env.PORT || 8000)
+    server.listen(process.env.PORT || 5000)

@@ -1,2 +1,1 @@
-web: cake build
-web: node build/server/server.js
+web: coffee src/server/server.coffee
