@@ -1,0 +1,8 @@
+{
+    "private": true,
+    "name": "puzzleschool",
+    "version": "0.0.1",
+    "devDependencies": {
+        "coffee-script": "latest"
+    }
+}
