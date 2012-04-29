@@ -49,6 +49,7 @@ exports.handle = function(request, response) {
     }
   });
   context.begin();
+  return context;
 };
 
 KeyMaster = (function() {
@@ -141,32 +142,23 @@ Context = (function(_super) {
     }
   };
 
-  Context.prototype.sendJSON = function(obj) {
-    var body;
-    body = JSON.stringify(obj);
-    this.response.setHeader('Content-Type', 'application/json');
-    this.response.setHeader('Content-Length', Buffer.byteLength(body));
-    this.response.end(body);
-  };
-
-  Context.prototype.sendText = function(body, contentType) {
-    if (body == null) {
-      body = '';
+  Context.prototype.send = function(statusCode, body) {
+    var contentType;
+    if (typeof statusCode !== 'number') {
+      body = statusCode;
+      statusCode = 200;
     }
-    if (contentType == null) {
+    if (typeof body === 'object') {
+      body = JSON.stringify(body);
+      contentType = 'application/json';
+    } else {
       contentType = 'text/html';
     }
-    this.response.setHeader('Content-Type', contentType);
-    this.response.setHeader('Content-Length', Buffer.byteLength(body));
-    this.response.end(body);
-  };
-
-  Context.prototype.sendBinary = function(body, contentType) {
-    if (contentType == null) {
-      contentType = 'application/octet-stream';
+    if (!body) {
+      body = '';
     }
     this.response.setHeader('Content-Type', contentType);
-    this.response.setHeader('Content-Length', body.length);
+    this.response.setHeader('Content-Length', Buffer.byteLength(body));
     this.response.end(body);
   };
 

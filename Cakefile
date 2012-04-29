@@ -15,6 +15,7 @@ task 'build', 'Build project', ->
 
 task 'build:local', 'Build all local code', ->
     execCmds [
+        'coffee --compile --bare --output public src/public/*.coffee'
         'coffee --compile --bare --output server src/server/*.coffee'
         'coffee --compile --bare --output server/lib src/server/lib/*.coffee'
         'coffee --compile --bare --output server/lib/db src/server/lib/db/*.coffee'

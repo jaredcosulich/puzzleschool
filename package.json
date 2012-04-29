@@ -13,7 +13,8 @@
         "bcrypt": "*",
         "cookies": "*",
         "dynode": "*",
-        "line": "*"
+        "line": "*",
+        "express": "*"
     }
 
 }

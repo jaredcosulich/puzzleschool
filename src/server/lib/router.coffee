@@ -31,7 +31,7 @@ exports.handle = (request, response) ->
             context.sendNotFound()
 
     context.begin()
-    return
+    return context
 
 
 class KeyMaster
@@ -90,23 +90,22 @@ class Context extends events.EventEmitter
             when 'application/octet-stream', 'multipart/form-data' then @_readFiles()
             
         return
-    
-    sendJSON: (obj) ->
-        body = JSON.stringify(obj)
-        @response.setHeader('Content-Type', 'application/json')
-        @response.setHeader('Content-Length', Buffer.byteLength(body))
-        @response.end(body)
-        return
-    
-    sendText: (body='', contentType='text/html') ->
+
+    send: (statusCode, body) ->
+        if typeof statusCode != 'number'
+            body = statusCode
+            statusCode = 200
+
+        if typeof body == 'object'
+            body = JSON.stringify(body)
+            contentType = 'application/json'
+        else
+            contentType = 'text/html'
+            
+        body = '' if not body
+        
         @response.setHeader('Content-Type', contentType)
         @response.setHeader('Content-Length', Buffer.byteLength(body))
-        @response.end(body)
-        return
-    
-    sendBinary: (body, contentType='application/octet-stream') ->
-        @response.setHeader('Content-Type', contentType)
-        @response.setHeader('Content-Length', body.length)
         @response.end(body)
         return
     

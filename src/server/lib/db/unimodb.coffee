@@ -5,8 +5,8 @@ db = exports
 unimoTable = 'puzzleschool'
 
 dynodeClient = new dynode.Client
-    accessKeyId: 'AKIAJJEYLSPOX3CMVWOQ'
-    secretAccessKey: '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'
+    accessKeyId: 'AKIAJ4DV2JSOSNOBJFNA'
+    secretAccessKey: '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'
     
 getGuid = (table, id) -> table + '-' + id
 splitGuid = (guid) -> guid.split('-', 2)

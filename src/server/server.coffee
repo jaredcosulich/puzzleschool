@@ -1,13 +1,20 @@
 fs = require('fs')
-http = require('http')
 url = require('url')
+express = require('express')
 
 router = require('./lib/router')
-
 router.init ->
     require('./api/user')
 
-    server = http.createServer (request, response) ->
-        router.handle(request, response)
-            
-    server.listen(process.env.PORT || 5000)
+    app = express.createServer()
+        
+    app.configure () ->
+        app.use(express.static(__dirname + '/../public'))
+        app.use(express.errorHandler(dumpExceptions: true, showStack: true))
+    
+    app.get '/api/*', (req, res) -> 
+        context = router.handle(req, res)
+        context.emit 'route'
+
+    app.listen(process.env.PORT || 5000)
+    console.log("Listening on port #{process.env.PORT || 5000}")

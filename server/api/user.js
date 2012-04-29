@@ -12,8 +12,56 @@ db = require('../lib/db');
 router = require('../lib/router');
 
 router.add({
-  '/api/login': function() {
-    console.log("HI");
-    return this.sendText("HI");
+  '/api/user': function() {
+    var _this = this;
+    line(function() {
+      return db.get('users', _this.data.email, line.wait());
+    });
+    line.error(function(err) {
+      return _this.sendError(err, 'Can\'t find user');
+    });
+    return line.run(function(user) {
+      _this.user = user;
+      return _this.send(_this.user);
+    });
+  },
+  '/api/register': function() {
+    var _this = this;
+    line(function() {
+      return db.get('users', _this.data.email, line.wait(function(user) {
+        if (user.email) {
+          return line.fail('duplicate user');
+        }
+      }));
+    });
+    line(function() {
+      _this.data.id = _this.data.email;
+      return db.put('users', _this.data, line.wait());
+    });
+    line(function(user) {
+      _this.user = user;
+      return _this.cookies.set('user', JSON.stringify(_this.user), {
+        signed: true,
+        httpOnly: false
+      });
+    });
+    line.error(function(err) {
+      return _this.sendError(err, 'Registration failed');
+    });
+    return line.run(function() {
+      return _this.send();
+    });
+  },
+  '/api/update': function() {
+    var _this = this;
+    line(function() {
+      return db.update('users', _this.data.email, _this.data, line.wait());
+    });
+    line.error(function(err) {
+      return _this.sendError(err, 'Updated failed');
+    });
+    return line.run(function() {
+      return _this.send();
+    });
   }
 });
