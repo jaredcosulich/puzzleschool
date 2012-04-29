@@ -6,8 +6,9 @@ var localData, x,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 (function($) {
-  var views;
+  var PuzzleSchool, views;
   views = require('views');
+  PuzzleSchool = require('PuzzleSchool');
   views.Scramble = (function(_super) {
 
     __extends(Scramble, _super);
@@ -23,11 +24,24 @@ var localData, x,
 
     Scramble.prototype.maxLevel = 7;
 
-    Scramble.prototype.prepare = function(_arg) {
-      this.level = _arg.level;
+    Scramble.prototype.prepare = function() {
+      var _this = this;
       this.template = this._requireTemplate('templates/scramble.html');
       this.loadUser();
-      return this.setOptions();
+      this.setOptions();
+      return window.test = function() {
+        return PuzzleSchool.post({
+          url: "api/register",
+          data: {
+            email: 'xxx',
+            a: 'b',
+            c: 'message'
+          },
+          success: function(response) {
+            return console.log(response);
+          }
+        });
+      };
     };
 
     Scramble.prototype.renderView = function() {
@@ -1263,7 +1277,7 @@ localData = {
         "native": 'there are three friends',
         foreign: 'ci sono tre amici'
       }, {
-        "native": 'this is great',
+        "native": 'this is fantastic',
         foreign: 'questo è fantastico'
       }, {
         "native": 'come here',
