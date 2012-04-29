@@ -8,7 +8,7 @@
     var data, success, url;
     url = _arg.url, data = _arg.data, success = _arg.success;
     return $.ajax({
-      url: "http://puzzleschoollocal.com:5000/" + url,
+      url: "http://api.puzzleschoollocal.com:5000/" + url,
       method: 'POST',
       data: data,
       success: success

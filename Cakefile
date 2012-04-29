@@ -9,11 +9,11 @@ execCmds = (cmds) ->
 
 task 'build', 'Build project', ->
     execCmds [
-        'cake build:local'
+        'cake build:site'
         'npm install'
     ]
 
-task 'build:local', 'Build all local code', ->
+task 'build:site', 'Build all local code', ->
     execCmds [
         'coffee --compile --bare --output public src/public/*.coffee'
         'coffee --compile --bare --output server src/server/*.coffee'
