@@ -1,0 +1,68 @@
+@import 'variables';
+@import 'methods';
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 13px;
+    color: @black;
+    background-color: @white;
+}
+
+h3 {
+    font-weight: normal;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.small {
+    font-size: 10px;
+}
+
+a {
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.upcase {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.text_right {
+    text-align: right;
+}
+
+.content {
+    width: @content_width;
+    margin: auto;
+}
+
+#top_nav {
+    background-color: @black;
+    padding: 3px 0;
+    margin-bottom: 15px;
+    .outer-shadow(0, 0, 15px, 0.75);
+    overflow: hidden;
+    line-height: 27px;
+    a {
+        color: white;
+    }
+    .logo {
+        font-weight: bold;
+        float: left;
+        img {
+            vertical-align: -7px;
+        }
+    }
+    .nav_links {
+        a {
+            padding-left: 9px;
+        }
+    }
+}
+
+@import 'views';

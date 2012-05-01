@@ -1,0 +1,26 @@
+.home {
+    .logo {
+        text-align: center;
+        padding: 15px 0;
+        img {
+            margin-left: -15px;
+        }
+    }
+    
+    .main_nav {
+        width: 49em;
+        margin: 0 auto 15px auto;
+        overflow: hidden;
+        a {
+            width: 7em;
+            margin-left: 1em;
+            float: left;
+            text-align: center;
+            padding-bottom: 3px;
+            border-bottom: 1px solid @lightgrey;
+            &.selected, &:hover {
+                border-bottom: 1px solid @darkgrey;
+            }
+        }
+    }
+}
