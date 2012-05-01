@@ -14,7 +14,8 @@
         "cookies": "*",
         "dynode": "*",
         "line": "*",
-        "express": "*"
+        "express": "*",
+        "wings": "*"
     }
 
 }

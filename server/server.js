@@ -14,13 +14,13 @@ router.init(function() {
   require('./api/user');
   app = express.createServer();
   app.configure(function() {
-    app.use(express["static"](__dirname + '/../public'));
+    app.use(express["static"](__dirname + '/../client'));
     return app.use(express.errorHandler({
       dumpExceptions: true,
       showStack: true
     }));
   });
-  app.get('/api/*', function(req, res) {
+  app.get('*', function(req, res) {
     var context;
     context = router.handle(req, res);
     return context.emit('route');

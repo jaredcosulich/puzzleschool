@@ -9,10 +9,10 @@ router.init ->
     app = express.createServer()
         
     app.configure () ->
-        app.use(express.static(__dirname + '/../public'))
+        app.use(express.static(__dirname + '/../client'))
         app.use(express.errorHandler(dumpExceptions: true, showStack: true))
     
-    app.get '/api/*', (req, res) -> 
+    app.get '*', (req, res) -> 
         context = router.handle(req, res)
         context.emit 'route'
 
