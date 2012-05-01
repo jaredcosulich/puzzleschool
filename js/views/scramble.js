@@ -6,9 +6,8 @@ var localData, x,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 (function($) {
-  var PuzzleSchool, views;
+  var views;
   views = require('views');
-  PuzzleSchool = require('PuzzleSchool');
   views.Scramble = (function(_super) {
 
     __extends(Scramble, _super);
@@ -28,20 +27,7 @@ var localData, x,
       var _this = this;
       this.template = this._requireTemplate('templates/scramble.html');
       this.loadUser();
-      this.setOptions();
-      return window.test = function() {
-        return PuzzleSchool.post({
-          url: "api/register",
-          data: {
-            email: 'xxx',
-            a: 'b',
-            c: 'message'
-          },
-          success: function(response) {
-            return console.log(response);
-          }
-        });
-      };
+      return this.setOptions();
     };
 
     Scramble.prototype.renderView = function() {
