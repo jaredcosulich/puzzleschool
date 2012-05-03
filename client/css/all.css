@@ -19,6 +19,7 @@ a {
   text-decoration: none;
   border: none;
   cursor: pointer;
+  color: #e46027;
 }
 .upcase {
   text-transform: uppercase;
@@ -28,7 +29,7 @@ a {
   text-align: right;
 }
 .content {
-  width: 930px;
+  width: 900px;
   margin: auto;
 }
 #top_nav {
@@ -44,6 +45,9 @@ a {
 #top_nav a {
   color: white;
 }
+#top_nav a:hover {
+  color: #e46027;
+}
 #top_nav .logo {
   font-weight: bold;
   float: left;
@@ -53,6 +57,12 @@ a {
 }
 #top_nav .nav_links a {
   padding-left: 9px;
+}
+#footer {
+  border-top: 1px solid #a6a6a6;
+  padding-top: 3px;
+  width: 900px;
+  margin: 60px auto;
 }
 .home .logo {
   text-align: center;
@@ -67,6 +77,7 @@ a {
   overflow: hidden;
 }
 .home .main_nav a {
+  color: #262626;
   width: 7em;
   margin-left: 1em;
   float: left;

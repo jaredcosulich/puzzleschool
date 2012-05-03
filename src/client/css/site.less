@@ -1,6 +1,3 @@
-@import 'variables';
-@import 'methods';
-
 body {
     padding: 0;
     margin: 0;
@@ -25,6 +22,7 @@ a {
     text-decoration: none;
     border: none;
     cursor: pointer;
+    color: @red;
 }
 
 .upcase {
@@ -50,6 +48,9 @@ a {
     line-height: 27px;
     a {
         color: white;
+        &:hover {
+            color: @red;
+        }
     }
     .logo {
         font-weight: bold;
@@ -65,4 +66,10 @@ a {
     }
 }
 
-@import 'views';
+#footer {
+    border-top: 1px solid @grey;
+    padding-top: 3px;
+    width: @content_width;
+    margin: 60px auto;
+}
+

@@ -23,7 +23,7 @@ task 'build:site', 'Build all local code', ->
         'coffee --compile --bare --output server/lib/db src/server/lib/db/*.coffee'
         'coffee --compile --bare --output server/api src/server/api/*.coffee'
         
-        'lessc src/client/css/site.less client/css/site.css'
+        'lessc src/client/css/all.less client/css/all.css'
         
         'cake build:site_html'
     ]
@@ -37,7 +37,7 @@ task 'build:site_html', ->
         "cp -r #{source}/client/css/images client/css/",
     ]
     
-    stylesheets = ("/css/#{sheet}.css" for sheet in ['site'])
+    stylesheets = ("/css/#{sheet}.css" for sheet in ['all'])
     stylesheets.push('http://fonts.googleapis.com/css?family=PT+Sans:400,700')
     
     views = ("views/js/#{name.replace('.coffee', '.js')}" for name in fs.readdirSync("#{source}/client/views/js") when name not in ['base.coffee', 'page.coffee'])
