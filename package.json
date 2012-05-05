@@ -1,6 +1,6 @@
 {
     "private": true,
-    "name": "puzzleschool",
+    "name": "soma-test",
     "version": "0.0.1",
     "engines": {
         "node": "0.6.5",
@@ -11,11 +11,19 @@
     },    
     "dependencies": {
         "bcrypt": "*",
-        "cookies": "*",
         "dynode": "*",
+        "riak-js": "*",
+        "knox": "*",
         "line": "*",
-        "express": "*",
-        "wings": "*"
+        "mailgun": "*",
+        "wings": "*",
+        "soma": "*"
+    },
+    
+    "soma": {
+        "port": 5000,
+        "shared": ["build/client/pages/base.js", "build/client/pages", "build/client/templates"],
+        "server": ["build/server"],
+        "client": ["ender.js", "build/client/css", "assets"]
     }
-
 }

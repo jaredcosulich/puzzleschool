@@ -1,0 +1,135 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'PT Sans', sans-serif;
+  font-size: 13px;
+  color: #262626;
+  background-color: #fafafa;
+}
+h1, h2, h3 {
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+h1 {
+  font-size: 27px;
+}
+h2 {
+  font-size: 18px;
+}
+h3 {
+  font-size: 15px;
+}
+small, .small {
+  font-size: 10px;
+}
+small {
+  color: #a6a6a6;
+}
+a {
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  color: #24a8c3;
+}
+.upcase {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.text_right {
+  text-align: right;
+}
+.content {
+  width: 900px;
+  margin: auto;
+}
+#top_nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #262626;
+  padding: 3px 0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+  line-height: 27px;
+}
+#top_nav a {
+  color: white;
+}
+#top_nav a:hover {
+  color: #e46027;
+}
+#top_nav .logo {
+  font-weight: bold;
+  float: left;
+}
+#top_nav .logo img {
+  vertical-align: -7px;
+}
+#top_nav .nav_links a {
+  padding-left: 9px;
+}
+#content {
+  margin-top: 45px;
+}
+#footer {
+  border-top: 1px solid #a6a6a6;
+  padding-top: 3px;
+  width: 900px;
+  margin: 60px auto;
+}
+.page .logo {
+  text-align: center;
+  padding: 15px 0;
+  line-height: 30px;
+}
+.page .logo img {
+  margin-left: -27px;
+  vertical-align: -48px;
+}
+.home .main_nav {
+  width: 25em;
+  margin: 0 auto 30px auto;
+  overflow: hidden;
+}
+.home .main_nav a {
+  color: #262626;
+  width: 7em;
+  margin-left: 1em;
+  float: left;
+  text-align: center;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.home .main_nav a.selected, .home .main_nav a:hover {
+  border-bottom: 1px solid #666666;
+}
+.home .opening_post {
+  width: 54em;
+  margin: auto;
+}
+.home .opening_post li {
+  margin-bottom: 6px;
+}
+.labs .experiment {
+  padding: 15px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+.labs .experiment img {
+  float: left;
+  margin: 12px 12px 0 0;
+  border: 1px solid #a6a6a6;
+}
+.labs .experiment .explanation {
+  overflow: hidden;
+}
+.about .about_text {
+  width: 54em;
+  margin: auto;
+}
+.about .about_text img {
+  float: left;
+  margin: 0 12px 12px 0;
+}

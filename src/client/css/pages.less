@@ -1,0 +1,65 @@
+.page {
+    .logo {
+        text-align: center;
+        padding: 15px 0;
+        line-height: 30px;
+        img {
+            margin-left: -27px;
+            vertical-align: -48px;
+        }
+    }
+}
+
+.home {    
+    .main_nav {
+        width: 25em;
+        margin: 0 auto 30px auto;
+        overflow: hidden;
+        a {
+            color: @black;
+            width: 7em;
+            margin-left: 1em;
+            float: left;
+            text-align: center;
+            padding-bottom: 3px;
+            border-bottom: 1px solid @lightgrey;
+            &.selected, &:hover {
+                border-bottom: 1px solid @darkgrey;
+            }
+        }
+    }
+    
+    .opening_post {
+        width: @narrow_content_width;
+        margin: auto;
+        li {
+            margin-bottom: 6px;
+        }
+    }
+}
+
+.labs {
+    .experiment {
+        padding: 15px 0;
+        border-bottom: 1px solid @lightgrey;
+        img {
+            float: left;
+            margin: 12px 12px 0 0;
+            border: 1px solid @grey;
+        }
+        .explanation {
+            overflow: hidden;
+        }
+    }
+}
+
+.about {
+    .about_text {
+        width: @narrow_content_width;
+        margin: auto;
+        img {
+            float: left;
+            margin: 0 12px 12px 0;
+        }
+    }
+}

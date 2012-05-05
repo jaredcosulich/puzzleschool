@@ -2,11 +2,11 @@ dynode = require('dynode')
 
 db = exports
 
-unimoTable = 'puzzleschool'
+unimoTable = 'mingl'
 
 dynodeClient = new dynode.Client
-    accessKeyId: 'AKIAJ4DV2JSOSNOBJFNA'
-    secretAccessKey: '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'
+    accessKeyId: 'AKIAJJEYLSPOX3CMVWOQ'
+    secretAccessKey: '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'
     
 getGuid = (table, id) -> table + '-' + id
 splitGuid = (guid) -> guid.split('-', 2)
@@ -82,4 +82,4 @@ db.multiget = (table, ids, callback) ->
                 result[table] = [item]
                 
         delete result[unimoTable]
-        callback.apply(this, arguments)
+        callback(err, result)

@@ -1,31 +1,36 @@
 bcrypt = require('bcrypt')
 crypto = require('crypto')
 line = require('line')
+soma = require('soma')
+wings = require('wings')
 
 db = require('../lib/db')
-router = require('../lib/router')
 
-router.add
-    '/api/user': ->
-        line => db.get 'users', @data.email, line.wait()
-        line.error (err) => @sendError(err, 'Can\'t find user')
-        line.run (@user) => @send(@user)
+{checkPassword, requireUser} = require('./lib/decorators')
+
+registrationTemplate = """
+    {name}, 
     
-    '/api/register': ->
-        line => 
-            db.get 'users', @data.email, line.wait (user) =>
-                if user.email
-                    return line.fail('duplicate user')
-
-        line => 
-            @data.id = @data.email
-            db.put 'users', @data, line.wait() 
-                       
-        line (@user) => @cookies.set('user', JSON.stringify(@user), { signed: true, httpOnly: false })
-        line.error (err) => @sendError(err, 'Registration failed')
-        line.run => @send()
-     
-     '/api/update': ->
-        line => db.update 'users', @data.email, @data, line.wait()
-        line.error (err) => @sendError(err, 'Updated failed')
-        line.run => @send()
+    We just wanted to welcome you to Min.gl
+    
+    Hope you enjoy it and meet some cool people.
+    
+    Really that's all we wanted to say. 
+    
+    If you have any questions, let us know.
+    
+    Best,
+        The Min.gl Team
+"""
+soma.routes
+    '/api/login': checkPassword ->
+        line => db.get 'users', @login.user, line.wait()
+        line (@user) =>
+            userCookie = @jar.get('user')
+            # if userCookie possibly merge user data
+            
+        line => crypto.randomBytes 16, line.wait()
+        line (session) => db.update 'users', @user.id, {session: session.toString('hex')}, line.wait()
+        line.run (@user) =>
+            @jar.set('user', JSON.stringify(@user), { signed: true, httpOnly: false })
+            @send()
