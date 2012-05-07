@@ -16,8 +16,8 @@ soma.chunks({
       });
       this.loadScript('/build/client/pages/base.js');
       this.loadScript('/build/client/pages/home.js');
-      this.loadScript('/build/client/pages/labs.js');
       this.loadScript('/build/client/pages/about.js');
+      this.loadScript('/build/client/pages/labs.js');
       this.loadStylesheet('/build/client/css/all.css');
       this.template = this.loadTemplate('/build/client/templates/base.html');
       return this.loadChunk(this.content);

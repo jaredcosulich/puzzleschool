@@ -85,3 +85,9 @@
     .border-bottom-right-radius(@bottomRight);
     .border-bottom-left-radius(@bottomLeft);
 }
+
+// Alpha
+
+.bg-alpha(@color, @alpha: @default-opacity) { background-color: hsla(hue(@color), saturation(@color), lightness(@color), @alpha); }
+.fg-alpha(@color, @alpha: @default-opacity) { background-color: hsla(hue(@color), saturation(@color), lightness(@color), @alpha); }
+

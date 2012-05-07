@@ -20,7 +20,9 @@ task 'build:site', 'Build the site files', ->
         'rm -rf build'
         
         'mkdir -p build/client/css'
+        'mkdir -p build/client/css/puzzles'
         'lessc src/client/css/all.less build/client/css/all.css'
+        'lessc src/client/css/puzzles/language_scramble.less build/client/css/puzzles/language_scramble.css'
 
         'coffee --compile --bare --output build/server/lib src/server/lib/*.coffee'
         'coffee --compile --bare --output build/server/lib/db src/server/lib/db/*.coffee'
@@ -28,11 +30,13 @@ task 'build:site', 'Build the site files', ->
         'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
 
         'coffee --compile --bare --output build/client/pages src/client/pages/*.coffee'
+        'coffee --compile --bare --output build/client/pages/puzzles src/client/pages/puzzles/*.coffee'
+        'coffee --compile --bare --output build/client/pages/puzzles/lib src/client/pages/puzzles/lib/*.coffee'
         'cp -r src/client/templates build/client'
     ]
     
 task 'build:ender', 'Build the ender modules', ->
     execCmds [
-        'ender build sel ../soma wings'
+        'ender build sel ../soma wings morpheus timeout'
     ]
 

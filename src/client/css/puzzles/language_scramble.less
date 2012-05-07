@@ -1,0 +1,240 @@
+@import '../variables';
+@import '../methods';
+
+body {
+    background-color: @blue;
+}
+
+.language_scramble {
+    margin-bottom: 60px;
+    position: relative;
+    background-color: @white;
+    .rounded(12px);
+
+    .header {
+        padding-top: 15px;
+        overflow: hidden;
+        text-align: center;
+        background-color: #eee;
+        .border-top-left-radius(12px);
+        .border-top-right-radius(12px);
+        margin-bottom: 30px;
+        h1 {
+            float: left;
+            height: 45px;
+            line-height: 45px;
+            margin-left: 24px;
+            color: @red;
+        }
+        .progress_meter {
+            float: right;
+            height: 60px;
+            margin-right: 24px;
+            .bar {
+                border: 1px solid #ccc;
+                height: 15px;
+                background-color: white;
+                overflow: hidden;
+                .progress_section {
+                    width: 9px;
+                    border-right: 1px solid #ccc;
+                    background-color: @green;
+                    height: 15px;
+                    float: left;
+                }
+            }
+        }
+        .title {
+            float: left;
+            font-size: 21px;
+            small {
+                display: block;
+                font-size: 10px;
+            }
+        }
+    }
+
+    .display_words, .scrambled {
+        .highlighted {
+            .bg-alpha(@green, 0.5);
+            padding: 0 3px;
+        }
+    }
+    
+    .section {
+        font-size: 30pt;
+        margin: 0;
+        padding: 10px 0;
+    }    
+
+    .guesses, .scrambled {
+        clear: left;
+        .container {
+            float: left;
+            overflow: hidden;
+            margin-left: auto;
+            margin-right: auto;        
+        }
+        .guess, .letter, .blank_letter, .space {
+            float: left;
+            margin: 3px;
+            width: 45px;
+            height: 45px;
+            line-height: 39px;
+        }
+        .space {
+            width: 24px;
+            margin: 6px 0;
+        }
+        .guess, .letter {
+            cursor: pointer;
+        }
+        .color1 .guess {
+            border: 1px dashed @blue;    
+            .bg-alpha(@blue, 0.3)
+        }
+        .color2 .guess {
+            border: 1px dashed @red;    
+            .bg-alpha(@red, 0.3)
+        }
+        .color3 .guess {
+            border: 1px dashed @orange;   
+            .bg-alpha(@orange, 0.3) 
+        }
+        .color4 .guess {
+            border: 1px dashed @black;
+            .bg-alpha(@black, 0.3)    
+        }
+        .color1, .color2, .color3, .color4 {
+            .selected {
+                background-color: white;            
+            }
+        }
+        .letter {
+            border: 1px solid #ccc;
+        }
+        .color1 .letter {
+            background-color: @blue;
+        }
+        .color2 .letter {
+            background-color: @red;
+        }
+        .color3 .letter {
+            background-color: @orange;
+        }
+        .color4 .letter {
+            background-color: @black;    
+        }
+        .correct {
+            height: 45px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .hidden_message {
+            display: none;
+            position: absolute;
+            font-size: 12pt;
+            background-color: white;
+        }
+        
+        &.hidden {
+            position: relative;
+            .letter, .guess, .space {
+                visibility: hidden;
+            }
+            .hidden_message {
+                display: block;
+                left: 236px;
+                top: 30px;
+            }
+        }
+    }
+
+    .guesses { 
+        .color1, .color2, .color3, .color4 {
+            .correct_letter {
+                .bg-alpha(@green, 0.5)
+            }
+
+            .wrong_letter {
+                .bg-alpha(@red, 0.5)
+            }
+        }
+        
+        &.hidden {
+            .letter {
+                visibility: visible;
+            }
+            .hidden_message {
+                left: 250px;    
+                top: 24px;            
+            }
+        }
+    }
+    
+    .floating_message {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        opacity: 0;
+        text-align: center;
+    }
+    
+    .last_answer {
+        .highlighted {
+            .bg-alpha(@green, 0.25);
+            padding: 0 3px;
+        }
+    }
+    
+    #clickarea {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        background-image:url('images/keyboard.gif');
+        width: 50px;
+	    height: 17px;
+        display: block;
+        color: gray;
+    }
+
+    /* iPad [portrait + landscape] */
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    	.show_keyboard #clickarea {
+    	    top: 284px;
+    	    left: 444px;
+        }
+    }
+
+    /* iPhone [portrait + landscape] */
+    @media only screen and (max-device-width: 480px) {
+    	.show_keyboard #clickarea {
+    	    top: 284px;
+    	    left: 444px;
+        }
+    }
+    
+    .footer {
+        padding: 15px 0;
+        overflow: hidden;
+        background-color: #eee;
+        .border-bottom-left-radius(12px);
+        .border-bottom-right-radius(12px);
+        margin-top: 30px;
+        
+        .levels {
+            padding: 0 88px;
+            text-align: center;
+            .level {
+                background-color: #fdfdfd;
+                border: 1px solid #ccc;
+                padding: 6px 0;
+                float: left;
+                margin: 12px 0 0 30px;
+                width: 330px;
+            }
+        }
+    }
+    
+}

@@ -1,0 +1,264 @@
+body {
+  background-color: #24a8c3;
+}
+.language_scramble {
+  margin-bottom: 60px;
+  position: relative;
+  background-color: #fafafa;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  /* iPad [portrait + landscape] */
+
+  /* iPhone [portrait + landscape] */
+
+}
+.language_scramble .header {
+  padding-top: 15px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #eee;
+  border-top-left-radius: 12px;
+  -webkit-border-top-left-radius: 12px;
+  -moz-border-radius-topleft: 12px;
+  border-top-right-radius: 12px;
+  -webkit-border-top-right-radius: 12px;
+  -moz-border-radius-topright: 12px;
+  margin-bottom: 30px;
+}
+.language_scramble .header h1 {
+  float: left;
+  height: 45px;
+  line-height: 45px;
+  margin-left: 24px;
+  color: #e46027;
+}
+.language_scramble .header .progress_meter {
+  float: right;
+  height: 60px;
+  margin-right: 24px;
+}
+.language_scramble .header .progress_meter .bar {
+  border: 1px solid #ccc;
+  height: 15px;
+  background-color: white;
+  overflow: hidden;
+}
+.language_scramble .header .progress_meter .bar .progress_section {
+  width: 9px;
+  border-right: 1px solid #ccc;
+  background-color: #93b649;
+  height: 15px;
+  float: left;
+}
+.language_scramble .header .title {
+  float: left;
+  font-size: 21px;
+}
+.language_scramble .header .title small {
+  display: block;
+  font-size: 10px;
+}
+.language_scramble .display_words .highlighted,
+.language_scramble .scrambled .highlighted {
+  background-color: rgba(148, 182, 73, 0.5);
+  padding: 0 3px;
+}
+.language_scramble .section {
+  font-size: 30pt;
+  margin: 0;
+  padding: 10px 0;
+}
+.language_scramble .guesses,
+.language_scramble .scrambled {
+  clear: left;
+}
+.language_scramble .guesses .container,
+.language_scramble .scrambled .container {
+  float: left;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+.language_scramble .guesses .guess,
+.language_scramble .scrambled .guess,
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter,
+.language_scramble .guesses .blank_letter,
+.language_scramble .scrambled .blank_letter,
+.language_scramble .guesses .space,
+.language_scramble .scrambled .space {
+  float: left;
+  margin: 3px;
+  width: 45px;
+  height: 45px;
+  line-height: 39px;
+}
+.language_scramble .guesses .space,
+.language_scramble .scrambled .space {
+  width: 24px;
+  margin: 6px 0;
+}
+.language_scramble .guesses .guess,
+.language_scramble .scrambled .guess,
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter {
+  cursor: pointer;
+}
+.language_scramble .guesses .color1 .guess,
+.language_scramble .scrambled .color1 .guess {
+  border: 1px dashed #24a8c3;
+  background-color: rgba(36, 168, 194, 0.3);
+}
+.language_scramble .guesses .color2 .guess,
+.language_scramble .scrambled .color2 .guess {
+  border: 1px dashed #e46027;
+  background-color: rgba(228, 94, 37, 0.3);
+}
+.language_scramble .guesses .color3 .guess,
+.language_scramble .scrambled .color3 .guess {
+  border: 1px dashed #f0d827;
+  background-color: rgba(240, 217, 40, 0.3);
+}
+.language_scramble .guesses .color4 .guess,
+.language_scramble .scrambled .color4 .guess {
+  border: 1px dashed #262626;
+  background-color: rgba(38, 38, 38, 0.3);
+}
+.language_scramble .guesses .color1 .selected,
+.language_scramble .scrambled .color1 .selected,
+.language_scramble .guesses .color2 .selected,
+.language_scramble .scrambled .color2 .selected,
+.language_scramble .guesses .color3 .selected,
+.language_scramble .scrambled .color3 .selected,
+.language_scramble .guesses .color4 .selected,
+.language_scramble .scrambled .color4 .selected {
+  background-color: white;
+}
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter {
+  border: 1px solid #ccc;
+}
+.language_scramble .guesses .color1 .letter,
+.language_scramble .scrambled .color1 .letter {
+  background-color: #24a8c3;
+}
+.language_scramble .guesses .color2 .letter,
+.language_scramble .scrambled .color2 .letter {
+  background-color: #e46027;
+}
+.language_scramble .guesses .color3 .letter,
+.language_scramble .scrambled .color3 .letter {
+  background-color: #f0d827;
+}
+.language_scramble .guesses .color4 .letter,
+.language_scramble .scrambled .color4 .letter {
+  background-color: #262626;
+}
+.language_scramble .guesses .correct,
+.language_scramble .scrambled .correct {
+  height: 45px;
+  font-weight: bold;
+  text-align: center;
+}
+.language_scramble .guesses .hidden_message,
+.language_scramble .scrambled .hidden_message {
+  display: none;
+  position: absolute;
+  font-size: 12pt;
+  background-color: white;
+}
+.language_scramble .guesses.hidden,
+.language_scramble .scrambled.hidden {
+  position: relative;
+}
+.language_scramble .guesses.hidden .letter,
+.language_scramble .scrambled.hidden .letter,
+.language_scramble .guesses.hidden .guess,
+.language_scramble .scrambled.hidden .guess,
+.language_scramble .guesses.hidden .space,
+.language_scramble .scrambled.hidden .space {
+  visibility: hidden;
+}
+.language_scramble .guesses.hidden .hidden_message,
+.language_scramble .scrambled.hidden .hidden_message {
+  display: block;
+  left: 236px;
+  top: 30px;
+}
+.language_scramble .guesses .color1 .correct_letter,
+.language_scramble .guesses .color2 .correct_letter,
+.language_scramble .guesses .color3 .correct_letter,
+.language_scramble .guesses .color4 .correct_letter {
+  background-color: rgba(148, 182, 73, 0.5);
+}
+.language_scramble .guesses .color1 .wrong_letter,
+.language_scramble .guesses .color2 .wrong_letter,
+.language_scramble .guesses .color3 .wrong_letter,
+.language_scramble .guesses .color4 .wrong_letter {
+  background-color: rgba(228, 94, 37, 0.5);
+}
+.language_scramble .guesses.hidden .letter {
+  visibility: visible;
+}
+.language_scramble .guesses.hidden .hidden_message {
+  left: 250px;
+  top: 24px;
+}
+.language_scramble .floating_message {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  opacity: 0;
+  text-align: center;
+}
+.language_scramble .last_answer .highlighted {
+  background-color: rgba(148, 182, 73, 0.25);
+  padding: 0 3px;
+}
+.language_scramble #clickarea {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  background-image: url('images/keyboard.gif');
+  width: 50px;
+  height: 17px;
+  display: block;
+  color: gray;
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .language_scramble .show_keyboard #clickarea {
+    top: 284px;
+    left: 444px;
+  }
+}
+@media only screen and (max-device-width: 480px) {
+  .language_scramble .show_keyboard #clickarea {
+    top: 284px;
+    left: 444px;
+  }
+}
+.language_scramble .footer {
+  padding: 15px 0;
+  overflow: hidden;
+  background-color: #eee;
+  border-bottom-left-radius: 12px;
+  -webkit-border-bottom-left-radius: 12px;
+  -moz-border-radius-bottomleft: 12px;
+  border-bottom-right-radius: 12px;
+  -webkit-border-bottom-right-radius: 12px;
+  -moz-border-radius-bottomright: 12px;
+  margin-top: 30px;
+}
+.language_scramble .footer .levels {
+  padding: 0 88px;
+  text-align: center;
+}
+.language_scramble .footer .levels .level {
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
+  padding: 6px 0;
+  float: left;
+  margin: 12px 0 0 30px;
+  width: 330px;
+}
