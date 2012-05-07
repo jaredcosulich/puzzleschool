@@ -1,11 +1,46 @@
+scrambleKey = (scrambleInfo) -> 
+    "#{scrambleInfo.native.replace(/\W/g, '_')}-#{scrambleInfo.foreign.replace(/\W/g, '_')}"
+
+randomIndex = (array) -> Math.floor(Math.random() * array.length)
+        
+random = (array) ->
+    return null unless array 
+    return null unless array.length
+    return array[0] if array.length == 1
+    return array[randomIndex(array)]
+        
+shuffle = (array) ->
+    top = array.length
+    return array if not top
+
+    while(top--) 
+        current = Math.floor(Math.random() * (top + 1))
+        tmp = array[current]
+        array[current] = array[top]
+        array[top] = tmp
+    return array
+
+
+
+
 languageScramble = exports ? provide('./lib/language_scramble', {})
 
-languageScramble.foo = 'bar'
+languageScramble.getLevel = (levelName) ->
+    level = languageScramble.data[levelName]
+    data.id = scrambleKey(data) for data, index in level.data
+    return level
+
+languageScramble.loadUser = () ->
+    name = 'guest'
+    user = {}
+    user.name = name if name && name.length
+    user.levels = {} unless user.levels?
+    return user
+
 
 class languageScramble.ChunkHelper
     constructor: (@levelName) ->
-        @level = languageScramble.data[@levelName]
-        data.id = index for data, index in @level.data
+        @level = languageScramble.getLevel(@levelName)
     
     allLevels: ->
         info = []
@@ -18,31 +53,15 @@ class languageScramble.ChunkHelper
         return info
 
 
-# setProgress: () ->
-#     if not @$(".progress_meter .bar .#{@scrambleKey(localData[@group].data[0])}").length
-#         @$('.progress_meter .bar .progress_section').remove()
-#         for scramble, index in localData[@group].data
-#             section = $(document.createElement("DIV"))
-#             section.addClass('progress_section')
-#             section.addClass(@scrambleKey(scramble))
-#             section.css(borderRight: 'none') if (index + 1) == localData[@group].data.length
-#             @$('.progress_meter .bar').append(section)
-#     
-#     for scramble in localData[@group].data
-#         key = @scrambleKey(scramble)
-#         level = @user.groups[@group][key]
-#         if level
-#             level = @maxLevel if level > @maxLevel
-#             @$(".progress_meter .bar .#{key}").css(opacity: 1 - ((1/@maxLevel) * level))
-#         else
-#             @$(".progress_meter .bar .#{key}").css(opacity: 1)
-
 
 class languageScramble.ViewHelper
     maxLevel: 7
-    
-    constructor: (@area, @user, @level) -> 
-        
+
+    constructor: (@area, @user, @levelName) -> 
+        @level = languageScramble.getLevel(@levelName)
+        @options = @level.data
+        @user.levels[@levelName] = {} unless @user.levels[@levelName]
+
     $: (selector) -> $(selector, @area)
 
     positionTitle: ->
@@ -92,18 +111,316 @@ class languageScramble.ViewHelper
 
         $(window).bind 'touchmove', moveDrag
         $(window).bind 'touchend', endDrag
+        
+        
+    bindKeyPress: () ->
+        hasFocus = false
+        $('#clickarea').bind 'focus', () -> hasFocus = true    
+        $('#clickarea').bind 'blur', () -> hasFocus = false    
 
+        $(window).bind 'keypress', (e) =>
+            return if hasFocus
+            $('#clickarea')[0].focus()
+            $('#clickarea').trigger('keypress', e)
+
+        $('#clickarea').bind 'keydown', (e) =>
+            if e.keyCode == 8
+                lastLetterAdded = @lettersAdded.pop()
+                guessedLetters = $(".guesses .letter_#{lastLetterAdded}")
+                $(guessedLetters[guessedLetters.length - 1]).trigger('click') if guessedLetters.length
+                return
+            
+        $('#clickarea').bind 'keypress', (e) =>
+            openGuess = @$('.guesses .selected')[0] or @$(".guesses .guess")[0]
+            return unless openGuess?
+            
+            try 
+                char = String.fromCharCode(e.keyCode).toLowerCase()                
+                if char in ['e', 'i', 'u', 'o']  
+                    foreignChar = switch char
+                        when 'e' then 'è'
+                        when 'i' then 'ì'
+                        when 'o' then 'ò'
+                        when 'u' then 'ù'
+                    
+                    char = foreignChar if $(openGuess).hasClass("actual_letter_#{foreignChar}")
+            
+                letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
+                if !letter and @activeLevel.match(/Hard/)?
+                    if char.match(/\w|[^\x00-\x80]+/)
+                        letter = @createLetter(char) 
+                        $(".scrambled .#{@containerClassName(openGuess)}").append(letter)
+                
+                $.timeout 10, () =>
+                    $('#clickarea').val('')        
+                    $('#clickarea').html('')        
+            catch e
+                return
+                
+            return unless letter?
+            $(letter).trigger 'click'
+            
+    bindLetter: (letter) ->
+        @dragging = null
+        @dragAdjustmentX = 0
+        @dragAdjustmentY = 0
+        @dragPathX = []
+        @dragPathY = []
+
+        click = (e) =>
+            return if @dragPathX.length > 1 or @dragPathY > 1
+            if @dragging && @dragging.css('position') == 'absolute'
+                alreadyDragged = true
+                @dragging.css(position: 'static')
+                @dragging = null
+
+            containerClass = @containerClassName(letter)
+            if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
+                @replaceLetterWithGuess(letter)
+                @replaceBlankWithLetter(letter)
+            else
+                guess = @$('.guesses .selected')[0] or @$(".guesses .#{containerClass} .guess")[0]
+                return unless guess?
+                @replaceLetterWithBlank(letter) unless alreadyDragged
+                @replaceGuessWithLetter(guess, letter)
+
+        startDrag = (e) =>
+            e.preventDefault() if e.preventDefault?
+            @dragging = letter
+            @dragPathX = []
+            @dragPathY = []
+            @dragAdjustmentX = @clientX(e) - letter.offset().left + @el.offset().left
+            @dragAdjustmentY = @clientY(e) - letter.offset().top + @el.offset().top
+
+        letter = $(letter)
+        letter.attr(onclick: 'void(0)', ontouchstart: 'void(0)', ontouchend: 'void(0)', ontouchmove: 'void(0)')
+        letter.bind 'click', click
+        letter.bind 'touchend', click                
+        letter.bind 'mousedown', startDrag   
+        letter.bind 'touchstart', startDrag                
+            
+        
+    newScramble: () ->
+        @answerTimes or= []
+        @answerTimes.push(new Date()) 
+
+        @lettersAdded = []
+
+        @scrambleInfo = @selectOption()
+        return unless @scrambleInfo     
+        @user.levels[@levelName][@scrambleInfo.id] or= 1    
+
+        displayWords = @$('.display_words')
+        if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
+            sentence = @scrambleInfo["#{@displayLevel}Sentence"]
+        else
+            sentence = @scrambleInfo[@displayLevel]
+        sentence = " #{sentence} "
+        highlighted = @scrambleInfo[@displayLevel]
+        for boundary in [' ', '?', ',']
+            sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+
+        displayWords.html(sentence)
+
+        @createGuesses()
+        @createScramble()
+    
+    selectOption: () ->
+        @orderedOptions or= []
+        if @orderedOptionsIndex?
+            @orderedOptionsIndex += 1
+        else
+            @orderedOptionsIndex = 0
+
+        if @orderedOptions[@orderedOptionsIndex]?
+            @setStage() 
+            return @orderedOptions[@orderedOptionsIndex] 
+            
+        optionsToAdd = [[],[],[],[],[],[],[]]            
+        minLevel = @maxLevel
+        
+        for option in @options
+            continue if option in @orderedOptions[-4..-1]
+            optionLevel = @user.levels[@levelName][option.id] || 1
+            optionsToAdd[optionLevel] or= []
+            optionsToAdd[optionLevel].push(option)
+            minLevel = optionLevel if optionLevel < minLevel
+
+        if minLevel == @maxLevel
+            incomplete = (option for option in @options when (@user.levels[@levelName][option.id] || 1) < @maxLevel)
+            if incomplete.length
+                @orderedOptions.push(option) for option in incomplete
+                return @orderedOptions[@orderedOptionsIndex]
+            else
+                @nextLevel()
+                return false
+
+        possibleLevels = [minLevel, minLevel]
+        if optionsToAdd[minLevel].length > 4                
+            if optionsToAdd[minLevel].length <  @options.length / (3/2)
+                possibleLevels.push(minLevel + 1)
+
+            if optionsToAdd[minLevel].length <  @options.length / 2
+                possibleLevels.push(minLevel + i) for i in [0..1]
+        
+            if optionsToAdd[minLevel].length <  @options.length / 3
+                possibleLevels.push(minLevel + i) for i in [0..2]
+            
+        level = random(possibleLevels)
+        if not optionsToAdd[level] or not optionsToAdd[level].length
+            level = (level for level, options of optionsToAdd when options.length)[0]  
+        
+        shuffledOptions = shuffle(optionsToAdd[level])
+        @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
+
+        switch level  
+            when 6
+                @activeLevel = 'foreignHard'
+            when 5
+                @activeLevel = 'nativeHard'
+            when 4
+                @activeLevel = 'foreignMedium'
+            when 3
+                @activeLevel = 'nativeMedium'
+            when 2
+                @activeLevel = 'foreign'
+            when 1
+                @activeLevel = 'native'
+        
+        @activeType = @activeLevel.replace(/Medium/, '').replace(/Hard/, '')
+
+        @displayLevel = if @activeType.match(/native/) then 'foreign' else 'native'
+        
+        @setStage() 
+                        
+        return @orderedOptions[@orderedOptionsIndex]
+            
+    createGuesses: () ->
+        guesses = @$('.guesses')
+        @clearContainer(guesses)
+        for group, index in @separateIntoWordGroups(@scrambleInfo[@activeType])
+            container = $(document.createElement("DIV"))
+            container.addClass('container')
+            container.addClass("color#{index + 1}") 
+            guesses.append(container)
+
+            for letter in group 
+                container.append(if letter.match(/\w|[^\x00-\x80]+/)? then @createGuess(letter) else @createSpace(letter)) 
+
+            container.width(container.width())
+            container.css(float: 'none', height: container.height())
+
+    clearContainer: (container) -> container.find('.container, .correct, .guess, .letter, .space').remove()
+
+    createGuess: (letter) ->
+        guess = $(document.createElement("DIV"))
+        guess.addClass('guess')
+        guess.addClass("actual_letter_#{letter}")
+        guess.bind 'click', () =>
+            if guess.hasClass('selected')
+                guess.removeClass('selected')
+            else
+                @$('.guesses .guess').removeClass('selected')
+                guess.addClass('selected')
+        
+    createSpace: (letter) ->
+        space = $(document.createElement("DIV"))
+        space.addClass('space')
+        space.html(letter)
+        
+    separateIntoWordGroups: (letters) ->
+        groups = [[]]
+        for letter in letters
+            group = groups[groups.length - 1]
+            if group.length == 18
+                groups.push(nextGroup = [])
+                nextGroup.push(group.pop()) while !group[group.length - 1].match(/\s/)?
+                group = nextGroup.reverse()
+                        
+            group.push(letter)                
+        return groups
+        
+    shuffleWord: (word) ->
+        top = word.length
+        return '' if not top
+        return word if top == 1
+        return (letter for letter in word).reverse().join('') if top == 2
+        
+        wordArray = (letter for letter in word)
+
+        while(top--) 
+            current = Math.floor(Math.random() * (top + 1))
+            tmp = wordArray[current]
+            wordArray[current] = wordArray[top]
+            wordArray[top] = tmp
+        
+        shuffled = wordArray.join('')
+        shuffled = @shuffleWord(shuffled) if shuffled == word
+        return shuffled
+        
+    createLetter: (letter) ->
+        letterContainer = $(document.createElement("DIV"))
+        letterContainer.addClass('letter')
+        letterContainer.addClass("letter_#{letter}")
+        letterContainer.html(letter)
+        @bindLetter(letterContainer)
+        return letterContainer
+        
+    createScramble: () ->
+        scrambled = @$('.scrambled')
+        @clearContainer(scrambled)
+
+        for group, index in @separateIntoWordGroups(@scrambleInfo[@activeType])
+            container = $(document.createElement("DIV"))
+            container.addClass('container')
+            container.addClass("color#{index + 1}")
+            scrambled.append(container)
+
+            for letter in @shuffleWord(@modifyScramble(group.join(''))) 
+                container.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
+
+            container.width(container.width())
+            container.css(float: 'none', height: container.height())
+
+
+    modifyScramble: (word) ->
+        return word unless word.length < 6
+        commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
+        add = (6 - word.length)
+        add = 2 if add > 2
+        word += (commonLetters[Math.floor(Math.random() * commonLetters.length)]) for i in [0...add]
+        return word
+            
+            
+            
+    setStage: () ->
+        @$('.guesses').removeClass('hidden')
+        @$('.scrambled').removeClass('hidden') 
+        @$('.scramble_content').removeClass('show_keyboard')      
+        if @activeLevel.match(/Medium/)? or @activeLevel.match(/Hard/)?
+            @$('.guesses').addClass('hidden')
+            @$('.guesses .hidden_message').show()
+
+        if @activeLevel.match(/Hard/)?
+            @$('.scrambled').addClass('hidden')       
+            @$('.scrambled .hidden_message').show()
+            @$('.scramble_content').addClass('show_keyboard')
     
     updateProgress: ->
         for scrambleInfo in @level.data
             id = scrambleInfo.id
-            level = @user.groups[@group][id]
+            level = @user.levels[@level][id]
             if level
                 level = @maxLevel if level > @maxLevel
                 @$(".progress_meter .bar .#{id}").css(opacity: 1 - ((1/@maxLevel) * level))
             else
                 @$(".progress_meter .bar .#{id}").css(opacity: 1)
     
+
+
+
+
+
 
 
 

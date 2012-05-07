@@ -22,6 +22,10 @@ soma.chunks({
     build: function() {
       var languageScramble;
       languageScramble = require('./lib/language_scramble');
+      this.user = languageScramble.loadUser();
+      if (!(this.levelName && this.levelName.length)) {
+        this.levelName = this.user.lastLevelPlayed || 'top10words';
+      }
       this.chunkHelper = new languageScramble.ChunkHelper(this.levelName);
       return this.html = wings.renderTemplate(this.template, {
         title: this.chunkHelper.level.title,
@@ -40,17 +44,19 @@ soma.views({
     create: function() {
       var languageScramble;
       languageScramble = require('./lib/language_scramble');
-      this.viewHelper = new languageScramble.ViewHelper(this.selector, {});
+      this.levelName = this.el.data('level_name');
+      this.user = languageScramble.loadUser();
+      this.viewHelper = new languageScramble.ViewHelper(this.selector, this.user, this.levelName);
       this.viewHelper.positionTitle();
-      return this.viewHelper.bindWindow();
+      this.viewHelper.bindWindow();
+      this.viewHelper.bindKeyPress();
+      return this.viewHelper.newScramble();
     }
   }
 });
 
 soma.routes({
   '/puzzles/language_scramble': function() {
-    return new soma.chunks.LanguageScramble({
-      levelName: 'top10words'
-    });
+    return new soma.chunks.LanguageScramble;
   }
 });

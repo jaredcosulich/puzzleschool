@@ -13,7 +13,11 @@ soma.chunks
 
         build: ->
             languageScramble = require('./lib/language_scramble')
+            
+            @user = languageScramble.loadUser()
+            @levelName = (@user.lastLevelPlayed or 'top10words') unless @levelName && @levelName.length
             @chunkHelper = new languageScramble.ChunkHelper(@levelName)
+            
             @html = wings.renderTemplate(@template, 
                 title: @chunkHelper.level.title
                 subtitle: @chunkHelper.level.subtitle
@@ -27,11 +31,15 @@ soma.views
         selector: '#content .language_scramble'
         create: ->
             languageScramble = require('./lib/language_scramble')
-            @viewHelper = new languageScramble.ViewHelper(@selector, {}, )
+
+            @levelName = @el.data('level_name')
+            @user = languageScramble.loadUser()
+            @viewHelper = new languageScramble.ViewHelper(@selector, @user, @levelName)
+
             @viewHelper.positionTitle()
             @viewHelper.bindWindow()
+            @viewHelper.bindKeyPress()
+            @viewHelper.newScramble()
 
 soma.routes
-    '/puzzles/language_scramble': -> 
-        new soma.chunks.LanguageScramble
-            levelName: 'top10words'
+    '/puzzles/language_scramble': -> new soma.chunks.LanguageScramble
