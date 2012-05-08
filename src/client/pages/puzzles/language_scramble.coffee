@@ -37,13 +37,28 @@ soma.views
 
             @languages = @el.data('languages')
             @levelName = @el.data('level_name')
+            # console.log(@languages, @levelName)
+
             @user = languageScramble.loadUser()
-            @viewHelper = new languageScramble.ViewHelper($(@selector), @user, @languages)
+            @viewHelper = new languageScramble.ViewHelper($(@selector), @user, @languages, @go)
 
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
             @viewHelper.bindKeyPress()
             @viewHelper.newScramble()
+            
+            
 
 soma.routes
     '/puzzles/language_scramble': -> new soma.chunks.LanguageScramble
+    
+    '/puzzles/language_scramble/:languages': (languages) -> 
+        new soma.chunks.LanguageScramble
+            languages: languages
+            
+    '/puzzles/language_scramble/:languages/:levelName': (languages, levelName) -> 
+        new soma.chunks.LanguageScramble
+            languages: languages
+            levelName: levelName
+            
+        

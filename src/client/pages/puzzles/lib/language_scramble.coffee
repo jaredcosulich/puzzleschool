@@ -49,6 +49,7 @@ class languageScramble.ChunkHelper
         info = []
         for levelName, levelData of @languageData.levels
             info.push
+                languages: @languages
                 id: levelName
                 title: levelData.title
                 subtitle: levelData.subtitle
@@ -61,7 +62,7 @@ class languageScramble.ChunkHelper
 class languageScramble.ViewHelper
     maxLevel: 7
 
-    constructor: (@el, @user, @languages) ->
+    constructor: (@el, @user, @languages, @go) ->
 
     $: (selector) -> $(selector, @el)
 

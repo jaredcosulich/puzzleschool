@@ -1,7 +1,7 @@
 /*!
   * =============================================================
   * Ender: open module JavaScript framework (https://ender.no.de)
-  * Build: ender build sel ../soma wings morpheus timeout
+  * Build: ender build sel soma wings morpheus timeout
   * =============================================================
   */
 
@@ -4532,7 +4532,7 @@
         }
         if (el.length) {
           if ('type' in attributes && attributes.type !== el.attr('type')) {
-            el.detach().attr('type', attributes.type).appendTo($('head'));
+            $(el.detach()).attr('type', attributes.type).appendTo($('head'));
           }
         } else {
           el = $(document.createElement(tag));

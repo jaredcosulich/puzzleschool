@@ -52,7 +52,7 @@ soma.views({
       this.languages = this.el.data('languages');
       this.levelName = this.el.data('level_name');
       this.user = languageScramble.loadUser();
-      this.viewHelper = new languageScramble.ViewHelper($(this.selector), this.user, this.languages);
+      this.viewHelper = new languageScramble.ViewHelper($(this.selector), this.user, this.languages, this.go);
       this.viewHelper.setLevel(this.levelName);
       this.viewHelper.bindWindow();
       this.viewHelper.bindKeyPress();
@@ -64,5 +64,16 @@ soma.views({
 soma.routes({
   '/puzzles/language_scramble': function() {
     return new soma.chunks.LanguageScramble;
+  },
+  '/puzzles/language_scramble/:languages': function(languages) {
+    return new soma.chunks.LanguageScramble({
+      languages: languages
+    });
+  },
+  '/puzzles/language_scramble/:languages/:levelName': function(languages, levelName) {
+    return new soma.chunks.LanguageScramble({
+      languages: languages,
+      levelName: levelName
+    });
   }
 });

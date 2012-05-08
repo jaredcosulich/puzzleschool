@@ -83,6 +83,7 @@ languageScramble.ChunkHelper = (function() {
     for (levelName in _ref) {
       levelData = _ref[levelName];
       info.push({
+        languages: this.languages,
         id: levelName,
         title: levelData.title,
         subtitle: levelData.subtitle
@@ -105,10 +106,11 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.maxLevel = 7;
 
-  function ViewHelper(el, user, languages) {
+  function ViewHelper(el, user, languages, go) {
     this.el = el;
     this.user = user;
     this.languages = languages;
+    this.go = go;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);

@@ -137,7 +137,7 @@ body {
 .language_scramble .scrambled .color3 .selected,
 .language_scramble .guesses .color4 .selected,
 .language_scramble .scrambled .color4 .selected {
-  background-color: white;
+  background-color: #fafafa;
 }
 .language_scramble .guesses .letter,
 .language_scramble .scrambled .letter {
@@ -170,7 +170,7 @@ body {
   display: none;
   position: absolute;
   font-size: 12pt;
-  background-color: white;
+  background-color: #fafafa;
 }
 .language_scramble .guesses.hidden,
 .language_scramble .scrambled.hidden {

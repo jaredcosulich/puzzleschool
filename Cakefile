@@ -37,6 +37,6 @@ task 'build:site', 'Build the site files', ->
     
 task 'build:ender', 'Build the ender modules', ->
     execCmds [
-        'ender build sel ../soma wings morpheus timeout'
+        'ender build sel soma wings morpheus timeout'
     ]
 
