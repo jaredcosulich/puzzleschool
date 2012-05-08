@@ -13,7 +13,7 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      this.levelName = _arg.levelName;
+      this.languages = _arg.languages, this.levelName = _arg.levelName;
       this.template = this.loadTemplate('/build/client/templates/puzzles/language_scramble.html');
       this.loadScript('/build/client/pages/puzzles/language_scramble.js');
       this.loadScript('/build/client/pages/puzzles/lib/language_scramble.js');
@@ -23,11 +23,16 @@ soma.chunks({
       var languageScramble;
       languageScramble = require('./lib/language_scramble');
       this.user = languageScramble.loadUser();
+      if (!(this.languages && this.languages.length)) {
+        this.languages = this.user.lastLanguages || 'english_italian';
+      }
       if (!(this.levelName && this.levelName.length)) {
         this.levelName = this.user.lastLevelPlayed || 'top10words';
       }
-      this.chunkHelper = new languageScramble.ChunkHelper(this.levelName);
+      this.chunkHelper = new languageScramble.ChunkHelper(this.languages, this.levelName);
       return this.html = wings.renderTemplate(this.template, {
+        languages: this.languages,
+        displayLanguages: this.chunkHelper.displayLanguages(),
         title: this.chunkHelper.level.title,
         subtitle: this.chunkHelper.level.subtitle,
         data: this.chunkHelper.level.data,
@@ -44,9 +49,10 @@ soma.views({
     create: function() {
       var languageScramble;
       languageScramble = require('./lib/language_scramble');
+      this.languages = this.el.data('languages');
       this.levelName = this.el.data('level_name');
       this.user = languageScramble.loadUser();
-      this.viewHelper = new languageScramble.ViewHelper($(this.selector), this.user);
+      this.viewHelper = new languageScramble.ViewHelper($(this.selector), this.user, this.languages);
       this.viewHelper.setLevel(this.levelName);
       this.viewHelper.bindWindow();
       this.viewHelper.bindKeyPress();

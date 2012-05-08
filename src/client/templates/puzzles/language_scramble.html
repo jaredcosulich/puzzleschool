@@ -1,4 +1,4 @@
-<div class='language_scramble' data-level_name={levelName}>
+<div class='language_scramble' data-languages={languages} data-level_name={levelName}>
     <div class='header'>
         <h1 class="red">Language Scramble</h1>
         <div class='progress_meter'>
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class='title'>
-            <div class='language'></div>
+            <div class='languages'>{displayLanguages}</div>
             <div class='text'>{title}</div>
             <small class='subtitle'>{subtitle}</small>
         </div>
@@ -52,7 +52,7 @@
 
     <div class='footer'>
         <div class='levels'>
-            <h2>Levels</h2>
+            <h2>{displayLanguages} Levels</h2>
             {:allLevels}
                 <div class='level'>
                     <a href='/puzzles/language_scramble/{id}'>

@@ -41,9 +41,9 @@ shuffle = function(array) {
 
 languageScramble = typeof exports !== "undefined" && exports !== null ? exports : provide('./lib/language_scramble', {});
 
-languageScramble.getLevel = function(levelName) {
+languageScramble.getLevel = function(languageData, levelName) {
   var data, index, level, _i, _len, _ref;
-  level = languageScramble.data[levelName];
+  level = languageData.levels[levelName];
   _ref = level.data;
   for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
     data = _ref[index];
@@ -69,15 +69,17 @@ languageScramble.ChunkHelper = (function() {
 
   ChunkHelper.name = 'ChunkHelper';
 
-  function ChunkHelper(levelName) {
+  function ChunkHelper(languages, levelName) {
+    this.languages = languages;
     this.levelName = levelName;
-    this.level = languageScramble.getLevel(this.levelName);
+    this.languageData = languageScramble.data[this.languages];
+    this.level = languageScramble.getLevel(this.languageData, this.levelName);
   }
 
   ChunkHelper.prototype.allLevels = function() {
     var info, levelData, levelName, _ref;
     info = [];
-    _ref = languageScramble.data;
+    _ref = this.languageData.levels;
     for (levelName in _ref) {
       levelData = _ref[levelName];
       info.push({
@@ -87,6 +89,10 @@ languageScramble.ChunkHelper = (function() {
       });
     }
     return info;
+  };
+
+  ChunkHelper.prototype.displayLanguages = function() {
+    return this.languageData.displayName;
   };
 
   return ChunkHelper;
@@ -99,9 +105,10 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.maxLevel = 7;
 
-  function ViewHelper(el, user) {
+  function ViewHelper(el, user, languages) {
     this.el = el;
     this.user = user;
+    this.languages = languages;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -121,6 +128,42 @@ languageScramble.ViewHelper = (function() {
     return this.$('.header .title').css({
       marginLeft: margin
     });
+  };
+
+  ViewHelper.prototype.setLevel = function(levelName) {
+    this.levelName = levelName;
+    this.languageData = languageScramble.data[this.languages];
+    this.level = languageScramble.getLevel(this.languageData, this.levelName);
+    this.options = this.level.data;
+    if (!this.user.levels[this.levelName]) {
+      this.user.levels[this.levelName] = {};
+    }
+    this.user.lastLevelPlayed = this.levelName;
+    this.saveUser();
+    this.orderedOptions = [];
+    this.orderedOptionsIndex = 0;
+    this.positionTitle();
+    return this.updateProgress();
+  };
+
+  ViewHelper.prototype.saveLevel = function() {
+    var lastAnswerDuration;
+    this.answerTimes.push(new Date());
+    lastAnswerDuration = this.answerTimes[this.answerTimes.length - 1] - this.answerTimes[this.answerTimes.length - 2];
+    if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
+      this.user.levels[this.levelName][this.scrambleInfo.id] += 1;
+    }
+    return this.saveUser();
+  };
+
+  ViewHelper.prototype.saveUser = function() {
+    var users;
+    return;
+    if (this.user && this.user.name) {
+      users = $.cookie('users') || {};
+      users[this.user.name.toLowerCase()] = this.user;
+      return $.cookie('users', users);
+    }
   };
 
   ViewHelper.prototype.bindWindow = function() {
@@ -926,492 +969,462 @@ languageScramble.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.setLevel = function(levelName) {
-    this.levelName = levelName;
-    this.level = languageScramble.getLevel(this.levelName);
-    this.options = this.level.data;
-    if (!this.user.levels[this.levelName]) {
-      this.user.levels[this.levelName] = {};
-    }
-    this.user.lastLevelPlayed = this.levelName;
-    this.saveUser();
-    this.orderedOptions = [];
-    this.orderedOptionsIndex = 0;
-    this.positionTitle();
-    return this.updateProgress();
-  };
-
-  ViewHelper.prototype.saveLevel = function() {
-    var lastAnswerDuration;
-    this.answerTimes.push(new Date());
-    lastAnswerDuration = this.answerTimes[this.answerTimes.length - 1] - this.answerTimes[this.answerTimes.length - 2];
-    if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
-      this.user.levels[this.levelName][this.scrambleInfo.id] += 1;
-    }
-    return this.saveUser();
-  };
-
-  ViewHelper.prototype.saveUser = function() {
-    var users;
-    return;
-    if (this.user && this.user.name) {
-      users = $.cookie('users') || {};
-      users[this.user.name.toLowerCase()] = this.user;
-      return $.cookie('users', users);
-    }
-  };
-
   return ViewHelper;
 
 })();
 
 languageScramble.data = {
-  top10words: {
-    title: 'Top 10 Words',
-    subtitle: 'The 10 most frequently used Italian words.',
-    nextLevel: 'top10phrases',
-    data: [
-      {
-        "native": 'not',
-        foreign: 'non',
-        nativeSentence: 'that\'s not necessary',
-        foreignSentence: 'non è necessario'
-      }, {
-        "native": 'of',
-        foreign: 'di',
-        nativeSentence: 'memories of a cat',
-        foreignSentence: 'memorie di un gatto'
-      }, {
-        "native": 'what',
-        foreign: 'che',
-        nativeSentence: 'what luck',
-        foreignSentence: 'che fortuna'
-      }, {
-        "native": 'is',
-        foreign: 'è',
-        nativeSentence: 'that bird is fat',
-        foreignSentence: 'quell\'uccello è grasso'
-      }, {
-        "native": 'and',
-        foreign: 'e',
-        nativeSentence: 'big and tall',
-        foreignSentence: 'grande e grosso'
-      }, {
-        "native": 'the',
-        foreign: 'la',
-        nativeSentence: 'drop the ball now',
-        foreignSentence: 'cadere la palla ora'
-      }, {
-        "native": 'the',
-        foreign: 'il',
-        nativeSentence: 'there are drinks for the party',
-        foreignSentence: 'ci sono bevande per il partito'
-      }, {
-        "native": 'a',
-        foreign: 'un',
-        nativeSentence: 'a little more',
-        foreignSentence: 'un po più'
-      }, {
-        "native": 'for',
-        foreign: 'per',
-        nativeSentence: 'where is the food for dinner?',
-        foreignSentence: 'dove è il cibo per la cena?'
-      }, {
-        "native": 'are',
-        foreign: 'sono',
-        nativeSentence: 'there are five quotes',
-        foreignSentence: 'ci sono cinque citazioni'
+  english_italian: {
+    displayName: "English - Italian",
+    levels: {
+      top10words: {
+        title: 'Top 10 Words',
+        subtitle: 'The 10 most frequently used Italian words.',
+        nextLevel: 'top10phrases',
+        data: [
+          {
+            "native": 'not',
+            foreign: 'non',
+            nativeSentence: 'that\'s not necessary',
+            foreignSentence: 'non è necessario'
+          }, {
+            "native": 'of',
+            foreign: 'di',
+            nativeSentence: 'memories of a cat',
+            foreignSentence: 'memorie di un gatto'
+          }, {
+            "native": 'what',
+            foreign: 'che',
+            nativeSentence: 'what luck',
+            foreignSentence: 'che fortuna'
+          }, {
+            "native": 'is',
+            foreign: 'è',
+            nativeSentence: 'that bird is fat',
+            foreignSentence: 'quell\'uccello è grasso'
+          }, {
+            "native": 'and',
+            foreign: 'e',
+            nativeSentence: 'big and tall',
+            foreignSentence: 'grande e grosso'
+          }, {
+            "native": 'the',
+            foreign: 'la',
+            nativeSentence: 'drop the ball now',
+            foreignSentence: 'cadere la palla ora'
+          }, {
+            "native": 'the',
+            foreign: 'il',
+            nativeSentence: 'there are drinks for the party',
+            foreignSentence: 'ci sono bevande per il partito'
+          }, {
+            "native": 'a',
+            foreign: 'un',
+            nativeSentence: 'a little more',
+            foreignSentence: 'un po più'
+          }, {
+            "native": 'for',
+            foreign: 'per',
+            nativeSentence: 'where is the food for dinner?',
+            foreignSentence: 'dove è il cibo per la cena?'
+          }, {
+            "native": 'are',
+            foreign: 'sono',
+            nativeSentence: 'there are five quotes',
+            foreignSentence: 'ci sono cinque citazioni'
+          }
+        ]
+      },
+      top10phrases: {
+        title: 'Phrases For The Top 10 Words',
+        subtitle: 'Phrases containing the 10 most frequently used Italian words',
+        nextLevel: 'top25words',
+        data: [
+          {
+            "native": 'that\'s not necessary',
+            foreign: 'non è necessario'
+          }, {
+            "native": 'memories of a cat',
+            foreign: 'memorie di un gatto'
+          }, {
+            "native": 'what luck',
+            foreign: 'che fortuna'
+          }, {
+            "native": 'that bird is fat',
+            foreign: 'quell\'uccello è grasso'
+          }, {
+            "native": 'big and tall',
+            foreign: 'grande e grosso'
+          }, {
+            "native": 'drop the ball now',
+            foreign: 'cadere la palla ora'
+          }, {
+            "native": 'there are drinks for the party',
+            foreign: 'ci sono bevande per il partito'
+          }, {
+            "native": 'a little more',
+            foreign: 'un po più'
+          }, {
+            "native": 'where is the food for dinner?',
+            foreign: 'dove è il cibo per la cena?'
+          }, {
+            "native": 'there are five quotes',
+            foreign: 'ci sono cinque citazioni'
+          }
+        ]
+      },
+      top25words: {
+        title: 'Top 10 - 25 Words',
+        subtitle: 'The 10 - 25 most frequently used Italian words',
+        nextLevel: 'top25phrases',
+        data: [
+          {
+            "native": 'i have',
+            foreign: 'ho',
+            nativeSentence: 'i have twenty dollars',
+            foreignSentence: 'ho venti dollari'
+          }, {
+            "native": 'but',
+            foreign: 'ma',
+            nativeSentence: 'i was going to but i can not',
+            foreignSentence: 'stavo andando ma non posso'
+          }, {
+            "native": 'he has',
+            foreign: 'ha',
+            nativeSentence: 'he has a big house',
+            foreignSentence: 'ha una grande casa'
+          }, {
+            "native": 'with',
+            foreign: 'con',
+            nativeSentence: 'i\'m coming with you',
+            foreignSentence: 'vengo con te'
+          }, {
+            "native": 'what',
+            foreign: 'cosa',
+            nativeSentence: 'what do you like to do?',
+            foreignSentence: 'cosa ti piace fare?'
+          }, {
+            "native": 'if',
+            foreign: 'se',
+            nativeSentence: 'what if he wins?',
+            foreignSentence: 'cosa succede se vince?'
+          }, {
+            "native": 'i',
+            foreign: 'io',
+            nativeSentence: 'i am going to the markets',
+            foreignSentence: 'io vado ai mercati'
+          }, {
+            "native": 'how',
+            foreign: 'come',
+            nativeSentence: 'how are you?',
+            foreignSentence: 'come stai?'
+          }, {
+            "native": 'there',
+            foreign: 'ci',
+            nativeSentence: 'there are three friends',
+            foreignSentence: 'ci sono tre amici'
+          }, {
+            "native": 'this',
+            foreign: 'questo',
+            nativeSentence: 'this is fantastic',
+            foreignSentence: 'questo è fantastico'
+          }, {
+            "native": 'here',
+            foreign: 'qui',
+            nativeSentence: 'come here',
+            foreignSentence: 'vieni qui'
+          }, {
+            "native": 'you have',
+            foreign: 'hai',
+            nativeSentence: 'you have ten minutes',
+            foreignSentence: 'hai dieci minuti'
+          }, {
+            "native": 'six',
+            foreign: 'sei',
+            nativeSentence: 'there are six doors',
+            foreignSentence: 'ci sono sei porte'
+          }, {
+            "native": 'well',
+            foreign: 'bene',
+            nativeSentence: 'are you well?',
+            foreignSentence: 'stai bene?'
+          }, {
+            "native": 'yes',
+            foreign: 'sì',
+            nativeSentence: 'yes, you can',
+            foreignSentence: 'sì, è possibile'
+          }
+        ]
+      },
+      top25phrases: {
+        title: 'Phrases For The Top 10 - 25 Words',
+        subtitle: 'Phrases for 10 - 25 most frequently used Italian words',
+        nextLevel: 'top50words',
+        data: [
+          {
+            "native": 'i have twenty dollars',
+            foreign: 'ho venti dollari'
+          }, {
+            "native": 'i was going to but i can not',
+            foreign: 'stavo andando ma non posso'
+          }, {
+            "native": 'he has a big house',
+            foreign: 'ha una grande casa'
+          }, {
+            "native": 'i\'m coming with you',
+            foreign: 'vengo con te'
+          }, {
+            "native": 'what do you like to do?',
+            foreign: 'cosa ti piace fare?'
+          }, {
+            "native": 'what if he wins?',
+            foreign: 'cosa succede se vince?'
+          }, {
+            "native": 'i am going to the markets',
+            foreign: 'io vado ai mercati'
+          }, {
+            "native": 'how are you?',
+            foreign: 'come stai?'
+          }, {
+            "native": 'there are three friends',
+            foreign: 'ci sono tre amici'
+          }, {
+            "native": 'this is great',
+            foreign: 'questo è fantastico'
+          }, {
+            "native": 'come here',
+            foreign: 'vieni qui'
+          }, {
+            "native": 'you have ten minutes',
+            foreign: 'hai dieci minuti'
+          }, {
+            "native": 'there are six doors',
+            foreign: 'ci sono sei porte'
+          }, {
+            "native": 'are you well?',
+            foreign: 'stai bene?'
+          }, {
+            "native": 'yes, you can',
+            foreign: 'sì, è possibile'
+          }
+        ]
+      },
+      top50words: {
+        title: 'Top 25 - 50 Words',
+        subtitle: 'The 25 - 50 most frequently used Italian words',
+        nextLevel: 'top50phrases',
+        data: [
+          {
+            "native": 'more',
+            foreign: 'più',
+            nativeSentence: 'a little more',
+            foreignSentence: 'un po più'
+          }, {
+            "native": 'my',
+            foreign: 'mio',
+            nativeSentence: 'my child is seven years old',
+            foreignSentence: 'mio figlio ha sette anni'
+          }, {
+            "native": 'because',
+            foreign: 'perché',
+            nativeSentence: 'because i want to',
+            foreignSentence: 'perché voglio'
+          }, {
+            "native": 'why',
+            foreign: 'perché',
+            nativeSentence: 'why do you want to go?',
+            foreignSentence: 'perché vuoi andare?'
+          }, {
+            "native": 'she',
+            foreign: 'lei',
+            nativeSentence: 'she leaves tomorrow',
+            foreignSentence: 'lei parte domani'
+          }, {
+            "native": 'only',
+            foreign: 'solo',
+            nativeSentence: 'it was only fifteen minutes',
+            foreignSentence: 'era solo quindici minuti'
+          }, {
+            "native": 'was',
+            foreign: 'era',
+            nativeSentence: 'it was thirty years ago',
+            foreignSentence: 'era trent\'anni fa'
+          }, {
+            "native": 'all',
+            foreign: 'tutti',
+            nativeSentence: 'all of the king\'s horses',
+            foreignSentence: 'tutti i cavalli del re'
+          }, {
+            "native": 'so-so',
+            foreign: 'così-così',
+            nativeSentence: 'i am feeling so-so',
+            foreignSentence: 'mi sento così-così'
+          }, {
+            "native": 'hello',
+            foreign: 'ciao',
+            nativeSentence: 'hello my friend',
+            foreignSentence: 'ciao amico mio'
+          }, {
+            "native": 'this',
+            foreign: 'questo',
+            nativeSentence: 'this is the best food',
+            foreignSentence: 'questo è il miglior cibo'
+          }, {
+            "native": 'to do',
+            foreign: 'fare',
+            nativeSentence: 'if you want to do this',
+            foreignSentence: 'se si vuole fare questo'
+          }, {
+            "native": 'when',
+            foreign: 'quando',
+            nativeSentence: 'when is the show?',
+            foreignSentence: 'quando è lo spettacolo?'
+          }, {
+            "native": 'now',
+            foreign: 'ora',
+            nativeSentence: 'drop the ball now',
+            foreignSentence: 'cadere la palla ora'
+          }, {
+            "native": 'you did',
+            foreign: 'hai fatto',
+            nativeSentence: 'you did your best',
+            foreignSentence: 'hai fatto del tuo meglio'
+          }, {
+            "native": 'to be',
+            foreign: 'essere',
+            nativeSentence: 'i want to be an astronaut',
+            foreignSentence: 'voglio essere un astronauta'
+          }, {
+            "native": 'never',
+            foreign: 'mai',
+            nativeSentence: 'i have never been to the coast',
+            foreignSentence: 'non sono mai stato alla costa'
+          }, {
+            "native": 'who',
+            foreign: 'chi',
+            nativeSentence: 'who are you?',
+            foreignSentence: 'chi sei?'
+          }, {
+            "native": 'or',
+            foreign: 'o',
+            nativeSentence: 'pizza or pasta',
+            foreignSentence: 'pizza o la pasta'
+          }, {
+            "native": 'all',
+            foreign: 'tutti',
+            nativeSentence: 'he ate all of the cookies',
+            foreignSentence: 'ha mangiato tutti i cookie'
+          }, {
+            "native": 'very',
+            foreign: 'molto',
+            nativeSentence: 'he is very old',
+            foreignSentence: 'lui è molto vecchio'
+          }, {
+            "native": 'also',
+            foreign: 'anche',
+            nativeSentence: 'i also need two pencils',
+            foreignSentence: 'ho anche bisogno di due matite'
+          }, {
+            "native": 'he said',
+            foreign: 'ha detto',
+            nativeSentence: 'he said go left',
+            foreignSentence: 'ha detto andate a sinistra'
+          }, {
+            "native": 'that',
+            foreign: 'quella',
+            nativeSentence: 'that lady ate my cheese',
+            foreignSentence: 'quella signora mangiato il mio formaggio'
+          }, {
+            "native": 'nothing',
+            foreign: 'niente',
+            nativeSentence: 'there was nothing there',
+            foreignSentence: 'non c\'era niente'
+          }
+        ]
+      },
+      top50Phrases: {
+        title: 'Phrases For The Top 25 - 50 Words',
+        subtitle: 'Phrases for the 25 - 50 most frequently used Italian words',
+        data: [
+          {
+            "native": 'a little more',
+            foreign: 'un po più'
+          }, {
+            "native": 'my child is seven years old',
+            foreign: 'mio figlio ha sette anni'
+          }, {
+            "native": 'because i want to',
+            foreign: 'perché voglio'
+          }, {
+            "native": 'why do you want to go?',
+            foreign: 'perché vuoi andare?'
+          }, {
+            "native": 'she leaves tomorrow',
+            foreign: 'lei parte domani'
+          }, {
+            "native": 'it was only fifteen minutes',
+            foreign: 'era solo quindici minuti'
+          }, {
+            "native": 'it was thirty years ago',
+            foreign: 'era trent\'anni fa'
+          }, {
+            "native": 'all of the king\'s horses',
+            foreign: 'tutti i cavalli del re'
+          }, {
+            "native": 'i am feeling so-so',
+            foreign: 'mi sento così-così'
+          }, {
+            "native": 'hello my friend',
+            foreign: 'ciao amico mio'
+          }, {
+            "native": 'this is the best food',
+            foreign: 'questo è il miglior cibo'
+          }, {
+            "native": 'if you want to do this',
+            foreign: 'se si vuole fare questo'
+          }, {
+            "native": 'when is the show?',
+            foreign: 'quando è lo spettacolo?'
+          }, {
+            "native": 'drop the ball now',
+            foreign: 'cadere la palla ora'
+          }, {
+            "native": 'you did your best',
+            foreign: 'hai fatto del tuo meglio'
+          }, {
+            "native": 'i want to be an astronaut',
+            foreign: 'voglio essere un astronauta'
+          }, {
+            "native": 'i have never been to the coast',
+            foreign: 'non sono mai stato alla costa'
+          }, {
+            "native": 'who are you?',
+            foreign: 'chi sei?'
+          }, {
+            "native": 'pizza or pasta',
+            foreign: 'pizza o la pasta'
+          }, {
+            "native": 'he ate all of the cookies',
+            foreign: 'ha mangiato tutti i cookie'
+          }, {
+            "native": 'he is very old',
+            foreign: 'lui è molto vecchio'
+          }, {
+            "native": 'i also need two pencils',
+            foreign: 'ho anche bisogno di due matite'
+          }, {
+            "native": 'he said go left',
+            foreign: 'ha detto andate a sinistra'
+          }, {
+            "native": 'that lady ate my cheese',
+            foreign: 'quella signora mangiato il mio formaggio'
+          }, {
+            "native": 'there was nothing there',
+            foreign: 'non c\'era niente'
+          }
+        ]
       }
-    ]
-  },
-  top10phrases: {
-    title: 'Phrases For The Top 10 Words',
-    subtitle: 'Phrases containing the 10 most frequently used Italian words',
-    nextLevel: 'top25words',
-    data: [
-      {
-        "native": 'that\'s not necessary',
-        foreign: 'non è necessario'
-      }, {
-        "native": 'memories of a cat',
-        foreign: 'memorie di un gatto'
-      }, {
-        "native": 'what luck',
-        foreign: 'che fortuna'
-      }, {
-        "native": 'that bird is fat',
-        foreign: 'quell\'uccello è grasso'
-      }, {
-        "native": 'big and tall',
-        foreign: 'grande e grosso'
-      }, {
-        "native": 'drop the ball now',
-        foreign: 'cadere la palla ora'
-      }, {
-        "native": 'there are drinks for the party',
-        foreign: 'ci sono bevande per il partito'
-      }, {
-        "native": 'a little more',
-        foreign: 'un po più'
-      }, {
-        "native": 'where is the food for dinner?',
-        foreign: 'dove è il cibo per la cena?'
-      }, {
-        "native": 'there are five quotes',
-        foreign: 'ci sono cinque citazioni'
-      }
-    ]
-  },
-  top25words: {
-    title: 'Top 10 - 25 Words',
-    subtitle: 'The 10 - 25 most frequently used Italian words',
-    nextLevel: 'top25phrases',
-    data: [
-      {
-        "native": 'i have',
-        foreign: 'ho',
-        nativeSentence: 'i have twenty dollars',
-        foreignSentence: 'ho venti dollari'
-      }, {
-        "native": 'but',
-        foreign: 'ma',
-        nativeSentence: 'i was going to but i can not',
-        foreignSentence: 'stavo andando ma non posso'
-      }, {
-        "native": 'he has',
-        foreign: 'ha',
-        nativeSentence: 'he has a big house',
-        foreignSentence: 'ha una grande casa'
-      }, {
-        "native": 'with',
-        foreign: 'con',
-        nativeSentence: 'i\'m coming with you',
-        foreignSentence: 'vengo con te'
-      }, {
-        "native": 'what',
-        foreign: 'cosa',
-        nativeSentence: 'what do you like to do?',
-        foreignSentence: 'cosa ti piace fare?'
-      }, {
-        "native": 'if',
-        foreign: 'se',
-        nativeSentence: 'what if he wins?',
-        foreignSentence: 'cosa succede se vince?'
-      }, {
-        "native": 'i',
-        foreign: 'io',
-        nativeSentence: 'i am going to the markets',
-        foreignSentence: 'io vado ai mercati'
-      }, {
-        "native": 'how',
-        foreign: 'come',
-        nativeSentence: 'how are you?',
-        foreignSentence: 'come stai?'
-      }, {
-        "native": 'there',
-        foreign: 'ci',
-        nativeSentence: 'there are three friends',
-        foreignSentence: 'ci sono tre amici'
-      }, {
-        "native": 'this',
-        foreign: 'questo',
-        nativeSentence: 'this is fantastic',
-        foreignSentence: 'questo è fantastico'
-      }, {
-        "native": 'here',
-        foreign: 'qui',
-        nativeSentence: 'come here',
-        foreignSentence: 'vieni qui'
-      }, {
-        "native": 'you have',
-        foreign: 'hai',
-        nativeSentence: 'you have ten minutes',
-        foreignSentence: 'hai dieci minuti'
-      }, {
-        "native": 'six',
-        foreign: 'sei',
-        nativeSentence: 'there are six doors',
-        foreignSentence: 'ci sono sei porte'
-      }, {
-        "native": 'well',
-        foreign: 'bene',
-        nativeSentence: 'are you well?',
-        foreignSentence: 'stai bene?'
-      }, {
-        "native": 'yes',
-        foreign: 'sì',
-        nativeSentence: 'yes, you can',
-        foreignSentence: 'sì, è possibile'
-      }
-    ]
-  },
-  top25phrases: {
-    title: 'Phrases For The Top 10 - 25 Words',
-    subtitle: 'Phrases for 10 - 25 most frequently used Italian words',
-    nextLevel: 'top50words',
-    data: [
-      {
-        "native": 'i have twenty dollars',
-        foreign: 'ho venti dollari'
-      }, {
-        "native": 'i was going to but i can not',
-        foreign: 'stavo andando ma non posso'
-      }, {
-        "native": 'he has a big house',
-        foreign: 'ha una grande casa'
-      }, {
-        "native": 'i\'m coming with you',
-        foreign: 'vengo con te'
-      }, {
-        "native": 'what do you like to do?',
-        foreign: 'cosa ti piace fare?'
-      }, {
-        "native": 'what if he wins?',
-        foreign: 'cosa succede se vince?'
-      }, {
-        "native": 'i am going to the markets',
-        foreign: 'io vado ai mercati'
-      }, {
-        "native": 'how are you?',
-        foreign: 'come stai?'
-      }, {
-        "native": 'there are three friends',
-        foreign: 'ci sono tre amici'
-      }, {
-        "native": 'this is great',
-        foreign: 'questo è fantastico'
-      }, {
-        "native": 'come here',
-        foreign: 'vieni qui'
-      }, {
-        "native": 'you have ten minutes',
-        foreign: 'hai dieci minuti'
-      }, {
-        "native": 'there are six doors',
-        foreign: 'ci sono sei porte'
-      }, {
-        "native": 'are you well?',
-        foreign: 'stai bene?'
-      }, {
-        "native": 'yes, you can',
-        foreign: 'sì, è possibile'
-      }
-    ]
-  },
-  top50words: {
-    title: 'Top 25 - 50 Words',
-    subtitle: 'The 25 - 50 most frequently used Italian words',
-    nextLevel: 'top50phrases',
-    data: [
-      {
-        "native": 'more',
-        foreign: 'più',
-        nativeSentence: 'a little more',
-        foreignSentence: 'un po più'
-      }, {
-        "native": 'my',
-        foreign: 'mio',
-        nativeSentence: 'my child is seven years old',
-        foreignSentence: 'mio figlio ha sette anni'
-      }, {
-        "native": 'because',
-        foreign: 'perché',
-        nativeSentence: 'because i want to',
-        foreignSentence: 'perché voglio'
-      }, {
-        "native": 'why',
-        foreign: 'perché',
-        nativeSentence: 'why do you want to go?',
-        foreignSentence: 'perché vuoi andare?'
-      }, {
-        "native": 'she',
-        foreign: 'lei',
-        nativeSentence: 'she leaves tomorrow',
-        foreignSentence: 'lei parte domani'
-      }, {
-        "native": 'only',
-        foreign: 'solo',
-        nativeSentence: 'it was only fifteen minutes',
-        foreignSentence: 'era solo quindici minuti'
-      }, {
-        "native": 'was',
-        foreign: 'era',
-        nativeSentence: 'it was thirty years ago',
-        foreignSentence: 'era trent\'anni fa'
-      }, {
-        "native": 'all',
-        foreign: 'tutti',
-        nativeSentence: 'all of the king\'s horses',
-        foreignSentence: 'tutti i cavalli del re'
-      }, {
-        "native": 'so-so',
-        foreign: 'così-così',
-        nativeSentence: 'i am feeling so-so',
-        foreignSentence: 'mi sento così-così'
-      }, {
-        "native": 'hello',
-        foreign: 'ciao',
-        nativeSentence: 'hello my friend',
-        foreignSentence: 'ciao amico mio'
-      }, {
-        "native": 'this',
-        foreign: 'questo',
-        nativeSentence: 'this is the best food',
-        foreignSentence: 'questo è il miglior cibo'
-      }, {
-        "native": 'to do',
-        foreign: 'fare',
-        nativeSentence: 'if you want to do this',
-        foreignSentence: 'se si vuole fare questo'
-      }, {
-        "native": 'when',
-        foreign: 'quando',
-        nativeSentence: 'when is the show?',
-        foreignSentence: 'quando è lo spettacolo?'
-      }, {
-        "native": 'now',
-        foreign: 'ora',
-        nativeSentence: 'drop the ball now',
-        foreignSentence: 'cadere la palla ora'
-      }, {
-        "native": 'you did',
-        foreign: 'hai fatto',
-        nativeSentence: 'you did your best',
-        foreignSentence: 'hai fatto del tuo meglio'
-      }, {
-        "native": 'to be',
-        foreign: 'essere',
-        nativeSentence: 'i want to be an astronaut',
-        foreignSentence: 'voglio essere un astronauta'
-      }, {
-        "native": 'never',
-        foreign: 'mai',
-        nativeSentence: 'i have never been to the coast',
-        foreignSentence: 'non sono mai stato alla costa'
-      }, {
-        "native": 'who',
-        foreign: 'chi',
-        nativeSentence: 'who are you?',
-        foreignSentence: 'chi sei?'
-      }, {
-        "native": 'or',
-        foreign: 'o',
-        nativeSentence: 'pizza or pasta',
-        foreignSentence: 'pizza o la pasta'
-      }, {
-        "native": 'all',
-        foreign: 'tutti',
-        nativeSentence: 'he ate all of the cookies',
-        foreignSentence: 'ha mangiato tutti i cookie'
-      }, {
-        "native": 'very',
-        foreign: 'molto',
-        nativeSentence: 'he is very old',
-        foreignSentence: 'lui è molto vecchio'
-      }, {
-        "native": 'also',
-        foreign: 'anche',
-        nativeSentence: 'i also need two pencils',
-        foreignSentence: 'ho anche bisogno di due matite'
-      }, {
-        "native": 'he said',
-        foreign: 'ha detto',
-        nativeSentence: 'he said go left',
-        foreignSentence: 'ha detto andate a sinistra'
-      }, {
-        "native": 'that',
-        foreign: 'quella',
-        nativeSentence: 'that lady ate my cheese',
-        foreignSentence: 'quella signora mangiato il mio formaggio'
-      }, {
-        "native": 'nothing',
-        foreign: 'niente',
-        nativeSentence: 'there was nothing there',
-        foreignSentence: 'non c\'era niente'
-      }
-    ]
-  },
-  top50Phrases: {
-    title: 'Phrases For The Top 25 - 50 Words',
-    subtitle: 'Phrases for the 25 - 50 most frequently used Italian words',
-    data: [
-      {
-        "native": 'a little more',
-        foreign: 'un po più'
-      }, {
-        "native": 'my child is seven years old',
-        foreign: 'mio figlio ha sette anni'
-      }, {
-        "native": 'because i want to',
-        foreign: 'perché voglio'
-      }, {
-        "native": 'why do you want to go?',
-        foreign: 'perché vuoi andare?'
-      }, {
-        "native": 'she leaves tomorrow',
-        foreign: 'lei parte domani'
-      }, {
-        "native": 'it was only fifteen minutes',
-        foreign: 'era solo quindici minuti'
-      }, {
-        "native": 'it was thirty years ago',
-        foreign: 'era trent\'anni fa'
-      }, {
-        "native": 'all of the king\'s horses',
-        foreign: 'tutti i cavalli del re'
-      }, {
-        "native": 'i am feeling so-so',
-        foreign: 'mi sento così-così'
-      }, {
-        "native": 'hello my friend',
-        foreign: 'ciao amico mio'
-      }, {
-        "native": 'this is the best food',
-        foreign: 'questo è il miglior cibo'
-      }, {
-        "native": 'if you want to do this',
-        foreign: 'se si vuole fare questo'
-      }, {
-        "native": 'when is the show?',
-        foreign: 'quando è lo spettacolo?'
-      }, {
-        "native": 'drop the ball now',
-        foreign: 'cadere la palla ora'
-      }, {
-        "native": 'you did your best',
-        foreign: 'hai fatto del tuo meglio'
-      }, {
-        "native": 'i want to be an astronaut',
-        foreign: 'voglio essere un astronauta'
-      }, {
-        "native": 'i have never been to the coast',
-        foreign: 'non sono mai stato alla costa'
-      }, {
-        "native": 'who are you?',
-        foreign: 'chi sei?'
-      }, {
-        "native": 'pizza or pasta',
-        foreign: 'pizza o la pasta'
-      }, {
-        "native": 'he ate all of the cookies',
-        foreign: 'ha mangiato tutti i cookie'
-      }, {
-        "native": 'he is very old',
-        foreign: 'lui è molto vecchio'
-      }, {
-        "native": 'i also need two pencils',
-        foreign: 'ho anche bisogno di due matite'
-      }, {
-        "native": 'he said go left',
-        foreign: 'ha detto andate a sinistra'
-      }, {
-        "native": 'that lady ate my cheese',
-        foreign: 'quella signora mangiato il mio formaggio'
-      }, {
-        "native": 'there was nothing there',
-        foreign: 'non c\'era niente'
-      }
-    ]
+    }
   }
 };
 
