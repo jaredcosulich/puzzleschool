@@ -121,17 +121,6 @@ languageScramble.ViewHelper = (function() {
     return $(selector, this.el);
   };
 
-  ViewHelper.prototype.positionTitle = function() {
-    var h1Space, halfTitleWidth, halfWidth, margin;
-    halfWidth = this.$('.header').width() / 2;
-    h1Space = this.$('.header h1').width() + parseInt(this.$('.header h1').css('marginLeft'));
-    halfTitleWidth = this.$('.header .title').width() / 2;
-    margin = halfWidth - h1Space - halfTitleWidth;
-    return this.$('.header .title').css({
-      marginLeft: margin
-    });
-  };
-
   ViewHelper.prototype.setLevel = function(levelName) {
     this.levelName = levelName;
     this.languageData = languageScramble.data[this.languages];
@@ -144,8 +133,8 @@ languageScramble.ViewHelper = (function() {
     this.saveUser();
     this.orderedOptions = [];
     this.orderedOptionsIndex = 0;
-    this.positionTitle();
-    return this.updateProgress();
+    this.setTitle();
+    return this.setProgress();
   };
 
   ViewHelper.prototype.saveLevel = function() {
@@ -166,6 +155,39 @@ languageScramble.ViewHelper = (function() {
       users[this.user.name.toLowerCase()] = this.user;
       return $.cookie('users', users);
     }
+  };
+
+  ViewHelper.prototype.setTitle = function() {
+    var _this = this;
+    if ($('.header .level .title').html() !== this.level.title) {
+      return $('.header .level').animate({
+        opacity: 0,
+        duration: 300,
+        complete: function() {
+          $('.header .level .languages').html(_this.languageData.displayLanguages);
+          $('.header .level .title').html(_this.level.title);
+          $('.header .level .subtitle').html(_this.level.subtitle);
+          _this.positionTitle();
+          return $('.header .level').animate({
+            opacity: 1,
+            duration: 300
+          });
+        }
+      });
+    } else {
+      return this.positionTitle();
+    }
+  };
+
+  ViewHelper.prototype.positionTitle = function() {
+    var h1Space, halfTitleWidth, halfWidth, margin;
+    halfWidth = this.$('.header').width() / 2;
+    h1Space = this.$('.header h1').width() + parseInt(this.$('.header h1').css('marginLeft'));
+    halfTitleWidth = this.$('.header .level').width() / 2;
+    margin = halfWidth - h1Space - halfTitleWidth;
+    return this.$('.header .level').css({
+      marginLeft: margin
+    });
   };
 
   ViewHelper.prototype.bindWindow = function() {
@@ -829,6 +851,42 @@ languageScramble.ViewHelper = (function() {
     }
   };
 
+  ViewHelper.prototype.setProgress = function() {
+    var _this = this;
+    if (!this.$(".progress_meter .bar ." + this.level.data[0].id).length) {
+      return this.$('.progress_meter').animate({
+        opacity: 0,
+        duration: 300,
+        complete: function() {
+          var index, scramble, section, _i, _len, _ref, _results;
+          _this.$('.progress_meter .bar .progress_section').remove();
+          _ref = _this.level.data;
+          _results = [];
+          for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+            scramble = _ref[index];
+            section = $(document.createElement("DIV"));
+            section.addClass('progress_section');
+            section.addClass(scramble.id);
+            if ((index + 1) === _this.level.data.length) {
+              section.css({
+                borderRight: 'none'
+              });
+            }
+            _this.$('.progress_meter .bar').append(section);
+            _this.updateProgress();
+            _results.push(_this.$('.progress_meter').animate({
+              opacity: 1,
+              duration: 300
+            }));
+          }
+          return _results;
+        }
+      });
+    } else {
+      return this.updateProgress();
+    }
+  };
+
   ViewHelper.prototype.updateProgress = function() {
     var id, level, scrambleInfo, _i, _len, _ref, _results;
     _ref = this.level.data;
@@ -892,7 +950,7 @@ languageScramble.ViewHelper = (function() {
       _this.el.unbind('touchstart');
       $('#clickarea').unbind('keyup');
       nextShown = true;
-      _this.updateProgress();
+      _this.setProgress();
       return _this.$('.foreign_words, .scrambled, .guesses').animate({
         opacity: 0,
         duration: 500,
@@ -935,7 +993,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.nextLevel = function() {
     var message, nextLevel,
       _this = this;
-    nextLevel = this.level.nextLevel;
+    nextLevel = this.languageData.levels[this.level.nextLevel];
     if (nextLevel != null) {
       this.$('#next_level .next_level_link').html(nextLevel.title);
       message = this.$('#next_level');
@@ -946,7 +1004,7 @@ languageScramble.ViewHelper = (function() {
       complete: function() {
         message.css({
           top: 200,
-          left: ($('.scramble').width() - _this.$('#next_level').width()) / 2
+          left: ($('.language_scramble').width() - _this.$('#next_level').width()) / 2
         });
         _this.$('#next_level .next_level_link').bind('click', function() {
           _this.$('#next_level .next_level_link').unbind('click');

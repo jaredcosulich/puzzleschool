@@ -47,7 +47,8 @@ soma.views({
   LanguageScramble: {
     selector: '#content .language_scramble',
     create: function() {
-      var languageScramble;
+      var languageScramble,
+        _this = this;
       languageScramble = require('./lib/language_scramble');
       this.languages = this.el.data('languages');
       this.levelName = this.el.data('level_name');
@@ -56,7 +57,13 @@ soma.views({
       this.viewHelper.setLevel(this.levelName);
       this.viewHelper.bindWindow();
       this.viewHelper.bindKeyPress();
-      return this.viewHelper.newScramble();
+      this.viewHelper.newScramble();
+      window.next = function() {
+        return _this.viewHelper.next();
+      };
+      return window.nextLevel = function() {
+        return _this.viewHelper.nextLevel();
+      };
     }
   }
 });

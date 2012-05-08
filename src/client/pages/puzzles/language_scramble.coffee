@@ -45,8 +45,7 @@ soma.views
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
             @viewHelper.bindKeyPress()
-            @viewHelper.newScramble()
-            
+            @viewHelper.newScramble()            
             
 
 soma.routes

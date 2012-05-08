@@ -51,15 +51,15 @@ body {
   height: 15px;
   float: left;
 }
-.language_scramble .header .title {
+.language_scramble .header .level {
   font-size: 18px;
   float: left;
 }
-.language_scramble .header .title .languages {
+.language_scramble .header .level .languages {
   font-size: 22px;
   margin-bottom: 3px;
 }
-.language_scramble .header .title small {
+.language_scramble .header .level small {
   display: block;
   font-size: 10px;
 }

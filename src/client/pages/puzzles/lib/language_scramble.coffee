@@ -66,13 +66,6 @@ class languageScramble.ViewHelper
 
     $: (selector) -> $(selector, @el)
 
-    positionTitle: ->
-        halfWidth = @$('.header').width() / 2 
-        h1Space = @$('.header h1').width() + parseInt(@$('.header h1').css('marginLeft'))
-        halfTitleWidth = @$('.header .title').width() / 2
-        margin = halfWidth - h1Space - halfTitleWidth
-        @$('.header .title').css(marginLeft: margin)        
-
     setLevel: (@levelName) ->   
         @languageData = languageScramble.data[@languages]
         @level = languageScramble.getLevel(@languageData, @levelName)
@@ -83,8 +76,8 @@ class languageScramble.ViewHelper
         @saveUser()
         @orderedOptions = []
         @orderedOptionsIndex = 0
-        @positionTitle()
-        @updateProgress()
+        @setTitle()
+        @setProgress()
 
     saveLevel: () ->
         @answerTimes.push(new Date())
@@ -101,6 +94,29 @@ class languageScramble.ViewHelper
             users = $.cookie('users') or {}
             users[@user.name.toLowerCase()] = @user
             $.cookie('users', users)
+
+    setTitle: ->
+        if $('.header .level .title').html() != @level.title
+            $('.header .level').animate
+                opacity: 0
+                duration: 300
+                complete: () =>
+                    $('.header .level .languages').html(@languageData.displayLanguages)
+                    $('.header .level .title').html(@level.title)
+                    $('.header .level .subtitle').html(@level.subtitle)
+                    @positionTitle()
+                    $('.header .level').animate
+                        opacity: 1
+                        duration: 300
+        else
+            @positionTitle()
+            
+    positionTitle: ->
+        halfWidth = @$('.header').width() / 2 
+        h1Space = @$('.header h1').width() + parseInt(@$('.header h1').css('marginLeft'))
+        halfTitleWidth = @$('.header .level').width() / 2
+        margin = halfWidth - h1Space - halfTitleWidth
+        @$('.header .level').css(marginLeft: margin)        
 
     bindWindow: () ->
         moveDrag = (e) =>
@@ -515,6 +531,26 @@ class languageScramble.ViewHelper
             @$('.scrambled .hidden_message').show()
             @$('.scramble_content').addClass('show_keyboard')
     
+    setProgress: ->
+        if not @$(".progress_meter .bar .#{@level.data[0].id}").length
+            @$('.progress_meter').animate
+                opacity: 0
+                duration: 300
+                complete: () => 
+                    @$('.progress_meter .bar .progress_section').remove()
+                    for scramble, index in @level.data
+                        section = $(document.createElement("DIV"))
+                        section.addClass('progress_section')
+                        section.addClass(scramble.id)
+                        section.css(borderRight: 'none') if (index + 1) == @level.data.length
+                        @$('.progress_meter .bar').append(section)
+                        @updateProgress()
+                        @$('.progress_meter').animate
+                            opacity: 1
+                            duration: 300
+        else
+            @updateProgress()
+    
     updateProgress: ->
         for scrambleInfo in @level.data
             id = scrambleInfo.id
@@ -561,7 +597,7 @@ class languageScramble.ViewHelper
             @el.unbind 'touchstart'
             $('#clickarea').unbind 'keyup'
             nextShown = true
-            @updateProgress()
+            @setProgress()
             @$('.foreign_words, .scrambled, .guesses').animate
                 opacity: 0
                 duration: 500
@@ -587,7 +623,7 @@ class languageScramble.ViewHelper
                 $('#clickarea').bind 'keyup', (e) => showNext() if e.keyCode == 13
 
     nextLevel: () ->
-        nextLevel = @level.nextLevel
+        nextLevel = @languageData.levels[@level.nextLevel]
         if nextLevel?
             @$('#next_level .next_level_link').html(nextLevel.title)
             message = @$('#next_level')
@@ -598,7 +634,7 @@ class languageScramble.ViewHelper
             complete: () =>
                 message.css
                     top: 200
-                    left: ($('.scramble').width() - @$('#next_level').width()) / 2
+                    left: ($('.language_scramble').width() - @$('#next_level').width()) / 2
                 @$('#next_level .next_level_link').bind 'click', () =>
                     @$('#next_level .next_level_link').unbind 'click'
                     @setLevel(@level.nextLevel)
@@ -694,7 +730,7 @@ languageScramble.data =
                     {native: 'i am going to the markets', foreign: 'io vado ai mercati'},
                     {native: 'how are you?', foreign: 'come stai?'}
                     {native: 'there are three friends', foreign: 'ci sono tre amici'},
-                    {native: 'this is great', foreign: 'questo è fantastico'},
+                    {native: 'this is fantastic', foreign: 'questo è fantastico'},
                     {native: 'come here', foreign: 'vieni qui'},
                     {native: 'you have ten minutes', foreign: 'hai dieci minuti'},
                     {native: 'there are six doors', foreign: 'ci sono sei porte'},
