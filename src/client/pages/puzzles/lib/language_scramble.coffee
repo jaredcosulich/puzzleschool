@@ -57,12 +57,9 @@ class languageScramble.ChunkHelper
 class languageScramble.ViewHelper
     maxLevel: 7
 
-    constructor: (@area, @user, @levelName) -> 
-        @level = languageScramble.getLevel(@levelName)
-        @options = @level.data
-        @user.levels[@levelName] = {} unless @user.levels[@levelName]
+    constructor: (@el, @user) -> 
 
-    $: (selector) -> $(selector, @area)
+    $: (selector) -> $(selector, @el)
 
     positionTitle: ->
         halfWidth = @$('.header').width() / 2 
@@ -382,6 +379,87 @@ class languageScramble.ViewHelper
             container.width(container.width())
             container.css(float: 'none', height: container.height())
 
+    replaceLetterWithBlank: (letter) ->
+        blankLetter = $(document.createElement("DIV"))
+        blankLetter.addClass('blank_letter').addClass(letter.html())
+        blankLetter.insertBefore(letter, @$(".scrambled .#{@containerClassName(letter)}"))
+
+    replaceBlankWithLetter: (letter) ->
+        containerClass = @containerClassName(letter)
+        blankLetter = @$(".scrambled .#{containerClass} .#{letter.html()}")[0]
+        return unless blankLetter?
+        blankLetter = $(blankLetter)
+        letter.remove().insertBefore(blankLetter, @$(".scrambled .#{containerClass}"))
+        if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
+            letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
+            letter.removeClass('wrong_letter')
+            letter.removeClass('correct_letter')
+        blankLetter.remove()
+        @bindLetter(letter)
+
+    replaceGuessWithLetter: (guess, letter) ->
+        $('.guesses .hidden_message').hide()
+        $('.guesses .space').css(visibility: 'visible')
+
+        guess = $(guess)
+        letter.remove().insertBefore(guess, @$('.guesses'))
+        letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
+        guess.remove()
+        @bindLetter(letter)
+        @lettersAdded.push(letter.html())
+
+        letterPosition = guess[0].className.indexOf('actual_letter_') + 'actual_letter_'.length
+        guessLetter = guess[0].className[letterPosition..letterPosition]
+        letter.addClass(if letter.html() == guessLetter then 'correct_letter' else 'wrong_letter')
+
+        @next() if @checkCorrectAnswer()
+
+    replaceLetterWithGuess: (letter) ->
+        letterAddedIndex = @lettersAdded.indexOf(letter.html())
+        @lettersAdded.slice(letterAddedIndex, letterAddedIndex + 1)
+        actualLetter = letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[1]
+        @createGuess(actualLetter).insertBefore(letter, @$(".guesses .#{@containerClassName(letter)}"))
+        if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
+            letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
+            letter.removeClass('wrong_letter')
+            letter.removeClass('correct_letter')
+
+    clientX: (e) => e.clientX or (if e.targetTouches[0] then e.targetTouches[0].pageX else null)
+    clientY: (e) => e.clientY or (if e.targetTouches[0] then e.targetTouches[0].pageY else null)
+
+    containerClassName: (square) ->
+        $(square).closest('.container')[0].className.match(/color\d+/)[0]
+
+    guessInPath: (letter, lastX, lastY, currentX, currentY) ->
+        letter = $(letter)
+        xSlope = currentX - lastX
+        ySlope = lastY - currentY
+        if Math.abs(xSlope) < Math.abs(ySlope)
+            xSlope = xSlope / Math.abs(ySlope)
+            ySlope = ySlope / Math.abs(ySlope)
+        else
+            ySlope = ySlope / Math.abs(xSlope)
+            xSlope = xSlope / Math.abs(xSlope)
+        guesses = @$(".guesses .#{@containerClassName(letter)} .guess")
+        for guess in guesses
+            guess = $(guess)
+            guessPosition = guess.offset()
+            guessDims = guess.dim()
+            for i in [2..14]
+                x = currentX + (xSlope * (((i % 12) - 2) * 10))
+                y = currentY - (ySlope * (((i % 12) - 2) * 10))
+                # marker = $(document.createElement("DIV"))
+                # marker.css(position: 'absolute', top: y + 2, left: x - 2, width: 4, height: 4, backgroundColor: 'red')
+                # @el.append(marker)
+                continue if x < guessPosition.left
+                continue if x > guessPosition.left + guessDims.width
+                continue if y > guessPosition.top + guessDims.height
+                continue if y < guessPosition.top
+                return guess
+        return null
+
+    checkCorrectAnswer: () ->
+        @$('.guesses .letter, .guesses .space').map((html) -> $(html).html()).join('') == (@scrambleInfo[@activeType])
 
     modifyScramble: (word) ->
         return word unless word.length < 6
@@ -390,8 +468,6 @@ class languageScramble.ViewHelper
         add = 2 if add > 2
         word += (commonLetters[Math.floor(Math.random() * commonLetters.length)]) for i in [0...add]
         return word
-            
-            
             
     setStage: () ->
         @$('.guesses').removeClass('hidden')
@@ -409,14 +485,131 @@ class languageScramble.ViewHelper
     updateProgress: ->
         for scrambleInfo in @level.data
             id = scrambleInfo.id
-            level = @user.levels[@level][id]
+            level = @user.levels[@levelName][id]
             if level
                 level = @maxLevel if level > @maxLevel
                 @$(".progress_meter .bar .#{id}").css(opacity: 1 - ((1/@maxLevel) * level))
             else
                 @$(".progress_meter .bar .#{id}").css(opacity: 1)
     
+    next: () ->
+        @saveLevel()
 
+        correct = $(document.createElement('DIV'))
+        if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length
+            correctSentence = @scrambleInfo["#{@activeType}Sentence"] 
+        else 
+            correctSentence = @scrambleInfo[@activeType]
+
+        correctSentence = " #{correctSentence} "
+        highlighted = @scrambleInfo[@activeType]
+        for boundary in [' ', '?', ',']
+            correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+
+        correct.html(correctSentence)
+        correct.addClass('correct')
+        correct.css(opacity: 0)
+        scrambled = @$('.scrambled')
+        @clearContainer(scrambled)
+        @$('.scrambled .hidden_message').hide()
+        @$('.scrambled').css(width: null)
+        scrambled.append(correct)
+
+        displayedSentence = @$('.display_words').html()
+
+        # @$('.last_answer').animate
+        #     opacity: 0
+        #     duration: 300
+
+        nextShown = false
+        showNext = () =>
+            return if nextShown
+            @el.unbind 'click'
+            @el.unbind 'touchstart'
+            $('#clickarea').unbind 'keyup'
+            nextShown = true
+            @updateProgress()
+            @$('.foreign_words, .scrambled, .guesses').animate
+                opacity: 0
+                duration: 500
+                complete: () =>
+                    @$('.scrambled, .guesses').css(width: null, height: null)
+                    @newScramble()
+                    @$('.foreign_words, .scrambled, .guesses').animate
+                        opacity: 1
+                        duration: 300
+                        complete: () =>
+                            # @$('.last_answer').html("#{displayedSentence} = #{correctSentence}")
+                            # @$('.last_answer').animate
+                            #     opacity: 1
+                            #     duration: 300
+
+        correct.animate
+            opacity: 1
+            duration: 500
+            complete: () =>
+                $.timeout 500 + (30 * correctSentence.length), () => showNext()
+                @el.bind 'click', () => showNext()
+                @el.bind 'touchstart', () => showNext()
+                $('#clickarea').bind 'keyup', (e) => showNext() if e.keyCode == 13
+
+    nextLevel: () ->
+        nextLevel = @level.nextLevel
+        if nextLevel?
+            @$('#next_level .next_level_link').html(nextLevel.title)
+            message = @$('#next_level')
+
+        @$('.scramble_content').animate
+            opacity: 0
+            duration: 500
+            complete: () =>
+                message.css
+                    top: 200
+                    left: ($('.scramble').width() - @$('#next_level').width()) / 2
+                @$('#next_level .next_level_link').bind 'click', () =>
+                    @$('#next_level .next_level_link').unbind 'click'
+                    @setLevel(@level.nextLevel)
+                    @$('#next_level').animate
+                        opacity: 0
+                        duration: 500
+                        complete: () =>
+                            @newScramble()
+                            @$('.scramble_content').animate
+                                opacity: 1
+                                duration: 500
+
+
+                @$('#next_level').animate
+                    opacity: 1
+                    duration: 1000
+
+    setLevel: (@levelName) ->   
+        @level = languageScramble.getLevel(@levelName)
+        @options = @level.data
+        @user.levels[@levelName] = {} unless @user.levels[@levelName]
+
+        @user.lastLevelPlayed = @levelName
+        @saveUser()
+        @orderedOptions = []
+        @orderedOptionsIndex = 0
+        @positionTitle()
+        @updateProgress()
+
+    saveLevel: () ->
+        @answerTimes.push(new Date())
+        
+        lastAnswerDuration = @answerTimes[@answerTimes.length - 1] - @answerTimes[@answerTimes.length - 2]
+        if lastAnswerDuration < 2500 * @scrambleInfo.native.length
+            @user.levels[@levelName][@scrambleInfo.id] += 1
+
+        @saveUser()
+        
+    saveUser: () ->
+        return
+        if @user and @user.name
+            users = $.cookie('users') or {}
+            users[@user.name.toLowerCase()] = @user
+            $.cookie('users', users)
 
 
 

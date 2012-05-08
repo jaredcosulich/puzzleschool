@@ -34,9 +34,9 @@ soma.views
 
             @levelName = @el.data('level_name')
             @user = languageScramble.loadUser()
-            @viewHelper = new languageScramble.ViewHelper(@selector, @user, @levelName)
+            @viewHelper = new languageScramble.ViewHelper($(@selector), @user)
 
-            @viewHelper.positionTitle()
+            @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
             @viewHelper.bindKeyPress()
             @viewHelper.newScramble()

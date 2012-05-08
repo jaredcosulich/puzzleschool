@@ -46,8 +46,8 @@ soma.views({
       languageScramble = require('./lib/language_scramble');
       this.levelName = this.el.data('level_name');
       this.user = languageScramble.loadUser();
-      this.viewHelper = new languageScramble.ViewHelper(this.selector, this.user, this.levelName);
-      this.viewHelper.positionTitle();
+      this.viewHelper = new languageScramble.ViewHelper($(this.selector), this.user);
+      this.viewHelper.setLevel(this.levelName);
       this.viewHelper.bindWindow();
       this.viewHelper.bindKeyPress();
       return this.viewHelper.newScramble();
