@@ -24,6 +24,7 @@
         "port": 5000,
         "shared": ["build/client/pages/base.js", "build/client/pages", "build/client/templates"],
         "server": ["build/server"],
-        "client": ["ender.js", "build/client/css", "assets"]
+        "client": ["build/client/css", "assets"],
+        "init": ["ender.js"]
     }
 }

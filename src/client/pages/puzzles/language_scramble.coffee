@@ -2,7 +2,6 @@ soma = require('soma')
 wings = require('wings')
 
 loadUser = (user={}) ->
-    console.log("LOADING", user)
     user.name = 'guest' unless user.name?
     user.levels = {} unless user.levels?
     return user
@@ -51,13 +50,13 @@ soma.views
                 user: @user
                 languages: @languages
                 go: @go
-                cookies: @cookies
+                saveUser: (user) => 
+                    @cookies.set('user', user)
 
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
             @viewHelper.bindKeyPress()
-            @viewHelper.newScramble()            
-            
+            @viewHelper.newScramble()                      
 
 soma.routes
     '/puzzles/language_scramble': -> new soma.chunks.LanguageScramble

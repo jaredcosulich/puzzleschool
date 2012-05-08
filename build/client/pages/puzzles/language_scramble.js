@@ -9,7 +9,6 @@ loadUser = function(user) {
   if (user == null) {
     user = {};
   }
-  console.log("LOADING", user);
   if (user.name == null) {
     user.name = 'guest';
   }
@@ -61,7 +60,8 @@ soma.views({
   LanguageScramble: {
     selector: '#content .language_scramble',
     create: function() {
-      var languageScramble;
+      var languageScramble,
+        _this = this;
       languageScramble = require('./lib/language_scramble');
       this.languages = this.el.data('languages');
       this.levelName = this.el.data('level_name');
@@ -71,7 +71,9 @@ soma.views({
         user: this.user,
         languages: this.languages,
         go: this.go,
-        cookies: this.cookies
+        saveUser: function(user) {
+          return _this.cookies.set('user', user);
+        }
       });
       this.viewHelper.setLevel(this.levelName);
       this.viewHelper.bindWindow();

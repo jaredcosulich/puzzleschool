@@ -94,7 +94,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.maxLevel = 7;
 
   function ViewHelper(_arg) {
-    this.el = _arg.el, this.user = _arg.user, this.languages = _arg.languages, this.go = _arg.go, this.cookies = _arg.cookies;
+    this.el = _arg.el, this.user = _arg.user, this.languages = _arg.languages, this.go = _arg.go, this.saveUser = _arg.saveUser;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -114,7 +114,7 @@ languageScramble.ViewHelper = (function() {
       this.user.levels[this.levelName] = {};
     }
     this.user.lastLevelPlayed = this.levelName;
-    this.saveUser();
+    this.saveUser(this.user);
     this.orderedOptions = [];
     this.orderedOptionsIndex = 0;
     this.setTitle();
@@ -128,11 +128,7 @@ languageScramble.ViewHelper = (function() {
     if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
       this.user.levels[this.levelName][this.scrambleInfo.id] += 1;
     }
-    return this.saveUser();
-  };
-
-  ViewHelper.prototype.saveUser = function() {
-    return this.cookies.set('user', this.user);
+    return this.saveUser(this.user);
   };
 
   ViewHelper.prototype.setTitle = function() {

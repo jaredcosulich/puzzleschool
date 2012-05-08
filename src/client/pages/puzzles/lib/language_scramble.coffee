@@ -52,7 +52,7 @@ class languageScramble.ChunkHelper
 class languageScramble.ViewHelper
     maxLevel: 7
 
-    constructor: ({@el, @user, @languages, @go, @cookies}) ->
+    constructor: ({@el, @user, @languages, @go, @saveUser}) ->
 
     $: (selector) -> $(selector, @el)
 
@@ -63,7 +63,7 @@ class languageScramble.ViewHelper
         @user.levels[@levelName] = {} unless @user.levels[@levelName]
 
         @user.lastLevelPlayed = @levelName
-        @saveUser()
+        @saveUser(@user)
         @orderedOptions = []
         @orderedOptionsIndex = 0
         @setTitle()
@@ -76,10 +76,7 @@ class languageScramble.ViewHelper
         if lastAnswerDuration < 2500 * @scrambleInfo.native.length
             @user.levels[@levelName][@scrambleInfo.id] += 1
 
-        @saveUser()
-
-    saveUser: () ->
-        @cookies.set('user', @user)
+        @saveUser(@user)
 
     setTitle: ->
         if $('.header .level .title').html() != @level.title

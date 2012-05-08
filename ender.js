@@ -4139,18 +4139,32 @@
       }
     };
   
+    Jar.prototype.encode = function(value) {
+      return encodeURIComponent(JSON.stringify(value));
+    };
+  
+    Jar.prototype.decode = function(value) {
+      return JSON.parse(decodeURIComponent(value));
+    };
+  
     Jar.prototype.get = function(name) {
+      if (!this.cookies) {
+        this.parse();
+      }
       try {
-        return JSON.parse(decodeURIComponent(this.cookies[name]));
+        return this.decode(this.cookies[name]);
       } catch (e) {
   
       }
     };
   
     Jar.prototype.set = function(name, value, options) {
-      var cookie, date, domain, encoded, expires, path, secure;
+      var cookie, date, domain, expires, path, secure;
       if (options == null) {
         options = {};
+      }
+      if (!this.cookies) {
+        this.parse();
       }
       if (value === null) {
         value = '';
@@ -4166,13 +4180,17 @@
           options.expires = options.expires.toUTCString();
         }
       }
+      options.path || (options.path = '/');
+      path = "; path=" + options.path;
       expires = (options.expires ? "; expires=" + options.expires : '');
-      path = (options.path ? "; path=" + options.path : '');
       domain = (options.domain ? "; domain=" + options.domain : '');
       secure = (options.secure ? '; secure' : '');
-      encoded = encodeURIComponent(JSON.stringify(value));
-      cookie = [name, '=', encoded, expires, path, domain, secure].join('');
-      return this._setCookie(cookie);
+      if (!('raw' in options) || !options.raw) {
+        value = this.encode(value);
+      }
+      cookie = [name, '=', value, expires, path, domain, secure].join('');
+      this._setCookie(cookie);
+      return this.cookies[name] = value;
     };
   
     return Jar;
@@ -4209,11 +4227,6 @@
   
       Jar.prototype._setCookie = function(cookie) {
         return document.cookie = cookie;
-      };
-  
-      Jar.prototype.get = function(name) {
-        this.parse();
-        return Jar.__super__.get.apply(this, arguments);
       };
   
       return Jar;
@@ -4388,7 +4401,7 @@
         var _this = this;
         View.__super__.constructor.apply(this, arguments);
         this.context = this.options.context || soma.context;
-        this.cookies = this.context.jar;
+        this.cookies = this.context.cookies;
         this.go = function() {
           return _this.context.go.apply(_this.context, arguments);
         };
@@ -4429,7 +4442,7 @@
       Chunk.prototype.load = function(context) {
         var _this = this;
         this.context = context;
-        this.cookies = this.context.jar;
+        this.cookies = this.context.cookies;
         this.go = function() {
           return _this.context.go.apply(_this.context, arguments);
         };
@@ -4704,7 +4717,7 @@
       function BrowserContext(path, lazy) {
         this.path = path;
         this.lazy = lazy;
-        this.jar = jar.jar;
+        this.cookies = jar.jar;
       }
   
       BrowserContext.prototype.begin = function() {
@@ -4746,7 +4759,8 @@
         }
         fn = function() {
           _this.chunk.emit('render');
-          return $('body').html(_this.chunk.html);
+          $('body').html(_this.chunk.html);
+          return $.enhance();
         };
         if (this.chunk.html) {
           fn();
