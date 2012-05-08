@@ -52,19 +52,6 @@ languageScramble.getLevel = function(languageData, levelName) {
   return level;
 };
 
-languageScramble.loadUser = function() {
-  var name, user;
-  name = 'guest';
-  user = {};
-  if (name && name.length) {
-    user.name = name;
-  }
-  if (user.levels == null) {
-    user.levels = {};
-  }
-  return user;
-};
-
 languageScramble.ChunkHelper = (function() {
 
   ChunkHelper.name = 'ChunkHelper';
@@ -106,11 +93,8 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.maxLevel = 7;
 
-  function ViewHelper(el, user, languages, go) {
-    this.el = el;
-    this.user = user;
-    this.languages = languages;
-    this.go = go;
+  function ViewHelper(_arg) {
+    this.el = _arg.el, this.user = _arg.user, this.languages = _arg.languages, this.go = _arg.go, this.cookies = _arg.cookies;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -148,13 +132,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.saveUser = function() {
-    var users;
-    return;
-    if (this.user && this.user.name) {
-      users = $.cookie('users') || {};
-      users[this.user.name.toLowerCase()] = this.user;
-      return $.cookie('users', users);
-    }
+    return this.cookies.set('user', this.user);
   };
 
   ViewHelper.prototype.setTitle = function() {
@@ -1249,7 +1227,7 @@ languageScramble.data = {
             "native": 'there are three friends',
             foreign: 'ci sono tre amici'
           }, {
-            "native": 'this is great',
+            "native": 'this is fantastic',
             foreign: 'questo è fantastico'
           }, {
             "native": 'come here',

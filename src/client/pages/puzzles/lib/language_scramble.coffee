@@ -30,16 +30,6 @@ languageScramble.getLevel = (languageData, levelName) ->
     data.id = scrambleKey(data) for data, index in level.data
     return level
 
-languageScramble.loadUser = () ->
-    name = 'guest'
-    user = {}
-    user.name = name if name && name.length
-    user.levels = {} unless user.levels?
-    return user
-
-
-
-
 class languageScramble.ChunkHelper
     constructor: (@languages, @levelName) ->
         @languageData = languageScramble.data[@languages]
@@ -62,7 +52,7 @@ class languageScramble.ChunkHelper
 class languageScramble.ViewHelper
     maxLevel: 7
 
-    constructor: (@el, @user, @languages, @go) ->
+    constructor: ({@el, @user, @languages, @go, @cookies}) ->
 
     $: (selector) -> $(selector, @el)
 
@@ -89,11 +79,7 @@ class languageScramble.ViewHelper
         @saveUser()
 
     saveUser: () ->
-        return
-        if @user and @user.name
-            users = $.cookie('users') or {}
-            users[@user.name.toLowerCase()] = @user
-            $.cookie('users', users)
+        @cookies.set('user', @user)
 
     setTitle: ->
         if $('.header .level .title').html() != @level.title

@@ -1,6 +1,12 @@
 soma = require('soma')
 wings = require('wings')
 
+loadUser = (user={}) ->
+    console.log("LOADING", user)
+    user.name = 'guest' unless user.name?
+    user.levels = {} unless user.levels?
+    return user
+
 soma.chunks
     LanguageScramble:
         meta: -> new soma.chunks.Base({ content: @ })
@@ -14,7 +20,7 @@ soma.chunks
         build: ->
             languageScramble = require('./lib/language_scramble')
             
-            @user = languageScramble.loadUser()
+            @user = loadUser(@cookies.get('user'))
             @languages = (@user.lastLanguages or 'english_italian') unless @languages && @languages.length
             @levelName = (@user.lastLevelPlayed or 'top10words') unless @levelName && @levelName.length
             @chunkHelper = new languageScramble.ChunkHelper(@languages, @levelName)
@@ -39,8 +45,13 @@ soma.views
             @levelName = @el.data('level_name')
             # console.log(@languages, @levelName)
 
-            @user = languageScramble.loadUser()
-            @viewHelper = new languageScramble.ViewHelper($(@selector), @user, @languages, @go)
+            @user = loadUser(@cookies.get('user'))
+            @viewHelper = new languageScramble.ViewHelper
+                el: $(@selector)
+                user: @user
+                languages: @languages
+                go: @go
+                cookies: @cookies
 
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
