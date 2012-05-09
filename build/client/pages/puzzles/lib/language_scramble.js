@@ -195,7 +195,7 @@ languageScramble.ViewHelper = (function() {
     };
     endDrag = function(e, force) {
       var currentX, currentY, guess, lastX, lastY, x, y;
-      if (!force && (_this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
+      if (!force && (!_this.dragPathX || !_this.dragPathY || _this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
         $.timeout(40, function() {
           if (_this.dragging != null) {
             return endDrag(e, true);
@@ -963,35 +963,49 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.nextLevel = function() {
-    var message, nextLevel,
+    var message, nextLevel, resetLevel, showLevel,
       _this = this;
     nextLevel = this.languageData.levels[this.level.nextLevel];
     if (nextLevel != null) {
       this.$('#next_level .next_level_link').html(nextLevel.title);
       message = this.$('#next_level');
     }
+    resetLevel = function() {
+      if (confirm('Are you sure you want to reset this level?')) {
+        _this.$('reset_level_link').unbind('click');
+        _this.user.levels[_this.levelName] = {};
+        _this.saveUser(_this.user);
+        return showLevel(_this.levelName);
+      }
+    };
+    showLevel = function(levelName) {
+      _this.$('#next_level .next_level_link').unbind('click');
+      _this.setLevel(levelName);
+      return _this.$('#next_level').animate({
+        opacity: 0,
+        duration: 500,
+        complete: function() {
+          _this.newScramble();
+          return _this.$('.scramble_content').animate({
+            opacity: 1,
+            duration: 500
+          });
+        }
+      });
+    };
     return this.$('.scramble_content').animate({
       opacity: 0,
       duration: 500,
       complete: function() {
         message.css({
-          top: 200,
+          top: 150,
           left: ($('.language_scramble').width() - _this.$('#next_level').width()) / 2
         });
+        _this.$('#next_level .reset_level_link').bind('click', function() {
+          return resetLevel();
+        });
         _this.$('#next_level .next_level_link').bind('click', function() {
-          _this.$('#next_level .next_level_link').unbind('click');
-          _this.setLevel(_this.level.nextLevel);
-          return _this.$('#next_level').animate({
-            opacity: 0,
-            duration: 500,
-            complete: function() {
-              _this.newScramble();
-              return _this.$('.scramble_content').animate({
-                opacity: 1,
-                duration: 500
-              });
-            }
-          });
+          return showLevel(_this.level.nextLevel);
         });
         return _this.$('#next_level').animate({
           opacity: 1,

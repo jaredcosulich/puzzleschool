@@ -115,7 +115,7 @@ class languageScramble.ViewHelper
             @dragging.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)                
             
         endDrag = (e, force) =>
-            if not force and (@dragPathX.length <= 1 or @dragPathY.length <= 1)
+            if not force and (!@dragPathX or !@dragPathY or @dragPathX.length <= 1 or @dragPathY.length <= 1)
                 $.timeout 40, () => endDrag(e, true) if @dragging?
                 return
                 
@@ -605,32 +605,40 @@ class languageScramble.ViewHelper
                 @el.bind 'touchstart', () => showNext()
                 $('#clickarea').bind 'keyup', (e) => showNext()
 
-    nextLevel: () ->
+    nextLevel: () ->        
         nextLevel = @languageData.levels[@level.nextLevel]
         if nextLevel?
             @$('#next_level .next_level_link').html(nextLevel.title)
             message = @$('#next_level')
+
+        resetLevel = () =>
+            if confirm('Are you sure you want to reset this level?')
+                @$('reset_level_link').unbind 'click'
+                @user.levels[@levelName] = {}
+                @saveUser(@user)
+                showLevel(@levelName)
+
+        showLevel = (levelName) =>
+            @$('#next_level .next_level_link').unbind 'click'
+            @setLevel(levelName)
+            @$('#next_level').animate
+                opacity: 0
+                duration: 500
+                complete: () =>
+                    @newScramble()
+                    @$('.scramble_content').animate
+                        opacity: 1
+                        duration: 500             
 
         @$('.scramble_content').animate
             opacity: 0
             duration: 500
             complete: () =>
                 message.css
-                    top: 200
+                    top: 150
                     left: ($('.language_scramble').width() - @$('#next_level').width()) / 2
-                @$('#next_level .next_level_link').bind 'click', () =>
-                    @$('#next_level .next_level_link').unbind 'click'
-                    @setLevel(@level.nextLevel)
-                    @$('#next_level').animate
-                        opacity: 0
-                        duration: 500
-                        complete: () =>
-                            @newScramble()
-                            @$('.scramble_content').animate
-                                opacity: 1
-                                duration: 500
-
-
+                @$('#next_level .reset_level_link').bind 'click', () => resetLevel()
+                @$('#next_level .next_level_link').bind 'click', () => showLevel(@level.nextLevel)
                 @$('#next_level').animate
                     opacity: 1
                     duration: 1000
