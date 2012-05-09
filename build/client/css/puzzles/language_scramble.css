@@ -47,7 +47,7 @@ body {
 .language_scramble .header .progress_meter .bar .progress_section {
   width: 9px;
   border-right: 1px solid #ccc;
-  background-color: #93b649;
+  background-color: #88cc66;
   height: 15px;
   float: left;
 }
@@ -65,7 +65,7 @@ body {
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
-  background-color: rgba(148, 182, 73, 0.5);
+  background-color: rgba(136, 204, 102, 0.5);
   padding: 0 3px;
 }
 .language_scramble .section {
@@ -194,7 +194,7 @@ body {
 .language_scramble .guesses .color2 .correct_letter,
 .language_scramble .guesses .color3 .correct_letter,
 .language_scramble .guesses .color4 .correct_letter {
-  background-color: rgba(148, 182, 73, 0.5);
+  background-color: rgba(136, 204, 102, 0.5);
 }
 .language_scramble .guesses .color1 .wrong_letter,
 .language_scramble .guesses .color2 .wrong_letter,
@@ -217,7 +217,7 @@ body {
   text-align: center;
 }
 .language_scramble .last_answer .highlighted {
-  background-color: rgba(148, 182, 73, 0.25);
+  background-color: rgba(136, 204, 102, 0.25);
   padding: 0 3px;
 }
 .language_scramble #clickarea {
