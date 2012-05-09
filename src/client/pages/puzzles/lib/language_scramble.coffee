@@ -65,7 +65,7 @@ class languageScramble.ViewHelper
         @user.lastLevelPlayed = @levelName
         @saveUser(@user)
         @orderedOptions = []
-        @orderedOptionsIndex = 0
+        @orderedOptionsIndex = null
         @setTitle()
         @setProgress()
 
@@ -321,7 +321,7 @@ class languageScramble.ViewHelper
         @displayLevel = if @activeType.match(/native/) then 'foreign' else 'native'
         
         @setStage() 
-                        
+        
         return @orderedOptions[@orderedOptionsIndex]
             
     createGuesses: () ->
@@ -603,7 +603,7 @@ class languageScramble.ViewHelper
                 $.timeout 500 + (30 * correctSentence.length), () => showNext()
                 @el.bind 'click', () => showNext()
                 @el.bind 'touchstart', () => showNext()
-                $('#clickarea').bind 'keyup', (e) => showNext() if e.keyCode == 13
+                $('#clickarea').bind 'keyup', (e) => showNext()
 
     nextLevel: () ->
         nextLevel = @languageData.levels[@level.nextLevel]

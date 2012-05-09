@@ -116,7 +116,7 @@ languageScramble.ViewHelper = (function() {
     this.user.lastLevelPlayed = this.levelName;
     this.saveUser(this.user);
     this.orderedOptions = [];
-    this.orderedOptionsIndex = 0;
+    this.orderedOptionsIndex = null;
     this.setTitle();
     return this.setProgress();
   };
@@ -956,9 +956,7 @@ languageScramble.ViewHelper = (function() {
           return showNext();
         });
         return $('#clickarea').bind('keyup', function(e) {
-          if (e.keyCode === 13) {
-            return showNext();
-          }
+          return showNext();
         });
       }
     });
