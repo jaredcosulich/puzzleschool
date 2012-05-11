@@ -52,30 +52,23 @@ exports.requireUser = function(fn) {
     var args, userCookie,
       _this = this;
     args = Array.prototype.slice.call(arguments);
-    userCookie = JSON.parse(this.jar.get('user') || 'null');
+    userCookie = this.cookies.get('user', {
+      signed: true
+    });
     if (!userCookie) {
-      line(function() {
-        return db.put('users', {
-          status: 1
-        }, line.wait());
-      });
-    } else {
-      line(function() {
-        return db.get('users', userCookie.id, line.wait());
-      });
+      return this.go('/');
     }
+    line(function() {
+      return db.get('users', userCookie.id, line.wait());
+    });
     line(function(user) {
       _this.user = user;
-      if (userCookie && _this.user.session !== userCookie.session) {
-        _this.jar.set('user', null, {
-          signed: true,
-          httpOnly: false
-        });
-        return _this.redirect('/');
+      if (_this.user.session !== userCookie.session) {
+        _this.cookies.set('user', null);
+        return _this.go('/');
       } else {
-        _this.jar.set('user', JSON.stringify(_this.user), {
-          signed: true,
-          httpOnly: false
+        _this.cookies.set('user', _this.user, {
+          signed: true
         });
         return fn.apply(_this, args);
       }

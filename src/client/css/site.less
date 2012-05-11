@@ -2,31 +2,33 @@ body {
     padding: 0;
     margin: 0;
     font-family: 'PT Sans', sans-serif;
-    font-size: 13px;
+    font-size: @bodysize;
     color: @black;
     background-color: @white;
 }
 
 h1, h2, h3 {
     font-weight: normal;
+}    
+h1, h2, h3, h4 {
     margin: 0;
     padding: 0;
 }
 
 h1 {
-    font-size: 27px;
+    font-size: @h1size;
 }
 
 h2 {
-    font-size: 18px
+    font-size: @h2size;
 }
 
 h3 {
-    font-size: 15px;
+    font-size: @h3size;
 }
 
 small, .small {
-    font-size: 11px;
+    font-size: @smallsize;
 }
 
 small {
@@ -38,6 +40,11 @@ a {
     border: none;
     cursor: pointer;
     color: @blue;
+}
+
+.logged_in .logged_out,
+.logged_out .logged_in {
+    display: none;
 }
 
 .upcase {
@@ -53,6 +60,14 @@ a {
     text-align: right;
 }
 
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
 .content {
     width: @content_width;
     margin: auto;
@@ -64,10 +79,9 @@ a {
     top: 0;
     width: 100%;
     background-color: @black;
-    padding: 3px 0;
     .outer-shadow(0, 0, 15px, 0.75);
-    overflow: hidden;
     line-height: 27px;
+    height: 30px;
     a {
         color: white;
         &:hover {
@@ -75,6 +89,7 @@ a {
         }
     }
     .logo {
+        margin-top: 3px;
         font-weight: bold;
         float: left;
         img {
@@ -82,8 +97,62 @@ a {
         }
     }
     .nav_links {
+        width: 30em;
+        margin: 3px auto 0 auto;
+        text-align: center;
         a {
-            padding-left: 9px;
+            padding: 0 6px;
+        }
+    }
+    .account {
+        float: right;
+        a {
+            padding-left: 12px;
+        }
+    }
+    .register {
+        background-color: @red;
+        float: right;
+        padding: 3px 6px;
+        margin-right: 24px;
+        .border-bottom-left-radius(6px);
+        .border-bottom-right-radius(6px);
+        text-align: center;
+        .outer-shadow(0, 0, 15px, 0.75);
+        line-height: 1.5em;
+        a, a:hover, a:visited {
+            text-decoration: underline;
+            color: @white;
+        }
+    }
+    .registration_form {
+        position: absolute;
+        left: -1000px;
+        top: -1000px;
+        opacity: 0;
+        padding: 12px;
+        border: 1px solid @grey;
+        background-color: @white;
+        .outer-shadow(0, 0, 15px, 0.75);
+        a {
+            color: @blue;
+        }
+        img {
+            vertical-align: -6px;
+        }
+        form {
+            width: 27em;
+            margin: 12px auto 0 auto;
+            input {
+                font-size: @h3size;
+            }
+            .password {
+                margin: 12px 0;
+            }
+        }
+        .buttons {
+            text-align: center;
+            margin-bottom: 6px;
         }
     }
 }

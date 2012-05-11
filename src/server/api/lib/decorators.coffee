@@ -27,22 +27,21 @@ exports.checkPassword = (fn) ->->
     line.run => fn.apply(this, args)
 
 
-exports.requireUser = (fn) ->->    
+exports.requireUser = (fn) ->->
     args = Array.prototype.slice.call(arguments)
-    userCookie = JSON.parse(@jar.get('user') or 'null')
+    userCookie = @cookies.get('user', { signed: true })
     
-    if not userCookie
-        line => db.put 'users', { status: 1 }, line.wait()
-    else
-        line => db.get 'users', userCookie.id, line.wait()
+    return @go('/') unless userCookie
+
+    line => db.get 'users', userCookie.id, line.wait()
     
     line (@user) =>
-        if userCookie and @user.session != userCookie.session
-            @jar.set('user', null, { signed: true, httpOnly: false })
-            @redirect('/')
+        if @user.session != userCookie.session
+            @cookies.set('user', null)
+            @go('/')
             
         else
-            @jar.set('user', JSON.stringify(@user), { signed: true, httpOnly: false })
+            @cookies.set('user', @user, { signed: true })
             fn.apply(this, args)
     
     line.error (err) => throw err

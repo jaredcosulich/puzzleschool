@@ -1,23 +1,90 @@
-<nav id="top_nav">
-    <div class='content'>
-        <a href='/' class='logo upcase'>
-            <img src='/assets/images/transparent_icon_tiny.png'/>
-            THE PUZZLE SCHOOL
-        </a>
+<div id='base'>
+    <nav id="top_nav">
+        <div class='content'>
+            <a href='/' class='logo upcase'>
+                <img src='/assets/images/transparent_icon_tiny.png'/>
+                THE PUZZLE SCHOOL
+            </a>
         
-        <div class='nav_links text-right small'>
-            <a href='/'>HOME</a>    
-            <!-- <a>THE SCHOOL</a> -->
-            <!-- <a>PUZZLES</a> -->
-            <a href='/labs'>LABS</a>
-            <!-- <a>BLOG</a> -->
-            <a href='/about'>ABOUT</a>
+            <div class='account small'>
+                <a href='/account' class='logged_in user_name'></a>
+                <a class='logged_in log_out'>Log Out</a>
+                <a class='logged_out'>Log In</a>
+                <a class='logged_out'>Register</a>
+            </div>
+        
+            <div class='nav_links small'>
+                <a href='/'>HOME</a>    
+                <!-- <a>THE SCHOOL</a> -->
+                <!-- <a>PUZZLES</a> -->
+                <a href='/labs'>LABS</a>
+                <!-- <a>BLOG</a> -->
+                <a href='/about'>ABOUT</a>
+            </div>
         </div>
+    
+        <div class='register logged_out'>
+            <h4>Save Your Progress</h4>
+            <a>Create a Puzzle School Account</a>
+        </div>
+    
+        <div class='registration_form modal'>            
+            <h3>
+                <img src='/assets/images/transparent_icon_tiny.png'/>
+                Create A Puzzle School Account
+            </h3>
+            <div class='logged_out'>
+                <p>Register a new account to save and review all of your progress on your puzzles.</p>
+                <form>
+                    <div class="field">
+                        <label for="name">What is your name?</label>
+                        <input name="name" type="text"></input>
+                    </div>
+        
+                    <div class="field">
+                        <label for="email">What is your email?</label>
+                        <input name="email" type="text"></input>
+                    </div>
+
+                    <div class="field">
+                        <label>When were you born?</label>
+                        <select name="month"><option value="">Month</option>
+                            {:months}
+                            <option value="{value}">{label}</option>
+                            {/months}
+                        </select>
+                        <select name="day"><option value="">Day</option>
+                            {:days}
+                            <option value="{}">{}</option>
+                            {/days}
+                        </select>
+                        <select name="year"><option value="">Year</option>
+                            {:years}
+                            <option value="{}">{}</option>
+                            {/years}
+                        </select>
+                    </div>
+                    <div class="field password">
+                        <label for="password">Enter a password:</label>
+                        <input name="password" type="password"></input>
+                    </div>
+                </form>
+                <div class='buttons'>
+                    <button class='register_button'>Register</button>
+                    <button class='close_modal'>Cancel</button>
+                </div>
+            </div>
+            <div class='logged_in'>
+                <p class='text-center'>You've already registered an account.</p>
+                <div class='right'><a class='log_out'>Log Out</a></div>
+                <div class='left'><a class='close_modal'>Close</a></div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="content" class='content'>{&content}</div>
+
+    <div id='footer' class='text-right small'>
+        &copy; Puzzle School 2012
     </div>
-</nav>
-
-<div id="content" class='content'>{&content}</div>
-
-<div id='footer' class='text-right small'>
-    &copy; Puzzle School 2012
 </div>

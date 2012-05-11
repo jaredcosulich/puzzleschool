@@ -38,11 +38,77 @@ soma.routes({
     });
     return line.run(function(user) {
       _this.user = user;
-      _this.jar.set('user', JSON.stringify(_this.user), {
-        signed: true,
-        httpOnly: false
+      _this.cookies.set('user', _this.user, {
+        signed: true
       });
       return _this.send();
     });
-  })
+  }),
+  '/api/register': function() {
+    var _this = this;
+    console.log(this.data);
+    if (!(this.data.name && /\S{3,}/.test(this.data.name))) {
+      return this.sendError(new Error('Name was invalid'));
+    }
+    if (!(this.data.email && /.+@.+\..+/.test(this.data.email))) {
+      return this.sendError(new Error('Email was invalid'));
+    }
+    if (!(this.data.password && /\S{3,}/.test(this.data.password))) {
+      return this.sendError(new Error('Password was invalid'));
+    }
+    if (!(this.data.year && this.data.month && this.data.day && isFinite(this.data.year) && isFinite(this.data.month) && isFinite(this.data.day))) {
+      return this.sendError(new Error('Birthday was invalid'));
+    }
+    this.data.birthday = "" + this.data.year + "-" + this.data.month + "-" + this.data.day;
+    this.data.year = parseInt(this.data.year);
+    this.data.month = parseInt(this.data.month);
+    this.data.day = parseInt(this.data.day);
+    line(function() {
+      return db.get('login', _this.data.email, line.wait(function(login) {
+        if (login != null) {
+          return line.fail('duplicate login');
+        }
+      }));
+    });
+    line(function() {
+      return bcrypt.genSalt(line.wait());
+    });
+    line(function(salt) {
+      return bcrypt.hash(_this.data.password, salt, line.wait());
+    });
+    line(function(hash) {
+      _this.data.password = hash;
+      return crypto.randomBytes(16, line.wait());
+    });
+    line(function(session) {
+      var key, user, _i, _len, _ref1;
+      user = {
+        id: _this.data.email,
+        session: session.toString('hex')
+      };
+      _ref1 = ['name', 'email', 'birthday', 'month', 'day', 'year'];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        key = _ref1[_i];
+        user[key] = _this.data[key];
+      }
+      return db.put('users', user, line.wait());
+    });
+    line(function(user) {
+      _this.user = user;
+      _this.cookies.set('user', _this.user, {
+        signed: true
+      });
+      return db.put('login', {
+        id: _this.data.email,
+        password: _this.data.password,
+        user: _this.user.id
+      }, line.wait());
+    });
+    line.error(function(err) {
+      return _this.sendError(err, 'Registration failed');
+    });
+    return line.run(function() {
+      return _this.send();
+    });
+  }
 });
