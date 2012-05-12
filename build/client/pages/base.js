@@ -195,6 +195,7 @@ soma.views({
     },
     logOut: function() {
       var _this = this;
+      this.cookies.set('user', null);
       return this.$('.logged_in').animate({
         opacity: 0,
         duration: 500,
@@ -258,7 +259,7 @@ soma.views({
             top: -1000,
             left: -1000
           });
-          return location.hash = '';
+          return _this.go(location.pathname, true);
         }
       });
     }

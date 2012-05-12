@@ -155,7 +155,7 @@ soma.views
                     modal.css
                         top: -1000
                         left: -1000
-                    location.hash = ''
+                    @go(location.pathname, true)
                     
             
             
