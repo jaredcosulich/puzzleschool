@@ -111,7 +111,7 @@ soma.views
                 
             
         logOut: () ->
-            # @cookies.set('user', null)
+            @cookies.set('user', null)
             @$('.logged_in').animate
                 opacity: 0
                 duration: 500
