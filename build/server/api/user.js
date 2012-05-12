@@ -26,7 +26,7 @@ soma.routes({
     line(function(user) {
       var userCookie;
       _this.user = user;
-      return userCookie = _this.jar.get('user');
+      return userCookie = _this.cookies.get('user');
     });
     line(function() {
       return crypto.randomBytes(16, line.wait());
@@ -46,7 +46,6 @@ soma.routes({
   }),
   '/api/register': function() {
     var _this = this;
-    console.log(this.data);
     if (!(this.data.name && /\S{3,}/.test(this.data.name))) {
       return this.sendError(new Error('Name was invalid'));
     }

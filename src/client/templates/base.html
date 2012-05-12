@@ -1,4 +1,4 @@
-<div id='base'>
+<div id='base' class='logged_out'>
     <nav id="top_nav">
         <div class='content'>
             <a href='/' class='logo upcase'>
@@ -9,8 +9,8 @@
             <div class='account small'>
                 <a href='/account' class='logged_in user_name'></a>
                 <a class='logged_in log_out'>Log Out</a>
-                <a class='logged_out'>Log In</a>
-                <a class='logged_out'>Register</a>
+                <a class='logged_out log_in'>Log In</a>
+                <a class='logged_out register'>Register</a>
             </div>
         
             <div class='nav_links small'>
@@ -23,9 +23,9 @@
             </div>
         </div>
     
-        <div class='register logged_out'>
+        <div class='register_flag logged_out'>
             <h4>Save Your Progress</h4>
-            <a>Create a Puzzle School Account</a>
+            <a class='register'>Create a Puzzle School Account</a>
         </div>
     
         <div class='registration_form modal'>            
@@ -76,10 +76,39 @@
             </div>
             <div class='logged_in'>
                 <p class='text-center'>You've already registered an account.</p>
-                <div class='right'><a class='log_out'>Log Out</a></div>
+                <div class='right'><a class='close_modal log_out'>Log Out</a></div>
                 <div class='left'><a class='close_modal'>Close</a></div>
             </div>
         </div>
+        
+        <div class='login_form modal'>            
+            <h3>
+                <img src='/assets/images/transparent_icon_tiny.png'/>
+                Log in to your Puzzle School Account
+            </h3>
+            <div class='logged_out'>
+                <form>
+                    <div class="field">
+                        <label for="email">Email:</label>
+                        <input name="email" type="text"></input>
+                    </div>
+                    <div class="field password">
+                        <label for="password">Password:</label>
+                        <input name="password" type="password"></input>
+                    </div>
+                </form>
+                <div class='buttons'>
+                    <button class='login_button'>Log In</button>
+                    <button class='close_modal'>Cancel</button>
+                </div>
+            </div>
+            <div class='logged_in'>
+                <p class='text-center'>You're already logged in as <a href='/account' class='user_name'></a>.</p>
+                <div class='right'><a class='close_modal log_out'>Log Out</a></div>
+                <div class='left'><a class='close_modal'>Close</a></div>
+            </div>
+        </div>
+        
     </nav>
 
     <div id="content" class='content'>{&content}</div>

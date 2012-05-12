@@ -6,22 +6,17 @@ db = require('../../lib/db')
 
 exports.checkPassword = (fn) ->->
     args = Array.prototype.slice.call(arguments)
-    if @user and not @data.email
-        @data.email = @user.email
+    @data.email = @user.email if @user and not @data.email
 
     return @sendError() unless @data.email and /.+@.+\..+/.test(@data.email)
     return @sendError() unless @data.password and /\S{3,}/.test(@data.password)
-    
-    line => db.get 'login', @data.email, line.wait()
-    line (@login) =>
-        if not @login.id
-            return line.fail()
 
+    line => db.get 'login', @data.email, line.wait()
+    line (@login) => 
+        return line.fail('Login failed, email not on record.') if not @login
         bcrypt.compare @data.password, @login.password, line.wait()
         
-    line (result) =>
-        if not result
-            return line.fail()
+    line (result) => return line.fail('Login failed, invalid password') if not result
 
     line.error => @sendError()
     line.run => fn.apply(this, args)

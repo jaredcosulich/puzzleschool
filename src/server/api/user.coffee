@@ -26,7 +26,7 @@ soma.routes
     '/api/login': checkPassword ->
         line => db.get 'users', @login.user, line.wait()
         line (@user) =>
-            userCookie = @jar.get('user')
+            userCookie = @cookies.get('user')
             # if userCookie possibly merge user data
             
         line => crypto.randomBytes 16, line.wait()
@@ -36,7 +36,6 @@ soma.routes
             @send()
 
     '/api/register': ->
-        console.log(@data)
         return @sendError(new Error('Name was invalid')) unless @data.name and /\S{3,}/.test(@data.name)
         return @sendError(new Error('Email was invalid')) unless @data.email and /.+@.+\..+/.test(@data.email)
         return @sendError(new Error('Password was invalid')) unless @data.password and /\S{3,}/.test(@data.password)
@@ -61,7 +60,6 @@ soma.routes
         line (session) =>
             user = {id: @data.email, session: session.toString('hex')}
             user[key] = @data[key] for key in ['name', 'email', 'birthday', 'month', 'day', 'year']
-
             db.put 'users', user, line.wait()
 
         line (@user) =>

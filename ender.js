@@ -1128,7 +1128,7 @@
     };
     /* parser.coffee
     */
-    attrPattern = /\[\s*([-\w]+)\s*(?:([~|^$*!]?=)\s*(?:([-\w]+)|['"]([^'"]*)['"]\s*(i))\s*)?\]/g;
+    attrPattern = /\[\s*([-\w]+)\s*(?:([~|^$*!]?=)\s*(?:([-\w]+)|['"]([^'"]*)['"])\s*(i)?\s*)?\]/g;
     pseudoPattern = /::?([-\w]+)(?:\((\([^()]+\)|[^()]+)\))?/g;
     combinatorPattern = /^\s*([,+~]|\/([-\w]+)\/)/;
     selectorPattern = RegExp("^(?:\\s*(>))?\\s*(?:(\\*|\\w+))?(?:\\#([-\\w]+))?(?:\\.([-\\.\\w]+))?((?:" + attrPattern.source + ")*)((?:" + pseudoPattern.source + ")*)(!)?");
@@ -1143,6 +1143,7 @@
     };
     parse = function(selector) {
       var e, last, result;
+      selector = selector.trim();
       if (selector in parse.cache) return parse.cache[selector];
       result = last = e = parseSimple(selector);
       if (e.compound) e.children = [];
@@ -4120,6 +4121,45 @@
   
   jar = typeof exports !== "undefined" && exports !== null ? exports : (this['jar'] = {});
   
+  jar.Cookie = (function() {
+  
+    Cookie.name = 'Cookie';
+  
+    function Cookie(name, value, options) {
+      var date, _base;
+      this.name = name;
+      this.value = value;
+      this.options = options;
+      if (this.value === null) {
+        this.value = '';
+        this.options.expires = -(60 * 60 * 24);
+      }
+      if (this.options.expires) {
+        if (typeof this.options.expires === 'number') {
+          date = new Date();
+          date.setTime(date.getTime() + (this.options.expires * 1000));
+          this.options.expires = date;
+        }
+        if (this.options.expires instanceof Date) {
+          this.options.expires = this.options.expires.toUTCString();
+        }
+      }
+      (_base = this.options).path || (_base.path = '/');
+    }
+  
+    Cookie.prototype.toString = function() {
+      var domain, expires, path, secure;
+      path = "; path=" + this.options.path;
+      expires = (this.options.expires ? "; expires=" + this.options.expires : '');
+      domain = (this.options.domain ? "; domain=" + this.options.domain : '');
+      secure = (this.options.secure ? '; secure' : '');
+      return [this.name, '=', this.value, expires, path, domain, secure].join('');
+    };
+  
+    return Cookie;
+  
+  })();
+  
   jar.Jar = (function() {
   
     Jar.name = 'Jar';
@@ -4148,9 +4188,6 @@
     };
   
     Jar.prototype.get = function(name) {
-      if (!this.cookies) {
-        this.parse();
-      }
       try {
         return this.decode(this.cookies[name]);
       } catch (e) {
@@ -4159,36 +4196,14 @@
     };
   
     Jar.prototype.set = function(name, value, options) {
-      var cookie, date, domain, expires, path, secure;
+      var cookie;
       if (options == null) {
         options = {};
       }
-      if (!this.cookies) {
-        this.parse();
-      }
-      if (value === null) {
-        value = '';
-        options.expires = -(60 * 60 * 24);
-      }
-      if (options.expires) {
-        if (typeof options.expires === 'number') {
-          date = new Date();
-          date.setTime(date.getTime() + (options.expires * 1000));
-          options.expires = date;
-        }
-        if (options.expires instanceof Date) {
-          options.expires = options.expires.toUTCString();
-        }
-      }
-      options.path || (options.path = '/');
-      path = "; path=" + options.path;
-      expires = (options.expires ? "; expires=" + options.expires : '');
-      domain = (options.domain ? "; domain=" + options.domain : '');
-      secure = (options.secure ? '; secure' : '');
       if (!('raw' in options) || !options.raw) {
         value = this.encode(value);
       }
-      cookie = [name, '=', value, expires, path, domain, secure].join('');
+      cookie = new jar.Cookie(name, value, options);
       this._setCookie(cookie);
       return this.cookies[name] = value;
     };
@@ -4226,7 +4241,17 @@
       };
   
       Jar.prototype._setCookie = function(cookie) {
-        return document.cookie = cookie;
+        document.cookie = cookie.toString();
+      };
+  
+      Jar.prototype.get = function() {
+        this.parse();
+        return Jar.__super__.get.apply(this, arguments);
+      };
+  
+      Jar.prototype.set = function() {
+        this.parse();
+        return Jar.__super__.set.apply(this, arguments);
       };
   
       return Jar;
@@ -4762,7 +4787,7 @@
           $('body').html(_this.chunk.html);
           return $.enhance();
         };
-        if (this.chunk.html) {
+        if (this.chunk.status === 'complete') {
           fn();
         } else {
           this.chunk.on('complete', fn);
@@ -4775,8 +4800,8 @@
             history.replaceState({}, "", path);
           } else {
             history.pushState({}, "", path);
-            window.onpopstate();
           }
+          window.onpopstate();
         } else {
           document.location = path;
         }
@@ -4834,14 +4859,38 @@
     soma.context = new soma.BrowserContext(origin);
   
     $('document').ready(function() {
-      window.onpopstate = function() {
-        if (document.location.pathname === origin) {
-          origin = null;
-          return;
-        }
-        soma.context = new soma.BrowserContext(document.location.pathname);
-        soma.context.begin();
-      };
+      if (history.pushState) {
+        window.onpopstate = function() {
+          var path;
+          path = document.location.pathname;
+          if (path === origin) {
+            origin = null;
+            return;
+          }
+          soma.context = new soma.BrowserContext(path);
+          soma.context.begin();
+        };
+        $('a:local-link(0)[data-precache != "true"]').each(function() {
+          var path;
+          path = this.pathname;
+          return $(this).bind('click', function(event) {
+            history.pushState({}, "", path);
+            window.onpopstate();
+            event.stop();
+          });
+        });
+        $('a:local-link(0)[data-precache = "true"]').each(function() {
+          var context, path;
+          path = this.pathname;
+          context = new soma.BrowserContext(path, true);
+          context.begin();
+          return $(this).bind('click', function(event) {
+            history.pushState({}, "", path);
+            context.render();
+            event.stop();
+          });
+        });
+      }
       return $.enhance();
     });
   

@@ -28,14 +28,14 @@ exports.checkPassword = function(fn) {
     });
     line(function(login) {
       _this.login = login;
-      if (!_this.login.id) {
-        return line.fail();
+      if (!_this.login) {
+        return line.fail('Login failed, email not on record.');
       }
       return bcrypt.compare(_this.data.password, _this.login.password, line.wait());
     });
     line(function(result) {
       if (!result) {
-        return line.fail();
+        return line.fail('Login failed, invalid password');
       }
     });
     line.error(function() {

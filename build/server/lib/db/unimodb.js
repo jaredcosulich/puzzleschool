@@ -144,3 +144,7 @@ db.multiget = function(table, ids, callback) {
     return callback(err, result);
   });
 };
+
+db.scan = function(table, options, callback) {
+  return dynodeClient.scan(table, options, callback);
+};

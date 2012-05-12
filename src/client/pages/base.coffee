@@ -39,17 +39,19 @@ soma.views
         selector: '#base'
         
         create: ->
-            @logIn()
-            
+            @checkLoggedIn()
+            @$('.log_out').bind 'click', => @logOut()
+
             $(window).bind 'hashchange', => @onhashchange()
             
-            @registerHashChange 'register', => @register()
-            @$('.register a').bind 'click', => location.hash = 'register'
+            @registerHashChange 'register', => @showRegistration()
+            @$('.register').bind 'click', => location.hash = 'register'
+
+            @registerHashChange 'login', => @showLogIn()
+            @$('.log_in').bind 'click', => location.hash = 'login'
             
             @$('.close_modal').bind 'click', (e) => @hideModal(e.currentTarget)
             
-            @$('log_out').bind 'click', => @logOut()
-
             @onhashchange()
 
         onhashchange: () -> callback() if (callback = @hashChanges[location.hash.replace(/#/, '')])
@@ -73,20 +75,11 @@ soma.views
             return data
                   
                             
-        register: () ->
-            registrationForm = @$('.registration_form')
-            registrationForm.css
-                top: 120
-                left: ($(document.body).width() - registrationForm.width()) / 2
-            registrationForm.animate
-                opacity: 1
-                duration: 500
-
-            @$('.registration_form').bind 'click', (e) => e.stopPropagation()
-            $(window).bind 'click', () => @hideModal('.registration_form')
+        showRegistration: () ->
+            @showModal('.registration_form')
             @$('.registration_form .cancel_button').bind 'click', () => @hideModal('.registration_form')
 
-            @$('.registration_form .register_button').bind 'click', () =>
+            submitForm = () =>
                 form = @$('.registration_form form')
                 $.ajax
                     url: '/api/register'
@@ -94,19 +87,62 @@ soma.views
                     data: @formData(form)
                     success: () => 
                         @hideModal(form)
-                        @logIn()
+                        @checkLoggedIn()
                 
+            @$('.registration_form input').bind 'keypress', (e) => submitForm() if e.keyCode == 13
+            @$('.registration_form .register_button').bind 'click', () => submitForm()
+                
+        showLogIn: () ->        
+            @showModal('.login_form')
+            @$('.login_form .cancel_button').bind 'click', () => @hideModal('.login_form')
+            
+            submitForm = () =>
+                form = @$('.login_form form')
+                $.ajax
+                    url: '/api/login'
+                    method: 'POST'
+                    data: @formData(form)
+                    success: () => 
+                        @hideModal(form)
+                        @checkLoggedIn()
+                
+            @$('.login_form input').bind 'keypress', (e) => submitForm() if e.keyCode == 13
+            @$('.login_form .login_button').bind 'click', () => submitForm()
+                
+            
         logOut: () ->
-            @el.removeClass('logged_in')
-            @el.addClass('logged_out')
-            @$('.user_name').html('')
-            @cookies.set('user', null)
+            # @cookies.set('user', null)
+            @$('.logged_in').animate
+                opacity: 0
+                duration: 500
+                complete: () =>
+                    @$('.logged_out').css(opacity: 0)
+                    @el.removeClass('logged_in')
+                    @el.addClass('logged_out')
+                    @$('.user_name').html('')
+                    @$('.logged_in').css(opacity: 1)    
+                    @$('.logged_out').animate
+                        opacity: 1
+                        duration: 500
                 
-        logIn: () ->
+        checkLoggedIn: () ->
             return unless (@user = @cookies.get('user'))?
             @el.removeClass('logged_out')
             @el.addClass('logged_in')
             @$('.user_name').html(@user.name)
+        
+        
+        showModal: (selector) ->
+            modal = @$(selector)
+            modal.css
+                top: 120
+                left: ($(document.body).width() - modal.width()) / 2
+            modal.animate
+                opacity: 1
+                duration: 500
+
+            modal.bind 'click', (e) => e.stopPropagation()
+            $(window).bind 'click', () => @hideModal(selector)
         
         hideModal: (selector) ->
             $(window).unbind 'click'
@@ -119,7 +155,7 @@ soma.views
                     modal.css
                         top: -1000
                         left: -1000
-                    # location.hash = ''
+                    location.hash = ''
                     
             
             

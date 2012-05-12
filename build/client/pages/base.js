@@ -84,21 +84,27 @@ soma.views({
     selector: '#base',
     create: function() {
       var _this = this;
-      this.logIn();
+      this.checkLoggedIn();
+      this.$('.log_out').bind('click', function() {
+        return _this.logOut();
+      });
       $(window).bind('hashchange', function() {
         return _this.onhashchange();
       });
       this.registerHashChange('register', function() {
-        return _this.register();
+        return _this.showRegistration();
       });
-      this.$('.register a').bind('click', function() {
+      this.$('.register').bind('click', function() {
         return location.hash = 'register';
+      });
+      this.registerHashChange('login', function() {
+        return _this.showLogIn();
+      });
+      this.$('.log_in').bind('click', function() {
+        return location.hash = 'login';
       });
       this.$('.close_modal').bind('click', function(e) {
         return _this.hideModal(e.currentTarget);
-      });
-      this.$('log_out').bind('click', function() {
-        return _this.logOut();
       });
       return this.onhashchange();
     },
@@ -129,28 +135,14 @@ soma.views({
       }
       return data;
     },
-    register: function() {
-      var registrationForm,
+    showRegistration: function() {
+      var submitForm,
         _this = this;
-      registrationForm = this.$('.registration_form');
-      registrationForm.css({
-        top: 120,
-        left: ($(document.body).width() - registrationForm.width()) / 2
-      });
-      registrationForm.animate({
-        opacity: 1,
-        duration: 500
-      });
-      this.$('.registration_form').bind('click', function(e) {
-        return e.stopPropagation();
-      });
-      $(window).bind('click', function() {
-        return _this.hideModal('.registration_form');
-      });
+      this.showModal('.registration_form');
       this.$('.registration_form .cancel_button').bind('click', function() {
         return _this.hideModal('.registration_form');
       });
-      return this.$('.registration_form .register_button').bind('click', function() {
+      submitForm = function() {
         var form;
         form = _this.$('.registration_form form');
         return $.ajax({
@@ -159,24 +151,96 @@ soma.views({
           data: _this.formData(form),
           success: function() {
             _this.hideModal(form);
-            return _this.logIn();
+            return _this.checkLoggedIn();
           }
         });
+      };
+      this.$('.registration_form input').bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+          return submitForm();
+        }
+      });
+      return this.$('.registration_form .register_button').bind('click', function() {
+        return submitForm();
+      });
+    },
+    showLogIn: function() {
+      var submitForm,
+        _this = this;
+      this.showModal('.login_form');
+      this.$('.login_form .cancel_button').bind('click', function() {
+        return _this.hideModal('.login_form');
+      });
+      submitForm = function() {
+        var form;
+        form = _this.$('.login_form form');
+        return $.ajax({
+          url: '/api/login',
+          method: 'POST',
+          data: _this.formData(form),
+          success: function() {
+            _this.hideModal(form);
+            return _this.checkLoggedIn();
+          }
+        });
+      };
+      this.$('.login_form input').bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+          return submitForm();
+        }
+      });
+      return this.$('.login_form .login_button').bind('click', function() {
+        return submitForm();
       });
     },
     logOut: function() {
-      this.el.removeClass('logged_in');
-      this.el.addClass('logged_out');
-      this.$('.user_name').html('');
-      return this.cookies.set('user', null);
+      var _this = this;
+      return this.$('.logged_in').animate({
+        opacity: 0,
+        duration: 500,
+        complete: function() {
+          _this.$('.logged_out').css({
+            opacity: 0
+          });
+          _this.el.removeClass('logged_in');
+          _this.el.addClass('logged_out');
+          _this.$('.user_name').html('');
+          _this.$('.logged_in').css({
+            opacity: 1
+          });
+          return _this.$('.logged_out').animate({
+            opacity: 1,
+            duration: 500
+          });
+        }
+      });
     },
-    logIn: function() {
+    checkLoggedIn: function() {
       if ((this.user = this.cookies.get('user')) == null) {
         return;
       }
       this.el.removeClass('logged_out');
       this.el.addClass('logged_in');
       return this.$('.user_name').html(this.user.name);
+    },
+    showModal: function(selector) {
+      var modal,
+        _this = this;
+      modal = this.$(selector);
+      modal.css({
+        top: 120,
+        left: ($(document.body).width() - modal.width()) / 2
+      });
+      modal.animate({
+        opacity: 1,
+        duration: 500
+      });
+      modal.bind('click', function(e) {
+        return e.stopPropagation();
+      });
+      return $(window).bind('click', function() {
+        return _this.hideModal(selector);
+      });
     },
     hideModal: function(selector) {
       var modal,
@@ -190,10 +254,11 @@ soma.views({
         opacity: 0,
         duration: 500,
         complete: function() {
-          return modal.css({
+          modal.css({
             top: -1000,
             left: -1000
           });
+          return location.hash = '';
         }
       });
     }

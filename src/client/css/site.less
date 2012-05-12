@@ -110,7 +110,7 @@ a {
             padding-left: 12px;
         }
     }
-    .register {
+    .register_flag {
         background-color: @red;
         float: right;
         padding: 3px 6px;
@@ -125,7 +125,7 @@ a {
             color: @white;
         }
     }
-    .registration_form {
+    .registration_form, .login_form {
         position: absolute;
         left: -1000px;
         top: -1000px;
@@ -144,7 +144,8 @@ a {
             width: 27em;
             margin: 12px auto 0 auto;
             input {
-                font-size: @h3size;
+                height: @h3size;
+                line-height: @h3size;
             }
             .password {
                 margin: 12px 0;

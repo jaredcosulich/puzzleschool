@@ -83,3 +83,5 @@ db.multiget = (table, ids, callback) ->
                 
         delete result[unimoTable]
         callback(err, result)
+
+db.scan = (table, options, callback) -> dynodeClient.scan(table, options, callback)
