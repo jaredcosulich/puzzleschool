@@ -63,7 +63,7 @@ exports.requireUser = function(fn) {
     });
     line(function(user) {
       _this.user = user;
-      if (_this.user.session !== userCookie.session) {
+      if (!_this.user || _this.user.session !== userCookie.session) {
         _this.cookies.set('user', null);
         return _this.go('/');
       } else {

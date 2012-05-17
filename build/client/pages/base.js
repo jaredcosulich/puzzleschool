@@ -44,6 +44,7 @@ soma.chunks({
       this.loadScript('/build/client/pages/about.js');
       this.loadScript('/build/client/pages/labs.js');
       this.loadStylesheet('/build/client/css/all.css');
+      this.loadScript('/assets/analytics.js');
       this.template = this.loadTemplate('/build/client/templates/base.html');
       return this.loadChunk(this.content);
     },
@@ -51,6 +52,7 @@ soma.chunks({
       var data, i, _i, _j, _ref, _results, _results1;
       this.setTitle('The Puzzle School');
       data = {
+        loggedIn: this.cookies.get('user') != null,
         content: this.content,
         months: (function() {
           var _i, _results;
@@ -88,7 +90,7 @@ soma.views({
       this.$('.log_out').bind('click', function() {
         return _this.logOut();
       });
-      $(window).bind('hashchange', function() {
+      $(window).one('hashchange', function() {
         return _this.onhashchange();
       });
       this.registerHashChange('register', function() {
@@ -174,7 +176,7 @@ soma.views({
       submitForm = function() {
         var form;
         form = _this.$('.login_form form');
-        return $.ajax({
+        return $.ajaj({
           url: '/api/login',
           method: 'POST',
           data: _this.formData(form),
@@ -211,7 +213,10 @@ soma.views({
           });
           return _this.$('.logged_out').animate({
             opacity: 1,
-            duration: 500
+            duration: 500,
+            complete: function() {
+              return _this.go(location.pathname, true);
+            }
           });
         }
       });
@@ -220,13 +225,26 @@ soma.views({
       if ((this.user = this.cookies.get('user')) == null) {
         return;
       }
-      this.el.removeClass('logged_out');
-      this.el.addClass('logged_in');
+      if (this.el.hasClass('logged_out')) {
+        this.go(location.pathname, true);
+      }
       return this.$('.user_name').html(this.user.name);
     },
     showModal: function(selector) {
       var modal,
         _this = this;
+      this.opaqueScreen = $('.opaque_screen');
+      this.opaqueScreen.css({
+        opacity: 0,
+        top: 0,
+        left: 0,
+        width: $(document.body).width(),
+        height: $(document.body).height() + $('#top_nav').height()
+      });
+      this.opaqueScreen.animate({
+        opacity: 0.75,
+        duration: 300
+      });
       modal = this.$(selector);
       modal.css({
         top: 120,
@@ -237,20 +255,30 @@ soma.views({
         duration: 500
       });
       modal.bind('click', function(e) {
-        return e.stopPropagation();
+        return e.stop();
       });
-      return $(window).bind('click', function() {
+      return $(this.opaqueScreen).bind('click', function() {
         return _this.hideModal(selector);
       });
     },
     hideModal: function(selector) {
       var modal,
         _this = this;
-      $(window).unbind('click');
+      $(this.opaqueScreen).unbind('click');
       modal = selector instanceof String ? this.$(selector) : $(selector);
       if (!modal.hasClass('modal')) {
         modal = modal.closest('.modal');
       }
+      this.opaqueScreen.animate({
+        opacity: 0,
+        duration: 500,
+        complete: function() {
+          return _this.opaqueScreen.css({
+            top: -1000,
+            left: -100
+          });
+        }
+      });
       return modal.animate({
         opacity: 0,
         duration: 500,
@@ -259,7 +287,7 @@ soma.views({
             top: -1000,
             left: -1000
           });
-          return _this.go(location.pathname, true);
+          return location.hash = '';
         }
       });
     }

@@ -1,11 +1,6 @@
 soma = require('soma')
 wings = require('wings')
 
-loadUser = (user={}) ->
-    user.name = 'guest' unless user.name?
-    user.levels = {} unless user.levels?
-    return user
-
 soma.chunks
     LanguageScramble:
         meta: -> new soma.chunks.Base({ content: @ })
@@ -15,16 +10,32 @@ soma.chunks
             @loadScript '/build/client/pages/puzzles/language_scramble.js'
             @loadScript '/build/client/pages/puzzles/lib/language_scramble.js'
             @loadStylesheet '/build/client/css/puzzles/language_scramble.css'
+            
+            @puzzleData = {levels: {}}
+            if @cookies.get('user')
+                @loadData 
+                    url: '/api/puzzles/language_scramble'
+                    success: (data) =>
+                        if data.puzzle? 
+                            @puzzleData = data.puzzle
+                            for levelName, levelInfo of @puzzleData.levels
+                                languages = levelName.split(/\//)[0]
+                                level = levelName.split(/\//)[1]
+                                @puzzleData.levels[languages] = {} unless @puzzleData.levels[languages]
+                                @puzzleData.levels[languages][level] = levelInfo
+                                delete @puzzleData.levels[levelName]
+            
 
         build: ->
             languageScramble = require('./lib/language_scramble')
             
-            @user = loadUser(@cookies.get('user'))
-            @languages = (@user.lastLanguages or 'english_italian') unless @languages && @languages.length
-            @levelName = (@user.lastLevelPlayed or 'top10words') unless @levelName && @levelName.length
+            @languages = (@puzzleData.lastLanguages or 'english_italian') unless @languages && @languages.length
+            @levelName = (@puzzleData.lastLevelPlayed or 'top10words') unless @levelName && @levelName.length
+            @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]
             @chunkHelper = new languageScramble.ChunkHelper(@languages, @levelName)
             
             @html = wings.renderTemplate(@template, 
+                puzzleData: JSON.stringify(@puzzleData)
                 languages: @languages
                 displayLanguages: @chunkHelper.displayLanguages()
                 title: @chunkHelper.level.title
@@ -40,23 +51,74 @@ soma.views
         create: ->
             languageScramble = require('./lib/language_scramble')
 
+            @puzzleData = JSON.parse(@el.data('puzzle_data'))
             @languages = @el.data('languages')
             @levelName = @el.data('level_name')
-            # console.log(@languages, @levelName)
 
-            @user = loadUser(@cookies.get('user'))
             @viewHelper = new languageScramble.ViewHelper
                 el: $(@selector)
-                user: @user
+                puzzleData: @puzzleData
                 languages: @languages
                 go: @go
-                saveUser: (user) => 
-                    @cookies.set('user', user)
+                saveProgress: (puzzleProgress) => 
+                    return unless @cookies.get('user')
+
+                    puzzleUpdates = @getUpdates(puzzleProgress)
+                    return unless puzzleUpdates
+                    
+                    levelUpdates = {}
+                    for languages, levels of puzzleUpdates.levels
+                        for levelName, levelInfo of levels
+                            levelUpdates["#{languages}/#{levelName}"] = levelInfo
+                    delete puzzleUpdates.levels
+                    
+                    console.log("UPDATES", JSON.stringify(puzzleUpdates), JSON.stringify(levelUpdates))
+                    $.ajaj
+                        url: "/api/puzzles/language_scramble/update"
+                        method: 'POST'
+                        data: 
+                            puzzleUpdates: puzzleUpdates
+                            levelUpdates: levelUpdates
+                        success: => @puzzleData = puzzleProgress
+                            
 
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
             @viewHelper.bindKeyPress()
-            @viewHelper.newScramble()                      
+            @viewHelper.newScramble()   
+            
+
+        compareItem: (current, original) ->
+            return current unless original
+            if typeof current == 'object'
+                return @compareHashes(current, original)
+
+            else if Array.isArray(current)
+                return @compareArrays(current, original)
+            
+            else    
+                return current unless current == original
+            
+        compareHashes: (current, original) ->
+            diff = {}
+            for key, value of current
+                diffValue = @compareItem(value, original[key])
+                diff[key] = diffValue if diffValue?
+                
+            return diff if Object.keys(diff).length > 0
+        
+        compareArrays: (current, original) ->
+            diff = []
+            for item, index in current
+                diffValue = @compareItem(item, original[index])
+                diff.push(diffValue) if diffValue?
+                
+            return diff if diff.length > 0
+                  
+        getUpdates: (progress) ->
+            @compareHashes(progress, @puzzleData)
+            
+
 
 soma.routes
     '/puzzles/language_scramble': -> new soma.chunks.LanguageScramble

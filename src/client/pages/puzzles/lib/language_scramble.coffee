@@ -52,18 +52,21 @@ class languageScramble.ChunkHelper
 class languageScramble.ViewHelper
     maxLevel: 7
 
-    constructor: ({@el, @user, @languages, @go, @saveUser}) ->
-
+    constructor: ({@el, puzzleData, @languages, @go, @saveProgress}) ->
+        @puzzleData = JSON.parse(JSON.stringify(puzzleData))
+        
     $: (selector) -> $(selector, @el)
 
     setLevel: (@levelName) ->   
         @languageData = languageScramble.data[@languages]
         @level = languageScramble.getLevel(@languageData, @levelName)
         @options = @level.data
-        @user.levels[@levelName] = {} unless @user.levels[@levelName]
-
-        @user.lastLevelPlayed = @levelName
-        @saveUser(@user)
+        @puzzleData.levels[@languages][@levelName] = {} unless @puzzleData.levels[@languages][@levelName]
+        
+        @puzzleData.lastLevelPlayed = @levelName
+        @puzzleUpdates
+        
+        @saveProgress(@puzzleData)
         @orderedOptions = []
         @orderedOptionsIndex = null
         @setTitle()
@@ -74,9 +77,9 @@ class languageScramble.ViewHelper
 
         lastAnswerDuration = @answerTimes[@answerTimes.length - 1] - @answerTimes[@answerTimes.length - 2]
         if lastAnswerDuration < 2500 * @scrambleInfo.native.length
-            @user.levels[@levelName][@scrambleInfo.id] += 1
+            @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
 
-        @saveUser(@user)
+        @saveProgress(@puzzleData)
 
     setTitle: ->
         if $('.header .level .title').html() != @level.title
@@ -148,7 +151,7 @@ class languageScramble.ViewHelper
         $('#clickarea').bind 'blur', () -> hasFocus = false    
 
         $(window).bind 'keypress', (e) =>
-            return if hasFocus
+            return if hasFocus or $('.opaque_screen').css('opacity') > 0
             $('#clickarea')[0].focus()
             $('#clickarea').trigger('keypress', e)
 
@@ -237,7 +240,7 @@ class languageScramble.ViewHelper
 
         @scrambleInfo = @selectOption()
         return unless @scrambleInfo     
-        @user.levels[@levelName][@scrambleInfo.id] or= 1    
+        @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
 
         displayWords = @$('.display_words')
         if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
@@ -270,13 +273,14 @@ class languageScramble.ViewHelper
         
         for option in @options
             continue if option in @orderedOptions[-4..-1]
-            optionLevel = @user.levels[@levelName][option.id] || 1
+            optionLevel = @puzzleData.levels[@languages][@levelName][option.id] || 1
             optionsToAdd[optionLevel] or= []
             optionsToAdd[optionLevel].push(option)
             minLevel = optionLevel if optionLevel < minLevel
 
         if minLevel == @maxLevel
-            incomplete = (option for option in @options when (@user.levels[@levelName][option.id] || 1) < @maxLevel)
+            
+            incomplete = (option for option in @options when (@puzzleData.levels[@languages][@levelName][option.id] || 1) < @maxLevel)
             if incomplete.length
                 @orderedOptions.push(option) for option in incomplete
                 return @orderedOptions[@orderedOptionsIndex]
@@ -537,7 +541,7 @@ class languageScramble.ViewHelper
     updateProgress: ->
         for scrambleInfo in @level.data
             id = scrambleInfo.id
-            level = @user.levels[@levelName][id]
+            level = @puzzleData.levels[@languages][@levelName][id]
             if level
                 level = @maxLevel if level > @maxLevel
                 @$(".progress_meter .bar .#{id}").css(opacity: 1 - ((1/@maxLevel) * level))
@@ -614,8 +618,8 @@ class languageScramble.ViewHelper
         resetLevel = () =>
             if confirm('Are you sure you want to reset this level?')
                 @$('reset_level_link').unbind 'click'
-                @user.levels[@levelName] = {}
-                @saveUser(@user)
+                @puzzleData.levels[@languages][@levelName] = {}
+                @saveProgress(@puzzleData)
                 showLevel(@levelName)
 
         showLevel = (levelName) =>

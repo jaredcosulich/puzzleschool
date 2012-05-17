@@ -1,7 +1,6 @@
 soma = require('soma')
 wings = require('wings')
 
-
 class soma.View extends soma.View
     hashChanges: {}
     registerHashChange: (hash, callback) => @hashChanges[hash.replace(/#/, '')] = callback
@@ -19,7 +18,9 @@ soma.chunks
             @loadScript '/build/client/pages/labs.js'
 
             @loadStylesheet '/build/client/css/all.css'
-            
+
+            @loadScript '/assets/analytics.js'
+                        
             @template = @loadTemplate '/build/client/templates/base.html'
             @loadChunk @content
 
@@ -27,6 +28,7 @@ soma.chunks
         build: () ->
             @setTitle('The Puzzle School')
             data = 
+                loggedIn: @cookies.get('user')?
                 content: @content
                 months: ({ label: @shortMonths[i-1], value: i } for i in [1..12])
                 days: [1..31]
@@ -42,7 +44,7 @@ soma.views
             @checkLoggedIn()
             @$('.log_out').bind 'click', => @logOut()
 
-            $(window).bind 'hashchange', => @onhashchange()
+            $(window).one 'hashchange', => @onhashchange()
             
             @registerHashChange 'register', => @showRegistration()
             @$('.register').bind 'click', => location.hash = 'register'
@@ -92,13 +94,13 @@ soma.views
             @$('.registration_form input').bind 'keypress', (e) => submitForm() if e.keyCode == 13
             @$('.registration_form .register_button').bind 'click', () => submitForm()
                 
-        showLogIn: () ->        
+        showLogIn: () ->  
             @showModal('.login_form')
             @$('.login_form .cancel_button').bind 'click', () => @hideModal('.login_form')
             
             submitForm = () =>
                 form = @$('.login_form form')
-                $.ajax
+                $.ajaj
                     url: '/api/login'
                     method: 'POST'
                     data: @formData(form)
@@ -115,7 +117,7 @@ soma.views
             @$('.logged_in').animate
                 opacity: 0
                 duration: 500
-                complete: () =>
+                complete: =>
                     @$('.logged_out').css(opacity: 0)
                     @el.removeClass('logged_in')
                     @el.addClass('logged_out')
@@ -124,15 +126,23 @@ soma.views
                     @$('.logged_out').animate
                         opacity: 1
                         duration: 500
+                        complete: => @go(location.pathname, true)
                 
         checkLoggedIn: () ->
             return unless (@user = @cookies.get('user'))?
-            @el.removeClass('logged_out')
-            @el.addClass('logged_in')
+            if @el.hasClass('logged_out')
+                @go(location.pathname, true)
+                
             @$('.user_name').html(@user.name)
         
         
         showModal: (selector) ->
+            @opaqueScreen = $('.opaque_screen')
+            @opaqueScreen.css(opacity: 0, top:0, left: 0, width: $(document.body).width(), height: $(document.body).height() + $('#top_nav').height())
+            @opaqueScreen.animate
+                opacity: 0.75
+                duration: 300
+                
             modal = @$(selector)
             modal.css
                 top: 120
@@ -141,13 +151,14 @@ soma.views
                 opacity: 1
                 duration: 500
 
-            modal.bind 'click', (e) => e.stopPropagation()
-            $(window).bind 'click', () => @hideModal(selector)
+            modal.bind 'click', (e) => e.stop()
+            $(@opaqueScreen).bind 'click', () => @hideModal(selector)
         
         hideModal: (selector) ->
-            $(window).unbind 'click'
+            $(@opaqueScreen).unbind 'click'
             modal = if selector instanceof String then @$(selector) else $(selector)
             modal = modal.closest('.modal') unless modal.hasClass('modal')
+            @opaqueScreen.animate(opacity:0, duration: 500, complete: () => @opaqueScreen.css(top: -1000, left: -100))
             modal.animate
                 opacity: 0
                 duration: 500
@@ -155,8 +166,6 @@ soma.views
                     modal.css
                         top: -1000
                         left: -1000
-                    @go(location.pathname, true)
+                    location.hash = ''
                     
             
-            
-                

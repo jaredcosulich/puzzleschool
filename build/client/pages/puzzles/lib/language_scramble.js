@@ -94,11 +94,13 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.maxLevel = 7;
 
   function ViewHelper(_arg) {
-    this.el = _arg.el, this.user = _arg.user, this.languages = _arg.languages, this.go = _arg.go, this.saveUser = _arg.saveUser;
+    var puzzleData;
+    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.go = _arg.go, this.saveProgress = _arg.saveProgress;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
 
+    this.puzzleData = JSON.parse(JSON.stringify(puzzleData));
   }
 
   ViewHelper.prototype.$ = function(selector) {
@@ -110,11 +112,12 @@ languageScramble.ViewHelper = (function() {
     this.languageData = languageScramble.data[this.languages];
     this.level = languageScramble.getLevel(this.languageData, this.levelName);
     this.options = this.level.data;
-    if (!this.user.levels[this.levelName]) {
-      this.user.levels[this.levelName] = {};
+    if (!this.puzzleData.levels[this.languages][this.levelName]) {
+      this.puzzleData.levels[this.languages][this.levelName] = {};
     }
-    this.user.lastLevelPlayed = this.levelName;
-    this.saveUser(this.user);
+    this.puzzleData.lastLevelPlayed = this.levelName;
+    this.puzzleUpdates;
+    this.saveProgress(this.puzzleData);
     this.orderedOptions = [];
     this.orderedOptionsIndex = null;
     this.setTitle();
@@ -126,9 +129,9 @@ languageScramble.ViewHelper = (function() {
     this.answerTimes.push(new Date());
     lastAnswerDuration = this.answerTimes[this.answerTimes.length - 1] - this.answerTimes[this.answerTimes.length - 2];
     if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
-      this.user.levels[this.levelName][this.scrambleInfo.id] += 1;
+      this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
     }
-    return this.saveUser(this.user);
+    return this.saveProgress(this.puzzleData);
   };
 
   ViewHelper.prototype.setTitle = function() {
@@ -260,7 +263,7 @@ languageScramble.ViewHelper = (function() {
       return hasFocus = false;
     });
     $(window).bind('keypress', function(e) {
-      if (hasFocus) {
+      if (hasFocus || $('.opaque_screen').css('opacity') > 0) {
         return;
       }
       $('#clickarea')[0].focus();
@@ -389,7 +392,7 @@ languageScramble.ViewHelper = (function() {
     if (!this.scrambleInfo) {
       return;
     }
-    (_base = this.user.levels[this.levelName])[_name = this.scrambleInfo.id] || (_base[_name] = 1);
+    (_base = this.puzzleData.levels[this.languages][this.levelName])[_name = this.scrambleInfo.id] || (_base[_name] = 1);
     displayWords = this.$('.display_words');
     if ((this.scrambleInfo["" + this.displayLevel + "Sentence"] != null) && this.scrambleInfo["" + this.displayLevel + "Sentence"].length) {
       sentence = this.scrambleInfo["" + this.displayLevel + "Sentence"];
@@ -428,7 +431,7 @@ languageScramble.ViewHelper = (function() {
       if (__indexOf.call(this.orderedOptions.slice(-4), option) >= 0) {
         continue;
       }
-      optionLevel = this.user.levels[this.levelName][option.id] || 1;
+      optionLevel = this.puzzleData.levels[this.languages][this.levelName][option.id] || 1;
       optionsToAdd[optionLevel] || (optionsToAdd[optionLevel] = []);
       optionsToAdd[optionLevel].push(option);
       if (optionLevel < minLevel) {
@@ -442,7 +445,7 @@ languageScramble.ViewHelper = (function() {
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           option = _ref1[_j];
-          if ((this.user.levels[this.levelName][option.id] || 1) < this.maxLevel) {
+          if ((this.puzzleData.levels[this.languages][this.levelName][option.id] || 1) < this.maxLevel) {
             _results.push(option);
           }
         }
@@ -868,7 +871,7 @@ languageScramble.ViewHelper = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       scrambleInfo = _ref[_i];
       id = scrambleInfo.id;
-      level = this.user.levels[this.levelName][id];
+      level = this.puzzleData.levels[this.languages][this.levelName][id];
       if (level) {
         if (level > this.maxLevel) {
           level = this.maxLevel;
@@ -973,8 +976,8 @@ languageScramble.ViewHelper = (function() {
     resetLevel = function() {
       if (confirm('Are you sure you want to reset this level?')) {
         _this.$('reset_level_link').unbind('click');
-        _this.user.levels[_this.levelName] = {};
-        _this.saveUser(_this.user);
+        _this.puzzleData.levels[_this.languages][_this.levelName] = {};
+        _this.saveProgress(_this.puzzleData);
         return showLevel(_this.levelName);
       }
     };

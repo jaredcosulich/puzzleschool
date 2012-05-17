@@ -73,8 +73,49 @@ a {
     margin: auto;
 }
 
+.modal {
+    position: absolute;
+    z-index: 101;
+    position: absolute;
+    left: -1000px;
+    top: -1000px;
+    opacity: 0;
+    padding: 12px;
+    border: 1px solid @grey;
+    background-color: @white;
+    .outer-shadow(0, 0, 15px, 0.75);
+    a {
+        color: @blue;
+    }
+    img {
+        vertical-align: -6px;
+    }
+    form {
+        width: 27em;
+        margin: 12px auto 0 auto;
+        input {
+            height: @h3size;
+            line-height: @h3size;
+        }
+        .password {
+            margin: 12px 0;
+        }
+    }
+    .buttons {
+        text-align: center;
+        margin-bottom: 6px;
+    }    
+}
+
+.opaque_screen {
+    position: absolute;
+    background-color: @darkgrey;
+    z-index: 100;
+    opacity: 0;
+}
+
 #top_nav {
-    z-index: 9999;
+    z-index: 99;
     position: fixed;
     top: 0;
     width: 100%;
@@ -123,37 +164,6 @@ a {
         a, a:hover, a:visited {
             text-decoration: underline;
             color: @white;
-        }
-    }
-    .registration_form, .login_form {
-        position: absolute;
-        left: -1000px;
-        top: -1000px;
-        opacity: 0;
-        padding: 12px;
-        border: 1px solid @grey;
-        background-color: @white;
-        .outer-shadow(0, 0, 15px, 0.75);
-        a {
-            color: @blue;
-        }
-        img {
-            vertical-align: -6px;
-        }
-        form {
-            width: 27em;
-            margin: 12px auto 0 auto;
-            input {
-                height: @h3size;
-                line-height: @h3size;
-            }
-            .password {
-                margin: 12px 0;
-            }
-        }
-        .buttons {
-            text-align: center;
-            margin-bottom: 6px;
         }
     }
 }

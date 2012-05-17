@@ -31,7 +31,7 @@ exports.requireUser = (fn) ->->
     line => db.get 'users', userCookie.id, line.wait()
     
     line (@user) =>
-        if @user.session != userCookie.session
+        if !@user or @user.session != userCookie.session
             @cookies.set('user', null)
             @go('/')
             

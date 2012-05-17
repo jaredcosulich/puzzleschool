@@ -64,8 +64,49 @@ a {
   width: 930px;
   margin: auto;
 }
+.modal {
+  position: absolute;
+  z-index: 101;
+  position: absolute;
+  left: -1000px;
+  top: -1000px;
+  opacity: 0;
+  padding: 12px;
+  border: 1px solid #a6a6a6;
+  background-color: #fafafa;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+}
+.modal a {
+  color: #24a8c3;
+}
+.modal img {
+  vertical-align: -6px;
+}
+.modal form {
+  width: 27em;
+  margin: 12px auto 0 auto;
+}
+.modal form input {
+  height: 15px;
+  line-height: 15px;
+}
+.modal form .password {
+  margin: 12px 0;
+}
+.modal .buttons {
+  text-align: center;
+  margin-bottom: 6px;
+}
+.opaque_screen {
+  position: absolute;
+  background-color: #666666;
+  z-index: 100;
+  opacity: 0;
+}
 #top_nav {
-  z-index: 9999;
+  z-index: 99;
   position: fixed;
   top: 0;
   width: 100%;
@@ -126,46 +167,6 @@ a {
 #top_nav .register_flag a:visited {
   text-decoration: underline;
   color: #fafafa;
-}
-#top_nav .registration_form,
-#top_nav .login_form {
-  position: absolute;
-  left: -1000px;
-  top: -1000px;
-  opacity: 0;
-  padding: 12px;
-  border: 1px solid #a6a6a6;
-  background-color: #fafafa;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
-}
-#top_nav .registration_form a,
-#top_nav .login_form a {
-  color: #24a8c3;
-}
-#top_nav .registration_form img,
-#top_nav .login_form img {
-  vertical-align: -6px;
-}
-#top_nav .registration_form form,
-#top_nav .login_form form {
-  width: 27em;
-  margin: 12px auto 0 auto;
-}
-#top_nav .registration_form form input,
-#top_nav .login_form form input {
-  height: 15px;
-  line-height: 15px;
-}
-#top_nav .registration_form form .password,
-#top_nav .login_form form .password {
-  margin: 12px 0;
-}
-#top_nav .registration_form .buttons,
-#top_nav .login_form .buttons {
-  text-align: center;
-  margin-bottom: 6px;
 }
 #content {
   margin-top: 45px;
