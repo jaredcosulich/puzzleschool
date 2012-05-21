@@ -90,36 +90,50 @@ soma.views({
         languages: this.languages,
         go: this.go,
         saveProgress: function(puzzleProgress) {
-          var languages, levelInfo, levelName, levelUpdates, levels, puzzleUpdates, _ref;
-          if (!_this.cookies.get('user')) {
-            return;
-          }
-          puzzleUpdates = _this.getUpdates(puzzleProgress);
-          if (!puzzleUpdates) {
-            return;
-          }
-          levelUpdates = {};
-          _ref = puzzleUpdates.levels;
-          for (languages in _ref) {
-            levels = _ref[languages];
-            for (levelName in levels) {
-              levelInfo = levels[levelName];
-              levelUpdates["" + languages + "/" + levelName] = levelInfo;
+          var answerCount, languages, levelInfo, levelName, levelUpdates, levels, puzzleUpdates, _ref, _ref1;
+          if (_this.cookies.get('user')) {
+            puzzleUpdates = _this.getUpdates(puzzleProgress);
+            if (!puzzleUpdates) {
+              return;
+            }
+            levelUpdates = {};
+            _ref = puzzleUpdates.levels;
+            for (languages in _ref) {
+              levels = _ref[languages];
+              for (levelName in levels) {
+                levelInfo = levels[levelName];
+                levelUpdates["" + languages + "/" + levelName] = levelInfo;
+              }
+            }
+            delete puzzleUpdates.levels;
+            console.log("UPDATES", JSON.stringify(puzzleUpdates), JSON.stringify(levelUpdates));
+            return $.ajaj({
+              url: "/api/puzzles/language_scramble/update",
+              method: 'POST',
+              data: {
+                puzzleUpdates: puzzleUpdates,
+                levelUpdates: levelUpdates
+              },
+              success: function() {
+                return _this.puzzleData = puzzleProgress;
+              }
+            });
+          } else if (puzzleProgress.levels) {
+            answerCount = 0;
+            _ref1 = puzzleProgress.levels;
+            for (languages in _ref1) {
+              levels = _ref1[languages];
+              for (levelName in levels) {
+                levelInfo = levels[levelName];
+                answerCount += Object.keys(levelInfo).length;
+              }
+            }
+            if (answerCount > 15) {
+              return $(window).bind('beforeunload', function() {
+                return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.';
+              });
             }
           }
-          delete puzzleUpdates.levels;
-          console.log("UPDATES", JSON.stringify(puzzleUpdates), JSON.stringify(levelUpdates));
-          return $.ajaj({
-            url: "/api/puzzles/language_scramble/update",
-            method: 'POST',
-            data: {
-              puzzleUpdates: puzzleUpdates,
-              levelUpdates: levelUpdates
-            },
-            success: function() {
-              return _this.puzzleData = puzzleProgress;
-            }
-          });
         }
       });
       this.viewHelper.setLevel(this.levelName);

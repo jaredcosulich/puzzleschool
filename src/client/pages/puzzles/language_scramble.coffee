@@ -61,26 +61,31 @@ soma.views
                 languages: @languages
                 go: @go
                 saveProgress: (puzzleProgress) => 
-                    return unless @cookies.get('user')
-
-                    puzzleUpdates = @getUpdates(puzzleProgress)
-                    return unless puzzleUpdates
+                    if @cookies.get('user')
+                        puzzleUpdates = @getUpdates(puzzleProgress)
+                        return unless puzzleUpdates
                     
-                    levelUpdates = {}
-                    for languages, levels of puzzleUpdates.levels
-                        for levelName, levelInfo of levels
-                            levelUpdates["#{languages}/#{levelName}"] = levelInfo
-                    delete puzzleUpdates.levels
+                        levelUpdates = {}
+                        for languages, levels of puzzleUpdates.levels
+                            for levelName, levelInfo of levels
+                                levelUpdates["#{languages}/#{levelName}"] = levelInfo
+                        delete puzzleUpdates.levels
                     
-                    console.log("UPDATES", JSON.stringify(puzzleUpdates), JSON.stringify(levelUpdates))
-                    $.ajaj
-                        url: "/api/puzzles/language_scramble/update"
-                        method: 'POST'
-                        data: 
-                            puzzleUpdates: puzzleUpdates
-                            levelUpdates: levelUpdates
-                        success: => @puzzleData = puzzleProgress
-                            
+                        console.log("UPDATES", JSON.stringify(puzzleUpdates), JSON.stringify(levelUpdates))
+                        $.ajaj
+                            url: "/api/puzzles/language_scramble/update"
+                            method: 'POST'
+                            data: 
+                                puzzleUpdates: puzzleUpdates
+                                levelUpdates: levelUpdates
+                            success: => @puzzleData = puzzleProgress
+                    else if puzzleProgress.levels 
+                        answerCount = 0
+                        for languages, levels of puzzleProgress.levels
+                            for levelName, levelInfo of levels
+                                answerCount += Object.keys(levelInfo).length
+                        if answerCount > 15
+                            $(window).bind 'beforeunload', => return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.'
 
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()
