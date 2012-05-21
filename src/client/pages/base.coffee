@@ -16,6 +16,7 @@ soma.chunks
             @loadScript '/build/client/pages/home.js'
             @loadScript '/build/client/pages/about.js'
             @loadScript '/build/client/pages/labs.js'
+            @loadScript '/build/client/pages/account.js'
 
             @loadStylesheet '/build/client/css/all.css'
 

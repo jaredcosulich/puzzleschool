@@ -43,6 +43,7 @@ soma.chunks({
       this.loadScript('/build/client/pages/home.js');
       this.loadScript('/build/client/pages/about.js');
       this.loadScript('/build/client/pages/labs.js');
+      this.loadScript('/build/client/pages/account.js');
       this.loadStylesheet('/build/client/css/all.css');
       this.loadScript('/assets/analytics.js');
       this.template = this.loadTemplate('/build/client/templates/base.html');
