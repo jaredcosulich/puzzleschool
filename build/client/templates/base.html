@@ -37,39 +37,46 @@
         <div class='logged_out'>
             <p>Register a new account to save and review all of your progress on your puzzles.</p>
             <form>
-                <div class="field">
-                    <label for="name">What is your name?</label>
-                    <input name="name" type="text"></input>
-                </div>
-    
-                <div class="field">
-                    <label for="email">What is your email?</label>
-                    <input name="email" type="text"></input>
-                </div>
-
-                <div class="field">
-                    <label>When were you born?</label>
-                    <select name="month"><option value="">Month</option>
-                        {:months}
-                        <option value="{value}">{label}</option>
-                        {/months}
-                    </select>
-                    <select name="day"><option value="">Day</option>
-                        {:days}
-                        <option value="{}">{}</option>
-                        {/days}
-                    </select>
-                    <select name="year"><option value="">Year</option>
-                        {:years}
-                        <option value="{}">{}</option>
-                        {/years}
-                    </select>
-                </div>
-                <div class="field password">
-                    <label for="password">Enter a password:</label>
-                    <input name="password" type="password"></input>
-                </div>
+                <table>
+                    <tr class='field'>
+                        <td><label for="name">What is your name?</label></td>
+                        <td><input name="name" type="text"></input></td>
+                    </tr>
+                    <tr class='field'>
+                        <td><label for="email">What is your email?</label></td>
+                        <td><input name="email" type="text"></input></td>
+                    </tr>
+                    <tr class='field'>
+                        <td><label for="password">Select a password:</label></td>
+                        <td><input name="password" type="password"></input></td>
+                    </tr>
+                    <tr><td colspan=2><br/></td></tr>
+                    <tr class='field'>
+                        <td><label>When were you born?</label></td>
+                        <td>
+                            <select name="month"><option value="">Month</option>
+                                {:months}
+                                <option value="{value}">{label}</option>
+                                {/months}
+                            </select>
+                            <select name="day"><option value="">Day</option>
+                                {:days}
+                                <option value="{}">{}</option>
+                                {/days}
+                            </select>
+                            <select name="year"><option value="">Year</option>
+                                {:years}
+                                <option value="{}">{}</option>
+                                {/years}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2><small>(we need to figure out what age groups can do each puzzle)</small></td>
+                    </tr>
+                </table>
             </form>
+            <br/>
             <div class='buttons'>
                 <button class='register_button'>Register</button>
                 <button class='close_modal'>Cancel</button>
@@ -89,14 +96,16 @@
         </h3>
         <div class='logged_out'>
             <form>
-                <div class="field">
-                    <label for="email">Email:</label>
-                    <input name="email" type="text"></input>
-                </div>
-                <div class="field password">
-                    <label for="password">Password:</label>
-                    <input name="password" type="password"></input>
-                </div>
+                <table>
+                    <tr class="field">
+                        <td><label for="email">Email:</label></td>
+                        <td><input name="email" type="text"></input></td>
+                    </tr>
+                    <tr class="field">
+                        <td><label for="password">Password:</label></td>
+                        <td><input name="password" type="password"></input></td>
+                    </tr>
+                </table>
             </form>
             <div class='buttons'>
                 <button class='login_button'>Log In</button>

@@ -170,6 +170,13 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.bindWindow = function() {
     var endDrag, moveDrag,
       _this = this;
+    $(window).bind('keypress', function(e) {
+      if (_this.clickAreaHasFocus || $('.opaque_screen').css('opacity') > 0) {
+        return;
+      }
+      $('#clickarea')[0].focus();
+      return $('#clickarea').trigger('keypress', e);
+    });
     moveDrag = function(e) {
       if (!_this.dragging) {
         return;
@@ -253,21 +260,14 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.bindKeyPress = function() {
-    var hasFocus,
+    var lastPress,
       _this = this;
-    hasFocus = false;
+    this.clickAreaHasFocus = false;
     $('#clickarea').bind('focus', function() {
-      return hasFocus = true;
+      return _this.clickAreaHasFocus = true;
     });
     $('#clickarea').bind('blur', function() {
-      return hasFocus = false;
-    });
-    $(window).bind('keypress', function(e) {
-      if (hasFocus || $('.opaque_screen').css('opacity') > 0) {
-        return;
-      }
-      $('#clickarea')[0].focus();
-      return $('#clickarea').trigger('keypress', e);
+      return _this.clickAreaHasFocus = false;
     });
     $('#clickarea').bind('keydown', function(e) {
       var guessedLetters, lastLetterAdded;
@@ -279,8 +279,13 @@ languageScramble.ViewHelper = (function() {
         }
       }
     });
+    lastPress = null;
     return $('#clickarea').bind('keypress', function(e) {
       var char, foreignChar, letter, openGuess;
+      if (lastPress && new Date() - lastPress < 10) {
+        return;
+      }
+      lastPress = new Date();
       openGuess = _this.$('.guesses .selected')[0] || _this.$(".guesses .guess")[0];
       if (openGuess == null) {
         return;

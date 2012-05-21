@@ -48,7 +48,6 @@ soma.routes({
   '/api/puzzles/:puzzleName/update': requireUser(function(puzzleName) {
     var levelName, levelUpdate, levelsPlayedUpdates, updates, userPuzzle, _ref,
       _this = this;
-    console.log(this.data);
     userPuzzle = "" + this.user.id + "/" + puzzleName;
     if (__indexOf.call(this.user.user_puzzles || [], userPuzzle) < 0) {
       line(function() {

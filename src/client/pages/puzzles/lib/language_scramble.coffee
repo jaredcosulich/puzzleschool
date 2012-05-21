@@ -105,6 +105,11 @@ class languageScramble.ViewHelper
         @$('.header .level').css(marginLeft: margin)        
 
     bindWindow: () ->
+        $(window).bind 'keypress', (e) =>
+            return if @clickAreaHasFocus or $('.opaque_screen').css('opacity') > 0
+            $('#clickarea')[0].focus()
+            $('#clickarea').trigger('keypress', e)
+        
         moveDrag = (e) =>
             return unless @dragging
             e.preventDefault() if e.preventDefault?
@@ -146,14 +151,9 @@ class languageScramble.ViewHelper
         
         
     bindKeyPress: () ->
-        hasFocus = false
-        $('#clickarea').bind 'focus', () -> hasFocus = true    
-        $('#clickarea').bind 'blur', () -> hasFocus = false    
-
-        $(window).bind 'keypress', (e) =>
-            return if hasFocus or $('.opaque_screen').css('opacity') > 0
-            $('#clickarea')[0].focus()
-            $('#clickarea').trigger('keypress', e)
+        @clickAreaHasFocus = false
+        $('#clickarea').bind 'focus', () => @clickAreaHasFocus = true    
+        $('#clickarea').bind 'blur', () => @clickAreaHasFocus = false    
 
         $('#clickarea').bind 'keydown', (e) =>
             if e.keyCode == 8
@@ -162,7 +162,10 @@ class languageScramble.ViewHelper
                 $(guessedLetters[guessedLetters.length - 1]).trigger('click') if guessedLetters.length
                 return
             
+        lastPress = null
         $('#clickarea').bind 'keypress', (e) =>
+            return if lastPress && new Date() - lastPress < 10
+            lastPress = new Date()
             openGuess = @$('.guesses .selected')[0] or @$(".guesses .guess")[0]
             return unless openGuess?
             
@@ -191,6 +194,7 @@ class languageScramble.ViewHelper
                 
             return unless letter?
             $(letter).trigger 'click'
+            
             
     bindLetter: (letter) ->
         @dragging = null

@@ -86,14 +86,17 @@ a {
 }
 .modal form {
   width: 27em;
-  margin: 12px auto 0 auto;
+  margin: 12px 0;
 }
-.modal form input {
+.modal form table {
+  margin: auto;
+}
+.modal form table input {
   height: 15px;
   line-height: 15px;
 }
-.modal form .password {
-  margin: 12px 0;
+.modal .field {
+  margin-bottom: 6px;
 }
 .modal .buttons {
   text-align: center;

@@ -23,7 +23,6 @@ soma.routes
         line.run => @send(puzzle: @userPuzzle)
         
     '/api/puzzles/:puzzleName/update': requireUser (puzzleName) ->
-        console.log(@data)
         userPuzzle = "#{@user.id}/#{puzzleName}"
         
         unless userPuzzle in (@user.user_puzzles or [])

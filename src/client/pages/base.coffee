@@ -41,8 +41,9 @@ soma.views
         selector: '#base'
         
         create: ->
-            unless window.bound
-                window.bound = true
+            unless window.initialized
+                window.initialized = true
+                window.postRegistration = []
                 $(window).bind 'hashchange', => @onhashchange()
             
             @checkLoggedIn()
@@ -85,13 +86,16 @@ soma.views
 
             submitForm = () =>
                 form = @$('.registration_form form')
-                $.ajax
+                $.ajaj
                     url: '/api/register'
                     method: 'POST'
                     data: @formData(form)
-                    success: () => 
+                    success: () =>
                         @hideModal(form)
-                        @checkLoggedIn()
+                        if window.postRegistration.length
+                            (postRegistrationMethod => @checkLoggedIn()) for postRegistrationMethod in window.postRegistration
+                        else
+                            @checkLoggedIn()
                 
             @$('.registration_form input').bind 'keypress', (e) => submitForm() if e.keyCode == 13
             @$('.registration_form .register_button').bind 'click', () => submitForm()

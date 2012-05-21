@@ -86,8 +86,9 @@ soma.views({
     selector: '#base',
     create: function() {
       var _this = this;
-      if (!window.bound) {
-        window.bound = true;
+      if (!window.initialized) {
+        window.initialized = true;
+        window.postRegistration = [];
         $(window).bind('hashchange', function() {
           return _this.onhashchange();
         });
@@ -150,13 +151,26 @@ soma.views({
       submitForm = function() {
         var form;
         form = _this.$('.registration_form form');
-        return $.ajax({
+        return $.ajaj({
           url: '/api/register',
           method: 'POST',
           data: _this.formData(form),
           success: function() {
+            var postRegistrationMethod, _i, _len, _ref, _results;
             _this.hideModal(form);
-            return _this.checkLoggedIn();
+            if (window.postRegistration.length) {
+              _ref = window.postRegistration;
+              _results = [];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                postRegistrationMethod = _ref[_i];
+                _results.push(postRegistrationMethod(function() {
+                  return _this.checkLoggedIn();
+                }));
+              }
+              return _results;
+            } else {
+              return _this.checkLoggedIn();
+            }
           }
         });
       };
