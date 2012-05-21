@@ -86,12 +86,15 @@ soma.views({
     selector: '#base',
     create: function() {
       var _this = this;
+      if (!window.bound) {
+        window.bound = true;
+        $(window).bind('hashchange', function() {
+          return _this.onhashchange();
+        });
+      }
       this.checkLoggedIn();
       this.$('.log_out').bind('click', function() {
         return _this.logOut();
-      });
-      $(window).one('hashchange', function() {
-        return _this.onhashchange();
       });
       this.registerHashChange('register', function() {
         return _this.showRegistration();

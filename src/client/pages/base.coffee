@@ -41,11 +41,13 @@ soma.views
         selector: '#base'
         
         create: ->
+            unless window.bound
+                window.bound = true
+                $(window).bind 'hashchange', => @onhashchange()
+            
             @checkLoggedIn()
             @$('.log_out').bind 'click', => @logOut()
 
-            $(window).one 'hashchange', => @onhashchange()
-            
             @registerHashChange 'register', => @showRegistration()
             @$('.register').bind 'click', => location.hash = 'register'
 
