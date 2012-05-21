@@ -124,7 +124,7 @@ soma.views({
             levelUpdates: levelUpdates
           },
           success: function() {
-            _this.puzzleData = puzzleProgress;
+            _this.puzzleData = JSON.parse(JSON.stringify(puzzleProgress));
             if (callback) {
               return callback();
             }

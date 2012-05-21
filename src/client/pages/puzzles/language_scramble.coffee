@@ -84,7 +84,7 @@ soma.views
                         puzzleUpdates: puzzleUpdates
                         levelUpdates: levelUpdates
                     success: => 
-                        @puzzleData = puzzleProgress
+                        @puzzleData = JSON.parse(JSON.stringify(puzzleProgress))
                         callback() if callback
             
             else if puzzleProgress.levels 
