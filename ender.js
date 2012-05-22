@@ -4655,17 +4655,22 @@
         });
       });
       return $('a:local-link(0)[data-precache = "true"]').each(function() {
-        var path;
-        path = this.pathname;
-        context = soma.load(path, true);
-        return $(this).bind('click', function(event) {
-          history.pushState({}, '', path);
-          context.render();
-          event.stop();
-        });
+        $(this).bind('click', soma.precache(this.pathname));
       });
     }
   });
+  
+  soma.precache = function(path) {
+    var context;
+    context = soma.load(path, true);
+    return function(event) {
+      history.pushState({}, '', path);
+      context.render();
+      if (event) {
+        event.stop();
+      }
+    };
+  };
   
   soma.load = function(path, lazy) {
     var context;
