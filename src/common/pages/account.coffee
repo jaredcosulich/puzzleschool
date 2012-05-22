@@ -2,20 +2,20 @@ soma = require('soma')
 wings = require('wings')
 
 soma.chunks
-    Labs:
+    Account:
         meta: -> new soma.chunks.Base({ content: @ })
 
         prepare: () ->
-            @template = @loadTemplate '/build/client/templates/labs.html'
+            @template = @loadTemplate '/build/common/templates/account.html'
 
         build: () ->
-            @setTitle("Labs - The Puzzle School")
+            @setTitle("Your Account - The Puzzle School")
             @html = wings.renderTemplate(@template)
         
 soma.views
     Labs:
-        selector: '#content .labs'
+        selector: '#content .account'
         create: ->
             
 soma.routes
-    '/labs': -> new soma.chunks.Labs
+    '/account': -> new soma.chunks.Account

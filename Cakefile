@@ -30,13 +30,15 @@ task 'build:site', 'Build the site files', ->
         'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
 
         'coffee --compile --bare --output build/client/pages src/client/pages/*.coffee'
-        'coffee --compile --bare --output build/client/pages/puzzles src/client/pages/puzzles/*.coffee'
-        'coffee --compile --bare --output build/client/pages/puzzles/lib src/client/pages/puzzles/lib/*.coffee'
-        'cp -r src/client/templates build/client'
+
+        'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/*.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/*.coffee'
+        'cp -r src/common/templates build/common'
     ]
     
 task 'build:ender', 'Build the ender modules', ->
     execCmds [
-        'ender build sel ../soma wings morpheus timeout'
+        'ender build sel soma wings morpheus timeout'
     ]
 

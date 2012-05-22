@@ -6,31 +6,26 @@ soma = require('soma');
 wings = require('wings');
 
 soma.chunks({
-  About: {
+  Home: {
     meta: function() {
       return new soma.chunks.Base({
         content: this
       });
     },
     prepare: function() {
-      return this.template = this.loadTemplate('/build/client/templates/about.html');
+      return this.template = this.loadTemplate('/build/common/templates/home.html');
     },
     build: function() {
-      this.setTitle("About - The Puzzle School");
       return this.html = wings.renderTemplate(this.template);
     }
   }
 });
 
-soma.views({
-  About: {
-    selector: '#content .about',
-    create: function() {}
-  }
-});
-
 soma.routes({
-  '/about': function() {
-    return new soma.chunks.About;
+  '': function() {
+    return new soma.chunks.Home;
+  },
+  '/': function() {
+    return new soma.chunks.Home;
   }
 });

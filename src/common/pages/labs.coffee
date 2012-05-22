@@ -2,20 +2,20 @@ soma = require('soma')
 wings = require('wings')
 
 soma.chunks
-    About:
+    Labs:
         meta: -> new soma.chunks.Base({ content: @ })
 
         prepare: () ->
-            @template = @loadTemplate '/build/client/templates/about.html'
+            @template = @loadTemplate '/build/common/templates/labs.html'
 
         build: () ->
-            @setTitle("About - The Puzzle School")
+            @setTitle("Labs - The Puzzle School")
             @html = wings.renderTemplate(@template)
         
 soma.views
-    About:
-        selector: '#content .about'
+    Labs:
+        selector: '#content .labs'
         create: ->
             
 soma.routes
-    '/about': -> new soma.chunks.About
+    '/labs': -> new soma.chunks.Labs

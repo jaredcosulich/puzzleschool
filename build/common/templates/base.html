@@ -78,7 +78,12 @@
             </form>
             <br/>
             <div class='buttons'>
-                <button class='register_button'>Register</button>
+                <button 
+                    class='register_button submit_feedback' 
+                    data-submitting_text='Saving Registration...' 
+                    data-failed_submission_text='An error occurred. Please check your registration information and try again in a moment. If this problem persists please contact support@puzzleschool.com'>
+                    Register
+                </button>
                 <button class='close_modal'>Cancel</button>
             </div>
         </div>
@@ -108,7 +113,12 @@
                 </table>
             </form>
             <div class='buttons'>
-                <button class='login_button'>Log In</button>
+                <button 
+                    class='login_button submit_feedback' 
+                    data-submitting_text='Logging In...' 
+                    data-failed_submission_text='An error occurred. Please check your email and password. If this problem persists please contact support@puzzleschool.com'>
+                    Log In
+                </button>
                 <button class='close_modal'>Cancel</button>
             </div>
         </div>

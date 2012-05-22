@@ -15,9 +15,9 @@ soma.chunks({
     prepare: function(_arg) {
       var _this = this;
       this.languages = _arg.languages, this.levelName = _arg.levelName;
-      this.template = this.loadTemplate('/build/client/templates/puzzles/language_scramble.html');
-      this.loadScript('/build/client/pages/puzzles/language_scramble.js');
-      this.loadScript('/build/client/pages/puzzles/lib/language_scramble.js');
+      this.template = this.loadTemplate('/build/common/templates/puzzles/language_scramble.html');
+      this.loadScript('/build/common/pages/puzzles/language_scramble.js');
+      this.loadScript('/build/common/pages/puzzles/lib/language_scramble.js');
       this.loadStylesheet('/build/client/css/puzzles/language_scramble.css');
       this.puzzleData = {
         levels: {}

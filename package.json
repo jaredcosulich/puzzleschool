@@ -22,9 +22,9 @@
     
     "soma": {
         "port": 5000,
-        "shared": ["build/client/pages/base.js", "build/client/pages", "build/client/templates"],
+        "shared": ["build/common/pages/base.js", "build/common/pages", "build/common/templates"],
         "server": ["build/server"],
-        "client": ["build/client/css", "assets"],
+        "client": ["build/client/pages", "build/client/css", "assets"],
         "init": ["ender.js"]
     }
 }

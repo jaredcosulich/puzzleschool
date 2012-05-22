@@ -12,17 +12,18 @@ soma.chunks
         prepare: ({@content}) ->
             @loadElement 'link', {href: '/assets/images/favicon.ico', rel: 'shortcut icon', type: 'image/x-icon'}
             
-            @loadScript '/build/client/pages/base.js'
-            @loadScript '/build/client/pages/home.js'
-            @loadScript '/build/client/pages/about.js'
-            @loadScript '/build/client/pages/labs.js'
-            @loadScript '/build/client/pages/account.js'
+            @loadScript '/build/common/pages/base.js'
+            @loadScript '/build/common/pages/home.js'
+            @loadScript '/build/common/pages/about.js'
+            @loadScript '/build/common/pages/labs.js'
+            @loadScript '/build/common/pages/account.js'
 
             @loadStylesheet '/build/client/css/all.css'
 
+            @loadScript '/build/client/pages/form.js'
             @loadScript '/assets/analytics.js'
                         
-            @template = @loadTemplate '/build/client/templates/base.html'
+            @template = @loadTemplate '/build/common/templates/base.html'
             @loadChunk @content
 
 
@@ -62,25 +63,6 @@ soma.views
 
         onhashchange: () -> callback() if (callback = @hashChanges[location.hash.replace(/#/, '')])
                   
-        formData: (form) ->
-            data = {}
-            fields = $('input, select', form)
-            for field in fields
-                if field.type not in ['radio', 'checkbox'] or field.checked
-                    val = $(field).val()
-
-                    if field.name.slice(-2) == '[]'
-                        name = field.name.slice(0, -2)
-                        if name not of data
-                            data[name] = []
-
-                        data[name].push(val)
-
-                    else
-                        data[field.name] = val
-            return data
-                  
-                            
         showRegistration: () ->
             @showModal('.registration_form')
             @$('.registration_form .cancel_button').bind 'click', () => @hideModal('.registration_form')
@@ -90,7 +72,7 @@ soma.views
                 $.ajaj
                     url: '/api/register'
                     method: 'POST'
-                    data: @formData(form)
+                    data: form.data('form').dataHash()
                     success: () =>
                         @hideModal(form)
                         if window.postRegistration.length
@@ -104,19 +86,20 @@ soma.views
         showLogIn: () ->  
             @showModal('.login_form')
             @$('.login_form .cancel_button').bind 'click', () => @hideModal('.login_form')
-            
-            submitForm = () =>
+            loginButton = @$('.login_form .login_button')
+            loginButton.bind 'click', () =>
                 form = @$('.login_form form')
                 $.ajaj
                     url: '/api/login'
                     method: 'POST'
-                    data: @formData(form)
+                    data: form.data('form').dataHash()
                     success: () => 
                         @hideModal(form)
                         @checkLoggedIn()
-                
-            @$('.login_form input').bind 'keypress', (e) => submitForm() if e.keyCode == 13
-            @$('.login_form .login_button').bind 'click', () => submitForm()
+                    error: () => 
+                        @$('.login_form .login_button').data('form-button').error()
+
+            @$('.login_form input').bind 'keypress', (e) => loginButton.trigger('click') if e.keyCode == 13
                 
             
         logOut: () ->

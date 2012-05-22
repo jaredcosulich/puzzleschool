@@ -6,17 +6,17 @@ soma = require('soma');
 wings = require('wings');
 
 soma.chunks({
-  Labs: {
+  Account: {
     meta: function() {
       return new soma.chunks.Base({
         content: this
       });
     },
     prepare: function() {
-      return this.template = this.loadTemplate('/build/client/templates/labs.html');
+      return this.template = this.loadTemplate('/build/common/templates/account.html');
     },
     build: function() {
-      this.setTitle("Labs - The Puzzle School");
+      this.setTitle("Your Account - The Puzzle School");
       return this.html = wings.renderTemplate(this.template);
     }
   }
@@ -24,13 +24,13 @@ soma.chunks({
 
 soma.views({
   Labs: {
-    selector: '#content .labs',
+    selector: '#content .account',
     create: function() {}
   }
 });
 
 soma.routes({
-  '/labs': function() {
-    return new soma.chunks.Labs;
+  '/account': function() {
+    return new soma.chunks.Account;
   }
 });

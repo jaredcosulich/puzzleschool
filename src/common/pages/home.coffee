@@ -6,7 +6,7 @@ soma.chunks
         meta: -> new soma.chunks.Base({ content: @ })
 
         prepare: () ->
-            @template = @loadTemplate '/build/client/templates/home.html'
+            @template = @loadTemplate '/build/common/templates/home.html'
 
         build: () ->
             @html = wings.renderTemplate(@template)

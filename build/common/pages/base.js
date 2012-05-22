@@ -39,14 +39,15 @@ soma.chunks({
         rel: 'shortcut icon',
         type: 'image/x-icon'
       });
-      this.loadScript('/build/client/pages/base.js');
-      this.loadScript('/build/client/pages/home.js');
-      this.loadScript('/build/client/pages/about.js');
-      this.loadScript('/build/client/pages/labs.js');
-      this.loadScript('/build/client/pages/account.js');
+      this.loadScript('/build/common/pages/base.js');
+      this.loadScript('/build/common/pages/home.js');
+      this.loadScript('/build/common/pages/about.js');
+      this.loadScript('/build/common/pages/labs.js');
+      this.loadScript('/build/common/pages/account.js');
       this.loadStylesheet('/build/client/css/all.css');
+      this.loadScript('/build/client/pages/form.js');
       this.loadScript('/assets/analytics.js');
-      this.template = this.loadTemplate('/build/client/templates/base.html');
+      this.template = this.loadTemplate('/build/common/templates/base.html');
       return this.loadChunk(this.content);
     },
     build: function() {
@@ -121,27 +122,6 @@ soma.views({
         return callback();
       }
     },
-    formData: function(form) {
-      var data, field, fields, name, val, _i, _len, _ref;
-      data = {};
-      fields = $('input, select', form);
-      for (_i = 0, _len = fields.length; _i < _len; _i++) {
-        field = fields[_i];
-        if (((_ref = field.type) !== 'radio' && _ref !== 'checkbox') || field.checked) {
-          val = $(field).val();
-          if (field.name.slice(-2) === '[]') {
-            name = field.name.slice(0, -2);
-            if (!(name in data)) {
-              data[name] = [];
-            }
-            data[name].push(val);
-          } else {
-            data[field.name] = val;
-          }
-        }
-      }
-      return data;
-    },
     showRegistration: function() {
       var submitForm,
         _this = this;
@@ -155,7 +135,7 @@ soma.views({
         return $.ajaj({
           url: '/api/register',
           method: 'POST',
-          data: _this.formData(form),
+          data: form.data('form').dataHash(),
           success: function() {
             var postRegistrationMethod, _i, _len, _ref, _results;
             _this.hideModal(form);
@@ -185,32 +165,33 @@ soma.views({
       });
     },
     showLogIn: function() {
-      var submitForm,
+      var loginButton,
         _this = this;
       this.showModal('.login_form');
       this.$('.login_form .cancel_button').bind('click', function() {
         return _this.hideModal('.login_form');
       });
-      submitForm = function() {
+      loginButton = this.$('.login_form .login_button');
+      loginButton.bind('click', function() {
         var form;
         form = _this.$('.login_form form');
         return $.ajaj({
           url: '/api/login',
           method: 'POST',
-          data: _this.formData(form),
+          data: form.data('form').dataHash(),
           success: function() {
             _this.hideModal(form);
             return _this.checkLoggedIn();
+          },
+          error: function() {
+            return _this.$('.login_form .login_button').data('form-button').error();
           }
         });
-      };
-      this.$('.login_form input').bind('keypress', function(e) {
-        if (e.keyCode === 13) {
-          return submitForm();
-        }
       });
-      return this.$('.login_form .login_button').bind('click', function() {
-        return submitForm();
+      return this.$('.login_form input').bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+          return loginButton.trigger('click');
+        }
       });
     },
     logOut: function() {
