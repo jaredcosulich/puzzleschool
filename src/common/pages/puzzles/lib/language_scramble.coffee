@@ -668,15 +668,15 @@ languageScramble.data =
                 nextLevel: 'top10phrases'
                 data: [
                     {native: 'not', foreign: 'non', nativeSentence: 'that\'s not necessary', foreignSentence: 'non è necessario'},
-                    {native: 'of', foreign: 'di', nativeSentence: 'memories of a cat', foreignSentence: 'memorie di un gatto'},
+                    {native: 'of', foreign: 'di', nativeSentence: 'here is a list of options', foreignSentence: 'ecco un elenco di opzioni'},
                     {native: 'what', foreign: 'che', nativeSentence: 'what luck', foreignSentence: 'che fortuna'},
-                    {native: 'is', foreign: 'è', nativeSentence: 'that bird is fat', foreignSentence: 'quell\'uccello è grasso'},
+                    {native: 'is', foreign: 'è', nativeSentence: 'what day is it?', foreignSentence: 'che giorno è?'},
                     {native: 'and', foreign: 'e', nativeSentence: 'big and tall', foreignSentence: 'grande e grosso'},
                     {native: 'the', foreign: 'la', nativeSentence: 'drop the ball now', foreignSentence: 'cadere la palla ora'},
-                    {native: 'the', foreign: 'il', nativeSentence: 'there are drinks for the party', foreignSentence: 'ci sono bevande per il partito'},
+                    {native: 'the', foreign: 'il', nativeSentence: 'here are some drinks for the party', foreignSentence: 'qui ci sono alcune bevande per la festa'},
                     {native: 'a', foreign: 'un', nativeSentence: 'a little more', foreignSentence: 'un po più'},
                     {native: 'for', foreign: 'per', nativeSentence: 'where is the food for dinner?', foreignSentence: 'dove è il cibo per la cena?'},
-                    {native: 'are', foreign: 'sono', nativeSentence: 'there are five quotes', foreignSentence: 'ci sono cinque citazioni'},
+                    {native: 'are', foreign: 'sono', nativeSentence: 'there are five houses on this road', foreignSentence: 'ci sono cinque case su questa strada'},
                 ]
             top10phrases: 
                 title: 'Phrases For The Top 10 Words'
@@ -684,15 +684,15 @@ languageScramble.data =
                 nextLevel: 'top25words'
                 data: [
                     {native: 'that\'s not necessary', foreign: 'non è necessario'},
-                    {native: 'memories of a cat', foreign: 'memorie di un gatto'},
+                    {native: 'here is a list of options', foreign: 'ecco un elenco di opzioni'},
                     {native: 'what luck', foreign: 'che fortuna'},
-                    {native: 'that bird is fat', foreign: 'quell\'uccello è grasso'},
+                    {native: 'what day is it?', foreign: 'che giorno è?'},
                     {native: 'big and tall', foreign: 'grande e grosso'},
                     {native: 'drop the ball now', foreign: 'cadere la palla ora'},
-                    {native: 'there are drinks for the party', foreign: 'ci sono bevande per il partito'},
+                    {native: 'here are some drinks for the party', foreign: 'qui ci sono alcune bevande per la festa'},
                     {native: 'a little more', foreign: 'un po più'},
                     {native: 'where is the food for dinner?', foreign: 'dove è il cibo per la cena?'},
-                    {native: 'there are five quotes', foreign: 'ci sono cinque citazioni'},
+                    {native: 'there are five houses on this road', foreign: 'ci sono cinque case su questa strada'},
                 ]
             top25words:
                 title: 'Top 10 - 25 Words'
