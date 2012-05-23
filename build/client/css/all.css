@@ -127,7 +127,6 @@ a {
   color: #e46027;
 }
 #top_nav .logo {
-  margin-top: 3px;
   font-weight: bold;
   float: left;
 }
@@ -146,7 +145,7 @@ a {
   float: right;
 }
 #top_nav .account a {
-  padding-left: 12px;
+  padding: 0 6px;
 }
 #top_nav .register_flag {
   background-color: #e46027;
@@ -179,6 +178,18 @@ a {
   padding-top: 3px;
   width: 930px;
   margin: 60px auto;
+}
+/* iPhone [portrait + landscape] */
+@media only screen and (max-device-width: 480px) {
+  #top_nav .logo span {
+    display: none;
+  }
+  #top_nav .nav_links {
+    width: auto;
+    margin: 0;
+    padding: 0 0 6px 0;
+    float: left;
+  }
 }
 .page .logo {
   text-align: center;
