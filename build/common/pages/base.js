@@ -58,6 +58,17 @@ soma.chunks({
       });
       this.loadElement("link", {
         rel: 'apple-touch-startup-image',
+        sizes: '1024x748',
+        href: '/assets/images/startup1024x748.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-startup-image',
+        sizes: '768x1004',
+        href: '/assets/images/startup768x1004.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-startup-image',
+        sizes: '320x460',
         href: '/assets/images/startup320x460.png'
       });
       this.loadScript('/build/common/pages/base.js');
