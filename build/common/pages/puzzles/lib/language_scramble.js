@@ -1069,8 +1069,8 @@ languageScramble.data = {
           }, {
             "native": 'the',
             foreign: 'il',
-            nativeSentence: 'here are some drinks for the party',
-            foreignSentence: 'qui ci sono alcune bevande per la festa'
+            nativeSentence: 'how much does the book cost?',
+            foreignSentence: 'quanto costa il libro?'
           }, {
             "native": 'a',
             foreign: 'un',
@@ -1113,8 +1113,8 @@ languageScramble.data = {
             "native": 'drop the ball now',
             foreign: 'cadere la palla ora'
           }, {
-            "native": 'here are some drinks for the party',
-            foreign: 'qui ci sono alcune bevande per la festa'
+            "native": 'how much does the book cost?',
+            foreign: 'quanto costa il libro?'
           }, {
             "native": 'a little more',
             foreign: 'un po più'
