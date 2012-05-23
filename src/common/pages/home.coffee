@@ -9,6 +9,7 @@ soma.chunks
             @template = @loadTemplate '/build/common/templates/home.html'
 
         build: () ->
+            @setTitle('The Puzzle School')
             @html = wings.renderTemplate(@template)
         
 

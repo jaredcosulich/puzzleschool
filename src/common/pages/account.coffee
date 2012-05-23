@@ -5,7 +5,7 @@ soma.chunks
     Account:
         meta: -> new soma.chunks.Base({ content: @ })
 
-        prepare: () ->
+        prepare: () ->            
             @template = @loadTemplate '/build/common/templates/account.html'
 
         build: () ->

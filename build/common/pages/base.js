@@ -34,10 +34,31 @@ soma.chunks({
     shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     prepare: function(_arg) {
       this.content = _arg.content;
+      this.setMeta('apple-mobile-web-app-capable', 'yes');
+      this.setMeta('apple-mobile-web-app-status-bar-style', 'black');
       this.loadElement('link', {
         href: '/assets/images/favicon.ico',
         rel: 'shortcut icon',
         type: 'image/x-icon'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-icon',
+        sizes: '57x57',
+        href: '/assets/images/touch-icon-iphone.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-icon',
+        sizes: '72x72',
+        href: '/assets/images/touch-icon-ipad.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-icon',
+        sizes: '114x114',
+        href: '/assets/images/touch-icon-iphone4.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-startup-image',
+        href: '/assets/images/startup320x460.png'
       });
       this.loadScript('/build/common/pages/base.js');
       this.loadScript('/build/common/pages/home.js');
@@ -52,7 +73,6 @@ soma.chunks({
     },
     build: function() {
       var data, i, _i, _j, _ref, _results, _results1;
-      this.setTitle('The Puzzle School');
       data = {
         loggedIn: this.cookies.get('user') != null,
         content: this.content,

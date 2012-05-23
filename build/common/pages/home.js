@@ -16,6 +16,7 @@ soma.chunks({
       return this.template = this.loadTemplate('/build/common/templates/home.html');
     },
     build: function() {
+      this.setTitle('The Puzzle School');
       return this.html = wings.renderTemplate(this.template);
     }
   }

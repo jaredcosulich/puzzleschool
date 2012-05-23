@@ -10,7 +10,14 @@ soma.chunks
         shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
         prepare: ({@content}) ->
+            @setMeta('apple-mobile-web-app-capable', 'yes')
+            @setMeta('apple-mobile-web-app-status-bar-style', 'black')
+
             @loadElement 'link', {href: '/assets/images/favicon.ico', rel: 'shortcut icon', type: 'image/x-icon'}
+            @loadElement("link", {rel: 'apple-touch-icon', sizes: '57x57', href: '/assets/images/touch-icon-iphone.png'})
+            @loadElement("link", {rel: 'apple-touch-icon', sizes: '72x72', href: '/assets/images/touch-icon-ipad.png'})
+            @loadElement("link", {rel: 'apple-touch-icon', sizes: '114x114', href: '/assets/images/touch-icon-iphone4.png'})
+            @loadElement("link", {rel: 'apple-touch-startup-image', href: '/assets/images/startup320x460.png'})
             
             @loadScript '/build/common/pages/base.js'
             @loadScript '/build/common/pages/home.js'
@@ -28,7 +35,6 @@ soma.chunks
 
 
         build: () ->
-            @setTitle('The Puzzle School')
             data = 
                 loggedIn: @cookies.get('user')?
                 content: @content

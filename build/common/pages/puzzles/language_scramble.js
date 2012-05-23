@@ -49,6 +49,7 @@ soma.chunks({
     },
     build: function() {
       var languageScramble;
+      this.setTitle("Language Scramble - The Puzzle School");
       languageScramble = require('./lib/language_scramble');
       if (!(this.languages && this.languages.length)) {
         this.languages = this.puzzleData.lastLanguages || 'english_italian';

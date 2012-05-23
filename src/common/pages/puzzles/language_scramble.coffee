@@ -27,6 +27,8 @@ soma.chunks
             
 
         build: ->
+            @setTitle("Language Scramble - The Puzzle School")
+
             languageScramble = require('./lib/language_scramble')
             
             @languages = (@puzzleData.lastLanguages or 'english_italian') unless @languages && @languages.length
