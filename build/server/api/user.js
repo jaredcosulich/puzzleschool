@@ -62,6 +62,7 @@ soma.routes({
     this.data.year = parseInt(this.data.year);
     this.data.month = parseInt(this.data.month);
     this.data.day = parseInt(this.data.day);
+    this.data.email = this.data.email.toLowerCase();
     line(function() {
       return db.get('login', _this.data.email, line.wait(function(login) {
         if (login != null) {

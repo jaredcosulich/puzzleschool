@@ -24,7 +24,7 @@ exports.checkPassword = function(fn) {
       return this.sendError();
     }
     line(function() {
-      return db.get('login', _this.data.email, line.wait());
+      return db.get('login', _this.data.email.toLowerCase(), line.wait());
     });
     line(function(login) {
       _this.login = login;

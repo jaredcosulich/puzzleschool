@@ -45,6 +45,7 @@ soma.routes
         @data.year = parseInt(@data.year)
         @data.month = parseInt(@data.month)
         @data.day = parseInt(@data.day)
+        @data.email = @data.email.toLowerCase()
 
         line =>
             db.get 'login', @data.email, line.wait (login) =>

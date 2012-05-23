@@ -11,7 +11,7 @@ exports.checkPassword = (fn) ->->
     return @sendError() unless @data.email and /.+@.+\..+/.test(@data.email)
     return @sendError() unless @data.password and /\S{3,}/.test(@data.password)
 
-    line => db.get 'login', @data.email, line.wait()
+    line => db.get 'login', @data.email.toLowerCase(), line.wait()
     line (@login) => 
         return line.fail('Login failed, email not on record.') if not @login
         bcrypt.compare @data.password, @login.password, line.wait()
