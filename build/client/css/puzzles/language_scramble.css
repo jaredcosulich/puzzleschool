@@ -160,7 +160,15 @@ body {
 .language_scramble .guesses .color3 .selected,
 .language_scramble .scrambled .color3 .selected,
 .language_scramble .guesses .color4 .selected,
-.language_scramble .scrambled .color4 .selected {
+.language_scramble .scrambled .color4 .selected,
+.language_scramble .guesses .color5 .selected,
+.language_scramble .scrambled .color5 .selected,
+.language_scramble .guesses .color6 .selected,
+.language_scramble .scrambled .color6 .selected,
+.language_scramble .guesses .color7 .selected,
+.language_scramble .scrambled .color7 .selected,
+.language_scramble .guesses .color8 .selected,
+.language_scramble .scrambled .color8 .selected {
   background-color: #fafafa;
 }
 .language_scramble .guesses .letter,
@@ -233,13 +241,21 @@ body {
 .language_scramble .guesses .color1 .correct_letter,
 .language_scramble .guesses .color2 .correct_letter,
 .language_scramble .guesses .color3 .correct_letter,
-.language_scramble .guesses .color4 .correct_letter {
+.language_scramble .guesses .color4 .correct_letter,
+.language_scramble .guesses .color5 .correct_letter,
+.language_scramble .guesses .color6 .correct_letter,
+.language_scramble .guesses .color7 .correct_letter,
+.language_scramble .guesses .color8 .correct_letter {
   background-color: rgba(36, 219, 75, 0.5);
 }
 .language_scramble .guesses .color1 .wrong_letter,
 .language_scramble .guesses .color2 .wrong_letter,
 .language_scramble .guesses .color3 .wrong_letter,
-.language_scramble .guesses .color4 .wrong_letter {
+.language_scramble .guesses .color4 .wrong_letter,
+.language_scramble .guesses .color5 .wrong_letter,
+.language_scramble .guesses .color6 .wrong_letter,
+.language_scramble .guesses .color7 .wrong_letter,
+.language_scramble .guesses .color8 .wrong_letter {
   background-color: rgba(255, 113, 97, 0.5);
 }
 .language_scramble .guesses.hidden .letter {
