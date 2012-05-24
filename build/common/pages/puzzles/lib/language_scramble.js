@@ -537,7 +537,7 @@ languageScramble.ViewHelper = (function() {
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       if (index % 2 === 1) {
-        combineGroups = (group.length < 7 || wordGroups[index - 1].length < 7) && (group.length + wordGroups[index - 1].length < 18);
+        combineGroups = (group.length < 7 || wordGroups[index - 1].length < 7) && (group.length + wordGroups[index - 1].length < 17);
       }
       if (!(index % 2 === 1 && combineGroups)) {
         wordGroup = this.createWordGroup(index);
@@ -569,7 +569,7 @@ languageScramble.ViewHelper = (function() {
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       if (index % 2 === 1) {
-        combineGroups = (group.length < 7 || wordGroups[index - 1].length < 7) && (group.length + wordGroups[index - 1].length < 18);
+        combineGroups = (group.length < 7 || wordGroups[index - 1].length < 7) && (group.length + wordGroups[index - 1].length < 17);
         if (!combineGroups) {
           wordGroup.append(this.createSpace(' '));
         }
