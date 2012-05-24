@@ -16,7 +16,6 @@ soma.chunks({
       var _this = this;
       this.languages = _arg.languages, this.levelName = _arg.levelName;
       this.template = this.loadTemplate('/build/common/templates/puzzles/language_scramble.html');
-      this.loadScript('/build/common/pages/puzzles/language_scramble.js');
       this.loadScript('/build/common/pages/puzzles/lib/language_scramble.js');
       this.loadStylesheet('/build/client/css/puzzles/language_scramble.css');
       this.puzzleData = {
@@ -144,7 +143,7 @@ soma.views({
             answerCount += Object.keys(levelInfo).length;
           }
         }
-        if (answerCount > 15) {
+        if (answerCount > 10) {
           return $(window).bind('beforeunload', function() {
             return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.';
           });

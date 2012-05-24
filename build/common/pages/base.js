@@ -76,6 +76,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/about.js');
       this.loadScript('/build/common/pages/labs.js');
       this.loadScript('/build/common/pages/account.js');
+      this.loadScript('/build/common/pages/puzzles/language_scramble.js');
       this.loadStylesheet('/build/client/css/all.css');
       this.loadScript('/build/client/pages/form.js');
       this.loadScript('/assets/analytics.js');

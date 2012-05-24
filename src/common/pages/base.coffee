@@ -27,6 +27,8 @@ soma.chunks
             @loadScript '/build/common/pages/labs.js'
             @loadScript '/build/common/pages/account.js'
 
+            @loadScript '/build/common/pages/puzzles/language_scramble.js'
+
             @loadStylesheet '/build/client/css/all.css'
 
             @loadScript '/build/client/pages/form.js'

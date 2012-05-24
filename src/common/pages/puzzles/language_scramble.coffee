@@ -7,7 +7,6 @@ soma.chunks
 
         prepare: ({@languages, @levelName}) ->
             @template = @loadTemplate '/build/common/templates/puzzles/language_scramble.html'
-            @loadScript '/build/common/pages/puzzles/language_scramble.js'
             @loadScript '/build/common/pages/puzzles/lib/language_scramble.js'
             @loadStylesheet '/build/client/css/puzzles/language_scramble.css'
             
