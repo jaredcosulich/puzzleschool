@@ -24,7 +24,7 @@ body {
             float: left;
             height: 45px;
             line-height: 45px;
-            color: @red;
+            color: @darkred;
         }
         .progress_meter {
             margin: 12px 24px 0 0;
@@ -38,7 +38,7 @@ body {
                 .progress_section {
                     width: 9px;
                     border-right: 1px solid #ccc;
-                    background-color: @green;
+                    background-color: @darkgreen;
                     height: 15px;
                     float: left;
                 }
@@ -106,6 +106,22 @@ body {
             .bg-alpha(@orange, 0.3) 
         }
         .color4 .guess {
+            border: 1px dashed @darkblue;
+            .bg-alpha(@black, 0.3)    
+        }
+        .color5 .guess {
+            border: 1px dashed @darkred;
+            .bg-alpha(@black, 0.3)    
+        }
+        .color6 .guess {
+            border: 1px dashed @darkorange;
+            .bg-alpha(@black, 0.3)    
+        }
+        .color7 .guess {
+            border: 1px dashed @darkyellow;
+            .bg-alpha(@black, 0.3)    
+        }
+        .color8 .guess {
             border: 1px dashed @black;
             .bg-alpha(@black, 0.3)    
         }
@@ -127,6 +143,18 @@ body {
             background-color: @orange;
         }
         .color4 .letter {
+            background-color: @darkblue;    
+        }
+        .color5 .letter {
+            background-color: @darkred;    
+        }
+        .color6 .letter {
+            background-color: @darkorange;    
+        }
+        .color7 .letter {
+            background-color: @darkyellow;    
+        }
+        .color8 .letter {
             background-color: @black;    
         }
         .correct {

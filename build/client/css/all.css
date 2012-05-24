@@ -38,7 +38,7 @@ a {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  color: #24a8c3;
+  color: #24aac3;
 }
 .logged_in .logged_out,
 .logged_out .logged_in {
@@ -79,7 +79,7 @@ a {
   -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
 }
 .modal a {
-  color: #24a8c3;
+  color: #24aac3;
 }
 .modal img {
   vertical-align: -6px;
@@ -124,7 +124,7 @@ a {
   color: white;
 }
 #top_nav a:hover {
-  color: #e46027;
+  color: #ff6e5f;
 }
 #top_nav .logo {
   font-weight: bold;
@@ -148,7 +148,7 @@ a {
   padding: 0 6px;
 }
 #top_nav .register_flag {
-  background-color: #e46027;
+  background-color: #a61c0e;
   float: right;
   padding: 3px 6px;
   margin-right: 24px;

@@ -1,5 +1,5 @@
 body {
-  background-color: #24a8c3;
+  background-color: #24aac3;
 }
 .language_scramble {
   margin-bottom: 60px;
@@ -31,7 +31,7 @@ body {
   float: left;
   height: 45px;
   line-height: 45px;
-  color: #e46027;
+  color: #a61c0e;
 }
 .language_scramble .header .progress_meter {
   margin: 12px 24px 0 0;
@@ -47,7 +47,7 @@ body {
 .language_scramble .header .progress_meter .bar .progress_section {
   width: 9px;
   border-right: 1px solid #ccc;
-  background-color: #88cc66;
+  background-color: #0c8d28;
   height: 15px;
   float: left;
 }
@@ -65,7 +65,7 @@ body {
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
-  background-color: rgba(136, 204, 102, 0.5);
+  background-color: rgba(36, 219, 75, 0.5);
   padding: 0 3px;
 }
 .language_scramble .section {
@@ -111,21 +111,41 @@ body {
 }
 .language_scramble .guesses .color1 .guess,
 .language_scramble .scrambled .color1 .guess {
-  border: 1px dashed #24a8c3;
-  background-color: rgba(36, 168, 194, 0.3);
+  border: 1px dashed #24aac3;
+  background-color: rgba(36, 170, 194, 0.3);
 }
 .language_scramble .guesses .color2 .guess,
 .language_scramble .scrambled .color2 .guess {
-  border: 1px dashed #e46027;
-  background-color: rgba(228, 94, 37, 0.3);
+  border: 1px dashed #ff6e5f;
+  background-color: rgba(255, 113, 97, 0.3);
 }
 .language_scramble .guesses .color3 .guess,
 .language_scramble .scrambled .color3 .guess {
-  border: 1px dashed #f0d827;
-  background-color: rgba(240, 217, 40, 0.3);
+  border: 1px dashed #ff922a;
+  background-color: rgba(255, 144, 41, 0.3);
 }
 .language_scramble .guesses .color4 .guess,
 .language_scramble .scrambled .color4 .guess {
+  border: 1px dashed #0c6d7f;
+  background-color: rgba(38, 38, 38, 0.3);
+}
+.language_scramble .guesses .color5 .guess,
+.language_scramble .scrambled .color5 .guess {
+  border: 1px dashed #a61c0e;
+  background-color: rgba(38, 38, 38, 0.3);
+}
+.language_scramble .guesses .color6 .guess,
+.language_scramble .scrambled .color6 .guess {
+  border: 1px dashed #a6580e;
+  background-color: rgba(38, 38, 38, 0.3);
+}
+.language_scramble .guesses .color7 .guess,
+.language_scramble .scrambled .color7 .guess {
+  border: 1px dashed #a6770e;
+  background-color: rgba(38, 38, 38, 0.3);
+}
+.language_scramble .guesses .color8 .guess,
+.language_scramble .scrambled .color8 .guess {
   border: 1px dashed #262626;
   background-color: rgba(38, 38, 38, 0.3);
 }
@@ -145,18 +165,34 @@ body {
 }
 .language_scramble .guesses .color1 .letter,
 .language_scramble .scrambled .color1 .letter {
-  background-color: #24a8c3;
+  background-color: #24aac3;
 }
 .language_scramble .guesses .color2 .letter,
 .language_scramble .scrambled .color2 .letter {
-  background-color: #e46027;
+  background-color: #ff6e5f;
 }
 .language_scramble .guesses .color3 .letter,
 .language_scramble .scrambled .color3 .letter {
-  background-color: #f0d827;
+  background-color: #ff922a;
 }
 .language_scramble .guesses .color4 .letter,
 .language_scramble .scrambled .color4 .letter {
+  background-color: #0c6d7f;
+}
+.language_scramble .guesses .color5 .letter,
+.language_scramble .scrambled .color5 .letter {
+  background-color: #a61c0e;
+}
+.language_scramble .guesses .color6 .letter,
+.language_scramble .scrambled .color6 .letter {
+  background-color: #a6580e;
+}
+.language_scramble .guesses .color7 .letter,
+.language_scramble .scrambled .color7 .letter {
+  background-color: #a6770e;
+}
+.language_scramble .guesses .color8 .letter,
+.language_scramble .scrambled .color8 .letter {
   background-color: #262626;
 }
 .language_scramble .guesses .correct,
@@ -194,13 +230,13 @@ body {
 .language_scramble .guesses .color2 .correct_letter,
 .language_scramble .guesses .color3 .correct_letter,
 .language_scramble .guesses .color4 .correct_letter {
-  background-color: rgba(136, 204, 102, 0.5);
+  background-color: rgba(36, 219, 75, 0.5);
 }
 .language_scramble .guesses .color1 .wrong_letter,
 .language_scramble .guesses .color2 .wrong_letter,
 .language_scramble .guesses .color3 .wrong_letter,
 .language_scramble .guesses .color4 .wrong_letter {
-  background-color: rgba(228, 94, 37, 0.5);
+  background-color: rgba(255, 113, 97, 0.5);
 }
 .language_scramble .guesses.hidden .letter {
   visibility: visible;
@@ -217,7 +253,7 @@ body {
   text-align: center;
 }
 .language_scramble .last_answer .highlighted {
-  background-color: rgba(136, 204, 102, 0.25);
+  background-color: rgba(36, 219, 75, 0.25);
   padding: 0 3px;
 }
 .language_scramble #clickarea {
