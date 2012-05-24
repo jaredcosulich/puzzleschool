@@ -537,7 +537,7 @@ languageScramble.ViewHelper = (function() {
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       if (index % 2 === 1) {
-        combineGroups = group.length < 7 || wordGroups[index - 1].length < 7;
+        combineGroups = (group.length < 7 || wordGroups[index - 1].length < 7) && (group.length < 12 && wordGroups[index - 1].length < 12);
       }
       if (!(index % 2 === 1 && combineGroups)) {
         wordGroup = this.createWordGroup(index);
@@ -569,7 +569,7 @@ languageScramble.ViewHelper = (function() {
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       if (index % 2 === 1) {
-        combineGroups = group.length < 7 || wordGroups[index - 1].length < 7;
+        combineGroups = (group.length < 7 || wordGroups[index - 1].length < 7) && (group.length < 12 && wordGroups[index - 1].length < 12);
         if (!combineGroups) {
           wordGroup.append(this.createSpace(' '));
         }
@@ -652,7 +652,7 @@ languageScramble.ViewHelper = (function() {
     for (_i = 0, _len = letters.length; _i < _len; _i++) {
       letter = letters[_i];
       group = groups[groups.length - 1];
-      if (group.length === 9) {
+      if (group.length >= 9 && group.join().match(/\s/)) {
         groups.push(nextGroup = []);
         while (!(group[group.length - 1].match(/\s/) != null)) {
           nextGroup.push(group.pop());

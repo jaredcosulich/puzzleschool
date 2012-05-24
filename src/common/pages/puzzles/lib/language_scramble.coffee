@@ -338,7 +338,7 @@ class languageScramble.ViewHelper
         
         wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
         for group, index in wordGroups
-            combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7) if index % 2 == 1
+            combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7) and (group.length < 12 and wordGroups[index - 1].length < 12) if (index % 2 == 1)
             wordGroup = @createWordGroup(index) unless index % 2 == 1 and combineGroups
             container = @createContainer() if index % 2 == 0
             container.append(wordGroup)
@@ -357,7 +357,7 @@ class languageScramble.ViewHelper
         wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
         for group, index in wordGroups
             if index % 2 == 1
-                combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7)
+                combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7) and (group.length < 12 and wordGroups[index - 1].length < 12)
                 wordGroup.append(@createSpace(' ')) unless combineGroups
             wordGroup = @createWordGroup(index) unless index % 2 == 1 and combineGroups
             container = @createContainer() if index % 2 == 0
@@ -407,7 +407,7 @@ class languageScramble.ViewHelper
         groups = [[]]
         for letter in letters
             group = groups[groups.length - 1]
-            if group.length == 9
+            if group.length >= 9 && group.join().match(/\s/)
                 groups.push(nextGroup = [])
                 nextGroup.push(group.pop()) while !group[group.length - 1].match(/\s/)?
                 group = nextGroup.reverse()
