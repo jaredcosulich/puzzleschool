@@ -529,28 +529,94 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.createGuesses = function() {
-    var container, group, guesses, index, letter, _i, _j, _len, _len1, _ref, _results;
+    var combineGroups, container, group, guesses, index, letter, wordGroup, wordGroups, _i, _j, _len, _len1, _results;
     guesses = this.$('.guesses');
     this.clearContainer(guesses);
-    _ref = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
+    wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
     _results = [];
-    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-      group = _ref[index];
-      container = $(document.createElement("DIV"));
-      container.addClass('container');
-      container.addClass("color" + (index + 1));
+    for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
+      group = wordGroups[index];
+      if (index % 2 === 1) {
+        combineGroups = group.length < 7 || wordGroups[index - 1].length < 7;
+      }
+      if (!(index % 2 === 1 && combineGroups)) {
+        wordGroup = this.createWordGroup(index);
+      }
+      if (index % 2 === 0) {
+        container = this.createContainer();
+      }
+      container.append(wordGroup);
       guesses.append(container);
       for (_j = 0, _len1 = group.length; _j < _len1; _j++) {
         letter = group[_j];
-        container.append(letter.match(/\w|[^\x00-\x80]+/) != null ? this.createGuess(letter) : this.createSpace(letter));
+        wordGroup.append(letter.match(/\w|[^\x00-\x80]+/) != null ? this.createGuess(letter) : this.createSpace(letter));
       }
-      container.width(container.width());
-      _results.push(container.css({
-        float: 'none',
-        height: container.height()
-      }));
+      if (index % 2 === 1 || index === wordGroups.length - 1) {
+        _results.push(this.positionContainer(container));
+      } else {
+        _results.push(void 0);
+      }
     }
     return _results;
+  };
+
+  ViewHelper.prototype.createScramble = function() {
+    var combineGroups, container, group, index, letter, scrambled, wordGroup, wordGroups, _i, _j, _len, _len1, _ref, _results;
+    scrambled = this.$('.scrambled');
+    this.clearContainer(scrambled);
+    wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
+    _results = [];
+    for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
+      group = wordGroups[index];
+      if (index % 2 === 1) {
+        combineGroups = group.length < 7 || wordGroups[index - 1].length < 7;
+        if (!combineGroups) {
+          wordGroup.append(this.createSpace(' '));
+        }
+      }
+      if (!(index % 2 === 1 && combineGroups)) {
+        wordGroup = this.createWordGroup(index);
+      }
+      if (index % 2 === 0) {
+        container = this.createContainer();
+      }
+      container.append(wordGroup);
+      scrambled.append(container);
+      _ref = this.shuffleWord(this.modifyScramble(group.join('')));
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        letter = _ref[_j];
+        if (letter.match(/\w|[^\x00-\x80]+/)) {
+          wordGroup.append(this.createLetter(letter));
+        }
+      }
+      if (index % 2 === 1 || index === wordGroups.length - 1) {
+        _results.push(this.positionContainer(container));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.createContainer = function(index) {
+    var container;
+    container = $(document.createElement("DIV"));
+    return container.addClass('container');
+  };
+
+  ViewHelper.prototype.positionContainer = function(container) {
+    container.width(container.width());
+    return container.css({
+      float: 'none',
+      height: container.height()
+    });
+  };
+
+  ViewHelper.prototype.createWordGroup = function(index) {
+    var wordGroup;
+    wordGroup = $(document.createElement("DIV"));
+    wordGroup.addClass('word_group');
+    return wordGroup.addClass("color" + (index + 1));
   };
 
   ViewHelper.prototype.clearContainer = function(container) {
@@ -586,7 +652,7 @@ languageScramble.ViewHelper = (function() {
     for (_i = 0, _len = letters.length; _i < _len; _i++) {
       letter = letters[_i];
       group = groups[groups.length - 1];
-      if (group.length === 18) {
+      if (group.length === 9) {
         groups.push(nextGroup = []);
         while (!(group[group.length - 1].match(/\s/) != null)) {
           nextGroup.push(group.pop());
@@ -648,34 +714,6 @@ languageScramble.ViewHelper = (function() {
     letterContainer.html(letter);
     this.bindLetter(letterContainer);
     return letterContainer;
-  };
-
-  ViewHelper.prototype.createScramble = function() {
-    var container, group, index, letter, scrambled, _i, _j, _len, _len1, _ref, _ref1, _results;
-    scrambled = this.$('.scrambled');
-    this.clearContainer(scrambled);
-    _ref = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
-    _results = [];
-    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-      group = _ref[index];
-      container = $(document.createElement("DIV"));
-      container.addClass('container');
-      container.addClass("color" + (index + 1));
-      scrambled.append(container);
-      _ref1 = this.shuffleWord(this.modifyScramble(group.join('')));
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        letter = _ref1[_j];
-        if (letter.match(/\w|[^\x00-\x80]+/)) {
-          container.append(this.createLetter(letter));
-        }
-      }
-      container.width(container.width());
-      _results.push(container.css({
-        float: 'none',
-        height: container.height()
-      }));
-    }
-    return _results;
   };
 
   ViewHelper.prototype.replaceLetterWithBlank = function(letter) {
@@ -745,7 +783,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.containerClassName = function(square) {
-    return $(square).closest('.container')[0].className.match(/color\d+/)[0];
+    return $(square).closest('.word_group')[0].className.match(/color\d+/)[0];
   };
 
   ViewHelper.prototype.guessInPath = function(letter, lastX, lastY, currentX, currentY) {

@@ -96,7 +96,7 @@ soma.views
                 for languages, levels of puzzleProgress.levels
                     for levelName, levelInfo of levels
                         answerCount += Object.keys(levelInfo).length
-                if answerCount > 15
+                if answerCount > 10
                     $(window).bind 'beforeunload', => return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.'
             
 

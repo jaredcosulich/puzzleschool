@@ -84,6 +84,10 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+.language_scramble .guesses .container .word_group,
+.language_scramble .scrambled .container .word_group {
+  float: left;
+}
 .language_scramble .guesses .guess,
 .language_scramble .scrambled .guess,
 .language_scramble .guesses .letter,

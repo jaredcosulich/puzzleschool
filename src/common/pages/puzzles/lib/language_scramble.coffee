@@ -335,17 +335,55 @@ class languageScramble.ViewHelper
     createGuesses: () ->
         guesses = @$('.guesses')
         @clearContainer(guesses)
-        for group, index in @separateIntoWordGroups(@scrambleInfo[@activeType])
-            container = $(document.createElement("DIV"))
-            container.addClass('container')
-            container.addClass("color#{index + 1}") 
+        
+        wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
+        for group, index in wordGroups
+            combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7) if index % 2 == 1
+            wordGroup = @createWordGroup(index) unless index % 2 == 1 and combineGroups
+            container = @createContainer() if index % 2 == 0
+            container.append(wordGroup)
             guesses.append(container)
 
             for letter in group 
-                container.append(if letter.match(/\w|[^\x00-\x80]+/)? then @createGuess(letter) else @createSpace(letter)) 
+                wordGroup.append(if letter.match(/\w|[^\x00-\x80]+/)? then @createGuess(letter) else @createSpace(letter))
 
-            container.width(container.width())
-            container.css(float: 'none', height: container.height())
+            if index % 2 == 1 or index == wordGroups.length - 1
+                @positionContainer(container)
+
+    createScramble: () ->
+        scrambled = @$('.scrambled')
+        @clearContainer(scrambled)
+
+        wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
+        for group, index in wordGroups
+            if index % 2 == 1
+                combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7)
+                wordGroup.append(@createSpace(' ')) unless combineGroups
+            wordGroup = @createWordGroup(index) unless index % 2 == 1 and combineGroups
+            container = @createContainer() if index % 2 == 0
+            container.append(wordGroup)
+            scrambled.append(container)
+
+            for letter in @shuffleWord(@modifyScramble(group.join(''))) 
+                wordGroup.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
+
+            if index % 2 == 1 or index == wordGroups.length - 1
+                @positionContainer(container)
+                
+
+    createContainer: (index) ->
+        container = $(document.createElement("DIV"))
+        container.addClass('container')
+
+    positionContainer: (container) ->
+        container.width(container.width())
+        container.css(float: 'none', height: container.height())
+
+    createWordGroup: (index) ->
+        wordGroup = $(document.createElement("DIV"))
+        wordGroup.addClass('word_group')
+        wordGroup.addClass("color#{index + 1}")
+        
 
     clearContainer: (container) -> container.find('.container, .correct, .guess, .letter, .space').remove()
 
@@ -359,7 +397,7 @@ class languageScramble.ViewHelper
             else
                 @$('.guesses .guess').removeClass('selected')
                 guess.addClass('selected')
-        
+
     createSpace: (letter) ->
         space = $(document.createElement("DIV"))
         space.addClass('space')
@@ -369,7 +407,7 @@ class languageScramble.ViewHelper
         groups = [[]]
         for letter in letters
             group = groups[groups.length - 1]
-            if group.length == 18
+            if group.length == 9
                 groups.push(nextGroup = [])
                 nextGroup.push(group.pop()) while !group[group.length - 1].match(/\s/)?
                 group = nextGroup.reverse()
@@ -403,22 +441,6 @@ class languageScramble.ViewHelper
         @bindLetter(letterContainer)
         return letterContainer
         
-    createScramble: () ->
-        scrambled = @$('.scrambled')
-        @clearContainer(scrambled)
-
-        for group, index in @separateIntoWordGroups(@scrambleInfo[@activeType])
-            container = $(document.createElement("DIV"))
-            container.addClass('container')
-            container.addClass("color#{index + 1}")
-            scrambled.append(container)
-
-            for letter in @shuffleWord(@modifyScramble(group.join(''))) 
-                container.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
-
-            container.width(container.width())
-            container.css(float: 'none', height: container.height())
-
     replaceLetterWithBlank: (letter) ->
         blankLetter = $(document.createElement("DIV"))
         blankLetter.addClass('blank_letter').addClass(letter.html())
@@ -468,7 +490,7 @@ class languageScramble.ViewHelper
     clientY: (e) => e.clientY or (if e.targetTouches[0] then e.targetTouches[0].pageY else null)
 
     containerClassName: (square) ->
-        $(square).closest('.container')[0].className.match(/color\d+/)[0]
+        $(square).closest('.word_group')[0].className.match(/color\d+/)[0]
 
     guessInPath: (letter, lastX, lastY, currentX, currentY) ->
         letter = $(letter)
