@@ -323,6 +323,8 @@ class languageScramble.ViewHelper
                 @activeLevel = 'foreign'
             when 1
                 @activeLevel = 'native'
+            else
+                @activeLevel = 'foreignHard'
         
         @activeType = @activeLevel.replace(/Medium/, '').replace(/Hard/, '')
 

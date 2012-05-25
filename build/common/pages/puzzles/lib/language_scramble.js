@@ -521,6 +521,9 @@ languageScramble.ViewHelper = (function() {
         break;
       case 1:
         this.activeLevel = 'native';
+        break;
+      default:
+        this.activeLevel = 'foreignHard';
     }
     this.activeType = this.activeLevel.replace(/Medium/, '').replace(/Hard/, '');
     this.displayLevel = this.activeType.match(/native/) ? 'foreign' : 'native';
@@ -1670,7 +1673,7 @@ languageScramble.data = {
         ]
       },
       top75phrases: {
-        title: 'Top 50 - 75 Phrases',
+        title: 'Phrases For The Top 50 - 75 Words',
         subtitle: 'Phrases for the 50 - 75 most frequently used Italian words',
         data: [
           {
