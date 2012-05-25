@@ -126,9 +126,11 @@ soma.views({
         $(window).bind('hashchange', function() {
           return _this.onhashchange();
         });
-        $(window).bind('resize orientationChanged', function() {
-          return $('#top_nav .content').width($.viewport().width);
-        });
+        if (navigator.userAgent.match(/iP/i)) {
+          $(window).bind('resize orientationChanged', function() {
+            return $('#top_nav .content').width($.viewport().width);
+          });
+        }
         if ($.viewport().width < $('#top_nav .content').width()) {
           $(window).trigger('resize');
         }

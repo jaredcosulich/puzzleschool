@@ -57,8 +57,9 @@ soma.views
                 window.initialized = true
                 window.postRegistration = []
                 $(window).bind 'hashchange', => @onhashchange()
-                $(window).bind 'resize orientationChanged', =>
-                    $('#top_nav .content').width($.viewport().width)
+                if navigator.userAgent.match(/iP/i)
+                    $(window).bind 'resize orientationChanged', =>
+                        $('#top_nav .content').width($.viewport().width)
                 $(window).trigger('resize') if $.viewport().width < $('#top_nav .content').width()
             
             @checkLoggedIn()
