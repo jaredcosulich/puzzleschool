@@ -131,22 +131,22 @@ body {
 .language_scramble .guesses .color4 .guess,
 .language_scramble .scrambled .color4 .guess {
   border: 1px dashed #0c6d7f;
-  background-color: rgba(38, 38, 38, 0.3);
+  background-color: rgba(12, 109, 126, 0.3);
 }
 .language_scramble .guesses .color5 .guess,
 .language_scramble .scrambled .color5 .guess {
   border: 1px dashed #a61c0e;
-  background-color: rgba(38, 38, 38, 0.3);
+  background-color: rgba(164, 29, 14, 0.3);
 }
 .language_scramble .guesses .color6 .guess,
 .language_scramble .scrambled .color6 .guess {
   border: 1px dashed #a6580e;
-  background-color: rgba(38, 38, 38, 0.3);
+  background-color: rgba(164, 87, 14, 0.3);
 }
 .language_scramble .guesses .color7 .guess,
 .language_scramble .scrambled .color7 .guess {
   border: 1px dashed #a6770e;
-  background-color: rgba(38, 38, 38, 0.3);
+  background-color: rgba(164, 117, 14, 0.3);
 }
 .language_scramble .guesses .color8 .guess,
 .language_scramble .scrambled .color8 .guess {

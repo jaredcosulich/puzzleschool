@@ -338,17 +338,20 @@ class languageScramble.ViewHelper
         
         wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
         for group, index in wordGroups
-            combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7) and (group.length + wordGroups[index - 1].length < 17) if (index % 2 == 1)
-            wordGroup = @createWordGroup(index) unless index % 2 == 1 and combineGroups
-            container = @createContainer() if index % 2 == 0
-            container.append(wordGroup)
-            guesses.append(container)
+            wordGroup = @createWordGroup(index)
+            if not container or runningTotal + group.length > 18
+                @positionContainer(container) if container
+                container = @createContainer() 
+                runningTotal = 0
 
             for letter in group 
                 wordGroup.append(if letter.match(/\w|[^\x00-\x80]+/)? then @createGuess(letter) else @createSpace(letter))
+            runningTotal += group.length
 
-            if index % 2 == 1 or index == wordGroups.length - 1
-                @positionContainer(container)
+            container.append(wordGroup)
+            guesses.append(container)
+
+            @positionContainer(container) if index == wordGroups.length - 1
 
     createScramble: () ->
         scrambled = @$('.scrambled')
@@ -356,20 +359,23 @@ class languageScramble.ViewHelper
 
         wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
         for group, index in wordGroups
-            if index % 2 == 1
-                combineGroups = (group.length < 7 or wordGroups[index - 1].length < 7) and (group.length + wordGroups[index - 1].length < 17)
-                wordGroup.append(@createSpace(' ')) unless combineGroups
-            wordGroup = @createWordGroup(index) unless index % 2 == 1 and combineGroups
-            container = @createContainer() if index % 2 == 0
-            container.append(wordGroup)
-            scrambled.append(container)
+            wordGroup = @createWordGroup(index)
+            if not container or runningTotal + group.length > 18
+                @positionContainer(container) if container
+                container = @createContainer() 
+                runningTotal = 0
+            else
+                wordGroup.append(@createSpace(' '))
+                runningTotal += 1
 
             for letter in @shuffleWord(@modifyScramble(group.join(''))) 
                 wordGroup.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
+            runningTotal += group.length
 
-            if index % 2 == 1 or index == wordGroups.length - 1
-                @positionContainer(container)
-                
+            container.append(wordGroup)
+            scrambled.append(container)
+
+            @positionContainer(container) if index == wordGroups.length - 1
 
     createContainer: (index) ->
         container = $(document.createElement("DIV"))
@@ -403,13 +409,16 @@ class languageScramble.ViewHelper
         space.addClass('space')
         space.html(letter)
         
-    separateIntoWordGroups: (letters) ->
+    separateIntoWordGroups: (letters, halfRow=9) ->
+        fullRow = halfRow * 2
         groups = [[]]
         for letter in letters
+            optimalLetters = if fullRowRemaining then fullRowRemaining else halfRow
             group = groups[groups.length - 1]
-            if group.length >= 9 && group.join().match(/\s/)
+            if group.length > optimalLetters && group.join().match(/\s/) 
                 groups.push(nextGroup = [])
                 nextGroup.push(group.pop()) while !group[group.length - 1].match(/\s/)?
+                fullRowRemaining = if fullRowRemaining then null else fullRow - group.length
                 group = nextGroup.reverse()
                         
             group.push(letter)                
@@ -792,6 +801,7 @@ languageScramble.data =
             top50Phrases:
                 title: 'Phrases For The Top 25 - 50 Words'
                 subtitle: 'Phrases for the 25 - 50 most frequently used Italian words'
+                nextLevel: 'top75words'
                 data: [
                     {native: 'a little more', foreign: 'un po più'},
                     {native: 'my child is seven years old', foreign: 'mio figlio ha sette anni'},
@@ -819,6 +829,68 @@ languageScramble.data =
                     {native: 'that lady ate my cheese', foreign: 'quella signora mangiato il mio formaggio'},
                     {native: 'there was nothing there', foreign: 'non c\'era niente'},
                 ]
+            top75words:
+                title: 'Top 50 - 75 Words'
+                subtitle: 'The 50 - 75 most frequently used Italian words'
+                nextLevel: 'top75phrases'
+                data: [
+                    {native: 'to him', foreign: 'gli', nativeSentence: 'i will speak to him', foreignSentence: 'gli voglio parlare'},
+                    {native: 'everything', foreign: 'tutto', nativeSentence: 'the one who has everything can lose everything', foreignSentence: 'chi ha tutto può perdere tutto'},
+                    {native: 'of', foreign: 'della', nativeSentence: 'celebriamo la festa della mamma in onore delle nostre madri', foreignSentence: 'we celebrate mother\'s day in honor of our mothers'},
+                    {native: 'so', foreign: 'così', nativeSentence: 'what made her so sad?', foreignSentence: 'cosa l\'ha resa così triste?'},
+                    {native: 'mia', foreign: 'my', nativeSentence: 'my mother is older than my father', foreignSentence: 'mia madre è più vecchio di mio padre'},
+                    {native: 'neither', foreign: 'ne', nativeSentence: 'he knows neither french nor german', foreignSentence: 'non sa né il francese né il tedesco'},
+                    {native: 'this', foreign: 'questa', nativeSentence: 'this house and this land are mine', foreignSentence: 'questa casa e questa terra sono mie'},
+                    {native: 'be', foreign: 'fare', nativeSentence: 'you must be careful not to drop the eggs', foreignSentence: 'dovete fare attenzione a non fare cadere le uova'},
+                    {native: 'when', foreign: 'quando', nativeSentence: 'when i hear that song i think about when i was young', foreignSentence: 'quando sento quella canzone penso a quando ero piccolo'},
+                    {native: 'time', foreign: 'ora', nativeSentence: 'what time does the plane leave?', foreignSentence: 'a che ora decolla l\'aereo?'}
+                    {native: 'did', foreign: 'fatto', nativeSentence: 'did you have a good trip?', foreignSentence: 'hai fatto un buon viaggio?'},
+                    {native: 'to be', foreign: 'essere', nativeSentence: 'it is never too late to be what you could have been', foreignSentence: 'non è mai troppo tardi per essere ciò che avresti potuto essere.'},
+                    {native: 'know', foreign: 'so', nativeSentence: 'i know the answer', foreignSentence: 'non so se avrò il tempo di farlo'},
+                    {native: 'never', foreign: 'mai', nativeSentence: 'never give up', foreignSentence: 'mai rinunciare'},
+                    {native: 'who', foreign: 'chi', nativeSentence: 'who is it?', foreignSentence: 'chi é?'},
+                    {native: 'or', foreign: 'o', nativeSentence: 'don\'t pour hot water in to the glass or it will crack', foreignSentence: 'non versare acqua calda nel bicchiere o si romperà'},
+                    {native: 'at the', foreign: 'alla', nativeSentence: 'i bought this book at the bookstore', foreignSentence: 'ho comprato questo libro alla libreria'},
+                    {native: 'very', foreign: 'molto', nativeSentence: 'italy is a very beautiful country', foreignSentence: 'l\'italia è un paese molto bello'},
+                    {native: 'also', foreign: 'anche', nativeSentence: 'excuse me, we\'re in a hurry also', foreignSentence: 'scusami, ma abbiamo anche noi fretta'},
+                    {native: 'said', foreign: 'detto', nativeSentence: 'she may have said so', foreignSentence: 'potrebbe aver detto ciò'},
+                    {native: 'that', foreign: 'quello', nativeSentence: 'that\'s not what i heard', foreignSentence: 'quello non è ciò che ho sentito io'},
+                    {native: 'goes', foreign: 'va', nativeSentence: 'my father goes to work on a bike', foreignSentence: 'mio padre va a lavorare in bici'},
+                    {native: 'nothing', foreign: 'niente', nativeSentence: 'he did nothing wrong', foreignSentence: 'non fece niente di male'},
+                    {native: 'thank you', foreign: 'grazie', nativeSentence: 'thank you for your invitation', foreignSentence: 'grazie per il vostro invito'},
+                    {native: 'he', foreign: 'lui', nativeSentence: 'he is very tall', foreignSentence: 'lui è molto alto'}
+                ]
+            top75phrases:
+                title: 'Top 50 - 75 Phrases'
+                subtitle: 'Phrases for the 50 - 75 most frequently used Italian words'
+                data: [
+                    {native: 'i will speak to him', foreign: 'gli voglio parlare'},
+                    {native: 'the one who has everything can lose everything', foreign: 'chi ha tutto può perdere tutto'},
+                    {native: 'celebriamo la festa della mamma in onore delle nostre madri', foreign: 'we celebrate mother\'s day in honor of our mothers'},
+                    {native: 'what made her so sad?', foreign: 'cosa l\'ha resa così triste?'},
+                    {native: 'my mother is older than my father', foreign: 'mia madre è più vecchio di mio padre'},
+                    {native: 'he knows neither french nor german', foreign: 'non sa né il francese né il tedesco'},
+                    {native: 'this house and this land are mine', foreign: 'questa casa e questa terra sono mie'},
+                    {native: 'you must be careful not to drop the eggs', foreign: 'dovete fare attenzione a non fare cadere le uova'},
+                    {native: 'when i hear that song i think about when i was young', foreign: 'quando sento quella canzone penso a quando ero piccolo'},
+                    {native: 'what time does the plane leave?', foreign: 'a che ora decolla l\'aereo?'}
+                    {native: 'did you have a good trip?', foreign: 'hai fatto un buon viaggio?'},
+                    {native: 'it is never too late to be what you could have been', foreign: 'non è mai troppo tardi per essere ciò che avresti potuto essere.'},
+                    {native: 'i know the answer', foreign: 'non so se avrò il tempo di farlo'},
+                    {native: 'never give up', foreign: 'mai rinunciare'},
+                    {native: 'who is it?', foreign: 'chi é?'},
+                    {native: 'don\'t pour hot water in to the glass or it will crack', foreign: 'non versare acqua calda nel bicchiere o si romperà'},
+                    {native: 'i bought this book at the bookstore', foreign: 'ho comprato questo libro alla libreria'},
+                    {native: 'italy is a very beautiful country', foreign: 'l\'italia è un paese molto bello'},
+                    {native: 'excuse me, we\'re in a hurry also', foreign: 'scusami, ma abbiamo anche noi fretta'},
+                    {native: 'she may have said so', foreign: 'potrebbe aver detto ciò'},
+                    {native: 'that\'s not what i heard', foreign: 'quello non è ciò che ho sentito io'},
+                    {native: 'my father goes to work on a bike', foreign: 'mio padre va a lavorare in bici'},
+                    {native: 'he did nothing wrong', foreign: 'non fece niente di male'},
+                    {native: 'thank you for your invitation', foreign: 'grazie per il vostro invito'},
+                    {native: 'he is very tall', foreign: 'lui è molto alto'}
+                ]
+        
 
 x = [
     {native: 'thanks', foreign: 'grazie', nativeSentence: 'thanks for the help', foreignSentence: 'grazie per l\'aiuto'},
