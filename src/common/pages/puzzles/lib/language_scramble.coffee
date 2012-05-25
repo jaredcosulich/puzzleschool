@@ -868,7 +868,7 @@ languageScramble.data =
                     {native: 'he', foreign: 'lui', nativeSentence: 'he is very tall', foreignSentence: 'lui è molto alto'}
                 ]
             top75phrases:
-                title: 'Top 50 - 75 Phrases'
+                title: 'Phrases For The Top 50 - 75 Words'
                 subtitle: 'Phrases for the 50 - 75 most frequently used Italian words'
                 data: [
                     {native: 'i will speak to him', foreign: 'gli voglio parlare'},
