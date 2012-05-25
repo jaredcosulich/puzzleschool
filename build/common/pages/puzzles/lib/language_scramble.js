@@ -647,7 +647,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.separateIntoWordGroups = function(letters, halfRow) {
-    var fullRow, fullRowRemaining, group, groups, letter, nextGroup, optimalLetters, _i, _len;
+    var firstWord, firstWordLetter, fullRow, fullRowRemaining, group, groups, letter, nextGroup, optimalLetters, previousGroup, _i, _j, _len, _len1;
     if (halfRow == null) {
       halfRow = 9;
     }
@@ -662,7 +662,20 @@ languageScramble.ViewHelper = (function() {
         while (!(group[group.length - 1].match(/\s/) != null)) {
           nextGroup.push(group.pop());
         }
-        fullRowRemaining = fullRowRemaining ? null : fullRow - group.length;
+        if (fullRowRemaining) {
+          fullRowRemaining = null;
+          if ((previousGroup = groups[groups.length - 2])) {
+            while ((firstWord = group.join().split('/\s/')[0]).length !== group.length && group.length - firstWord.length > groups[groups.length - 2].length) {
+              group.replace("" + firstWord + " ", '');
+              for (_j = 0, _len1 = firstWord.length; _j < _len1; _j++) {
+                firstWordLetter = firstWord[_j];
+                previousGroup.push(firstWordLetter);
+              }
+            }
+          }
+        } else {
+          fullRow - group.length;
+        }
         group = nextGroup.reverse();
       }
       group.push(letter);

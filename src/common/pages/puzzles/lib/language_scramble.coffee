@@ -418,7 +418,14 @@ class languageScramble.ViewHelper
             if group.length > optimalLetters && group.join().match(/\s/) 
                 groups.push(nextGroup = [])
                 nextGroup.push(group.pop()) while !group[group.length - 1].match(/\s/)?
-                fullRowRemaining = if fullRowRemaining then null else fullRow - group.length
+                if fullRowRemaining
+                    fullRowRemaining = null
+                    if (previousGroup = groups[groups.length - 2])
+                        while (firstWord = group.join().split('/\s/')[0]).length != group.length and group.length - firstWord.length > groups[groups.length - 2].length
+                            group.replace("#{firstWord} ", '')
+                            previousGroup.push(firstWordLetter) for firstWordLetter in firstWord
+                else 
+                    fullRow - group.length
                 group = nextGroup.reverse()
                         
             group.push(letter)                
