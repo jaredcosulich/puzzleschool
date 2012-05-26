@@ -4645,7 +4645,7 @@
         }
         return soma.load(document.location.pathname);
       };
-      $('a:local-link(0)[data-precache != "true"]').each(function() {
+      $('a[data-precache != "true"]:local-link(0)').each(function() {
         var path;
         path = this.pathname;
         return $(this).bind('click', function(event) {
@@ -4654,7 +4654,7 @@
           event.stop();
         });
       });
-      return $('a:local-link(0)[data-precache = "true"]').each(function() {
+      return $('a[data-precache = "true"]:local-link(0)').each(function() {
         $(this).bind('click', soma.precache(this.pathname));
       });
     }
