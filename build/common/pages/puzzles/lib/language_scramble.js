@@ -281,7 +281,7 @@ languageScramble.ViewHelper = (function() {
     });
     lastPress = null;
     return $('#clickarea').bind('keypress', function(e) {
-      var char, foreignChar, letter, openGuess;
+      var char, foreignChar, letter, nativeChar, openGuess;
       if (lastPress && new Date() - lastPress < 10) {
         return;
       }
@@ -292,20 +292,23 @@ languageScramble.ViewHelper = (function() {
       }
       try {
         char = String.fromCharCode(e.keyCode).toLowerCase();
-        if (char === 'e' || char === 'i' || char === 'u' || char === 'o') {
-          foreignChar = (function() {
-            switch (char) {
-              case 'e':
-                return 'è';
-              case 'i':
-                return 'ì';
-              case 'o':
-                return 'ò';
-              case 'u':
-                return 'ù';
+        foreignChar = openGuess.className.match(/actual_letter_(.)/)[1];
+        if (foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'ò' || foreignChar === 'ù') {
+          nativeChar = (function() {
+            switch (foreignChar) {
+              case 'é':
+                return 'e';
+              case 'è':
+                return 'e';
+              case 'ì':
+                return 'i';
+              case 'ò':
+                return 'o';
+              case 'ù':
+                return 'u';
             }
           })();
-          if ($(openGuess).hasClass("actual_letter_" + foreignChar)) {
+          if (char === nativeChar) {
             char = foreignChar;
           }
         }

@@ -170,22 +170,24 @@ class languageScramble.ViewHelper
             return unless openGuess?
             
             try 
-                char = String.fromCharCode(e.keyCode).toLowerCase()                
-                if char in ['e', 'i', 'u', 'o']  
-                    foreignChar = switch char
-                        when 'e' then 'è'
-                        when 'i' then 'ì'
-                        when 'o' then 'ò'
-                        when 'u' then 'ù'
-                    
-                    char = foreignChar if $(openGuess).hasClass("actual_letter_#{foreignChar}")
-            
+                char = String.fromCharCode(e.keyCode).toLowerCase()
+                foreignChar = openGuess.className.match(/actual_letter_(.)/)[1]
+                if foreignChar in ['é', 'è', 'ì', 'ò', 'ù']  
+                    nativeChar = switch foreignChar
+                        when 'é' then 'e'
+                        when 'è' then 'e'
+                        when 'ì' then 'i'
+                        when 'ò' then 'o'
+                        when 'ù' then 'u'
+                
+                    char = foreignChar if char == nativeChar
+        
                 letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
                 if !letter and @activeLevel.match(/Hard/)?
                     if char.match(/\w|[^\x00-\x80]+/)
                         letter = @createLetter(char) 
                         $(".scrambled .#{@containerClassName(openGuess)}").append(letter)
-                
+            
                 $.timeout 10, () =>
                     $('#clickarea').val('')        
                     $('#clickarea').html('')        
