@@ -55,8 +55,15 @@ class languageScramble.ViewHelper
 
     constructor: ({@el, puzzleData, @languages, @go, @saveProgress}) ->
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
+        @formatLevelLinks()
         
     $: (selector) -> $(selector, @el)
+
+    formatLevelLinks: () ->
+        for percentComplete in $('.footer .levels .level .percent_complete')
+            percentComplete = $(percentComplete)
+            height = percentComplete.closest('.level').height()
+            percentComplete.css(height: height, marginTop: height * -1)
 
     setLevel: (@levelName) ->   
         @languageData = languageScramble.data[@languages]

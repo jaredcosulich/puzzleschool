@@ -103,10 +103,27 @@ languageScramble.ViewHelper = (function() {
     this.clientX = __bind(this.clientX, this);
 
     this.puzzleData = JSON.parse(JSON.stringify(puzzleData));
+    this.formatLevelLinks();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
+  };
+
+  ViewHelper.prototype.formatLevelLinks = function() {
+    var height, percentComplete, _i, _len, _ref, _results;
+    _ref = $('.footer .levels .level .percent_complete');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      percentComplete = _ref[_i];
+      percentComplete = $(percentComplete);
+      height = percentComplete.closest('.level').height();
+      _results.push(percentComplete.css({
+        height: height,
+        marginTop: height * -1
+      }));
+    }
+    return _results;
   };
 
   ViewHelper.prototype.setLevel = function(levelName) {
