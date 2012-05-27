@@ -31,7 +31,7 @@ languageScramble.getLevel = (languageData, levelName) ->
     return level
 
 class languageScramble.ChunkHelper
-    constructor: (@languages, @levelName) ->
+    constructor: (@languages, @levelName, @puzzleData) ->
         @languageData = languageScramble.data[@languages]
         @level = languageScramble.getLevel(@languageData, @levelName)
     
@@ -43,6 +43,7 @@ class languageScramble.ChunkHelper
                 id: levelName
                 title: levelData.title
                 subtitle: levelData.subtitle
+                percentComplete: @puzzleData.levels?[@languages]?[levelName]?.percentComplete or 0
 
         return info
 
@@ -78,6 +79,14 @@ class languageScramble.ViewHelper
         lastAnswerDuration = @answerTimes[@answerTimes.length - 1] - @answerTimes[@answerTimes.length - 2]
         if lastAnswerDuration < 2500 * @scrambleInfo.native.length
             @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
+            progress = @$(".progress_meter .bar .progress_section")
+            progressIncrement = 100.0 / progress.length
+            leftToGo = 0            
+            leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
+            percentComplete = 100 - leftToGo
+            @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete
+            $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
+            
 
         @saveProgress(@puzzleData)
 
@@ -784,12 +793,12 @@ languageScramble.data =
                 nextLevel: 'top50phrases'
                 data: [
                     {native: 'more', foreign: 'più', nativeSentence: 'a little more', foreignSentence: 'un po più'},
-                    {native: 'my', foreign: 'mio', nativeSentence: 'my child is seven years old', foreignSentence: 'mio figlio ha sette anni'},
+                    {native: 'my', foreign: 'mio', nativeSentence: 'my brother is seven years old', foreignSentence: 'mio fratello ha sette anni'},
                     {native: 'because', foreign: 'perché', nativeSentence: 'because i want to', foreignSentence: 'perché voglio'},
                     {native: 'why', foreign: 'perché', nativeSentence: 'why do you want to go?', foreignSentence: 'perché vuoi andare?'},
                     {native: 'she', foreign: 'lei', nativeSentence: 'she leaves tomorrow', foreignSentence: 'lei parte domani'},
                     {native: 'only', foreign: 'solo', nativeSentence: 'it was only fifteen minutes', foreignSentence: 'era solo quindici minuti'},
-                    {native: 'was', foreign: 'era', nativeSentence: 'it was thirty years ago', foreignSentence: 'era trent\'anni fa'},
+                    {native: 'it was', foreign: 'era', nativeSentence: 'it was thirty years ago', foreignSentence: 'era trent\'anni fa'},
                     {native: 'all', foreign: 'tutti', nativeSentence: 'all of the king\'s horses', foreignSentence: 'tutti i cavalli del re'},
                     {native: 'so-so', foreign: 'così-così', nativeSentence: 'i am feeling so-so', foreignSentence: 'mi sento così-così'},
                     {native: 'hello', foreign: 'ciao', nativeSentence: 'hello my friend', foreignSentence: 'ciao amico mio'},

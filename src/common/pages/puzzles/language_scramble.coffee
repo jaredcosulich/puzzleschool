@@ -33,7 +33,7 @@ soma.chunks
             @languages = (@puzzleData.lastLanguages or 'english_italian') unless @languages && @languages.length
             @levelName = (@puzzleData.lastLevelPlayed or 'top10words') unless @levelName && @levelName.length
             @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]
-            @chunkHelper = new languageScramble.ChunkHelper(@languages, @levelName)
+            @chunkHelper = new languageScramble.ChunkHelper(@languages, @levelName, @puzzleData)
             
             @html = wings.renderTemplate(@template, 
                 puzzleData: JSON.stringify(@puzzleData)

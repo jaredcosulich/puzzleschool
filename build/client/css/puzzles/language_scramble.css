@@ -318,8 +318,19 @@ body {
 .language_scramble .footer .levels .level {
   background-color: #fdfdfd;
   border: 1px solid #ccc;
-  padding: 6px 0;
   float: left;
   margin: 12px 0 0 30px;
   width: 330px;
+}
+.language_scramble .footer .levels .level a {
+  display: block;
+  margin: 6px 0;
+}
+.language_scramble .footer .levels .level .percent_complete {
+  opacity: 0.3;
+  margin-top: -48px;
+  overflow: hidden;
+  height: 48px;
+  float: left;
+  background-color: #0c8d28;
 }

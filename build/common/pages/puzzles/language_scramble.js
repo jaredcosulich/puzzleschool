@@ -59,7 +59,7 @@ soma.chunks({
       if (!this.puzzleData.levels[this.languages]) {
         this.puzzleData.levels[this.languages] = {};
       }
-      this.chunkHelper = new languageScramble.ChunkHelper(this.languages, this.levelName);
+      this.chunkHelper = new languageScramble.ChunkHelper(this.languages, this.levelName, this.puzzleData);
       return this.html = wings.renderTemplate(this.template, {
         puzzleData: JSON.stringify(this.puzzleData),
         languages: this.languages,

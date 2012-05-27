@@ -56,15 +56,16 @@ languageScramble.ChunkHelper = (function() {
 
   ChunkHelper.name = 'ChunkHelper';
 
-  function ChunkHelper(languages, levelName) {
+  function ChunkHelper(languages, levelName, puzzleData) {
     this.languages = languages;
     this.levelName = levelName;
+    this.puzzleData = puzzleData;
     this.languageData = languageScramble.data[this.languages];
     this.level = languageScramble.getLevel(this.languageData, this.levelName);
   }
 
   ChunkHelper.prototype.allLevels = function() {
-    var info, levelData, levelName, _ref;
+    var info, levelData, levelName, _ref, _ref1, _ref2, _ref3;
     info = [];
     _ref = this.languageData.levels;
     for (levelName in _ref) {
@@ -73,7 +74,8 @@ languageScramble.ChunkHelper = (function() {
         languages: this.languages,
         id: levelName,
         title: levelData.title,
-        subtitle: levelData.subtitle
+        subtitle: levelData.subtitle,
+        percentComplete: ((_ref1 = this.puzzleData.levels) != null ? (_ref2 = _ref1[this.languages]) != null ? (_ref3 = _ref2[levelName]) != null ? _ref3.percentComplete : void 0 : void 0 : void 0) || 0
       });
     }
     return info;
@@ -125,11 +127,21 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.saveLevel = function() {
-    var lastAnswerDuration;
+    var lastAnswerDuration, leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
     this.answerTimes.push(new Date());
     lastAnswerDuration = this.answerTimes[this.answerTimes.length - 1] - this.answerTimes[this.answerTimes.length - 2];
     if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
       this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
+      progress = this.$(".progress_meter .bar .progress_section");
+      progressIncrement = 100.0 / progress.length;
+      leftToGo = 0;
+      for (_i = 0, _len = progress.length; _i < _len; _i++) {
+        progressSection = progress[_i];
+        leftToGo += $(progressSection).css('opacity') * progressIncrement;
+      }
+      percentComplete = 100 - leftToGo;
+      this.puzzleData.levels[this.languages][this.levelName].percentComplete = percentComplete;
+      $("#level_link_" + this.levelName + " .percent_complete").width("" + percentComplete + "%");
     }
     return this.saveProgress(this.puzzleData);
   };
