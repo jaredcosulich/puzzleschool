@@ -1351,8 +1351,8 @@ languageScramble.data = {
           }, {
             "native": 'my',
             foreign: 'mio',
-            nativeSentence: 'my child is seven years old',
-            foreignSentence: 'mio figlio ha sette anni'
+            nativeSentence: 'my brother is seven years old',
+            foreignSentence: 'mio fratello ha sette anni'
           }, {
             "native": 'because',
             foreign: 'perché',
@@ -1374,7 +1374,7 @@ languageScramble.data = {
             nativeSentence: 'it was only fifteen minutes',
             foreignSentence: 'era solo quindici minuti'
           }, {
-            "native": 'was',
+            "native": 'it was',
             foreign: 'era',
             nativeSentence: 'it was thirty years ago',
             foreignSentence: 'era trent\'anni fa'
@@ -1471,7 +1471,7 @@ languageScramble.data = {
           }
         ]
       },
-      top50Phrases: {
+      top50phrases: {
         title: 'Phrases For The Top 25 - 50 Words',
         subtitle: 'Phrases for the 25 - 50 most frequently used Italian words',
         nextLevel: 'top75words',
@@ -1480,8 +1480,8 @@ languageScramble.data = {
             "native": 'a little more',
             foreign: 'un po più'
           }, {
-            "native": 'my child is seven years old',
-            foreign: 'mio figlio ha sette anni'
+            "native": 'my brother is seven years old',
+            foreign: 'mio fratello ha sette anni'
           }, {
             "native": 'because i want to',
             foreign: 'perché voglio'

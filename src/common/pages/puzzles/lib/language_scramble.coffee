@@ -818,13 +818,13 @@ languageScramble.data =
                     {native: 'that', foreign: 'quella', nativeSentence: 'that lady ate my cheese', foreignSentence: 'quella signora mangiato il mio formaggio'},
                     {native: 'nothing', foreign: 'niente', nativeSentence: 'there was nothing there', foreignSentence: 'non c\'era niente'},
                 ]
-            top50Phrases:
+            top50phrases:
                 title: 'Phrases For The Top 25 - 50 Words'
                 subtitle: 'Phrases for the 25 - 50 most frequently used Italian words'
                 nextLevel: 'top75words'
                 data: [
                     {native: 'a little more', foreign: 'un po più'},
-                    {native: 'my child is seven years old', foreign: 'mio figlio ha sette anni'},
+                    {native: 'my brother is seven years old', foreign: 'mio fratello ha sette anni'},
                     {native: 'because i want to', foreign: 'perché voglio'},
                     {native: 'why do you want to go?', foreign: 'perché vuoi andare?'},
                     {native: 'she leaves tomorrow', foreign: 'lei parte domani'},
