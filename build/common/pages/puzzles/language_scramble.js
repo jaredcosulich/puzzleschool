@@ -99,7 +99,7 @@ soma.views({
       return this.viewHelper.newScramble();
     },
     saveProgress: function(puzzleProgress, callback) {
-      var answerCount, languages, levelInfo, levelName, levelUpdates, levels, puzzleUpdates, _ref, _ref1,
+      var languages, levelInfo, levelName, levelUpdates, levels, paddingTop, puzzleUpdates, registrationFlag, _ref,
         _this = this;
       if (this.cookies.get('user')) {
         puzzleUpdates = this.getUpdates(puzzleProgress);
@@ -134,16 +134,31 @@ soma.views({
         window.postRegistration.push(function(callback) {
           return _this.saveProgress(puzzleProgress, callback);
         });
-        answerCount = 0;
-        _ref1 = puzzleProgress.levels;
-        for (languages in _ref1) {
-          levels = _ref1[languages];
-          for (levelName in levels) {
-            levelInfo = levels[levelName];
-            answerCount += Object.keys(levelInfo).length;
-          }
+        if (!this.answerCount) {
+          this.answerCount = 0;
         }
-        if (answerCount > 10) {
+        this.answerCount += 1;
+        if (this.answerCount > 7) {
+          if (this.answerCount % 8 === 0) {
+            registrationFlag = $('.register_flag');
+            paddingTop = registrationFlag.css('paddingTop');
+            $.timeout(1000, function() {
+              return registrationFlag.animate({
+                paddingTop: 45,
+                paddingBottom: 45,
+                duration: 1000,
+                complete: function() {
+                  return $.timeout(1000, function() {
+                    return registrationFlag.animate({
+                      paddingTop: paddingTop,
+                      paddingBottom: paddingTop,
+                      duration: 1000
+                    });
+                  });
+                }
+              });
+            });
+          }
           return $(window).bind('beforeunload', function() {
             return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.';
           });

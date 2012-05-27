@@ -91,11 +91,24 @@ soma.views
             else if puzzleProgress.levels 
                 window.postRegistration.push((callback) => @saveProgress(puzzleProgress, callback))
                     
-                answerCount = 0
-                for languages, levels of puzzleProgress.levels
-                    for levelName, levelInfo of levels
-                        answerCount += Object.keys(levelInfo).length
-                if answerCount > 10
+                @answerCount = 0 if not @answerCount
+                @answerCount += 1
+                if @answerCount > 7
+                    if @answerCount % 8 == 0
+                        registrationFlag = $('.register_flag')
+                        paddingTop = registrationFlag.css('paddingTop')
+                        $.timeout 1000, =>
+                            registrationFlag.animate
+                                paddingTop: 45
+                                paddingBottom: 45
+                                duration: 1000
+                                complete: =>
+                                    $.timeout 1000, =>
+                                        registrationFlag.animate
+                                            paddingTop: paddingTop
+                                            paddingBottom: paddingTop
+                                            duration: 1000
+                            
                     $(window).bind 'beforeunload', => return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.'
             
 
