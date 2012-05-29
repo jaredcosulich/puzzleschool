@@ -4,7 +4,7 @@ wings = require('wings')
 class soma.View extends soma.View
     hashChanges: {}
     registerHashChange: (hash, callback) => @hashChanges[hash.replace(/#/, '')] = callback
-    
+        
 soma.chunks
     Base:
         shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -21,18 +21,11 @@ soma.chunks
             @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '768x1004', href: '/assets/images/startup768x1004.png'})
             @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '320x460', href: '/assets/images/startup320x460.png'})
 
-            @loadScript '/build/client/pages/local_storage.js'
-            @loadScript '/build/client/pages/form.js'
-            
-            @loadScript '/build/common/pages/base.js'
-            @loadScript '/build/common/pages/home.js'
-            @loadScript '/build/common/pages/about.js'
-            @loadScript '/build/common/pages/labs.js'
-            @loadScript '/build/common/pages/account.js'
-
-            @loadScript '/build/common/pages/puzzles/language_scramble.js'
-
             @loadStylesheet '/build/client/css/all.css'
+
+            @loadScript '/build/client/pages/form.js'
+
+            @loadScript '/build/common/pages/base.js'
 
             @loadScript '/assets/analytics.js'
                         
@@ -120,7 +113,6 @@ soma.views
             
         logOut: () ->
             @cookies.set('user', null)
-            @user = window.setLocalStorage('user', null) if window.hasLocalStorage
             @$('.logged_in').animate
                 opacity: 0
                 duration: 500
@@ -136,17 +128,10 @@ soma.views
                         complete: => @go(location.pathname, true)
                 
         checkLoggedIn: () ->
-            @user = @cookies.get('user')
-            if not @user and window.hasLocalStorage
-                @user = window.getLocalStorage('user')
-            return unless @user?
-
-            window.setLocalStorage('user', @user) if window.hasLocalStorage
-            @cookies.set('user', @user)
+            return unless (@user = @cookies.get('user'))?
             
             if @el.hasClass('logged_out')
-                @el.removeClass('logged_out')
-                @el.addClass('logged_in')
+                @go(location.pathname, true)
             
             @$('.user_name').html(@user.name)
         

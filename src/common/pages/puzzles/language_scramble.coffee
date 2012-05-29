@@ -23,7 +23,6 @@ soma.chunks
                                 @puzzleData.levels[languages] = {} unless @puzzleData.levels[languages]
                                 @puzzleData.levels[languages][level] = levelInfo
                                 delete @puzzleData.levels[levelName]
-            
 
         build: ->
             @setTitle("Language Scramble - The Puzzle School")
@@ -88,7 +87,6 @@ soma.views
                         @puzzleData = JSON.parse(JSON.stringify(puzzleProgress))
                         callback() if callback
                         
-            
             else if puzzleProgress.levels 
                 window.postRegistration.push((callback) => @saveProgress(puzzleProgress, callback))
                     

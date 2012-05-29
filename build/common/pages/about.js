@@ -22,13 +22,6 @@ soma.chunks({
   }
 });
 
-soma.views({
-  About: {
-    selector: '#content .about',
-    create: function() {}
-  }
-});
-
 soma.routes({
   '/about': function() {
     return new soma.chunks.About;

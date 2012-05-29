@@ -71,15 +71,9 @@ soma.chunks({
         sizes: '320x460',
         href: '/assets/images/startup320x460.png'
       });
-      this.loadScript('/build/client/pages/local_storage.js');
+      this.loadStylesheet('/build/client/css/all.css');
       this.loadScript('/build/client/pages/form.js');
       this.loadScript('/build/common/pages/base.js');
-      this.loadScript('/build/common/pages/home.js');
-      this.loadScript('/build/common/pages/about.js');
-      this.loadScript('/build/common/pages/labs.js');
-      this.loadScript('/build/common/pages/account.js');
-      this.loadScript('/build/common/pages/puzzles/language_scramble.js');
-      this.loadStylesheet('/build/client/css/all.css');
       this.loadScript('/assets/analytics.js');
       this.template = this.loadTemplate('/build/common/templates/base.html');
       return this.loadChunk(this.content);
@@ -238,9 +232,6 @@ soma.views({
     logOut: function() {
       var _this = this;
       this.cookies.set('user', null);
-      if (window.hasLocalStorage) {
-        this.user = window.setLocalStorage('user', null);
-      }
       return this.$('.logged_in').animate({
         opacity: 0,
         duration: 500,
@@ -265,20 +256,11 @@ soma.views({
       });
     },
     checkLoggedIn: function() {
-      this.user = this.cookies.get('user');
-      if (!this.user && window.hasLocalStorage) {
-        this.user = window.getLocalStorage('user');
-      }
-      if (this.user == null) {
+      if ((this.user = this.cookies.get('user')) == null) {
         return;
       }
-      if (window.hasLocalStorage) {
-        window.setLocalStorage('user', this.user);
-      }
-      this.cookies.set('user', this.user);
       if (this.el.hasClass('logged_out')) {
-        this.el.removeClass('logged_out');
-        this.el.addClass('logged_in');
+        this.go(location.pathname, true);
       }
       return this.$('.user_name').html(this.user.name);
     },
