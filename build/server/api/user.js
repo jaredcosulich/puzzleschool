@@ -23,19 +23,6 @@ soma.routes({
     line(function() {
       return db.get('users', _this.login.user, line.wait());
     });
-    line(function(user) {
-      var userCookie;
-      _this.user = user;
-      return userCookie = _this.cookies.get('user');
-    });
-    line(function() {
-      return crypto.randomBytes(16, line.wait());
-    });
-    line(function(session) {
-      return db.update('users', _this.user.id, {
-        session: session.toString('hex')
-      }, line.wait());
-    });
     return line.run(function(user) {
       _this.user = user;
       _this.cookies.set('user', _this.user, {

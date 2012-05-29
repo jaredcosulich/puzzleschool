@@ -20,6 +20,9 @@ soma.chunks
             @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '1024x748', href: '/assets/images/startup1024x748.png'})
             @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '768x1004', href: '/assets/images/startup768x1004.png'})
             @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '320x460', href: '/assets/images/startup320x460.png'})
+
+            @loadScript '/build/client/pages/local_storage.js'
+            @loadScript '/build/client/pages/form.js'
             
             @loadScript '/build/common/pages/base.js'
             @loadScript '/build/common/pages/home.js'
@@ -31,7 +34,6 @@ soma.chunks
 
             @loadStylesheet '/build/client/css/all.css'
 
-            @loadScript '/build/client/pages/form.js'
             @loadScript '/assets/analytics.js'
                         
             @template = @loadTemplate '/build/common/templates/base.html'
@@ -118,6 +120,7 @@ soma.views
             
         logOut: () ->
             @cookies.set('user', null)
+            @user = window.setLocalStorage('user', null) if window.hasLocalStorage
             @$('.logged_in').animate
                 opacity: 0
                 duration: 500
@@ -133,10 +136,18 @@ soma.views
                         complete: => @go(location.pathname, true)
                 
         checkLoggedIn: () ->
-            return unless (@user = @cookies.get('user'))?
+            @user = @cookies.get('user')
+            if not @user and window.hasLocalStorage
+                @user = window.getLocalStorage('user')
+            return unless @user?
+
+            window.setLocalStorage('user', @user) if window.hasLocalStorage
+            @cookies.set('user', @user)
+            
             if @el.hasClass('logged_out')
-                @go(location.pathname, true)
-                
+                @el.removeClass('logged_out')
+                @el.addClass('logged_in')
+            
             @$('.user_name').html(@user.name)
         
         

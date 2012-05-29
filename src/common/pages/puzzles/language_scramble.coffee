@@ -87,6 +87,7 @@ soma.views
                     success: => 
                         @puzzleData = JSON.parse(JSON.stringify(puzzleProgress))
                         callback() if callback
+                        
             
             else if puzzleProgress.levels 
                 window.postRegistration.push((callback) => @saveProgress(puzzleProgress, callback))

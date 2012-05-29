@@ -25,12 +25,12 @@ registrationTemplate = """
 soma.routes
     '/api/login': checkPassword ->
         line => db.get 'users', @login.user, line.wait()
-        line (@user) =>
-            userCookie = @cookies.get('user')
+        # line (@user) =>
+        #     userCookie = @cookies.get('user')
             # if userCookie possibly merge user data
             
-        line => crypto.randomBytes 16, line.wait()
-        line (session) => db.update 'users', @user.id, {session: session.toString('hex')}, line.wait()
+        # line => crypto.randomBytes 16, line.wait()
+        # line (session) => db.update 'users', @user.id, {session: session.toString('hex')}, line.wait()
         line.run (@user) =>
             @cookies.set('user', @user, { signed: true })
             @send()
