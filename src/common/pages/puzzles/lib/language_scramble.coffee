@@ -62,7 +62,7 @@ class languageScramble.ViewHelper
     formatLevelLinks: () ->
         for percentComplete in $('.footer .levels .level .percent_complete')
             percentComplete = $(percentComplete)
-            height = percentComplete.closest('.level').height()
+            height = percentComplete.closest('.level').height() - 2
             percentComplete.css(height: height, marginTop: height * -1)
 
     setLevel: (@levelName) ->   

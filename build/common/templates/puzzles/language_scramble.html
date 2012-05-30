@@ -56,10 +56,10 @@
             <h2>{displayLanguages} Levels</h2>
             {:allLevels}
                 <div class='level' id='level_link_{id}'>
-                    <a href='/puzzles/language_scramble/{languages}/{id}'>
+                    <a class='level_link' href='/puzzles/language_scramble/{languages}/{id}'>
                         {title}<br/><small>{subtitle}</small>
                     </a>
-                    <div class='percent_complete' style='width: {percentComplete}%'>&nbsp;</div>
+                    <a class='percent_complete' href='/puzzles/language_scramble/{languages}/{id}' style='width: {percentComplete}%'>&nbsp;</a>
                 </div>
             {/allLevels}
         </div>

@@ -117,7 +117,7 @@ languageScramble.ViewHelper = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       percentComplete = _ref[_i];
       percentComplete = $(percentComplete);
-      height = percentComplete.closest('.level').height();
+      height = percentComplete.closest('.level').height() - 2;
       _results.push(percentComplete.css({
         height: height,
         marginTop: height * -1

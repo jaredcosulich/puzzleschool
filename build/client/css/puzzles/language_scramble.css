@@ -322,7 +322,7 @@ body {
   margin: 12px 0 0 30px;
   width: 330px;
 }
-.language_scramble .footer .levels .level a {
+.language_scramble .footer .levels .level .level_link {
   display: block;
   margin: 6px 0;
 }
