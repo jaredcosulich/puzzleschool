@@ -863,10 +863,10 @@ languageScramble.data =
                 data: [
                     {native: 'to him', foreign: 'gli', nativeSentence: 'i will speak to him', foreignSentence: 'gli voglio parlare'},
                     {native: 'everything', foreign: 'tutto', nativeSentence: 'the one who has everything can lose everything', foreignSentence: 'chi ha tutto può perdere tutto'},
-                    {native: 'of', foreign: 'della', nativeSentence: 'celebriamo la festa della mamma in onore delle nostre madri', foreignSentence: 'we celebrate mother\'s day in honor of our mothers'},
+                    {native: 'of', foreign: 'della', nativeSentence: 'we celebrate mother\'s day in honor of our mothers', foreignSentence: 'celebriamo la festa della mamma in onore delle nostre madri'},
                     {native: 'so', foreign: 'così', nativeSentence: 'what made her so sad?', foreignSentence: 'cosa l\'ha resa così triste?'},
-                    {native: 'mia', foreign: 'my', nativeSentence: 'my mother is older than my father', foreignSentence: 'mia madre è più vecchio di mio padre'},
-                    {native: 'neither', foreign: 'ne', nativeSentence: 'he knows neither french nor german', foreignSentence: 'non sa né il francese né il tedesco'},
+                    {native: 'my', foreign: 'mia', nativeSentence: 'my mother is older than my father', foreignSentence: 'mia madre è più vecchio di mio padre'},
+                    {native: 'neither', foreign: 'né', nativeSentence: 'he knows neither french nor german', foreignSentence: 'non sa né il francese né il tedesco'},
                     {native: 'this', foreign: 'questa', nativeSentence: 'this house and this land are mine', foreignSentence: 'questa casa e questa terra sono mie'},
                     {native: 'be', foreign: 'fare', nativeSentence: 'you must be careful not to drop the eggs', foreignSentence: 'dovete fare attenzione a non fare cadere le uova'},
                     {native: 'when', foreign: 'quando', nativeSentence: 'when i hear that song i think about when i was young', foreignSentence: 'quando sento quella canzone penso a quando ero piccolo'},

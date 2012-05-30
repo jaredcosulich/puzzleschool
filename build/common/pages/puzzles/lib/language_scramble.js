@@ -1589,21 +1589,21 @@ languageScramble.data = {
           }, {
             "native": 'of',
             foreign: 'della',
-            nativeSentence: 'celebriamo la festa della mamma in onore delle nostre madri',
-            foreignSentence: 'we celebrate mother\'s day in honor of our mothers'
+            nativeSentence: 'we celebrate mother\'s day in honor of our mothers',
+            foreignSentence: 'celebriamo la festa della mamma in onore delle nostre madri'
           }, {
             "native": 'so',
             foreign: 'così',
             nativeSentence: 'what made her so sad?',
             foreignSentence: 'cosa l\'ha resa così triste?'
           }, {
-            "native": 'mia',
-            foreign: 'my',
+            "native": 'my',
+            foreign: 'mia',
             nativeSentence: 'my mother is older than my father',
             foreignSentence: 'mia madre è più vecchio di mio padre'
           }, {
             "native": 'neither',
-            foreign: 'ne',
+            foreign: 'né',
             nativeSentence: 'he knows neither french nor german',
             foreignSentence: 'non sa né il francese né il tedesco'
           }, {
