@@ -188,8 +188,9 @@ class languageScramble.ViewHelper
             try 
                 char = String.fromCharCode(e.keyCode).toLowerCase()
                 foreignChar = openGuess.className.match(/actual_letter_(.)/)[1]
-                if foreignChar in ['é', 'è', 'ì', 'ò', 'ù']  
+                if foreignChar in ['é', 'è', 'ì', 'ò', 'ù', 'à']  
                     nativeChar = switch foreignChar
+                        when 'à' then 'a'
                         when 'é' then 'e'
                         when 'è' then 'e'
                         when 'ì' then 'i'
