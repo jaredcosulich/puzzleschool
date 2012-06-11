@@ -302,7 +302,6 @@ class languageScramble.ViewHelper
             minLevel = optionLevel if optionLevel < minLevel
 
         if minLevel == @maxLevel
-            
             incomplete = (option for option in @options when (@puzzleData.levels[@languages][@levelName][option.id] || 1) < @maxLevel)
             if incomplete.length
                 @orderedOptions.push(option) for option in incomplete
@@ -882,7 +881,7 @@ languageScramble.data =
                     {native: 'very', foreign: 'molto', nativeSentence: 'italy is a very beautiful country', foreignSentence: 'l\'italia è un paese molto bello'},
                     {native: 'also', foreign: 'anche', nativeSentence: 'excuse me, we\'re in a hurry also', foreignSentence: 'scusami, ma abbiamo anche noi fretta'},
                     {native: 'said', foreign: 'detto', nativeSentence: 'she may have said so', foreignSentence: 'potrebbe aver detto ciò'},
-                    {native: 'that', foreign: 'quello', nativeSentence: 'that\'s not what i heard', foreignSentence: 'quello non è ciò che ho sentito io'},
+                    {native: 'that', foreign: 'quello', nativeSentence: 'that is not what i heard', foreignSentence: 'quello non è ciò che ho sentito io'},
                     {native: 'goes', foreign: 'va', nativeSentence: 'my father goes to work on a bike', foreignSentence: 'mio padre va a lavorare in bici'},
                     {native: 'nothing', foreign: 'niente', nativeSentence: 'he did nothing wrong', foreignSentence: 'non fece niente di male'},
                     {native: 'thank you', foreign: 'grazie', nativeSentence: 'thank you for your invitation', foreignSentence: 'grazie per il vostro invito'},

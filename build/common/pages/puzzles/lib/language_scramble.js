@@ -322,9 +322,11 @@ languageScramble.ViewHelper = (function() {
       try {
         char = String.fromCharCode(e.keyCode).toLowerCase();
         foreignChar = openGuess.className.match(/actual_letter_(.)/)[1];
-        if (foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'ò' || foreignChar === 'ù') {
+        if (foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'ò' || foreignChar === 'ù' || foreignChar === 'à') {
           nativeChar = (function() {
             switch (foreignChar) {
+              case 'à':
+                return 'a';
               case 'é':
                 return 'e';
               case 'è':
@@ -1679,7 +1681,7 @@ languageScramble.data = {
           }, {
             "native": 'that',
             foreign: 'quello',
-            nativeSentence: 'that\'s not what i heard',
+            nativeSentence: 'that is not what i heard',
             foreignSentence: 'quello non è ciò che ho sentito io'
           }, {
             "native": 'goes',
