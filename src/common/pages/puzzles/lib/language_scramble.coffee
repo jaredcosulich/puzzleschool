@@ -53,7 +53,7 @@ class languageScramble.ChunkHelper
 class languageScramble.ViewHelper
     maxLevel: 7
 
-    constructor: ({@el, puzzleData, @languages, @go, @saveProgress}) ->
+    constructor: ({@el, puzzleData, @languages, @saveProgress}) ->
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
         @formatLevelLinks()
         
@@ -873,7 +873,7 @@ languageScramble.data =
                     {native: 'time', foreign: 'ora', nativeSentence: 'what time does the plane leave?', foreignSentence: 'a che ora decolla l\'aereo?'}
                     {native: 'did', foreign: 'fatto', nativeSentence: 'did you have a good trip?', foreignSentence: 'hai fatto un buon viaggio?'},
                     {native: 'to be', foreign: 'essere', nativeSentence: 'it is never too late to be what you could have been', foreignSentence: 'non è mai troppo tardi per essere ciò che avresti potuto essere.'},
-                    {native: 'know', foreign: 'so', nativeSentence: 'i know the answer', foreignSentence: 'non so se avrò il tempo di farlo'},
+                    {native: 'know', foreign: 'so', nativeSentence: 'i know how to dance', foreignSentence: 'so ballare'},
                     {native: 'never', foreign: 'mai', nativeSentence: 'never give up', foreignSentence: 'mai rinunciare'},
                     {native: 'who', foreign: 'chi', nativeSentence: 'who is it?', foreignSentence: 'chi é?'},
                     {native: 'or', foreign: 'o', nativeSentence: 'don\'t pour hot water in to the glass or it will crack', foreignSentence: 'non versare acqua calda nel bicchiere o si romperà'},
@@ -903,7 +903,7 @@ languageScramble.data =
                     {native: 'what time does the plane leave?', foreign: 'a che ora decolla l\'aereo?'}
                     {native: 'did you have a good trip?', foreign: 'hai fatto un buon viaggio?'},
                     {native: 'it is never too late to be what you could have been', foreign: 'non è mai troppo tardi per essere ciò che avresti potuto essere.'},
-                    {native: 'i know the answer', foreign: 'non so se avrò il tempo di farlo'},
+                    {native: 'i know how to dance', foreign: 'so ballare'},
                     {native: 'never give up', foreign: 'mai rinunciare'},
                     {native: 'who is it?', foreign: 'chi é?'},
                     {native: 'don\'t pour hot water in to the glass or it will crack', foreign: 'non versare acqua calda nel bicchiere o si romperà'},

@@ -97,7 +97,7 @@ languageScramble.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     var puzzleData;
-    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.go = _arg.go, this.saveProgress = _arg.saveProgress;
+    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.saveProgress = _arg.saveProgress;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -1641,8 +1641,8 @@ languageScramble.data = {
           }, {
             "native": 'know',
             foreign: 'so',
-            nativeSentence: 'i know the answer',
-            foreignSentence: 'non so se avrò il tempo di farlo'
+            nativeSentence: 'i know how to dance',
+            foreignSentence: 'so ballare'
           }, {
             "native": 'never',
             foreign: 'mai',
@@ -1747,8 +1747,8 @@ languageScramble.data = {
             "native": 'it is never too late to be what you could have been',
             foreign: 'non è mai troppo tardi per essere ciò che avresti potuto essere.'
           }, {
-            "native": 'i know the answer',
-            foreign: 'non so se avrò il tempo di farlo'
+            "native": 'i know how to dance',
+            foreign: 'so ballare'
           }, {
             "native": 'never give up',
             foreign: 'mai rinunciare'
