@@ -88,9 +88,10 @@ class languageScramble.ViewHelper
             @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
             progress = @$(".progress_meter .bar .progress_section")
             progressIncrement = 100.0 / progress.length
-            leftToGo = 0            
+            leftToGo = 0
             leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
             percentComplete = 100 - leftToGo
+            percentComplete = 100 if percentComplete > 98
             @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete
             $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
             
