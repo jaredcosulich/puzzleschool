@@ -121,11 +121,11 @@ LABDATA = [
     },
     practicality: {
       rating: 4,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>Although there's very little to Language Scramble than the languages involved, it still could improve a bit.</p>\n<p>\n    To be truly practical as a language learning game we're going to need to have more than just written words to\n    translate. Ideally there would be images and spoken words as well, providing a more complete experience of\n    the foreign language.\n</p>\n<p>\n    Still there are very few bells and whistles distracting from the language learning, so the learning is effective and\n    very practical as is.\n<p>"
     },
     accessibility: {
       rating: 3,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>There's still a lot more work to be done to make Language Scramble as accessible as it needs to be.</p>\n<p>\n    Although it works well on a computer or through a web browser on an iPad or even the iPhone, it's not yet\n    available through any app stores, and the web browser experience requires you to sign in, making it more\n    difficult to access the app through your phone or iPad.\n</p>\n<p>\n    The experience is also not yet optimized for small screens. So while it works well on an iPad, it leaves a little\n    to be desired on a smart phone. It works, but the experience isn't all that great yet.\n</p>\n<p>We're hoping to improve all of this as soon as we can.</p>"
     }
   }, {
     title: 'Peanutty!',
