@@ -121,7 +121,7 @@ REVIEWDATA = [
     },
     accessibility: {
       rating: 3,
-      explanation: " \n<p>\n    This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely\n    iPhone of iPad) and it's not available in any app stores, so taking this on the road requires a laptop and\n    an internet connection.\n</p>\n<p>\n    I don't think it would be too hard for them to get this working in a way that is more accessible, though. In\n    fact we might reach out to them to see if we can do it for them.\n<br/><br/><br/><br/>"
+      explanation: " \n<p>\n    This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely\n    iPhone or iPad) and it's not available in any app stores, so taking this on the road requires a laptop and\n    an internet connection.\n</p>\n<p>\n    I don't think it would be too hard for them to get this working in a way that is more accessible, though. In\n    fact we might reach out to them to see if we can do it for them.\n<br/><br/><br/><br/>"
     }
   }, {
     title: 'Foldit',

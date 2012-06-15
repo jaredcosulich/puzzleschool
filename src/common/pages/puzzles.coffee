@@ -249,7 +249,7 @@ REVIEWDATA = [{
             """ 
             <p>
                 This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely
-                iPhone of iPad) and it's not available in any app stores, so taking this on the road requires a laptop and
+                iPhone or iPad) and it's not available in any app stores, so taking this on the road requires a laptop and
                 an internet connection.
             </p>
             <p>
