@@ -127,12 +127,13 @@ REVIEWDATA = [{
                 Hopefully they'll build out some more advanced levels that start to use the equation solving skills in more practical
                 situations, but, even if they don't, the game does a good enough job of making the equation solving skill fun that it's
                 likely that a student will figure out how to apply the skill themself once the game is complete.
+            </p>
             """
     accessibility:
         rating: 4
         explanation:
             """
-            <p>The app is available on IOS (iPhone) and Android phones as wel as the iPad.</p>
+            <p>The app is available on IOS (iPhone) and Android phones as well as the iPad.</p>
             <p>
                 That should make it accessible to most people, but I would still prefer to see if available on the web for people
                 who don't have an iPad and don't want to squint at their phone all the time.
@@ -151,6 +152,139 @@ REVIEWDATA = [{
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-algebra-meets-angry-birds/' target='_blank'>DragonBox - Algebra Meets Angry Birds</a></p>
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>
             <br/><br/><br/><br/><br/><br/>
+        """
+},{
+    title: 'Foldit'
+    website: 'http://fold.it'
+    thumbnail: '/assets/images/reviews/foldit.jpg'
+    company: 'UW Center for Game Science'
+    companyWebsite: 'http://www.centerforgamescience.org'
+    material: 'Biochemistry'
+    availability: 'Web'
+    cost: 'Free'
+    overall:
+        rating: 3
+        explanation:
+            """
+            <p>Foldit is crowd-sourced experiment that lets you try and figure out how to fold proteins to try and discover their optimal folded state.</p>
+            <p>
+                The puzzle is educational, but doesn't do the best job of providing enough context for someone to walk away with a better understanding
+                of the biochemistry they are working with.
+            </p>
+            <p>
+                The site has the great benefit that the puzzles you are solving are actually helping scientists discover cures for diseases such
+                as AIDS. In fact, in 2011, players of Foldit helped to decipher the crystal structure of the Mason-Pfizer monkey virus (M-PMV) 
+                retroviral protease, an AIDS-causing monkey virus. While the puzzle was available to play for a period of three weeks, 
+                players produced an accurate 3D model of the enzyme in just ten days. The problem of how to configure the structure of the enzyme 
+                had stumped scientists for 15 years [from <a href='http://en.wikipedia.org/wiki/Foldit' target='_blank'>Wikipedia</a>].
+            </p>
+            <p>
+                Despite that enormously practical benefit of helping to cure AIDS and other diseases, Foldit is not the most practical experience
+                for students. Although I'm sure the developers did the best job they could to make the site intuitive and fun, the mechanics
+                are still quite clunky and I think it's unlikely that students will stick with it long enough to gain any significant educational
+                benefit.
+            </p>
+            <p>
+                I can't quite recommend it, but I do feel it would be a shame if someone didn't try it out based on my recommendation and actually
+                loved it and went on to make a significant contribution to science, so maybe give it a shot with the expectation that it probably
+                won't click as easily as I would hope.
+            </p>
+            """
+    loveOfLearning:
+        rating: 3
+        explanation:
+            """
+            <p>
+                Although the opportunity to truly help scientists discover more optimal protein-folding structure could
+                really inspire a student to learn more about biochemistry and the uses for the work they do in Foldit,
+                I think most students would walk away from Foldit a little discouraged due to the complex nature and lack
+                of context in to what is going on.
+            </p>
+            <p>
+                The site could do a better job of providing more context and learning around the puzzle-like elements
+                so that students could gain a better understanding of what is going on. I think that would help students
+                learn more through the site, become more excited about the science that they are playing with, and encourage
+                them to come back for more later.
+            <p>
+                As it is, though, I can't rate it too highly. It is tempting to given it's actual real-world application, but
+                just from playing it myself it relies too much on scores and didn't provide enough context for me to feel
+                motivated to continue playing or curious to learn more about the underlying science.
+            </p>
+            """
+    intuitive:
+        rating: 3
+        explanation:
+            """
+            <p>
+                Foldit does a good job of walking you through the different manipulations you can do the proteins, making
+                it relatively easy to advance through a few puzzles, but I never really felt all that comfortable with what I
+                was trying to do.
+            </p>
+            <p>
+                The complex nature of the puzzles you are trying to solve and the lack of context the site provides makes it
+                feel quite frustrating at points when you can't quite manipulate the proteins in the way that you want, or that,
+                when you do manipulate them correctly, you don't get the result you were expecting.
+            </p>
+            <p>
+                A lot of people have been able to figure out Foldit and have gone on to solve very complex protein-folding puzzles,
+                so I can't knock it too much, but compared to other educatonal resources, I don't think Foldit is nearly intuitive enough
+                to just drop in front of a student and have them run with it.
+            </p>
+            """
+    engagement:
+        rating: 3
+        explanation:
+            """
+            <p>Foldit's engagement relies heavily on the idea that you are helping advance science.</p>
+            <p>
+                The complexity and ambiguity of the puzzles themselves aren't ideal for engagement. Manipulating a puzzle
+                can be challenging and solving a puzzle can feel less rewarding than many other puzzles.
+            </p>
+            <p>
+                Still the puzzles are interesting, and the real-world nature of them certainly adds a feeling of purpose
+                to the experience.
+            </p>
+            <p>
+                Unfortunately I just don't expect most students to stick it out.
+            </p>            
+            """
+    practicality:
+        rating: 4
+        explanation:
+            """
+            <p>
+                It doesn't get much more practical than actually contributing to scientific efforts, but from an educational
+                perspective, Foldit could use some improvement.
+            </p>
+            <p>
+                I hope some day they'll improve the puzzle to better expose the underlying science and how protein-folding
+                fits in to a larger scientific context, but for now the puzzles are fun and there's no dressing up the
+                puzzles. What you see is the same thing that a professional scientist may work with, and there's certainly
+                a lot of practical benefit in that.
+            </p>
+            <br/><br/><br/>
+            """
+    accessibility:
+        rating: 2
+        explanation:
+            """ 
+            <p>
+                Foldit requires a download in order to run. The download is easy to install and should work on most computers,
+                but it's still not as accessible as a web-based application or an app in an app store.
+            </p>
+            <p>
+                2 stars does feel a little bit harsh for a free app that is a simple download, but downloading an app that requires
+                registration makes it that much more of a committment just to try it out.
+            </p>
+            <br/><br/><br/><br/>
+            """
+    articles: 
+        """
+        <p><a href='http://en.wikipedia.org/wiki/Foldit' target='_blank'>Wikipedia - Foldit</a></p>
+        <p><a href='http://foldit.wikia.com/wiki/Foldit_Wiki' target='_blank'>Foldit Wiki</a></p>
+        <p><a href='http://www.scientificamerican.com/article.cfm?id=foldit-gamers-solve-riddle' target='_blank'>Foldit Gamers Solve Riddle of HIV Enzyme within 3 Weeks</a></p>
+        <p><a href='http://news.cnet.com/8301-27083_3-20108365-247/foldit-game-leads-to-aids-research-breakthrough/' target='_blank'>Foldit game leads to AIDS research breakthrough</a></p>
+        <br/><br/><br/><br/>
         """
 }]
 
