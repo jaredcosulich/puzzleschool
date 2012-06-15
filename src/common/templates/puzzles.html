@@ -1,0 +1,124 @@
+<div class='page puzzles'>
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
+        Puzzles
+    </h1>
+    
+    <h3 class='main_nav upcase'>
+        <a href='/'>HOME</a>    
+        <!-- <a>THE SCHOOL</a> -->
+        <a href='/puzzles' class='selected'>PUZZLES</a>
+        <!-- <a>BLOG</a> -->
+        <a href='/about'>ABOUT</a>
+    </h3>
+    <h4 class='sub_nav'>
+        <a href='#reviews' class='selected'>Reviews</a>
+        <a href='#labs'>Labs</a>
+    </h4>
+        
+    <div class='section' id='reviews'>
+        <h2>Reviews</h2>
+        <p>We're all about creating and finding the best educational puzzles out there. Here are reviews of some of the best we've discovered.</p>
+        {:reviews}
+        <div class='puzzle'>
+            <h3>
+                <a href='{&website}' target='_blank'>{title}</a>
+                <small>by <a href='{&companyWebsite}' target='_blank'>{company}</a></small>
+            </h3>
+            <div class='info'>
+                <a href='{website}' target='_blank'><img src='{&thumbnail}'/></a>
+                <p><b>Material:</b> {material}</p> 
+                <p><b>Availability:</b> {availability}</p> 
+                <p><b>Cost:</b> {cost}</p>
+                <p>Try <a href='{&website}' target='_blank'>{title}</a> ></p>
+            </div>
+            <div class='details'>
+                <div class='rating'>
+                    <p class='overall selected'><b>Overall:</b> {overall.rating} Stars</p> 
+                    <p class='love_of_learning'><b>Love Of Learning:</b> <img src='/assets/images/reviews/{loveOfLearning.rating}stars.png'/></p> 
+                    <p class='intuitive'><b>Intuitive:</b> <img src='/assets/images/reviews/{intuitive.rating}stars.png'/></p> 
+                    <p class='engagement'><b>Engagement:</b> <img src='/assets/images/reviews/{engagement.rating}stars.png'/></p> 
+                    <p class='practicality'><b>Practicality:</b> <img src='/assets/images/reviews/{practicality.rating}stars.png'/></p> 
+                    <p class='accessibility'><b>Accessibility:</b> <img src='/assets/images/reviews/{accessibility.rating}stars.png'/></p>
+                    <p class='articles'><b>Articles</b></p>
+                </div>
+                <div class='explanation overall selected'>
+                    {&overall.explanation}
+                </div>
+                <div class='explanation love_of_learning'>
+                    {&loveOfLearning.explanation}
+                </div>
+                <div class='explanation intuitive'>
+                    {&intuitive.explanation}
+                </div>
+                <div class='explanation engagement'>
+                    {&engagement.explanation}
+                </div>
+                <div class='explanation practicality'>
+                    {&practicality.explanation}
+                </div>
+                <div class='explanation accessibility'>
+                    {&accessibility.explanation}
+                </div>
+                <div class='explanation articles'>
+                    <p>Here are a collection of articles about {title} from around the web (mostly my blog):
+                    {&articles}
+                </div>
+            </div>
+        </div>
+        {/reviews}
+    </div>
+
+
+    <div class='section' id='labs'>
+        <h2>Labs</h2>
+        <p>Here are all of the puzzles we're working on at The Puzzle School.</p>
+        {:labs}
+        <div class='puzzle'>
+            <h3>
+                <a href='{&website}' target='_blank'>{title}</a>
+                <small>by <a href='{&companyWebsite}' target='_blank'>{company}</a></small>
+            </h3>
+            <div class='info'>
+                <a href='{website}' target='_blank'><img src='{&thumbnail}'/></a>
+                <p><b>Material:</b> {material}</p> 
+                <p><b>Availability:</b> {availability}</p> 
+                <p><b>Cost:</b> {cost}</p>
+            </div>
+            <div class='details'>
+                <div class='rating'>
+                    <p class='overall selected'><b>Overall:</b> {overall.rating}</p> 
+                    {:loveOfLearning}<p class='love_of_learning'><b>Love Of Learning:</b> <img src='/assets/images/reviews/{rating}stars.png'/></p>{/loveOfLearning} 
+                    {:intuitive}<p class='intuitive'><b>Intuitive:</b> <img src='/assets/images/reviews/{rating}stars.png'/></p>{/intuitive}
+                    {:engagement}<p class='engagement'><b>Engagement:</b> <img src='/assets/images/reviews/{rating}stars.png'/></p>{/engagement} 
+                    {:practicality}<p class='practicality'><b>Practicality:</b> <img src='/assets/images/reviews/{rating}stars.png'/></p>{/practicality}
+                    {:accessibility}<p class='accessibility'><b>Accessibility:</b> <img src='/assets/images/reviews/{rating}stars.png'/></p>{/accessibility}
+                    {:articles}<p class='articles'><b>Articles</b></p>{/articles}
+                </div>
+                <div class='explanation overall selected'>
+                    {&overall.explanation}
+                </div>
+                <div class='explanation love_of_learning'>
+                    {&loveOfLearning.explanation}
+                </div>
+                <div class='explanation intuitive'>
+                    {&intuitive.explanation}
+                </div>
+                <div class='explanation engagement'>
+                    {&engagement.explanation}
+                </div>
+                <div class='explanation practicality'>
+                    {&practicality.explanation}
+                </div>
+                <div class='explanation accessibility'>
+                    {&accessibility.explanation}
+                </div>
+                <div class='explanation articles'>
+                    <p>Here are a collection of articles about {title} from around the web (mostly my blog):
+                    {&articles}
+                </div>
+            </div>
+        </div>
+        {/labs}        
+    </div>
+</div>

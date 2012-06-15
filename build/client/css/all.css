@@ -22,17 +22,17 @@ h1 {
   font-size: 27px;
 }
 h2 {
-  font-size: 18px;
+  font-size: 23px;
 }
 h3 {
-  font-size: 15px;
+  font-size: 18px;
 }
 small,
 .small {
   font-size: 11px;
 }
 small {
-  color: #a6a6a6;
+  color: #949494;
 }
 a {
   text-decoration: none;
@@ -72,7 +72,7 @@ a {
   top: -1000px;
   opacity: 0;
   padding: 12px;
-  border: 1px solid #a6a6a6;
+  border: 1px solid #949494;
   background-color: #fafafa;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
@@ -92,8 +92,8 @@ a {
   margin: auto;
 }
 .modal form table input {
-  height: 15px;
-  line-height: 15px;
+  height: 18px;
+  line-height: 18px;
 }
 .modal .field {
   margin-bottom: 6px;
@@ -104,7 +104,7 @@ a {
 }
 .opaque_screen {
   position: absolute;
-  background-color: #666666;
+  background-color: #484848;
   z-index: 100;
   opacity: 0;
 }
@@ -174,7 +174,7 @@ a {
   margin-top: 45px;
 }
 #footer {
-  border-top: 1px solid #a6a6a6;
+  border-top: 1px solid #949494;
   padding-top: 3px;
   width: 930px;
   margin: 60px auto;
@@ -212,11 +212,30 @@ a {
   float: left;
   text-align: center;
   padding-bottom: 3px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #c7c7c7;
 }
 .page .main_nav a.selected,
 .page .main_nav a:hover {
-  border-bottom: 1px solid #666666;
+  border-bottom: 1px solid #484848;
+}
+.page .sub_nav {
+  width: 16em;
+  margin: -15px auto 30px auto;
+  overflow: hidden;
+}
+.page .sub_nav a {
+  font-weight: normal;
+  color: #262626;
+  width: 7em;
+  margin-left: 1em;
+  float: left;
+  text-align: center;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #c7c7c7;
+}
+.page .sub_nav a.selected,
+.page .sub_nav a:hover {
+  border-bottom: 1px solid #484848;
 }
 .home .opening_post {
   width: 54em;
@@ -225,18 +244,47 @@ a {
 .home .opening_post li {
   margin-bottom: 6px;
 }
-.labs .experiment {
-  padding-bottom: 30px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #e5e5e5;
+.puzzles #labs {
+  padding-top: 45px;
+  border-top: 1px solid #c7c7c7;
 }
-.labs .experiment img {
-  float: left;
-  margin: 12px 12px 0 0;
-  border: 1px solid #a6a6a6;
+.puzzles .section {
+  margin-bottom: 45px;
 }
-.labs .experiment .explanation {
+.puzzles .section .puzzle {
+  padding: 30px 0;
   overflow: hidden;
+}
+.puzzles .section .puzzle .info {
+  float: left;
+}
+.puzzles .section .puzzle .info img {
+  margin: 12px 12px 0 0;
+  border: 1px solid #949494;
+}
+.puzzles .section .puzzle .details {
+  margin-top: 12px;
+}
+.puzzles .section .puzzle .details .explanation {
+  padding: 0 12px;
+  overflow: hidden;
+  background-color: #ededed;
+  display: none;
+}
+.puzzles .section .puzzle .details .explanation.selected {
+  display: block;
+}
+.puzzles .section .puzzle .details .rating {
+  width: 180px;
+  float: left;
+}
+.puzzles .section .puzzle .details .rating p {
+  cursor: pointer;
+  padding: 6px;
+  margin: 0;
+}
+.puzzles .section .puzzle .details .rating p.selected {
+  background-color: #ededed;
 }
 .about .about_text {
   width: 54em;

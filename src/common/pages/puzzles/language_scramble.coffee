@@ -23,6 +23,8 @@ soma.chunks
                                 @puzzleData.levels[languages] = {} unless @puzzleData.levels[languages]
                                 @puzzleData.levels[languages][level] = levelInfo
                                 delete @puzzleData.levels[levelName]
+                    error: () =>
+                        alert('We were unable to load your account information. Please check your internet connection.')
 
         build: ->
             @setTitle("Language Scramble - The Puzzle School")
@@ -59,7 +61,6 @@ soma.views
                 el: $(@selector)
                 puzzleData: @puzzleData
                 languages: @languages
-                go: @go
                 saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
             @viewHelper.setLevel(@levelName)
             @viewHelper.bindWindow()

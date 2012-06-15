@@ -42,6 +42,9 @@ soma.chunks({
               }
               return _results;
             }
+          },
+          error: function() {
+            return alert('We were unable to load your account information. Please check your internet connection.');
           }
         });
       }
@@ -88,7 +91,6 @@ soma.views({
         el: $(this.selector),
         puzzleData: this.puzzleData,
         languages: this.languages,
-        go: this.go,
         saveProgress: function(puzzleProgress) {
           return _this.saveProgress(puzzleProgress);
         }
