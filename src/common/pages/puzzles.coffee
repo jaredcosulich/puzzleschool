@@ -543,31 +543,73 @@ LABDATA = [{
         rating: 3
         explanation:
             """
-            <p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <p>
+                Unforunately Peanutty! is still a bit too complicated for most students to engage with it beyond the first few
+                challanges. We think it has the potential to be a great environment to learn programming, but it's not there yet.
+            </p>
+            <p>
+                At this point I think it's too likely that a student would get overwhelmed and frustrated trying to use Peanutty!
+                Some students may be able to figure it out and have a lot of fun with it, but too many may find it confusing, leading
+                to a general sense that they're not good at programming. That's exactly what we would like to avoid.
+            </p>
+            <br/><br/>
             """
     intuitive:
         rating: 3
         explanation:
             """
-            <p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <p>
+                Alhough Peanutty! has some fun techniques to make it intuitive with very little instruction (namely the ability to
+                interact with the environment without coding, but having those interactions produce code), but it's still not nearly
+                intuitive enough for prime time.
+            </p>
+            <p>
+                As with the "love of learning" aspect, we hope to improve the intuitiveness of Peanutty! in the near future.
+            </p>
+            <br/><br/>
             """
     engagement:
         rating: 3
         explanation:
             """
-            <p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <p>
+                Once again we think Peanutty! has a lot of potential in the engagement arena. Already in tests with high school students
+                we've seen a high level of engagement. Unfortunately it rapidly diminished as the activities became too challenging
+                too quickly.
+            </p>
+            <p>Once again we hope to improve this aspect of Peanutty! in the near future as well.</p>
+            <br/><br/><br/>
             """
     practicality:
         rating: 5
         explanation:
             """
-            <p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <p>
+                This is the one area where Peanutty! currently rates very highly. In order to solve problems and create levels in
+                Peanutty! students write the same code that I use every day as a professional programmer. There's very little
+                between the studens and actual coding. Maybe there should be some more layers of simplification, but as it is
+                students get a very practical exposure to programming, how it looks, how to interact with it, etc.
+            </p>
+            <br/><br/><br/><br/>
             """
     accessibility:
         rating: 2
         explanation:
             """
-            <p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <p>
+                Peanutty! currently scores pretty low here. It only works on the Chrome browser and isn't accessible on smart phones
+                or tablets. Even worse, we're not sure that it's ever going to be accessible on those more mobile devices.
+            </p>
+            <p>
+                The problem is that programming requires a fair amount of typing and we're not really sure that it's going to
+                work well with a virtual keyboard. I certainly wouldn't want to program anything substantial on a virtual keyboard.
+            </p>
+            <p>
+                Not only that, but we're not sure how to make it all work on a smaller screen. We want to make sure the environment and
+                the code are both visible at all times so that it's easier to make and test changes. We might be able to squeeze it into a
+                tablet format, but I doubt it will ever fit on a smart phone's screen.
+            </p>
+            <br/>
             """
 }, {
     title: 'Upside Down Academy'

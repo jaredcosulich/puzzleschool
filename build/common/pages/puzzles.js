@@ -209,23 +209,23 @@ LABDATA = [
     },
     loveOfLearning: {
       rating: 3,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>\n    Unforunately Peanutty! is still a bit too complicated for most students to engage with it beyond the first few\n    challanges. We think it has the potential to be a great environment to learn programming, but it's not there yet.\n</p>\n<p>\n    At this point I think it's too likely that a student would get overwhelmed and frustrated trying to use Peanutty!\n    Some students may be able to figure it out and have a lot of fun with it, but too many may find it confusing, leading\n    to a general sense that they're not good at programming. That's exactly what we would like to avoid.\n</p>\n<br/><br/>"
     },
     intuitive: {
       rating: 3,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>\n    Alhough Peanutty! has some fun techniques to make it intuitive with very little instruction (namely the ability to\n    interact with the environment without coding, but having those interactions produce code), but it's still not nearly\n    intuitive enough for prime time.\n</p>\n<p>\n    As with the \"love of learning\" aspect, we hope to improve the intuitiveness of Peanutty! in the near future.\n</p>\n<br/><br/>"
     },
     engagement: {
       rating: 3,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>\n    Once again we think Peanutty! has a lot of potential in the engagement arena. Already in tests with high school students\n    we've seen a high level of engagement. Unfortunately it rapidly diminished as the activities became too challenging\n    too quickly.\n</p>\n<p>Once again we hope to improve this aspect of Peanutty! in the near future as well.</p>\n<br/><br/><br/>"
     },
     practicality: {
       rating: 5,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>\n    This is the one area where Peanutty! currently rates very highly. In order to solve problems and create levels in\n    Peanutty! students write the same code that I use every day as a professional programmer. There's very little\n    between the studens and actual coding. Maybe there should be some more layers of simplification, but as it is\n    students get a very practical exposure to programming, how it looks, how to interact with it, etc.\n</p>\n<br/><br/><br/><br/>"
     },
     accessibility: {
       rating: 2,
-      explanation: "<p>Coming soon...</p><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+      explanation: "<p>\n    Peanutty! currently scores pretty low here. It only works on the Chrome browser and isn't accessible on smart phones\n    or tablets. Even worse, we're not sure that it's ever going to be accessible on those more mobile devices.\n</p>\n<p>\n    The problem is that programming requires a fair amount of typing and we're not really sure that it's going to\n    work well with a virtual keyboard. I certainly wouldn't want to program anything substantial on a virtual keyboard.\n</p>\n<p>\n    Not only that, but we're not sure how to make it all work on a smaller screen. We want to make sure the environment and\n    the code are both visible at all times so that it's easier to make and test changes. We might be able to squeeze it into a\n    tablet format, but I doubt it will ever fit on a smart phone's screen.\n</p>\n<br/>"
     }
   }, {
     title: 'Upside Down Academy',
