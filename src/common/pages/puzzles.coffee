@@ -38,7 +38,7 @@ REVIEWDATA = [{
     thumbnail: '/assets/images/reviews/dragonbox.jpg'
     company: 'We Want To Know'
     companyWebsite: 'http://wewanttoknow.com'
-    material: 'Math, Algebra'
+    material: 'Algebra'
     availability: 'Mobile, Tablet'
     cost: '$2.95 - $5.95'
     overall:
@@ -153,7 +153,111 @@ REVIEWDATA = [{
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>
             <br/><br/><br/><br/><br/><br/>
         """
-},{
+}, {
+    title: 'Refraction'
+    website: 'http://games.cs.washington.edu/Refraction/'
+    thumbnail: '/assets/images/reviews/refraction.jpg'
+    company: 'UW Center for Game Science'
+    companyWebsite: 'http://www.centerforgamescience.org'
+    material: 'Fractions'
+    availability: 'Web'
+    cost: 'Free'
+    overall:
+        rating: 4.6
+        explanation:
+            """
+            <p>
+                Refraction is a fantastic website for teaching fractions.
+            </p>
+            <p>
+                They've done a great job of creating puzzles that teach fractions directly, by dividing up and redirecting
+                a laser to power various rocketships. The challenges are excellently produced, getting increasingly harder as you go
+                and integrating more and more advanced concepts around fractions.
+            </p>
+            <p>
+                It's free to use and online so easy to access. Really the only downside is that it's built in flash so not only is not
+                available in any app store, but you can't use it on an iPhone or iPad.
+            </p>
+            <p>
+                Still this is one of the best sites I've seen overall. Highly recommended. Hopefully they'll create a non-flash version
+                soon. If not then we may try to do it for them.
+            </p>
+            """
+    loveOfLearning:
+        rating: 5
+        explanation:
+            """
+            <p>
+                No problems here. Refractions takes a reasonably challenging topic to understand and makes it engaging and fun
+                to interact with. I think most students will walk away from the game with a great understanding of fractions
+                and a hunger for more.
+            </p>
+            <br/><br/><br/>
+            """
+    intuitive:
+        rating: 5
+        explanation:
+            """
+            <p>
+                It may be possible to make refraction a bit more intuitive, but it's already very high on the charts.
+            </p>
+            <p>
+                Very little explanation is provided and I would imagine most students will be able to figure it out with
+                little or no help.
+            </p>
+            <p>
+                There's very little that students have to understand in refraction outside of how to manipulate fractions,
+                which is exactly what we like to see.
+            </p>
+            """
+    engagement:
+        rating: 5
+        explanation:
+            """
+            <p>
+                Excellent engagement through puzzle mechanics. There are some bells and whistles that I might remove, but
+                generally speaking it's all tastefully done and doesn't feel forced at all.
+            </p>            
+            <p>
+                You're just solving fraction based puzzles and, despite that simplistic approach, the engagement is quite
+                high. I've already been back to the site a few times just to solve a few more puzzles.
+            </p>
+            <br/><br/>
+            """
+    practicality:
+        rating: 5
+        explanation:
+            """
+            <p>
+                Refraction offers an excellent, practical usage of fractions. Although there is this maze like quality
+                to the puzzles, the focus is clearly on the fractions and you're working with them in a way that isn't
+                artificial at all. You really need to use fractions to solve these puzzles.
+            </p>
+            <p>
+                Even as someone who is very comfortable with fractions I was challenged figuring out how to get 1/9th and
+                1/12th out of the same laser beam.
+            </p>
+            <p>
+                At no point does it ever feel like fractions are being slapped on to another game. The story here is very
+                coherent.
+            <p>
+            <br/><br/><br/>
+            """
+    accessibility:
+        rating: 3
+        explanation:
+            """ 
+            <p>
+                This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely
+                iPhone of iPad) and it's not available in any app stores, so taking this on the road requires a laptop and
+                an internet connection.
+            </p>
+            <p>
+                I don't think it would be too hard for them to get this working in a way that is more accessible, though. In
+                fact we might reach out to them to see if we can do it for them.
+            <br/><br/><br/><br/>
+            """
+}, {
     title: 'Foldit'
     website: 'http://fold.it'
     thumbnail: '/assets/images/reviews/foldit.jpg'
