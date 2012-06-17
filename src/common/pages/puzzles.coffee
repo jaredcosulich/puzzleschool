@@ -255,7 +255,122 @@ REVIEWDATA = [{
             <p>
                 I don't think it would be too hard for them to get this working in a way that is more accessible, though. In
                 fact we might reach out to them to see if we can do it for them.
+            </p>
             <br/><br/><br/><br/>
+            """
+}, {
+    title: 'ST Math'
+    website: 'http://web.stmath.com/'
+    thumbnail: '/assets/images/reviews/stmath.jpg'
+    company: 'MIND Research Institute'
+    companyWebsite: 'http://www.mindresearch.net'
+    material: 'Math'
+    availability: 'Web'
+    cost: '???'
+    overall:
+        rating: 3.8
+        explanation:
+            """
+            <p>
+                ST Math stands for Spatial Temporal Math. Basically it teaches a wide range of mathematical concepts 
+                without language (no instructions at all), using puzzles that make it easy to learn through trial-and-error.
+            </p>
+            <p>
+                The techniques are backed up by extensive research and have already shown significant success within schools.
+                It is one of the most pure examples of puzzles that teach exclusively through trial and error. There are no instructions
+                at all, even for the most complicated concepts.
+            </p>
+            <p>
+                Basically we love it.
+            </p>
+            <p>
+                Unfortunately, although the software is built for online distribution, you can't get access to more than a few
+                samples without contacting the company. I think this is a real shame. I've contacted them trying to figure out
+                why they don't make it more accessible, but for now it's unlikely you'll be able to use ST Math except in the
+                classroom.
+            </p>
+            """
+    loveOfLearning:
+        rating: 5
+        explanation:
+            """
+            <p>
+                From everything I've seen ST Math will absolutely promote a love of learning and a curiosity about everything
+                you can do with math. They're work is backed up by a great deal of research, presents puzzle after puzzle,
+                teaching complicated mathematical concepts entirely through trial-and-error with no instrucions at all.
+            </p>
+            <p>
+                I haven't seen all of their products, but everything I have seen is very well done and creatively tackles
+                a huge range of subjects.
+            </p>
+            <br/><br/><br/>
+            """
+    intuitive:
+        rating: 4
+        explanation:
+            """
+            <p>
+                ST Math's mission to teach without relying on language to provide instruction means it has to be intuitive to work.
+            </p>
+            <p>
+                In my experiences with it I've found that they've achieved this goal most of the time, but that some of the programs
+                are still a bit confusing. I hate to complain about it as they are tackling complex matchematical concepts with
+                absolutely no instruction, but I still feel they have a little room to improve in this area.
+            </p>
+            <p>
+                I'm guessing they will improve as they can't rely on the crutch of providing instruction. 
+            </p>
+            """
+    engagement:
+        rating: 5
+        explanation:
+            """
+            <p>
+                The engagement from ST Math is very high quality. Very few bells and whistles. The engagement comes entirely from
+                the satisfaction of figuring out the answer without any instruction, learning new matchematical concepts through
+                trial-and-error.
+            </p>
+            <p>
+                I could imagine some engagement being diminished due to the occassional puzzle that is too difficult to figure out,
+                but I already gave ST Math 4 stars for intuitiveness, so I'm going to leave engagement at 5 stars.
+            </p>
+            <br/><br/>
+            """
+    practicality:
+        rating: 4
+        explanation:
+            """
+            <p>
+                A number of the puzzles I've seen are not as practical as they could be. Although they are teaching very practical
+                mathematical concepts, the puzzles themselves tend to be disconnected from any way you would use the mathematical
+                concepts in real life.
+            <p>
+            <p>
+                It's not terrible, it's just not giving the student a real practical sense of how one would use the concepts outside
+                of ST Math.
+            </p>
+            <br/><br/><br/>
+            """
+    accessibility:
+        rating: 1
+        explanation:
+            """ 
+            <p>
+                This is by far the biggest problem with ST Math. Outside of a few examples and videos you can't actually use their 
+                programs without contacting them. I'm not sure if there is a licensing fee or, if there is, how much it would cost,
+                but the fact that there programs aren't more accessible is really too bad.
+            </p>
+            <p>
+                I've reached out to them trying to figure out why they are taking this approach when students could be deriving so
+                much more value from their software in and outside of school if it were more accessible.
+            </p>
+            <p>
+                In the meantime you may want to talk to your school to recommend they check out ST Math, because, as far as I can tell
+                you can't use it without going through a sales process.
+            </p>
+            <p>
+                Real shame.
+            </p>
             """
 }, {
     title: 'Foldit'
