@@ -375,6 +375,7 @@ REVIEWDATA = [{
     articles:
         """
             <p><a href='https://www.edsurge.com/st-math#/default' target='_blank'>ST Math - EdSurge Review</a></p>
+            <p><a href='https://www.youtube.com/watch?feature=player_embedded&v=2VLje8QRrwg' target='_blank'>ST Math - TedX Talk</a></p>
             <p><a href='http://www.youtube.com/watch?v=t4P5XlfzliM' target='_blank'>ST Math Promotional Video</a></p>
             <br/><br/><br/><br/><br/><br/>
         """
