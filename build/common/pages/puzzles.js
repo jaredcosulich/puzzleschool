@@ -154,7 +154,7 @@ REVIEWDATA = [
     },
     accessibility: {
       rating: 1,
-      explanation: " \n<p>\n    This is by far the biggest problem with ST Math. Outside of a few examples and videos you can't actually use their \n    programs without contacting them. I'm not sure if there is a licensing fee or, if there is, how much it would cost,\n    but the fact that there programs aren't more accessible is really too bad.\n</p>\n<p>\n    I've reached out to them trying to figure out why they are taking this approach when students could be deriving so\n    much more value from their software in and outside of school if it were more accessible.\n</p>\n<p>\n    In the meantime you may want to talk to your school to recommend they check out ST Math, because, as far as I can tell\n    you can't use it without going through a sales process.\n</p>\n<p>\n    Real shame.\n</p>\n<br/><br/><br/><br/>"
+      explanation: " \n<p>\n    This is by far the biggest problem with ST Math. Outside of a few examples and videos you can't actually use their \n    programs without contacting them. I'm not sure if there is a licensing fee or, if there is, how much it would cost,\n    but the fact that there programs aren't more accessible is really too bad.\n</p>\n<p>\n    I've reached out to them trying to figure out why they are taking this approach when students could be deriving so\n    much more value from their software in and outside of school if it were more accessible.\n</p>\n<p>\n    In the meantime you may want to talk to your school to recommend they check out ST Math, because, as far as I can tell\n    you can't use it without going through a sales process.\n</p>\n<p>\n    Real shame.\n</p>"
     }
   }, {
     title: 'Foldit',
