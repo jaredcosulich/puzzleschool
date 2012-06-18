@@ -372,6 +372,14 @@ REVIEWDATA = [{
                 Real shame.
             </p>
             """
+    articles:
+        """
+            <p><a href='https://www.edsurge.com/st-math#/default' target='_blank'>ST Math - EdSurge Review</a></p>
+            <p><a href='http://www.youtube.com/watch?v=t4P5XlfzliM' target='_blank'>ST Math Promotional Video</a></p>
+            <br/><br/><br/><br/><br/><br/>
+        """
+        
+        
 }, {
     title: 'Foldit'
     website: 'http://fold.it'
