@@ -57,6 +57,39 @@ soma.routes({
 
 REVIEWDATA = [
   {
+    title: 'Refraction',
+    website: 'http://games.cs.washington.edu/Refraction/',
+    thumbnail: '/assets/images/reviews/refraction.jpg',
+    company: 'UW Center for Game Science',
+    companyWebsite: 'http://www.centerforgamescience.org',
+    material: 'Fractions',
+    availability: 'Web',
+    cost: 'Free',
+    overall: {
+      rating: 4.6,
+      explanation: "<p>\n    Refraction is a fantastic website for teaching fractions.\n</p>\n<p>\n    They've done a great job of creating puzzles that teach fractions directly, by dividing up and redirecting\n    a laser to power various rocketships. The challenges are excellently produced, getting increasingly harder as you go\n    and integrating more and more advanced concepts around fractions.\n</p>\n<p>\n    It's free to use and online so easy to access. Really the only downside is that it's built in flash so not only is not\n    available in any app store, but you can't use it on an iPhone or iPad.\n</p>\n<p>\n    Still this is one of the best sites I've seen overall. Highly recommended. Hopefully they'll create a non-flash version\n    soon. If not then we may try to do it for them.\n</p>"
+    },
+    loveOfLearning: {
+      rating: 5,
+      explanation: "<p>\n    No problems here. Refractions takes a reasonably challenging topic to understand and makes it engaging and fun\n    to interact with. I think most students will walk away from the game with a great understanding of fractions\n    and a hunger for more.\n</p>\n<br/><br/><br/>"
+    },
+    intuitive: {
+      rating: 5,
+      explanation: "<p>\n    It may be possible to make refraction a bit more intuitive, but it's already very high on the charts.\n</p>\n<p>\n    Very little explanation is provided and I would imagine most students will be able to figure it out with\n    little or no help.\n</p>\n<p>\n    There's very little that students have to understand in refraction outside of how to manipulate fractions,\n    which is exactly what we like to see.\n</p>"
+    },
+    engagement: {
+      rating: 5,
+      explanation: "<p>\n    Excellent engagement through puzzle mechanics. There are some bells and whistles that I might remove, but\n    generally speaking it's all tastefully done and doesn't feel forced at all.\n</p>            \n<p>\n    You're just solving fraction based puzzles and, despite that simplistic approach, the engagement is quite\n    high. I've already been back to the site a few times just to solve a few more puzzles.\n</p>\n<br/><br/>"
+    },
+    practicality: {
+      rating: 5,
+      explanation: "<p>\n    Refraction offers an excellent, practical usage of fractions. Although there is this maze like quality\n    to the puzzles, the focus is clearly on the fractions and you're working with them in a way that isn't\n    artificial at all. You really need to use fractions to solve these puzzles.\n</p>\n<p>\n    Even as someone who is very comfortable with fractions I was challenged figuring out how to get 1/9th and\n    1/12th out of the same laser beam.\n</p>\n<p>\n    At no point does it ever feel like fractions are being slapped on to another game. The story here is very\n    coherent.\n<p>\n<br/><br/><br/>"
+    },
+    accessibility: {
+      rating: 3,
+      explanation: " \n<p>\n    This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely\n    iPhone or iPad) and it's not available in any app stores, so taking this on the road requires a laptop and\n    an internet connection.\n</p>\n<p>\n    I don't think it would be too hard for them to get this working in a way that is more accessible, though. In\n    fact we might reach out to them to see if we can do it for them.\n</p>\n<br/><br/><br/><br/>"
+    }
+  }, {
     title: 'DragonBox',
     website: 'http://dragonboxapp.com/',
     thumbnail: '/assets/images/reviews/dragonbox.jpg',
@@ -91,39 +124,6 @@ REVIEWDATA = [
     },
     articles: "<p><a href='http://www.wired.com/geekdad/2012/06/dragonbox/all/' target='_blank'>DragonBox: Algebra Beats Angry Birds</a></p>\n<p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-algebra-meets-angry-birds/' target='_blank'>DragonBox - Algebra Meets Angry Birds</a></p>\n<p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>\n<br/><br/><br/><br/><br/><br/>"
   }, {
-    title: 'Refraction',
-    website: 'http://games.cs.washington.edu/Refraction/',
-    thumbnail: '/assets/images/reviews/refraction.jpg',
-    company: 'UW Center for Game Science',
-    companyWebsite: 'http://www.centerforgamescience.org',
-    material: 'Fractions',
-    availability: 'Web',
-    cost: 'Free',
-    overall: {
-      rating: 4.6,
-      explanation: "<p>\n    Refraction is a fantastic website for teaching fractions.\n</p>\n<p>\n    They've done a great job of creating puzzles that teach fractions directly, by dividing up and redirecting\n    a laser to power various rocketships. The challenges are excellently produced, getting increasingly harder as you go\n    and integrating more and more advanced concepts around fractions.\n</p>\n<p>\n    It's free to use and online so easy to access. Really the only downside is that it's built in flash so not only is not\n    available in any app store, but you can't use it on an iPhone or iPad.\n</p>\n<p>\n    Still this is one of the best sites I've seen overall. Highly recommended. Hopefully they'll create a non-flash version\n    soon. If not then we may try to do it for them.\n</p>"
-    },
-    loveOfLearning: {
-      rating: 5,
-      explanation: "<p>\n    No problems here. Refractions takes a reasonably challenging topic to understand and makes it engaging and fun\n    to interact with. I think most students will walk away from the game with a great understanding of fractions\n    and a hunger for more.\n</p>\n<br/><br/><br/>"
-    },
-    intuitive: {
-      rating: 5,
-      explanation: "<p>\n    It may be possible to make refraction a bit more intuitive, but it's already very high on the charts.\n</p>\n<p>\n    Very little explanation is provided and I would imagine most students will be able to figure it out with\n    little or no help.\n</p>\n<p>\n    There's very little that students have to understand in refraction outside of how to manipulate fractions,\n    which is exactly what we like to see.\n</p>"
-    },
-    engagement: {
-      rating: 5,
-      explanation: "<p>\n    Excellent engagement through puzzle mechanics. There are some bells and whistles that I might remove, but\n    generally speaking it's all tastefully done and doesn't feel forced at all.\n</p>            \n<p>\n    You're just solving fraction based puzzles and, despite that simplistic approach, the engagement is quite\n    high. I've already been back to the site a few times just to solve a few more puzzles.\n</p>\n<br/><br/>"
-    },
-    practicality: {
-      rating: 5,
-      explanation: "<p>\n    Refraction offers an excellent, practical usage of fractions. Although there is this maze like quality\n    to the puzzles, the focus is clearly on the fractions and you're working with them in a way that isn't\n    artificial at all. You really need to use fractions to solve these puzzles.\n</p>\n<p>\n    Even as someone who is very comfortable with fractions I was challenged figuring out how to get 1/9th and\n    1/12th out of the same laser beam.\n</p>\n<p>\n    At no point does it ever feel like fractions are being slapped on to another game. The story here is very\n    coherent.\n<p>\n<br/><br/><br/>"
-    },
-    accessibility: {
-      rating: 3,
-      explanation: " \n<p>\n    This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely\n    iPhone or iPad) and it's not available in any app stores, so taking this on the road requires a laptop and\n    an internet connection.\n</p>\n<p>\n    I don't think it would be too hard for them to get this working in a way that is more accessible, though. In\n    fact we might reach out to them to see if we can do it for them.\n</p>\n<br/><br/><br/><br/>"
-    }
-  }, {
     title: 'ST Math',
     website: 'http://web.stmath.com/',
     thumbnail: '/assets/images/reviews/stmath.jpg',
@@ -157,6 +157,40 @@ REVIEWDATA = [
       explanation: " \n<p>\n    This is by far the biggest problem with ST Math. Outside of a few examples and videos you can't actually use their \n    programs without contacting them. I'm not sure if there is a licensing fee or, if there is, how much it would cost,\n    but the fact that there programs aren't more accessible is really too bad.\n</p>\n<p>\n    I've reached out to them trying to figure out why they are taking this approach when students could be deriving so\n    much more value from their software in and outside of school if it were more accessible.\n</p>\n<p>\n    In the meantime you may want to talk to your school to recommend they check out ST Math, because, as far as I can tell\n    you can't use it without going through a sales process.\n</p>\n<p>\n    Real shame.\n</p>"
     },
     articles: "<p><a href='https://www.edsurge.com/st-math#/default' target='_blank'>ST Math - EdSurge Review</a></p>\n<p><a href='https://www.youtube.com/watch?feature=player_embedded&v=2VLje8QRrwg' target='_blank'>ST Math - TedX Talk</a></p>\n<p><a href='http://www.youtube.com/watch?v=t4P5XlfzliM' target='_blank'>ST Math Promotional Video</a></p>\n<br/><br/><br/><br/><br/><br/>"
+  }, {
+    title: 'Mozilla Thimble',
+    website: 'https://thimble.webmaker.org',
+    thumbnail: '/assets/images/reviews/thimble.jpg',
+    company: 'Mozilla',
+    companyWebsite: 'http://www.mozilla.org/',
+    material: 'Programming/HTML',
+    availability: 'Web',
+    cost: 'Free',
+    overall: {
+      rating: 3.2,
+      explanation: "<p>\n    Mozilla Thimble is an effort by Mozilla.org (makers of the Firefox web browser) to make learning html more\n    accessible. It harkens back to the day when most people learned html by looking at the code other people\n    had written on websites by \"viewing the source\". In many ways the fact that you could view the source code for\n    web pages was instrumental in both the education of thousands of web developers as well as the explosion of the\n    web itself.\n</p>\n<p>\n    Mozilla has taken it one step further with Thimble, putting the source and the website side by side and making it\n    so that any change to the source immediately changes the website. This tight feedback loop is fantastic and makes it\n    easier to see the effect your changes have on the website. It's a great trial-and-error learning environment.\n</p>\n<p>\n    Unfortunately there's not much purpose provided by Thimble. They do try to create projects, but most have an excessive\n    amount of instructions buried in the comments. I think it's unlikely that a student who is just exploring will become\n    engaged by Thimble enough to get any real value out of it. It's certainly possible that a student will get in to it,\n    but I think it's unlikely.\n</p>\n<p>\n    So if you're coming to the table with your own motivation (e.g. you want to build a website), then I think Mozilla\n    Thimble is a great tool. With education, though, too often the problem is that there is a lack of purpose and the\n    educational activity needs to supply that purpose. In this case Mozilla Thimble falls short. I think it's unlikely\n    that a student will run with Mozilla Thimble without a lot of encouragement, support, and assistance. \n</p>"
+    },
+    loveOfLearning: {
+      rating: 3,
+      explanation: "<p>\n    The trial-and-error environment with tight feedback loops will certainly encourage a sense of progress and a\n    desire to learn more if you start with enough motivation. Without bringing your own motivation to the table,\n    though, I don't think you're going to engage with Thimble enough to create a desire to learn more.\n</p>\n<p>\n    It's a tall order to get all of these aspects correct. Thimble does a very good job with the learning environment,\n    but I don't think too many students are going to engage with it unless they are forced to do so or they've been\n    inspired by some external factor.\n</p>"
+    },
+    intuitive: {
+      rating: 3,
+      explanation: "<p>\n    Mozilla Thimble does offer some fantastic advancements in intuitive web design. They've made it easy to\n    click on a website and see what code is responsible. This makes it easy to explore a website from the outside-in,\n    seeing what code creates which effects. This can be very enabling to a learner.\n</p>\n<p>\n    They've also made it so that when you change the html code the website immediately changes so you can see\n    the effect of your code changes. This tight feedback loop is very well done and makes it very easy to learn\n    with html through trial-and-error, something we're a big fan of.\n</p>\n<p>\n    Unfortunately the site relies heavily on instructions in the code to describe projects and create a sense\n    of purpose. This is a real detractor from it becoming a great educational resource. I just don't think you're \n    going to be able to expose this to a student and have them run with it.\n</p>\n<p>\n    So while the click-to-explore and trial-and-error environment with tight feedback make the experience of learning\n    html very intuitive, the instructions buried in code make the projects and any sense of purpose far less intuitive.\n</p>"
+    },
+    engagement: {
+      rating: 3,
+      explanation: "<p>\n    This is probably the biggest issue with Mozilla Thimble. If you're not coming to it with a project in mind, it's\n    unlikely that their projects are going to engage you. It's not impossible, so give it a shot, but I think they\n    fall short by quite a bit.\n</p>            \n<p>\n    As with most programming, once you get in to a project the engagement can come very easily. With the click-to-explore\n    and automatic-refreshing of the website every time you make a code change, the engage is even more likely to kick in\n    to gear.\n</p>\n<p>\n    But without a better mechanism to drive purpose (we recommend puzzles), it's not very likely that a student without\n    a specific project in mind will be able to get deep enough for the engagement to kick in."
+    },
+    practicality: {
+      rating: 5,
+      explanation: "<p>\n    Mozilla Thimble is highly practical. There are no bells or whistles. The site focuses on making it very easy to learn\n    html through a great trial-and-error environment with tight feedback loops. That's it. Just the material and a quality\n    environment.\n</p>\n<p>\n    If a student does find their way to engagement with Thimble then there's no doubt that time on Thimble is time well spent.\n    As a professional programmer I'm even tempted to spend more time with Thimble for my professional work as the tight feedback\n    loops are so practical even at the professional level.\n</p>\n\n<br/><br/><br/>"
+    },
+    accessibility: {
+      rating: 4,
+      explanation: " \n<p>\n    Mozilla Thimble is available for free on the web. Although it's not available in any app stores and requires an internet\n    connection to access, it's still pretty accessible. Best of all, it's completely free.\n</p>\n<br/><br/><br/><br/><br/><br/><br/>"
+    },
+    articles: "<p><a href='http://www.techspot.com/news/49050-mozilla-previews-thimble-a-refreshingly-simple-html-coding-tool.html' target='_blank'>Mozilla previews Thimble, a refreshingly simple HTML coding tool</a></p>\n<p><a href='http://blog.mozilla.org/blog/2012/06/18/introducing_thimble/' target='_blank'>Introducing Thimble</a></p>\n<p><a href='http://mashable.com/2012/06/18/mozilla-thimble/' target='_blank'>Create Your Own Website Using Mozilla’s Thimble</a></p>\n<p><a href='http://lifehacker.com/5914119/mozilla-thimble-teaches-you-how-to-code-with-a-side+by+side-html-editor' target='_blank'>Mozilla Thimble Teaches You HTML and CSS with a Side-by-Side HTML Editor</a></p>\n<p><a href='http://techcrunch.com/2012/06/18/mozilla-launches-thimble-a-web-based-code-editor-for-teaching-html-and-css/mozilla-thimble/' target='_blank'>Mozilla Thimble</a></p>\n<br/><br/>"
   }, {
     title: 'Foldit',
     website: 'http://fold.it',

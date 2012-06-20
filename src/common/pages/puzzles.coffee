@@ -33,6 +33,111 @@ soma.routes
 
 
 REVIEWDATA = [{
+    title: 'Refraction'
+    website: 'http://games.cs.washington.edu/Refraction/'
+    thumbnail: '/assets/images/reviews/refraction.jpg'
+    company: 'UW Center for Game Science'
+    companyWebsite: 'http://www.centerforgamescience.org'
+    material: 'Fractions'
+    availability: 'Web'
+    cost: 'Free'
+    overall:
+        rating: 4.6
+        explanation:
+            """
+            <p>
+                Refraction is a fantastic website for teaching fractions.
+            </p>
+            <p>
+                They've done a great job of creating puzzles that teach fractions directly, by dividing up and redirecting
+                a laser to power various rocketships. The challenges are excellently produced, getting increasingly harder as you go
+                and integrating more and more advanced concepts around fractions.
+            </p>
+            <p>
+                It's free to use and online so easy to access. Really the only downside is that it's built in flash so not only is not
+                available in any app store, but you can't use it on an iPhone or iPad.
+            </p>
+            <p>
+                Still this is one of the best sites I've seen overall. Highly recommended. Hopefully they'll create a non-flash version
+                soon. If not then we may try to do it for them.
+            </p>
+            """
+    loveOfLearning:
+        rating: 5
+        explanation:
+            """
+            <p>
+                No problems here. Refractions takes a reasonably challenging topic to understand and makes it engaging and fun
+                to interact with. I think most students will walk away from the game with a great understanding of fractions
+                and a hunger for more.
+            </p>
+            <br/><br/><br/>
+            """
+    intuitive:
+        rating: 5
+        explanation:
+            """
+            <p>
+                It may be possible to make refraction a bit more intuitive, but it's already very high on the charts.
+            </p>
+            <p>
+                Very little explanation is provided and I would imagine most students will be able to figure it out with
+                little or no help.
+            </p>
+            <p>
+                There's very little that students have to understand in refraction outside of how to manipulate fractions,
+                which is exactly what we like to see.
+            </p>
+            """
+    engagement:
+        rating: 5
+        explanation:
+            """
+            <p>
+                Excellent engagement through puzzle mechanics. There are some bells and whistles that I might remove, but
+                generally speaking it's all tastefully done and doesn't feel forced at all.
+            </p>            
+            <p>
+                You're just solving fraction based puzzles and, despite that simplistic approach, the engagement is quite
+                high. I've already been back to the site a few times just to solve a few more puzzles.
+            </p>
+            <br/><br/>
+            """
+    practicality:
+        rating: 5
+        explanation:
+            """
+            <p>
+                Refraction offers an excellent, practical usage of fractions. Although there is this maze like quality
+                to the puzzles, the focus is clearly on the fractions and you're working with them in a way that isn't
+                artificial at all. You really need to use fractions to solve these puzzles.
+            </p>
+            <p>
+                Even as someone who is very comfortable with fractions I was challenged figuring out how to get 1/9th and
+                1/12th out of the same laser beam.
+            </p>
+            <p>
+                At no point does it ever feel like fractions are being slapped on to another game. The story here is very
+                coherent.
+            <p>
+            <br/><br/><br/>
+            """
+    accessibility:
+        rating: 3
+        explanation:
+            """ 
+            <p>
+                This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely
+                iPhone or iPad) and it's not available in any app stores, so taking this on the road requires a laptop and
+                an internet connection.
+            </p>
+            <p>
+                I don't think it would be too hard for them to get this working in a way that is more accessible, though. In
+                fact we might reach out to them to see if we can do it for them.
+            </p>
+            <br/><br/><br/><br/>
+            """
+}, {
     title: 'DragonBox'
     website: 'http://dragonboxapp.com/'
     thumbnail: '/assets/images/reviews/dragonbox.jpg'
@@ -153,111 +258,6 @@ REVIEWDATA = [{
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>
             <br/><br/><br/><br/><br/><br/>
         """
-}, {
-    title: 'Refraction'
-    website: 'http://games.cs.washington.edu/Refraction/'
-    thumbnail: '/assets/images/reviews/refraction.jpg'
-    company: 'UW Center for Game Science'
-    companyWebsite: 'http://www.centerforgamescience.org'
-    material: 'Fractions'
-    availability: 'Web'
-    cost: 'Free'
-    overall:
-        rating: 4.6
-        explanation:
-            """
-            <p>
-                Refraction is a fantastic website for teaching fractions.
-            </p>
-            <p>
-                They've done a great job of creating puzzles that teach fractions directly, by dividing up and redirecting
-                a laser to power various rocketships. The challenges are excellently produced, getting increasingly harder as you go
-                and integrating more and more advanced concepts around fractions.
-            </p>
-            <p>
-                It's free to use and online so easy to access. Really the only downside is that it's built in flash so not only is not
-                available in any app store, but you can't use it on an iPhone or iPad.
-            </p>
-            <p>
-                Still this is one of the best sites I've seen overall. Highly recommended. Hopefully they'll create a non-flash version
-                soon. If not then we may try to do it for them.
-            </p>
-            """
-    loveOfLearning:
-        rating: 5
-        explanation:
-            """
-            <p>
-                No problems here. Refractions takes a reasonably challenging topic to understand and makes it engaging and fun
-                to interact with. I think most students will walk away from the game with a great understanding of fractions
-                and a hunger for more.
-            </p>
-            <br/><br/><br/>
-            """
-    intuitive:
-        rating: 5
-        explanation:
-            """
-            <p>
-                It may be possible to make refraction a bit more intuitive, but it's already very high on the charts.
-            </p>
-            <p>
-                Very little explanation is provided and I would imagine most students will be able to figure it out with
-                little or no help.
-            </p>
-            <p>
-                There's very little that students have to understand in refraction outside of how to manipulate fractions,
-                which is exactly what we like to see.
-            </p>
-            """
-    engagement:
-        rating: 5
-        explanation:
-            """
-            <p>
-                Excellent engagement through puzzle mechanics. There are some bells and whistles that I might remove, but
-                generally speaking it's all tastefully done and doesn't feel forced at all.
-            </p>            
-            <p>
-                You're just solving fraction based puzzles and, despite that simplistic approach, the engagement is quite
-                high. I've already been back to the site a few times just to solve a few more puzzles.
-            </p>
-            <br/><br/>
-            """
-    practicality:
-        rating: 5
-        explanation:
-            """
-            <p>
-                Refraction offers an excellent, practical usage of fractions. Although there is this maze like quality
-                to the puzzles, the focus is clearly on the fractions and you're working with them in a way that isn't
-                artificial at all. You really need to use fractions to solve these puzzles.
-            </p>
-            <p>
-                Even as someone who is very comfortable with fractions I was challenged figuring out how to get 1/9th and
-                1/12th out of the same laser beam.
-            </p>
-            <p>
-                At no point does it ever feel like fractions are being slapped on to another game. The story here is very
-                coherent.
-            <p>
-            <br/><br/><br/>
-            """
-    accessibility:
-        rating: 3
-        explanation:
-            """ 
-            <p>
-                This is the biggest problem with Refraction. Since it is built in flash it won't work on all platforms (namely
-                iPhone or iPad) and it's not available in any app stores, so taking this on the road requires a laptop and
-                an internet connection.
-            </p>
-            <p>
-                I don't think it would be too hard for them to get this working in a way that is more accessible, though. In
-                fact we might reach out to them to see if we can do it for them.
-            </p>
-            <br/><br/><br/><br/>
-            """
 }, {
     title: 'ST Math'
     website: 'http://web.stmath.com/'
@@ -381,6 +381,137 @@ REVIEWDATA = [{
         """
         
         
+}, {
+    title: 'Mozilla Thimble'
+    website: 'https://thimble.webmaker.org'
+    thumbnail: '/assets/images/reviews/thimble.jpg'
+    company: 'Mozilla'
+    companyWebsite: 'http://www.mozilla.org/'
+    material: 'Programming/HTML'
+    availability: 'Web'
+    cost: 'Free'
+    overall:
+        rating: 3.2
+        explanation:
+            """
+            <p>
+                Mozilla Thimble is an effort by Mozilla.org (makers of the Firefox web browser) to make learning html more
+                accessible. It harkens back to the day when most people learned html by looking at the code other people
+                had written on websites by "viewing the source". In many ways the fact that you could view the source code for
+                web pages was instrumental in both the education of thousands of web developers as well as the explosion of the
+                web itself.
+            </p>
+            <p>
+                Mozilla has taken it one step further with Thimble, putting the source and the website side by side and making it
+                so that any change to the source immediately changes the website. This tight feedback loop is fantastic and makes it
+                easier to see the effect your changes have on the website. It's a great trial-and-error learning environment.
+            </p>
+            <p>
+                Unfortunately there's not much purpose provided by Thimble. They do try to create projects, but most have an excessive
+                amount of instructions buried in the comments. I think it's unlikely that a student who is just exploring will become
+                engaged by Thimble enough to get any real value out of it. It's certainly possible that a student will get in to it,
+                but I think it's unlikely.
+            </p>
+            <p>
+                So if you're coming to the table with your own motivation (e.g. you want to build a website), then I think Mozilla
+                Thimble is a great tool. With education, though, too often the problem is that there is a lack of purpose and the
+                educational activity needs to supply that purpose. In this case Mozilla Thimble falls short. I think it's unlikely
+                that a student will run with Mozilla Thimble without a lot of encouragement, support, and assistance. 
+            </p>
+            """
+    loveOfLearning:
+        rating: 3
+        explanation:
+            """
+            <p>
+                The trial-and-error environment with tight feedback loops will certainly encourage a sense of progress and a
+                desire to learn more if you start with enough motivation. Without bringing your own motivation to the table,
+                though, I don't think you're going to engage with Thimble enough to create a desire to learn more.
+            </p>
+            <p>
+                It's a tall order to get all of these aspects correct. Thimble does a very good job with the learning environment,
+                but I don't think too many students are going to engage with it unless they are forced to do so or they've been
+                inspired by some external factor.
+            </p>
+            """
+    intuitive:
+        rating: 3
+        explanation:
+            """
+            <p>
+                Mozilla Thimble does offer some fantastic advancements in intuitive web design. They've made it easy to
+                click on a website and see what code is responsible. This makes it easy to explore a website from the outside-in,
+                seeing what code creates which effects. This can be very enabling to a learner.
+            </p>
+            <p>
+                They've also made it so that when you change the html code the website immediately changes so you can see
+                the effect of your code changes. This tight feedback loop is very well done and makes it very easy to learn
+                with html through trial-and-error, something we're a big fan of.
+            </p>
+            <p>
+                Unfortunately the site relies heavily on instructions in the code to describe projects and create a sense
+                of purpose. This is a real detractor from it becoming a great educational resource. I just don't think you're 
+                going to be able to expose this to a student and have them run with it.
+            </p>
+            <p>
+                So while the click-to-explore and trial-and-error environment with tight feedback make the experience of learning
+                html very intuitive, the instructions buried in code make the projects and any sense of purpose far less intuitive.
+            </p>
+            """
+    engagement:
+        rating: 3
+        explanation:
+            """
+            <p>
+                This is probably the biggest issue with Mozilla Thimble. If you're not coming to it with a project in mind, it's
+                unlikely that their projects are going to engage you. It's not impossible, so give it a shot, but I think they
+                fall short by quite a bit.
+            </p>            
+            <p>
+                As with most programming, once you get in to a project the engagement can come very easily. With the click-to-explore
+                and automatic-refreshing of the website every time you make a code change, the engage is even more likely to kick in
+                to gear.
+            </p>
+            <p>
+                But without a better mechanism to drive purpose (we recommend puzzles), it's not very likely that a student without
+                a specific project in mind will be able to get deep enough for the engagement to kick in.
+            """
+    practicality:
+        rating: 5
+        explanation:
+            """
+            <p>
+                Mozilla Thimble is highly practical. There are no bells or whistles. The site focuses on making it very easy to learn
+                html through a great trial-and-error environment with tight feedback loops. That's it. Just the material and a quality
+                environment.
+            </p>
+            <p>
+                If a student does find their way to engagement with Thimble then there's no doubt that time on Thimble is time well spent.
+                As a professional programmer I'm even tempted to spend more time with Thimble for my professional work as the tight feedback
+                loops are so practical even at the professional level.
+            </p>
+            
+            <br/><br/><br/>
+            """
+    accessibility:
+        rating: 4
+        explanation:
+            """ 
+            <p>
+                Mozilla Thimble is available for free on the web. Although it's not available in any app stores and requires an internet
+                connection to access, it's still pretty accessible. Best of all, it's completely free.
+            </p>
+            <br/><br/><br/><br/><br/><br/><br/>
+            """
+    articles: 
+        """
+        <p><a href='http://www.techspot.com/news/49050-mozilla-previews-thimble-a-refreshingly-simple-html-coding-tool.html' target='_blank'>Mozilla previews Thimble, a refreshingly simple HTML coding tool</a></p>
+        <p><a href='http://blog.mozilla.org/blog/2012/06/18/introducing_thimble/' target='_blank'>Introducing Thimble</a></p>
+        <p><a href='http://mashable.com/2012/06/18/mozilla-thimble/' target='_blank'>Create Your Own Website Using Mozilla’s Thimble</a></p>
+        <p><a href='http://lifehacker.com/5914119/mozilla-thimble-teaches-you-how-to-code-with-a-side+by+side-html-editor' target='_blank'>Mozilla Thimble Teaches You HTML and CSS with a Side-by-Side HTML Editor</a></p>
+        <p><a href='http://techcrunch.com/2012/06/18/mozilla-launches-thimble-a-web-based-code-editor-for-teaching-html-and-css/mozilla-thimble/' target='_blank'>Mozilla Thimble</a></p>
+        <br/><br/>
+        """
 }, {
     title: 'Foldit'
     website: 'http://fold.it'
@@ -514,7 +645,7 @@ REVIEWDATA = [{
         <p><a href='http://news.cnet.com/8301-27083_3-20108365-247/foldit-game-leads-to-aids-research-breakthrough/' target='_blank'>Foldit game leads to AIDS research breakthrough</a></p>
         <br/><br/><br/><br/>
         """
-}]
+    }]
 
 LABDATA = [{
     title: 'Language Scramble'
