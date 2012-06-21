@@ -150,11 +150,11 @@ REVIEWDATA = [{
         rating: 4.4
         explanation:
             """
-            <p>DragonBox is one of the best apps I've seen for teaching algebra.</p>
+            <p>DragonBox is one of the best apps I've seen for teaching the strategies required to solve algebric equations.</p>
             <p>
                 They've done a great job of focusing on the puzzle-like aspects of algebra,
-                starting with puzzles using colorful icons that are solved like an algebra equation before
-                transitioning to equations.
+                starting with puzzles using colorful icons that represent variables before
+                transitioning to actual equations.
             </p>
             <p>
                 The app focuses on solving algebraic equations and does an excellent job of communicating
