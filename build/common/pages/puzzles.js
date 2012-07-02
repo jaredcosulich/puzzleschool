@@ -124,6 +124,40 @@ REVIEWDATA = [
     },
     articles: "<p><a href='http://www.wired.com/geekdad/2012/06/dragonbox/all/' target='_blank'>DragonBox: Algebra Beats Angry Birds</a></p>\n<p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-algebra-meets-angry-birds/' target='_blank'>DragonBox - Algebra Meets Angry Birds</a></p>\n<p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>\n<br/><br/><br/><br/><br/><br/>"
   }, {
+    title: 'CargoBot',
+    website: 'http://twolivesleft.com/CargoBot/',
+    thumbnail: '/assets/images/reviews/cargobot.jpg',
+    company: 'Two Lives Left',
+    companyWebsite: 'hhttp://twolivesleft.com/',
+    material: 'Basic Programming',
+    availability: 'iPad',
+    cost: 'Free',
+    overall: {
+      rating: 4.2,
+      explanation: "<p>\n    CargoBot is a simple puzzle game that teaches the basics of programming (loops and conditional statements).\n</p>\n<p>\n    That may sound intimidating, but they've created a great trial-and-error environment with a simple tool box\n    that lets you learn the basics of these concepts without writing any programming.\n</p>\n<p>\n    You basically try to move boxes around by programming a crane to pick up, move, and drop boxes to solve the\n    puzzle. It's a very practical way to approach introductory programming, it's presented in a great trial-and-error\n    environment, and is quite engaging.\n</p>\n<p>\n    Really the only two knocks against it are that the puzzles get a little too hard a little too fast,\n    which could result in excessive frustration or even someone giving up, and it is only available iPad, \n    which means you can't play it at all unless you own an iPad.\n</p>\n<p>\n    It is free, though, so if you own an iPad I would highly recommend CargoBot. I think it's \n    very likely that a student will leave CargoBot wanting to learn more about programming so they can do \n    more interesting things than just solve puzzles in CargoBot. That's the most important factor from my perspective.\n</p>"
+    },
+    loveOfLearning: {
+      rating: 4,
+      explanation: "<p>\n    I think CargoBot represents an excellent introduction to programming and should leave students hungry for more.\n</p>\n<p>\n    The fact that you're using programming to control a \"physical\" object (the crane) helps to explain what we use\n    programming for and should lead to creative connections about controlling other things.\n</p>\n<p>\n    The only knock I give it is that it may get too hard too fast, which could lead to frustration. Even as a\n    professional programmer I struggled with some of the puzzles and at points questioned whether there was\n    a mistake or not. That isn't a good sign and would make me a bit nervous about a less experienced student\n    getting too frustrated and actually giving up.\n</p>\n<p>\n    Overall, though, that concern is a minor one and can be moderated with a little outside help if it becomes an\n    issue. I think it's much more likely that a student walks away wanting to learn more programming after playing\n    CargoBot.\n</p>"
+    },
+    intuitive: {
+      rating: 4,
+      explanation: "<p>\n    CargoBot isn't quite as intuitive as I would like, but it's still very good. It requires a fair amount of\n    explanation to get started with it, which is a negative, but the explanations are provided within the tutorial\n    levels, so they're atleast provided with a great deal of context. \n</p>\n<p>\n    It's pretty hard to teach programming without any explanation and they do a good job of minimizing it, using\n    a great trial-and-error environment complete with debugging tools. Overall they've done an excellent job making\n    CargoBot intuitive enough that anyone should be able to figure it out with very little if any outside help.\n</p>"
+    },
+    engagement: {
+      rating: 5,
+      explanation: "<p>\n    CargoBot is an excellent puzzle environment. It provides quality challenges (maybe they get a bit too hard too quickly) \n    and a great trial-and-error environment. I found myself getting hooked on a number of the challenges, even\n    racing back to try a solution after I'd given up on getting the full 3 stars on one puzzle.\n</p>\n<p>\n    Again the only knock might be that it gets too hard too fast, but with engagement that might actually be a plus.\n    It's a fine line and I'd rather see them add in more puzzles to make the progress a little more granular, but\n    as it is I do think it's a very engaging experience.\n</p>"
+    },
+    practicality: {
+      rating: 5,
+      explanation: "<p>\n    CargoBot demonstrates a clearly practical usage of programming. You're programming a crane that moves boxes from\n    one place to another. That's an actual use of programming in the real world and provides a clear introduction\n    to not only programming, but why you would want to use programming in the real world.\n</p>\n<br/><br/><br/><br/><br/>"
+    },
+    accessibility: {
+      rating: 3,
+      explanation: " \n<p>\n    CargoBot is only available on the iPad, which makes it completely inaccessible unless you own an iPad.\n</p>\n<p>\n    Hopefully they'll at least introduce a version that can work on mobile phones in the future, but, since\n    the company that created it only built CargoBot as a demo of what their primary product can build (it's a\n    program that helps people develop apps), I'm not sure they're going to prioritize further development\n    of CargoBot.\n</p>\n<p>\n    Still, it is free. So, if you own an iPad, it doesn't get any more accessible. For those without an iPad,\n    though, you're out of luck for now.\n</p>\n<br/><br/>"
+    },
+    articles: "<p><a href='http://jayisgames.com/archives/2012/05/cargo-bot.php' target='_blank'>CargoBot Walk Through</a></p>\n<p><a href='http://www.engadget.com/2012/04/24/cargo-bot-for-ipad-video/' target='_blank'>CargoBot - Engadget Review</a></p>\n<br/><br/><br/><br/><br/><br/><br/><br/>"
+  }, {
     title: 'ST Math',
     website: 'http://web.stmath.com/',
     thumbnail: '/assets/images/reviews/stmath.jpg',

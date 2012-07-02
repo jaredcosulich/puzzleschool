@@ -1,3 +1,6 @@
+# Shikaku http://www.nikoli.com/en/puzzles/shikaku/ http://itunes.apple.com/us/app/shikaku-free/id355469616?mt=8
+# Build With Chrome http://www.buildwithchrome.com/
+
 soma = require('soma')
 wings = require('wings')
 
@@ -258,6 +261,134 @@ REVIEWDATA = [{
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>
             <br/><br/><br/><br/><br/><br/>
         """
+}, {
+    title: 'CargoBot'
+    website: 'http://twolivesleft.com/CargoBot/'
+    thumbnail: '/assets/images/reviews/cargobot.jpg'
+    company: 'Two Lives Left'
+    companyWebsite: 'hhttp://twolivesleft.com/'
+    material: 'Basic Programming'
+    availability: 'iPad'
+    cost: 'Free'
+    overall:
+        rating: 4.2
+        explanation:
+            """
+            <p>
+                CargoBot is a simple puzzle game that teaches the basics of programming (loops and conditional statements).
+            </p>
+            <p>
+                That may sound intimidating, but they've created a great trial-and-error environment with a simple tool box
+                that lets you learn the basics of these concepts without writing any programming.
+            </p>
+            <p>
+                You basically try to move boxes around by programming a crane to pick up, move, and drop boxes to solve the
+                puzzle. It's a very practical way to approach introductory programming, it's presented in a great trial-and-error
+                environment, and is quite engaging.
+            </p>
+            <p>
+                Really the only two knocks against it are that the puzzles get a little too hard a little too fast,
+                which could result in excessive frustration or even someone giving up, and it is only available iPad, 
+                which means you can't play it at all unless you own an iPad.
+            </p>
+            <p>
+                It is free, though, so if you own an iPad I would highly recommend CargoBot. I think it's 
+                very likely that a student will leave CargoBot wanting to learn more about programming so they can do 
+                more interesting things than just solve puzzles in CargoBot. That's the most important factor from my perspective.
+            </p>
+            """
+    loveOfLearning:
+        rating: 4
+        explanation:
+            """
+            <p>
+                I think CargoBot represents an excellent introduction to programming and should leave students hungry for more.
+            </p>
+            <p>
+                The fact that you're using programming to control a "physical" object (the crane) helps to explain what we use
+                programming for and should lead to creative connections about controlling other things.
+            </p>
+            <p>
+                The only knock I give it is that it may get too hard too fast, which could lead to frustration. Even as a
+                professional programmer I struggled with some of the puzzles and at points questioned whether there was
+                a mistake or not. That isn't a good sign and would make me a bit nervous about a less experienced student
+                getting too frustrated and actually giving up.
+            </p>
+            <p>
+                Overall, though, that concern is a minor one and can be moderated with a little outside help if it becomes an
+                issue. I think it's much more likely that a student walks away wanting to learn more programming after playing
+                CargoBot.
+            </p>
+            """
+    intuitive:
+        rating: 4
+        explanation:
+            """
+            <p>
+                CargoBot isn't quite as intuitive as I would like, but it's still very good. It requires a fair amount of
+                explanation to get started with it, which is a negative, but the explanations are provided within the tutorial
+                levels, so they're atleast provided with a great deal of context. 
+            </p>
+            <p>
+                It's pretty hard to teach programming without any explanation and they do a good job of minimizing it, using
+                a great trial-and-error environment complete with debugging tools. Overall they've done an excellent job making
+                CargoBot intuitive enough that anyone should be able to figure it out with very little if any outside help.
+            </p>
+            """
+    engagement:
+        rating: 5
+        explanation:
+            """
+            <p>
+                CargoBot is an excellent puzzle environment. It provides quality challenges (maybe they get a bit too hard too quickly) 
+                and a great trial-and-error environment. I found myself getting hooked on a number of the challenges, even
+                racing back to try a solution after I'd given up on getting the full 3 stars on one puzzle.
+            </p>
+            <p>
+                Again the only knock might be that it gets too hard too fast, but with engagement that might actually be a plus.
+                It's a fine line and I'd rather see them add in more puzzles to make the progress a little more granular, but
+                as it is I do think it's a very engaging experience.
+            </p>
+            """
+    practicality:
+        rating: 5
+        explanation:
+            """
+            <p>
+                CargoBot demonstrates a clearly practical usage of programming. You're programming a crane that moves boxes from
+                one place to another. That's an actual use of programming in the real world and provides a clear introduction
+                to not only programming, but why you would want to use programming in the real world.
+            </p>
+            <br/><br/><br/><br/><br/>
+            """
+    accessibility:
+        rating: 3
+        explanation:
+            """ 
+            <p>
+                CargoBot is only available on the iPad, which makes it completely inaccessible unless you own an iPad.
+            </p>
+            <p>
+                Hopefully they'll at least introduce a version that can work on mobile phones in the future, but, since
+                the company that created it only built CargoBot as a demo of what their primary product can build (it's a
+                program that helps people develop apps), I'm not sure they're going to prioritize further development
+                of CargoBot.
+            </p>
+            <p>
+                Still, it is free. So, if you own an iPad, it doesn't get any more accessible. For those without an iPad,
+                though, you're out of luck for now.
+            </p>
+            <br/><br/>
+            """
+    articles:
+        """
+            <p><a href='http://jayisgames.com/archives/2012/05/cargo-bot.php' target='_blank'>CargoBot Walk Through</a></p>
+            <p><a href='http://www.engadget.com/2012/04/24/cargo-bot-for-ipad-video/' target='_blank'>CargoBot - Engadget Review</a></p>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+        """
+
+
+
 }, {
     title: 'ST Math'
     website: 'http://web.stmath.com/'
