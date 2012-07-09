@@ -158,6 +158,40 @@ REVIEWDATA = [
     },
     articles: "<p><a href='http://jayisgames.com/archives/2012/05/cargo-bot.php' target='_blank'>CargoBot Walk Through</a></p>\n<p><a href='http://www.engadget.com/2012/04/24/cargo-bot-for-ipad-video/' target='_blank'>CargoBot - Engadget Review</a></p>\n<br/><br/><br/><br/><br/><br/><br/><br/>"
   }, {
+    title: 'Shikaku',
+    website: 'http://itunes.apple.com/us/app/shikaku-free/id355469616?mt=8',
+    thumbnail: '/assets/images/reviews/shikaku.jpg',
+    company: 'Nikoli',
+    companyWebsite: 'http://www.nikoli.com',
+    material: 'Multiplication / Factors',
+    availability: 'Web, iPhone, iPad, Android',
+    cost: 'Free - $5.99',
+    overall: {
+      rating: 4,
+      explanation: "<p>\n    Shikaku is from the same people who created Sudoku and has a very similar style to it. Unlike, Sudoku, though,\n    Shikaku introduces some basic multiplication.\n</p>\n<p>\n    In order to solve the puzzles you need to create squares or rectangles that add up in area to the number\n    they encompass. So in order to satisfy a \"12\" box you could fill in a 12x1 area or a 3x4 area or a 6x2 area.\n</p>\n<p>\n    Just like Sudoku, the engagement level is high. It's a quality puzzle that will likely entertain adults as\n    well as students. \n</p>\n<p>\n    Really the only drawback is that there is limited learning available. It's good practice for basic multiplication\n    and factors, providing feedback on whether the area filled in satisfies the number's requirement, but most of the\n    puzzles don't go above 9 and those that do don't seem to go above 16 or so, so you're not going to get in to\n    larger numbers at all.\n</p>\n<p>\n    If the puzzles involved a wider range of numbers then Shikaku would be a better tool for learning multiplication\n    and factors. If it were to do that, though, the puzzles may become too challenging.\n    As it is it's still a great fun puzzle that uses basic multiplication.\n</p>"
+    },
+    loveOfLearning: {
+      rating: 3,
+      explanation: "<p>\n    Shikaku is a great puzzle game. It's very likely that people will enjoy playing it just because it's a\n    fun puzzle, much like Sudoku. That said, the educational content (outside of the standard benefits of\n    these types of puzzles) is a little limited and I kind of doubt that a student would walk away wanting\n    to learn more about multiplication of factors. \n</p>\n<p>\n    Still I think there is significant educational value for someone who is just starting to learn about \n    multiplication and factors. The feedback in the puzzle is a little subtle, but it is there, and the puzzles\n    are high quality so once someone gets a hang of it they will likely stick with it and could gain a great\n    understanding of some basic multiplication and factors. \n</p>"
+    },
+    intuitive: {
+      rating: 4,
+      explanation: "<p>\n    Shikaku is a very intuitive puzzle, but you will probably need to watch a video to understand how it works.\n</p>\n<p>\n    In fact I would recommend the video in \n    <a href='http://mrhodotnet.blogspot.com/2011/12/shikaku.html' target='_blank'>this blog</a>.\n</p>\n<p>\n    The feedback loops in the puzzle that show you whether the rectangle you've filled is appropriate is also\n    a little subtle, making the puzzle a little less intuitive.\n</p>\n<p>\n    Overall, though it shouldn't take long to get the hang of Shikaku and then you're off and running.\n</p>"
+    },
+    engagement: {
+      rating: 5,
+      explanation: "<p>\n    Shikaku, like Sudoku, can be very addictive. The puzzles are fun to solve and range nicely in difficulty.\n</p>\n<p>\n    There's a very good chance that once you get in to them you'll want to continue solving harder and harder\n    puzzles. There's not much more you can ask for from an extremely simple puzzle.\n</p>"
+    },
+    practicality: {
+      rating: 3,
+      explanation: "<p>\n    The biggest knock against Shikaku is that it's a little limited in the educational department. Although\n    it is a very simple and effective puzzle environment for exploring factors, while the puzzles get harder\n    the educational content remains fairly constant.\n</p>\n<p>\n    Which isn't to say it's not worth playing, I just wouldn't expect a student to come away with a real expertise\n    of factors once they've played for a while.\n</p>\n\n<br/><br/><br/>"
+    },
+    accessibility: {
+      rating: 5,
+      explanation: " \n<p>\n    Shikaku is available on the web in various free forms as well as in most app stores (iPhone, iPad, Android), so you\n    shouldn't have too much trouble finding a free version for any device. You can also pay to get more puzzles through\n    most of the app stores. \n</p>\n<p>\n    There are also books you can buy to play Shikaku in the same way that so many people play Sudoku.\n</p>\n<p>\n    So you should be able to find a way to play Shikaku on your favorite device or just with pen and paper.\n</p>\n<br/><br/>"
+    },
+    articles: "<p><a href='http://mrhodotnet.blogspot.com/2011/12/shikaku.html' target='_blank'>Shikaku blog post</a></p>\n<p><a href='http://www.nikoli.co.jp/en/puzzles/shikaku.html' target='_blank'>Shikaku from Nikoli</a></p>\n<p><a href='http://www.puzzle-shikaku.com/' target='_blank'>Free, online Shikaku Puzzles</a></p>\n<p><a href='http://itunes.apple.com/us/app/shikaku-free/id355469616?mt=8' target='_blank'>Shikaku - iTunes App Store</a></p>\n<br/><br/><br/><br/>"
+  }, {
     title: 'ST Math',
     website: 'http://web.stmath.com/',
     thumbnail: '/assets/images/reviews/stmath.jpg',
