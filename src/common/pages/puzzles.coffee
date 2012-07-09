@@ -1,4 +1,3 @@
-# Shikaku http://www.nikoli.com/en/puzzles/shikaku/ 
 # Build With Chrome http://www.buildwithchrome.com/
 
 soma = require('soma')
@@ -394,7 +393,7 @@ REVIEWDATA = [{
     company: 'Nikoli'
     companyWebsite: 'http://www.nikoli.com'
     material: 'Multiplication / Factors'
-    availability: 'Web, iPhone, iPad, Android'
+    availability: 'Web, Mobile, Paper'
     cost: 'Free - $5.99'
     overall:
         rating: 4
