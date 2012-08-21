@@ -522,8 +522,9 @@ languageScramble.ViewHelper = (function() {
       sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
     }
     displayWords.html(sentence);
+    this.createScramble();
     this.createGuesses();
-    return this.createScramble();
+    return this.resizeLettersAndGuesses();
   };
 
   ViewHelper.prototype.selectOption = function() {
@@ -641,7 +642,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.createGuesses = function() {
-    var container, group, guesses, index, letter, runningTotal, wordGroup, wordGroups, _i, _j, _len, _len1, _results;
+    var container, group, guesses, index, letter, wordGroup, wordGroups, _i, _j, _len, _len1, _results;
     guesses = this.$('.guesses');
     this.clearContainer(guesses);
     wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
@@ -649,47 +650,29 @@ languageScramble.ViewHelper = (function() {
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       wordGroup = this.createWordGroup(index);
-      if (!container || runningTotal + group.length > 18) {
-        if (container) {
-          this.positionContainer(container);
-        }
+      if (!container) {
         container = this.createContainer();
-        runningTotal = 0;
       }
       for (_j = 0, _len1 = group.length; _j < _len1; _j++) {
         letter = group[_j];
         wordGroup.append(letter.match(/\w|[^\x00-\x80]+/) != null ? this.createGuess(letter) : this.createSpace(letter));
       }
-      runningTotal += group.length;
       container.append(wordGroup);
-      guesses.append(container);
-      if (index === wordGroups.length - 1) {
-        _results.push(this.positionContainer(container));
-      } else {
-        _results.push(void 0);
-      }
+      _results.push(guesses.append(container));
     }
     return _results;
   };
 
   ViewHelper.prototype.createScramble = function() {
-    var container, group, index, letter, runningTotal, scrambled, wordGroup, wordGroups, _i, _j, _len, _len1, _ref, _results;
+    var container, group, index, letter, scrambled, wordGroup, wordGroups, _i, _j, _len, _len1, _ref;
     scrambled = this.$('.scrambled');
     this.clearContainer(scrambled);
     wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
-    _results = [];
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       wordGroup = this.createWordGroup(index);
-      if (!container || runningTotal + group.length > 18) {
-        if (container) {
-          this.positionContainer(container);
-        }
+      if (!container) {
         container = this.createContainer();
-        runningTotal = 0;
-      } else {
-        wordGroup.append(this.createSpace(' '));
-        runningTotal += 1;
       }
       _ref = this.shuffleWord(this.modifyScramble(group.join('')));
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
@@ -698,16 +681,10 @@ languageScramble.ViewHelper = (function() {
           wordGroup.append(this.createLetter(letter));
         }
       }
-      runningTotal += group.length;
       container.append(wordGroup);
       scrambled.append(container);
-      if (index === wordGroups.length - 1) {
-        _results.push(this.positionContainer(container));
-      } else {
-        _results.push(void 0);
-      }
     }
-    return _results;
+    return this.sizeLetter($(scrambled.find('.letter')[0]));
   };
 
   ViewHelper.prototype.createContainer = function(index) {
@@ -716,11 +693,83 @@ languageScramble.ViewHelper = (function() {
     return container.addClass('container');
   };
 
-  ViewHelper.prototype.positionContainer = function(container) {
-    container.width(container.width());
-    return container.css({
-      float: 'none',
-      height: container.height()
+  ViewHelper.prototype.centerContainers = function() {
+    var container, containers, height, marginLeft, startMarginLeft, width, wordGroup, _i, _j, _len, _len1, _ref;
+    containers = this.$('.container');
+    for (_i = 0, _len = containers.length; _i < _len; _i++) {
+      container = containers[_i];
+      container = $(container);
+      container.css({
+        float: 'none',
+        margin: 'auto'
+      });
+      height = container.height();
+      width = container.width();
+      while (height === container.height()) {
+        width -= 1;
+        container.width(width);
+      }
+      container.width(width + 1);
+      _ref = container.find('.word_group');
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        wordGroup = _ref[_j];
+        wordGroup = $(wordGroup);
+        marginLeft = parseInt(wordGroup.css('marginLeft') || 0);
+        startMarginLeft = marginLeft;
+        height = container.height();
+        while (height === container.height()) {
+          marginLeft += 1;
+          wordGroup.css({
+            marginLeft: marginLeft
+          });
+        }
+        wordGroup.css({
+          marginLeft: (marginLeft - startMarginLeft - 1) / 2
+        });
+      }
+      container.height(container.height());
+    }
+    return this.$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css({
+      lineHeight: this.letterLineHeight,
+      height: this.letterDim
+    });
+  };
+
+  ViewHelper.prototype.resizeLettersAndGuesses = function() {
+    var container, letter, targetHeight;
+    letter = $(this.$('.scrambled').find('.letter')[0]);
+    this.letterFontSize = parseInt(letter.css('fontSize'));
+    this.sizeLetter(letter);
+    container = this.$('.scrambled .container');
+    if (this.$('.guesses .container').height() > container.height()) {
+      container = this.$('.guesses .container');
+    }
+    targetHeight = this.$('.scramble_content').height() / 3;
+    while (container.height() < targetHeight) {
+      this.letterFontSize += 1;
+      this.sizeLetter(letter);
+    }
+    while (container.height() > targetHeight) {
+      this.letterFontSize -= 1;
+      this.sizeLetter(letter);
+    }
+    return this.centerContainers();
+  };
+
+  ViewHelper.prototype.sizeLetter = function(letter) {
+    this.$('.guesses, .scrambled').css({
+      fontSize: "" + this.letterFontSize + "px"
+    });
+    this.letterDim = letter.height();
+    this.letterLineHeight = "" + (this.letterDim - (this.letterDim / 10)) + "px";
+    this.$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css({
+      width: this.letterDim
+    });
+    this.$('.guesses, .scrambled').find('.guess, .blank_letter').css({
+      height: this.letterDim
+    });
+    return this.$('.guesses, .scrambled').find('.space').css({
+      width: this.letterDim / 2
     });
   };
 
@@ -731,8 +780,21 @@ languageScramble.ViewHelper = (function() {
     return wordGroup.addClass("color" + (index + 1));
   };
 
+  ViewHelper.prototype.formatLetterOrGuess = function(letterOrGuess) {
+    if (this.letterDim) {
+      return letterOrGuess.css({
+        height: this.letterDim,
+        width: this.letterDim,
+        lineHeight: this.letterLineHeight
+      });
+    }
+  };
+
   ViewHelper.prototype.clearContainer = function(container) {
-    return container.find('.container, .correct, .guess, .letter, .space').remove();
+    container.find('.container, .correct, .guess, .letter, .space').remove();
+    this.letterDim = null;
+    this.letterLineHeight = null;
+    return this.letterFontSize = null;
   };
 
   ViewHelper.prototype.createGuess = function(letter) {
@@ -740,6 +802,7 @@ languageScramble.ViewHelper = (function() {
       _this = this;
     guess = $(document.createElement("DIV"));
     guess.addClass('guess');
+    this.formatLetterOrGuess(guess);
     guess.addClass("actual_letter_" + letter);
     return guess.bind('click', function() {
       if (guess.hasClass('selected')) {
@@ -761,7 +824,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.separateIntoWordGroups = function(letters, halfRow) {
     var firstWord, firstWordLetter, fullRow, fullRowRemaining, group, groups, letter, nextGroup, optimalLetters, previousGroup, _i, _j, _len, _len1;
     if (halfRow == null) {
-      halfRow = 9;
+      halfRow = 14;
     }
     fullRow = halfRow * 2;
     groups = [[]];
@@ -841,6 +904,7 @@ languageScramble.ViewHelper = (function() {
     var letterContainer;
     letterContainer = $(document.createElement("DIV"));
     letterContainer.addClass('letter');
+    this.formatLetterOrGuess(letterContainer);
     letterContainer.addClass("letter_" + letter);
     letterContainer.html(letter);
     this.bindLetter(letterContainer);
@@ -851,6 +915,7 @@ languageScramble.ViewHelper = (function() {
     var blankLetter;
     blankLetter = $(document.createElement("DIV"));
     blankLetter.addClass('blank_letter').addClass(letter.html());
+    this.formatLetterOrGuess(blankLetter);
     return blankLetter.insertBefore(letter, this.$(".scrambled ." + (this.containerClassName(letter))));
   };
 

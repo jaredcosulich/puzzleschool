@@ -9,14 +9,15 @@ window.app = {
     }), false);
     languageScramble = require('./lib/language_scramble');
     this.selector = $('.language_scramble');
+    $('.scramble_content').height(window.innerHeight);
     this.puzzleData = JSON.parse(window.localStorage.getItem('data')) || {
       levels: {}
     };
     this.languages = "english_italian";
-    this.levelName = "top10words";
     if (!this.puzzleData.levels[this.languages]) {
       this.puzzleData.levels[this.languages] = {};
     }
+    this.levelName = this.puzzleData.lastLevelPlayed || "top10words";
     this.viewHelper = new languageScramble.ViewHelper({
       el: $(this.selector),
       puzzleData: this.puzzleData,

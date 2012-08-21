@@ -44,14 +44,10 @@ body {
 .language_scramble .scrambled .space {
   float: left;
   margin: 3px;
-  width: 45px;
-  height: 45px;
-  line-height: 39px;
+  vertical-align: top;
 }
-.language_scramble .guesses .space,
-.language_scramble .scrambled .space {
-  width: 24px;
-  margin: 6px 0;
+.language_scramble .scrambled .word_group {
+    padding: 0 6px;
 }
 .language_scramble .guesses .guess,
 .language_scramble .scrambled .guess,
@@ -255,7 +251,7 @@ body {
 .language_scramble .level_progress_meter .percent_complete {
   opacity: 0.3;
   overflow: hidden;
-  height: 48px;
+  height: 18px;
   float: left;
   background-color: #0c8d28;
 }
