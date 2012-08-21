@@ -208,7 +208,7 @@ languageScramble.ViewHelper = (function() {
       if (!_this.dragging) {
         return;
       }
-      if (e.preventDefault != null) {
+      if (e.preventDefault) {
         e.preventDefault();
       }
       if (_this.dragging.css('position') !== 'absolute') {
@@ -363,7 +363,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.bindLetter = function(letter) {
-    var click, startDrag,
+    var click, startDrag, touchEnd,
       _this = this;
     this.dragging = null;
     this.dragAdjustmentX = 0;
@@ -417,7 +417,80 @@ languageScramble.ViewHelper = (function() {
     letter.bind('click', click);
     letter.bind('touchend', click);
     letter.bind('mousedown', startDrag);
-    return letter.bind('touchstart', startDrag);
+    letter.bind('touchstart', startDrag);
+    letter.bind('touchmove', function(e) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      if (letter.css('position') !== 'absolute') {
+        if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
+          _this.replaceLetterWithGuess(letter);
+        } else {
+          _this.replaceLetterWithBlank(letter);
+        }
+      }
+      if (_this.dragPathX[_this.dragPathX.length - 1] !== _this.clientX(e)) {
+        _this.dragPathX.push(_this.clientX(e));
+      }
+      if (_this.dragPathX[_this.dragPathY.length - 1] !== _this.clientY(e)) {
+        _this.dragPathY.push(_this.clientY(e));
+      }
+      return letter.css({
+        position: 'absolute',
+        top: _this.clientY(e) - _this.dragAdjustmentY,
+        left: _this.clientX(e) - _this.dragAdjustmentX
+      });
+    });
+    touchEnd = function(e, force) {
+      var currentX, currentY, guess, lastX, lastY, x, y;
+      if (!force && (!_this.dragPathX || !_this.dragPathY || _this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
+        $.timeout(40, function() {
+          return touchEnd(e, true);
+        });
+        return;
+      }
+      if (e.preventDefault != null) {
+        e.preventDefault();
+      }
+      currentX = _this.dragPathX.pop();
+      currentY = _this.dragPathY.pop();
+      lastX = ((function() {
+        var _i, _len, _ref, _results;
+        _ref = this.dragPathX.reverse();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          x = _ref[_i];
+          if (Math.abs(x - currentX) > 10) {
+            _results.push(x);
+          }
+        }
+        return _results;
+      }).call(_this))[0] || currentX + 0.01;
+      lastY = ((function() {
+        var _i, _len, _ref, _results;
+        _ref = this.dragPathY.reverse();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          y = _ref[_i];
+          if (Math.abs(y - currentY) > 10) {
+            _results.push(y);
+          }
+        }
+        return _results;
+      }).call(_this))[0] || currentY - 0.01;
+      guess = _this.guessInPath(letter, lastX, lastY, currentX, currentY);
+      letter.css({
+        position: 'static'
+      });
+      if (guess != null) {
+        return _this.replaceGuessWithLetter(guess, letter);
+      } else {
+        return _this.replaceBlankWithLetter(letter);
+      }
+    };
+    return letter.bind('touchend', function(e) {
+      return touchEnd(e);
+    });
   };
 
   ViewHelper.prototype.newScramble = function() {
@@ -829,11 +902,13 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.clientX = function(e) {
-    return e.clientX || (e.targetTouches[0] ? e.targetTouches[0].pageX : null);
+    var _ref, _ref1;
+    return e.clientX || ((_ref = e.targetTouches[0]) != null ? _ref.pageX : void 0) || ((_ref1 = e.touches[0]) != null ? _ref1.pageX : void 0);
   };
 
   ViewHelper.prototype.clientY = function(e) {
-    return e.clientY || (e.targetTouches[0] ? e.targetTouches[0].pageY : null);
+    var _ref, _ref1;
+    return e.clientY || ((_ref = e.targetTouches[0]) != null ? _ref.pageY : void 0) || ((_ref1 = e.touches[0]) != null ? _ref1.pageY : void 0);
   };
 
   ViewHelper.prototype.containerClassName = function(square) {

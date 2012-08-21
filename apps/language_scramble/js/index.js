@@ -9,23 +9,6 @@ window.app = {
     this.puzzleData = JSON.parse(window.localStorage.getItem('data')) || {
       levels: {}
     };
-    this.puzzleData = {
-      "levels": {
-        "english_italian": {
-          "top10words": {
-            "is-_": 1,
-            "and-e": 2,
-            "percentComplete": 14.285714285714278,
-            "the-il": 2,
-            "of-di": 1,
-            "a-un": 2,
-            "not-non": 2,
-            "are-sono": 2
-          }
-        }
-      },
-      "lastLevelPlayed": "top10words"
-    };
     this.languages = "english_italian";
     this.levelName = "top10words";
     if (!this.puzzleData.levels[this.languages]) {

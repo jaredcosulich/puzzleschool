@@ -3,7 +3,6 @@ window.app =
         languageScramble = require('./lib/language_scramble')
         @selector = $('.scramble_content')
         @puzzleData = JSON.parse(window.localStorage.getItem('data')) or {levels: {}}
-        @puzzleData = {"levels":{"english_italian":{"top10words":{"is-_":1,"and-e":2,"percentComplete":14.285714285714278,"the-il":2,"of-di":1,"a-un":2,"not-non":2,"are-sono":2}}},"lastLevelPlayed":"top10words"}        
         @languages = "english_italian"
         @levelName = "top10words"
         @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]        

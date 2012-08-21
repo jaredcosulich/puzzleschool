@@ -127,7 +127,7 @@ class languageScramble.ViewHelper
         
         moveDrag = (e) =>
             return unless @dragging
-            e.preventDefault() if e.preventDefault?
+            e.preventDefault() if e.preventDefault
             unless @dragging.css('position') == 'absolute'
                 if @dragging[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
                     @replaceLetterWithGuess(@dragging)  
@@ -163,7 +163,7 @@ class languageScramble.ViewHelper
 
         $(window).bind 'touchmove', moveDrag
         $(window).bind 'touchend', endDrag
-        
+                
         
     bindKeyPress: () ->
         @clickAreaHasFocus = false
@@ -251,7 +251,41 @@ class languageScramble.ViewHelper
         letter.bind 'click', click
         letter.bind 'touchend', click                
         letter.bind 'mousedown', startDrag   
-        letter.bind 'touchstart', startDrag                
+        letter.bind 'touchstart', startDrag   
+        
+        letter.bind 'touchmove', (e) => 
+            e.preventDefault() if e.preventDefault
+            unless letter.css('position') == 'absolute'
+                if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
+                    @replaceLetterWithGuess(letter)  
+                else
+                    @replaceLetterWithBlank(letter)  
+            @dragPathX.push(@clientX(e)) unless @dragPathX[@dragPathX.length - 1] == @clientX(e)
+            @dragPathY.push(@clientY(e)) unless @dragPathX[@dragPathY.length - 1] == @clientY(e)
+            letter.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)  
+            
+        touchEnd = (e, force) =>
+            if not force and (!@dragPathX or !@dragPathY or @dragPathX.length <= 1 or @dragPathY.length <= 1)
+                $.timeout 40, () => touchEnd(e, true)
+                return
+                
+            e.preventDefault() if e.preventDefault?
+
+            currentX = @dragPathX.pop()
+            currentY = @dragPathY.pop()
+            lastX = (x for x in @dragPathX.reverse() when Math.abs(x - currentX) > 10)[0] or currentX + 0.01
+            lastY = (y for y in @dragPathY.reverse() when Math.abs(y - currentY) > 10)[0] or currentY - 0.01
+
+            guess = @guessInPath(letter, lastX, lastY, currentX, currentY)
+            letter.css(position: 'static')
+            if guess?
+                @replaceGuessWithLetter(guess, letter)
+            else    
+                @replaceBlankWithLetter(letter)
+                
+            
+        letter.bind 'touchend', (e) => touchEnd(e)
+                          
             
         
     newScramble: () ->
@@ -521,8 +555,8 @@ class languageScramble.ViewHelper
             letter.removeClass('wrong_letter')
             letter.removeClass('correct_letter')
 
-    clientX: (e) => e.clientX or (if e.targetTouches[0] then e.targetTouches[0].pageX else null)
-    clientY: (e) => e.clientY or (if e.targetTouches[0] then e.targetTouches[0].pageY else null)
+    clientX: (e) => e.clientX or e.targetTouches[0]?.pageX or e.touches[0]?.pageX
+    clientY: (e) => e.clientY or e.targetTouches[0]?.pageY or e.touches[0]?.pageY
 
     containerClassName: (square) ->
         $(square).closest('.word_group')[0].className.match(/color\d+/)[0]
