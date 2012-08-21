@@ -1,0 +1,265 @@
+body {
+  background-color: #24aac3;
+  padding: 0;
+  margin: 0;
+}
+.text-center {
+    text-align: center;
+}
+.language_scramble {
+  background-color: #fafafa;
+}
+.language_scramble .display_words .highlighted,
+.language_scramble .scrambled .highlighted {
+  background-color: rgba(36, 219, 75, 0.5);
+  padding: 0 3px;
+}
+.language_scramble .section {
+  font-size: 30pt;
+  margin: 0;
+  padding: 10px 0;
+}
+.language_scramble .guesses,
+.language_scramble .scrambled {
+  clear: left;
+}
+.language_scramble .guesses .container,
+.language_scramble .scrambled .container {
+  float: left;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+.language_scramble .guesses .container .word_group,
+.language_scramble .scrambled .container .word_group {
+  float: left;
+}
+.language_scramble .guesses .guess,
+.language_scramble .scrambled .guess,
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter,
+.language_scramble .guesses .blank_letter,
+.language_scramble .scrambled .blank_letter,
+.language_scramble .guesses .space,
+.language_scramble .scrambled .space {
+  float: left;
+  margin: 3px;
+  width: 45px;
+  height: 45px;
+  line-height: 39px;
+}
+.language_scramble .guesses .space,
+.language_scramble .scrambled .space {
+  width: 24px;
+  margin: 6px 0;
+}
+.language_scramble .guesses .guess,
+.language_scramble .scrambled .guess,
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter {
+  cursor: pointer;
+}
+.language_scramble .guesses .color1 .guess,
+.language_scramble .scrambled .color1 .guess {
+  border: 1px dashed #24aac3;
+  background-color: rgba(36, 170, 194, 0.3);
+}
+.language_scramble .guesses .color2 .guess,
+.language_scramble .scrambled .color2 .guess {
+  border: 1px dashed #ff6e5f;
+  background-color: rgba(255, 113, 97, 0.3);
+}
+.language_scramble .guesses .color3 .guess,
+.language_scramble .scrambled .color3 .guess {
+  border: 1px dashed #ff922a;
+  background-color: rgba(255, 144, 41, 0.3);
+}
+.language_scramble .guesses .color4 .guess,
+.language_scramble .scrambled .color4 .guess {
+  border: 1px dashed #0c6d7f;
+  background-color: rgba(12, 109, 126, 0.3);
+}
+.language_scramble .guesses .color5 .guess,
+.language_scramble .scrambled .color5 .guess {
+  border: 1px dashed #a61c0e;
+  background-color: rgba(164, 29, 14, 0.3);
+}
+.language_scramble .guesses .color6 .guess,
+.language_scramble .scrambled .color6 .guess {
+  border: 1px dashed #a6580e;
+  background-color: rgba(164, 87, 14, 0.3);
+}
+.language_scramble .guesses .color7 .guess,
+.language_scramble .scrambled .color7 .guess {
+  border: 1px dashed #a6770e;
+  background-color: rgba(164, 117, 14, 0.3);
+}
+.language_scramble .guesses .color8 .guess,
+.language_scramble .scrambled .color8 .guess {
+  border: 1px dashed #fafafa;
+  background-color: rgba(250, 250, 250, 0.3);
+}
+.language_scramble .guesses .color1 .selected,
+.language_scramble .scrambled .color1 .selected,
+.language_scramble .guesses .color2 .selected,
+.language_scramble .scrambled .color2 .selected,
+.language_scramble .guesses .color3 .selected,
+.language_scramble .scrambled .color3 .selected,
+.language_scramble .guesses .color4 .selected,
+.language_scramble .scrambled .color4 .selected,
+.language_scramble .guesses .color5 .selected,
+.language_scramble .scrambled .color5 .selected,
+.language_scramble .guesses .color6 .selected,
+.language_scramble .scrambled .color6 .selected,
+.language_scramble .guesses .color7 .selected,
+.language_scramble .scrambled .color7 .selected,
+.language_scramble .guesses .color8 .selected,
+.language_scramble .scrambled .color8 .selected {
+  background-color: #fafafa;
+}
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter {
+  border: 1px solid #ccc;
+}
+.language_scramble .guesses .color1 .letter,
+.language_scramble .scrambled .color1 .letter {
+  background-color: #24aac3;
+}
+.language_scramble .guesses .color2 .letter,
+.language_scramble .scrambled .color2 .letter {
+  background-color: #ff6e5f;
+}
+.language_scramble .guesses .color3 .letter,
+.language_scramble .scrambled .color3 .letter {
+  background-color: #ff922a;
+}
+.language_scramble .guesses .color4 .letter,
+.language_scramble .scrambled .color4 .letter {
+  background-color: #0c6d7f;
+}
+.language_scramble .guesses .color5 .letter,
+.language_scramble .scrambled .color5 .letter {
+  background-color: #a61c0e;
+}
+.language_scramble .guesses .color6 .letter,
+.language_scramble .scrambled .color6 .letter {
+  background-color: #a6580e;
+}
+.language_scramble .guesses .color7 .letter,
+.language_scramble .scrambled .color7 .letter {
+  background-color: #a6770e;
+}
+.language_scramble .guesses .color8 .letter,
+.language_scramble .scrambled .color8 .letter {
+  background-color: #fafafa;
+}
+.language_scramble .guesses .correct,
+.language_scramble .scrambled .correct {
+  text-align: center;
+}
+.language_scramble .guesses .hidden_message,
+.language_scramble .scrambled .hidden_message {
+  display: none;
+  position: absolute;
+  font-size: 12pt;
+  background-color: #fafafa;
+}
+.language_scramble .guesses.hidden,
+.language_scramble .scrambled.hidden {
+  position: relative;
+}
+.language_scramble .guesses.hidden .letter,
+.language_scramble .scrambled.hidden .letter,
+.language_scramble .guesses.hidden .guess,
+.language_scramble .scrambled.hidden .guess,
+.language_scramble .guesses.hidden .space,
+.language_scramble .scrambled.hidden .space {
+  visibility: hidden;
+}
+.language_scramble .guesses.hidden .hidden_message,
+.language_scramble .scrambled.hidden .hidden_message {
+  display: block;
+  left: 236px;
+  top: 30px;
+}
+.language_scramble .guesses .color1 .correct_letter,
+.language_scramble .guesses .color2 .correct_letter,
+.language_scramble .guesses .color3 .correct_letter,
+.language_scramble .guesses .color4 .correct_letter,
+.language_scramble .guesses .color5 .correct_letter,
+.language_scramble .guesses .color6 .correct_letter,
+.language_scramble .guesses .color7 .correct_letter,
+.language_scramble .guesses .color8 .correct_letter {
+  background-color: rgba(36, 219, 75, 0.5);
+}
+.language_scramble .guesses .color1 .wrong_letter,
+.language_scramble .guesses .color2 .wrong_letter,
+.language_scramble .guesses .color3 .wrong_letter,
+.language_scramble .guesses .color4 .wrong_letter,
+.language_scramble .guesses .color5 .wrong_letter,
+.language_scramble .guesses .color6 .wrong_letter,
+.language_scramble .guesses .color7 .wrong_letter,
+.language_scramble .guesses .color8 .wrong_letter {
+  background-color: rgba(255, 113, 97, 0.5);
+}
+.language_scramble .guesses.hidden .letter {
+  visibility: visible;
+}
+.language_scramble .guesses.hidden .hidden_message {
+  left: 250px;
+  top: 24px;
+}
+.language_scramble .floating_message {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  opacity: 0;
+  text-align: center;
+}
+.language_scramble .last_answer .highlighted {
+  background-color: rgba(36, 219, 75, 0.25);
+  padding: 0 3px;
+}
+.language_scramble .footer .levels {
+  padding: 0 88px;
+  text-align: center;
+}
+.language_scramble .footer .levels .level {
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
+  float: left;
+  margin: 12px 0 0 30px;
+  width: 330px;
+}
+.language_scramble .footer .levels .level .level_link {
+  display: block;
+  margin: 6px 0;
+}
+.language_scramble .footer .levels .level .percent_complete {
+  opacity: 0.3;
+  margin-top: -48px;
+  overflow: hidden;
+  height: 48px;
+  float: left;
+  background-color: #0c8d28;
+}
+.language_scramble .level_progress_meter {
+  width: 100%;
+  position: absolute;
+  left: 0;
+}
+.language_scramble .level_progress_meter .percent_complete {
+  opacity: 0.3;
+  overflow: hidden;
+  height: 24px;
+  float: left;
+  background-color: #0c8d28;
+}
+
+.language_scramble .progress_meter {
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+}
+
+
