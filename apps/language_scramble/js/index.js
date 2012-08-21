@@ -4,8 +4,11 @@ window.app = {
   initialize: function() {
     var languageScramble,
       _this = this;
+    document.addEventListener('touchmove', (function(e) {
+      return e.preventDefault();
+    }), false);
     languageScramble = require('./lib/language_scramble');
-    this.selector = $('.scramble_content');
+    this.selector = $('.language_scramble');
     this.puzzleData = JSON.parse(window.localStorage.getItem('data')) || {
       levels: {}
     };
@@ -20,7 +23,8 @@ window.app = {
       languages: this.languages,
       saveProgress: function(puzzleProgress) {
         return _this.saveProgress(puzzleProgress);
-      }
+      },
+      maxLevel: 5
     });
     this.initProgressMeter();
     this.viewHelper.setLevel(this.levelName);
@@ -36,10 +40,12 @@ window.app = {
     });
   },
   saveProgress: function(puzzleProgress) {
-    var _ref;
-    if ((_ref = puzzleProgress.levels[this.languages][this.levelName]) != null ? _ref.percentComplete : void 0) {
-      this.percentComplete.width("" + puzzleProgress.levels[this.languages][this.levelName].percentComplete + "%");
+    var percentComplete, _ref;
+    percentComplete = 0;
+    if ((_ref = puzzleProgress.levels[this.languages][puzzleProgress.lastLevelPlayed]) != null ? _ref.percentComplete : void 0) {
+      percentComplete = puzzleProgress.levels[this.languages][puzzleProgress.lastLevelPlayed].percentComplete;
     }
+    this.percentComplete.width("" + percentComplete + "%");
     return window.localStorage.setItem("data", JSON.stringify(puzzleProgress));
   }
 };

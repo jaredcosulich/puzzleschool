@@ -51,10 +51,10 @@ class languageScramble.ChunkHelper
 
 
 class languageScramble.ViewHelper
-    maxLevel: 7
 
-    constructor: ({@el, puzzleData, @languages, @saveProgress}) ->
+    constructor: ({@el, puzzleData, @languages, @saveProgress, @maxLevel}) ->
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
+        @maxLevel or= 7
         @formatLevelLinks()
         
     $: (selector) -> $(selector, @el)
@@ -81,18 +81,15 @@ class languageScramble.ViewHelper
 
     saveLevel: () ->
         @answerTimes.push(new Date())
-
-        lastAnswerDuration = @answerTimes[@answerTimes.length - 1] - @answerTimes[@answerTimes.length - 2]
-        if lastAnswerDuration < 2500 * @scrambleInfo.native.length
-            @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
-            progress = @$(".progress_meter .bar .progress_section")
-            progressIncrement = 100.0 / progress.length
-            leftToGo = 0
-            leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
-            percentComplete = 100 - leftToGo
-            percentComplete = 100 if percentComplete > 98
-            @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete
-            $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
+        @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
+        progress = @$(".progress_meter .bar .progress_section")
+        progressIncrement = 100.0 / progress.length
+        leftToGo = 0
+        leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
+        percentComplete = 100 - leftToGo
+        percentComplete = 100 if percentComplete >= 98
+        @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete
+        $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
             
         @saveProgress(@puzzleData)
 
@@ -346,7 +343,7 @@ class languageScramble.ViewHelper
         possibleLevels = [minLevel, minLevel]
         if optionsToAdd[minLevel].length > 4                
             if optionsToAdd[minLevel].length <  @options.length / (3/2)
-                possibleLevels.push(minLevel + 1)
+                possibleLevels.push(minLevel + 1) unless minLevel < @maxLevel - 1
 
             if optionsToAdd[minLevel].length <  @options.length / 2
                 possibleLevels.push(minLevel + i) for i in [0..1]
@@ -374,8 +371,6 @@ class languageScramble.ViewHelper
                 @activeLevel = 'foreign'
             when 1
                 @activeLevel = 'native'
-            else
-                @activeLevel = 'foreignHard'
         
         @activeType = @activeLevel.replace(/Medium/, '').replace(/Hard/, '')
 
@@ -427,7 +422,6 @@ class languageScramble.ViewHelper
 
             container.append(wordGroup)
             scrambled.append(container)
-
             @positionContainer(container) if index == wordGroups.length - 1
 
     createContainer: (index) ->
@@ -606,7 +600,10 @@ class languageScramble.ViewHelper
         @$('.scramble_content').removeClass('show_keyboard')      
         if @activeLevel.match(/Medium/)? or @activeLevel.match(/Hard/)?
             @$('.guesses').addClass('hidden')
-            @$('.guesses .hidden_message').show()
+            message = @$('.guesses .hidden_message')
+            message.show()
+            message.width(message.width())
+            message.css('left', (window.innerWidth - message.width()) / 2)
 
         if @activeLevel.match(/Hard/)?
             @$('.scrambled').addClass('hidden')       
@@ -675,10 +672,10 @@ class languageScramble.ViewHelper
         nextShown = false
         showNext = () =>
             return if nextShown
+            nextShown = true
             @el.unbind 'click'
             @el.unbind 'touchstart'
             $('#clickarea').unbind 'keyup'
-            nextShown = true
             @setProgress()
             @$('.foreign_words, .scrambled, .guesses').animate
                 opacity: 0
@@ -699,7 +696,7 @@ class languageScramble.ViewHelper
             opacity: 1
             duration: 500
             complete: () =>
-                $.timeout 500 + (30 * correctSentence.length), () => showNext()
+                $.timeout 500 + (10 * correctSentence.length), () => showNext()
                 @el.bind 'click', () => showNext()
                 @el.bind 'touchstart', () => showNext()
                 $('#clickarea').bind 'keyup', (e) => showNext()
@@ -727,15 +724,20 @@ class languageScramble.ViewHelper
                     @newScramble()
                     @$('.scramble_content').animate
                         opacity: 1
-                        duration: 500             
+                        duration: 500
+                        complete: () =>
+                            message.css
+                                top: -1000
+                                left: -1000
 
         @$('.scramble_content').animate
             opacity: 0
             duration: 500
             complete: () =>
                 message.css
-                    top: 150
+                    top: ($('.language_scramble').height() - @$('#next_level').height()) / 2
                     left: ($('.language_scramble').width() - @$('#next_level').width()) / 2
+                    
                 @$('#next_level .reset_level_link').bind 'click', () => resetLevel()
                 @$('#next_level .next_level_link').bind 'click', () => showLevel(@level.nextLevel)
                 @$('#next_level').animate

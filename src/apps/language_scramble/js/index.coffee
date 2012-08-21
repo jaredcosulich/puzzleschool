@@ -1,8 +1,11 @@
 window.app = 
     initialize: ->
+        document.addEventListener('touchmove', ((e) => e.preventDefault()), false)
         languageScramble = require('./lib/language_scramble')
-        @selector = $('.scramble_content')
+        @selector = $('.language_scramble')
         @puzzleData = JSON.parse(window.localStorage.getItem('data')) or {levels: {}}
+        #@puzzleData = {"levels":{"english_italian":{"top10words":{"for-per":4,"percentComplete":95.55555555555556,"the-la":5,"what-che":5,"the-il":5,"a-un":5,"and-e":5,"is-_":5,"are-sono":5,"not-non":5,"of-di":5}}},"lastLevelPlayed":"top10words"}
+        #@puzzleData = {levels: {}}
         @languages = "english_italian"
         @levelName = "top10words"
         @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]        
@@ -11,6 +14,7 @@ window.app =
             puzzleData: @puzzleData
             languages: @languages
             saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
+            maxLevel: 5
 
         @initProgressMeter()
         @viewHelper.setLevel(@levelName)
@@ -25,7 +29,9 @@ window.app =
         @progressMeter.css(top: window.innerHeight - @percentComplete.height())
 
     saveProgress: (puzzleProgress) ->
-        if puzzleProgress.levels[@languages][@levelName]?.percentComplete
-            @percentComplete.width("#{puzzleProgress.levels[@languages][@levelName].percentComplete}%")
+        percentComplete = 0
+        if puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed]?.percentComplete
+            percentComplete = puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed].percentComplete
+        @percentComplete.width("#{percentComplete}%")
         window.localStorage.setItem("data", JSON.stringify(puzzleProgress))
         

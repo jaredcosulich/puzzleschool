@@ -89,16 +89,15 @@ languageScramble.ChunkHelper = (function() {
 
 languageScramble.ViewHelper = (function() {
 
-  ViewHelper.prototype.maxLevel = 7;
-
   function ViewHelper(_arg) {
     var puzzleData;
-    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.saveProgress = _arg.saveProgress;
+    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.saveProgress = _arg.saveProgress, this.maxLevel = _arg.maxLevel;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
 
     this.puzzleData = JSON.parse(JSON.stringify(puzzleData));
+    this.maxLevel || (this.maxLevel = 7);
     this.formatLevelLinks();
   }
 
@@ -139,25 +138,22 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.saveLevel = function() {
-    var lastAnswerDuration, leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
+    var leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
     this.answerTimes.push(new Date());
-    lastAnswerDuration = this.answerTimes[this.answerTimes.length - 1] - this.answerTimes[this.answerTimes.length - 2];
-    if (lastAnswerDuration < 2500 * this.scrambleInfo["native"].length) {
-      this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
-      progress = this.$(".progress_meter .bar .progress_section");
-      progressIncrement = 100.0 / progress.length;
-      leftToGo = 0;
-      for (_i = 0, _len = progress.length; _i < _len; _i++) {
-        progressSection = progress[_i];
-        leftToGo += $(progressSection).css('opacity') * progressIncrement;
-      }
-      percentComplete = 100 - leftToGo;
-      if (percentComplete > 98) {
-        percentComplete = 100;
-      }
-      this.puzzleData.levels[this.languages][this.levelName].percentComplete = percentComplete;
-      $("#level_link_" + this.levelName + " .percent_complete").width("" + percentComplete + "%");
+    this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
+    progress = this.$(".progress_meter .bar .progress_section");
+    progressIncrement = 100.0 / progress.length;
+    leftToGo = 0;
+    for (_i = 0, _len = progress.length; _i < _len; _i++) {
+      progressSection = progress[_i];
+      leftToGo += $(progressSection).css('opacity') * progressIncrement;
     }
+    percentComplete = 100 - leftToGo;
+    if (percentComplete >= 98) {
+      percentComplete = 100;
+    }
+    this.puzzleData.levels[this.languages][this.levelName].percentComplete = percentComplete;
+    $("#level_link_" + this.levelName + " .percent_complete").width("" + percentComplete + "%");
     return this.saveProgress(this.puzzleData);
   };
 
@@ -575,7 +571,9 @@ languageScramble.ViewHelper = (function() {
     possibleLevels = [minLevel, minLevel];
     if (optionsToAdd[minLevel].length > 4) {
       if (optionsToAdd[minLevel].length < this.options.length / (3 / 2)) {
-        possibleLevels.push(minLevel + 1);
+        if (!(minLevel < this.maxLevel - 1)) {
+          possibleLevels.push(minLevel + 1);
+        }
       }
       if (optionsToAdd[minLevel].length < this.options.length / 2) {
         for (i = _k = 0; _k <= 1; i = ++_k) {
@@ -626,9 +624,6 @@ languageScramble.ViewHelper = (function() {
         break;
       case 1:
         this.activeLevel = 'native';
-        break;
-      default:
-        this.activeLevel = 'foreignHard';
     }
     this.activeType = this.activeLevel.replace(/Medium/, '').replace(/Hard/, '');
     this.displayLevel = this.activeType.match(/native/) ? 'foreign' : 'native';
@@ -986,12 +981,16 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.setStage = function() {
+    var message;
     this.$('.guesses').removeClass('hidden');
     this.$('.scrambled').removeClass('hidden');
     this.$('.scramble_content').removeClass('show_keyboard');
     if ((this.activeLevel.match(/Medium/) != null) || (this.activeLevel.match(/Hard/) != null)) {
       this.$('.guesses').addClass('hidden');
-      this.$('.guesses .hidden_message').show();
+      message = this.$('.guesses .hidden_message');
+      message.show();
+      message.width(message.width());
+      message.css('left', (window.innerWidth - message.width()) / 2);
     }
     if (this.activeLevel.match(/Hard/) != null) {
       this.$('.scrambled').addClass('hidden');
@@ -1095,10 +1094,10 @@ languageScramble.ViewHelper = (function() {
       if (nextShown) {
         return;
       }
+      nextShown = true;
       _this.el.unbind('click');
       _this.el.unbind('touchstart');
       $('#clickarea').unbind('keyup');
-      nextShown = true;
       _this.setProgress();
       return _this.$('.foreign_words, .scrambled, .guesses').animate({
         opacity: 0,
@@ -1121,7 +1120,7 @@ languageScramble.ViewHelper = (function() {
       opacity: 1,
       duration: 500,
       complete: function() {
-        $.timeout(500 + (30 * correctSentence.length), function() {
+        $.timeout(500 + (10 * correctSentence.length), function() {
           return showNext();
         });
         _this.el.bind('click', function() {
@@ -1163,7 +1162,13 @@ languageScramble.ViewHelper = (function() {
           _this.newScramble();
           return _this.$('.scramble_content').animate({
             opacity: 1,
-            duration: 500
+            duration: 500,
+            complete: function() {
+              return message.css({
+                top: -1000,
+                left: -1000
+              });
+            }
           });
         }
       });
@@ -1173,7 +1178,7 @@ languageScramble.ViewHelper = (function() {
       duration: 500,
       complete: function() {
         message.css({
-          top: 150,
+          top: ($('.language_scramble').height() - _this.$('#next_level').height()) / 2,
           left: ($('.language_scramble').width() - _this.$('#next_level').width()) / 2
         });
         _this.$('#next_level .reset_level_link').bind('click', function() {
