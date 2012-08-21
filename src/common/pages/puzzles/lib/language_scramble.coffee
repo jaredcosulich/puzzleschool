@@ -87,8 +87,16 @@ class languageScramble.ViewHelper
         leftToGo = 0
         leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
         percentComplete = 100 - leftToGo
-        percentComplete = 100 if percentComplete >= 98
-        @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete
+
+        if percentComplete > 95
+            allComplete = true
+            for id of @puzzleData.levels[@languages][@levelName]
+                if @puzzleData.levels[@languages][@levelName][id] < @maxLevel
+                    allComplete = false
+                    break
+            percentComplete = 100 if allComplete
+        
+        @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete        
         $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
             
         @saveProgress(@puzzleData)
@@ -343,7 +351,7 @@ class languageScramble.ViewHelper
         possibleLevels = [minLevel, minLevel]
         if optionsToAdd[minLevel].length > 4                
             if optionsToAdd[minLevel].length <  @options.length / (3/2)
-                possibleLevels.push(minLevel + 1) unless minLevel < @maxLevel - 1
+                possibleLevels.push(minLevel + 1) unless minLevel >= @maxLevel
 
             if optionsToAdd[minLevel].length <  @options.length / 2
                 possibleLevels.push(minLevel + i) for i in [0..1]
@@ -641,8 +649,6 @@ class languageScramble.ViewHelper
                 @$(".progress_meter .bar .#{id}").css(opacity: 1)
     
     next: () ->
-        @saveLevel()
-
         correct = $(document.createElement('DIV'))
         if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length
             correctSentence = @scrambleInfo["#{@activeType}Sentence"] 
@@ -677,6 +683,7 @@ class languageScramble.ViewHelper
             @el.unbind 'touchstart'
             $('#clickarea').unbind 'keyup'
             @setProgress()
+            @saveLevel()
             @$('.foreign_words, .scrambled, .guesses').animate
                 opacity: 0
                 duration: 500

@@ -138,7 +138,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.saveLevel = function() {
-    var leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
+    var allComplete, id, leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
     this.answerTimes.push(new Date());
     this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
     progress = this.$(".progress_meter .bar .progress_section");
@@ -149,8 +149,17 @@ languageScramble.ViewHelper = (function() {
       leftToGo += $(progressSection).css('opacity') * progressIncrement;
     }
     percentComplete = 100 - leftToGo;
-    if (percentComplete >= 98) {
-      percentComplete = 100;
+    if (percentComplete > 95) {
+      allComplete = true;
+      for (id in this.puzzleData.levels[this.languages][this.levelName]) {
+        if (this.puzzleData.levels[this.languages][this.levelName][id] < this.maxLevel) {
+          allComplete = false;
+          break;
+        }
+      }
+      if (allComplete) {
+        percentComplete = 100;
+      }
     }
     this.puzzleData.levels[this.languages][this.levelName].percentComplete = percentComplete;
     $("#level_link_" + this.levelName + " .percent_complete").width("" + percentComplete + "%");
@@ -571,7 +580,7 @@ languageScramble.ViewHelper = (function() {
     possibleLevels = [minLevel, minLevel];
     if (optionsToAdd[minLevel].length > 4) {
       if (optionsToAdd[minLevel].length < this.options.length / (3 / 2)) {
-        if (!(minLevel < this.maxLevel - 1)) {
+        if (!(minLevel >= this.maxLevel)) {
           possibleLevels.push(minLevel + 1);
         }
       }
@@ -1062,7 +1071,6 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.next = function() {
     var boundary, correct, correctSentence, displayedSentence, highlighted, nextShown, scrambled, showNext, _i, _len, _ref,
       _this = this;
-    this.saveLevel();
     correct = $(document.createElement('DIV'));
     if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
       correctSentence = this.scrambleInfo["" + this.activeType + "Sentence"];
@@ -1099,6 +1107,7 @@ languageScramble.ViewHelper = (function() {
       _this.el.unbind('touchstart');
       $('#clickarea').unbind('keyup');
       _this.setProgress();
+      _this.saveLevel();
       return _this.$('.foreign_words, .scrambled, .guesses').animate({
         opacity: 0,
         duration: 500,
