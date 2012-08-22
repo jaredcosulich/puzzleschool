@@ -399,7 +399,7 @@ class languageScramble.ViewHelper
         wordGroups = @separateIntoWordGroups(sentence)
         for group, index in wordGroups
             colorGroup += group.length
-            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup > (sentence.length/2))
+            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup > (sentence.length*0.65))
                 colorIndex += 1
                 colorGroup = group.length
 
@@ -421,23 +421,30 @@ class languageScramble.ViewHelper
         wordGroups = @separateIntoWordGroups(sentence)
         scrambledWordGroups = []
         scrambleSentence = []
+        scrambleSentenceLength = 0
         start = 0
         for group, index in wordGroups
-            scrambleSentence.push(letter) for letter in group
-            if scrambleSentence.length > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and scrambleSentence.length >= (sentence.length/2)) or index == wordGroups.length - 1
+            scrambleSentenceLength += group.length
+            if scrambleSentenceLength > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and scrambleSentenceLength >= (sentence.length*0.65)) or index == wordGroups.length - 1
+                scrambleSentence.push(letter) for letter in group if index == wordGroups.length - 1
                 shuffled = @shuffleWord(scrambleSentence).split('')
-                for g in wordGroups[start..index]
+                shuffled = shuffled.reverse()
+                i = (if index < wordGroups.length - 1 then index else index + 1)
+                for g in wordGroups[start...i]
                     shuffledGroup = []
                     shuffledGroup.push(shuffled.pop()) for l in g                        
                     scrambledWordGroups.push(shuffledGroup)
-                start = index + 1    
-                scrambleSentence = []
-        
+                start = index
+                scrambleSentence = group
+                scrambleSentenceLength = group.length
+            else
+                scrambleSentence.push(letter) for letter in group
+    
         colorIndex = 0
         colorGroup = 0
         for group, index in scrambledWordGroups
             colorGroup += group.length
-            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup >= (sentence.length / 2))
+            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup >= (sentence.length*0.65))
                 colorIndex += 1
                 colorGroup = group.length
                 wordGroup.append(@createSpace(' '))

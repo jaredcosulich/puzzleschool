@@ -653,7 +653,7 @@ languageScramble.ViewHelper = (function() {
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
       colorGroup += group.length;
-      if (colorGroup > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && colorGroup > (sentence.length / 2))) {
+      if (colorGroup > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && colorGroup > (sentence.length * 0.65))) {
         colorIndex += 1;
         colorGroup = group.length;
       }
@@ -672,23 +672,29 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.createScramble = function() {
-    var colorGroup, colorIndex, container, g, group, index, l, letter, scrambleSentence, scrambled, scrambledWordGroups, sentence, shuffled, shuffledGroup, start, wordGroup, wordGroups, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref;
+    var colorGroup, colorIndex, container, g, group, i, index, l, letter, scrambleSentence, scrambleSentenceLength, scrambled, scrambledWordGroups, sentence, shuffled, shuffledGroup, start, wordGroup, wordGroups, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref;
     scrambled = this.$('.scrambled');
     this.clearContainer(scrambled);
     sentence = this.scrambleInfo[this.activeType];
     wordGroups = this.separateIntoWordGroups(sentence);
     scrambledWordGroups = [];
     scrambleSentence = [];
+    scrambleSentenceLength = 0;
     start = 0;
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
-      for (_j = 0, _len1 = group.length; _j < _len1; _j++) {
-        letter = group[_j];
-        scrambleSentence.push(letter);
-      }
-      if (scrambleSentence.length > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && scrambleSentence.length >= (sentence.length / 2)) || index === wordGroups.length - 1) {
+      scrambleSentenceLength += group.length;
+      if (scrambleSentenceLength > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && scrambleSentenceLength >= (sentence.length * 0.65)) || index === wordGroups.length - 1) {
+        if (index === wordGroups.length - 1) {
+          for (_j = 0, _len1 = group.length; _j < _len1; _j++) {
+            letter = group[_j];
+            scrambleSentence.push(letter);
+          }
+        }
         shuffled = this.shuffleWord(scrambleSentence).split('');
-        _ref = wordGroups.slice(start, index + 1 || 9e9);
+        shuffled = shuffled.reverse();
+        i = (index < wordGroups.length - 1 ? index : index + 1);
+        _ref = wordGroups.slice(start, i);
         for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
           g = _ref[_k];
           shuffledGroup = [];
@@ -698,16 +704,22 @@ languageScramble.ViewHelper = (function() {
           }
           scrambledWordGroups.push(shuffledGroup);
         }
-        start = index + 1;
-        scrambleSentence = [];
+        start = index;
+        scrambleSentence = group;
+        scrambleSentenceLength = group.length;
+      } else {
+        for (_m = 0, _len4 = group.length; _m < _len4; _m++) {
+          letter = group[_m];
+          scrambleSentence.push(letter);
+        }
       }
     }
     colorIndex = 0;
     colorGroup = 0;
-    for (index = _m = 0, _len4 = scrambledWordGroups.length; _m < _len4; index = ++_m) {
+    for (index = _n = 0, _len5 = scrambledWordGroups.length; _n < _len5; index = ++_n) {
       group = scrambledWordGroups[index];
       colorGroup += group.length;
-      if (colorGroup > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && colorGroup >= (sentence.length / 2))) {
+      if (colorGroup > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && colorGroup >= (sentence.length * 0.65))) {
         colorIndex += 1;
         colorGroup = group.length;
         wordGroup.append(this.createSpace(' '));
@@ -717,8 +729,8 @@ languageScramble.ViewHelper = (function() {
       if (!container) {
         container = this.createContainer();
       }
-      for (_n = 0, _len5 = group.length; _n < _len5; _n++) {
-        letter = group[_n];
+      for (_o = 0, _len6 = group.length; _o < _len6; _o++) {
+        letter = group[_o];
         if (letter.match(/\w|[^\x00-\x80]+/)) {
           wordGroup.append(this.createLetter(letter));
         }
