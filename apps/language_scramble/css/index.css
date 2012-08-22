@@ -46,9 +46,6 @@ body {
   margin: 3px;
   vertical-align: top;
 }
-.language_scramble .scrambled .word_group {
-    padding: 0 6px;
-}
 .language_scramble .guesses .guess,
 .language_scramble .scrambled .guess,
 .language_scramble .guesses .letter,

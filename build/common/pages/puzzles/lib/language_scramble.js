@@ -642,14 +642,22 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.createGuesses = function() {
-    var container, group, guesses, index, letter, wordGroup, wordGroups, _i, _j, _len, _len1, _results;
+    var colorGroup, colorIndex, container, group, guesses, index, letter, sentence, wordGroup, wordGroups, _i, _j, _len, _len1, _results;
     guesses = this.$('.guesses');
     this.clearContainer(guesses);
-    wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
+    colorIndex = 0;
+    colorGroup = 0;
+    sentence = this.scrambleInfo[this.activeType];
+    wordGroups = this.separateIntoWordGroups(sentence);
     _results = [];
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
-      wordGroup = this.createWordGroup(index);
+      colorGroup += group.length;
+      if (colorGroup > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && colorGroup > (sentence.length / 2))) {
+        colorIndex += 1;
+        colorGroup = group.length;
+      }
+      wordGroup = this.createWordGroup(colorIndex);
       if (!container) {
         container = this.createContainer();
       }
@@ -664,20 +672,53 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.createScramble = function() {
-    var container, group, index, letter, scrambled, wordGroup, wordGroups, _i, _j, _len, _len1, _ref;
+    var colorGroup, colorIndex, container, g, group, index, l, letter, scrambleSentence, scrambled, scrambledWordGroups, sentence, shuffled, shuffledGroup, start, wordGroup, wordGroups, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref;
     scrambled = this.$('.scrambled');
     this.clearContainer(scrambled);
-    wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
+    sentence = this.scrambleInfo[this.activeType];
+    wordGroups = this.separateIntoWordGroups(sentence);
+    scrambledWordGroups = [];
+    scrambleSentence = [];
+    start = 0;
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
+      for (_j = 0, _len1 = group.length; _j < _len1; _j++) {
+        letter = group[_j];
+        scrambleSentence.push(letter);
+      }
+      if (scrambleSentence.length > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && scrambleSentence.length >= (sentence.length / 2)) || index === wordGroups.length - 1) {
+        shuffled = this.shuffleWord(scrambleSentence).split('');
+        _ref = wordGroups.slice(start, index + 1 || 9e9);
+        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+          g = _ref[_k];
+          shuffledGroup = [];
+          for (_l = 0, _len3 = g.length; _l < _len3; _l++) {
+            l = g[_l];
+            shuffledGroup.push(shuffled.pop());
+          }
+          scrambledWordGroups.push(shuffledGroup);
+        }
+        start = index + 1;
+        scrambleSentence = [];
+      }
+    }
+    colorIndex = 0;
+    colorGroup = 0;
+    for (index = _m = 0, _len4 = scrambledWordGroups.length; _m < _len4; index = ++_m) {
+      group = scrambledWordGroups[index];
+      colorGroup += group.length;
+      if (colorGroup > 15 || (index !== (wordGroups.length - 1) && sentence.length > 15 && colorGroup >= (sentence.length / 2))) {
+        colorIndex += 1;
+        colorGroup = group.length;
+        wordGroup.append(this.createSpace(' '));
+      }
       group = wordGroups.length === 1 ? this.modifyScramble(group.join('')) : group.join('');
-      wordGroup = this.createWordGroup(index);
+      wordGroup = this.createWordGroup(colorIndex);
       if (!container) {
         container = this.createContainer();
       }
-      _ref = this.shuffleWord(group);
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        letter = _ref[_j];
+      for (_n = 0, _len5 = group.length; _n < _len5; _n++) {
+        letter = group[_n];
         if (letter.match(/\w|[^\x00-\x80]+/)) {
           wordGroup.append(this.createLetter(letter));
         }
@@ -695,7 +736,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.centerContainers = function() {
-    var container, containers, height, marginLeft, startMarginLeft, width, wordGroup, _i, _j, _len, _len1, _ref;
+    var container, containers, currentOffsetTop, height, marginLeft, startMarginLeft, width, wordGroup, _i, _j, _len, _len1, _ref;
     containers = this.$('.container');
     for (_i = 0, _len = containers.length; _i < _len; _i++) {
       container = containers[_i];
@@ -714,6 +755,10 @@ languageScramble.ViewHelper = (function() {
       _ref = container.find('.word_group');
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         wordGroup = _ref[_j];
+        if (currentOffsetTop === wordGroup.offsetTop) {
+          continue;
+        }
+        currentOffsetTop = wordGroup.offsetTop;
         wordGroup = $(wordGroup);
         marginLeft = parseInt(wordGroup.css('marginLeft') || 0);
         startMarginLeft = marginLeft;
@@ -759,6 +804,10 @@ languageScramble.ViewHelper = (function() {
     }
     while (this.containerHeights() > targetHeight) {
       this.letterFontSize -= 1;
+      this.sizeLetter(letter);
+    }
+    if (this.letterFontSize > 40) {
+      this.letterFontSize = 40;
       this.sizeLetter(letter);
     }
     return this.centerContainers();

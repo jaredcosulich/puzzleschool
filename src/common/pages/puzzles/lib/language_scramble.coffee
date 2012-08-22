@@ -393,9 +393,17 @@ class languageScramble.ViewHelper
         guesses = @$('.guesses')
         @clearContainer(guesses)
         
-        wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
+        colorIndex = 0
+        colorGroup = 0
+        sentence = @scrambleInfo[@activeType]
+        wordGroups = @separateIntoWordGroups(sentence)
         for group, index in wordGroups
-            wordGroup = @createWordGroup(index)
+            colorGroup += group.length
+            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup > (sentence.length/2))
+                colorIndex += 1
+                colorGroup = group.length
+
+            wordGroup = @createWordGroup(colorIndex)
             if not container
                 container = @createContainer() 
 
@@ -408,15 +416,38 @@ class languageScramble.ViewHelper
     createScramble: () ->
         scrambled = @$('.scrambled')
         @clearContainer(scrambled)
-
-        wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
+        
+        sentence = @scrambleInfo[@activeType]
+        wordGroups = @separateIntoWordGroups(sentence)
+        scrambledWordGroups = []
+        scrambleSentence = []
+        start = 0
         for group, index in wordGroups
+            scrambleSentence.push(letter) for letter in group
+            if scrambleSentence.length > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and scrambleSentence.length >= (sentence.length/2)) or index == wordGroups.length - 1
+                shuffled = @shuffleWord(scrambleSentence).split('')
+                for g in wordGroups[start..index]
+                    shuffledGroup = []
+                    shuffledGroup.push(shuffled.pop()) for l in g                        
+                    scrambledWordGroups.push(shuffledGroup)
+                start = index + 1    
+                scrambleSentence = []
+        
+        colorIndex = 0
+        colorGroup = 0
+        for group, index in scrambledWordGroups
+            colorGroup += group.length
+            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup >= (sentence.length / 2))
+                colorIndex += 1
+                colorGroup = group.length
+                wordGroup.append(@createSpace(' '))
+                
             group = if wordGroups.length == 1 then @modifyScramble(group.join('')) else group.join('')
-            wordGroup = @createWordGroup(index)
+            wordGroup = @createWordGroup(colorIndex)
             if not container
                 container = @createContainer() 
 
-            for letter in @shuffleWord(group) 
+            for letter in group
                 wordGroup.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
 
             container.append(wordGroup)
@@ -442,6 +473,8 @@ class languageScramble.ViewHelper
             container.width(width + 1)
 
             for wordGroup in container.find('.word_group')
+                continue if currentOffsetTop == wordGroup.offsetTop
+                currentOffsetTop = wordGroup.offsetTop
                 wordGroup = $(wordGroup)
                 marginLeft = parseInt(wordGroup.css('marginLeft') or 0)
                 startMarginLeft = marginLeft
@@ -476,6 +509,10 @@ class languageScramble.ViewHelper
 
         while @containerHeights() > targetHeight
             @letterFontSize -= 1
+            @sizeLetter(letter)
+
+        if @letterFontSize > 40
+            @letterFontSize = 40
             @sizeLetter(letter)
             
         @centerContainers()
