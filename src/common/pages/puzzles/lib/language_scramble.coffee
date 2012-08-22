@@ -317,7 +317,7 @@ class languageScramble.ViewHelper
 
         @createScramble()
         @createGuesses()
-        @resizeLettersAndGuesses()
+        @resize()
     
     selectOption: () ->
         @orderedOptions or= []
@@ -411,11 +411,12 @@ class languageScramble.ViewHelper
 
         wordGroups = @separateIntoWordGroups(@scrambleInfo[@activeType])
         for group, index in wordGroups
+            group = if wordGroups.length == 1 then @modifyScramble(group.join('')) else group.join('')
             wordGroup = @createWordGroup(index)
             if not container
                 container = @createContainer() 
 
-            for letter in @shuffleWord(@modifyScramble(group.join(''))) 
+            for letter in @shuffleWord(group) 
                 wordGroup.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
 
             container.append(wordGroup)
@@ -456,28 +457,33 @@ class languageScramble.ViewHelper
             lineHeight: @letterLineHeight
             height: @letterDim
                 
+    containerHeights: ->
+        total = 0
+        for container in @$('.scrambled .container, .guesses .container, .display_words')
+            total += $(container).height() + 15
+        return total
 
-    resizeLettersAndGuesses: ->
+    resize: ->
         letter = $(@$('.scrambled').find('.letter')[0])
         @letterFontSize = parseInt(letter.css('fontSize'))
         @sizeLetter(letter)
-        container = @$('.scrambled .container')
-        container = @$('.guesses .container') if @$('.guesses .container').height() > container.height()
-        targetHeight = @$('.scramble_content').height() / 3
+        
+        targetHeight =  @$('.scramble_content').height()
 
-        while container.height() < targetHeight
+        while @containerHeights() < targetHeight
             @letterFontSize += 1
             @sizeLetter(letter)
 
-        while container.height() > targetHeight
+        while @containerHeights() > targetHeight
             @letterFontSize -= 1
             @sizeLetter(letter)
             
         @centerContainers()
 
     sizeLetter: (letter) ->
-        @$('.guesses, .scrambled').css
-            fontSize: "#{@letterFontSize}px"
+        @$('.guesses, .scrambled').css(fontSize: "#{@letterFontSize}px")
+        @$('.display_words').css(fontSize: "#{@letterFontSize + 2}px")
+            
         @letterDim = letter.height()
         @letterLineHeight = "#{@letterDim - (@letterDim / 10)}px"
         @$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css
@@ -517,25 +523,11 @@ class languageScramble.ViewHelper
         space.addClass('space')
         space.html(letter)
         
-    separateIntoWordGroups: (letters, halfRow=14) ->
-        fullRow = halfRow * 2
+    separateIntoWordGroups: (letters) ->
         groups = [[]]
         for letter in letters
-            optimalLetters = if fullRowRemaining then fullRowRemaining else halfRow
+            groups.push([]) if letter.match(/\s/) 
             group = groups[groups.length - 1]
-            if group.length > optimalLetters && group.join().match(/\s/) 
-                groups.push(nextGroup = [])
-                nextGroup.push(group.pop()) while !group[group.length - 1].match(/\s/)?
-                if fullRowRemaining
-                    fullRowRemaining = null
-                    if (previousGroup = groups[groups.length - 2])
-                        while (firstWord = group.join().split('/\s/')[0]).length != group.length and group.length - firstWord.length > groups[groups.length - 2].length
-                            group.replace("#{firstWord} ", '')
-                            previousGroup.push(firstWordLetter) for firstWordLetter in firstWord
-                else 
-                    fullRow - group.length
-                group = nextGroup.reverse()
-                        
             group.push(letter)                
         return groups
         

@@ -524,7 +524,7 @@ languageScramble.ViewHelper = (function() {
     displayWords.html(sentence);
     this.createScramble();
     this.createGuesses();
-    return this.resizeLettersAndGuesses();
+    return this.resize();
   };
 
   ViewHelper.prototype.selectOption = function() {
@@ -670,11 +670,12 @@ languageScramble.ViewHelper = (function() {
     wordGroups = this.separateIntoWordGroups(this.scrambleInfo[this.activeType]);
     for (index = _i = 0, _len = wordGroups.length; _i < _len; index = ++_i) {
       group = wordGroups[index];
+      group = wordGroups.length === 1 ? this.modifyScramble(group.join('')) : group.join('');
       wordGroup = this.createWordGroup(index);
       if (!container) {
         container = this.createContainer();
       }
-      _ref = this.shuffleWord(this.modifyScramble(group.join('')));
+      _ref = this.shuffleWord(group);
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         letter = _ref[_j];
         if (letter.match(/\w|[^\x00-\x80]+/)) {
@@ -735,21 +736,28 @@ languageScramble.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.resizeLettersAndGuesses = function() {
-    var container, letter, targetHeight;
+  ViewHelper.prototype.containerHeights = function() {
+    var container, total, _i, _len, _ref;
+    total = 0;
+    _ref = this.$('.scrambled .container, .guesses .container, .display_words');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      container = _ref[_i];
+      total += $(container).height() + 15;
+    }
+    return total;
+  };
+
+  ViewHelper.prototype.resize = function() {
+    var letter, targetHeight;
     letter = $(this.$('.scrambled').find('.letter')[0]);
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
-    container = this.$('.scrambled .container');
-    if (this.$('.guesses .container').height() > container.height()) {
-      container = this.$('.guesses .container');
-    }
-    targetHeight = this.$('.scramble_content').height() / 3;
-    while (container.height() < targetHeight) {
+    targetHeight = this.$('.scramble_content').height();
+    while (this.containerHeights() < targetHeight) {
       this.letterFontSize += 1;
       this.sizeLetter(letter);
     }
-    while (container.height() > targetHeight) {
+    while (this.containerHeights() > targetHeight) {
       this.letterFontSize -= 1;
       this.sizeLetter(letter);
     }
@@ -759,6 +767,9 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.sizeLetter = function(letter) {
     this.$('.guesses, .scrambled').css({
       fontSize: "" + this.letterFontSize + "px"
+    });
+    this.$('.display_words').css({
+      fontSize: "" + (this.letterFontSize + 2) + "px"
     });
     this.letterDim = letter.height();
     this.letterLineHeight = "" + (this.letterDim - (this.letterDim / 10)) + "px";
@@ -821,38 +832,15 @@ languageScramble.ViewHelper = (function() {
     return space.html(letter);
   };
 
-  ViewHelper.prototype.separateIntoWordGroups = function(letters, halfRow) {
-    var firstWord, firstWordLetter, fullRow, fullRowRemaining, group, groups, letter, nextGroup, optimalLetters, previousGroup, _i, _j, _len, _len1;
-    if (halfRow == null) {
-      halfRow = 14;
-    }
-    fullRow = halfRow * 2;
+  ViewHelper.prototype.separateIntoWordGroups = function(letters) {
+    var group, groups, letter, _i, _len;
     groups = [[]];
     for (_i = 0, _len = letters.length; _i < _len; _i++) {
       letter = letters[_i];
-      optimalLetters = fullRowRemaining ? fullRowRemaining : halfRow;
-      group = groups[groups.length - 1];
-      if (group.length > optimalLetters && group.join().match(/\s/)) {
-        groups.push(nextGroup = []);
-        while (!(group[group.length - 1].match(/\s/) != null)) {
-          nextGroup.push(group.pop());
-        }
-        if (fullRowRemaining) {
-          fullRowRemaining = null;
-          if ((previousGroup = groups[groups.length - 2])) {
-            while ((firstWord = group.join().split('/\s/')[0]).length !== group.length && group.length - firstWord.length > groups[groups.length - 2].length) {
-              group.replace("" + firstWord + " ", '');
-              for (_j = 0, _len1 = firstWord.length; _j < _len1; _j++) {
-                firstWordLetter = firstWord[_j];
-                previousGroup.push(firstWordLetter);
-              }
-            }
-          }
-        } else {
-          fullRow - group.length;
-        }
-        group = nextGroup.reverse();
+      if (letter.match(/\s/)) {
+        groups.push([]);
       }
+      group = groups[groups.length - 1];
       group.push(letter);
     }
     return groups;
