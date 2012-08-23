@@ -54,8 +54,11 @@ window.app =
             levelSelect.scrollTop(startPosition.scrollTop - (@viewHelper.clientY(e) - startPosition.touch))
 
         showLevel = (level) =>
+            console.log(0)
             @viewHelper.setLevel(level)
+            console.log(1)
             @viewHelper.newScramble()
+            console.log(2)
                    
             levelSelect.animate
                 opacity: 0
@@ -91,5 +94,5 @@ window.app =
                 left: ($('.language_scramble').width() - levelSelect.width()) / 2
             levelSelect.animate
                 opacity: 1
-                duration: 1000
+                duration: 500
             

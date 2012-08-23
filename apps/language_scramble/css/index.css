@@ -262,12 +262,12 @@ body {
 
 .language_scramble #menu_button {
     position: absolute;
-    bottom: 0;
-    left: 12px;
+    top: 0;
+    right: 3px;
     display: block;
     background-color: black;
     color: white;
-    padding: 6px;
+    padding: 3px 6px;
 }
 
 .language_scramble #level_select_menu {

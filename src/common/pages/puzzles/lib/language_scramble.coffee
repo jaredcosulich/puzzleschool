@@ -299,6 +299,7 @@ class languageScramble.ViewHelper
         @lettersAdded = []
 
         @scrambleInfo = @selectOption()
+        console.log(JSON.stringify(@scrambleInfo))
         return unless @scrambleInfo     
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
 
@@ -422,25 +423,33 @@ class languageScramble.ViewHelper
         scrambleSentence = []
         scrambleSentenceLength = 0
         start = 0
+        
+        addToScrambledWordGroups = (scrambleSentence, start, end) =>
+            shuffled = @shuffleWord(scrambleSentence).split('')
+            shuffled = shuffled.reverse()            
+            for g, x in wordGroups[start...end]
+                shuffledGroup = []
+                shuffledGroup.push(shuffled.pop()) for l in g      
+                scrambledWordGroups.push(shuffledGroup)
+            
         for group, index in wordGroups
             scrambleSentenceLength += group.length
-            if scrambleSentenceLength > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and scrambleSentenceLength >= (sentence.length*0.65)) or index == wordGroups.length - 1
-                scrambleSentence.push(letter) for letter in group if index == wordGroups.length - 1
-                shuffled = @shuffleWord(scrambleSentence).split('')
-                shuffled = shuffled.reverse()
-                i = (if index < wordGroups.length - 1 then index else index + 1)
-                for g in wordGroups[start...i]
-                    shuffledGroup = []
-                    shuffledGroup.push(shuffled.pop()) for l in g                        
-                    scrambledWordGroups.push(shuffledGroup)
+            if scrambleSentenceLength > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and scrambleSentenceLength >= (sentence.length*0.65))
+                addToScrambledWordGroups(scrambleSentence, start, index)
                 start = index
-                scrambleSentence = group
-                scrambleSentenceLength = group.length
-            else
+                scrambleSentence = []
                 scrambleSentence.push(letter) for letter in group
+                scrambleSentenceLength = group.length
+            else            
+                scrambleSentence.push(letter) for letter in group
+            
+            if index == wordGroups.length - 1 and scrambleSentence.length
+                addToScrambledWordGroups(scrambleSentence, start, index + 1)
     
         colorIndex = 0
         colorGroup = 0
+        # console.log(JSON.stringify(scrambledWordGroups))
+        # console.log(JSON.stringify(wordGroups))
         for group, index in scrambledWordGroups
             colorGroup += group.length
             if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup >= (sentence.length*0.65))
@@ -1056,20 +1065,20 @@ languageScramble.data =
                 nextLevel: 'top100phrases'
                 data: [
                     {native: 'he', foreign: 'lui', nativeSentence: 'he is a very shy person', foreignSentence:  'lui è una persona molto timida'},
-                    {native: 'want', foreign: 'voglio', nativeSentence: 'I want to go home', foreignSentence: 'voglio andare a casa'},
+                    {native: 'want', foreign: 'voglio', nativeSentence: 'i want to go home', foreignSentence: 'voglio andare a casa'},
                     {native: 'we have', foreign: 'abbiamo', nativeSentence: 'we have a big house with three bedrooms', foreignSentence: 'abbiamo una grande casa con tre camere da letto'},
                     {native: 'was', foreign: 'stato', nativeSentence: 'it was a great pleasure to work with him', foreignSentence: 'è stato un grande  piacere lavorare con lui'},
-                    {native: 'him', foreign: 'lui', nativeSentence: 'I don\'t know anything about him', foreignSentence: 'non so nulla di lui'},
+                    {native: 'him', foreign: 'lui', nativeSentence: 'i don\'t know anything about him', foreignSentence: 'non so nulla di lui'},
                     {native: 'in the', foreign: 'nel', nativeSentence: 'there is a big tree in the garden', foreignSentence: 'c\'è un grande albero nel giardino'},
                     {native: 'his', foreign: 'suo', nativeSentence: 'his dog barks all night', foreignSentence: 'il suo cane abbaia tutta la notte'},
                     {native: 'will be', foreign: 'sarà', nativeSentence: 'tomorrow will be different', foreignSentence: 'domani sarà diverso'},
                     {native: 'where', foreign: 'dove', nativeSentence: 'where is my book?', foreignSentence: 'dove è il mio libro?'},
-                    {native: 'can', foreign: 'posso', nativeSentence: 'I can dance all night long', foreignSentence: 'posso ballare tutta la notte'},
+                    {native: 'can', foreign: 'posso', nativeSentence: 'i can dance all night long', foreignSentence: 'posso ballare tutta la notte'},
                     {native: 'oh', foreign: 'oh', nativeSentence: 'oh what a beautiful sunset!', foreignSentence: 'oh che bel tramonto!'},
-                    {native: 'before', foreign: 'prima', nativeSentence: 'I always read before going to bed', foreignSentence: 'leggo sempre prima di andare a letto'},
+                    {native: 'before', foreign: 'prima', nativeSentence: 'i always read before going to bed', foreignSentence: 'leggo sempre prima di andare a letto'},
                     {native: 'so', foreign: 'allora',nativeSentence: 'so, how is it going?', foreignSentence: 'allora, come va?'},
                     {native: 'we are', foreign: 'siamo', nativeSentence: 'we are happy to help you', foreignSentence: 'siamo felici di aiutarti'},
-                    {native: 'a', foreign: 'uno', nativeSentence: 'I made a mistake', foreignSentence: 'ho fatto uno sbaglio'},
+                    {native: 'a', foreign: 'uno', nativeSentence: 'i made a mistake', foreignSentence: 'ho fatto uno sbaglio'},
                     {native: 'an', foreign: 'un\'', nativeSentence: 'she is an excellent cook', foreignSentence: 'lei è un\' eccellente cuoca'},
                     {native: 'her', foreign: 'sua', nativeSentence: 'her house is on the hill', foreignSentence: 'la sua casa è sulla collina'},
                     {native: 'your', foreign: 'tuo', nativeSentence: 'what is your job?', foreignSentence: 'quale è il tuo lavoro?'},
@@ -1087,63 +1096,100 @@ languageScramble.data =
                 subtitle: 'Phrases for the 75 - 100 most frequently used Italian words'
                 nextLevel: 'top150words'
                 data: [
-                    {native: 'he', foreign: 'lui', nativeSentence: 'he is a very shy person', foreignSentence:  'lui è una persona molto timida'},
-                    {native: 'want', foreign: 'voglio', nativeSentence: 'I want to go home', foreignSentence: 'voglio andare a casa'},
-                    {native: 'have', foreign: 'abbiamo', nativeSentence: 'we have a big house with three bedrooms', foreignSentence: 'abbiamo una grande casa con tre camere da letto'},
-                    {native: 'was', foreign: 'stato', nativeSentence: 'it was a great pleasure to work with him', foreignSentence: 'è stato un grande  piacere lavorare con lui'},
-                    {native: 'him', foreign: 'lui', nativeSentence: 'I don\'t know anything about him', foreignSentence: 'non so nulla di lui'},
-                    {native: 'in the', foreign: 'nel', nativeSentence: 'there is a big tree in the garden', foreignSentence: 'c\'è un grande albero nel giardino'},
-                    {native: 'his', foreign: 'suo', nativeSentence: 'his dog barks all night', foreignSentence: 'il suo cane abbaia tutta la notte'},
-                    {native: 'will be', foreign: 'sarà', nativeSentence: 'tomorrow will be different', foreignSentence: 'domani sarà diverso'},
-                    {native: 'where', foreign: 'dove', nativeSentence: 'where is my book?', foreignSentence: 'dove è il mio libro?'},
-                    {native: 'can', foreign: 'posso', nativeSentence: 'I can dance all night long', foreignSentence: 'posso ballare tutta la notte'},
-                    {native: 'oh', foreign: 'oh', nativeSentence: 'oh what a beautiful sunset!', foreignSentence: 'oh che bel tramonto!'},
-                    {native: 'before', foreign: 'prima', nativeSentence: 'I always read before going to bed', foreignSentence: 'leggo sempre prima di andare a letto'},
-                    {native: 'so', foreign: 'allora',nativeSentence: 'so, how is it going?', foreignSentence: 'allora, come va?'},
-                    {native: 'are', foreign: 'siamo', nativeSentence: 'we are happy to help you', foreignSentence: 'siamo felici di aiutarti'},
-                    {native: 'a', foreign: 'uno', nativeSentence: 'I made a mistake', foreignSentence: 'ho fatto uno sbaglio'},
-                    {native: 'an', foreign: 'un\'', nativeSentence: 'she is an excellent cook', foreignSentence: 'lei è un\'eccellente cuoca'},
-                    {native: 'her', foreign: 'sua', nativeSentence: 'her house is on the hill', foreignSentence: 'la sua casa è sulla collina'},
-                    {native: 'your', foreign: 'tuo', nativeSentence: 'what is your job?', foreignSentence: 'quale è il tuo lavoro?'},
-                    {native: 'have', foreign: 'hanno', nativeSentence: 'they have a big house', foreignSentence: 'loro hanno una grande casa'},
-                    {native: 'we', foreign: 'noi', nativeSentence: 'we love tennis', foreignSentence: 'noi amiamo il tennis'},
-                    {native: 'is', foreign: 'sta', nativeSentence: 'who is knocking on my door?', foreignSentence: 'chi sta bussando alla mia porta?'},
-                    {native: 'does', foreign: 'fa', nativeSentence: 'he does what he wants', foreignSentence: 'lui fa ciò che vuole'},
-                    {native: 'two', foreign: 'due', nativeSentence: 'my house has two bathrooms', foreignSentence: 'la mia casa ha due bagni'},
-                    {native: 'want', foreign: 'vuoi', nativeSentence: 'what do you want from me?', foreignSentence: 'cosa vuoi da me?'},
-                    {native: 'still', foreign: 'ancora', nativeSentence: 'he is still sleeping', foreignSentence: 'lui sta ancora dormendo'},
-                    {native: 'something', foreign: 'qualcosa', nativeSentence: 'there is something to talk about', foreignSentence: 'c\'è qualcosa di cui parlare'},
+                    {native: 'he is a very shy person', foreign:  'lui è una persona molto timida'},
+                    {native: 'i want to go home', foreign: 'voglio andare a casa'},
+                    {native: 'we have a big house with three bedrooms', foreign: 'abbiamo una grande casa con tre camere da letto'},
+                    {native: 'it was a great pleasure to work with him', foreign: 'è stato un grande  piacere lavorare con lui'},
+                    {native: 'i don\'t know anything about him', foreign: 'non so nulla di lui'},
+                    {native: 'there is a big tree in the garden', foreign: 'c\'è un grande albero nel giardino'},
+                    {native: 'his dog barks all night', foreign: 'il suo cane abbaia tutta la notte'},
+                    {native: 'tomorrow will be different', foreign: 'domani sarà diverso'},
+                    {native: 'where is my book?', foreign: 'dove è il mio libro?'},
+                    {native: 'i can dance all night long', foreign: 'posso ballare tutta la notte'},
+                    {native: 'oh what a beautiful sunset!', foreign: 'oh che bel tramonto!'},
+                    {native: 'i always read before going to bed', foreign: 'leggo sempre prima di andare a letto'},
+                    {native: 'so, how is it going?', foreign: 'allora, come va?'},
+                    {native: 'we are happy to help you', foreign: 'siamo felici di aiutarti'},
+                    {native: 'i made a mistake', foreign: 'ho fatto uno sbaglio'},
+                    {native: 'she is an excellent cook', foreign: 'lei è un\'eccellente cuoca'},
+                    {native: 'her house is on the hill', foreign: 'la sua casa è sulla collina'},
+                    {native: 'what is your job?', foreign: 'quale è il tuo lavoro?'},
+                    {native: 'they have a big house', foreign: 'loro hanno una grande casa'},
+                    {native: 'we love tennis', foreign: 'noi amiamo il tennis'},
+                    {native: 'who is knocking on my door?', foreign: 'chi sta bussando alla mia porta?'},
+                    {native: 'he does what he wants', foreign: 'lui fa ciò che vuole'},
+                    {native: 'my house has two bathrooms', foreign: 'la mia casa ha due bagni'},
+                    {native: 'what do you want from me?', foreign: 'cosa vuoi da me?'},
+                    {native: 'he is still sleeping', foreign: 'lui sta ancora dormendo'},
+                    {native: 'there is something to talk about', foreign: 'c\'è qualcosa di cui parlare'},
                 ]
-            top150words:
-                title: 'Top 100 - 150 Words'
-                subtitle: 'The 100 - 150 most frequently used Italian words'
-                nextLevel: 'top150phrases'
+            top125words:
+                title: 'Top 100 - 125 Words'
+                subtitle: 'The 100 - 125 most frequently used Italian words'
+                nextLevel: 'top125phrases'
                 data: [
                     {native: 'true', foreign: 'vero', nativeSentence: 'it\'s true!', foreignSentence: 'è vero!'},
                     {native: 'home', foreign: 'casa', nativeSentence: 'home sweet home', foreignSentence: 'casa dolce casa'},
-                    {native: 'are', foreign: 'sia', nativeSentence: 'I suppose you are angry', foreignSentence: 'suppongo tu sia arrabbiato'},
+                    {native: 'are', foreign: 'sia', nativeSentence: 'i suppose you are angry', foreignSentence: 'suppongo tu sia arrabbiato'},
                     {native: 'up', foreign: 'su', nativeSentence: 'look up and see the stars', foreignSentence: 'guarda su e vedi le stelle'},
                     {native: 'your', foreign: 'tua', nativeSentence: 'your mother must be proud of you', foreignSentence: 'tua madre deve essere orgogliosa di te'},
-                    {native: 'always', foreign: 'sempre', nativeSentence: 'I will always love you', foreignSentence: 'ti amerò per sempre'},
+                    {native: 'always', foreign: 'sempre', nativeSentence: 'i will always love you', foreignSentence: 'ti amerò per sempre'},
                     {native: 'maybe', foreign: 'forse', nativeSentence: 'maybe we should go home', foreignSentence: 'forse dovremmo andare a casa'},
                     {native: 'tell', foreign: 'dire', nativeSentence: 'it is important to tell the truth', foreignSentence: 'è importante dire la verità'},
-                    {native: 'you', foreign: 'vi', nativeSentence: 'your parents love you very much', foreignSentence: 'I vostri genitori vi amano moltissimo'},
-                    {native: 'they', foreign: 'loro', nativeSentence: 'they live in London', foreignSentence: 'loro vivono a Londra'},
-                    {native: 'the', foreign: 'i', nativeSentence: 'the kids are playing in the garden', foreignSentence: 'I bambini stanno giocando in giardino'},
+                    {native: 'you', foreign: 'vi', nativeSentence: 'your parents love you very much', foreignSentence: 'i vostri genitori vi amano moltissimo'},
+                    {native: 'they', foreign: 'loro', nativeSentence: 'they live in london', foreignSentence: 'loro vivono a londra'},
+                    {native: 'the', foreign: 'i', nativeSentence: 'the kids are playing in the garden', foreignSentence: 'i bambini stanno giocando in giardino'},
                     {native: 'another', foreign: 'altro', nativeSentence: 'there is another man', foreignSentence: 'c\'è un altro uomo'},
                     {native: 'know', foreign: 'sai', nativeSentence: 'you know the truth', foreignSentence: 'tu sai la verità'},
                     {native: 'are', foreign: 'stai', nativeSentence: 'you are making progress', foreignSentence: 'stai facendo progressi'},
-                    {native: 'must', foreign: 'devo', nativeSentence: 'I must go to the bank', foreignSentence: 'devo andare in banca'}, 
+                    {native: 'must', foreign: 'devo', nativeSentence: 'i must go to the bank', foreignSentence: 'devo andare in banca'}, 
                     {native: 'that', foreign: 'quella', nativeSentence: 'that car is old', foreignSentence: 'quella macchina è vecchia'},
-                    {native: 'life', foreign: 'vita',nativeSentence: 'I am happy with my life',foreignSentence: 'sono contento della mia vita'},
+                    {native: 'life', foreign: 'vita',nativeSentence: 'i am happy with my life',foreignSentence: 'sono contento della mia vita'},
                     {native: 'that', foreign: 'quel', nativeSentence: 'that guy is very tall', foreignSentence: 'quel tipo è molto alto'},
-                    {native: 'of', foreign: 'delle', nativeSentence: 'I am scared of bees', foreignSentence: 'ho paura delle api'},
-                    {native: 'time', foreign: 'tempo', nativeSentence: 'it is time to go away', foreignSentence: 'è tempo di andare via'},                    
-                    {native: 'go', foreign: 'andare', nativeSentence: 'I want to go home' , foreignSentence: 'voglio andare    a casa'},
+                    {native: 'of', foreign: 'delle', nativeSentence: 'i am scared of bees', foreignSentence: 'ho paura delle api'},
+                    {native: 'time', foreign: 'tempo', nativeSentence: 'it\'s time to go', foreignSentence: 'è tempo di andare via'},                    
+                    {native: 'go', foreign: 'andare', nativeSentence: 'i want to go home' , foreignSentence: 'voglio andare    a casa'},
                     {native: 'sure', foreign: 'certo', nativeSentence: 'i am sure you will get the job', foreignSentence:  'sono certo che otterrai il lavoro'},
                     {native: 'then', foreign: 'poi', nativeSentence: 'do your homework now, then you go out', foreignSentence: 'fai i tuoi compiti ora, poi esci'},
-                    {native: 'in', foreign: 'nella', nativeSentence: 'i have seen a spider in the bedroom', foreignSentence: 'ho visto un ragno nella camera da letto'},
+                    {native: 'in', foreign: 'nella', nativeSentence: 'i saw a spider in the bedroom', foreignSentence: 'ho visto un ragno nella camera da letto'},
                     {native: 'man', foreign: 'uomo', nativeSentence: 'there is a strange man in front of the house', foreignSentence: 'c\'è uno strano uomo di fronte alla casa'},
+                ]
+            top125phrases:
+                title: 'Phrases For The Top 100 - 125 Words'
+                subtitle: 'Phrases for the 100 - 125 most frequently used Italian words'
+                nextLevel: 'top150words'
+                data: [
+                    {native: 'it\'s true!', foreign: 'è vero!'},
+                    {native: 'home sweet home', foreign: 'casa dolce casa'},
+                    {native: 'i suppose you are angry', foreign: 'suppongo tu sia arrabbiato'},
+                    {native: 'look up and see the stars', foreign: 'guarda su e vedi le stelle'},
+                    {native: 'your mother must be proud of you', foreign: 'tua madre deve essere orgogliosa di te'},
+                    {native: 'i will always love you', foreign: 'ti amerò per sempre'},
+                    {native: 'maybe we should go home', foreign: 'forse dovremmo andare a casa'},
+                    {native: 'it is important to tell the truth', foreign: 'è importante dire la verità'},
+                    {native: 'your parents love you very much', foreign: 'i vostri genitori vi amano moltissimo'},
+                    {native: 'they live in london', foreign: 'loro vivono a londra'},
+                    {native: 'the kids are playing in the garden', foreign: 'i bambini stanno giocando in giardino'},
+                    {native: 'there is another man', foreign: 'c\'è un altro uomo'},
+                    {native: 'you know the truth', foreign: 'tu sai la verità'},
+                    {native: 'you are making progress', foreign: 'stai facendo progressi'},
+                    {native: 'i must go to the bank', foreign: 'devo andare in banca'}, 
+                    {native: 'that car is old', foreign: 'quella macchina è vecchia'},
+                    {native: 'i am happy with my life',foreign: 'sono contento della mia vita'},
+                    {native: 'that guy is very tall', foreign: 'quel tipo è molto alto'},
+                    {native: 'i am scared of bees', foreign: 'ho paura delle api'},
+                    {native: 'it\'s time to go', foreign: 'è tempo di andare via'},                    
+                    {native: 'i want to go home' , foreign: 'voglio andare    a casa'},
+                    {native: 'i am sure you will get the job', foreign:  'sono certo che otterrai il lavoro'},
+                    {native: 'do your homework now, then you go out', foreign: 'fai i tuoi compiti ora, poi esci'},
+                    {native: 'i have seen a spider in the bedroom', foreign: 'ho visto un ragno nella camera da letto'},
+                    {native: 'there is a strange man in front of the house', foreign: 'c\'è uno strano uomo di fronte alla casa'},
+                ]
+            top150words:
+                title: 'Top 125 - 150 Words'
+                subtitle: 'The 125 - 150 most frequently used Italian words'
+                nextLevel: 'top150phrases'
+                data: [
                     {native: 'sir', foreign: 'signore', nativeSentence: 'good morning, sir', foreignSentence: 'buongiorno signore'},
                     {native: 'to', foreign: 'ad', nativeSentence: 'give a book to every child', foreignSentence: 'dai un libro ad ogni bambino'},
                     {native: 'little', foreign: 'pò', nativeSentence: 'i am a little sad', foreignSentence: 'sono un pò triste'},
@@ -1171,115 +1217,165 @@ languageScramble.data =
                     {native: 'is', foreign: 'è', nativeSentence: 'she is a very beautiful girl', foreignSentence: 'lei è una ragazza molto bella'},
                 ]
             top150phrases:
-                title: 'Phrases For The Top 100 - 150 Words'
-                subtitle: 'Phrases for the 100 - 150 most frequently used Italian words'
+                title: 'Phrases For The Top 125 - 150 Words'
+                subtitle: 'Phrases for the 125 - 150 most frequently used Italian words'
+                nextLevel: 'top175words'
+                data: [
+                    {native: 'good morning, sir', foreign: 'buongiorno signore'},
+                    {native: 'give a book to every child', foreign: 'dai un libro ad ogni bambino'},
+                    {native: 'i am a little sad', foreign: 'sono un pò triste'},
+                    {native: 'he can do it better than you', foreign: 'lui può farlo meglio di te'},
+                    {native: 'i believe in love', foreign: 'credo nell\'amore'},
+                    {native: 'what do you think about Italy? ', foreign: 'cosa pensate dell\'Italia? '},
+                    {native: 'i have already eaten', foreign: 'ho già mangiato'},
+                    {native:  'now it\'s too late', foreign: 'ora è troppo tardi'},
+                    {native: 'let\'s go home', foreign: 'andiamo a casa'},
+                    {native: 'i am sixteen years old', foreign: 'ho sedici anni'},
+                    {native: 'he always cancels plans at the last minute', foreign: 'lui cancella sempre i programmi all\'ultimo minuto'},
+                    {native: 'i have seen a rat in the garden', foreign: 'ho visto un topo in giardino'},
+                    {native: 'the kids are out of control', foreign: 'i bambini sono fuori controllo'},
+                    {native: 'that is just what i wanted to say', foreign: 'è proprio quello che volevo dire'},
+                    {native: 'music is an important part of culture', foreign: 'la musica è una parte importante della cultura'},
+                    {native: 'you live in a really beautiful house' , foreign: 'vivi in una casa davvero bella'},
+                    {native: 'he wants to go home', foreign:  'lui vuole andare a casa'},
+                    {native: 'she really loves them', foreign: 'lei li ama veramente'}, 
+                    {native: 'december is the last month of the year', foreign: 'dicembre è l\'ultimo mese dell\'anno'},
+                    {native: 'i am waiting for you', foreign: 'ti sto aspettando'},
+                    {native: 'how much does it cost? ', foreign: 'quanto costa? '},
+                    {native: 'this is the right time', foreign: 'questa è la volta buona'},
+                    {native: 'there is no way out', foreign: 'non c\'è via di scampo'},
+                    {native: 'there is a spot on the floor', foreign: 'c\'è una macchia sul pavimento'},
+                    {native: 'she is a very beautiful girl', foreign: 'lei è una ragazza molto bella'},
+                ]
+            top175words:
+                title: 'Top 150 - 175 Words'
+                subtitle: 'The 150 - 175 most frequently used Italian words'
+                nextLevel: 'top175phrases'                
+                data: [
+                    {native: 'god', foreign: 'dio', nativeSentence: 'i believe in god', foreignSentence: 'io credo in dio'},
+                    {native: 'later', foreign: 'dopo ', nativeSentence: 'i will tell you later', foreignSentence: 'te lo dirò dopo'},
+                    {native: 'without ', foreign: 'senza', nativeSentence: 'i never go out without my umbrella ', foreignSentence: 'non esco mai senza il mio ombrello'},
+                    {native: 'things', foreign: 'cose', nativeSentence: 'put your things in the wardrobe', foreignSentence: 'metti le tue cose nell\'armadio'},
+                    {native: 'nobody', foreign: 'nessuno', nativeSentence: 'nobody knows the truth', foreignSentence: 'nessuno sa la verità '},
+                    {native: 'do', foreign:  'fai', nativeSentence: 'what do you do in your spare time? ', foreignSentence: 'cosa fai nel tuo tempo libero? '},
+                    {native: 'day', foreign: 'giorno', nativeSentence: 'what day is today? ', foreignSentence: 'che giorno è oggi? '},
+                    {native: 'and', foreign: 'ed', nativeSentence: 'cause and effect', foreignSentence: 'causa ed effetto'}
+                    {native: 'better ', foreign: 'meglio ', nativeSentence: 'better late than never', foreignSentence: 'meglio tardi che mai '},
+                    {native: 'father', foreign: 'padre', nativeSentence: 'my father is very strict', foreignSentence: 'mio padre è molto severo'},
+                    {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favour? ', foreignSentence: 'puoi farmi un favore? '},
+                    {native: 'hello', foreign: 'ciao', nativeSentence: 'hello, my name is Mary', foreignSentence: 'ciao, mi chiamo Maria'},
+                    {native: 'what', foreign: 'cos\'', nativeSentence: 'what is this? ', foreignSentence: 'cos\'è questo? '},
+                    {native: 'must', foreign: 'devi', nativeSentence: 'you must go to work tomorrow', foreignSentence: 'devi andare al lavoro domani'},
+                    {native: 'here', foreign: 'ecco ', nativeSentence: 'here is my book', foreignSentence: 'ecco il mio libro'},
+                    {native: 'someone', foreign: 'qualcuno', nativeSentence: 'someone ate the last piece of cake', foreignSentence: 'qualcuno ha mangiato l\'ultima fetta di torta'},
+                    {native: 'from', foreign: 'dal', nativeSentence: 'you can sea the sea from the balcony', foreignSentence: 'puoi vedere il mare dal balcone'},
+                    {native: 'job', foreign: 'lavoro', nativeSentence: 'he really loves his job', foreignSentence: 'lui ama veramente il suo lavoro'},
+                    {native: 'knows', foreign: 'sa', nativeSentence: 'he knows everything about me', foreignSentence: 'lui sa tutto di me'},
+                    {native: 'to', foreign: 'ai', nativeSentence: 'he left a lot of money to his heirs', foreignSentence: 'ha lasciato molto denaro ai suoi eredi'},
+                    {native: 'see', foreign: 'vedere', nativeSentence: 'let me see', foreignSentence: 'fammi vedere'},
+                    {native: 'every', foreign: 'ogni', nativeSentence: 'every man has a dream', foreignSentence: 'ogni uomo ha un sogno'},
+                    {native: 'the', foreign: 'i', nativeSentence: 'the children are watching tv', foreignSentence: 'i bambini stanno guardando la tv'},
+                    {native: 'too much', foreign: 'troppo', nativeSentence: 'i ate too much', foreignSentence: 'ho mangiato troppo'}, 
+                    {native: 'place', foreign: 'posto',  nativeSentence: 'this it the place for me!', foreignSentence: 'questo  è il posto per me!'},
+                ]
+            top175phrases:
+                title: 'Phrases For The Top 150 - 175 Words'
+                subtitle: 'Phrases for the 150 - 175 most frequently used Italian words'
                 nextLevel: 'top200words'
                 data: [
-                    {native: 'true', foreign: 'vero', nativeSentence: 'it\'s true!', foreignSentence: 'è vero!'},
-                    {native: 'home', foreign: 'casa', nativeSentence: 'home sweet home', foreignSentence: 'casa dolce casa'},
-                    {native: 'are', foreign: 'sia', nativeSentence: 'I suppose you are angry', foreignSentence: 'suppongo tu sia arrabbiato'},
-                    {native: 'up', foreign: 'su', nativeSentence: 'look up and see the stars', foreignSentence: 'guarda su e vedi le stelle'},
-                    {native: 'your', foreign: 'tua', nativeSentence: 'your mother must be proud of you', foreignSentence: 'tua madre deve essere orgogliosa di te'},
-                    {native: 'always', foreign: 'sempre', nativeSentence: 'I will always love you', foreignSentence: 'ti amerò per sempre'},
-                    {native: 'maybe', foreign: 'forse', nativeSentence: 'maybe we should go home', foreignSentence: 'forse dovremmo andare a casa'},
-                    {native: 'tell', foreign: 'dire', nativeSentence: 'it is important to tell the truth', foreignSentence: 'è importante dire la verità'},
-                    {native: 'you', foreign: 'vi', nativeSentence: 'your parents love you very much', foreignSentence: 'I vostri genitori vi amano moltissimo'},
-                    {native: 'they', foreign: 'loro', nativeSentence: 'they live in London', foreignSentence: 'loro vivono a Londra'},
-                    {native: 'the', foreign: 'i', nativeSentence: 'the kids are playing in the garden', foreignSentence: 'I bambini stanno giocando in giardino'},
-                    {native: 'another', foreign: 'altro', nativeSentence: 'there is another man', foreignSentence: 'c\'è un altro uomo'},
-                    {native: 'know', foreign: 'sai', nativeSentence: 'you know the truth', foreignSentence: 'tu sai la verità'},
-                    {native: 'are', foreign: 'stai', nativeSentence: 'you are making progress', foreignSentence: 'stai facendo progressi'},
-                    {native: 'must', foreign: 'devo', nativeSentence: 'I must go to the bank', foreignSentence: 'devo andare in banca'}, 
-                    {native: 'that', foreign: 'quella', nativeSentence: 'that car is old', foreignSentence: 'quella macchina è vecchia'},
-                    {native: 'life', foreign: 'vita',nativeSentence: 'I am happy with my life',foreignSentence: 'sono contento della mia vita'},
-                    {native: 'that', foreign: 'quel', nativeSentence: 'that guy is very tall', foreignSentence: 'quel tipo è molto alto'},
-                    {native: 'of', foreign: 'delle', nativeSentence: 'I am scared of bees', foreignSentence: 'ho paura delle api'},
-                    {native: 'time', foreign: 'tempo', nativeSentence: 'it is time to go away', foreignSentence: 'è tempo di andare via'},                    
-                    {native: 'go', foreign: 'andare', nativeSentence: 'I want to go home' , foreignSentence: 'voglio andare    a casa'},
-                    {native: 'sure', foreign: 'certo', nativeSentence: 'i am sure you will get the job', foreignSentence:  'sono certo che otterrai il lavoro'},
-                    {native: 'then', foreign: 'poi', nativeSentence: 'do your homework now, then you go out', foreignSentence: 'fai i tuoi compiti ora, poi esci'},
-                    {native: 'in', foreign: 'nella', nativeSentence: 'i have seen a spider in the bedroom', foreignSentence: 'ho visto un ragno nella camera da letto'},
-                    {native: 'man', foreign: 'uomo', nativeSentence: 'there is a strange man in front of the house', foreignSentence: 'c\'è uno strano uomo di fronte alla casa'},
-                    {native: 'sir', foreign: 'signore', nativeSentence: 'good morning, sir', foreignSentence: 'buongiorno signore'},
-                    {native: 'to', foreign: 'ad', nativeSentence: 'give a book to every child', foreignSentence: 'dai un libro ad ogni bambino'},
-                    {native: 'little', foreign: 'pò', nativeSentence: 'i am a little sad', foreignSentence: 'sono un pò triste'},
-                    {native: 'can', foreign: 'può',  nativeSentence: 'he can do it better than you', foreignSentence: 'lui può farlo meglio di te'},
-                    {native: 'believe', foreign: 'credo', nativeSentence: 'i believe in love', foreignSentence: 'credo nell\'amore'},
-                    {native: 'you', foreign: 'voi', nativeSentence: 'what do you think about Italy? ', foreignSentence: 'cosa pensate dell\'Italia? '},
-                    {native: 'already', foreign: 'già', nativeSentence: 'i have already eaten', foreignSentence: 'ho già mangiato'},
-                    {native: 'now', foreign: 'adesso', nativeSentence:  'now it\'s too late', foreignSentence: 'ora è troppo tardi'},
-                    {native: 'go', foreign: 'andiamo', nativeSentence: 'let\'s go home', foreignSentence: 'andiamo a casa'},
-                    {native: 'years', foreign: 'anni', nativeSentence: 'i am sixteen years old', foreignSentence: 'ho sedici anni'},
-                    {native: 'at', foreign: 'all\' ', nativeSentence: 'he always cancels plans at the last minute', foreignSentence: 'lui cancella sempre i programmi all\'ultimo minuto'},
-                    {native: 'seen', foreign: 'visto', nativeSentence: 'i have seen a rat in the garden', foreignSentence: 'ho visto un topo in giardino'},
-                    {native: 'out', foreign: 'fuori ', nativeSentence: 'the kids are out of control', foreignSentence: 'i bambini sono fuori controllo'},
-                    {native: 'just', foreign: 'proprio', nativeSentence: 'that is just what i wanted to say', foreignSentence: 'è proprio quello che volevo dire'},
-                    {native: 'part', foreign:  'parte', nativeSentence: 'music is an important part of culture', foreignSentence: 'la musica è una parte importante della cultura'},
-                    {native: 'really', foreign: 'davvero', nativeSentence: 'you live in a really beautiful house' , foreignSentence: 'vivi in una casa davvero bella'},
-                    {native: 'wants', foreign: 'vuole', nativeSentence: 'he wants to go home', foreignSentence:  'lui vuole andare a casa'},
-                    {native: 'them', foreign: 'li ', nativeSentence: 'she really loves them', foreignSentence: 'lei li ama veramente'}, 
-                    {native: 'of ', foreign: 'dell\'', nativeSentence: 'december is the last month of the year', foreignSentence: 'dicembre è l\'ultimo mese dell\'anno'},
-                    {native: 'am', foreign: 'sto' , nativeSentence: 'i am waiting for you', foreignSentence: 'ti sto aspettando'},
-                    {native: 'how much ', foreign: 'quanto', nativeSentence: 'how much does it cost? ', foreignSentence: 'quanto costa? '},
-                    {native: 'time', foreign: 'volta', nativeSentence: 'this is the right time', foreignSentence: 'questa è la volta buona'},
-                    {native: 'way', foreign: 'via', nativeSentence: 'there is no way out', foreignSentence: 'non c\'è via di scampo'},
-                    {native: 'on', foreign: 'sul', nativeSentence: 'there is a spot on the floor', foreignSentence: 'c\'è una macchia sul pavimento'},
-                    {native: 'is', foreign: 'è', nativeSentence: 'she is a very beautiful girl', foreignSentence: 'lei è una ragazza molto bella'},
+                    {native: 'i believe in god', foreign: 'io credo in dio'},
+                    {native: 'i will tell you later', foreign: 'te lo dirò dopo'},
+                    {native: 'i never go out without my umbrella ', foreign: 'non esco mai senza il mio ombrello'},
+                    {native: 'put your things in the wardrobe', foreign: 'metti le tue cose nell\'armadio'},
+                    {native: 'nobody knows the truth', foreign: 'nessuno sa la verità '},
+                    {native: 'what do you do in your spare time? ', foreign: 'cosa fai nel tuo tempo libero? '},
+                    {native: 'what day is today? ', foreign: 'che giorno è oggi? '},
+                    {native: 'cause and effect', foreign: 'causa ed effetto'}
+                    {native: 'better late than never', foreign: 'meglio tardi che mai '},
+                    {native: 'my father is very strict', foreign: 'mio padre è molto severo'},
+                    {native: 'can you do me a favour? ', foreign: 'puoi farmi un favore? '},
+                    {native: 'hello, my name is Mary', foreign: 'ciao, mi chiamo Maria'},
+                    {native: 'what is this? ', foreign: 'cos\'è questo? '},
+                    {native: 'you must go to work tomorrow', foreign: 'devi andare al lavoro domani'},
+                    {native: 'here is my book', foreign: 'ecco il mio libro'},
+                    {native: 'someone ate the last piece of cake', foreign: 'qualcuno ha mangiato l\'ultima fetta di torta'},
+                    {native: 'you can sea the sea from the balcony', foreign: 'puoi vedere il mare dal balcone'},
+                    {native: 'he really loves his job', foreign: 'lui ama veramente il suo lavoro'},
+                    {native: 'he knows everything about me', foreign: 'lui sa tutto di me'},
+                    {native: 'he left a lot of money to his heirs', foreign: 'ha lasciato molto denaro ai suoi eredi'},
+                    {native: 'let me see', foreign: 'fammi vedere'},
+                    {native: 'every man has a dream', foreign: 'ogni uomo ha un sogno'},
+                    {native: 'the children are watching tv', foreign: 'i bambini stanno guardando la tv'},
+                    {native: 'i ate too much', foreign: 'ho mangiato troppo'}, 
+                    {native: 'this it the place for me!', foreign: 'questo  è il posto per me!'},
                 ]
-
-
+            top200words:
+                title: 'Top 175 - 200 Words'
+                subtitle: 'The 175 - 200 most frequently used Italian words'
+                nextLevel: 'top200phrases'                
+                data: [
+                    {native: 'whom', foreign: 'cui', nativeSentence: 'Tom is the boy with whom Mary fell in love', foreignSentence: 'Tom è il ragazzo di cui Mary si è innamorata'},
+                    {native: 'a lot', foreign: 'tanto', nativeSentence: 'i studied a lot', foreignSentence: 'ho studiato tanto'},
+                    {native: 'bad', foreign: 'male', nativeSentence: 'she speaks bad french', foreignSentence: 'lei parla male francese'},
+                    {native: 'from the', foreign: 'dai', nativeSentence: 'the warm wind from the seas', foreignSentence: 'il vento caldo dai mari'},
+                    {native: 'it', foreign: 'ce', nativeSentence: 'i did it!', foreignSentence: 'ce l\'ho fatta!'},
+                    {native: 'need', foreign: 'bisogno', nativeSentence: 'i need to rest', foreignSentence: 'ho bisogno di riposare'},
+                    {native: 'mister', foreign: 'signor', nativeSentence: 'mister White is a very generous man', foreignSentence: 'il signor White è un uomo molto generoso'},
+                    {native: 'well', foreign: 'beh', nativeSentence: 'well, i think so', foreignSentence: 'beh, penso di si'},
+                    {native: 'why', foreign: 'perché', nativeSentence: 'why are you laughing?', foreignSentence: 'perché stai ridendo?'},
+                    {native: 'come', foreign: 'vieni', nativeSentence: 'come to my party tomorrow', foreignSentence: 'vieni alla mia festa domani'},
+                    {native: 'at', foreign: 'alle', nativeSentence: 'Tom will arrive at 6 pm', foreignSentence: 'Tom arriverà alle 18'},
+                    {native: 'from the', foreign: 'dalla', nativeSentence: 'an intense light from the moon', foreignSentence: 'una luce intensa dalla luna'},
+                    {native: 'has been', foreign: 'stata', nativeSentence: 'she has been the belle of the ball several times', foreignSentence: 'lei è stata la reginetta del ballo molte volte'},
+                    {native: 'between', foreign: 'tra', nativeSentence: 'the city was built between two mountains', foreignSentence: 'la città fu costruita tra due montagne'},
+                    {native: 'go', foreign: 'vai', nativeSentence: 'go to the store to buy some milk', foreignSentence: 'vai al negozio a comprare del latte'},
+                    {native: 'hey', foreign: 'ehi', nativeSentence: 'hey, come here!', foreignSentence: 'ehi, vieni qui!'},
+                    {native: 'my', foreign: 'miei', nativeSentence: 'do you like my new boots?', foreignSentence: 'ti piacciono i miei nuovi stivali?'},
+                    {native: 'friend', foreign: 'amico', nativeSentence: 'Tom is my best friend', foreignSentence: 'Tom è il mio migliore amico'},
+                    {native: 'tells', foreign: 'dice', nativeSentence: 'he always tells the truth', foreignSentence: 'lui dice sempre la verità'},
+                    {native: 'would be', foreign: 'sarebbe', nativeSentence: 'it would be better to go', foreignSentence: 'sarebbe meglio andare'},
+                    {native: 'have', foreign: 'avete', nativeSentence: 'you have a very beautiful house', foreignSentence: 'avete una casa molto bella'},
+                    {native: 'another', foreign: 'altra', nativeSentence: 'i would like another cup of coffee, please', foreignSentence: 'vorrei un\'altra tazza di caffè, per favore'},
+                    {native: 'must', foreign:'deve', nativeSentence:  'he must go to work today', foreignSentence: 'lui deve andare al lavoro oggi'},
+                    {native: 'on the', foreign: 'sulla', nativeSentence: 'she kissed me on the cheek', foreignSentence: 'lei mi ha baciato sulla guancia'},
+                    {native: 'some', foreign: 'qualche', nativeSentence: 'i need some advice', foreignSentence: 'ho bisogno di qualche consiglio'},
+                ]
+            top200phrases:
+                title: 'Phrases For The Top 175 - 200 Words'
+                subtitle: 'Phrases for the 175 - 200 most frequently used Italian words'
+                nextLevel: 'top225words'
+                data: [
+                    {native: 'Tom is the boy with whom Mary fell in love', foreign: 'Tom è il ragazzo di cui Mary si è innamorata'},
+                    {native: 'i studied a lot', foreign: 'ho studiato tanto'},
+                    {native: 'she speaks bad french', foreign: 'lei parla male francese'},
+                    {native: 'the warm wind from the seas', foreign: 'il vento caldo dai mari'},
+                    {native: 'i did it!', foreign: 'ce l\'ho fatta!'},
+                    {native: 'i need to rest', foreign: 'ho bisogno di riposare'},
+                    {native: 'mister White is a very generous man', foreign: 'il signor White è un uomo molto generoso'},
+                    {native: 'well, i think so', foreign: 'beh, penso di si'},
+                    {native: 'why are you laughing?', foreign: 'perché stai ridendo?'},
+                    {native: 'come to my party tomorrow', foreign: 'vieni alla mia festa domani'},
+                    {native: 'Tom will arrive at 6 pm', foreign: 'Tom arriverà alle 18'},
+                    {native: 'an intense light from the moon', foreign: 'una luce intensa dalla luna'},
+                    {native: 'she has been the belle of the ball several times', foreign: 'lei è stata la reginetta del ballo molte volte'},
+                    {native: 'the city was built between two mountains', foreign: 'la città fu costruita tra due montagne'},
+                    {native: 'go to the store to buy some milk', foreign: 'vai al negozio a comprare del latte'},
+                    {native: 'hey, come here!', foreign: 'ehi, vieni qui!'},
+                    {native: 'do you like my new boots?', foreign: 'ti piacciono i miei nuovi stivali?'},
+                    {native: 'Tom is my best friend', foreign: 'Tom è il mio migliore amico'},
+                    {native: 'he always tells the truth', foreign: 'lui dice sempre la verità'},
+                    {native: 'it would be better to go', foreign: 'sarebbe meglio andare'},
+                    {native: 'you have a very beautiful house', foreign: 'avete una casa molto bella'},
+                    {native: 'i would like another cup of coffee, please', foreign: 'vorrei un\'altra tazza di caffè, per favore'},
+                    {native:  'he must go to work today', foreign: 'lui deve andare al lavoro oggi'},
+                    {native: 'she kissed me on the cheek', foreign: 'lei mi ha baciato sulla guancia'},
+                    {native: 'i need some advice', foreign: 'ho bisogno di qualche consiglio'},
+                ]
                 
+
+
+
 after150 = [                    
-    {native: 'God', foreign: 'Dio', nativeSentence: 'i believe in God', foreignSentence: 'io credo in Dio'},
-    {native: 'later', foreign: 'dopo ', nativeSentence: 'i will tell you later', foreignSentence: 'te lo dirò dopo'},
-    {native: 'without ', foreign: 'senza', nativeSentence: 'i never go out without my umbrella ', foreignSentence: 'non esco mai senza il mio ombrello'},
-    {native: 'things', foreign: 'cose', nativeSentence: 'put your things in the wardrobe', foreignSentence: 'metti le tue cose nell\'armadio'},
-    {native: 'nobody', foreign: 'nessuno', nativeSentence: 'nobody knows the truth', foreignSentence: 'nessuno sa la verità '},
-    {native: 'do', foreign:  'fai', nativeSentence: 'what do you do in your spare time? ', foreignSentence: 'cosa fai nel tuo tempo libero? '},
-    {native: 'day', foreign: 'giorno', nativeSentence: 'what day is today? ', foreignSentence: 'che giorno è oggi? '},
-    {native: 'and', foreign: 'ed', nativeSentence: 'cause and effect', foreignSentence: 'causa ed effetto'}
-    {native: 'better ', foreign: 'meglio ', nativeSentence: 'better late than never', foreignSentence: 'meglio tardi che mai '},
-    {native: 'father', foreign: 'padre', nativeSentence: 'my father is very strict', foreignSentence: 'mio padre è molto severo'},
-    {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favour? ', foreignSentence: 'puoi farmi un favore? '},
-    {native: 'hello', foreign: 'ciao', nativeSentence: 'hello, my name is Mary', foreignSentence: 'ciao, mi chiamo Maria'},
-    {native: 'what', foreign: 'cos\'', nativeSentence: 'what is this? ', foreignSentence: 'cos\'è questo? '},
-    {native: 'must', foreign: 'devi', nativeSentence: 'you must go to work tomorrow', foreignSentence: 'devi andare al lavoro domani'},
-    {native: 'here', foreign: 'ecco ', nativeSentence: 'here is my book', foreignSentence: 'ecco il mio libro'},
-    {native: 'someone', foreign: 'qualcuno', nativeSentence: 'someone ate the last piece of cake', foreignSentence: 'qualcuno ha mangiato l\'ultima fetta di torta'},
-    {native: 'from', foreign: 'dal', nativeSentence: 'you can sea the sea from the balcony', foreignSentence: 'puoi vedere il mare dal balcone'},
-    {native: 'job', foreign: 'lavoro', nativeSentence: 'he really loves his job', foreignSentence: 'lui ama veramente il suo lavoro'},
-    {native: 'knows', foreign: 'sa', nativeSentence: 'he knows everything about me', foreignSentence: 'lui sa tutto di me'},
-    {native: 'to', foreign: 'ai', nativeSentence: 'he left a lot of money to his heirs', foreignSentence: 'ha lasciato molto denaro ai suoi eredi'},
-    {native: 'see', foreign: 'vedere', nativeSentence: 'let me see', foreignSentence: 'fammi vedere'},
-    {native: 'every', foreign: 'ogni', nativeSentence: 'every man has a dream', foreignSentence: 'ogni uomo ha un sogno'},
-    {native: 'the', foreign: 'i', nativeSentence: 'the children are watching tv', foreignSentence: 'I bambini stanno guardando la tv'},
-    {native: 'too much', foreign: 'troppo', nativeSentence: 'i ate too much', foreignSentence: 'ho mangiato troppo'}, 
-    {native: 'place', foreign: 'posto',  nativeSentence: 'this it the place for me!', foreignSentence: 'questo  è il posto per me!'},
-    {native: 'whom', foreign: 'cui', nativeSentence: 'Tom is the boy with whom Mary fell in love', foreignSentence: 'Tom è il ragazzo di cui Mary si è innamorata'},
-    {native: 'a lot', foreign: 'tanto', nativeSentence: 'i studied a lot', foreignSentence: 'ho studiato tanto'},
-    {native: 'bad', foreign: 'male', nativeSentence: 'she speaks bad french', foreignSentence: 'lei parla male francese'},
-    {native: 'from the', foreign: 'dai', nativeSentence: 'the warm wind from the seas', foreignSentence: 'il vento caldo dai mari'},
-    {native: 'it', foreign: 'ce', nativeSentence: 'i did it!', foreignSentence: 'ce l\'ho fatta!'},
-    {native: 'need', foreign: 'bisogno', nativeSentence: 'i need to rest', foreignSentence: 'ho bisogno di riposare'},
-    {native: 'mister', foreign: 'signor', nativeSentence: 'mister White is a very generous man', foreignSentence: 'il signor White è un uomo molto generoso'},
-    {native: 'well', foreign: 'beh', nativeSentence: 'well, I think so', foreignSentence: 'beh, penso di si'},
-    {native: 'why', foreign: 'perché', nativeSentence: 'why are you laughing?', foreignSentence: 'perché stai ridendo?'},
-    {native: 'come', foreign: 'vieni', nativeSentence: 'come to my party tomorrow', foreignSentence: 'vieni alla mia festa domani'},
-    {native: 'at', foreign: 'alle', nativeSentence: 'Tom will arrive at 6 pm', foreignSentence: 'Tom arriverà alle 18'},
-    {native: 'from the', foreign: 'dalla', nativeSentence: 'an intense light from the moon', foreignSentence: 'una luce intensa dalla luna'},
-    {native: 'has been', foreign: 'stata', nativeSentence: 'she has been the belle of the ball several times', foreignSentence: 'lei è stata la reginetta del ballo molte volte'},
-    {native: 'between', foreign: 'tra', nativeSentence: 'the city was built between two mountains', foreignSentence: 'la città fu costruita tra due montagne'},
-    {native: 'go', foreign: 'vai', nativeSentence: 'go to the store to buy some milk', foreignSentence: 'vai al negozio a comprare del latte'},
-    {native: 'hey', foreign: 'ehi', nativeSentence: 'hey, come here!', foreignSentence: 'ehi, vieni qui!'},
-    {native: 'my', foreign: 'miei', nativeSentence: 'do you like my new boots?', foreignSentence: 'ti piacciono i miei nuovi stivali?'},
-    {native: 'friend', foreign: 'amico', nativeSentence: 'Tom is my best friend', foreignSentence: 'Tom è il mio migliore amico'},
-    {native: 'says', foreign: 'dice', nativeSentence: 'he always tells the truth', foreignSentence: 'lui dice sempre la verità'},
-    {native: 'would be', foreign: 'sarebbe', nativeSentence: 'it would be better to go', foreignSentence: 'sarebbe meglio andare'},
-    {native: 'have', foreign: 'avete', nativeSentence: 'you have a very beautiful house', foreignSentence: 'avete una casa molto bella'},
-    {native: 'another', foreign: 'altra', nativeSentence: 'i would like another cup of coffee, please', foreignSentence: 'vorrei un\'altra tazza di caffè, per favore'},
-    {native: 'must', foreign:'deve', nativeSentence:  'he must go to work today', foreignSentence: 'lui deve andare al lavoro oggi'},
-    {native: 'on the', foreign: 'sulla', nativeSentence: 'she kissed me on the cheek', foreignSentence: 'lei mi ha baciato sulla guancia'},
-    {native: 'some', foreign: 'qualche', nativeSentence: 'i need some advice', foreignSentence: 'ho bisogno di qualche consiglio'},
     {native: 'seems', foreign: 'sembra', nativeSentence: 'it seems like it is going to rain', foreignSentence: 'sembra che stia per piovere'},
     {native: 'people', foreign: 'gente', nativeSentence: 'how many people were at the party?', foreignSentence: 'quanta gente c\'era alla festa?'},
     {native: 'must', foreign: 'dobbiamo', nativeSentence: 'we must be proud of our son', foreignSentence: 'dobbiamo essere orgogliosi di nostro figlio'},
@@ -1288,7 +1384,7 @@ after150 = [
     {native: 'moment', foreign: 'momento', nativeSentence: 'just a moment, please', foreignSentence: 'solo un momento, per favore'},
     {native: 'please', foreign: 'prego', nativeSentence: 'this way, please', foreignSentence: 'da questa parte, prego'},
     {native: 'talk', foreign: 'parlare', nativeSentence: 'i must talk to you', foreignSentence: 'ti devo parlare'},    
-    {native: 'mum', foreign: 'mamma', nativeSentence: 'mum, can I have another cup of tea?', foreignSentence: 'mamma, posso avere un\'altra tazza di tè?'},
+    {native: 'mum', foreign: 'mamma', nativeSentence: 'mum, can i have another cup of tea?', foreignSentence: 'mamma, posso avere un\'altra tazza di tè?'},
     {native: 'look', foreign: 'guarda', nativeSentence: 'look at the blue sky', foreignSentence: 'guarda il cielo blu'},
     {native: 'lady', foreign: 'signora', nativeSentence: 'who is that lady with a strange hat?', foreignSentence:  'chi è quella signora con uno strano cappello?'},
     {native: 'big', foreign: 'grande', nativeSentence: 'they live in a big country house', foreignSentence: 'loro vivono in una grande casa di campagna'},
@@ -1298,43 +1394,43 @@ after150 = [
     {native: 'forward', foreign: 'avanti', nativeSentence: 'please, take one step forward', foreignSentence: 'per favore, fai un passo avanti'},
     {native: 'to have', foreign: 'avere', nativeSentence: 'sleep is essential to have a luminous skin', foreignSentence: 'il sonno è essenziale per avere una pelle luminosa'},
     {native: 'success', foreign: 'successo', nativeSentence: 'education is the key to success', foreignSentence: 'l\'istruzione è la chiave del successo'},
-    {native: 'was', foreign: 'ero', nativeSentence: 'I was a very shy child', foreignSentence: 'ero un bimbo molto timido'},
+    {native: 'was', foreign: 'ero', nativeSentence: 'i was a very shy child', foreignSentence: 'ero un bimbo molto timido'},
     {native: 'woman', foreign: 'donna', nativeSentence: 'every man needs a woman', foreignSentence: 'ogni uomo ha bisogno di una donna'},
     {native: 'new', foreign: 'nuovo', nativeSentence: 'there is a new flower in my garden', foreignSentence: 'c\'è un nuovo fiore nel mio giardino'},
-    {native: 'ah', foreign: 'ah', nativeSentence: 'ah, the good old days!', foreignSentence: 'ah, I bei vecchi tempi!'},
-    {native: 'do', foreign: 'faccio', nativeSentence: 'I do what I want', foreignSentence: 'faccio quel che voglio'},
+    {native: 'ah', foreign: 'ah', nativeSentence: 'ah, the good old days!', foreignSentence: 'ah, i bei vecchi tempi!'},
+    {native: 'do', foreign: 'faccio', nativeSentence: 'i do what i want', foreignSentence: 'faccio quel che voglio'},
     {native: 'had', foreign: 'aveva', nativeSentence: 'she had a red old car', foreignSentence: 'lei aveva una vecchia macchina rossa'},
     {native: 'our', foreign: 'nostro', nativeSentence: 'there is a rat in our garden', foreignSentence: 'c\'è un topo nel nostro giardino'},
     {native: 'of+the', foreign: 'degli', nativeSentence: 'ambrosia was the food of the gods', foreignSentence: 'l\'ambrosia era il cibo degli dei'},
     {native: 'these', foreign: 'questi', nativeSentence: 'it\'s been raining a lot these days', foreignSentence: 'è piovuto molto in questi giorni'},
     {native: 'are', foreign: 'siete', nativeSentence: 'are you sure about that?', foreignSentence: 'sieti sicuri di ciò?'},
     {native: 'force', foreign: 'forza', nativeSentence: 'she is a force of nature', foreignSentence: 'lei è una forza della natura'},
-    {native: 'like', foreign: 'piace', nativeSentence: 'I like chocolate', foreignSentence: 'mi piace il cioccolato'},
+    {native: 'like', foreign: 'piace', nativeSentence: 'i like chocolate', foreignSentence: 'mi piace il cioccolato'},
     {native: 'beautiful', foreign: 'bella', nativeSentence: 'she is the most beautiful girl in town', foreignSentence: 'lei è la più bella ragazza in città'},
     {native: 'where', foreign: 'dov\'', nativeSentence: 'where is my hat?', foreignSentence: 'dov\'è il mio cappello?'},
     {native: 'money', foreign: 'soldi', nativeSentence: 'it takes money to make money', foreignSentence: 'ci vogliono soldi per fare soldi'},
-    {native: 'had', foreign: 'avevo', nativeSentence: 'once I had a parrot named Bob', foreignSentence: 'una volta avevo un pappagallo chiamato Bob'},
+    {native: 'had', foreign: 'avevo', nativeSentence: 'once i had a parrot named Bob', foreignSentence: 'una volta avevo un pappagallo chiamato Bob'},
     {native: 'favour', foreign: 'favore', nativeSentence: 'can you do me a favour?', foreignSentence: 'puoi farmi un favore?'},
     {native: 'were',  foreign: 'fosse', nativeSentence: 'oh that it were so!', foreignSentence: 'magari fosse così!'},
     {native: 'other', foreign: 'altri', nativeSentence: 'Mary likes to play with other children', foreignSentence: 'a Mary piace giocare con altri bambini'},
-    {native: 'sorry', foreign: 'dispiace', nativeSentence: 'I am sorry to disturb you', foreignSentence: 'mi dispiace disturbarti'},
+    {native: 'sorry', foreign: 'dispiace', nativeSentence: 'i am sorry to disturb you', foreignSentence: 'mi dispiace disturbarti'},
     {native: 'immediately', foreign: 'subito', nativeSentence: 'let\'s start immediately', foreignSentence: 'cominciamo subito'},
     {native: 'inside', foreign: 'dentro', nativeSentence: 'the ring is inside the box', foreignSentence: 'l\'anello è dentro la scatola'},
     {native: 'today', foreign: 'oggi', nativeSentence: 'today, it\'s a wonderful day', foreignSentence: 'oggi, è una meravigliosa giornata'},
-    {native: 'agree', foreign: 'accordo', nativeSentence: 'I agree with him', foreignSentence: 'sono d\'accordo con lui'},
+    {native: 'agree', foreign: 'accordo', nativeSentence: 'i agree with him', foreignSentence: 'sono d\'accordo con lui'},
     {native: 'whole', foreign: 'tutta', nativeSentence: 'you don\'t know the whole story', foreignSentence: 'tu non sai tutta la storia'},
-    {native: 'name', foreign: 'nome', nativeSentence: 'I don\'t know his name', foreignSentence: 'non so il suo nome'},
+    {native: 'name', foreign: 'nome', nativeSentence: 'i don\'t know his name', foreignSentence: 'non so il suo nome'},
     {native: 'ok', foreign: 'ok', nativeSentence: 'it\'s ok!', foreignSentence: 'è ok!'},
     {native: 'night', foreign:'notte', nativeSentence: 'Rome is a magical city at night', foreignSentence: 'Roma è una città magica di notte'},
     {native: 'these', foreign: 'queste', nativeSentence: 'these are my favourite shoes', foreignSentence: 'queste sono le mie scarpe preferite'},
     {native: 'son', foreign: 'figlio', nativeSentence: 'my son is a doctor', foreignSentence: 'mio figlio è un dottore'},
-    {native: 'world', foreign: 'mondo', nativeSentence: 'I would like to travel all over the world', foreignSentence: 'vorrei viaggiare in tutto il mondo'},
+    {native: 'world', foreign: 'mondo', nativeSentence: 'i would like to travel all over the world', foreignSentence: 'vorrei viaggiare in tutto il mondo'},
     {native: 'our', foreign: 'nostra', nativeSentence: 'our car needs repair', foreignSentence: 'la nostra auto ha bisogno di riparazioni'},
     {native: 'to know', foreign: 'sapere', nativeSentence: 'it is important to know the truth', foreignSentence: 'è importante sapere la verità'},
-    {native: 'go', foreign: 'vado', nativeSentence: 'I go to the church every day', foreignSentence: 'vado in chiesa ogni giorno'},
+    {native: 'go', foreign: 'vado', nativeSentence: 'i go to the church every day', foreignSentence: 'vado in chiesa ogni giorno'},
     {native: 'all', foreign: 'tutte', nativeSentence: 'all the women were dressed in blue', foreignSentence: 'tutte le donne erano vestite di blu'},
     {native: 'wait', foreign: 'aspetta', nativeSentence: 'wait a moment, please', foreignSentence: 'aspetta un attimo, per favore'},
-    {native: 'to love', foreign: 'amare', nativeSentence: 'I need somebody to love', foreignSentence: 'ho bisogno di qualcuno da amare'},
+    {native: 'to love', foreign: 'amare', nativeSentence: 'i need somebody to love', foreignSentence: 'ho bisogno di qualcuno da amare'},
     {native: 'wife', foreign: 'moglie', nativeSentence: 'he really loves his wife', foreignSentence: 'lui ama veramente sua moglie'},
     {native: 'sure', foreign: 'sicuro', nativeSentence: 'you can never be sure of anything', foreignSentence: 'non puoi mai essere sicuro di nulla'}
 ]        
@@ -1529,7 +1625,7 @@ x = [
 
 'The apple is red'
 'It is John\'s apple'
-'I give John the apple'
+'i give John the apple'
 'We want to give him the apple'
 'He gives it to John'
 'She gives it to him'

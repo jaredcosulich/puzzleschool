@@ -67,8 +67,11 @@ window.app = {
       return levelSelect.scrollTop(startPosition.scrollTop - (_this.viewHelper.clientY(e) - startPosition.touch));
     });
     showLevel = function(level) {
+      console.log(0);
       _this.viewHelper.setLevel(level);
+      console.log(1);
       _this.viewHelper.newScramble();
+      console.log(2);
       return levelSelect.animate({
         opacity: 0,
         duration: 500,
@@ -114,7 +117,7 @@ window.app = {
       });
       return levelSelect.animate({
         opacity: 1,
-        duration: 1000
+        duration: 500
       });
     });
   }
