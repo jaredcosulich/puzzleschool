@@ -39,10 +39,8 @@
             <br/>
             <h4 class='text-center last_answer'></h4>
 
-            <div class='level_progress_meter'>
-                <div class='percent_complete'></div>
-            </div>
-            <a id='menu_button'></a>
+            <div class='level_progress_meter'><div class='percent_complete'></div></div>
+            <a id='menu_button'>Menu</a>
             <div class='progress_meter'>
                 Level Progress
                 <div class='bar'>
@@ -65,6 +63,18 @@
             <p>Please email us to let us know you'd like us to add more levels</p>
             <p><a href='mailto:info@puzzleschool.com'>info@puzzleschool</a></p>
         </div>
+        <div id='level_select_menu' class='levels floating_message'>
+            <h2>Select A Level</h2>
+            <!-- {:allLevels}
+                <div class='level' id='level_link_{id}'>
+                    <a class='level_link' href='/puzzles/language_scramble/{languages}/{id}'>
+                        {title}<br/><small>{subtitle}</small>
+                    </a>
+                    <a class='percent_complete' href='/puzzles/language_scramble/{languages}/{id}' style='width: {percentComplete}%'>&nbsp;</a>
+                </div>
+            {/allLevels} -->
+        </div>
+        
         <script type="text/javascript" src="cordova-2.0.0.js"></script>
         <script type="text/javascript" src="js/ender.js"></script>
         <script type="text/javascript" src="js/language_scramble.js"></script>

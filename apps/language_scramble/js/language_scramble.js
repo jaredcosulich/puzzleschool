@@ -767,7 +767,7 @@ languageScramble.ViewHelper = (function() {
       _ref = container.find('.word_group');
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         wordGroup = _ref[_j];
-        if (currentOffsetTop === wordGroup.offsetTop) {
+        if (currentOffsetTop === wordGroup.offsetTop || !wordGroup.innerHTML.length) {
           continue;
         }
         currentOffsetTop = wordGroup.offsetTop;

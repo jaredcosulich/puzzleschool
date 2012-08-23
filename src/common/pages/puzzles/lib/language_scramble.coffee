@@ -292,7 +292,6 @@ class languageScramble.ViewHelper
         letter.bind 'touchend', (e) => touchEnd(e)
                           
             
-        
     newScramble: () ->
         @answerTimes or= []
         @answerTimes.push(new Date()) 
@@ -480,7 +479,7 @@ class languageScramble.ViewHelper
             container.width(width + 1)
 
             for wordGroup in container.find('.word_group')
-                continue if currentOffsetTop == wordGroup.offsetTop
+                continue if currentOffsetTop == wordGroup.offsetTop or not wordGroup.innerHTML.length
                 currentOffsetTop = wordGroup.offsetTop
                 wordGroup = $(wordGroup)
                 marginLeft = parseInt(wordGroup.css('marginLeft') or 0)

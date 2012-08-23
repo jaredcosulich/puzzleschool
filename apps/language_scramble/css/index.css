@@ -217,22 +217,22 @@ body {
   background-color: rgba(36, 219, 75, 0.25);
   padding: 0 3px;
 }
-.language_scramble .footer .levels {
+.language_scramble .levels {
   padding: 0 88px;
   text-align: center;
 }
-.language_scramble .footer .levels .level {
+.language_scramble .levels .level {
   background-color: #fdfdfd;
   border: 1px solid #ccc;
   float: left;
-  margin: 12px 0 0 30px;
+  margin: 12px 0 12px 30px;
   width: 330px;
 }
-.language_scramble .footer .levels .level .level_link {
+.language_scramble .levels .level .level_link {
   display: block;
-  margin: 6px 0;
+  height: 48px;
 }
-.language_scramble .footer .levels .level .percent_complete {
+.language_scramble .levels .level .percent_complete {
   opacity: 0.3;
   margin-top: -48px;
   overflow: hidden;
@@ -251,12 +251,34 @@ body {
   height: 18px;
   float: left;
   background-color: #0c8d28;
+  position: relative;
 }
 
 .language_scramble .progress_meter {
     position: absolute;
     top: -1000px;
     left: -1000px;
+}
+
+.language_scramble #menu_button {
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    display: block;
+    background-color: black;
+    color: white;
+    padding: 6px;
+}
+
+.language_scramble #level_select_menu {
+    background-color: white;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.language_scramble #level_select_menu .level {
+    margin: auto;
+    float: none;
 }
 
 
