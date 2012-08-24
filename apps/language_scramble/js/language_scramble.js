@@ -523,8 +523,8 @@ languageScramble.ViewHelper = (function() {
       sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
     }
     displayWords.html(sentence);
-    this.createScramble();
     this.createGuesses();
+    this.createScramble();
     return this.resize();
   };
 
@@ -685,7 +685,7 @@ languageScramble.ViewHelper = (function() {
     start = 0;
     addToScrambledWordGroups = function(scrambleSentence, start, end) {
       var g, l, shuffled, shuffledGroup, x, _i, _j, _len, _len1, _ref, _results;
-      shuffled = _this.shuffleWord(scrambleSentence).split('');
+      shuffled = scrambleSentence.length > 1 ? _this.shuffleWord(scrambleSentence).split('') : [scrambleSentence];
       shuffled = shuffled.reverse();
       _ref = wordGroups.slice(start, end);
       _results = [];
@@ -756,7 +756,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.centerContainers = function() {
-    var container, containers, currentOffsetTop, height, marginLeft, startMarginLeft, width, wordGroup, _i, _j, _len, _len1, _ref;
+    var container, containers, currentOffsetTop, height, marginLeft, startMarginLeft, width, wordGroup, wordGroups, _i, _j, _len, _len1;
     containers = this.$('.container');
     for (_i = 0, _len = containers.length; _i < _len; _i++) {
       container = containers[_i];
@@ -767,31 +767,33 @@ languageScramble.ViewHelper = (function() {
       });
       height = container.height();
       width = container.width();
-      while (height === container.height()) {
+      while (height === container.height() && width > $(container.find('.word_group')[0]).width()) {
         width -= 1;
         container.width(width);
       }
       container.width(width + 1);
-      _ref = container.find('.word_group');
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        wordGroup = _ref[_j];
-        if (currentOffsetTop === wordGroup.offsetTop || !wordGroup.innerHTML.length) {
-          continue;
-        }
-        currentOffsetTop = wordGroup.offsetTop;
-        wordGroup = $(wordGroup);
-        marginLeft = parseInt(wordGroup.css('marginLeft') || 0);
-        startMarginLeft = marginLeft;
-        height = container.height();
-        while (height === container.height()) {
-          marginLeft += 1;
+      wordGroups = container.find('.word_group');
+      if (wordGroups.length > 1) {
+        for (_j = 0, _len1 = wordGroups.length; _j < _len1; _j++) {
+          wordGroup = wordGroups[_j];
+          if (currentOffsetTop === wordGroup.offsetTop || !wordGroup.innerHTML.length) {
+            continue;
+          }
+          currentOffsetTop = wordGroup.offsetTop;
+          wordGroup = $(wordGroup);
+          marginLeft = parseInt(wordGroup.css('marginLeft') || 0);
+          startMarginLeft = marginLeft;
+          height = container.height();
+          while (height === container.height()) {
+            marginLeft += 1;
+            wordGroup.css({
+              marginLeft: marginLeft
+            });
+          }
           wordGroup.css({
-            marginLeft: marginLeft
+            marginLeft: (marginLeft - startMarginLeft - 1) / 2
           });
         }
-        wordGroup.css({
-          marginLeft: (marginLeft - startMarginLeft - 1) / 2
-        });
       }
       container.height(container.height());
     }
@@ -2481,8 +2483,8 @@ languageScramble.data = {
           }, {
             "native": 'now',
             foreign: 'adesso',
-            nativeSentence: 'now it\'s too late',
-            foreignSentence: 'ora è troppo tardi'
+            nativeSentence: 'now come here',
+            foreignSentence: 'adesso vieni qui'
           }, {
             "native": 'go',
             foreign: 'andiamo',
@@ -2505,7 +2507,7 @@ languageScramble.data = {
             foreignSentence: 'ho visto un topo in giardino'
           }, {
             "native": 'out',
-            foreign: 'fuori ',
+            foreign: 'fuori',
             nativeSentence: 'the kids are out of control',
             foreignSentence: 'i bambini sono fuori controllo'
           }, {
@@ -2530,11 +2532,11 @@ languageScramble.data = {
             foreignSentence: 'lui vuole andare a casa'
           }, {
             "native": 'them',
-            foreign: 'li ',
+            foreign: 'li',
             nativeSentence: 'she really loves them',
             foreignSentence: 'lei li ama veramente'
           }, {
-            "native": 'of ',
+            "native": 'of',
             foreign: 'dell\'',
             nativeSentence: 'december is the last month of the year',
             foreignSentence: 'dicembre è l\'ultimo mese dell\'anno'
@@ -2544,7 +2546,7 @@ languageScramble.data = {
             nativeSentence: 'i am waiting for you',
             foreignSentence: 'ti sto aspettando'
           }, {
-            "native": 'how much ',
+            "native": 'how much',
             foreign: 'quanto',
             nativeSentence: 'how much does it cost? ',
             foreignSentence: 'quanto costa? '
@@ -2666,13 +2668,13 @@ languageScramble.data = {
             foreignSentence: 'io credo in dio'
           }, {
             "native": 'later',
-            foreign: 'dopo ',
+            foreign: 'dopo',
             nativeSentence: 'i will tell you later',
             foreignSentence: 'te lo dirò dopo'
           }, {
-            "native": 'without ',
+            "native": 'without',
             foreign: 'senza',
-            nativeSentence: 'i never go out without my umbrella ',
+            nativeSentence: 'i never go out without my umbrella',
             foreignSentence: 'non esco mai senza il mio ombrello'
           }, {
             "native": 'things',
@@ -2683,7 +2685,7 @@ languageScramble.data = {
             "native": 'nobody',
             foreign: 'nessuno',
             nativeSentence: 'nobody knows the truth',
-            foreignSentence: 'nessuno sa la verità '
+            foreignSentence: 'nessuno sa la verità'
           }, {
             "native": 'do',
             foreign: 'fai',
@@ -2700,10 +2702,10 @@ languageScramble.data = {
             nativeSentence: 'cause and effect',
             foreignSentence: 'causa ed effetto'
           }, {
-            "native": 'better ',
-            foreign: 'meglio ',
+            "native": 'better',
+            foreign: 'meglio',
             nativeSentence: 'better late than never',
-            foreignSentence: 'meglio tardi che mai '
+            foreignSentence: 'meglio tardi che mai'
           }, {
             "native": 'father',
             foreign: 'padre',
@@ -2731,7 +2733,7 @@ languageScramble.data = {
             foreignSentence: 'devi andare al lavoro domani'
           }, {
             "native": 'here',
-            foreign: 'ecco ',
+            foreign: 'ecco',
             nativeSentence: 'here is my book',
             foreignSentence: 'ecco il mio libro'
           }, {
@@ -2799,14 +2801,14 @@ languageScramble.data = {
             "native": 'i will tell you later',
             foreign: 'te lo dirò dopo'
           }, {
-            "native": 'i never go out without my umbrella ',
+            "native": 'i never go out without my umbrella',
             foreign: 'non esco mai senza il mio ombrello'
           }, {
             "native": 'put your things in the wardrobe',
             foreign: 'metti le tue cose nell\'armadio'
           }, {
             "native": 'nobody knows the truth',
-            foreign: 'nessuno sa la verità '
+            foreign: 'nessuno sa la verità'
           }, {
             "native": 'what do you do in your spare time? ',
             foreign: 'cosa fai nel tuo tempo libero? '
@@ -2818,7 +2820,7 @@ languageScramble.data = {
             foreign: 'causa ed effetto'
           }, {
             "native": 'better late than never',
-            foreign: 'meglio tardi che mai '
+            foreign: 'meglio tardi che mai'
           }, {
             "native": 'my father is very strict',
             foreign: 'mio padre è molto severo'

@@ -299,7 +299,7 @@ class languageScramble.ViewHelper
         @lettersAdded = []
 
         @scrambleInfo = @selectOption()
-        console.log(JSON.stringify(@scrambleInfo))
+        # console.log(JSON.stringify(@scrambleInfo))
         return unless @scrambleInfo     
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
 
@@ -315,9 +315,11 @@ class languageScramble.ViewHelper
 
         displayWords.html(sentence)
 
-        @createScramble()
         @createGuesses()
+        @createScramble()
         @resize()
+        # @assignColors()
+        # @scrambleScramble()
     
     selectOption: () ->
         @orderedOptions or= []
@@ -425,7 +427,7 @@ class languageScramble.ViewHelper
         start = 0
         
         addToScrambledWordGroups = (scrambleSentence, start, end) =>
-            shuffled = @shuffleWord(scrambleSentence).split('')
+            shuffled = if scrambleSentence.length > 1 then @shuffleWord(scrambleSentence).split('') else [scrambleSentence]
             shuffled = shuffled.reverse()            
             for g, x in wordGroups[start...end]
                 shuffledGroup = []
@@ -482,22 +484,24 @@ class languageScramble.ViewHelper
             container.css(float: 'none', margin: 'auto')
             height = container.height()
             width = container.width()
-            while height == container.height()
+            while height == container.height() and width > $(container.find('.word_group')[0]).width()
                 width -= 1
                 container.width(width)
             container.width(width + 1)
 
-            for wordGroup in container.find('.word_group')
-                continue if currentOffsetTop == wordGroup.offsetTop or not wordGroup.innerHTML.length
-                currentOffsetTop = wordGroup.offsetTop
-                wordGroup = $(wordGroup)
-                marginLeft = parseInt(wordGroup.css('marginLeft') or 0)
-                startMarginLeft = marginLeft
-                height = container.height()
-                while height == container.height()
-                    marginLeft += 1
-                    wordGroup.css(marginLeft: marginLeft)
-                wordGroup.css(marginLeft: (marginLeft - startMarginLeft - 1) / 2)
+            wordGroups = container.find('.word_group')
+            if wordGroups.length > 1
+                for wordGroup in wordGroups
+                    continue if currentOffsetTop == wordGroup.offsetTop or not wordGroup.innerHTML.length
+                    currentOffsetTop = wordGroup.offsetTop
+                    wordGroup = $(wordGroup)
+                    marginLeft = parseInt(wordGroup.css('marginLeft') or 0)
+                    startMarginLeft = marginLeft
+                    height = container.height()
+                    while height == container.height()
+                        marginLeft += 1
+                        wordGroup.css(marginLeft: marginLeft)
+                    wordGroup.css(marginLeft: (marginLeft - startMarginLeft - 1) / 2)
             
             container.height(container.height())
 
@@ -1197,20 +1201,20 @@ languageScramble.data =
                     {native: 'believe', foreign: 'credo', nativeSentence: 'i believe in love', foreignSentence: 'credo nell\'amore'},
                     {native: 'you', foreign: 'voi', nativeSentence: 'what do you think about Italy? ', foreignSentence: 'cosa pensate dell\'Italia? '},
                     {native: 'already', foreign: 'già', nativeSentence: 'i have already eaten', foreignSentence: 'ho già mangiato'},
-                    {native: 'now', foreign: 'adesso', nativeSentence:  'now it\'s too late', foreignSentence: 'ora è troppo tardi'},
+                    {native: 'now', foreign: 'adesso', nativeSentence:  'now come here', foreignSentence: 'adesso vieni qui'},
                     {native: 'go', foreign: 'andiamo', nativeSentence: 'let\'s go home', foreignSentence: 'andiamo a casa'},
                     {native: 'years', foreign: 'anni', nativeSentence: 'i am sixteen years old', foreignSentence: 'ho sedici anni'},
                     {native: 'at', foreign: 'all\' ', nativeSentence: 'he always cancels plans at the last minute', foreignSentence: 'lui cancella sempre i programmi all\'ultimo minuto'},
                     {native: 'seen', foreign: 'visto', nativeSentence: 'i have seen a rat in the garden', foreignSentence: 'ho visto un topo in giardino'},
-                    {native: 'out', foreign: 'fuori ', nativeSentence: 'the kids are out of control', foreignSentence: 'i bambini sono fuori controllo'},
+                    {native: 'out', foreign: 'fuori', nativeSentence: 'the kids are out of control', foreignSentence: 'i bambini sono fuori controllo'},
                     {native: 'just', foreign: 'proprio', nativeSentence: 'that is just what i wanted to say', foreignSentence: 'è proprio quello che volevo dire'},
                     {native: 'part', foreign:  'parte', nativeSentence: 'music is an important part of culture', foreignSentence: 'la musica è una parte importante della cultura'},
                     {native: 'really', foreign: 'davvero', nativeSentence: 'you live in a really beautiful house' , foreignSentence: 'vivi in una casa davvero bella'},
                     {native: 'wants', foreign: 'vuole', nativeSentence: 'he wants to go home', foreignSentence:  'lui vuole andare a casa'},
-                    {native: 'them', foreign: 'li ', nativeSentence: 'she really loves them', foreignSentence: 'lei li ama veramente'}, 
-                    {native: 'of ', foreign: 'dell\'', nativeSentence: 'december is the last month of the year', foreignSentence: 'dicembre è l\'ultimo mese dell\'anno'},
+                    {native: 'them', foreign: 'li', nativeSentence: 'she really loves them', foreignSentence: 'lei li ama veramente'}, 
+                    {native: 'of', foreign: 'dell\'', nativeSentence: 'december is the last month of the year', foreignSentence: 'dicembre è l\'ultimo mese dell\'anno'},
                     {native: 'am', foreign: 'sto' , nativeSentence: 'i am waiting for you', foreignSentence: 'ti sto aspettando'},
-                    {native: 'how much ', foreign: 'quanto', nativeSentence: 'how much does it cost? ', foreignSentence: 'quanto costa? '},
+                    {native: 'how much', foreign: 'quanto', nativeSentence: 'how much does it cost? ', foreignSentence: 'quanto costa? '},
                     {native: 'time', foreign: 'volta', nativeSentence: 'this is the right time', foreignSentence: 'questa è la volta buona'},
                     {native: 'way', foreign: 'via', nativeSentence: 'there is no way out', foreignSentence: 'non c\'è via di scampo'},
                     {native: 'on', foreign: 'sul', nativeSentence: 'there is a spot on the floor', foreignSentence: 'c\'è una macchia sul pavimento'},
@@ -1253,20 +1257,20 @@ languageScramble.data =
                 nextLevel: 'top175phrases'                
                 data: [
                     {native: 'god', foreign: 'dio', nativeSentence: 'i believe in god', foreignSentence: 'io credo in dio'},
-                    {native: 'later', foreign: 'dopo ', nativeSentence: 'i will tell you later', foreignSentence: 'te lo dirò dopo'},
-                    {native: 'without ', foreign: 'senza', nativeSentence: 'i never go out without my umbrella ', foreignSentence: 'non esco mai senza il mio ombrello'},
+                    {native: 'later', foreign: 'dopo', nativeSentence: 'i will tell you later', foreignSentence: 'te lo dirò dopo'},
+                    {native: 'without', foreign: 'senza', nativeSentence: 'i never go out without my umbrella', foreignSentence: 'non esco mai senza il mio ombrello'},
                     {native: 'things', foreign: 'cose', nativeSentence: 'put your things in the wardrobe', foreignSentence: 'metti le tue cose nell\'armadio'},
-                    {native: 'nobody', foreign: 'nessuno', nativeSentence: 'nobody knows the truth', foreignSentence: 'nessuno sa la verità '},
+                    {native: 'nobody', foreign: 'nessuno', nativeSentence: 'nobody knows the truth', foreignSentence: 'nessuno sa la verità'},
                     {native: 'do', foreign:  'fai', nativeSentence: 'what do you do in your spare time? ', foreignSentence: 'cosa fai nel tuo tempo libero? '},
                     {native: 'day', foreign: 'giorno', nativeSentence: 'what day is today? ', foreignSentence: 'che giorno è oggi? '},
                     {native: 'and', foreign: 'ed', nativeSentence: 'cause and effect', foreignSentence: 'causa ed effetto'}
-                    {native: 'better ', foreign: 'meglio ', nativeSentence: 'better late than never', foreignSentence: 'meglio tardi che mai '},
+                    {native: 'better', foreign: 'meglio', nativeSentence: 'better late than never', foreignSentence: 'meglio tardi che mai'},
                     {native: 'father', foreign: 'padre', nativeSentence: 'my father is very strict', foreignSentence: 'mio padre è molto severo'},
                     {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favour? ', foreignSentence: 'puoi farmi un favore? '},
                     {native: 'hello', foreign: 'ciao', nativeSentence: 'hello, my name is Mary', foreignSentence: 'ciao, mi chiamo Maria'},
                     {native: 'what', foreign: 'cos\'', nativeSentence: 'what is this? ', foreignSentence: 'cos\'è questo? '},
                     {native: 'must', foreign: 'devi', nativeSentence: 'you must go to work tomorrow', foreignSentence: 'devi andare al lavoro domani'},
-                    {native: 'here', foreign: 'ecco ', nativeSentence: 'here is my book', foreignSentence: 'ecco il mio libro'},
+                    {native: 'here', foreign: 'ecco', nativeSentence: 'here is my book', foreignSentence: 'ecco il mio libro'},
                     {native: 'someone', foreign: 'qualcuno', nativeSentence: 'someone ate the last piece of cake', foreignSentence: 'qualcuno ha mangiato l\'ultima fetta di torta'},
                     {native: 'from', foreign: 'dal', nativeSentence: 'you can sea the sea from the balcony', foreignSentence: 'puoi vedere il mare dal balcone'},
                     {native: 'job', foreign: 'lavoro', nativeSentence: 'he really loves his job', foreignSentence: 'lui ama veramente il suo lavoro'},
@@ -1285,13 +1289,13 @@ languageScramble.data =
                 data: [
                     {native: 'i believe in god', foreign: 'io credo in dio'},
                     {native: 'i will tell you later', foreign: 'te lo dirò dopo'},
-                    {native: 'i never go out without my umbrella ', foreign: 'non esco mai senza il mio ombrello'},
+                    {native: 'i never go out without my umbrella', foreign: 'non esco mai senza il mio ombrello'},
                     {native: 'put your things in the wardrobe', foreign: 'metti le tue cose nell\'armadio'},
-                    {native: 'nobody knows the truth', foreign: 'nessuno sa la verità '},
+                    {native: 'nobody knows the truth', foreign: 'nessuno sa la verità'},
                     {native: 'what do you do in your spare time? ', foreign: 'cosa fai nel tuo tempo libero? '},
                     {native: 'what day is today? ', foreign: 'che giorno è oggi? '},
                     {native: 'cause and effect', foreign: 'causa ed effetto'}
-                    {native: 'better late than never', foreign: 'meglio tardi che mai '},
+                    {native: 'better late than never', foreign: 'meglio tardi che mai'},
                     {native: 'my father is very strict', foreign: 'mio padre è molto severo'},
                     {native: 'can you do me a favour? ', foreign: 'puoi farmi un favore? '},
                     {native: 'hello, my name is Mary', foreign: 'ciao, mi chiamo Maria'},
