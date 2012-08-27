@@ -98,9 +98,6 @@ body {
 .language_scramble .scrambled .space {
   float: left;
   margin: 3px;
-  width: 45px;
-  height: 45px;
-  line-height: 39px;
 }
 .language_scramble .guesses .space,
 .language_scramble .scrambled .space {

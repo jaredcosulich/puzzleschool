@@ -125,7 +125,7 @@ class languageScramble.ViewHelper
         @$('.header .level').css(marginLeft: margin)        
 
     bindWindow: () ->
-        $(window).bind 'keypress', (e) =>
+        $(document.body).bind 'keypress', (e) =>
             return if @clickAreaHasFocus or $('.opaque_screen').css('opacity') > 0
             $('#clickarea')[0].focus()
             $('#clickarea').trigger('keypress', e)
@@ -163,12 +163,13 @@ class languageScramble.ViewHelper
             @dragging = null
             
         
-        $(window).bind 'mousemove', moveDrag
-        $(window).bind 'mouseup', endDrag
+        $(document.body).bind 'mousemove', moveDrag
+        $(document.body).bind 'mouseup', endDrag
 
-        $(window).bind 'touchmove', moveDrag
-        $(window).bind 'touchend', endDrag
-                
+        $(document.body).bind 'touchmove', moveDrag
+        $(document.body).bind 'touchend', endDrag
+        document.body.focus()
+
         
     bindKeyPress: () ->
         @clickAreaHasFocus = false
@@ -315,11 +316,12 @@ class languageScramble.ViewHelper
 
         displayWords.html(sentence)
 
-        @createGuesses()
-        @createScramble()
+        @initScrambleAreas('scrambled')
+        @initScrambleAreas('guesses')
         @resize()
-        # @assignColors()
-        # @scrambleScramble()
+        @assignColors('scrambled')
+        @assignColors('guesses')
+        @scrambleScrambleArea()
     
     selectOption: () ->
         @orderedOptions or= []
@@ -391,94 +393,64 @@ class languageScramble.ViewHelper
         
         return @orderedOptions[@orderedOptionsIndex]
             
-    createGuesses: () ->
-        guesses = @$('.guesses')
-        @clearContainer(guesses)
+    initScrambleAreas: (areaClass) ->
+        area = @$(".#{areaClass}")
+        @clearContainer(area)
         
-        colorIndex = 0
-        colorGroup = 0
         sentence = @scrambleInfo[@activeType]
         wordGroups = @separateIntoWordGroups(sentence)
         for group, index in wordGroups
-            colorGroup += group.length
-            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup > (sentence.length*0.65))
-                colorIndex += 1
-                colorGroup = group.length
-
-            wordGroup = @createWordGroup(colorIndex)
+            wordGroup = @createWordGroup()
             if not container
                 container = @createContainer() 
 
             for letter in group 
-                wordGroup.append(if letter.match(/\w|[^\x00-\x80]+/)? then @createGuess(letter) else @createSpace(letter))
+                wordGroup.append(
+                    if letter.match(/\w|[^\x00-\x80]+/)? then (
+                        if (areaClass == 'scrambled') then @createLetter(letter) else @createGuess(letter)
+                    ) else @createSpace(letter)
+                )
 
             container.append(wordGroup)
-            guesses.append(container)
+            area.append(container)
+        
+        @sizeLetter($(area.find('.letter')[0])) if areaClass == 'scrambled' 
 
-    createScramble: () ->
-        scrambled = @$('.scrambled')
-        @clearContainer(scrambled)
-        
-        sentence = @scrambleInfo[@activeType]
-        wordGroups = @separateIntoWordGroups(sentence)
-        scrambledWordGroups = []
-        scrambleSentence = []
-        scrambleSentenceLength = 0
-        start = 0
-        
-        addToScrambledWordGroups = (scrambleSentence, start, end) =>
-            shuffled = if scrambleSentence.length > 1 then @shuffleWord(scrambleSentence).split('') else [scrambleSentence]
-            shuffled = shuffled.reverse()            
-            for g, x in wordGroups[start...end]
-                shuffledGroup = []
-                shuffledGroup.push(shuffled.pop()) for l in g      
-                scrambledWordGroups.push(shuffledGroup)
-            
-        for group, index in wordGroups
-            scrambleSentenceLength += group.length
-            if scrambleSentenceLength > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and scrambleSentenceLength >= (sentence.length*0.65))
-                addToScrambledWordGroups(scrambleSentence, start, index)
-                start = index
-                scrambleSentence = []
-                scrambleSentence.push(letter) for letter in group
-                scrambleSentenceLength = group.length
-            else            
-                scrambleSentence.push(letter) for letter in group
-            
-            if index == wordGroups.length - 1 and scrambleSentence.length
-                addToScrambledWordGroups(scrambleSentence, start, index + 1)
-    
+    assignColors: (areaClass) ->
         colorIndex = 0
-        colorGroup = 0
-        # console.log(JSON.stringify(scrambledWordGroups))
-        # console.log(JSON.stringify(wordGroups))
-        for group, index in scrambledWordGroups
-            colorGroup += group.length
-            if colorGroup > 15 or (index != (wordGroups.length - 1) and sentence.length > 15 and colorGroup >= (sentence.length*0.65))
+        for wordGroup in @$(".#{areaClass} .word_group")
+            if wordGroup.offsetTop != offsetTop
+                offsetTop = wordGroup.offsetTop
                 colorIndex += 1
-                colorGroup = group.length
-                wordGroup.append(@createSpace(' '))
-                
-            group = if wordGroups.length == 1 then @modifyScramble(group.join('')) else group.join('')
-            wordGroup = @createWordGroup(colorIndex)
-            if not container
-                container = @createContainer() 
+            wordGroup.className = "word_group color#{colorIndex}"
+            
+    scrambleScrambleArea: ->
+        scrambled = @$('.scrambled')
+        wordGroups = {}
+        for wordGroup in scrambled.find('.word_group')
+            wordGroups[wordGroup.className] or= [] 
+            for letter in $(wordGroup).find('.letter')
+                wordGroups[wordGroup.className].push($(letter).html())
+                    
+        containers = []
+        scrambled.find('.container').remove()
+        for color of wordGroups
+            container = @createContainer() 
+            wordGroup = @createWordGroup()
+            wordGroup[0].className = color
+            letters = @shuffleWord(wordGroups[color])
+            wordGroup.append(@createLetter(letter)) for letter in letters
 
-            for letter in group
-                wordGroup.append(@createLetter(letter)) if letter.match(/\w|[^\x00-\x80]+/)
-
+            containers.push(container)
             container.append(wordGroup)
             scrambled.append(container)
+        @centerContainers(containers)
         
-        @sizeLetter($(scrambled.find('.letter')[0]))
-            
-
     createContainer: (index) ->
         container = $(document.createElement("DIV"))
         container.addClass('container')
     
-    centerContainers: ->
-        containers = @$('.container')
+    centerContainers: (containers = @$('.container'))->
         for container in containers
             container = $(container)
             container.css(float: 'none', margin: 'auto')
@@ -530,8 +502,8 @@ class languageScramble.ViewHelper
             @letterFontSize -= 1
             @sizeLetter(letter)
 
-        if @letterFontSize > 40
-            @letterFontSize = 40
+        if @letterFontSize > 30
+            @letterFontSize = 30
             @sizeLetter(letter)
             
         @centerContainers()
@@ -548,10 +520,10 @@ class languageScramble.ViewHelper
             height: @letterDim
         @$('.guesses, .scrambled').find('.space').css(width: @letterDim / 2)
 
-    createWordGroup: (index) ->
+    createWordGroup: () ->
         wordGroup = $(document.createElement("DIV"))
         wordGroup.addClass('word_group')
-        wordGroup.addClass("color#{index + 1}")
+        wordGroup.addClass('color1')
         
     formatLetterOrGuess: (letterOrGuess) -> 
         letterOrGuess.css(height: @letterDim, width: @letterDim, lineHeight: @letterLineHeight) if @letterDim

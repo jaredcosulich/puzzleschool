@@ -258,6 +258,8 @@ REVIEWDATA = [{
             <p><a href='http://www.wired.com/geekdad/2012/06/dragonbox/all/' target='_blank'>DragonBox: Algebra Beats Angry Birds</a></p>
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-algebra-meets-angry-birds/' target='_blank'>DragonBox - Algebra Meets Angry Birds</a></p>
             <p><a href='http://jaredcosulich.wordpress.com/2012/06/13/dragonbox-misses-the-why/' target='_blank'>DragonBox Misses The Why</a></p>
+            <p><a href='http://kk.org/cooltools/archives/6504' target='_blank'>Trick Kids Into Learning Algebra</a></p>
+            
             <br/><br/><br/><br/><br/><br/>
         """
 }, {
@@ -902,6 +904,42 @@ REVIEWDATA = [{
     }]
 
 LABDATA = [{
+    title: 'Architect'
+    website: '/puzzles/architect'
+    thumbnail: '/assets/images/reviews/architect.jpg'
+    company: 'The Puzzle School'
+    companyWebsite: 'http://puzzleschool.com'
+    material: 'Spatial Skills'
+    availability: 'Mobile, Tablet'
+    cost: '$0.99'
+    overall:
+        explanation:
+            """
+            <p>
+                Architect is not an educational puzzle. It can help develop spatial skills, which have been shown to
+                <a href='http://medicalxpress.com/news/2012-07-spatial-skills.html' target='_blank'>improve performance in STEM subjects</a>,
+                but does not approach any other educational material.
+            </p>
+            <p>
+                We built Architect to provide a fun starting point for anyone exploring learning through puzzles.
+                It is meant to be more fun than educational, but does provide an opportunity to work on spatial skills
+                and working memory that can be valuable when trying to solve more educational puzzles.
+            </p>
+            <p>
+                Architect was inspired by Tetris, but was changed to minimize the somewhat stressful aspect of increasingly
+                fast falling blocks, making the game more about arranging the pieces to complete the puzzle then about the speed
+                with which the pieces are dropping. Along these lines we also added in the pause feature and the ability to
+                reorganize any piece at any time.
+            </p>
+            <p>
+                Architect was also built for touchscreens, making the experience a little more tactile than the original Tetris.
+                You actually have to grab and move pieces in order to position them.
+            </p>
+            <p>
+                Again Architect is more for fun than our other educational puzzles. We do think there are some educational
+                benefits such as developing spatial skills, but we are not promoting it as an educational puzzle.
+            """
+}, {
     title: 'Language Scramble'
     website: '/puzzles/language_scramble'
     thumbnail: '/assets/images/reviews/language_scramble.jpg'

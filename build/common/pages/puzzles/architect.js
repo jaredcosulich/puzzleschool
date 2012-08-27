@@ -6,27 +6,25 @@ soma = require('soma');
 wings = require('wings');
 
 soma.chunks({
-  Home: {
+  Architect: {
     meta: function() {
       return new soma.chunks.Base({
         content: this
       });
     },
-    prepare: function() {
-      return this.template = this.loadTemplate('/build/common/templates/home.html');
+    prepare: function(_arg) {
+      _arg;
+      return this.template = this.loadTemplate('/build/common/templates/puzzles/architect.html');
     },
     build: function() {
-      this.setTitle('The Puzzle School');
+      this.setTitle("Architect - The Puzzle School");
       return this.html = wings.renderTemplate(this.template);
     }
   }
 });
 
 soma.routes({
-  '': function() {
-    return new soma.chunks.Home;
-  },
-  '/': function() {
-    return new soma.chunks.Home;
+  '/puzzles/architect': function() {
+    return new soma.chunks.Architect;
   }
 });
