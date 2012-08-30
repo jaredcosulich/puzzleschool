@@ -502,8 +502,8 @@ class languageScramble.ViewHelper
             @letterFontSize -= 1
             @sizeLetter(letter)
 
-        if @letterFontSize > 30
-            @letterFontSize = 30
+        if @letterFontSize > window.innerWidth / 15
+            @letterFontSize = window.innerWidth / 15
             @sizeLetter(letter)
             
         @centerContainers()
@@ -562,8 +562,7 @@ class languageScramble.ViewHelper
     shuffleWord: (word) ->
         top = word.length
         return '' if not top
-        return word if top == 1
-        return (letter for letter in word).reverse().join('') if top == 2
+        word = @modifyScramble(word)
         
         wordArray = (letter for letter in word)
 
@@ -674,7 +673,7 @@ class languageScramble.ViewHelper
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
         add = (6 - word.length)
         add = 2 if add > 2
-        word += (commonLetters[Math.floor(Math.random() * commonLetters.length)]) for i in [0...add]
+        word.push(commonLetters[Math.floor(Math.random() * commonLetters.length)]) for i in [0...add]
         return word
             
     setStage: () ->
@@ -735,6 +734,8 @@ class languageScramble.ViewHelper
         for boundary in [' ', '?', ',']
             correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
+        correctSentence += '<br/><br/><br/><p class=\'small\'>Tap the screen to continue ></p>'
+
         correct.html(correctSentence)
         correct.addClass('correct')
         correct.css(opacity: 0)
@@ -754,18 +755,18 @@ class languageScramble.ViewHelper
         showNext = () =>
             return if nextShown
             nextShown = true
-            @el.unbind 'click'
-            @el.unbind 'touchstart'
+            $(document.body).unbind 'click'
+            $(document.body).unbind 'touchstart'
             $('#clickarea').unbind 'keyup'
             @setProgress()
             @saveLevel()
-            @$('.foreign_words, .scrambled, .guesses').animate
+            @$('.display_words, .scrambled, .guesses').animate
                 opacity: 0
-                duration: 500
+                duration: 300
                 complete: () =>
                     @$('.scrambled, .guesses').css(width: null, height: null)
                     @newScramble()
-                    @$('.foreign_words, .scrambled, .guesses').animate
+                    @$('.display_words, .scrambled, .guesses').animate
                         opacity: 1
                         duration: 300
                         complete: () =>
@@ -774,13 +775,18 @@ class languageScramble.ViewHelper
                             #     opacity: 1
                             #     duration: 300
 
+        @$('.guesses').animate
+            opacity: 0
+            height: 0
+            duration: 500
+
         correct.animate
             opacity: 1
             duration: 500
             complete: () =>
-                $.timeout 500 + (10 * correctSentence.length), () => showNext()
-                @el.bind 'click', () => showNext()
-                @el.bind 'touchstart', () => showNext()
+                $.timeout 500 + (50 * correctSentence.length), () => showNext()
+                $(document.body).bind 'click', () => showNext()
+                $(document.body).bind 'touchstart', () => showNext()
                 $('#clickarea').bind 'keyup', (e) => showNext()
 
     nextLevel: () ->        

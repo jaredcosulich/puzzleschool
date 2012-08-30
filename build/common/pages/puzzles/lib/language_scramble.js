@@ -798,8 +798,8 @@ languageScramble.ViewHelper = (function() {
       this.letterFontSize -= 1;
       this.sizeLetter(letter);
     }
-    if (this.letterFontSize > 30) {
-      this.letterFontSize = 30;
+    if (this.letterFontSize > window.innerWidth / 15) {
+      this.letterFontSize = window.innerWidth / 15;
       this.sizeLetter(letter);
     }
     return this.centerContainers();
@@ -893,20 +893,7 @@ languageScramble.ViewHelper = (function() {
     if (!top) {
       return '';
     }
-    if (top === 1) {
-      return word;
-    }
-    if (top === 2) {
-      return ((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = word.length; _i < _len; _i++) {
-          letter = word[_i];
-          _results.push(letter);
-        }
-        return _results;
-      })()).reverse().join('');
-    }
+    word = this.modifyScramble(word);
     wordArray = (function() {
       var _i, _len, _results;
       _results = [];
@@ -1078,7 +1065,7 @@ languageScramble.ViewHelper = (function() {
       add = 2;
     }
     for (i = _i = 0; 0 <= add ? _i < add : _i > add; i = 0 <= add ? ++_i : --_i) {
-      word += commonLetters[Math.floor(Math.random() * commonLetters.length)];
+      word.push(commonLetters[Math.floor(Math.random() * commonLetters.length)]);
     }
     return word;
   };
@@ -1178,6 +1165,7 @@ languageScramble.ViewHelper = (function() {
       boundary = _ref[_i];
       correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
     }
+    correctSentence += '<br/><br/><br/><p class=\'small\'>Tap the screen to continue ></p>';
     correct.html(correctSentence);
     correct.addClass('correct');
     correct.css({
@@ -1197,21 +1185,21 @@ languageScramble.ViewHelper = (function() {
         return;
       }
       nextShown = true;
-      _this.el.unbind('click');
-      _this.el.unbind('touchstart');
+      $(document.body).unbind('click');
+      $(document.body).unbind('touchstart');
       $('#clickarea').unbind('keyup');
       _this.setProgress();
       _this.saveLevel();
-      return _this.$('.foreign_words, .scrambled, .guesses').animate({
+      return _this.$('.display_words, .scrambled, .guesses').animate({
         opacity: 0,
-        duration: 500,
+        duration: 300,
         complete: function() {
           _this.$('.scrambled, .guesses').css({
             width: null,
             height: null
           });
           _this.newScramble();
-          return _this.$('.foreign_words, .scrambled, .guesses').animate({
+          return _this.$('.display_words, .scrambled, .guesses').animate({
             opacity: 1,
             duration: 300,
             complete: function() {}
@@ -1219,17 +1207,22 @@ languageScramble.ViewHelper = (function() {
         }
       });
     };
+    this.$('.guesses').animate({
+      opacity: 0,
+      height: 0,
+      duration: 500
+    });
     return correct.animate({
       opacity: 1,
       duration: 500,
       complete: function() {
-        $.timeout(500 + (10 * correctSentence.length), function() {
+        $.timeout(500 + (50 * correctSentence.length), function() {
           return showNext();
         });
-        _this.el.bind('click', function() {
+        $(document.body).bind('click', function() {
           return showNext();
         });
-        _this.el.bind('touchstart', function() {
+        $(document.body).bind('touchstart', function() {
           return showNext();
         });
         return $('#clickarea').bind('keyup', function(e) {

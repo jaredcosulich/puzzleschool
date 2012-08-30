@@ -6,6 +6,9 @@ body {
 .text-center {
     text-align: center;
 }
+.small {
+    font-size: 12pt;
+}
 .language_scramble {
   background-color: #fafafa;
 }
