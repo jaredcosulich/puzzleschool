@@ -452,7 +452,6 @@ class languageScramble.ViewHelper
     
     centerContainers: (containers = @$('.container'))->
         for container in containers
-            console.log("CONTAINER: #{container?.parentNode?.className}")
             container = $(container)
             containerWidth = container.width() 
             container.width(containerWidth)

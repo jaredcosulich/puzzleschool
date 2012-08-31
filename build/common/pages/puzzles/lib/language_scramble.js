@@ -724,13 +724,12 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.centerContainers = function(containers) {
-    var centerWordGroups, container, containerWidth, currentOffsetTop, index, leftGroup, rightGroup, wordGroup, wordGroups, _i, _j, _len, _len1, _ref;
+    var centerWordGroups, container, containerWidth, currentOffsetTop, index, leftGroup, rightGroup, wordGroup, wordGroups, _i, _j, _len, _len1;
     if (containers == null) {
       containers = this.$('.container');
     }
     for (_i = 0, _len = containers.length; _i < _len; _i++) {
       container = containers[_i];
-      console.log("CONTAINER: " + (container != null ? (_ref = container.parentNode) != null ? _ref.className : void 0 : void 0));
       container = $(container);
       containerWidth = container.width();
       container.width(containerWidth);

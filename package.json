@@ -3,7 +3,7 @@
     "name": "puzzleschool",
     "version": "0.0.2",
     "engines": {
-        "node": "0.6.5",
+        "node": "0.8.8",
         "npm":  "1.0.106"
     },
     "devDependencies": {
