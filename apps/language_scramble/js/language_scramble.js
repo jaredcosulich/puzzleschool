@@ -724,46 +724,52 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.centerContainers = function(containers) {
-    var container, currentOffsetTop, height, marginLeft, startMarginLeft, width, wordGroup, wordGroups, _i, _j, _len, _len1;
+    var centerWordGroups, container, containerWidth, currentOffsetTop, index, leftGroup, rightGroup, wordGroup, wordGroups, _i, _j, _len, _len1, _ref;
     if (containers == null) {
       containers = this.$('.container');
     }
     for (_i = 0, _len = containers.length; _i < _len; _i++) {
       container = containers[_i];
+      console.log("CONTAINER: " + (container != null ? (_ref = container.parentNode) != null ? _ref.className : void 0 : void 0));
       container = $(container);
+      containerWidth = container.width();
+      container.width(containerWidth);
       container.css({
         float: 'none',
         margin: 'auto'
       });
-      height = container.height();
-      width = container.width();
-      while (height === container.height() && width > $(container.find('.word_group')[0]).width()) {
-        width -= 1;
-        container.width(width);
-      }
-      container.width(width + 1);
       wordGroups = container.find('.word_group');
       if (wordGroups.length > 1) {
-        for (_j = 0, _len1 = wordGroups.length; _j < _len1; _j++) {
-          wordGroup = wordGroups[_j];
-          if (currentOffsetTop === wordGroup.offsetTop || !wordGroup.innerHTML.length) {
-            continue;
+        centerWordGroups = function(lg, rg) {
+          var containerRight, right;
+          if (!rg) {
+            rg = lg;
           }
-          currentOffsetTop = wordGroup.offsetTop;
-          wordGroup = $(wordGroup);
-          marginLeft = parseInt(wordGroup.css('marginLeft') || 0);
-          startMarginLeft = marginLeft;
-          height = container.height();
-          while (height === container.height()) {
-            marginLeft += 1;
-            wordGroup.css({
-              marginLeft: marginLeft
-            });
-          }
-          wordGroup.css({
-            marginLeft: (marginLeft - startMarginLeft - 1) / 2
+          containerRight = container.offset().left + container.offset().width;
+          right = rg.offset().left + rg.offset().width;
+          return lg.css({
+            marginLeft: (containerRight - right) / 2
           });
+        };
+        for (index = _j = 0, _len1 = wordGroups.length; _j < _len1; index = ++_j) {
+          wordGroup = wordGroups[index];
+          if (currentOffsetTop && (currentOffsetTop !== wordGroup.offsetTop)) {
+            centerWordGroups(leftGroup, rightGroup);
+            leftGroup = null;
+            rightGroup = null;
+            currentOffsetTop = null;
+          }
+          if (!currentOffsetTop) {
+            leftGroup = $(wordGroup);
+            currentOffsetTop = wordGroup.offsetTop;
+          } else {
+            rightGroup = $(wordGroup);
+          }
         }
+        centerWordGroups(leftGroup, rightGroup);
+        leftGroup = null;
+        rightGroup = null;
+        currentOffsetTop = null;
       }
       container.height(container.height());
     }
@@ -785,21 +791,29 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.resize = function() {
-    var letter, targetHeight;
+    var increase, increment, letter, maxFontSize, targetHeight;
     letter = $(this.$('.scrambled').find('.letter')[0]);
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
     targetHeight = this.$('.scramble_content').height();
-    while (this.containerHeights() < targetHeight) {
-      this.letterFontSize += 1;
-      this.sizeLetter(letter);
+    maxFontSize = window.innerWidth / 15;
+    increment = maxFontSize;
+    while (increment >= 1) {
+      if (increase && this.letterFontSize >= maxFontSize) {
+        break;
+      }
+      increase = this.containerHeights() < targetHeight;
+      increment = increment / 2;
+      while (increase === (this.containerHeights() < targetHeight)) {
+        if (increase && this.letterFontSize >= maxFontSize) {
+          break;
+        }
+        this.letterFontSize += increment * (increase ? 1 : -1);
+        this.sizeLetter(letter);
+      }
     }
-    while (this.containerHeights() > targetHeight) {
-      this.letterFontSize -= 1;
-      this.sizeLetter(letter);
-    }
-    if (this.letterFontSize > window.innerWidth / 15) {
-      this.letterFontSize = window.innerWidth / 15;
+    if (this.letterFontSize >= maxFontSize) {
+      this.letterFontSize = maxFontSize;
       this.sizeLetter(letter);
     }
     return this.centerContainers();
@@ -3050,6 +3064,438 @@ languageScramble.data = {
             foreign: 'ho bisogno di qualche consiglio'
           }
         ]
+      },
+      top225words: {
+        title: 'Top 200 - 225 Words',
+        subtitle: 'The 200 - 225 most frequently used Italian words',
+        nextLevel: 'top225phrases',
+        data: [
+          {
+            "native": 'seems',
+            foreign: 'sembra',
+            nativeSentence: 'it seems like it is going to rain',
+            foreignSentence: 'sembra che stia per piovere'
+          }, {
+            "native": 'people',
+            foreign: 'gente',
+            nativeSentence: 'how many people were at the party?',
+            foreignSentence: 'quanta gente c\'era alla festa?'
+          }, {
+            "native": 'must',
+            foreign: 'dobbiamo',
+            nativeSentence: 'we must be proud of our son',
+            foreignSentence: 'dobbiamo essere orgogliosi di nostro figlio'
+          }, {
+            "native": 'way',
+            foreign: 'modo',
+            nativeSentence: 'i don\'t like the way you live',
+            foreignSentence: 'non mi piace il modo in cui vivi'
+          }, {
+            "native": 'three',
+            foreign: 'tre',
+            nativeSentence: 'i have three cats',
+            foreignSentence: 'ho tre gatti'
+          }, {
+            "native": 'moment',
+            foreign: 'momento',
+            nativeSentence: 'just a moment, please',
+            foreignSentence: 'solo un momento, per favore'
+          }, {
+            "native": 'please',
+            foreign: 'prego',
+            nativeSentence: 'this way, please',
+            foreignSentence: 'da questa parte, prego'
+          }, {
+            "native": 'talk',
+            foreign: 'parlare',
+            nativeSentence: 'i must talk to you',
+            foreignSentence: 'ti devo parlare'
+          }, {
+            "native": 'mum',
+            foreign: 'mamma',
+            nativeSentence: 'mum, can i have another cup of tea?',
+            foreignSentence: 'mamma, posso avere un\'altra tazza di tè?'
+          }, {
+            "native": 'look',
+            foreign: 'guarda',
+            nativeSentence: 'look at the blue sky',
+            foreignSentence: 'guarda il cielo blu'
+          }, {
+            "native": 'lady',
+            foreign: 'signora',
+            nativeSentence: 'who is that lady with a strange hat?',
+            foreignSentence: 'chi è quella signora con uno strano cappello?'
+          }, {
+            "native": 'big',
+            foreign: 'grande',
+            nativeSentence: 'they live in a big country house',
+            foreignSentence: 'loro vivono in una grande casa di campagna'
+          }, {
+            "native": 'there',
+            foreign: 'lì',
+            nativeSentence: 'your book is right there',
+            foreignSentence: 'il tuo libro è proprio lì'
+          }, {
+            "native": 'mother',
+            foreign: 'madre',
+            nativeSentence: 'my mother is an excellent cook',
+            foreignSentence: 'mia madre è un\'eccellente cuoca'
+          }, {
+            "native": 'can',
+            foreign: 'possiamo',
+            nativeSentence: 'can we talk about it later?',
+            foreignSentence: 'possiamo parlarne più tardi?'
+          }, {
+            "native": 'forward',
+            foreign: 'avanti',
+            nativeSentence: 'please, take one step forward',
+            foreignSentence: 'per favore, fai un passo avanti'
+          }, {
+            "native": 'to have',
+            foreign: 'avere',
+            nativeSentence: 'sleep is essential to have a luminous skin',
+            foreignSentence: 'il sonno è essenziale per avere una pelle luminosa'
+          }, {
+            "native": 'success',
+            foreign: 'successo',
+            nativeSentence: 'education is the key to success',
+            foreignSentence: 'l\'istruzione è la chiave del successo'
+          }, {
+            "native": 'was',
+            foreign: 'ero',
+            nativeSentence: 'i was a very shy child',
+            foreignSentence: 'ero un bimbo molto timido'
+          }, {
+            "native": 'woman',
+            foreign: 'donna',
+            nativeSentence: 'every man needs a woman',
+            foreignSentence: 'ogni uomo ha bisogno di una donna'
+          }, {
+            "native": 'new',
+            foreign: 'nuovo',
+            nativeSentence: 'there is a new flower in my garden',
+            foreignSentence: 'c\'è un nuovo fiore nel mio giardino'
+          }, {
+            "native": 'ah',
+            foreign: 'ah',
+            nativeSentence: 'ah, the good old days!',
+            foreignSentence: 'ah, i bei vecchi tempi!'
+          }, {
+            "native": 'do',
+            foreign: 'faccio',
+            nativeSentence: 'i do what i want',
+            foreignSentence: 'faccio quel che voglio'
+          }, {
+            "native": 'had',
+            foreign: 'aveva',
+            nativeSentence: 'she had a red old car',
+            foreignSentence: 'lei aveva una vecchia macchina rossa'
+          }, {
+            "native": 'our',
+            foreign: 'nostro',
+            nativeSentence: 'there is a rat in our garden',
+            foreignSentence: 'c\'è un topo nel nostro giardino'
+          }
+        ]
+      },
+      top225phrases: {
+        title: 'Phrases For The Top 200 - 225 Words',
+        subtitle: 'Phrases for the 200 - 225 most frequently used Italian words',
+        nextLevel: 'top250words',
+        data: [
+          {
+            "native": 'it seems like it is going to rain',
+            foreign: 'sembra che stia per piovere'
+          }, {
+            "native": 'how many people were at the party?',
+            foreign: 'quanta gente c\'era alla festa?'
+          }, {
+            "native": 'we must be proud of our son',
+            foreign: 'dobbiamo essere orgogliosi di nostro figlio'
+          }, {
+            "native": 'i don\'t like the way you live',
+            foreign: 'non mi piace il modo in cui vivi'
+          }, {
+            "native": 'i have three cats',
+            foreign: 'ho tre gatti'
+          }, {
+            "native": 'just a moment, please',
+            foreign: 'solo un momento, per favore'
+          }, {
+            "native": 'this way, please',
+            foreign: 'da questa parte, prego'
+          }, {
+            "native": 'i must talk to you',
+            foreign: 'ti devo parlare'
+          }, {
+            "native": 'mum, can i have another cup of tea?',
+            foreign: 'mamma, posso avere un\'altra tazza di tè?'
+          }, {
+            "native": 'look at the blue sky',
+            foreign: 'guarda il cielo blu'
+          }, {
+            "native": 'who is that lady with a strange hat?',
+            foreign: 'chi è quella signora con uno strano cappello?'
+          }, {
+            "native": 'they live in a big country house',
+            foreign: 'loro vivono in una grande casa di campagna'
+          }, {
+            "native": 'your book is right there',
+            foreign: 'il tuo libro è proprio lì'
+          }, {
+            "native": 'my mother is an excellent cook',
+            foreign: 'mia madre è un\'eccellente cuoca'
+          }, {
+            "native": 'can we talk about it later?',
+            foreign: 'possiamo parlarne più tardi?'
+          }, {
+            "native": 'please, take one step forward',
+            foreign: 'per favore, fai un passo avanti'
+          }, {
+            "native": 'sleep is essential to have a luminous skin',
+            foreign: 'il sonno è essenziale per avere una pelle luminosa'
+          }, {
+            "native": 'education is the key to success',
+            foreign: 'l\'istruzione è la chiave del successo'
+          }, {
+            "native": 'i was a very shy child',
+            foreign: 'ero un bimbo molto timido'
+          }, {
+            "native": 'every man needs a woman',
+            foreign: 'ogni uomo ha bisogno di una donna'
+          }, {
+            "native": 'there is a new flower in my garden',
+            foreign: 'c\'è un nuovo fiore nel mio giardino'
+          }, {
+            "native": 'ah, the good old days!',
+            foreign: 'ah, i bei vecchi tempi!'
+          }, {
+            "native": 'i do what i want',
+            foreign: 'faccio quel che voglio'
+          }, {
+            "native": 'she had a red old car',
+            foreign: 'lei aveva una vecchia macchina rossa'
+          }, {
+            "native": 'there is a rat in our garden',
+            foreign: 'c\'è un topo nel nostro giardino'
+          }
+        ]
+      },
+      top250words: {
+        title: 'Top 225 - 250 Words',
+        subtitle: 'The 225 - 250 most frequently used Italian words',
+        nextLevel: 'top250phrases',
+        data: [
+          {
+            "native": 'of the',
+            foreign: 'degli',
+            nativeSentence: 'ambrosia was the food of the gods',
+            foreignSentence: 'l\'ambrosia era il cibo degli dei'
+          }, {
+            "native": 'these',
+            foreign: 'questi',
+            nativeSentence: 'it\'s been raining a lot these days',
+            foreignSentence: 'è piovuto molto in questi giorni'
+          }, {
+            "native": 'are',
+            foreign: 'siete',
+            nativeSentence: 'are you sure about that?',
+            foreignSentence: 'sieti sicuri di ciò?'
+          }, {
+            "native": 'force',
+            foreign: 'forza',
+            nativeSentence: 'she is a force of nature',
+            foreignSentence: 'lei è una forza della natura'
+          }, {
+            "native": 'like',
+            foreign: 'piace',
+            nativeSentence: 'i like chocolate',
+            foreignSentence: 'mi piace il cioccolato'
+          }, {
+            "native": 'beautiful',
+            foreign: 'bella',
+            nativeSentence: 'she is the most beautiful girl in town',
+            foreignSentence: 'lei è la più bella ragazza in città'
+          }, {
+            "native": 'where',
+            foreign: 'dov\'',
+            nativeSentence: 'where is my hat?',
+            foreignSentence: 'dov\'è il mio cappello?'
+          }, {
+            "native": 'money',
+            foreign: 'soldi',
+            nativeSentence: 'it takes money to make money',
+            foreignSentence: 'ci vogliono soldi per fare soldi'
+          }, {
+            "native": 'had',
+            foreign: 'avevo',
+            nativeSentence: 'once i had a parrot named Bob',
+            foreignSentence: 'una volta avevo un pappagallo chiamato Bob'
+          }, {
+            "native": 'favour',
+            foreign: 'favore',
+            nativeSentence: 'can you do me a favour?',
+            foreignSentence: 'puoi farmi un favore?'
+          }, {
+            "native": 'were',
+            foreign: 'fosse',
+            nativeSentence: 'oh that it were so!',
+            foreignSentence: 'magari fosse così!'
+          }, {
+            "native": 'other',
+            foreign: 'altri',
+            nativeSentence: 'Mary likes to play with other children',
+            foreignSentence: 'a Mary piace giocare con altri bambini'
+          }, {
+            "native": 'sorry',
+            foreign: 'dispiace',
+            nativeSentence: 'i am sorry to disturb you',
+            foreignSentence: 'mi dispiace disturbarti'
+          }, {
+            "native": 'immediately',
+            foreign: 'subito',
+            nativeSentence: 'let\'s start immediately',
+            foreignSentence: 'cominciamo subito'
+          }, {
+            "native": 'inside',
+            foreign: 'dentro',
+            nativeSentence: 'the ring is inside the box',
+            foreignSentence: 'l\'anello è dentro la scatola'
+          }, {
+            "native": 'today',
+            foreign: 'oggi',
+            nativeSentence: 'today, it\'s a wonderful day',
+            foreignSentence: 'oggi, è una meravigliosa giornata'
+          }, {
+            "native": 'agree',
+            foreign: 'accordo',
+            nativeSentence: 'i agree with him',
+            foreignSentence: 'sono d\'accordo con lui'
+          }, {
+            "native": 'whole',
+            foreign: 'tutta',
+            nativeSentence: 'you don\'t know the whole story',
+            foreignSentence: 'tu non sai tutta la storia'
+          }, {
+            "native": 'name',
+            foreign: 'nome',
+            nativeSentence: 'i don\'t know his name',
+            foreignSentence: 'non so il suo nome'
+          }, {
+            "native": 'ok',
+            foreign: 'ok',
+            nativeSentence: 'it\'s ok',
+            foreignSentence: 'è ok'
+          }, {
+            "native": 'night',
+            foreign: 'notte',
+            nativeSentence: 'rome is a magical city at night',
+            foreignSentence: 'roma è una città magica di notte'
+          }, {
+            "native": 'these',
+            foreign: 'queste',
+            nativeSentence: 'these are my favourite shoes',
+            foreignSentence: 'queste sono le mie scarpe preferite'
+          }, {
+            "native": 'son',
+            foreign: 'figlio',
+            nativeSentence: 'my son is a doctor',
+            foreignSentence: 'mio figlio è un dottore'
+          }, {
+            "native": 'world',
+            foreign: 'mondo',
+            nativeSentence: 'i would like to travel all over the world',
+            foreignSentence: 'vorrei viaggiare in tutto il mondo'
+          }, {
+            "native": 'our',
+            foreign: 'nostra',
+            nativeSentence: 'our car needs repair',
+            foreignSentence: 'la nostra auto ha bisogno di riparazioni'
+          }
+        ]
+      },
+      top250phrases: {
+        title: 'Phrases For The Top 225 - 250 Words',
+        subtitle: 'Phrases for the 225 - 250 most frequently used Italian words',
+        nextLevel: 'top275words',
+        data: [
+          {
+            "native": 'ambrosia was the food of the gods',
+            foreign: 'l\'ambrosia era il cibo degli dei'
+          }, {
+            "native": 'it\'s been raining a lot these days',
+            foreign: 'è piovuto molto in questi giorni'
+          }, {
+            "native": 'are you sure about that?',
+            foreign: 'sieti sicuri di ciò?'
+          }, {
+            "native": 'she is a force of nature',
+            foreign: 'lei è una forza della natura'
+          }, {
+            "native": 'i like chocolate',
+            foreign: 'mi piace il cioccolato'
+          }, {
+            "native": 'she is the most beautiful girl in town',
+            foreign: 'lei è la più bella ragazza in città'
+          }, {
+            "native": 'where is my hat?',
+            foreign: 'dov\'è il mio cappello?'
+          }, {
+            "native": 'it takes money to make money',
+            foreign: 'ci vogliono soldi per fare soldi'
+          }, {
+            "native": 'once i had a parrot named Bob',
+            foreign: 'una volta avevo un pappagallo chiamato Bob'
+          }, {
+            "native": 'can you do me a favour?',
+            foreign: 'puoi farmi un favore?'
+          }, {
+            "native": 'oh that it were so!',
+            foreign: 'magari fosse così!'
+          }, {
+            "native": 'Mary likes to play with other children',
+            foreign: 'a Mary piace giocare con altri bambini'
+          }, {
+            "native": 'i am sorry to disturb you',
+            foreign: 'mi dispiace disturbarti'
+          }, {
+            "native": 'let\'s start immediately',
+            foreign: 'cominciamo subito'
+          }, {
+            "native": 'the ring is inside the box',
+            foreign: 'l\'anello è dentro la scatola'
+          }, {
+            "native": 'today, it\'s a wonderful day',
+            foreign: 'oggi, è una meravigliosa giornata'
+          }, {
+            "native": 'i agree with him',
+            foreign: 'sono d\'accordo con lui'
+          }, {
+            "native": 'you don\'t know the whole story',
+            foreign: 'tu non sai tutta la storia'
+          }, {
+            "native": 'i don\'t know his name',
+            foreign: 'non so il suo nome'
+          }, {
+            "native": 'it\'s ok',
+            foreign: 'è ok'
+          }, {
+            "native": 'rome is a magical city at night',
+            foreign: 'roma è una città magica di notte'
+          }, {
+            "native": 'these are my favourite shoes',
+            foreign: 'queste sono le mie scarpe preferite'
+          }, {
+            "native": 'my son is a doctor',
+            foreign: 'mio figlio è un dottore'
+          }, {
+            "native": 'i would like to travel all over the world',
+            foreign: 'vorrei viaggiare in tutto il mondo'
+          }, {
+            "native": 'our car needs repair',
+            foreign: 'la nostra auto ha bisogno di riparazioni'
+          }
+        ]
       }
     }
   }
@@ -3057,256 +3503,6 @@ languageScramble.data = {
 
 after150 = [
   {
-    "native": 'seems',
-    foreign: 'sembra',
-    nativeSentence: 'it seems like it is going to rain',
-    foreignSentence: 'sembra che stia per piovere'
-  }, {
-    "native": 'people',
-    foreign: 'gente',
-    nativeSentence: 'how many people were at the party?',
-    foreignSentence: 'quanta gente c\'era alla festa?'
-  }, {
-    "native": 'must',
-    foreign: 'dobbiamo',
-    nativeSentence: 'we must be proud of our son',
-    foreignSentence: 'dobbiamo essere orgogliosi di nostro figlio'
-  }, {
-    "native": 'way',
-    foreign: 'modo',
-    nativeSentence: 'i don\'t like the way you live',
-    foreignSentence: 'non mi piace il modo in cui vivi'
-  }, {
-    "native": 'three',
-    foreign: 'tre',
-    nativeSentence: 'i have three cats',
-    foreignSentence: 'ho tre gatti'
-  }, {
-    "native": 'moment',
-    foreign: 'momento',
-    nativeSentence: 'just a moment, please',
-    foreignSentence: 'solo un momento, per favore'
-  }, {
-    "native": 'please',
-    foreign: 'prego',
-    nativeSentence: 'this way, please',
-    foreignSentence: 'da questa parte, prego'
-  }, {
-    "native": 'talk',
-    foreign: 'parlare',
-    nativeSentence: 'i must talk to you',
-    foreignSentence: 'ti devo parlare'
-  }, {
-    "native": 'mum',
-    foreign: 'mamma',
-    nativeSentence: 'mum, can i have another cup of tea?',
-    foreignSentence: 'mamma, posso avere un\'altra tazza di tè?'
-  }, {
-    "native": 'look',
-    foreign: 'guarda',
-    nativeSentence: 'look at the blue sky',
-    foreignSentence: 'guarda il cielo blu'
-  }, {
-    "native": 'lady',
-    foreign: 'signora',
-    nativeSentence: 'who is that lady with a strange hat?',
-    foreignSentence: 'chi è quella signora con uno strano cappello?'
-  }, {
-    "native": 'big',
-    foreign: 'grande',
-    nativeSentence: 'they live in a big country house',
-    foreignSentence: 'loro vivono in una grande casa di campagna'
-  }, {
-    "native": 'there',
-    foreign: 'lì',
-    nativeSentence: 'your book is right there',
-    foreignSentence: 'il tuo libro è proprio lì'
-  }, {
-    "native": 'mother',
-    foreign: 'madre',
-    nativeSentence: 'my mother is an excellent cook',
-    foreignSentence: 'mia madre è un\'eccellente cuoca'
-  }, {
-    "native": 'can',
-    foreign: 'possiamo',
-    nativeSentence: 'can we talk about it later?',
-    foreignSentence: 'possiamo parlarne più tardi?'
-  }, {
-    "native": 'forward',
-    foreign: 'avanti',
-    nativeSentence: 'please, take one step forward',
-    foreignSentence: 'per favore, fai un passo avanti'
-  }, {
-    "native": 'to have',
-    foreign: 'avere',
-    nativeSentence: 'sleep is essential to have a luminous skin',
-    foreignSentence: 'il sonno è essenziale per avere una pelle luminosa'
-  }, {
-    "native": 'success',
-    foreign: 'successo',
-    nativeSentence: 'education is the key to success',
-    foreignSentence: 'l\'istruzione è la chiave del successo'
-  }, {
-    "native": 'was',
-    foreign: 'ero',
-    nativeSentence: 'i was a very shy child',
-    foreignSentence: 'ero un bimbo molto timido'
-  }, {
-    "native": 'woman',
-    foreign: 'donna',
-    nativeSentence: 'every man needs a woman',
-    foreignSentence: 'ogni uomo ha bisogno di una donna'
-  }, {
-    "native": 'new',
-    foreign: 'nuovo',
-    nativeSentence: 'there is a new flower in my garden',
-    foreignSentence: 'c\'è un nuovo fiore nel mio giardino'
-  }, {
-    "native": 'ah',
-    foreign: 'ah',
-    nativeSentence: 'ah, the good old days!',
-    foreignSentence: 'ah, i bei vecchi tempi!'
-  }, {
-    "native": 'do',
-    foreign: 'faccio',
-    nativeSentence: 'i do what i want',
-    foreignSentence: 'faccio quel che voglio'
-  }, {
-    "native": 'had',
-    foreign: 'aveva',
-    nativeSentence: 'she had a red old car',
-    foreignSentence: 'lei aveva una vecchia macchina rossa'
-  }, {
-    "native": 'our',
-    foreign: 'nostro',
-    nativeSentence: 'there is a rat in our garden',
-    foreignSentence: 'c\'è un topo nel nostro giardino'
-  }, {
-    "native": 'of+the',
-    foreign: 'degli',
-    nativeSentence: 'ambrosia was the food of the gods',
-    foreignSentence: 'l\'ambrosia era il cibo degli dei'
-  }, {
-    "native": 'these',
-    foreign: 'questi',
-    nativeSentence: 'it\'s been raining a lot these days',
-    foreignSentence: 'è piovuto molto in questi giorni'
-  }, {
-    "native": 'are',
-    foreign: 'siete',
-    nativeSentence: 'are you sure about that?',
-    foreignSentence: 'sieti sicuri di ciò?'
-  }, {
-    "native": 'force',
-    foreign: 'forza',
-    nativeSentence: 'she is a force of nature',
-    foreignSentence: 'lei è una forza della natura'
-  }, {
-    "native": 'like',
-    foreign: 'piace',
-    nativeSentence: 'i like chocolate',
-    foreignSentence: 'mi piace il cioccolato'
-  }, {
-    "native": 'beautiful',
-    foreign: 'bella',
-    nativeSentence: 'she is the most beautiful girl in town',
-    foreignSentence: 'lei è la più bella ragazza in città'
-  }, {
-    "native": 'where',
-    foreign: 'dov\'',
-    nativeSentence: 'where is my hat?',
-    foreignSentence: 'dov\'è il mio cappello?'
-  }, {
-    "native": 'money',
-    foreign: 'soldi',
-    nativeSentence: 'it takes money to make money',
-    foreignSentence: 'ci vogliono soldi per fare soldi'
-  }, {
-    "native": 'had',
-    foreign: 'avevo',
-    nativeSentence: 'once i had a parrot named Bob',
-    foreignSentence: 'una volta avevo un pappagallo chiamato Bob'
-  }, {
-    "native": 'favour',
-    foreign: 'favore',
-    nativeSentence: 'can you do me a favour?',
-    foreignSentence: 'puoi farmi un favore?'
-  }, {
-    "native": 'were',
-    foreign: 'fosse',
-    nativeSentence: 'oh that it were so!',
-    foreignSentence: 'magari fosse così!'
-  }, {
-    "native": 'other',
-    foreign: 'altri',
-    nativeSentence: 'Mary likes to play with other children',
-    foreignSentence: 'a Mary piace giocare con altri bambini'
-  }, {
-    "native": 'sorry',
-    foreign: 'dispiace',
-    nativeSentence: 'i am sorry to disturb you',
-    foreignSentence: 'mi dispiace disturbarti'
-  }, {
-    "native": 'immediately',
-    foreign: 'subito',
-    nativeSentence: 'let\'s start immediately',
-    foreignSentence: 'cominciamo subito'
-  }, {
-    "native": 'inside',
-    foreign: 'dentro',
-    nativeSentence: 'the ring is inside the box',
-    foreignSentence: 'l\'anello è dentro la scatola'
-  }, {
-    "native": 'today',
-    foreign: 'oggi',
-    nativeSentence: 'today, it\'s a wonderful day',
-    foreignSentence: 'oggi, è una meravigliosa giornata'
-  }, {
-    "native": 'agree',
-    foreign: 'accordo',
-    nativeSentence: 'i agree with him',
-    foreignSentence: 'sono d\'accordo con lui'
-  }, {
-    "native": 'whole',
-    foreign: 'tutta',
-    nativeSentence: 'you don\'t know the whole story',
-    foreignSentence: 'tu non sai tutta la storia'
-  }, {
-    "native": 'name',
-    foreign: 'nome',
-    nativeSentence: 'i don\'t know his name',
-    foreignSentence: 'non so il suo nome'
-  }, {
-    "native": 'ok',
-    foreign: 'ok',
-    nativeSentence: 'it\'s ok!',
-    foreignSentence: 'è ok!'
-  }, {
-    "native": 'night',
-    foreign: 'notte',
-    nativeSentence: 'Rome is a magical city at night',
-    foreignSentence: 'Roma è una città magica di notte'
-  }, {
-    "native": 'these',
-    foreign: 'queste',
-    nativeSentence: 'these are my favourite shoes',
-    foreignSentence: 'queste sono le mie scarpe preferite'
-  }, {
-    "native": 'son',
-    foreign: 'figlio',
-    nativeSentence: 'my son is a doctor',
-    foreignSentence: 'mio figlio è un dottore'
-  }, {
-    "native": 'world',
-    foreign: 'mondo',
-    nativeSentence: 'i would like to travel all over the world',
-    foreignSentence: 'vorrei viaggiare in tutto il mondo'
-  }, {
-    "native": 'our',
-    foreign: 'nostra',
-    nativeSentence: 'our car needs repair',
-    foreignSentence: 'la nostra auto ha bisogno di riparazioni'
-  }, {
     "native": 'to know',
     foreign: 'sapere',
     nativeSentence: 'it is important to know the truth',
