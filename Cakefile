@@ -40,10 +40,10 @@ task 'build:site', 'Build the site files', ->
 task 'build:language_scramble', 'Build the language scramble app', ->
     execCmds [
         'cake build:site'
-        'coffee --compile --bare --output apps/language_scramble/js src/apps/language_scramble/js/*.coffee'
-        'cp build/common/pages/puzzles/lib/language_scramble.js apps/language_scramble/js/language_scramble.js'
-        'cp ender.js apps/language_scramble/js/ender.js'
-        'cp -r apps/language_scramble/* ~/workspace/puzzleschoolapps/languagescramble/ios/www/'
+        'coffee --compile --bare --output apps/language_scramble/web src/apps/language_scramble/js/*.coffee'
+        'cp build/common/pages/puzzles/lib/language_scramble.js apps/language_scramble/web/language_scramble.js'
+        'cp ender.js apps/language_scramble/web/ender.js'
+        'cp -r apps/language_scramble/* ~/workspace/puzzleschoolapps/languagescramble/'
     ]
 
     

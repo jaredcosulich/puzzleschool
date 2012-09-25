@@ -203,6 +203,9 @@ languageScramble.ViewHelper = (function() {
     var endDrag, moveDrag,
       _this = this;
     $(document.body).bind('keypress', function(e) {
+      if (_this.initializingScramble) {
+        return;
+      }
       if (_this.clickAreaHasFocus || $('.opaque_screen').css('opacity') > 0) {
         return;
       }
@@ -210,6 +213,9 @@ languageScramble.ViewHelper = (function() {
       return $('#clickarea').trigger('keypress', e);
     });
     moveDrag = function(e) {
+      if (_this.initializingScramble) {
+        return;
+      }
       if (!_this.dragging) {
         return;
       }
@@ -237,6 +243,9 @@ languageScramble.ViewHelper = (function() {
     };
     endDrag = function(e, force) {
       var currentX, currentY, guess, lastX, lastY, x, y;
+      if (_this.initializingScramble) {
+        return;
+      }
       if (!force && (!_this.dragPathX || !_this.dragPathY || _this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
         $.timeout(40, function() {
           if (_this.dragging != null) {
@@ -245,9 +254,17 @@ languageScramble.ViewHelper = (function() {
         });
         return;
       }
+      if (_this.actionHandled) {
+        return;
+      }
+      _this.actionHandled = true;
+      $.timeout(50, function() {
+        return _this.actionHandled = false;
+      });
       if (e.preventDefault != null) {
         e.preventDefault();
       }
+      console.log("DOCUMENT END DRAG");
       currentX = _this.dragPathX.pop();
       currentY = _this.dragPathY.pop();
       lastX = ((function() {
@@ -304,6 +321,9 @@ languageScramble.ViewHelper = (function() {
     });
     $('#clickarea').bind('keydown', function(e) {
       var guessedLetters, lastLetterAdded;
+      if (_this.initializingScramble) {
+        return;
+      }
       if (e.keyCode === 8) {
         lastLetterAdded = _this.lettersAdded.pop();
         guessedLetters = $(".guesses .letter_" + lastLetterAdded);
@@ -315,6 +335,9 @@ languageScramble.ViewHelper = (function() {
     lastPress = null;
     return $('#clickarea').bind('keypress', function(e) {
       var char, foreignChar, letter, nativeChar, openGuess;
+      if (_this.initializingScramble) {
+        return;
+      }
       if (lastPress && new Date() - lastPress < 10) {
         return;
       }
@@ -369,7 +392,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.bindLetter = function(letter) {
-    var click, startDrag, touchEnd,
+    var click, handleMove, startDrag, touchEnd,
       _this = this;
     this.dragging = null;
     this.dragAdjustmentX = 0;
@@ -378,9 +401,17 @@ languageScramble.ViewHelper = (function() {
     this.dragPathY = [];
     click = function(e) {
       var alreadyDragged, containerClass, guess;
-      if (_this.dragPathX.length > 1 || _this.dragPathY > 1) {
+      if (_this.initializingScramble) {
         return;
       }
+      if (_this.actionHandled) {
+        return;
+      }
+      _this.actionHandled = true;
+      $.timeout(50, function() {
+        return _this.actionHandled = false;
+      });
+      console.log("LETTER CLICK");
       if (_this.dragging && _this.dragging.css('position') === 'absolute') {
         alreadyDragged = true;
         _this.dragging.css({
@@ -389,7 +420,7 @@ languageScramble.ViewHelper = (function() {
         _this.dragging = null;
       }
       containerClass = _this.containerClassName(letter);
-      if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
+      if ((letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) || letter.hasClass('recent_guess')) {
         _this.replaceLetterWithGuess(letter);
         return _this.replaceBlankWithLetter(letter);
       } else {
@@ -404,6 +435,9 @@ languageScramble.ViewHelper = (function() {
       }
     };
     startDrag = function(e) {
+      if (_this.initializingScramble) {
+        return;
+      }
       if (e.preventDefault != null) {
         e.preventDefault();
       }
@@ -424,7 +458,10 @@ languageScramble.ViewHelper = (function() {
     letter.bind('touchend', click);
     letter.bind('mousedown', startDrag);
     letter.bind('touchstart', startDrag);
-    letter.bind('touchmove', function(e) {
+    handleMove = function(e) {
+      if (_this.initializingScramble) {
+        return;
+      }
       if (e.preventDefault) {
         e.preventDefault();
       }
@@ -446,18 +483,30 @@ languageScramble.ViewHelper = (function() {
         top: _this.clientY(e) - _this.dragAdjustmentY,
         left: _this.clientX(e) - _this.dragAdjustmentX
       });
-    });
+    };
+    letter.bind('touchmove', handleMove);
     touchEnd = function(e, force) {
       var currentX, currentY, guess, lastX, lastY, x, y;
+      if (_this.initializingScramble) {
+        return;
+      }
       if (!force && (!_this.dragPathX || !_this.dragPathY || _this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
         $.timeout(40, function() {
           return touchEnd(e, true);
         });
         return;
       }
+      if (_this.actionHandled) {
+        return;
+      }
+      _this.actionHandled = true;
+      $.timeout(50, function() {
+        return _this.actionHandled = false;
+      });
       if (e.preventDefault != null) {
         e.preventDefault();
       }
+      console.log("LETTER END DRAG");
       currentX = _this.dragPathX.pop();
       currentY = _this.dragPathY.pop();
       lastX = ((function() {
@@ -501,6 +550,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.newScramble = function() {
     var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
+    this.initializingScramble = true;
     this.answerTimes || (this.answerTimes = []);
     this.answerTimes.push(new Date());
     this.lettersAdded = [];
@@ -528,7 +578,8 @@ languageScramble.ViewHelper = (function() {
     this.resize();
     this.assignColors('scrambled');
     this.assignColors('guesses');
-    return this.scrambleScrambleArea();
+    this.scrambleScrambleArea();
+    return this.initializingScramble = false;
   };
 
   ViewHelper.prototype.selectOption = function() {
@@ -740,12 +791,17 @@ languageScramble.ViewHelper = (function() {
       wordGroups = container.find('.word_group');
       if (wordGroups.length > 1) {
         centerWordGroups = function(lg, rg) {
-          var containerRight, right;
+          var containerRight, right, space;
           if (!rg) {
             rg = lg;
           }
           containerRight = container.offset().left + container.offset().width;
           right = rg.offset().left + rg.offset().width;
+          if ((space = rg.children()[0])) {
+            if (space.className.indexOf('space') > -1) {
+              right += $(space).width();
+            }
+          }
           return lg.css({
             marginLeft: (containerRight - right) / 2
           });
@@ -790,12 +846,13 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.resize = function() {
-    var increase, increment, letter, maxFontSize, targetHeight;
+    var increase, increment, letter, maxFontSize, targetHeight, windowWidth;
     letter = $(this.$('.scrambled').find('.letter')[0]);
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
     targetHeight = this.$('.scramble_content').height();
-    maxFontSize = window.innerWidth / 15;
+    windowWidth = window.innerWidth || window.landwidth;
+    maxFontSize = windowWidth / 15;
     increment = maxFontSize;
     while (increment >= 1) {
       if (increase && this.letterFontSize >= maxFontSize) {
@@ -962,6 +1019,7 @@ languageScramble.ViewHelper = (function() {
       letter.removeClass('wrong_letter');
       letter.removeClass('correct_letter');
     }
+    letter.removeClass('recent_guess');
     blankLetter.remove();
     return this.bindLetter(letter);
   };
@@ -975,6 +1033,7 @@ languageScramble.ViewHelper = (function() {
     guess = $(guess);
     letter.remove().insertBefore(guess, this.$('.guesses'));
     letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
+    letter.removeClass('recent_guess');
     guess.remove();
     this.bindLetter(letter);
     this.lettersAdded.push(letter.html());
@@ -988,6 +1047,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.replaceLetterWithGuess = function(letter) {
     var actualLetter, letterAddedIndex;
+    letter.removeClass('recent_guess');
     letterAddedIndex = this.lettersAdded.indexOf(letter.html());
     this.lettersAdded.slice(letterAddedIndex, letterAddedIndex + 1);
     actualLetter = letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[1];
@@ -995,7 +1055,8 @@ languageScramble.ViewHelper = (function() {
     if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
       letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
       letter.removeClass('wrong_letter');
-      return letter.removeClass('correct_letter');
+      letter.removeClass('correct_letter');
+      return letter.addClass('recent_guess');
     }
   };
 
@@ -1165,6 +1226,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.next = function() {
     var boundary, correct, correctSentence, displayedSentence, highlighted, nextShown, scrambled, showNext, _i, _len, _ref,
       _this = this;
+    this.initializingScramble = true;
     correct = $(document.createElement('DIV'));
     if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
       correctSentence = this.scrambleInfo["" + this.activeType + "Sentence"];
@@ -3536,6 +3598,966 @@ after150 = [
     foreign: 'sicuro',
     nativeSentence: 'you can never be sure of anything',
     foreignSentence: 'non puoi mai essere sicuro di nulla'
+  }, {
+    "native": 'her',
+    foreign: 'suoi',
+    nativeSentence: 'I like her new boots',
+    foreignSentence: 'mi piacciono I suoi nuovi stivali'
+  }, {
+    "native": 'think',
+    foreign: 'penso',
+    nativeSentence: ' I always think about you',
+    foreignSentence: 'ti penso sempre'
+  }, {
+    "native": 'fright',
+    foreign: 'paura',
+    nativeSentence: 'what a fright!',
+    foreignSentence: 'che paura!'
+  }, {
+    "native": 'idea',
+    foreign: 'idea',
+    nativeSentence: 'I think it is a good idea',
+    foreignSentence: 'penso che sia una buona idea'
+  }, {
+    "native": 'head',
+    foreign: 'testa',
+    nativeSentence: 'he has his head in the clouds',
+    foreignSentence: 'ha la testa tra le nuvole'
+  }, {
+    "native": 'dad',
+    foreign: 'papà',
+    nativeSentence: 'my dad is very protective of me',
+    foreignSentence: 'il mio papà è molto protettivo con me'
+  }, {
+    "native": 'right',
+    foreign: 'giusto',
+    nativeSentence: 'to be in the right place at the right time',
+    foreignSentence: 'essere al posto giusto al momento giusto'
+  }, {
+    "native": 'eh',
+    foreign: 'eh',
+    nativeSentence: 'eh, that’s life!',
+    foreignSentence: 'eh, questa è la vita!'
+  }, {
+    "native": 'would like',
+    foreign: 'vorrei',
+    nativeSentence: 'I would like a piece of cake',
+    foreignSentence: 'vorrei una fetta di torta'
+  }, {
+    "native": 'hear',
+    foreign: 'senti',
+    nativeSentence: 'don’t you hear strange noises?',
+    foreignSentences: 'non senti strani rumori?'
+  }, {
+    "native": 'early',
+    foreign: 'presto',
+    nativeSentence: 'I always wake up early in the morning',
+    foreignSentence: 'mi sveglio sempre presto al mattino'
+  }, {
+    "native": 'men',
+    foreign: 'uomini',
+    nativeSentence: 'men must be brave and strong',
+    foreignSentence: 'gli uomini devono essere coraggiosi e forti'
+  }, {
+    "native": 'the',
+    foreign: 'il',
+    nativeSentence: 'the sea is rough today',
+    foreignSentence: 'il mare è agitato oggi'
+  }, {
+    "native": 'stop',
+    foreign: 'basta',
+    nativeSentence: 'stop talking',
+    foreignSentence: 'basta parlare'
+  }, {
+    "native": 'might',
+    foreign: 'potrebbe',
+    nativeSentence: 'she might be wrong',
+    foreignSentence: 'lei potrebbe sbagliarsi'
+  }, {
+    "native": 'same',
+    foreign: 'stesso',
+    nativeSentence: 'she is wearing the same dress as yesterday',
+    foreignSentence: 'lei indossa lo stesso abito di ieri'
+  }, {
+    "native": 'had',
+    foreign: 'avuto',
+    nativeSentence: 'I had no time to say goodbye',
+    foreignSentence: 'non ho avuto tempo di salutare'
+  }, {
+    "native": 'door',
+    foreign: 'porta',
+    nativeSentence: 'please, close the door',
+    foreignSentence: 'per favore, chiudi la porta'
+  }, {
+    "native": 'were',
+    foreign: 'erano',
+    nativeSentence: 'they were bored with the game',
+    foreignSentence: 'erano annoiati dal gioco'
+  }, {
+    "native": 'to be',
+    foreign: 'stare',
+    nativeSentence: 'you can not be in two places at once',
+    foreignSentence: 'non puoi stare in due posti contemporaneamente'
+  }, {
+    "native": 'good',
+    foreign: 'buona',
+    nativeSentence: 'any excuse is good for him',
+    foreignSentence: 'ogni scusa è buona per lui'
+  }, {
+    "native": 'therefore',
+    foreign: 'quindi',
+    nativeSentence: 'I think, therefore I am',
+    foreignSentence: 'penso, quindi sono'
+  }, {
+    "native": 'do it',
+    foreign: 'farlo',
+    nativeSentence: 'we must do it as soon as possible',
+    foreignSentence: 'dobbiamo farlo il più presto possibile'
+  }, {
+    "native": 'just',
+    foreign: 'appena',
+    nativeSentence: 'he has just arrived in town',
+    foreignSentence: 'lui è appena arrivato in città'
+  }, {
+    "native": 'have',
+    foreign: 'abbia',
+    nativeSentence: 'she is the prettiest girl I have ever seen',
+    foreignSentence: 'è la ragazza più carina che abbia mai visto'
+  }, {
+    "native": 'reason',
+    foreign: 'ragione',
+    nativeSentence: 'you have no reason to complain',
+    foreignSentence: 'non hai ragione di lamentarti'
+  }, {
+    "native": 'heard',
+    foreign: 'sentito',
+    nativeSentence: 'I heard you are leaving your job',
+    foreignSentence: 'ho sentito che lascerai il tuo lavoro'
+  }, {
+    "native": 'boys',
+    foreign: 'ragazzi',
+    nativeSentence: 'boys like to watch sports on tv',
+    foreignSentence: 'ai ragazzi piace guardare lo sport in tv'
+  }, {
+    "native": 'tomorrow',
+    foreign: 'domani',
+    nativeSentence: 'I am going to the cinema tomorrow',
+    foreignSentence: 'andrò al cinema domani'
+  }, {
+    "native": 'girl',
+    foreign: 'ragazza',
+    nativeSentence: 'that girl has a great sense of humor',
+    foreignSentence: 'quella ragazza ha un gran senso dell’umorismo'
+  }, {
+    "native": 'boy',
+    foreign: 'ragazzo',
+    nativeSentence: 'that boy is so boring',
+    foreignSentence: 'quel ragazzo è così noioso'
+  }, {
+    "native": 'together',
+    foreign: 'insieme',
+    nativeSentence: 'they are always together',
+    foreignSentence: 'stanno sempre insieme'
+  }, {
+    "native": 'under',
+    foreign: 'sotto',
+    nativeSentence: 'the cat is under the table',
+    foreignSentence: 'il gatto è sotto al tavolo'
+  }, {
+    "native": 'wanted',
+    foreign: 'volevo',
+    nativeSentence: 'I wanted to be alone',
+    foreignSentence: 'volevo stare solo'
+  }, {
+    "native": 'ready',
+    foreign: 'pronto',
+    nativeSentence: 'are you ready?',
+    foreignSentence: 'sei pronto?'
+  }, {
+    "native": 'in the',
+    foreign: 'nei',
+    nativeSentence: 'I met a bear in the woods',
+    foreignSentence: 'ho incontrato un orso nei boschi'
+  }, {
+    "native": 'that',
+    foreign: 'ciò',
+    nativeSentence: 'that is all I can say',
+    foreignSentence: 'è tutto ciò che posso dire'
+  }, {
+    "native": 'times',
+    foreign: 'volte',
+    nativeSentence: 'I have been to Italy many times',
+    foreignSentence: 'sono stato in Italia molte volte'
+  }, {
+    "native": 'understood',
+    foreign: 'capito',
+    nativeSentence: 'have you understood?',
+    foreignSentence: 'hai capito?'
+  }, {
+    "native": 'happens',
+    foreign: 'succede',
+    nativeSentence: 'sometimes something unexpected happens',
+    foreignSentence: 'a volte succede qualcosa di inaspettato'
+  }, {
+    "native": 'taken',
+    foreign: 'preso',
+    nativeSentence: 'I have taken notes',
+    foreignSentence: 'ho preso appunti'
+  }, {
+    "native": 'doing',
+    foreign: 'facendo',
+    nativeSentence: 'what are you doing?',
+    foreignSentence: 'cosa stai facendo?'
+  }, {
+    "native": 'nice',
+    foreign: 'piacere',
+    nativeSentence: 'nice to meet you',
+    foreignSentence: 'piacere di conoscerla'
+  }, {
+    "native": 'dead',
+    foreign: 'morto',
+    nativeSentence: 'he is dead to us',
+    foreeignSentence: 'lui è morto per noi'
+  }, {
+    "native": 'your',
+    foreign: 'tuoi',
+    nativeSentence: 'claim your rights',
+    foreignSentence: 'rivendica I tuoi diritti'
+  }, {
+    "native": 'captain',
+    foreign: 'capitano',
+    nativeSentence: 'the captain abandoned the ship',
+    foreignSentence: 'il capitano ha abbandonato la nave'
+  }, {
+    "native": 'bed',
+    foreign: 'letto',
+    nativeSentence: 'it is time to go to bed',
+    foreignSentence: 'è ora di andare a letto'
+  }, {
+    "native": 'story',
+    foreign: 'storia',
+    nativeSentence: 'it is always the same old story',
+    foreignSentence: 'è sempre la solita vecchia storia'
+  }, {
+    "native": 'case',
+    foreign: 'caso',
+    nativeSentence: 'call me in case of emergency',
+    foreignSentence: 'chiamami in caso di emergenza'
+  }, {
+    "native": 'found',
+    foreign: 'trovato',
+    nativeSentence: 'I found a ring on the street',
+    foreignSentence: 'ho trovato un anello per strada'
+  }, {
+    "native": 'friends',
+    foreign: 'amici',
+    nativeSentence: 'they are my best friends',
+    foreignSentence: 'loro sono I miei migliori amici'
+  }, {
+    "native": 'to come',
+    foreign: 'venire',
+    nativeSentence: 'the best is yet to come',
+    foreignSentence: 'il meglio deve ancora venire'
+  }, {
+    "native": 'say',
+    foreign: 'dico',
+    nativeSentence: 'every night I say a prayer',
+    foreignSentence: 'ogni sera dico una preghiera'
+  }, {
+    "native": 'understand',
+    foreign: 'capisco',
+    nativeSentence: 'I understand what you mean',
+    foreeignSentence: 'capisco ciò che vuoi dire'
+  }, {
+    "native": 'problem',
+    foreign: 'problema',
+    nativeSentence: 'you need to solve the problem',
+    foreignSentence: 'hai bisogno di risolvere il problema'
+  }, {
+    "native": 'until',
+    foreign: 'fino',
+    nativeSentence: 'I will be busy until tomorrow night',
+    foreignSentence: 'sarò impegnato fino a domani sera'
+  }, {
+    "native": 'guy',
+    foreign: 'tipo',
+    nativeSentence: 'who is that guy?',
+    foreignSentence: 'chi è quell tipo?'
+  }, {
+    "native": 'there',
+    foreign: 'là',
+    nativeSentence: 'go over there',
+    foreignSentence: 'vai là'
+  }, {
+    "native": 'here',
+    foreign: 'qua',
+    nativeSentence: 'come here!',
+    foreignSentence: 'vieni qua!'
+  }, {
+    "native": ' have',
+    foreign: 'aver',
+    nativeSentence: 'have no fear!',
+    foreignSentence: 'non aver paura!'
+  }, {
+    "native": 'days',
+    foreign: 'giorni',
+    nativeSentence: 'I am working a lot these days',
+    foreignSentence: 'sto lavorando molto in questi giorni'
+  }, {
+    "native": 'fuck',
+    foreign: 'cazzo',
+    nativeSentence: 'what the fuck do you want?',
+    foreignSentence: 'che cazzo vuoi?'
+  }, {
+    "native": 'okay',
+    foreign: 'okay',
+    nativeSentence: 'is everything okay?',
+    foreignSentence: 'è tutto okay?'
+  }, {
+    "native": 'nothing',
+    foreign: 'nulla',
+    nativeSentence: 'there is nothing to do',
+    foreignSentence: 'non c’è nulla da fare'
+  }, {
+    "native": 'beautiful',
+    foreign: 'bello',
+    nativeSentence: 'your new coat is very beautiful',
+    foreeignSentence: 'il tuo cappotto nuovo è molto bello'
+  }, {
+    "native": 'people',
+    foreign: 'persone',
+    nativeSentence: 'they are nice people',
+    foreignSentence: 'sono persone simpatiche'
+  }, {
+    "native": 'good',
+    foreign: 'buon',
+    nativeSentence: 'good morning!',
+    foreignSentence: 'buon giorno!'
+  }, {
+    "native": 'earth',
+    foreign: 'terra',
+    nativeSentence: 'pollutionis destroying the earth',
+    foreignSentence: 'l’inquinamento sta distruggendo la terra'
+  }, {
+    "native": 'gave',
+    foreign: 'dato',
+    nativeSentence: 'the teacher gave the whole class one hour detention',
+    foreignSentence: 'l’insegnante ha dato un’ora di punizione a tutta la classe'
+  }, {
+    "native": 'second',
+    foreign: 'secondo',
+    nativeSentence: 'I will be back in a second',
+    foreignSentence: 'torno tra un secondo'
+  }, {
+    "native": 'movie',
+    foreign: 'film',
+    nativeSentence: 'the movie was about a love story',
+    foreignSentence: 'il film riguardava una storia d’amore'
+  }, {
+    "native": 'in the',
+    foreign: 'nell’',
+    nativeSentence: 'there is something in the air',
+    foreignSentence: 'c’è qualcosa nell’aria'
+  }, {
+    "native": 'hand',
+    foreign: 'mano',
+    nativeSentence: 'give me your hand',
+    foreignSentence: 'dammi la mano'
+  }, {
+    "native": 'do',
+    foreign: 'facciamo',
+    nativeSentence: 'we are what we do',
+    foreignSentence: 'siamo quell che facciamo'
+  }, {
+    "native": 'see',
+    foreign: 'vediamo',
+    nativeSentence: 'we see her every day at school',
+    foreignSentence: 'la vediamo a scuola tutti i giorni'
+  }, {
+    "native": 'see',
+    foreign: 'vedo',
+    nativeSentence: 'I see a shadow behind the window',
+    foreignSentence: 'vedo un’ombra dietro la finestra'
+  }, {
+    "native": 'are',
+    foreign: 'stanno',
+    nativeSentence: 'the books are on the table',
+    foreignSentence: 'I libri stanno sul tavolo'
+  }, {
+    "native": 'have',
+    foreign: 'avrei',
+    nativeSentence: 'I should have studied harder',
+    foreignSentence: 'avrei dovuto studiare di più'
+  }, {
+    "native": 'to take',
+    foreign: 'prendere',
+    nativeSentence: 'you have to take the medicin',
+    foreignSentence: 'devi prendere la medicina'
+  }, {
+    "native": 'say',
+    foreign: 'dici',
+    nativesentence: 'you always say the right thing',
+    foreignSentence: 'dici sempre la cosa giusta'
+  }, {
+    "native": 'need',
+    foreign: 'serve',
+    nativeSentence: 'there is no need for anger',
+    foreignSentence: 'non serve arrabbiarsi'
+  }, {
+    "native": 'dead',
+    foreign: 'morte',
+    nativeSentence: 'four people are dead after a car accident yesterday',
+    foreignSentence: 'quattro persone sono morte dopo un incidente d’auto ieri'
+  }, {
+    "native": 'less',
+    foreign: 'meno',
+    nativeSentence: 'it is less complicated then you think',
+    foreignSentence: 'è meno complicato di quanto pensi'
+  }, {
+    "native": 'city',
+    foreign: 'città',
+    nativeSentence: 'living in a big city is stressful',
+    foreignSentence: 'vivere in una grande città è stressante'
+  }, {
+    "native": 'eyes',
+    foreign: 'occhi',
+    nativeSentence: 'I can not keep my eyes open',
+    foreignSentence: 'non riesco a tenere gli occhi aperti'
+  }, {
+    "native": 'end',
+    foreign: 'fine',
+    nativeSentence: 'from beginning to end',
+    foreignSentence: 'dall’inizio alla fine'
+  }, {
+    "native": 'mr',
+    foreign: 'sig',
+    nativeSentence: 'mr Smith has two children',
+    foreignSentence: 'il sig Smith ha due figli'
+  }, {
+    "native": 'darling',
+    foreign: 'tesoro',
+    nativeSentence: 'I miss you darling',
+    foreignSentence: 'mi manchi tesoro'
+  }, {
+    "native": 'excuse',
+    foreign: 'scusi',
+    nativeSentence: 'excuse me, what time is it?',
+    foreignSentence: 'scusi, che ora è?'
+  }, {
+    "native": 'first',
+    foreign: 'primo',
+    nativeSentence: 'Armstrong was the first man to walk on the moon',
+    foreignSentence: 'Armstrong fu il primo uomo a camminare sulla luna'
+  }, {
+    "native": 'think',
+    foreign: 'credi',
+    nativeSentence: 'do as you think best',
+    foreignSentence: 'fai come meglio credi'
+  }, {
+    "native": 'hi',
+    foreign: 'salve',
+    nativeSentence: 'hi everybody!',
+    foreignSentence: 'salve a tutti!'
+  }, {
+    "native": 'ship',
+    foreign: 'nave',
+    nativeSentence: 'rats leave a sinking ship',
+    foreignSentence: 'I topi abbandonano una nave che affonda'
+  }, {
+    "native": 'are',
+    foreign: 'stiamo',
+    nativeSentence: 'we are looking for a new house',
+    foreignSentence: 'stiamo cercando una nuova casa'
+  }, {
+    "native": 'evening',
+    foreign: 'sera',
+    nativeSentence: 'I am leaving on Saturday evening',
+    foreignSentence: 'partirò sabato sera'
+  }, {
+    "native": 'slow',
+    foreign: 'piano',
+    nativeSentence: 'please slow down',
+    foreignSentence: 'per favore vai più piano'
+  }, {
+    "native": 'hear',
+    foreign: 'sento',
+    nativeSentence: 'I hear the church bells',
+    foreignSentence: 'sento le campane della chiesa'
+  }, {
+    "native": 'car',
+    foreign: 'macchina',
+    nativeSentence: 'my brother has a vintage car',
+    foreignSentence: 'mio fratello ha una  macchina d’epoca'
+  }, {
+    "native": 'your',
+    foreign: 'vostro',
+    nativeSentence: 'your dog is very aggressive',
+    foreignSentence: 'il vostro cane è molto aggressivo'
+  }, {
+    "native": 'hands',
+    foreign: 'mani',
+    nativeSentence: 'you are in good hands',
+    foreignSentence: 'sei in buone mani'
+  }, {
+    "native": 'either',
+    foreign: 'neanche',
+    nativeSentence: 'I can not do it either',
+    foreignSentence: 'neanche io posso farlo'
+  }, {
+    "native": 'from the',
+    foreign: 'dall’',
+    nativeSentence: 'the station is not far from the hotel',
+    foreignSentence: 'la stazione non è lontana dall’albergo'
+  }, {
+    "native": 'doctor',
+    foreign: 'dottore',
+    nativeSentence: 'I went to the doctor yesterday',
+    foreignSentence: 'ieri sono andato dal dottore'
+  }, {
+    "native": 'what',
+    foreign: 'quale',
+    nativeSentence: 'what is your favourite book?',
+    foreignSentence: 'quale è il tuo libro preferito?'
+  }, {
+    "native": 'enough',
+    foreign: 'abbastanza',
+    nativeSentence: 'have you got enough chocolate for the cake?',
+    foreignSentence: 'hai abbastanza cioccolato per la torta?'
+  }, {
+    "native": 'late',
+    foreign: 'tardi',
+    nativeSentence: 'it is getting late',
+    foreignSentence: 'si sta facendo tardi'
+  }, {
+    "native": 'fine',
+    foreign: 'bel',
+    nativeSentence: 'what a fine weather we have today!',
+    foreignSentence: 'che bel tempo c’è oggi!'
+  }, {
+    "native": 'heart',
+    foreign: 'cuore',
+    nativeSentence: 'follow your heart',
+    foreignSentence: 'segui il tuo cuore'
+  }, {
+    "native": 'family',
+    foreign: 'famiglia',
+    nativeSentence: 'sunday is family day',
+    foreignSentence: 'la domenica è il giorno della famiglia'
+  }, {
+    "native": 'to do',
+    foreign: 'far',
+    nativeSentence: 'it’s time to do something',
+    foreignSentence: 'è tempo di far qualcosa'
+  }, {
+    "native": 'have been',
+    foreign: 'stati',
+    nativeSentence: 'all items have been shipped',
+    foreignSentence: 'tutti gli articoli sono stati spediti'
+  }, {
+    "native": 'help',
+    foreign: 'aiuto',
+    nativeSentence: 'call me if you need help',
+    foreignSentence: 'chiamami se hai bisogno di aiuto'
+  }, {
+    "native": 'devil',
+    foreign: 'diavolo',
+    nativeSentence: 'speak of the devil and he doth appear',
+    foreignSentence: 'parli del diavolo e spuntano le corna'
+  }, {
+    "native": 'our',
+    foreign: 'nostri',
+    nativeSentence: 'our kids love to paint',
+    foreignSentence: 'ai nostril figli piace dipingere'
+  }, {
+    "native": 'with',
+    foreign: 'col',
+    nativeSentence: 'if you play with fire you get burned',
+    foreignSentence: 'se giochi col fuoco ti scotti'
+  }, {
+    "native": 'almost',
+    foreign: 'quasi',
+    nativeSentence: 'it’s almost ten o’clock',
+    foreignSentence: 'sono quasi le dieci'
+  }, {
+    "native": 'police',
+    foreign: 'polizia',
+    nativeSentence: 'the police arrested a thief',
+    foreignSentence: 'la polizia ha arrestato un ladro'
+  }, {
+    "native": 'boss',
+    foreign: 'capo',
+    nativeSentence: 'my boss gave me a promotion',
+    foreignSentence: 'il mio capo mi ha dato una promozione'
+  }, {
+    "native": 'would have',
+    foreign: 'avrebbe',
+    nativeSentence: 'who would have tought it?',
+    foreignSentence: 'chi l’avrebbe pensato?'
+  }, {
+    "native": 'those',
+    foreign: 'quei',
+    nativeSentence: 'put those books in the bookcase',
+    foreignSentence: 'metti quei libri nello scaffale'
+  }, {
+    "native": 'my',
+    foreign: 'mie',
+    nativeSentence: 'please accept my apologies',
+    foreignSentence: 'per favore accetta le mie scuse'
+  }, {
+    "native": 'to go back',
+    foreign: 'tornare',
+    nativeSentence: 'I have to go back home',
+    foreignSentence: 'devo tornare a casa'
+  }, {
+    "native": 'but',
+    foreign: 'però',
+    nativeSentence: 'she is not pretty but she is nice',
+    foreignSentence: 'lei non è carina però è simpatica'
+  }, {
+    "native": 'against',
+    foreign: 'contro',
+    nativeSentence: 'we are against racism',
+    foreignSentence: 'noi siamo contro il razzismo'
+  }, {
+    "native": 'comes',
+    foreign: 'viene',
+    nativeSentence: 'where does he come from?',
+    foreignSentence: 'da dove viene?'
+  }, {
+    "native": 'while',
+    foreign: 'mentre',
+    nativeSentence: 'I fell asleep while watching tv',
+    foreignSentence: 'mi sono addormentato mentre guardavo la tv'
+  }, {
+    "native": 'sorry',
+    foreign: 'scusa',
+    nativeSentence: 'sorry for the delay',
+    foreignSentence: 'scusa il ritardo'
+  }, {
+    "native": 'lonely',
+    foreign: 'sola',
+    nativeSentence: 'I often feel lonely',
+    foreignSentence: 'mi sento spesso sola'
+  }, {
+    "native": 'hope',
+    foreign: 'spero',
+    nativeSentence: 'I hope to see you soon',
+    foreignSentence: 'spero di vederti presto'
+  }, {
+    "native": 'those',
+    foreign: 'quelle',
+    nativeSentence: 'those pink roses are so beautiful!',
+    foreignSentence: 'quelle rose rosa sono così belle!'
+  }, {
+    "native": 'to find',
+    foreign: 'trovare',
+    nativeSentence: 'it’s not easy to find a good job',
+    foreignSentence: 'non è facile trovare un buon lavoro'
+  }, {
+    "native": 'walk',
+    foreign: 'giro',
+    nativeSentence: 'let’s go for a walk',
+    foreignSentence: 'facciamo un giro'
+  }, {
+    "native": 'too',
+    foreign: 'anch’',
+    nativeSentence: 'I love you too',
+    foreignSentence: 'anch’io ti amo'
+  }, {
+    "native": 'war',
+    foreign: 'guerra',
+    nativeSentence: 'my grandfather fought in the war',
+    foreignSentence: 'mio nonno ha combattuto in guerra'
+  }, {
+    "native": 'her',
+    foreign: 'sue',
+    nativeSentence: 'she lives with her sisters',
+    foreignSentence: 'lei vive con le sue sorelle'
+  }, {
+    "native": 'child',
+    foreign: 'bambino',
+    nativeSentence: 'he is a child prodigy',
+    foreignSentence: 'è un bambino prodigio'
+  }, {
+    "native": 'street',
+    foreign: 'strada',
+    nativeSentence: 'this street has four lanes',
+    foreignSentence: 'questa strada ha quattro corsie'
+  }, {
+    "native": 'old',
+    foreign: 'vecchio',
+    nativeSentence: 'he is getting old',
+    foreignSentence: 'sta diventando vecchio'
+  }, {
+    "native": 'brother',
+    foreign: 'fratello',
+    nativeSentence: 'I have an older brother',
+    foreignSentence: 'ho un fratello maggiore'
+  }, {
+    "native": 'water',
+    foreign: 'acqua',
+    nativeSentence: 'please bring me some water',
+    foreignSentence: 'per favore portami dell’acqua'
+  }, {
+    "native": 'tonight',
+    foreign: 'stasera',
+    nativeSentence: 'I’m going to the cinema tonight',
+    foreignSentence: 'vado al cinema stasera'
+  }, {
+    "native": 'thought',
+    foreign: 'pensavo',
+    nativeSentence: 'I thought you would come',
+    foreignSentence: 'pensavo che saresti venuto'
+  }, {
+    "native": 'call',
+    foreign: 'chiama',
+    nativeSentence: 'call you parents if you’re going to be late',
+    foreignSentence: 'chiama I tuoi genitori se farai tardi'
+  }, {
+    "native": 'person',
+    foreign: 'persona',
+    nativeSentence: 'she is a very nice person',
+    foreignSentence: 'è una persona molto simpatica'
+  }, {
+    "native": 'see',
+    foreign: 'vedi',
+    nativeSentence: 'tell me what you see',
+    foreignSentence: 'dimmi cosa vedi'
+  }, {
+    "native": 'was',
+    foreign: 'fu',
+    nativeSentence: 'my father was a hero',
+    foreignSentence: 'mio padre fu un eroe'
+  }, {
+    "native": 'year',
+    foreign: 'anno',
+    nativeSentence: 'next year I will go to the university',
+    foreignSentence: 'il prossimo anno andrò all’università'
+  }, {
+    "native": 'your',
+    foreign: 'vostra',
+    nativeSentence: 'your house is bigger than mine',
+    foreignSentence: 'la vostra casa è più grande della mia'
+  }, {
+    "native": 'really',
+    foreign: 'veramente',
+    nativeSentence: 'I really enjoyed the movie',
+    foreignSentence: 'ilfilm mi è veramente piaciuto'
+  }, {
+    "native": 'over',
+    foreign: 'finito',
+    nativeSentence: 'the game is over',
+    foreignSentence: 'il gioco è finito'
+  }, {
+    "native": 'husband',
+    foreign: 'marito',
+    nativeSentence: 'my husband works in the business district',
+    foreignSentence: 'mio marito lavora nel distretto finanziario'
+  }, {
+    "native": 'minutes',
+    foreign: 'minuti',
+    nativeSentence: 'I’ll be back in five minutes',
+    foreignSentence: 'torno tra cinque minuti'
+  }, {
+    "native": 'down',
+    foreign: 'giù',
+    nativeSentence: 'he was walking up and down the room',
+    foreignSentence: 'andava su e giù per la stanza'
+  }, {
+    "native": 'women',
+    foreign: 'donne',
+    nativeSentence: 'women take care of their beauty',
+    foreignSentence: 'le donne hanno cura della loro bellezza'
+  }, {
+    "native": 'good',
+    foreign: 'bravo',
+    nativeSentence: 'he is a good pupil',
+    foreignSentence: 'è un bravo allievo'
+  }, {
+    "native": 'children',
+    foreign: 'bambini',
+    nativeSentence: 'education is important for children',
+    foreignSentence: 'l’istruzione è importante per I bambini'
+  }, {
+    "native": 'remember',
+    foreign: 'ricordi',
+    nativeSentence: 'do you remember your childhood?',
+    foreignSentence: 'ricordi la tua infanzia?'
+  }, {
+    "native": 'those',
+    foreign: 'quelli',
+    nativeSentence: 'true friends are those who share',
+    foreignSentence: 'I veri amici sono quelli che condividono'
+  }, {
+    "native": 'stay',
+    foreign: 'state',
+    nativeSentence: 'stay there, don’t move',
+    foreignSentence: 'state lì, non muovetevi'
+  }, {
+    "native": 'hours',
+    foreign: 'ore',
+    nativeSentence: 'I’ve been sitting here for hours',
+    foreignSentence: 'sono seduto qui da ore'
+  }, {
+    "native": 'was',
+    foreign: 'stavo',
+    nativeSentence: 'I was lying on the sofa',
+    foreignSentence: 'stavo sdraiato sul divano'
+  }, {
+    "native": 'had',
+    foreign: 'dovuto',
+    nativeSentence: 'I had to learn to forgive',
+    foreignSentence: 'ho dovuto imparare a perdonare'
+  }, {
+    "native": 'not even',
+    foreign: 'nemmeno',
+    nativeSentence: 'she did not even try to explain',
+    foreignSentence: 'lei non ha nemmeno provato a spiegare'
+  }, {
+    "native": 'came',
+    foreign: 'venuto',
+    nativeSentence: 'he came by bus',
+    foreignSentence: 'è venuto in autobus'
+  }, {
+    "native": 'back',
+    foreign: 'indietro',
+    nativeSentence: 'look forward, not back',
+    foreignSentence: 'guarda avanti, non indietro'
+  }, {
+    "native": 'same',
+    foreign: 'stessa',
+    nativeSentence: 'we were in the same class',
+    foreignSentence: 'eravamo nella stessa classe'
+  }, {
+    "native": 'care',
+    foreign: 'importa',
+    nativeSentence: 'I don’t care what they say',
+    foreignSentence: 'non m’importa di ciò che dicono'
+  }, {
+    "native": 'no',
+    foreign: 'nessun',
+    nativeSentence: 'sorry, no seats available',
+    foreignSentence: 'spiacenti, nessun posto disponibile'
+  }, {
+    "native": 'point',
+    foreign: 'punto',
+    nativeSentence: 'the water reached the boiling point',
+    foreignSentence: 'l’acqua ha raggiunto il punto d’ebollizione'
+  }, {
+    "native": 'instead',
+    foreign: 'invece',
+    nativeSentence: 'could I have tea instead of coffee?',
+    foreignSentence: 'potrei avere del tè invece del caffè?'
+  }, {
+    "native": 'lost',
+    foreign: 'perso',
+    nativeSentence: 'I have lost my keys',
+    foreignSentence: 'ho perso le mie chiavi'
+  }, {
+    "native": 'possible',
+    foreign: 'possibile',
+    nativeSentence: 'reply as soon as possible',
+    foreignSentence: 'rispondi il prima possibile'
+  }, {
+    "native": 'killed',
+    foreign: 'ucciso',
+    nativeSentence: 'a man was killed by a gunshot',
+    foreignSentence: 'un uomo è stato ucciso da una fucilata'
+  }, {
+    "native": 'strong',
+    foreign: 'forte',
+    nativeSentence: 'he is a strong man',
+    foreignSentence: 'è un uomo forte'
+  }, {
+    "native": 'tought',
+    foreign: 'pensato',
+    nativeSentence: 'I thought of a solution for the problem',
+    foreignSentence: 'ho pensato ad una soluzione al problema'
+  }, {
+    "native": 'should',
+    foreign: 'dovrebbe',
+    nativeSentence: 'every kid should play a sport',
+    foreignSentence: 'ogni bambino dovrebbe praticare uno sport'
+  }, {
+    "native": 'think',
+    foreign: 'pensa',
+    nativeSentence: 'think before you speak',
+    foreignSentence: 'pensa prima di parlare'
+  }, {
+    "native": 'little',
+    foreign: 'poco',
+    nativeSentence: 'little by little',
+    foreignSentence: 'a poco a poco'
+  }, {
+    "native": 'speak',
+    foreign: 'parla',
+    nativeSentence: 'speak up!',
+    foreignSentence: 'parla più forte'
+  }, {
+    "native": 'will do',
+    foreign: 'farò',
+    nativeSentence: 'I will do my best',
+    foreignSentence: 'farò del mio meglio'
+  }, {
+    "native": 'seeking',
+    foreign: 'cercando',
+    nativeSentence: 'the detective is seeking clues to solve the crime',
+    foreignSentence: 'l’investigatore sta cercando indizi per risolvere il crimine'
+  }, {
+    "native": 'the',
+    foreign: 'l’',
+    nativeSentence: 'the bird flies high in the sky',
+    foreignSentence: 'l’uccello vola alto nel cielo'
+  }, {
+    "native": 'truth',
+    foreign: 'verità',
+    nativeSentence: 'truth makes men free',
+    foreignSentence: 'la verità rende gli uomini liberi'
+  }, {
+    "native": 'went',
+    foreign: 'andato',
+    nativeSentence: 'I went to the zoo yesterday',
+    foreignSentence: 'sono andato allo zoo ieri'
+  }, {
+    "native": 'that',
+    foreign: 'quell’',
+    nativeSentence: 'how old is that tree?',
+    foreignSentence: 'quanto è vecchio quell’albero?'
+  }, {
+    "native": 'king',
+    foreign: 're',
+    nativeSentence: 'to live like a king',
+    foreignSentence: 'vivere come un re'
+  }, {
+    "native": 'do',
+    foreign: 'fanno',
+    nativeSentence: 'mothers do anything for their children',
+    foreignSentence: 'le madri fanno tutto per i propri figli'
+  }, {
+    "native": 'could',
+    foreign: 'potrei',
+    nativeSentence: 'could I have some more wine?',
+    foreignSentence: 'potrei avere dell’altro vino?'
+  }, {
+    "native": 'important',
+    foreign: 'importante',
+    nativeSentence: 'a good education is important for our kids',
+    foreignSentence: 'una buona istruzione è importante per I nostri figli'
+  }, {
+    "native": 'this',
+    foreign: 'quest’',
+    nativeSentence: 'this water is too cold',
+    foreignSentence: 'quest’acqua è troppo fredda'
+  }, {
+    "native": 'love',
+    foreign: 'amo',
+    nativeSentence: 'I love my husband',
+    foreignSentence: 'amo mio marito'
+  }, {
+    "native": 'asked',
+    foreign: 'chiesto',
+    nativeSentence: 'I asked her to leave',
+    foreignSentence: 'le ho chiesto di andarsene'
   }
 ];
 
