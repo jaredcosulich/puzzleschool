@@ -1,7 +1,9 @@
 window.app = 
     initialize: ->
-        return if window.appInitialized
-        window.appInitialized = true
+        if not window.innerWidth or window.landwidth
+            $.timeout 100, -> window.app.initialize()
+            return
+            
         document.addEventListener('touchmove', ((e) => e.preventDefault()), false)
         languageScramble = require('./lib/language_scramble')
         @selector = $('.language_scramble')

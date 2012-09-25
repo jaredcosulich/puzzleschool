@@ -57,7 +57,6 @@ class languageScramble.ViewHelper
         @maxLevel or= 7
         @formatLevelLinks()
         
-        
     $: (selector) -> $(selector, @el)
 
     formatLevelLinks: () ->
@@ -133,51 +132,6 @@ class languageScramble.ViewHelper
             $('#clickarea')[0].focus()
             $('#clickarea').trigger('keypress', e)
         
-        moveDrag = (e) =>
-            return if @initializingScramble
-            return unless @dragging
-            e.preventDefault() if e.preventDefault
-            unless @dragging.css('position') == 'absolute'
-                if @dragging[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
-                    @replaceLetterWithGuess(@dragging)  
-                else
-                    @replaceLetterWithBlank(@dragging)  
-            @dragPathX.push(@clientX(e)) unless @dragPathX[@dragPathX.length - 1] == @clientX(e)
-            @dragPathY.push(@clientY(e)) unless @dragPathX[@dragPathY.length - 1] == @clientY(e)
-            @dragging.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)                
-            
-        endDrag = (e, force) =>
-            return if @initializingScramble
-
-            if not force and (!@dragPathX or !@dragPathY or @dragPathX.length <= 1 or @dragPathY.length <= 1)
-                $.timeout 40, () => endDrag(e, true) if @dragging?
-                return
-
-            return if @actionHandled
-            @actionHandled = true
-            $.timeout 50, () => @actionHandled = false
-                
-            e.preventDefault() if e.preventDefault?
-
-            currentX = @dragPathX.pop()
-            currentY = @dragPathY.pop()
-            lastX = (x for x in @dragPathX.reverse() when Math.abs(x - currentX) > 10)[0] or currentX + 0.01
-            lastY = (y for y in @dragPathY.reverse() when Math.abs(y - currentY) > 10)[0] or currentY - 0.01
-            
-            guess = @guessInPath(@dragging, lastX, lastY, currentX, currentY)
-            @dragging.css(position: 'static')
-            if guess?
-                @replaceGuessWithLetter(guess, @dragging)
-            else    
-                @replaceBlankWithLetter(@dragging)
-            @dragging = null
-            
-        
-        $(document.body).bind 'mousemove', moveDrag
-        $(document.body).bind 'mouseup', endDrag
-
-        $(document.body).bind 'touchmove', moveDrag
-        $(document.body).bind 'touchend', endDrag
         document.body.focus()
 
         
@@ -231,7 +185,9 @@ class languageScramble.ViewHelper
             return unless letter?
             $(letter).trigger 'click'
             
-            
+    actualLetter: (letter) ->
+        return letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)
+                 
     bindLetter: (letter) ->
         @dragging = null
         @dragAdjustmentX = 0
@@ -239,28 +195,7 @@ class languageScramble.ViewHelper
         @dragPathX = []
         @dragPathY = []
 
-        click = (e) =>
-            return if @initializingScramble
-            return if @actionHandled
-            @actionHandled = true
-            $.timeout 50, () => @actionHandled = false
-            
-            if @dragging && @dragging.css('position') == 'absolute'
-                alreadyDragged = true
-                @dragging.css(position: 'static')
-                @dragging = null
-
-            containerClass = @containerClassName(letter)
-            if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)? or letter.hasClass('recent_guess')
-                @replaceLetterWithGuess(letter)
-                @replaceBlankWithLetter(letter)
-            else
-                guess = @$('.guesses .selected')[0] or @$(".guesses .#{containerClass} .guess")[0]
-                return unless guess?
-                @replaceLetterWithBlank(letter) unless alreadyDragged
-                @replaceGuessWithLetter(guess, letter)
-                
-                
+        letter = $(letter)
 
         startDrag = (e) =>
             return if @initializingScramble
@@ -270,55 +205,72 @@ class languageScramble.ViewHelper
             @dragPathY = []
             @dragAdjustmentX = @clientX(e) - letter.offset().left + @el.offset().left
             @dragAdjustmentY = @clientY(e) - letter.offset().top + @el.offset().top
+            if @actualLetter(letter)?
+                letter.addClass('recently_static_guess')
+            else
+                letter.addClass('recently_static_letter')
 
-        letter = $(letter)
-        letter.attr(onclick: 'void(0)', ontouchstart: 'void(0)', ontouchend: 'void(0)', ontouchmove: 'void(0)')
-        letter.bind 'click', click
-        letter.bind 'touchend', click                
-        letter.bind 'mousedown', startDrag   
+        letter.bind 'mousedown', startDrag unless window.AppMobi   
         letter.bind 'touchstart', startDrag 
         
         handleMove = (e) =>
-            return if @initializingScramble 
+            return if @initializingScramble
+            return unless @dragging 
             e.preventDefault() if e.preventDefault
             unless letter.css('position') == 'absolute'
-                if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
+                if @actualLetter(letter)?
                     @replaceLetterWithGuess(letter)  
                 else
                     @replaceLetterWithBlank(letter)  
+
+            if letter.hasClass('recently_static') 
+                if @dragPathX.length > 1 and @dragPathY.length > 1
+                    if Math.abs(@dragPathX[0] - @clientX(e)) > 20 and Math.abs(@dragPathY[0] - @clientY(e)) > 20
+                        letter.removeClass('recently_static_guess')
+                        letter.removeClass('recently_static_letter')
+            
             @dragPathX.push(@clientX(e)) unless @dragPathX[@dragPathX.length - 1] == @clientX(e)
-            @dragPathY.push(@clientY(e)) unless @dragPathX[@dragPathY.length - 1] == @clientY(e)
+            @dragPathY.push(@clientY(e)) unless @dragPathY[@dragPathY.length - 1] == @clientY(e)
             letter.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)  
 
         letter.bind 'touchmove', handleMove  
-            
-        touchEnd = (e, force) =>
+        letter.bind 'mousemove', handleMove unless window.AppMobi
+
+        endDrag = (e) =>
             return if @initializingScramble
-            
-            if not force and (!@dragPathX or !@dragPathY or @dragPathX.length <= 1 or @dragPathY.length <= 1)
-                $.timeout 40, () => touchEnd(e, true)
-                return
-                
-            return if @actionHandled
-            @actionHandled = true
-            $.timeout 50, () => @actionHandled = false
 
             e.preventDefault() if e.preventDefault?
 
-            currentX = @dragPathX.pop()
-            currentY = @dragPathY.pop()
-            lastX = (x for x in @dragPathX.reverse() when Math.abs(x - currentX) > 10)[0] or currentX + 0.01
-            lastY = (y for y in @dragPathY.reverse() when Math.abs(y - currentY) > 10)[0] or currentY - 0.01
-
-            guess = @guessInPath(letter, lastX, lastY, currentX, currentY)
-            letter.css(position: 'static')
-            if guess?
-                @replaceGuessWithLetter(guess, letter)
-            else    
-                @replaceBlankWithLetter(letter)
-                
+            if @dragging && @dragging.css('position') == 'absolute'
+                alreadyDragged = true
+                @dragging.css(position: 'static')
+                @dragging = null
             
-        letter.bind 'touchend', (e) => touchEnd(e)
+            if  letter.hasClass('recently_static_guess')
+                @replaceLetterWithGuess(letter) unless alreadyDragged
+                @replaceBlankWithLetter(letter)
+            else if letter.hasClass('recently_static_letter')
+                containerClass = @containerClassName(letter)
+                guess = @$('.guesses .selected')[0] or @$(".guesses .#{containerClass} .guess")[0]
+                return unless guess?
+                @replaceLetterWithBlank(letter) unless alreadyDragged
+                @replaceGuessWithLetter(guess, letter)
+            else
+                currentX = @dragPathX.pop()
+                currentY = @dragPathY.pop()
+                lastX = (x for x in @dragPathX.reverse() when Math.abs(x - currentX) > 10)[0] or currentX + 0.01
+                lastY = (y for y in @dragPathY.reverse() when Math.abs(y - currentY) > 10)[0] or currentY - 0.01
+
+                guess = @guessInPath(letter, lastX, lastY, currentX, currentY)
+                letter.css(position: 'static')
+                if guess?
+                    @replaceGuessWithLetter(guess, letter)
+                else    
+                    @replaceBlankWithLetter(letter)
+            
+            
+        letter.bind 'touchend', endDrag
+        letter.bind 'mouseup', endDrag unless window.AppMobi
                           
             
     newScramble: () ->
@@ -542,7 +494,7 @@ class languageScramble.ViewHelper
             increase = @containerHeights() < targetHeight
             increment = increment / 2
             while increase == (@containerHeights() < targetHeight)
-                break if increase and @letterFontSize >= maxFontSize
+                break if (increase and @letterFontSize >= maxFontSize) or (!increase and @letterFontSize <= 0)
                 @letterFontSize += increment * (if increase then 1 else -1)
                 @sizeLetter(letter)
         
@@ -646,7 +598,8 @@ class languageScramble.ViewHelper
             letter.removeClass('wrong_letter')
             letter.removeClass('correct_letter')
 
-        letter.removeClass('recent_guess')
+        letter.removeClass('recently_static_guess')
+        letter.removeClass('recently_static_letter')
         blankLetter.remove()
         @bindLetter(letter)
 
@@ -657,7 +610,8 @@ class languageScramble.ViewHelper
         guess = $(guess)
         letter.remove().insertBefore(guess, @$('.guesses'))
         letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
-        letter.removeClass('recent_guess')
+        letter.removeClass('recently_static_guess')
+        letter.removeClass('recently_static_letter')
             
         guess.remove()
         @bindLetter(letter)
@@ -670,7 +624,6 @@ class languageScramble.ViewHelper
         @next() if @checkCorrectAnswer()
 
     replaceLetterWithGuess: (letter) ->
-        letter.removeClass('recent_guess')
         letterAddedIndex = @lettersAdded.indexOf(letter.html())
         @lettersAdded.slice(letterAddedIndex, letterAddedIndex + 1)
         actualLetter = letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[1]
@@ -679,7 +632,6 @@ class languageScramble.ViewHelper
             letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
             letter.removeClass('wrong_letter')
             letter.removeClass('correct_letter')
-            letter.addClass('recent_guess')
 
     clientX: (e) => e.clientX or e.targetTouches[0]?.pageX or e.touches[0]?.pageX
     clientY: (e) => e.clientY or e.targetTouches[0]?.pageY or e.touches[0]?.pageY

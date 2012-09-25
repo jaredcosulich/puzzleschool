@@ -200,8 +200,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.bindWindow = function() {
-    var endDrag, moveDrag,
-      _this = this;
+    var _this = this;
     $(document.body).bind('keypress', function(e) {
       if (_this.initializingScramble) {
         return;
@@ -212,100 +211,6 @@ languageScramble.ViewHelper = (function() {
       $('#clickarea')[0].focus();
       return $('#clickarea').trigger('keypress', e);
     });
-    moveDrag = function(e) {
-      if (_this.initializingScramble) {
-        return;
-      }
-      if (!_this.dragging) {
-        return;
-      }
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
-      if (_this.dragging.css('position') !== 'absolute') {
-        if (_this.dragging[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
-          _this.replaceLetterWithGuess(_this.dragging);
-        } else {
-          _this.replaceLetterWithBlank(_this.dragging);
-        }
-      }
-      if (_this.dragPathX[_this.dragPathX.length - 1] !== _this.clientX(e)) {
-        _this.dragPathX.push(_this.clientX(e));
-      }
-      if (_this.dragPathX[_this.dragPathY.length - 1] !== _this.clientY(e)) {
-        _this.dragPathY.push(_this.clientY(e));
-      }
-      return _this.dragging.css({
-        position: 'absolute',
-        top: _this.clientY(e) - _this.dragAdjustmentY,
-        left: _this.clientX(e) - _this.dragAdjustmentX
-      });
-    };
-    endDrag = function(e, force) {
-      var currentX, currentY, guess, lastX, lastY, x, y;
-      if (_this.initializingScramble) {
-        return;
-      }
-      if (!force && (!_this.dragPathX || !_this.dragPathY || _this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
-        $.timeout(40, function() {
-          if (_this.dragging != null) {
-            return endDrag(e, true);
-          }
-        });
-        return;
-      }
-      if (_this.actionHandled) {
-        return;
-      }
-      _this.actionHandled = true;
-      $.timeout(50, function() {
-        return _this.actionHandled = false;
-      });
-      if (e.preventDefault != null) {
-        e.preventDefault();
-      }
-      console.log("DOCUMENT END DRAG");
-      currentX = _this.dragPathX.pop();
-      currentY = _this.dragPathY.pop();
-      lastX = ((function() {
-        var _i, _len, _ref, _results;
-        _ref = this.dragPathX.reverse();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          x = _ref[_i];
-          if (Math.abs(x - currentX) > 10) {
-            _results.push(x);
-          }
-        }
-        return _results;
-      }).call(_this))[0] || currentX + 0.01;
-      lastY = ((function() {
-        var _i, _len, _ref, _results;
-        _ref = this.dragPathY.reverse();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          y = _ref[_i];
-          if (Math.abs(y - currentY) > 10) {
-            _results.push(y);
-          }
-        }
-        return _results;
-      }).call(_this))[0] || currentY - 0.01;
-      guess = _this.guessInPath(_this.dragging, lastX, lastY, currentX, currentY);
-      _this.dragging.css({
-        position: 'static'
-      });
-      if (guess != null) {
-        _this.replaceGuessWithLetter(guess, _this.dragging);
-      } else {
-        _this.replaceBlankWithLetter(_this.dragging);
-      }
-      return _this.dragging = null;
-    };
-    $(document.body).bind('mousemove', moveDrag);
-    $(document.body).bind('mouseup', endDrag);
-    $(document.body).bind('touchmove', moveDrag);
-    $(document.body).bind('touchend', endDrag);
     return document.body.focus();
   };
 
@@ -391,49 +296,19 @@ languageScramble.ViewHelper = (function() {
     });
   };
 
+  ViewHelper.prototype.actualLetter = function(letter) {
+    return letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/);
+  };
+
   ViewHelper.prototype.bindLetter = function(letter) {
-    var click, handleMove, startDrag, touchEnd,
+    var endDrag, handleMove, startDrag,
       _this = this;
     this.dragging = null;
     this.dragAdjustmentX = 0;
     this.dragAdjustmentY = 0;
     this.dragPathX = [];
     this.dragPathY = [];
-    click = function(e) {
-      var alreadyDragged, containerClass, guess;
-      if (_this.initializingScramble) {
-        return;
-      }
-      if (_this.actionHandled) {
-        return;
-      }
-      _this.actionHandled = true;
-      $.timeout(50, function() {
-        return _this.actionHandled = false;
-      });
-      console.log("LETTER CLICK");
-      if (_this.dragging && _this.dragging.css('position') === 'absolute') {
-        alreadyDragged = true;
-        _this.dragging.css({
-          position: 'static'
-        });
-        _this.dragging = null;
-      }
-      containerClass = _this.containerClassName(letter);
-      if ((letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) || letter.hasClass('recent_guess')) {
-        _this.replaceLetterWithGuess(letter);
-        return _this.replaceBlankWithLetter(letter);
-      } else {
-        guess = _this.$('.guesses .selected')[0] || _this.$(".guesses ." + containerClass + " .guess")[0];
-        if (guess == null) {
-          return;
-        }
-        if (!alreadyDragged) {
-          _this.replaceLetterWithBlank(letter);
-        }
-        return _this.replaceGuessWithLetter(guess, letter);
-      }
-    };
+    letter = $(letter);
     startDrag = function(e) {
       if (_this.initializingScramble) {
         return;
@@ -445,37 +320,46 @@ languageScramble.ViewHelper = (function() {
       _this.dragPathX = [];
       _this.dragPathY = [];
       _this.dragAdjustmentX = _this.clientX(e) - letter.offset().left + _this.el.offset().left;
-      return _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + _this.el.offset().top;
+      _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + _this.el.offset().top;
+      if (_this.actualLetter(letter) != null) {
+        return letter.addClass('recently_static_guess');
+      } else {
+        return letter.addClass('recently_static_letter');
+      }
     };
-    letter = $(letter);
-    letter.attr({
-      onclick: 'void(0)',
-      ontouchstart: 'void(0)',
-      ontouchend: 'void(0)',
-      ontouchmove: 'void(0)'
-    });
-    letter.bind('click', click);
-    letter.bind('touchend', click);
-    letter.bind('mousedown', startDrag);
+    if (!window.AppMobi) {
+      letter.bind('mousedown', startDrag);
+    }
     letter.bind('touchstart', startDrag);
     handleMove = function(e) {
       if (_this.initializingScramble) {
+        return;
+      }
+      if (!_this.dragging) {
         return;
       }
       if (e.preventDefault) {
         e.preventDefault();
       }
       if (letter.css('position') !== 'absolute') {
-        if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
+        if (_this.actualLetter(letter) != null) {
           _this.replaceLetterWithGuess(letter);
         } else {
           _this.replaceLetterWithBlank(letter);
         }
       }
+      if (letter.hasClass('recently_static')) {
+        if (_this.dragPathX.length > 1 && _this.dragPathY.length > 1) {
+          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 20 && Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 20) {
+            letter.removeClass('recently_static_guess');
+            letter.removeClass('recently_static_letter');
+          }
+        }
+      }
       if (_this.dragPathX[_this.dragPathX.length - 1] !== _this.clientX(e)) {
         _this.dragPathX.push(_this.clientX(e));
       }
-      if (_this.dragPathX[_this.dragPathY.length - 1] !== _this.clientY(e)) {
+      if (_this.dragPathY[_this.dragPathY.length - 1] !== _this.clientY(e)) {
         _this.dragPathY.push(_this.clientY(e));
       }
       return letter.css({
@@ -485,67 +369,81 @@ languageScramble.ViewHelper = (function() {
       });
     };
     letter.bind('touchmove', handleMove);
-    touchEnd = function(e, force) {
-      var currentX, currentY, guess, lastX, lastY, x, y;
+    if (!window.AppMobi) {
+      letter.bind('mousemove', handleMove);
+    }
+    endDrag = function(e) {
+      var alreadyDragged, containerClass, currentX, currentY, guess, lastX, lastY, x, y;
       if (_this.initializingScramble) {
         return;
       }
-      if (!force && (!_this.dragPathX || !_this.dragPathY || _this.dragPathX.length <= 1 || _this.dragPathY.length <= 1)) {
-        $.timeout(40, function() {
-          return touchEnd(e, true);
-        });
-        return;
-      }
-      if (_this.actionHandled) {
-        return;
-      }
-      _this.actionHandled = true;
-      $.timeout(50, function() {
-        return _this.actionHandled = false;
-      });
       if (e.preventDefault != null) {
         e.preventDefault();
       }
-      console.log("LETTER END DRAG");
-      currentX = _this.dragPathX.pop();
-      currentY = _this.dragPathY.pop();
-      lastX = ((function() {
-        var _i, _len, _ref, _results;
-        _ref = this.dragPathX.reverse();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          x = _ref[_i];
-          if (Math.abs(x - currentX) > 10) {
-            _results.push(x);
-          }
+      if (_this.dragging && _this.dragging.css('position') === 'absolute') {
+        alreadyDragged = true;
+        _this.dragging.css({
+          position: 'static'
+        });
+        _this.dragging = null;
+      }
+      if (letter.hasClass('recently_static_guess')) {
+        if (!alreadyDragged) {
+          _this.replaceLetterWithGuess(letter);
         }
-        return _results;
-      }).call(_this))[0] || currentX + 0.01;
-      lastY = ((function() {
-        var _i, _len, _ref, _results;
-        _ref = this.dragPathY.reverse();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          y = _ref[_i];
-          if (Math.abs(y - currentY) > 10) {
-            _results.push(y);
-          }
+        return _this.replaceBlankWithLetter(letter);
+      } else if (letter.hasClass('recently_static_letter')) {
+        containerClass = _this.containerClassName(letter);
+        guess = _this.$('.guesses .selected')[0] || _this.$(".guesses ." + containerClass + " .guess")[0];
+        if (guess == null) {
+          return;
         }
-        return _results;
-      }).call(_this))[0] || currentY - 0.01;
-      guess = _this.guessInPath(letter, lastX, lastY, currentX, currentY);
-      letter.css({
-        position: 'static'
-      });
-      if (guess != null) {
+        if (!alreadyDragged) {
+          _this.replaceLetterWithBlank(letter);
+        }
         return _this.replaceGuessWithLetter(guess, letter);
       } else {
-        return _this.replaceBlankWithLetter(letter);
+        currentX = _this.dragPathX.pop();
+        currentY = _this.dragPathY.pop();
+        lastX = ((function() {
+          var _i, _len, _ref, _results;
+          _ref = this.dragPathX.reverse();
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            x = _ref[_i];
+            if (Math.abs(x - currentX) > 10) {
+              _results.push(x);
+            }
+          }
+          return _results;
+        }).call(_this))[0] || currentX + 0.01;
+        lastY = ((function() {
+          var _i, _len, _ref, _results;
+          _ref = this.dragPathY.reverse();
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            y = _ref[_i];
+            if (Math.abs(y - currentY) > 10) {
+              _results.push(y);
+            }
+          }
+          return _results;
+        }).call(_this))[0] || currentY - 0.01;
+        guess = _this.guessInPath(letter, lastX, lastY, currentX, currentY);
+        letter.css({
+          position: 'static'
+        });
+        if (guess != null) {
+          return _this.replaceGuessWithLetter(guess, letter);
+        } else {
+          return _this.replaceBlankWithLetter(letter);
+        }
       }
     };
-    return letter.bind('touchend', function(e) {
-      return touchEnd(e);
-    });
+    letter.bind('touchend', endDrag);
+    if (!window.AppMobi) {
+      return letter.bind('mouseup', endDrag);
+    }
   };
 
   ViewHelper.prototype.newScramble = function() {
@@ -861,7 +759,7 @@ languageScramble.ViewHelper = (function() {
       increase = this.containerHeights() < targetHeight;
       increment = increment / 2;
       while (increase === (this.containerHeights() < targetHeight)) {
-        if (increase && this.letterFontSize >= maxFontSize) {
+        if ((increase && this.letterFontSize >= maxFontSize) || (!increase && this.letterFontSize <= 0)) {
           break;
         }
         this.letterFontSize += increment * (increase ? 1 : -1);
@@ -1019,7 +917,8 @@ languageScramble.ViewHelper = (function() {
       letter.removeClass('wrong_letter');
       letter.removeClass('correct_letter');
     }
-    letter.removeClass('recent_guess');
+    letter.removeClass('recently_static_guess');
+    letter.removeClass('recently_static_letter');
     blankLetter.remove();
     return this.bindLetter(letter);
   };
@@ -1033,7 +932,8 @@ languageScramble.ViewHelper = (function() {
     guess = $(guess);
     letter.remove().insertBefore(guess, this.$('.guesses'));
     letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
-    letter.removeClass('recent_guess');
+    letter.removeClass('recently_static_guess');
+    letter.removeClass('recently_static_letter');
     guess.remove();
     this.bindLetter(letter);
     this.lettersAdded.push(letter.html());
@@ -1047,7 +947,6 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.replaceLetterWithGuess = function(letter) {
     var actualLetter, letterAddedIndex;
-    letter.removeClass('recent_guess');
     letterAddedIndex = this.lettersAdded.indexOf(letter.html());
     this.lettersAdded.slice(letterAddedIndex, letterAddedIndex + 1);
     actualLetter = letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[1];
@@ -1055,8 +954,7 @@ languageScramble.ViewHelper = (function() {
     if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
       letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
       letter.removeClass('wrong_letter');
-      letter.removeClass('correct_letter');
-      return letter.addClass('recent_guess');
+      return letter.removeClass('correct_letter');
     }
   };
 
