@@ -223,9 +223,9 @@ class languageScramble.ViewHelper
                 else
                     @replaceLetterWithBlank(letter)  
 
-            if letter.hasClass('recently_static') 
-                if @dragPathX.length > 1 and @dragPathY.length > 1
-                    if Math.abs(@dragPathX[0] - @clientX(e)) > 20 and Math.abs(@dragPathY[0] - @clientY(e)) > 20
+            if letter.hasClass('recently_static_letter') or letter.hasClass('recently_static_guess') 
+                if @dragPathX.length > 1 or @dragPathY.length > 1
+                    if Math.abs(@dragPathX[0] - @clientX(e)) > 20 or Math.abs(@dragPathY[0] - @clientY(e)) > 20
                         letter.removeClass('recently_static_guess')
                         letter.removeClass('recently_static_letter')
             
@@ -243,7 +243,7 @@ class languageScramble.ViewHelper
 
             if @dragging && @dragging.css('position') == 'absolute'
                 alreadyDragged = true
-                @dragging.css(position: 'static')
+                # @dragging.css(position: 'static')
                 @dragging = null
             
             if  letter.hasClass('recently_static_guess')
@@ -271,7 +271,6 @@ class languageScramble.ViewHelper
             
         letter.bind 'touchend', endDrag
         letter.bind 'mouseup', endDrag unless window.AppMobi
-                          
             
     newScramble: () ->
         @initializingScramble = true
@@ -650,13 +649,14 @@ class languageScramble.ViewHelper
             ySlope = ySlope / Math.abs(xSlope)
             xSlope = xSlope / Math.abs(xSlope)
         guesses = @$(".guesses .#{@containerClassName(letter)} .guess")
-        for guess in guesses
-            guess = $(guess)
-            guessPosition = guess.offset()
-            guessDims = guess.dim()
-            for i in [2..14]
-                x = currentX + (xSlope * (((i % 12) - 2) * 10))
-                y = currentY - (ySlope * (((i % 12) - 2) * 10))
+        
+        for i in [0..6]
+            for guess in guesses
+                guess = $(guess)
+                guessPosition = guess.offset()
+                guessDims = guess.dim()
+                x = currentX + (xSlope * i * 10)
+                y = currentY - (ySlope * i * 10)
                 # marker = $(document.createElement("DIV"))
                 # marker.css(position: 'absolute', top: y + 2, left: x - 2, width: 4, height: 4, backgroundColor: 'red')
                 # @el.append(marker)
@@ -665,6 +665,7 @@ class languageScramble.ViewHelper
                 continue if y > guessPosition.top + guessDims.height
                 continue if y < guessPosition.top
                 return guess
+
         return null
 
     checkCorrectAnswer: () ->

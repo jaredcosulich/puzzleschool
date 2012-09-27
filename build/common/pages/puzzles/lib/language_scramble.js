@@ -348,9 +348,9 @@ languageScramble.ViewHelper = (function() {
           _this.replaceLetterWithBlank(letter);
         }
       }
-      if (letter.hasClass('recently_static')) {
-        if (_this.dragPathX.length > 1 && _this.dragPathY.length > 1) {
-          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 20 && Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 20) {
+      if (letter.hasClass('recently_static_letter') || letter.hasClass('recently_static_guess')) {
+        if (_this.dragPathX.length > 1 || _this.dragPathY.length > 1) {
+          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 20 || Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 20) {
             letter.removeClass('recently_static_guess');
             letter.removeClass('recently_static_letter');
           }
@@ -382,9 +382,6 @@ languageScramble.ViewHelper = (function() {
       }
       if (_this.dragging && _this.dragging.css('position') === 'absolute') {
         alreadyDragged = true;
-        _this.dragging.css({
-          position: 'static'
-        });
         _this.dragging = null;
       }
       if (letter.hasClass('recently_static_guess')) {
@@ -985,14 +982,14 @@ languageScramble.ViewHelper = (function() {
       xSlope = xSlope / Math.abs(xSlope);
     }
     guesses = this.$(".guesses ." + (this.containerClassName(letter)) + " .guess");
-    for (_i = 0, _len = guesses.length; _i < _len; _i++) {
-      guess = guesses[_i];
-      guess = $(guess);
-      guessPosition = guess.offset();
-      guessDims = guess.dim();
-      for (i = _j = 2; _j <= 14; i = ++_j) {
-        x = currentX + (xSlope * (((i % 12) - 2) * 10));
-        y = currentY - (ySlope * (((i % 12) - 2) * 10));
+    for (i = _i = 0; _i <= 6; i = ++_i) {
+      for (_j = 0, _len = guesses.length; _j < _len; _j++) {
+        guess = guesses[_j];
+        guess = $(guess);
+        guessPosition = guess.offset();
+        guessDims = guess.dim();
+        x = currentX + (xSlope * i * 10);
+        y = currentY - (ySlope * i * 10);
         if (x < guessPosition.left) {
           continue;
         }
