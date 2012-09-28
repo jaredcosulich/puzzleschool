@@ -99,6 +99,7 @@ languageScramble.ViewHelper = (function() {
     this.puzzleData = JSON.parse(JSON.stringify(puzzleData));
     this.maxLevel || (this.maxLevel = 7);
     this.formatLevelLinks();
+    this.data = languageScramble.data;
   }
 
   ViewHelper.prototype.$ = function(selector) {
@@ -123,7 +124,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.setLevel = function(levelName) {
     this.levelName = levelName;
-    this.languageData = languageScramble.data[this.languages];
+    this.languageData = this.data[this.languages];
     this.level = languageScramble.getLevel(this.languageData, this.levelName);
     this.options = this.level.data;
     if (!this.puzzleData.levels[this.languages][this.levelName]) {
@@ -350,7 +351,7 @@ languageScramble.ViewHelper = (function() {
       }
       if (letter.hasClass('recently_static_letter') || letter.hasClass('recently_static_guess')) {
         if (_this.dragPathX.length > 1 || _this.dragPathY.length > 1) {
-          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 20 || Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 20) {
+          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 10 || Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 10) {
             letter.removeClass('recently_static_guess');
             letter.removeClass('recently_static_letter');
           }
@@ -746,9 +747,15 @@ languageScramble.ViewHelper = (function() {
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
     targetHeight = this.$('.scramble_content').height();
+    if (window.innerHeight) {
+      targetHeight = Math.min(targetHeight, window.innerHeight);
+    }
+    if (window.landheight) {
+      targetHeight = Math.min(targetHeight, window.landheight);
+    }
     windowWidth = window.innerWidth || window.landwidth;
     maxFontSize = windowWidth / 15;
-    increment = maxFontSize;
+    increment = Math.min(maxFontSize, this.letterFontSize) - 1;
     while (increment >= 1) {
       if (increase && this.letterFontSize >= maxFontSize) {
         break;
@@ -756,12 +763,20 @@ languageScramble.ViewHelper = (function() {
       increase = this.containerHeights() < targetHeight;
       increment = increment / 2;
       while (increase === (this.containerHeights() < targetHeight)) {
-        if ((increase && this.letterFontSize >= maxFontSize) || (!increase && this.letterFontSize <= 0)) {
+        if (increase && this.letterFontSize >= maxFontSize) {
           break;
         }
         this.letterFontSize += increment * (increase ? 1 : -1);
         this.sizeLetter(letter);
       }
+    }
+    while (this.containerHeights() > targetHeight) {
+      this.letterFontSize -= 1;
+      this.sizeLetter(letter);
+    }
+    if (this.letterFontSize <= 0) {
+      this.letterFontSize = 1;
+      this.sizeLetter(letter);
     }
     if (this.letterFontSize >= maxFontSize) {
       this.letterFontSize = maxFontSize;
@@ -916,6 +931,9 @@ languageScramble.ViewHelper = (function() {
     }
     letter.removeClass('recently_static_guess');
     letter.removeClass('recently_static_letter');
+    letter.css({
+      position: 'static'
+    });
     blankLetter.remove();
     return this.bindLetter(letter);
   };
@@ -931,6 +949,9 @@ languageScramble.ViewHelper = (function() {
     letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
     letter.removeClass('recently_static_guess');
     letter.removeClass('recently_static_letter');
+    letter.css({
+      position: 'static'
+    });
     guess.remove();
     this.bindLetter(letter);
     this.lettersAdded.push(letter.html());
@@ -2612,7 +2633,7 @@ languageScramble.data = {
           }, {
             "native": 'things',
             foreign: 'cose',
-            nativeSentence: 'put your things in the wardrobe',
+            nativeSentence: 'put your things in the closet',
             foreignSentence: 'metti le tue cose nell\'armadio'
           }, {
             "native": 'nobody',
@@ -2647,7 +2668,7 @@ languageScramble.data = {
           }, {
             "native": 'can',
             foreign: 'puoi',
-            nativeSentence: 'can you do me a favour? ',
+            nativeSentence: 'can you do me a favou? ',
             foreignSentence: 'puoi farmi un favore? '
           }, {
             "native": 'hello',
@@ -2677,7 +2698,7 @@ languageScramble.data = {
           }, {
             "native": 'from',
             foreign: 'dal',
-            nativeSentence: 'you can sea the sea from the balcony',
+            nativeSentence: 'you can see the sea from the balcony',
             foreignSentence: 'puoi vedere il mare dal balcone'
           }, {
             "native": 'job',
@@ -2717,7 +2738,7 @@ languageScramble.data = {
           }, {
             "native": 'place',
             foreign: 'posto',
-            nativeSentence: 'this it the place for me!',
+            nativeSentence: 'this is the place for me!',
             foreignSentence: 'questo  è il posto per me!'
           }
         ]
@@ -2737,7 +2758,7 @@ languageScramble.data = {
             "native": 'i never go out without my umbrella',
             foreign: 'non esco mai senza il mio ombrello'
           }, {
-            "native": 'put your things in the wardrobe',
+            "native": 'put your things in the closet',
             foreign: 'metti le tue cose nell\'armadio'
           }, {
             "native": 'nobody knows the truth',
@@ -2758,7 +2779,7 @@ languageScramble.data = {
             "native": 'my father is very strict',
             foreign: 'mio padre è molto severo'
           }, {
-            "native": 'can you do me a favour? ',
+            "native": 'can you do me a favor? ',
             foreign: 'puoi farmi un favore? '
           }, {
             "native": 'hello, my name is Mary',
@@ -2776,7 +2797,7 @@ languageScramble.data = {
             "native": 'someone ate the last piece of cake',
             foreign: 'qualcuno ha mangiato l\'ultima fetta di torta'
           }, {
-            "native": 'you can sea the sea from the balcony',
+            "native": 'you can see the sea from the balcony',
             foreign: 'puoi vedere il mare dal balcone'
           }, {
             "native": 'he really loves his job',
@@ -2800,7 +2821,7 @@ languageScramble.data = {
             "native": 'i ate too much',
             foreign: 'ho mangiato troppo'
           }, {
-            "native": 'this it the place for me!',
+            "native": 'this is the place for me!',
             foreign: 'questo  è il posto per me!'
           }
         ]
@@ -3288,9 +3309,9 @@ languageScramble.data = {
             nativeSentence: 'once i had a parrot named Bob',
             foreignSentence: 'una volta avevo un pappagallo chiamato Bob'
           }, {
-            "native": 'favour',
+            "native": 'favor',
             foreign: 'favore',
-            nativeSentence: 'can you do me a favour?',
+            nativeSentence: 'can you do me a favor?',
             foreignSentence: 'puoi farmi un favore?'
           }, {
             "native": 'were',
@@ -3350,7 +3371,7 @@ languageScramble.data = {
           }, {
             "native": 'these',
             foreign: 'queste',
-            nativeSentence: 'these are my favourite shoes',
+            nativeSentence: 'these are my favorite shoes',
             foreignSentence: 'queste sono le mie scarpe preferite'
           }, {
             "native": 'son',
@@ -3403,7 +3424,7 @@ languageScramble.data = {
             "native": 'once i had a parrot named Bob',
             foreign: 'una volta avevo un pappagallo chiamato Bob'
           }, {
-            "native": 'can you do me a favour?',
+            "native": 'can you do me a favor?',
             foreign: 'puoi farmi un favore?'
           }, {
             "native": 'oh that it were so!',
@@ -3439,7 +3460,7 @@ languageScramble.data = {
             "native": 'rome is a magical city at night',
             foreign: 'roma è una città magica di notte'
           }, {
-            "native": 'these are my favourite shoes',
+            "native": 'these are my favorite shoes',
             foreign: 'queste sono le mie scarpe preferite'
           }, {
             "native": 'my son is a doctor',
@@ -4011,7 +4032,7 @@ after150 = [
   }, {
     "native": 'what',
     foreign: 'quale',
-    nativeSentence: 'what is your favourite book?',
+    nativeSentence: 'what is your favo   rite book?',
     foreignSentence: 'quale è il tuo libro preferito?'
   }, {
     "native": 'enough',

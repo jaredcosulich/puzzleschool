@@ -1,6 +1,6 @@
 window.app = 
     initialize: ->
-        if not window.innerWidth or window.landwidth
+        if not (@width = window.innerWidth or window.landwidth) or not (@height = window.innerHeight or window.landheight) or @width < @height
             $.timeout 100, -> window.app.initialize()
             return
             
@@ -45,7 +45,7 @@ window.app =
     initProgressMeter: ->
         @progressMeter = @viewHelper.$('.level_progress_meter')
         @percentComplete = @progressMeter.find('.percent_complete')
-        @progressMeter.css(top: window.innerHeight - @percentComplete.height())
+        @progressMeter.css(top: @height - @percentComplete.height())
 
     saveProgress: (puzzleProgress) ->
         percentComplete = 0

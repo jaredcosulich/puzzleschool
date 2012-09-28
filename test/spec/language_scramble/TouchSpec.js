@@ -2,7 +2,7 @@ describe("Touch", function() {
     var game;
 
     beforeEach(function() {
-        languageScramble.data = {
+        var data = {
             english_italian: { 
                 levels: {
                     top10words: {
@@ -21,7 +21,7 @@ describe("Touch", function() {
             saveProgress: function() {},
             maxLevel: 5
         })
-        
+        game.data = data;
         game.setLevel('top10words');         
         game.newScramble();        
     });
@@ -72,15 +72,16 @@ describe("Touch", function() {
 
         describe("dragging a bit", function() {
             beforeEach(function() {
-                triggerTouch(letter[0], 'move', letter.offset().left - 5, letter.offset().top - 5);
-                triggerTouch(letter[0], 'move', letter.offset().left - 10, letter.offset().top - 10);
-                triggerTouch(letter[0], 'move', letter.offset().left - 15, letter.offset().top - 15);
+                triggerTouch(letter[0], 'move', letter.offset().left - 0, letter.offset().top - 0);
+                triggerTouch(letter[0], 'move', letter.offset().left - 1, letter.offset().top - 1);
+                triggerTouch(letter[0], 'move', letter.offset().left - 2, letter.offset().top - 2);
                 triggerTouch(letter[0], 'end');
             });
             
             it("should jump to the first open guess", function() {
                 var guess = $($('.guesses .letter')[0]);
                 expect(guess.html()).toEqual(letterHtml);
+                expect(guess.offset().top).toEqual($($('.guesses .guess')[0]).offset().top)
             })
 
             it("should jump back if dragged a little again", function() {
@@ -88,9 +89,9 @@ describe("Touch", function() {
                 var guessHtml = guess.html();
 
                 triggerTouch(guess[0], 'start', guess.offset().left, guess.offset().top);
-                triggerTouch(guess[0], 'move', guess.offset().left - 5, guess.offset().top - 5);
-                triggerTouch(guess[0], 'move', guess.offset().left - 10, guess.offset().top - 10);
-                triggerTouch(guess[0], 'move', guess.offset().left - 15, guess.offset().top - 15);
+                triggerTouch(guess[0], 'move', guess.offset().left - 0, guess.offset().top - 0);
+                triggerTouch(guess[0], 'move', guess.offset().left - 1, guess.offset().top - 1);
+                triggerTouch(guess[0], 'move', guess.offset().left - 2, guess.offset().top - 2);
                 triggerTouch(guess[0], 'end');
                 expect($('.guesses .letter').length).toEqual(0);
                 expect($($('.scrambled .letter')[0]).html()).toEqual(guessHtml);
@@ -101,9 +102,9 @@ describe("Touch", function() {
                 var guessHtml = guess.html();
                 
                 triggerTouch(guess[0], 'start', guess.offset().left, guess.offset().top);
-                triggerTouch(guess[0], 'move', guess.offset().left + 5, guess.offset().top + 0);
-                triggerTouch(guess[0], 'move', guess.offset().left + 10, guess.offset().top + 1);
-                triggerTouch(guess[0], 'move', guess.offset().left + 15, guess.offset().top + 2);
+                triggerTouch(guess[0], 'move', guess.offset().left + 0, guess.offset().top + 0);
+                triggerTouch(guess[0], 'move', guess.offset().left + 1, guess.offset().top + 1);
+                triggerTouch(guess[0], 'move', guess.offset().left + 2, guess.offset().top + 2);
                 triggerTouch(guess[0], 'end');
                 expect($('.guesses .letter').length).toEqual(0);
                 expect($($('.scrambled .letter')[0]).html()).toEqual(guessHtml);
@@ -147,9 +148,9 @@ describe("Touch", function() {
                 var guessHtml = guess.html();
                 
                 triggerTouch(guess[0], 'start', guess.offset().left, guess.offset().top);
-                triggerTouch(guess[0], 'move', guess.offset().left + 5, guess.offset().top + 1);
-                triggerTouch(guess[0], 'move', guess.offset().left + 10, guess.offset().top + 2);
-                triggerTouch(guess[0], 'end', guess.offset().left + 15, guess.offset().top + 3);
+                triggerTouch(guess[0], 'move', guess.offset().left + 0, guess.offset().top + 0);
+                triggerTouch(guess[0], 'move', guess.offset().left + 1, guess.offset().top + 1);
+                triggerTouch(guess[0], 'end', guess.offset().left + 2, guess.offset().top + 2);
                 expect($('.guesses .letter').length).toEqual(0);
                 expect($($('.scrambled .letter')[0]).html()).toEqual(guessHtml);
             })

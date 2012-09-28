@@ -56,6 +56,7 @@ class languageScramble.ViewHelper
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
         @maxLevel or= 7
         @formatLevelLinks()
+        @data = languageScramble.data
         
     $: (selector) -> $(selector, @el)
 
@@ -66,7 +67,7 @@ class languageScramble.ViewHelper
             percentComplete.css(height: height, marginTop: height * -1)
 
     setLevel: (@levelName) ->   
-        @languageData = languageScramble.data[@languages]
+        @languageData = @data[@languages]
         @level = languageScramble.getLevel(@languageData, @levelName)
         @options = @level.data
         @puzzleData.levels[@languages][@levelName] = {} unless @puzzleData.levels[@languages][@levelName]
@@ -225,7 +226,7 @@ class languageScramble.ViewHelper
 
             if letter.hasClass('recently_static_letter') or letter.hasClass('recently_static_guess') 
                 if @dragPathX.length > 1 or @dragPathY.length > 1
-                    if Math.abs(@dragPathX[0] - @clientX(e)) > 20 or Math.abs(@dragPathY[0] - @clientY(e)) > 20
+                    if Math.abs(@dragPathX[0] - @clientX(e)) > 10 or Math.abs(@dragPathY[0] - @clientY(e)) > 10
                         letter.removeClass('recently_static_guess')
                         letter.removeClass('recently_static_letter')
             
@@ -243,7 +244,6 @@ class languageScramble.ViewHelper
 
             if @dragging && @dragging.css('position') == 'absolute'
                 alreadyDragged = true
-                # @dragging.css(position: 'static')
                 @dragging = null
             
             if  letter.hasClass('recently_static_guess')
@@ -482,20 +482,30 @@ class languageScramble.ViewHelper
         @letterFontSize = parseInt(letter.css('fontSize'))
         @sizeLetter(letter)
         
-        targetHeight =  @$('.scramble_content').height()
+        targetHeight = @$('.scramble_content').height()
+        targetHeight = Math.min(targetHeight, window.innerHeight) if window.innerHeight 
+        targetHeight = Math.min(targetHeight, window.landheight) if window.landheight 
 
         windowWidth = window.innerWidth or window.landwidth
         maxFontSize = windowWidth / 15
-        increment = maxFontSize
+        increment = Math.min(maxFontSize, @letterFontSize) - 1
         
         while increment >= 1
             break if increase and @letterFontSize >= maxFontSize
             increase = @containerHeights() < targetHeight
             increment = increment / 2
             while increase == (@containerHeights() < targetHeight)
-                break if (increase and @letterFontSize >= maxFontSize) or (!increase and @letterFontSize <= 0)
+                break if (increase and @letterFontSize >= maxFontSize)
                 @letterFontSize += increment * (if increase then 1 else -1)
                 @sizeLetter(letter)
+        
+        while @containerHeights() > targetHeight
+            @letterFontSize -= 1
+            @sizeLetter(letter)
+        
+        if @letterFontSize <= 0
+            @letterFontSize = 1
+            @sizeLetter(letter)
         
         if @letterFontSize >= maxFontSize
             @letterFontSize = maxFontSize
@@ -599,6 +609,8 @@ class languageScramble.ViewHelper
 
         letter.removeClass('recently_static_guess')
         letter.removeClass('recently_static_letter')
+        letter.css(position: 'static')
+        
         blankLetter.remove()
         @bindLetter(letter)
 
@@ -611,6 +623,7 @@ class languageScramble.ViewHelper
         letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
         letter.removeClass('recently_static_guess')
         letter.removeClass('recently_static_letter')
+        letter.css(position: 'static')
             
         guess.remove()
         @bindLetter(letter)
@@ -1241,20 +1254,20 @@ languageScramble.data =
                     {native: 'god', foreign: 'dio', nativeSentence: 'i believe in god', foreignSentence: 'io credo in dio'},
                     {native: 'later', foreign: 'dopo', nativeSentence: 'i will tell you later', foreignSentence: 'te lo dirò dopo'},
                     {native: 'without', foreign: 'senza', nativeSentence: 'i never go out without my umbrella', foreignSentence: 'non esco mai senza il mio ombrello'},
-                    {native: 'things', foreign: 'cose', nativeSentence: 'put your things in the wardrobe', foreignSentence: 'metti le tue cose nell\'armadio'},
+                    {native: 'things', foreign: 'cose', nativeSentence: 'put your things in the closet', foreignSentence: 'metti le tue cose nell\'armadio'},
                     {native: 'nobody', foreign: 'nessuno', nativeSentence: 'nobody knows the truth', foreignSentence: 'nessuno sa la verità'},
                     {native: 'do', foreign:  'fai', nativeSentence: 'what do you do in your spare time? ', foreignSentence: 'cosa fai nel tuo tempo libero? '},
                     {native: 'day', foreign: 'giorno', nativeSentence: 'what day is today? ', foreignSentence: 'che giorno è oggi? '},
                     {native: 'and', foreign: 'ed', nativeSentence: 'cause and effect', foreignSentence: 'causa ed effetto'}
                     {native: 'better', foreign: 'meglio', nativeSentence: 'better late than never', foreignSentence: 'meglio tardi che mai'},
                     {native: 'father', foreign: 'padre', nativeSentence: 'my father is very strict', foreignSentence: 'mio padre è molto severo'},
-                    {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favour? ', foreignSentence: 'puoi farmi un favore? '},
+                    {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favou? ', foreignSentence: 'puoi farmi un favore? '},
                     {native: 'hello', foreign: 'ciao', nativeSentence: 'hello, my name is Mary', foreignSentence: 'ciao, mi chiamo Maria'},
                     {native: 'what', foreign: 'cos\'', nativeSentence: 'what is this? ', foreignSentence: 'cos\'è questo? '},
                     {native: 'must', foreign: 'devi', nativeSentence: 'you must go to work tomorrow', foreignSentence: 'devi andare al lavoro domani'},
                     {native: 'here', foreign: 'ecco', nativeSentence: 'here is my book', foreignSentence: 'ecco il mio libro'},
                     {native: 'someone', foreign: 'qualcuno', nativeSentence: 'someone ate the last piece of cake', foreignSentence: 'qualcuno ha mangiato l\'ultima fetta di torta'},
-                    {native: 'from', foreign: 'dal', nativeSentence: 'you can sea the sea from the balcony', foreignSentence: 'puoi vedere il mare dal balcone'},
+                    {native: 'from', foreign: 'dal', nativeSentence: 'you can see the sea from the balcony', foreignSentence: 'puoi vedere il mare dal balcone'},
                     {native: 'job', foreign: 'lavoro', nativeSentence: 'he really loves his job', foreignSentence: 'lui ama veramente il suo lavoro'},
                     {native: 'knows', foreign: 'sa', nativeSentence: 'he knows everything about me', foreignSentence: 'lui sa tutto di me'},
                     {native: 'to', foreign: 'ai', nativeSentence: 'he left a lot of money to his heirs', foreignSentence: 'ha lasciato molto denaro ai suoi eredi'},
@@ -1262,7 +1275,7 @@ languageScramble.data =
                     {native: 'every', foreign: 'ogni', nativeSentence: 'every man has a dream', foreignSentence: 'ogni uomo ha un sogno'},
                     {native: 'the', foreign: 'i', nativeSentence: 'the children are watching tv', foreignSentence: 'i bambini stanno guardando la tv'},
                     {native: 'too much', foreign: 'troppo', nativeSentence: 'i ate too much', foreignSentence: 'ho mangiato troppo'}, 
-                    {native: 'place', foreign: 'posto',  nativeSentence: 'this it the place for me!', foreignSentence: 'questo  è il posto per me!'},
+                    {native: 'place', foreign: 'posto',  nativeSentence: 'this is the place for me!', foreignSentence: 'questo  è il posto per me!'},
                 ]
             top175phrases:
                 title: 'Phrases For The Top 150 - 175 Words'
@@ -1272,20 +1285,20 @@ languageScramble.data =
                     {native: 'i believe in god', foreign: 'io credo in dio'},
                     {native: 'i will tell you later', foreign: 'te lo dirò dopo'},
                     {native: 'i never go out without my umbrella', foreign: 'non esco mai senza il mio ombrello'},
-                    {native: 'put your things in the wardrobe', foreign: 'metti le tue cose nell\'armadio'},
+                    {native: 'put your things in the closet', foreign: 'metti le tue cose nell\'armadio'},
                     {native: 'nobody knows the truth', foreign: 'nessuno sa la verità'},
                     {native: 'what do you do in your spare time? ', foreign: 'cosa fai nel tuo tempo libero? '},
                     {native: 'what day is today? ', foreign: 'che giorno è oggi? '},
                     {native: 'cause and effect', foreign: 'causa ed effetto'}
                     {native: 'better late than never', foreign: 'meglio tardi che mai'},
                     {native: 'my father is very strict', foreign: 'mio padre è molto severo'},
-                    {native: 'can you do me a favour? ', foreign: 'puoi farmi un favore? '},
+                    {native: 'can you do me a favor? ', foreign: 'puoi farmi un favore? '},
                     {native: 'hello, my name is Mary', foreign: 'ciao, mi chiamo Maria'},
                     {native: 'what is this? ', foreign: 'cos\'è questo? '},
                     {native: 'you must go to work tomorrow', foreign: 'devi andare al lavoro domani'},
                     {native: 'here is my book', foreign: 'ecco il mio libro'},
                     {native: 'someone ate the last piece of cake', foreign: 'qualcuno ha mangiato l\'ultima fetta di torta'},
-                    {native: 'you can sea the sea from the balcony', foreign: 'puoi vedere il mare dal balcone'},
+                    {native: 'you can see the sea from the balcony', foreign: 'puoi vedere il mare dal balcone'},
                     {native: 'he really loves his job', foreign: 'lui ama veramente il suo lavoro'},
                     {native: 'he knows everything about me', foreign: 'lui sa tutto di me'},
                     {native: 'he left a lot of money to his heirs', foreign: 'ha lasciato molto denaro ai suoi eredi'},
@@ -1293,7 +1306,7 @@ languageScramble.data =
                     {native: 'every man has a dream', foreign: 'ogni uomo ha un sogno'},
                     {native: 'the children are watching tv', foreign: 'i bambini stanno guardando la tv'},
                     {native: 'i ate too much', foreign: 'ho mangiato troppo'}, 
-                    {native: 'this it the place for me!', foreign: 'questo  è il posto per me!'},
+                    {native: 'this is the place for me!', foreign: 'questo  è il posto per me!'},
                 ]
             top200words:
                 title: 'Top 175 - 200 Words'
@@ -1433,7 +1446,7 @@ languageScramble.data =
                     {native: 'where', foreign: 'dov\'', nativeSentence: 'where is my hat?', foreignSentence: 'dov\'è il mio cappello?'},
                     {native: 'money', foreign: 'soldi', nativeSentence: 'it takes money to make money', foreignSentence: 'ci vogliono soldi per fare soldi'},
                     {native: 'had', foreign: 'avevo', nativeSentence: 'once i had a parrot named Bob', foreignSentence: 'una volta avevo un pappagallo chiamato Bob'},
-                    {native: 'favour', foreign: 'favore', nativeSentence: 'can you do me a favour?', foreignSentence: 'puoi farmi un favore?'},
+                    {native: 'favor', foreign: 'favore', nativeSentence: 'can you do me a favor?', foreignSentence: 'puoi farmi un favore?'},
                     {native: 'were',  foreign: 'fosse', nativeSentence: 'oh that it were so!', foreignSentence: 'magari fosse così!'},
                     {native: 'other', foreign: 'altri', nativeSentence: 'Mary likes to play with other children', foreignSentence: 'a Mary piace giocare con altri bambini'},
                     {native: 'sorry', foreign: 'dispiace', nativeSentence: 'i am sorry to disturb you', foreignSentence: 'mi dispiace disturbarti'},
@@ -1445,7 +1458,7 @@ languageScramble.data =
                     {native: 'name', foreign: 'nome', nativeSentence: 'i don\'t know his name', foreignSentence: 'non so il suo nome'},
                     {native: 'ok', foreign: 'ok', nativeSentence: 'it\'s ok', foreignSentence: 'è ok'},
                     {native: 'night', foreign:'notte', nativeSentence: 'rome is a magical city at night', foreignSentence: 'roma è una città magica di notte'},
-                    {native: 'these', foreign: 'queste', nativeSentence: 'these are my favourite shoes', foreignSentence: 'queste sono le mie scarpe preferite'},
+                    {native: 'these', foreign: 'queste', nativeSentence: 'these are my favorite shoes', foreignSentence: 'queste sono le mie scarpe preferite'},
                     {native: 'son', foreign: 'figlio', nativeSentence: 'my son is a doctor', foreignSentence: 'mio figlio è un dottore'},
                     {native: 'world', foreign: 'mondo', nativeSentence: 'i would like to travel all over the world', foreignSentence: 'vorrei viaggiare in tutto il mondo'},
                     {native: 'our', foreign: 'nostra', nativeSentence: 'our car needs repair', foreignSentence: 'la nostra auto ha bisogno di riparazioni'},
@@ -1464,7 +1477,7 @@ languageScramble.data =
                     {native: 'where is my hat?', foreign: 'dov\'è il mio cappello?'},
                     {native: 'it takes money to make money', foreign: 'ci vogliono soldi per fare soldi'},
                     {native: 'once i had a parrot named Bob', foreign: 'una volta avevo un pappagallo chiamato Bob'},
-                    {native: 'can you do me a favour?', foreign: 'puoi farmi un favore?'},
+                    {native: 'can you do me a favor?', foreign: 'puoi farmi un favore?'},
                     {native: 'oh that it were so!', foreign: 'magari fosse così!'},
                     {native: 'Mary likes to play with other children', foreign: 'a Mary piace giocare con altri bambini'},
                     {native: 'i am sorry to disturb you', foreign: 'mi dispiace disturbarti'},
@@ -1476,7 +1489,7 @@ languageScramble.data =
                     {native: 'i don\'t know his name', foreign: 'non so il suo nome'},
                     {native: 'it\'s ok', foreign: 'è ok'},
                     {native: 'rome is a magical city at night', foreign: 'roma è una città magica di notte'},
-                    {native: 'these are my favourite shoes', foreign: 'queste sono le mie scarpe preferite'},
+                    {native: 'these are my favorite shoes', foreign: 'queste sono le mie scarpe preferite'},
                     {native: 'my son is a doctor', foreign: 'mio figlio è un dottore'},
                     {native: 'i would like to travel all over the world', foreign: 'vorrei viaggiare in tutto il mondo'},
                     {native: 'our car needs repair', foreign: 'la nostra auto ha bisogno di riparazioni'},
@@ -1596,7 +1609,7 @@ after150 = [
     {native: 'either', foreign: 'neanche', nativeSentence: 'I can not do it either', foreignSentence: 'neanche io posso farlo'},
     {native: 'from the', foreign: 'dall’', nativeSentence: 'the station is not far from the hotel', foreignSentence: 'la stazione non è lontana dall’albergo'},
     {native: 'doctor', foreign: 'dottore', nativeSentence: 'I went to the doctor yesterday', foreignSentence: 'ieri sono andato dal dottore'},
-    {native: 'what', foreign: 'quale', nativeSentence: 'what is your favourite book?', foreignSentence: 'quale è il tuo libro preferito?'},
+    {native: 'what', foreign: 'quale', nativeSentence: 'what is your favo   rite book?', foreignSentence: 'quale è il tuo libro preferito?'},
     {native: 'enough', foreign: 'abbastanza', nativeSentence: 'have you got enough chocolate for the cake?', foreignSentence: 'hai abbastanza cioccolato per la torta?'},
     {native: 'late', foreign: 'tardi', nativeSentence: 'it is getting late', foreignSentence: 'si sta facendo tardi'},
     {native: 'fine', foreign: 'bel', nativeSentence: 'what a fine weather we have today!', foreignSentence: 'che bel tempo c’è oggi!'},
