@@ -154,7 +154,7 @@ class languageScramble.ViewHelper
             return if @initializingScramble
             return if lastPress && new Date() - lastPress < 10
             lastPress = new Date()
-            openGuess = @$('.guesses .selected')[0] or @$(".guesses .guess")[0]
+            openGuess = @$(".guesses .guess")[0]
             return unless openGuess?
             
             try 
@@ -256,7 +256,7 @@ class languageScramble.ViewHelper
                 @replaceBlankWithLetter(letter)
             else if letter.hasClass('recently_static_letter')
                 containerClass = @containerClassName(letter)
-                guess = @$('.guesses .selected')[0] or @$(".guesses .#{containerClass} .guess")[0]
+                guess = @$(".guesses .#{containerClass} .guess")[0]
                 return unless guess?
                 @replaceLetterWithBlank(letter) unless alreadyDragged
                 @replaceGuessWithLetter(guess, letter)
@@ -552,12 +552,6 @@ class languageScramble.ViewHelper
         guess.addClass('guess')
         @formatLetterOrGuess(guess)
         guess.addClass("actual_letter_#{letter}")
-        guess.bind 'click', () =>
-            if guess.hasClass('selected')
-                guess.removeClass('selected')
-            else
-                @$('.guesses .guess').removeClass('selected')
-                guess.addClass('selected')
 
     createSpace: (letter) ->
         space = $(document.createElement("DIV"))

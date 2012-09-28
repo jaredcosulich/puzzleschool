@@ -104,8 +104,6 @@ body {
   width: 24px;
   margin: 6px 0;
 }
-.language_scramble .guesses .guess,
-.language_scramble .scrambled .guess,
 .language_scramble .guesses .letter,
 .language_scramble .scrambled .letter {
   cursor: pointer;
@@ -149,24 +147,6 @@ body {
 .language_scramble .scrambled .color8 .guess {
   border: 1px dashed #fafafa;
   background-color: rgba(250, 250, 250, 0.3);
-}
-.language_scramble .guesses .color1 .selected,
-.language_scramble .scrambled .color1 .selected,
-.language_scramble .guesses .color2 .selected,
-.language_scramble .scrambled .color2 .selected,
-.language_scramble .guesses .color3 .selected,
-.language_scramble .scrambled .color3 .selected,
-.language_scramble .guesses .color4 .selected,
-.language_scramble .scrambled .color4 .selected,
-.language_scramble .guesses .color5 .selected,
-.language_scramble .scrambled .color5 .selected,
-.language_scramble .guesses .color6 .selected,
-.language_scramble .scrambled .color6 .selected,
-.language_scramble .guesses .color7 .selected,
-.language_scramble .scrambled .color7 .selected,
-.language_scramble .guesses .color8 .selected,
-.language_scramble .scrambled .color8 .selected {
-  background-color: #fafafa;
 }
 .language_scramble .guesses .letter,
 .language_scramble .scrambled .letter {

@@ -248,7 +248,7 @@ languageScramble.ViewHelper = (function() {
         return;
       }
       lastPress = new Date();
-      openGuess = _this.$('.guesses .selected')[0] || _this.$(".guesses .guess")[0];
+      openGuess = _this.$(".guesses .guess")[0];
       if (openGuess == null) {
         return;
       }
@@ -397,7 +397,7 @@ languageScramble.ViewHelper = (function() {
         return _this.replaceBlankWithLetter(letter);
       } else if (letter.hasClass('recently_static_letter')) {
         containerClass = _this.containerClassName(letter);
-        guess = _this.$('.guesses .selected')[0] || _this.$(".guesses ." + containerClass + " .guess")[0];
+        guess = _this.$(".guesses ." + containerClass + " .guess")[0];
         if (guess == null) {
           return;
         }
@@ -840,20 +840,11 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.createGuess = function(letter) {
-    var guess,
-      _this = this;
+    var guess;
     guess = $(document.createElement("DIV"));
     guess.addClass('guess');
     this.formatLetterOrGuess(guess);
-    guess.addClass("actual_letter_" + letter);
-    return guess.bind('click', function() {
-      if (guess.hasClass('selected')) {
-        return guess.removeClass('selected');
-      } else {
-        _this.$('.guesses .guess').removeClass('selected');
-        return guess.addClass('selected');
-      }
-    });
+    return guess.addClass("actual_letter_" + letter);
   };
 
   ViewHelper.prototype.createSpace = function(letter) {
