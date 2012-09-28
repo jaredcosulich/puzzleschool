@@ -311,6 +311,7 @@ languageScramble.ViewHelper = (function() {
     this.dragPathY = [];
     letter = $(letter);
     startDrag = function(e) {
+      var relativeParent;
       if (_this.initializingScramble) {
         return;
       }
@@ -320,8 +321,12 @@ languageScramble.ViewHelper = (function() {
       _this.dragging = letter;
       _this.dragPathX = [];
       _this.dragPathY = [];
-      _this.dragAdjustmentX = _this.clientX(e) - letter.offset().left + _this.el.offset().left;
-      _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + _this.el.offset().top;
+      relativeParent = $(letter[0].parentNode);
+      while (relativeParent.css('position') !== 'relative' && relativeParent[0] !== _this.el[0]) {
+        relativeParent = $(relativeParent[0].parentNode);
+      }
+      _this.dragAdjustmentX = _this.clientX(e) - letter.offset().left + relativeParent.offset().left;
+      _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + relativeParent.offset().top;
       if (_this.actualLetter(letter) != null) {
         return letter.addClass('recently_static_guess');
       } else {
@@ -351,7 +356,7 @@ languageScramble.ViewHelper = (function() {
       }
       if (letter.hasClass('recently_static_letter') || letter.hasClass('recently_static_guess')) {
         if (_this.dragPathX.length > 1 || _this.dragPathY.length > 1) {
-          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 10 || Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 10) {
+          if (Math.abs(_this.dragPathX[0] - _this.clientX(e)) > 20 || Math.abs(_this.dragPathY[0] - _this.clientY(e)) > 20) {
             letter.removeClass('recently_static_guess');
             letter.removeClass('recently_static_letter');
           }
@@ -469,6 +474,11 @@ languageScramble.ViewHelper = (function() {
       sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
     }
     displayWords.html(sentence);
+    return this.displayScramble();
+  };
+
+  ViewHelper.prototype.displayScramble = function() {
+    this.initializingScramble = true;
     this.initScrambleAreas('scrambled');
     this.initScrambleAreas('guesses');
     this.resize();
@@ -1037,7 +1047,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.modifyScramble = function(word) {
     var add, commonLetters, i, letter, _i;
-    if (!(word.length < 6)) {
+    if (!(word.length < 8)) {
       return word;
     }
     commonLetters = (function() {
@@ -1050,12 +1060,12 @@ languageScramble.ViewHelper = (function() {
       }
       return _results;
     })();
-    add = 6 - word.length;
-    if (add > 2) {
-      add = 2;
+    add = 8 - word.length;
+    if (add > 4) {
+      add = 4;
     }
     for (i = _i = 0; 0 <= add ? _i < add : _i > add; i = 0 <= add ? ++_i : --_i) {
-      word.push(commonLetters[Math.floor(Math.random() * commonLetters.length)]);
+      word.splice(Math.floor(Math.random() * word.length), 0, commonLetters[Math.floor(Math.random() * commonLetters.length)]);
     }
     return word;
   };
@@ -1203,20 +1213,22 @@ languageScramble.ViewHelper = (function() {
       height: 0,
       duration: 500
     });
+    if (!window.AppMobi) {
+      $(document.body).bind('click', function() {
+        return showNext();
+      });
+    }
+    $(document.body).bind('touchstart', function() {
+      return showNext();
+    });
+    $('#clickarea').bind('keyup', function(e) {
+      return showNext();
+    });
     return correct.animate({
       opacity: 1,
       duration: 500,
       complete: function() {
-        $.timeout(500 + (50 * correctSentence.length), function() {
-          return showNext();
-        });
-        $(document.body).bind('click', function() {
-          return showNext();
-        });
-        $(document.body).bind('touchstart', function() {
-          return showNext();
-        });
-        return $('#clickarea').bind('keyup', function(e) {
+        return $.timeout(500 + (100 * correctSentence.length), function() {
           return showNext();
         });
       }

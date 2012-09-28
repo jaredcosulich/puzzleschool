@@ -281,6 +281,7 @@ body {
 .language_scramble #close_menu_button {
     float: right;
     margin-right: 6px;
+    text-decoration: none;
 }   
 
 .language_scramble #level_select_menu {

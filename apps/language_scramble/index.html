@@ -33,10 +33,11 @@
                 AppMobi.device.managePower(true,false);
 
             	//any app-specific initialization
-            	window.app.initialize();
-
-    			//hide splash screen
+    	        window.app.initialize();
+    	         
+    	        //hide splash screen
     			AppMobi.device.hideSplashScreen();
+    			
             };
     		document.addEventListener("appMobi.device.ready",onDeviceReady,false);
 

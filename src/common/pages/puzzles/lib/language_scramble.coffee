@@ -204,8 +204,13 @@ class languageScramble.ViewHelper
             @dragging = letter
             @dragPathX = []
             @dragPathY = []
-            @dragAdjustmentX = @clientX(e) - letter.offset().left + @el.offset().left
-            @dragAdjustmentY = @clientY(e) - letter.offset().top + @el.offset().top
+            
+            relativeParent = $(letter[0].parentNode)
+            while relativeParent.css('position') != 'relative' and relativeParent[0] != @el[0]
+                relativeParent = $(relativeParent[0].parentNode) 
+            @dragAdjustmentX = @clientX(e) - letter.offset().left + relativeParent.offset().left
+            @dragAdjustmentY = @clientY(e) - letter.offset().top + relativeParent.offset().top
+
             if @actualLetter(letter)?
                 letter.addClass('recently_static_guess')
             else
@@ -226,7 +231,7 @@ class languageScramble.ViewHelper
 
             if letter.hasClass('recently_static_letter') or letter.hasClass('recently_static_guess') 
                 if @dragPathX.length > 1 or @dragPathY.length > 1
-                    if Math.abs(@dragPathX[0] - @clientX(e)) > 10 or Math.abs(@dragPathY[0] - @clientY(e)) > 10
+                    if Math.abs(@dragPathX[0] - @clientX(e)) > 20 or Math.abs(@dragPathY[0] - @clientY(e)) > 20
                         letter.removeClass('recently_static_guess')
                         letter.removeClass('recently_static_letter')
             
@@ -272,7 +277,7 @@ class languageScramble.ViewHelper
         letter.bind 'touchend', endDrag
         letter.bind 'mouseup', endDrag unless window.AppMobi
             
-    newScramble: () ->
+    newScramble: ->
         @initializingScramble = true
         @answerTimes or= []
         @answerTimes.push(new Date()) 
@@ -294,7 +299,10 @@ class languageScramble.ViewHelper
             sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
         displayWords.html(sentence)
+        @displayScramble()
 
+    displayScramble: ->
+        @initializingScramble = true
         @initScrambleAreas('scrambled')
         @initScrambleAreas('guesses')
         @resize()
@@ -685,11 +693,16 @@ class languageScramble.ViewHelper
         @$('.guesses .letter, .guesses .space').map((html) -> $(html).html()).join('') == (@scrambleInfo[@activeType])
 
     modifyScramble: (word) ->
-        return word unless word.length < 6
+        return word unless word.length < 8
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
-        add = (6 - word.length)
-        add = 2 if add > 2
-        word.push(commonLetters[Math.floor(Math.random() * commonLetters.length)]) for i in [0...add]
+        add = (8 - word.length)
+        add = 4 if add > 4
+        for i in [0...add]
+            word.splice(
+                Math.floor(Math.random() * word.length),
+                0,
+                (commonLetters[Math.floor(Math.random() * commonLetters.length)])
+            ) 
         return word
             
     setStage: () ->
@@ -797,14 +810,16 @@ class languageScramble.ViewHelper
             height: 0
             duration: 500
 
+        unless window.AppMobi
+            $(document.body).bind 'click', () => showNext() 
+        $(document.body).bind 'touchstart', () => showNext()
+        $('#clickarea').bind 'keyup', (e) => showNext()
+
         correct.animate
             opacity: 1
             duration: 500
             complete: () =>
-                $.timeout 500 + (50 * correctSentence.length), () => showNext()
-                $(document.body).bind 'click', () => showNext()
-                $(document.body).bind 'touchstart', () => showNext()
-                $('#clickarea').bind 'keyup', (e) => showNext()
+                $.timeout 500 + (100 * correctSentence.length), () => showNext()
 
     nextLevel: () ->        
         nextLevel = @languageData.levels[@level.nextLevel]

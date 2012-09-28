@@ -153,7 +153,48 @@ describe("Touch", function() {
                 triggerTouch(guess[0], 'end', guess.offset().left + 2, guess.offset().top + 2);
                 expect($('.guesses .letter').length).toEqual(0);
                 expect($($('.scrambled .letter')[0]).html()).toEqual(guessHtml);
+            });
+        });        
+        
+        describe("dragging at the 'blank' stage", function() {
+            beforeEach(function() {
+                game.data.english_italian.levels.top10words.data.push(
+                    {native: 'what', foreign: 'che', nativeSentence: 'what luck', foreignSentence: 'che fortuna', id: 'what-che'}
+                )
+                game.puzzleData.levels.english_italian.top10words['not-non'] = 4;
+                game.puzzleData.levels.english_italian.top10words['what-che'] = 3;
+                game.newScramble();
+                
+                letter = $('.scrambled .letter');
+                var guess = $($('.guesses .guess')[0]);
+
+                letterHtml = letter.html();
+                triggerTouch(letter[0], 'start', letter.offset().left, letter.offset().top);
+                triggerTouch(letter[0], 'move', letter.offset().left + 5, letter.offset().top - 10);
+                triggerTouch(letter[0], 'move', guess.offset().left - 10, guess.offset().top + 30);
+                triggerTouch(letter[0], 'move', guess.offset().left + 1, guess.offset().top + 1);
+                triggerTouch(letter[0], 'end');
+            });
+
+            it("should replace the guess", function() {
+                var guessLetter = $($('.guesses .letter')[0]);
+                expect(guessLetter.html()).toEqual(letterHtml);
+                expect(guessLetter.hasClass('actual_letter_w')).toBe(true);
             })
-        });
+
+            it("should drag properly when dragging to another guess", function() {
+                var guessLetter = $($('.guesses .letter')[0]);
+                var nextGuess  = $($('.guesses .guess')[0]);    
+                expect(nextGuess.hasClass('actual_letter_h')).toBe(true);
+
+                guessTop = guessLetter.offset().top
+                triggerTouch(guessLetter[0], 'start', guessLetter.offset().left, guessLetter.offset().top);
+                triggerTouch(guessLetter[0], 'move', guessLetter.offset().left + 5, guessLetter.offset().top);
+                expect(Math.abs(guessLetter.offset().top - guessTop)).toBeLessThan(20)
+                triggerTouch(guessLetter[0], 'move', nextGuess.offset().left - 5, guessLetter.offset().top);
+                expect(Math.abs(guessLetter.offset().top - guessTop)).toBeLessThan(20)
+                triggerTouch(guessLetter[0], 'end');
+            })
+        });        
     });    
 });

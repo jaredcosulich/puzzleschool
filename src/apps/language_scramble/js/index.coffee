@@ -34,6 +34,9 @@ window.app =
 
         @initProgressMeter()
         @initMenuButton()
+
+        @checkSize(50)
+        @sizeElements()
         
         @viewHelper.setLevel(@levelName)
 
@@ -41,11 +44,23 @@ window.app =
         @viewHelper.bindKeyPress()
         @viewHelper.newScramble() 
 
-        
+    checkSize: (interval) ->
+        if @width != (window.innerWidth or window.landwidth)
+            @width = window.innerWidth or window.landwidth
+            @height = window.innerHeight or window.landheight
+            @sizeElements()            
+            @viewHelper.displayScramble()
+        $.timeout interval, () => @checkSize(interval * 2)
+
+    sizeElements: ->
+        @progressMeter.css(top: @height - @percentComplete.height())
+        levelSelect = @selector.find('#level_select_menu')
+        levelSelect.width(@width)
+        levelSelect.height(@height)
+    
     initProgressMeter: ->
         @progressMeter = @viewHelper.$('.level_progress_meter')
         @percentComplete = @progressMeter.find('.percent_complete')
-        @progressMeter.css(top: @height - @percentComplete.height())
 
     saveProgress: (puzzleProgress) ->
         percentComplete = 0
@@ -66,8 +81,6 @@ window.app =
         
     initMenuButton: ->
         levelSelect = @selector.find('#level_select_menu')
-        levelSelect.width($('.language_scramble').width())
-        levelSelect.height($('.language_scramble').height())
         startPosition = {}
         levelSelect.bind 'touchstart', (e) =>
             startPosition = 
@@ -108,11 +121,11 @@ window.app =
                 $(levelProgress).bind 'click', () => showLevel(key)
                 $(levelLinkDiv).append(levelProgress)
     
-        @selector.find('#menu_button').bind 'click', ->
+        @selector.find('#menu_button').bind 'click', =>
             levelSelect.css
                 opacity: 0
-                top: ($('.language_scramble').height() - levelSelect.height()) / 2
-                left: ($('.language_scramble').width() - levelSelect.width()) / 2
+                top: (@height - levelSelect.height()) / 2
+                left: (@width - levelSelect.width()) / 2
             levelSelect.animate
                 opacity: 1
                 duration: 500
