@@ -53,5 +53,18 @@ describe("Init:", function() {
         }
         
         for (var i=0; i<phrases.length; ++i) testPhrase(phrases[i]);
+        
+        it("should not go beyond the max level", function() {
+            game.data.english_italian.levels.advanced.data = phrases
+            game.data.english_italian.levels.advanced.data.push({native: 'x', foreign: 'y'})
+            game.setLevel('advanced');         
+            data = game.data.english_italian.levels.advanced.data
+            game.puzzleData.levels.english_italian.advanced[data[0].id] = 5;
+            game.puzzleData.levels.english_italian.advanced[data[1].id] = 5;
+            game.puzzleData.levels.english_italian.advanced[data[2].id] = 5;
+            game.puzzleData.levels.english_italian.advanced[data[3].id] = 4;
+            game.newScramble();
+            expect($('.display_words').html()).toContain('x');
+        })
     });
 });

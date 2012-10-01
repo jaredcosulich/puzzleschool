@@ -23,6 +23,15 @@ soma.chunks({
   }
 });
 
+soma.views({
+  Architect: {
+    selector: function() {},
+    create: function() {
+      return $('.register_flag').hide();
+    }
+  }
+});
+
 soma.routes({
   '/puzzles/architect': function() {
     return new soma.chunks.Architect;

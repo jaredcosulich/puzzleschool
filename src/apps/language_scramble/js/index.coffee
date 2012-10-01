@@ -121,7 +121,7 @@ window.app =
                 $(levelProgress).bind 'click', () => showLevel(key)
                 $(levelLinkDiv).append(levelProgress)
     
-        @selector.find('#menu_button').bind 'click', =>
+        @selector.find('.menu_button').bind 'click', =>
             levelSelect.css
                 opacity: 0
                 top: (@height - levelSelect.height()) / 2

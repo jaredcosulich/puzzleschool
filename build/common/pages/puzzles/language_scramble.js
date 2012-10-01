@@ -216,18 +216,18 @@ soma.views({
 });
 
 soma.routes({
+  '/puzzles/language_scramble/:languages/:levelName': function(data) {
+    return new soma.chunks.LanguageScramble({
+      languages: data.languages,
+      levelName: data.levelName
+    });
+  },
+  '/puzzles/language_scramble/:languages': function(data) {
+    return new soma.chunks.LanguageScramble({
+      languages: data.languages
+    });
+  },
   '/puzzles/language_scramble': function() {
     return new soma.chunks.LanguageScramble;
-  },
-  '/puzzles/language_scramble/:languages': function(languages) {
-    return new soma.chunks.LanguageScramble({
-      languages: languages
-    });
-  },
-  '/puzzles/language_scramble/:languages/:levelName': function(languages, levelName) {
-    return new soma.chunks.LanguageScramble({
-      languages: languages,
-      levelName: levelName
-    });
   }
 });

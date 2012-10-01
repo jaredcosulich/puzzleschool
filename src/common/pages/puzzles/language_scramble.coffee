@@ -145,15 +145,15 @@ soma.views
 
 
 soma.routes
-    '/puzzles/language_scramble': -> new soma.chunks.LanguageScramble
+    '/puzzles/language_scramble/:languages/:levelName': (data) -> 
+        new soma.chunks.LanguageScramble
+            languages: data.languages
+            levelName: data.levelName
     
-    '/puzzles/language_scramble/:languages': (languages) -> 
+    '/puzzles/language_scramble/:languages': (data) -> 
         new soma.chunks.LanguageScramble
-            languages: languages
+            languages: data.languages
             
-    '/puzzles/language_scramble/:languages/:levelName': (languages, levelName) -> 
-        new soma.chunks.LanguageScramble
-            languages: languages
-            levelName: levelName
+    '/puzzles/language_scramble': -> new soma.chunks.LanguageScramble
             
         

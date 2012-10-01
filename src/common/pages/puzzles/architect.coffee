@@ -12,5 +12,11 @@ soma.chunks
             @setTitle("Architect - The Puzzle School")
             @html = wings.renderTemplate(@template)
         
+soma.views
+    Architect:
+        selector: -> 
+            
+        create: ->
+            $('.register_flag').hide()    
 soma.routes
     '/puzzles/architect': -> new soma.chunks.Architect
