@@ -11,6 +11,13 @@ soma.chunks
         build: () ->
             @setTitle("About - The Puzzle School")
             @html = wings.renderTemplate(@template)
+            
+soma.views
+    About:
+        selector: '#content .about'
+        create: ->
+            $('.register_flag').hide()    
+
         
 soma.routes
     '/about': -> new soma.chunks.About

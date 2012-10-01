@@ -18,6 +18,8 @@ soma.views
     Puzzles:
         selector: '#content .puzzle'
         create: ->
+            $('.register_flag').hide()    
+            
             @$('.rating p').bind 'click', (e) => @showSection(e.currentTarget)
             
         showSection: (navElement) ->

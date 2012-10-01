@@ -23,9 +23,11 @@ soma.chunks({
 });
 
 soma.views({
-  Labs: {
+  Account: {
     selector: '#content .account',
-    create: function() {}
+    create: function() {
+      return $('.register_flag').hide();
+    }
   }
 });
 

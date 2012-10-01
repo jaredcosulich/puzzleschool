@@ -14,9 +14,9 @@ soma.chunks
         
 soma.views
     Architect:
-        selector: -> 
-            
+        selector: '#content .architect'
         create: ->
             $('.register_flag').hide()    
+
 soma.routes
     '/puzzles/architect': -> new soma.chunks.Architect

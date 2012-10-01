@@ -13,9 +13,10 @@ soma.chunks
             @html = wings.renderTemplate(@template)
         
 soma.views
-    Labs:
+    Account:
         selector: '#content .account'
         create: ->
+            $('.register_flag').hide()    
             
 soma.routes
     '/account': -> new soma.chunks.Account

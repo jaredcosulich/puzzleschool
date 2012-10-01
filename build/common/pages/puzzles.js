@@ -31,6 +31,7 @@ soma.views({
     selector: '#content .puzzle',
     create: function() {
       var _this = this;
+      $('.register_flag').hide();
       return this.$('.rating p').bind('click', function(e) {
         return _this.showSection(e.currentTarget);
       });

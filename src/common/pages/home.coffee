@@ -12,6 +12,12 @@ soma.chunks
             @setTitle('The Puzzle School')
             @html = wings.renderTemplate(@template)
         
+soma.views
+    Home:
+        selector: '#content .home'
+        create: ->
+            $('.register_flag').hide()    
+            
 
 soma.routes
     '': -> new soma.chunks.Home

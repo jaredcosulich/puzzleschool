@@ -22,6 +22,15 @@ soma.chunks({
   }
 });
 
+soma.views({
+  About: {
+    selector: '#content .about',
+    create: function() {
+      return $('.register_flag').hide();
+    }
+  }
+});
+
 soma.routes({
   '/about': function() {
     return new soma.chunks.About;

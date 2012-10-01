@@ -22,6 +22,15 @@ soma.chunks({
   }
 });
 
+soma.views({
+  Home: {
+    selector: '#content .home',
+    create: function() {
+      return $('.register_flag').hide();
+    }
+  }
+});
+
 soma.routes({
   '': function() {
     return new soma.chunks.Home;

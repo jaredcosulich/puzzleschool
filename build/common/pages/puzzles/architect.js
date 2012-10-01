@@ -25,7 +25,7 @@ soma.chunks({
 
 soma.views({
   Architect: {
-    selector: function() {},
+    selector: '#content .architect',
     create: function() {
       return $('.register_flag').hide();
     }
