@@ -219,14 +219,14 @@ a {
   border-bottom: 1px solid #484848;
 }
 .page .sub_nav {
-  width: 16em;
+  width: 63em;
   margin: -15px auto 30px auto;
   overflow: hidden;
 }
 .page .sub_nav a {
   font-weight: normal;
   color: #262626;
-  width: 7em;
+  width: 20em;
   margin-left: 1em;
   float: left;
   text-align: center;
