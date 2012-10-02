@@ -244,7 +244,7 @@ body {
     left: -1000px;
 }
 
-.language_scramble .menu_button, .language_scramble #close_menu_button {
+.language_scramble .scramble_content .menu_button, .language_scramble #close_menu_button {
     display: block;
     background-color: black;
     color: white;
@@ -252,7 +252,7 @@ body {
     cursor: pointer;
 }
 
-.language_scramble .menu_button {
+.language_scramble .scramble_content .menu_button {
     position: absolute;
     top: 0;
     right: 6px;

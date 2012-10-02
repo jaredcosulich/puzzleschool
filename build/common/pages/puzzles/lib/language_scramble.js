@@ -1252,14 +1252,14 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.nextLevel = function() {
-    var index, message, nextLevel, nextLevels, resetLevel, showLevel, _i, _len, _ref,
+    var index, message, nextLevel, nextLevelName, resetLevel, showLevel, _i, _len, _ref,
       _this = this;
-    nextLevels = this.languageData.levels[this.level.nextLevel];
-    _ref = nextLevels || [];
+    message = this.$('#next_level');
+    _ref = this.level.nextLevels || [];
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-      nextLevel = _ref[index];
+      nextLevelName = _ref[index];
+      nextLevel = this.languageData.levels[nextLevelName];
       $(this.$('#next_level .next_level_link')[index]).html(nextLevel.title);
-      message = this.$('#next_level');
     }
     resetLevel = function() {
       if (confirm('Are you sure you want to reset this level?')) {
@@ -1331,7 +1331,7 @@ languageScramble.data = {
       top10words: {
         title: 'Top 10 Words',
         subtitle: 'The 10 most frequently used Italian words.',
-        nextLevel: ['top20words', 'top10phrases'],
+        nextLevels: ['top20words', 'top10phrases'],
         data: [
           {
             "native": 'not',
@@ -1389,7 +1389,7 @@ languageScramble.data = {
       top20words: {
         title: 'Top 10-20 Words',
         subtitle: 'The 10-20 most frequently used Italian words.',
-        nextLevel: ['top30words', 'top20phrases'],
+        nextLevels: ['top30words', 'top20phrases'],
         data: [
           {
             "native": 'i have',
@@ -1447,7 +1447,7 @@ languageScramble.data = {
       top30words: {
         title: 'Top 20-30 Words',
         subtitle: 'The 20-30 most frequently used Italian words.',
-        nextLevel: ['top40words', 'top30phrases'],
+        nextLevels: ['top40words', 'top30phrases'],
         data: [
           {
             "native": 'here',
@@ -1505,7 +1505,7 @@ languageScramble.data = {
       top40words: {
         title: 'Top 30-40 Words',
         subtitle: 'The 30-40 most frequently used Italian words.',
-        nextLevel: ['top50words', 'top40phrases'],
+        nextLevels: ['top50words', 'top40phrases'],
         data: [
           {
             "native": 'only',
@@ -1563,7 +1563,7 @@ languageScramble.data = {
       top50words: {
         title: 'Top 40-50 Words',
         subtitle: 'The 40-50 most frequently used Italian words.',
-        nextLevel: ['top60words', 'top50phrases'],
+        nextLevels: ['top60words', 'top50phrases'],
         data: [
           {
             "native": 'to be',
@@ -1621,7 +1621,7 @@ languageScramble.data = {
       top60words: {
         title: 'Top 50-60 Words',
         subtitle: 'The 50-60 most frequently used Italian words.',
-        nextLevel: ['top70words', 'top60phrases'],
+        nextLevels: ['top70words', 'top60phrases'],
         data: [
           {
             "native": 'to him',
@@ -1679,7 +1679,7 @@ languageScramble.data = {
       top70words: {
         title: 'Top 60-70 Words',
         subtitle: 'The 60-70 most frequently used Italian words.',
-        nextLevel: ['top80words', 'top70phrases'],
+        nextLevels: ['top80words', 'top70phrases'],
         data: [
           {
             "native": 'did',
@@ -1737,7 +1737,7 @@ languageScramble.data = {
       top80words: {
         title: 'Top 70-80 Words',
         subtitle: 'The 70-80 most frequently used Italian words.',
-        nextLevel: ['top90words', 'top80phrases'],
+        nextLevels: ['top90words', 'top80phrases'],
         data: [
           {
             "native": 'that',
@@ -1795,7 +1795,7 @@ languageScramble.data = {
       top90words: {
         title: 'Top 80-90 Words',
         subtitle: 'The 80-90 most frequently used Italian words.',
-        nextLevel: ['top100words', 'top90phrases'],
+        nextLevels: ['top100words', 'top90phrases'],
         data: [
           {
             "native": 'his',
@@ -1853,7 +1853,7 @@ languageScramble.data = {
       top100words: {
         title: 'Top 90-100 Words',
         subtitle: 'The 90-100 most frequently used Italian words.',
-        nextLevel: ['top110words', 'top100phrases'],
+        nextLevels: ['top110words', 'top100phrases'],
         data: [
           {
             "native": 'her',
@@ -1911,7 +1911,7 @@ languageScramble.data = {
       top110words: {
         title: 'Top 100-110 Words',
         subtitle: 'The 100-110 most frequently used Italian words.',
-        nextLevel: ['top120words', 'top110phrases'],
+        nextLevels: ['top120words', 'top110phrases'],
         data: [
           {
             "native": 'true',
@@ -1969,7 +1969,7 @@ languageScramble.data = {
       top120words: {
         title: 'Top 110-120 Words',
         subtitle: 'The 110-120 most frequently used Italian words.',
-        nextLevel: ['top130words', 'top120phrases'],
+        nextLevels: ['top130words', 'top120phrases'],
         data: [
           {
             "native": 'the',
@@ -2027,7 +2027,7 @@ languageScramble.data = {
       top130words: {
         title: 'Top 120-130 Words',
         subtitle: 'The 120-130 most frequently used Italian words.',
-        nextLevel: ['top140words', 'top130phrases'],
+        nextLevels: ['top140words', 'top130phrases'],
         data: [
           {
             "native": 'go',
@@ -2085,7 +2085,7 @@ languageScramble.data = {
       top140words: {
         title: 'Top 130-140 Words',
         subtitle: 'The 130-140 most frequently used Italian words.',
-        nextLevel: ['top150words', 'top140phrases'],
+        nextLevels: ['top150words', 'top140phrases'],
         data: [
           {
             "native": 'you',
@@ -2143,7 +2143,7 @@ languageScramble.data = {
       top150words: {
         title: 'Top 140-150 Words',
         subtitle: 'The 140-150 most frequently used Italian words.',
-        nextLevel: ['top160words', 'top150phrases'],
+        nextLevels: ['top160words', 'top150phrases'],
         data: [
           {
             "native": 'really',
@@ -2201,7 +2201,7 @@ languageScramble.data = {
       top160words: {
         title: 'Top 150-160 Words',
         subtitle: 'The 150-160 most frequently used Italian words.',
-        nextLevel: ['top170words', 'top160phrases'],
+        nextLevels: ['top170words', 'top160phrases'],
         data: [
           {
             "native": 'god',
@@ -2259,7 +2259,7 @@ languageScramble.data = {
       top170words: {
         title: 'Top 160-170 Words',
         subtitle: 'The 160-170 most frequently used Italian words.',
-        nextLevel: ['top180words', 'top170phrases'],
+        nextLevels: ['top180words', 'top170phrases'],
         data: [
           {
             "native": 'can',
@@ -2317,7 +2317,7 @@ languageScramble.data = {
       top180words: {
         title: 'Top 170-180 Words',
         subtitle: 'The 170-180 most frequently used Italian words.',
-        nextLevel: ['top190words', 'top180phrases'],
+        nextLevels: ['top190words', 'top180phrases'],
         data: [
           {
             "native": 'see',
@@ -2345,9 +2345,9 @@ languageScramble.data = {
             nativeSentence: 'this is the place for me!',
             foreignSentence: 'questo  è il posto per me!'
           }, {
-            "native": 'whom',
+            "native": 'that',
             foreign: 'cui',
-            nativeSentence: 'Tom is the boy with whom Mary fell in love',
+            nativeSentence: 'Tom is the boy that Mary fell in love with',
             foreignSentence: 'Tom è il ragazzo di cui Mary si è innamorata'
           }, {
             "native": 'a lot',
@@ -2367,15 +2367,15 @@ languageScramble.data = {
           }, {
             "native": 'it',
             foreign: 'ce',
-            nativeSentence: 'i did it!',
-            foreignSentence: 'ce l\'ho fatta!'
+            nativeSentence: 'i did it',
+            foreignSentence: 'ce l\'ho fatta'
           }
         ]
       },
       top190words: {
         title: 'Top 180-190 Words',
         subtitle: 'The 180-190 most frequently used Italian words.',
-        nextLevel: ['top200words', 'top190phrases'],
+        nextLevels: ['top200words', 'top190phrases'],
         data: [
           {
             "native": 'need',
@@ -2433,7 +2433,7 @@ languageScramble.data = {
       top200words: {
         title: 'Top 190-200 Words',
         subtitle: 'The 190-200 most frequently used Italian words.',
-        nextLevel: ['top200phrases'],
+        nextLevels: ['top200phrases'],
         data: [
           {
             "native": 'hey',
@@ -2491,7 +2491,7 @@ languageScramble.data = {
       top10phrases: {
         title: 'Phrases For The Top 10 Words',
         subtitle: 'Phrases containing the 10 most frequently used Italian words',
-        nextLevel: ['top20words', 'top20phrases'],
+        nextLevels: ['top20words', 'top20phrases'],
         data: [
           {
             "native": 'that\'s not necessary',
@@ -2529,7 +2529,7 @@ languageScramble.data = {
       top20phrases: {
         title: 'Phrases For The Top 10 - 20 Words',
         subtitle: 'Phrases containing the 10 -20 most frequently used Italian words',
-        nextLevel: ['top30words', 'top30phrases'],
+        nextLevels: ['top30words', 'top30phrases'],
         data: [
           {
             "native": 'i have twenty dollars',
@@ -2567,7 +2567,7 @@ languageScramble.data = {
       top30phrases: {
         title: 'Phrases For The Top 20 - 30 Words',
         subtitle: 'Phrases containing the 20 - 30 most frequently used Italian words',
-        nextLevel: ['top40words', 'top40phrases'],
+        nextLevels: ['top40words', 'top40phrases'],
         data: [
           {
             "native": 'come here',
@@ -2605,7 +2605,7 @@ languageScramble.data = {
       top40phrases: {
         title: 'Phrases For The Top 30 - 40 Words',
         subtitle: 'Phrases containing the 30 - 40 most frequently used Italian words',
-        nextLevel: ['top50words', 'top50phrases'],
+        nextLevels: ['top50words', 'top50phrases'],
         data: [
           {
             "native": 'it was only fifteen minutes',
@@ -2643,7 +2643,7 @@ languageScramble.data = {
       top50phrases: {
         title: 'Phrases For The Top 40 - 50 Words',
         subtitle: 'Phrases for the 40 - 50 most frequently used Italian words',
-        nextLevel: ['top60words', 'top60phrases'],
+        nextLevels: ['top60words', 'top60phrases'],
         data: [
           {
             "native": 'i want to be an astronaut',
@@ -2681,7 +2681,7 @@ languageScramble.data = {
       top60phrases: {
         title: 'Phrases For The Top 50 - 60 Words',
         subtitle: 'Phrases for the 50 - 60 most frequently used Italian words',
-        nextLevel: ['top70words', 'top70phrases'],
+        nextLevels: ['top70words', 'top70phrases'],
         data: [
           {
             "native": 'i will speak to him',
@@ -2719,7 +2719,7 @@ languageScramble.data = {
       top70phrases: {
         title: 'Phrases For The Top 60 - 70 Words',
         subtitle: 'Phrases for the 60 - 70 most frequently used Italian words',
-        nextLevel: ['top80words', 'top80phrases'],
+        nextLevels: ['top80words', 'top80phrases'],
         data: [
           {
             "native": 'did you have a good trip?',
@@ -2757,7 +2757,7 @@ languageScramble.data = {
       top80phrases: {
         title: 'Phrases For The Top 70 - 80 Words',
         subtitle: 'Phrases for the 70 - 80 most frequently used Italian words',
-        nextLevel: ['top90words', 'top90phrases'],
+        nextLevels: ['top90words', 'top90phrases'],
         data: [
           {
             "native": 'that\'s not what i heard',
@@ -2795,7 +2795,7 @@ languageScramble.data = {
       top90phrases: {
         title: 'Phrases For The Top 80 - 90 Words',
         subtitle: 'Phrases for the 80 - 90 most frequently used Italian words',
-        nextLevel: ['top100words', 'top100phrases'],
+        nextLevels: ['top100words', 'top100phrases'],
         data: [
           {
             "native": 'there is a big tree in the garden',
@@ -2833,7 +2833,7 @@ languageScramble.data = {
       top100phrases: {
         title: 'Phrases For The Top 90 - 100 Words',
         subtitle: 'Phrases for the 90 - 100 most frequently used Italian words',
-        nextLevel: ['top110words', 'top110phrases'],
+        nextLevels: ['top110words', 'top110phrases'],
         data: [
           {
             "native": 'she is an excellent cook',
@@ -2874,7 +2874,7 @@ languageScramble.data = {
       top110phrases: {
         title: 'Phrases For The Top 100 - 110 Words',
         subtitle: 'Phrases for the 100 - 110 most frequently used Italian words',
-        nextLevel: ['top120words', 'top120phrases'],
+        nextLevels: ['top120words', 'top120phrases'],
         data: [
           {
             "native": 'it\'s true!',
@@ -2912,7 +2912,7 @@ languageScramble.data = {
       top120phrases: {
         title: 'Phrases For The Top 110 - 120 Words',
         subtitle: 'Phrases for the 110 - 120 most frequently used Italian words',
-        nextLevel: ['top130words', 'top130phrases'],
+        nextLevels: ['top130words', 'top130phrases'],
         data: [
           {
             "native": 'the kids are playing in the garden',
@@ -2950,7 +2950,7 @@ languageScramble.data = {
       top130phrases: {
         title: 'Phrases For The Top 120 - 130 Words',
         subtitle: 'Phrases for the 120 - 130 most frequently used Italian words',
-        nextLevel: ['top140words', 'top140phrases'],
+        nextLevels: ['top140words', 'top140phrases'],
         data: [
           {
             "native": 'i want to go home',
@@ -2988,7 +2988,7 @@ languageScramble.data = {
       top140phrases: {
         title: 'Phrases For The Top 130 - 140 Words',
         subtitle: 'Phrases for the 130 - 140 most frequently used Italian words',
-        nextLevel: ['top150words', 'top150phrases'],
+        nextLevels: ['top150words', 'top150phrases'],
         data: [
           {
             "native": 'what do you think about Italy? ',
@@ -3026,7 +3026,7 @@ languageScramble.data = {
       top150phrases: {
         title: 'Phrases For The Top 140 - 150 Words',
         subtitle: 'Phrases for the 140 - 150 most frequently used Italian words',
-        nextLevel: ['top160words', 'top160phrases'],
+        nextLevels: ['top160words', 'top160phrases'],
         data: [
           {
             "native": 'he wants to go home',
@@ -3064,7 +3064,7 @@ languageScramble.data = {
       top160phrases: {
         title: 'Phrases For The Top 150 - 160 Words',
         subtitle: 'Phrases for the 150 - 160 most frequently used Italian words',
-        nextLevel: ['top170words', 'top170phrases'],
+        nextLevels: ['top170words', 'top170phrases'],
         data: [
           {
             "native": 'i believe in god',
@@ -3102,7 +3102,7 @@ languageScramble.data = {
       top170phrases: {
         title: 'Phrases For The Top 160 - 170 Words',
         subtitle: 'Phrases for the 160 - 170 most frequently used Italian words',
-        nextLevel: ['top180words', 'top180phrases'],
+        nextLevels: ['top180words', 'top180phrases'],
         data: [
           {
             "native": 'can you do me a favor? ',
@@ -3140,7 +3140,7 @@ languageScramble.data = {
       top180phrases: {
         title: 'Phrases For The Top 170 - 180 Words',
         subtitle: 'Phrases for the 170 - 180 most frequently used Italian words',
-        nextLevel: ['top190words', 'top190phrases'],
+        nextLevels: ['top190words', 'top190phrases'],
         data: [
           {
             "native": 'let me see',
@@ -3178,7 +3178,7 @@ languageScramble.data = {
       top190phrases: {
         title: 'Phrases For The Top 180 - 190 Words',
         subtitle: 'Phrases for the 180 - 190 most frequently used Italian words',
-        nextLevel: ['top200words', 'top200phrases'],
+        nextLevels: ['top200words', 'top200phrases'],
         data: [
           {
             "native": 'i need to rest',
@@ -3258,7 +3258,7 @@ languageScramble.data = {
             top225words:
                 title: 'Top 200 - 225 Words'
                 subtitle: 'The 200 - 225 most frequently used Italian words'
-                nextLevel: 'top225phrases'                
+                nextLevels: 'top225phrases'                
                 data: [
                     {native: 'seems', foreign: 'sembra', nativeSentence: 'it seems like it is going to rain', foreignSentence: 'sembra che stia per piovere'},
                     {native: 'people', foreign: 'gente', nativeSentence: 'how many people were at the party?', foreignSentence: 'quanta gente c\'era alla festa?'},
@@ -3289,7 +3289,7 @@ languageScramble.data = {
             top225phrases:
                 title: 'Phrases For The Top 200 - 225 Words'
                 subtitle: 'Phrases for the 200 - 225 most frequently used Italian words'
-                nextLevel: 'top250words'
+                nextLevels: 'top250words'
                 data: [
                     {native: 'it seems like it is going to rain', foreign: 'sembra che stia per piovere'},
                     {native: 'how many people were at the party?', foreign: 'quanta gente c\'era alla festa?'},
@@ -3320,7 +3320,7 @@ languageScramble.data = {
             top250words:
                 title: 'Top 225 - 250 Words'
                 subtitle: 'The 225 - 250 most frequently used Italian words'
-                nextLevel: 'top250phrases'                
+                nextLevels: 'top250phrases'                
                 data: [
                     {native: 'of the', foreign: 'degli', nativeSentence: 'ambrosia was the food of the gods', foreignSentence: 'l\'ambrosia era il cibo degli dei'},
                     {native: 'these', foreign: 'questi', nativeSentence: 'it\'s been raining a lot these days', foreignSentence: 'è piovuto molto in questi giorni'},
@@ -3351,7 +3351,7 @@ languageScramble.data = {
             top250phrases:
                 title: 'Phrases For The Top 225 - 250 Words'
                 subtitle: 'Phrases for the 225 - 250 most frequently used Italian words'
-                nextLevel: 'top275words'
+                nextLevels: 'top275words'
                 data: [
                     {native: 'ambrosia was the food of the gods', foreign: 'l\'ambrosia era il cibo degli dei'},
                     {native: 'it\'s been raining a lot these days', foreign: 'è piovuto molto in questi giorni'},
