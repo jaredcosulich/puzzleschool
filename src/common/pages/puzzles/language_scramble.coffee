@@ -24,7 +24,8 @@ soma.chunks
                                 @puzzleData.levels[languages][level] = levelInfo
                                 delete @puzzleData.levels[levelName]
                     error: () =>
-                        alert('We were unable to load your account information. Please check your internet connection.')
+                        if window?.alert
+                            alert('We were unable to load your account information. Please check your internet connection.')
 
         build: ->
             @setTitle("Language Scramble - The Puzzle School")
@@ -81,6 +82,7 @@ soma.views
                 $.ajaj
                     url: "/api/puzzles/language_scramble/update"
                     method: 'POST'
+                    headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                     data: 
                         puzzleUpdates: puzzleUpdates
                         levelUpdates: levelUpdates

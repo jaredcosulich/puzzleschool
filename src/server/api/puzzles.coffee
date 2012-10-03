@@ -1,43 +1,53 @@
-line = require('line')
+Line = require('line').Line
 soma = require('soma')
 db = require('../lib/db')
 
 {requireUser} = require('./lib/decorators')
 
 soma.routes
-    '/api/puzzles/:puzzleName': requireUser (puzzleName) ->
-        line => db.get 'user_puzzles', "#{@user.id}/#{puzzleName}", line.wait()
-        line (@userPuzzle) => 
-            if not @userPuzzle
-                @send({})
-                line.end()
-                return
+    '/api/puzzles/:puzzleName': requireUser (data) ->
+        l = new Line
+            error: (err) => 
+                console.log('Loading puzzle data failed:', err)
+                @sendError()
+
+            => db.get 'user_puzzles', "#{@user.id}/#{data.puzzleName}", l.wait()
+            
+            (@userPuzzle) => 
+                if not @userPuzzle
+                    @send({})
+                    l.stop()
+                    return
         
-        line => db.multiget 'user_puzzle_progress', @userPuzzle.levelsPlayed, line.wait()
-        line (data) =>
-            @userPuzzle.levels = {}
-            (@userPuzzle.levels[level.name] = level) for level in data.user_puzzle_progress
-            delete @userPuzzle.levelsPlayed
+            => db.multiget 'user_puzzle_progress', @userPuzzle.levelsPlayed, l.wait()
+            
+            (data) =>
+                @userPuzzle.levels = {}
+                (@userPuzzle.levels[level.name] = level) for level in data.user_puzzle_progress
+                delete @userPuzzle.levelsPlayed
                 
-        line.error (err) => @sendError(err, 'Puzzle Info Failed')
-        line.run => @send(puzzle: @userPuzzle)
+            => @send(puzzle: @userPuzzle)
         
-    '/api/puzzles/:puzzleName/update': requireUser (puzzleName) ->
-        userPuzzle = "#{@user.id}/#{puzzleName}"
+    '/api/puzzles/:puzzleName/update': requireUser (data) ->
+        userPuzzle = "#{@user.id}/#{data.puzzleName}"
+
+        l = new Line
+            error: (err) => 
+                console.log('Saving puzzle data failed:', err)
+                @sendError()
+                
+            => @send()    
         
         unless userPuzzle in (@user.user_puzzles or [])
-            line => db.update 'users', @user.id, {user_puzzles: {add: [userPuzzle]}}, line.wait()
+            l.add => db.update 'users', @user.id, {user_puzzles: {add: [userPuzzle]}}, l.wait()
 
         if @data.puzzleUpdates
             levelsPlayedUpdates =  ("#{userPuzzle}/#{levelName}" for levelName, updates of @data.levelUpdates)
             @data.puzzleUpdates.levelsPlayed = {add: levelsPlayedUpdates} if levelsPlayedUpdates.length
-            line => db.update 'user_puzzles', userPuzzle, @data.puzzleUpdates, line.wait()
+            l.add => db.update 'user_puzzles', userPuzzle, @data.puzzleUpdates, l.wait()
 
         if @data.levelUpdates
             for levelName, levelUpdate of @data.levelUpdates
                 levelUpdate.name = levelName                
-                line => db.update 'user_puzzle_progress', "#{userPuzzle}/#{levelName}", levelUpdate, line.wait()
-
-        line.error (err) => @sendError(err, 'Puzzle Update Failed')
-        line.run => @send()
+                l.add => db.update 'user_puzzle_progress', "#{userPuzzle}/#{levelName}", levelUpdate, l.wait()
 

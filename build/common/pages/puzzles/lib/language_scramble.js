@@ -44,6 +44,9 @@ languageScramble = typeof exports !== "undefined" && exports !== null ? exports 
 languageScramble.getLevel = function(languageData, levelName) {
   var data, index, level, _i, _len, _ref;
   level = languageData.levels[levelName];
+  if (!level) {
+    level = languageData.levels['top10words'];
+  }
   _ref = level.data;
   for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
     data = _ref[index];
@@ -202,7 +205,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.bindWindow = function() {
     var _this = this;
-    $(document.body).bind('keypress', function(e) {
+    window.onkeypress = function(e) {
       if (_this.initializingScramble) {
         return;
       }
@@ -211,8 +214,8 @@ languageScramble.ViewHelper = (function() {
       }
       $('#clickarea')[0].focus();
       return $('#clickarea').trigger('keypress', e);
-    });
-    return document.body.focus();
+    };
+    return window.focus();
   };
 
   ViewHelper.prototype.bindKeyPress = function() {
@@ -226,7 +229,7 @@ languageScramble.ViewHelper = (function() {
       return _this.clickAreaHasFocus = false;
     });
     $('#clickarea').bind('keydown', function(e) {
-      var guessedLetters, lastLetterAdded;
+      var guessedLetter, guessedLetters, lastLetterAdded;
       if (_this.initializingScramble) {
         return;
       }
@@ -234,7 +237,9 @@ languageScramble.ViewHelper = (function() {
         lastLetterAdded = _this.lettersAdded.pop();
         guessedLetters = $(".guesses .letter_" + lastLetterAdded);
         if (guessedLetters.length) {
-          $(guessedLetters[guessedLetters.length - 1]).trigger('click');
+          guessedLetter = $(guessedLetters[guessedLetters.length - 1]);
+          guessedLetter.trigger('mousedown');
+          guessedLetter.trigger('mouseup');
         }
       }
     });
@@ -293,7 +298,8 @@ languageScramble.ViewHelper = (function() {
       if (letter == null) {
         return;
       }
-      return $(letter).trigger('click');
+      $(letter).trigger('mousedown');
+      return $(letter).trigger('mouseup');
     });
   };
 
@@ -322,14 +328,16 @@ languageScramble.ViewHelper = (function() {
         e.preventDefault();
       }
       _this.dragging = letter;
-      _this.dragPathX = [];
-      _this.dragPathY = [];
-      relativeParent = $(letter[0].parentNode);
-      while (relativeParent.css('position') !== 'relative' && relativeParent[0] !== _this.el[0]) {
-        relativeParent = $(relativeParent[0].parentNode);
+      if (_this.clientX(e)) {
+        _this.dragPathX = [];
+        _this.dragPathY = [];
+        relativeParent = $(letter[0].parentNode);
+        while (relativeParent.css('position') !== 'relative' && relativeParent[0] !== _this.el[0]) {
+          relativeParent = $(relativeParent[0].parentNode);
+        }
+        _this.dragAdjustmentX = _this.clientX(e) - letter.offset().left + relativeParent.offset().left;
+        _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + relativeParent.offset().top;
       }
-      _this.dragAdjustmentX = _this.clientX(e) - letter.offset().left + relativeParent.offset().left;
-      _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + relativeParent.offset().top;
       if (_this.actualLetter(letter) != null) {
         return letter.addClass('recently_static_guess');
       } else {
@@ -1002,13 +1010,13 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.clientX = function(e) {
-    var _ref, _ref1;
-    return e.clientX || ((_ref = e.targetTouches[0]) != null ? _ref.pageX : void 0) || ((_ref1 = e.touches[0]) != null ? _ref1.pageX : void 0);
+    var _ref, _ref1, _ref2, _ref3;
+    return e.clientX || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0);
   };
 
   ViewHelper.prototype.clientY = function(e) {
-    var _ref, _ref1;
-    return e.clientY || ((_ref = e.targetTouches[0]) != null ? _ref.pageY : void 0) || ((_ref1 = e.touches[0]) != null ? _ref1.pageY : void 0);
+    var _ref, _ref1, _ref2, _ref3;
+    return e.clientY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0);
   };
 
   ViewHelper.prototype.containerClassName = function(square) {
@@ -1062,8 +1070,9 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.modifyScramble = function(word) {
-    var add, commonLetters, i, letter, _i;
-    if (!(word.length < 8)) {
+    var add, commonLetters, i, letter, maxLetterCount, _i;
+    maxLetterCount = this.activeLevel.match(/Medium/) != null ? 12 : 8;
+    if (!(word.length < maxLetterCount)) {
       return word;
     }
     commonLetters = (function() {
@@ -1076,9 +1085,9 @@ languageScramble.ViewHelper = (function() {
       }
       return _results;
     })();
-    add = 8 - word.length;
-    if (add > 4) {
-      add = 4;
+    add = (maxLetterCount - 4) - word.length;
+    if (add > maxLetterCount - 4) {
+      add = maxLetterCount - 4;
     }
     for (i = _i = 0; 0 <= add ? _i < add : _i > add; i = 0 <= add ? ++_i : --_i) {
       word.splice(Math.floor(Math.random() * word.length), 0, commonLetters[Math.floor(Math.random() * commonLetters.length)]);
@@ -1096,7 +1105,7 @@ languageScramble.ViewHelper = (function() {
       message = this.$('.guesses .hidden_message');
       message.show();
       message.width(message.width());
-      message.css('left', (window.innerWidth - message.width()) / 2);
+      message.css('left', (this.$('.scramble_content').width() - message.width()) / 2);
     }
     if (this.activeLevel.match(/Hard/) != null) {
       this.$('.scrambled').addClass('hidden');
@@ -1237,7 +1246,7 @@ languageScramble.ViewHelper = (function() {
     $(document.body).bind('touchstart', function() {
       return showNext();
     });
-    $('#clickarea').bind('keyup', function(e) {
+    $('#clickarea').bind('keydown', function(e) {
       return showNext();
     });
     return correct.animate({
@@ -1252,7 +1261,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.nextLevel = function() {
-    var index, message, nextLevel, nextLevelName, resetLevel, showLevel, _i, _len, _ref,
+    var index, level, message, nextLevel, nextLevelName, resetLevel, showLevel, _fn, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
     message = this.$('#next_level');
     _ref = this.level.nextLevels || [];
@@ -1263,7 +1272,7 @@ languageScramble.ViewHelper = (function() {
     }
     resetLevel = function() {
       if (confirm('Are you sure you want to reset this level?')) {
-        _this.$('reset_level_link').unbind('click');
+        _this.$('.reset_level_link').unbind('click');
         _this.puzzleData.levels[_this.languages][_this.levelName] = {};
         _this.saveProgress(_this.puzzleData);
         return showLevel(_this.levelName);
@@ -1290,33 +1299,29 @@ languageScramble.ViewHelper = (function() {
         }
       });
     };
-    return this.$('.scramble_content').animate({
-      opacity: 0,
-      duration: 500,
-      complete: function() {
-        var level, _fn, _j, _len1, _ref1;
-        message.css({
-          top: ($('.language_scramble').height() - _this.$('#next_level').height()) / 2,
-          left: ($('.language_scramble').width() - _this.$('#next_level').width()) / 2
-        });
-        _this.$('#next_level .reset_level_link').bind('click', function() {
-          return resetLevel();
-        });
-        _ref1 = _this.level.nextLevels;
-        _fn = function(level, index) {
-          return $(_this.$('#next_level .next_level_link')[index]).bind('click', function() {
-            return showLevel(level);
-          });
-        };
-        for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
-          level = _ref1[index];
-          _fn(level, index);
-        }
-        return _this.$('#next_level').animate({
-          opacity: 1,
-          duration: 1000
-        });
-      }
+    this.$('.scramble_content').css({
+      opacity: 0
+    });
+    message.css({
+      top: ($('.language_scramble').height() - this.$('#next_level').height()) / 2,
+      left: ($('.language_scramble').width() - this.$('#next_level').width()) / 2
+    });
+    this.$('#next_level .reset_level_link').bind('click', function() {
+      return resetLevel();
+    });
+    _ref1 = this.level.nextLevels;
+    _fn = function(level, index) {
+      return $(_this.$('#next_level .next_level_link')[index]).bind('click', function() {
+        return showLevel(level);
+      });
+    };
+    for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
+      level = _ref1[index];
+      _fn(level, index);
+    }
+    return this.$('#next_level').animate({
+      opacity: 1,
+      duration: 1000
     });
   };
 
@@ -1328,6 +1333,208 @@ languageScramble.data = {
   english_italian: {
     displayName: "English - Italian",
     levels: {
+      greetings: {
+        title: 'Greetings',
+        subtitle: 'Common conversational greetings.',
+        nextLevels: ['questions', 'questionPhrases'],
+        data: [
+          {
+            "native": 'hello',
+            foreign: 'salve'
+          }, {
+            "native": 'good morning',
+            foreign: 'buongiorno'
+          }, {
+            "native": 'good evening',
+            foreign: 'buonasera'
+          }, {
+            "native": 'good night',
+            foreign: 'buonanotte'
+          }, {
+            "native": 'hi',
+            foreign: 'ciao'
+          }, {
+            "native": 'good bye',
+            foreign: 'arrivederci'
+          }, {
+            "native": 'see you soon',
+            foreign: 'a presto'
+          }
+        ]
+      },
+      questions: {
+        title: 'Common Questions',
+        subtitle: 'Basic question words.',
+        nextLevels: ['questionPhrases', 'travelWords'],
+        data: [
+          {
+            "native": 'where',
+            foreign: 'dove',
+            nativeSentence: 'where is your house?',
+            foreignSentence: 'dove è la tua casa?'
+          }, {
+            "native": 'when',
+            foreign: 'quando',
+            nativeSentence: 'when is the party?',
+            foreignSentence: 'quando è la festa?'
+          }, {
+            "native": 'why',
+            foreign: 'perché',
+            nativeSentence: 'why are you angry?',
+            foreignSentence: 'perché sei arrabbiato?'
+          }, {
+            "native": 'who',
+            foreign: 'chi',
+            nativeSentence: 'who is she?',
+            foreignSentence: 'chi è?'
+          }, {
+            "native": 'which',
+            foreign: 'quale',
+            nativeSentence: 'which car is yours?',
+            foreignSentence: 'quale auto è la tua?'
+          }, {
+            "native": 'how',
+            foreign: 'come',
+            nativeSentence: 'how are you feeling?',
+            foreignSentence: 'come ti senti?'
+          }, {
+            "native": 'how much',
+            foreign: 'quanto',
+            nativeSentence: 'how much does it cost?',
+            foreignSentence: 'quanto costa?'
+          }, {
+            "native": 'how many',
+            foreign: 'quante',
+            nativeSentence: 'how many cards do you have?',
+            foreignSentence: 'quante carte hai?'
+          }
+        ]
+      },
+      questionPhrases: {
+        title: 'Question Phrases',
+        subtitle: 'Phrases for common questions.',
+        nextLevels: ['travelWords', 'travelPhrases'],
+        data: [
+          {
+            "native": 'where is your house?',
+            foreign: 'dove è la tua casa?'
+          }, {
+            "native": 'when is the party?',
+            foreign: 'quando è la festa?'
+          }, {
+            "native": 'why are you angry?',
+            foreign: 'perché sei arrabbiato?'
+          }, {
+            "native": 'who is she?',
+            foreign: 'chi è?'
+          }, {
+            "native": 'which car is yours?',
+            foreign: 'quale auto è la tua?'
+          }, {
+            "native": 'how are you feeling?',
+            foreign: 'come ti senti?'
+          }, {
+            "native": 'how much does it cost?',
+            foreign: 'quanto costa?'
+          }, {
+            "native": 'how many cards do you have?',
+            foreign: 'quante carte hai?'
+          }
+        ]
+      },
+      travelWords: {
+        title: 'Common Travel Words',
+        subtitle: 'Common words you might use when traveling.',
+        nextLevels: ['travelArrangementPhrases', 'hotelArrangementPhrases'],
+        data: [
+          {
+            "native": 'flight',
+            foreign: 'volo'
+          }, {
+            "native": 'airport',
+            foreign: 'aeroporto'
+          }, {
+            "native": 'train',
+            foreign: 'treno'
+          }, {
+            "native": 'train station',
+            foreign: 'stazione'
+          }, {
+            "native": 'seat',
+            foreign: 'posto'
+          }, {
+            "native": 'one-way ticket',
+            foreign: 'biglietto a senso unico'
+          }, {
+            "native": 'round-trip ticket',
+            foreign: 'biglietto di andata e ritorno'
+          }, {
+            "native": 'discounts',
+            foreign: 'sconti'
+          }, {
+            "native": 'hotel',
+            foreign: 'albergo'
+          }
+        ]
+      },
+      travelArrangementPhrases: {
+        title: 'Travel Arrangement Phrases',
+        subtitle: 'Some usefule phrases for arranging travel.',
+        nextLevels: ['hotelArrangementPhrases', 'top10words'],
+        data: [
+          {
+            "native": 'do you have any discounts for students?',
+            foreign: 'avete sconti per studenti?'
+          }, {
+            "native": 'per favore, due biglietti ',
+            foreign: 'i\'ll take two tickets please'
+          }, {
+            "native": 'vorrei prenotare due biglietti',
+            foreign: 'i would like to reserve two tickets'
+          }, {
+            "native": 'just one-way',
+            foreign: 'solo andata'
+          }, {
+            "native": 'how many are you?',
+            foreign: 'quanti siete?'
+          }, {
+            "native": 'there are four of us',
+            foreign: 'siamo in quattro'
+          }, {
+            "native": 'how much is the ticket?',
+            foreign: 'quanto è il biglietto?'
+          }, {
+            "native": 'we\'d like the 7 pm flight',
+            foreign: 'vorremmo il volo delle diciannove'
+          }
+        ]
+      },
+      hotelArrangementPhrases: {
+        title: 'Hotel Reservation Phrases',
+        subtitle: 'Some useful phrases for making hotel arrangements.',
+        nextLevels: ['top10words', 'top10phrases'],
+        data: [
+          {
+            "native": 'do you have a room on the grand canal?',
+            foreign: 'avete una camera sul canal grande?'
+          }, {
+            "native": 'is breakfast included?',
+            foreign: 'la colazione è compresa?'
+          }, {
+            "native": 'we need to cancel our room reservation',
+            foreign: 'dobbiamo cancellare la nostra prenotazione'
+          }, {
+            "native": 'at what time is checkout?',
+            foreign: 'a che ora bisogna lasciare la camera?'
+          }, {
+            "native": 'yes, we do. what were you looking for?',
+            foreign: 'si ne abbiamo. cosa vi interessava?'
+          }, {
+            "native": 'i\'m sorry, we\'re full',
+            foreign: 'mi dispiace, siamo al completo'
+          }
+        ]
+      },
       top10words: {
         title: 'Top 10 Words',
         subtitle: 'The 10 most frequently used Italian words.',
@@ -2264,7 +2471,7 @@ languageScramble.data = {
           {
             "native": 'can',
             foreign: 'puoi',
-            nativeSentence: 'can you do me a favou? ',
+            nativeSentence: 'can you do me a favor? ',
             foreignSentence: 'puoi farmi un favore? '
           }, {
             "native": 'hello',
@@ -2272,10 +2479,10 @@ languageScramble.data = {
             nativeSentence: 'hello, my name is Mary',
             foreignSentence: 'ciao, mi chiamo Maria'
           }, {
-            "native": 'what',
-            foreign: 'cos\'',
-            nativeSentence: 'what is this? ',
-            foreignSentence: 'cos\'è questo? '
+            "native": 'what is',
+            foreign: "cos'è",
+            nativeSentence: 'what is this?',
+            foreignSentence: "cos'è questo?"
           }, {
             "native": 'must',
             foreign: 'devi',
@@ -2490,7 +2697,7 @@ languageScramble.data = {
       },
       top10phrases: {
         title: 'Phrases For The Top 10 Words',
-        subtitle: 'Phrases containing the 10 most frequently used Italian words',
+        subtitle: 'Phrases for the 10 most frequently used Italian words',
         nextLevels: ['top20words', 'top20phrases'],
         data: [
           {
@@ -2528,7 +2735,7 @@ languageScramble.data = {
       },
       top20phrases: {
         title: 'Phrases For The Top 10 - 20 Words',
-        subtitle: 'Phrases containing the 10 -20 most frequently used Italian words',
+        subtitle: 'Phrases for the 10 -20 most frequently used Italian words',
         nextLevels: ['top30words', 'top30phrases'],
         data: [
           {
@@ -2566,7 +2773,7 @@ languageScramble.data = {
       },
       top30phrases: {
         title: 'Phrases For The Top 20 - 30 Words',
-        subtitle: 'Phrases containing the 20 - 30 most frequently used Italian words',
+        subtitle: 'Phrases for the 20 - 30 most frequently used Italian words',
         nextLevels: ['top40words', 'top40phrases'],
         data: [
           {
@@ -2604,7 +2811,7 @@ languageScramble.data = {
       },
       top40phrases: {
         title: 'Phrases For The Top 30 - 40 Words',
-        subtitle: 'Phrases containing the 30 - 40 most frequently used Italian words',
+        subtitle: 'Phrases for the 30 - 40 most frequently used Italian words',
         nextLevels: ['top50words', 'top50phrases'],
         data: [
           {

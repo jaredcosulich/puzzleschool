@@ -51,7 +51,7 @@ soma.views
             unless window.initialized
                 window.initialized = true
                 window.postRegistration = []
-                $(window).bind 'hashchange', => @onhashchange()
+                window.onhashchange = () => @onhashchange()
                 if navigator.userAgent.match(/iP/i)
                     $(window).bind 'resize orientationChanged', =>
                         $('#top_nav .content').width($.viewport().width)
@@ -81,6 +81,7 @@ soma.views
                 $.ajaj
                     url: '/api/register'
                     method: 'POST'
+                    headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                     data: form.data('form').dataHash()
                     success: () =>
                         @hideModal(form)
@@ -102,6 +103,7 @@ soma.views
                     url: '/api/login'
                     method: 'POST'
                     data: form.data('form').dataHash()
+                    headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }                        
                     success: () => 
                         @hideModal(form)
                         @checkLoggedIn()
@@ -138,7 +140,7 @@ soma.views
         
         showModal: (selector) ->
             @opaqueScreen = $('.opaque_screen')
-            @opaqueScreen.css(opacity: 0, top:0, left: 0, width: $(document.body).width(), height: $(document.body).height() + $('#top_nav').height())
+            @opaqueScreen.css(opacity: 0, top:0, left: 0, width: window.innerWidth, height: window.innerHeight + $('#top_nav').height())
             @opaqueScreen.animate
                 opacity: 0.75
                 duration: 300

@@ -3,6 +3,7 @@ dynode = require('dynode')
 db = exports
 
 unimoTable = 'puzzleschool'
+# unimoTable = 'puzzleschool-dev'
 
 dynodeClient = new dynode.Client
     accessKeyId: 'AKIAJ4DV2JSOSNOBJFNA'

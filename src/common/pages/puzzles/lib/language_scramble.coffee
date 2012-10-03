@@ -27,6 +27,7 @@ languageScramble = exports ? provide('./lib/language_scramble', {})
 
 languageScramble.getLevel = (languageData, levelName) ->
     level = languageData.levels[levelName]
+    level = languageData.levels['top10words'] if not level
     data.id = scrambleKey(data) for data, index in level.data
     return level
 
@@ -127,13 +128,13 @@ class languageScramble.ViewHelper
         @$('.header .level').css(marginLeft: margin)        
 
     bindWindow: () ->
-        $(document.body).bind 'keypress', (e) =>
+        window.onkeypress = (e) =>
             return if @initializingScramble
             return if @clickAreaHasFocus or $('.opaque_screen').css('opacity') > 0
             $('#clickarea')[0].focus()
             $('#clickarea').trigger('keypress', e)
         
-        document.body.focus()
+        window.focus()
 
         
     bindKeyPress: () ->
@@ -146,7 +147,11 @@ class languageScramble.ViewHelper
             if e.keyCode == 8
                 lastLetterAdded = @lettersAdded.pop()
                 guessedLetters = $(".guesses .letter_#{lastLetterAdded}")
-                $(guessedLetters[guessedLetters.length - 1]).trigger('click') if guessedLetters.length
+                if guessedLetters.length
+                    guessedLetter = $(guessedLetters[guessedLetters.length - 1])
+                    guessedLetter.trigger('mousedown')
+                    guessedLetter.trigger('mouseup')
+                    
                 return
             
         lastPress = null
@@ -184,7 +189,8 @@ class languageScramble.ViewHelper
                 return
                 
             return unless letter?
-            $(letter).trigger 'click'
+            $(letter).trigger 'mousedown'
+            $(letter).trigger 'mouseup'
             
     actualLetter: (letter) ->
         return letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)
@@ -203,14 +209,16 @@ class languageScramble.ViewHelper
             return if @dragging 
             e.preventDefault() if e.preventDefault?
             @dragging = letter
-            @dragPathX = []
-            @dragPathY = []
             
-            relativeParent = $(letter[0].parentNode)
-            while relativeParent.css('position') != 'relative' and relativeParent[0] != @el[0]
-                relativeParent = $(relativeParent[0].parentNode) 
-            @dragAdjustmentX = @clientX(e) - letter.offset().left + relativeParent.offset().left
-            @dragAdjustmentY = @clientY(e) - letter.offset().top + relativeParent.offset().top
+            if @clientX(e)
+                @dragPathX = []
+                @dragPathY = []
+            
+                relativeParent = $(letter[0].parentNode)
+                while relativeParent.css('position') != 'relative' and relativeParent[0] != @el[0]
+                    relativeParent = $(relativeParent[0].parentNode) 
+                @dragAdjustmentX = @clientX(e) - letter.offset().left + relativeParent.offset().left
+                @dragAdjustmentY = @clientY(e) - letter.offset().top + relativeParent.offset().top
 
             if @actualLetter(letter)?
                 letter.addClass('recently_static_guess')
@@ -665,8 +673,8 @@ class languageScramble.ViewHelper
             letter.removeClass('wrong_letter')
             letter.removeClass('correct_letter')
 
-    clientX: (e) => e.clientX or e.targetTouches[0]?.pageX or e.touches[0]?.pageX
-    clientY: (e) => e.clientY or e.targetTouches[0]?.pageY or e.touches[0]?.pageY
+    clientX: (e) => e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX
+    clientY: (e) => e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY
 
     containerClassName: (square) ->
         $(square).closest('.word_group')?[0]?.className?.match(/color\d+/)?[0]
@@ -705,10 +713,11 @@ class languageScramble.ViewHelper
         @$('.guesses .letter, .guesses .space').map((html) -> $(html).html()).join('') == (@scrambleInfo[@activeType])
 
     modifyScramble: (word) ->
-        return word unless word.length < 8
+        maxLetterCount = if @activeLevel.match(/Medium/)? then 12 else 8
+        return word unless word.length < maxLetterCount
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
-        add = (8 - word.length)
-        add = 4 if add > 4
+        add = ((maxLetterCount - 4) - word.length)
+        add = maxLetterCount - 4 if add > maxLetterCount - 4
         for i in [0...add]
             word.splice(
                 Math.floor(Math.random() * word.length),
@@ -726,7 +735,7 @@ class languageScramble.ViewHelper
             message = @$('.guesses .hidden_message')
             message.show()
             message.width(message.width())
-            message.css('left', (window.innerWidth - message.width()) / 2)
+            message.css('left', (@$('.scramble_content').width() - message.width()) / 2)
 
         if @activeLevel.match(/Hard/)?
             @$('.scrambled').addClass('hidden')       
@@ -825,7 +834,7 @@ class languageScramble.ViewHelper
         unless window.AppMobi
             $(document.body).bind 'click', () => showNext() 
         $(document.body).bind 'touchstart', () => showNext()
-        $('#clickarea').bind 'keyup', (e) => showNext()
+        $('#clickarea').bind 'keydown', (e) => showNext()
 
         correct.animate
             opacity: 1
@@ -841,7 +850,7 @@ class languageScramble.ViewHelper
 
         resetLevel = () =>
             if confirm('Are you sure you want to reset this level?')
-                @$('reset_level_link').unbind 'click'
+                @$('.reset_level_link').unbind 'click'
                 @puzzleData.levels[@languages][@levelName] = {}
                 @saveProgress(@puzzleData)
                 showLevel(@levelName)
@@ -862,25 +871,20 @@ class languageScramble.ViewHelper
                                 top: -1000
                                 left: -1000
 
-        @$('.scramble_content').animate
+        @$('.scramble_content').css
             opacity: 0
-            duration: 500
-            complete: () =>
-                message.css
-                    top: ($('.language_scramble').height() - @$('#next_level').height()) / 2
-                    left: ($('.language_scramble').width() - @$('#next_level').width()) / 2
-                    
-                @$('#next_level .reset_level_link').bind 'click', () => resetLevel()
-                for level, index in @level.nextLevels
-                    do (level, index) =>
-                        $(@$('#next_level .next_level_link')[index]).bind 'click', () => showLevel(level)
-                @$('#next_level').animate
-                    opacity: 1
-                    duration: 1000
 
-
-
-
+        message.css
+            top: ($('.language_scramble').height() - @$('#next_level').height()) / 2
+            left: ($('.language_scramble').width() - @$('#next_level').width()) / 2
+            
+        @$('#next_level .reset_level_link').bind 'click', () => resetLevel()
+        for level, index in @level.nextLevels
+            do (level, index) =>
+                $(@$('#next_level .next_level_link')[index]).bind 'click', () => showLevel(level)
+        @$('#next_level').animate
+            opacity: 1
+            duration: 1000
 
 
 
@@ -889,6 +893,88 @@ languageScramble.data =
     english_italian: 
         displayName: "English - Italian"
         levels:
+            greetings:
+                title: 'Greetings'
+                subtitle: 'Common conversational greetings.'
+                nextLevels: ['questions', 'questionPhrases']
+                data: [
+                    {native: 'hello', foreign: 'salve'}
+                    {native: 'good morning', foreign: 'buongiorno'}
+                    {native: 'good evening', foreign: 'buonasera'}
+                    {native: 'good night', foreign: 'buonanotte'}
+                    {native: 'hi', foreign: 'ciao'}
+                    {native: 'good bye', foreign: 'arrivederci'}
+                    {native: 'see you soon', foreign: 'a presto'}
+                ]
+            questions:
+                title: 'Common Questions'
+                subtitle: 'Basic question words.'
+                nextLevels: ['questionPhrases', 'travelWords']
+                data: [
+                    {native: 'where', foreign: 'dove', nativeSentence: 'where is your house?', foreignSentence: 'dove è la tua casa?'}
+                    {native: 'when', foreign: 'quando', nativeSentence: 'when is the party?', foreignSentence: 'quando è la festa?'}
+                    {native: 'why', foreign: 'perché', nativeSentence: 'why are you angry?', foreignSentence: 'perché sei arrabbiato?'}
+                    {native: 'who', foreign: 'chi', nativeSentence: 'who is she?', foreignSentence: 'chi è?'}
+                    {native: 'which', foreign: 'quale', nativeSentence: 'which car is yours?', foreignSentence: 'quale auto è la tua?'}
+                    {native: 'how', foreign: 'come', nativeSentence: 'how are you feeling?', foreignSentence: 'come ti senti?'}
+                    {native: 'how much', foreign: 'quanto', nativeSentence: 'how much does it cost?', foreignSentence: 'quanto costa?'}
+                    {native: 'how many', foreign: 'quante', nativeSentence: 'how many cards do you have?', foreignSentence: 'quante carte hai?'}
+                ]
+            questionPhrases:
+                title: 'Question Phrases'
+                subtitle: 'Phrases for common questions.'
+                nextLevels: ['travelWords', 'travelPhrases']
+                data: [
+                    {native: 'where is your house?', foreign: 'dove è la tua casa?'}
+                    {native: 'when is the party?', foreign: 'quando è la festa?'}
+                    {native: 'why are you angry?', foreign: 'perché sei arrabbiato?'}
+                    {native: 'who is she?', foreign: 'chi è?'}
+                    {native: 'which car is yours?', foreign: 'quale auto è la tua?'}
+                    {native: 'how are you feeling?', foreign: 'come ti senti?'}
+                    {native: 'how much does it cost?', foreign: 'quanto costa?'}
+                    {native: 'how many cards do you have?', foreign: 'quante carte hai?'}
+                ]
+            travelWords:
+                title: 'Common Travel Words'
+                subtitle: 'Common words you might use when traveling.'
+                nextLevels: ['travelArrangementPhrases', 'hotelArrangementPhrases']
+                data: [
+                    {native: 'flight', foreign: 'volo'}
+                    {native: 'airport', foreign: 'aeroporto'}
+                    {native: 'train', foreign: 'treno'}
+                    {native: 'train station', foreign: 'stazione'}
+                    {native: 'seat', foreign: 'posto'}
+                    {native: 'one-way ticket', foreign: 'biglietto a senso unico'}
+                    {native: 'round-trip ticket', foreign: 'biglietto di andata e ritorno'}
+                    {native: 'discounts', foreign: 'sconti'}
+                    {native: 'hotel', foreign: 'albergo'}
+                ]
+            travelArrangementPhrases: 
+                title: 'Travel Arrangement Phrases'
+                subtitle: 'Some usefule phrases for arranging travel.'
+                nextLevels: ['hotelArrangementPhrases', 'top10words']
+                data: [
+                    {native: 'do you have any discounts for students?', foreign: 'avete sconti per studenti?'}
+                    {native: 'per favore, due biglietti ', foreign: 'i\'ll take two tickets please'}
+                    {native: 'vorrei prenotare due biglietti', foreign: 'i would like to reserve two tickets'}
+                    {native: 'just one-way', foreign: 'solo andata'}
+                    {native: 'how many are you?', foreign: 'quanti siete?'}
+                    {native: 'there are four of us', foreign: 'siamo in quattro'}
+                    {native: 'how much is the ticket?', foreign: 'quanto è il biglietto?'}
+                    {native: 'we\'d like the 7 pm flight', foreign: 'vorremmo il volo delle diciannove'}
+                ]
+            hotelArrangementPhrases: 
+                title: 'Hotel Reservation Phrases'
+                subtitle: 'Some useful phrases for making hotel arrangements.'
+                nextLevels: ['top10words', 'top10phrases']
+                data: [
+                    {native: 'do you have a room on the grand canal?', foreign: 'avete una camera sul canal grande?'}
+                    {native: 'is breakfast included?', foreign: 'la colazione è compresa?'}
+                    {native: 'we need to cancel our room reservation', foreign: 'dobbiamo cancellare la nostra prenotazione'}
+                    {native: 'at what time is checkout?', foreign: 'a che ora bisogna lasciare la camera?'}
+                    {native: 'yes, we do. what were you looking for?', foreign: 'si ne abbiamo. cosa vi interessava?'}
+                    {native: 'i\'m sorry, we\'re full', foreign: 'mi dispiace, siamo al completo'}
+                ]
             top10words: 
                 title: 'Top 10 Words'
                 subtitle: 'The 10 most frequently used Italian words.'
@@ -1150,9 +1236,9 @@ languageScramble.data =
                 subtitle: 'The 160-170 most frequently used Italian words.'
                 nextLevels: ['top180words', 'top170phrases']
                 data: [
-                    {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favou? ', foreignSentence: 'puoi farmi un favore? '},
+                    {native: 'can', foreign: 'puoi', nativeSentence: 'can you do me a favor? ', foreignSentence: 'puoi farmi un favore? '},
                     {native: 'hello', foreign: 'ciao', nativeSentence: 'hello, my name is Mary', foreignSentence: 'ciao, mi chiamo Maria'},
-                    {native: 'what', foreign: 'cos\'', nativeSentence: 'what is this? ', foreignSentence: 'cos\'è questo? '},
+                    {native: 'what is', foreign: "cos'è", nativeSentence: 'what is this?', foreignSentence: "cos'è questo?"},
                     {native: 'must', foreign: 'devi', nativeSentence: 'you must go to work tomorrow', foreignSentence: 'devi andare al lavoro domani'},
                     {native: 'here', foreign: 'ecco', nativeSentence: 'here is my book', foreignSentence: 'ecco il mio libro'},
                     {native: 'someone', foreign: 'qualcuno', nativeSentence: 'someone ate the last piece of cake', foreignSentence: 'qualcuno ha mangiato l\'ultima fetta di torta'},
@@ -1211,7 +1297,7 @@ languageScramble.data =
                 ]
             top10phrases: 
                 title: 'Phrases For The Top 10 Words'
-                subtitle: 'Phrases containing the 10 most frequently used Italian words'
+                subtitle: 'Phrases for the 10 most frequently used Italian words'
                 nextLevels: ['top20words', 'top20phrases']
                 data: [
                     {native: 'that\'s not necessary', foreign: 'non è necessario'},
@@ -1227,7 +1313,7 @@ languageScramble.data =
                 ]
             top20phrases: 
                 title: 'Phrases For The Top 10 - 20 Words'
-                subtitle: 'Phrases containing the 10 -20 most frequently used Italian words'
+                subtitle: 'Phrases for the 10 -20 most frequently used Italian words'
                 nextLevels: ['top30words', 'top30phrases']
                 data: [
                     {native: 'i have twenty dollars', foreign: 'ho venti dollari'},
@@ -1243,7 +1329,7 @@ languageScramble.data =
                 ]
             top30phrases: 
                 title: 'Phrases For The Top 20 - 30 Words'
-                subtitle: 'Phrases containing the 20 - 30 most frequently used Italian words'
+                subtitle: 'Phrases for the 20 - 30 most frequently used Italian words'
                 nextLevels: ['top40words', 'top40phrases']
                 data: [
                     {native: 'come here', foreign: 'vieni qui'},
@@ -1259,7 +1345,7 @@ languageScramble.data =
                 ]
             top40phrases: 
                 title: 'Phrases For The Top 30 - 40 Words'
-                subtitle: 'Phrases containing the 30 - 40 most frequently used Italian words'
+                subtitle: 'Phrases for the 30 - 40 most frequently used Italian words'
                 nextLevels: ['top50words', 'top50phrases']
                 data: [
                     {native: 'it was only fifteen minutes', foreign: 'era solo quindici minuti'},

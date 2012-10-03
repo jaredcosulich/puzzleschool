@@ -44,7 +44,9 @@ soma.chunks({
             }
           },
           error: function() {
-            return alert('We were unable to load your account information. Please check your internet connection.');
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load your account information. Please check your internet connection.');
+            }
           }
         });
       }
@@ -121,6 +123,11 @@ soma.views({
         return $.ajaj({
           url: "/api/puzzles/language_scramble/update",
           method: 'POST',
+          headers: {
+            'X-CSRF-Token': this.cookies.get('_csrf', {
+              raw: true
+            })
+          },
           data: {
             puzzleUpdates: puzzleUpdates,
             levelUpdates: levelUpdates

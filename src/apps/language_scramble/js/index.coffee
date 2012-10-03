@@ -90,6 +90,12 @@ window.app =
             levelSelect.scrollTop(startPosition.scrollTop - (@viewHelper.clientY(e) - startPosition.touch))
     
         showLevel = (level) =>
+            @viewHelper.$('#next_level').css
+                opacity: 0
+
+            @viewHelper.$('.scramble_content').css
+                opacity: 1
+            
             @viewHelper.setLevel(level)
             @viewHelper.newScramble()
                    

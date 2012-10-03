@@ -286,6 +286,27 @@ a {
 .puzzles .section .puzzle .details .rating p.selected {
   background-color: #ededed;
 }
+.translations #translation_container {
+  margin-top: 12px;
+}
+.translations #translation_container .translation_area {
+  display: none;
+}
+.translations #translation_container.new_translation .new_translation {
+  display: block;
+}
+.translations form {
+  width: 60em;
+}
+.translations form table input {
+  height: 18px;
+  line-height: 18px;
+  width: 30em;
+}
+.translations .field,
+.translations .buttons {
+  margin-bottom: 6px;
+}
 .about .about_text {
   width: 54em;
   margin: auto;

@@ -1,6 +1,6 @@
 bcrypt = require('bcrypt')
 crypto = require('crypto')
-line = require('line')
+Line = require('line').Line
 soma = require('soma')
 wings = require('wings')
 
@@ -24,16 +24,23 @@ registrationTemplate = """
 """
 soma.routes
     '/api/login': checkPassword ->
-        line => db.get 'users', @login.user, line.wait()
-        # line (@user) =>
-        #     userCookie = @cookies.get('user')
-            # if userCookie possibly merge user data
+        l = new Line
+            error: (err) => 
+                console.log('Login failed:', err)
+                @sendError()
+        
+            => db.get 'users', @login.user, l.wait()
             
-        # line => crypto.randomBytes 16, line.wait()
-        # line (session) => db.update 'users', @user.id, {session: session.toString('hex')}, line.wait()
-        line.run (@user) =>
-            @cookies.set('user', @user, { signed: true })
-            @send()
+        #    (@user) =>
+        #       userCookie = @cookies.get('user')
+        #       if userCookie possibly merge user data
+            
+        #    => crypto.randomBytes 16, l.wait()
+        #    (session) => db.update 'users', @user.id, {session: session.toString('hex')}, l.wait()
+            
+            (@user) =>
+                @cookies.set('user', @user, { signed: true })
+                @send()
 
     '/api/register': ->
         return @sendError(new Error('Name was invalid')) unless @data.name and /\S{3,}/.test(@data.name)
@@ -47,32 +54,36 @@ soma.routes
         @data.day = parseInt(@data.day)
         @data.email = @data.email.toLowerCase()
 
-        line =>
-            db.get 'login', @data.email, line.wait (login) =>
+        l = new Line
+            error: (err) => 
+                console.log('Registration failed:', err)
+                @sendError()
+        
+            => 
+                db.get 'login', @data.email, l.wait (login) =>
                 return line.fail('duplicate login') if login?
 
-        line => bcrypt.genSalt line.wait()
-        line (salt) => bcrypt.hash @data.password, salt, line.wait()
+            => bcrypt.genSalt l.wait()
+            
+            (salt) => bcrypt.hash @data.password, salt, l.wait()
 
-        line (hash) =>
-            @data.password = hash
-            crypto.randomBytes 16, line.wait()
+            (hash) =>
+                @data.password = hash
+                crypto.randomBytes 16, l.wait()
 
-        line (session) =>
-            user = {id: @data.email, session: session.toString('hex')}
-            user[key] = @data[key] for key in ['name', 'email', 'birthday', 'month', 'day', 'year']
-            db.put 'users', user, line.wait()
+            (session) =>
+                user = {id: @data.email, session: session.toString('hex')}
+                user[key] = @data[key] for key in ['name', 'email', 'birthday', 'month', 'day', 'year']
+                db.put 'users', user, l.wait()
 
-        line (@user) =>
-            @cookies.set('user', @user, { signed: true })
-            db.put 'login', { id: @data.email, password: @data.password, user: @user.id }, line.wait()
+            (@user) =>
+                @cookies.set('user', @user, { signed: true })
+                db.put 'login', { id: @data.email, password: @data.password, user: @user.id }, l.wait()
 
         # line => 
         #     @email.send 'The Puzzle School <support@puzzleschool.com>', @data.email,
         #         "#{@user.name}, Welcome",
         #         wings.renderTemplate(registrationTemplate, @user),
-        #         line.wait()
+        #         l.wait()
 
-        line.error (err) => @sendError(err, 'Registration failed')
-
-        line.run => @send()
+            => @send()

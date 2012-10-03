@@ -116,9 +116,9 @@ soma.views({
       if (!window.initialized) {
         window.initialized = true;
         window.postRegistration = [];
-        $(window).bind('hashchange', function() {
+        window.onhashchange = function() {
           return _this.onhashchange();
-        });
+        };
         if (navigator.userAgent.match(/iP/i)) {
           $(window).bind('resize orientationChanged', function() {
             return $('#top_nav .content').width($.viewport().width);
@@ -168,6 +168,11 @@ soma.views({
         return $.ajaj({
           url: '/api/register',
           method: 'POST',
+          headers: {
+            'X-CSRF-Token': _this.cookies.get('_csrf', {
+              raw: true
+            })
+          },
           data: form.data('form').dataHash(),
           success: function() {
             var postRegistrationMethod, _i, _len, _ref, _results;
@@ -212,6 +217,11 @@ soma.views({
           url: '/api/login',
           method: 'POST',
           data: form.data('form').dataHash(),
+          headers: {
+            'X-CSRF-Token': _this.cookies.get('_csrf', {
+              raw: true
+            })
+          },
           success: function() {
             _this.hideModal(form);
             return _this.checkLoggedIn();
@@ -270,8 +280,8 @@ soma.views({
         opacity: 0,
         top: 0,
         left: 0,
-        width: $(document.body).width(),
-        height: $(document.body).height() + $('#top_nav').height()
+        width: window.innerWidth,
+        height: window.innerHeight + $('#top_nav').height()
       });
       this.opaqueScreen.animate({
         opacity: 0.75,

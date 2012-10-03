@@ -1,6 +1,6 @@
 bcrypt = require('bcrypt')
 crypto = require('crypto')
-line = require('line')
+Line = require('line').Line
 
 db = require('../../lib/db')
 
@@ -11,15 +11,20 @@ exports.checkPassword = (fn) ->->
     return @sendError() unless @data.email and /.+@.+\..+/.test(@data.email)
     return @sendError() unless @data.password and /\S{3,}/.test(@data.password)
 
-    line => db.get 'login', @data.email.toLowerCase(), line.wait()
-    line (@login) => 
-        return line.fail('Login failed, email not on record.') if not @login
-        bcrypt.compare @data.password, @login.password, line.wait()
-        
-    line (result) => return line.fail('Login failed, invalid password') if not result
+    l = new Line
+        error: (err) => 
+            console.log('checkPassword failed:', err)
+            @sendError()
+            
+        => db.get 'login', @data.email.toLowerCase(), l.wait()
 
-    line.error => @sendError()
-    line.run => fn.apply(this, args)
+        (@login) => 
+            return line.fail('Login failed, email not on record.') if not @login
+            bcrypt.compare @data.password, @login.password, l.wait()
+        
+        (result) => return l.fail('Login failed, invalid password') if not result
+
+        => fn.apply(this, args)
 
 
 exports.requireUser = (fn) ->->
@@ -28,17 +33,18 @@ exports.requireUser = (fn) ->->
     
     return @go('/') unless userCookie
 
-    line => db.get 'users', userCookie.id, line.wait()
-    
-    line (@user) =>
-        if !@user or @user.session != userCookie.session
-            @cookies.set('user', null)
-            @go('/')
+    l = new Line
+        error: (err) => 
+            console.log('checkUser failed:', err)
+            @sendError()
             
-        else
-            @cookies.set('user', @user, { signed: true })
-            fn.apply(this, args)
+        => db.get 'users', userCookie.id, l.wait()
     
-    line.error (err) => throw err
-
-    line.run()
+        (@user) =>
+            if !@user or @user.session != userCookie.session
+                @cookies.set('user', null)
+                @go('/')
+            
+            else
+                @cookies.set('user', @user, { signed: true })
+                fn.apply(this, args)
