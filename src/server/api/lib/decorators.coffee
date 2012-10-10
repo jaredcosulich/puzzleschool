@@ -19,7 +19,7 @@ exports.checkPassword = (fn) ->->
         => db.get 'login', @data.email.toLowerCase(), l.wait()
 
         (@login) => 
-            return line.fail('Login failed, email not on record.') if not @login
+            return l.fail('Login failed, email not on record.') if not @login
             bcrypt.compare @data.password, @login.password, l.wait()
         
         (result) => return l.fail('Login failed, invalid password') if not result

@@ -64,7 +64,7 @@ soma.routes({
     }, function() {
       db.get('login', _this.data.email, l.wait(function(login) {}));
       if (typeof login !== "undefined" && login !== null) {
-        return line.fail('duplicate login');
+        return l.fail('duplicate login');
       }
     }, function() {
       return bcrypt.genSalt(l.wait());

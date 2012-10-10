@@ -33,7 +33,7 @@ exports.checkPassword = function(fn) {
     }, function(login) {
       _this.login = login;
       if (!_this.login) {
-        return line.fail('Login failed, email not on record.');
+        return l.fail('Login failed, email not on record.');
       }
       return bcrypt.compare(_this.data.password, _this.login.password, l.wait());
     }, function(result) {

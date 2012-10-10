@@ -61,7 +61,7 @@ soma.routes
         
             => 
                 db.get 'login', @data.email, l.wait (login) =>
-                return line.fail('duplicate login') if login?
+                return l.fail('duplicate login') if login?
 
             => bcrypt.genSalt l.wait()
             
