@@ -795,7 +795,7 @@ languageScramble.ViewHelper = (function() {
     if (window.landheight) {
       targetHeight = Math.min(targetHeight, window.landheight);
     }
-    windowWidth = window.innerWidth || window.landwidth;
+    windowWidth = window.AppMobi ? window.innerWidth || window.landwidth : this.$('.scramble_content').width();
     maxFontSize = windowWidth / 15;
     increment = Math.min(maxFontSize, this.letterFontSize) - 1;
     while (increment >= 1) {
@@ -1071,7 +1071,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.modifyScramble = function(word) {
     var add, commonLetters, i, letter, maxLetterCount, _i;
-    maxLetterCount = this.activeLevel.match(/Medium/) != null ? 12 : 8;
+    maxLetterCount = 10;
     if (!(word.length < maxLetterCount)) {
       return word;
     }
@@ -1085,9 +1085,9 @@ languageScramble.ViewHelper = (function() {
       }
       return _results;
     })();
-    add = (maxLetterCount - 4) - word.length;
-    if (add > maxLetterCount - 4) {
-      add = maxLetterCount - 4;
+    add = maxLetterCount - word.length;
+    if (add > 5) {
+      add = 5;
     }
     for (i = _i = 0; 0 <= add ? _i < add : _i > add; i = 0 <= add ? ++_i : --_i) {
       word.splice(Math.floor(Math.random() * word.length), 0, commonLetters[Math.floor(Math.random() * commonLetters.length)]);
@@ -2476,8 +2476,8 @@ languageScramble.data = {
           }, {
             "native": 'hello',
             foreign: 'ciao',
-            nativeSentence: 'hello, my name is Mary',
-            foreignSentence: 'ciao, mi chiamo Maria'
+            nativeSentence: 'hello, my name is mary',
+            foreignSentence: 'ciao, mi chiamo maria'
           }, {
             "native": 'what is',
             foreign: "cos'è",
@@ -2554,8 +2554,8 @@ languageScramble.data = {
           }, {
             "native": 'that',
             foreign: 'cui',
-            nativeSentence: 'Tom is the boy that Mary fell in love with',
-            foreignSentence: 'Tom è il ragazzo di cui Mary si è innamorata'
+            nativeSentence: 'tom is the boy that mary fell in love with',
+            foreignSentence: 'tom è il ragazzo di cui mary si è innamorata'
           }, {
             "native": 'a lot',
             foreign: 'tanto',
@@ -2612,8 +2612,8 @@ languageScramble.data = {
           }, {
             "native": 'at',
             foreign: 'alle',
-            nativeSentence: 'Tom will arrive at 6 pm',
-            foreignSentence: 'Tom arriverà alle 18'
+            nativeSentence: 'tom will arrive at 6 pm',
+            foreignSentence: 'tom arriverà alle 18'
           }, {
             "native": 'from the',
             foreign: 'dalla',
@@ -2655,8 +2655,8 @@ languageScramble.data = {
           }, {
             "native": 'friend',
             foreign: 'amico',
-            nativeSentence: 'Tom is my best friend',
-            foreignSentence: 'Tom è il mio migliore amico'
+            nativeSentence: 'tom is my best friend',
+            foreignSentence: 'tom è il mio migliore amico'
           }, {
             "native": 'tells',
             foreign: 'dice',
@@ -3315,8 +3315,8 @@ languageScramble.data = {
             "native": 'can you do me a favor? ',
             foreign: 'puoi farmi un favore? '
           }, {
-            "native": 'hello, my name is Mary',
-            foreign: 'ciao, mi chiamo Maria'
+            "native": 'hello, my name is mary',
+            foreign: 'ciao, mi chiamo maria'
           }, {
             "native": 'what is this? ',
             foreign: 'cos\'è questo? '
@@ -3365,8 +3365,8 @@ languageScramble.data = {
             "native": 'this is the place for me!',
             foreign: 'questo  è il posto per me!'
           }, {
-            "native": 'Tom is the boy with whom Mary fell in love',
-            foreign: 'Tom è il ragazzo di cui Mary si è innamorata'
+            "native": 'tom is the boy with whom mary fell in love',
+            foreign: 'tom è il ragazzo di cui mary si è innamorata'
           }, {
             "native": 'i studied a lot',
             foreign: 'ho studiato tanto'
@@ -3403,8 +3403,8 @@ languageScramble.data = {
             "native": 'come to my party tomorrow',
             foreign: 'vieni alla mia festa domani'
           }, {
-            "native": 'Tom will arrive at 6 pm',
-            foreign: 'Tom arriverà alle 18'
+            "native": 'tom will arrive at 6 pm',
+            foreign: 'tom arriverà alle 18'
           }, {
             "native": 'an intense light from the moon',
             foreign: 'una luce intensa dalla luna'
@@ -3431,8 +3431,8 @@ languageScramble.data = {
             "native": 'do you like my new boots?',
             foreign: 'ti piacciono i miei nuovi stivali?'
           }, {
-            "native": 'Tom is my best friend',
-            foreign: 'Tom è il mio migliore amico'
+            "native": 'tom is my best friend',
+            foreign: 'tom è il mio migliore amico'
           }, {
             "native": 'he always tells the truth',
             foreign: 'lui dice sempre la verità'
@@ -3540,7 +3540,7 @@ languageScramble.data = {
                     {native: 'had', foreign: 'avevo', nativeSentence: 'once i had a parrot named Bob', foreignSentence: 'una volta avevo un pappagallo chiamato Bob'},
                     {native: 'favor', foreign: 'favore', nativeSentence: 'can you do me a favor?', foreignSentence: 'puoi farmi un favore?'},
                     {native: 'were',  foreign: 'fosse', nativeSentence: 'oh that it were so!', foreignSentence: 'magari fosse così!'},
-                    {native: 'other', foreign: 'altri', nativeSentence: 'Mary likes to play with other children', foreignSentence: 'a Mary piace giocare con altri bambini'},
+                    {native: 'other', foreign: 'altri', nativeSentence: 'mary likes to play with other children', foreignSentence: 'a mary piace giocare con altri bambini'},
                     {native: 'sorry', foreign: 'dispiace', nativeSentence: 'i am sorry to disturb you', foreignSentence: 'mi dispiace disturbarti'},
                     {native: 'immediately', foreign: 'subito', nativeSentence: 'let\'s start immediately', foreignSentence: 'cominciamo subito'},
                     {native: 'inside', foreign: 'dentro', nativeSentence: 'the ring is inside the box', foreignSentence: 'l\'anello è dentro la scatola'},
@@ -3571,7 +3571,7 @@ languageScramble.data = {
                     {native: 'once i had a parrot named Bob', foreign: 'una volta avevo un pappagallo chiamato Bob'},
                     {native: 'can you do me a favor?', foreign: 'puoi farmi un favore?'},
                     {native: 'oh that it were so!', foreign: 'magari fosse così!'},
-                    {native: 'Mary likes to play with other children', foreign: 'a Mary piace giocare con altri bambini'},
+                    {native: 'mary likes to play with other children', foreign: 'a mary piace giocare con altri bambini'},
                     {native: 'i am sorry to disturb you', foreign: 'mi dispiace disturbarti'},
                     {native: 'let\'s start immediately', foreign: 'cominciamo subito'},
                     {native: 'the ring is inside the box', foreign: 'l\'anello è dentro la scatola'},
