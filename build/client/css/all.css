@@ -291,12 +291,39 @@ a {
 }
 .translations #translation_container .translation_area {
   display: none;
+  overflow: hidden;
 }
-.translations #translation_container.new_translation .new_translation {
+.translations #translation_container.new_translation .new_translation,
+.translations #translation_container.no_translation .no_translation,
+.translations #translation_container.no_bundle .no_bundle,
+.translations #translation_container.not_native_verified .not_native_verified,
+.translations #translation_container.not_foreign_verified .not_foreign_verified {
   display: block;
 }
-.translations form {
-  width: 60em;
+.translations #translation_container .no_translation .form_container,
+.translations #translation_container .no_bundle .form_container {
+  float: left;
+  width: 600px;
+}
+.translations #translation_container .no_translation .no_translations,
+.translations #translation_container .no_bundle .no_translations,
+.translations #translation_container .no_translation .bundles,
+.translations #translation_container .no_bundle .bundles {
+  float: right;
+  height: 150px;
+  width: 300px;
+  overflow: auto;
+}
+.translations #translation_container .no_translation .no_translations a,
+.translations #translation_container .no_bundle .no_translations a,
+.translations #translation_container .no_translation .bundles a,
+.translations #translation_container .no_bundle .bundles a {
+  display: block;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+.translations #translation_container .no_translation .form_container {
+  display: none;
 }
 .translations form table input {
   height: 18px;

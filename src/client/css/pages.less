@@ -107,15 +107,41 @@
         margin-top: 12px;
         .translation_area {
             display: none;
+            overflow: hidden;
         }
     
-        &.new_translation .new_translation {
+        &.new_translation .new_translation,
+        &.no_translation .no_translation,
+        &.no_bundle .no_bundle,
+        &.not_native_verified .not_native_verified,
+        &.not_foreign_verified .not_foreign_verified {
             display: block;
+        }
+        
+        .no_translation, .no_bundle {
+            .form_container {
+                float: left;
+                width: 600px;
+            }
+            .no_translations, .bundles {
+                float: right;
+                height: 150px;
+                width: 300px;
+                overflow: auto;
+                a {
+                    display: block;
+                    margin-bottom: 6px;
+                    cursor: pointer;
+                }
+            }
+        }
+        
+        .no_translation .form_container {
+            display: none;
         }
     }
     
     form {
-        width: 60em;
         table {
             input {
                 height: @h3size;

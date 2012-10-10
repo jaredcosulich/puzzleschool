@@ -45,7 +45,7 @@ soma.routes({
     });
   }),
   '/api/puzzles/:puzzleName/update': requireUser(function(data) {
-    var l, levelName, levelUpdate, levelsPlayedUpdates, updates, userPuzzle, _ref, _results,
+    var l, levelName, levelUpdate, levelsPlayedUpdates, updates, userPuzzle, _ref,
       _this = this;
     userPuzzle = "" + this.user.id + "/" + data.puzzleName;
     l = new Line({
@@ -53,8 +53,6 @@ soma.routes({
         console.log('Saving puzzle data failed:', err);
         return _this.sendError();
       }
-    }, function() {
-      return _this.send();
     });
     if (__indexOf.call(this.user.user_puzzles || [], userPuzzle) < 0) {
       l.add(function() {
@@ -87,15 +85,16 @@ soma.routes({
     }
     if (this.data.levelUpdates) {
       _ref = this.data.levelUpdates;
-      _results = [];
       for (levelName in _ref) {
         levelUpdate = _ref[levelName];
         levelUpdate.name = levelName;
-        _results.push(l.add(function() {
+        l.add(function() {
           return db.update('user_puzzle_progress', "" + userPuzzle + "/" + levelName, levelUpdate, l.wait());
-        }));
+        });
       }
-      return _results;
     }
+    return l.add(function() {
+      return _this.send();
+    });
   })
 });

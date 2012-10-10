@@ -73,7 +73,12 @@ soma.views({
           _this.message.html(_this.el.data('submitted_text'));
           return _this.message.animate({
             opacity: 1,
-            duration: 300
+            duration: 300,
+            complete: function() {
+              return $.timeout(1000, function() {
+                return _this.revert();
+              });
+            }
           });
         }
       });

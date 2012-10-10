@@ -36,8 +36,6 @@ soma.routes
                 console.log('Saving puzzle data failed:', err)
                 @sendError()
                 
-            => @send()    
-        
         unless userPuzzle in (@user.user_puzzles or [])
             l.add => db.update 'users', @user.id, {user_puzzles: {add: [userPuzzle]}}, l.wait()
 
@@ -51,3 +49,6 @@ soma.routes
                 levelUpdate.name = levelName                
                 l.add => db.update 'user_puzzle_progress', "#{userPuzzle}/#{levelName}", levelUpdate, l.wait()
 
+        l.add => @send()    
+
+        

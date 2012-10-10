@@ -144,9 +144,11 @@ soma.views({
       this.$('.log_in').bind('click', function() {
         return location.hash = 'login';
       });
-      this.$('.close_modal').bind('click', function(e) {
+      return this.$('.close_modal').bind('click', function(e) {
         return _this.hideModal(e.currentTarget);
       });
+    },
+    complete: function() {
       return this.onhashchange();
     },
     onhashchange: function() {

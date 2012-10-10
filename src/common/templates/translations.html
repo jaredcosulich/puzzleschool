@@ -1,0 +1,167 @@
+<div class='page translations'>
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
+        Translations
+    </h1>
+
+    <h3 class='main_nav upcase'>
+        <a href='/'>HOME</a>    
+        <!-- <a>THE SCHOOL</a> -->
+        <a href='/puzzles'>PUZZLES</a>
+        <!-- <a>BLOG</a> -->
+        <a href='/about'>ABOUT</a>
+    </h3>
+
+    <div id='translation_links'>
+        <a class='show_translation' id='new_translation'>New Translation</a>
+        &nbsp; | &nbsp;
+        <a class='show_translation' id='no_translation'>
+            Requiring Translation 
+            (<span class='no_translation_count'>{noTranslationCount}</span>)
+        </a>
+        &nbsp; | &nbsp;
+        <a class='show_translation' id='no_bundle'>
+            Requiring Bundle 
+            (<span class='no_bundle_count'>{noBundleCount}</span>)
+        </a>
+        &nbsp; | &nbsp;
+        <a class='show_translation' id='not_native_verified'>
+            Requiring English Verification 
+            (<span class='not_native_verified_count'>{notNativeVerifiedCount}</span>)
+        </a>
+        &nbsp; | &nbsp;
+        <a class='show_translation' id='not_foreign_verified'>
+            Requiring Foreign Verification 
+            (<span class='not_foreign_verified_count'>{notForeignVerifiedCount}</span>)
+        </a>
+    </div>
+
+    <div id='translation_container'>
+        <div class='translation_area new_translation'>
+            <h3>Add A New Translation. </h3>
+            <p>At least one field is required. Please keep all sentences as short as possible.</p>
+            <form>
+                <table>
+                    <tr class='field'>
+                        <td><label for="native">English Word or Sentence</label></td>
+                        <td><input name="native" type="text"></input></td>
+                    </tr>
+                    <tr class='field'>
+                        <td><label for="foreign">Foreign Word or Sentence</label></td>
+                        <td><input name="foreign" type="text"></input></td>
+                    </tr>
+                    <tr class='field'>
+                        <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
+                        <td><input name="nativeSentence" type="text"></input></td>
+                    </tr>
+                    <tr class='field'>
+                        <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
+                        <td><input name="foreignSentence" type="text"></input></td>
+                    </tr>
+                </table>
+            </form>
+            <br/>
+            <div class='buttons'>
+                <button 
+                    class='save_button submit_feedback' 
+                    data-submitting_text='Saving Translation...' 
+                    data-submitted_text='Translation Saved...' 
+                    data-failed_submission_text='An error occurred.'>
+                    Save
+                </button>
+            </div>            
+        </div>
+        <div class='translation_area no_translation'>
+            <h3>Requiring Translation</h3>
+            <p>The following translations are incomplete. Please keep all sentences as short as possible.</p>
+            <div class='no_translations'>
+                {:noTranslation}
+                    <a>{}</a>
+                {/noTranslation}
+            </div>
+            <div class='form_container'>
+                <form>
+                    <table>
+                        <tr class='field'>
+                            <td><label for="native">English Word or Sentence</label></td>
+                            <td><input name="native" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreign">Foreign Word or Sentence</label></td>
+                            <td><input name="foreign" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
+                            <td><input name="nativeSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
+                            <td><input name="foreignSentence" type="text"></input></td>
+                        </tr>
+                    </table>
+                    <input type='hidden' name='noTranslation'></input>
+                </form>
+                <br/>
+                <div class='buttons'>
+                    <button 
+                        class='save_button submit_feedback' 
+                        data-submitting_text='Saving Translation...' 
+                        data-submitted_text='Translation Saved...' 
+                        data-failed_submission_text='An error occurred.'>
+                        Save
+                    </button>
+                </div>            
+            </div>
+        </div>
+        <div class='translation_area no_bundle'>
+            <h3>Requiring Bundle</h3>
+            <p>The following translation has not assigned to a bundle.</p>
+            <div class='bundles'>
+            </div>
+            <div class='form_container'>
+                <form>
+                    <table>
+                        <tr class='field'>
+                            <td><label for="native">English Word or Sentence</label></td>
+                            <td><input name="native" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreign">Foreign Word or Sentence</label></td>
+                            <td><input name="foreign" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
+                            <td><input name="nativeSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
+                            <td><input name="foreignSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="bundle">Bundle</label></td>
+                            <td><input name="bundle" type="text"></input></td>
+                        </tr>
+                    </table>
+                    <input type='hidden' name='noTranslation'></input>
+                </form>
+                <br/>
+                <div class='buttons'>
+                    <button 
+                        class='save_button submit_feedback' 
+                        data-submitting_text='Saving Bundle...' 
+                        data-submitted_text='Bundle Saved...' 
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='loadNoBundle'>
+                        Save
+                    </button>
+                </div>            
+            </div>
+        </div>
+        <div class='translation_area not_native_verified'>
+            NOT NATIVE VERIFIED
+        </div>
+        <div class='translation_area not_foreign_verified'>
+            NOT FOREIGN VERIFIED
+        </div>
+    </div>
+</div>

@@ -27,6 +27,7 @@ task 'build:site', 'Build the site files', ->
         'coffee --compile --bare --output build/server/lib src/server/lib/*.coffee'
         'coffee --compile --bare --output build/server/lib/db src/server/lib/db/*.coffee'
         'coffee --compile --bare --output build/server/api src/server/api/*.coffee'
+        'coffee --compile --bare --output build/server/api src/server/api/puzzles/*.coffee'
         'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
 
         'coffee --compile --bare --output build/client/pages src/client/pages/*.coffee'

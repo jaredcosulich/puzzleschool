@@ -54,6 +54,8 @@ soma.views
                     @message.animate
                         opacity: 1
                         duration: 300
+                        complete: =>
+                            $.timeout 1000, => @revert()
           
         error: ->
             errorMessage = @el.data('failed_submission_text')

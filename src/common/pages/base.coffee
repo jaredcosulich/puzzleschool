@@ -68,7 +68,7 @@ soma.views
             
             @$('.close_modal').bind 'click', (e) => @hideModal(e.currentTarget)
             
-            @onhashchange()
+        complete: -> @onhashchange()
 
         onhashchange: () -> callback() if (callback = @hashChanges[location.hash.replace(/#/, '')])
                   
