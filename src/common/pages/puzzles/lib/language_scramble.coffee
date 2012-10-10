@@ -1188,7 +1188,7 @@ languageScramble.data =
                 subtitle: 'The 130-140 most frequently used Italian words.'
                 nextLevels: ['top150words', 'top140phrases']
                 data: [
-                    {native: 'you', foreign: 'voi', nativeSentence: 'what do you think about Italy? ', foreignSentence: 'cosa pensate dell\'Italia? '},
+                    {native: 'you', foreign: 'voi', nativeSentence: 'what do you think about italy? ', foreignSentence: 'cosa pensate dell\'italia? '},
                     {native: 'already', foreign: 'già', nativeSentence: 'i have already eaten', foreignSentence: 'ho già mangiato'},
                     {native: 'now', foreign: 'adesso', nativeSentence:  'now come here', foreignSentence: 'adesso vieni qui'},
                     {native: 'go', foreign: 'andiamo', nativeSentence: 'let\'s go home', foreignSentence: 'andiamo a casa'},
@@ -1509,7 +1509,7 @@ languageScramble.data =
                 subtitle: 'Phrases for the 130 - 140 most frequently used Italian words'
                 nextLevels: ['top150words', 'top150phrases']
                 data: [
-                    {native: 'what do you think about Italy? ', foreign: 'cosa pensate dell\'Italia? '},
+                    {native: 'what do you think about italy? ', foreign: 'cosa pensate dell\'italia? '},
                     {native: 'i have already eaten', foreign: 'ho già mangiato'},
                     {native:  'now it\'s too late', foreign: 'ora è troppo tardi'},
                     {native: 'let\'s go home', foreign: 'andiamo a casa'},
@@ -1789,7 +1789,7 @@ after150 = [
     {native: 'ready', foreign: 'pronto', nativeSentence: 'are you ready?', foreignSentence: 'sei pronto?'},
     {native: 'in the', foreign: 'nei', nativeSentence: 'I met a bear in the woods', foreignSentence: 'ho incontrato un orso nei boschi'},
     {native: 'that', foreign: 'ciò', nativeSentence: 'that is all I can say', foreignSentence: 'è tutto ciò che posso dire'},
-    {native: 'times', foreign: 'volte', nativeSentence: 'I have been to Italy many times', foreignSentence: 'sono stato in Italia molte volte'},
+    {native: 'times', foreign: 'volte', nativeSentence: 'I have been to italy many times', foreignSentence: 'sono stato in italia molte volte'},
     {native: 'understood', foreign: 'capito', nativeSentence: 'have you understood?', foreignSentence: 'hai capito?'},
     {native: 'happens', foreign: 'succede', nativeSentence: 'sometimes something unexpected happens', foreignSentence: 'a volte succede qualcosa di inaspettato'},
     {native: 'taken', foreign: 'preso', nativeSentence: 'I have taken notes', foreignSentence: 'ho preso appunti'},

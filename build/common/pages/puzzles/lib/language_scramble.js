@@ -2297,8 +2297,8 @@ languageScramble.data = {
           {
             "native": 'you',
             foreign: 'voi',
-            nativeSentence: 'what do you think about Italy? ',
-            foreignSentence: 'cosa pensate dell\'Italia? '
+            nativeSentence: 'what do you think about italy? ',
+            foreignSentence: 'cosa pensate dell\'italia? '
           }, {
             "native": 'already',
             foreign: 'già',
@@ -3198,8 +3198,8 @@ languageScramble.data = {
         nextLevels: ['top150words', 'top150phrases'],
         data: [
           {
-            "native": 'what do you think about Italy? ',
-            foreign: 'cosa pensate dell\'Italia? '
+            "native": 'what do you think about italy? ',
+            foreign: 'cosa pensate dell\'italia? '
           }, {
             "native": 'i have already eaten',
             foreign: 'ho già mangiato'
@@ -3813,8 +3813,8 @@ after150 = [
   }, {
     "native": 'times',
     foreign: 'volte',
-    nativeSentence: 'I have been to Italy many times',
-    foreignSentence: 'sono stato in Italia molte volte'
+    nativeSentence: 'I have been to italy many times',
+    foreignSentence: 'sono stato in italia molte volte'
   }, {
     "native": 'understood',
     foreign: 'capito',
