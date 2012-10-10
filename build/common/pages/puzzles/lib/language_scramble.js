@@ -1070,11 +1070,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.modifyScramble = function(word) {
-    var add, commonLetters, i, letter, maxLetterCount, _i;
-    maxLetterCount = 10;
-    if (!(word.length < maxLetterCount)) {
-      return word;
-    }
+    var add, commonLetters, i, letter, _i;
     commonLetters = (function() {
       var _i, _len, _ref, _results;
       _ref = 'etaoinshrdlumkpcd';
@@ -1085,10 +1081,26 @@ languageScramble.ViewHelper = (function() {
       }
       return _results;
     })();
-    add = maxLetterCount - word.length;
-    if (add > 5) {
-      add = 5;
-    }
+    add = (function() {
+      switch (word.length) {
+        case 1:
+          return 3;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          return 4;
+        case 6:
+          return 3;
+        case 7:
+          return 2;
+        case 8:
+        case 9:
+          return 1;
+        default:
+          return 0;
+      }
+    })();
     for (i = _i = 0; 0 <= add ? _i < add : _i > add; i = 0 <= add ? ++_i : --_i) {
       word.splice(Math.floor(Math.random() * word.length), 0, commonLetters[Math.floor(Math.random() * commonLetters.length)]);
     }

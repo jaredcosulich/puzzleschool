@@ -322,9 +322,6 @@ a {
   margin-bottom: 6px;
   cursor: pointer;
 }
-.translations #translation_container .no_translation .form_container {
-  display: none;
-}
 .translations form table input {
   height: 18px;
   line-height: 18px;

@@ -713,17 +713,22 @@ class languageScramble.ViewHelper
         @$('.guesses .letter, .guesses .space').map((html) -> $(html).html()).join('') == (@scrambleInfo[@activeType])
 
     modifyScramble: (word) ->
-        maxLetterCount = 10
-        return word unless word.length < maxLetterCount
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
-        add = maxLetterCount - word.length
-        add = 5 if add > 5
+        add = switch word.length
+            when 1 then 3
+            when 2,3,4,5 then 4
+            when 6 then 3
+            when 7 then 2
+            when 8,9 then 1
+            else  0
+
         for i in [0...add]
             word.splice(
                 Math.floor(Math.random() * word.length),
                 0,
                 (commonLetters[Math.floor(Math.random() * commonLetters.length)])
             ) 
+
         return word
             
     setStage: () ->

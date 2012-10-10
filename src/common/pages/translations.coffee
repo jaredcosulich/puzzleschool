@@ -32,10 +32,8 @@ soma.views
             for link in @$('.show_translation')
                 do (link) =>
                     @registerHashChange link.id, => @showSection(link.id)
-                    @$(link).bind 'click', => 
-                        location.hash = link.id
-                        @loadNoTranslations() if link.id in ['no_translation']
-                        @loadNoBundle() if link.id in ['no_bundle']
+                    @$(link).bind 'click', => location.hash = link.id
+                        
 
         initSaveButtons: ->
             for button in @$('.save_button')     
@@ -50,12 +48,13 @@ soma.views
         initBundles: ->
             for bundle in @$('.bundles a')
                 do (bundle) => $(bundle).bind 'click', => 
-                    console.log(bundle)
                     @setBundle($(bundle).html())   
             
         
         showSection: (sectionName) ->
             @$('#translation_container')[0].className = sectionName
+            @loadNoTranslations() if sectionName in ['no_translation']
+            @loadNoBundle() if sectionName in ['no_bundle']
                  
         saveNewTranslation: (button) ->
             form = $(button).closest('.translation_area').find('form')
@@ -95,7 +94,6 @@ soma.views
             @initBundles()
             
         setBundle: (bundle) ->
-            console.log(bundle)
             @$('.bundles').closest('.translation_area').find('input[name=\'bundle\']').val(bundle)         
                     
         loadNoTranslations: ->
@@ -125,6 +123,7 @@ soma.views
             for noTranslation in @data.noTranslation
                 @$('.no_translations').append("<a>#{noTranslation}</a>")
             @initNoTranslation()
+            @displayNoTranslation(@$('.no_translations a')[0])
 
         displayNoTranslation: (element) ->
             formContainer = $(element).closest('.translation_area').find('.form_container')
@@ -134,7 +133,7 @@ soma.views
 
         fillInTranslationForm: (formContainer, data) ->
             for input in formContainer.find('input')
-                $(input).val(data[input.name])
+                $(input).val(data[input.name] or '')
                 $(input).val(JSON.stringify(data)) if input.name == 'noTranslation'
              
 soma.routes

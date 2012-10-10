@@ -55,14 +55,7 @@ soma.views({
             return _this.showSection(link.id);
           });
           return _this.$(link).bind('click', function() {
-            var _ref1, _ref2;
-            location.hash = link.id;
-            if ((_ref1 = link.id) === 'no_translation') {
-              _this.loadNoTranslations();
-            }
-            if ((_ref2 = link.id) === 'no_bundle') {
-              return _this.loadNoBundle();
-            }
+            return location.hash = link.id;
           });
         })(link));
       }
@@ -107,7 +100,6 @@ soma.views({
         bundle = _ref[_i];
         _results.push((function(bundle) {
           return $(bundle).bind('click', function() {
-            console.log(bundle);
             return _this.setBundle($(bundle).html());
           });
         })(bundle));
@@ -115,7 +107,13 @@ soma.views({
       return _results;
     },
     showSection: function(sectionName) {
-      return this.$('#translation_container')[0].className = sectionName;
+      this.$('#translation_container')[0].className = sectionName;
+      if (sectionName === 'no_translation') {
+        this.loadNoTranslations();
+      }
+      if (sectionName === 'no_bundle') {
+        return this.loadNoBundle();
+      }
     },
     saveNewTranslation: function(button) {
       var form,
@@ -176,7 +174,6 @@ soma.views({
       return this.initBundles();
     },
     setBundle: function(bundle) {
-      console.log(bundle);
       return this.$('.bundles').closest('.translation_area').find('input[name=\'bundle\']').val(bundle);
     },
     loadNoTranslations: function() {
@@ -221,7 +218,8 @@ soma.views({
         noTranslation = _ref[_i];
         this.$('.no_translations').append("<a>" + noTranslation + "</a>");
       }
-      return this.initNoTranslation();
+      this.initNoTranslation();
+      return this.displayNoTranslation(this.$('.no_translations a')[0]);
     },
     displayNoTranslation: function(element) {
       var data, formContainer;
@@ -236,7 +234,7 @@ soma.views({
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         input = _ref[_i];
-        $(input).val(data[input.name]);
+        $(input).val(data[input.name] || '');
         if (input.name === 'noTranslation') {
           _results.push($(input).val(JSON.stringify(data)));
         } else {
