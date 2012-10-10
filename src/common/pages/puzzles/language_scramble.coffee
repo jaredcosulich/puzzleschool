@@ -53,6 +53,9 @@ soma.views
         selector: '#content .language_scramble'
         create: ->
             languageScramble = require('./lib/language_scramble')
+            
+            console.log(window.innerHeight * 0.6)
+            @$('.scramble_content').height(window.innerHeight * 0.6)
 
             @puzzleData = JSON.parse(@el.data('puzzle_data'))
             @languages = @el.data('languages')
