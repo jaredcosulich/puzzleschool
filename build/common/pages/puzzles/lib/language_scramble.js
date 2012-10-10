@@ -1303,8 +1303,8 @@ languageScramble.ViewHelper = (function() {
       opacity: 0
     });
     message.css({
-      top: ($('.language_scramble').height() - this.$('#next_level').height()) / 2,
-      left: ($('.language_scramble').width() - this.$('#next_level').width()) / 2
+      top: ($('.scramble_content').height() - this.$('#next_level').height()) / 2,
+      left: ($('.scramble_content').width() - this.$('#next_level').width()) / 2
     });
     this.$('#next_level .reset_level_link').bind('click', function() {
       return resetLevel();
@@ -3628,12 +3628,12 @@ after150 = [
   }, {
     "native": 'her',
     foreign: 'suoi',
-    nativeSentence: 'I like her new boots',
-    foreignSentence: 'mi piacciono I suoi nuovi stivali'
+    nativeSentence: 'i like her new boots',
+    foreignSentence: 'mi piacciono i suoi nuovi stivali'
   }, {
     "native": 'think',
     foreign: 'penso',
-    nativeSentence: ' I always think about you',
+    nativeSentence: ' i always think about you',
     foreignSentence: 'ti penso sempre'
   }, {
     "native": 'fright',
@@ -3643,7 +3643,7 @@ after150 = [
   }, {
     "native": 'idea',
     foreign: 'idea',
-    nativeSentence: 'I think it is a good idea',
+    nativeSentence: 'i think it is a good idea',
     foreignSentence: 'penso che sia una buona idea'
   }, {
     "native": 'head',
@@ -3668,7 +3668,7 @@ after150 = [
   }, {
     "native": 'would like',
     foreign: 'vorrei',
-    nativeSentence: 'I would like a piece of cake',
+    nativeSentence: 'i would like a piece of cake',
     foreignSentence: 'vorrei una fetta di torta'
   }, {
     "native": 'hear',
@@ -3678,7 +3678,7 @@ after150 = [
   }, {
     "native": 'early',
     foreign: 'presto',
-    nativeSentence: 'I always wake up early in the morning',
+    nativeSentence: 'i always wake up early in the morning',
     foreignSentence: 'mi sveglio sempre presto al mattino'
   }, {
     "native": 'men',
@@ -3708,7 +3708,7 @@ after150 = [
   }, {
     "native": 'had',
     foreign: 'avuto',
-    nativeSentence: 'I had no time to say goodbye',
+    nativeSentence: 'i had no time to say goodbye',
     foreignSentence: 'non ho avuto tempo di salutare'
   }, {
     "native": 'door',
@@ -3733,7 +3733,7 @@ after150 = [
   }, {
     "native": 'therefore',
     foreign: 'quindi',
-    nativeSentence: 'I think, therefore I am',
+    nativeSentence: 'i think, therefore i am',
     foreignSentence: 'penso, quindi sono'
   }, {
     "native": 'do it',
@@ -3748,7 +3748,7 @@ after150 = [
   }, {
     "native": 'have',
     foreign: 'abbia',
-    nativeSentence: 'she is the prettiest girl I have ever seen',
+    nativeSentence: 'she is the prettiest girl i have ever seen',
     foreignSentence: 'è la ragazza più carina che abbia mai visto'
   }, {
     "native": 'reason',
@@ -3758,7 +3758,7 @@ after150 = [
   }, {
     "native": 'heard',
     foreign: 'sentito',
-    nativeSentence: 'I heard you are leaving your job',
+    nativeSentence: 'i heard you are leaving your job',
     foreignSentence: 'ho sentito che lascerai il tuo lavoro'
   }, {
     "native": 'boys',
@@ -3768,7 +3768,7 @@ after150 = [
   }, {
     "native": 'tomorrow',
     foreign: 'domani',
-    nativeSentence: 'I am going to the cinema tomorrow',
+    nativeSentence: 'i am going to the cinema tomorrow',
     foreignSentence: 'andrò al cinema domani'
   }, {
     "native": 'girl',
@@ -3793,7 +3793,7 @@ after150 = [
   }, {
     "native": 'wanted',
     foreign: 'volevo',
-    nativeSentence: 'I wanted to be alone',
+    nativeSentence: 'i wanted to be alone',
     foreignSentence: 'volevo stare solo'
   }, {
     "native": 'ready',
@@ -3803,17 +3803,17 @@ after150 = [
   }, {
     "native": 'in the',
     foreign: 'nei',
-    nativeSentence: 'I met a bear in the woods',
+    nativeSentence: 'i met a bear in the woods',
     foreignSentence: 'ho incontrato un orso nei boschi'
   }, {
     "native": 'that',
     foreign: 'ciò',
-    nativeSentence: 'that is all I can say',
+    nativeSentence: 'that is all i can say',
     foreignSentence: 'è tutto ciò che posso dire'
   }, {
     "native": 'times',
     foreign: 'volte',
-    nativeSentence: 'I have been to italy many times',
+    nativeSentence: 'i have been to italy many times',
     foreignSentence: 'sono stato in italia molte volte'
   }, {
     "native": 'understood',
@@ -3828,7 +3828,7 @@ after150 = [
   }, {
     "native": 'taken',
     foreign: 'preso',
-    nativeSentence: 'I have taken notes',
+    nativeSentence: 'i have taken notes',
     foreignSentence: 'ho preso appunti'
   }, {
     "native": 'doing',
@@ -3849,7 +3849,7 @@ after150 = [
     "native": 'your',
     foreign: 'tuoi',
     nativeSentence: 'claim your rights',
-    foreignSentence: 'rivendica I tuoi diritti'
+    foreignSentence: 'rivendica i tuoi diritti'
   }, {
     "native": 'captain',
     foreign: 'capitano',
@@ -3873,13 +3873,13 @@ after150 = [
   }, {
     "native": 'found',
     foreign: 'trovato',
-    nativeSentence: 'I found a ring on the street',
+    nativeSentence: 'i found a ring on the street',
     foreignSentence: 'ho trovato un anello per strada'
   }, {
     "native": 'friends',
     foreign: 'amici',
     nativeSentence: 'they are my best friends',
-    foreignSentence: 'loro sono I miei migliori amici'
+    foreignSentence: 'loro sono i miei migliori amici'
   }, {
     "native": 'to come',
     foreign: 'venire',
@@ -3888,12 +3888,12 @@ after150 = [
   }, {
     "native": 'say',
     foreign: 'dico',
-    nativeSentence: 'every night I say a prayer',
+    nativeSentence: 'every night i say a prayer',
     foreignSentence: 'ogni sera dico una preghiera'
   }, {
     "native": 'understand',
     foreign: 'capisco',
-    nativeSentence: 'I understand what you mean',
+    nativeSentence: 'i understand what you mean',
     foreeignSentence: 'capisco ciò che vuoi dire'
   }, {
     "native": 'problem',
@@ -3903,7 +3903,7 @@ after150 = [
   }, {
     "native": 'until',
     foreign: 'fino',
-    nativeSentence: 'I will be busy until tomorrow night',
+    nativeSentence: 'i will be busy until tomorrow night',
     foreignSentence: 'sarò impegnato fino a domani sera'
   }, {
     "native": 'guy',
@@ -3928,7 +3928,7 @@ after150 = [
   }, {
     "native": 'days',
     foreign: 'giorni',
-    nativeSentence: 'I am working a lot these days',
+    nativeSentence: 'i am working a lot these days',
     foreignSentence: 'sto lavorando molto in questi giorni'
   }, {
     "native": 'fuck',
@@ -3973,7 +3973,7 @@ after150 = [
   }, {
     "native": 'second',
     foreign: 'secondo',
-    nativeSentence: 'I will be back in a second',
+    nativeSentence: 'i will be back in a second',
     foreignSentence: 'torno tra un secondo'
   }, {
     "native": 'movie',
@@ -4003,17 +4003,17 @@ after150 = [
   }, {
     "native": 'see',
     foreign: 'vedo',
-    nativeSentence: 'I see a shadow behind the window',
+    nativeSentence: 'i see a shadow behind the window',
     foreignSentence: 'vedo un’ombra dietro la finestra'
   }, {
     "native": 'are',
     foreign: 'stanno',
     nativeSentence: 'the books are on the table',
-    foreignSentence: 'I libri stanno sul tavolo'
+    foreignSentence: 'i libri stanno sul tavolo'
   }, {
     "native": 'have',
     foreign: 'avrei',
-    nativeSentence: 'I should have studied harder',
+    nativeSentence: 'i should have studied harder',
     foreignSentence: 'avrei dovuto studiare di più'
   }, {
     "native": 'to take',
@@ -4048,7 +4048,7 @@ after150 = [
   }, {
     "native": 'eyes',
     foreign: 'occhi',
-    nativeSentence: 'I can not keep my eyes open',
+    nativeSentence: 'i can not keep my eyes open',
     foreignSentence: 'non riesco a tenere gli occhi aperti'
   }, {
     "native": 'end',
@@ -4063,7 +4063,7 @@ after150 = [
   }, {
     "native": 'darling',
     foreign: 'tesoro',
-    nativeSentence: 'I miss you darling',
+    nativeSentence: 'i miss you darling',
     foreignSentence: 'mi manchi tesoro'
   }, {
     "native": 'excuse',
@@ -4089,7 +4089,7 @@ after150 = [
     "native": 'ship',
     foreign: 'nave',
     nativeSentence: 'rats leave a sinking ship',
-    foreignSentence: 'I topi abbandonano una nave che affonda'
+    foreignSentence: 'i topi abbandonano una nave che affonda'
   }, {
     "native": 'are',
     foreign: 'stiamo',
@@ -4098,7 +4098,7 @@ after150 = [
   }, {
     "native": 'evening',
     foreign: 'sera',
-    nativeSentence: 'I am leaving on Saturday evening',
+    nativeSentence: 'i am leaving on Saturday evening',
     foreignSentence: 'partirò sabato sera'
   }, {
     "native": 'slow',
@@ -4108,7 +4108,7 @@ after150 = [
   }, {
     "native": 'hear',
     foreign: 'sento',
-    nativeSentence: 'I hear the church bells',
+    nativeSentence: 'i hear the church bells',
     foreignSentence: 'sento le campane della chiesa'
   }, {
     "native": 'car',
@@ -4128,7 +4128,7 @@ after150 = [
   }, {
     "native": 'either',
     foreign: 'neanche',
-    nativeSentence: 'I can not do it either',
+    nativeSentence: 'i can not do it either',
     foreignSentence: 'neanche io posso farlo'
   }, {
     "native": 'from the',
@@ -4138,7 +4138,7 @@ after150 = [
   }, {
     "native": 'doctor',
     foreign: 'dottore',
-    nativeSentence: 'I went to the doctor yesterday',
+    nativeSentence: 'i went to the doctor yesterday',
     foreignSentence: 'ieri sono andato dal dottore'
   }, {
     "native": 'what',
@@ -4233,7 +4233,7 @@ after150 = [
   }, {
     "native": 'to go back',
     foreign: 'tornare',
-    nativeSentence: 'I have to go back home',
+    nativeSentence: 'i have to go back home',
     foreignSentence: 'devo tornare a casa'
   }, {
     "native": 'but',
@@ -4253,7 +4253,7 @@ after150 = [
   }, {
     "native": 'while',
     foreign: 'mentre',
-    nativeSentence: 'I fell asleep while watching tv',
+    nativeSentence: 'i fell asleep while watching tv',
     foreignSentence: 'mi sono addormentato mentre guardavo la tv'
   }, {
     "native": 'sorry',
@@ -4263,12 +4263,12 @@ after150 = [
   }, {
     "native": 'lonely',
     foreign: 'sola',
-    nativeSentence: 'I often feel lonely',
+    nativeSentence: 'i often feel lonely',
     foreignSentence: 'mi sento spesso sola'
   }, {
     "native": 'hope',
     foreign: 'spero',
-    nativeSentence: 'I hope to see you soon',
+    nativeSentence: 'i hope to see you soon',
     foreignSentence: 'spero di vederti presto'
   }, {
     "native": 'those',
@@ -4288,7 +4288,7 @@ after150 = [
   }, {
     "native": 'too',
     foreign: 'anch’',
-    nativeSentence: 'I love you too',
+    nativeSentence: 'i love you too',
     foreignSentence: 'anch’io ti amo'
   }, {
     "native": 'war',
@@ -4318,7 +4318,7 @@ after150 = [
   }, {
     "native": 'brother',
     foreign: 'fratello',
-    nativeSentence: 'I have an older brother',
+    nativeSentence: 'i have an older brother',
     foreignSentence: 'ho un fratello maggiore'
   }, {
     "native": 'water',
@@ -4328,18 +4328,18 @@ after150 = [
   }, {
     "native": 'tonight',
     foreign: 'stasera',
-    nativeSentence: 'I’m going to the cinema tonight',
+    nativeSentence: 'i\'m going to the cinema tonight',
     foreignSentence: 'vado al cinema stasera'
   }, {
     "native": 'thought',
     foreign: 'pensavo',
-    nativeSentence: 'I thought you would come',
+    nativeSentence: 'i thought you would come',
     foreignSentence: 'pensavo che saresti venuto'
   }, {
     "native": 'call',
     foreign: 'chiama',
     nativeSentence: 'call you parents if you’re going to be late',
-    foreignSentence: 'chiama I tuoi genitori se farai tardi'
+    foreignSentence: 'chiama i tuoi genitori se farai tardi'
   }, {
     "native": 'person',
     foreign: 'persona',
@@ -4358,7 +4358,7 @@ after150 = [
   }, {
     "native": 'year',
     foreign: 'anno',
-    nativeSentence: 'next year I will go to the university',
+    nativeSentence: 'next year i will go to the university',
     foreignSentence: 'il prossimo anno andrò all’università'
   }, {
     "native": 'your',
@@ -4368,7 +4368,7 @@ after150 = [
   }, {
     "native": 'really',
     foreign: 'veramente',
-    nativeSentence: 'I really enjoyed the movie',
+    nativeSentence: 'i really enjoyed the movie',
     foreignSentence: 'ilfilm mi è veramente piaciuto'
   }, {
     "native": 'over',
@@ -4383,7 +4383,7 @@ after150 = [
   }, {
     "native": 'minutes',
     foreign: 'minuti',
-    nativeSentence: 'I’ll be back in five minutes',
+    nativeSentence: 'i\'ll be back in five minutes',
     foreignSentence: 'torno tra cinque minuti'
   }, {
     "native": 'down',
@@ -4404,7 +4404,7 @@ after150 = [
     "native": 'children',
     foreign: 'bambini',
     nativeSentence: 'education is important for children',
-    foreignSentence: 'l’istruzione è importante per I bambini'
+    foreignSentence: 'l’istruzione è importante per i bambini'
   }, {
     "native": 'remember',
     foreign: 'ricordi',
@@ -4414,7 +4414,7 @@ after150 = [
     "native": 'those',
     foreign: 'quelli',
     nativeSentence: 'true friends are those who share',
-    foreignSentence: 'I veri amici sono quelli che condividono'
+    foreignSentence: 'i veri amici sono quelli che condividono'
   }, {
     "native": 'stay',
     foreign: 'state',
@@ -4423,17 +4423,17 @@ after150 = [
   }, {
     "native": 'hours',
     foreign: 'ore',
-    nativeSentence: 'I’ve been sitting here for hours',
+    nativeSentence: 'i\'ve been sitting here for hours',
     foreignSentence: 'sono seduto qui da ore'
   }, {
     "native": 'was',
     foreign: 'stavo',
-    nativeSentence: 'I was lying on the sofa',
+    nativeSentence: 'i was lying on the sofa',
     foreignSentence: 'stavo sdraiato sul divano'
   }, {
     "native": 'had',
     foreign: 'dovuto',
-    nativeSentence: 'I had to learn to forgive',
+    nativeSentence: 'i had to learn to forgive',
     foreignSentence: 'ho dovuto imparare a perdonare'
   }, {
     "native": 'not even',
@@ -4458,7 +4458,7 @@ after150 = [
   }, {
     "native": 'care',
     foreign: 'importa',
-    nativeSentence: 'I don’t care what they say',
+    nativeSentence: 'i don’t care what they say',
     foreignSentence: 'non m’importa di ciò che dicono'
   }, {
     "native": 'no',
@@ -4473,12 +4473,12 @@ after150 = [
   }, {
     "native": 'instead',
     foreign: 'invece',
-    nativeSentence: 'could I have tea instead of coffee?',
+    nativeSentence: 'could i have tea instead of coffee?',
     foreignSentence: 'potrei avere del tè invece del caffè?'
   }, {
     "native": 'lost',
     foreign: 'perso',
-    nativeSentence: 'I have lost my keys',
+    nativeSentence: 'i have lost my keys',
     foreignSentence: 'ho perso le mie chiavi'
   }, {
     "native": 'possible',
@@ -4498,7 +4498,7 @@ after150 = [
   }, {
     "native": 'tought',
     foreign: 'pensato',
-    nativeSentence: 'I thought of a solution for the problem',
+    nativeSentence: 'i thought of a solution for the problem',
     foreignSentence: 'ho pensato ad una soluzione al problema'
   }, {
     "native": 'should',
@@ -4523,7 +4523,7 @@ after150 = [
   }, {
     "native": 'will do',
     foreign: 'farò',
-    nativeSentence: 'I will do my best',
+    nativeSentence: 'i will do my best',
     foreignSentence: 'farò del mio meglio'
   }, {
     "native": 'seeking',
@@ -4543,7 +4543,7 @@ after150 = [
   }, {
     "native": 'went',
     foreign: 'andato',
-    nativeSentence: 'I went to the zoo yesterday',
+    nativeSentence: 'i went to the zoo yesterday',
     foreignSentence: 'sono andato allo zoo ieri'
   }, {
     "native": 'that',
@@ -4563,13 +4563,13 @@ after150 = [
   }, {
     "native": 'could',
     foreign: 'potrei',
-    nativeSentence: 'could I have some more wine?',
+    nativeSentence: 'could i have some more wine?',
     foreignSentence: 'potrei avere dell’altro vino?'
   }, {
     "native": 'important',
     foreign: 'importante',
     nativeSentence: 'a good education is important for our kids',
-    foreignSentence: 'una buona istruzione è importante per I nostri figli'
+    foreignSentence: 'una buona istruzione è importante per i nostri figli'
   }, {
     "native": 'this',
     foreign: 'quest’',
@@ -4578,12 +4578,12 @@ after150 = [
   }, {
     "native": 'love',
     foreign: 'amo',
-    nativeSentence: 'I love my husband',
+    nativeSentence: 'i love my husband',
     foreignSentence: 'amo mio marito'
   }, {
     "native": 'asked',
     foreign: 'chiesto',
-    nativeSentence: 'I asked her to leave',
+    nativeSentence: 'i asked her to leave',
     foreignSentence: 'le ho chiesto di andarsene'
   }
 ];
