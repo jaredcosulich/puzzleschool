@@ -39,8 +39,23 @@ soma.routes({
       return _this.send((bundles != null ? bundles.bundleList : void 0) || []);
     });
   },
+  '/api/language_scramble/bundle/:name': function(_arg) {
+    var l, name,
+      _this = this;
+    name = _arg.name;
+    return l = new Line({
+      error: function(err) {
+        console.log('Error retrieving bundles:', err);
+        return _this.sendError();
+      }
+    }, function() {
+      return db.get('language_scramble_translation_lists', 'bundles', this.wait());
+    }, function(bundles) {
+      return _this.send((bundles || {})[name] || []);
+    });
+  },
   '/api/language_scramble/translations/save': function() {
-    var existingTranslation, incompleteUpdates, l, translated, translation, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6,
+    var existingTranslation, incompleteUpdates, l, translated, translation, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8,
       _this = this;
     translation = {};
     if ((_ref = this.data["native"]) != null ? _ref.length : void 0) {
@@ -54,6 +69,12 @@ soma.routes({
     }
     if ((_ref3 = this.data.foreignSentence) != null ? _ref3.length : void 0) {
       translation.foreignSentence = this.data.foreignSentence;
+    }
+    if ((_ref4 = this.data.nativeVerified) != null ? _ref4.length : void 0) {
+      translation.nativeVerified = this.data.nativeVerified;
+    }
+    if ((_ref5 = this.data.foreignVerified) != null ? _ref5.length : void 0) {
+      translation.foreignVerified = this.data.foreignVerified;
     }
     l = new Line({
       error: function(err) {
@@ -74,13 +95,13 @@ soma.routes({
         delete incompleteUpdates.noTranslation;
       }
       translation.id = "" + (this.data["native"].replace(/\W/g, '_')) + "-" + (translation.foreign.replace(/\W/g, '_'));
-      if ((_ref4 = this.data.bundle) != null ? _ref4.length : void 0) {
+      if ((_ref6 = this.data.bundle) != null ? _ref6.length : void 0) {
         translation.bundle = this.data.bundle;
       }
-      if ((_ref5 = this.data.nativeVerificationCount) != null ? _ref5.length : void 0) {
+      if ((_ref7 = this.data.nativeVerificationCount) != null ? _ref7.length : void 0) {
         translation.nativeVerificationCount = this.data.nativeVerificationCount;
       }
-      if ((_ref6 = this.data.foreignVerificationCount) != null ? _ref6.length : void 0) {
+      if ((_ref8 = this.data.foreignVerificationCount) != null ? _ref8.length : void 0) {
         translation.foreignVerificationCount = this.data.foreignVerificationCount;
       }
       existingTranslation = null;
@@ -90,15 +111,15 @@ soma.routes({
       l.add(function(existing) {
         existingTranslation = existing || {};
         if (existingTranslation["native"] !== translation["native"] || existingTranslation.nativeSentence !== translation.nativeSentence) {
-          translation.nativeVerificationCount = 0;
+          translation.nativeVerified = 0;
         }
         if (existingTranslation.foreign !== translation.foreign || existingTranslation.foreignSentence !== translation.foreignSentence) {
-          translation.foreignVerificationCount = 0;
+          translation.foreignVerified = 0;
         }
         incompleteUpdates.notNativeVerified = {};
-        incompleteUpdates.notNativeVerified["" + (translation.nativeVerificationCount ? 'delete' : 'add')] = [translation.id];
+        incompleteUpdates.notNativeVerified["" + (translation.nativeVerified ? 'delete' : 'add')] = [translation.id];
         incompleteUpdates.notForeignVerified = {};
-        incompleteUpdates.notForeignVerified["" + (translation.foreignVerificationCount ? 'delete' : 'add')] = [translation.id];
+        incompleteUpdates.notForeignVerified["" + (translation.foreignVerified ? 'delete' : 'add')] = [translation.id];
         return db.update('language_scramble_translations', translation.id, translation, l.wait());
       });
       l.add(function() {

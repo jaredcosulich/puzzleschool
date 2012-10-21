@@ -26,7 +26,8 @@ soma.views
             $('.register_flag').hide()    
             @initShowSection()
             @initSaveButtons()
-            @initNoTranslation()
+            @initDatas()
+            @initVerification()
         
         initShowSection: ->
             for link in @$('.show_translation')
@@ -40,24 +41,35 @@ soma.views
                 do (button) => $(button).bind 'click', => 
                     @saveNewTranslation(button)     
 
-        initNoTranslation: ->
-            for noTranslation in @$('.no_translations a')
-                do (noTranslation) => $(noTranslation).bind 'click', => 
-                    @displayNoTranslation(noTranslation)   
+        initDatas: ->
+            for dataLink in @$('.data a')
+                do (dataLink) => $(dataLink).bind 'click', => 
+                    @displayData(dataLink)   
                     
         initBundles: ->
             for bundle in @$('.bundles a')
                 do (bundle) => $(bundle).bind 'click', => 
                     @setBundle($(bundle).html())   
-            
+                    
+        initVerification: ->
+            for verifyButton in @$('.verify_button')
+                do (verifyButton) => $(verifyButton).bind 'click', =>
+                    form = $(verifyButton).closest('.form_container').find('form')
+                    form.find('.verification_field').val('1')
+                    @saveNewTranslation(verifyButton) 
+                    
+
         
         showSection: (sectionName) ->
             @$('#translation_container')[0].className = sectionName
             @loadNoTranslations() if sectionName in ['no_translation']
             @loadNoBundle() if sectionName in ['no_bundle']
+            @loadNotNativeVerified() if sectionName in ['not_native_verified']
+            @loadNotForeignVerified() if sectionName in ['not_foreign_verified']
+            @loadBundleList() if sectionName in ['bundle_list']
                  
         saveNewTranslation: (button) ->
-            form = $(button).closest('.translation_area').find('form')
+            form = $(button).closest('.form_container').find('form')
             $.ajaj
                 url: '/api/language_scramble/translations/save'
                 method: 'POST'
@@ -78,23 +90,51 @@ soma.views
                     @data = data
                     callback()
 
-        loadBundles: (callback) ->
+
+        getBundleList: (callback) ->
             $.ajaj
                 url: '/api/language_scramble/bundles'
                 method: 'GET'
                 success: (bundles) =>
-                    @displayBundles(bundles)
-                    callback()
+                    callback(bundles)
+                    
+        getBundle: (name, callback) ->
+            $.ajaj
+                url: "/api/language_scramble/bundle/#{name}"
+                method: 'GET'
+                success: (bundle) =>
+                    callback(bundle)
+
+        loadBundles: (callback) ->
+            @getBundleList (bundles) =>
+                @displayBundles(bundles)
+                callback()
+                    
+        loadBundleList: ->
+            @getBundleList (bundles) =>
+                @displayBundleList(bundles)
+
+        displayBundleList: (bundles) ->
+            return unless bundles?.length
+            dataArea = @$('#translation_container .bundle_list .bundle_list')
+            dataArea.html('')
+            for bundle in bundles
+                do (bundle) =>
+                    dataArea.append("<a>#{bundle}</a>")
+                    bundleLink = dataArea.lastChild
+                    bundleLink.bind 'click', =>
+                        
                     
         displayBundles: (bundles) ->
             return unless bundles?.length
-            @$('.bundles').html('')
+            dataArea = @$('#translation_container .no_bundle .bundles')
+            dataArea.html('')
             for bundle in bundles
-                @$('.bundles').append("<a>#{bundle}</a>")
+                dataArea.append("<a>#{bundle}</a>")
             @initBundles()
             
         setBundle: (bundle) ->
-            @$('.bundles').closest('.translation_area').find('input[name=\'bundle\']').val(bundle)         
+            @$('#translation_container .no_bundle .data').closest('.translation_area').find('input[name=\'bundle\']').val(bundle)         
                     
         loadNoTranslations: ->
             @loadIncompleteTranslations => @displayNoTranslations()
@@ -102,7 +142,15 @@ soma.views
         loadNoBundle: ->
             @loadBundles =>
                 @loadIncompleteTranslations => 
-                    @displayNoBundle()
+                    @displayTranslation(@$('.no_bundle'), @data.noBundle[0])
+                    
+        loadNotNativeVerified: ->
+            @loadIncompleteTranslations => 
+                @displayNotNativeVerifieds()
+
+        loadNotForeignVerified: ->
+            @loadIncompleteTranslations => 
+                @displayNotForeignVerifieds()
 
         updateIncomplete: ->    
             @$('.no_translation_count').html("#{@data.noTranslation?.length or 0}")
@@ -110,26 +158,46 @@ soma.views
             @$('.not_native_verified_count').html("#{@data.notNativeVerified?.length or 0}")
             @$('.not_foreign_verified_count').html("#{@data.notForeignVerified?.length or 0}")
             
-        displayNoBundle: ->
+        displayTranslation: (area, id) ->
             $.ajaj
-                url: "/api/language_scramble/translation/#{@data.noBundle[0]}"
+                url: "/api/language_scramble/translation/#{id}"
                 method: 'GET'
                 success: (translation) =>
-                    @fillInTranslationForm(@$('.no_bundle .form_container'), translation) 
+                    @fillInTranslationForm(area.find('.form_container'), translation) 
             
         displayNoTranslations: ->
             return unless @data.noTranslation
-            @$('.no_translations').html('')
+            dataArea = @$('#translation_container .no_translation .data')
+            dataArea.html('')
             for noTranslation in @data.noTranslation
-                @$('.no_translations').append("<a>#{noTranslation}</a>")
-            @initNoTranslation()
-            @displayNoTranslation(@$('.no_translations a')[0])
+                dataArea.append("<a>#{noTranslation}</a>")
+            @initDatas()
+            @displayData(dataArea.find('a')[0])
 
-        displayNoTranslation: (element) ->
-            formContainer = $(element).closest('.translation_area').find('.form_container')
-            formContainer.css('display', 'block')
-            data = JSON.parse($(element).html())
-            @fillInTranslationForm(formContainer, data)
+        displayNotNativeVerifieds: ->
+            dataArea = @$('#translation_container .not_native_verified .data')
+            dataArea.html('')
+            for notVerified in @data.notNativeVerified
+                dataArea.append("<a>#{notVerified}</a>")
+            @initDatas()
+            @displayData(dataArea.find('a')[0])
+
+        displayNotForeignVerifieds: ->
+            dataArea = @$('#translation_container .not_foreign_verified .data')
+            dataArea.html('')
+            for notVerified in @data.notForeignVerified
+                dataArea.append("<a>#{notVerified}</a>")
+            @initDatas()
+            @displayData(dataArea.find('a')[0])
+            
+        displayData: (element) ->
+            area = $(element).closest('.translation_area')
+            formContainer = area.find('.form_container')
+            if (html = $(element).html()).indexOf('{') == 0
+                data = JSON.parse(html)
+                @fillInTranslationForm(formContainer, data)
+            else
+                @displayTranslation(area, html)
 
         fillInTranslationForm: (formContainer, data) ->
             for input in formContainer.find('input')

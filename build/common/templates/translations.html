@@ -34,6 +34,10 @@
             Requiring Foreign Verification 
             (<span class='not_foreign_verified_count'>{notForeignVerifiedCount}</span>)
         </a>
+        &nbsp; | &nbsp;
+        <a class='show_translation' id='bundle_list'>
+            Bundles 
+        </a>
     </div>
 
     <div id='translation_container'>
@@ -58,6 +62,10 @@
                         <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
                         <td><input name="foreignSentence" type="text"></input></td>
                     </tr>
+                    <tr class='field'>
+                        <td><label for="bundle">Bundle</label></td>
+                        <td><input name="bundle" type="text"></input></td>
+                    </tr>                    
                 </table>
             </form>
             <br/>
@@ -74,7 +82,7 @@
         <div class='translation_area no_translation'>
             <h3>Requiring Translation</h3>
             <p>The following translations are incomplete. Please keep all sentences as short as possible.</p>
-            <div class='no_translations'>
+            <div class='data'>
                 {:noTranslation}
                     <a>{}</a>
                 {/noTranslation}
@@ -107,7 +115,8 @@
                         class='save_button submit_feedback' 
                         data-submitting_text='Saving Translation...' 
                         data-submitted_text='Translation Saved...' 
-                        data-failed_submission_text='An error occurred.'>
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='loadNoTranslations'>
                         Save
                     </button>
                 </div>            
@@ -158,10 +167,110 @@
             </div>
         </div>
         <div class='translation_area not_native_verified'>
-            NOT NATIVE VERIFIED
+            <h3>Not English Verified</h3>
+            <p>The following translations have not been verified as good english sentences.</p>
+            <div class='data'>
+            </div>
+            <div class='form_container'>
+                <form>
+                    <table>
+                        <tr class='field'>
+                            <td><label for="native"><b>English Word or Sentence</b></label></td>
+                            <td><input name="native" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreign">Foreign Word or Sentence</label></td>
+                            <td><input name="foreign" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="nativeSentence"><b>English Sentence</b> (if translating a word)</label></td>
+                            <td><input name="nativeSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
+                            <td><input name="foreignSentence" type="text"></input></td>
+                        </tr>
+                    </table>
+                    <input name="nativeVerified" class='verification_field' type="text"></input>
+                    <input type='hidden' name='noTranslation'></input>
+                </form>
+                <br/>
+                <div class='buttons'>
+                    <button
+                        style='display: none;'
+                        class='save_button submit_feedback' 
+                        data-submitting_text='Saving...' 
+                        data-submitted_text='Saved...' 
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='loadNotNativeVerified'>
+                        Save
+                    </button>
+                    <button 
+                        class='verify_button submit_feedback' 
+                        data-submitting_text='Verifying...' 
+                        data-submitted_text='Verified...' 
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='loadNotNativeVerified'>
+                        Verify
+                    </button>
+                </div>            
+            </div>
         </div>
         <div class='translation_area not_foreign_verified'>
-            NOT FOREIGN VERIFIED
+            <h3>Not Foreign Verified</h3>
+            <p>The following translations have not been verified as good foreign sentences.</p>
+            <div class='data'>
+            </div>
+            <div class='form_container'>
+                <form>
+                    <table>
+                        <tr class='field'>
+                            <td><label for="native">English Word or Sentence</label></td>
+                            <td><input name="native" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreign"><b>Foreign Word or Sentence</b></label></td>
+                            <td><input name="foreign" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
+                            <td><input name="nativeSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignSentence"><b>Foreign Sentence</b> (if translating a word)</label></td>
+                            <td><input name="foreignSentence" type="text"></input></td>
+                        </tr>
+                    </table>
+                    <input name="foreignVerified" class='verification_field' type="text"></input>
+                    <input type='hidden' name='noTranslation'></input>
+                </form>
+                <br/>
+                <div class='buttons'>
+                    <button
+                        style='display: none;'
+                        class='save_button submit_feedback' 
+                        data-submitting_text='Saving...' 
+                        data-submitted_text='Saved...' 
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='loadNotForeignVerified'>
+                        Save
+                    </button>
+                    <button 
+                        class='verify_button submit_feedback' 
+                        data-submitting_text='Verifying...' 
+                        data-submitted_text='Verified...' 
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='loadNotForeignVerified'>
+                        Verify
+                    </button>
+                </div>            
+            </div>
+        </div>
+        <div class='translation_area bundle_list'>
+            <h3>Bundle List</h3>
+            <p>All Bundles</p>
+            <div class='bundle_list'>
+            </div>
         </div>
     </div>
 </div>

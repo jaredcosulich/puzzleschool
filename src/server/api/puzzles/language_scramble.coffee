@@ -25,6 +25,16 @@ soma.routes
 
             (bundles) => @send(bundles?.bundleList or [])
 
+    '/api/language_scramble/bundle/:name': ({name}) ->
+        l = new Line
+            error: (err) => 
+                console.log('Error retrieving bundles:', err)
+                @sendError()
+
+            -> db.get 'language_scramble_translation_lists', 'bundles', @wait()
+
+            (bundles) => @send((bundles or {})[name] or [])
+
         
     '/api/language_scramble/translations/save': () ->
         translation = {}
@@ -32,6 +42,8 @@ soma.routes
         translation.foreign = @data.foreign if @data.foreign?.length
         translation.nativeSentence = @data.nativeSentence if @data.nativeSentence?.length
         translation.foreignSentence = @data.foreignSentence if @data.foreignSentence?.length
+        translation.nativeVerified = @data.nativeVerified if @data.nativeVerified?.length
+        translation.foreignVerified = @data.foreignVerified if @data.foreignVerified?.length
 
         l = new Line
             error: (err) => 
@@ -61,17 +73,17 @@ soma.routes
                 existingTranslation = existing or {}
                 if existingTranslation.native != translation.native or
                    existingTranslation.nativeSentence != translation.nativeSentence
-                    translation.nativeVerificationCount = 0
+                    translation.nativeVerified = 0
 
                 if existingTranslation.foreign != translation.foreign or
                    existingTranslation.foreignSentence != translation.foreignSentence
-                    translation.foreignVerificationCount = 0
-
+                    translation.foreignVerified = 0
+                    
                 incompleteUpdates.notNativeVerified = {}
-                incompleteUpdates.notNativeVerified["#{if translation.nativeVerificationCount then 'delete' else 'add'}"] = [translation.id]
+                incompleteUpdates.notNativeVerified["#{if translation.nativeVerified then 'delete' else 'add'}"] = [translation.id]
 
                 incompleteUpdates.notForeignVerified = {}
-                incompleteUpdates.notForeignVerified["#{if translation.foreignVerificationCount then 'delete' else 'add'}"] = [translation.id]
+                incompleteUpdates.notForeignVerified["#{if translation.foreignVerified then 'delete' else 'add'}"] = [translation.id]
 
                 db.update 'language_scramble_translations', translation.id, translation, l.wait()
 

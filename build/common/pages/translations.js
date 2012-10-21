@@ -41,7 +41,8 @@ soma.views({
       $('.register_flag').hide();
       this.initShowSection();
       this.initSaveButtons();
-      return this.initNoTranslation();
+      this.initDatas();
+      return this.initVerification();
     },
     initShowSection: function() {
       var link, _i, _len, _ref, _results,
@@ -76,18 +77,18 @@ soma.views({
       }
       return _results;
     },
-    initNoTranslation: function() {
-      var noTranslation, _i, _len, _ref, _results,
+    initDatas: function() {
+      var dataLink, _i, _len, _ref, _results,
         _this = this;
-      _ref = this.$('.no_translations a');
+      _ref = this.$('.data a');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        noTranslation = _ref[_i];
-        _results.push((function(noTranslation) {
-          return $(noTranslation).bind('click', function() {
-            return _this.displayNoTranslation(noTranslation);
+        dataLink = _ref[_i];
+        _results.push((function(dataLink) {
+          return $(dataLink).bind('click', function() {
+            return _this.displayData(dataLink);
           });
-        })(noTranslation));
+        })(dataLink));
       }
       return _results;
     },
@@ -106,19 +107,46 @@ soma.views({
       }
       return _results;
     },
+    initVerification: function() {
+      var verifyButton, _i, _len, _ref, _results,
+        _this = this;
+      _ref = this.$('.verify_button');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        verifyButton = _ref[_i];
+        _results.push((function(verifyButton) {
+          return $(verifyButton).bind('click', function() {
+            var form;
+            form = $(verifyButton).closest('.form_container').find('form');
+            form.find('.verification_field').val('1');
+            return _this.saveNewTranslation(verifyButton);
+          });
+        })(verifyButton));
+      }
+      return _results;
+    },
     showSection: function(sectionName) {
       this.$('#translation_container')[0].className = sectionName;
       if (sectionName === 'no_translation') {
         this.loadNoTranslations();
       }
       if (sectionName === 'no_bundle') {
-        return this.loadNoBundle();
+        this.loadNoBundle();
+      }
+      if (sectionName === 'not_native_verified') {
+        this.loadNotNativeVerified();
+      }
+      if (sectionName === 'not_foreign_verified') {
+        this.loadNotForeignVerified();
+      }
+      if (sectionName === 'bundle_list') {
+        return this.loadBundleList();
       }
     },
     saveNewTranslation: function(button) {
       var form,
         _this = this;
-      form = $(button).closest('.translation_area').find('form');
+      form = $(button).closest('.form_container').find('form');
       return $.ajaj({
         url: '/api/language_scramble/translations/save',
         method: 'POST',
@@ -150,31 +178,74 @@ soma.views({
         }
       });
     },
-    loadBundles: function(callback) {
+    getBundleList: function(callback) {
       var _this = this;
       return $.ajaj({
         url: '/api/language_scramble/bundles',
         method: 'GET',
         success: function(bundles) {
-          _this.displayBundles(bundles);
-          return callback();
+          return callback(bundles);
         }
       });
     },
-    displayBundles: function(bundles) {
-      var bundle, _i, _len;
+    getBundle: function(name, callback) {
+      var _this = this;
+      return $.ajaj({
+        url: "/api/language_scramble/bundle/" + name,
+        method: 'GET',
+        success: function(bundle) {
+          return callback(bundle);
+        }
+      });
+    },
+    loadBundles: function(callback) {
+      var _this = this;
+      return this.getBundleList(function(bundles) {
+        _this.displayBundles(bundles);
+        return callback();
+      });
+    },
+    loadBundleList: function() {
+      var _this = this;
+      return this.getBundleList(function(bundles) {
+        return _this.displayBundleList(bundles);
+      });
+    },
+    displayBundleList: function(bundles) {
+      var bundle, dataArea, _i, _len, _results,
+        _this = this;
       if (!(bundles != null ? bundles.length : void 0)) {
         return;
       }
-      this.$('.bundles').html('');
+      dataArea = this.$('#translation_container .bundle_list .bundle_list');
+      dataArea.html('');
+      _results = [];
       for (_i = 0, _len = bundles.length; _i < _len; _i++) {
         bundle = bundles[_i];
-        this.$('.bundles').append("<a>" + bundle + "</a>");
+        _results.push((function(bundle) {
+          var bundleLink;
+          dataArea.append("<a>" + bundle + "</a>");
+          bundleLink = dataArea.lastChild;
+          return bundleLink.bind('click', function() {});
+        })(bundle));
+      }
+      return _results;
+    },
+    displayBundles: function(bundles) {
+      var bundle, dataArea, _i, _len;
+      if (!(bundles != null ? bundles.length : void 0)) {
+        return;
+      }
+      dataArea = this.$('#translation_container .no_bundle .bundles');
+      dataArea.html('');
+      for (_i = 0, _len = bundles.length; _i < _len; _i++) {
+        bundle = bundles[_i];
+        dataArea.append("<a>" + bundle + "</a>");
       }
       return this.initBundles();
     },
     setBundle: function(bundle) {
-      return this.$('.bundles').closest('.translation_area').find('input[name=\'bundle\']').val(bundle);
+      return this.$('#translation_container .no_bundle .data').closest('.translation_area').find('input[name=\'bundle\']').val(bundle);
     },
     loadNoTranslations: function() {
       var _this = this;
@@ -186,8 +257,20 @@ soma.views({
       var _this = this;
       return this.loadBundles(function() {
         return _this.loadIncompleteTranslations(function() {
-          return _this.displayNoBundle();
+          return _this.displayTranslation(_this.$('.no_bundle'), _this.data.noBundle[0]);
         });
+      });
+    },
+    loadNotNativeVerified: function() {
+      var _this = this;
+      return this.loadIncompleteTranslations(function() {
+        return _this.displayNotNativeVerifieds();
+      });
+    },
+    loadNotForeignVerified: function() {
+      var _this = this;
+      return this.loadIncompleteTranslations(function() {
+        return _this.displayNotForeignVerifieds();
       });
     },
     updateIncomplete: function() {
@@ -197,36 +280,65 @@ soma.views({
       this.$('.not_native_verified_count').html("" + (((_ref2 = this.data.notNativeVerified) != null ? _ref2.length : void 0) || 0));
       return this.$('.not_foreign_verified_count').html("" + (((_ref3 = this.data.notForeignVerified) != null ? _ref3.length : void 0) || 0));
     },
-    displayNoBundle: function() {
+    displayTranslation: function(area, id) {
       var _this = this;
       return $.ajaj({
-        url: "/api/language_scramble/translation/" + this.data.noBundle[0],
+        url: "/api/language_scramble/translation/" + id,
         method: 'GET',
         success: function(translation) {
-          return _this.fillInTranslationForm(_this.$('.no_bundle .form_container'), translation);
+          return _this.fillInTranslationForm(area.find('.form_container'), translation);
         }
       });
     },
     displayNoTranslations: function() {
-      var noTranslation, _i, _len, _ref;
+      var dataArea, noTranslation, _i, _len, _ref;
       if (!this.data.noTranslation) {
         return;
       }
-      this.$('.no_translations').html('');
+      dataArea = this.$('#translation_container .no_translation .data');
+      dataArea.html('');
       _ref = this.data.noTranslation;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         noTranslation = _ref[_i];
-        this.$('.no_translations').append("<a>" + noTranslation + "</a>");
+        dataArea.append("<a>" + noTranslation + "</a>");
       }
-      this.initNoTranslation();
-      return this.displayNoTranslation(this.$('.no_translations a')[0]);
+      this.initDatas();
+      return this.displayData(dataArea.find('a')[0]);
     },
-    displayNoTranslation: function(element) {
-      var data, formContainer;
-      formContainer = $(element).closest('.translation_area').find('.form_container');
-      formContainer.css('display', 'block');
-      data = JSON.parse($(element).html());
-      return this.fillInTranslationForm(formContainer, data);
+    displayNotNativeVerifieds: function() {
+      var dataArea, notVerified, _i, _len, _ref;
+      dataArea = this.$('#translation_container .not_native_verified .data');
+      dataArea.html('');
+      _ref = this.data.notNativeVerified;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        notVerified = _ref[_i];
+        dataArea.append("<a>" + notVerified + "</a>");
+      }
+      this.initDatas();
+      return this.displayData(dataArea.find('a')[0]);
+    },
+    displayNotForeignVerifieds: function() {
+      var dataArea, notVerified, _i, _len, _ref;
+      dataArea = this.$('#translation_container .not_foreign_verified .data');
+      dataArea.html('');
+      _ref = this.data.notForeignVerified;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        notVerified = _ref[_i];
+        dataArea.append("<a>" + notVerified + "</a>");
+      }
+      this.initDatas();
+      return this.displayData(dataArea.find('a')[0]);
+    },
+    displayData: function(element) {
+      var area, data, formContainer, html;
+      area = $(element).closest('.translation_area');
+      formContainer = area.find('.form_container');
+      if ((html = $(element).html()).indexOf('{') === 0) {
+        data = JSON.parse(html);
+        return this.fillInTranslationForm(formContainer, data);
+      } else {
+        return this.displayTranslation(area, html);
+      }
     },
     fillInTranslationForm: function(formContainer, data) {
       var input, _i, _len, _ref, _results;

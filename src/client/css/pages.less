@@ -114,16 +114,18 @@
         &.no_translation .no_translation,
         &.no_bundle .no_bundle,
         &.not_native_verified .not_native_verified,
-        &.not_foreign_verified .not_foreign_verified {
+        &.not_foreign_verified .not_foreign_verified,
+        &.bundle_list .bundle_list {
             display: block;
         }
         
-        .no_translation, .no_bundle {
+        .translation_area {
             .form_container {
                 float: left;
                 width: 600px;
             }
-            .no_translations, .bundles {
+
+            .data, .bundles, .bundle_list {
                 float: right;
                 height: 150px;
                 width: 300px;

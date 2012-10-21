@@ -1,4 +1,5 @@
 # Build With Chrome http://www.buildwithchrome.com/
+# Lightbot: http://armorgames.com/play/6061/light-bot-20
 
 soma = require('soma')
 wings = require('wings')
@@ -676,6 +677,135 @@ REVIEWDATA = [{
             <br/><br/><br/><br/><br/><br/>
         """
 }, {
+    title: 'Lure of the Labyrinth'
+    website: 'http://labyrinth.thinkport.org'
+    thumbnail: '/assets/images/reviews/lureofthelabyrinth.jpg'
+    company: 'Maryland Public Television, MIT'
+    companyWebsite: 'http://wewanttoknow.com'
+    material: 'Pre-Algebra'
+    availability: 'Web'
+    cost: 'Free'
+    overall:
+        rating: 3.6
+        explanation:
+            """
+            <p>
+                Lure of the Labrynth is a game with numerous math-based puzzles for teaching pre-algebra, tied
+                together by a comic-like storyline revolving around a lost pet.
+            </p>
+            <p>
+                The game has a very high production value. Clearly a lot of work went in to developing it. The story
+                line could work well, although I didn't really get caught up in it. The puzzles are well-done, but they
+                aren't quite granular enough, making them a bit too challenging.
+            </p>
+            <p>
+                It seems like a lot of work went in to the production of the game when I would have prefered
+                more work go in to the intuitiveness of the game and the puzzles.
+            </p>
+            <p>
+                Like any quality puzzle I would recommend giving them a shot with any student, especially since this
+                one is free and the production value is quite high. Unfortunately, I don't have a whole lot of confidence 
+                that students will engage with this game enough unless they get caught up in the story, which could happen.
+            </p>
+            <p>
+                The puzzles themselves are, like most puzzles, an engaging way to practice pre-algebra concepts, such as
+                proportions, but they don't really make any attempt to teach the concepts, or at least the feedback
+                loops are not tight enough to facilitate learning for beginners. I think many beginners will give up before
+                being able to solve many of the puzzles unfortunately.
+            </p>
+            """
+    loveOfLearning:
+        rating: 3
+        explanation:
+            """
+            <p>
+                The storyline with the puzzles makes for an engaging experience. I struggled to get in to it myself, but
+                someone else make get in to it more easily.
+            </p>
+            <p>
+                The biggest issue when it comes to "love of learning" is that I fear a beginner will become too confused. I'm
+                not entirely sure as there are feedback loops and mistakes are ok, but I get the sense that it was designed as
+                additional material for students to practice concepts they were already taught, rather than trying to teach
+                them the concepts through the puzzle.
+            </p>
+            <p>
+                If the puzzles were more granualar (starting very easy and gradually getting harder) and had tighter feedback loops
+                so that the learning process could happen more quickly, then I think the puzzles would be much more effective as
+                learning tools. As they are, though, I would worry that beginners would get frustrated too easily.
+            </p>
+            """
+    intuitive:
+        rating: 3
+        explanation:
+            """
+            <p>
+                I personally found Lure of the Labyrinth to be less intuitive than I would hope.
+            </p>
+            <p>
+                You can play the puzzle independently and, although they aren't as intuitive as they could be, they
+                are still intuitive enough that I could figure them out with out any help.
+            </p>
+            <p>
+                When I tried playing the game via the story, though, I struggled to get going, unable to figure out
+                what to do.
+            </p>
+            <p>
+                I'm worried that the game was developed exclusively for classroom use, where a teacher would be on hand
+                to make sure students didn't get stuck. A student on their own trying to play the game might get frustrated,
+                as I did.
+            </p>
+            """
+    engagement:
+        rating: 4
+        explanation:
+            """
+            <p>
+                The storyline is a nice touch when it comes to engagement, tying together the puzzles. I would prefer that more
+                attention be paid to the puzzles themselves, making them as engaging as possible by instilling a constant sense
+                of progress in the student, but I do think a quality storyline is a positive.
+            </p>
+            <p>
+                I still didn't find it engaging enough to give it very high marks. While I appreciate the storyline, and I do 
+                think it's possible that some students may get in to it more than I did, I wasn't engaged with Lure of the 
+                Labyrinth as much as I have been with other puzzles.
+            </p>
+
+            """
+    practicality:
+        rating: 5
+        explanation:
+            """
+            <p>
+                Lure of the Labyrinth was built to coincide directly with Common Core coursework in the classroom, so in
+                that way, it is very practical.
+            </p>
+            <p>
+                The puzzles themselves are also quite practical. They deal with scenarios that aren't very far removed from
+                reality, such as combining the correct proportions of a recipe.
+            </p>
+            <br/><br/><br/><br/>
+            """
+    accessibility:
+        rating: 3
+        explanation:
+            """
+            <p>
+                Lure of the Labyrinth is a flash game that is only available online. You can't play it on a mobile phone or 
+                tablet at all, making it far less than ideal.
+            </p>
+            <p>
+                Still, it is free, which makes it easy to try out, so it definitely deserves points for that.
+            </p>
+            <br/><br/><br/><br/><br/><br/>
+            """
+    articles: 
+        """
+            <p><a href='http://dogtrax.edublogs.org/2012/04/19/gaming-challenge-the-lure-of-the-labyrinth/' target='_blank'>Gaming Challenge: The Lure of the Labyrinth</a></p>
+            <p><a href='http://www.youtube.com/watch?feature=player_detailpage&v=4KMwXaS_FKY#t=53s' target='_blank'>Amateur Game Demo</a></p>
+
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+        """
+},{
     title: 'Mozilla Thimble'
     website: 'https://thimble.webmaker.org'
     thumbnail: '/assets/images/reviews/thimble.jpg'

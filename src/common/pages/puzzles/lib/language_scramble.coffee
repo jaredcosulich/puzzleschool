@@ -131,8 +131,9 @@ class languageScramble.ViewHelper
         window.onkeypress = (e) =>
             return if @initializingScramble
             return if @clickAreaHasFocus or $('.opaque_screen').css('opacity') > 0
-            $('#clickarea')[0].focus()
-            $('#clickarea').trigger('keypress', e)
+            return unless clickArea = $('#clickarea')
+            clickArea[0].focus()
+            clickArea.trigger('keypress', e)
         
         window.focus()
 
@@ -280,9 +281,11 @@ class languageScramble.ViewHelper
             else if letter.hasClass('recently_static_letter')
                 containerClass = @containerClassName(letter)
                 guess = @$(".guesses .#{containerClass} .guess")[0]
-                return unless guess?
-                @replaceLetterWithBlank(letter) unless alreadyDragged
-                @replaceGuessWithLetter(guess, letter)
+                if guess?
+                    @replaceLetterWithBlank(letter) unless alreadyDragged
+                    @replaceGuessWithLetter(guess, letter)
+                else
+                    @replaceBlankWithLetter(letter) if alreadyDragged                    
             else
                 currentX = @dragPathX.pop()
                 currentY = @dragPathY.pop()
@@ -807,6 +810,7 @@ class languageScramble.ViewHelper
         #     opacity: 0
         #     duration: 300
 
+        guessAnimationOngoing = true
         nextShown = false
         showNext = () =>
             return if nextShown
@@ -819,22 +823,24 @@ class languageScramble.ViewHelper
             @$('.display_words, .scrambled, .guesses').animate
                 opacity: 0
                 duration: 300
-                complete: () =>
-                    @$('.scrambled, .guesses').css(width: null, height: null)
-                    @newScramble()
-                    @$('.display_words, .scrambled, .guesses').animate
-                        opacity: 1
-                        duration: 300
-                        complete: () =>
-                            # @$('.last_answer').html("#{displayedSentence} = #{correctSentence}")
-                            # @$('.last_answer').animate
-                            #     opacity: 1
-                            #     duration: 300
+                complete: () => displayNext()
+                    
+        displayNext = =>
+            if guessAnimationOngoing
+                $.timeout 10, displayNext
+                return
+                
+            @$('.scrambled, .guesses').css(width: null, height: null)
+            @newScramble()
+            @$('.display_words, .scrambled, .guesses').animate
+                opacity: 1
+                duration: 300            
 
         @$('.guesses').animate
             opacity: 0
             height: 0
             duration: 500
+            complete: -> guessAnimationOngoing = false
 
         unless window.AppMobi
             $(document.body).bind 'click', () => showNext() 
@@ -1274,13 +1280,13 @@ languageScramble.data =
                 nextLevels: ['top200words', 'top190phrases']
                 data: [
                     {native: 'need', foreign: 'bisogno', nativeSentence: 'i need to rest', foreignSentence: 'ho bisogno di riposare'},
-                    {native: 'mister', foreign: 'signor', nativeSentence: 'mister White is a very generous man', foreignSentence: 'il signor White è un uomo molto generoso'},
+                    {native: 'mister', foreign: 'signor', nativeSentence: 'mister white is a very generous man', foreignSentence: 'il signor white è un uomo molto generoso'},
                     {native: 'well', foreign: 'beh', nativeSentence: 'well, i think so', foreignSentence: 'beh, penso di si'},
                     {native: 'why', foreign: 'perché', nativeSentence: 'why are you laughing?', foreignSentence: 'perché stai ridendo?'},
                     {native: 'come', foreign: 'vieni', nativeSentence: 'come to my party tomorrow', foreignSentence: 'vieni alla mia festa domani'},
-                    {native: 'at', foreign: 'alle', nativeSentence: 'tom will arrive at 6 pm', foreignSentence: 'tom arriverà alle 18'},
+                    {native: 'at', foreign: 'alle', nativeSentence: 'tom will arrive at sei pm', foreignSentence: 'tom arriverà alle diciotto'},
                     {native: 'from the', foreign: 'dalla', nativeSentence: 'an intense light from the moon', foreignSentence: 'una luce intensa dalla luna'},
-                    {native: 'has been', foreign: 'stata', nativeSentence: 'she has been the belle of the ball several times', foreignSentence: 'lei è stata la reginetta del ballo molte volte'},
+                    {native: 'has been', foreign: 'stata', nativeSentence: 'she has been to the coast many times', foreignSentence: 'lei è stata fino alla costa molte volte'},
                     {native: 'between', foreign: 'tra', nativeSentence: 'the city was built between two mountains', foreignSentence: 'la città fu costruita tra due montagne'},
                     {native: 'go', foreign: 'vai', nativeSentence: 'go to the store to buy some milk', foreignSentence: 'vai al negozio a comprare del latte'},
                 ]
@@ -1595,13 +1601,13 @@ languageScramble.data =
                 nextLevels: ['top200words', 'top200phrases']
                 data: [
                     {native: 'i need to rest', foreign: 'ho bisogno di riposare'},
-                    {native: 'mister White is a very generous man', foreign: 'il signor White è un uomo molto generoso'},
+                    {native: 'mister white is a very generous man', foreign: 'il signor white è un uomo molto generoso'},
                     {native: 'well, i think so', foreign: 'beh, penso di si'},
                     {native: 'why are you laughing?', foreign: 'perché stai ridendo?'},
                     {native: 'come to my party tomorrow', foreign: 'vieni alla mia festa domani'},
-                    {native: 'tom will arrive at 6 pm', foreign: 'tom arriverà alle 18'},
+                    {native: 'tom will arrive at sei pm', foreign: 'tom arriverà alle diciotto'},
                     {native: 'an intense light from the moon', foreign: 'una luce intensa dalla luna'},
-                    {native: 'she has been the belle of the ball several times', foreign: 'lei è stata la reginetta del ballo molte volte'},
+                    {native: 'she has been to the coast many times', foreign: 'lei è stata fino alla costa molte volte'},
                     {native: 'the city was built between two mountains', foreign: 'la città fu costruita tra due montagne'},
                     {native: 'go to the store to buy some milk', foreign: 'vai al negozio a comprare del latte'},
                 ]

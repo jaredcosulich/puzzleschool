@@ -206,14 +206,18 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.bindWindow = function() {
     var _this = this;
     window.onkeypress = function(e) {
+      var clickArea;
       if (_this.initializingScramble) {
         return;
       }
       if (_this.clickAreaHasFocus || $('.opaque_screen').css('opacity') > 0) {
         return;
       }
-      $('#clickarea')[0].focus();
-      return $('#clickarea').trigger('keypress', e);
+      if (!(clickArea = $('#clickarea'))) {
+        return;
+      }
+      clickArea[0].focus();
+      return clickArea.trigger('keypress', e);
     };
     return window.focus();
   };
@@ -423,13 +427,16 @@ languageScramble.ViewHelper = (function() {
       } else if (letter.hasClass('recently_static_letter')) {
         containerClass = _this.containerClassName(letter);
         guess = _this.$(".guesses ." + containerClass + " .guess")[0];
-        if (guess == null) {
-          return;
+        if (guess != null) {
+          if (!alreadyDragged) {
+            _this.replaceLetterWithBlank(letter);
+          }
+          _this.replaceGuessWithLetter(guess, letter);
+        } else {
+          if (alreadyDragged) {
+            _this.replaceBlankWithLetter(letter);
+          }
         }
-        if (!alreadyDragged) {
-          _this.replaceLetterWithBlank(letter);
-        }
-        _this.replaceGuessWithLetter(guess, letter);
       } else {
         currentX = _this.dragPathX.pop();
         currentY = _this.dragPathY.pop();
@@ -1187,7 +1194,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.next = function() {
-    var boundary, correct, correctSentence, displayedSentence, highlighted, nextShown, scrambled, showNext, _i, _len, _ref,
+    var boundary, correct, correctSentence, displayNext, displayedSentence, guessAnimationOngoing, highlighted, nextShown, scrambled, showNext, _i, _len, _ref,
       _this = this;
     this.initializingScramble = true;
     correct = $(document.createElement('DIV'));
@@ -1217,6 +1224,7 @@ languageScramble.ViewHelper = (function() {
     });
     scrambled.append(correct);
     displayedSentence = this.$('.display_words').html();
+    guessAnimationOngoing = true;
     nextShown = false;
     showNext = function() {
       if (nextShown) {
@@ -1232,23 +1240,32 @@ languageScramble.ViewHelper = (function() {
         opacity: 0,
         duration: 300,
         complete: function() {
-          _this.$('.scrambled, .guesses').css({
-            width: null,
-            height: null
-          });
-          _this.newScramble();
-          return _this.$('.display_words, .scrambled, .guesses').animate({
-            opacity: 1,
-            duration: 300,
-            complete: function() {}
-          });
+          return displayNext();
         }
+      });
+    };
+    displayNext = function() {
+      if (guessAnimationOngoing) {
+        $.timeout(10, displayNext);
+        return;
+      }
+      _this.$('.scrambled, .guesses').css({
+        width: null,
+        height: null
+      });
+      _this.newScramble();
+      return _this.$('.display_words, .scrambled, .guesses').animate({
+        opacity: 1,
+        duration: 300
       });
     };
     this.$('.guesses').animate({
       opacity: 0,
       height: 0,
-      duration: 500
+      duration: 500,
+      complete: function() {
+        return guessAnimationOngoing = false;
+      }
     });
     if (!window.AppMobi) {
       $(document.body).bind('click', function() {
@@ -2604,8 +2621,8 @@ languageScramble.data = {
           }, {
             "native": 'mister',
             foreign: 'signor',
-            nativeSentence: 'mister White is a very generous man',
-            foreignSentence: 'il signor White è un uomo molto generoso'
+            nativeSentence: 'mister white is a very generous man',
+            foreignSentence: 'il signor white è un uomo molto generoso'
           }, {
             "native": 'well',
             foreign: 'beh',
@@ -2624,8 +2641,8 @@ languageScramble.data = {
           }, {
             "native": 'at',
             foreign: 'alle',
-            nativeSentence: 'tom will arrive at 6 pm',
-            foreignSentence: 'tom arriverà alle 18'
+            nativeSentence: 'tom will arrive at sei pm',
+            foreignSentence: 'tom arriverà alle diciotto'
           }, {
             "native": 'from the',
             foreign: 'dalla',
@@ -2634,8 +2651,8 @@ languageScramble.data = {
           }, {
             "native": 'has been',
             foreign: 'stata',
-            nativeSentence: 'she has been the belle of the ball several times',
-            foreignSentence: 'lei è stata la reginetta del ballo molte volte'
+            nativeSentence: 'she has been to the coast many times',
+            foreignSentence: 'lei è stata fino alla costa molte volte'
           }, {
             "native": 'between',
             foreign: 'tra',
@@ -3403,8 +3420,8 @@ languageScramble.data = {
             "native": 'i need to rest',
             foreign: 'ho bisogno di riposare'
           }, {
-            "native": 'mister White is a very generous man',
-            foreign: 'il signor White è un uomo molto generoso'
+            "native": 'mister white is a very generous man',
+            foreign: 'il signor white è un uomo molto generoso'
           }, {
             "native": 'well, i think so',
             foreign: 'beh, penso di si'
@@ -3415,14 +3432,14 @@ languageScramble.data = {
             "native": 'come to my party tomorrow',
             foreign: 'vieni alla mia festa domani'
           }, {
-            "native": 'tom will arrive at 6 pm',
-            foreign: 'tom arriverà alle 18'
+            "native": 'tom will arrive at sei pm',
+            foreign: 'tom arriverà alle diciotto'
           }, {
             "native": 'an intense light from the moon',
             foreign: 'una luce intensa dalla luna'
           }, {
-            "native": 'she has been the belle of the ball several times',
-            foreign: 'lei è stata la reginetta del ballo molte volte'
+            "native": 'she has been to the coast many times',
+            foreign: 'lei è stata fino alla costa molte volte'
           }, {
             "native": 'the city was built between two mountains',
             foreign: 'la città fu costruita tra due montagne'

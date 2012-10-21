@@ -297,27 +297,25 @@ a {
 .translations #translation_container.no_translation .no_translation,
 .translations #translation_container.no_bundle .no_bundle,
 .translations #translation_container.not_native_verified .not_native_verified,
-.translations #translation_container.not_foreign_verified .not_foreign_verified {
+.translations #translation_container.not_foreign_verified .not_foreign_verified,
+.translations #translation_container.bundle_list .bundle_list {
   display: block;
 }
-.translations #translation_container .no_translation .form_container,
-.translations #translation_container .no_bundle .form_container {
+.translations #translation_container .translation_area .form_container {
   float: left;
   width: 600px;
 }
-.translations #translation_container .no_translation .no_translations,
-.translations #translation_container .no_bundle .no_translations,
-.translations #translation_container .no_translation .bundles,
-.translations #translation_container .no_bundle .bundles {
+.translations #translation_container .translation_area .data,
+.translations #translation_container .translation_area .bundles,
+.translations #translation_container .translation_area .bundle_list {
   float: right;
   height: 150px;
   width: 300px;
   overflow: auto;
 }
-.translations #translation_container .no_translation .no_translations a,
-.translations #translation_container .no_bundle .no_translations a,
-.translations #translation_container .no_translation .bundles a,
-.translations #translation_container .no_bundle .bundles a {
+.translations #translation_container .translation_area .data a,
+.translations #translation_container .translation_area .bundles a,
+.translations #translation_container .translation_area .bundle_list a {
   display: block;
   margin-bottom: 6px;
   cursor: pointer;
