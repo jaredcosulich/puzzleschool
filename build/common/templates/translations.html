@@ -44,40 +44,54 @@
         <div class='translation_area new_translation'>
             <h3>Add A New Translation. </h3>
             <p>At least one field is required. Please keep all sentences as short as possible.</p>
-            <form>
-                <table>
-                    <tr class='field'>
-                        <td><label for="native">English Word or Sentence</label></td>
-                        <td><input name="native" type="text"></input></td>
-                    </tr>
-                    <tr class='field'>
-                        <td><label for="foreign">Foreign Word or Sentence</label></td>
-                        <td><input name="foreign" type="text"></input></td>
-                    </tr>
-                    <tr class='field'>
-                        <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
-                        <td><input name="nativeSentence" type="text"></input></td>
-                    </tr>
-                    <tr class='field'>
-                        <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
-                        <td><input name="foreignSentence" type="text"></input></td>
-                    </tr>
-                    <tr class='field'>
-                        <td><label for="bundle">Bundle</label></td>
-                        <td><input name="bundle" type="text"></input></td>
-                    </tr>                    
-                </table>
-            </form>
-            <br/>
-            <div class='buttons'>
-                <button 
-                    class='save_button submit_feedback' 
-                    data-submitting_text='Saving Translation...' 
-                    data-submitted_text='Translation Saved...' 
-                    data-failed_submission_text='An error occurred.'>
-                    Save
-                </button>
-            </div>            
+            <div class='form_container'>
+                <form>
+                    <table>
+                        <tr class='field'>
+                            <td><label for="nativeLanguage">Native Language</label></td>
+                            <td><input name="nativeLanguage" type="text" value='english'></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignLanguage">Foreign Language</label></td>
+                            <td><input name="foreignLanguage" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="native">English Word or Sentence</label></td>
+                            <td><input name="native" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreign">Foreign Word or Sentence</label></td>
+                            <td><input name="foreign" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
+                            <td><input name="nativeSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
+                            <td><input name="foreignSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="bundle">Bundle</label></td>
+                            <td><input name="bundle" type="text"></input></td>
+                        </tr>           
+                        <tr class='field'>
+                            <td><label for="bundleDescription">Bundle Description</label></td>
+                            <td><input name="bundleDescription" type="text"></input></td>
+                        </tr>         
+                    </table>
+                </form>
+                <br/>
+                <div class='buttons'>
+                    <button 
+                        class='save_button submit_feedback' 
+                        data-submitting_text='Saving Translation...' 
+                        data-submitted_text='Translation Saved...' 
+                        data-failed_submission_text='An error occurred.'>
+                        Save
+                    </button>
+                </div>            
+            </div>
         </div>
         <div class='translation_area no_translation'>
             <h3>Requiring Translation</h3>
@@ -90,6 +104,14 @@
             <div class='form_container'>
                 <form>
                     <table>
+                        <tr class='field'>
+                            <td><label for="nativeLanguage">Native Language</label></td>
+                            <td><input name="nativeLanguage" type="text" value='english'></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignLanguage">Foreign Language</label></td>
+                            <td><input name="foreignLanguage" type="text"></input></td>
+                        </tr>
                         <tr class='field'>
                             <td><label for="native">English Word or Sentence</label></td>
                             <td><input name="native" type="text"></input></td>
@@ -131,6 +153,14 @@
                 <form>
                     <table>
                         <tr class='field'>
+                            <td><label for="nativeLanguage">Native Language</label></td>
+                            <td><input name="nativeLanguage" type="text" value='english'></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignLanguage">Foreign Language</label></td>
+                            <td><input name="foreignLanguage" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
                             <td><label for="native">English Word or Sentence</label></td>
                             <td><input name="native" type="text"></input></td>
                         </tr>
@@ -149,6 +179,10 @@
                         <tr class='field'>
                             <td><label for="bundle">Bundle</label></td>
                             <td><input name="bundle" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="bundleDescription">Bundle Description</label></td>
+                            <td><input name="bundleDescription" type="text"></input></td>
                         </tr>
                     </table>
                     <input type='hidden' name='noTranslation'></input>
@@ -175,6 +209,14 @@
                 <form>
                     <table>
                         <tr class='field'>
+                            <td><label for="nativeLanguage">Native Language</label></td>
+                            <td><input name="nativeLanguage" type="text" value='english'></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignLanguage">Foreign Language</label></td>
+                            <td><input name="foreignLanguage" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
                             <td><label for="native"><b>English Word or Sentence</b></label></td>
                             <td><input name="native" type="text"></input></td>
                         </tr>
@@ -191,7 +233,7 @@
                             <td><input name="foreignSentence" type="text"></input></td>
                         </tr>
                     </table>
-                    <input name="nativeVerified" class='verification_field' type="text"></input>
+                    <input name="nativeVerified" class='verification_field' type="hidden"></input>
                     <input type='hidden' name='noTranslation'></input>
                 </form>
                 <br/>
@@ -225,6 +267,14 @@
                 <form>
                     <table>
                         <tr class='field'>
+                            <td><label for="nativeLanguage">Native Language</label></td>
+                            <td><input name="nativeLanguage" type="text" value='english'></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignLanguage">Foreign Language</label></td>
+                            <td><input name="foreignLanguage" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
                             <td><label for="native">English Word or Sentence</label></td>
                             <td><input name="native" type="text"></input></td>
                         </tr>
@@ -241,7 +291,7 @@
                             <td><input name="foreignSentence" type="text"></input></td>
                         </tr>
                     </table>
-                    <input name="foreignVerified" class='verification_field' type="text"></input>
+                    <input name="foreignVerified" class='verification_field' type="hidden"></input>
                     <input type='hidden' name='noTranslation'></input>
                 </form>
                 <br/>
@@ -268,8 +318,59 @@
         </div>
         <div class='translation_area bundle_list'>
             <h3>Bundle List</h3>
-            <p>All Bundles</p>
             <div class='bundle_list'>
+            </div>
+            <div class='bundle_data'>
+            </div>
+            <div class='form_container' style='display: none;'>
+                <form>
+                    <table>
+                        <tr class='field'>
+                            <td><label for="nativeLanguage">Native Language</label></td>
+                            <td><input name="nativeLanguage" type="text" value='english'></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignLanguage">Foreign Language</label></td>
+                            <td><input name="foreignLanguage" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="native">English Word or Sentence</label></td>
+                            <td><input name="native" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreign">Foreign Word or Sentence</label></td>
+                            <td><input name="foreign" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="nativeSentence">English Sentence (if translating a word)</label></td>
+                            <td><input name="nativeSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="foreignSentence">Foreign Sentence (if translating a word)</label></td>
+                            <td><input name="foreignSentence" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="bundle">Bundle</label></td>
+                            <td><input name="bundle" type="text"></input></td>
+                        </tr>
+                        <tr class='field'>
+                            <td><label for="bundleDescription">Bundle Description</label></td>
+                            <td><input name="bundleDescription" type="text"></input></td>
+                        </tr>
+                    </table>
+                    <input type='hidden' name='noTranslation'></input>
+                </form>
+                <br/>
+                <div class='buttons'>
+                    <button 
+                        class='save_button submit_feedback' 
+                        data-submitting_text='Saving Bundle...' 
+                        data-submitted_text='Bundle Saved...' 
+                        data-failed_submission_text='An error occurred.'
+                        data-callback='backBundleList'>
+                        Save
+                    </button>
+                </div>            
             </div>
         </div>
     </div>

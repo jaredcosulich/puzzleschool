@@ -23,27 +23,34 @@ soma.routes
 
             -> db.get 'language_scramble_translation_lists', 'bundles', @wait()
 
-            (bundles) => @send(bundles?.bundleList or [])
+            (bundles) => @send(bundles?.bundles or [])
 
-    '/api/language_scramble/bundle/:name': ({name}) ->
+    '/api/language_scramble/bundle/:languages/:bundleName': ({languages, bundleName}) ->
         l = new Line
             error: (err) => 
                 console.log('Error retrieving bundles:', err)
                 @sendError()
 
-            -> db.get 'language_scramble_translation_lists', 'bundles', @wait()
-
-            (bundles) => @send((bundles or {})[name] or [])
+            -> db.get 'language_scramble_translation_bundles', "#{languages}/#{bundleName}", @wait()
+            
+            (bundle) => @send(bundle or {})
 
         
     '/api/language_scramble/translations/save': () ->
         translation = {}
+        translation.nativeLanguage = @data.nativeLanguage if @data.nativeLanguage?.length
+        translation.foreignLanguage = @data.foreignLanguage if @data.foreignLanguage?.length
         translation.native = @data.native if @data.native?.length
         translation.foreign = @data.foreign if @data.foreign?.length
         translation.nativeSentence = @data.nativeSentence if @data.nativeSentence?.length
         translation.foreignSentence = @data.foreignSentence if @data.foreignSentence?.length
         translation.nativeVerified = @data.nativeVerified if @data.nativeVerified?.length
         translation.foreignVerified = @data.foreignVerified if @data.foreignVerified?.length
+        translation.bundle = @data.bundle if @data.bundle?.length
+        bundleDescription = @data.bundleDescription if @data.bundleDescription?.length
+
+        languages = "#{translation.nativeLanguage}-#{translation.foreignLanguage}"
+        languageBundle = "#{languages}/#{translation.bundle.replace(/\s/g, '_')}" if translation.bundle
 
         l = new Line
             error: (err) => 
@@ -62,10 +69,6 @@ soma.routes
                 delete incompleteUpdates.noTranslation
                 
             translation.id = "#{@data.native.replace(/\W/g, '_')}-#{translation.foreign.replace(/\W/g, '_')}"
-            translation.bundle = @data.bundle if @data.bundle?.length
-            translation.nativeVerificationCount = @data.nativeVerificationCount if @data.nativeVerificationCount?.length
-            translation.foreignVerificationCount = @data.foreignVerificationCount if @data.foreignVerificationCount?.length
-
             existingTranslation = null
             l.add => db.get 'language_scramble_translations', translation.id, l.wait()
 
@@ -85,31 +88,63 @@ soma.routes
                 incompleteUpdates.notForeignVerified = {}
                 incompleteUpdates.notForeignVerified["#{if translation.foreignVerified then 'delete' else 'add'}"] = [translation.id]
 
+                if existingTranslation.bundle
+                    existingLanguageBundle = "#{existingTranslation.nativeLanguage}-#{existingTranslation.foreignLanguage}/#{existingTranslation.bundle.replace(/\s/g, '_')}"
+
                 db.update 'language_scramble_translations', translation.id, translation, l.wait()
 
             l.add =>
                 if existingTranslation.bundle and existingTranslation.bundle != translation.bundle
-                    bundleUpdate = {}
-                    bundleUpdate["#{existingTranslation.bundle}"] = {delete: [translation.id]}
                     db.update( 
-                        'language_scramble_translation_lists', 
-                        'bundles', 
-                        bundleUpdate, 
+                        'language_scramble_translation_bundles', 
+                        existingTranslation.bundle, 
+                        {translations: {delete: [translation.id]}}, 
                         l.wait()
                     )
-            
+
+            l.add (bundleInfo) =>
+                if bundleInfo and bundleInfo.translations and not bundleInfo.translations.length
+                    db.delete( 
+                        'language_scramble_translation_bundles', 
+                        existingLanguageBundle,
+                        =>
+                            db.update(
+                                'language_scramble_translation_lists', {
+                                    languages: {delete: [existingLanguageBundle]}
+                                    'bundles': {delete: [existingLanguageBundle]}
+                                },
+                                l.wait()
+                            )
+                    )
+
             l.add =>
                 if not translation.bundle
                     incompleteUpdates.noBundle = {add: [translation.id]}                    
-                else if existingTranslation.bundle != translation.bundle
+                else if existingTranslation.bundle != translation.bundle or bundleDescription?.length
                     incompleteUpdates.noBundle = {delete: [translation.id]}
-                    bundleUpdate = {}
-                    bundleUpdate["#{translation.bundle}"] = {add: [translation.id]}
-                    bundleUpdate['bundleList'] = {add: [translation.bundle]}
+                    
+                    bundleUpdate = 
+                        name: translation.bundle
+                        translations: {add: [translation.id]}
+                    bundleUpdate.description = bundleDescription if bundleDescription?.length
+                        
+                    db.update(
+                        'language_scramble_translation_bundles', 
+                        languageBundle, 
+                        bundleUpdate,
+                        l.wait()
+                    )                    
+
+            l.add =>
+                if translation.nativeLanguage and translation.foreignLanguage and translation.bundle
+                    listUpdates = {}
+                    listUpdates['languages'] = {add: [languages]}
+                    listUpdates[languages] = {add: [languageBundle]}
+                    listUpdates['bundles'] = {add: [languageBundle]}
                     db.update(
                         'language_scramble_translation_lists', 
                         'bundles', 
-                        bundleUpdate,
+                        listUpdates,
                         l.wait()
                     )                    
 
@@ -127,7 +162,7 @@ soma.routes
         l = new Line
             error: (err) => 
                 console.log('Unable to load incomplete translation data:', err)
-                @sendError()
+                @send({})
                 
             => db.get 'language_scramble_translation_lists', 'incomplete', l.wait()
             

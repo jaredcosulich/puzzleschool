@@ -315,7 +315,8 @@ a {
 }
 .translations #translation_container .translation_area .data a,
 .translations #translation_container .translation_area .bundles a,
-.translations #translation_container .translation_area .bundle_list a {
+.translations #translation_container .translation_area .bundle_list a,
+.translations #translation_container .translation_area .bundle_data a {
   display: block;
   margin-bottom: 6px;
   cursor: pointer;

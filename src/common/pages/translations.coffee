@@ -17,7 +17,7 @@ soma.chunks
 
         build: () ->
             @setTitle("Translations - The Puzzle School")
-            @html = wings.renderTemplate(@template, @incomplete)
+            @html = wings.renderTemplate(@template, @incomplete or {})
         
 soma.views
     Translations:
@@ -70,17 +70,30 @@ soma.views
                  
         saveNewTranslation: (button) ->
             form = $(button).closest('.form_container').find('form')
+            dataHash = form.data('form').dataHash()
+            @nativeLanguage = dataHash.nativeLanguage
+            @foreignLanguage = dataHash.foreignLanguage
+            @bundle = dataHash.bundle if dataHash.bundle?.length
+            @bundleDescription = dataHash.bundleDescription if dataHash.bundleDescription?.length
+            
             $.ajaj
                 url: '/api/language_scramble/translations/save'
                 method: 'POST'
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
-                data: form.data('form').dataHash()
+                data: dataHash
                 success: (data) =>
                     @data = data
-                    form.find('input').val('')
+                    @clearForm(form)
                     $(button).data('form-button').success()
                     @updateIncomplete()
                     @[$(button).data('callback')]() if $(button).data('callback')
+                 
+        clearForm: (form) ->
+            form.find('input').val('')
+            form.find('input[name=\'nativeLanguage\']').val(@nativeLanguage)
+            form.find('input[name=\'foreignLanguage\']').val(@foreignLanguage)
+            form.find('input[name=\'bundle\']').val(@bundle)
+            form.find('input[name=\'bundleDescription\']').val(@bundleDescription)
                  
         loadIncompleteTranslations: (callback) ->
             $.ajaj
@@ -117,24 +130,55 @@ soma.views
         displayBundleList: (bundles) ->
             return unless bundles?.length
             dataArea = @$('#translation_container .bundle_list .bundle_list')
+            translationArea = dataArea.closest('.translation_area')
+            form = translationArea.find('.form_container')
+            form.hide()
             dataArea.html('')
             for bundle in bundles
                 do (bundle) =>
-                    dataArea.append("<a>#{bundle}</a>")
-                    bundleLink = dataArea.lastChild
-                    bundleLink.bind 'click', =>
-                        
+                    bundleLink = $(document.createElement('A'))
+                    bundleLink.html(bundle)
+                    @latestBundle = bundle
+                    bundleLink.bind 'click', => @showTranslations(bundleLink.html()) 
+                    dataArea.append(bundleLink)
                     
+        showTranslations: (bundle) ->            
+            bundleDataArea = @$('#translation_container .bundle_list .bundle_data')
+            translationArea = bundleDataArea.closest('.translation_area')
+            form = translationArea.find('.form_container')
+            form.hide()
+            @getBundle bundle, (bundleData) =>
+                @bundle = bundleData.name
+                @bundleDescription = bundleData.description
+                bundleDataArea.show()
+                bundleDataArea.html('')
+                for translationId in bundleData.translations
+                    do (translationId) =>
+                        translationLink = $(document.createElement('A'))
+                        translationLink.html(translationId)
+                        translationLink.bind 'click', =>
+                            debugger
+                            bundleDataArea.hide()
+                            form.show()
+                            @displayTranslation(translationArea, translationId)
+                        bundleDataArea.append(translationLink)
+         
+        backBundleList: ->
+            if @latestBundle 
+                @showTranslations(@latestBundle)      
+            else
+                @loadBundleList()
+                
         displayBundles: (bundles) ->
             return unless bundles?.length
             dataArea = @$('#translation_container .no_bundle .bundles')
             dataArea.html('')
             for bundle in bundles
-                dataArea.append("<a>#{bundle}</a>")
+                dataArea.append("<a>#{bundle.split(/\//)[1].replace(/_/g, ' ')}</a>")
             @initBundles()
             
         setBundle: (bundle) ->
-            @$('#translation_container .no_bundle .data').closest('.translation_area').find('input[name=\'bundle\']').val(bundle)         
+            @$('#translation_container .no_bundle input[name=\'bundle\']').val(bundle)         
                     
         loadNoTranslations: ->
             @loadIncompleteTranslations => @displayNoTranslations()
@@ -142,7 +186,7 @@ soma.views
         loadNoBundle: ->
             @loadBundles =>
                 @loadIncompleteTranslations => 
-                    @displayTranslation(@$('.no_bundle'), @data.noBundle[0])
+                    @displayTranslation(@$('#translation_container .no_bundle'), @data.noBundle[0]) if @data.noBundle?.length
                     
         loadNotNativeVerified: ->
             @loadIncompleteTranslations => 
@@ -203,6 +247,15 @@ soma.views
             for input in formContainer.find('input')
                 $(input).val(data[input.name] or '')
                 $(input).val(JSON.stringify(data)) if input.name == 'noTranslation'
+                if input.name == 'nativeLanguage' and not data.nativeLanguage
+                    $(input).val(@nativeLanguage)
+                if input.name == 'foreignLanguage' and not data.foreignLanguage
+                    $(input).val(@foreignLanguage)
+                if input.name == 'bundle' and not data.bundle
+                    $(input).val(@bundle)
+                if input.name == 'bundleDescription' and not data.bundleDescription
+                    $(input).val(@bundleDescription)
+                
              
 soma.routes
     '/translations': -> new soma.chunks.Translations

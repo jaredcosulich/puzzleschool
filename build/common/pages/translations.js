@@ -29,7 +29,7 @@ soma.chunks({
     },
     build: function() {
       this.setTitle("Translations - The Puzzle School");
-      return this.html = wings.renderTemplate(this.template, this.incomplete);
+      return this.html = wings.renderTemplate(this.template, this.incomplete || {});
     }
   }
 });
@@ -144,9 +144,18 @@ soma.views({
       }
     },
     saveNewTranslation: function(button) {
-      var form,
+      var dataHash, form, _ref, _ref1,
         _this = this;
       form = $(button).closest('.form_container').find('form');
+      dataHash = form.data('form').dataHash();
+      this.nativeLanguage = dataHash.nativeLanguage;
+      this.foreignLanguage = dataHash.foreignLanguage;
+      if ((_ref = dataHash.bundle) != null ? _ref.length : void 0) {
+        this.bundle = dataHash.bundle;
+      }
+      if ((_ref1 = dataHash.bundleDescription) != null ? _ref1.length : void 0) {
+        this.bundleDescription = dataHash.bundleDescription;
+      }
       return $.ajaj({
         url: '/api/language_scramble/translations/save',
         method: 'POST',
@@ -155,10 +164,10 @@ soma.views({
             raw: true
           })
         },
-        data: form.data('form').dataHash(),
+        data: dataHash,
         success: function(data) {
           _this.data = data;
-          form.find('input').val('');
+          _this.clearForm(form);
           $(button).data('form-button').success();
           _this.updateIncomplete();
           if ($(button).data('callback')) {
@@ -166,6 +175,13 @@ soma.views({
           }
         }
       });
+    },
+    clearForm: function(form) {
+      form.find('input').val('');
+      form.find('input[name=\'nativeLanguage\']').val(this.nativeLanguage);
+      form.find('input[name=\'foreignLanguage\']').val(this.foreignLanguage);
+      form.find('input[name=\'bundle\']').val(this.bundle);
+      return form.find('input[name=\'bundleDescription\']').val(this.bundleDescription);
     },
     loadIncompleteTranslations: function(callback) {
       var _this = this;
@@ -212,24 +228,70 @@ soma.views({
       });
     },
     displayBundleList: function(bundles) {
-      var bundle, dataArea, _i, _len, _results,
+      var bundle, dataArea, form, translationArea, _i, _len, _results,
         _this = this;
       if (!(bundles != null ? bundles.length : void 0)) {
         return;
       }
       dataArea = this.$('#translation_container .bundle_list .bundle_list');
+      translationArea = dataArea.closest('.translation_area');
+      form = translationArea.find('.form_container');
+      form.hide();
       dataArea.html('');
       _results = [];
       for (_i = 0, _len = bundles.length; _i < _len; _i++) {
         bundle = bundles[_i];
         _results.push((function(bundle) {
           var bundleLink;
-          dataArea.append("<a>" + bundle + "</a>");
-          bundleLink = dataArea.lastChild;
-          return bundleLink.bind('click', function() {});
+          bundleLink = $(document.createElement('A'));
+          bundleLink.html(bundle);
+          _this.latestBundle = bundle;
+          bundleLink.bind('click', function() {
+            return _this.showTranslations(bundleLink.html());
+          });
+          return dataArea.append(bundleLink);
         })(bundle));
       }
       return _results;
+    },
+    showTranslations: function(bundle) {
+      var bundleDataArea, form, translationArea,
+        _this = this;
+      bundleDataArea = this.$('#translation_container .bundle_list .bundle_data');
+      translationArea = bundleDataArea.closest('.translation_area');
+      form = translationArea.find('.form_container');
+      form.hide();
+      return this.getBundle(bundle, function(bundleData) {
+        var translationId, _i, _len, _ref, _results;
+        _this.bundle = bundleData.name;
+        _this.bundleDescription = bundleData.description;
+        bundleDataArea.show();
+        bundleDataArea.html('');
+        _ref = bundleData.translations;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          translationId = _ref[_i];
+          _results.push((function(translationId) {
+            var translationLink;
+            translationLink = $(document.createElement('A'));
+            translationLink.html(translationId);
+            translationLink.bind('click', function() {
+              debugger;              bundleDataArea.hide();
+              form.show();
+              return _this.displayTranslation(translationArea, translationId);
+            });
+            return bundleDataArea.append(translationLink);
+          })(translationId));
+        }
+        return _results;
+      });
+    },
+    backBundleList: function() {
+      if (this.latestBundle) {
+        return this.showTranslations(this.latestBundle);
+      } else {
+        return this.loadBundleList();
+      }
     },
     displayBundles: function(bundles) {
       var bundle, dataArea, _i, _len;
@@ -240,12 +302,12 @@ soma.views({
       dataArea.html('');
       for (_i = 0, _len = bundles.length; _i < _len; _i++) {
         bundle = bundles[_i];
-        dataArea.append("<a>" + bundle + "</a>");
+        dataArea.append("<a>" + (bundle.split(/\//)[1].replace(/_/g, ' ')) + "</a>");
       }
       return this.initBundles();
     },
     setBundle: function(bundle) {
-      return this.$('#translation_container .no_bundle .data').closest('.translation_area').find('input[name=\'bundle\']').val(bundle);
+      return this.$('#translation_container .no_bundle input[name=\'bundle\']').val(bundle);
     },
     loadNoTranslations: function() {
       var _this = this;
@@ -257,7 +319,10 @@ soma.views({
       var _this = this;
       return this.loadBundles(function() {
         return _this.loadIncompleteTranslations(function() {
-          return _this.displayTranslation(_this.$('.no_bundle'), _this.data.noBundle[0]);
+          var _ref;
+          if ((_ref = _this.data.noBundle) != null ? _ref.length : void 0) {
+            return _this.displayTranslation(_this.$('#translation_container .no_bundle'), _this.data.noBundle[0]);
+          }
         });
       });
     },
@@ -348,7 +413,19 @@ soma.views({
         input = _ref[_i];
         $(input).val(data[input.name] || '');
         if (input.name === 'noTranslation') {
-          _results.push($(input).val(JSON.stringify(data)));
+          $(input).val(JSON.stringify(data));
+        }
+        if (input.name === 'nativeLanguage' && !data.nativeLanguage) {
+          $(input).val(this.nativeLanguage);
+        }
+        if (input.name === 'foreignLanguage' && !data.foreignLanguage) {
+          $(input).val(this.foreignLanguage);
+        }
+        if (input.name === 'bundle' && !data.bundle) {
+          $(input).val(this.bundle);
+        }
+        if (input.name === 'bundleDescription' && !data.bundleDescription) {
+          _results.push($(input).val(this.bundleDescription));
         } else {
           _results.push(void 0);
         }
