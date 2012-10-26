@@ -44,11 +44,12 @@ soma.routes
         translation.foreign = @data.foreign if @data.foreign?.length
         translation.nativeSentence = @data.nativeSentence if @data.nativeSentence?.length
         translation.foreignSentence = @data.foreignSentence if @data.foreignSentence?.length
-        translation.nativeVerified = @data.nativeVerified if @data.nativeVerified?.length
-        translation.foreignVerified = @data.foreignVerified if @data.foreignVerified?.length
+        translation.nativeVerified = if @data.nativeVerified?.length then @data.nativeVerified else null
+        translation.foreignVerified = if @data.foreignVerified?.length then @data.foreignVerified else null 
         translation.bundle = @data.bundle if @data.bundle?.length
         bundleDescription = @data.bundleDescription if @data.bundleDescription?.length
-
+        bundleNextLevels = @data.bundleNextLevels if @data.bundleNextLevels?.length
+        
         languages = "#{translation.nativeLanguage}-#{translation.foreignLanguage}"
         languageBundle = "#{languages}/#{translation.bundle.replace(/\s/g, '_')}" if translation.bundle
 
@@ -82,11 +83,13 @@ soma.routes
                    existingTranslation.foreignSentence != translation.foreignSentence
                     translation.foreignVerified = 0
                     
-                incompleteUpdates.notNativeVerified = {}
-                incompleteUpdates.notNativeVerified["#{if translation.nativeVerified then 'delete' else 'add'}"] = [translation.id]
+                if translation.nativeVerified?    
+                    incompleteUpdates.notNativeVerified = {}
+                    incompleteUpdates.notNativeVerified["#{if translation.nativeVerified then 'delete' else 'add'}"] = [translation.id]
 
-                incompleteUpdates.notForeignVerified = {}
-                incompleteUpdates.notForeignVerified["#{if translation.foreignVerified then 'delete' else 'add'}"] = [translation.id]
+                if translation.foreignVerified?
+                    incompleteUpdates.notForeignVerified = {}
+                    incompleteUpdates.notForeignVerified["#{if translation.foreignVerified then 'delete' else 'add'}"] = [translation.id]
 
                 if existingTranslation.bundle
                     existingLanguageBundle = "#{existingTranslation.nativeLanguage}-#{existingTranslation.foreignLanguage}/#{existingTranslation.bundle.replace(/\s/g, '_')}"
@@ -94,7 +97,7 @@ soma.routes
                 db.update 'language_scramble_translations', translation.id, translation, l.wait()
 
             l.add =>
-                if existingTranslation.bundle and existingTranslation.bundle != translation.bundle
+                if existingTranslation.bundle and translation.bundle and existingTranslation.bundle != translation.bundle
                     db.update( 
                         'language_scramble_translation_bundles', 
                         existingTranslation.bundle, 
@@ -118,15 +121,17 @@ soma.routes
                     )
 
             l.add =>
+                return if existingTranslation.bundle and not translation.bundle
                 if not translation.bundle
                     incompleteUpdates.noBundle = {add: [translation.id]}                    
-                else if existingTranslation.bundle != translation.bundle or bundleDescription?.length
+                else if existingTranslation.bundle != translation.bundle or bundleDescription?.length or bundleNextLevels?.length
                     incompleteUpdates.noBundle = {delete: [translation.id]}
                     
                     bundleUpdate = 
                         name: translation.bundle
                         translations: {add: [translation.id]}
                     bundleUpdate.description = bundleDescription if bundleDescription?.length
+                    bundleUpdate.nextLevels = {add: JSON.parse(bundleNextLevels)} if bundleNextLevels?.length
                         
                     db.update(
                         'language_scramble_translation_bundles', 

@@ -55,7 +55,7 @@ soma.routes({
     });
   },
   '/api/language_scramble/translations/save': function() {
-    var bundleDescription, existingTranslation, incompleteUpdates, l, languageBundle, languages, translated, translation, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9,
+    var bundleDescription, bundleNextLevels, existingTranslation, incompleteUpdates, l, languageBundle, languages, translated, translation, _ref, _ref1, _ref10, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9,
       _this = this;
     translation = {};
     if ((_ref = this.data.nativeLanguage) != null ? _ref.length : void 0) {
@@ -76,17 +76,16 @@ soma.routes({
     if ((_ref5 = this.data.foreignSentence) != null ? _ref5.length : void 0) {
       translation.foreignSentence = this.data.foreignSentence;
     }
-    if ((_ref6 = this.data.nativeVerified) != null ? _ref6.length : void 0) {
-      translation.nativeVerified = this.data.nativeVerified;
-    }
-    if ((_ref7 = this.data.foreignVerified) != null ? _ref7.length : void 0) {
-      translation.foreignVerified = this.data.foreignVerified;
-    }
+    translation.nativeVerified = ((_ref6 = this.data.nativeVerified) != null ? _ref6.length : void 0) ? this.data.nativeVerified : null;
+    translation.foreignVerified = ((_ref7 = this.data.foreignVerified) != null ? _ref7.length : void 0) ? this.data.foreignVerified : null;
     if ((_ref8 = this.data.bundle) != null ? _ref8.length : void 0) {
       translation.bundle = this.data.bundle;
     }
     if ((_ref9 = this.data.bundleDescription) != null ? _ref9.length : void 0) {
       bundleDescription = this.data.bundleDescription;
+    }
+    if ((_ref10 = this.data.bundleNextLevels) != null ? _ref10.length : void 0) {
+      bundleNextLevels = this.data.bundleNextLevels;
     }
     languages = "" + translation.nativeLanguage + "-" + translation.foreignLanguage;
     if (translation.bundle) {
@@ -124,17 +123,21 @@ soma.routes({
         if (existingTranslation.foreign !== translation.foreign || existingTranslation.foreignSentence !== translation.foreignSentence) {
           translation.foreignVerified = 0;
         }
-        incompleteUpdates.notNativeVerified = {};
-        incompleteUpdates.notNativeVerified["" + (translation.nativeVerified ? 'delete' : 'add')] = [translation.id];
-        incompleteUpdates.notForeignVerified = {};
-        incompleteUpdates.notForeignVerified["" + (translation.foreignVerified ? 'delete' : 'add')] = [translation.id];
+        if (translation.nativeVerified != null) {
+          incompleteUpdates.notNativeVerified = {};
+          incompleteUpdates.notNativeVerified["" + (translation.nativeVerified ? 'delete' : 'add')] = [translation.id];
+        }
+        if (translation.foreignVerified != null) {
+          incompleteUpdates.notForeignVerified = {};
+          incompleteUpdates.notForeignVerified["" + (translation.foreignVerified ? 'delete' : 'add')] = [translation.id];
+        }
         if (existingTranslation.bundle) {
           existingLanguageBundle = "" + existingTranslation.nativeLanguage + "-" + existingTranslation.foreignLanguage + "/" + (existingTranslation.bundle.replace(/\s/g, '_'));
         }
         return db.update('language_scramble_translations', translation.id, translation, l.wait());
       });
       l.add(function() {
-        if (existingTranslation.bundle && existingTranslation.bundle !== translation.bundle) {
+        if (existingTranslation.bundle && translation.bundle && existingTranslation.bundle !== translation.bundle) {
           return db.update('language_scramble_translation_bundles', existingTranslation.bundle, {
             translations: {
               "delete": [translation.id]
@@ -158,11 +161,14 @@ soma.routes({
       });
       l.add(function() {
         var bundleUpdate;
+        if (existingTranslation.bundle && !translation.bundle) {
+          return;
+        }
         if (!translation.bundle) {
           return incompleteUpdates.noBundle = {
             add: [translation.id]
           };
-        } else if (existingTranslation.bundle !== translation.bundle || (bundleDescription != null ? bundleDescription.length : void 0)) {
+        } else if (existingTranslation.bundle !== translation.bundle || (bundleDescription != null ? bundleDescription.length : void 0) || (bundleNextLevels != null ? bundleNextLevels.length : void 0)) {
           incompleteUpdates.noBundle = {
             "delete": [translation.id]
           };
@@ -174,6 +180,11 @@ soma.routes({
           };
           if (bundleDescription != null ? bundleDescription.length : void 0) {
             bundleUpdate.description = bundleDescription;
+          }
+          if (bundleNextLevels != null ? bundleNextLevels.length : void 0) {
+            bundleUpdate.nextLevels = {
+              add: JSON.parse(bundleNextLevels)
+            };
           }
           return db.update('language_scramble_translation_bundles', languageBundle, bundleUpdate, l.wait());
         }

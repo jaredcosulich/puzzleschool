@@ -23,6 +23,7 @@ task 'build:site', 'Build the site files', ->
         'mkdir -p build/client/css/puzzles'
         'lessc src/client/css/all.less build/client/css/all.css'
         'lessc src/client/css/puzzles/language_scramble.less build/client/css/puzzles/language_scramble.css'
+        'lessc src/client/css/puzzles/space_fractions.less build/client/css/puzzles/space_fractions.css'
 
         'coffee --compile --bare --output build/server/lib src/server/lib/*.coffee'
         'coffee --compile --bare --output build/server/lib/db src/server/lib/db/*.coffee'
