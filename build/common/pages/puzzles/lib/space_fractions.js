@@ -68,7 +68,8 @@ spaceFractions.ViewHelper = (function() {
     this.board = this.$('.board');
     _ref = this.board.find('.square');
     _fn = function(square, index) {
-      return $(square).data('index', index);
+      $(square).data('index', index);
+      return $(square).addClass("index" + index);
     };
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
       square = _ref[index];
@@ -82,8 +83,11 @@ spaceFractions.ViewHelper = (function() {
 
   ViewHelper.prototype.addObjectToBoard = function(objectType, square) {
     var object, objectContainer;
+    square = $(square);
     square.html('');
+    this.removeExistingLaser(square);
     square.addClass('occupied');
+    square.data('object_type', objectType);
     object = this.objects[objectType];
     objectContainer = $(document.createElement('IMG'));
     objectContainer.attr('src', object.image);
@@ -94,14 +98,19 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
-  ViewHelper.prototype.fireLaser = function(square) {
-    var denominator, direction, existingLaser, height, laser, numerator, object, offset,
-      _this = this;
+  ViewHelper.prototype.removeExistingLaser = function(square) {
+    var existingLaser;
     square = $(square);
     if ((existingLaser = this.board.find(".laser.index" + (square.data('index')))).length) {
-      console.log(square.data('index'), existingLaser[0].className);
-      existingLaser.remove();
+      return existingLaser.remove();
     }
+  };
+
+  ViewHelper.prototype.fireLaser = function(square) {
+    var checkSquare, denominator, direction, end, height, increment, index, laser, numerator, object, offset, start, width, _i,
+      _this = this;
+    square = $(square);
+    this.removeExistingLaser(square);
     object = square.find('img');
     if (!object.height()) {
       $.timeout(10, function() {
@@ -119,10 +128,43 @@ spaceFractions.ViewHelper = (function() {
     laser.data('denominator', denominator);
     offset = square.offset();
     height = object.height() * (numerator / denominator);
+    start = square.data('index') + 1;
+    increment = (function() {
+      switch (direction) {
+        case 'up':
+          return -1 * start;
+        case 'down':
+          return start;
+        case 'left':
+          return -1;
+        case 'right':
+          return 1;
+      }
+    })();
+    end = (function() {
+      switch (direction) {
+        case 'up':
+          return 0;
+        case 'down':
+          return this.board.data('rows') * this.board.data('columns');
+        case 'left':
+          return Math.floor(start / 10) * 10;
+        case 'right':
+          return Math.ceil(start / 10) * 10;
+      }
+    }).call(this);
+    width = 0;
+    for (index = _i = start; start <= end ? _i < end : _i > end; index = _i += increment) {
+      checkSquare = this.board.find(".square.index" + index);
+      if (checkSquare.hasClass('occupied')) {
+        break;
+      }
+      width += checkSquare.width();
+    }
     if (direction === 'right') {
       laser.css({
         height: height,
-        width: 300,
+        width: width,
         top: offset.top + ((offset.height - height) / 2),
         left: offset.left + offset.width
       });

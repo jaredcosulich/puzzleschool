@@ -48,6 +48,7 @@ body {
   overflow: auto;
 }
 .space_fractions .element_selector .object {
+  cursor: pointer;
   width: 65px;
   height: 65px;
   line-height: 65px;

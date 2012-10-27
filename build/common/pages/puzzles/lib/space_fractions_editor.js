@@ -53,7 +53,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     var setFraction,
       _this = this;
     this.fractionSelector = $(document.createElement('DIV'));
-    this.fractionSelector.html("<h2>Select A Fraction</h2>\n<p>What fraction of laser should this object use?</p>\n<p>\n    <input name='numerator' class='numerator' type='text' value='1'/>\n    <span class='solidus'>/</span>\n    <input name='denominator' class='denominator' type='text' value='1'/>\n</p>\n<p class='fraction'>Fraction: 1/1 or " + (Math.round(1000 * (1 / 1)) / 1000) + "</p>\n<button class='set_fraction'>Set</button> ");
+    this.fractionSelector.html("<h2>Select A Fraction</h2>\n<p>What fraction of laser should this object use?</p>\n<p>\n    <input name='numerator' class='numerator' type='text' value='1'/>\n    <span class='solidus'>/</span>\n    <input name='denominator' class='denominator' type='text' value='1'/>\n</p>\n<p class='fraction'>Fraction: 1/1 or " + (Math.round(1000 * (1 / 1)) / 1000) + "</p>\n<button class='set_fraction'>Set</button>\n<br/>\n<p><a class='select_new_object'>< Select a different object</a></p>");
     this.fractionSelector.find('.numerator, .denominator').bind('keyup', function() {
       return _this.displayFractionValue();
     });
@@ -61,6 +61,9 @@ spaceFractionsEditor.EditorHelper = (function() {
     setFraction.bind('click', function() {
       _this[setFraction.data('callback')](_this.fractionSelector.find('.numerator').val(), _this.fractionSelector.find('.denominator').val());
       return _this.closeElementSelector();
+    });
+    this.fractionSelector.find('.select_new_object').bind('click', function() {
+      return _this.showSelector('object');
     });
     this.fractionSelector.addClass('selector');
     this.fractionSelector.addClass('fraction_selector');
@@ -102,24 +105,25 @@ spaceFractionsEditor.EditorHelper = (function() {
     var offset;
     square = $(square);
     offset = square.offset();
-    this.showSelector('object');
     this.elementSelector.css({
       opacity: 0,
       top: offset.top + offset.height + 6,
       left: offset.left + (offset.width / 2) - (this.elementSelector.offset().width / 2)
     });
+    this.showObjectSelector();
     return this.elementSelector.animate({
-      opacity: 1
+      opacity: 1,
+      duration: 250
     });
   };
 
   EditorHelper.prototype.closeElementSelector = function() {
     var _this = this;
+    this.$('.board .selected').removeClass('selected');
     return this.elementSelector.animate({
       opacity: 0,
       duration: 250,
       complete: function() {
-        _this.$('.board .selected').removeClass('selected');
         return _this.elementSelector.css({
           top: -1000,
           left: -1000
@@ -133,10 +137,23 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectedSquare = this.$('.board .selected');
     this.viewHelper.addObjectToBoard(objectType, selectedSquare);
     object = this.viewHelper.objects[objectType];
+    return this.showObjectSelector();
+  };
+
+  EditorHelper.prototype.showObjectSelector = function() {
+    var object, selectedSquare;
+    selectedSquare = this.$('.board .selected');
+    if (!selectedSquare.hasClass('occupied')) {
+      this.showSelector('object');
+      return;
+    }
+    object = this.viewHelper.objects[selectedSquare.data('object_type')];
     if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
       this.setFractionValue(selectedSquare.data('numerator') || 1, selectedSquare.data('denominator') || 1);
       this.fractionSelector.find('.set_fraction').data('callback', 'setObjectFraction');
       return this.showSelector('fraction');
+    } else {
+      return this.closeElementSelector();
     }
   };
 
@@ -150,25 +167,33 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.showSelector = function(selectorPage) {
-    var fractionSelector, selectors,
+    var selector, selectors,
       _this = this;
     selectors = this.elementSelector.find('.selector');
-    fractionSelector = this.elementSelector.find("." + selectorPage + "_selector");
-    return selectors.animate({
-      opacity: 0,
-      duration: 250,
-      complete: function() {
-        selectors.hide();
-        fractionSelector.css({
-          opacity: 0,
-          display: 'block'
-        });
-        return fractionSelector.animate({
-          opacity: 1,
-          duration: 250
-        });
-      }
-    });
+    selector = this.elementSelector.find("." + selectorPage + "_selector");
+    if (parseInt(this.elementSelector.css('opacity'))) {
+      return selectors.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          selectors.hide();
+          selector.css({
+            opacity: 0,
+            display: 'block'
+          });
+          return selector.animate({
+            opacity: 1,
+            duration: 250
+          });
+        }
+      });
+    } else {
+      selectors.hide();
+      return selector.css({
+        opacity: 1,
+        display: 'block'
+      });
+    }
   };
 
   return EditorHelper;

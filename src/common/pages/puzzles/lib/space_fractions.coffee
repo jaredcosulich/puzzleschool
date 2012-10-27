@@ -52,13 +52,18 @@ class spaceFractions.ViewHelper
         @board = @$('.board')
         
         for square, index in @board.find('.square')
-            do (square, index) -> $(square).data('index', index)
+            do (square, index) -> 
+                $(square).data('index', index)
+                $(square).addClass("index#{index}")
         
     $: (selector) -> $(selector, @el)
     
     addObjectToBoard: (objectType, square) ->
+        square = $(square)
         square.html('')
+        @removeExistingLaser(square)
         square.addClass('occupied')
+        square.data('object_type', objectType)
         object = @objects[objectType]
         objectContainer = $(document.createElement('IMG'))
         objectContainer.attr('src', object.image)
@@ -68,12 +73,15 @@ class spaceFractions.ViewHelper
             square.data('direction', object.distributeDirection)
             @fireLaser(square, object.distributeDirection)
          
+    removeExistingLaser: (square) ->
+        square = $(square)
+        if (existingLaser = @board.find(".laser.index#{square.data('index')}")).length
+            existingLaser.remove()
+         
     fireLaser: (square) ->
         square = $(square)
         
-        if (existingLaser = @board.find(".laser.index#{square.data('index')}")).length
-            console.log(square.data('index'), existingLaser[0].className)
-            existingLaser.remove()
+        @removeExistingLaser(square)
         
         object = square.find('img')
         if not object.height()
@@ -91,10 +99,30 @@ class spaceFractions.ViewHelper
         
         offset = square.offset()
         height = object.height() * (numerator / denominator)
+        
+        start = square.data('index') + 1
+        increment = switch direction
+            when 'up' then -1 * start
+            when 'down' then start 
+            when 'left' then -1
+            when 'right' then 1
+            
+        end = switch direction
+            when 'up' then 0
+            when 'down' then @board.data('rows') * @board.data('columns')
+            when 'left' then Math.floor(start/10) * 10 
+            when 'right' then Math.ceil(start/10) * 10 
+
+        width = 0
+        for index in [start...end] by increment
+            checkSquare = @board.find(".square.index#{index}")
+            break if checkSquare.hasClass('occupied')
+            width += checkSquare.width()
+        
         if direction == 'right'
             laser.css
                 height: height
-                width: 300
+                width: width
                 top: offset.top + ((offset.height - height) / 2)
                 left: offset.left + offset.width
         

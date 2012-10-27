@@ -46,7 +46,9 @@ class spaceFractionsEditor.EditorHelper
                 <input name='denominator' class='denominator' type='text' value='1'/>
             </p>
             <p class='fraction'>Fraction: 1/1 or #{Math.round(1000 * (1/1)) / 1000}</p>
-            <button class='set_fraction'>Set</button> 
+            <button class='set_fraction'>Set</button>
+            <br/>
+            <p><a class='select_new_object'>< Select a different object</a></p>
         """
         
         @fractionSelector.find('.numerator, .denominator').bind 'keyup', => @displayFractionValue()
@@ -58,6 +60,8 @@ class spaceFractionsEditor.EditorHelper
             )
             @closeElementSelector()
                         
+        @fractionSelector.find('.select_new_object').bind 'click', => @showSelector('object')
+                            
         @fractionSelector.addClass('selector')
         @fractionSelector.addClass('fraction_selector')
         @fractionSelector.hide()
@@ -85,20 +89,25 @@ class spaceFractionsEditor.EditorHelper
     showElementSelector: (square) ->
         square = $(square)
         offset = square.offset()
-        @showSelector('object')
+        
         @elementSelector.css
             opacity: 0
             top: offset.top + offset.height + 6
             left: offset.left + (offset.width / 2) - (@elementSelector.offset().width / 2)
+
+        @showObjectSelector() 
+
         @elementSelector.animate
             opacity: 1
+            duration: 250
+        
             
     closeElementSelector: ->
+        @$('.board .selected').removeClass('selected')
         @elementSelector.animate
             opacity: 0
             duration: 250
             complete: =>
-                @$('.board .selected').removeClass('selected')
                 @elementSelector.css
                     top: -1000
                     left: -1000
@@ -108,11 +117,23 @@ class spaceFractionsEditor.EditorHelper
         @viewHelper.addObjectToBoard(objectType, selectedSquare)
         
         object = @viewHelper.objects[objectType]
+        @showObjectSelector()
+        
+    showObjectSelector: ->
+        selectedSquare = @$('.board .selected')
+        
+        if not selectedSquare.hasClass('occupied')
+            @showSelector('object')
+            return
+        
+        object = @viewHelper.objects[selectedSquare.data('object_type')]
         if (object.distribute and not object.accept) or (object.accept and not object.distribute)
             @setFractionValue(selectedSquare.data('numerator') or 1, selectedSquare.data('denominator') or 1)
             @fractionSelector.find('.set_fraction').data('callback', 'setObjectFraction')
             @showSelector('fraction')
-            
+        else
+            @closeElementSelector()
+        
     setObjectFraction: (numerator, denominator) ->
         selectedSquare = @$('.board .selected')
         selectedSquare.data('numerator', numerator)
@@ -122,16 +143,23 @@ class spaceFractionsEditor.EditorHelper
             
     showSelector: (selectorPage) ->
         selectors = @elementSelector.find('.selector')
-        fractionSelector = @elementSelector.find(".#{selectorPage}_selector")
-        selectors.animate
-            opacity: 0
-            duration: 250
-            complete: =>
-                selectors.hide()
-                fractionSelector.css
-                    opacity: 0
-                    display: 'block'
-                fractionSelector.animate
-                    opacity: 1
-                    duration: 250
+        selector = @elementSelector.find(".#{selectorPage}_selector")
+        
+        if parseInt(@elementSelector.css('opacity'))
+            selectors.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    selectors.hide()
+                    selector.css
+                        opacity: 0
+                        display: 'block'
+                    selector.animate
+                        opacity: 1
+                        duration: 250
+        else   
+            selectors.hide()
+            selector.css
+                opacity: 1
+                display: 'block'
         
