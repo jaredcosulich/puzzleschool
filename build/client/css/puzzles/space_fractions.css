@@ -1,0 +1,74 @@
+body {
+  background-color: #949494;
+}
+.space_fractions {
+  overflow: hidden;
+  margin-bottom: 60px;
+}
+.space_fractions .board {
+  border: 1px solid #fafafa;
+  float: left;
+  width: 620px;
+  overflow: hidden;
+  background: url(/assets/images/puzzles/space_fractions/space1.jpg) no-repeat center center;
+  background-color: #1a1a1a;
+}
+.space_fractions .board .square {
+  display: block;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  border: 1px solid transparent;
+  float: left;
+}
+.space_fractions .board .square:hover,
+.space_fractions .board .square.selected {
+  border: 1px solid #fafafa;
+}
+.space_fractions .board .square img {
+  vertical-align: middle;
+}
+.space_fractions .board .laser {
+  position: absolute;
+  background-color: red;
+}
+.space_fractions .element_selector {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  position: absolute;
+  top: -1000px;
+  left: -100px;
+  opacity: 0;
+  width: 300px;
+  height: 300px;
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+.space_fractions .element_selector .object {
+  width: 65px;
+  height: 65px;
+  line-height: 65px;
+  text-align: center;
+  border: 1px solid #ccc;
+  margin: 6px 0 0 6px;
+  float: left;
+}
+.space_fractions .element_selector .object img {
+  vertical-align: middle;
+}
+.space_fractions .element_selector .fraction_selector {
+  padding: 12px;
+  text-align: center;
+}
+.space_fractions .element_selector .fraction_selector input,
+.space_fractions .element_selector .fraction_selector .solidus,
+.space_fractions .element_selector .fraction_selector button {
+  width: 3em;
+  font-size: 14pt;
+}
+.space_fractions .element_selector .fraction_selector .numerator {
+  text-align: right;
+}

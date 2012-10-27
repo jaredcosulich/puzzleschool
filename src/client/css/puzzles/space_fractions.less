@@ -1,0 +1,76 @@
+@import '../variables';
+@import '../methods';
+
+body {
+    background-color: @grey;
+}
+
+.space_fractions {
+    overflow:hidden;
+    margin-bottom: 60px;
+    .board {
+        border: 1px solid @white;
+        float: left;
+        width: 620px;
+        overflow: hidden;
+        background: url(/assets/images/puzzles/space_fractions/space1.jpg) no-repeat center center; 
+        background-color: lighten(#000, 10%);
+        .square {
+            display: block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            border: 1px solid transparent;
+            float: left;
+            &:hover, &.selected {
+                border: 1px solid @white;
+            }
+            img {
+                vertical-align: middle;
+            }   
+        }
+        
+        .laser {
+            position: absolute;
+            background-color: red;            
+        }
+    }
+    
+    .element_selector {
+        .rounded(6px);
+        position: absolute;
+        top: -1000px;
+        left: -100px;
+        opacity: 0;
+        width: 300px;
+        height: 300px;
+        background-color: @white;
+        border: 1px solid #ccc;
+        overflow: auto;
+        .object {
+            width: 65px;
+            height: 65px;
+            line-height: 65px;
+            text-align: center;
+            border: 1px solid #ccc;
+            margin: 6px 0 0 6px;
+            float: left;
+            img {
+                vertical-align: middle;
+            }
+        }
+        
+        .fraction_selector {
+            padding: 12px;
+            text-align: center;
+            input, .solidus, button {
+                width: 3em;
+                font-size: 14pt;
+            }
+            .numerator {
+                text-align: right;
+            }
+        }
+    }
+}
