@@ -158,7 +158,7 @@ class spaceFractionsEditor.EditorHelper
                         opacity: 1
                         duration: 250
         else   
-            selectors.hide()
+                selectors.hide()
             selector.css
                 opacity: 1
                 display: 'block'

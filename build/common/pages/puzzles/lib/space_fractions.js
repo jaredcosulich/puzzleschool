@@ -107,7 +107,7 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.fireLaser = function(square) {
-    var checkSquare, denominator, direction, end, height, increment, index, laser, numerator, object, offset, start, width, _i,
+    var checkSquare, columns, denominator, direction, end, height, increment, index, laser, numerator, object, offset, rows, start, width, _i, _j,
       _this = this;
     square = $(square);
     this.removeExistingLaser(square);
@@ -126,47 +126,79 @@ spaceFractions.ViewHelper = (function() {
     laser.addClass('laser');
     laser.data('numerator', numerator);
     laser.data('denominator', denominator);
-    offset = square.offset();
-    height = object.height() * (numerator / denominator);
-    start = square.data('index') + 1;
+    rows = 10;
+    columns = 10;
     increment = (function() {
       switch (direction) {
         case 'up':
-          return -1 * start;
+          return -1 * columns;
         case 'down':
-          return start;
+          return columns;
         case 'left':
           return -1;
         case 'right':
           return 1;
       }
     })();
+    start = square.data('index') + increment;
     end = (function() {
       switch (direction) {
         case 'up':
           return 0;
         case 'down':
-          return this.board.data('rows') * this.board.data('columns');
+          return this.board.find('.square').length;
         case 'left':
-          return Math.floor(start / 10) * 10;
+          return (Math.floor(start / columns) * columns) - 1;
         case 'right':
-          return Math.ceil(start / 10) * 10;
+          return Math.ceil(start / columns) * columns;
       }
     }).call(this);
-    width = 0;
-    for (index = _i = start; start <= end ? _i < end : _i > end; index = _i += increment) {
-      checkSquare = this.board.find(".square.index" + index);
-      if (checkSquare.hasClass('occupied')) {
-        break;
+    offset = square.offset();
+    if (direction === 'left' || direction === 'right') {
+      height = object.height() * (numerator / denominator);
+      width = 0;
+      for (index = _i = start; start <= end ? _i < end : _i > end; index = _i += increment) {
+        checkSquare = this.board.find(".square.index" + index);
+        if (checkSquare.hasClass('occupied')) {
+          break;
+        }
+        width += checkSquare.width();
       }
-      width += checkSquare.width();
+    } else {
+      console.log(start, end, increment);
+      width = object.width() * (numerator / denominator);
+      height = 0;
+      for (index = _j = start; start <= end ? _j < end : _j > end; index = _j += increment) {
+        checkSquare = this.board.find(".square.index" + index);
+        if (checkSquare.hasClass('occupied')) {
+          break;
+        }
+        height += checkSquare.height();
+      }
     }
+    laser.css({
+      height: height,
+      width: width
+    });
     if (direction === 'right') {
       laser.css({
-        height: height,
-        width: width,
         top: offset.top + ((offset.height - height) / 2),
         left: offset.left + offset.width
+      });
+    } else if (direction === 'left') {
+      laser.css({
+        top: offset.top + ((offset.height - height) / 2),
+        left: offset.left - width
+      });
+    } else if (direction === 'up') {
+      laser.css({
+        top: offset.top - height,
+        left: offset.left + ((offset.width - width) / 2)
+      });
+    } else if (direction === 'down') {
+      laser.css({
+        top: offset.top + offset.height,
+        left: offset.left + ((offset.width - width) / 2)
       });
     }
     return this.board.append(laser);

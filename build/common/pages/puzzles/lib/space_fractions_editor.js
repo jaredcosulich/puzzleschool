@@ -172,7 +172,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectors = this.elementSelector.find('.selector');
     selector = this.elementSelector.find("." + selectorPage + "_selector");
     if (parseInt(this.elementSelector.css('opacity'))) {
-      return selectors.animate({
+      selectors.animate({
         opacity: 0,
         duration: 250,
         complete: function() {
@@ -189,11 +189,11 @@ spaceFractionsEditor.EditorHelper = (function() {
       });
     } else {
       selectors.hide();
-      return selector.css({
-        opacity: 1,
-        display: 'block'
-      });
     }
+    return selector.css({
+      opacity: 1,
+      display: 'block'
+    });
   };
 
   return EditorHelper;

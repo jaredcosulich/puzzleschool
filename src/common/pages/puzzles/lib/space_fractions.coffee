@@ -97,34 +97,60 @@ class spaceFractions.ViewHelper
         laser.data('numerator', numerator)
         laser.data('denominator', denominator)
         
-        offset = square.offset()
-        height = object.height() * (numerator / denominator)
+        rows = 10
+        columns = 10
         
-        start = square.data('index') + 1
         increment = switch direction
-            when 'up' then -1 * start
-            when 'down' then start 
+            when 'up' then -1 * columns
+            when 'down' then columns
             when 'left' then -1
             when 'right' then 1
+
+        start = square.data('index') + increment
             
         end = switch direction
             when 'up' then 0
-            when 'down' then @board.data('rows') * @board.data('columns')
-            when 'left' then Math.floor(start/10) * 10 
-            when 'right' then Math.ceil(start/10) * 10 
+            when 'down' then @board.find('.square').length
+            when 'left' then (Math.floor(start/columns) * columns) - 1
+            when 'right' then Math.ceil(start/columns) * columns 
 
-        width = 0
-        for index in [start...end] by increment
-            checkSquare = @board.find(".square.index#{index}")
-            break if checkSquare.hasClass('occupied')
-            width += checkSquare.width()
+        offset = square.offset()
         
+        if direction == 'left' or direction == 'right'
+            height = object.height() * (numerator / denominator)
+            width = 0
+            for index in [start...end] by increment
+                checkSquare = @board.find(".square.index#{index}")
+                break if checkSquare.hasClass('occupied')
+                width += checkSquare.width()
+        else
+            width = object.width() * (numerator / denominator)
+            height = 0
+            for index in [start...end] by increment
+                checkSquare = @board.find(".square.index#{index}")
+                break if checkSquare.hasClass('occupied')
+                height += checkSquare.height()
+            
+        laser.css
+            height: height
+            width: width
+
         if direction == 'right'
             laser.css
-                height: height
-                width: width
                 top: offset.top + ((offset.height - height) / 2)
                 left: offset.left + offset.width
+        else if direction == 'left'
+            laser.css
+                top: offset.top + ((offset.height - height) / 2)
+                left: offset.left - width
+        else if direction == 'up'
+            laser.css
+                top: offset.top - height
+                left: offset.left + ((offset.width - width) / 2)
+        else if direction == 'down'
+            laser.css
+                top: offset.top + offset.height
+                left: offset.left + ((offset.width - width) / 2)
         
         @board.append(laser)
         
