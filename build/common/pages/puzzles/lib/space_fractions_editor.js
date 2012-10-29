@@ -24,11 +24,15 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
-    var objectSelector, objectType, _fn,
+    var objectSelector, objectType, sortedObjectTypes, _fn, _i, _len,
       _this = this;
     objectSelector = $(document.createElement('DIV'));
     objectSelector.addClass('selector');
     objectSelector.addClass('object_selector');
+    objectSelector.html('<h3>Select what to put in this square:</h3>');
+    sortedObjectTypes = Object.keys(this.viewHelper.objects).sort(function(a, b) {
+      return _this.viewHelper.objects[a].index - _this.viewHelper.objects[b].index;
+    });
     _fn = function(objectType) {
       var object, objectContainer, objectImage;
       object = _this.viewHelper.objects[objectType];
@@ -43,7 +47,8 @@ spaceFractionsEditor.EditorHelper = (function() {
       objectContainer.append(objectImage);
       return objectSelector.append(objectContainer);
     };
-    for (objectType in this.viewHelper.objects) {
+    for (_i = 0, _len = sortedObjectTypes.length; _i < _len; _i++) {
+      objectType = sortedObjectTypes[_i];
       _fn(objectType);
     }
     return this.elementSelector.append(objectSelector);
@@ -137,11 +142,14 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectedSquare = this.$('.board .selected');
     this.viewHelper.addObjectToBoard(objectType, selectedSquare);
     object = this.viewHelper.objects[objectType];
-    return this.showObjectSelector();
+    return this.showObjectSelector(true);
   };
 
-  EditorHelper.prototype.showObjectSelector = function() {
+  EditorHelper.prototype.showObjectSelector = function(close) {
     var object, selectedSquare;
+    if (close == null) {
+      close = false;
+    }
     selectedSquare = this.$('.board .selected');
     if (!selectedSquare.hasClass('occupied')) {
       this.showSelector('object');
@@ -153,7 +161,11 @@ spaceFractionsEditor.EditorHelper = (function() {
       this.fractionSelector.find('.set_fraction').data('callback', 'setObjectFraction');
       return this.showSelector('fraction');
     } else {
-      return this.closeElementSelector();
+      if (close) {
+        return this.closeElementSelector();
+      } else {
+        return this.showSelector('object');
+      }
     }
   };
 

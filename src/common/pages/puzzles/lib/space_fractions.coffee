@@ -1,40 +1,39 @@
 spaceFractions = exports ? provide('./lib/space_fractions', {})
 
+LASER_HEIGHT = 24
+
 OBJECTS = 
-    laserLeft:
-        image: 'laser_left'
-        distribute: true
-        distributeDirection: 'left'
-        accept: false
-
-    laserRight:
-        image: 'laser_right'
-        distribute: true
-        distributeDirection: 'right'
-        accept: false
-
-    laserUp:
-        image: 'laser_up'
-        distribute: true
-        distributeDirection: 'up'
-        accept: false
-
-    laserDown:
-        image: 'laser_down'
-        distribute: true
-        distributeDirection: 'down'
-        accept: false
-
     rock1: 
         image: 'rock1'
-        distribute: false
-        accept: false
+        index: 999999
 
     rock2: 
         image: 'rock2'
-        distribute: false
-        accept: false
+        index: 1000000
 
+# directional objects
+directions = ['up', 'down', 'left',  'right']
+for direction, index in directions
+    #lasers
+    OBJECTS["laser_#{direction}"] =
+        index: 10 + index
+        image: "laser_#{direction}"
+        distribute: true
+        distributeDirections: [direction]
+        accept: false
+    
+    for direction2, index2 in directions
+        continue if (index < 2 and index2 < 2) or (index > 1 and index2 > 1)
+        #turners
+        OBJECTS["turn_#{direction}_#{direction2}"] =
+            index: 100 + index2
+            image: "turn_#{direction}_#{direction2}"
+            distribute: true
+            distributeDirections: [direction2]
+            accept: true
+            acceptDirections: [direction]
+        
+        
 class spaceFractions.ChunkHelper
     constructor: (@languages, @levelName, @puzzleData) ->
         @languageData = languageScramble.data[@languages]
@@ -61,7 +60,7 @@ class spaceFractions.ViewHelper
     addObjectToBoard: (objectType, square) ->
         square = $(square)
         square.html('')
-        @removeExistingLaser(square)
+        @removeExistingLasers(square)
         square.addClass('occupied')
         square.data('object_type', objectType)
         object = @objects[objectType]
@@ -69,88 +68,127 @@ class spaceFractions.ViewHelper
         objectContainer.attr('src', object.image)
         square.append(objectContainer)
         
+        if object.accept
+            square.data('acceptDirections', JSON.stringify(object.acceptDirections))        
+            if (laserData = JSON.parse(square.data('lasers') or null))
+                for direction in object.acceptDirections
+                    if laserData[direction]
+                        square.data('numerator', laserData[direction].numerator)
+                        square.data('denominator', laserData[direction].denominator)
+                        @fireLaser(@board.find(".square.index#{laserData[direction].index}"))
+                    
         if object.distribute
-            square.data('direction', object.distributeDirection)
-            @fireLaser(square, object.distributeDirection)
+            square.data('distributeDirections', JSON.stringify(object.distributeDirections))
+            @fireLaser(square)
+        
          
-    removeExistingLaser: (square) ->
+    removeExistingLasers: (square) ->
         square = $(square)
-        if (existingLaser = @board.find(".laser.index#{square.data('index')}")).length
-            existingLaser.remove()
+        index = square.data('index')
+        if (existingLasers = @board.find(".laser.laser#{index}")).length
+            existingLasers.remove()
+            for laserSquare in @board.find(".square.laser#{index}")
+                laserSquare = $(laserSquare)
+                laserSquare.removeClass("laser#{index}}}")
+                laserSquare.data('lasers')[laserSquare.data("laser{index}")] = null
+                laserSquare.data("laser{index}", null)
+                @removeExistingLasers(laserSquare) if laserSquare.hasClass('occupied')
          
     fireLaser: (square) ->
         square = $(square)
         
-        @removeExistingLaser(square)
-        
-        object = square.find('img')
-        if not object.height()
-            $.timeout 10, => @fireLaser(square, direction)
-            return
+        @removeExistingLasers(square)
+
+        return unless (distributeDirections = JSON.parse(square.data('distributeDirections') or null))
+        if (acceptDirections = JSON.parse(square.data('acceptDirections') or null))
+            return unless (laserData = JSON.parse(square.data('lasers') or null))
+            for direction in acceptDirections
+                return unless laserData[direction]
             
-        direction = square.data('direction')
-        numerator = square.data('numerator') or 1
-        denominator = square.data('denominator') or 1
-        laser = $(document.createElement('DIV'))
-        laser.addClass("index#{square.data('index')}")
-        laser.addClass('laser')
-        laser.data('numerator', numerator)
-        laser.data('denominator', denominator)
-        
         rows = 10
         columns = 10
         
-        increment = switch direction
-            when 'up' then -1 * columns
-            when 'down' then columns
-            when 'left' then -1
-            when 'right' then 1
+        numerator = square.data('numerator') or 1
+        denominator = square.data('denominator') or 1
+        squareIndex = square.data('index')
 
-        start = square.data('index') + increment
-            
-        end = switch direction
-            when 'up' then 0
-            when 'down' then @board.find('.square').length
-            when 'left' then (Math.floor(start/columns) * columns) - 1
-            when 'right' then Math.ceil(start/columns) * columns 
-
-        offset = square.offset()
+        checkPath = (checkSquare, squareIndex, direction) =>
+            occupied = checkSquare.hasClass('occupied')
+            acceptDirection = JSON.parse(checkSquare.data('acceptDirection') or null)
+            return false if occupied and not acceptDirection
+            laserData = JSON.parse(checkSquare.data('lasers') or '{}')
+            laserData[direction] = 
+                index: squareIndex
+                numerator: numerator
+                denominator: denominator
+            checkSquare.data('lasers', JSON.stringify(laserData))
+            checkSquare.data("laser#{squareIndex}", direction)
+            checkSquare.addClass("laser#{squareIndex}")
+            if direction in JSON.parse(checkSquare.data('acceptDirection') or '[]')
+                checkSquare.data('numerator', numerator)
+                checkSquare.data('denominator', denominator)
+                @fireLaser(checkSquare)
+            return false if occupied
+            return true
         
-        if direction == 'left' or direction == 'right'
-            height = object.height() * (numerator / denominator)
-            width = 0
-            for index in [start...end] by increment
-                checkSquare = @board.find(".square.index#{index}")
-                break if checkSquare.hasClass('occupied')
-                width += checkSquare.width()
-        else
-            width = object.width() * (numerator / denominator)
-            height = 0
-            for index in [start...end] by increment
-                checkSquare = @board.find(".square.index#{index}")
-                break if checkSquare.hasClass('occupied')
-                height += checkSquare.height()
-            
-        laser.css
-            height: height
-            width: width
+        for direction in distributeDirections
+            laser = $(document.createElement('DIV'))
+            laser.addClass('laser')
+            laser.addClass("laser#{squareIndex}")
+            laser.data('numerator', numerator)
+            laser.data('denominator', denominator)
 
-        if direction == 'right'
-            laser.css
-                top: offset.top + ((offset.height - height) / 2)
-                left: offset.left + offset.width
-        else if direction == 'left'
-            laser.css
-                top: offset.top + ((offset.height - height) / 2)
-                left: offset.left - width
-        else if direction == 'up'
-            laser.css
-                top: offset.top - height
-                left: offset.left + ((offset.width - width) / 2)
-        else if direction == 'down'
-            laser.css
-                top: offset.top + offset.height
-                left: offset.left + ((offset.width - width) / 2)
+            increment = switch direction
+                when 'up' then -1 * columns
+                when 'down' then columns
+                when 'left' then -1
+                when 'right' then 1
+
+            start = square.data('index') + increment
+            
+            end = switch direction
+                when 'up' then 0
+                when 'down' then @board.find('.square').length
+                when 'left' then (Math.floor(start/columns) * columns) - 1
+                when 'right' then Math.ceil(start/columns) * columns 
+
+            offset = square.offset()
         
-        @board.append(laser)
+            if direction == 'left' or direction == 'right'
+                height = LASER_HEIGHT * (numerator / denominator)
+                width = 0
+                for index in [start...end] by increment
+                    checkSquare = @board.find(".square.index#{index}")
+                    break unless checkPath(checkSquare, squareIndex, direction)
+                    width += checkSquare.width()
+            else
+                width = LASER_HEIGHT * (numerator / denominator)
+                height = 0
+                for index in [start...end] by increment
+                    checkSquare = @board.find(".square.index#{index}")
+                    break unless checkPath(checkSquare, squareIndex, direction)
+                    height += checkSquare.height()
+            
+            laser.css
+                height: height
+                width: width
+
+            if direction == 'right'
+                laser.css
+                    top: offset.top + ((offset.height - height) / 2)
+                    left: offset.left + offset.width
+            else if direction == 'left'
+                laser.css
+                    top: offset.top + ((offset.height - height) / 2)
+                    left: offset.left - width
+            else if direction == 'up'
+                laser.css
+                    top: offset.top - height
+                    left: offset.left + ((offset.width - width) / 2)
+            else if direction == 'down'
+                laser.css
+                    top: offset.top + offset.height
+                    left: offset.left + ((offset.width - width) / 2)
+        
+            @board.append(laser)
         

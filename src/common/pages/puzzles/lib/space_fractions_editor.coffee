@@ -20,7 +20,9 @@ class spaceFractionsEditor.EditorHelper
         objectSelector = $(document.createElement('DIV'))
         objectSelector.addClass('selector')
         objectSelector.addClass('object_selector')
-        for objectType of @viewHelper.objects
+        objectSelector.html('<h3>Select what to put in this square:</h3>')
+        sortedObjectTypes = Object.keys(@viewHelper.objects).sort((a, b) => @viewHelper.objects[a].index - @viewHelper.objects[b].index)
+        for objectType in sortedObjectTypes
             do (objectType) =>
                 object = @viewHelper.objects[objectType]
                 objectContainer = $(document.createElement('DIV'))
@@ -117,9 +119,9 @@ class spaceFractionsEditor.EditorHelper
         @viewHelper.addObjectToBoard(objectType, selectedSquare)
         
         object = @viewHelper.objects[objectType]
-        @showObjectSelector()
+        @showObjectSelector(true)
         
-    showObjectSelector: ->
+    showObjectSelector: (close=false) ->
         selectedSquare = @$('.board .selected')
         
         if not selectedSquare.hasClass('occupied')
@@ -132,7 +134,7 @@ class spaceFractionsEditor.EditorHelper
             @fractionSelector.find('.set_fraction').data('callback', 'setObjectFraction')
             @showSelector('fraction')
         else
-            @closeElementSelector()
+            if close then @closeElementSelector() else @showSelector('object')
         
     setObjectFraction: (numerator, denominator) ->
         selectedSquare = @$('.board .selected')
