@@ -35,6 +35,13 @@ class spaceFractionsEditor.EditorHelper
             
                 objectContainer.append(objectImage)
                 objectSelector.append(objectContainer)
+                
+        clear = $(document.createElement('DIV'))
+        clear.html('<a>Clear</a>')
+        clear.addClass('object')
+        clear.bind 'click', => @removeObject()
+        objectSelector.append(clear)
+                
         @elementSelector.append(objectSelector)
     
     initFractionSelector: ->
@@ -120,6 +127,11 @@ class spaceFractionsEditor.EditorHelper
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
+        
+    removeObject: () ->
+        selectedSquare = @$('.board .selected')
+        @viewHelper.removeObjectFromBoard(selectedSquare)
+        @closeElementSelector()
         
     showObjectSelector: (close=false) ->
         selectedSquare = @$('.board .selected')

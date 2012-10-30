@@ -24,7 +24,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
-    var objectSelector, objectType, sortedObjectTypes, _fn, _i, _len,
+    var clear, objectSelector, objectType, sortedObjectTypes, _fn, _i, _len,
       _this = this;
     objectSelector = $(document.createElement('DIV'));
     objectSelector.addClass('selector');
@@ -51,6 +51,13 @@ spaceFractionsEditor.EditorHelper = (function() {
       objectType = sortedObjectTypes[_i];
       _fn(objectType);
     }
+    clear = $(document.createElement('DIV'));
+    clear.html('<a>Clear</a>');
+    clear.addClass('object');
+    clear.bind('click', function() {
+      return _this.removeObject();
+    });
+    objectSelector.append(clear);
     return this.elementSelector.append(objectSelector);
   };
 
@@ -143,6 +150,13 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.viewHelper.addObjectToBoard(objectType, selectedSquare);
     object = this.viewHelper.objects[objectType];
     return this.showObjectSelector(true);
+  };
+
+  EditorHelper.prototype.removeObject = function() {
+    var selectedSquare;
+    selectedSquare = this.$('.board .selected');
+    this.viewHelper.removeObjectFromBoard(selectedSquare);
+    return this.closeElementSelector();
   };
 
   EditorHelper.prototype.showObjectSelector = function(close) {

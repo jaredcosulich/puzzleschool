@@ -116,6 +116,20 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
+  ViewHelper.prototype.removeObjectFromBoard = function(square) {
+    var laserData, _results;
+    this.removeExistingLasers(square);
+    square.html('');
+    square.removeClass('occupied');
+    square.data('object_type', null);
+    laserData = JSON.parse(square.data('lasers') || '{}');
+    _results = [];
+    for (direction in laserData) {
+      _results.push(this.fireLaser(this.$(".index" + laserData[direction].index)));
+    }
+    return _results;
+  };
+
   ViewHelper.prototype.removeExistingLasers = function(square) {
     var existingLasers, laserSquare, _k, _len2, _ref, _results;
     square = $(square);
