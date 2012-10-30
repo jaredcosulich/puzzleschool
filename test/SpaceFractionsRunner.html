@@ -2,13 +2,10 @@
   "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Puzzle School Spec Runner</title>
+  <title>Space Fractions Spec Runner</title>
 
   <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.2.0/jasmine_favicon.png">
-  
-  <link rel="stylesheet" type="text/css" href="../build/client/css/puzzles/language_scramble.css" />
   <link rel="stylesheet" type="text/css" href="../build/client/css/puzzles/space_fractions.css" />
-  
   <link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css">
   <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js"></script>
   <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
@@ -16,17 +13,12 @@
 
   <!-- include source files here... -->
   <script type="text/javascript" src="spec/SpecHelper.js"></script>
-  
-  <!-- Language Scramble Specs -->
-  <script type="text/javascript" src="spec/language_scramble/InitSpec.js"></script>
-  <script type="text/javascript" src="spec/language_scramble/TouchSpec.js"></script>
 
   <!-- Space Fractions Specs -->  
   <script type="text/javascript" src="spec/space_fractions/InitSpec.js"></script>
   <script type="text/javascript" src="spec/space_fractions/TurnSpec.js"></script>
   
   <!-- include spec files here... -->
-  <script type="text/javascript" src="../build/common/pages/puzzles/lib/language_scramble.js"></script>
   <script type="text/javascript" src="../build/common/pages/puzzles/lib/space_fractions.js"></script>
   
 
@@ -62,19 +54,6 @@
 </head>
 
 <body>
-    <div class='language_scramble' style='top: -1000px; left: -100px; position: absolute;'>
-        <div class='scramble_content' style='width: 480px; height: 300px;'>
-            <div class="section display_words text-center"></div>
-            <div class="section guesses text-center">
-                <div class='hidden_message'></div>
-            </div>
-            <div class="section scrambled text-center"></div>
-            <br/>
-            <h4 class='text-center last_answer'></h4>
-
-            <div class='level_progress_meter'><div class='percent_complete'></div></div>
-        </div>
-    </div>
     <div class='space_fractions' style='top: 0; left: 0; position: absolute; visibility: hidden;'>
         <div class='board'></div>
         <div class='options'></div>

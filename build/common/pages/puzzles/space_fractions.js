@@ -50,7 +50,9 @@ soma.views({
       var spaceFractions, spaceFractionsEditor;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
-        el: $(this.selector)
+        el: $(this.selector),
+        rows: 10,
+        columns: 10
       });
       if (this.el.data('level_name') === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');

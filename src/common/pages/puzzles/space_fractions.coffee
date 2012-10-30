@@ -32,6 +32,8 @@ soma.views
             spaceFractions = require('./lib/space_fractions')
             @viewHelper = new spaceFractions.ViewHelper
                 el: $(@selector)
+                rows: 10
+                columns: 10
 
             if @el.data('level_name') == 'editor'
                 spaceFractionsEditor = require('./lib/space_fractions_editor')

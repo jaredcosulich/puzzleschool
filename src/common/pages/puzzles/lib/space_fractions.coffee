@@ -33,28 +33,30 @@ for direction, index in directions
             accept: true
             acceptDirections: [direction]
         
+for objectType of OBJECTS
+    object = OBJECTS[objectType]
+    object.image = "/assets/images/puzzles/space_fractions/#{object.image}.png" 
         
 class spaceFractions.ChunkHelper
-    constructor: (@languages, @levelName, @puzzleData) ->
-        @languageData = languageScramble.data[@languages]
-        @level = languageScramble.getLevel(@languageData, @levelName)
+    constructor: () ->
     
 
 class spaceFractions.ViewHelper
     objects: OBJECTS
 
-    constructor: ({@el}) ->
-        for objectType of @objects
-            object = @objects[objectType]
-            object.image = "/assets/images/puzzles/space_fractions/#{object.image}.png" 
-        
+    constructor: ({@el, @rows, @columns}) ->
         @board = @$('.board')
+        @board.html('')
         
-        for square, index in @board.find('.square')
-            do (square, index) -> 
-                $(square).data('index', index)
-                $(square).addClass("index#{index}")
-        
+        for row in [0...@rows]
+            for column in [0...@columns]
+                index = (row * @rows) + column
+                square = $(document.createElement('DIV'))
+                square.addClass('square')
+                square.data('index', index)
+                square.addClass("index#{index}")
+                @board.append(square)
+                
     $: (selector) -> $(selector, @el)
     
     addObjectToBoard: (objectType, square) ->
@@ -80,6 +82,7 @@ class spaceFractions.ViewHelper
         if object.distribute
             square.data('distributeDirections', JSON.stringify(object.distributeDirections))
             @fireLaser(square)
+        
         
     removeObjectFromBoard: (square) ->
         @removeExistingLasers(square)
@@ -113,9 +116,6 @@ class spaceFractions.ViewHelper
             for direction in acceptDirections
                 return unless laserData[direction]
             
-        rows = 10
-        columns = 10
-        
         numerator = square.data('numerator') or 1
         denominator = square.data('denominator') or 1
         squareIndex = square.data('index')
@@ -147,8 +147,8 @@ class spaceFractions.ViewHelper
             laser.data('denominator', denominator)
 
             increment = switch direction
-                when 'up' then -1 * columns
-                when 'down' then columns
+                when 'up' then -1 * @columns
+                when 'down' then @columns
                 when 'left' then -1
                 when 'right' then 1
 
@@ -157,8 +157,8 @@ class spaceFractions.ViewHelper
             end = switch direction
                 when 'up' then 0
                 when 'down' then @board.find('.square').length
-                when 'left' then (Math.floor(start/columns) * columns) - 1
-                when 'right' then Math.ceil(start/columns) * columns 
+                when 'left' then (Math.floor(start/@columns) * @columns) - 1
+                when 'right' then Math.ceil(start/@columns) * @columns 
 
             offset = square.offset()
         
