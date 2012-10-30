@@ -70,18 +70,22 @@ class spaceFractions.ViewHelper
         objectContainer.attr('src', object.image)
         square.append(objectContainer)
         
+        laserData = JSON.parse(square.data('lasers') or '{}')
+        
         if object.accept
             square.data('acceptDirections', JSON.stringify(object.acceptDirections))        
-            if (laserData = JSON.parse(square.data('lasers') or null))
-                for direction in object.acceptDirections
-                    if laserData[direction]
-                        square.data('numerator', laserData[direction].numerator)
-                        square.data('denominator', laserData[direction].denominator)
-                        @fireLaser(@board.find(".square.index#{laserData[direction].index}"))
+            for direction in object.acceptDirections
+                if laserData[direction]
+                    square.data('numerator', laserData[direction].numerator)
+                    square.data('denominator', laserData[direction].denominator)
+
+        for direction of laserData
+            @fireLaser(@board.find(".square.index#{laserData[direction].index}"))
                     
         if object.distribute
             square.data('distributeDirections', JSON.stringify(object.distributeDirections))
             @fireLaser(square)
+            
         
         
     removeObjectFromBoard: (square) ->

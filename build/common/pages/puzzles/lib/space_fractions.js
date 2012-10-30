@@ -93,19 +93,20 @@ spaceFractions.ViewHelper = (function() {
     objectContainer = $(document.createElement('IMG'));
     objectContainer.attr('src', object.image);
     square.append(objectContainer);
+    laserData = JSON.parse(square.data('lasers') || '{}');
     if (object.accept) {
       square.data('acceptDirections', JSON.stringify(object.acceptDirections));
-      if ((laserData = JSON.parse(square.data('lasers') || null))) {
-        _ref = object.acceptDirections;
-        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-          direction = _ref[_k];
-          if (laserData[direction]) {
-            square.data('numerator', laserData[direction].numerator);
-            square.data('denominator', laserData[direction].denominator);
-            this.fireLaser(this.board.find(".square.index" + laserData[direction].index));
-          }
+      _ref = object.acceptDirections;
+      for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+        direction = _ref[_k];
+        if (laserData[direction]) {
+          square.data('numerator', laserData[direction].numerator);
+          square.data('denominator', laserData[direction].denominator);
         }
       }
+    }
+    for (direction in laserData) {
+      this.fireLaser(this.board.find(".square.index" + laserData[direction].index));
     }
     if (object.distribute) {
       square.data('distributeDirections', JSON.stringify(object.distributeDirections));

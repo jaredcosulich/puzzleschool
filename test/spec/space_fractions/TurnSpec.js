@@ -58,4 +58,24 @@ describe("A turn", function() {
         });
     });
     
+    describe('when another turn is added', function() {
+        it('should redirect again if it accepts a laser from the right direction', function() {
+            var anotherTurnSquare = game.board.find('.square.index67')
+            game.addObjectToBoard('turn_down_left', anotherTurnSquare);
+            var lasers = game.board.find('.laser')
+            expect(lasers.length).toEqual(3);
+            expect($(lasers[2]).offset().left).toEqual(1)
+            expect($(lasers[2]).offset().width).toEqual(anotherTurnSquare.offset().left - 1)
+        });
+        
+        it('should block the laser if it does not accept a laser for the right direction', function() {
+            var badTurnSquare = game.board.find('.square.index67')
+            game.addObjectToBoard('turn_up_left', badTurnSquare);
+            var laser2 = $(game.board.find('.laser')[1]);
+            expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
+            expect(laser2.offset().height).toEqual(laserSquare.height() * 3);
+            
+        });
+    })
+    
 });
