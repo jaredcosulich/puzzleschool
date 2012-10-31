@@ -97,6 +97,9 @@ spaceFractions.ViewHelper = (function() {
       acceptedLaser = laserData[object.acceptDirections[0]];
       totalLaser = acceptedLaser ? acceptedLaser.numerator / acceptedLaser.denominator : 0;
       fraction = parseInt(square.data('fullNumerator')) / parseInt(square.data('fullDenominator'));
+      if (isNaN(fraction)) {
+        fraction = 1;
+      }
       if (totalLaser === 0) {
         state = 'empty';
       } else if (totalLaser < fraction) {
@@ -184,9 +187,36 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
+  ViewHelper.prototype.checkLaserPath = function(checkSquare, squareIndex, direction, numerator, denominator) {
+    var acceptDirections, laserData, occupied;
+    occupied = checkSquare.hasClass('occupied');
+    acceptDirections = JSON.parse(checkSquare.data('acceptDirections') || null);
+    if (occupied && !acceptDirections) {
+      return false;
+    }
+    laserData = JSON.parse(checkSquare.data('lasers') || '{}');
+    laserData[direction] = {
+      index: squareIndex,
+      numerator: numerator,
+      denominator: denominator
+    };
+    checkSquare.data('lasers', JSON.stringify(laserData));
+    checkSquare.data("laser" + squareIndex, direction);
+    checkSquare.addClass("laser" + squareIndex);
+    if (__indexOf.call(acceptDirections || [], direction) >= 0) {
+      checkSquare.data('numerator', numerator);
+      checkSquare.data('denominator', denominator);
+      this.setObjectImage(checkSquare);
+      this.fireLaser(checkSquare);
+    }
+    if (occupied) {
+      return false;
+    }
+    return true;
+  };
+
   ViewHelper.prototype.fireLaser = function(square) {
-    var acceptDirections, checkPath, checkSquare, denominator, distributeDirections, end, height, increment, laser, laserData, numerator, offset, squareIndex, start, width, _k, _l, _len2, _len3, _m, _n, _results,
-      _this = this;
+    var acceptDirection, acceptDirections, checkSquare, denominator, distributeDirection, distributeDirections, end, height, increment, laser, laserData, numerator, offset, squareIndex, start, width, _k, _l, _len2, _len3, _m, _n, _results;
     square = $(square);
     this.removeExistingLasers(square);
     if (!(distributeDirections = JSON.parse(square.data('distributeDirections') || null))) {
@@ -197,8 +227,8 @@ spaceFractions.ViewHelper = (function() {
         return;
       }
       for (_k = 0, _len2 = acceptDirections.length; _k < _len2; _k++) {
-        direction = acceptDirections[_k];
-        if (!laserData[direction]) {
+        acceptDirection = acceptDirections[_k];
+        if (!laserData[acceptDirection]) {
           return;
         }
       }
@@ -206,43 +236,16 @@ spaceFractions.ViewHelper = (function() {
     numerator = square.data('numerator') || 1;
     denominator = square.data('denominator') || 1;
     squareIndex = square.data('index');
-    checkPath = function(checkSquare, squareIndex, direction) {
-      var occupied;
-      occupied = checkSquare.hasClass('occupied');
-      acceptDirections = JSON.parse(checkSquare.data('acceptDirections') || null);
-      if (occupied && !acceptDirections) {
-        return false;
-      }
-      laserData = JSON.parse(checkSquare.data('lasers') || '{}');
-      laserData[direction] = {
-        index: squareIndex,
-        numerator: numerator,
-        denominator: denominator
-      };
-      checkSquare.data('lasers', JSON.stringify(laserData));
-      checkSquare.data("laser" + squareIndex, direction);
-      checkSquare.addClass("laser" + squareIndex);
-      if (__indexOf.call(acceptDirections || [], direction) >= 0) {
-        checkSquare.data('numerator', numerator);
-        checkSquare.data('denominator', denominator);
-        _this.setObjectImage(checkSquare);
-        _this.fireLaser(checkSquare);
-      }
-      if (occupied) {
-        return false;
-      }
-      return true;
-    };
     _results = [];
     for (_l = 0, _len3 = distributeDirections.length; _l < _len3; _l++) {
-      direction = distributeDirections[_l];
+      distributeDirection = distributeDirections[_l];
       laser = $(document.createElement('DIV'));
       laser.addClass('laser');
       laser.addClass("laser" + squareIndex);
       laser.data('numerator', numerator);
       laser.data('denominator', denominator);
       increment = (function() {
-        switch (direction) {
+        switch (distributeDirection) {
           case 'up':
             return -1 * this.columns;
           case 'down':
@@ -255,7 +258,7 @@ spaceFractions.ViewHelper = (function() {
       }).call(this);
       start = square.data('index') + increment;
       end = (function() {
-        switch (direction) {
+        switch (distributeDirection) {
           case 'up':
             return 0;
           case 'down':
@@ -267,12 +270,12 @@ spaceFractions.ViewHelper = (function() {
         }
       }).call(this);
       offset = square.offset();
-      if (direction === 'left' || direction === 'right') {
+      if (distributeDirection === 'left' || distributeDirection === 'right') {
         height = LASER_HEIGHT * (numerator / denominator);
         width = 0;
         for (index = _m = start; start <= end ? _m < end : _m > end; index = _m += increment) {
           checkSquare = this.board.find(".square.index" + index);
-          if (!checkPath(checkSquare, squareIndex, direction)) {
+          if (!this.checkLaserPath(checkSquare, squareIndex, distributeDirection, numerator, denominator)) {
             break;
           }
           width += checkSquare.width();
@@ -282,7 +285,7 @@ spaceFractions.ViewHelper = (function() {
         height = 0;
         for (index = _n = start; start <= end ? _n < end : _n > end; index = _n += increment) {
           checkSquare = this.board.find(".square.index" + index);
-          if (!checkPath(checkSquare, squareIndex, direction)) {
+          if (!this.checkLaserPath(checkSquare, squareIndex, distributeDirection, numerator, denominator)) {
             break;
           }
           height += checkSquare.height();
@@ -292,22 +295,22 @@ spaceFractions.ViewHelper = (function() {
         height: height,
         width: width
       });
-      if (direction === 'right') {
+      if (distributeDirection === 'right') {
         laser.css({
           top: offset.top + ((offset.height - height) / 2),
           left: offset.left + offset.width
         });
-      } else if (direction === 'left') {
+      } else if (distributeDirection === 'left') {
         laser.css({
           top: offset.top + ((offset.height - height) / 2),
           left: offset.left - width
         });
-      } else if (direction === 'up') {
+      } else if (distributeDirection === 'up') {
         laser.css({
           top: offset.top - height,
           left: offset.left + ((offset.width - width) / 2)
         });
-      } else if (direction === 'down') {
+      } else if (distributeDirection === 'down') {
         laser.css({
           top: offset.top + offset.height,
           left: offset.left + ((offset.width - width) / 2)

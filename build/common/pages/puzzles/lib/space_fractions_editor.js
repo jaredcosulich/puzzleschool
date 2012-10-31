@@ -174,7 +174,11 @@ spaceFractionsEditor.EditorHelper = (function() {
     }
     object = this.viewHelper.objects[selectedSquare.data('object_type')];
     if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
-      this.setFractionValue(selectedSquare.data('numerator') || 1, selectedSquare.data('denominator') || 1);
+      if (selectedSquare.data('fullNumerator')) {
+        this.setFractionValue(selectedSquare.data('fullNumerator'), selectedSquare.data('fullDenominator'));
+      } else {
+        this.setFractionValue(selectedSquare.data('numerator') || 1, selectedSquare.data('denominator') || 1);
+      }
       this.fractionSelector.find('.set_fraction').data('callback', 'setObjectFraction');
       return this.showSelector('fraction');
     } else {

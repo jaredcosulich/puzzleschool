@@ -151,7 +151,10 @@ class spaceFractionsEditor.EditorHelper
         
         object = @viewHelper.objects[selectedSquare.data('object_type')]
         if (object.distribute and not object.accept) or (object.accept and not object.distribute)
-            @setFractionValue(selectedSquare.data('numerator') or 1, selectedSquare.data('denominator') or 1)
+            if selectedSquare.data('fullNumerator')
+                @setFractionValue(selectedSquare.data('fullNumerator'), selectedSquare.data('fullDenominator'))
+            else
+                @setFractionValue(selectedSquare.data('numerator') or 1, selectedSquare.data('denominator') or 1)
             @fractionSelector.find('.set_fraction').data('callback', 'setObjectFraction')
             @showSelector('fraction')
         else

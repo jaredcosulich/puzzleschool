@@ -16,9 +16,19 @@ describe("A turn", function() {
     }); 
     
     it('should stop the laser', function() {
-        var laser = $(game.board.find('.laser')[0]);
+        var laser = game.board.find('.laser.laser21');
+        expect(laser.length).toEqual(1);
         expect(laser.offset().width).toEqual(turnSquare.offset().width * 5)
         expect(laser.offset().left + laser.offset().width).toEqual(turnSquare.offset().left)
+    });
+
+    it('should not change at all if the laser fires again', function() {
+        game.fireLaser(laserSquare);
+        var laser = game.board.find('.laser.laser21');
+        expect(laser.length).toEqual(1);
+        expect(laser.offset().left + laser.offset().width).toEqual(turnSquare.offset().left);
+        var laser2 = game.board.find('.laser.laser27')
+        expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
     });
     
     it('should create two lasers, each with the original fraction', function() {
@@ -29,7 +39,7 @@ describe("A turn", function() {
     });
     
     it('should send the laser down to the bottom of the board', function() {
-        var laser2 = $(game.board.find('.laser')[1]);
+        var laser2 = game.board.find('.laser.laser27')
         expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
         expect(laser2.offset().height).toEqual(laserSquare.height() * 7);
     });
@@ -37,8 +47,8 @@ describe("A turn", function() {
     it('should remove markings from previous page', function() {
         var oldPathSquare = game.board.find('.square.index29');
         expect(oldPathSquare[0].className).toNotContain('laser');
-    })
-    
+    });
+        
     describe('when the turn is removed', function() {
         beforeEach(function() {
             game.removeObjectFromBoard(turnSquare);            

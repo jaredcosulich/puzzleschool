@@ -46,6 +46,20 @@ describe("Init:", function() {
             }
             expect(game.board.find('.square.index21').hasClass('laser12')).toEqual(false)    
         })
+        
+        it('should not change position if fired again', function() {
+            game.fireLaser(square);
+            laser = game.board.find('.laser' + square.data('index'))
+            expect(laser.offset().left).toEqual(square.offset().left + square.offset().width);
+        })
+        
+        it('should not change position if fired again with a different fraction', function() {
+            square.data('denominator', 12);
+            game.fireLaser(square);
+            laser = game.board.find('.laser.laser' + square.data('index'))
+            expect(laser.offset().left).toEqual(square.offset().left + square.offset().width);
+        })
+        
     })
     
 });
