@@ -44,6 +44,12 @@ class spaceFractionsEditor.EditorHelper
         clear.addClass('object')
         clear.bind 'click', => @removeObject()
         objectSelector.append(clear)
+
+        close = $(document.createElement('DIV'))
+        close.html('<a>Close</a>')
+        close.addClass('object')
+        close.bind 'click', => @closeElementSelector()
+        objectSelector.append(close)
                 
         @elementSelector.append(objectSelector)
     

@@ -45,7 +45,50 @@ body {
         
         .laser {
             position: absolute;
-            background-color: red;            
+            overflow: hidden;
+            &.right {
+                margin-left: -3px;
+            }
+            &.left {
+                margin-right: -3px;
+            }
+            &.up {
+                margin-bottom: -3px;
+            }
+            &.down {
+                margin-top: -3px;
+            }
+            .beam {
+                background-color: red;
+                box-shadow: 0 0 20px 10px red;
+                opacity:0.75;
+                &.left, &.right {
+                    margin: 20px 0;
+                }
+                &.up, &.down {
+                    margin: 0 20px;
+                }
+                &.right {
+                    border-top-left-radius: 40%;
+                    border-bottom-left-radius: 40%;
+                    margin-left: 2px;
+                }
+                &.left {
+                    border-top-right-radius: 40%;
+                    border-bottom-right-radius: 40%;
+                    margin-right: 2px;
+                }
+                &.up {
+                    border-bottom-left-radius: 40%;
+                    border-bottom-right-radius: 40%;
+                    margin-bottom: 2px;
+                }
+                &.down {
+                    border-top-left-radius: 40%;
+                    border-top-right-radius: 40%;
+                    margin-top: 2px;
+                }
+            }
         }
     }
     

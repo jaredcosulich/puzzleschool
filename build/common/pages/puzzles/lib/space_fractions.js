@@ -4,7 +4,7 @@ var LASER_HEIGHT, OBJECTS, direction, direction2, directions, index, index2, spa
 
 spaceFractions = typeof exports !== "undefined" && exports !== null ? exports : provide('./lib/space_fractions', {});
 
-LASER_HEIGHT = 24;
+LASER_HEIGHT = 20;
 
 OBJECTS = {
   rock1: {
@@ -243,7 +243,7 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.fireLaser = function(square) {
-    var acceptDirection, acceptDirections, checkSquare, denominator, distributeDirection, distributeDirections, end, height, increment, laser, laserData, numerator, offset, squareIndex, start, width, _k, _l, _len2, _len3, _m, _n, _results;
+    var acceptDirection, acceptDirections, beam, checkSquare, denominator, distributeDirection, distributeDirections, end, height, increment, laser, laserData, numerator, offset, squareIndex, start, width, _k, _l, _len2, _len3, _m, _n, _results;
     square = $(square);
     this.removeExistingLasers(square);
     if (!(distributeDirections = JSON.parse(square.data('distributeDirections') || null))) {
@@ -267,8 +267,10 @@ spaceFractions.ViewHelper = (function() {
     for (_l = 0, _len3 = distributeDirections.length; _l < _len3; _l++) {
       distributeDirection = distributeDirections[_l];
       laser = $(document.createElement('DIV'));
+      laser.html('<div class=\'beam\'></div>');
       laser.addClass('laser');
       laser.addClass("laser" + squareIndex);
+      laser.addClass(distributeDirection);
       laser.data('numerator', numerator);
       laser.data('denominator', denominator);
       increment = (function() {
@@ -297,6 +299,7 @@ spaceFractions.ViewHelper = (function() {
         }
       }).call(this);
       offset = square.offset();
+      beam = laser.find('.beam');
       if (distributeDirection === 'left' || distributeDirection === 'right') {
         height = LASER_HEIGHT * (numerator / denominator);
         width = 0;
@@ -318,29 +321,30 @@ spaceFractions.ViewHelper = (function() {
           height += checkSquare.height();
         }
       }
-      laser.css({
+      beam.addClass(distributeDirection);
+      beam.css({
         height: height,
         width: width
       });
       if (distributeDirection === 'right') {
         laser.css({
-          top: offset.top + ((offset.height - height) / 2),
+          top: offset.top + ((offset.height - height) / 2) - LASER_HEIGHT,
           left: offset.left + offset.width
         });
       } else if (distributeDirection === 'left') {
         laser.css({
-          top: offset.top + ((offset.height - height) / 2),
+          top: offset.top + ((offset.height - height) / 2) - LASER_HEIGHT,
           left: offset.left - width
         });
       } else if (distributeDirection === 'up') {
         laser.css({
           top: offset.top - height,
-          left: offset.left + ((offset.width - width) / 2)
+          left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
         });
       } else if (distributeDirection === 'down') {
         laser.css({
           top: offset.top + offset.height,
-          left: offset.left + ((offset.width - width) / 2)
+          left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
         });
       }
       _results.push(this.board.append(laser));

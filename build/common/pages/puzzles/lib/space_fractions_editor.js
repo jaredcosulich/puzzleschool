@@ -24,7 +24,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
-    var clear, objectSelector, objectType, sortedObjectTypes, _fn, _i, _len,
+    var clear, close, objectSelector, objectType, sortedObjectTypes, _fn, _i, _len,
       _this = this;
     objectSelector = $(document.createElement('DIV'));
     objectSelector.addClass('selector');
@@ -60,6 +60,13 @@ spaceFractionsEditor.EditorHelper = (function() {
       return _this.removeObject();
     });
     objectSelector.append(clear);
+    close = $(document.createElement('DIV'));
+    close.html('<a>Close</a>');
+    close.addClass('object');
+    close.bind('click', function() {
+      return _this.closeElementSelector();
+    });
+    objectSelector.append(close);
     return this.elementSelector.append(objectSelector);
   };
 

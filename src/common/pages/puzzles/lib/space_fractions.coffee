@@ -1,6 +1,6 @@
 spaceFractions = exports ? provide('./lib/space_fractions', {})
 
-LASER_HEIGHT = 24
+LASER_HEIGHT = 20
 
 OBJECTS = 
     rock1: 
@@ -203,8 +203,10 @@ class spaceFractions.ViewHelper
         
         for distributeDirection in distributeDirections
             laser = $(document.createElement('DIV'))
+            laser.html('<div class=\'beam\'></div>')
             laser.addClass('laser')
             laser.addClass("laser#{squareIndex}")
+            laser.addClass(distributeDirection)
             laser.data('numerator', numerator)
             laser.data('denominator', denominator)
 
@@ -223,7 +225,8 @@ class spaceFractions.ViewHelper
                 when 'right' then Math.ceil(start/@columns) * @columns 
 
             offset = square.offset()
-        
+            beam = laser.find('.beam')
+            
             if distributeDirection == 'left' or distributeDirection == 'right'
                 height = LASER_HEIGHT * (numerator / denominator)
                 width = 0
@@ -239,26 +242,27 @@ class spaceFractions.ViewHelper
                     break unless @checkLaserPath(checkSquare, squareIndex, distributeDirection, numerator, denominator)
                     height += checkSquare.height()
             
-            laser.css
+            beam.addClass(distributeDirection)
+            beam.css
                 height: height
                 width: width
-
+                        
             if distributeDirection == 'right'
                 laser.css
-                    top: offset.top + ((offset.height - height) / 2)
+                    top: offset.top + ((offset.height - height) / 2) - LASER_HEIGHT
                     left: offset.left + offset.width
             else if distributeDirection == 'left'
                 laser.css
-                    top: offset.top + ((offset.height - height) / 2)
+                    top: offset.top + ((offset.height - height) / 2) - LASER_HEIGHT
                     left: offset.left - width
             else if distributeDirection == 'up'
                 laser.css
                     top: offset.top - height
-                    left: offset.left + ((offset.width - width) / 2)
+                    left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
             else if distributeDirection == 'down'
                 laser.css
                     top: offset.top + offset.height
-                    left: offset.left + ((offset.width - width) / 2)
+                    left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
             
             @board.append(laser)
         

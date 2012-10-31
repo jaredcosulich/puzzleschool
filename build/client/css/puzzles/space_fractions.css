@@ -43,7 +43,52 @@ body {
 }
 .space_fractions .board .laser {
   position: absolute;
+  overflow: hidden;
+}
+.space_fractions .board .laser.right {
+  margin-left: -3px;
+}
+.space_fractions .board .laser.left {
+  margin-right: -3px;
+}
+.space_fractions .board .laser.up {
+  margin-bottom: -3px;
+}
+.space_fractions .board .laser.down {
+  margin-top: -3px;
+}
+.space_fractions .board .laser .beam {
   background-color: red;
+  box-shadow: 0 0 20px 10px red;
+  opacity: 0.75;
+}
+.space_fractions .board .laser .beam.left,
+.space_fractions .board .laser .beam.right {
+  margin: 20px 0;
+}
+.space_fractions .board .laser .beam.up,
+.space_fractions .board .laser .beam.down {
+  margin: 0 20px;
+}
+.space_fractions .board .laser .beam.right {
+  border-top-left-radius: 40%;
+  border-bottom-left-radius: 40%;
+  margin-left: 2px;
+}
+.space_fractions .board .laser .beam.left {
+  border-top-right-radius: 40%;
+  border-bottom-right-radius: 40%;
+  margin-right: 2px;
+}
+.space_fractions .board .laser .beam.up {
+  border-bottom-left-radius: 40%;
+  border-bottom-right-radius: 40%;
+  margin-bottom: 2px;
+}
+.space_fractions .board .laser .beam.down {
+  border-top-left-radius: 40%;
+  border-top-right-radius: 40%;
+  margin-top: 2px;
 }
 .space_fractions .element_selector {
   -webkit-border-radius: 6px;
