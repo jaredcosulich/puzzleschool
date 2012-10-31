@@ -174,8 +174,8 @@ spaceFractionsEditor.EditorHelper = (function() {
     }
     object = this.viewHelper.objects[selectedSquare.data('object_type')];
     if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
-      if (selectedSquare.data('fullNumerator')) {
-        this.setFractionValue(selectedSquare.data('fullNumerator'), selectedSquare.data('fullDenominator'));
+      if (this.viewHelper.objects[selectedSquare.data('object_type')].states) {
+        this.setFractionValue(selectedSquare.data('fullNumerator') || 1, selectedSquare.data('fullDenominator') || 1);
       } else {
         this.setFractionValue(selectedSquare.data('numerator') || 1, selectedSquare.data('denominator') || 1);
       }
@@ -196,6 +196,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     if (this.viewHelper.objects[selectedSquare.data('object_type')].states) {
       selectedSquare.data('fullNumerator', numerator);
       selectedSquare.data('fullDenominator', denominator);
+      this.viewHelper.setObjectImage(selectedSquare);
     } else {
       selectedSquare.data('numerator', numerator);
       selectedSquare.data('denominator', denominator);

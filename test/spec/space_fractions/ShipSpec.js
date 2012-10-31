@@ -55,7 +55,6 @@ describe("A ship", function() {
             game.removeObjectFromBoard(laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('empty');                        
         });
-         
     });
 
     describe('in a space occupied by a laser', function() {
@@ -75,7 +74,7 @@ describe("A ship", function() {
         it('should block a laser that is not heading in the direction it accepts', function() {
             game.addObjectToBoard('ship_left', shipSquare);
             expect(shipSquare.find('img').attr('src')).toContain('empty');                        
-        });        
+        });
     });
     
 });
