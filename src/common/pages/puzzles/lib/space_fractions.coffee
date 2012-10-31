@@ -42,6 +42,18 @@ for direction, index in directions
             accept: true
             acceptDirections: [direction]
         
+        #splitters
+        OBJECTS["two_split_#{direction}_#{direction2}"] =
+            index: 1000 + index2
+            image: "two_split_#{direction}_#{direction2}"
+            distribute: true
+            distributeDirections: [direction, direction2]
+            accept: true
+            acceptDirections: [direction]
+            denominatorMultiplier: 2
+        
+        
+        
 class spaceFractions.ChunkHelper
     constructor: () ->
     
@@ -101,7 +113,9 @@ class spaceFractions.ViewHelper
         laserData = JSON.parse(square.data('lasers') or '{}')
         
         if object.accept
-            square.data('acceptDirections', JSON.stringify(object.acceptDirections))        
+            square.data('acceptDirections', JSON.stringify(object.acceptDirections))
+            square.data('numeratorMultiplier', object.numeratorMultiplier or 1)        
+            square.data('denominatorMultiplier', object.denominatorMultiplier or 1)        
             for direction in object.acceptDirections
                 if laserData[direction]
                     square.data('numerator', laserData[direction].numerator)
@@ -172,8 +186,8 @@ class spaceFractions.ViewHelper
             for acceptDirection in acceptDirections
                 return unless laserData[acceptDirection]
             
-        numerator = square.data('numerator') or 1
-        denominator = square.data('denominator') or 1
+        numerator = (square.data('numerator') or 1) * (square.data('numeratorMultiplier') or 1)
+        denominator = (square.data('denominator') or 1) * (square.data('denominatorMultiplier') or 1)
         squareIndex = square.data('index')
         
         for distributeDirection in distributeDirections

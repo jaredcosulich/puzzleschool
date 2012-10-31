@@ -44,7 +44,7 @@ describe("A turn", function() {
         expect(laser2.offset().height).toEqual(laserSquare.height() * 7);
     });
     
-    it('should remove markings from previous page', function() {
+    it('should remove markings from previous path', function() {
         var oldPathSquare = game.board.find('.square.index29');
         expect(oldPathSquare[0].className).toNotContain('laser');
     });

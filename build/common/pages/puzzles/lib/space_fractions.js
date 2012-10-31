@@ -48,6 +48,15 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
       accept: true,
       acceptDirections: [direction]
     };
+    OBJECTS["two_split_" + direction + "_" + direction2] = {
+      index: 1000 + index2,
+      image: "two_split_" + direction + "_" + direction2,
+      distribute: true,
+      distributeDirections: [direction, direction2],
+      accept: true,
+      acceptDirections: [direction],
+      denominatorMultiplier: 2
+    };
   }
 }
 
@@ -128,6 +137,8 @@ spaceFractions.ViewHelper = (function() {
     laserData = JSON.parse(square.data('lasers') || '{}');
     if (object.accept) {
       square.data('acceptDirections', JSON.stringify(object.acceptDirections));
+      square.data('numeratorMultiplier', object.numeratorMultiplier || 1);
+      square.data('denominatorMultiplier', object.denominatorMultiplier || 1);
       _ref = object.acceptDirections;
       for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
         direction = _ref[_k];
@@ -233,8 +244,8 @@ spaceFractions.ViewHelper = (function() {
         }
       }
     }
-    numerator = square.data('numerator') || 1;
-    denominator = square.data('denominator') || 1;
+    numerator = (square.data('numerator') || 1) * (square.data('numeratorMultiplier') || 1);
+    denominator = (square.data('denominator') || 1) * (square.data('denominatorMultiplier') || 1);
     squareIndex = square.data('index');
     _results = [];
     for (_l = 0, _len3 = distributeDirections.length; _l < _len3; _l++) {
