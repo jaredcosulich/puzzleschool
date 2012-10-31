@@ -31,7 +31,10 @@ class spaceFractionsEditor.EditorHelper
                 objectContainer.bind 'click', => @addObject(objectType)
 
                 objectImage = $(document.createElement('IMG'))
-                objectImage.attr('src', object.image)
+                
+                src = @viewHelper.baseFolder + object.image
+                src += if object.states then '_full.png' else '.png'
+                objectImage.attr('src', src)
             
                 objectContainer.append(objectImage)
                 objectSelector.append(objectContainer)
@@ -150,8 +153,12 @@ class spaceFractionsEditor.EditorHelper
         
     setObjectFraction: (numerator, denominator) ->
         selectedSquare = @$('.board .selected')
-        selectedSquare.data('numerator', numerator)
-        selectedSquare.data('denominator', denominator)
+        if @viewHelper.objects[selectedSquare.data('object_type')].states
+            selectedSquare.data('fullNumerator', numerator)
+            selectedSquare.data('fullDenominator', denominator)
+        else
+            selectedSquare.data('numerator', numerator)
+            selectedSquare.data('denominator', denominator)
         selectedSquare.attr('title', "Fraction: #{numerator}/#{denominator}")
         @viewHelper.fireLaser(selectedSquare)
             

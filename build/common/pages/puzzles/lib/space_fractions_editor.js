@@ -34,7 +34,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       return _this.viewHelper.objects[a].index - _this.viewHelper.objects[b].index;
     });
     _fn = function(objectType) {
-      var object, objectContainer, objectImage;
+      var object, objectContainer, objectImage, src;
       object = _this.viewHelper.objects[objectType];
       objectContainer = $(document.createElement('DIV'));
       objectContainer.addClass('object');
@@ -43,7 +43,9 @@ spaceFractionsEditor.EditorHelper = (function() {
         return _this.addObject(objectType);
       });
       objectImage = $(document.createElement('IMG'));
-      objectImage.attr('src', object.image);
+      src = _this.viewHelper.baseFolder + object.image;
+      src += object.states ? '_full.png' : '.png';
+      objectImage.attr('src', src);
       objectContainer.append(objectImage);
       return objectSelector.append(objectContainer);
     };
@@ -186,8 +188,13 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.setObjectFraction = function(numerator, denominator) {
     var selectedSquare;
     selectedSquare = this.$('.board .selected');
-    selectedSquare.data('numerator', numerator);
-    selectedSquare.data('denominator', denominator);
+    if (this.viewHelper.objects[selectedSquare.data('object_type')].states) {
+      selectedSquare.data('fullNumerator', numerator);
+      selectedSquare.data('fullDenominator', denominator);
+    } else {
+      selectedSquare.data('numerator', numerator);
+      selectedSquare.data('denominator', denominator);
+    }
     selectedSquare.attr('title', "Fraction: " + numerator + "/" + denominator);
     return this.viewHelper.fireLaser(selectedSquare);
   };

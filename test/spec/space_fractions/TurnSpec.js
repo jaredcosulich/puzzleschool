@@ -34,6 +34,11 @@ describe("A turn", function() {
         expect(laser2.offset().height).toEqual(laserSquare.height() * 7);
     });
     
+    it('should remove markings from previous page', function() {
+        var oldPathSquare = game.board.find('.square.index29');
+        expect(oldPathSquare[0].className).toNotContain('laser');
+    })
+    
     describe('when the turn is removed', function() {
         beforeEach(function() {
             game.removeObjectFromBoard(turnSquare);            
@@ -73,9 +78,16 @@ describe("A turn", function() {
             game.addObjectToBoard('turn_up_left', badTurnSquare);
             var laser2 = $(game.board.find('.laser')[1]);
             expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
-            expect(laser2.offset().height).toEqual(laserSquare.height() * 3);
-            
+            expect(laser2.offset().height).toEqual(laserSquare.height() * 3);            
         });
+        
+        it('should work if the turn goes back to the original path', function() {
+            game.addObjectToBoard('turn_down_right', game.board.find('.square.index67'));
+            game.addObjectToBoard('turn_right_up', game.board.find('.square.index68'));
+            game.addObjectToBoard('turn_up_right', game.board.find('.square.index28'));
+            var lasers = game.board.find('.laser');
+            expect(lasers.length).toEqual(5);
+        })
     })
     
 });

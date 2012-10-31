@@ -14,6 +14,14 @@ OBJECTS =
 # directional objects
 directions = ['up', 'down', 'left',  'right']
 for direction, index in directions
+    #ships
+    OBJECTS["ship_#{direction}"] =
+        index: index
+        image: "ship_#{direction}"
+        accept: true
+        acceptDirections: [direction]
+        states: true
+
     #lasers
     OBJECTS["laser_#{direction}"] =
         index: 10 + index
@@ -21,7 +29,8 @@ for direction, index in directions
         distribute: true
         distributeDirections: [direction]
         accept: false
-    
+        
+        
     for direction2, index2 in directions
         continue if (index < 2 and index2 < 2) or (index > 1 and index2 > 1)
         #turners
@@ -33,16 +42,13 @@ for direction, index in directions
             accept: true
             acceptDirections: [direction]
         
-for objectType of OBJECTS
-    object = OBJECTS[objectType]
-    object.image = "/assets/images/puzzles/space_fractions/#{object.image}.png" 
-        
 class spaceFractions.ChunkHelper
     constructor: () ->
     
 
 class spaceFractions.ViewHelper
     objects: OBJECTS
+    baseFolder: '/assets/images/puzzles/space_fractions/'
 
     constructor: ({@el, @rows, @columns}) ->
         @board = @$('.board')
@@ -59,6 +65,28 @@ class spaceFractions.ViewHelper
                 
     $: (selector) -> $(selector, @el)
     
+    setObjectImage: (square) ->
+        object = @objects[square.data('object_type')]
+        return unless object
+        if object.states
+            laserData = JSON.parse(square.data('lasers') or '{}')
+            acceptedLaser = laserData[object.acceptDirections[0]]
+            totalLaser = if acceptedLaser then (acceptedLaser.numerator/acceptedLaser.denominator) else 0
+            fraction = parseInt(square.data('fullNumerator'))/parseInt(square.data('fullDenominator'))
+            if totalLaser == 0
+                state = 'empty'
+            else if totalLaser < fraction
+                state = 'under'
+            else if totalLaser == fraction
+                state = 'full'
+            else if totalLaser > fraction
+                state = 'over'
+            
+            square.find('img').attr('src', @baseFolder + object.image + '_' + state + '.png')
+        else
+            square.find('img').attr('src', @baseFolder + object.image + '.png')
+        
+    
     addObjectToBoard: (objectType, square) ->
         square = $(square)
         square.html('')
@@ -67,7 +95,6 @@ class spaceFractions.ViewHelper
         square.data('object_type', objectType)
         object = @objects[objectType]
         objectContainer = $(document.createElement('IMG'))
-        objectContainer.attr('src', object.image)
         square.append(objectContainer)
         
         laserData = JSON.parse(square.data('lasers') or '{}')
@@ -78,7 +105,7 @@ class spaceFractions.ViewHelper
                 if laserData[direction]
                     square.data('numerator', laserData[direction].numerator)
                     square.data('denominator', laserData[direction].denominator)
-
+                        
         for direction of laserData
             @fireLaser(@board.find(".square.index#{laserData[direction].index}"))
                     
@@ -86,6 +113,7 @@ class spaceFractions.ViewHelper
             square.data('distributeDirections', JSON.stringify(object.distributeDirections))
             @fireLaser(square)
             
+        @setObjectImage(square)
         
         
     removeObjectFromBoard: (square) ->
@@ -93,20 +121,21 @@ class spaceFractions.ViewHelper
         square.html('')
         square.removeClass('occupied')
         square.data('object_type', null)
+        square.data('acceptDirections', null)
         laserData = JSON.parse(square.data('lasers') or '{}')
         for direction of laserData
             @fireLaser(@$(".index#{laserData[direction].index}"))
              
     removeExistingLasers: (square) ->
         square = $(square)
-        index = square.data('index')
-        if (existingLasers = @board.find(".laser.laser#{index}")).length
+        squareIndex = square.data('index')
+        if (existingLasers = @board.find(".laser.laser#{squareIndex}")).length
             existingLasers.remove()
-            for laserSquare in @board.find(".square.laser#{index}")
+            for laserSquare in @board.find(".square.laser#{squareIndex}")
                 laserSquare = $(laserSquare)
-                laserSquare.removeClass("laser#{index}}}")
-                laserSquare.data('lasers')[laserSquare.data("laser{index}")] = null
-                laserSquare.data("laser{index}", null)
+                laserSquare.removeClass("laser#{squareIndex}")
+                laserSquare.data('lasers')[laserSquare.data("laser#{squareIndex}")] = null
+                laserSquare.data("laser#{squareIndex}", null)
                 @removeExistingLasers(laserSquare) if laserSquare.hasClass('occupied')
          
     fireLaser: (square) ->
@@ -126,8 +155,8 @@ class spaceFractions.ViewHelper
 
         checkPath = (checkSquare, squareIndex, direction) =>
             occupied = checkSquare.hasClass('occupied')
-            acceptDirection = JSON.parse(checkSquare.data('acceptDirection') or null)
-            return false if occupied and not acceptDirection
+            acceptDirections = JSON.parse(checkSquare.data('acceptDirections') or null)
+            return false if occupied and not acceptDirections
             laserData = JSON.parse(checkSquare.data('lasers') or '{}')
             laserData[direction] = 
                 index: squareIndex
@@ -136,9 +165,10 @@ class spaceFractions.ViewHelper
             checkSquare.data('lasers', JSON.stringify(laserData))
             checkSquare.data("laser#{squareIndex}", direction)
             checkSquare.addClass("laser#{squareIndex}")
-            if direction in JSON.parse(checkSquare.data('acceptDirection') or '[]')
+            if direction in (acceptDirections or [])
                 checkSquare.data('numerator', numerator)
                 checkSquare.data('denominator', denominator)
+                @setObjectImage(checkSquare)
                 @fireLaser(checkSquare)
             return false if occupied
             return true
