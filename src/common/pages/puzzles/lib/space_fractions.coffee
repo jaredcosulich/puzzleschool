@@ -134,9 +134,11 @@ class spaceFractions.ViewHelper
             for laserSquare in @board.find(".square.laser#{squareIndex}")
                 laserSquare = $(laserSquare)
                 laserSquare.removeClass("laser#{squareIndex}")
-                laserSquare.data('lasers')[laserSquare.data("laser#{squareIndex}")] = null
+                laserSquare.data('lasers', null)
                 laserSquare.data("laser#{squareIndex}", null)
-                @removeExistingLasers(laserSquare) if laserSquare.hasClass('occupied')
+                if laserSquare.hasClass('occupied')
+                    @setObjectImage(laserSquare)                
+                    @removeExistingLasers(laserSquare)
          
     fireLaser: (square) ->
         square = $(square)

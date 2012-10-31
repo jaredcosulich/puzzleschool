@@ -63,7 +63,6 @@ class spaceFractionsEditor.EditorHelper
             <p><a class='select_new_object'>< Select a different object</a></p>
         """
         
-        @fractionSelector.find('.numerator, .denominator').bind 'keyup', => @displayFractionValue()
         setFraction = @fractionSelector.find('.set_fraction')
         setFraction.bind 'click', =>
             @[setFraction.data('callback')](
@@ -71,6 +70,13 @@ class spaceFractionsEditor.EditorHelper
                 @fractionSelector.find('.denominator').val()
             )
             @closeElementSelector()
+
+        @fractionSelector.find('.numerator, .denominator').bind 'keyup', => 
+            @displayFractionValue()
+            @[setFraction.data('callback')](
+                @fractionSelector.find('.numerator').val(), 
+                @fractionSelector.find('.denominator').val()
+            )
                         
         @fractionSelector.find('.select_new_object').bind 'click', => @showSelector('object')
                             
@@ -80,8 +86,8 @@ class spaceFractionsEditor.EditorHelper
         @elementSelector.append(@fractionSelector)
         
     setFractionValue: (numeratorVal=1, denominatorVal=1) ->
-        @fractionSelector.find('.numerator').val(numeratorVal)
-        @fractionSelector.find('.denominator').val(denominatorVal)
+        @fractionSelector.find('.numerator').val(numeratorVal.toString())
+        @fractionSelector.find('.denominator').val(denominatorVal.toString())
         @displayFractionValue()
 
     displayFractionValue: ->
@@ -179,7 +185,7 @@ class spaceFractionsEditor.EditorHelper
                         opacity: 1
                         duration: 250
         else   
-                selectors.hide()
+            selectors.hide()
             selector.css
                 opacity: 1
                 display: 'block'

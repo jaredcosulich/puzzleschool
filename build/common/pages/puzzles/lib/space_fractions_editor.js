@@ -68,13 +68,14 @@ spaceFractionsEditor.EditorHelper = (function() {
       _this = this;
     this.fractionSelector = $(document.createElement('DIV'));
     this.fractionSelector.html("<h2>Select A Fraction</h2>\n<p>What fraction of laser should this object use?</p>\n<p>\n    <input name='numerator' class='numerator' type='text' value='1'/>\n    <span class='solidus'>/</span>\n    <input name='denominator' class='denominator' type='text' value='1'/>\n</p>\n<p class='fraction'>Fraction: 1/1 or " + (Math.round(1000 * (1 / 1)) / 1000) + "</p>\n<button class='set_fraction'>Set</button>\n<br/>\n<p><a class='select_new_object'>< Select a different object</a></p>");
-    this.fractionSelector.find('.numerator, .denominator').bind('keyup', function() {
-      return _this.displayFractionValue();
-    });
     setFraction = this.fractionSelector.find('.set_fraction');
     setFraction.bind('click', function() {
       _this[setFraction.data('callback')](_this.fractionSelector.find('.numerator').val(), _this.fractionSelector.find('.denominator').val());
       return _this.closeElementSelector();
+    });
+    this.fractionSelector.find('.numerator, .denominator').bind('keyup', function() {
+      _this.displayFractionValue();
+      return _this[setFraction.data('callback')](_this.fractionSelector.find('.numerator').val(), _this.fractionSelector.find('.denominator').val());
     });
     this.fractionSelector.find('.select_new_object').bind('click', function() {
       return _this.showSelector('object');
@@ -92,8 +93,8 @@ spaceFractionsEditor.EditorHelper = (function() {
     if (denominatorVal == null) {
       denominatorVal = 1;
     }
-    this.fractionSelector.find('.numerator').val(numeratorVal);
-    this.fractionSelector.find('.denominator').val(denominatorVal);
+    this.fractionSelector.find('.numerator').val(numeratorVal.toString());
+    this.fractionSelector.find('.denominator').val(denominatorVal.toString());
     return this.displayFractionValue();
   };
 
@@ -205,7 +206,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectors = this.elementSelector.find('.selector');
     selector = this.elementSelector.find("." + selectorPage + "_selector");
     if (parseInt(this.elementSelector.css('opacity'))) {
-      selectors.animate({
+      return selectors.animate({
         opacity: 0,
         duration: 250,
         complete: function() {
@@ -222,11 +223,11 @@ spaceFractionsEditor.EditorHelper = (function() {
       });
     } else {
       selectors.hide();
+      return selector.css({
+        opacity: 1,
+        display: 'block'
+      });
     }
-    return selector.css({
-      opacity: 1,
-      display: 'block'
-    });
   };
 
   return EditorHelper;

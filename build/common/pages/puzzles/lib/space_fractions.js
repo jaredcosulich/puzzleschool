@@ -171,9 +171,10 @@ spaceFractions.ViewHelper = (function() {
         laserSquare = _ref[_k];
         laserSquare = $(laserSquare);
         laserSquare.removeClass("laser" + squareIndex);
-        laserSquare.data('lasers')[laserSquare.data("laser" + squareIndex)] = null;
+        laserSquare.data('lasers', null);
         laserSquare.data("laser" + squareIndex, null);
         if (laserSquare.hasClass('occupied')) {
+          this.setObjectImage(laserSquare);
           _results.push(this.removeExistingLasers(laserSquare));
         } else {
           _results.push(void 0);

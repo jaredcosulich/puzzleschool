@@ -45,6 +45,16 @@ describe("A ship", function() {
             game.addObjectToBoard('laser_up', laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('under');            
         });
+        
+        it('should go back to empty when the laser is removed', function() {
+            var laserSquare = game.board.find('.square.index58');
+            laserSquare.data('numerator', 1);
+            laserSquare.data('denominator', 3);
+            game.addObjectToBoard('laser_up', laserSquare);
+            expect(shipSquare.find('img').attr('src')).toContain('full');
+            game.removeObjectFromBoard(laserSquare);
+            expect(shipSquare.find('img').attr('src')).toContain('empty');                        
+        });
          
     });
 
