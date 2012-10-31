@@ -197,6 +197,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       selectedSquare.data('fullNumerator', numerator);
       selectedSquare.data('fullDenominator', denominator);
       this.viewHelper.setObjectImage(selectedSquare);
+      this.viewHelper.setObjectFraction(selectedSquare);
     } else {
       selectedSquare.data('numerator', numerator);
       selectedSquare.data('denominator', denominator);

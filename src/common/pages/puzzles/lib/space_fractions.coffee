@@ -21,6 +21,7 @@ for direction, index in directions
         accept: true
         acceptDirections: [direction]
         states: true
+        showFraction: true
 
     #lasers
     OBJECTS["laser_#{direction}"] =
@@ -29,7 +30,7 @@ for direction, index in directions
         distribute: true
         distributeDirections: [direction]
         accept: false
-        
+        showFraction: true
         
     for direction2, index2 in directions
         continue if (index < 2 and index2 < 2) or (index > 1 and index2 > 1)
@@ -99,6 +100,12 @@ class spaceFractions.ViewHelper
         else
             square.find('img').attr('src', @baseFolder + object.image + '.png')
         
+    setObjectFraction: (square) ->
+        square.find('.fraction').remove()
+        fraction = $(document.createElement('DIV'))
+        fraction.html("#{square.data('fullNumerator') or square.data('numerator') or 1}/#{square.data('fullDenominator') or square.data('denominator') or 1}")
+        fraction.addClass('fraction')
+        square.append(fraction)
     
     addObjectToBoard: (objectType, square) ->
         square = $(square)
@@ -110,6 +117,8 @@ class spaceFractions.ViewHelper
         objectContainer = $(document.createElement('IMG'))
         square.append(objectContainer)
         
+        @setObjectFraction(square) if object.showFraction
+            
         laserData = JSON.parse(square.data('lasers') or '{}')
         
         if object.accept
@@ -149,7 +158,9 @@ class spaceFractions.ViewHelper
             for laserSquare in @board.find(".square.laser#{squareIndex}")
                 laserSquare = $(laserSquare)
                 laserSquare.removeClass("laser#{squareIndex}")
-                laserSquare.data('lasers', null)
+                laserData = JSON.parse(laserSquare.data('lasers'))
+                delete laserData[laserSquare.data("laser#{squareIndex}")]
+                laserSquare.data('lasers', JSON.stringify(laserData))
                 laserSquare.data("laser#{squareIndex}", null)
                 if laserSquare.hasClass('occupied')
                     @setObjectImage(laserSquare)                

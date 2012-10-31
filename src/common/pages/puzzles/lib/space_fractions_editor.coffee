@@ -166,6 +166,7 @@ class spaceFractionsEditor.EditorHelper
             selectedSquare.data('fullNumerator', numerator)
             selectedSquare.data('fullDenominator', denominator)
             @viewHelper.setObjectImage(selectedSquare)
+            @viewHelper.setObjectFraction(selectedSquare)
         else
             selectedSquare.data('numerator', numerator)
             selectedSquare.data('denominator', denominator)

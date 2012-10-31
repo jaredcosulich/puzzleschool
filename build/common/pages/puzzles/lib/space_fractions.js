@@ -26,14 +26,16 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
     image: "ship_" + direction,
     accept: true,
     acceptDirections: [direction],
-    states: true
+    states: true,
+    showFraction: true
   };
   OBJECTS["laser_" + direction] = {
     index: 10 + index,
     image: "laser_" + direction,
     distribute: true,
     distributeDirections: [direction],
-    accept: false
+    accept: false,
+    showFraction: true
   };
   for (index2 = _j = 0, _len1 = directions.length; _j < _len1; index2 = ++_j) {
     direction2 = directions[index2];
@@ -124,6 +126,15 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
+  ViewHelper.prototype.setObjectFraction = function(square) {
+    var fraction;
+    square.find('.fraction').remove();
+    fraction = $(document.createElement('DIV'));
+    fraction.html("" + (square.data('fullNumerator') || square.data('numerator') || 1) + "/" + (square.data('fullDenominator') || square.data('denominator') || 1));
+    fraction.addClass('fraction');
+    return square.append(fraction);
+  };
+
   ViewHelper.prototype.addObjectToBoard = function(objectType, square) {
     var laserData, object, objectContainer, _k, _len2, _ref;
     square = $(square);
@@ -134,6 +145,9 @@ spaceFractions.ViewHelper = (function() {
     object = this.objects[objectType];
     objectContainer = $(document.createElement('IMG'));
     square.append(objectContainer);
+    if (object.showFraction) {
+      this.setObjectFraction(square);
+    }
     laserData = JSON.parse(square.data('lasers') || '{}');
     if (object.accept) {
       square.data('acceptDirections', JSON.stringify(object.acceptDirections));
@@ -174,7 +188,7 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.removeExistingLasers = function(square) {
-    var existingLasers, laserSquare, squareIndex, _k, _len2, _ref, _results;
+    var existingLasers, laserData, laserSquare, squareIndex, _k, _len2, _ref, _results;
     square = $(square);
     squareIndex = square.data('index');
     if ((existingLasers = this.board.find(".laser.laser" + squareIndex)).length) {
@@ -185,7 +199,9 @@ spaceFractions.ViewHelper = (function() {
         laserSquare = _ref[_k];
         laserSquare = $(laserSquare);
         laserSquare.removeClass("laser" + squareIndex);
-        laserSquare.data('lasers', null);
+        laserData = JSON.parse(laserSquare.data('lasers'));
+        delete laserData[laserSquare.data("laser" + squareIndex)];
+        laserSquare.data('lasers', JSON.stringify(laserData));
         laserSquare.data("laser" + squareIndex, null);
         if (laserSquare.hasClass('occupied')) {
           this.setObjectImage(laserSquare);
