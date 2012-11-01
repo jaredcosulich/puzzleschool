@@ -21,10 +21,19 @@ class spaceFractionsEditor.EditorHelper
         @levelDescription = $(document.createElement('textarea'))
         @levelDescription.addClass('level_description')
         @el.append(@levelDescription)
+
         loadLevelDescription = $(document.createElement('button'))
         loadLevelDescription.html('Load To Edit')
         loadLevelDescription.bind 'click', => @load()
         @el.append(loadLevelDescription)
+
+        @playLevel = $(document.createElement('A'))
+        @playLevel.html('Play Level')
+        @playLevel.attr('target', '_blank')
+        @playLevel.css
+            color: 'white'
+            marginLeft: 12
+        @el.append(@playLevel)
         
         
     initObjectSelector: ->    
@@ -241,7 +250,11 @@ class spaceFractionsEditor.EditorHelper
         
             levelDescription.objects.push(object)
             
-        @levelDescription.val(JSON.stringify(levelDescription))
+        json = JSON.stringify(levelDescription)
+        @levelDescription.val(json)
+        window.location.hash = encodeURIComponent(json)
+        href = window.location.href.toString()
+        @playLevel.attr('href', href.replace(/editor/, 'custom'))
             
     load: ->
         json = JSON.parse(@levelDescription.val())

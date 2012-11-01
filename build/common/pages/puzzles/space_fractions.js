@@ -48,7 +48,7 @@ soma.views({
   SpaceFractions: {
     selector: '#content .space_fractions',
     create: function() {
-      var levelName, spaceFractions, spaceFractionsEditor,
+      var level, levelName, spaceFractions, spaceFractionsEditor,
         _this = this;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
@@ -59,14 +59,23 @@ soma.views({
       levelName = this.el.data('level_name');
       if (levelName === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
-        return this.editor = new spaceFractionsEditor.EditorHelper({
+        this.editor = new spaceFractionsEditor.EditorHelper({
           el: $(this.selector),
           viewHelper: this.viewHelper
         });
       } else if (levelName === 'custom') {
-        return this.$('.load_to_play').bind('click', function() {
+        this.$('.load_to_play').bind('click', function() {
           return _this.viewHelper.loadToPlay(_this.$('.level_description').val());
         });
+      }
+      if (window.location.hash) {
+        level = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+        if (levelName === 'editor') {
+          this.editor.levelDescription.val(level);
+          return this.editor.load();
+        } else {
+          return this.viewHelper.loadToPlay(level);
+        }
       }
     }
   }

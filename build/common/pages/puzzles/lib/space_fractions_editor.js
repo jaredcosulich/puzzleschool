@@ -35,7 +35,15 @@ spaceFractionsEditor.EditorHelper = (function() {
     loadLevelDescription.bind('click', function() {
       return _this.load();
     });
-    return this.el.append(loadLevelDescription);
+    this.el.append(loadLevelDescription);
+    this.playLevel = $(document.createElement('A'));
+    this.playLevel.html('Play Level');
+    this.playLevel.attr('target', '_blank');
+    this.playLevel.css({
+      color: 'white',
+      marginLeft: 12
+    });
+    return this.el.append(this.playLevel);
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
@@ -266,7 +274,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.save = function() {
-    var levelDescription, object, objectMeta, square, _i, _len, _ref;
+    var href, json, levelDescription, object, objectMeta, square, _i, _len, _ref;
     this.levelDescription.val('');
     levelDescription = {
       objects: []
@@ -289,7 +297,11 @@ spaceFractionsEditor.EditorHelper = (function() {
       }
       levelDescription.objects.push(object);
     }
-    return this.levelDescription.val(JSON.stringify(levelDescription));
+    json = JSON.stringify(levelDescription);
+    this.levelDescription.val(json);
+    window.location.hash = encodeURIComponent(json);
+    href = window.location.href.toString();
+    return this.playLevel.attr('href', href.replace(/editor/, 'custom'));
   };
 
   EditorHelper.prototype.load = function() {

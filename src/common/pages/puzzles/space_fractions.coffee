@@ -47,6 +47,13 @@ soma.views
                 @$('.load_to_play').bind 'click', =>
                     @viewHelper.loadToPlay(@$('.level_description').val())
             
+            if window.location.hash
+                level = decodeURIComponent(window.location.hash.replace(/^#/, ''))
+                if levelName == 'editor'
+                    @editor.levelDescription.val(level)
+                    @editor.load()
+                else
+                    @viewHelper.loadToPlay(level)
 
 soma.routes
     '/puzzles/space_fractions/:levelName': ({levelName}) -> 
