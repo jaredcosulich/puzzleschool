@@ -23,7 +23,7 @@ describe("A splitter", function() {
     it('should stop the full laser', function() {
         var laser = game.board.find('.laser.laser21');
         expect(laser.length).toEqual(1);
-        expect(laser.offset().width).toEqual(splitterSquare.offset().width * 5)
+        expect(laser.find('.beam').offset().width).toEqual(splitterSquare.offset().width * 5)
         expect(laser.offset().left + laser.offset().width).toEqual(splitterSquare.offset().left)
     });
 
@@ -43,14 +43,14 @@ describe("A splitter", function() {
 
     it('should send a laser completing the original path', function() {
         var laser2 = $(game.board.find('.laser.laser27')[0])
-        expect(laser2.offset().width).toEqual(splitterSquare.offset().width * 2)
+        expect(laser2.find('.beam').offset().width).toEqual(splitterSquare.offset().width * 2)
         expect(laser2.offset().left + laser2.offset().width).toEqual(game.board.offset().width-1)
     });
     
     it('should send a laser down to the bottom of the board', function() {
         var laser3 = $(game.board.find('.laser.laser27')[1])
-        expect(laser3.offset().top).toEqual(splitterSquare.offset().top + splitterSquare.offset().height);
-        expect(laser3.offset().height).toEqual(laserSquare.height() * 7);
+        expect(laser3.find('.beam').offset().top).toEqual(splitterSquare.offset().top + splitterSquare.offset().height);
+        expect(laser3.find('.beam').offset().height).toEqual(laserSquare.height() * 7);
     });
     
     describe('when the turn is removed', function() {
@@ -61,7 +61,7 @@ describe("A splitter", function() {
         it('should remove the split in the laser', function() {
             var laser = game.board.find('.laser');
             expect(laser.length).toEqual(1);
-            expect(laser.offset().width).toEqual(laserSquare.offset().width * 8);
+            expect(laser.find('.beam').offset().width).toEqual(laserSquare.offset().width * 8);
         });
     });
 
@@ -72,14 +72,14 @@ describe("A splitter", function() {
 
         it('should send a laser completing the original path', function() {
             var laser2 = $(game.board.find('.laser.laser27')[0])
-            expect(laser2.offset().width).toEqual(splitterSquare.offset().width * 2)
+            expect(laser2.find('.beam').offset().width).toEqual(splitterSquare.offset().width * 2)
             expect(laser2.offset().left + laser2.offset().width).toEqual(game.board.offset().width-1)
         });
         
         it('should send the laser up to the top of the board', function() {
             var laser3 = $(game.board.find('.laser')[2]);
             expect(laser3.offset().top).toEqual(1);
-            expect(laser3.offset().height).toEqual(splitterSquare.height() * 2);
+            expect(laser3.find('.beam').offset().height).toEqual(splitterSquare.height() * 2);
         });
     });
     
@@ -97,8 +97,8 @@ describe("A splitter", function() {
             var lasers = game.board.find('.laser')
             expect(lasers.length).toEqual(3);
             var laser3 = $(game.board.find('.laser.laser27')[1])
-            expect(laser3.offset().top).toEqual(splitterSquare.offset().top + splitterSquare.offset().height);
-            expect(laser3.offset().height).toEqual(laserSquare.height() * 3);                
+            expect(laser3.find('.beam').offset().top).toEqual(splitterSquare.offset().top + splitterSquare.offset().height);
+            expect(laser3.find('.beam').offset().height).toEqual(laserSquare.height() * 3);                
         });        
     })
     

@@ -18,7 +18,7 @@ describe("A turn", function() {
     it('should stop the laser', function() {
         var laser = game.board.find('.laser.laser21');
         expect(laser.length).toEqual(1);
-        expect(laser.offset().width).toEqual(turnSquare.offset().width * 5)
+        expect(laser.find('.beam').offset().width).toEqual(turnSquare.offset().width * 5)
         expect(laser.offset().left + laser.offset().width).toEqual(turnSquare.offset().left)
     });
 
@@ -28,7 +28,7 @@ describe("A turn", function() {
         expect(laser.length).toEqual(1);
         expect(laser.offset().left + laser.offset().width).toEqual(turnSquare.offset().left);
         var laser2 = game.board.find('.laser.laser27')
-        expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
+        expect(laser2.find('.beam').offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
     });
     
     it('should create two lasers, each with the original fraction', function() {
@@ -40,8 +40,8 @@ describe("A turn", function() {
     
     it('should send the laser down to the bottom of the board', function() {
         var laser2 = game.board.find('.laser.laser27')
-        expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
-        expect(laser2.offset().height).toEqual(laserSquare.height() * 7);
+        expect(laser2.find('.beam').offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
+        expect(laser2.find('.beam').offset().height).toEqual(laserSquare.height() * 7);
     });
     
     it('should remove markings from previous path', function() {
@@ -57,7 +57,7 @@ describe("A turn", function() {
         it('should remove the split in the laser', function() {
             var laser = game.board.find('.laser');
             expect(laser.length).toEqual(1);
-            expect(laser.offset().width).toEqual(laserSquare.offset().width * 8);
+            expect(laser.find('.beam').offset().width).toEqual(laserSquare.offset().width * 8);
         });
     });
 
@@ -69,7 +69,7 @@ describe("A turn", function() {
         it('should send the laser up to the top of the board', function() {
             var laser2 = $(game.board.find('.laser')[1]);
             expect(laser2.offset().top).toEqual(1);
-            expect(laser2.offset().height).toEqual(turnSquare.height() * 2);
+            expect(laser2.find('.beam').offset().height).toEqual(turnSquare.height() * 2);
         });
     });
     
@@ -80,15 +80,15 @@ describe("A turn", function() {
             var lasers = game.board.find('.laser')
             expect(lasers.length).toEqual(3);
             expect($(lasers[2]).offset().left).toEqual(1)
-            expect($(lasers[2]).offset().width).toEqual(anotherTurnSquare.offset().left - 1)
+            expect($(lasers[2]).find('.beam').offset().width).toEqual(anotherTurnSquare.offset().left - 1)
         });
         
         it('should block the laser if it does not accept a laser for the right direction', function() {
             var badTurnSquare = game.board.find('.square.index67')
             game.addObjectToBoard('turn_up_left', badTurnSquare);
             var laser2 = $(game.board.find('.laser')[1]);
-            expect(laser2.offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
-            expect(laser2.offset().height).toEqual(laserSquare.height() * 3);            
+            expect(laser2.find('.beam').offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
+            expect(laser2.find('.beam').offset().height).toEqual(laserSquare.height() * 3);            
         });
         
         it('should work if the turn goes back to the original path', function() {

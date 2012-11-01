@@ -74,22 +74,22 @@ body {
 .space_fractions .board .laser .beam.right {
   border-top-left-radius: 40%;
   border-bottom-left-radius: 40%;
-  margin-left: 2px;
+  margin-left: 3px;
 }
 .space_fractions .board .laser .beam.left {
   border-top-right-radius: 40%;
   border-bottom-right-radius: 40%;
-  margin-right: 2px;
+  margin-right: 3px;
 }
 .space_fractions .board .laser .beam.up {
   border-bottom-left-radius: 40%;
   border-bottom-right-radius: 40%;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 .space_fractions .board .laser .beam.down {
   border-top-left-radius: 40%;
   border-top-right-radius: 40%;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .space_fractions .element_selector {
   -webkit-border-radius: 6px;

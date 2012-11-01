@@ -31,11 +31,11 @@ describe("Init:", function() {
         })
         
         it('should be 7 squares long', function() {
-            expect(laser.width()).toEqual(square.width() * 7)
+            expect(laser.find('.beam').width()).toEqual(square.width() * 7)
         })
         
         it('should start at the right edge of the laser', function() {
-            expect(laser.offset().left).toEqual(square.offset().left + square.offset().width)
+            expect(laser.find('.beam').offset().left).toEqual(square.offset().left + square.offset().width)
         })
         
         it('should mark each square the laser passes, but no others', function() {
@@ -50,14 +50,14 @@ describe("Init:", function() {
         it('should not change position if fired again', function() {
             game.fireLaser(square);
             laser = game.board.find('.laser' + square.data('index'))
-            expect(laser.offset().left).toEqual(square.offset().left + square.offset().width);
+            expect(laser.find('.beam').offset().left).toEqual(square.offset().left + square.offset().width);
         })
         
         it('should not change position if fired again with a different fraction', function() {
             square.data('denominator', 12);
             game.fireLaser(square);
             laser = game.board.find('.laser.laser' + square.data('index'))
-            expect(laser.offset().left).toEqual(square.offset().left + square.offset().width);
+            expect(laser.find('.beam').offset().left).toEqual(square.offset().left + square.offset().width);
         })
         
     })
