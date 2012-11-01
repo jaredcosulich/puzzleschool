@@ -55,12 +55,12 @@ describe("EditorSpec:", function() {
     
     describe('the level saving process', function() {
         beforeEach(function() {
-            editor.selectSquare(game.board.find('.square.index35'))
+            editor.selectSquare(game.board.find('.square.index29'))
             editor.addObject('laser_up')
         });
         
         it('should change the level_description text area to reflect the current state of the board', function() {
-            expect(editor.levelDescription.val()).toContain('laser')
+            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 29}]});
         })
         
         it('reloads the game after being cleared', function() {
@@ -68,7 +68,7 @@ describe("EditorSpec:", function() {
             editor.clear();
             editor.levelDescription.val(description);
             editor.load();
-            expect(game.board.find('.square.index35').html()).toContain('laser')
+            expect(game.board.find('.square.index29').html()).toContain('laser_up')
         })
         
     })

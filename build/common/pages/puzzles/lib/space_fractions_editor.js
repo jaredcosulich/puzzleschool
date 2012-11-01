@@ -172,10 +172,15 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addObject = function(objectType) {
-    var object, selectedSquare;
+    var json, object, selectedSquare;
     selectedSquare = this.$('.board .selected');
     this.viewHelper.addObjectToBoard(objectType, selectedSquare);
-    this.levelDescription.val('laser');
+    json = JSON.parse(this.levelDescription.val() || '{"objects": []}');
+    json.objects.push({
+      type: objectType,
+      index: selectedSquare.data('index')
+    });
+    this.levelDescription.val(JSON.stringify(json));
     object = this.viewHelper.objects[objectType];
     return this.showObjectSelector(true);
   };
@@ -263,8 +268,16 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.load = function() {
-    this.selectSquare(this.viewHelper.board.find('.square.index35'));
-    return this.addObject('laser_up');
+    var json, object, _i, _len, _ref, _results;
+    json = JSON.parse(this.levelDescription.val());
+    _ref = json.objects;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      object = _ref[_i];
+      this.selectSquare(this.viewHelper.board.find(".square.index" + object.index));
+      _results.push(this.addObject(object.type));
+    }
+    return _results;
   };
 
   EditorHelper.prototype.clear = function() {

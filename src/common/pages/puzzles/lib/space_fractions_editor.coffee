@@ -153,7 +153,9 @@ class spaceFractionsEditor.EditorHelper
         selectedSquare = @$('.board .selected')
         @viewHelper.addObjectToBoard(objectType, selectedSquare)
         
-        @levelDescription.val('laser')
+        json = JSON.parse(@levelDescription.val() or '{"objects": []}')
+        json.objects.push({type: objectType, index: selectedSquare.data('index')})
+        @levelDescription.val(JSON.stringify(json))
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
@@ -220,8 +222,10 @@ class spaceFractionsEditor.EditorHelper
                 display: 'block'
     
     load: () ->
-        @selectSquare(@viewHelper.board.find('.square.index35'))
-        @addObject('laser_up')
+        json = JSON.parse(@levelDescription.val())
+        for object in json.objects
+            @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
+            @addObject(object.type)
                 
     clear: () ->
         for square in @viewHelper.board.find('.square.occupied')
