@@ -1,3 +1,6 @@
+# GoGoGames: http://hackeducation.com/2012/10/31/app-of-the-month-october-2012/
+# Stack the States: https://itunes.apple.com/us/app/stack-the-states/id381342267?mt=8
+# Hax Attacks: https://itunes.apple.com/ua/app/hax-attacks/id556677673?mt=8
 # Build With Chrome http://www.buildwithchrome.com/
 # Lightbot: http://armorgames.com/play/6061/light-bot-20
 

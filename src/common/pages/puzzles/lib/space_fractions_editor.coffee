@@ -4,6 +4,7 @@ class spaceFractionsEditor.EditorHelper
     constructor: ({@el, @viewHelper}) ->
         @initElementSelector()
         @initSquares()
+        @initLevelDescription()
         
     $: (selector) -> $(selector, @el)
     
@@ -15,6 +16,10 @@ class spaceFractionsEditor.EditorHelper
         @initFractionSelector()
 
         @el.append(@elementSelector)
+        
+    initLevelDescription: ->
+        @levelDescription = $(document.createElement('textarea'))
+        @el.append(@levelDescription)
         
     initObjectSelector: ->    
         objectSelector = $(document.createElement('DIV'))
@@ -103,13 +108,15 @@ class spaceFractionsEditor.EditorHelper
         @fractionSelector.find('.fraction').html(
             "Fraction: #{numeratorVal}/#{denominatorVal} or #{Math.round(1000 * (numeratorVal/denominatorVal)) / 1000}"
         )
+
+    selectSquare: (square) ->
+        @$('.board .selected').removeClass('selected')
+        square = $(square)
+        square.addClass('selected')
+        @showElementSelector(square)
         
     initSquares: ->
-        @$('.board .square').bind 'click', (e) =>
-            @$('.board .selected').removeClass('selected')
-            square = $(e.currentTarget)
-            square.addClass('selected')
-            @showElementSelector(square)
+        @$('.board .square').bind 'click', (e) => @selectSquare(e.currentTarget)
             
     showElementSelector: (square) ->
         square = $(square)
@@ -140,6 +147,8 @@ class spaceFractionsEditor.EditorHelper
     addObject: (objectType) ->
         selectedSquare = @$('.board .selected')
         @viewHelper.addObjectToBoard(objectType, selectedSquare)
+        
+        @levelDescription.val('laser')
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
@@ -179,6 +188,8 @@ class spaceFractionsEditor.EditorHelper
         selectedSquare.attr('title', "Fraction: #{numerator}/#{denominator}")
         @viewHelper.setObjectFraction(selectedSquare)
         @viewHelper.fireLaser(selectedSquare)
+        
+    
             
     showSelector: (selectorPage) ->
         selectors = @elementSelector.find('.selector')

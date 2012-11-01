@@ -8,7 +8,8 @@ soma.chunks
         prepare: ({@levelName}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/space_fractions.html"
             @loadScript '/build/common/pages/puzzles/lib/space_fractions.js'
-            @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js'  if @levelName == 'editor'
+            if @levelName == 'editor'
+                @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
             @loadStylesheet '/build/client/css/puzzles/space_fractions.css'
             
 

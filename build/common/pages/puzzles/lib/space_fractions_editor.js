@@ -9,6 +9,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.el = _arg.el, this.viewHelper = _arg.viewHelper;
     this.initElementSelector();
     this.initSquares();
+    this.initLevelDescription();
   }
 
   EditorHelper.prototype.$ = function(selector) {
@@ -21,6 +22,11 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.initObjectSelector();
     this.initFractionSelector();
     return this.el.append(this.elementSelector);
+  };
+
+  EditorHelper.prototype.initLevelDescription = function() {
+    this.levelDescription = $(document.createElement('textarea'));
+    return this.el.append(this.levelDescription);
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
@@ -112,14 +118,17 @@ spaceFractionsEditor.EditorHelper = (function() {
     return this.fractionSelector.find('.fraction').html("Fraction: " + numeratorVal + "/" + denominatorVal + " or " + (Math.round(1000 * (numeratorVal / denominatorVal)) / 1000));
   };
 
+  EditorHelper.prototype.selectSquare = function(square) {
+    this.$('.board .selected').removeClass('selected');
+    square = $(square);
+    square.addClass('selected');
+    return this.showElementSelector(square);
+  };
+
   EditorHelper.prototype.initSquares = function() {
     var _this = this;
     return this.$('.board .square').bind('click', function(e) {
-      var square;
-      _this.$('.board .selected').removeClass('selected');
-      square = $(e.currentTarget);
-      square.addClass('selected');
-      return _this.showElementSelector(square);
+      return _this.selectSquare(e.currentTarget);
     });
   };
 
@@ -158,6 +167,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     var object, selectedSquare;
     selectedSquare = this.$('.board .selected');
     this.viewHelper.addObjectToBoard(objectType, selectedSquare);
+    this.levelDescription.val('laser');
     object = this.viewHelper.objects[objectType];
     return this.showObjectSelector(true);
   };
