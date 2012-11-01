@@ -231,25 +231,27 @@ class spaceFractionsEditor.EditorHelper
                 type: square.data('object_type')
                 index: square.data('index')
                 
-            if @viewHelper.objects[square.data('object_type')].states
+            objectMeta = @viewHelper.objects[square.data('object_type')]
+            if objectMeta.states
                 object.fullNumerator = square.data('fullNumerator')
                 object.fullDenominator = square.data('fullDenominator')
-            else
+            else if objectMeta.distribute and not objectMeta.accept
                 object.numerator = square.data('numerator')
                 object.denominator = square.data('denominator')
         
             levelDescription.objects.push(object)
             
         @levelDescription.val(JSON.stringify(levelDescription))
-        
-    
+            
     load: ->
         json = JSON.parse(@levelDescription.val())
         @levelDescription.val('')
         for object in json.objects
             @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
             @addObject(object.type)
-            @setObjectFraction(object.fullNumerator or object.numerator, object.fullDenominator or object.denominator)
+            if (numerator = object.fullNumerator or object.numerator) and 
+               (denominator = object.fullDenominator or object.denominator)
+                @setObjectFraction(numerator, denominator)
                 
     clear: ->
         for square in @viewHelper.board.find('.square.occupied')

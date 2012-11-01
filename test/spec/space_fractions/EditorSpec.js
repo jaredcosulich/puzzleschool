@@ -102,6 +102,13 @@ describe("EditorSpec:", function() {
         })
         
     })
+    
+    it('should be able to load a complex level', function () {
+        levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16},{"type":"ship_right","index":18,"fullNumerator":"1","fullDenominator":"10"},{"type":"ship_left","index":50,"fullNumerator":"1","fullDenominator":"20"},{"type":"two_split_down_left","index":56},{"type":"laser_up","index":71,"numerator":"1","denominator":"5"},{"type":"ship_down","index":86,"fullNumerator":"1","fullDenominator":"40"}]}
+        editor.levelDescription.val(JSON.stringify(levelDescription));
+        editor.load();
+        expect(game.board.find('.square.occupied').length).toEqual(levelDescription.objects.length);        
+    })
    
     
         
