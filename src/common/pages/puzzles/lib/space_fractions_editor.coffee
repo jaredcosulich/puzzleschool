@@ -246,6 +246,7 @@ class spaceFractionsEditor.EditorHelper
     load: ->
         json = JSON.parse(@levelDescription.val())
         @levelDescription.val('')
+        @clear()
         for object in json.objects
             @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
             @addObject(object.type)

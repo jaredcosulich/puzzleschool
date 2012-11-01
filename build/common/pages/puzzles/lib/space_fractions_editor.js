@@ -296,6 +296,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     var denominator, json, numerator, object, _i, _len, _ref, _results;
     json = JSON.parse(this.levelDescription.val());
     this.levelDescription.val('');
+    this.clear();
     _ref = json.objects;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {

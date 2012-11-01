@@ -73,7 +73,6 @@ describe("EditorSpec:", function() {
         
         it('reloads the game after being cleared', function() {
             var description = editor.levelDescription.val();
-            editor.clear();
             editor.levelDescription.val(description);
             editor.load();
             expect(game.board.find('.square.index89').html()).toContain('laser_up');
@@ -87,7 +86,6 @@ describe("EditorSpec:", function() {
             editor.setObjectFraction(4, 5)
             
             var description = editor.levelDescription.val();
-            editor.clear();
             editor.levelDescription.val(description);
             editor.load();
             
