@@ -227,12 +227,19 @@ class spaceFractionsEditor.EditorHelper
 
         for square in @viewHelper.board.find('.square.occupied')
             square = $(square)
-            levelDescription.objects.push
+            object =
                 type: square.data('object_type')
                 index: square.data('index')
-                numerator: square.data('numerator')
-                denominator: square.data('denominator')
+                
+            if @viewHelper.objects[square.data('object_type')].states
+                object.fullNumerator = square.data('fullNumerator')
+                object.fullDenominator = square.data('fullDenominator')
+            else
+                object.numerator = square.data('numerator')
+                object.denominator = square.data('denominator')
         
+            levelDescription.objects.push(object)
+            
         @levelDescription.val(JSON.stringify(levelDescription))
         
     
@@ -242,7 +249,7 @@ class spaceFractionsEditor.EditorHelper
         for object in json.objects
             @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
             @addObject(object.type)
-            @setObjectFraction(object.numerator, object.denominator)
+            @setObjectFraction(object.fullNumerator or object.numerator, object.fullDenominator or object.denominator)
                 
     clear: ->
         for square in @viewHelper.board.find('.square.occupied')

@@ -62,13 +62,13 @@ describe("EditorSpec:", function() {
     
     describe('the level saving process', function() {
         beforeEach(function() {
-            editor.selectSquare(game.board.find('.square.index29'))
+            editor.selectSquare(game.board.find('.square.index89'))
             editor.addObject('laser_up')
             editor.setObjectFraction(1, 3)
         });
         
         it('should change the level_description text area to reflect the current state of the board', function() {
-            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 29, numerator: 1, denominator: 3}]});
+            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 89, numerator: 1, denominator: 3}]});
         })
         
         it('reloads the game after being cleared', function() {
@@ -76,15 +76,15 @@ describe("EditorSpec:", function() {
             editor.clear();
             editor.levelDescription.val(description);
             editor.load();
-            expect(game.board.find('.square.index29').html()).toContain('laser_up');
-            expect(game.board.find('.square.index29').data('denominator')).toEqual(3);
+            expect(game.board.find('.square.index89').html()).toContain('laser_up');
+            expect(game.board.find('.square.index89').data('denominator')).toEqual(3);
             expect(JSON.parse(editor.levelDescription.val()).objects.length).toEqual(1);
         })
         
         it('should properly save and be able to load a second object', function () {
-            editor.selectSquare(game.board.find('.square.index42'))
-            editor.addObject('ship_left')
-            editor.setObjectFraction(2, 9)
+            editor.selectSquare(game.board.find('.square.index29'))
+            editor.addObject('ship_up')
+            editor.setObjectFraction(4, 5)
             
             var description = editor.levelDescription.val();
             editor.clear();
@@ -93,12 +93,12 @@ describe("EditorSpec:", function() {
             
             expect(JSON.parse(editor.levelDescription.val()).objects.length).toEqual(2);
 
-            expect(game.board.find('.square.index29').html()).toContain('laser_up');
-            expect(game.board.find('.square.index29').data('denominator')).toEqual(3);
+            expect(game.board.find('.square.index89').html()).toContain('laser_up');
+            expect(game.board.find('.square.index89').data('denominator')).toEqual(3);
 
-            expect(game.board.find('.square.index42').html()).toContain('ship_left');
-            expect(game.board.find('.square.index42').data('fullNumerator')).toEqual(2);
-            expect(game.board.find('.square.index42').data('fullDenominator')).toEqual(9);
+            expect(game.board.find('.square.index29').html()).toContain('ship_up');
+            expect(game.board.find('.square.index29').data('fullNumerator')).toEqual(4);
+            expect(game.board.find('.square.index29').data('fullDenominator')).toEqual(5);
         })
         
     })

@@ -266,7 +266,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.save = function() {
-    var levelDescription, square, _i, _len, _ref;
+    var levelDescription, object, square, _i, _len, _ref;
     this.levelDescription.val('');
     levelDescription = {
       objects: []
@@ -275,12 +275,18 @@ spaceFractionsEditor.EditorHelper = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       square = _ref[_i];
       square = $(square);
-      levelDescription.objects.push({
+      object = {
         type: square.data('object_type'),
-        index: square.data('index'),
-        numerator: square.data('numerator'),
-        denominator: square.data('denominator')
-      });
+        index: square.data('index')
+      };
+      if (this.viewHelper.objects[square.data('object_type')].states) {
+        object.fullNumerator = square.data('fullNumerator');
+        object.fullDenominator = square.data('fullDenominator');
+      } else {
+        object.numerator = square.data('numerator');
+        object.denominator = square.data('denominator');
+      }
+      levelDescription.objects.push(object);
     }
     return this.levelDescription.val(JSON.stringify(levelDescription));
   };
@@ -295,7 +301,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       object = _ref[_i];
       this.selectSquare(this.viewHelper.board.find(".square.index" + object.index));
       this.addObject(object.type);
-      _results.push(this.setObjectFraction(object.numerator, object.denominator));
+      _results.push(this.setObjectFraction(object.fullNumerator || object.numerator, object.fullDenominator || object.denominator));
     }
     return _results;
   };
