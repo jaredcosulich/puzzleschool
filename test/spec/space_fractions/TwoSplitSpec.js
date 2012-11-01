@@ -10,9 +10,9 @@ describe("A splitter", function() {
         laserSquare = game.board.find('.square.index21');
         laserSquare.data('numerator', 1)
         laserSquare.data('denominator', 3)
-        game.addObjectToBoard('laser_right', laserSquare);
+        game.addObjectToSquare('laser_right', laserSquare);
         splitterSquare = game.board.find('.square.index27')
-        game.addObjectToBoard('two_split_right_down', splitterSquare);
+        game.addObjectToSquare('two_split_right_down', splitterSquare);
     }); 
     
     it('should create three lasers', function() {
@@ -67,7 +67,7 @@ describe("A splitter", function() {
 
     describe('when the splitter is replaced with another splitter', function() {
         beforeEach(function() {
-            game.addObjectToBoard('two_split_right_up', splitterSquare);
+            game.addObjectToSquare('two_split_right_up', splitterSquare);
         });
 
         it('should send a laser completing the original path', function() {
@@ -86,14 +86,14 @@ describe("A splitter", function() {
     describe('when another splitter is added', function() {
         it('should split again if it accepts a laser from the right direction', function() {
             var anotherSplitterSquare = game.board.find('.square.index67')
-            game.addObjectToBoard('two_split_down_left', anotherSplitterSquare);
+            game.addObjectToSquare('two_split_down_left', anotherSplitterSquare);
             var lasers = game.board.find('.laser')
             expect(lasers.length).toEqual(5);
         });
         
         it('should block the laser if it does not accept a laser for the right direction', function() {
             var badSplitterSquare = game.board.find('.square.index67')
-            game.addObjectToBoard('two_split_up_left', badSplitterSquare);
+            game.addObjectToSquare('two_split_up_left', badSplitterSquare);
             var lasers = game.board.find('.laser')
             expect(lasers.length).toEqual(3);
             var laser3 = $(game.board.find('.laser.laser27')[1])

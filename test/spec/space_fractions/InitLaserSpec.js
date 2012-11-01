@@ -18,7 +18,7 @@ describe("Init:", function() {
         
         beforeEach(function() {
             square = game.board.find('.square.index12');
-            game.addObjectToBoard('laser_right', square)
+            game.addObjectToSquare('laser_right', square)
             laser = game.board.find('.laser')
         })
         
@@ -73,6 +73,10 @@ describe("Init:", function() {
         it('should load only ships, rocks, and lasers on to the board', function() {
             expect(game.board.find('.square.occupied').length).toEqual(4)
             expect(game.board.find('.square.index11').data('object_type')).toBeUndefined()
+        })
+        
+        it('should load movable objects next to the board', function() {
+            expect(game.options.find('.square.occupied').length).toEqual(3);
         })
         
         it('should set numerator/denominator on correct objects', function() {

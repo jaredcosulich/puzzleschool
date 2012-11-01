@@ -65,6 +65,12 @@ class spaceFractions.ViewHelper
     baseFolder: '/assets/images/puzzles/space_fractions/'
 
     constructor: ({@el, @rows, @columns}) ->
+        @initBoard()
+        @initOptions()
+
+    $: (selector) -> $(selector, @el)
+
+    initBoard: ->
         @board = @$('.board')
         @board.html('')
         
@@ -76,9 +82,21 @@ class spaceFractions.ViewHelper
                 square.data('index', index)
                 square.addClass("index#{index}")
                 @board.append(square)
-                
-    $: (selector) -> $(selector, @el)
-    
+
+    initOptions: ->
+        @options = @$('.options')
+        @options.html('')
+        
+        for row in [0...6]
+            for column in [0...3]
+                index = (row * 3) + column
+                square = $(document.createElement('DIV'))
+                square.addClass('square')
+                square.data('index', index)
+                square.addClass("index#{index}")
+                @options.append(square)
+        
+        
     setObjectImage: (square) ->
         object = @objects[square.data('object_type')]
         return unless object
@@ -108,7 +126,7 @@ class spaceFractions.ViewHelper
         fraction.addClass('fraction')
         square.append(fraction)
     
-    addObjectToBoard: (objectType, square) ->
+    addObjectToSquare: (objectType, square) ->
         square = $(square)
         square.html('')
         @removeExistingLasers(square)
@@ -193,11 +211,15 @@ class spaceFractions.ViewHelper
     
     loadToPlay: (data) ->
         json = JSON.parse(data)
+        movableObjectIndex = 0
         for object in json.objects
             objectMeta = @objects[object.type]
-            unless objectMeta.movable
+            if objectMeta.movable
+                square = @options.find(".square.index#{movableObjectIndex++}")
+                @addObjectToSquare(object.type, square)                
+            else
                 square = @board.find(".square.index#{object.index}")
-                @addObjectToBoard(object.type, square)
+                @addObjectToSquare(object.type, square)
                 for attr of object when attr not in ['type', 'index']
                     square.data(attr, object[attr])
 

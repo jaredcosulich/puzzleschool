@@ -152,7 +152,7 @@ class spaceFractionsEditor.EditorHelper
 
     addObject: (objectType) ->
         selectedSquare = @$('.board .selected')
-        @viewHelper.addObjectToBoard(objectType, selectedSquare)
+        @viewHelper.addObjectToSquare(objectType, selectedSquare)
         
         @save()
         

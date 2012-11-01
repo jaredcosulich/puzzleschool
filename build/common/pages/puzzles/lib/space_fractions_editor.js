@@ -175,7 +175,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.addObject = function(objectType) {
     var object, selectedSquare;
     selectedSquare = this.$('.board .selected');
-    this.viewHelper.addObjectToBoard(objectType, selectedSquare);
+    this.viewHelper.addObjectToSquare(objectType, selectedSquare);
     this.save();
     object = this.viewHelper.objects[objectType];
     return this.showObjectSelector(true);

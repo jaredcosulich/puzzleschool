@@ -79,24 +79,59 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.baseFolder = '/assets/images/puzzles/space_fractions/';
 
   function ViewHelper(_arg) {
-    var column, row, square, _k, _l, _ref, _ref1;
     this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns;
-    this.board = this.$('.board');
-    this.board.html('');
-    for (row = _k = 0, _ref = this.rows; 0 <= _ref ? _k < _ref : _k > _ref; row = 0 <= _ref ? ++_k : --_k) {
-      for (column = _l = 0, _ref1 = this.columns; 0 <= _ref1 ? _l < _ref1 : _l > _ref1; column = 0 <= _ref1 ? ++_l : --_l) {
-        index = (row * this.rows) + column;
-        square = $(document.createElement('DIV'));
-        square.addClass('square');
-        square.data('index', index);
-        square.addClass("index" + index);
-        this.board.append(square);
-      }
-    }
+    this.initBoard();
+    this.initOptions();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
+  };
+
+  ViewHelper.prototype.initBoard = function() {
+    var column, row, square, _k, _ref, _results;
+    this.board = this.$('.board');
+    this.board.html('');
+    _results = [];
+    for (row = _k = 0, _ref = this.rows; 0 <= _ref ? _k < _ref : _k > _ref; row = 0 <= _ref ? ++_k : --_k) {
+      _results.push((function() {
+        var _l, _ref1, _results1;
+        _results1 = [];
+        for (column = _l = 0, _ref1 = this.columns; 0 <= _ref1 ? _l < _ref1 : _l > _ref1; column = 0 <= _ref1 ? ++_l : --_l) {
+          index = (row * this.rows) + column;
+          square = $(document.createElement('DIV'));
+          square.addClass('square');
+          square.data('index', index);
+          square.addClass("index" + index);
+          _results1.push(this.board.append(square));
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.initOptions = function() {
+    var column, row, square, _k, _results;
+    this.options = this.$('.options');
+    this.options.html('');
+    _results = [];
+    for (row = _k = 0; _k < 6; row = ++_k) {
+      _results.push((function() {
+        var _l, _results1;
+        _results1 = [];
+        for (column = _l = 0; _l < 3; column = ++_l) {
+          index = (row * 3) + column;
+          square = $(document.createElement('DIV'));
+          square.addClass('square');
+          square.data('index', index);
+          square.addClass("index" + index);
+          _results1.push(this.options.append(square));
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
   };
 
   ViewHelper.prototype.setObjectImage = function(square) {
@@ -137,7 +172,7 @@ spaceFractions.ViewHelper = (function() {
     return square.append(fraction);
   };
 
-  ViewHelper.prototype.addObjectToBoard = function(objectType, square) {
+  ViewHelper.prototype.addObjectToSquare = function(objectType, square) {
     var laserData, object, objectContainer, _k, _len2, _ref;
     square = $(square);
     square.html('');
@@ -252,16 +287,20 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.loadToPlay = function(data) {
-    var attr, json, object, objectMeta, square, _k, _len2, _ref, _results;
+    var attr, json, movableObjectIndex, object, objectMeta, square, _k, _len2, _ref, _results;
     json = JSON.parse(data);
+    movableObjectIndex = 0;
     _ref = json.objects;
     _results = [];
     for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
       object = _ref[_k];
       objectMeta = this.objects[object.type];
-      if (!objectMeta.movable) {
+      if (objectMeta.movable) {
+        square = this.options.find(".square.index" + (movableObjectIndex++));
+        _results.push(this.addObjectToSquare(object.type, square));
+      } else {
         square = this.board.find(".square.index" + object.index);
-        this.addObjectToBoard(object.type, square);
+        this.addObjectToSquare(object.type, square);
         for (attr in object) {
           if (attr !== 'type' && attr !== 'index') {
             square.data(attr, object[attr]);
@@ -270,8 +309,6 @@ spaceFractions.ViewHelper = (function() {
         this.setObjectFraction(square);
         this.setObjectImage(square);
         _results.push(this.fireLaser(square));
-      } else {
-        _results.push(void 0);
       }
     }
     return _results;

@@ -10,9 +10,9 @@ describe("A turn", function() {
         laserSquare = game.board.find('.square.index21');
         laserSquare.data('numerator', 1)
         laserSquare.data('denominator', 3)
-        game.addObjectToBoard('laser_right', laserSquare);
+        game.addObjectToSquare('laser_right', laserSquare);
         turnSquare = game.board.find('.square.index27')
-        game.addObjectToBoard('turn_right_down', turnSquare);
+        game.addObjectToSquare('turn_right_down', turnSquare);
     }); 
     
     it('should stop the laser', function() {
@@ -63,7 +63,7 @@ describe("A turn", function() {
 
     describe('when the turn is replaced with another turn', function() {
         beforeEach(function() {
-            game.addObjectToBoard('turn_right_up', turnSquare);
+            game.addObjectToSquare('turn_right_up', turnSquare);
         });
         
         it('should send the laser up to the top of the board', function() {
@@ -76,7 +76,7 @@ describe("A turn", function() {
     describe('when another turn is added', function() {
         it('should redirect again if it accepts a laser from the right direction', function() {
             var anotherTurnSquare = game.board.find('.square.index67')
-            game.addObjectToBoard('turn_down_left', anotherTurnSquare);
+            game.addObjectToSquare('turn_down_left', anotherTurnSquare);
             var lasers = game.board.find('.laser')
             expect(lasers.length).toEqual(3);
             expect($(lasers[2]).offset().left).toEqual(1)
@@ -85,16 +85,16 @@ describe("A turn", function() {
         
         it('should block the laser if it does not accept a laser for the right direction', function() {
             var badTurnSquare = game.board.find('.square.index67')
-            game.addObjectToBoard('turn_up_left', badTurnSquare);
+            game.addObjectToSquare('turn_up_left', badTurnSquare);
             var laser2 = $(game.board.find('.laser')[1]);
             expect(laser2.find('.beam').offset().top).toEqual(turnSquare.offset().top + turnSquare.offset().height);
             expect(laser2.find('.beam').offset().height).toEqual(laserSquare.height() * 3);            
         });
         
         it('should work if the turn goes back to the original path', function() {
-            game.addObjectToBoard('turn_down_right', game.board.find('.square.index67'));
-            game.addObjectToBoard('turn_right_up', game.board.find('.square.index68'));
-            game.addObjectToBoard('turn_up_right', game.board.find('.square.index28'));
+            game.addObjectToSquare('turn_down_right', game.board.find('.square.index67'));
+            game.addObjectToSquare('turn_right_up', game.board.find('.square.index68'));
+            game.addObjectToSquare('turn_up_right', game.board.find('.square.index28'));
             var lasers = game.board.find('.laser');
             expect(lasers.length).toEqual(5);
         })

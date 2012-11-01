@@ -15,7 +15,7 @@ describe("A ship", function() {
         
     describe('in an empty space', function() {
         beforeEach(function() {
-            game.addObjectToBoard('ship_up', shipSquare);
+            game.addObjectToSquare('ship_up', shipSquare);
         });
 
         it('should display the fraction it accepts', function() {
@@ -30,7 +30,7 @@ describe("A ship", function() {
             var laserSquare = game.board.find('.square.index58');
             laserSquare.data('numerator', 1);
             laserSquare.data('denominator', 3);
-            game.addObjectToBoard('laser_up', laserSquare);
+            game.addObjectToSquare('laser_up', laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('full');
         });
 
@@ -38,7 +38,7 @@ describe("A ship", function() {
             var laserSquare = game.board.find('.square.index58');
             laserSquare.data('numerator', 2);
             laserSquare.data('denominator', 3);
-            game.addObjectToBoard('laser_up', laserSquare);
+            game.addObjectToSquare('laser_up', laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('over');            
         });
 
@@ -46,7 +46,7 @@ describe("A ship", function() {
             var laserSquare = game.board.find('.square.index58');
             laserSquare.data('numerator', 1);
             laserSquare.data('denominator', 6);
-            game.addObjectToBoard('laser_up', laserSquare);
+            game.addObjectToSquare('laser_up', laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('under');            
         });
         
@@ -54,7 +54,7 @@ describe("A ship", function() {
             var laserSquare = game.board.find('.square.index58');
             laserSquare.data('numerator', 1);
             laserSquare.data('denominator', 3);
-            game.addObjectToBoard('laser_up', laserSquare);
+            game.addObjectToSquare('laser_up', laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('full');
             game.removeObjectFromBoard(laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('empty');                        
@@ -68,16 +68,16 @@ describe("A ship", function() {
             laserSquare = game.board.find('.square.index58');
             laserSquare.data('numerator', 1);
             laserSquare.data('denominator', 3);
-            game.addObjectToBoard('laser_up', laserSquare);
+            game.addObjectToSquare('laser_up', laserSquare);
         })
         
         it('should light up if the it is placed on the correct amount of laser', function() {
-            game.addObjectToBoard('ship_up', shipSquare);
+            game.addObjectToSquare('ship_up', shipSquare);
             expect(shipSquare.find('img').attr('src')).toContain('full');                        
         });
 
         it('should block a laser that is not heading in the direction it accepts', function() {
-            game.addObjectToBoard('ship_left', shipSquare);
+            game.addObjectToSquare('ship_left', shipSquare);
             expect(shipSquare.find('img').attr('src')).toContain('empty');                        
         });
     });
@@ -86,16 +86,16 @@ describe("A ship", function() {
         var laserSquare, laser2Square;
         
         beforeEach(function() {
-            game.addObjectToBoard('ship_up', shipSquare);
+            game.addObjectToSquare('ship_up', shipSquare);
             laserSquare = game.board.find('.square.index58');
             laserSquare.data('numerator', 1);
             laserSquare.data('denominator', 3);
-            game.addObjectToBoard('laser_up', laserSquare);
+            game.addObjectToSquare('laser_up', laserSquare);
 
             laser2Square = game.board.find('.square.index22');
             laser2Square.data('numerator', 1);
             laser2Square.data('denominator', 2);
-            game.addObjectToBoard('laser_right', laser2Square);
+            game.addObjectToSquare('laser_right', laser2Square);
         });
 
         it('should accept the corret laser and ignore the other', function() {
