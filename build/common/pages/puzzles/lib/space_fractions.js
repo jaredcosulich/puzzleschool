@@ -190,6 +190,10 @@ spaceFractions.ViewHelper = (function() {
     objectMeta = this.objects[objectType];
     return square.bind('mousedown', function(e) {
       var body, movingObject;
+      if (_this.movingObject) {
+        return;
+      }
+      _this.movingObject = true;
       _this.removeObjectFromSquare(square);
       movingObject = $(document.createElement('IMG'));
       movingObject.addClass('movable_object');
@@ -202,13 +206,16 @@ spaceFractions.ViewHelper = (function() {
       body = $(document.body);
       body.bind('mousemove', function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
+        if (!movingObject) {
+          return;
+        }
         left = e.clientX - (square.width() / 2);
         top = e.clientY - (square.height() / 2);
         movingObject.css({
           left: left,
           top: top
         });
-        _ref = _this.board.find('.square:not(.occupied)');
+        _ref = _this.el.find('.square:not(.occupied)');
         _results = [];
         for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
           boardSquare = _ref[_k];
@@ -223,15 +230,17 @@ spaceFractions.ViewHelper = (function() {
       });
       return body.bind('mouseup', function(e) {
         var selectedSquare;
+        movingObject = null;
         _this.el.find('.movable_object').remove();
         body.unbind('mousemove');
         body.unbind('mouseup');
-        selectedSquare = _this.board.find('.square.selected');
+        selectedSquare = _this.el.find('.square.selected');
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
         }
         _this.addObjectToSquare(objectType, selectedSquare);
-        return selectedSquare.removeClass('selected');
+        selectedSquare.removeClass('selected');
+        return _this.movingObject = false;
       });
     });
   };
