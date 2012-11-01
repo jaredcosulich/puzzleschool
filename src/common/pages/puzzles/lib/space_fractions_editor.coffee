@@ -161,7 +161,7 @@ class spaceFractionsEditor.EditorHelper
         
     removeObject: () ->
         selectedSquare = @$('.board .selected')
-        @viewHelper.removeObjectFromBoard(selectedSquare)
+        @viewHelper.removeObjectFromSquare(selectedSquare)
         @levelDescription.val('')
         @closeElementSelector()
         @save()

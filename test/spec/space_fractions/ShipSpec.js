@@ -56,7 +56,7 @@ describe("A ship", function() {
             laserSquare.data('denominator', 3);
             game.addObjectToSquare('laser_up', laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('full');
-            game.removeObjectFromBoard(laserSquare);
+            game.removeObjectFromSquare(laserSquare);
             expect(shipSquare.find('img').attr('src')).toContain('empty');                        
         });
         
@@ -103,7 +103,7 @@ describe("A ship", function() {
         })
         
         it('should not change state if a non-affecting laser is removed', function() {
-            game.removeObjectFromBoard(laser2Square);
+            game.removeObjectFromSquare(laser2Square);
             expect(shipSquare.find('img').attr('src')).toContain('full');            
         })
     })

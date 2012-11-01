@@ -116,11 +116,11 @@ spaceFractions.ViewHelper = (function() {
     this.options = this.$('.options');
     this.options.html('');
     _results = [];
-    for (row = _k = 0; _k < 6; row = ++_k) {
+    for (row = _k = 0; _k < 7; row = ++_k) {
       _results.push((function() {
         var _l, _results1;
         _results1 = [];
-        for (column = _l = 0; _l < 3; column = ++_l) {
+        for (column = _l = 0; _l < 4; column = ++_l) {
           index = (row * 3) + column;
           square = $(document.createElement('DIV'));
           square.addClass('square');
@@ -172,6 +172,56 @@ spaceFractions.ViewHelper = (function() {
     return square.append(fraction);
   };
 
+  ViewHelper.prototype.initMovableObject = function(square) {
+    var objectMeta, objectType,
+      _this = this;
+    objectType = square.data('object_type');
+    objectMeta = this.objects[objectType];
+    return square.bind('mousedown', function(e) {
+      var body, movingObject;
+      _this.removeObjectFromSquare(square);
+      movingObject = $(document.createElement('IMG'));
+      movingObject.addClass('movable_object');
+      movingObject.attr('src', _this.baseFolder + objectMeta.image + '.png');
+      _this.el.append(movingObject);
+      movingObject.css({
+        left: e.clientX - (square.width() / 2),
+        top: e.clientY - (square.height() / 2)
+      });
+      body = $(document.body);
+      body.bind('mousemove', function(e) {
+        var boardSquare, left, offset, top, _k, _len2, _ref, _results;
+        left = e.clientX - (square.width() / 2);
+        top = e.clientY - (square.height() / 2);
+        movingObject.css({
+          left: left,
+          top: top
+        });
+        _ref = _this.board.find('.square:not(.occupied)');
+        _results = [];
+        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+          boardSquare = _ref[_k];
+          offset = $(boardSquare).offset();
+          if (e.clientX > offset.left && e.clientX < offset.left + offset.width && e.clientY > offset.top && e.clientY < offset.top + offset.height) {
+            _results.push($(boardSquare).addClass('selected'));
+          } else {
+            _results.push($(boardSquare).removeClass('selected'));
+          }
+        }
+        return _results;
+      });
+      return body.bind('mouseup', function(e) {
+        var selectedSquare;
+        body.unbind('mousemove');
+        body.unbind('mouseup');
+        selectedSquare = _this.board.find('.square.selected');
+        _this.addObjectToSquare(objectType, selectedSquare);
+        selectedSquare.removeClass('selected');
+        return movingObject.remove();
+      });
+    });
+  };
+
   ViewHelper.prototype.addObjectToSquare = function(objectType, square) {
     var laserData, object, objectContainer, _k, _len2, _ref;
     square = $(square);
@@ -206,10 +256,13 @@ spaceFractions.ViewHelper = (function() {
       square.data('distributeDirections', JSON.stringify(object.distributeDirections));
       this.fireLaser(square);
     }
+    if (object.movable) {
+      this.initMovableObject(square);
+    }
     return this.setObjectImage(square);
   };
 
-  ViewHelper.prototype.removeObjectFromBoard = function(square) {
+  ViewHelper.prototype.removeObjectFromSquare = function(square) {
     var attr, laserData, _k, _len2, _ref, _results;
     square = $(square);
     if (!square.data('object_type')) {

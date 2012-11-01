@@ -87,8 +87,8 @@ class spaceFractions.ViewHelper
         @options = @$('.options')
         @options.html('')
         
-        for row in [0...6]
-            for column in [0...3]
+        for row in [0...7]
+            for column in [0...4]
                 index = (row * 3) + column
                 square = $(document.createElement('DIV'))
                 square.addClass('square')
@@ -126,6 +126,44 @@ class spaceFractions.ViewHelper
         fraction.addClass('fraction')
         square.append(fraction)
     
+    initMovableObject: (square) ->
+        objectType = square.data('object_type')
+        objectMeta = @objects[objectType]
+        square.bind 'mousedown', (e) =>
+            @removeObjectFromSquare(square)
+            movingObject = $(document.createElement('IMG'))
+            movingObject.addClass('movable_object')
+            movingObject.attr('src', @baseFolder + objectMeta.image + '.png')
+            @el.append(movingObject)
+            movingObject.css
+                left: e.clientX - (square.width() / 2)
+                top: e.clientY - (square.height() / 2)
+            
+            body = $(document.body)
+            body.bind 'mousemove', (e) =>
+                left = e.clientX - (square.width() / 2)
+                top = e.clientY - (square.height() / 2)
+                movingObject.css
+                    left: left
+                    top: top
+                for boardSquare in @board.find('.square:not(.occupied)')
+                    offset = $(boardSquare).offset()
+                    if e.clientX > offset.left and
+                       e.clientX < offset.left + offset.width and
+                       e.clientY > offset.top and
+                       e.clientY < offset.top + offset.height
+                        $(boardSquare).addClass('selected')
+                    else
+                        $(boardSquare).removeClass('selected')
+                    
+            body.bind 'mouseup', (e) =>
+                body.unbind 'mousemove'        
+                body.unbind 'mouseup'
+                selectedSquare = @board.find('.square.selected')
+                @addObjectToSquare(objectType, selectedSquare)
+                selectedSquare.removeClass('selected')
+                movingObject.remove()
+    
     addObjectToSquare: (objectType, square) ->
         square = $(square)
         square.html('')
@@ -156,10 +194,12 @@ class spaceFractions.ViewHelper
             square.data('distributeDirections', JSON.stringify(object.distributeDirections))
             @fireLaser(square)
             
+        if object.movable
+            @initMovableObject(square)
+            
         @setObjectImage(square)
         
-        
-    removeObjectFromBoard: (square) ->
+    removeObjectFromSquare: (square) ->
         square = $(square)
         return unless square.data('object_type')
         @removeExistingLasers(square)

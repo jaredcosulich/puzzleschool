@@ -184,7 +184,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.removeObject = function() {
     var selectedSquare;
     selectedSquare = this.$('.board .selected');
-    this.viewHelper.removeObjectFromBoard(selectedSquare);
+    this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.levelDescription.val('');
     this.closeElementSelector();
     return this.save();

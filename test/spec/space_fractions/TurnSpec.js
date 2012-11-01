@@ -51,7 +51,7 @@ describe("A turn", function() {
         
     describe('when the turn is removed', function() {
         beforeEach(function() {
-            game.removeObjectFromBoard(turnSquare);            
+            game.removeObjectFromSquare(turnSquare);            
         });
         
         it('should remove the split in the laser', function() {

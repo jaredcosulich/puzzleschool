@@ -4,6 +4,12 @@ body {
 .space_fractions {
   overflow: hidden;
   margin-bottom: 60px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .space_fractions .board {
   border: 1px solid #fafafa;
@@ -13,34 +19,6 @@ body {
   margin-bottom: 24px;
   background: url(/assets/images/puzzles/space_fractions/space1.jpg) no-repeat center center;
   background-color: #1a1a1a;
-}
-.space_fractions .board .square {
-  position: relative;
-  display: block;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-  border: 1px solid transparent;
-  float: left;
-}
-.space_fractions .board .square:hover,
-.space_fractions .board .square.selected {
-  border: 1px solid #fafafa;
-}
-.space_fractions .board .square img {
-  vertical-align: middle;
-}
-.space_fractions .board .square .fraction {
-  padding: 6px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  font-weight: bold;
-  opacity: 0.9;
-  line-height: 1em;
 }
 .space_fractions .board .laser {
   pointer-events: none;
@@ -91,6 +69,52 @@ body {
   border-top-left-radius: 40%;
   border-top-right-radius: 40%;
   margin-top: 3px;
+}
+.space_fractions .options {
+  margin-left: 12px;
+  background-color: #0c6d7f;
+  overflow: hidden;
+  width: 272px;
+  float: left;
+  border: 1px solid #262626;
+}
+.space_fractions .options .square {
+  border: 1px solid #262626;
+  width: 66px;
+  height: 66px;
+  line-height: 66px;
+}
+.space_fractions .square {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  border: 1px solid transparent;
+  float: left;
+}
+.space_fractions .square:hover,
+.space_fractions .square.selected {
+  border: 1px solid #fafafa;
+}
+.space_fractions .square img {
+  vertical-align: middle;
+}
+.space_fractions .square .fraction {
+  padding: 6px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  opacity: 0.9;
+  line-height: 1em;
+}
+.space_fractions .movable_object {
+  pointer-events: none;
+  position: absolute;
 }
 .space_fractions .element_selector {
   -webkit-border-radius: 6px;
