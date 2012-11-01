@@ -67,6 +67,10 @@ class spaceFractions.ViewHelper
     constructor: ({@el, @rows, @columns}) ->
         @initBoard()
         @initOptions()
+        
+        window.onresize = =>
+            for square in @board.find('.square.occupied')
+                @fireLaser(square)
 
     $: (selector) -> $(selector, @el)
 
@@ -148,21 +152,22 @@ class spaceFractions.ViewHelper
                     top: top
                 for boardSquare in @board.find('.square:not(.occupied)')
                     offset = $(boardSquare).offset()
-                    if e.clientX > offset.left and
+                    if e.clientX >= offset.left and
                        e.clientX < offset.left + offset.width and
-                       e.clientY > offset.top and
+                       e.clientY >= offset.top and
                        e.clientY < offset.top + offset.height
                         $(boardSquare).addClass('selected')
                     else
                         $(boardSquare).removeClass('selected')
                     
             body.bind 'mouseup', (e) =>
+                @el.find('.movable_object').remove()
                 body.unbind 'mousemove'        
                 body.unbind 'mouseup'
                 selectedSquare = @board.find('.square.selected')
+                selectedSquare = square if not selectedSquare?.length
                 @addObjectToSquare(objectType, selectedSquare)
                 selectedSquare.removeClass('selected')
-                movingObject.remove()
     
     addObjectToSquare: (objectType, square) ->
         square = $(square)

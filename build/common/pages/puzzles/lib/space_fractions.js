@@ -79,9 +79,20 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.baseFolder = '/assets/images/puzzles/space_fractions/';
 
   function ViewHelper(_arg) {
+    var _this = this;
     this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns;
     this.initBoard();
     this.initOptions();
+    window.onresize = function() {
+      var square, _k, _len2, _ref, _results;
+      _ref = _this.board.find('.square.occupied');
+      _results = [];
+      for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+        square = _ref[_k];
+        _results.push(_this.fireLaser(square));
+      }
+      return _results;
+    };
   }
 
   ViewHelper.prototype.$ = function(selector) {
@@ -202,7 +213,7 @@ spaceFractions.ViewHelper = (function() {
         for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
           boardSquare = _ref[_k];
           offset = $(boardSquare).offset();
-          if (e.clientX > offset.left && e.clientX < offset.left + offset.width && e.clientY > offset.top && e.clientY < offset.top + offset.height) {
+          if (e.clientX >= offset.left && e.clientX < offset.left + offset.width && e.clientY >= offset.top && e.clientY < offset.top + offset.height) {
             _results.push($(boardSquare).addClass('selected'));
           } else {
             _results.push($(boardSquare).removeClass('selected'));
@@ -212,12 +223,15 @@ spaceFractions.ViewHelper = (function() {
       });
       return body.bind('mouseup', function(e) {
         var selectedSquare;
+        _this.el.find('.movable_object').remove();
         body.unbind('mousemove');
         body.unbind('mouseup');
         selectedSquare = _this.board.find('.square.selected');
+        if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
+          selectedSquare = square;
+        }
         _this.addObjectToSquare(objectType, selectedSquare);
-        selectedSquare.removeClass('selected');
-        return movingObject.remove();
+        return selectedSquare.removeClass('selected');
       });
     });
   };
