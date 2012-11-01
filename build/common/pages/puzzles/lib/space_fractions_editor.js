@@ -25,8 +25,16 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initLevelDescription = function() {
+    var loadLevelDescription,
+      _this = this;
     this.levelDescription = $(document.createElement('textarea'));
-    return this.el.append(this.levelDescription);
+    this.el.append(this.levelDescription);
+    loadLevelDescription = $(document.createElement('button'));
+    loadLevelDescription.html('Load');
+    loadLevelDescription.bind('click', function() {
+      return _this.load();
+    });
+    return this.el.append(loadLevelDescription);
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
@@ -176,6 +184,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     var selectedSquare;
     selectedSquare = this.$('.board .selected');
     this.viewHelper.removeObjectFromBoard(selectedSquare);
+    this.levelDescription.val('');
     return this.closeElementSelector();
   };
 
@@ -209,7 +218,7 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.setObjectFraction = function(numerator, denominator) {
     var selectedSquare;
-    selectedSquare = this.$('.board .selected');
+    selectedSquare = this.viewHelper.board.find('.selected');
     if (this.viewHelper.objects[selectedSquare.data('object_type')].states) {
       selectedSquare.data('fullNumerator', numerator);
       selectedSquare.data('fullDenominator', denominator);
@@ -251,6 +260,23 @@ spaceFractionsEditor.EditorHelper = (function() {
         display: 'block'
       });
     }
+  };
+
+  EditorHelper.prototype.load = function() {
+    this.selectSquare(this.viewHelper.board.find('.square.index35'));
+    return this.addObject('laser_up');
+  };
+
+  EditorHelper.prototype.clear = function() {
+    var square, _i, _len, _ref, _results;
+    _ref = this.viewHelper.board.find('.square.occupied');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      square = _ref[_i];
+      this.selectSquare(square);
+      _results.push(this.removeObject());
+    }
+    return _results;
   };
 
   return EditorHelper;

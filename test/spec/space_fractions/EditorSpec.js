@@ -34,6 +34,25 @@ describe("EditorSpec:", function() {
     });
     
     
+    describe('clearing the editor', function() {
+        beforeEach(function() {
+            editor.selectSquare(game.board.find('.square.index35'));
+            editor.addObject('laser_up');
+            d = new Date()
+            editor.clear();
+        });
+
+        it('should clear the board', function() {
+            expect(game.board.html()).toNotContain('laser');           
+        });
+        
+        it('should clear the level description field', function() {
+            expect(editor.levelDescription.val()).toNotContain('laser');
+        });
+        
+    })
+    
+    
     describe('the level saving process', function() {
         beforeEach(function() {
             editor.selectSquare(game.board.find('.square.index35'))
@@ -42,6 +61,14 @@ describe("EditorSpec:", function() {
         
         it('should change the level_description text area to reflect the current state of the board', function() {
             expect(editor.levelDescription.val()).toContain('laser')
+        })
+        
+        it('reloads the game after being cleared', function() {
+            var description = editor.levelDescription.val();
+            editor.clear();
+            editor.levelDescription.val(description);
+            editor.load();
+            expect(game.board.find('.square.index35').html()).toContain('laser')
         })
         
     })

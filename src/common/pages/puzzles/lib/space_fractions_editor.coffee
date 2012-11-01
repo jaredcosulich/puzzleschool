@@ -20,6 +20,11 @@ class spaceFractionsEditor.EditorHelper
     initLevelDescription: ->
         @levelDescription = $(document.createElement('textarea'))
         @el.append(@levelDescription)
+        loadLevelDescription = $(document.createElement('button'))
+        loadLevelDescription.html('Load')
+        loadLevelDescription.bind 'click', => @load()
+        @el.append(loadLevelDescription)
+        
         
     initObjectSelector: ->    
         objectSelector = $(document.createElement('DIV'))
@@ -156,6 +161,7 @@ class spaceFractionsEditor.EditorHelper
     removeObject: () ->
         selectedSquare = @$('.board .selected')
         @viewHelper.removeObjectFromBoard(selectedSquare)
+        @levelDescription.val('')
         @closeElementSelector()
         
     showObjectSelector: (close=false) ->
@@ -177,7 +183,7 @@ class spaceFractionsEditor.EditorHelper
             if close then @closeElementSelector() else @showSelector('object')
         
     setObjectFraction: (numerator, denominator) ->
-        selectedSquare = @$('.board .selected')
+        selectedSquare = @viewHelper.board.find('.selected')
         if @viewHelper.objects[selectedSquare.data('object_type')].states
             selectedSquare.data('fullNumerator', numerator)
             selectedSquare.data('fullDenominator', denominator)
@@ -212,4 +218,14 @@ class spaceFractionsEditor.EditorHelper
             selector.css
                 opacity: 1
                 display: 'block'
+    
+    load: () ->
+        @selectSquare(@viewHelper.board.find('.square.index35'))
+        @addObject('laser_up')
+                
+    clear: () ->
+        for square in @viewHelper.board.find('.square.occupied')
+            @selectSquare(square)
+            @removeObject()
+            
         

@@ -174,6 +174,10 @@ spaceFractions.ViewHelper = (function() {
 
   ViewHelper.prototype.removeObjectFromBoard = function(square) {
     var laserData, _results;
+    square = $(square);
+    if (!square.data('object_type')) {
+      return;
+    }
     this.removeExistingLasers(square);
     square.html('');
     square.removeClass('occupied');

@@ -141,6 +141,8 @@ class spaceFractions.ViewHelper
         
         
     removeObjectFromBoard: (square) ->
+        square = $(square)
+        return unless square.data('object_type')
         @removeExistingLasers(square)
         square.html('')
         square.removeClass('occupied')
