@@ -22,7 +22,7 @@ class spaceFractionsEditor.EditorHelper
         @levelDescription.addClass('level_description')
         @el.append(@levelDescription)
         loadLevelDescription = $(document.createElement('button'))
-        loadLevelDescription.html('Load')
+        loadLevelDescription.html('Load To Edit')
         loadLevelDescription.bind 'click', => @load()
         @el.append(loadLevelDescription)
         

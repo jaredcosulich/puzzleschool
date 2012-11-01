@@ -31,7 +31,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.levelDescription.addClass('level_description');
     this.el.append(this.levelDescription);
     loadLevelDescription = $(document.createElement('button'));
-    loadLevelDescription.html('Load');
+    loadLevelDescription.html('Load To Edit');
     loadLevelDescription.bind('click', function() {
       return _this.load();
     });

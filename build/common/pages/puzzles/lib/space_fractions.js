@@ -48,7 +48,8 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
       distribute: true,
       distributeDirections: [direction2],
       accept: true,
-      acceptDirections: [direction]
+      acceptDirections: [direction],
+      movable: true
     };
     OBJECTS["two_split_" + direction + "_" + direction2] = {
       index: 1000 + index2,
@@ -57,7 +58,8 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
       distributeDirections: [direction, direction2],
       accept: true,
       acceptDirections: [direction],
-      denominatorMultiplier: 2
+      denominatorMultiplier: 2,
+      movable: true
     };
   }
 }
@@ -247,6 +249,23 @@ spaceFractions.ViewHelper = (function() {
       return false;
     }
     return true;
+  };
+
+  ViewHelper.prototype.loadToPlay = function(data) {
+    var json, object, objectMeta, _k, _len2, _ref, _results;
+    json = JSON.parse(data);
+    _ref = json.objects;
+    _results = [];
+    for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+      object = _ref[_k];
+      objectMeta = this.objects[object.type];
+      if (!objectMeta.movable) {
+        _results.push(this.addObjectToBoard(object.type, this.board.find(".square.index" + object.index)));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
 
   ViewHelper.prototype.fireLaser = function(square) {

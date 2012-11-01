@@ -62,4 +62,17 @@ describe("Init:", function() {
         
     })
     
+    describe('loading data for a custom game', function() {
+        beforeEach(function() {
+            levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16},{"type":"ship_right","index":18,"fullNumerator":"1","fullDenominator":"10"},{"type":"ship_left","index":50,"fullNumerator":"1","fullDenominator":"20"},{"type":"two_split_down_left","index":56},{"type":"laser_up","index":71,"numerator":"1","denominator":"5"},{"type":"ship_down","index":86,"fullNumerator":"1","fullDenominator":"40"}]}
+            game.loadToPlay(JSON.stringify(levelDescription));
+        })
+        
+        it('should load only ships, rocks, and lasers on to the board', function() {
+            expect(game.board.find('.square.occupied').length).toEqual(4)
+            expect(game.board.find('.square.index11').data('object_type')).toBeUndefined()
+        })
+        
+    })
+    
 });

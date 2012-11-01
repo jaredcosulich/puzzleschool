@@ -42,7 +42,8 @@ for direction, index in directions
             distributeDirections: [direction2]
             accept: true
             acceptDirections: [direction]
-        
+            movable: true
+            
         #splitters
         OBJECTS["two_split_#{direction}_#{direction2}"] =
             index: 1000 + index2
@@ -52,7 +53,7 @@ for direction, index in directions
             accept: true
             acceptDirections: [direction]
             denominatorMultiplier: 2
-        
+            movable: true
         
         
 class spaceFractions.ChunkHelper
@@ -188,7 +189,19 @@ class spaceFractions.ViewHelper
             @fireLaser(checkSquare)
         return false if occupied
         return true
-
+        
+    
+    loadToPlay: (data) ->
+        json = JSON.parse(data)
+        for object in json.objects
+            objectMeta = @objects[object.type]
+            unless objectMeta.movable
+                @addObjectToBoard(object.type, @board.find(".square.index#{object.index}"))
+            # if (numerator = object.fullNumerator or object.numerator) and 
+            #    (denominator = object.fullDenominator or object.denominator)
+            #     @setObjectFraction(numerator, denominator)
+        
+    
     fireLaser: (square) ->
         square = $(square)
         

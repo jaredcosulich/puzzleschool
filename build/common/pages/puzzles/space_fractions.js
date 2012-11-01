@@ -37,6 +37,7 @@ soma.chunks({
       })();
       return this.html = wings.renderTemplate(this.template, {
         levelName: this.levelName || '',
+        custom: this.levelName === 'custom',
         rows: rows
       });
     }
@@ -47,18 +48,24 @@ soma.views({
   SpaceFractions: {
     selector: '#content .space_fractions',
     create: function() {
-      var spaceFractions, spaceFractionsEditor;
+      var levelName, spaceFractions, spaceFractionsEditor,
+        _this = this;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
         el: $(this.selector),
         rows: 10,
         columns: 10
       });
-      if (this.el.data('level_name') === 'editor') {
+      levelName = this.el.data('level_name');
+      if (levelName === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
         return this.editor = new spaceFractionsEditor.EditorHelper({
           el: $(this.selector),
           viewHelper: this.viewHelper
+        });
+      } else if (levelName === 'custom') {
+        return this.$('.load_to_play').bind('click', function() {
+          return _this.viewHelper.loadToPlay(_this.$('.level_description').val());
         });
       }
     }

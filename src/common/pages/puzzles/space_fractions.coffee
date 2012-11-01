@@ -21,6 +21,7 @@ soma.chunks
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
                 levelName: (@levelName or '')
+                custom: @levelName == 'custom'
                 rows: rows
             )
             
@@ -36,12 +37,15 @@ soma.views
                 rows: 10
                 columns: 10
 
-            if @el.data('level_name') == 'editor'
+            levelName = @el.data('level_name')
+            if levelName == 'editor'
                 spaceFractionsEditor = require('./lib/space_fractions_editor')
                 @editor = new spaceFractionsEditor.EditorHelper
                     el: $(@selector)
                     viewHelper: @viewHelper
-            
+            else if levelName == 'custom'
+                @$('.load_to_play').bind 'click', =>
+                    @viewHelper.loadToPlay(@$('.level_description').val())
             
 
 soma.routes
