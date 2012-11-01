@@ -28,6 +28,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     var loadLevelDescription,
       _this = this;
     this.levelDescription = $(document.createElement('textarea'));
+    this.levelDescription.addClass('level_description');
     this.el.append(this.levelDescription);
     loadLevelDescription = $(document.createElement('button'));
     loadLevelDescription.html('Load');
@@ -172,15 +173,10 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addObject = function(objectType) {
-    var json, object, selectedSquare;
+    var object, selectedSquare;
     selectedSquare = this.$('.board .selected');
     this.viewHelper.addObjectToBoard(objectType, selectedSquare);
-    json = JSON.parse(this.levelDescription.val() || '{"objects": []}');
-    json.objects.push({
-      type: objectType,
-      index: selectedSquare.data('index')
-    });
-    this.levelDescription.val(JSON.stringify(json));
+    this.save();
     object = this.viewHelper.objects[objectType];
     return this.showObjectSelector(true);
   };
@@ -190,7 +186,8 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectedSquare = this.$('.board .selected');
     this.viewHelper.removeObjectFromBoard(selectedSquare);
     this.levelDescription.val('');
-    return this.closeElementSelector();
+    this.closeElementSelector();
+    return this.save();
   };
 
   EditorHelper.prototype.showObjectSelector = function(close) {
@@ -234,7 +231,8 @@ spaceFractionsEditor.EditorHelper = (function() {
     }
     selectedSquare.attr('title', "Fraction: " + numerator + "/" + denominator);
     this.viewHelper.setObjectFraction(selectedSquare);
-    return this.viewHelper.fireLaser(selectedSquare);
+    this.viewHelper.fireLaser(selectedSquare);
+    return this.save();
   };
 
   EditorHelper.prototype.showSelector = function(selectorPage) {
@@ -267,15 +265,37 @@ spaceFractionsEditor.EditorHelper = (function() {
     }
   };
 
+  EditorHelper.prototype.save = function() {
+    var levelDescription, square, _i, _len, _ref;
+    this.levelDescription.val('');
+    levelDescription = {
+      objects: []
+    };
+    _ref = this.viewHelper.board.find('.square.occupied');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      square = _ref[_i];
+      square = $(square);
+      levelDescription.objects.push({
+        type: square.data('object_type'),
+        index: square.data('index'),
+        numerator: square.data('numerator'),
+        denominator: square.data('denominator')
+      });
+    }
+    return this.levelDescription.val(JSON.stringify(levelDescription));
+  };
+
   EditorHelper.prototype.load = function() {
     var json, object, _i, _len, _ref, _results;
     json = JSON.parse(this.levelDescription.val());
+    this.levelDescription.val('');
     _ref = json.objects;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       object = _ref[_i];
       this.selectSquare(this.viewHelper.board.find(".square.index" + object.index));
-      _results.push(this.addObject(object.type));
+      this.addObject(object.type);
+      _results.push(this.setObjectFraction(object.numerator, object.denominator));
     }
     return _results;
   };

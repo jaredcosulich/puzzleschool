@@ -10,6 +10,7 @@ body {
   float: left;
   width: 620px;
   overflow: hidden;
+  margin-bottom: 24px;
   background: url(/assets/images/puzzles/space_fractions/space1.jpg) no-repeat center center;
   background-color: #1a1a1a;
 }
@@ -134,4 +135,9 @@ body {
 }
 .space_fractions .element_selector .fraction_selector .numerator {
   text-align: right;
+}
+.space_fractions .level_description {
+  display: block;
+  height: 6em;
+  width: 600px;
 }

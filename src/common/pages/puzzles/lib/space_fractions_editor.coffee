@@ -19,6 +19,7 @@ class spaceFractionsEditor.EditorHelper
         
     initLevelDescription: ->
         @levelDescription = $(document.createElement('textarea'))
+        @levelDescription.addClass('level_description')
         @el.append(@levelDescription)
         loadLevelDescription = $(document.createElement('button'))
         loadLevelDescription.html('Load')
@@ -153,9 +154,7 @@ class spaceFractionsEditor.EditorHelper
         selectedSquare = @$('.board .selected')
         @viewHelper.addObjectToBoard(objectType, selectedSquare)
         
-        json = JSON.parse(@levelDescription.val() or '{"objects": []}')
-        json.objects.push({type: objectType, index: selectedSquare.data('index')})
-        @levelDescription.val(JSON.stringify(json))
+        @save()
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
@@ -165,6 +164,7 @@ class spaceFractionsEditor.EditorHelper
         @viewHelper.removeObjectFromBoard(selectedSquare)
         @levelDescription.val('')
         @closeElementSelector()
+        @save()
         
     showObjectSelector: (close=false) ->
         selectedSquare = @$('.board .selected')
@@ -196,7 +196,7 @@ class spaceFractionsEditor.EditorHelper
         selectedSquare.attr('title', "Fraction: #{numerator}/#{denominator}")
         @viewHelper.setObjectFraction(selectedSquare)
         @viewHelper.fireLaser(selectedSquare)
-        
+        @save()
     
             
     showSelector: (selectorPage) ->
@@ -221,13 +221,30 @@ class spaceFractionsEditor.EditorHelper
                 opacity: 1
                 display: 'block'
     
-    load: () ->
+    save: ->
+        @levelDescription.val('')
+        levelDescription = {objects: []}
+
+        for square in @viewHelper.board.find('.square.occupied')
+            square = $(square)
+            levelDescription.objects.push
+                type: square.data('object_type')
+                index: square.data('index')
+                numerator: square.data('numerator')
+                denominator: square.data('denominator')
+        
+        @levelDescription.val(JSON.stringify(levelDescription))
+        
+    
+    load: ->
         json = JSON.parse(@levelDescription.val())
+        @levelDescription.val('')
         for object in json.objects
             @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
             @addObject(object.type)
+            @setObjectFraction(object.numerator, object.denominator)
                 
-    clear: () ->
+    clear: ->
         for square in @viewHelper.board.find('.square.occupied')
             @selectSquare(square)
             @removeObject()

@@ -173,7 +173,7 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.removeObjectFromBoard = function(square) {
-    var laserData, _results;
+    var attr, laserData, _k, _len2, _ref, _results;
     square = $(square);
     if (!square.data('object_type')) {
       return;
@@ -181,8 +181,11 @@ spaceFractions.ViewHelper = (function() {
     this.removeExistingLasers(square);
     square.html('');
     square.removeClass('occupied');
-    square.data('object_type', null);
-    square.data('acceptDirections', null);
+    _ref = ['object_type', 'acceptDirections', 'numerator', 'denominator'];
+    for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+      attr = _ref[_k];
+      square.data(attr, null);
+    }
     laserData = JSON.parse(square.data('lasers') || '{}');
     _results = [];
     for (direction in laserData) {

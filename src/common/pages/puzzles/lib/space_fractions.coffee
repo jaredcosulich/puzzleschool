@@ -146,8 +146,9 @@ class spaceFractions.ViewHelper
         @removeExistingLasers(square)
         square.html('')
         square.removeClass('occupied')
-        square.data('object_type', null)
-        square.data('acceptDirections', null)
+        for attr in ['object_type', 'acceptDirections', 'numerator', 'denominator']
+            square.data(attr, null)
+
         laserData = JSON.parse(square.data('lasers') or '{}')
         for direction of laserData
             @fireLaser(@$(".index#{laserData[direction].index}"))
