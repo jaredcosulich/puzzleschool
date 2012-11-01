@@ -293,23 +293,20 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.load = function() {
-    var denominator, json, numerator, object, _i, _len, _ref, _results;
+    var denominator, json, numerator, object, _i, _len, _ref;
     json = JSON.parse(this.levelDescription.val());
     this.levelDescription.val('');
     this.clear();
     _ref = json.objects;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       object = _ref[_i];
       this.selectSquare(this.viewHelper.board.find(".square.index" + object.index));
       this.addObject(object.type);
       if ((numerator = object.fullNumerator || object.numerator) && (denominator = object.fullDenominator || object.denominator)) {
-        _results.push(this.setObjectFraction(numerator, denominator));
-      } else {
-        _results.push(void 0);
+        this.setObjectFraction(numerator, denominator);
       }
     }
-    return _results;
+    return this.closeElementSelector();
   };
 
   EditorHelper.prototype.clear = function() {

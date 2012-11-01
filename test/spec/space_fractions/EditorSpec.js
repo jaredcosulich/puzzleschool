@@ -20,7 +20,7 @@ describe("EditorSpec:", function() {
     
     it('the level description should not describe any lasers', function() {
         expect(editor.levelDescription.val()).toNotContain('laser')
-    })
+    });
     
     describe('adding an object', function() {
        beforeEach(function() {
@@ -33,6 +33,11 @@ describe("EditorSpec:", function() {
        });
     });
     
+    describe('change a ship to a laser', function() {
+        it('should fire the laser', function() {
+            expect('pending').toEqual('completed')
+        })
+    });
     
     describe('clearing the editor', function() {
         var selectedSquare;

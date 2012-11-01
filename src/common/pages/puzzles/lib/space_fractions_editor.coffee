@@ -253,6 +253,7 @@ class spaceFractionsEditor.EditorHelper
             if (numerator = object.fullNumerator or object.numerator) and 
                (denominator = object.fullDenominator or object.denominator)
                 @setObjectFraction(numerator, denominator)
+        @closeElementSelector()
                 
     clear: ->
         for square in @viewHelper.board.find('.square.occupied')
