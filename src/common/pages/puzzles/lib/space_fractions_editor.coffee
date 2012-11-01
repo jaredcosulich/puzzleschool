@@ -21,6 +21,19 @@ class spaceFractionsEditor.EditorHelper
         objectSelector.addClass('selector')
         objectSelector.addClass('object_selector')
         objectSelector.html('<h3>Select what to put in this square:</h3>')
+
+        close = $(document.createElement('DIV'))
+        close.html('<a>Close</a>')
+        close.addClass('object')
+        close.bind 'click', => @closeElementSelector()
+        objectSelector.append(close)
+
+        clear = $(document.createElement('DIV'))
+        clear.html('<a>Clear</a>')
+        clear.addClass('object')
+        clear.bind 'click', => @removeObject()
+        objectSelector.append(clear)
+
         sortedObjectTypes = Object.keys(@viewHelper.objects).sort((a, b) => @viewHelper.objects[a].index - @viewHelper.objects[b].index)
         for objectType in sortedObjectTypes
             do (objectType) =>
@@ -38,19 +51,7 @@ class spaceFractionsEditor.EditorHelper
             
                 objectContainer.append(objectImage)
                 objectSelector.append(objectContainer)
-                
-        clear = $(document.createElement('DIV'))
-        clear.html('<a>Clear</a>')
-        clear.addClass('object')
-        clear.bind 'click', => @removeObject()
-        objectSelector.append(clear)
-
-        close = $(document.createElement('DIV'))
-        close.html('<a>Close</a>')
-        close.addClass('object')
-        close.bind 'click', => @closeElementSelector()
-        objectSelector.append(close)
-                
+                                
         @elementSelector.append(objectSelector)
     
     initFractionSelector: ->
@@ -172,11 +173,11 @@ class spaceFractionsEditor.EditorHelper
             selectedSquare.data('fullNumerator', numerator)
             selectedSquare.data('fullDenominator', denominator)
             @viewHelper.setObjectImage(selectedSquare)
-            @viewHelper.setObjectFraction(selectedSquare)
         else
             selectedSquare.data('numerator', numerator)
             selectedSquare.data('denominator', denominator)
         selectedSquare.attr('title', "Fraction: #{numerator}/#{denominator}")
+        @viewHelper.setObjectFraction(selectedSquare)
         @viewHelper.fireLaser(selectedSquare)
             
     showSelector: (selectorPage) ->

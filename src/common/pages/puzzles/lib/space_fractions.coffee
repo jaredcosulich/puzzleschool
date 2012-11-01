@@ -5,11 +5,11 @@ LASER_HEIGHT = 20
 OBJECTS = 
     rock1: 
         image: 'rock1'
-        index: 999999
+        index: -1
 
     rock2: 
         image: 'rock2'
-        index: 1000000
+        index: -2
 
 # directional objects
 directions = ['up', 'down', 'left',  'right']

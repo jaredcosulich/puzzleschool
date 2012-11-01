@@ -30,6 +30,20 @@ spaceFractionsEditor.EditorHelper = (function() {
     objectSelector.addClass('selector');
     objectSelector.addClass('object_selector');
     objectSelector.html('<h3>Select what to put in this square:</h3>');
+    close = $(document.createElement('DIV'));
+    close.html('<a>Close</a>');
+    close.addClass('object');
+    close.bind('click', function() {
+      return _this.closeElementSelector();
+    });
+    objectSelector.append(close);
+    clear = $(document.createElement('DIV'));
+    clear.html('<a>Clear</a>');
+    clear.addClass('object');
+    clear.bind('click', function() {
+      return _this.removeObject();
+    });
+    objectSelector.append(clear);
     sortedObjectTypes = Object.keys(this.viewHelper.objects).sort(function(a, b) {
       return _this.viewHelper.objects[a].index - _this.viewHelper.objects[b].index;
     });
@@ -53,20 +67,6 @@ spaceFractionsEditor.EditorHelper = (function() {
       objectType = sortedObjectTypes[_i];
       _fn(objectType);
     }
-    clear = $(document.createElement('DIV'));
-    clear.html('<a>Clear</a>');
-    clear.addClass('object');
-    clear.bind('click', function() {
-      return _this.removeObject();
-    });
-    objectSelector.append(clear);
-    close = $(document.createElement('DIV'));
-    close.html('<a>Close</a>');
-    close.addClass('object');
-    close.bind('click', function() {
-      return _this.closeElementSelector();
-    });
-    objectSelector.append(close);
     return this.elementSelector.append(objectSelector);
   };
 
@@ -204,12 +204,12 @@ spaceFractionsEditor.EditorHelper = (function() {
       selectedSquare.data('fullNumerator', numerator);
       selectedSquare.data('fullDenominator', denominator);
       this.viewHelper.setObjectImage(selectedSquare);
-      this.viewHelper.setObjectFraction(selectedSquare);
     } else {
       selectedSquare.data('numerator', numerator);
       selectedSquare.data('denominator', denominator);
     }
     selectedSquare.attr('title', "Fraction: " + numerator + "/" + denominator);
+    this.viewHelper.setObjectFraction(selectedSquare);
     return this.viewHelper.fireLaser(selectedSquare);
   };
 
