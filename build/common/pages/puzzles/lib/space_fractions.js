@@ -252,7 +252,7 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.loadToPlay = function(data) {
-    var json, object, objectMeta, _k, _len2, _ref, _results;
+    var attr, json, object, objectMeta, square, _k, _len2, _ref, _results;
     json = JSON.parse(data);
     _ref = json.objects;
     _results = [];
@@ -260,7 +260,16 @@ spaceFractions.ViewHelper = (function() {
       object = _ref[_k];
       objectMeta = this.objects[object.type];
       if (!objectMeta.movable) {
-        _results.push(this.addObjectToBoard(object.type, this.board.find(".square.index" + object.index)));
+        square = this.board.find(".square.index" + object.index);
+        this.addObjectToBoard(object.type, square);
+        for (attr in object) {
+          if (attr !== 'type' && attr !== 'index') {
+            square.data(attr, object[attr]);
+          }
+        }
+        this.setObjectFraction(square);
+        this.setObjectImage(square);
+        _results.push(this.fireLaser(square));
       } else {
         _results.push(void 0);
       }

@@ -196,10 +196,15 @@ class spaceFractions.ViewHelper
         for object in json.objects
             objectMeta = @objects[object.type]
             unless objectMeta.movable
-                @addObjectToBoard(object.type, @board.find(".square.index#{object.index}"))
-            # if (numerator = object.fullNumerator or object.numerator) and 
-            #    (denominator = object.fullDenominator or object.denominator)
-            #     @setObjectFraction(numerator, denominator)
+                square = @board.find(".square.index#{object.index}")
+                @addObjectToBoard(object.type, square)
+                for attr of object when attr not in ['type', 'index']
+                    square.data(attr, object[attr])
+
+                @setObjectFraction(square)
+                @setObjectImage(square)
+                @fireLaser(square)
+                
         
     
     fireLaser: (square) ->
