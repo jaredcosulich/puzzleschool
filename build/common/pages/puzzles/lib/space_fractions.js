@@ -255,19 +255,27 @@ spaceFractions.ViewHelper = (function() {
         return _results;
       });
       return body.bind('mouseup', function(e) {
-        var image, selectedSquare;
+        var image, occupiedSquare, selectedSquare, _k, _len2, _ref;
         image = movingObject;
         movingObject = null;
         _this.el.find('.movable_object').remove();
         body.unbind('mousemove');
         body.unbind('mouseup');
-        selectedSquare = _this.el.find('.square.selected');
+        selectedSquare = _this.$('.square.selected');
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
         }
         image.removeClass('movable_object');
         _this.addObjectToSquare(objectType, selectedSquare, image);
         selectedSquare.removeClass('selected');
+        _ref = _this.$('.square.occupied');
+        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+          occupiedSquare = _ref[_k];
+          occupiedSquare = $(occupiedSquare);
+          if (!occupiedSquare.find('img').length) {
+            occupiedSquare.removeClass('occupied');
+          }
+        }
         return _this.movingObject = false;
       });
     });

@@ -188,11 +188,14 @@ class spaceFractions.ViewHelper
                 @el.find('.movable_object').remove()
                 body.unbind 'mousemove'        
                 body.unbind 'mouseup'
-                selectedSquare = @el.find('.square.selected')
+                selectedSquare = @$('.square.selected')
                 selectedSquare = square if not selectedSquare?.length
                 image.removeClass('movable_object')
                 @addObjectToSquare(objectType, selectedSquare, image)
                 selectedSquare.removeClass('selected')
+                for occupiedSquare in @$('.square.occupied')
+                    occupiedSquare = $(occupiedSquare)
+                    occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
                 @movingObject = false
     
     addObjectToSquare: (objectType, square, image) ->
