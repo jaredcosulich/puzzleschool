@@ -32,10 +32,16 @@ soma.chunks({
           _ref = ['empty', 'under', 'full', 'over'];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             state = _ref[_i];
-            objectImages.push(this.chunkHelper.objects[object].image + ("_" + state));
+            objectImages.push({
+              id: "" + object + "_" + state,
+              image: this.chunkHelper.objects[object].image + ("_" + state)
+            });
           }
         } else {
-          objectImages.push(this.chunkHelper.objects[object].image);
+          objectImages.push({
+            id: object,
+            image: this.chunkHelper.objects[object].image
+          });
         }
       }
       rows = (function() {

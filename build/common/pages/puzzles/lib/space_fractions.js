@@ -76,9 +76,9 @@ spaceFractions.ChunkHelper = (function() {
 
 spaceFractions.ViewHelper = (function() {
 
-  ViewHelper.prototype.objects = OBJECTS;
-
   ViewHelper.prototype.baseFolder = '/assets/images/puzzles/space_fractions/';
+
+  ViewHelper.prototype.objects = OBJECTS;
 
   function ViewHelper(_arg) {
     var _this = this;
@@ -147,9 +147,27 @@ spaceFractions.ViewHelper = (function() {
     return _results;
   };
 
+  ViewHelper.prototype.getObjectImage = function(objectType, state) {
+    var cached, fullImage, objectMeta, uncached;
+    objectMeta = this.objects[objectType];
+    if (objectMeta.states) {
+      fullImage = "" + objectMeta.image + "_" + state;
+      cached = this.$("#" + fullImage);
+      uncached = "" + this.baseFolder + fullImage;
+    } else {
+      cached = this.$("#" + objectMeta.image);
+      uncached = "" + this.baseFolder + objectMeta.image;
+    }
+    if (cached != null ? cached.length : void 0) {
+      return cached.attr('src');
+    }
+    return "" + uncached + ".png";
+  };
+
   ViewHelper.prototype.setObjectImage = function(square) {
-    var acceptedLaser, fraction, laserData, object, state, totalLaser;
-    object = this.objects[square.data('object_type')];
+    var acceptedLaser, fraction, laserData, object, objectType, state, totalLaser;
+    objectType = square.data('object_type');
+    object = this.objects[objectType];
     if (!object) {
       return;
     }
@@ -170,9 +188,9 @@ spaceFractions.ViewHelper = (function() {
       } else if (totalLaser > fraction) {
         state = 'over';
       }
-      return square.find('img').attr('src', this.baseFolder + object.image + '_' + state + '.png');
+      return square.find('img').attr('src', this.getObjectImage(objectType, state));
     } else {
-      return square.find('img').attr('src', this.baseFolder + object.image + '.png');
+      return square.find('img').attr('src', this.getObjectImage(objectType));
     }
   };
 
@@ -217,7 +235,7 @@ spaceFractions.ViewHelper = (function() {
       _this.removeObjectFromSquare(square);
       movingObject = $(document.createElement('IMG'));
       movingObject.addClass('movable_object');
-      movingObject.attr('src', _this.baseFolder + objectMeta.image + '.png');
+      movingObject.attr('src', _this.getObjectImage(objectType));
       _this.el.append(movingObject);
       movingObject.css({
         left: e.clientX - (square.width() / 2),

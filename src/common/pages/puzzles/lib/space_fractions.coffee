@@ -62,8 +62,8 @@ class spaceFractions.ChunkHelper
     
 
 class spaceFractions.ViewHelper
-    objects: OBJECTS
     baseFolder: '/assets/images/puzzles/space_fractions/'
+    objects: OBJECTS
 
     constructor: ({@el, @rows, @columns}) ->
         @initBoard()
@@ -101,9 +101,23 @@ class spaceFractions.ViewHelper
                 square.addClass("index#{index}")
                 @options.append(square)
         
+    getObjectImage: (objectType, state) ->
+        objectMeta = @objects[objectType]
+        if objectMeta.states
+            fullImage = "#{objectMeta.image}_#{state}"
+            cached = @$("##{fullImage}")
+            uncached = "#{@baseFolder}#{fullImage}"
+        else
+            cached = @$("##{objectMeta.image}")
+            uncached = "#{@baseFolder}#{objectMeta.image}"
+            
+        return cached.attr('src') if cached?.length
+        return "#{uncached}.png"
+        
         
     setObjectImage: (square) ->
-        object = @objects[square.data('object_type')]
+        objectType = square.data('object_type')
+        object = @objects[objectType]
         return unless object
         if object.states
             laserData = JSON.parse(square.data('lasers') or '{}')
@@ -120,9 +134,9 @@ class spaceFractions.ViewHelper
             else if totalLaser > fraction
                 state = 'over'
             
-            square.find('img').attr('src', @baseFolder + object.image + '_' + state + '.png')
+            square.find('img').attr('src', @getObjectImage(objectType, state))
         else
-            square.find('img').attr('src', @baseFolder + object.image + '.png')
+            square.find('img').attr('src', @getObjectImage(objectType))
         
     showFraction: (squareOrLaser) ->
         if not squareOrLaser.height()
@@ -153,7 +167,7 @@ class spaceFractions.ViewHelper
             @removeObjectFromSquare(square)
             movingObject = $(document.createElement('IMG'))
             movingObject.addClass('movable_object')
-            movingObject.attr('src', @baseFolder + objectMeta.image + '.png')
+            movingObject.attr('src', @getObjectImage(objectType))
             @el.append(movingObject)
             movingObject.css
                 left: e.clientX - (square.width() / 2)
