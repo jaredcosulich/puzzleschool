@@ -41,6 +41,7 @@ body {
   background-color: red;
   box-shadow: 0 0 20px 10px red;
   opacity: 0.75;
+  position: relative;
 }
 .space_fractions .board .laser .beam.left,
 .space_fractions .board .laser .beam.right {
@@ -102,10 +103,13 @@ body {
   vertical-align: middle;
 }
 .space_fractions .square .fraction {
-  padding: 6px;
-  position: absolute;
   top: 0;
   left: 0;
+}
+.space_fractions .square .fraction,
+.space_fractions .laser .fraction {
+  padding: 6px;
+  position: absolute;
   background-color: white;
   border: 1px solid #ccc;
   font-weight: bold;

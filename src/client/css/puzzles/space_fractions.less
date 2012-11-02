@@ -44,6 +44,7 @@ body {
                 background-color: red;
                 box-shadow: 0 0 20px 10px red;
                 opacity:0.75;
+                position: relative;
                 &.left, &.right {
                     margin: 20px 0;
                 }
@@ -105,10 +106,15 @@ body {
             vertical-align: middle;
         }
         .fraction {
-            padding: 6px;
-            position: absolute;
             top: 0;
             left: 0;
+        }
+    }
+    
+    .square, .laser {
+        .fraction {
+            padding: 6px;
+            position: absolute;
             background-color: white;
             border: 1px solid #ccc;
             font-weight: bold;

@@ -174,13 +174,31 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
-  ViewHelper.prototype.setObjectFraction = function(square) {
-    var fraction;
-    square.find('.fraction').remove();
+  ViewHelper.prototype.showFraction = function(squareOrLaser) {
+    var beam, denominator, fraction, numerator,
+      _this = this;
+    if (!squareOrLaser.height()) {
+      $.timeout(50, function() {
+        return _this.showFraction(squareOrLaser);
+      });
+      return;
+    }
+    squareOrLaser.find('.fraction').remove();
     fraction = $(document.createElement('DIV'));
-    fraction.html("" + (square.data('fullNumerator') || square.data('numerator') || 1) + "/" + (square.data('fullDenominator') || square.data('denominator') || 1));
+    numerator = squareOrLaser.data('fullNumerator') || squareOrLaser.data('numerator') || 1;
+    denominator = squareOrLaser.data('fullDenominator') || squareOrLaser.data('denominator') || 1;
+    fraction.html("" + numerator + "/" + denominator);
     fraction.addClass('fraction');
-    return square.append(fraction);
+    if (squareOrLaser.hasClass('laser')) {
+      beam = squareOrLaser.find('.beam');
+      beam.append(fraction);
+      return fraction.css({
+        top: (beam.height() / 2) - (fraction.height() / 2),
+        left: (beam.width() / 2) - (fraction.width() / 2)
+      });
+    } else {
+      return squareOrLaser.append(fraction);
+    }
   };
 
   ViewHelper.prototype.initMovableObject = function(square) {
@@ -256,7 +274,7 @@ spaceFractions.ViewHelper = (function() {
     objectContainer = $(document.createElement('IMG'));
     square.append(objectContainer);
     if (object.showFraction) {
-      this.setObjectFraction(square);
+      this.showFraction(square);
     }
     laserData = JSON.parse(square.data('lasers') || '{}');
     if (object.accept) {
@@ -382,7 +400,7 @@ spaceFractions.ViewHelper = (function() {
             square.data(attr, object[attr]);
           }
         }
-        this.setObjectFraction(square);
+        this.showFraction(square);
         this.setObjectImage(square);
         _results.push(this.fireLaser(square));
       }
@@ -495,6 +513,7 @@ spaceFractions.ViewHelper = (function() {
           left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
         });
       }
+      this.showFraction(laser);
       _results.push(this.board.append(laser));
     }
     return _results;

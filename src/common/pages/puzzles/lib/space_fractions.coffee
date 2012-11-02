@@ -123,12 +123,25 @@ class spaceFractions.ViewHelper
         else
             square.find('img').attr('src', @baseFolder + object.image + '.png')
         
-    setObjectFraction: (square) ->
-        square.find('.fraction').remove()
+    showFraction: (squareOrLaser) ->
+        if not squareOrLaser.height()
+            $.timeout 50, => @showFraction(squareOrLaser)
+            return
+            
+        squareOrLaser.find('.fraction').remove()
         fraction = $(document.createElement('DIV'))
-        fraction.html("#{square.data('fullNumerator') or square.data('numerator') or 1}/#{square.data('fullDenominator') or square.data('denominator') or 1}")
+        numerator = squareOrLaser.data('fullNumerator') or squareOrLaser.data('numerator') or 1
+        denominator = squareOrLaser.data('fullDenominator') or squareOrLaser.data('denominator') or 1
+        fraction.html("#{numerator}/#{denominator}")
         fraction.addClass('fraction')
-        square.append(fraction)
+        if squareOrLaser.hasClass('laser')
+            beam = squareOrLaser.find('.beam')
+            beam.append(fraction)
+            fraction.css
+                top: (beam.height() / 2) - (fraction.height() / 2)
+                left: (beam.width() / 2) - (fraction.width() / 2)
+        else
+            squareOrLaser.append(fraction)
     
     initMovableObject: (square) ->
         objectType = square.data('object_type')
@@ -184,7 +197,7 @@ class spaceFractions.ViewHelper
         objectContainer = $(document.createElement('IMG'))
         square.append(objectContainer)
         
-        @setObjectFraction(square) if object.showFraction
+        @showFraction(square) if object.showFraction
             
         laserData = JSON.parse(square.data('lasers') or '{}')
         
@@ -273,7 +286,7 @@ class spaceFractions.ViewHelper
                 for attr of object when attr not in ['type', 'index']
                     square.data(attr, object[attr])
 
-                @setObjectFraction(square)
+                @showFraction(square)
                 @setObjectImage(square)
                 @fireLaser(square)
                 
@@ -356,6 +369,8 @@ class spaceFractions.ViewHelper
                 laser.css
                     top: offset.top + offset.height
                     left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
+            
+            @showFraction(laser)
             
             @board.append(laser)
         
