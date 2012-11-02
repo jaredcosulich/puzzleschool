@@ -147,33 +147,16 @@ spaceFractions.ViewHelper = (function() {
     return _results;
   };
 
-  ViewHelper.prototype.getObjectImage = function(objectType, state) {
-    var cached, fullImage, objectMeta, uncached;
-    objectMeta = this.objects[objectType];
-    if (objectMeta.states) {
-      fullImage = "" + objectMeta.image + "_" + state;
-      cached = this.$("#" + fullImage);
-      uncached = "" + this.baseFolder + fullImage;
-    } else {
-      cached = this.$("#" + objectMeta.image);
-      uncached = "" + this.baseFolder + objectMeta.image;
-    }
-    if (cached != null ? cached.length : void 0) {
-      return cached.attr('src');
-    }
-    return "" + uncached + ".png";
-  };
-
   ViewHelper.prototype.setObjectImage = function(square) {
-    var acceptedLaser, fraction, laserData, object, objectType, state, totalLaser;
+    var acceptedLaser, fraction, laserData, objectMeta, objectType, state, totalLaser;
     objectType = square.data('object_type');
-    object = this.objects[objectType];
-    if (!object) {
+    objectMeta = this.objects[objectType];
+    if (!objectMeta) {
       return;
     }
-    if (object.states) {
+    if (objectMeta.states) {
       laserData = JSON.parse(square.data('lasers') || '{}');
-      acceptedLaser = laserData[object.acceptDirections[0]];
+      acceptedLaser = laserData[objectMeta.acceptDirections[0]];
       totalLaser = acceptedLaser ? acceptedLaser.numerator / acceptedLaser.denominator : 0;
       fraction = parseInt(square.data('fullNumerator')) / parseInt(square.data('fullDenominator'));
       if (isNaN(fraction)) {
@@ -188,9 +171,9 @@ spaceFractions.ViewHelper = (function() {
       } else if (totalLaser > fraction) {
         state = 'over';
       }
-      return square.find('img').attr('src', this.getObjectImage(objectType, state));
+      return square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + "_" + state + ".png");
     } else {
-      return square.find('img').attr('src', this.getObjectImage(objectType));
+      return square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + ".png");
     }
   };
 
@@ -232,15 +215,14 @@ spaceFractions.ViewHelper = (function() {
         return;
       }
       _this.movingObject = true;
-      _this.removeObjectFromSquare(square);
-      movingObject = $(document.createElement('IMG'));
-      movingObject.addClass('movable_object');
-      movingObject.attr('src', _this.getObjectImage(objectType));
+      movingObject = square.find('img');
       _this.el.append(movingObject);
+      movingObject.addClass('movable_object');
       movingObject.css({
         left: e.clientX - (square.width() / 2),
         top: e.clientY - (square.height() / 2)
       });
+      _this.removeObjectFromSquare(square);
       body = $(document.body);
       body.bind('mousemove', function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
@@ -267,7 +249,8 @@ spaceFractions.ViewHelper = (function() {
         return _results;
       });
       return body.bind('mouseup', function(e) {
-        var selectedSquare;
+        var image, selectedSquare;
+        image = movingObject;
         movingObject = null;
         _this.el.find('.movable_object').remove();
         body.unbind('mousemove');
@@ -276,23 +259,26 @@ spaceFractions.ViewHelper = (function() {
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
         }
-        _this.addObjectToSquare(objectType, selectedSquare);
+        image.removeClass('movable_object');
+        _this.addObjectToSquare(objectType, selectedSquare, image);
         selectedSquare.removeClass('selected');
         return _this.movingObject = false;
       });
     });
   };
 
-  ViewHelper.prototype.addObjectToSquare = function(objectType, square) {
-    var laserData, object, objectContainer, _k, _len2, _ref;
+  ViewHelper.prototype.addObjectToSquare = function(objectType, square, image) {
+    var laserData, object, _k, _len2, _ref;
     square = $(square);
     square.html('');
     this.removeExistingLasers(square);
     square.addClass('occupied');
     square.data('object_type', objectType);
     object = this.objects[objectType];
-    objectContainer = $(document.createElement('IMG'));
-    square.append(objectContainer);
+    if (!image) {
+      image = $(document.createElement('IMG'));
+    }
+    square.append(image);
     if (object.showFraction) {
       this.showFraction(square);
     }

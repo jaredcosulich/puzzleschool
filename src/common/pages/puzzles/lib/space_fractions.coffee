@@ -101,27 +101,13 @@ class spaceFractions.ViewHelper
                 square.addClass("index#{index}")
                 @options.append(square)
         
-    getObjectImage: (objectType, state) ->
-        objectMeta = @objects[objectType]
-        if objectMeta.states
-            fullImage = "#{objectMeta.image}_#{state}"
-            cached = @$("##{fullImage}")
-            uncached = "#{@baseFolder}#{fullImage}"
-        else
-            cached = @$("##{objectMeta.image}")
-            uncached = "#{@baseFolder}#{objectMeta.image}"
-            
-        return cached.attr('src') if cached?.length
-        return "#{uncached}.png"
-        
-        
     setObjectImage: (square) ->
         objectType = square.data('object_type')
-        object = @objects[objectType]
-        return unless object
-        if object.states
+        objectMeta = @objects[objectType]
+        return unless objectMeta
+        if objectMeta.states
             laserData = JSON.parse(square.data('lasers') or '{}')
-            acceptedLaser = laserData[object.acceptDirections[0]]
+            acceptedLaser = laserData[objectMeta.acceptDirections[0]]
             totalLaser = if acceptedLaser then (acceptedLaser.numerator/acceptedLaser.denominator) else 0
             fraction = parseInt(square.data('fullNumerator'))/parseInt(square.data('fullDenominator'))
             fraction = 1 if isNaN(fraction)
@@ -134,9 +120,9 @@ class spaceFractions.ViewHelper
             else if totalLaser > fraction
                 state = 'over'
             
-            square.find('img').attr('src', @getObjectImage(objectType, state))
+            square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}_#{state}.png")
         else
-            square.find('img').attr('src', @getObjectImage(objectType))
+            square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}.png")
         
     showFraction: (squareOrLaser) ->
         if not squareOrLaser.height()
@@ -164,14 +150,15 @@ class spaceFractions.ViewHelper
         square.bind 'mousedown', (e) =>
             return if @movingObject
             @movingObject = true
-            @removeObjectFromSquare(square)
-            movingObject = $(document.createElement('IMG'))
-            movingObject.addClass('movable_object')
-            movingObject.attr('src', @getObjectImage(objectType))
+            movingObject = square.find('img')
             @el.append(movingObject)
+            movingObject.addClass('movable_object')
+            
             movingObject.css
                 left: e.clientX - (square.width() / 2)
                 top: e.clientY - (square.height() / 2)
+
+            @removeObjectFromSquare(square)
             
             body = $(document.body)
             body.bind 'mousemove', (e) =>
@@ -192,25 +179,27 @@ class spaceFractions.ViewHelper
                         $(boardSquare).removeClass('selected')
                     
             body.bind 'mouseup', (e) =>
+                image = movingObject
                 movingObject = null
                 @el.find('.movable_object').remove()
                 body.unbind 'mousemove'        
                 body.unbind 'mouseup'
                 selectedSquare = @el.find('.square.selected')
                 selectedSquare = square if not selectedSquare?.length
-                @addObjectToSquare(objectType, selectedSquare)
+                image.removeClass('movable_object')
+                @addObjectToSquare(objectType, selectedSquare, image)
                 selectedSquare.removeClass('selected')
                 @movingObject = false
     
-    addObjectToSquare: (objectType, square) ->
+    addObjectToSquare: (objectType, square, image) ->
         square = $(square)
         square.html('')
         @removeExistingLasers(square)
         square.addClass('occupied')
         square.data('object_type', objectType)
         object = @objects[objectType]
-        objectContainer = $(document.createElement('IMG'))
-        square.append(objectContainer)
+        image = $(document.createElement('IMG')) unless image
+        square.append(image)
         
         @showFraction(square) if object.showFraction
             

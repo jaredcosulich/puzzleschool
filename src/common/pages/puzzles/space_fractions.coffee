@@ -14,30 +14,13 @@ soma.chunks
 
         build: ->
             @setTitle("Space Fractions - The Puzzle School")
-
-            spaceFractions = require('./lib/space_fractions')
-            @chunkHelper = new spaceFractions.ChunkHelper()
-            
-            objectImages = []
-            for object of @chunkHelper.objects
-                if @chunkHelper.objects[object].states
-                    for state in ['empty', 'under', 'full', 'over']
-                        objectImages.push
-                            id: "#{object}_#{state}"
-                            image: @chunkHelper.objects[object].image + "_#{state}"
-                else
-                    objectImages.push
-                        id: object
-                        image: @chunkHelper.objects[object].image
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
                 levelName: (@levelName or '')
                 custom: @levelName == 'custom'
                 rows: rows
-                objectImages: objectImages
             )
-            
             
         
 soma.views
