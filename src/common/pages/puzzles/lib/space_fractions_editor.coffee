@@ -203,7 +203,7 @@ class spaceFractionsEditor.EditorHelper
             selectedSquare.data('numerator', numerator)
             selectedSquare.data('denominator', denominator)
         selectedSquare.attr('title', "Fraction: #{numerator}/#{denominator}")
-        @viewHelper.setObjectFraction(selectedSquare)
+        @viewHelper.showFraction(selectedSquare)
         @viewHelper.fireLaser(selectedSquare)
         @save()
     

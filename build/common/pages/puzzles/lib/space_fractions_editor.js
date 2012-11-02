@@ -238,7 +238,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       selectedSquare.data('denominator', denominator);
     }
     selectedSquare.attr('title', "Fraction: " + numerator + "/" + denominator);
-    this.viewHelper.setObjectFraction(selectedSquare);
+    this.viewHelper.showFraction(selectedSquare);
     this.viewHelper.fireLaser(selectedSquare);
     return this.save();
   };
