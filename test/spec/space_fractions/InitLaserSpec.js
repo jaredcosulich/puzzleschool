@@ -72,7 +72,7 @@ describe("Init:", function() {
         
         it('should load only ships, rocks, and lasers on to the board', function() {
             expect(game.board.find('.square.occupied').length).toEqual(4)
-            expect(game.board.find('.square.index11').data('object_type')).toBeUndefined()
+            expect(game.board.find('.square.index11').data('objectType')).toBeUndefined()
         })
         
         it('should load movable objects next to the board', function() {

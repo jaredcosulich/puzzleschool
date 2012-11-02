@@ -32,6 +32,8 @@ soma.views
                 el: $(@selector)
                 rows: 10
                 columns: 10
+                
+            window.game = @viewHelper
 
             levelName = @el.data('level_name')
             if levelName == 'editor'

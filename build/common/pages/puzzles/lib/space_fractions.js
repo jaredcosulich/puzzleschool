@@ -149,7 +149,7 @@ spaceFractions.ViewHelper = (function() {
 
   ViewHelper.prototype.setObjectImage = function(square) {
     var acceptedLaser, fraction, laserData, objectMeta, objectType, state, totalLaser;
-    objectType = square.data('object_type');
+    objectType = square.data('objectType');
     objectMeta = this.objects[objectType];
     if (!objectMeta) {
       return;
@@ -213,9 +213,9 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.initMovableObject = function(square) {
     var objectMeta, objectType,
       _this = this;
-    objectType = square.data('object_type');
+    objectType = square.data('objectType');
     objectMeta = this.objects[objectType];
-    return square.bind('mousedown', function(e) {
+    return square.one('mousedown', function(e) {
       var body, movingObject;
       if (_this.movingObject) {
         return;
@@ -287,7 +287,7 @@ spaceFractions.ViewHelper = (function() {
     square.html('');
     this.removeExistingLasers(square);
     square.addClass('occupied');
-    square.data('object_type', objectType);
+    square.data('objectType', objectType);
     object = this.objects[objectType];
     if (!image) {
       image = $(document.createElement('IMG'));
@@ -324,18 +324,18 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.removeObjectFromSquare = function(square) {
-    var attr, laserData, _k, _len2, _ref, _results;
+    var attr, laserData, _results;
     square = $(square);
-    if (!square.data('object_type')) {
+    if (!square.data('objectType')) {
       return;
     }
     this.removeExistingLasers(square);
     square.html('');
     square.removeClass('occupied');
-    _ref = ['object_type', 'acceptDirections', 'numerator', 'denominator'];
-    for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-      attr = _ref[_k];
-      square.data(attr, null);
+    for (attr in square.data()) {
+      if (attr !== 'index' && attr !== 'nodeUid' && attr !== 'lasers') {
+        square.data(attr, null);
+      }
     }
     laserData = JSON.parse(square.data('lasers') || '{}');
     _results = [];

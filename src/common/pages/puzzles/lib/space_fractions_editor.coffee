@@ -60,7 +60,7 @@ class spaceFractionsEditor.EditorHelper
                 object = @viewHelper.objects[objectType]
                 objectContainer = $(document.createElement('DIV'))
                 objectContainer.addClass('object')
-                objectContainer.data('object_type', objectType)
+                objectContainer.data('objectType', objectType)
                 objectContainer.bind 'click', => @addObject(objectType)
 
                 objectImage = $(document.createElement('IMG'))
@@ -182,9 +182,9 @@ class spaceFractionsEditor.EditorHelper
             @showSelector('object')
             return
         
-        object = @viewHelper.objects[selectedSquare.data('object_type')]
+        object = @viewHelper.objects[selectedSquare.data('objectType')]
         if (object.distribute and not object.accept) or (object.accept and not object.distribute)
-            if @viewHelper.objects[selectedSquare.data('object_type')].states
+            if @viewHelper.objects[selectedSquare.data('objectType')].states
                 @setFractionValue(selectedSquare.data('fullNumerator') or 1, selectedSquare.data('fullDenominator') or 1)
             else
                 @setFractionValue(selectedSquare.data('numerator') or 1, selectedSquare.data('denominator') or 1)
@@ -195,7 +195,7 @@ class spaceFractionsEditor.EditorHelper
         
     setObjectFraction: (numerator, denominator) ->
         selectedSquare = @viewHelper.board.find('.selected')
-        if @viewHelper.objects[selectedSquare.data('object_type')].states
+        if @viewHelper.objects[selectedSquare.data('objectType')].states
             selectedSquare.data('fullNumerator', numerator)
             selectedSquare.data('fullDenominator', denominator)
             @viewHelper.setObjectImage(selectedSquare)
@@ -237,10 +237,10 @@ class spaceFractionsEditor.EditorHelper
         for square in @viewHelper.board.find('.square.occupied')
             square = $(square)
             object =
-                type: square.data('object_type')
+                type: square.data('objectType')
                 index: square.data('index')
                 
-            objectMeta = @viewHelper.objects[square.data('object_type')]
+            objectMeta = @viewHelper.objects[square.data('objectType')]
             if objectMeta.states
                 object.fullNumerator = square.data('fullNumerator')
                 object.fullDenominator = square.data('fullDenominator')

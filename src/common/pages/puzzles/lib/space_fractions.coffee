@@ -102,7 +102,7 @@ class spaceFractions.ViewHelper
                 @options.append(square)
         
     setObjectImage: (square) ->
-        objectType = square.data('object_type')
+        objectType = square.data('objectType')
         objectMeta = @objects[objectType]
         return unless objectMeta
         if objectMeta.states
@@ -150,9 +150,9 @@ class spaceFractions.ViewHelper
             squareOrLaser.append(fraction)
     
     initMovableObject: (square) ->
-        objectType = square.data('object_type')
+        objectType = square.data('objectType')
         objectMeta = @objects[objectType]
-        square.bind 'mousedown', (e) =>
+        square.one 'mousedown', (e) =>
             return if @movingObject
             @movingObject = true
             movingObject = square.find('img')
@@ -203,7 +203,7 @@ class spaceFractions.ViewHelper
         square.html('')
         @removeExistingLasers(square)
         square.addClass('occupied')
-        square.data('object_type', objectType)
+        square.data('objectType', objectType)
         object = @objects[objectType]
         image = $(document.createElement('IMG')) unless image
         square.append(image)
@@ -235,16 +235,18 @@ class spaceFractions.ViewHelper
         
     removeObjectFromSquare: (square) ->
         square = $(square)
-        return unless square.data('object_type')
+        return unless square.data('objectType')
         @removeExistingLasers(square)
         square.html('')
         square.removeClass('occupied')
-        for attr in ['object_type', 'acceptDirections', 'numerator', 'denominator']
+
+        for attr of square.data() when attr not in ['index', 'nodeUid', 'lasers']
             square.data(attr, null)
 
         laserData = JSON.parse(square.data('lasers') or '{}')
         for direction of laserData
             @fireLaser(@$(".index#{laserData[direction].index}"))
+
              
     removeExistingLasers: (square) ->
         square = $(square)

@@ -75,7 +75,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       object = _this.viewHelper.objects[objectType];
       objectContainer = $(document.createElement('DIV'));
       objectContainer.addClass('object');
-      objectContainer.data('object_type', objectType);
+      objectContainer.data('objectType', objectType);
       objectContainer.bind('click', function() {
         return _this.addObject(objectType);
       });
@@ -208,9 +208,9 @@ spaceFractionsEditor.EditorHelper = (function() {
       this.showSelector('object');
       return;
     }
-    object = this.viewHelper.objects[selectedSquare.data('object_type')];
+    object = this.viewHelper.objects[selectedSquare.data('objectType')];
     if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
-      if (this.viewHelper.objects[selectedSquare.data('object_type')].states) {
+      if (this.viewHelper.objects[selectedSquare.data('objectType')].states) {
         this.setFractionValue(selectedSquare.data('fullNumerator') || 1, selectedSquare.data('fullDenominator') || 1);
       } else {
         this.setFractionValue(selectedSquare.data('numerator') || 1, selectedSquare.data('denominator') || 1);
@@ -229,7 +229,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.setObjectFraction = function(numerator, denominator) {
     var selectedSquare;
     selectedSquare = this.viewHelper.board.find('.selected');
-    if (this.viewHelper.objects[selectedSquare.data('object_type')].states) {
+    if (this.viewHelper.objects[selectedSquare.data('objectType')].states) {
       selectedSquare.data('fullNumerator', numerator);
       selectedSquare.data('fullDenominator', denominator);
       this.viewHelper.setObjectImage(selectedSquare);
@@ -284,10 +284,10 @@ spaceFractionsEditor.EditorHelper = (function() {
       square = _ref[_i];
       square = $(square);
       object = {
-        type: square.data('object_type'),
+        type: square.data('objectType'),
         index: square.data('index')
       };
-      objectMeta = this.viewHelper.objects[square.data('object_type')];
+      objectMeta = this.viewHelper.objects[square.data('objectType')];
       if (objectMeta.states) {
         object.fullNumerator = square.data('fullNumerator');
         object.fullDenominator = square.data('fullDenominator');

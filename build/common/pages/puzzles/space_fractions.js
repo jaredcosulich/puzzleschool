@@ -55,6 +55,7 @@ soma.views({
         rows: 10,
         columns: 10
       });
+      window.game = this.viewHelper;
       levelName = this.el.data('level_name');
       if (levelName === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
