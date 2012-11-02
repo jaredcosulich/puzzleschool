@@ -124,6 +124,11 @@ class spaceFractions.ViewHelper
         else
             square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}.png")
         
+        square.find('img').bind "mousedown", (e) -> 
+            e.preventDefault() if e.preventDefault
+            return false
+        
+        
     showFraction: (squareOrLaser) ->
         if not squareOrLaser.height()
             $.timeout 50, => @showFraction(squareOrLaser)
@@ -153,7 +158,6 @@ class spaceFractions.ViewHelper
             movingObject = square.find('img')
             @el.append(movingObject)
             movingObject.addClass('movable_object')
-            
             movingObject.css
                 left: e.clientX - (square.width() / 2)
                 top: e.clientY - (square.height() / 2)

@@ -171,10 +171,16 @@ spaceFractions.ViewHelper = (function() {
       } else if (totalLaser > fraction) {
         state = 'over';
       }
-      return square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + "_" + state + ".png");
+      square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + "_" + state + ".png");
     } else {
-      return square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + ".png");
+      square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + ".png");
     }
+    return square.find('img').bind("mousedown", function(e) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      return false;
+    });
   };
 
   ViewHelper.prototype.showFraction = function(squareOrLaser) {
