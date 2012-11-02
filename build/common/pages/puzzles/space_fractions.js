@@ -22,13 +22,26 @@ soma.chunks({
       return this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
     },
     build: function() {
-      var languageScramble, row, rows;
+      var object, objectImages, row, rows, spaceFractions, state, _i, _len, _ref;
       this.setTitle("Space Fractions - The Puzzle School");
-      languageScramble = require('./lib/language_scramble');
+      spaceFractions = require('./lib/space_fractions');
+      this.chunkHelper = new spaceFractions.ChunkHelper();
+      objectImages = [];
+      for (object in this.chunkHelper.objects) {
+        if (this.chunkHelper.objects[object].states) {
+          _ref = ['empty', 'under', 'full', 'over'];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            state = _ref[_i];
+            objectImages.push(this.chunkHelper.objects[object].image + ("_" + state));
+          }
+        } else {
+          objectImages.push(this.chunkHelper.objects[object].image);
+        }
+      }
       rows = (function() {
-        var _i, _results;
+        var _j, _results;
         _results = [];
-        for (row = _i = 0; _i < 10; row = ++_i) {
+        for (row = _j = 0; _j < 10; row = ++_j) {
           _results.push({
             columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
           });
@@ -38,7 +51,8 @@ soma.chunks({
       return this.html = wings.renderTemplate(this.template, {
         levelName: this.levelName || '',
         custom: this.levelName === 'custom',
-        rows: rows
+        rows: rows,
+        objectImages: objectImages
       });
     }
   }

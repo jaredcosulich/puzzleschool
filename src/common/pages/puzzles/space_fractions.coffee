@@ -10,19 +10,29 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/space_fractions.js'
             if @levelName == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
-            @loadStylesheet '/build/client/css/puzzles/space_fractions.css'
-            
+            @loadStylesheet '/build/client/css/puzzles/space_fractions.css'            
 
         build: ->
             @setTitle("Space Fractions - The Puzzle School")
 
-            languageScramble = require('./lib/language_scramble')
+            spaceFractions = require('./lib/space_fractions')
+            @chunkHelper = new spaceFractions.ChunkHelper()
+            
+            objectImages = []
+            for object of @chunkHelper.objects
+                if @chunkHelper.objects[object].states
+                    for state in ['empty', 'under', 'full', 'over']
+                        objectImages.push(@chunkHelper.objects[object].image + "_#{state}")
+                else
+                    objectImages.push(@chunkHelper.objects[object].image)
+            
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
                 levelName: (@levelName or '')
                 custom: @levelName == 'custom'
                 rows: rows
+                objectImages: objectImages
             )
             
             

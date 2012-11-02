@@ -66,6 +66,8 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
 
 spaceFractions.ChunkHelper = (function() {
 
+  ChunkHelper.prototype.objects = OBJECTS;
+
   function ChunkHelper() {}
 
   return ChunkHelper;

@@ -57,6 +57,7 @@ for direction, index in directions
         
         
 class spaceFractions.ChunkHelper
+    objects: OBJECTS
     constructor: () ->
     
 
