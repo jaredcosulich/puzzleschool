@@ -77,6 +77,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       object = _this.viewHelper.objects[objectType];
       objectContainer = $(document.createElement('DIV'));
       objectContainer.addClass('object');
+      objectContainer.addClass(object.movable ? 'movable' : 'static');
       objectContainer.data('objectType', objectType);
       objectContainer.bind('click', function() {
         return _this.addObject(objectType);
@@ -146,7 +147,7 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.initSquares = function() {
     var _this = this;
-    return this.$('.board .square').bind('click', function(e) {
+    return this.$('.square').bind('click', function(e) {
       return _this.selectSquare(e.currentTarget);
     });
   };
@@ -155,6 +156,11 @@ spaceFractionsEditor.EditorHelper = (function() {
     var offset;
     square = $(square);
     offset = square.offset();
+    if (square.parent().hasClass('options')) {
+      this.elementSelector.find('.static').hide();
+    } else {
+      this.elementSelector.find('.object').show();
+    }
     this.elementSelector.css({
       opacity: 0,
       top: offset.top + offset.height + 6,
@@ -169,7 +175,7 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.closeElementSelector = function() {
     var _this = this;
-    this.$('.board .selected').removeClass('selected');
+    this.$('.square.selected').removeClass('selected');
     return this.elementSelector.animate({
       opacity: 0,
       duration: 250,
@@ -184,8 +190,9 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.addObject = function(objectType) {
     var object, selectedSquare;
-    selectedSquare = this.$('.board .selected');
+    selectedSquare = this.$('.square.selected');
     this.viewHelper.addObjectToSquare(objectType, selectedSquare);
+    selectedSquare.unbind('mousedown');
     this.save();
     object = this.viewHelper.objects[objectType];
     return this.showObjectSelector(true);
@@ -193,7 +200,7 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.removeObject = function() {
     var selectedSquare;
-    selectedSquare = this.$('.board .selected');
+    selectedSquare = this.$('.square.selected');
     this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.levelDescription.val('');
     this.closeElementSelector();
@@ -205,7 +212,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     if (close == null) {
       close = false;
     }
-    selectedSquare = this.$('.board .selected');
+    selectedSquare = this.$('.square.selected');
     if (!selectedSquare.hasClass('occupied')) {
       this.showSelector('object');
       return;
@@ -276,7 +283,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.save = function() {
-    var href, json, levelDescription, object, objectMeta, square, _i, _len, _ref;
+    var href, json, levelDescription, object, objectMeta, square, _i, _j, _len, _len1, _ref, _ref1;
     this.levelDescription.val('');
     levelDescription = {
       objects: []
@@ -299,6 +306,15 @@ spaceFractionsEditor.EditorHelper = (function() {
       }
       levelDescription.objects.push(object);
     }
+    _ref1 = this.viewHelper.options.find('.square.occupied');
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      square = _ref1[_j];
+      square = $(square);
+      object = {
+        type: square.data('objectType')
+      };
+      levelDescription.objects.push(object);
+    }
     json = JSON.stringify(levelDescription);
     this.levelDescription.val(json);
     window.location.hash = encodeURIComponent(this.encode(json));
@@ -314,10 +330,15 @@ spaceFractionsEditor.EditorHelper = (function() {
     _ref = json.objects;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       object = _ref[_i];
-      this.selectSquare(this.viewHelper.board.find(".square.index" + object.index));
-      this.addObject(object.type);
-      if ((numerator = object.fullNumerator || object.numerator) && (denominator = object.fullDenominator || object.denominator)) {
-        this.setObjectFraction(numerator, denominator);
+      if (object.index) {
+        this.selectSquare(this.viewHelper.board.find(".square.index" + object.index));
+        this.addObject(object.type);
+        if ((numerator = object.fullNumerator || object.numerator) && (denominator = object.fullDenominator || object.denominator)) {
+          this.setObjectFraction(numerator, denominator);
+        }
+      } else {
+        this.selectSquare(this.viewHelper.options.find(".square:not(.occupied)")[0]);
+        this.addObject(object.type);
       }
     }
     return this.closeElementSelector();

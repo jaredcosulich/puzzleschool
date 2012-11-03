@@ -61,6 +61,7 @@ class spaceFractionsEditor.EditorHelper
                 object = @viewHelper.objects[objectType]
                 objectContainer = $(document.createElement('DIV'))
                 objectContainer.addClass('object')
+                objectContainer.addClass(if object.movable then 'movable' else 'static') 
                 objectContainer.data('objectType', objectType)
                 objectContainer.bind 'click', => @addObject(objectType)
 
@@ -132,11 +133,16 @@ class spaceFractionsEditor.EditorHelper
         @showElementSelector(square)
         
     initSquares: ->
-        @$('.board .square').bind 'click', (e) => @selectSquare(e.currentTarget)
+        @$('.square').bind 'click', (e) => @selectSquare(e.currentTarget)
             
     showElementSelector: (square) ->
         square = $(square)
         offset = square.offset()
+        
+        if square.parent().hasClass('options')
+            @elementSelector.find('.static').hide()
+        else
+            @elementSelector.find('.object').show()
         
         @elementSelector.css
             opacity: 0
@@ -151,7 +157,7 @@ class spaceFractionsEditor.EditorHelper
         
             
     closeElementSelector: ->
-        @$('.board .selected').removeClass('selected')
+        @$('.square.selected').removeClass('selected')
         @elementSelector.animate
             opacity: 0
             duration: 250
@@ -161,23 +167,23 @@ class spaceFractionsEditor.EditorHelper
                     left: -1000
 
     addObject: (objectType) ->
-        selectedSquare = @$('.board .selected')
+        selectedSquare = @$('.square.selected')
         @viewHelper.addObjectToSquare(objectType, selectedSquare)
-        
+        selectedSquare.unbind 'mousedown'
         @save()
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
         
     removeObject: () ->
-        selectedSquare = @$('.board .selected')
+        selectedSquare = @$('.square.selected')
         @viewHelper.removeObjectFromSquare(selectedSquare)
         @levelDescription.val('')
         @closeElementSelector()
         @save()
         
     showObjectSelector: (close=false) ->
-        selectedSquare = @$('.board .selected')
+        selectedSquare = @$('.square.selected')
         
         if not selectedSquare.hasClass('occupied')
             @showSelector('object')
@@ -250,6 +256,13 @@ class spaceFractionsEditor.EditorHelper
                 object.denominator = square.data('denominator')
         
             levelDescription.objects.push(object)
+
+        for square in @viewHelper.options.find('.square.occupied')
+            square = $(square)
+            object =
+                type: square.data('objectType')
+
+            levelDescription.objects.push(object)
             
         json = JSON.stringify(levelDescription)
         @levelDescription.val(json)
@@ -262,11 +275,15 @@ class spaceFractionsEditor.EditorHelper
         @levelDescription.val('')
         @clear()
         for object in json.objects
-            @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
-            @addObject(object.type)
-            if (numerator = object.fullNumerator or object.numerator) and 
-               (denominator = object.fullDenominator or object.denominator)
-                @setObjectFraction(numerator, denominator)
+            if object.index
+                @selectSquare(@viewHelper.board.find(".square.index#{object.index}"))
+                @addObject(object.type)
+                if (numerator = object.fullNumerator or object.numerator) and 
+                   (denominator = object.fullDenominator or object.denominator)
+                    @setObjectFraction(numerator, denominator)
+            else
+                @selectSquare(@viewHelper.options.find(".square:not(.occupied)")[0])
+                @addObject(object.type)
         @closeElementSelector()
                 
     clear: ->

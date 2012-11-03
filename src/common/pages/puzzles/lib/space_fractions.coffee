@@ -1,3 +1,14 @@
+shuffle = (array) ->
+    top = array.length
+    return array if not top
+
+    while(top--) 
+        current = Math.floor(Math.random() * (top + 1))
+        tmp = array[current]
+        array[current] = array[top]
+        array[top] = tmp
+    return array
+
 spaceFractions = exports ? provide('./lib/space_fractions', {})
 
 LASER_HEIGHT = 20
@@ -287,12 +298,11 @@ class spaceFractions.ViewHelper
     
     loadToPlay: (data) ->
         json = JSON.parse(data)
-        movableObjectIndex = 0
+        movableObjects = []
         for object in json.objects
             objectMeta = @objects[object.type]
             if objectMeta.movable
-                square = @options.find(".square.index#{movableObjectIndex++}")
-                @addObjectToSquare(object.type, square)                
+                movableObjects.push(object.type)
             else
                 square = @board.find(".square.index#{object.index}")
                 @addObjectToSquare(object.type, square)
@@ -302,8 +312,10 @@ class spaceFractions.ViewHelper
                 @showFraction(square)
                 @setObjectImage(square)
                 @fireLaser(square)
-                
-        
+
+        for type in shuffle(movableObjects)
+            square = @options.find(".square:not(.occupied)")[0]
+            @addObjectToSquare(type, square)                
     
     fireLaser: (square) ->
         square = $(square)
@@ -386,4 +398,4 @@ class spaceFractions.ViewHelper
             @showFraction(laser)
             
             @board.append(laser)
-        
+
