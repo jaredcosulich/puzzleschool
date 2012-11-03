@@ -214,10 +214,13 @@ body {
 .space_fractions .verification_messages .unverified h3 {
   color: #ff6e5f;
 }
-.space_fractions .verification_messages a {
+.space_fractions .verification_messages .play_level {
   text-decoration: underline;
   display: block;
-  padding: 6px 0;
+  padding-top: 6px;
+}
+.space_fractions .verification_messages .share_link {
+  width: 400px;
 }
 .space_fractions .level_description {
   display: block;

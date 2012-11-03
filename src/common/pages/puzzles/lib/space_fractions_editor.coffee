@@ -30,13 +30,13 @@ class spaceFractionsEditor.EditorHelper
                 <h3>Unverified</h3>
                 Not all ships are full.
             </div>
+            <a class='play_level' target='_blank'>Play Level</a>
+            <p>Share: <input type='text' class='share_link' /></p>
         '''
         @el.append(verifiedMessages)
 
-        @playLevel = $(document.createElement('A'))
-        @playLevel.html('Play Level')
-        @playLevel.attr('target', '_blank')
-        verifiedMessages.append(@playLevel)
+        @playLevel = verifiedMessages.find('.play_level')
+        @shareLink = verifiedMessages.find('.share_link')
         
         @levelDescription = $(document.createElement('textarea'))
         @levelDescription.addClass('level_description')
@@ -289,8 +289,9 @@ class spaceFractionsEditor.EditorHelper
         json = JSON.stringify(levelDescription)
         @levelDescription.val(json)
         window.location.hash = encodeURIComponent(@encode(json))
-        href = window.location.href.toString()
-        @playLevel.attr('href', href.replace(/editor/, 'custom'))
+        href = window.location.href.toString().replace(/editor/, 'custom')
+        @playLevel.attr('href', href)
+        @shareLink.val(href)
             
     load: ->
         json = JSON.parse(@levelDescription.val())

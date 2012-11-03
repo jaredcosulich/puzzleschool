@@ -31,12 +31,13 @@ spaceFractionsEditor.EditorHelper = (function() {
       _this = this;
     verifiedMessages = $(document.createElement('DIV'));
     verifiedMessages.addClass('verification_messages');
-    verifiedMessages.html('<div class=\'verification_message verified\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>');
+    verifiedMessages.html('<div class=\'verification_message verified\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>\n<a class=\'play_level\' target=\'_blank\'>Play Level</a>\n<p>Share: <input type=\'text\' class=\'share_link\' /></p>');
     this.el.append(verifiedMessages);
-    this.playLevel = $(document.createElement('A'));
-    this.playLevel.html('Play Level');
-    this.playLevel.attr('target', '_blank');
-    verifiedMessages.append(this.playLevel);
+    this.playLevel = verifiedMessages.find('.play_level');
+    this.shareLink = verifiedMessages.find('.share_link');
+    this.shareLink.bind('focus', function() {
+      return _this.shareLink[0].select();
+    });
     this.levelDescription = $(document.createElement('textarea'));
     this.levelDescription.addClass('level_description');
     this.el.append(this.levelDescription);
@@ -329,8 +330,9 @@ spaceFractionsEditor.EditorHelper = (function() {
     json = JSON.stringify(levelDescription);
     this.levelDescription.val(json);
     window.location.hash = encodeURIComponent(this.encode(json));
-    href = window.location.href.toString();
-    return this.playLevel.attr('href', href.replace(/editor/, 'custom'));
+    href = window.location.href.toString().replace(/editor/, 'custom');
+    this.playLevel.attr('href', href);
+    return this.shareLink.val(href);
   };
 
   EditorHelper.prototype.load = function() {
