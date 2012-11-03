@@ -19,6 +19,25 @@ class spaceFractionsEditor.EditorHelper
         @el.append(@elementSelector)
         
     initLevelDescription: ->
+        verifiedMessages = $(document.createElement('DIV'))
+        verifiedMessages.addClass('verification_messages')
+        verifiedMessages.html '''
+            <div class='verification_message verified'>
+                <h3>Verified</h3>
+                All ships are full.
+            </div>
+            <div class='verification_message unverified'>
+                <h3>Unverified</h3>
+                Not all ships are full.
+            </div>
+        '''
+        @el.append(verifiedMessages)
+
+        @playLevel = $(document.createElement('A'))
+        @playLevel.html('Play Level')
+        @playLevel.attr('target', '_blank')
+        verifiedMessages.append(@playLevel)
+        
         @levelDescription = $(document.createElement('textarea'))
         @levelDescription.addClass('level_description')
         @el.append(@levelDescription)
@@ -28,13 +47,6 @@ class spaceFractionsEditor.EditorHelper
         loadLevelDescription.bind 'click', => @load()
         @el.append(loadLevelDescription)
 
-        @playLevel = $(document.createElement('A'))
-        @playLevel.html('Play Level')
-        @playLevel.attr('target', '_blank')
-        @playLevel.css
-            color: 'white'
-            marginLeft: 12
-        @el.append(@playLevel)
         
         
     initObjectSelector: ->    
@@ -241,6 +253,7 @@ class spaceFractionsEditor.EditorHelper
         @levelDescription.val('')
         levelDescription = {objects: []}
 
+        levelVerified = true
         for square in @viewHelper.board.find('.square.occupied')
             square = $(square)
             object =
@@ -251,6 +264,8 @@ class spaceFractionsEditor.EditorHelper
             if objectMeta.states
                 object.fullNumerator = square.data('fullNumerator')
                 object.fullDenominator = square.data('fullDenominator')
+                levelVerified = false if square.html().indexOf('full') == -1
+                    
             else if objectMeta.distribute and not objectMeta.accept
                 object.numerator = square.data('numerator')
                 object.denominator = square.data('denominator')
@@ -263,6 +278,13 @@ class spaceFractionsEditor.EditorHelper
                 type: square.data('objectType')
 
             levelDescription.objects.push(object)
+        
+        levelDescription.verified = levelVerified
+        @$('.verification_message').hide()
+        if levelVerified
+            @$('.verified').show()
+        else
+            @$('.unverified').show()
             
         json = JSON.stringify(levelDescription)
         @levelDescription.val(json)

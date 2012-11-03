@@ -1,6 +1,16 @@
 <div class='space_fractions' data-level_name={levelName}>
     <div class='board'></div>
-    <div class='options'></div>
+    <div class='sidebar'>
+        <div class='options'></div>
+        {!editor}
+            <div class='menu'>
+                <h3>Menu</h3>
+                <p><a class='hint'>I'm stuck, show me a piece of the solution.</a></p>
+                <div class='hint_message hint_drag_message'>Drag this piece</div>
+                <div class='hint_message hint_drop_message'>Drop it here</div>
+            </div>
+        {/editor}        
+    </div>
     {:custom}
         <textarea class='level_description'></textarea>
         <button class='load_to_play'>Load To Play</button>

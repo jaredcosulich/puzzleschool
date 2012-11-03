@@ -71,21 +71,8 @@ body {
   border-top-right-radius: 40%;
   margin-top: 3px;
 }
-.space_fractions .options {
-  margin-left: 12px;
-  background-color: #0c6d7f;
-  overflow: hidden;
-  width: 272px;
-  float: left;
-  border: 1px solid #262626;
-}
-.space_fractions .options .square {
-  border: 1px solid #262626;
-  width: 66px;
-  height: 66px;
-  line-height: 66px;
-}
-.space_fractions .square {
+.space_fractions .board .square,
+.space_fractions .sidebar .options .square {
   position: relative;
   display: block;
   width: 60px;
@@ -95,16 +82,64 @@ body {
   border: 1px solid transparent;
   float: left;
 }
-.space_fractions .square:hover,
-.space_fractions .square.selected {
+.space_fractions .board .square:hover,
+.space_fractions .sidebar .options .square:hover,
+.space_fractions .board .square.selected,
+.space_fractions .sidebar .options .square.selected,
+.space_fractions .board .square.permanently_selected,
+.space_fractions .sidebar .options .square.permanently_selected {
   border: 1px solid #fafafa;
 }
-.space_fractions .square img {
+.space_fractions .board .square img,
+.space_fractions .sidebar .options .square img {
   vertical-align: middle;
 }
-.space_fractions .square .fraction {
+.space_fractions .board .square .fraction,
+.space_fractions .sidebar .options .square .fraction {
   top: 0;
   left: 0;
+}
+.space_fractions .sidebar {
+  float: left;
+  overflow: hidden;
+}
+.space_fractions .sidebar .options,
+.space_fractions .sidebar .menu {
+  margin-left: 12px;
+  background-color: #0c6d7f;
+  overflow: hidden;
+  width: 272px;
+  border: 1px solid #262626;
+}
+.space_fractions .sidebar .options .square,
+.space_fractions .sidebar .menu .square {
+  border: 1px solid #262626;
+  width: 66px;
+  height: 66px;
+  line-height: 66px;
+}
+.space_fractions .sidebar .menu {
+  margin-top: 12px;
+  height: 130px;
+  background-color: #fafafa;
+}
+.space_fractions .sidebar .menu h3 {
+  margin-top: 12px;
+}
+.space_fractions .sidebar .menu h3,
+.space_fractions .sidebar .menu p {
+  margin-left: 12px;
+}
+.space_fractions .sidebar .menu h3 a,
+.space_fractions .sidebar .menu p a {
+  text-decoration: underline;
+}
+.space_fractions .sidebar .menu .hint_drag_message,
+.space_fractions .sidebar .menu .hint_drop_message {
+  position: absolute;
+  opacity: 0;
+  background-color: #c7c7c7;
+  padding: 6px;
 }
 .space_fractions .square .fraction,
 .space_fractions .laser .fraction {
@@ -163,6 +198,26 @@ body {
 }
 .space_fractions .element_selector .fraction_selector .numerator {
   text-align: right;
+}
+.space_fractions .verification_messages {
+  background-color: white;
+  padding: 6px 0;
+  text-align: center;
+  overflow: hidden;
+  clear: both;
+  width: 620px;
+  margin-bottom: 12px;
+}
+.space_fractions .verification_messages .verified h3 {
+  color: #24d94c;
+}
+.space_fractions .verification_messages .unverified h3 {
+  color: #ff6e5f;
+}
+.space_fractions .verification_messages a {
+  text-decoration: underline;
+  display: block;
+  padding: 6px 0;
 }
 .space_fractions .level_description {
   display: block;

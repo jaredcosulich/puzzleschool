@@ -65,7 +65,7 @@ describe("Init:", function() {
     describe('loading data for a custom game', function() {
         var shipSquare;
         beforeEach(function() {
-            levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16},{"type":"ship_right","index":18,"fullNumerator":"1","fullDenominator":"10"},{"type":"ship_left","index":50,"fullNumerator":"1","fullDenominator":"20"},{"type":"two_split_down_left","index":56},{"type":"laser_up","index":71,"numerator":"1","denominator":"5"},{"type":"ship_down","index":86,"fullNumerator":"1","fullDenominator":"40"}]}
+            levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16},{"type":"ship_right","index":18,"fullNumerator":"1","fullDenominator":"10"},{"type":"ship_left","index":50,"fullNumerator":"1","fullDenominator":"20"},{"type":"two_split_down_left","index":56},{"type":"laser_up","index":71,"numerator":"1","denominator":"5"},{"type":"ship_down","index":86,"fullNumerator":"1","fullDenominator":"40"}], "verified": true}
             game.loadToPlay(JSON.stringify(levelDescription));
             shipSquare = game.board.find('.square.index18');
         })

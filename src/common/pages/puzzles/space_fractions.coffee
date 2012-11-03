@@ -19,6 +19,7 @@ soma.chunks
             @html = wings.renderTemplate(@template,
                 levelName: (@levelName or '')
                 custom: @levelName == 'custom'
+                editor: @levelName == 'editor'
                 rows: rows
             )
             
@@ -53,19 +54,23 @@ soma.views
                     @editor.levelDescription.val(level)
                     @editor.load()
                 else
+                    @$('.level_description').val(level)
                     @viewHelper.loadToPlay(level)
 
         initEncode: ->
             @encodeMap =
-                objects: '~o'
-                type: '~t'
-                index: '~i'
-                numerator: '~n'
-                denominator: '~d'
-                fullNumerator: '~fN'
-                fullDenominator: '~fD'
+                '"objects"': '~o'
+                '"type"': '~t'
+                '"index"': '~i'
+                '"numerator"': '~n'
+                '"denominator"': '~d'
+                '"fullNumerator"': '~fN'
+                '"fullDenominator"': '~fD'
+                '"verified"': '~v'
+                'true': '~u'
+                'false': '~f'
             for object of @viewHelper.objects
-                @encodeMap[object] = "!#{object.split(/_/ig).map((section) -> return section[0]).join('')}"
+                @encodeMap['"' + object + '"'] = "!#{object.split(/_/ig).map((section) -> return section[0]).join('')}"
             
             @extraEncodeMap = 
                 ':': '-'
@@ -77,7 +82,7 @@ soma.views
                 
         encode: (json) ->
             for encode of @encodeMap
-                regExp = new RegExp('"' + encode + '"','g')
+                regExp = new RegExp(encode,'g')
                 json = json.replace(regExp, @encodeMap[encode])
             for extraEncode of @extraEncodeMap
                 regExp = new RegExp('\\' + extraEncode,'g')
@@ -87,7 +92,7 @@ soma.views
         decode: (json) ->
             for encode of @encodeMap
                 regExp = new RegExp(@encodeMap[encode],'g')
-                json = json.replace(regExp, '"' + encode + '"')
+                json = json.replace(regExp, encode)
             for extraEncode of @extraEncodeMap
                 regExp = new RegExp('\\' + @extraEncodeMap[extraEncode],'g')
                 json = json.replace(regExp, extraEncode)

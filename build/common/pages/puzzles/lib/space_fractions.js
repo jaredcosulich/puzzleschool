@@ -100,6 +100,7 @@ spaceFractions.ViewHelper = (function() {
     this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns;
     this.initBoard();
     this.initOptions();
+    this.initHint();
     window.onresize = function() {
       var square, _k, _len2, _ref, _results;
       _ref = _this.board.find('.square.occupied');
@@ -160,6 +161,64 @@ spaceFractions.ViewHelper = (function() {
       }).call(this));
     }
     return _results;
+  };
+
+  ViewHelper.prototype.initHint = function() {
+    var _this = this;
+    return this.$('.hint').bind('click', function() {
+      var dragMessage, object, option, square, _k, _len2, _ref;
+      _ref = _this.solution.objects;
+      for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+        object = _ref[_k];
+        square = _this.board.find(".square.index" + object.index);
+        if (square.data('objectType') !== object.type) {
+          option = $(_this.options.find(".square." + object.type)[0]);
+          if (option != null ? option.length : void 0) {
+            option.addClass('selected');
+            dragMessage = _this.$('.hint_drag_message');
+            dragMessage.css({
+              left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2),
+              top: option.offset().top + option.height()
+            });
+            dragMessage.animate({
+              opacity: 1,
+              duration: 250
+            });
+            option.one('mousedown', function() {
+              var dropMessage, hideHint;
+              dragMessage.css({
+                opacity: 0
+              });
+              square.addClass('permanently_selected');
+              dropMessage = _this.$('.hint_drop_message');
+              dropMessage.css({
+                left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2),
+                top: square.offset().top + square.height()
+              });
+              dropMessage.animate({
+                opacity: 1,
+                duration: 250
+              });
+              hideHint = function() {
+                if (!square.hasClass(object.type)) {
+                  $.timeout(50, function() {
+                    return hideHint();
+                  });
+                  return;
+                }
+                _this.$('.hint_message').animate({
+                  opacity: 0,
+                  duration: 250
+                });
+                return _this.$('.square.permanently_selected').removeClass('permanently_selected');
+              };
+              return hideHint();
+            });
+            return;
+          }
+        }
+      }
+    });
   };
 
   ViewHelper.prototype.setObjectImage = function(square) {
@@ -302,6 +361,7 @@ spaceFractions.ViewHelper = (function() {
     square.html('');
     this.removeExistingLasers(square);
     square.addClass('occupied');
+    square.addClass(objectType);
     square.data('objectType', objectType);
     object = this.objects[objectType];
     if (!image) {
@@ -416,10 +476,10 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.loadToPlay = function(data) {
-    var attr, json, movableObjects, object, objectMeta, square, type, _k, _l, _len2, _len3, _ref, _ref1, _results;
-    json = JSON.parse(data);
+    var attr, movableObjects, object, objectMeta, square, type, _k, _l, _len2, _len3, _ref, _ref1;
+    this.solution = JSON.parse(data);
     movableObjects = [];
-    _ref = json.objects;
+    _ref = this.solution.objects;
     for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
       object = _ref[_k];
       objectMeta = this.objects[object.type];
@@ -439,13 +499,14 @@ spaceFractions.ViewHelper = (function() {
       }
     }
     _ref1 = shuffle(movableObjects);
-    _results = [];
     for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
       type = _ref1[_l];
       square = this.options.find(".square:not(.occupied)")[0];
-      _results.push(this.addObjectToSquare(type, square));
+      this.addObjectToSquare(type, square);
     }
-    return _results;
+    if (!this.solution.verified) {
+      return alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist');
+    }
   };
 
   ViewHelper.prototype.fireLaser = function(square) {

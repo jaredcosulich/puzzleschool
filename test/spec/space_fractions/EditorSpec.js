@@ -74,7 +74,7 @@ describe("EditorSpec:", function() {
         });
         
         it('should change the level_description text area to reflect the current state of the board', function() {
-            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 89, numerator: 1, denominator: 3}]});
+            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 89, numerator: 1, denominator: 3}], verified: true});
         })
         
         it('reloads the game after being cleared', function() {
@@ -108,7 +108,7 @@ describe("EditorSpec:", function() {
     })
     
     it('should be able to load a complex level', function () {
-        levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16},{"type":"ship_right","index":18,"fullNumerator":"1","fullDenominator":"10"},{"type":"ship_left","index":50,"fullNumerator":"1","fullDenominator":"20"},{"type":"two_split_down_left","index":56},{"type":"laser_up","index":71,"numerator":"1","denominator":"5"},{"type":"ship_down","index":86,"fullNumerator":"1","fullDenominator":"40"}]}
+        levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16},{"type":"ship_right","index":18,"fullNumerator":"1","fullDenominator":"10"},{"type":"ship_left","index":50,"fullNumerator":"1","fullDenominator":"20"},{"type":"two_split_down_left","index":56},{"type":"laser_up","index":71,"numerator":"1","denominator":"5"},{"type":"ship_down","index":86,"fullNumerator":"1","fullDenominator":"40"}], "verified": true}
         editor.levelDescription.val(JSON.stringify(levelDescription));
         editor.load();
         expect(game.board.find('.square.occupied').length).toEqual(levelDescription.objects.length);        

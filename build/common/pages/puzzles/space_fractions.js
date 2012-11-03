@@ -37,6 +37,7 @@ soma.chunks({
       return this.html = wings.renderTemplate(this.template, {
         levelName: this.levelName || '',
         custom: this.levelName === 'custom',
+        editor: this.levelName === 'editor',
         rows: rows
       });
     }
@@ -77,6 +78,7 @@ soma.views({
           this.editor.levelDescription.val(level);
           return this.editor.load();
         } else {
+          this.$('.level_description').val(level);
           return this.viewHelper.loadToPlay(level);
         }
       }
@@ -84,16 +86,19 @@ soma.views({
     initEncode: function() {
       var object;
       this.encodeMap = {
-        objects: '~o',
-        type: '~t',
-        index: '~i',
-        numerator: '~n',
-        denominator: '~d',
-        fullNumerator: '~fN',
-        fullDenominator: '~fD'
+        '"objects"': '~o',
+        '"type"': '~t',
+        '"index"': '~i',
+        '"numerator"': '~n',
+        '"denominator"': '~d',
+        '"fullNumerator"': '~fN',
+        '"fullDenominator"': '~fD',
+        '"verified"': '~v',
+        'true': '~u',
+        'false': '~f'
       };
       for (object in this.viewHelper.objects) {
-        this.encodeMap[object] = "!" + (object.split(/_/ig).map(function(section) {
+        this.encodeMap['"' + object + '"'] = "!" + (object.split(/_/ig).map(function(section) {
           return section[0];
         }).join(''));
       }
@@ -109,7 +114,7 @@ soma.views({
     encode: function(json) {
       var encode, extraEncode, regExp;
       for (encode in this.encodeMap) {
-        regExp = new RegExp('"' + encode + '"', 'g');
+        regExp = new RegExp(encode, 'g');
         json = json.replace(regExp, this.encodeMap[encode]);
       }
       for (extraEncode in this.extraEncodeMap) {
@@ -122,7 +127,7 @@ soma.views({
       var encode, extraEncode, regExp;
       for (encode in this.encodeMap) {
         regExp = new RegExp(this.encodeMap[encode], 'g');
-        json = json.replace(regExp, '"' + encode + '"');
+        json = json.replace(regExp, encode);
       }
       for (extraEncode in this.extraEncodeMap) {
         regExp = new RegExp('\\' + this.extraEncodeMap[extraEncode], 'g');

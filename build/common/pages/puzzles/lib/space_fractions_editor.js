@@ -27,8 +27,16 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initLevelDescription = function() {
-    var loadLevelDescription,
+    var loadLevelDescription, verifiedMessages,
       _this = this;
+    verifiedMessages = $(document.createElement('DIV'));
+    verifiedMessages.addClass('verification_messages');
+    verifiedMessages.html('<div class=\'verification_message verified\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>');
+    this.el.append(verifiedMessages);
+    this.playLevel = $(document.createElement('A'));
+    this.playLevel.html('Play Level');
+    this.playLevel.attr('target', '_blank');
+    verifiedMessages.append(this.playLevel);
     this.levelDescription = $(document.createElement('textarea'));
     this.levelDescription.addClass('level_description');
     this.el.append(this.levelDescription);
@@ -37,15 +45,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     loadLevelDescription.bind('click', function() {
       return _this.load();
     });
-    this.el.append(loadLevelDescription);
-    this.playLevel = $(document.createElement('A'));
-    this.playLevel.html('Play Level');
-    this.playLevel.attr('target', '_blank');
-    this.playLevel.css({
-      color: 'white',
-      marginLeft: 12
-    });
-    return this.el.append(this.playLevel);
+    return this.el.append(loadLevelDescription);
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
@@ -283,11 +283,12 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.save = function() {
-    var href, json, levelDescription, object, objectMeta, square, _i, _j, _len, _len1, _ref, _ref1;
+    var href, json, levelDescription, levelVerified, object, objectMeta, square, _i, _j, _len, _len1, _ref, _ref1;
     this.levelDescription.val('');
     levelDescription = {
       objects: []
     };
+    levelVerified = true;
     _ref = this.viewHelper.board.find('.square.occupied');
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       square = _ref[_i];
@@ -300,6 +301,9 @@ spaceFractionsEditor.EditorHelper = (function() {
       if (objectMeta.states) {
         object.fullNumerator = square.data('fullNumerator');
         object.fullDenominator = square.data('fullDenominator');
+        if (square.html().indexOf('full') === -1) {
+          levelVerified = false;
+        }
       } else if (objectMeta.distribute && !objectMeta.accept) {
         object.numerator = square.data('numerator');
         object.denominator = square.data('denominator');
@@ -314,6 +318,13 @@ spaceFractionsEditor.EditorHelper = (function() {
         type: square.data('objectType')
       };
       levelDescription.objects.push(object);
+    }
+    levelDescription.verified = levelVerified;
+    this.$('.verification_message').hide();
+    if (levelVerified) {
+      this.$('.verified').show();
+    } else {
+      this.$('.unverified').show();
     }
     json = JSON.stringify(levelDescription);
     this.levelDescription.val(json);

@@ -79,6 +79,7 @@ class spaceFractions.ViewHelper
     constructor: ({@el, @rows, @columns}) ->
         @initBoard()
         @initOptions()
+        @initHint()
         
         window.onresize = =>
             for square in @board.find('.square.occupied')
@@ -112,6 +113,45 @@ class spaceFractions.ViewHelper
                 square.addClass("index#{index}")
                 @options.append(square)
         
+    initHint: ->
+        @$('.hint').bind 'click', =>
+            for object in @solution.objects
+                square = @board.find(".square.index#{object.index}")
+                if square.data('objectType') != object.type
+                    option = $(@options.find(".square.#{object.type}")[0])
+                    if option?.length
+                        option.addClass('selected')
+                        dragMessage = @$('.hint_drag_message')
+                        dragMessage.css
+                            left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2)
+                            top: option.offset().top + option.height()
+                        dragMessage.animate
+                            opacity: 1
+                            duration: 250
+                            
+                        option.one 'mousedown', =>
+                            dragMessage.css(opacity: 0)
+                            square.addClass('permanently_selected')
+                            dropMessage = @$('.hint_drop_message')
+                            dropMessage.css
+                                left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2)
+                                top: square.offset().top + square.height()
+                            dropMessage.animate
+                                opacity: 1
+                                duration: 250
+                                
+                            hideHint = () =>  
+                                unless square.hasClass(object.type)
+                                    $.timeout 50, => hideHint()
+                                    return
+                                @$('.hint_message').animate
+                                    opacity: 0
+                                    duration: 250
+                                @$('.square.permanently_selected').removeClass('permanently_selected')                                
+                            hideHint()
+                            
+                        return        
+
     setObjectImage: (square) ->
         objectType = square.data('objectType')
         objectMeta = @objects[objectType]
@@ -214,6 +254,7 @@ class spaceFractions.ViewHelper
         square.html('')
         @removeExistingLasers(square)
         square.addClass('occupied')
+        square.addClass(objectType)
         square.data('objectType', objectType)
         object = @objects[objectType]
         image = $(document.createElement('IMG')) unless image
@@ -297,9 +338,9 @@ class spaceFractions.ViewHelper
         
     
     loadToPlay: (data) ->
-        json = JSON.parse(data)
+        @solution = JSON.parse(data)
         movableObjects = []
-        for object in json.objects
+        for object in @solution.objects
             objectMeta = @objects[object.type]
             if objectMeta.movable
                 movableObjects.push(object.type)
@@ -315,8 +356,12 @@ class spaceFractions.ViewHelper
 
         for type in shuffle(movableObjects)
             square = @options.find(".square:not(.occupied)")[0]
-            @addObjectToSquare(type, square)                
-    
+            @addObjectToSquare(type, square)  
+            
+        if not @solution.verified
+            alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist')
+            
+            
     fireLaser: (square) ->
         square = $(square)
         

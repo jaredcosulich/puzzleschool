@@ -75,42 +75,67 @@ body {
         }        
     }
     
-    .options {
-        margin-left: 12px;
-        background-color: @darkblue;
-        overflow: hidden;
-        width: 272px;
-        float: left;
-        border: 1px solid @black;
+    .board, .sidebar .options {
         .square {
-            border: 1px solid @black;
-            width: 66px;
-            height: 66px;
-            line-height: 66px;
+            position: relative;
+            display: block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            border: 1px solid transparent;
+            float: left;
+            &:hover, &.selected, &.permanently_selected {
+                border: 1px solid @white;
+            }
+            img {
+                vertical-align: middle;
+            }
+            .fraction {
+                top: 0;
+                left: 0;
+            }
         }
     }
     
-    .square {
-        position: relative;
-        display: block;
-        width: 60px;
-        height: 60px;
-        line-height: 60px;
-        text-align: center;
-        border: 1px solid transparent;
+    .sidebar {
         float: left;
-        &:hover, &.selected {
-            border: 1px solid @white;
+        overflow: hidden;
+        .options, .menu {
+            margin-left: 12px;
+            background-color: @darkblue;
+            overflow: hidden;
+            width: 272px;
+            border: 1px solid @black;
+            .square {
+                border: 1px solid @black;
+                width: 66px;
+                height: 66px;
+                line-height: 66px;
+            }
         }
-        img {
-            vertical-align: middle;
-        }
-        .fraction {
-            top: 0;
-            left: 0;
+        .menu {
+            margin-top: 12px;
+            height: 130px;
+            background-color: @white;
+            h3 {
+                margin-top: 12px;
+            }
+            h3, p {
+                margin-left: 12px;
+                a {
+                    text-decoration: underline;
+                }
+            }
+            .hint_drag_message, .hint_drop_message {
+                position: absolute;
+                opacity: 0;
+                background-color: @lightgrey;
+                padding: 6px;
+            }
         }
     }
-    
+        
     .square, .laser {
         .fraction {
             padding: 6px;
@@ -167,6 +192,27 @@ body {
             .numerator {
                 text-align: right;
             }
+        }
+    }
+    
+    .verification_messages {
+        background-color: white;
+        padding: 6px 0;
+        text-align: center;
+        overflow: hidden;
+        clear: both;
+        width: 620px;
+        margin-bottom: 12px;
+        .verified h3 {
+            color: @green;
+        }
+        .unverified h3 {
+            color: @red;
+        }
+        a {
+            text-decoration: underline;
+            display: block;
+            padding: 6px 0;
         }
     }
     
