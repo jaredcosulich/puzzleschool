@@ -117,8 +117,15 @@ class spaceFractions.ViewHelper
         @$('.hint').bind 'click', =>
             for object in @solution.objects
                 square = @board.find(".square.index#{object.index}")
-                if square.data('objectType') != object.type
+                if square.length and square.data('objectType') != object.type
                     option = $(@options.find(".square.#{object.type}")[0])
+                    if not option?.length
+                        boardOptions = @board.find(".square.#{object.type}")
+                        for boardOption in boardOptions
+                            if (o.type for o in @solution.objects when o.index == $(boardOption).data('index'))[0] != object.type
+                                option = $(boardOption)
+                                break
+                                
                     if option?.length
                         option.addClass('selected')
                         dragMessage = @$('.hint_drag_message')
@@ -291,6 +298,7 @@ class spaceFractions.ViewHelper
         @removeExistingLasers(square)
         square.html('')
         square.removeClass('occupied')
+        square.removeClass(square.data('objectType'))
 
         for attr of square.data() when attr not in ['index', 'nodeUid', 'lasers']
             square.data(attr, null)

@@ -166,13 +166,34 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.initHint = function() {
     var _this = this;
     return this.$('.hint').bind('click', function() {
-      var dragMessage, object, option, square, _k, _len2, _ref;
+      var boardOption, boardOptions, dragMessage, o, object, option, square, _k, _l, _len2, _len3, _ref;
       _ref = _this.solution.objects;
       for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
         object = _ref[_k];
         square = _this.board.find(".square.index" + object.index);
-        if (square.data('objectType') !== object.type) {
+        if (square.length && square.data('objectType') !== object.type) {
           option = $(_this.options.find(".square." + object.type)[0]);
+          if (!(option != null ? option.length : void 0)) {
+            boardOptions = _this.board.find(".square." + object.type);
+            for (_l = 0, _len3 = boardOptions.length; _l < _len3; _l++) {
+              boardOption = boardOptions[_l];
+              if (((function() {
+                var _len4, _m, _ref1, _results;
+                _ref1 = this.solution.objects;
+                _results = [];
+                for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
+                  o = _ref1[_m];
+                  if (o.index === $(boardOption).data('index')) {
+                    _results.push(o.type);
+                  }
+                }
+                return _results;
+              }).call(_this))[0] !== object.type) {
+                option = $(boardOption);
+                break;
+              }
+            }
+          }
           if (option != null ? option.length : void 0) {
             option.addClass('selected');
             dragMessage = _this.$('.hint_drag_message');
@@ -407,6 +428,7 @@ spaceFractions.ViewHelper = (function() {
     this.removeExistingLasers(square);
     square.html('');
     square.removeClass('occupied');
+    square.removeClass(square.data('objectType'));
     for (attr in square.data()) {
       if (attr !== 'index' && attr !== 'nodeUid' && attr !== 'lasers') {
         square.data(attr, null);
