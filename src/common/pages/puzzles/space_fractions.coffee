@@ -56,7 +56,7 @@ soma.views
                     @viewHelper.loadToPlay(level)
 
         initEncode: ->
-            @encodeMap = 
+            @encodeMap =
                 objects: '~o'
                 type: '~t'
                 index: '~i'
@@ -67,17 +67,30 @@ soma.views
             for object of @viewHelper.objects
                 @encodeMap[object] = "!#{object.split(/_/ig).map((section) -> return section[0]).join('')}"
             
+            @extraEncodeMap = 
+                ':': '-'
+                '"': '*'
+                ',': "'"
+                '=': '+'
+                '{': '('
+                '}': ')'
+                
         encode: (json) ->
             for encode of @encodeMap
-                regExp = new RegExp(encode,'g')
+                regExp = new RegExp('"' + encode + '"','g')
                 json = json.replace(regExp, @encodeMap[encode])
+            for extraEncode of @extraEncodeMap
+                regExp = new RegExp('\\' + extraEncode,'g')
+                json = json.replace(regExp, @extraEncodeMap[extraEncode])
             return json
             
         decode: (json) ->
             for encode of @encodeMap
                 regExp = new RegExp(@encodeMap[encode],'g')
-                json = json.replace(regExp, encode)
-            console.log(json)
+                json = json.replace(regExp, '"' + encode + '"')
+            for extraEncode of @extraEncodeMap
+                regExp = new RegExp('\\' + @extraEncodeMap[extraEncode],'g')
+                json = json.replace(regExp, extraEncode)
             return json
             
 soma.routes

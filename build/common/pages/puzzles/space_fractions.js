@@ -82,7 +82,7 @@ soma.views({
       }
     },
     initEncode: function() {
-      var object, _results;
+      var object;
       this.encodeMap = {
         objects: '~o',
         type: '~t',
@@ -92,29 +92,42 @@ soma.views({
         fullNumerator: '~fN',
         fullDenominator: '~fD'
       };
-      _results = [];
       for (object in this.viewHelper.objects) {
-        _results.push(this.encodeMap[object] = "!" + (object.split(/_/ig).map(function(section) {
+        this.encodeMap[object] = "!" + (object.split(/_/ig).map(function(section) {
           return section[0];
-        }).join('')));
+        }).join(''));
       }
-      return _results;
+      return this.extraEncodeMap = {
+        ':': '-',
+        '"': '*',
+        ',': "'",
+        '=': '+',
+        '{': '(',
+        '}': ')'
+      };
     },
     encode: function(json) {
-      var encode, regExp;
+      var encode, extraEncode, regExp;
       for (encode in this.encodeMap) {
-        regExp = new RegExp(encode, 'g');
+        regExp = new RegExp('"' + encode + '"', 'g');
         json = json.replace(regExp, this.encodeMap[encode]);
+      }
+      for (extraEncode in this.extraEncodeMap) {
+        regExp = new RegExp('\\' + extraEncode, 'g');
+        json = json.replace(regExp, this.extraEncodeMap[extraEncode]);
       }
       return json;
     },
     decode: function(json) {
-      var encode, regExp;
+      var encode, extraEncode, regExp;
       for (encode in this.encodeMap) {
         regExp = new RegExp(this.encodeMap[encode], 'g');
-        json = json.replace(regExp, encode);
+        json = json.replace(regExp, '"' + encode + '"');
       }
-      console.log(json);
+      for (extraEncode in this.extraEncodeMap) {
+        regExp = new RegExp('\\' + this.extraEncodeMap[extraEncode], 'g');
+        json = json.replace(regExp, extraEncode);
+      }
       return json;
     }
   }
