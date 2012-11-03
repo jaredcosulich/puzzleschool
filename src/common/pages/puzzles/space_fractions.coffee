@@ -33,26 +33,53 @@ soma.views
                 rows: 10
                 columns: 10
                 
-            window.game = @viewHelper
-
+            @initEncode()
+                
             levelName = @el.data('level_name')
             if levelName == 'editor'
                 spaceFractionsEditor = require('./lib/space_fractions_editor')
                 @editor = new spaceFractionsEditor.EditorHelper
                     el: $(@selector)
                     viewHelper: @viewHelper
+                    encodeMethod: (json) => @encode(json)
+                    
             else if levelName == 'custom'
                 @$('.load_to_play').bind 'click', =>
                     @viewHelper.loadToPlay(@$('.level_description').val())
             
             if window.location.hash
-                level = decodeURIComponent(window.location.hash.replace(/^#/, ''))
+                level = @decode(decodeURIComponent(window.location.hash.replace(/^#/, '')))
                 if levelName == 'editor'
                     @editor.levelDescription.val(level)
                     @editor.load()
                 else
                     @viewHelper.loadToPlay(level)
 
+        initEncode: ->
+            @encodeMap = 
+                objects: '~o'
+                type: '~t'
+                index: '~i'
+                numerator: '~n'
+                denominator: '~d'
+                fullNumerator: '~fN'
+                fullDenominator: '~fD'
+            for object of @viewHelper.objects
+                @encodeMap[object] = "!#{object.split(/_/ig).map((section) -> return section[0]).join('')}"
+            
+        encode: (json) ->
+            for encode of @encodeMap
+                regExp = new RegExp(encode,'g')
+                json = json.replace(regExp, @encodeMap[encode])
+            return json
+            
+        decode: (json) ->
+            for encode of @encodeMap
+                regExp = new RegExp(@encodeMap[encode],'g')
+                json = json.replace(regExp, encode)
+            console.log(json)
+            return json
+            
 soma.routes
     '/puzzles/space_fractions/:levelName': ({levelName}) -> 
         new soma.chunks.SpaceFractions

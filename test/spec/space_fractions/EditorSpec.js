@@ -10,7 +10,8 @@ describe("EditorSpec:", function() {
         
         editor = new spaceFractionsEditor.EditorHelper({
             el: $('.space_fractions'),
-            viewHelper: game
+            viewHelper: game,
+            encodeMethod: function(json) { return json; }
         });
     });
     

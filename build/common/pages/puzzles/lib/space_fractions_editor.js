@@ -6,7 +6,9 @@ spaceFractionsEditor = typeof exports !== "undefined" && exports !== null ? expo
 spaceFractionsEditor.EditorHelper = (function() {
 
   function EditorHelper(_arg) {
-    this.el = _arg.el, this.viewHelper = _arg.viewHelper;
+    var encodeMethod;
+    this.el = _arg.el, this.viewHelper = _arg.viewHelper, encodeMethod = _arg.encodeMethod;
+    this.encode = encodeMethod;
     this.initElementSelector();
     this.initSquares();
     this.initLevelDescription();
@@ -299,7 +301,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     }
     json = JSON.stringify(levelDescription);
     this.levelDescription.val(json);
-    window.location.hash = encodeURIComponent(json);
+    window.location.hash = encodeURIComponent(this.encode(json));
     href = window.location.href.toString();
     return this.playLevel.attr('href', href.replace(/editor/, 'custom'));
   };

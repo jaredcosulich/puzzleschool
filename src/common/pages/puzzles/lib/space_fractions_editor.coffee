@@ -1,7 +1,8 @@
 spaceFractionsEditor = exports ? provide('./lib/space_fractions_editor', {})
 
 class spaceFractionsEditor.EditorHelper
-    constructor: ({@el, @viewHelper}) ->
+    constructor: ({@el, @viewHelper, encodeMethod}) ->
+        @encode = encodeMethod
         @initElementSelector()
         @initSquares()
         @initLevelDescription()
@@ -252,7 +253,7 @@ class spaceFractionsEditor.EditorHelper
             
         json = JSON.stringify(levelDescription)
         @levelDescription.val(json)
-        window.location.hash = encodeURIComponent(json)
+        window.location.hash = encodeURIComponent(@encode(json))
         href = window.location.href.toString()
         @playLevel.attr('href', href.replace(/editor/, 'custom'))
             

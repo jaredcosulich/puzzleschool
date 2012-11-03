@@ -55,13 +55,16 @@ soma.views({
         rows: 10,
         columns: 10
       });
-      window.game = this.viewHelper;
+      this.initEncode();
       levelName = this.el.data('level_name');
       if (levelName === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
         this.editor = new spaceFractionsEditor.EditorHelper({
           el: $(this.selector),
-          viewHelper: this.viewHelper
+          viewHelper: this.viewHelper,
+          encodeMethod: function(json) {
+            return _this.encode(json);
+          }
         });
       } else if (levelName === 'custom') {
         this.$('.load_to_play').bind('click', function() {
@@ -69,7 +72,7 @@ soma.views({
         });
       }
       if (window.location.hash) {
-        level = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+        level = this.decode(decodeURIComponent(window.location.hash.replace(/^#/, '')));
         if (levelName === 'editor') {
           this.editor.levelDescription.val(level);
           return this.editor.load();
@@ -77,6 +80,42 @@ soma.views({
           return this.viewHelper.loadToPlay(level);
         }
       }
+    },
+    initEncode: function() {
+      var object, _results;
+      this.encodeMap = {
+        objects: '~o',
+        type: '~t',
+        index: '~i',
+        numerator: '~n',
+        denominator: '~d',
+        fullNumerator: '~fN',
+        fullDenominator: '~fD'
+      };
+      _results = [];
+      for (object in this.viewHelper.objects) {
+        _results.push(this.encodeMap[object] = "!" + (object.split(/_/ig).map(function(section) {
+          return section[0];
+        }).join('')));
+      }
+      return _results;
+    },
+    encode: function(json) {
+      var encode, regExp;
+      for (encode in this.encodeMap) {
+        regExp = new RegExp(encode, 'g');
+        json = json.replace(regExp, this.encodeMap[encode]);
+      }
+      return json;
+    },
+    decode: function(json) {
+      var encode, regExp;
+      for (encode in this.encodeMap) {
+        regExp = new RegExp(this.encodeMap[encode], 'g');
+        json = json.replace(regExp, encode);
+      }
+      console.log(json);
+      return json;
     }
   }
 });
