@@ -489,12 +489,35 @@ spaceFractions.ViewHelper = (function() {
       checkSquare.data('numerator', numerator);
       checkSquare.data('denominator', denominator);
       this.setObjectImage(checkSquare);
+      this.checkSuccess();
       this.fireLaser(checkSquare);
     }
     if (occupied) {
       return false;
     }
     return true;
+  };
+
+  ViewHelper.prototype.checkSuccess = function() {
+    var square, successMessage, _k, _len2, _ref;
+    _ref = this.$('.square.occupied');
+    for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+      square = _ref[_k];
+      if (square.className.indexOf('ship') > -1) {
+        if ($(square).html().indexOf('full') === -1) {
+          return;
+        }
+      }
+    }
+    successMessage = this.$('.success');
+    successMessage.css({
+      top: this.el.offset().top + (this.el.height() / 2) - (successMessage.height() / 2),
+      left: this.el.offset().left + (this.el.width() / 2) - (successMessage.width() / 2)
+    });
+    return successMessage.animate({
+      opacity: 1,
+      duration: 500
+    });
   };
 
   ViewHelper.prototype.loadToPlay = function(data) {

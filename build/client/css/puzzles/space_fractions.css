@@ -224,3 +224,16 @@ body {
   height: 6em;
   width: 600px;
 }
+.space_fractions .success {
+  text-align: center;
+  background-color: #fafafa;
+  border: 1px solid #949494;
+  padding: 60px 90px;
+  opacity: 0;
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+}
+.space_fractions .success h2 {
+  color: #24d94c;
+}
