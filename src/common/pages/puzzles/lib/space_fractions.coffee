@@ -43,11 +43,22 @@ for direction, index in directions
         accept: false
         showFraction: true
         
+    #three-way splitters
+    OBJECTS["three_way_split_#{direction}"] =
+        index: 10000 + index
+        image: "three_way_split_#{direction}"
+        distribute: true
+        distributeDirections: [direction, (if index < 2 then directions[2..3] else directions[0..1])...]
+        accept: true
+        acceptDirections: [direction]
+        denominatorMultiplier: 3
+        movable: true
+        
     for direction2, index2 in directions
         continue if (index < 2 and index2 < 2) or (index > 1 and index2 > 1)
         #turners
         OBJECTS["turn_#{direction}_#{direction2}"] =
-            index: 100 + index2
+            index: 100 + (index * directions.length) + index2
             image: "turn_#{direction}_#{direction2}"
             distribute: true
             distributeDirections: [direction2]
@@ -57,7 +68,7 @@ for direction, index in directions
             
         #splitters
         OBJECTS["two_split_#{direction}_#{direction2}"] =
-            index: 1000 + index2
+            index: 1000 + (index * directions.length) + index2
             image: "two_split_#{direction}_#{direction2}"
             distribute: true
             distributeDirections: [direction, direction2]
