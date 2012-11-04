@@ -25,6 +25,8 @@ OBJECTS =
 # directional objects
 directions = ['up', 'down', 'left',  'right']
 for direction, index in directions
+    perpendicularDirections = (if index < 2 then directions[2..3] else directions[0..1])
+    
     #ships
     OBJECTS["ship_#{direction}"] =
         index: index
@@ -45,14 +47,26 @@ for direction, index in directions
         
     #three-way splitters
     OBJECTS["three_way_split_#{direction}"] =
-        index: 10000 + index
+        index: 2000 + index
         image: "three_way_split_#{direction}"
         distribute: true
-        distributeDirections: [direction, (if index < 2 then directions[2..3] else directions[0..1])...]
+        distributeDirections: [direction, perpendicularDirections...]
         accept: true
         acceptDirections: [direction]
         denominatorMultiplier: 3
         movable: true
+
+    #three-way splitters
+    OBJECTS["add_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}_#{direction}"] =
+        index: 3000 + index
+        image: "add_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}_#{direction}"
+        distribute: true
+        distributeDirections: [direction]
+        accept: true
+        acceptDirections: perpendicularDirections
+        additive: true
+        movable: true
+
         
     for direction2, index2 in directions
         continue if (index < 2 and index2 < 2) or (index > 1 and index2 > 1)
@@ -301,7 +315,8 @@ class spaceFractions.ViewHelper
         if object.accept
             square.data('acceptDirections', JSON.stringify(object.acceptDirections))
             square.data('numeratorMultiplier', object.numeratorMultiplier or 1)        
-            square.data('denominatorMultiplier', object.denominatorMultiplier or 1)        
+            square.data('denominatorMultiplier', object.denominatorMultiplier or 1) 
+            square.data('additive', true) if object.additive       
             for direction in object.acceptDirections
                 if laserData[direction]
                     square.data('numerator', laserData[direction].numerator)
@@ -419,9 +434,16 @@ class spaceFractions.ViewHelper
             return unless (laserData = JSON.parse(square.data('lasers') or null))
             for acceptDirection in acceptDirections
                 return unless laserData[acceptDirection]
-            
-        numerator = (square.data('numerator') or 1) * (square.data('numeratorMultiplier') or 1)
-        denominator = (square.data('denominator') or 1) * (square.data('denominatorMultiplier') or 1)
+                    
+        if square.data('additive')
+            for acceptDirection in acceptDirections
+                numerator = (numerator or 0) + laserData[acceptDirection].numerator
+                return if (denominator and laserData[acceptDirection].denominator != denominator)
+                denominator = laserData[acceptDirection].denominator
+        else
+            numerator = (square.data('numerator') or 1) * (square.data('numeratorMultiplier') or 1)
+            denominator = (square.data('denominator') or 1) * (square.data('denominatorMultiplier') or 1)
+        
         squareIndex = square.data('index')
         
         for distributeDirection in distributeDirections
