@@ -210,7 +210,7 @@ class spaceFractions.ViewHelper
     initMovableObject: (square) ->
         objectType = square.data('objectType')
         objectMeta = @objects[objectType]
-        square.one 'mousedown', (e) =>
+        moveObject = (e) =>
             return if @movingObject
             @movingObject = true
             movingObject = square.find('img')
@@ -255,6 +255,10 @@ class spaceFractions.ViewHelper
                     occupiedSquare = $(occupiedSquare)
                     occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
                 @movingObject = false
+                
+        square.one 'mousedown', (e) => moveObject(e)
+        square.one 'touchstart', (e) => moveObject(e)
+        
     
     addObjectToSquare: (objectType, square, image) ->
         square = $(square)

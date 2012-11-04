@@ -306,11 +306,11 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initMovableObject = function(square) {
-    var objectMeta, objectType,
+    var moveObject, objectMeta, objectType,
       _this = this;
     objectType = square.data('objectType');
     objectMeta = this.objects[objectType];
-    return square.one('mousedown', function(e) {
+    moveObject = function(e) {
       var body, movingObject;
       if (_this.movingObject) {
         return;
@@ -373,6 +373,12 @@ spaceFractions.ViewHelper = (function() {
         }
         return _this.movingObject = false;
       });
+    };
+    square.one('mousedown', function(e) {
+      return moveObject(e);
+    });
+    return square.one('touchstart', function(e) {
+      return moveObject(e);
     });
   };
 

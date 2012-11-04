@@ -35,9 +35,6 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.el.append(verifiedMessages);
     this.playLevel = verifiedMessages.find('.play_level');
     this.shareLink = verifiedMessages.find('.share_link');
-    this.shareLink.bind('focus', function() {
-      return _this.shareLink[0].select();
-    });
     this.levelDescription = $(document.createElement('textarea'));
     this.levelDescription.addClass('level_description');
     this.el.append(this.levelDescription);
