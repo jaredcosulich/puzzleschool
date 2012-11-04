@@ -226,6 +226,7 @@ class spaceFractions.ViewHelper
             body = $(document.body)
             
             move = (e) =>
+                e.preventDefault() if e.preventDefault
                 return unless movingObject
                 left = e.clientX - (square.width() / 2)
                 top = e.clientY - (square.height() / 2)
@@ -246,6 +247,7 @@ class spaceFractions.ViewHelper
             body.bind 'touchmove', (e) => move(e)
 
             endMove = (e) =>
+                e.preventDefault() if e.preventDefault
                 image = movingObject
                 movingObject = null
                 @el.find('.movable_object').remove()

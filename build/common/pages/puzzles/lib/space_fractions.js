@@ -330,6 +330,9 @@ spaceFractions.ViewHelper = (function() {
       body = $(document.body);
       move = function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
         if (!movingObject) {
           return;
         }
@@ -360,6 +363,9 @@ spaceFractions.ViewHelper = (function() {
       });
       endMove = function(e) {
         var image, occupiedSquare, selectedSquare, _k, _len2, _ref;
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
         image = movingObject;
         movingObject = null;
         _this.el.find('.movable_object').remove();
