@@ -311,7 +311,7 @@ spaceFractions.ViewHelper = (function() {
     objectType = square.data('objectType');
     objectMeta = this.objects[objectType];
     moveObject = function(e) {
-      var body, movingObject;
+      var body, endMove, move, movingObject;
       if (e.preventDefault != null) {
         e.preventDefault();
       }
@@ -328,7 +328,7 @@ spaceFractions.ViewHelper = (function() {
       });
       _this.removeObjectFromSquare(square);
       body = $(document.body);
-      body.bind('mousemove', function(e) {
+      move = function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
         if (!movingObject) {
           return;
@@ -351,14 +351,22 @@ spaceFractions.ViewHelper = (function() {
           }
         }
         return _results;
+      };
+      body.bind('mousemove', function(e) {
+        return move(e);
       });
-      return body.bind('mouseup', function(e) {
+      body.bind('touchmove', function(e) {
+        return move(e);
+      });
+      endMove = function(e) {
         var image, occupiedSquare, selectedSquare, _k, _len2, _ref;
         image = movingObject;
         movingObject = null;
         _this.el.find('.movable_object').remove();
         body.unbind('mousemove');
         body.unbind('mouseup');
+        body.unbind('touchmove');
+        body.unbind('touchend');
         selectedSquare = _this.$('.square.selected');
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
@@ -375,6 +383,12 @@ spaceFractions.ViewHelper = (function() {
           }
         }
         return _this.movingObject = false;
+      };
+      body.bind('mouseup', function(e) {
+        return endMove(e);
+      });
+      return body.bind('touchend', function(e) {
+        return endMove(e);
       });
     };
     square.one('mousedown', function(e) {

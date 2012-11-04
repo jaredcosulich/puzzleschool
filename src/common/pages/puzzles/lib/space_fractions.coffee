@@ -212,7 +212,6 @@ class spaceFractions.ViewHelper
         objectMeta = @objects[objectType]
         moveObject = (e) =>
             e.preventDefault() if e.preventDefault?
-            
             return if @movingObject
             @movingObject = true
             movingObject = square.find('img')
@@ -225,7 +224,8 @@ class spaceFractions.ViewHelper
             @removeObjectFromSquare(square)
             
             body = $(document.body)
-            body.bind 'mousemove', (e) =>
+            
+            move = (e) =>
                 return unless movingObject
                 left = e.clientX - (square.width() / 2)
                 top = e.clientY - (square.height() / 2)
@@ -241,13 +241,18 @@ class spaceFractions.ViewHelper
                         $(boardSquare).addClass('selected')
                     else
                         $(boardSquare).removeClass('selected')
-                    
-            body.bind 'mouseup', (e) =>
+                
+            body.bind 'mousemove', (e) => move(e)
+            body.bind 'touchmove', (e) => move(e)
+
+            endMove = (e) =>
                 image = movingObject
                 movingObject = null
                 @el.find('.movable_object').remove()
                 body.unbind 'mousemove'        
                 body.unbind 'mouseup'
+                body.unbind 'touchmove'        
+                body.unbind 'touchend'
                 selectedSquare = @$('.square.selected')
                 selectedSquare = square if not selectedSquare?.length
                 image.removeClass('movable_object')
@@ -257,6 +262,9 @@ class spaceFractions.ViewHelper
                     occupiedSquare = $(occupiedSquare)
                     occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
                 @movingObject = false
+                
+            body.bind 'mouseup', (e) => endMove(e)
+            body.bind 'touchend', (e) => endMove(e)
                 
         square.one 'mousedown', (e) => moveObject(e)
         square.one 'touchstart', (e) => moveObject(e)
