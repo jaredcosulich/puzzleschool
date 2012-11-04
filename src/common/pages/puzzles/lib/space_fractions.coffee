@@ -211,6 +211,8 @@ class spaceFractions.ViewHelper
         objectType = square.data('objectType')
         objectMeta = @objects[objectType]
         moveObject = (e) =>
+            e.preventDefault() if e.preventDefault?
+            
             return if @movingObject
             @movingObject = true
             movingObject = square.find('img')

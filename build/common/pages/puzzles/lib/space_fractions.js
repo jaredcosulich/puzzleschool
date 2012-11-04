@@ -312,6 +312,9 @@ spaceFractions.ViewHelper = (function() {
     objectMeta = this.objects[objectType];
     moveObject = function(e) {
       var body, movingObject;
+      if (e.preventDefault != null) {
+        e.preventDefault();
+      }
       if (_this.movingObject) {
         return;
       }
