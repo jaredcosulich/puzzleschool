@@ -45,6 +45,18 @@ for direction, index in directions
         accept: false
         showFraction: true
         
+    # splitters
+    OBJECTS["split_#{direction}_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}"] =
+        index: 1500 + index
+        image: "split_#{direction}_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}"
+        distribute: true
+        distributeDirections: perpendicularDirections
+        accept: true
+        acceptDirections: [direction]
+        denominatorMultiplier: 2
+        movable: true
+    
+        
     #three-way splitters
     OBJECTS["three_way_split_#{direction}"] =
         index: 2000 + index
@@ -56,7 +68,7 @@ for direction, index in directions
         denominatorMultiplier: 3
         movable: true
 
-    #three-way splitters
+    #two-way adders
     OBJECTS["add_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}_#{direction}"] =
         index: 3000 + index
         image: "add_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}_#{direction}"
@@ -64,6 +76,17 @@ for direction, index in directions
         distributeDirections: [direction]
         accept: true
         acceptDirections: perpendicularDirections
+        additive: true
+        movable: true
+
+    #three-way adders
+    OBJECTS["three_add_#{direction}"] =
+        index: 4000 + index
+        image: "three_add_#{direction}"
+        distribute: true
+        distributeDirections: [direction]
+        accept: true
+        acceptDirections: [direction, perpendicularDirections...]
         additive: true
         movable: true
 

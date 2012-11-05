@@ -54,6 +54,16 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
     accept: false,
     showFraction: true
   };
+  OBJECTS["split_" + direction + "_" + perpendicularDirections[0] + "_" + perpendicularDirections[1]] = {
+    index: 1500 + index,
+    image: "split_" + direction + "_" + perpendicularDirections[0] + "_" + perpendicularDirections[1],
+    distribute: true,
+    distributeDirections: perpendicularDirections,
+    accept: true,
+    acceptDirections: [direction],
+    denominatorMultiplier: 2,
+    movable: true
+  };
   OBJECTS["three_way_split_" + direction] = {
     index: 2000 + index,
     image: "three_way_split_" + direction,
@@ -71,6 +81,16 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
     distributeDirections: [direction],
     accept: true,
     acceptDirections: perpendicularDirections,
+    additive: true,
+    movable: true
+  };
+  OBJECTS["three_add_" + direction] = {
+    index: 4000 + index,
+    image: "three_add_" + direction,
+    distribute: true,
+    distributeDirections: [direction],
+    accept: true,
+    acceptDirections: [direction].concat(__slice.call(perpendicularDirections)),
     additive: true,
     movable: true
   };
