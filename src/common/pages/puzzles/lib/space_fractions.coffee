@@ -443,6 +443,11 @@ class spaceFractions.ViewHelper
         successMessage.animate
             opacity: 1
             duration: 500
+            
+        @el.one 'click', ->
+            successMessage.animate
+                opacity: 0
+                duration: 500
     
     loadToPlay: (data) ->
         @solution = JSON.parse(data)

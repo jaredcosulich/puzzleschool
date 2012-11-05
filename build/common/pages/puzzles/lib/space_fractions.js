@@ -613,9 +613,15 @@ spaceFractions.ViewHelper = (function() {
       top: this.el.offset().top + (this.el.height() / 2) - (successMessage.height() / 2),
       left: this.el.offset().left + (this.el.width() / 2) - (successMessage.width() / 2)
     });
-    return successMessage.animate({
+    successMessage.animate({
       opacity: 1,
       duration: 500
+    });
+    return this.el.one('click', function() {
+      return successMessage.animate({
+        opacity: 0,
+        duration: 500
+      });
     });
   };
 
