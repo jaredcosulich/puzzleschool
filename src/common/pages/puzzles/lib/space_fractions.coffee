@@ -55,7 +55,6 @@ for direction, index in directions
         acceptDirections: [direction]
         denominatorMultiplier: 2
         movable: true
-    
         
     #three-way splitters
     OBJECTS["three_way_split_#{direction}"] =
@@ -89,7 +88,29 @@ for direction, index in directions
         acceptDirections: [direction, perpendicularDirections...]
         additive: true
         movable: true
+        
+    #multipliers
+    OBJECTS["multiplier_two_#{direction}"] =
+        index: 5000 + index
+        image: "multiplier_two_#{direction}"
+        distribute: true
+        distributeDirections: [direction]
+        accept: true
+        acceptDirections: [direction]
+        denominatorMultiplier: 2
+        numeratorMultiplier: 2
+        movable: true
 
+    OBJECTS["multiplier_three_#{direction}"] =
+        index: 5500 + index
+        image: "multiplier_three_#{direction}"
+        distribute: true
+        distributeDirections: [direction]
+        accept: true
+        acceptDirections: [direction]
+        denominatorMultiplier: 3
+        numeratorMultiplier: 3
+        movable: true
         
     for direction2, index2 in directions
         continue if (index < 2 and index2 < 2) or (index > 1 and index2 > 1)

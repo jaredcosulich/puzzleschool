@@ -94,6 +94,28 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
     additive: true,
     movable: true
   };
+  OBJECTS["multiplier_two_" + direction] = {
+    index: 5000 + index,
+    image: "multiplier_two_" + direction,
+    distribute: true,
+    distributeDirections: [direction],
+    accept: true,
+    acceptDirections: [direction],
+    denominatorMultiplier: 2,
+    numeratorMultiplier: 2,
+    movable: true
+  };
+  OBJECTS["multiplier_three_" + direction] = {
+    index: 5500 + index,
+    image: "multiplier_three_" + direction,
+    distribute: true,
+    distributeDirections: [direction],
+    accept: true,
+    acceptDirections: [direction],
+    denominatorMultiplier: 3,
+    numeratorMultiplier: 3,
+    movable: true
+  };
   for (index2 = _j = 0, _len1 = directions.length; _j < _len1; index2 = ++_j) {
     direction2 = directions[index2];
     if ((index < 2 && index2 < 2) || (index > 1 && index2 > 1)) {
