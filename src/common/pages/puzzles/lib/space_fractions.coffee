@@ -396,6 +396,7 @@ class spaceFractions.ViewHelper
              
     removeExistingLasers: (square) ->
         square = $(square)
+        return if square.parent()[0].className != @board[0].className
         squareIndex = square.data('index')
         if (existingLasers = @board.find(".laser.laser#{squareIndex}")).length
             existingLasers.remove()
@@ -470,6 +471,8 @@ class spaceFractions.ViewHelper
             
     fireLaser: (square) ->
         square = $(square)
+
+        return unless square.parent()[0].className == @board[0].className
         
         @removeExistingLasers(square)
 

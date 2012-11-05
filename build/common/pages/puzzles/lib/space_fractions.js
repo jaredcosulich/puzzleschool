@@ -541,6 +541,9 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.removeExistingLasers = function(square) {
     var existingLasers, laserData, laserSquare, squareIndex, _k, _len2, _ref, _results;
     square = $(square);
+    if (square.parent()[0].className !== this.board[0].className) {
+      return;
+    }
     squareIndex = square.data('index');
     if ((existingLasers = this.board.find(".laser.laser" + squareIndex)).length) {
       existingLasers.remove();
@@ -653,6 +656,9 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.fireLaser = function(square) {
     var acceptDirection, acceptDirections, beam, checkSquare, denominator, distributeDirection, distributeDirections, end, height, increment, laser, laserData, numerator, offset, squareIndex, start, width, _k, _l, _len2, _len3, _len4, _m, _n, _o, _results;
     square = $(square);
+    if (square.parent()[0].className !== this.board[0].className) {
+      return;
+    }
     this.removeExistingLasers(square);
     if (!(distributeDirections = JSON.parse(square.data('distributeDirections') || null))) {
       return;
