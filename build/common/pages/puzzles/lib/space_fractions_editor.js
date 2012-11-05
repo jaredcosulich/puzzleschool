@@ -31,7 +31,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       _this = this;
     verifiedMessages = $(document.createElement('DIV'));
     verifiedMessages.addClass('verification_messages');
-    verifiedMessages.html('<div class=\'verification_message verified\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>\n<a class=\'play_level\' target=\'_blank\'>Play Level</a>\n<p>Share: <input type=\'text\' class=\'share_link\' /></p>');
+    verifiedMessages.html('<div class=\'verification_message verified\' style=\'display: none;\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified style=\'display: none;\'\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>\n<a class=\'play_level\' target=\'_blank\'>Play Level</a>\n<p>Share: <input type=\'text\' class=\'share_link\' /></p>');
     this.el.append(verifiedMessages);
     this.playLevel = verifiedMessages.find('.play_level');
     this.shareLink = verifiedMessages.find('.share_link');
@@ -286,7 +286,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     levelDescription = {
       objects: []
     };
-    levelVerified = true;
+    levelVerified = null;
     _ref = this.viewHelper.board.find('.square.occupied');
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       square = _ref[_i];
@@ -301,6 +301,8 @@ spaceFractionsEditor.EditorHelper = (function() {
         object.fullDenominator = square.data('fullDenominator');
         if (square.html().indexOf('full') === -1) {
           levelVerified = false;
+        } else if (levelVerified === null) {
+          levelVerified = true;
         }
       } else if (objectMeta.distribute && !objectMeta.accept) {
         object.numerator = square.data('numerator');

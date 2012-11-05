@@ -22,11 +22,11 @@ class spaceFractionsEditor.EditorHelper
         verifiedMessages = $(document.createElement('DIV'))
         verifiedMessages.addClass('verification_messages')
         verifiedMessages.html '''
-            <div class='verification_message verified'>
+            <div class='verification_message verified' style='display: none;'>
                 <h3>Verified</h3>
                 All ships are full.
             </div>
-            <div class='verification_message unverified'>
+            <div class='verification_message unverified style='display: none;''>
                 <h3>Unverified</h3>
                 Not all ships are full.
             </div>
@@ -253,7 +253,7 @@ class spaceFractionsEditor.EditorHelper
         @levelDescription.val('')
         levelDescription = {objects: []}
 
-        levelVerified = true
+        levelVerified = null
         for square in @viewHelper.board.find('.square.occupied')
             square = $(square)
             object =
@@ -264,7 +264,10 @@ class spaceFractionsEditor.EditorHelper
             if objectMeta.states
                 object.fullNumerator = square.data('fullNumerator')
                 object.fullDenominator = square.data('fullDenominator')
-                levelVerified = false if square.html().indexOf('full') == -1
+                if square.html().indexOf('full') == -1
+                    levelVerified = false 
+                else if levelVerified == null
+                    levelVerified = true
                     
             else if objectMeta.distribute and not objectMeta.accept
                 object.numerator = square.data('numerator')
