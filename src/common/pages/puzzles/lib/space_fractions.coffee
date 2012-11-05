@@ -427,13 +427,13 @@ class spaceFractions.ViewHelper
             checkSquare.data('numerator', numerator)
             checkSquare.data('denominator', denominator)
             @setObjectImage(checkSquare)
-            @checkSuccess()
+            @checkSuccess() unless @loading
             @fireLaser(checkSquare)
         return false if occupied
         return true
         
     checkSuccess: ->
-        for square in @$('.square.occupied') when square.className.indexOf('ship') > -1
+        for square in @board.find('.square.occupied') when square.className.indexOf('ship') > -1
             return if $(square).html().indexOf('full') == -1
             
         successMessage = @$('.success')
@@ -450,6 +450,7 @@ class spaceFractions.ViewHelper
                 duration: 500
     
     loadToPlay: (data) ->
+        @loading = true
         @solution = JSON.parse(data)
         movableObjects = []
         for object in @solution.objects
@@ -473,7 +474,9 @@ class spaceFractions.ViewHelper
         if not @solution.verified
             alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist')
             
-            
+        @loading = false
+        @checkSuccess()
+        
     fireLaser: (square) ->
         square = $(square)
 

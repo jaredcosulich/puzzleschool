@@ -588,7 +588,9 @@ spaceFractions.ViewHelper = (function() {
       checkSquare.data('numerator', numerator);
       checkSquare.data('denominator', denominator);
       this.setObjectImage(checkSquare);
-      this.checkSuccess();
+      if (!this.loading) {
+        this.checkSuccess();
+      }
       this.fireLaser(checkSquare);
     }
     if (occupied) {
@@ -599,7 +601,7 @@ spaceFractions.ViewHelper = (function() {
 
   ViewHelper.prototype.checkSuccess = function() {
     var square, successMessage, _k, _len2, _ref;
-    _ref = this.$('.square.occupied');
+    _ref = this.board.find('.square.occupied');
     for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
       square = _ref[_k];
       if (square.className.indexOf('ship') > -1) {
@@ -627,6 +629,7 @@ spaceFractions.ViewHelper = (function() {
 
   ViewHelper.prototype.loadToPlay = function(data) {
     var attr, movableObjects, object, objectMeta, square, type, _k, _l, _len2, _len3, _ref, _ref1;
+    this.loading = true;
     this.solution = JSON.parse(data);
     movableObjects = [];
     _ref = this.solution.objects;
@@ -655,8 +658,10 @@ spaceFractions.ViewHelper = (function() {
       this.addObjectToSquare(type, square);
     }
     if (!this.solution.verified) {
-      return alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist');
+      alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist');
     }
+    this.loading = false;
+    return this.checkSuccess();
   };
 
   ViewHelper.prototype.fireLaser = function(square) {
