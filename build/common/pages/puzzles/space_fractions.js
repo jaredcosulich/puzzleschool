@@ -112,8 +112,20 @@ soma.views({
       };
     },
     encode: function(json) {
-      var encode, extraEncode, regExp;
-      for (encode in this.encodeMap) {
+      var encode, extraEncode, key, regExp, _i, _len, _ref,
+        _this = this;
+      _ref = ((function() {
+        var _results;
+        _results = [];
+        for (key in this.encodeMap) {
+          _results.push(key);
+        }
+        return _results;
+      }).call(this)).sort(function(a, b) {
+        return b.length - a.length;
+      });
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        encode = _ref[_i];
         regExp = new RegExp(encode, 'g');
         json = json.replace(regExp, this.encodeMap[encode]);
       }
@@ -124,8 +136,20 @@ soma.views({
       return json;
     },
     decode: function(json) {
-      var encode, extraEncode, regExp;
-      for (encode in this.encodeMap) {
+      var encode, extraEncode, key, regExp, _i, _len, _ref,
+        _this = this;
+      _ref = ((function() {
+        var _results;
+        _results = [];
+        for (key in this.encodeMap) {
+          _results.push(key);
+        }
+        return _results;
+      }).call(this)).sort(function(a, b) {
+        return b.length - a.length;
+      });
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        encode = _ref[_i];
         regExp = new RegExp(this.encodeMap[encode], 'g');
         json = json.replace(regExp, encode);
       }

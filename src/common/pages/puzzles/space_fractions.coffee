@@ -81,7 +81,7 @@ soma.views
                 '}': ')'
                 
         encode: (json) ->
-            for encode of @encodeMap
+            for encode in (key for key of @encodeMap).sort((a,b) => b.length - a.length)
                 regExp = new RegExp(encode,'g')
                 json = json.replace(regExp, @encodeMap[encode])
             for extraEncode of @extraEncodeMap
@@ -90,7 +90,7 @@ soma.views
             return json
             
         decode: (json) ->
-            for encode of @encodeMap
+            for encode in (key for key of @encodeMap).sort((a,b) => b.length - a.length)
                 regExp = new RegExp(@encodeMap[encode],'g')
                 json = json.replace(regExp, encode)
             for extraEncode of @extraEncodeMap
