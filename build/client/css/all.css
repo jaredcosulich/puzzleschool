@@ -206,7 +206,7 @@ a {
   vertical-align: -48px;
 }
 .page .main_nav {
-  width: 25em;
+  width: 32em;
   margin: 0 auto 30px auto;
   overflow: hidden;
 }
@@ -224,15 +224,15 @@ a {
   border-bottom: 1px solid #484848;
 }
 .page .sub_nav {
-  width: 63em;
+  width: 25em;
   margin: -15px auto 30px auto;
   overflow: hidden;
 }
 .page .sub_nav a {
   font-weight: normal;
   color: #262626;
-  width: 20em;
-  margin-left: 1em;
+  width: 11em;
+  margin-left: 1.5em;
   float: left;
   text-align: center;
   padding-bottom: 3px;
@@ -242,53 +242,72 @@ a {
 .page .sub_nav a:hover {
   border-bottom: 1px solid #484848;
 }
-.home .opening_post {
+.home .section {
   width: 54em;
   margin: auto;
 }
-.home .opening_post li {
-  margin-bottom: 6px;
+.home .section table {
+  margin: auto;
 }
-.puzzles #labs {
+.home .section table td {
+  padding: 0 12px;
+}
+.home .section table img {
+  width: 120px;
+  height: 120px;
+  text-align: center;
+}
+.puzzles #labs,
+.reviews #labs {
   padding-top: 45px;
   border-top: 1px solid #c7c7c7;
 }
-.puzzles .section {
+.puzzles .section,
+.reviews .section {
   margin-bottom: 45px;
 }
-.puzzles .section .puzzle {
+.puzzles .section .puzzle,
+.reviews .section .puzzle {
   padding: 30px 0;
   overflow: hidden;
 }
-.puzzles .section .puzzle .info {
+.puzzles .section .puzzle .info,
+.reviews .section .puzzle .info {
   float: left;
 }
-.puzzles .section .puzzle .info img {
+.puzzles .section .puzzle .info img,
+.reviews .section .puzzle .info img {
   margin: 12px 12px 0 0;
   border: 1px solid #949494;
 }
-.puzzles .section .puzzle .details {
+.puzzles .section .puzzle .details,
+.reviews .section .puzzle .details {
   margin-top: 12px;
 }
-.puzzles .section .puzzle .details .explanation {
+.puzzles .section .puzzle .details .explanation,
+.reviews .section .puzzle .details .explanation {
   padding: 0 12px;
   overflow: hidden;
   background-color: #ededed;
   display: none;
 }
-.puzzles .section .puzzle .details .explanation.selected {
+.puzzles .section .puzzle .details .explanation.selected,
+.reviews .section .puzzle .details .explanation.selected {
   display: block;
 }
-.puzzles .section .puzzle .details .rating {
+.puzzles .section .puzzle .details .rating,
+.reviews .section .puzzle .details .rating {
   width: 180px;
   float: left;
 }
-.puzzles .section .puzzle .details .rating p {
+.puzzles .section .puzzle .details .rating p,
+.reviews .section .puzzle .details .rating p {
   cursor: pointer;
   padding: 6px;
   margin: 0;
 }
-.puzzles .section .puzzle .details .rating p.selected {
+.puzzles .section .puzzle .details .rating p.selected,
+.reviews .section .puzzle .details .rating p.selected {
   background-color: #ededed;
 }
 .translations #translation_container {

@@ -10,7 +10,7 @@
     }
 
     .main_nav {
-        width: 25em;
+        width: 32em;
         margin: 0 auto 30px auto;
         overflow: hidden;
         a {
@@ -28,14 +28,14 @@
     }
 
     .sub_nav {
-        width: 63em;
+        width: 25em;
         margin: -15px auto 30px auto;
         overflow: hidden;
         a {
             font-weight: normal;
             color: @black;
-            width: 20em;
-            margin-left: 1em;
+            width: 11em;
+            margin-left: 1.5em;
             float: left;
             text-align: center;
             padding-bottom: 3px;
@@ -48,16 +48,26 @@
 }
 
 .home {    
-    .opening_post {
+    .section {
         width: @narrow_content_width;
         margin: auto;
-        li {
-            margin-bottom: 6px;
+        table {
+            margin: auto;
+            td {
+                padding: 0 12px;
+            }
+            img {
+                width: 120px;
+                height: 120px;
+                text-align: center;
+            }
         }
     }
+    
+    
 }
 
-.puzzles {
+.puzzles, .reviews {
     #labs {
         padding-top: 45px;
         border-top: 1px solid @lightgrey;

@@ -17,6 +17,13 @@ soma.views
         selector: '#content .about'
         create: ->
             $('.register_flag').hide()    
+            
+            for moreLink in @$('.more')
+                do (moreLink) =>
+                    moreLink = $(moreLink)
+                    moreLink.bind 'click', =>
+                        moreLink.hide()
+                        moreLink.closest('.about_text').find('.hidden').show()
 
         
 soma.routes

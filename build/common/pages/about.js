@@ -26,7 +26,22 @@ soma.views({
   About: {
     selector: '#content .about',
     create: function() {
-      return $('.register_flag').hide();
+      var moreLink, _i, _len, _ref, _results,
+        _this = this;
+      $('.register_flag').hide();
+      _ref = this.$('.more');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        moreLink = _ref[_i];
+        _results.push((function(moreLink) {
+          moreLink = $(moreLink);
+          return moreLink.bind('click', function() {
+            moreLink.hide();
+            return moreLink.closest('.about_text').find('.hidden').show();
+          });
+        })(moreLink));
+      }
+      return _results;
     }
   }
 });
