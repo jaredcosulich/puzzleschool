@@ -19,6 +19,7 @@ class spaceFractionsEditor.EditorHelper
         @el.append(@elementSelector)
         
     initLevelDescription: ->
+        explanation = @$('.explanation')
         verifiedMessages = $(document.createElement('DIV'))
         verifiedMessages.addClass('verification_messages')
         verifiedMessages.html '''
@@ -33,19 +34,19 @@ class spaceFractionsEditor.EditorHelper
             <a class='play_level' target='_blank'>Play Level</a>
             <p>Share: <input type='text' class='share_link' /></p>
         '''
-        @el.append(verifiedMessages)
+        verifiedMessages.insertBefore(explanation)
 
         @playLevel = verifiedMessages.find('.play_level')
         @shareLink = verifiedMessages.find('.share_link')
         
         @levelDescription = $(document.createElement('textarea'))
         @levelDescription.addClass('level_description')
-        @el.append(@levelDescription)
+        @levelDescription.insertBefore(explanation)
 
         loadLevelDescription = $(document.createElement('button'))
         loadLevelDescription.html('Load To Edit')
         loadLevelDescription.bind 'click', => @load()
-        @el.append(loadLevelDescription)
+        loadLevelDescription.insertBefore(explanation)
 
         
         
@@ -187,6 +188,16 @@ class spaceFractionsEditor.EditorHelper
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
         
+        @initMovableObject(selectedSquare)
+
+    initMovableObject: (square) ->
+        @viewHelper.initMovableObject square, (newSquare, data) =>
+            newSquare.addClass('selected') 
+            @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
+            @save()
+            @initMovableObject(newSquare)
+            newSquare.removeClass('selected') 
+           
     removeObject: () ->
         selectedSquare = @$('.square.selected')
         @viewHelper.removeObjectFromSquare(selectedSquare)

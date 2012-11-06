@@ -17,7 +17,7 @@ body {
   width: 620px;
   overflow: hidden;
   margin-bottom: 24px;
-  background: url(/assets/images/puzzles/space_fractions/space1.jpg) no-repeat center center;
+  background: url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
   background-color: #1a1a1a;
 }
 .space_fractions .board .laser {
@@ -39,7 +39,7 @@ body {
 }
 .space_fractions .board .laser .beam {
   background-color: red;
-  box-shadow: 0 0 20px 10px red;
+  box-shadow: 0 0 10px 5px red;
   opacity: 0.75;
   position: relative;
 }
@@ -52,23 +52,23 @@ body {
   margin: 0 20px;
 }
 .space_fractions .board .laser .beam.right {
-  border-top-left-radius: 40%;
-  border-bottom-left-radius: 40%;
+  border-top-left-radius: 80%;
+  border-bottom-left-radius: 80%;
   margin-left: 3px;
 }
 .space_fractions .board .laser .beam.left {
-  border-top-right-radius: 40%;
-  border-bottom-right-radius: 40%;
+  border-top-right-radius: 80%;
+  border-bottom-right-radius: 80%;
   margin-right: 3px;
 }
 .space_fractions .board .laser .beam.up {
-  border-bottom-left-radius: 40%;
-  border-bottom-right-radius: 40%;
+  border-bottom-left-radius: 80%;
+  border-bottom-right-radius: 80%;
   margin-bottom: 3px;
 }
 .space_fractions .board .laser .beam.down {
-  border-top-left-radius: 40%;
-  border-top-right-radius: 40%;
+  border-top-left-radius: 80%;
+  border-top-right-radius: 80%;
   margin-top: 3px;
 }
 .space_fractions .board .square,

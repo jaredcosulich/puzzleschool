@@ -369,13 +369,14 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
-  ViewHelper.prototype.initMovableObject = function(square) {
+  ViewHelper.prototype.initMovableObject = function(square, callback) {
     var moveObject, objectMeta, objectType,
       _this = this;
+    square = $(square);
     objectType = square.data('objectType');
     objectMeta = this.objects[objectType];
     moveObject = function(e) {
-      var body, endMove, move, movingObject;
+      var body, data, endMove, move, movingObject;
       if (e.preventDefault != null) {
         e.preventDefault();
       }
@@ -390,6 +391,7 @@ spaceFractions.ViewHelper = (function() {
         left: e.clientX - (square.width() / 2),
         top: e.clientY - (square.height() / 2)
       });
+      data = JSON.parse(JSON.stringify(square.data()));
       _this.removeObjectFromSquare(square);
       body = $(document.body);
       move = function(e) {
@@ -452,7 +454,10 @@ spaceFractions.ViewHelper = (function() {
             occupiedSquare.removeClass('occupied');
           }
         }
-        return _this.movingObject = false;
+        _this.movingObject = false;
+        if (callback) {
+          return callback(selectedSquare, data);
+        }
       };
       body.bind('mouseup', function(e) {
         return endMove(e);

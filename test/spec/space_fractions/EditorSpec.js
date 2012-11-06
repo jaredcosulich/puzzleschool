@@ -74,7 +74,7 @@ describe("EditorSpec:", function() {
         });
         
         it('should change the level_description text area to reflect the current state of the board', function() {
-            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 89, numerator: 1, denominator: 3}], verified: true});
+            expect(JSON.parse(editor.levelDescription.val())).toEqual({objects: [{type: 'laser_up', index: 89, numerator: 1, denominator: 3}], verified: null});
         })
         
         it('reloads the game after being cleared', function() {

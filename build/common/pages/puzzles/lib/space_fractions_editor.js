@@ -27,23 +27,24 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initLevelDescription = function() {
-    var loadLevelDescription, verifiedMessages,
+    var explanation, loadLevelDescription, verifiedMessages,
       _this = this;
+    explanation = this.$('.explanation');
     verifiedMessages = $(document.createElement('DIV'));
     verifiedMessages.addClass('verification_messages');
     verifiedMessages.html('<div class=\'verification_message verified\' style=\'display: none;\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified style=\'display: none;\'\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>\n<a class=\'play_level\' target=\'_blank\'>Play Level</a>\n<p>Share: <input type=\'text\' class=\'share_link\' /></p>');
-    this.el.append(verifiedMessages);
+    verifiedMessages.insertBefore(explanation);
     this.playLevel = verifiedMessages.find('.play_level');
     this.shareLink = verifiedMessages.find('.share_link');
     this.levelDescription = $(document.createElement('textarea'));
     this.levelDescription.addClass('level_description');
-    this.el.append(this.levelDescription);
+    this.levelDescription.insertBefore(explanation);
     loadLevelDescription = $(document.createElement('button'));
     loadLevelDescription.html('Load To Edit');
     loadLevelDescription.bind('click', function() {
       return _this.load();
     });
-    return this.el.append(loadLevelDescription);
+    return loadLevelDescription.insertBefore(explanation);
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
@@ -193,7 +194,19 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectedSquare.unbind('mousedown');
     this.save();
     object = this.viewHelper.objects[objectType];
-    return this.showObjectSelector(true);
+    this.showObjectSelector(true);
+    return this.initMovableObject(selectedSquare);
+  };
+
+  EditorHelper.prototype.initMovableObject = function(square) {
+    var _this = this;
+    return this.viewHelper.initMovableObject(square, function(newSquare, data) {
+      newSquare.addClass('selected');
+      _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
+      _this.save();
+      _this.initMovableObject(newSquare);
+      return newSquare.removeClass('selected');
+    });
   };
 
   EditorHelper.prototype.removeObject = function() {

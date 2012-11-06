@@ -276,7 +276,8 @@ class spaceFractions.ViewHelper
         else
             squareOrLaser.append(fraction)
     
-    initMovableObject: (square) ->
+    initMovableObject: (square, callback) ->
+        square = $(square)
         objectType = square.data('objectType')
         objectMeta = @objects[objectType]
         moveObject = (e) =>
@@ -290,6 +291,8 @@ class spaceFractions.ViewHelper
                 left: e.clientX - (square.width() / 2)
                 top: e.clientY - (square.height() / 2)
 
+            data = JSON.parse(JSON.stringify(square.data()))
+            
             @removeObjectFromSquare(square)
             
             body = $(document.body)
@@ -333,6 +336,7 @@ class spaceFractions.ViewHelper
                     occupiedSquare = $(occupiedSquare)
                     occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
                 @movingObject = false
+                callback(selectedSquare, data) if callback
                 
             body.bind 'mouseup', (e) => endMove(e)
             body.bind 'touchend', (e) => endMove(e)
