@@ -646,7 +646,9 @@ spaceFractions.ViewHelper = (function() {
             square.data(attr, object[attr]);
           }
         }
-        this.showFraction(square);
+        if (objectMeta.showFraction) {
+          this.showFraction(square);
+        }
         this.setObjectImage(square);
         this.fireLaser(square);
       }

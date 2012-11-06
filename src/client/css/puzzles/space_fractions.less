@@ -226,6 +226,7 @@ body {
     }
     
     .success {
+        .rounded(6px);
         text-align: center;
         background-color: @white;
         border: 1px solid @grey;
@@ -240,6 +241,7 @@ body {
     }
     
     .intro {
+        .rounded(6px);
         background-color: @white;
         border: 1px solid @grey;
         padding: 60px 90px;
@@ -251,5 +253,16 @@ body {
         p {
             width: 300px;
         }
+    }
+    
+    .explanation {
+        clear: both;
+        border-top: 1px solid @grey;
+        padding-top: 3px;
+        width: @narrow_content_width;
+        margin: 60px auto;
+        background-color: @white;
+        padding: 6px;
+        .rounded(6px);
     }
 }

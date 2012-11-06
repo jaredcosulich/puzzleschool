@@ -463,7 +463,7 @@ class spaceFractions.ViewHelper
                 for attr of object when attr not in ['type', 'index']
                     square.data(attr, object[attr])
 
-                @showFraction(square)
+                @showFraction(square) if objectMeta.showFraction
                 @setObjectImage(square)
                 @fireLaser(square)
 
