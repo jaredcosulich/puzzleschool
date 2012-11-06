@@ -22,7 +22,7 @@ soma.chunks({
       return this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
     },
     build: function() {
-      var row, rows;
+      var row, rows, _ref;
       this.setTitle("Space Fractions - The Puzzle School");
       rows = (function() {
         var _i, _results;
@@ -38,6 +38,7 @@ soma.chunks({
         levelName: this.levelName || '',
         custom: this.levelName === 'custom',
         editor: this.levelName === 'editor',
+        intro: !((_ref = this.levelName) != null ? _ref.length : void 0),
         rows: rows
       });
     }
@@ -48,7 +49,7 @@ soma.views({
   SpaceFractions: {
     selector: '#content .space_fractions',
     create: function() {
-      var level, levelName, spaceFractions, spaceFractionsEditor,
+      var introMessage, level, levelName, spaceFractions, spaceFractionsEditor,
         _this = this;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
@@ -58,7 +59,17 @@ soma.views({
       });
       this.initEncode();
       levelName = this.el.data('level_name');
-      if (levelName === 'editor') {
+      if (!(levelName != null ? levelName.length : void 0)) {
+        introMessage = this.$('.intro');
+        introMessage.css({
+          top: this.el.offset().top + (this.el.height() / 2) - (introMessage.height() / 2),
+          left: this.el.offset().left + (this.el.width() / 2) - (introMessage.width() / 2)
+        });
+        introMessage.animate({
+          opacity: 1,
+          duration: 500
+        });
+      } else if (levelName === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
         this.editor = new spaceFractionsEditor.EditorHelper({
           el: $(this.selector),

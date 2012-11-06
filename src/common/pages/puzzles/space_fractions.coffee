@@ -20,6 +20,7 @@ soma.chunks
                 levelName: (@levelName or '')
                 custom: @levelName == 'custom'
                 editor: @levelName == 'editor'
+                intro: !@levelName?.length
                 rows: rows
             )
             
@@ -37,7 +38,16 @@ soma.views
             @initEncode()
                 
             levelName = @el.data('level_name')
-            if levelName == 'editor'
+            if not levelName?.length
+                introMessage = @$('.intro')
+                introMessage.css
+                    top: @el.offset().top + (@el.height() / 2) - (introMessage.height() / 2)
+                    left: @el.offset().left + (@el.width() / 2) - (introMessage.width() / 2)
+                introMessage.animate
+                    opacity: 1
+                    duration: 500
+                
+            else if levelName == 'editor'
                 spaceFractionsEditor = require('./lib/space_fractions_editor')
                 @editor = new spaceFractionsEditor.EditorHelper
                     el: $(@selector)
