@@ -101,9 +101,9 @@ for direction, index in directions
         numeratorMultiplier: 2
         movable: true
 
-    OBJECTS["multiplier_three_#{direction}"] =
+    OBJECTS["three_multiplier_#{direction}"] =
         index: 5500 + index
-        image: "multiplier_three_#{direction}"
+        image: "three_multiplier_#{direction}"
         distribute: true
         distributeDirections: [direction]
         accept: true
