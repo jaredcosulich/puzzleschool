@@ -606,7 +606,8 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.checkSuccess = function() {
-    var square, successMessage, _k, _len2, _ref;
+    var square, _k, _len2, _ref,
+      _this = this;
     _ref = this.board.find('.square.occupied');
     for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
       square = _ref[_k];
@@ -616,19 +617,22 @@ spaceFractions.ViewHelper = (function() {
         }
       }
     }
-    successMessage = this.$('.success');
-    successMessage.css({
-      top: this.el.offset().top + (this.el.height() / 2) - (successMessage.height() / 2),
-      left: this.el.offset().left + (this.el.width() / 2) - (successMessage.width() / 2)
-    });
-    successMessage.animate({
-      opacity: 1,
-      duration: 500
-    });
-    return this.el.one('click', function() {
-      return successMessage.animate({
-        opacity: 0,
+    return $.timeout(1000, function() {
+      var successMessage;
+      successMessage = _this.$('.success');
+      successMessage.css({
+        top: _this.el.offset().top + (_this.el.height() / 2) - (successMessage.height() / 2),
+        left: _this.el.offset().left + (_this.el.width() / 2) - (successMessage.width() / 2)
+      });
+      successMessage.animate({
+        opacity: 1,
         duration: 500
+      });
+      return _this.el.one('click', function() {
+        return successMessage.animate({
+          opacity: 0,
+          duration: 500
+        });
       });
     });
   };

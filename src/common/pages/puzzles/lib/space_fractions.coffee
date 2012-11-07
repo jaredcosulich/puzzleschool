@@ -443,18 +443,19 @@ class spaceFractions.ViewHelper
         for square in @board.find('.square.occupied') when square.className.indexOf('ship') > -1
             return if $(square).html().indexOf('full') == -1
             
-        successMessage = @$('.success')
-        successMessage.css
-            top: @el.offset().top + (@el.height() / 2) - (successMessage.height() / 2)
-            left: @el.offset().left + (@el.width() / 2) - (successMessage.width() / 2)
-        successMessage.animate
-            opacity: 1
-            duration: 500
-            
-        @el.one 'click', ->
+        $.timeout 1000, () =>
+            successMessage = @$('.success')
+            successMessage.css
+                top: @el.offset().top + (@el.height() / 2) - (successMessage.height() / 2)
+                left: @el.offset().left + (@el.width() / 2) - (successMessage.width() / 2)
             successMessage.animate
-                opacity: 0
+                opacity: 1
                 duration: 500
+            
+            @el.one 'click', ->
+                successMessage.animate
+                    opacity: 0
+                    duration: 500
     
     loadToPlay: (data) ->
         @loading = true
