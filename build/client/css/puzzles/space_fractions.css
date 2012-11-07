@@ -266,7 +266,9 @@ body {
 }
 .space_fractions .custom_level,
 .space_fractions .level_editor {
+  clear: left;
   height: 0;
+  overflow: hidden;
 }
 .space_fractions .custom_level .level_description,
 .space_fractions .level_editor .level_description {

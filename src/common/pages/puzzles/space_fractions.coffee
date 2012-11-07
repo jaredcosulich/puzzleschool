@@ -53,8 +53,15 @@ soma.views
                     el: $(@selector)
                     viewHelper: @viewHelper
                     encodeMethod: (json) => @encode(json)
+                @$('.load_custom_level_data').bind 'click', => 
+                    @$('.level_editor').css(height: 'auto')
+                    @$('.load_custom_level_data').hide()
                     
             else if levelName == 'custom'
+                @$('.load_custom_level_data').bind 'click', => 
+                    @$('.custom_level').css(height: 'auto')
+                    @$('.load_custom_level_data').hide()
+                    
                 @$('.load_to_play').bind 'click', =>
                     @viewHelper.loadToPlay(@$('.level_description').val())
             

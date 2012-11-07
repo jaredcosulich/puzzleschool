@@ -28,7 +28,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initLevelDescription = function() {
-    var explanation, loadLevelDescription, verifiedMessages,
+    var explanation, levelEditor, loadLevelButton, loadLevelDescription, verifiedMessages,
       _this = this;
     explanation = this.$('.explanation');
     verifiedMessages = $(document.createElement('DIV'));
@@ -37,15 +37,22 @@ spaceFractionsEditor.EditorHelper = (function() {
     verifiedMessages.insertBefore(explanation);
     this.playLevel = verifiedMessages.find('.play_level');
     this.shareLink = verifiedMessages.find('.share_link');
+    levelEditor = $(document.createElement('DIV'));
+    levelEditor.addClass('level_editor');
+    levelEditor.insertBefore(explanation);
     this.levelDescription = $(document.createElement('textarea'));
     this.levelDescription.addClass('level_description');
-    this.levelDescription.insertBefore(explanation);
+    levelEditor.append(this.levelDescription);
     loadLevelDescription = $(document.createElement('button'));
     loadLevelDescription.html('Load To Edit');
     loadLevelDescription.bind('click', function() {
       return _this.load();
     });
-    return loadLevelDescription.insertBefore(explanation);
+    levelEditor.append(loadLevelDescription);
+    loadLevelButton = $(document.createElement('button'));
+    loadLevelButton.addClass('load_custom_level_data');
+    loadLevelButton.html('Show Custom Level Data');
+    return loadLevelButton.insertBefore(explanation);
   };
 
   EditorHelper.prototype.initObjectSelector = function() {

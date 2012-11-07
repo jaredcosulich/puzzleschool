@@ -78,7 +78,19 @@ soma.views({
             return _this.encode(json);
           }
         });
+        this.$('.load_custom_level_data').bind('click', function() {
+          _this.$('.level_editor').css({
+            height: 'auto'
+          });
+          return _this.$('.load_custom_level_data').hide();
+        });
       } else if (levelName === 'custom') {
+        this.$('.load_custom_level_data').bind('click', function() {
+          _this.$('.custom_level').css({
+            height: 'auto'
+          });
+          return _this.$('.load_custom_level_data').hide();
+        });
         this.$('.load_to_play').bind('click', function() {
           return _this.viewHelper.loadToPlay(_this.$('.level_description').val());
         });

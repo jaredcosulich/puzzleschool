@@ -40,14 +40,25 @@ class spaceFractionsEditor.EditorHelper
         @playLevel = verifiedMessages.find('.play_level')
         @shareLink = verifiedMessages.find('.share_link')
         
+        levelEditor = $(document.createElement('DIV'))
+        levelEditor.addClass('level_editor')
+        levelEditor.insertBefore(explanation)
+        
         @levelDescription = $(document.createElement('textarea'))
         @levelDescription.addClass('level_description')
-        @levelDescription.insertBefore(explanation)
+        levelEditor.append(@levelDescription)
 
         loadLevelDescription = $(document.createElement('button'))
         loadLevelDescription.html('Load To Edit')
         loadLevelDescription.bind 'click', => @load()
-        loadLevelDescription.insertBefore(explanation)
+        levelEditor.append(loadLevelDescription)
+        
+        loadLevelButton = $(document.createElement('button'))
+        loadLevelButton.addClass('load_custom_level_data')
+        loadLevelButton.html('Show Custom Level Data')
+        loadLevelButton.insertBefore(explanation)
+        
+
 
     initObjectSelector: ->    
         objectSelector = $(document.createElement('DIV'))
