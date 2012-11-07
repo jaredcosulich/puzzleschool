@@ -106,8 +106,11 @@ body {
   left: 0;
 }
 .space_fractions .board .square:hover,
+.space_fractions .sidebar .editor .square:hover,
 .space_fractions .board .square.selected,
-.space_fractions .board .square.permanently_selected {
+.space_fractions .sidebar .editor .square.selected,
+.space_fractions .board .square.permanently_selected,
+.space_fractions .sidebar .editor .square.permanently_selected {
   border: 1px solid #262626;
 }
 .space_fractions .sidebar {
@@ -209,6 +212,7 @@ body {
 }
 .space_fractions .sidebar .editor .square {
   border: 1px solid #ccc;
+  margin: 3px 0 0 3px;
 }
 .space_fractions .element_selector .object,
 .space_fractions .editor .object {

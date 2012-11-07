@@ -49,26 +49,21 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
-    var clear, close, objectSelector, objectType, _fn, _i, _len, _ref,
+    var links, objectSelector, objectType, _fn, _i, _len, _ref,
       _this = this;
     objectSelector = $(document.createElement('DIV'));
     objectSelector.addClass('selector');
     objectSelector.addClass('object_selector');
     objectSelector.html('<h3>Select what to put in this square:</h3>');
-    close = $(document.createElement('DIV'));
-    close.html('<a>Close</a>');
-    close.addClass('object');
-    close.bind('click', function() {
+    links = $(document.createElement('P'));
+    links.html('<a class=\'clear\'>Clear Square</a> &nbsp; &nbsp; &nbsp; <a class=\'close\'>Close Selector</a>');
+    links.find('.close').bind('click', function() {
       return _this.closeElementSelector();
     });
-    objectSelector.append(close);
-    clear = $(document.createElement('DIV'));
-    clear.html('<a>Clear</a>');
-    clear.addClass('object');
-    clear.bind('click', function() {
+    links.find('.clear').bind('click', function() {
       return _this.removeObject();
     });
-    objectSelector.append(clear);
+    objectSelector.append(links);
     _ref = this.sortedObjectTypes();
     _fn = function(objectType) {
       var object, objectContainer, objectImage, src;
@@ -114,6 +109,7 @@ spaceFractionsEditor.EditorHelper = (function() {
         editor.append(objectContainer);
         initObjectContainer = function() {
           var objectImage, src;
+          objectContainer.html('');
           objectContainer.data('objectType', objectType);
           objectImage = $(document.createElement('IMG'));
           src = _this.viewHelper.baseFolder + object.image;
@@ -121,6 +117,10 @@ spaceFractionsEditor.EditorHelper = (function() {
           objectImage.attr('src', src);
           objectContainer.append(objectImage);
           return _this.viewHelper.initMovableObject(objectContainer, function(selectedSquare) {
+            if (selectedSquare[0] === objectContainer[0]) {
+              initObjectContainer();
+              return;
+            }
             selectedSquare.addClass('selected');
             _this.save();
             object = _this.viewHelper.objects[objectType];
@@ -262,7 +262,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
       _this.save();
       _this.initMovableObject(newSquare);
-      if ($(square)[0] === $(newSquare)[0]) {
+      if (($(square)[0] === $(newSquare)[0]) || _this.elementSelector.css('opacity') > 0) {
         return _this.showElementSelector(newSquare);
       } else {
         return newSquare.removeClass('selected');

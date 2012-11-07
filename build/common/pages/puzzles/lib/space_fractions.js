@@ -25,11 +25,11 @@ LASER_HEIGHT = 20;
 OBJECTS = {
   rock1: {
     image: 'rock1',
-    index: -1
+    index: 99999999
   },
   rock2: {
     image: 'rock2',
-    index: -2
+    index: 999999999
   }
 };
 

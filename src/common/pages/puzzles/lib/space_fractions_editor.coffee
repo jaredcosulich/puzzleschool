@@ -55,17 +55,11 @@ class spaceFractionsEditor.EditorHelper
         objectSelector.addClass('object_selector')
         objectSelector.html('<h3>Select what to put in this square:</h3>')
 
-        close = $(document.createElement('DIV'))
-        close.html('<a>Close</a>')
-        close.addClass('object')
-        close.bind 'click', => @closeElementSelector()
-        objectSelector.append(close)
-
-        clear = $(document.createElement('DIV'))
-        clear.html('<a>Clear</a>')
-        clear.addClass('object')
-        clear.bind 'click', => @removeObject()
-        objectSelector.append(clear)
+        links = $(document.createElement('P'))
+        links.html('<a class=\'clear\'>Clear Square</a> &nbsp; &nbsp; &nbsp; <a class=\'close\'>Close Selector</a>')
+        links.find('.close').bind 'click', => @closeElementSelector()
+        links.find('.clear').bind 'click', => @removeObject()
+        objectSelector.append(links)
 
         for objectType in @sortedObjectTypes()
             do (objectType) =>
@@ -102,8 +96,9 @@ class spaceFractionsEditor.EditorHelper
                 editor.append(objectContainer)
 
                 initObjectContainer = =>
+                    objectContainer.html('')
                     objectContainer.data('objectType', objectType)
-
+                    
                     objectImage = $(document.createElement('IMG'))
 
                     src = @viewHelper.baseFolder + object.image
@@ -111,7 +106,11 @@ class spaceFractionsEditor.EditorHelper
                     objectImage.attr('src', src)
 
                     objectContainer.append(objectImage)
-                    @viewHelper.initMovableObject objectContainer, (selectedSquare) =>
+                    @viewHelper.initMovableObject objectContainer, (selectedSquare) => 
+                        if selectedSquare[0] == objectContainer[0]
+                            initObjectContainer()
+                            return
+                        
                         selectedSquare.addClass('selected') 
                         @save()
                         object = @viewHelper.objects[objectType]
@@ -239,7 +238,7 @@ class spaceFractionsEditor.EditorHelper
             @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
             @save()
             @initMovableObject(newSquare)
-            if ($(square)[0] == $(newSquare)[0])
+            if ($(square)[0] == $(newSquare)[0]) or @elementSelector.css('opacity') > 0
                 @showElementSelector(newSquare) 
             else
                 newSquare.removeClass('selected') 
