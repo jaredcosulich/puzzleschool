@@ -209,7 +209,7 @@ spaceFractions.ViewHelper = (function() {
     this.options = this.$('.options');
     this.options.html('');
     _results = [];
-    for (row = _k = 0; _k < 7; row = ++_k) {
+    for (row = _k = 0; _k < 6; row = ++_k) {
       _results.push((function() {
         var _l, _results1;
         _results1 = [];
@@ -384,20 +384,19 @@ spaceFractions.ViewHelper = (function() {
         return;
       }
       _this.movingObject = true;
-      movingObject = square.find('img');
-      _this.el.append(movingObject);
-      movingObject.addClass('movable_object');
-      movingObject.css({
-        left: e.clientX - (square.width() / 2),
-        top: e.clientY - (square.height() / 2)
-      });
-      data = JSON.parse(JSON.stringify(square.data()));
-      _this.removeObjectFromSquare(square);
       body = $(document.body);
+      data = JSON.parse(JSON.stringify(square.data()));
+      movingObject = void 0;
       move = function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
         if (e.preventDefault) {
           e.preventDefault();
+        }
+        if (movingObject === void 0) {
+          movingObject = $(square.find('img')[0]);
+          _this.el.append(movingObject);
+          movingObject.addClass('movable_object');
+          _this.removeObjectFromSquare(square);
         }
         if (!movingObject) {
           return;
@@ -432,26 +431,28 @@ spaceFractions.ViewHelper = (function() {
         if (e.preventDefault) {
           e.preventDefault();
         }
-        image = movingObject;
-        movingObject = null;
+        selectedSquare = _this.$('.square.selected');
+        if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
+          selectedSquare = square;
+        }
         _this.el.find('.movable_object').remove();
         body.unbind('mousemove');
         body.unbind('mouseup');
         body.unbind('touchmove');
         body.unbind('touchend');
-        selectedSquare = _this.$('.square.selected');
-        if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
-          selectedSquare = square;
-        }
-        image.removeClass('movable_object');
-        _this.addObjectToSquare(objectType, selectedSquare, image);
-        selectedSquare.removeClass('selected');
-        _ref = _this.$('.square.occupied');
-        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-          occupiedSquare = _ref[_k];
-          occupiedSquare = $(occupiedSquare);
-          if (!occupiedSquare.find('img').length) {
-            occupiedSquare.removeClass('occupied');
+        if (movingObject) {
+          image = movingObject;
+          movingObject = null;
+          image.removeClass('movable_object');
+          _this.addObjectToSquare(objectType, selectedSquare, image);
+          selectedSquare.removeClass('selected');
+          _ref = _this.$('.square.occupied');
+          for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+            occupiedSquare = _ref[_k];
+            occupiedSquare = $(occupiedSquare);
+            if (!occupiedSquare.find('img').length) {
+              occupiedSquare.removeClass('occupied');
+            }
           }
         }
         _this.movingObject = false;

@@ -40,7 +40,7 @@ body {
 .space_fractions .board .laser .beam {
   background-color: red;
   box-shadow: 0 0 10px 5px red;
-  opacity: 0.75;
+  opacity: 0.8;
   position: relative;
 }
 .space_fractions .board .laser .beam.left,
@@ -72,7 +72,8 @@ body {
   margin-top: 3px;
 }
 .space_fractions .board .square,
-.space_fractions .sidebar .options .square {
+.space_fractions .sidebar .options .square,
+.space_fractions .sidebar .editor .square {
   position: relative;
   display: block;
   width: 60px;
@@ -84,20 +85,30 @@ body {
 }
 .space_fractions .board .square:hover,
 .space_fractions .sidebar .options .square:hover,
+.space_fractions .sidebar .editor .square:hover,
 .space_fractions .board .square.selected,
 .space_fractions .sidebar .options .square.selected,
+.space_fractions .sidebar .editor .square.selected,
 .space_fractions .board .square.permanently_selected,
-.space_fractions .sidebar .options .square.permanently_selected {
+.space_fractions .sidebar .options .square.permanently_selected,
+.space_fractions .sidebar .editor .square.permanently_selected {
   border: 1px solid #fafafa;
 }
 .space_fractions .board .square img,
-.space_fractions .sidebar .options .square img {
+.space_fractions .sidebar .options .square img,
+.space_fractions .sidebar .editor .square img {
   vertical-align: middle;
 }
 .space_fractions .board .square .fraction,
-.space_fractions .sidebar .options .square .fraction {
+.space_fractions .sidebar .options .square .fraction,
+.space_fractions .sidebar .editor .square .fraction {
   top: 0;
   left: 0;
+}
+.space_fractions .board .square:hover,
+.space_fractions .board .square.selected,
+.space_fractions .board .square.permanently_selected {
+  border: 1px solid #262626;
 }
 .space_fractions .sidebar {
   float: left;
@@ -174,17 +185,7 @@ body {
   padding-top: 12px;
 }
 .space_fractions .element_selector .object {
-  cursor: pointer;
-  width: 65px;
-  height: 65px;
-  line-height: 65px;
-  text-align: center;
-  border: 1px solid #ccc;
   margin: 6px 0 0 6px;
-  float: left;
-}
-.space_fractions .element_selector .object img {
-  vertical-align: middle;
 }
 .space_fractions .element_selector .fraction_selector {
   padding: 12px;
@@ -199,12 +200,36 @@ body {
 .space_fractions .element_selector .fraction_selector .numerator {
   text-align: right;
 }
+.space_fractions .sidebar .editor {
+  height: 192px;
+  overflow: auto;
+  margin: 12px 0 0 12px;
+  background-color: #fafafa;
+  width: 272px;
+}
+.space_fractions .sidebar .editor .square {
+  border: 1px solid #ccc;
+}
+.space_fractions .element_selector .object,
+.space_fractions .editor .object {
+  cursor: pointer;
+  width: 65px;
+  height: 65px;
+  line-height: 65px;
+  text-align: center;
+  border: 1px solid #ccc;
+  float: left;
+}
+.space_fractions .element_selector .object img,
+.space_fractions .editor .object img {
+  vertical-align: middle;
+}
 .space_fractions .verification_messages {
   background-color: white;
   padding: 6px 0;
   text-align: center;
   overflow: hidden;
-  clear: both;
+  clear: left;
   width: 620px;
   margin-bottom: 12px;
 }

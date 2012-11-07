@@ -41,9 +41,9 @@ body {
                 margin-top: -3px;
             }
             .beam {
-                background-color: red;
-                box-shadow: 0 0 10px 5px red;
-                opacity:0.75;
+                background-color: red;//#FFF22C;
+                box-shadow: 0 0 10px 5px red;//#FFF22C;
+                opacity:0.8;
                 position: relative;
                 &.left, &.right {
                     margin: 20px 0;
@@ -75,7 +75,7 @@ body {
         }        
     }
     
-    .board, .sidebar .options {
+    .board, .sidebar .options, .sidebar .editor {
         .square {
             position: relative;
             display: block;
@@ -94,6 +94,14 @@ body {
             .fraction {
                 top: 0;
                 left: 0;
+            }
+        }
+    }
+    
+    .board {
+        .square {
+            &:hover, &.selected, &.permanently_selected {
+                border: 1px solid @black;
             }
         }
     }
@@ -168,20 +176,9 @@ body {
         h3 { 
             padding-top: 12px;
         }
-        .object {
-            cursor: pointer;
-            width: 65px;
-            height: 65px;
-            line-height: 65px;
-            text-align: center;
-            border: 1px solid #ccc;
+        .object{
             margin: 6px 0 0 6px;
-            float: left;
-            img {
-                vertical-align: middle;
-            }
         }
-        
         .fraction_selector {
             padding: 12px;
             text-align: center;
@@ -193,6 +190,32 @@ body {
                 text-align: right;
             }
         }
+    } 
+    
+    .sidebar .editor {
+        height: 192px;
+        overflow: auto;
+        margin: 12px 0 0 12px;
+        background-color: @white;
+        width: 272px;
+        .square {
+            border: 1px solid #ccc;
+        }
+    }   
+    
+    .element_selector, .editor {
+        .object {
+            cursor: pointer;
+            width: 65px;
+            height: 65px;
+            line-height: 65px;
+            text-align: center;
+            border: 1px solid #ccc;
+            float: left;
+            img {
+                vertical-align: middle;
+            }
+        }
     }
     
     .verification_messages {
@@ -200,7 +223,7 @@ body {
         padding: 6px 0;
         text-align: center;
         overflow: hidden;
-        clear: both;
+        clear: left;
         width: 620px;
         margin-bottom: 12px;
         .verified h3 {

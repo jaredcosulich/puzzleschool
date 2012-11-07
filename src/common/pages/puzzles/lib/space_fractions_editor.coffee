@@ -4,6 +4,7 @@ class spaceFractionsEditor.EditorHelper
     constructor: ({@el, @viewHelper, encodeMethod}) ->
         @encode = encodeMethod
         @initElementSelector()
+        @initEditor()
         @initSquares()
         @initLevelDescription()
         
@@ -48,8 +49,6 @@ class spaceFractionsEditor.EditorHelper
         loadLevelDescription.bind 'click', => @load()
         loadLevelDescription.insertBefore(explanation)
 
-        
-        
     initObjectSelector: ->    
         objectSelector = $(document.createElement('DIV'))
         objectSelector.addClass('selector')
@@ -68,8 +67,7 @@ class spaceFractionsEditor.EditorHelper
         clear.bind 'click', => @removeObject()
         objectSelector.append(clear)
 
-        sortedObjectTypes = Object.keys(@viewHelper.objects).sort((a, b) => @viewHelper.objects[a].index - @viewHelper.objects[b].index)
-        for objectType in sortedObjectTypes
+        for objectType in @sortedObjectTypes()
             do (objectType) =>
                 object = @viewHelper.objects[objectType]
                 objectContainer = $(document.createElement('DIV'))
@@ -88,6 +86,47 @@ class spaceFractionsEditor.EditorHelper
                 objectSelector.append(objectContainer)
                                 
         @elementSelector.append(objectSelector)
+
+    initEditor: ->    
+        editor = $(document.createElement('DIV'))
+        editor.addClass('selector')
+        editor.addClass('editor')
+        @$('.sidebar').append(editor)
+
+        for objectType in @sortedObjectTypes()
+            do (objectType) =>
+                object = @viewHelper.objects[objectType]
+                objectContainer = $(document.createElement('DIV'))
+                objectContainer.addClass('object')
+                objectContainer.addClass('square')
+                editor.append(objectContainer)
+
+                initObjectContainer = =>
+                    objectContainer.data('objectType', objectType)
+
+                    objectImage = $(document.createElement('IMG'))
+
+                    src = @viewHelper.baseFolder + object.image
+                    src += if object.states then '_full.png' else '.png'
+                    objectImage.attr('src', src)
+
+                    objectContainer.append(objectImage)
+                    @viewHelper.initMovableObject objectContainer, (selectedSquare) =>
+                        selectedSquare.addClass('selected') 
+                        @save()
+                        object = @viewHelper.objects[objectType]
+                        if (object.distribute and not object.accept) or (object.accept and not object.distribute)
+                            @showElementSelector(selectedSquare)
+                        else
+                            selectedSquare.removeClass('selected')
+                        @initMovableObject(selectedSquare)
+                        initObjectContainer()
+
+                initObjectContainer()
+                    
+    
+    sortedObjectTypes: ->
+        Object.keys(@viewHelper.objects).sort((a, b) => @viewHelper.objects[a].index - @viewHelper.objects[b].index)
     
     initFractionSelector: ->
         @fractionSelector = $(document.createElement('DIV'))
@@ -103,6 +142,8 @@ class spaceFractionsEditor.EditorHelper
             <button class='set_fraction'>Set</button>
             <br/>
             <p><a class='select_new_object'>< Select a different object</a></p>
+            <p><a class='clear_square'>Clear Square</a></p>
+            <p><a class='close_fraction_selector'>Close Window</a></p>
         """
         
         setFraction = @fractionSelector.find('.set_fraction')
@@ -121,6 +162,8 @@ class spaceFractionsEditor.EditorHelper
             )
                         
         @fractionSelector.find('.select_new_object').bind 'click', => @showSelector('object')
+        @fractionSelector.find('.close_fraction_selector').bind 'click', => @closeElementSelector()
+        @fractionSelector.find('.clear_square').bind 'click', => @removeObject()
                             
         @fractionSelector.addClass('selector')
         @fractionSelector.addClass('fraction_selector')
@@ -196,7 +239,10 @@ class spaceFractionsEditor.EditorHelper
             @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
             @save()
             @initMovableObject(newSquare)
-            newSquare.removeClass('selected') 
+            if ($(square)[0] == $(newSquare)[0])
+                @showElementSelector(newSquare) 
+            else
+                newSquare.removeClass('selected') 
            
     removeObject: () ->
         selectedSquare = @$('.square.selected')

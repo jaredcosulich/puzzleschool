@@ -173,7 +173,7 @@ class spaceFractions.ViewHelper
         @options = @$('.options')
         @options.html('')
         
-        for row in [0...7]
+        for row in [0...6]
             for column in [0...4]
                 index = (row * 3) + column
                 square = $(document.createElement('DIV'))
@@ -284,22 +284,22 @@ class spaceFractions.ViewHelper
             e.preventDefault() if e.preventDefault?
             return if @movingObject
             @movingObject = true
-            movingObject = square.find('img')
-            @el.append(movingObject)
-            movingObject.addClass('movable_object')
-            movingObject.css
-                left: e.clientX - (square.width() / 2)
-                top: e.clientY - (square.height() / 2)
-
-            data = JSON.parse(JSON.stringify(square.data()))
-            
-            @removeObjectFromSquare(square)
             
             body = $(document.body)
+            data = JSON.parse(JSON.stringify(square.data()))
             
+            movingObject = undefined
             move = (e) =>
                 e.preventDefault() if e.preventDefault
+
+                if movingObject == undefined
+                    movingObject = $(square.find('img')[0])
+                    @el.append(movingObject)
+                    movingObject.addClass('movable_object')
+                    @removeObjectFromSquare(square)
+
                 return unless movingObject
+
                 left = e.clientX - (square.width() / 2)
                 top = e.clientY - (square.height() / 2)
                 movingObject.css
@@ -320,21 +320,24 @@ class spaceFractions.ViewHelper
 
             endMove = (e) =>
                 e.preventDefault() if e.preventDefault
-                image = movingObject
-                movingObject = null
+                selectedSquare = @$('.square.selected')
+                selectedSquare = square if not selectedSquare?.length
                 @el.find('.movable_object').remove()
                 body.unbind 'mousemove'        
                 body.unbind 'mouseup'
                 body.unbind 'touchmove'        
                 body.unbind 'touchend'
-                selectedSquare = @$('.square.selected')
-                selectedSquare = square if not selectedSquare?.length
-                image.removeClass('movable_object')
-                @addObjectToSquare(objectType, selectedSquare, image)
-                selectedSquare.removeClass('selected')
-                for occupiedSquare in @$('.square.occupied')
-                    occupiedSquare = $(occupiedSquare)
-                    occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
+
+                if movingObject
+                    image = movingObject
+                    movingObject = null
+                    image.removeClass('movable_object')
+                    @addObjectToSquare(objectType, selectedSquare, image)
+                    selectedSquare.removeClass('selected')
+                    for occupiedSquare in @$('.square.occupied')
+                        occupiedSquare = $(occupiedSquare)
+                        occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
+
                 @movingObject = false
                 callback(selectedSquare, data) if callback
                 

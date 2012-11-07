@@ -10,6 +10,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.el = _arg.el, this.viewHelper = _arg.viewHelper, encodeMethod = _arg.encodeMethod;
     this.encode = encodeMethod;
     this.initElementSelector();
+    this.initEditor();
     this.initSquares();
     this.initLevelDescription();
   }
@@ -48,7 +49,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initObjectSelector = function() {
-    var clear, close, objectSelector, objectType, sortedObjectTypes, _fn, _i, _len,
+    var clear, close, objectSelector, objectType, _fn, _i, _len, _ref,
       _this = this;
     objectSelector = $(document.createElement('DIV'));
     objectSelector.addClass('selector');
@@ -68,9 +69,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       return _this.removeObject();
     });
     objectSelector.append(clear);
-    sortedObjectTypes = Object.keys(this.viewHelper.objects).sort(function(a, b) {
-      return _this.viewHelper.objects[a].index - _this.viewHelper.objects[b].index;
-    });
+    _ref = this.sortedObjectTypes();
     _fn = function(objectType) {
       var object, objectContainer, objectImage, src;
       object = _this.viewHelper.objects[objectType];
@@ -88,18 +87,70 @@ spaceFractionsEditor.EditorHelper = (function() {
       objectContainer.append(objectImage);
       return objectSelector.append(objectContainer);
     };
-    for (_i = 0, _len = sortedObjectTypes.length; _i < _len; _i++) {
-      objectType = sortedObjectTypes[_i];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      objectType = _ref[_i];
       _fn(objectType);
     }
     return this.elementSelector.append(objectSelector);
+  };
+
+  EditorHelper.prototype.initEditor = function() {
+    var editor, objectType, _i, _len, _ref, _results,
+      _this = this;
+    editor = $(document.createElement('DIV'));
+    editor.addClass('selector');
+    editor.addClass('editor');
+    this.$('.sidebar').append(editor);
+    _ref = this.sortedObjectTypes();
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      objectType = _ref[_i];
+      _results.push((function(objectType) {
+        var initObjectContainer, object, objectContainer;
+        object = _this.viewHelper.objects[objectType];
+        objectContainer = $(document.createElement('DIV'));
+        objectContainer.addClass('object');
+        objectContainer.addClass('square');
+        editor.append(objectContainer);
+        initObjectContainer = function() {
+          var objectImage, src;
+          objectContainer.data('objectType', objectType);
+          objectImage = $(document.createElement('IMG'));
+          src = _this.viewHelper.baseFolder + object.image;
+          src += object.states ? '_full.png' : '.png';
+          objectImage.attr('src', src);
+          objectContainer.append(objectImage);
+          return _this.viewHelper.initMovableObject(objectContainer, function(selectedSquare) {
+            selectedSquare.addClass('selected');
+            _this.save();
+            object = _this.viewHelper.objects[objectType];
+            if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
+              _this.showElementSelector(selectedSquare);
+            } else {
+              selectedSquare.removeClass('selected');
+            }
+            _this.initMovableObject(selectedSquare);
+            return initObjectContainer();
+          });
+        };
+        return initObjectContainer();
+      })(objectType));
+    }
+    return _results;
+  };
+
+  EditorHelper.prototype.sortedObjectTypes = function() {
+    var _this = this;
+    return Object.keys(this.viewHelper.objects).sort(function(a, b) {
+      return _this.viewHelper.objects[a].index - _this.viewHelper.objects[b].index;
+    });
   };
 
   EditorHelper.prototype.initFractionSelector = function() {
     var setFraction,
       _this = this;
     this.fractionSelector = $(document.createElement('DIV'));
-    this.fractionSelector.html("<h2>Select A Fraction</h2>\n<p>What fraction of laser should this object use?</p>\n<p>\n    <input name='numerator' class='numerator' type='text' value='1'/>\n    <span class='solidus'>/</span>\n    <input name='denominator' class='denominator' type='text' value='1'/>\n</p>\n<p class='fraction'>Fraction: 1/1 or " + (Math.round(1000 * (1 / 1)) / 1000) + "</p>\n<button class='set_fraction'>Set</button>\n<br/>\n<p><a class='select_new_object'>< Select a different object</a></p>");
+    this.fractionSelector.html("<h2>Select A Fraction</h2>\n<p>What fraction of laser should this object use?</p>\n<p>\n    <input name='numerator' class='numerator' type='text' value='1'/>\n    <span class='solidus'>/</span>\n    <input name='denominator' class='denominator' type='text' value='1'/>\n</p>\n<p class='fraction'>Fraction: 1/1 or " + (Math.round(1000 * (1 / 1)) / 1000) + "</p>\n<button class='set_fraction'>Set</button>\n<br/>\n<p><a class='select_new_object'>< Select a different object</a></p>\n<p><a class='clear_square'>Clear Square</a></p>\n<p><a class='close_fraction_selector'>Close Window</a></p>");
     setFraction = this.fractionSelector.find('.set_fraction');
     setFraction.bind('click', function() {
       _this[setFraction.data('callback')](_this.fractionSelector.find('.numerator').val(), _this.fractionSelector.find('.denominator').val());
@@ -111,6 +162,12 @@ spaceFractionsEditor.EditorHelper = (function() {
     });
     this.fractionSelector.find('.select_new_object').bind('click', function() {
       return _this.showSelector('object');
+    });
+    this.fractionSelector.find('.close_fraction_selector').bind('click', function() {
+      return _this.closeElementSelector();
+    });
+    this.fractionSelector.find('.clear_square').bind('click', function() {
+      return _this.removeObject();
     });
     this.fractionSelector.addClass('selector');
     this.fractionSelector.addClass('fraction_selector');
@@ -205,7 +262,11 @@ spaceFractionsEditor.EditorHelper = (function() {
       _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
       _this.save();
       _this.initMovableObject(newSquare);
-      return newSquare.removeClass('selected');
+      if ($(square)[0] === $(newSquare)[0]) {
+        return _this.showElementSelector(newSquare);
+      } else {
+        return newSquare.removeClass('selected');
+      }
     });
   };
 
