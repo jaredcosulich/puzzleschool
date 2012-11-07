@@ -222,7 +222,8 @@ class spaceFractionsEditor.EditorHelper
                     left: -1000
 
     addObject: (objectType) ->
-        selectedSquare = @$('.square.selected')
+        selectedSquare = @$('.square.selected')        
+        @viewHelper.removeObjectFromSquare(selectedSquare)
         @viewHelper.addObjectToSquare(objectType, selectedSquare)
         selectedSquare.unbind 'mousedown'
         @save()

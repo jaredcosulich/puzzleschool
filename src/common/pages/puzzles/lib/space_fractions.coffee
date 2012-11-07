@@ -415,8 +415,11 @@ class spaceFractions.ViewHelper
                 laserSquare.data('lasers', JSON.stringify(laserData))
                 laserSquare.data("laser#{squareIndex}", null)
                 if laserSquare.hasClass('occupied')
-                    @setObjectImage(laserSquare)                
+                    @setObjectImage(laserSquare)      
                     @removeExistingLasers(laserSquare)
+                    for direction of laserData
+                        @fireLaser(@$(".index#{laserData[direction].index}"))
+                        
 
     checkLaserPath: (checkSquare, squareIndex, direction, numerator, denominator) ->
         occupied = checkSquare.hasClass('occupied')

@@ -565,7 +565,15 @@ spaceFractions.ViewHelper = (function() {
         laserSquare.data("laser" + squareIndex, null);
         if (laserSquare.hasClass('occupied')) {
           this.setObjectImage(laserSquare);
-          _results.push(this.removeExistingLasers(laserSquare));
+          this.removeExistingLasers(laserSquare);
+          _results.push((function() {
+            var _results1;
+            _results1 = [];
+            for (direction in laserData) {
+              _results1.push(this.fireLaser(this.$(".index" + laserData[direction].index)));
+            }
+            return _results1;
+          }).call(this));
         } else {
           _results.push(void 0);
         }

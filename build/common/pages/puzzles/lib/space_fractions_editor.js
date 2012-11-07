@@ -247,6 +247,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.addObject = function(objectType) {
     var object, selectedSquare;
     selectedSquare = this.$('.square.selected');
+    this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.viewHelper.addObjectToSquare(objectType, selectedSquare);
     selectedSquare.unbind('mousedown');
     this.save();

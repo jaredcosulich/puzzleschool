@@ -35,8 +35,14 @@ describe("EditorSpec:", function() {
     });
     
     describe('change a ship to a laser', function() {
+        beforeEach(function() {
+            editor.selectSquare(game.board.find('.square.index35'))
+            editor.addObject('ship_up')           
+            editor.addObject('laser_up')           
+        });
+        
         it('should fire the laser', function() {
-            expect('pending').toEqual('completed')
+            expect(game.board.find('.laser').length).toEqual(1)
         })
     });
     

@@ -100,4 +100,33 @@ describe("A turn", function() {
         })
     })
     
+    describe('when hit by another laser', function() {
+        var anotherLaserSquare;
+        beforeEach(function() {
+            anotherLaserSquare = game.board.find('.square.index7');
+            anotherLaserSquare.data('numerator', 1)
+            anotherLaserSquare.data('denominator', 4)
+            game.addObjectToSquare('laser_down', anotherLaserSquare);
+        })
+        
+        it('should produce 3 lasers', function() {
+            expect(game.board.find('.laser').length).toEqual(3);            
+        })
+        
+        it('should not stop the original fraction', function() {
+            var lasers = game.board.find('.laser');
+            expect($(lasers[0]).data('denominator')).toEqual(3)
+            expect($(lasers[1]).data('denominator')).toEqual(3)
+            expect($(lasers[2]).data('denominator')).toEqual(4)
+        })
+        
+        it('should not affect the original laser when the other laser is removed', function() {
+            game.removeObjectFromSquare(anotherLaserSquare);   
+            var lasers = game.board.find('.laser');
+            expect(lasers.length).toEqual(2);  
+            expect($(lasers[0]).data('denominator')).toEqual(3);  
+            expect($(lasers[1]).data('denominator')).toEqual(3);                      
+        })
+    })
+    
 });
