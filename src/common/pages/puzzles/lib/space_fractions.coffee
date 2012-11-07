@@ -182,51 +182,53 @@ class spaceFractions.ViewHelper
                 square.addClass("index#{index}")
                 @options.append(square)
         
-    initHint: ->
-        @$('.hint').bind 'click', =>
-            for object in @solution.objects
-                square = @board.find(".square.index#{object.index}")
-                if square.length and square.data('objectType') != object.type
-                    option = $(@options.find(".square.#{object.type}")[0])
-                    if not option?.length
-                        boardOptions = @board.find(".square.#{object.type}")
-                        for boardOption in boardOptions
-                            if (o.type for o in @solution.objects when o.index == $(boardOption).data('index'))[0] != object.type
-                                option = $(boardOption)
-                                break
-                                
-                    if option?.length
-                        option.addClass('selected')
-                        dragMessage = @$('.hint_drag_message')
-                        dragMessage.css
-                            left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2)
-                            top: option.offset().top + option.height()
-                        dragMessage.animate
+    initHint: -> @$('.hint').bind 'click', => @showHint()
+    
+    showHint: ->
+        for object in @solution.objects
+            square = @board.find(".square.index#{object.index}")
+            if square.length and square.data('objectType') != object.type
+                option = $(@options.find(".square.#{object.type}")[0])
+                if not option?.length
+                    boardOptions = @board.find(".square.#{object.type}")
+                    for boardOption in boardOptions
+                        if (o.type for o in @solution.objects when o.index == $(boardOption).data('index'))[0] != object.type
+                            option = $(boardOption)
+                            break
+                            
+                if option?.length
+                    option.addClass('highlighted')
+                    dragMessage = @$('.hint_drag_message')
+                    dragMessage.css
+                        left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2)
+                        top: option.offset().top + option.height()
+                    dragMessage.animate
+                        opacity: 1
+                        duration: 250
+                        
+                    option.one 'mousedown', =>
+                        dragMessage.css(opacity: 0)
+                        square.addClass('highlighted')
+                        dropMessage = @$('.hint_drop_message')
+                        dropMessage.css
+                            left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2)
+                            top: square.offset().top + square.height()
+                        dropMessage.animate
                             opacity: 1
                             duration: 250
                             
-                        option.one 'mousedown', =>
-                            dragMessage.css(opacity: 0)
-                            square.addClass('permanently_selected')
-                            dropMessage = @$('.hint_drop_message')
-                            dropMessage.css
-                                left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2)
-                                top: square.offset().top + square.height()
-                            dropMessage.animate
-                                opacity: 1
+                        hideHint = () =>  
+                            unless square.hasClass(object.type)
+                                $.timeout 50, => hideHint()
+                                return
+                            @$('.hint_message').animate
+                                opacity: 0
                                 duration: 250
-                                
-                            hideHint = () =>  
-                                unless square.hasClass(object.type)
-                                    $.timeout 50, => hideHint()
-                                    return
-                                @$('.hint_message').animate
-                                    opacity: 0
-                                    duration: 250
-                                @$('.square.permanently_selected').removeClass('permanently_selected')                                
-                            hideHint()
-                            
-                        return        
+                            @$('.square.highlighted').removeClass('highlighted')                                
+                        hideHint()
+                        
+                    return        
+        
 
     setObjectImage: (square) ->
         objectType = square.data('objectType')

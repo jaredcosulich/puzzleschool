@@ -89,10 +89,19 @@ body {
 .space_fractions .board .square.selected,
 .space_fractions .sidebar .options .square.selected,
 .space_fractions .sidebar .editor .square.selected,
-.space_fractions .board .square.permanently_selected,
-.space_fractions .sidebar .options .square.permanently_selected,
-.space_fractions .sidebar .editor .square.permanently_selected {
+.space_fractions .board .square.highlighted,
+.space_fractions .sidebar .options .square.highlighted,
+.space_fractions .sidebar .editor .square.highlighted {
   border: 1px solid #fafafa;
+}
+.space_fractions .board .square.highlighted,
+.space_fractions .sidebar .options .square.highlighted,
+.space_fractions .sidebar .editor .square.highlighted {
+  box-shadow: inset 0 0 10px 5px #fafafa;
+  -webkit-transition: box-shadow 1s ease;
+  -moz-transition: box-shadow 1s ease;
+  -o-transition: box-shadow 1s ease;
+  -ms-transition: box-shadow 1s ease;
 }
 .space_fractions .board .square img,
 .space_fractions .sidebar .options .square img,
@@ -109,9 +118,13 @@ body {
 .space_fractions .sidebar .editor .square:hover,
 .space_fractions .board .square.selected,
 .space_fractions .sidebar .editor .square.selected,
-.space_fractions .board .square.permanently_selected,
-.space_fractions .sidebar .editor .square.permanently_selected {
+.space_fractions .board .square.highlighted,
+.space_fractions .sidebar .editor .square.highlighted {
   border: 1px solid #262626;
+}
+.space_fractions .board .square.highlighted,
+.space_fractions .sidebar .editor .square.highlighted {
+  box-shadow: inset 0 0 10px 5px #262626;
 }
 .space_fractions .sidebar {
   float: left;
@@ -251,7 +264,12 @@ body {
 .space_fractions .verification_messages .share_link {
   width: 400px;
 }
-.space_fractions .level_description {
+.space_fractions .custom_level,
+.space_fractions .level_editor {
+  height: 0;
+}
+.space_fractions .custom_level .level_description,
+.space_fractions .level_editor .level_description {
   display: block;
   height: 6em;
   width: 600px;
