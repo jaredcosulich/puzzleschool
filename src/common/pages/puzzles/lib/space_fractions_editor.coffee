@@ -26,11 +26,11 @@ class spaceFractionsEditor.EditorHelper
         verifiedMessages.html '''
             <div class='verification_message verified' style='display: none;'>
                 <h3>Verified</h3>
-                All ships are full.
+                All sensors are lit up yellow.
             </div>
             <div class='verification_message unverified style='display: none;''>
                 <h3>Unverified</h3>
-                Not all ships are full.
+                Not all of the sensors are lit up yellow.
             </div>
             <a class='play_level' target='_blank'>Play Level</a>
             <p>Share: <input type='text' class='share_link' /></p>
