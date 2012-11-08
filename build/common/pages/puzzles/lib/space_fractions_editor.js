@@ -123,12 +123,17 @@ spaceFractionsEditor.EditorHelper = (function() {
           src += object.states ? '_full.png' : '.png';
           objectImage.attr('src', src);
           objectContainer.append(objectImage);
+          objectContainer.bind('mousedown', function() {
+            _this.closeElementSelector();
+            return _this.$('.square.selected').removeClass('selected');
+          });
           return _this.viewHelper.initMovableObject(objectContainer, function(selectedSquare) {
             if (selectedSquare[0] === objectContainer[0]) {
               initObjectContainer();
               return;
             }
             selectedSquare.addClass('selected');
+            selectedSquare.unbind('click');
             _this.save();
             object = _this.viewHelper.objects[objectType];
             if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
@@ -256,6 +261,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     selectedSquare = this.$('.square.selected');
     this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.viewHelper.addObjectToSquare(objectType, selectedSquare);
+    selectedSquare.unbind('click');
     selectedSquare.unbind('mousedown');
     this.save();
     object = this.viewHelper.objects[objectType];
@@ -267,6 +273,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     var _this = this;
     return this.viewHelper.initMovableObject(square, function(newSquare, data) {
       newSquare.addClass('selected');
+      newSquare.unbind('click');
       _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
       _this.save();
       _this.initMovableObject(newSquare);

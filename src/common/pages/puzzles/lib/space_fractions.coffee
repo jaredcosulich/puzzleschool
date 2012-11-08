@@ -31,6 +31,7 @@ for direction, index in directions
     OBJECTS["ship_#{direction}"] =
         index: index
         image: "ship_#{direction}"
+        tip: 'sensor'
         accept: true
         acceptDirections: [direction]
         states: true
@@ -40,6 +41,7 @@ for direction, index in directions
     OBJECTS["laser_#{direction}"] =
         index: 10 + index
         image: "laser_#{direction}"
+        tip: 'laser'
         distribute: true
         distributeDirections: [direction]
         accept: false
@@ -49,6 +51,7 @@ for direction, index in directions
     OBJECTS["split_#{direction}_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}"] =
         index: 1500 + index
         image: "split_#{direction}_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}"
+        tip: 'splitter'
         distribute: true
         distributeDirections: perpendicularDirections
         accept: true
@@ -60,6 +63,7 @@ for direction, index in directions
     OBJECTS["three_way_split_#{direction}"] =
         index: 2000 + index
         image: "three_way_split_#{direction}"
+        tip: 'splitter'
         distribute: true
         distributeDirections: [direction, perpendicularDirections...]
         accept: true
@@ -71,6 +75,7 @@ for direction, index in directions
     OBJECTS["add_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}_#{direction}"] =
         index: 3000 + index
         image: "add_#{perpendicularDirections[0]}_#{perpendicularDirections[1]}_#{direction}"
+        tip: 'adder'
         distribute: true
         distributeDirections: [direction]
         accept: true
@@ -82,6 +87,7 @@ for direction, index in directions
     OBJECTS["three_add_#{direction}"] =
         index: 4000 + index
         image: "three_add_#{direction}"
+        tip: 'adder'
         distribute: true
         distributeDirections: [direction]
         accept: true
@@ -93,6 +99,7 @@ for direction, index in directions
     OBJECTS["multiplier_two_#{direction}"] =
         index: 5000 + index
         image: "multiplier_two_#{direction}"
+        tip: 'denominator'
         distribute: true
         distributeDirections: [direction]
         accept: true
@@ -104,6 +111,7 @@ for direction, index in directions
     OBJECTS["three_multiplier_#{direction}"] =
         index: 5500 + index
         image: "three_multiplier_#{direction}"
+        tip: 'denominator'
         distribute: true
         distributeDirections: [direction]
         accept: true
@@ -118,6 +126,7 @@ for direction, index in directions
         OBJECTS["turn_#{direction}_#{direction2}"] =
             index: 100 + (index * directions.length) + index2
             image: "turn_#{direction}_#{direction2}"
+            tip: 'turner'
             distribute: true
             distributeDirections: [direction2]
             accept: true
@@ -128,6 +137,7 @@ for direction, index in directions
         OBJECTS["two_split_#{direction}_#{direction2}"] =
             index: 1000 + (index * directions.length) + index2
             image: "two_split_#{direction}_#{direction2}"
+            tip: 'splitter'
             distribute: true
             distributeDirections: [direction, direction2]
             accept: true
@@ -383,9 +393,40 @@ class spaceFractions.ViewHelper
             @fireLaser(square)
             
         if object.movable
-            @initMovableObject(square)
+            @initMovableObject square, (selectedSquare) => 
+                @showTip(square) if square[0] == selectedSquare[0]
+                    
+        square.bind 'click', => @showTip(square)
             
         @setObjectImage(square)
+        
+    showTip: (square) ->
+        square = $(square)
+        square.unbind 'click'
+        objectMeta = @objects[square.data('objectType')]
+        if (tip = @$(".tip.#{objectMeta.tip}")).length
+            offset = square.offset()
+            tip.css
+                opacity: 0
+                top: offset.top + offset.height + 6
+                left: offset.left + (offset.width / 2) - (tip.offset().width / 2)
+
+            tip.animate
+                opacity: 1
+                duration: 250
+        
+        $.timeout 10, =>
+            $(document).one 'click', =>
+                tip.animate
+                    opacity: 0
+                    duration: 250
+                    complete: =>
+                        square.bind 'click', => @showTip(square)
+                        tip.css
+                            top: -1000
+                            left: -1000
+                        
+                    
         
     removeObjectFromSquare: (square) ->
         square = $(square)
@@ -485,7 +526,8 @@ class spaceFractions.ViewHelper
             @addObjectToSquare(type, square)  
             
         if not @solution.verified
-            alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist')
+            $.timeout 200, ->
+                alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist')
             
         @loading = false
         @checkSuccess()

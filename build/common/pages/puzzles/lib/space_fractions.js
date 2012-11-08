@@ -41,6 +41,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["ship_" + direction] = {
     index: index,
     image: "ship_" + direction,
+    tip: 'sensor',
     accept: true,
     acceptDirections: [direction],
     states: true,
@@ -49,6 +50,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["laser_" + direction] = {
     index: 10 + index,
     image: "laser_" + direction,
+    tip: 'laser',
     distribute: true,
     distributeDirections: [direction],
     accept: false,
@@ -57,6 +59,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["split_" + direction + "_" + perpendicularDirections[0] + "_" + perpendicularDirections[1]] = {
     index: 1500 + index,
     image: "split_" + direction + "_" + perpendicularDirections[0] + "_" + perpendicularDirections[1],
+    tip: 'splitter',
     distribute: true,
     distributeDirections: perpendicularDirections,
     accept: true,
@@ -67,6 +70,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["three_way_split_" + direction] = {
     index: 2000 + index,
     image: "three_way_split_" + direction,
+    tip: 'splitter',
     distribute: true,
     distributeDirections: [direction].concat(__slice.call(perpendicularDirections)),
     accept: true,
@@ -77,6 +81,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["add_" + perpendicularDirections[0] + "_" + perpendicularDirections[1] + "_" + direction] = {
     index: 3000 + index,
     image: "add_" + perpendicularDirections[0] + "_" + perpendicularDirections[1] + "_" + direction,
+    tip: 'adder',
     distribute: true,
     distributeDirections: [direction],
     accept: true,
@@ -87,6 +92,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["three_add_" + direction] = {
     index: 4000 + index,
     image: "three_add_" + direction,
+    tip: 'adder',
     distribute: true,
     distributeDirections: [direction],
     accept: true,
@@ -97,6 +103,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["multiplier_two_" + direction] = {
     index: 5000 + index,
     image: "multiplier_two_" + direction,
+    tip: 'denominator',
     distribute: true,
     distributeDirections: [direction],
     accept: true,
@@ -108,6 +115,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
   OBJECTS["three_multiplier_" + direction] = {
     index: 5500 + index,
     image: "three_multiplier_" + direction,
+    tip: 'denominator',
     distribute: true,
     distributeDirections: [direction],
     accept: true,
@@ -124,6 +132,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
     OBJECTS["turn_" + direction + "_" + direction2] = {
       index: 100 + (index * directions.length) + index2,
       image: "turn_" + direction + "_" + direction2,
+      tip: 'turner',
       distribute: true,
       distributeDirections: [direction2],
       accept: true,
@@ -133,6 +142,7 @@ for (index = _i = 0, _len = directions.length; _i < _len; index = ++_i) {
     OBJECTS["two_split_" + direction + "_" + direction2] = {
       index: 1000 + (index * directions.length) + index2,
       image: "two_split_" + direction + "_" + direction2,
+      tip: 'splitter',
       distribute: true,
       distributeDirections: [direction, direction2],
       accept: true,
@@ -481,7 +491,8 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.addObjectToSquare = function(objectType, square, image) {
-    var laserData, object, _k, _len2, _ref;
+    var laserData, object, _k, _len2, _ref,
+      _this = this;
     square = $(square);
     square.html('');
     this.removeExistingLasers(square);
@@ -521,9 +532,53 @@ spaceFractions.ViewHelper = (function() {
       this.fireLaser(square);
     }
     if (object.movable) {
-      this.initMovableObject(square);
+      this.initMovableObject(square, function(selectedSquare) {
+        if (square[0] === selectedSquare[0]) {
+          return _this.showTip(square);
+        }
+      });
     }
+    square.bind('click', function() {
+      return _this.showTip(square);
+    });
     return this.setObjectImage(square);
+  };
+
+  ViewHelper.prototype.showTip = function(square) {
+    var objectMeta, offset, tip,
+      _this = this;
+    square = $(square);
+    square.unbind('click');
+    objectMeta = this.objects[square.data('objectType')];
+    if ((tip = this.$(".tip." + objectMeta.tip)).length) {
+      offset = square.offset();
+      tip.css({
+        opacity: 0,
+        top: offset.top + offset.height + 6,
+        left: offset.left + (offset.width / 2) - (tip.offset().width / 2)
+      });
+      tip.animate({
+        opacity: 1,
+        duration: 250
+      });
+    }
+    return $.timeout(10, function() {
+      return $(document).one('click', function() {
+        return tip.animate({
+          opacity: 0,
+          duration: 250,
+          complete: function() {
+            square.bind('click', function() {
+              return _this.showTip(square);
+            });
+            return tip.css({
+              top: -1000,
+              left: -1000
+            });
+          }
+        });
+      });
+    });
   };
 
   ViewHelper.prototype.removeObjectFromSquare = function(square) {
@@ -683,7 +738,9 @@ spaceFractions.ViewHelper = (function() {
       this.addObjectToSquare(type, square);
     }
     if (!this.solution.verified) {
-      alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist');
+      $.timeout(200, function() {
+        return alert('This level has not been verified as solvable.\n\nIt\'s possible that a solution may not exist');
+      });
     }
     this.loading = false;
     return this.checkSuccess();

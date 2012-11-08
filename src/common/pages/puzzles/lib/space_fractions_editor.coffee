@@ -117,12 +117,18 @@ class spaceFractionsEditor.EditorHelper
                     objectImage.attr('src', src)
 
                     objectContainer.append(objectImage)
-                    @viewHelper.initMovableObject objectContainer, (selectedSquare) => 
+                    objectContainer.bind 'mousedown', =>
+                        @closeElementSelector()
+                        @$('.square.selected').removeClass('selected')
+                        
+                    @viewHelper.initMovableObject objectContainer, (selectedSquare) =>
                         if selectedSquare[0] == objectContainer[0]
                             initObjectContainer()
                             return
                         
                         selectedSquare.addClass('selected') 
+                        selectedSquare.unbind 'click'
+                        
                         @save()
                         object = @viewHelper.objects[objectType]
                         if (object.distribute and not object.accept) or (object.accept and not object.distribute)
@@ -236,6 +242,7 @@ class spaceFractionsEditor.EditorHelper
         selectedSquare = @$('.square.selected')        
         @viewHelper.removeObjectFromSquare(selectedSquare)
         @viewHelper.addObjectToSquare(objectType, selectedSquare)
+        selectedSquare.unbind 'click'
         selectedSquare.unbind 'mousedown'
         @save()
         
@@ -246,7 +253,9 @@ class spaceFractionsEditor.EditorHelper
 
     initMovableObject: (square) ->
         @viewHelper.initMovableObject square, (newSquare, data) =>
-            newSquare.addClass('selected') 
+            newSquare.addClass('selected')
+            newSquare.unbind 'click'
+             
             @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
             @save()
             @initMovableObject(newSquare)

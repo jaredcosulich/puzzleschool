@@ -210,7 +210,7 @@ body {
         width: 272px;
         .square {
             border: 1px solid #ccc;
-            margin: 3px 0 0 3px;
+            margin: 2px 0 0 2px;
         }
     }   
     
@@ -303,5 +303,32 @@ body {
         background-color: @white;
         padding: 6px;
         .rounded(6px);
+    }
+    
+    .tip {
+        padding: 12px;
+        background-color: @white;
+        border: 1px solid @grey;
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        height: 210px;
+        overflow: auto;
+        h2 {
+            img {
+                vertical-align: middle;
+            }
+        }
+        .section {
+            overflow: hidden;
+            padding: 6px 0;
+            h4 {
+                margin-top: 6px;
+            }
+            img {
+                float: left;
+            }
+        }
+    
     }
 }
