@@ -22,7 +22,7 @@ soma.chunks({
       return this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
     },
     build: function() {
-      var row, rows, _ref;
+      var row, rows;
       this.setTitle("Space Fractions - The Puzzle School");
       rows = (function() {
         var _i, _results;
@@ -38,7 +38,6 @@ soma.chunks({
         levelName: this.levelName || '',
         custom: this.levelName === 'custom',
         editor: this.levelName === 'editor',
-        intro: !((_ref = this.levelName) != null ? _ref.length : void 0),
         rows: rows
       });
     }
@@ -49,7 +48,7 @@ soma.views({
   SpaceFractions: {
     selector: '#content .space_fractions',
     create: function() {
-      var introMessage, level, levelName, spaceFractions, spaceFractionsEditor,
+      var introMessage, spaceFractions, spaceFractionsEditor, _ref,
         _this = this;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
@@ -58,8 +57,8 @@ soma.views({
         columns: 10
       });
       this.initEncode();
-      levelName = this.el.data('level_name');
-      if (!(levelName != null ? levelName.length : void 0)) {
+      this.levelName = this.el.data('level_name');
+      if (!((_ref = this.levelName) != null ? _ref.length : void 0)) {
         introMessage = this.$('.intro');
         introMessage.css({
           top: this.el.offset().top + (this.el.height() / 2) - (introMessage.height() / 2),
@@ -69,7 +68,7 @@ soma.views({
           opacity: 1,
           duration: 500
         });
-      } else if (levelName === 'editor') {
+      } else if (this.levelName === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
         this.editor = new spaceFractionsEditor.EditorHelper({
           el: $(this.selector),
@@ -84,7 +83,7 @@ soma.views({
           });
           return _this.$('.load_custom_level_data').hide();
         });
-      } else if (levelName === 'custom') {
+      } else if (this.levelName === 'custom') {
         this.$('.load_custom_level_data').bind('click', function() {
           _this.$('.custom_level').css({
             height: 'auto'
@@ -96,14 +95,21 @@ soma.views({
         });
       }
       if (window.location.hash) {
-        level = this.decode(decodeURIComponent(window.location.hash.replace(/^#/, '')));
-        if (levelName === 'editor') {
-          this.editor.levelDescription.val(level);
-          return this.editor.load();
-        } else {
-          this.$('.level_description').val(level);
-          return this.viewHelper.loadToPlay(level);
-        }
+        this.loadLevelData();
+      }
+      return window.onhashchange = function() {
+        return window.location.reload();
+      };
+    },
+    loadLevelData: function() {
+      var level;
+      level = this.decode(decodeURIComponent(window.location.hash.replace(/^#/, '')));
+      if (this.levelName === 'editor') {
+        this.editor.levelDescription.val(level);
+        return this.editor.load();
+      } else {
+        this.$('.level_description').val(level);
+        return this.viewHelper.loadToPlay(level);
       }
     },
     initEncode: function() {

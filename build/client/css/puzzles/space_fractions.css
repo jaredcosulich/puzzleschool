@@ -301,12 +301,33 @@ body {
   padding: 60px 90px;
   opacity: 0;
   position: absolute;
+  top: -1000px;
+  left: -1000px;
 }
 .space_fractions .intro h3 {
   text-align: center;
 }
 .space_fractions .intro p {
   width: 300px;
+}
+.space_fractions .intro .level_selection_message {
+  display: none;
+}
+.space_fractions .intro.only_levels .intro_message {
+  display: none;
+}
+.space_fractions .intro.only_levels .level_selection_message {
+  display: block;
+}
+.space_fractions .level_selector_link {
+  opacity: 0;
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  background-color: #fafafa;
+  border: 1px solid #949494;
+  padding: 6px;
+  box-shadow: 0 0 10px 5px #24d94c;
 }
 .space_fractions .explanation {
   clear: both;

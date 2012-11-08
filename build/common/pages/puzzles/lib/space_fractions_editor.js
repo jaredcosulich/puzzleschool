@@ -33,7 +33,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     explanation = this.$('.explanation');
     verifiedMessages = $(document.createElement('DIV'));
     verifiedMessages.addClass('verification_messages');
-    verifiedMessages.html('<div class=\'verification_message verified\' style=\'display: none;\'>\n    <h3>Verified</h3>\n    All ships are full.\n</div>\n<div class=\'verification_message unverified style=\'display: none;\'\'>\n    <h3>Unverified</h3>\n    Not all ships are full.\n</div>\n<a class=\'play_level\' target=\'_blank\'>Play Level</a>\n<p>Share: <input type=\'text\' class=\'share_link\' /></p>');
+    verifiedMessages.html('<div class=\'verification_message verified\' style=\'display: none;\'>\n    <h3>Verified</h3>\n    All sensors are lit up yellow.\n</div>\n<div class=\'verification_message unverified style=\'display: none;\'\'>\n    <h3>Unverified</h3>\n    Not all of the sensors are lit up yellow.\n</div>\n<a class=\'play_level\' target=\'_blank\'>Play Level</a>\n<p>Share: <input type=\'text\' class=\'share_link\' /></p>');
     verifiedMessages.insertBefore(explanation);
     this.playLevel = verifiedMessages.find('.play_level');
     this.shareLink = verifiedMessages.find('.share_link');

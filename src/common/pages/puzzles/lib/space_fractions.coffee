@@ -416,7 +416,7 @@ class spaceFractions.ViewHelper
                 duration: 250
         
         $.timeout 10, =>
-            $(document).one 'click', =>
+            $(document).one 'mousedown', =>
                 tip.animate
                     opacity: 0
                     duration: 250
@@ -488,9 +488,25 @@ class spaceFractions.ViewHelper
     checkSuccess: ->
         for square in @board.find('.square.occupied') when square.className.indexOf('ship') > -1
             return if $(square).html().indexOf('full') == -1
+
+        successMessage = @$('.success')
             
-        $.timeout 1000, () =>
-            successMessage = @$('.success')
+        @$('.show_level_selector').bind 'click', =>
+            successMessage.animate
+                opacity: 0
+                duration: 500
+
+            intro = @$('.intro')
+            intro.addClass('only_levels') unless intro.hasClass('only_levels')
+            intro.css
+                top: @el.offset().top + (@el.height() / 2) - (intro.height() / 2)
+                left: @el.offset().left + (@el.width() / 2) - (intro.width() / 2)
+            
+            intro.animate
+                opacity: 1
+                duration: 250
+            
+        $.timeout 500, () =>
             successMessage.css
                 top: @el.offset().top + (@el.height() / 2) - (successMessage.height() / 2)
                 left: @el.offset().left + (@el.width() / 2) - (successMessage.width() / 2)
@@ -498,7 +514,14 @@ class spaceFractions.ViewHelper
                 opacity: 1
                 duration: 500
             
-            @el.one 'click', ->
+            @board.one 'click', =>
+                @$('.level_selector_link').css
+                    top: @board.offset().top
+                    left: @board.offset().left
+                @$('.level_selector_link').animate
+                    opacity: 1
+                    duration: 500
+                    
                 successMessage.animate
                     opacity: 0
                     duration: 500

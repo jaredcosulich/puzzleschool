@@ -563,7 +563,7 @@ spaceFractions.ViewHelper = (function() {
       });
     }
     return $.timeout(10, function() {
-      return $(document).one('click', function() {
+      return $(document).one('mousedown', function() {
         return tip.animate({
           opacity: 0,
           duration: 250,
@@ -674,7 +674,7 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.checkSuccess = function() {
-    var square, _k, _len2, _ref,
+    var square, successMessage, _k, _len2, _ref,
       _this = this;
     _ref = this.board.find('.square.occupied');
     for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
@@ -685,9 +685,27 @@ spaceFractions.ViewHelper = (function() {
         }
       }
     }
-    return $.timeout(1000, function() {
-      var successMessage;
-      successMessage = _this.$('.success');
+    successMessage = this.$('.success');
+    this.$('.show_level_selector').bind('click', function() {
+      var intro;
+      successMessage.animate({
+        opacity: 0,
+        duration: 500
+      });
+      intro = _this.$('.intro');
+      if (!intro.hasClass('only_levels')) {
+        intro.addClass('only_levels');
+      }
+      intro.css({
+        top: _this.el.offset().top + (_this.el.height() / 2) - (intro.height() / 2),
+        left: _this.el.offset().left + (_this.el.width() / 2) - (intro.width() / 2)
+      });
+      return intro.animate({
+        opacity: 1,
+        duration: 250
+      });
+    });
+    return $.timeout(500, function() {
       successMessage.css({
         top: _this.el.offset().top + (_this.el.height() / 2) - (successMessage.height() / 2),
         left: _this.el.offset().left + (_this.el.width() / 2) - (successMessage.width() / 2)
@@ -696,7 +714,15 @@ spaceFractions.ViewHelper = (function() {
         opacity: 1,
         duration: 500
       });
-      return _this.el.one('click', function() {
+      return _this.board.one('click', function() {
+        _this.$('.level_selector_link').css({
+          top: _this.board.offset().top,
+          left: _this.board.offset().left
+        });
+        _this.$('.level_selector_link').animate({
+          opacity: 1,
+          duration: 500
+        });
         return successMessage.animate({
           opacity: 0,
           duration: 500
