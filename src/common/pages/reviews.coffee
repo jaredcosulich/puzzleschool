@@ -4,6 +4,8 @@
 # Hax Attacks: https://itunes.apple.com/ua/app/hax-attacks/id556677673?mt=8
 # Build With Chrome http://www.buildwithchrome.com/
 # Lightbot: http://armorgames.com/play/6061/light-bot-20
+# NAND to Tetris: http://www.nand2tetris.org/course.php
+
 
 soma = require('soma')
 wings = require('wings')

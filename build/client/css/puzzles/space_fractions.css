@@ -328,6 +328,7 @@ body {
   top: -1000px;
   left: -1000px;
   height: 210px;
+  width: 450px;
   overflow: auto;
 }
 .space_fractions .tip h2 img {
@@ -341,5 +342,6 @@ body {
   margin-top: 6px;
 }
 .space_fractions .tip .section img {
+  margin-right: 6px;
   float: left;
 }
