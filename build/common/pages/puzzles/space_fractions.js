@@ -195,5 +195,15 @@ soma.routes({
   },
   '/puzzles/space_fractions': function() {
     return new soma.chunks.SpaceFractions;
+  },
+  '/puzzles/light_it_up/:levelName': function(_arg) {
+    var levelName;
+    levelName = _arg.levelName;
+    return new soma.chunks.SpaceFractions({
+      levelName: levelName
+    });
+  },
+  '/puzzles/light_it_up': function() {
+    return new soma.chunks.SpaceFractions;
   }
 });

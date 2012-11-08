@@ -121,4 +121,10 @@ soma.routes
             levelName: levelName
     
     '/puzzles/space_fractions': -> new soma.chunks.SpaceFractions
+
+    '/puzzles/light_it_up/:levelName': ({levelName}) -> 
+        new soma.chunks.SpaceFractions
+            levelName: levelName
+    
+    '/puzzles/light_it_up': -> new soma.chunks.SpaceFractions
             

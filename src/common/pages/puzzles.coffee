@@ -197,10 +197,10 @@ LABDATA = [{
             <p>We're hoping to improve all of this as soon as we can.</p>
             """
 }, {
-    id: 'space_fractions'
-    title: 'Space Fractions'
-    website: '/puzzles/space_fractions'
-    thumbnail: '/assets/images/reviews/space_fractions.jpg'
+    id: 'light_it_up'
+    title: 'Light It Up'
+    website: '/puzzles/light_it_up'
+    thumbnail: '/assets/images/reviews/light_it_up.jpg'
     company: 'The Puzzle School'
     companyWebsite: 'http://puzzleschool.com'
     material: 'Fractions'
@@ -210,7 +210,7 @@ LABDATA = [{
         explanation:
             """
             <p>
-                Space Fractions is a remix of fractions game,
+                Light It Up was inspired by the fractions game,
                 <a href='/reviews'>Refraction</a>,
                 developed by the University of Washington's Center for Game Science.
             </p>
@@ -224,7 +224,7 @@ LABDATA = [{
                     fractions than the obstacles.
                 </li>
                 <li>
-                    We created a <a href='/puzzles/space_fractions/editor' target='_blank'>level editor</a> 
+                    We created a <a href='/puzzles/light_it_up/editor' target='_blank'>level editor</a> 
                     that allows teachers to easily create custom levels to teach
                     a specific fraction-based idea. The level editor also allows students to create their own
                     puzzles, improving their mastery of fractions while creating puzzles as well as solving puzzles.
@@ -241,11 +241,11 @@ LABDATA = [{
                 </li>
             </ul>
             <p>
-                Space Fractions is still a work in progress, so beware that it may be buggy.
+                Light It Up is still a work in progress, so beware that it may be buggy.
             </p>
             <p>
                 You can try creating your own levels with the 
-                <a href='/puzzles/space_fractions/editor' target='_blank'>Level Editor</a>.
+                <a href='/puzzles/light_it_up/editor' target='_blank'>Level Editor</a>.
                 Just click on a block on the board to add pieces of your puzzle to the board.
             </p>
             """
