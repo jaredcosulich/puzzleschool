@@ -356,6 +356,8 @@ class spaceFractions.ViewHelper
             body.bind 'mouseup', (e) => endMove(e)
             body.bind 'touchend', (e) => endMove(e)
                 
+        square.unbind 'mousedown'
+        square.unbind 'touchstart'
         square.one 'mousedown', (e) => moveObject(e)
         square.one 'touchstart', (e) => moveObject(e)
         

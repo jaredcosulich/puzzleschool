@@ -482,6 +482,8 @@ spaceFractions.ViewHelper = (function() {
         return endMove(e);
       });
     };
+    square.unbind('mousedown');
+    square.unbind('touchstart');
     square.one('mousedown', function(e) {
       return moveObject(e);
     });
