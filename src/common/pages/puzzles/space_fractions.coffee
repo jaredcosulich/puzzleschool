@@ -58,6 +58,7 @@ soma.views
                     @$('.load_custom_level_data').hide()
                     
             else if @levelName == 'custom'
+                window.onhashchange = -> window.location.reload()
                 @$('.load_custom_level_data').bind 'click', => 
                     @$('.custom_level').css(height: 'auto')
                     @$('.load_custom_level_data').hide()
@@ -66,7 +67,6 @@ soma.views
                     @viewHelper.loadToPlay(@$('.level_description').val())
             
             @loadLevelData() if window.location.hash
-            window.onhashchange = -> window.location.reload()
                     
         loadLevelData: ->
             level = @decode(decodeURIComponent(window.location.hash.replace(/^#/, '')))

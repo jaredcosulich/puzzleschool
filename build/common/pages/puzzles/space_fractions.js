@@ -84,6 +84,9 @@ soma.views({
           return _this.$('.load_custom_level_data').hide();
         });
       } else if (this.levelName === 'custom') {
+        window.onhashchange = function() {
+          return window.location.reload();
+        };
         this.$('.load_custom_level_data').bind('click', function() {
           _this.$('.custom_level').css({
             height: 'auto'
@@ -95,11 +98,8 @@ soma.views({
         });
       }
       if (window.location.hash) {
-        this.loadLevelData();
+        return this.loadLevelData();
       }
-      return window.onhashchange = function() {
-        return window.location.reload();
-      };
     },
     loadLevelData: function() {
       var level;
