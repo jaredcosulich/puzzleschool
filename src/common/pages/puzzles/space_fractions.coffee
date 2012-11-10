@@ -13,7 +13,7 @@ soma.chunks
             @loadStylesheet '/build/client/css/puzzles/space_fractions.css'            
 
         build: ->
-            @setTitle("Space Fractions - The Puzzle School")
+            @setTitle("Light It Up - The Puzzle School")
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,

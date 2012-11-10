@@ -23,7 +23,7 @@ soma.chunks({
     },
     build: function() {
       var row, rows;
-      this.setTitle("Space Fractions - The Puzzle School");
+      this.setTitle("Light It Up - The Puzzle School");
       rows = (function() {
         var _i, _results;
         _results = [];
