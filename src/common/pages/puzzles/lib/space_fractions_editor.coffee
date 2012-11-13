@@ -104,6 +104,7 @@ class spaceFractionsEditor.EditorHelper
                 objectContainer = $(document.createElement('DIV'))
                 objectContainer.addClass('object')
                 objectContainer.addClass('square')
+                objectContainer.addClass('occupied')
                 editor.append(objectContainer)
 
                 initObjectContainer = =>
@@ -125,6 +126,9 @@ class spaceFractionsEditor.EditorHelper
                         if selectedSquare[0] == objectContainer[0]
                             initObjectContainer()
                             return
+                        
+                        if selectedSquare.parent()[0] == editor[0]
+                            @closeElementSelector()
                         
                         selectedSquare.addClass('selected') 
                         selectedSquare.unbind 'click'

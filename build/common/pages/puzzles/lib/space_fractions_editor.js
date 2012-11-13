@@ -113,6 +113,7 @@ spaceFractionsEditor.EditorHelper = (function() {
         objectContainer = $(document.createElement('DIV'));
         objectContainer.addClass('object');
         objectContainer.addClass('square');
+        objectContainer.addClass('occupied');
         editor.append(objectContainer);
         initObjectContainer = function() {
           var objectImage, src;
@@ -131,6 +132,9 @@ spaceFractionsEditor.EditorHelper = (function() {
             if (selectedSquare[0] === objectContainer[0]) {
               initObjectContainer();
               return;
+            }
+            if (selectedSquare.parent()[0] === editor[0]) {
+              _this.closeElementSelector();
             }
             selectedSquare.addClass('selected');
             selectedSquare.unbind('click');

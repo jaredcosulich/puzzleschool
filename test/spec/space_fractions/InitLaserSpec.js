@@ -62,6 +62,18 @@ describe("Init:", function() {
         
     })
     
+    describe('with a laser pointing at square 0', function() {
+        beforeEach(function() {
+            square = game.board.find('.square.index30');
+            game.addObjectToSquare('laser_up', square)
+            laser = game.board.find('.laser')
+        })
+        
+        it('should fill in square 0', function() {
+            expect(laser.offset().top).toEqual(1)
+        })
+    })
+    
     describe('loading data for a custom game', function() {
         var shipSquare;
         beforeEach(function() {

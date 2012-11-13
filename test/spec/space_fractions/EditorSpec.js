@@ -1,7 +1,8 @@
 describe("EditorSpec:", function() {
-    var game, editor;
+    var html, game, editor;
 
     beforeEach(function() {
+        html = $('.space_fractions').html()
         game = new spaceFractions.ViewHelper({
             el: $('.space_fractions'),
             rows: 10,
@@ -14,6 +15,10 @@ describe("EditorSpec:", function() {
             encodeMethod: function(json) { return json; }
         });
     });
+    
+    afterEach(function() {
+        $('.space_fractions').html(html)
+    })
     
     it('should not have a laser on it', function() {
         expect(game.board.html()).toNotContain('laser')        
@@ -111,6 +116,13 @@ describe("EditorSpec:", function() {
             expect(game.board.find('.square.index29').data('fullDenominator')).toEqual(5);
         })
         
+    })
+    
+    xdescribe('the drag and drop editor', function() {
+        it('should not show the element selector if dropped back on the editor area', function() {
+            var editorObject = $($('.selector.editor .object')[0]);
+            editorObject.trigger('mousedown')
+        })
     })
     
     it('should be able to load a complex level', function () {
