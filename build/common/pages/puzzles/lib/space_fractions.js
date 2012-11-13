@@ -644,37 +644,6 @@ spaceFractions.ViewHelper = (function() {
     }
   };
 
-  ViewHelper.prototype.checkLaserPath = function(checkSquare, squareIndex, direction, numerator, denominator) {
-    var acceptDirections, laserData, occupied;
-    occupied = checkSquare.hasClass('occupied');
-    acceptDirections = JSON.parse(checkSquare.data('acceptDirections') || null);
-    if (occupied && !acceptDirections) {
-      return false;
-    }
-    laserData = JSON.parse(checkSquare.data('lasers') || '{}');
-    laserData[direction] = {
-      index: squareIndex,
-      numerator: numerator,
-      denominator: denominator
-    };
-    checkSquare.data('lasers', JSON.stringify(laserData));
-    checkSquare.data("laser" + squareIndex, direction);
-    checkSquare.addClass("laser" + squareIndex);
-    if (__indexOf.call(acceptDirections || [], direction) >= 0) {
-      checkSquare.data('numerator', numerator);
-      checkSquare.data('denominator', denominator);
-      this.setObjectImage(checkSquare);
-      if (!this.loading) {
-        this.checkSuccess();
-      }
-      this.fireLaser(checkSquare);
-    }
-    if (occupied) {
-      return false;
-    }
-    return true;
-  };
-
   ViewHelper.prototype.checkSuccess = function() {
     var square, successMessage, _k, _len2, _ref,
       _this = this;
@@ -835,7 +804,7 @@ spaceFractions.ViewHelper = (function() {
       end = (function() {
         switch (distributeDirection) {
           case 'up':
-            return 0;
+            return -1;
           case 'down':
             return this.board.find('.square').length;
           case 'left':
@@ -897,6 +866,37 @@ spaceFractions.ViewHelper = (function() {
       _results.push(this.board.append(laser));
     }
     return _results;
+  };
+
+  ViewHelper.prototype.checkLaserPath = function(checkSquare, squareIndex, direction, numerator, denominator) {
+    var acceptDirections, laserData, occupied;
+    occupied = checkSquare.hasClass('occupied');
+    acceptDirections = JSON.parse(checkSquare.data('acceptDirections') || null);
+    if (occupied && !acceptDirections) {
+      return false;
+    }
+    laserData = JSON.parse(checkSquare.data('lasers') || '{}');
+    laserData[direction] = {
+      index: squareIndex,
+      numerator: numerator,
+      denominator: denominator
+    };
+    checkSquare.data('lasers', JSON.stringify(laserData));
+    checkSquare.data("laser" + squareIndex, direction);
+    checkSquare.addClass("laser" + squareIndex);
+    if (__indexOf.call(acceptDirections || [], direction) >= 0) {
+      checkSquare.data('numerator', numerator);
+      checkSquare.data('denominator', denominator);
+      this.setObjectImage(checkSquare);
+      if (!this.loading) {
+        this.checkSuccess();
+      }
+      this.fireLaser(checkSquare);
+    }
+    if (occupied) {
+      return false;
+    }
+    return true;
   };
 
   return ViewHelper;

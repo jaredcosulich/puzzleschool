@@ -466,27 +466,6 @@ class spaceFractions.ViewHelper
                         @fireLaser(@$(".index#{laserData[direction].index}"))
                         
 
-    checkLaserPath: (checkSquare, squareIndex, direction, numerator, denominator) ->
-        occupied = checkSquare.hasClass('occupied')
-        acceptDirections = JSON.parse(checkSquare.data('acceptDirections') or null)
-        return false if occupied and not acceptDirections
-        laserData = JSON.parse(checkSquare.data('lasers') or '{}')
-        laserData[direction] = 
-            index: squareIndex
-            numerator: numerator
-            denominator: denominator
-        checkSquare.data('lasers', JSON.stringify(laserData))
-        checkSquare.data("laser#{squareIndex}", direction)
-        checkSquare.addClass("laser#{squareIndex}")
-        if direction in (acceptDirections or [])
-            checkSquare.data('numerator', numerator)
-            checkSquare.data('denominator', denominator)
-            @setObjectImage(checkSquare)
-            @checkSuccess() unless @loading
-            @fireLaser(checkSquare)
-        return false if occupied
-        return true
-        
     checkSuccess: ->
         for square in @board.find('.square.occupied') when square.className.indexOf('ship') > -1
             return if $(square).html().indexOf('full') == -1
@@ -599,7 +578,7 @@ class spaceFractions.ViewHelper
             start = square.data('index') + increment
             
             end = switch distributeDirection
-                when 'up' then 0
+                when 'up' then -1
                 when 'down' then @board.find('.square').length
                 when 'left' then (Math.floor(start/@columns) * @columns) - 1
                 when 'right' then Math.ceil(start/@columns) * @columns 
@@ -647,4 +626,28 @@ class spaceFractions.ViewHelper
             @showFraction(laser)
             
             @board.append(laser)
+
+            
+    checkLaserPath: (checkSquare, squareIndex, direction, numerator, denominator) ->
+        occupied = checkSquare.hasClass('occupied')
+        acceptDirections = JSON.parse(checkSquare.data('acceptDirections') or null)
+        return false if occupied and not acceptDirections
+        laserData = JSON.parse(checkSquare.data('lasers') or '{}')
+        laserData[direction] = 
+            index: squareIndex
+            numerator: numerator
+            denominator: denominator
+        checkSquare.data('lasers', JSON.stringify(laserData))
+        checkSquare.data("laser#{squareIndex}", direction)
+        checkSquare.addClass("laser#{squareIndex}")
+        if direction in (acceptDirections or [])
+            checkSquare.data('numerator', numerator)
+            checkSquare.data('denominator', denominator)
+            @setObjectImage(checkSquare)
+            @checkSuccess() unless @loading
+            @fireLaser(checkSquare)
+        return false if occupied
+        return true
+
+
 
