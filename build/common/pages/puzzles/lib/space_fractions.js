@@ -432,7 +432,7 @@ spaceFractions.ViewHelper = (function() {
       });
       return;
     }
-    squareOrLaser.find('.fraction').remove();
+    squareOrLaser.find('.fraction').off().remove();
     fraction = $(document.createElement('DIV'));
     numerator = squareOrLaser.data('fullNumerator') || squareOrLaser.data('numerator') || 1;
     denominator = squareOrLaser.data('fullDenominator') || squareOrLaser.data('denominator') || 1;
@@ -516,7 +516,7 @@ spaceFractions.ViewHelper = (function() {
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
         }
-        _this.el.find('.movable_object').remove();
+        _this.el.find('.movable_object').off().remove();
         body.unbind('mousemove.move');
         body.unbind('touchmove.move');
         if (movingObject) {
@@ -676,7 +676,7 @@ spaceFractions.ViewHelper = (function() {
     }
     squareIndex = square.data('index');
     if ((existingLasers = this.board.find(".laser.laser" + squareIndex)).length) {
-      existingLasers.remove();
+      existingLasers.off().remove();
       _ref = this.board.find(".square.laser" + squareIndex);
       _results = [];
       for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {

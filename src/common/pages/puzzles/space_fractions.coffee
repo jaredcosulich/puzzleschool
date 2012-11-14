@@ -67,6 +67,8 @@ soma.views
                     @viewHelper.loadToPlay(@$('.level_description').val())
             
             @loadLevelData() if window.location.hash
+            
+            @initInstructions()
                     
         loadLevelData: ->
             level = @decode(decodeURIComponent(window.location.hash.replace(/^#/, '')))
@@ -77,6 +79,27 @@ soma.views
                 @$('.level_description').val(level)
                 @viewHelper.loadToPlay(level)
 
+        initInstructions: ->
+            @$('.instructions_link').bind 'click', =>
+                instructions = @$('.instructions')
+                instructions.css
+                    top: @el.offset().top + (@el.height() / 2) - (instructions.height() / 2)
+                    left: @el.offset().left + (@el.width() / 2) - (instructions.width() / 2)
+
+                instructions.animate
+                    opacity: 1
+                    duration: 500
+                    
+                $.timeout 10, ->
+                    $(document.body).one 'click', -> 
+                        instructions.animate
+                            opacity: 0
+                            duration: 500
+                            complete: ->
+                                instructions.css
+                                    top: -1000
+                                    left: -1000
+                
         initEncode: ->
             @encodeMap =
                 '"objects"': '~o'

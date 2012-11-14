@@ -312,7 +312,7 @@ class spaceFractions.ViewHelper
             $.timeout 50, => @showFraction(squareOrLaser)
             return
             
-        squareOrLaser.find('.fraction').remove()
+        squareOrLaser.find('.fraction').off().remove()
         fraction = $(document.createElement('DIV'))
         numerator = squareOrLaser.data('fullNumerator') or squareOrLaser.data('numerator') or 1
         denominator = squareOrLaser.data('fullDenominator') or squareOrLaser.data('denominator') or 1
@@ -373,7 +373,7 @@ class spaceFractions.ViewHelper
                 e.preventDefault() if e.preventDefault
                 selectedSquare = @$('.square.selected')
                 selectedSquare = square if not selectedSquare?.length
-                @el.find('.movable_object').remove()
+                @el.find('.movable_object').off().remove()
                 body.unbind 'mousemove.move'        
                 body.unbind 'touchmove.move'
 
@@ -488,7 +488,7 @@ class spaceFractions.ViewHelper
         return if square.parent()[0].className != @board[0].className
         squareIndex = square.data('index')
         if (existingLasers = @board.find(".laser.laser#{squareIndex}")).length
-            existingLasers.remove()
+            existingLasers.off().remove()
             for laserSquare in @board.find(".square.laser#{squareIndex}")
                 laserSquare = $(laserSquare)
                 laserSquare.removeClass("laser#{squareIndex}")

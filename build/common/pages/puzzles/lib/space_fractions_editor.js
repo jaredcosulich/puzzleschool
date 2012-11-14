@@ -211,7 +211,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.selectSquare = function(square) {
-    this.$('.board .selected').removeClass('selected');
+    this.$('.square.selected').removeClass('selected');
     square = $(square);
     square.addClass('selected');
     return this.showElementSelector(square);
@@ -261,15 +261,18 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addObject = function(objectType) {
-    var object, selectedSquare;
+    var object, selectedSquare,
+      _this = this;
     selectedSquare = this.$('.square.selected');
     this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.viewHelper.addObjectToSquare(objectType, selectedSquare);
-    selectedSquare.unbind('click');
-    selectedSquare.unbind('mousedown');
+    selectedSquare.unbind('click.tip');
     this.save();
     object = this.viewHelper.objects[objectType];
     this.showObjectSelector(true);
+    selectedSquare.bind('click.element_selector', function() {
+      return _this.showElementSelector(selectedSquare);
+    });
     return this.initMovableObject(selectedSquare);
   };
 
@@ -277,15 +280,11 @@ spaceFractionsEditor.EditorHelper = (function() {
     var _this = this;
     return this.viewHelper.initMovableObject(square, function(newSquare, data) {
       newSquare.addClass('selected');
-      newSquare.unbind('click');
+      newSquare.unbind('click.tip');
       _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
       _this.save();
       _this.initMovableObject(newSquare);
-      if (($(square)[0] === $(newSquare)[0]) || _this.elementSelector.css('opacity') > 0) {
-        return _this.showElementSelector(newSquare);
-      } else {
-        return newSquare.removeClass('selected');
-      }
+      return newSquare.removeClass('selected');
     });
   };
 
@@ -327,9 +326,13 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.setObjectFraction = function(numerator, denominator) {
-    var selectedSquare;
-    selectedSquare = this.viewHelper.board.find('.selected');
-    if (this.viewHelper.objects[selectedSquare.data('objectType')].states) {
+    var objectMeta, selectedSquare;
+    selectedSquare = this.$('.square.selected');
+    objectMeta = this.viewHelper.objects[selectedSquare.data('objectType')];
+    if (!objectMeta.showFraction) {
+      return;
+    }
+    if (objectMeta.states) {
       selectedSquare.data('fullNumerator', numerator);
       selectedSquare.data('fullDenominator', denominator);
       this.viewHelper.setObjectImage(selectedSquare);

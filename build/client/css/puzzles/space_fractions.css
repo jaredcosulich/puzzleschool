@@ -52,23 +52,23 @@ body {
   margin: 0 20px;
 }
 .space_fractions .board .laser .beam.right {
-  border-top-left-radius: 80%;
-  border-bottom-left-radius: 80%;
+  border-top-left-radius: 45%;
+  border-bottom-left-radius: 45%;
   margin-left: 3px;
 }
 .space_fractions .board .laser .beam.left {
-  border-top-right-radius: 80%;
-  border-bottom-right-radius: 80%;
+  border-top-right-radius: 45%;
+  border-bottom-right-radius: 45%;
   margin-right: 3px;
 }
 .space_fractions .board .laser .beam.up {
-  border-bottom-left-radius: 80%;
-  border-bottom-right-radius: 80%;
+  border-bottom-left-radius: 45%;
+  border-bottom-right-radius: 45%;
   margin-bottom: 3px;
 }
 .space_fractions .board .laser .beam.down {
-  border-top-left-radius: 80%;
-  border-top-right-radius: 80%;
+  border-top-left-radius: 45%;
+  border-top-right-radius: 45%;
   margin-top: 3px;
 }
 .space_fractions .board .square,
@@ -292,23 +292,25 @@ body {
 .space_fractions .success h2 {
   color: #24d94c;
 }
-.space_fractions .intro {
+.space_fractions .intro,
+.space_fractions .instructions {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
   background-color: #fafafa;
   border: 1px solid #949494;
-  padding: 60px 90px;
+  padding: 24px;
   opacity: 0;
   position: absolute;
   top: -1000px;
   left: -1000px;
 }
+.space_fractions .intro p,
+.space_fractions .instructions p {
+  width: 300px;
+}
 .space_fractions .intro h3 {
   text-align: center;
-}
-.space_fractions .intro p {
-  width: 300px;
 }
 .space_fractions .intro .level_selection_message {
   display: none;
@@ -342,7 +344,10 @@ body {
   border-radius: 6px;
 }
 .space_fractions .tip {
-  padding: 12px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  padding: 24px;
   background-color: #fafafa;
   border: 1px solid #949494;
   position: absolute;

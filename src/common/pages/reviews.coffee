@@ -6,6 +6,7 @@
 # Lightbot: http://armorgames.com/play/6061/light-bot-20
 # NAND to Tetris: http://www.nand2tetris.org/course.php
 # Memrise: http://www.memrise.com/
+# Teach with Portals: http://www.teachwithportals.com/
 
 soma = require('soma')
 wings = require('wings')

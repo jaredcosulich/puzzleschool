@@ -98,8 +98,9 @@ soma.views({
         });
       }
       if (window.location.hash) {
-        return this.loadLevelData();
+        this.loadLevelData();
       }
+      return this.initInstructions();
     },
     loadLevelData: function() {
       var level;
@@ -111,6 +112,35 @@ soma.views({
         this.$('.level_description').val(level);
         return this.viewHelper.loadToPlay(level);
       }
+    },
+    initInstructions: function() {
+      var _this = this;
+      return this.$('.instructions_link').bind('click', function() {
+        var instructions;
+        instructions = _this.$('.instructions');
+        instructions.css({
+          top: _this.el.offset().top + (_this.el.height() / 2) - (instructions.height() / 2),
+          left: _this.el.offset().left + (_this.el.width() / 2) - (instructions.width() / 2)
+        });
+        instructions.animate({
+          opacity: 1,
+          duration: 500
+        });
+        return $.timeout(10, function() {
+          return $(document.body).one('click', function() {
+            return instructions.animate({
+              opacity: 0,
+              duration: 500,
+              complete: function() {
+                return instructions.css({
+                  top: -1000,
+                  left: -1000
+                });
+              }
+            });
+          });
+        });
+      });
     },
     initEncode: function() {
       var object;

@@ -203,7 +203,7 @@ class spaceFractionsEditor.EditorHelper
         )
 
     selectSquare: (square) ->
-        @$('.board .selected').removeClass('selected')
+        @$('.square.selected').removeClass('selected')
         square = $(square)
         square.addClass('selected')
         @showElementSelector(square)
@@ -246,27 +246,25 @@ class spaceFractionsEditor.EditorHelper
         selectedSquare = @$('.square.selected')        
         @viewHelper.removeObjectFromSquare(selectedSquare)
         @viewHelper.addObjectToSquare(objectType, selectedSquare)
-        selectedSquare.unbind 'click'
-        selectedSquare.unbind 'mousedown'
+        selectedSquare.unbind 'click.tip'
         @save()
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
         
+        selectedSquare.bind 'click.element_selector', => @showElementSelector(selectedSquare)
+
         @initMovableObject(selectedSquare)
 
     initMovableObject: (square) ->
         @viewHelper.initMovableObject square, (newSquare, data) =>
             newSquare.addClass('selected')
-            newSquare.unbind 'click'
+            newSquare.unbind('click.tip')
              
             @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
             @save()
             @initMovableObject(newSquare)
-            if ($(square)[0] == $(newSquare)[0]) or @elementSelector.css('opacity') > 0
-                @showElementSelector(newSquare) 
-            else
-                newSquare.removeClass('selected') 
+            newSquare.removeClass('selected') 
            
     removeObject: () ->
         selectedSquare = @$('.square.selected')
@@ -294,8 +292,10 @@ class spaceFractionsEditor.EditorHelper
             if close then @closeElementSelector() else @showSelector('object')
         
     setObjectFraction: (numerator, denominator) ->
-        selectedSquare = @viewHelper.board.find('.selected')
-        if @viewHelper.objects[selectedSquare.data('objectType')].states
+        selectedSquare = @$('.square.selected')
+        objectMeta = @viewHelper.objects[selectedSquare.data('objectType')]
+        return unless objectMeta.showFraction
+        if objectMeta.states
             selectedSquare.data('fullNumerator', numerator)
             selectedSquare.data('fullDenominator', denominator)
             @viewHelper.setObjectImage(selectedSquare)
