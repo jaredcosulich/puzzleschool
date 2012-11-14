@@ -304,10 +304,12 @@ body {
   position: absolute;
   top: -1000px;
   left: -1000px;
+  height: 300px;
+  overflow: auto;
 }
 .space_fractions .intro p,
 .space_fractions .instructions p {
-  width: 300px;
+  width: 390px;
 }
 .space_fractions .intro h3 {
   text-align: center;
@@ -320,6 +322,9 @@ body {
 }
 .space_fractions .intro.only_levels .level_selection_message {
   display: block;
+}
+.space_fractions .instructions h3 {
+  padding-top: 24px;
 }
 .space_fractions .level_selector_link {
   opacity: 0;

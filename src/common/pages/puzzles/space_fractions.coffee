@@ -40,9 +40,9 @@ soma.views
             if not @levelName?.length
                 introMessage = @$('.intro')
                 introMessage.css
-                    top: @el.offset().top + (@el.height() / 2) - (introMessage.height() / 2)
-                    left: @el.offset().left + (@el.width() / 2) - (introMessage.width() / 2)
-
+                    top: ($.viewport().height / 2) - (introMessage.height() / 2) + (window.scrollY)
+                    left: ($.viewport().width / 2) - (introMessage.width() / 2)
+                
                 introMessage.animate
                     opacity: 1
                     duration: 500
@@ -83,8 +83,8 @@ soma.views
             @$('.instructions_link').bind 'click', =>
                 instructions = @$('.instructions')
                 instructions.css
-                    top: @el.offset().top + (@el.height() / 2) - (instructions.height() / 2)
-                    left: @el.offset().left + (@el.width() / 2) - (instructions.width() / 2)
+                    top: ($.viewport().height / 2) - (instructions.height() / 2) + (window.scrollY)
+                    left: ($.viewport().width / 2) - (instructions.width() / 2)
 
                 instructions.animate
                     opacity: 1

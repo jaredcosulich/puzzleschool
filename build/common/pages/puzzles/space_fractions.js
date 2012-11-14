@@ -61,8 +61,8 @@ soma.views({
       if (!((_ref = this.levelName) != null ? _ref.length : void 0)) {
         introMessage = this.$('.intro');
         introMessage.css({
-          top: this.el.offset().top + (this.el.height() / 2) - (introMessage.height() / 2),
-          left: this.el.offset().left + (this.el.width() / 2) - (introMessage.width() / 2)
+          top: ($.viewport().height / 2) - (introMessage.height() / 2) + window.scrollY,
+          left: ($.viewport().width / 2) - (introMessage.width() / 2)
         });
         introMessage.animate({
           opacity: 1,
@@ -119,8 +119,8 @@ soma.views({
         var instructions;
         instructions = _this.$('.instructions');
         instructions.css({
-          top: _this.el.offset().top + (_this.el.height() / 2) - (instructions.height() / 2),
-          left: _this.el.offset().left + (_this.el.width() / 2) - (instructions.width() / 2)
+          top: ($.viewport().height / 2) - (instructions.height() / 2) + window.scrollY,
+          left: ($.viewport().width / 2) - (instructions.width() / 2)
         });
         instructions.animate({
           opacity: 1,
