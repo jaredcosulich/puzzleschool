@@ -32,6 +32,7 @@ describe("Hints:", function() {
         option = game.board.find('.square.highlighted')
         expect(option.hasClass('index11')).toBe(true);
         option.trigger('mousedown')  
+        option.trigger('mousemove')  
 
         placeHere = game.board.find('.square.highlighted')
         expect(placeHere.length).toEqual(1)
@@ -47,13 +48,14 @@ describe("Hints:", function() {
         expect(game.board.find('.square.highlighted').hasClass('index16')).toBe(true);      
     })
     
-    it('should dehighlight the option space when the option is clicked on', function() {
+    it('should dehighlight the option space when the option is moved a bit', function() {
         game.addObjectToSquare('two_split_right_down', game.board.find('.square.index11'))
         game.addObjectToSquare('turn_up_left', game.board.find('.square.index16'))
         game.showHint();
         option = game.board.find('.square.highlighted')
         expect(option.hasClass('index16')).toBe(true);
         option.trigger('mousedown')  
+        option.trigger('mousemove')  
 
         expect(game.board.find('.square.highlighted').length).toEqual(0);  
         expect(game.options.find('.square.highlighted').length).toEqual(1);        

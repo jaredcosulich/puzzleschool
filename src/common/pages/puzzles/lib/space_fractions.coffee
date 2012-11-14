@@ -204,7 +204,7 @@ class spaceFractions.ViewHelper
             return [o, s]
         return [o, $(@options.find('.square:not(.occupied)')[0])]
     
-    showHint: ->
+    findHint: ->
         for object in @solution.objects
             square = @board.find(".square.index#{object.index}")
             continue if not square.length
@@ -220,34 +220,53 @@ class spaceFractions.ViewHelper
                     if (o.type for o in @solution.objects when o.index == $(boardOption).data('index'))[0] != object.type
                         option = $(boardOption)
                         break
-                        
-            if option?.length
-                option.addClass('highlighted')
-                dragMessage = @$('.hint_drag_message')
-                dragMessage.css
-                    left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2)
-                    top: option.offset().top + option.height()
-                dragMessage.animate
-                    opacity: 1
-                    duration: 250
-                    
-                option.one 'mousedown.hint', =>
-                    dragMessage.css(opacity: 0)
-                    @$('.square.highlighted').removeClass('highlighted') 
-                    square.addClass('highlighted')
-                    dropMessage = @$('.hint_drop_message')
-                    dropMessage.css
-                        left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2)
-                        top: square.offset().top + square.height()
-                    dropMessage.animate
-                        opacity: 1
-                        duration: 250
-                        
-                    @hideHint(square, option.data('objectType'))
+            
+            return [option, square]
+            
+        
+    
+    showHint: (option, square) ->        
+        [option, square] = @findHint() if not option or not square
 
-                $(document.body).one 'mouseup.hint', => @hideHint(square, option.data('objectType'), true)                        
+        if option?.length
+            option.addClass('highlighted')
+            dragMessage = @$('.hint_drag_message')
+            dragMessage.css
+                left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2)
+                top: option.offset().top + option.height()
+            dragMessage.animate
+                opacity: 1
+                duration: 250
                 
-                return        
+            objectType = option.data('objectType')
+            option.bind 'mousedown.hint', =>
+                body = $(document.body)
+                body.bind 'mouseup.hint', => body.unbind('mousemove.hint')
+                body.bind 'mousemove.hint', => @moveHint(option, square, objectType)                 
+                
+    moveHint: (option, square, objectType) ->
+        option.unbind('mousedown.hint')
+
+        body = $(document.body)
+        body.unbind('mouseup.hint')
+        body.unbind('mousemove.hint')
+        
+        dragMessage = @$('.hint_drag_message')
+        dragMessage.css(opacity: 0)
+        @$('.square.highlighted').removeClass('highlighted') 
+        square.addClass('highlighted')
+        dropMessage = @$('.hint_drop_message')
+        dropMessage.css
+            left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2)
+            top: square.offset().top + square.height()
+        dropMessage.animate
+            opacity: 1
+            duration: 250
+        
+        @hideHint(square, objectType)
+
+        $(document.body).one 'mouseup.hint', => @hideHint(square, objectType, true)                        
+        
         
     hideHint: (square, type, force) ->
         return if not @$('.square.highlighted').length and not force
@@ -414,9 +433,7 @@ class spaceFractions.ViewHelper
             square.data('distributeDirections', JSON.stringify(object.distributeDirections))
             @fireLaser(square)
             
-        if object.movable
-            @initMovableObject square, (selectedSquare) => 
-                @showTip(square) if square[0] == selectedSquare[0]
+        @initMovableObject(square) if object.movable
                     
         square.bind 'click.tip', => @showTip(square)
             
