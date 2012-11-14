@@ -239,7 +239,7 @@ spaceFractions.ViewHelper = (function() {
 
   ViewHelper.prototype.initHint = function() {
     var _this = this;
-    return this.$('.hint').bind('click', function() {
+    return this.$('.hint').bind('click.hint', function() {
       return _this.showHint();
     });
   };
@@ -318,7 +318,7 @@ spaceFractions.ViewHelper = (function() {
           opacity: 1,
           duration: 250
         });
-        option.one('mousedown', function() {
+        option.one('mousedown.hint', function() {
           var dropMessage;
           dragMessage.css({
             opacity: 0
@@ -336,19 +336,26 @@ spaceFractions.ViewHelper = (function() {
           });
           return _this.hideHint(square, option.data('objectType'));
         });
+        $(document.body).one('mouseup.hint', function() {
+          return _this.hideHint(square, option.data('objectType'), true);
+        });
         return;
       }
     }
   };
 
-  ViewHelper.prototype.hideHint = function(square, type) {
+  ViewHelper.prototype.hideHint = function(square, type, force) {
     var _this = this;
-    if (!square.hasClass(type)) {
+    if (!this.$('.square.highlighted').length && !force) {
+      return;
+    }
+    if (!(square.hasClass(type) || force)) {
       $.timeout(500, function() {
         return _this.hideHint(square, type);
       });
       return;
     }
+    $(document.body).unbind('mouseup.hint');
     this.$('.hint_message').animate({
       opacity: 0,
       duration: 250
@@ -386,9 +393,8 @@ spaceFractions.ViewHelper = (function() {
     }
     return square.find('img').bind("mousedown", function(e) {
       if (e.preventDefault) {
-        e.preventDefault();
+        return e.preventDefault();
       }
-      return false;
     });
   };
 
@@ -427,7 +433,7 @@ spaceFractions.ViewHelper = (function() {
     objectMeta = this.objects[objectType];
     moveObject = function(e) {
       var body, data, endMove, move, movingObject;
-      if (e.preventDefault != null) {
+      if (e.preventDefault) {
         e.preventDefault();
       }
       if (_this.movingObject) {
@@ -470,10 +476,10 @@ spaceFractions.ViewHelper = (function() {
         }
         return _results;
       };
-      body.bind('mousemove', function(e) {
+      body.bind('mousemove.move', function(e) {
         return move(e);
       });
-      body.bind('touchmove', function(e) {
+      body.bind('touchmove.move', function(e) {
         return move(e);
       });
       endMove = function(e) {
@@ -486,10 +492,8 @@ spaceFractions.ViewHelper = (function() {
           selectedSquare = square;
         }
         _this.el.find('.movable_object').remove();
-        body.unbind('mousemove');
-        body.unbind('mouseup');
-        body.unbind('touchmove');
-        body.unbind('touchend');
+        body.unbind('mousemove.move');
+        body.unbind('touchmove.move');
         if (movingObject) {
           image = movingObject;
           movingObject = null;
@@ -504,25 +508,27 @@ spaceFractions.ViewHelper = (function() {
               occupiedSquare.removeClass('occupied');
             }
           }
+        } else {
+          _this.initMovableObject(square, callback);
         }
         _this.movingObject = false;
         if (callback) {
           return callback(selectedSquare, data);
         }
       };
-      body.bind('mouseup', function(e) {
+      body.one('mouseup.move', function(e) {
         return endMove(e);
       });
-      return body.bind('touchend', function(e) {
+      return body.one('touchend.move', function(e) {
         return endMove(e);
       });
     };
-    square.unbind('mousedown');
-    square.unbind('touchstart');
-    square.one('mousedown', function(e) {
+    square.unbind('mousedown.move');
+    square.unbind('touchstart.move');
+    square.one('mousedown.move', function(e) {
       return moveObject(e);
     });
-    return square.one('touchstart', function(e) {
+    return square.one('touchstart.move', function(e) {
       return moveObject(e);
     });
   };
@@ -575,7 +581,7 @@ spaceFractions.ViewHelper = (function() {
         }
       });
     }
-    square.bind('click', function() {
+    square.bind('click.tip', function() {
       return _this.showTip(square);
     });
     return this.setObjectImage(square);
@@ -585,7 +591,7 @@ spaceFractions.ViewHelper = (function() {
     var objectMeta, offset, tip,
       _this = this;
     square = $(square);
-    square.unbind('click');
+    square.unbind('click.tip');
     objectMeta = this.objects[square.data('objectType')];
     if ((tip = this.$(".tip." + objectMeta.tip)).length) {
       offset = square.offset();
@@ -600,12 +606,12 @@ spaceFractions.ViewHelper = (function() {
       });
     }
     return $.timeout(10, function() {
-      return $(document).one('mousedown', function() {
+      return $(document.body).one('mousedown.tip', function() {
         return tip.animate({
           opacity: 0,
           duration: 250,
           complete: function() {
-            square.bind('click', function() {
+            square.bind('click.tip', function() {
               return _this.showTip(square);
             });
             return tip.css({
@@ -692,7 +698,7 @@ spaceFractions.ViewHelper = (function() {
       }
     }
     successMessage = this.$('.success');
-    this.$('.show_level_selector').bind('click', function() {
+    this.$('.show_level_selector').bind('click.level_selector', function() {
       var intro;
       successMessage.animate({
         opacity: 0,
@@ -720,7 +726,7 @@ spaceFractions.ViewHelper = (function() {
         opacity: 1,
         duration: 500
       });
-      return _this.board.one('click', function() {
+      return _this.board.one('click.level_selector', function() {
         _this.$('.level_selector_link').css({
           top: _this.board.offset().top,
           left: _this.board.offset().left

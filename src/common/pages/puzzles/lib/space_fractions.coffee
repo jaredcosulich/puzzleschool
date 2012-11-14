@@ -192,7 +192,7 @@ class spaceFractions.ViewHelper
                 square.addClass("index#{index}")
                 @options.append(square)
         
-    initHint: -> @$('.hint').bind 'click', => @showHint()
+    initHint: -> @$('.hint').bind 'click.hint', => @showHint()
     
     findGoodHintOption: (square) ->
         o = square
@@ -231,7 +231,7 @@ class spaceFractions.ViewHelper
                     opacity: 1
                     duration: 250
                     
-                option.one 'mousedown', =>
+                option.one 'mousedown.hint', =>
                     dragMessage.css(opacity: 0)
                     @$('.square.highlighted').removeClass('highlighted') 
                     square.addClass('highlighted')
@@ -244,13 +244,18 @@ class spaceFractions.ViewHelper
                         duration: 250
                         
                     @hideHint(square, option.data('objectType'))
-                    
+
+                $(document.body).one 'mouseup.hint', => @hideHint(square, option.data('objectType'), true)                        
+                
                 return        
         
-    hideHint: (square, type) ->
-        unless square.hasClass(type)
+    hideHint: (square, type, force) ->
+        return if not @$('.square.highlighted').length and not force
+        unless square.hasClass(type) or force
             $.timeout 500, => @hideHint(square, type)
             return
+
+        $(document.body).unbind('mouseup.hint')                     
         @$('.hint_message').animate
             opacity: 0
             duration: 250
@@ -280,9 +285,7 @@ class spaceFractions.ViewHelper
         else
             square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}.png")
         
-        square.find('img').bind "mousedown", (e) -> 
-            e.preventDefault() if e.preventDefault
-            return false
+        square.find('img').bind "mousedown", (e) -> e.preventDefault() if e.preventDefault
         
         
     showFraction: (squareOrLaser) ->
@@ -310,7 +313,7 @@ class spaceFractions.ViewHelper
         objectType = square.data('objectType')
         objectMeta = @objects[objectType]
         moveObject = (e) =>
-            e.preventDefault() if e.preventDefault?
+            e.preventDefault() if e.preventDefault
             return if @movingObject
             @movingObject = true
             
@@ -320,7 +323,7 @@ class spaceFractions.ViewHelper
             movingObject = undefined
             move = (e) =>
                 e.preventDefault() if e.preventDefault
-
+                
                 if movingObject == undefined
                     movingObject = $(square.find('img')[0])
                     @el.append(movingObject)
@@ -344,18 +347,16 @@ class spaceFractions.ViewHelper
                     else
                         $(boardSquare).removeClass('selected')
                 
-            body.bind 'mousemove', (e) => move(e)
-            body.bind 'touchmove', (e) => move(e)
+            body.bind 'mousemove.move', (e) => move(e)
+            body.bind 'touchmove.move', (e) => move(e)
 
             endMove = (e) =>
                 e.preventDefault() if e.preventDefault
                 selectedSquare = @$('.square.selected')
                 selectedSquare = square if not selectedSquare?.length
                 @el.find('.movable_object').remove()
-                body.unbind 'mousemove'        
-                body.unbind 'mouseup'
-                body.unbind 'touchmove'        
-                body.unbind 'touchend'
+                body.unbind 'mousemove.move'        
+                body.unbind 'touchmove.move'
 
                 if movingObject
                     image = movingObject
@@ -366,17 +367,19 @@ class spaceFractions.ViewHelper
                     for occupiedSquare in @$('.square.occupied')
                         occupiedSquare = $(occupiedSquare)
                         occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
+                else
+                    @initMovableObject(square, callback)
 
                 @movingObject = false
                 callback(selectedSquare, data) if callback
                 
-            body.bind 'mouseup', (e) => endMove(e)
-            body.bind 'touchend', (e) => endMove(e)
+            body.one 'mouseup.move', (e) => endMove(e)
+            body.one 'touchend.move', (e) => endMove(e)
                 
-        square.unbind 'mousedown'
-        square.unbind 'touchstart'
-        square.one 'mousedown', (e) => moveObject(e)
-        square.one 'touchstart', (e) => moveObject(e)
+        square.unbind 'mousedown.move'
+        square.unbind 'touchstart.move'
+        square.one 'mousedown.move', (e) => moveObject(e)
+        square.one 'touchstart.move', (e) => moveObject(e)
         
     
     addObjectToSquare: (objectType, square, image) ->
@@ -415,13 +418,13 @@ class spaceFractions.ViewHelper
             @initMovableObject square, (selectedSquare) => 
                 @showTip(square) if square[0] == selectedSquare[0]
                     
-        square.bind 'click', => @showTip(square)
+        square.bind 'click.tip', => @showTip(square)
             
         @setObjectImage(square)
         
     showTip: (square) ->
         square = $(square)
-        square.unbind 'click'
+        square.unbind 'click.tip'
         objectMeta = @objects[square.data('objectType')]
         if (tip = @$(".tip.#{objectMeta.tip}")).length
             offset = square.offset()
@@ -435,12 +438,12 @@ class spaceFractions.ViewHelper
                 duration: 250
         
         $.timeout 10, =>
-            $(document).one 'mousedown', =>
+            $(document.body).one 'mousedown.tip', =>
                 tip.animate
                     opacity: 0
                     duration: 250
                     complete: =>
-                        square.bind 'click', => @showTip(square)
+                        square.bind 'click.tip', => @showTip(square)
                         tip.css
                             top: -1000
                             left: -1000
@@ -489,7 +492,7 @@ class spaceFractions.ViewHelper
 
         successMessage = @$('.success')
             
-        @$('.show_level_selector').bind 'click', =>
+        @$('.show_level_selector').bind 'click.level_selector', =>
             successMessage.animate
                 opacity: 0
                 duration: 500
@@ -512,7 +515,7 @@ class spaceFractions.ViewHelper
                 opacity: 1
                 duration: 500
             
-            @board.one 'click', =>
+            @board.one 'click.level_selector', =>
                 @$('.level_selector_link').css
                     top: @board.offset().top
                     left: @board.offset().left
