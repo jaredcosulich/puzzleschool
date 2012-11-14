@@ -244,81 +244,116 @@ spaceFractions.ViewHelper = (function() {
     });
   };
 
+  ViewHelper.prototype.findGoodHintOption = function(square) {
+    var o, obj, s, _k, _len2, _ref, _ref1;
+    o = square;
+    _ref = this.solution.objects;
+    for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+      obj = _ref[_k];
+      if (!(obj.type === square.data('objectType'))) {
+        continue;
+      }
+      s = this.board.find(".square.index" + obj.index);
+      if (!s.length) {
+        continue;
+      }
+      if (s.data('objectType') === obj.type) {
+        continue;
+      }
+      if (s.data('objectType')) {
+        _ref1 = this.findGoodHintOption(s), o = _ref1[0], s = _ref1[1];
+      }
+      return [o, s];
+    }
+    return [o, $(this.options.find('.square:not(.occupied)')[0])];
+  };
+
   ViewHelper.prototype.showHint = function() {
-    var boardOption, boardOptions, dragMessage, o, object, option, square, _k, _l, _len2, _len3, _ref,
+    var boardOption, boardOptions, dragMessage, o, object, option, square, _k, _l, _len2, _len3, _ref, _ref1,
       _this = this;
     _ref = this.solution.objects;
     for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
       object = _ref[_k];
       square = this.board.find(".square.index" + object.index);
-      if (square.length && square.data('objectType') !== object.type) {
+      if (!square.length) {
+        continue;
+      }
+      if (square.data('objectType') === object.type) {
+        continue;
+      }
+      if (square.data('objectType')) {
+        _ref1 = this.findGoodHintOption(square), option = _ref1[0], square = _ref1[1];
+      } else {
         option = $(this.options.find(".square." + object.type)[0]);
-        if (!(option != null ? option.length : void 0)) {
-          boardOptions = this.board.find(".square." + object.type);
-          for (_l = 0, _len3 = boardOptions.length; _l < _len3; _l++) {
-            boardOption = boardOptions[_l];
-            if (((function() {
-              var _len4, _m, _ref1, _results;
-              _ref1 = this.solution.objects;
-              _results = [];
-              for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
-                o = _ref1[_m];
-                if (o.index === $(boardOption).data('index')) {
-                  _results.push(o.type);
-                }
+      }
+      if (!(option != null ? option.length : void 0)) {
+        boardOptions = this.board.find(".square." + object.type);
+        for (_l = 0, _len3 = boardOptions.length; _l < _len3; _l++) {
+          boardOption = boardOptions[_l];
+          if (((function() {
+            var _len4, _m, _ref2, _results;
+            _ref2 = this.solution.objects;
+            _results = [];
+            for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+              o = _ref2[_m];
+              if (o.index === $(boardOption).data('index')) {
+                _results.push(o.type);
               }
-              return _results;
-            }).call(this))[0] !== object.type) {
-              option = $(boardOption);
-              break;
             }
+            return _results;
+          }).call(this))[0] !== object.type) {
+            option = $(boardOption);
+            break;
           }
         }
-        if (option != null ? option.length : void 0) {
-          option.addClass('highlighted');
-          dragMessage = this.$('.hint_drag_message');
+      }
+      if (option != null ? option.length : void 0) {
+        option.addClass('highlighted');
+        dragMessage = this.$('.hint_drag_message');
+        dragMessage.css({
+          left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2),
+          top: option.offset().top + option.height()
+        });
+        dragMessage.animate({
+          opacity: 1,
+          duration: 250
+        });
+        option.one('mousedown', function() {
+          var dropMessage;
           dragMessage.css({
-            left: option.offset().left + (option.width() / 2) - (dragMessage.width() / 2),
-            top: option.offset().top + option.height()
+            opacity: 0
           });
-          dragMessage.animate({
+          _this.$('.square.highlighted').removeClass('highlighted');
+          square.addClass('highlighted');
+          dropMessage = _this.$('.hint_drop_message');
+          dropMessage.css({
+            left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2),
+            top: square.offset().top + square.height()
+          });
+          dropMessage.animate({
             opacity: 1,
             duration: 250
           });
-          option.one('mousedown', function() {
-            var dropMessage, hideHint;
-            dragMessage.css({
-              opacity: 0
-            });
-            square.addClass('highlighted');
-            dropMessage = _this.$('.hint_drop_message');
-            dropMessage.css({
-              left: square.offset().left + (square.width() / 2) - (dropMessage.width() / 2),
-              top: square.offset().top + square.height()
-            });
-            dropMessage.animate({
-              opacity: 1,
-              duration: 250
-            });
-            hideHint = function() {
-              if (!square.hasClass(object.type)) {
-                $.timeout(50, function() {
-                  return hideHint();
-                });
-                return;
-              }
-              _this.$('.hint_message').animate({
-                opacity: 0,
-                duration: 250
-              });
-              return _this.$('.square.highlighted').removeClass('highlighted');
-            };
-            return hideHint();
-          });
-          return;
-        }
+          return _this.hideHint(square, option.data('objectType'));
+        });
+        return;
       }
     }
+  };
+
+  ViewHelper.prototype.hideHint = function(square, type) {
+    var _this = this;
+    if (!square.hasClass(type)) {
+      $.timeout(500, function() {
+        return _this.hideHint(square, type);
+      });
+      return;
+    }
+    this.$('.hint_message').animate({
+      opacity: 0,
+      duration: 250
+    });
+    return this.$('.square.highlighted').removeClass('highlighted');
   };
 
   ViewHelper.prototype.setObjectImage = function(square) {
