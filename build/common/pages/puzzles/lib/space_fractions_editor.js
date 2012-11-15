@@ -28,6 +28,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     instructions.html('<h2>Level Editor Instructions</h2>\n<p>Here are some quick instructions on how to create your own level.</p>\n<ul>\n    <li><p>Drag objects from the selector in the bottom right corner of the screen on to the board.</p></li>\n    <li><p>You can also drop objects on to the right hand sidebar as extra objects.</p></li>\n    <li><p>You need at least one laser and one lightbulb and the lightbulb must be lit yellow.</p></li>\n    <li><p>When your level is complete it should say "Verified" at the bottom of the page.</p></li>\n    <li><p>Share the link to your level!</p></li>\n</ul>\n<p>Click anywhere to close this and get started.</p>');
     this.el.append(instructions);
     showInstructions = function() {
+      _this.disableSquares();
       instructions.css({
         top: ($.viewport().height / 2) - (instructions.height() / 2) + window.scrollY,
         left: ($.viewport().width / 2) - (instructions.width() / 2)
@@ -41,6 +42,7 @@ spaceFractionsEditor.EditorHelper = (function() {
           opacity: 0,
           duration: 500,
           complete: function() {
+            _this.initSquares();
             return instructions.css({
               top: -1000,
               left: -1000
@@ -60,6 +62,9 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.initElementSelector = function() {
     this.elementSelector = $(document.createElement('DIV'));
     this.elementSelector.addClass('element_selector');
+    this.elementSelector.bind('click', function(e) {
+      return e.stop();
+    });
     this.initObjectSelector();
     this.initFractionSelector();
     return this.el.append(this.elementSelector);
@@ -100,6 +105,9 @@ spaceFractionsEditor.EditorHelper = (function() {
     objectSelector.addClass('selector');
     objectSelector.addClass('object_selector');
     objectSelector.html('<h3>Select what to put in this square:</h3>');
+    objectSelector.bind('click', function(e) {
+      return e.stop();
+    });
     links = $(document.createElement('P'));
     links.html('<a class=\'clear\'>Clear Square</a> &nbsp; &nbsp; &nbsp; <a class=\'close\'>Close Selector</a>');
     links.find('.close').bind('click', function() {
@@ -202,6 +210,9 @@ spaceFractionsEditor.EditorHelper = (function() {
       _this = this;
     this.fractionSelector = $(document.createElement('DIV'));
     this.fractionSelector.html("<h2>Select A Fraction</h2>\n<p>What fraction of laser should this object use?</p>\n<p>\n    <input name='numerator' class='numerator' type='text' value='1'/>\n    <span class='solidus'>/</span>\n    <input name='denominator' class='denominator' type='text' value='1'/>\n</p>\n<p class='fraction'>Fraction: 1/1 or " + (Math.round(1000 * (1 / 1)) / 1000) + "</p>\n<button class='set_fraction'>Set</button>\n<br/>\n<p><a class='select_new_object'>< Select a different object</a></p>\n<p><a class='clear_square'>Clear Square</a></p>\n<p><a class='close_fraction_selector'>Close Window</a></p>");
+    this.fractionSelector.bind('click', function(e) {
+      return e.stop();
+    });
     setFraction = this.fractionSelector.find('.set_fraction');
     setFraction.bind('click', function() {
       _this[setFraction.data('callback')](_this.fractionSelector.find('.numerator').val(), _this.fractionSelector.find('.denominator').val());
@@ -254,13 +265,18 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.initSquares = function() {
     var _this = this;
-    return this.$('.square').bind('click', function(e) {
+    return this.$('.square').bind('click.element_selector', function(e) {
       return _this.selectSquare(e.currentTarget);
     });
   };
 
+  EditorHelper.prototype.disableSquares = function() {
+    return this.$('.square').unbind('click.element_selector');
+  };
+
   EditorHelper.prototype.showElementSelector = function(square) {
-    var offset;
+    var offset,
+      _this = this;
     square = $(square);
     offset = square.offset();
     if (square.parent().hasClass('options')) {
@@ -277,17 +293,25 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.showObjectSelector();
     return this.elementSelector.animate({
       opacity: 1,
-      duration: 250
+      duration: 250,
+      complete: function() {
+        _this.disableSquares();
+        return $(document.body).one('click.element_selector', function() {
+          return _this.closeElementSelector();
+        });
+      }
     });
   };
 
   EditorHelper.prototype.closeElementSelector = function() {
     var _this = this;
+    $(document.body).unbind('click.element_selector');
     this.$('.square.selected').removeClass('selected');
     return this.elementSelector.animate({
       opacity: 0,
       duration: 250,
       complete: function() {
+        _this.initSquares();
         return _this.elementSelector.css({
           top: -1000,
           left: -1000

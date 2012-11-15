@@ -29,6 +29,7 @@ class spaceFractionsEditor.EditorHelper
         @el.append(instructions)
                 
         showInstructions = =>
+            @disableSquares()
             instructions.css
                 top: ($.viewport().height / 2) - (instructions.height() / 2) + (window.scrollY)
                 left: ($.viewport().width / 2) - (instructions.width() / 2)
@@ -42,6 +43,7 @@ class spaceFractionsEditor.EditorHelper
                     opacity: 0
                     duration: 500
                     complete: =>
+                        @initSquares()
                         instructions.css
                             top: -1000
                             left: -1000
@@ -59,6 +61,7 @@ class spaceFractionsEditor.EditorHelper
     initElementSelector: ->
         @elementSelector = $(document.createElement('DIV'))
         @elementSelector.addClass('element_selector')
+        @elementSelector.bind 'click', (e) -> e.stop()
 
         @initObjectSelector()
         @initFractionSelector()
@@ -111,6 +114,7 @@ class spaceFractionsEditor.EditorHelper
         objectSelector.addClass('selector')
         objectSelector.addClass('object_selector')
         objectSelector.html('<h3>Select what to put in this square:</h3>')
+        objectSelector.bind 'click', (e) -> e.stop()
 
         links = $(document.createElement('P'))
         links.html('<a class=\'clear\'>Clear Square</a> &nbsp; &nbsp; &nbsp; <a class=\'close\'>Close Selector</a>')
@@ -209,6 +213,8 @@ class spaceFractionsEditor.EditorHelper
             <p><a class='close_fraction_selector'>Close Window</a></p>
         """
         
+        @fractionSelector.bind 'click', (e) -> e.stop()
+        
         setFraction = @fractionSelector.find('.set_fraction')
         setFraction.bind 'click', =>
             @[setFraction.data('callback')](
@@ -225,6 +231,7 @@ class spaceFractionsEditor.EditorHelper
             )
                         
         @fractionSelector.find('.select_new_object').bind 'click', => @showSelector('object')
+            
         @fractionSelector.find('.close_fraction_selector').bind 'click', => @closeElementSelector()
         @fractionSelector.find('.clear_square').bind 'click', => @removeObject()
                             
@@ -252,7 +259,10 @@ class spaceFractionsEditor.EditorHelper
         @showElementSelector(square)
         
     initSquares: ->
-        @$('.square').bind 'click', (e) => @selectSquare(e.currentTarget)
+        @$('.square').bind 'click.element_selector', (e) => @selectSquare(e.currentTarget)
+        
+    disableSquares: ->
+        @$('.square').unbind 'click.element_selector'
             
     showElementSelector: (square) ->
         square = $(square)
@@ -275,14 +285,19 @@ class spaceFractionsEditor.EditorHelper
         @elementSelector.animate
             opacity: 1
             duration: 250
-        
+            complete: =>
+                @disableSquares()
+                $(document.body).one 'click.element_selector', => @closeElementSelector()
+                    
             
     closeElementSelector: ->
+        $(document.body).unbind 'click.element_selector'
         @$('.square.selected').removeClass('selected')
         @elementSelector.animate
             opacity: 0
             duration: 250
             complete: =>
+                @initSquares()
                 @elementSelector.css
                     top: -1000
                     left: -1000
