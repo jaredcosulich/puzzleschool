@@ -265,13 +265,13 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.initSquares = function() {
     var _this = this;
-    return this.$('.square').bind('click.element_selector', function(e) {
+    return this.$('.square').bind('click.select_square', function(e) {
       return _this.selectSquare(e.currentTarget);
     });
   };
 
   EditorHelper.prototype.disableSquares = function() {
-    return this.$('.square').unbind('click.element_selector');
+    return this.$('.square').unbind('click.select_square');
   };
 
   EditorHelper.prototype.showElementSelector = function(square) {
@@ -296,7 +296,8 @@ spaceFractionsEditor.EditorHelper = (function() {
       duration: 250,
       complete: function() {
         _this.disableSquares();
-        return $(document.body).one('click.element_selector', function() {
+        return $(document.body).one('click.element_selector', function(e) {
+          e.stop();
           return _this.closeElementSelector();
         });
       }
@@ -321,8 +322,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addObject = function(objectType) {
-    var object, selectedSquare,
-      _this = this;
+    var object, selectedSquare;
     selectedSquare = this.$('.square.selected');
     this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.viewHelper.addObjectToSquare(objectType, selectedSquare);
@@ -330,15 +330,15 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.save();
     object = this.viewHelper.objects[objectType];
     this.showObjectSelector(true);
-    selectedSquare.bind('click.element_selector', function() {
-      return _this.showElementSelector(selectedSquare);
-    });
     return this.initMovableObject(selectedSquare);
   };
 
   EditorHelper.prototype.initMovableObject = function(square) {
     var _this = this;
     return this.viewHelper.initMovableObject(square, function(newSquare, data) {
+      if (newSquare[0] === square[0]) {
+        return;
+      }
       newSquare.addClass('selected');
       newSquare.unbind('click.tip');
       _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);

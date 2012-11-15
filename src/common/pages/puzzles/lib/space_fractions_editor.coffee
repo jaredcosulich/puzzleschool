@@ -259,10 +259,10 @@ class spaceFractionsEditor.EditorHelper
         @showElementSelector(square)
         
     initSquares: ->
-        @$('.square').bind 'click.element_selector', (e) => @selectSquare(e.currentTarget)
+        @$('.square').bind 'click.select_square', (e) => @selectSquare(e.currentTarget)
         
     disableSquares: ->
-        @$('.square').unbind 'click.element_selector'
+        @$('.square').unbind 'click.select_square'
             
     showElementSelector: (square) ->
         square = $(square)
@@ -287,7 +287,9 @@ class spaceFractionsEditor.EditorHelper
             duration: 250
             complete: =>
                 @disableSquares()
-                $(document.body).one 'click.element_selector', => @closeElementSelector()
+                $(document.body).one 'click.element_selector', (e) => 
+                    e.stop()
+                    @closeElementSelector()
                     
             
     closeElementSelector: ->
@@ -311,13 +313,13 @@ class spaceFractionsEditor.EditorHelper
         
         object = @viewHelper.objects[objectType]
         @showObjectSelector(true)
-        
-        selectedSquare.bind 'click.element_selector', => @showElementSelector(selectedSquare)
-
+                
         @initMovableObject(selectedSquare)
+        
 
     initMovableObject: (square) ->
         @viewHelper.initMovableObject square, (newSquare, data) =>
+            return if newSquare[0] == square[0]
             newSquare.addClass('selected')
             newSquare.unbind('click.tip')
              
