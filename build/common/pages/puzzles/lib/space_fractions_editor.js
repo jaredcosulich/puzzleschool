@@ -278,6 +278,8 @@ spaceFractionsEditor.EditorHelper = (function() {
     var offset,
       _this = this;
     square = $(square);
+    this.elementSelector.data('square', square.data('index'));
+    this.elementSelector.data('area', (square.parent().hasClass('board') ? 'board' : 'options'));
     offset = square.offset();
     if (square.parent().hasClass('options')) {
       this.elementSelector.find('.static').hide();
@@ -285,10 +287,9 @@ spaceFractionsEditor.EditorHelper = (function() {
       this.elementSelector.find('.object').show();
     }
     this.elementSelector.css({
-      opacity: 0,
-      top: offset.top + offset.height + 6,
-      left: offset.left + (offset.width / 2) - (this.elementSelector.offset().width / 2)
+      opacity: 0
     });
+    this.positionElementSelector();
     this.elementSelector.scrollTop(0);
     this.showObjectSelector();
     return this.elementSelector.animate({
@@ -307,7 +308,7 @@ spaceFractionsEditor.EditorHelper = (function() {
   EditorHelper.prototype.closeElementSelector = function() {
     var _this = this;
     $(document.body).unbind('click.element_selector');
-    this.$('.square.selected').removeClass('selected');
+    this.getElementSelectorSquare().removeClass('selected');
     return this.elementSelector.animate({
       opacity: 0,
       duration: 250,
@@ -321,9 +322,13 @@ spaceFractionsEditor.EditorHelper = (function() {
     });
   };
 
+  EditorHelper.prototype.getElementSelectorSquare = function() {
+    return this.$("." + (this.elementSelector.data('area')) + " .square.index" + (this.elementSelector.data('square')));
+  };
+
   EditorHelper.prototype.addObject = function(objectType) {
     var object, selectedSquare;
-    selectedSquare = this.$('.square.selected');
+    selectedSquare = this.getElementSelectorSquare();
     this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.viewHelper.addObjectToSquare(objectType, selectedSquare);
     selectedSquare.unbind('click.tip');
@@ -333,15 +338,36 @@ spaceFractionsEditor.EditorHelper = (function() {
     return this.initMovableObject(selectedSquare);
   };
 
+  EditorHelper.prototype.positionElementSelector = function() {
+    var offset, selectedSquare;
+    selectedSquare = this.getElementSelectorSquare();
+    offset = selectedSquare.offset();
+    return this.elementSelector.css({
+      top: offset.top + offset.height + 6,
+      left: offset.left + (offset.width / 2) - (this.elementSelector.offset().width / 2)
+    });
+  };
+
   EditorHelper.prototype.initMovableObject = function(square) {
     var _this = this;
-    return this.viewHelper.initMovableObject(square, function(newSquare, data) {
-      if (newSquare[0] === square[0]) {
-        return;
-      }
+    return this.viewHelper.initMovableObject(square, function(newSquare, data, moved) {
+      var previousSquareArea, previousSquareIndex;
       newSquare.addClass('selected');
       newSquare.unbind('click.tip');
-      _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
+      previousSquareIndex = _this.elementSelector.data('square');
+      previousSquareArea = _this.elementSelector.data('area');
+      _this.elementSelector.data('square', newSquare.data('index'));
+      _this.elementSelector.data('area', (newSquare.parent().hasClass('board') ? 'board' : 'options'));
+      if (moved) {
+        _this.setObjectFraction(data.fullNumerator || data.numerator, data.fullDenominator || data.denominator);
+      }
+      if (parseInt(_this.elementSelector.css('opacity'))) {
+        if (previousSquareIndex === square.data('index') && previousSquareArea === (square.parent().hasClass('board') ? 'board' : 'options')) {
+          _this.positionElementSelector();
+        } else {
+          _this.closeElementSelector();
+        }
+      }
       _this.save();
       _this.initMovableObject(newSquare);
       return newSquare.removeClass('selected');
@@ -350,7 +376,7 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.removeObject = function() {
     var selectedSquare;
-    selectedSquare = this.$('.square.selected');
+    selectedSquare = this.getElementSelectorSquare();
     this.viewHelper.removeObjectFromSquare(selectedSquare);
     this.levelDescription.val('');
     this.closeElementSelector();
@@ -362,7 +388,7 @@ spaceFractionsEditor.EditorHelper = (function() {
     if (close == null) {
       close = false;
     }
-    selectedSquare = this.$('.square.selected');
+    selectedSquare = this.getElementSelectorSquare();
     if (!selectedSquare.hasClass('occupied')) {
       this.showSelector('object');
       return;
@@ -387,7 +413,13 @@ spaceFractionsEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.setObjectFraction = function(numerator, denominator) {
     var objectMeta, selectedSquare;
-    selectedSquare = this.$('.square.selected');
+    if (numerator == null) {
+      numerator = 1;
+    }
+    if (denominator == null) {
+      denominator = 1;
+    }
+    selectedSquare = this.getElementSelectorSquare();
     objectMeta = this.viewHelper.objects[selectedSquare.data('objectType')];
     if (!objectMeta.showFraction) {
       return;

@@ -426,6 +426,9 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.showFraction = function(squareOrLaser) {
     var beam, denominator, fraction, numerator,
       _this = this;
+    if (!squareOrLaser.parent().length) {
+      return;
+    }
     if (!squareOrLaser.height()) {
       $.timeout(50, function() {
         return _this.showFraction(squareOrLaser);
@@ -465,6 +468,7 @@ spaceFractions.ViewHelper = (function() {
         return;
       }
       _this.movingObject = true;
+      _this.$('.square.selected').removeClass('selected');
       body = $(document.body);
       data = JSON.parse(JSON.stringify(square.data()));
       movingObject = void 0;
@@ -538,7 +542,7 @@ spaceFractions.ViewHelper = (function() {
         }
         _this.movingObject = false;
         if (callback) {
-          return callback(selectedSquare, data);
+          return callback(selectedSquare, data, image);
         }
       };
       body.one('mouseup.move', function(e) {

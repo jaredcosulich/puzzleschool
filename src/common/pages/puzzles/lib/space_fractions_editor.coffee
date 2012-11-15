@@ -266,6 +266,8 @@ class spaceFractionsEditor.EditorHelper
             
     showElementSelector: (square) ->
         square = $(square)
+        @elementSelector.data('square', square.data('index'))
+        @elementSelector.data('area', (if square.parent().hasClass('board') then 'board' else 'options'))
         offset = square.offset()
         
         if square.parent().hasClass('options')
@@ -273,11 +275,8 @@ class spaceFractionsEditor.EditorHelper
         else
             @elementSelector.find('.object').show()
         
-        @elementSelector.css
-            opacity: 0
-            top: offset.top + offset.height + 6
-            left: offset.left + (offset.width / 2) - (@elementSelector.offset().width / 2)
-            
+        @elementSelector.css(opacity: 0)
+        @positionElementSelector()            
         @elementSelector.scrollTop(0)
 
         @showObjectSelector() 
@@ -294,7 +293,7 @@ class spaceFractionsEditor.EditorHelper
             
     closeElementSelector: ->
         $(document.body).unbind 'click.element_selector'
-        @$('.square.selected').removeClass('selected')
+        @getElementSelectorSquare().removeClass('selected')
         @elementSelector.animate
             opacity: 0
             duration: 250
@@ -304,8 +303,10 @@ class spaceFractionsEditor.EditorHelper
                     top: -1000
                     left: -1000
 
+    getElementSelectorSquare: -> @$(".#{@elementSelector.data('area')} .square.index#{@elementSelector.data('square')}")
+
     addObject: (objectType) ->
-        selectedSquare = @$('.square.selected')        
+        selectedSquare = @getElementSelectorSquare()   
         @viewHelper.removeObjectFromSquare(selectedSquare)
         @viewHelper.addObjectToSquare(objectType, selectedSquare)
         selectedSquare.unbind 'click.tip'
@@ -316,27 +317,47 @@ class spaceFractionsEditor.EditorHelper
                 
         @initMovableObject(selectedSquare)
         
+    positionElementSelector: ->
+        selectedSquare = @getElementSelectorSquare()
+        offset = selectedSquare.offset()
+        @elementSelector.css
+            top: offset.top + offset.height + 6
+            left: offset.left + (offset.width / 2) - (@elementSelector.offset().width / 2)
+        
 
     initMovableObject: (square) ->
-        @viewHelper.initMovableObject square, (newSquare, data) =>
-            return if newSquare[0] == square[0]
+        @viewHelper.initMovableObject square, (newSquare, data, moved) =>
             newSquare.addClass('selected')
             newSquare.unbind('click.tip')
+            
+            previousSquareIndex = @elementSelector.data('square')
+            previousSquareArea = @elementSelector.data('area')
+            @elementSelector.data('square', newSquare.data('index'))
+            @elementSelector.data('area', (if newSquare.parent().hasClass('board') then 'board' else 'options'))
+            
+            if moved
+                @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
+            
+            if parseInt(@elementSelector.css('opacity'))
+                if previousSquareIndex == square.data('index') and
+                   previousSquareArea == (if square.parent().hasClass('board') then 'board' else 'options')
+                    @positionElementSelector()    
+                else
+                    @closeElementSelector()
              
-            @setObjectFraction(data.fullNumerator or data.numerator, data.fullDenominator or data.denominator)
             @save()
             @initMovableObject(newSquare)
             newSquare.removeClass('selected') 
            
     removeObject: () ->
-        selectedSquare = @$('.square.selected')
+        selectedSquare = @getElementSelectorSquare()
         @viewHelper.removeObjectFromSquare(selectedSquare)
         @levelDescription.val('')
         @closeElementSelector()
         @save()
         
     showObjectSelector: (close=false) ->
-        selectedSquare = @$('.square.selected')
+        selectedSquare = @getElementSelectorSquare()
         
         if not selectedSquare.hasClass('occupied')
             @showSelector('object')
@@ -353,8 +374,8 @@ class spaceFractionsEditor.EditorHelper
         else
             if close then @closeElementSelector() else @showSelector('object')
         
-    setObjectFraction: (numerator, denominator) ->
-        selectedSquare = @$('.square.selected')
+    setObjectFraction: (numerator=1, denominator=1) ->
+        selectedSquare = @getElementSelectorSquare()
         objectMeta = @viewHelper.objects[selectedSquare.data('objectType')]
         return unless objectMeta.showFraction
         if objectMeta.states

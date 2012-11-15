@@ -308,6 +308,7 @@ class spaceFractions.ViewHelper
         
         
     showFraction: (squareOrLaser) ->
+        return unless squareOrLaser.parent().length
         if not squareOrLaser.height()
             $.timeout 50, => @showFraction(squareOrLaser)
             return
@@ -335,6 +336,8 @@ class spaceFractions.ViewHelper
             e.preventDefault() if e.preventDefault
             return if @movingObject
             @movingObject = true
+            
+            @$('.square.selected').removeClass('selected')
             
             body = $(document.body)
             data = JSON.parse(JSON.stringify(square.data()))
@@ -390,7 +393,7 @@ class spaceFractions.ViewHelper
                     @initMovableObject(square, callback)
 
                 @movingObject = false
-                callback(selectedSquare, data) if callback
+                callback(selectedSquare, data, image) if callback
                 
             body.one 'mouseup.move', (e) => endMove(e)
             body.one 'touchend.move', (e) => endMove(e)
