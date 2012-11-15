@@ -133,11 +133,8 @@ spaceFractionsEditor.EditorHelper = (function() {
               initObjectContainer();
               return;
             }
-            if (selectedSquare.parent()[0] === editor[0]) {
-              _this.closeElementSelector();
-            }
             selectedSquare.addClass('selected');
-            selectedSquare.unbind('click');
+            selectedSquare.unbind('click.tip');
             _this.save();
             object = _this.viewHelper.objects[objectType];
             if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {

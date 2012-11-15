@@ -127,11 +127,8 @@ class spaceFractionsEditor.EditorHelper
                             initObjectContainer()
                             return
                         
-                        if selectedSquare.parent()[0] == editor[0]
-                            @closeElementSelector()
-                        
                         selectedSquare.addClass('selected') 
-                        selectedSquare.unbind 'click'
+                        selectedSquare.unbind 'click.tip'
                         
                         @save()
                         object = @viewHelper.objects[objectType]
