@@ -20,7 +20,7 @@ body {
         float: left;
         width: 620px;
         overflow: hidden;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
         background: url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat; 
         background-color: lighten(#000, 10%);
         
@@ -117,7 +117,7 @@ body {
     }
         
     .sidebar {
-        float: left;
+        float: right;
         overflow: hidden;
         .options, .menu {
             margin-left: 12px;
@@ -279,7 +279,7 @@ body {
         }
     }
     
-    .intro, .instructions {
+    .intro, .instructions, .editor_instructions {
         .rounded(6px);
         background-color: @white;
         border: 1px solid @grey;
@@ -293,6 +293,15 @@ body {
         p {
             width: 390px;
         }
+    }
+    
+    .editor_instructions_link {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 6px 0;
+        text-align: center;
+        margin: 12px 0 0 12px;
+        width: 272px;
     }
     
     .intro {

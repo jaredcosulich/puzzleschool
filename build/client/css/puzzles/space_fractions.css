@@ -16,7 +16,7 @@ body {
   float: left;
   width: 620px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   background: url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
   background-color: #1a1a1a;
 }
@@ -127,7 +127,7 @@ body {
   box-shadow: inset 0 0 10px 5px #262626;
 }
 .space_fractions .sidebar {
-  float: left;
+  float: right;
   overflow: hidden;
 }
 .space_fractions .sidebar .options,
@@ -293,7 +293,8 @@ body {
   color: #24d94c;
 }
 .space_fractions .intro,
-.space_fractions .instructions {
+.space_fractions .instructions,
+.space_fractions .editor_instructions {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -308,8 +309,17 @@ body {
   overflow: auto;
 }
 .space_fractions .intro p,
-.space_fractions .instructions p {
+.space_fractions .instructions p,
+.space_fractions .editor_instructions p {
   width: 390px;
+}
+.space_fractions .editor_instructions_link {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 6px 0;
+  text-align: center;
+  margin: 12px 0 0 12px;
+  width: 272px;
 }
 .space_fractions .intro h3 {
   text-align: center;

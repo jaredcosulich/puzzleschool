@@ -13,10 +13,48 @@ spaceFractionsEditor.EditorHelper = (function() {
     this.initEditor();
     this.initSquares();
     this.initLevelDescription();
+    this.initInstructions();
   }
 
   EditorHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
+  };
+
+  EditorHelper.prototype.initInstructions = function() {
+    var instructionLink, instructions, showInstructions,
+      _this = this;
+    instructions = $(document.createElement('DIV'));
+    instructions.addClass('editor_instructions');
+    instructions.html('<h2>Level Editor Instructions</h2>\n<p>Here are some quick instructions on how to create your own level.</p>\n<ul>\n    <li><p>Drag objects from the selector in the bottom right corner of the screen on to the board.</p></li>\n    <li><p>You can also drop objects on to the right hand sidebar as extra objects.</p></li>\n    <li><p>You need at least one laser and one lightbulb and the lightbulb must be lit yellow.</p></li>\n    <li><p>When your level is complete it should say "Verified" at the bottom of the page.</p></li>\n    <li><p>Share the link to your level!</p></li>\n</ul>\n<p>Click anywhere to close this and get started.</p>');
+    this.el.append(instructions);
+    showInstructions = function() {
+      instructions.css({
+        top: ($.viewport().height / 2) - (instructions.height() / 2) + window.scrollY,
+        left: ($.viewport().width / 2) - (instructions.width() / 2)
+      });
+      instructions.animate({
+        opacity: 1,
+        duration: 500
+      });
+      return $(document.body).one('click.editor_instructions', function(e) {
+        return instructions.animate({
+          opacity: 0,
+          duration: 500,
+          complete: function() {
+            return instructions.css({
+              top: -1000,
+              left: -1000
+            });
+          }
+        });
+      });
+    };
+    instructionLink = $(document.createElement('DIV'));
+    instructionLink.addClass('editor_instructions_link');
+    instructionLink.html('<a>Show Editor Instructions</a>');
+    instructionLink.find('a').bind('click', showInstructions);
+    this.$('.sidebar').append(instructionLink);
+    return $.timeout(500, showInstructions);
   };
 
   EditorHelper.prototype.initElementSelector = function() {
@@ -235,6 +273,7 @@ spaceFractionsEditor.EditorHelper = (function() {
       top: offset.top + offset.height + 6,
       left: offset.left + (offset.width / 2) - (this.elementSelector.offset().width / 2)
     });
+    this.elementSelector.scrollTop(0);
     this.showObjectSelector();
     return this.elementSelector.animate({
       opacity: 1,

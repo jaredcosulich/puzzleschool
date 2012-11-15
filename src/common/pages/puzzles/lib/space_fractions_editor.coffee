@@ -7,8 +7,54 @@ class spaceFractionsEditor.EditorHelper
         @initEditor()
         @initSquares()
         @initLevelDescription()
+        @initInstructions()
         
     $: (selector) -> $(selector, @el)
+    
+    initInstructions: ->
+        instructions = $(document.createElement('DIV'))
+        instructions.addClass('editor_instructions')
+        instructions.html '''
+            <h2>Level Editor Instructions</h2>
+            <p>Here are some quick instructions on how to create your own level.</p>
+            <ul>
+                <li><p>Drag objects from the selector in the bottom right corner of the screen on to the board.</p></li>
+                <li><p>You can also drop objects on to the right hand sidebar as extra objects.</p></li>
+                <li><p>You need at least one laser and one lightbulb and the lightbulb must be lit yellow.</p></li>
+                <li><p>When your level is complete it should say "Verified" at the bottom of the page.</p></li>
+                <li><p>Share the link to your level!</p></li>
+            </ul>
+            <p>Click anywhere to close this and get started.</p>
+        '''
+        @el.append(instructions)
+                
+        showInstructions = =>
+            instructions.css
+                top: ($.viewport().height / 2) - (instructions.height() / 2) + (window.scrollY)
+                left: ($.viewport().width / 2) - (instructions.width() / 2)
+            
+            instructions.animate
+                opacity: 1
+                duration: 500
+                
+            $(document.body).one 'click.editor_instructions', (e) =>
+                instructions.animate
+                    opacity: 0
+                    duration: 500
+                    complete: =>
+                        instructions.css
+                            top: -1000
+                            left: -1000
+        
+        instructionLink = $(document.createElement('DIV'))
+        instructionLink.addClass('editor_instructions_link')
+        instructionLink.html '''
+            <a>Show Editor Instructions</a>
+        '''
+        instructionLink.find('a').bind 'click', showInstructions
+        @$('.sidebar').append(instructionLink)
+    
+        $.timeout 500, showInstructions
     
     initElementSelector: ->
         @elementSelector = $(document.createElement('DIV'))
@@ -221,6 +267,8 @@ class spaceFractionsEditor.EditorHelper
             opacity: 0
             top: offset.top + offset.height + 6
             left: offset.left + (offset.width / 2) - (@elementSelector.offset().width / 2)
+            
+        @elementSelector.scrollTop(0)
 
         @showObjectSelector() 
 
