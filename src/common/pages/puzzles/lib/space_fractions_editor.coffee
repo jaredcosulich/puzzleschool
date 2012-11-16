@@ -150,7 +150,7 @@ class spaceFractionsEditor.EditorHelper
 
         for objectType in @sortedObjectTypes()
             do (objectType) =>
-                object = @viewHelper.objects[objectType]
+                objectMeta = @viewHelper.objects[objectType]
                 objectContainer = $(document.createElement('DIV'))
                 objectContainer.addClass('object')
                 objectContainer.addClass('square')
@@ -163,14 +163,24 @@ class spaceFractionsEditor.EditorHelper
                     
                     objectImage = $(document.createElement('IMG'))
 
-                    src = @viewHelper.baseFolder + object.image
-                    src += if object.states then '_full.png' else '.png'
+                    src = @viewHelper.baseFolder + objectMeta.image
+                    src += if objectMeta.states then '_full.png' else '.png'
                     objectImage.attr('src', src)
 
                     objectContainer.append(objectImage)
                     objectContainer.bind 'mousedown', =>
                         @closeElementSelector()
                         @$('.square.selected').removeClass('selected')
+                        
+                    if not objectMeta.movable
+                        objectContainer.unbind('mousedown.static mouseup.static')
+                        objectContainer.bind 'mousedown.static', =>
+                            @viewHelper.options.find('.square.occupied').addClass('actually_occupied')
+                            @viewHelper.options.find('.square').addClass('occupied')
+                        objectContainer.bind 'mouseup.static', =>
+                            @viewHelper.options.find('.square').removeClass('occupied')
+                            @viewHelper.options.find('.square.actually_occupied').addClass('occupied')
+                            @viewHelper.options.find('.square.actually_occupied').removeClass('actually_occupied')
                         
                     @viewHelper.initMovableObject objectContainer, (selectedSquare) =>
                         if selectedSquare[0] == objectContainer[0]
@@ -181,8 +191,7 @@ class spaceFractionsEditor.EditorHelper
                         selectedSquare.unbind 'click.tip'
                         
                         @save()
-                        object = @viewHelper.objects[objectType]
-                        if (object.distribute and not object.accept) or (object.accept and not object.distribute)
+                        if (objectMeta.distribute and not objectMeta.accept) or (objectMeta.accept and not objectMeta.distribute)
                             @showElementSelector(selectedSquare)
                         else
                             selectedSquare.removeClass('selected')

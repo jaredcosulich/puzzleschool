@@ -154,8 +154,8 @@ spaceFractionsEditor.EditorHelper = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       objectType = _ref[_i];
       _results.push((function(objectType) {
-        var initObjectContainer, object, objectContainer;
-        object = _this.viewHelper.objects[objectType];
+        var initObjectContainer, objectContainer, objectMeta;
+        objectMeta = _this.viewHelper.objects[objectType];
         objectContainer = $(document.createElement('DIV'));
         objectContainer.addClass('object');
         objectContainer.addClass('square');
@@ -166,14 +166,26 @@ spaceFractionsEditor.EditorHelper = (function() {
           objectContainer.addClass('occupied');
           objectContainer.data('objectType', objectType);
           objectImage = $(document.createElement('IMG'));
-          src = _this.viewHelper.baseFolder + object.image;
-          src += object.states ? '_full.png' : '.png';
+          src = _this.viewHelper.baseFolder + objectMeta.image;
+          src += objectMeta.states ? '_full.png' : '.png';
           objectImage.attr('src', src);
           objectContainer.append(objectImage);
           objectContainer.bind('mousedown', function() {
             _this.closeElementSelector();
             return _this.$('.square.selected').removeClass('selected');
           });
+          if (!objectMeta.movable) {
+            objectContainer.unbind('mousedown.static mouseup.static');
+            objectContainer.bind('mousedown.static', function() {
+              _this.viewHelper.options.find('.square.occupied').addClass('actually_occupied');
+              return _this.viewHelper.options.find('.square').addClass('occupied');
+            });
+            objectContainer.bind('mouseup.static', function() {
+              _this.viewHelper.options.find('.square').removeClass('occupied');
+              _this.viewHelper.options.find('.square.actually_occupied').addClass('occupied');
+              return _this.viewHelper.options.find('.square.actually_occupied').removeClass('actually_occupied');
+            });
+          }
           return _this.viewHelper.initMovableObject(objectContainer, function(selectedSquare) {
             if (selectedSquare[0] === objectContainer[0]) {
               initObjectContainer();
@@ -182,8 +194,7 @@ spaceFractionsEditor.EditorHelper = (function() {
             selectedSquare.addClass('selected');
             selectedSquare.unbind('click.tip');
             _this.save();
-            object = _this.viewHelper.objects[objectType];
-            if ((object.distribute && !object.accept) || (object.accept && !object.distribute)) {
+            if ((objectMeta.distribute && !objectMeta.accept) || (objectMeta.accept && !objectMeta.distribute)) {
               _this.showElementSelector(selectedSquare);
             } else {
               selectedSquare.removeClass('selected');
