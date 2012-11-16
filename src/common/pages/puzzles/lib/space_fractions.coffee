@@ -322,9 +322,24 @@ class spaceFractions.ViewHelper
         if squareOrLaser.hasClass('laser')
             beam = squareOrLaser.find('.beam')
             beam.append(fraction)
-            fraction.css
-                top: (beam.height() / 2) - (fraction.height() / 2)
-                left: (beam.width() / 2) - (fraction.width() / 2)
+            
+            css = {}
+            if beam.width() > beam.height()
+                css.top = (beam.height() / 2) - (fraction.height() / 2)
+                pos = fraction.width() + 3
+                if beam.width() > @board.find('.square').width()
+                    pos += (beam.width() / 2) - (fraction.width() / 2)
+
+                css[if beam.hasClass('left') then 'right' else 'left'] = pos
+            else
+                css.left = (beam.width() / 2) - (fraction.width() / 2)
+                pos = fraction.height() + 3
+                if beam.height() > @board.find('.square').height()
+                    pos += (beam.height() / 2) - (fraction.height() / 2)
+
+                css[if beam.hasClass('up') then 'bottom' else 'top'] = pos
+            
+            fraction.css(css)
         else
             squareOrLaser.append(fraction)
     
