@@ -185,7 +185,7 @@ class spaceFractions.ViewHelper
         
         for row in [0...6]
             for column in [0...4]
-                index = (row * 3) + column
+                index = (row * 4) + column
                 square = $(document.createElement('DIV'))
                 square.addClass('square')
                 square.data('index', index)

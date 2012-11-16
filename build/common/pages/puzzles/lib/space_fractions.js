@@ -224,7 +224,7 @@ spaceFractions.ViewHelper = (function() {
         var _l, _results1;
         _results1 = [];
         for (column = _l = 0; _l < 4; column = ++_l) {
-          index = (row * 3) + column;
+          index = (row * 4) + column;
           square = $(document.createElement('DIV'));
           square.addClass('square');
           square.data('index', index);
