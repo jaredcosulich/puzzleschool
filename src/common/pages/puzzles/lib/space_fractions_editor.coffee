@@ -154,11 +154,11 @@ class spaceFractionsEditor.EditorHelper
                 objectContainer = $(document.createElement('DIV'))
                 objectContainer.addClass('object')
                 objectContainer.addClass('square')
-                objectContainer.addClass('occupied')
                 editor.append(objectContainer)
 
                 initObjectContainer = =>
                     objectContainer.html('')
+                    objectContainer.addClass('occupied')
                     objectContainer.data('objectType', objectType)
                     
                     objectImage = $(document.createElement('IMG'))

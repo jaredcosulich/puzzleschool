@@ -159,11 +159,11 @@ spaceFractionsEditor.EditorHelper = (function() {
         objectContainer = $(document.createElement('DIV'));
         objectContainer.addClass('object');
         objectContainer.addClass('square');
-        objectContainer.addClass('occupied');
         editor.append(objectContainer);
         initObjectContainer = function() {
           var objectImage, src;
           objectContainer.html('');
+          objectContainer.addClass('occupied');
           objectContainer.data('objectType', objectType);
           objectImage = $(document.createElement('IMG'));
           src = _this.viewHelper.baseFolder + object.image;
