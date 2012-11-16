@@ -60,6 +60,9 @@ a {
 .left {
   float: left;
 }
+.center {
+  margin: auto;
+}
 .content {
   width: 930px;
   margin: auto;
@@ -361,4 +364,11 @@ a {
 .about .about_text img {
   float: left;
   margin: 0 12px 12px 0;
+}
+.big_form {
+  font-size: 23px;
+}
+.big_form input,
+.big_form button {
+  font-size: 18px;
 }

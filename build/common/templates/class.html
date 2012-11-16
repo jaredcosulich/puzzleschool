@@ -1,0 +1,30 @@
+<div class='page class' data-id={id}>
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
+        {className}
+    </h1>
+
+    <br/>
+    
+    <div class='big_form'>
+        <form>
+            <table class='center'>
+                <tr class="field">
+                    <td><label for="name">Class Name:</label></td>
+                    <td><input name="name" type="text"></input></td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <button 
+                            class='save_button submit_feedback' 
+                            data-submitting_text='Saving...' 
+                            data-failed_submission_text='An error occurred saving this class. If this problem persists please contact support@puzzleschool.com'>
+                            Save
+                        </button>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td><button class='cancel_button'>Cancel</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
