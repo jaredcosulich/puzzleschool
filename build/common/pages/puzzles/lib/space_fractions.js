@@ -928,8 +928,8 @@ spaceFractions.ViewHelper = (function() {
           left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
         });
       }
-      this.showFraction(laser);
-      _results.push(this.board.append(laser));
+      this.board.append(laser);
+      _results.push(this.showFraction(laser));
     }
     return _results;
   };

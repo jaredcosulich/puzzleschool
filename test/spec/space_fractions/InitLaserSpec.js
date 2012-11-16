@@ -60,6 +60,10 @@ describe("Init:", function() {
             expect(laser.find('.beam').offset().left).toEqual(square.offset().left + square.offset().width);
         })
         
+        it('should show the fraction on the laser', function() {
+            expect(laser.find('.beam .fraction').length).toEqual(1)
+        })
+        
     })
     
     describe('with a laser pointing at square 0', function() {

@@ -662,10 +662,9 @@ class spaceFractions.ViewHelper
                 laser.css
                     top: offset.top + offset.height
                     left: offset.left + ((offset.width - width) / 2) - LASER_HEIGHT
-            
-            @showFraction(laser)
-            
+                        
             @board.append(laser)
+            @showFraction(laser)
 
             
     checkLaserPath: (checkSquare, squareIndex, direction, numerator, denominator) ->
