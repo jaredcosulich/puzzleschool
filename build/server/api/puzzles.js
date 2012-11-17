@@ -64,17 +64,17 @@ soma.routes({
       });
     });
   },
-  '/api/puzzles/:puzzleName/levels/:className/:levelName': function(_arg) {
-    var className, l, levelName, puzzleName,
+  '/api/puzzles/levels/:levelId': function(_arg) {
+    var l, levelId,
       _this = this;
-    puzzleName = _arg.puzzleName, className = _arg.className, levelName = _arg.levelName;
+    levelId = _arg.levelId;
     return l = new Line({
       error: function(err) {
         console.log('Loading puzzle level data failed:', err);
         return _this.sendError();
       }
     }, function() {
-      return db.get('puzzle_levels', "" + puzzleName + "/" + className + "/" + levelName, l.wait());
+      return db.get('puzzle_levels', levelId, l.wait());
     }, function(level) {
       return _this.send(level);
     });
@@ -84,8 +84,6 @@ soma.routes({
       _this = this;
     puzzleName = _arg.puzzleName;
     levelData = {
-      id: "" + puzzleName + "/" + this.data.classId + "/" + (this.data.name.replace(/\s/g, '_')),
-      "class": this.data.classId,
       name: this.data.name,
       instructions: this.data.instructions,
       difficulty: this.data.difficulty
@@ -96,7 +94,7 @@ soma.routes({
         return _this.sendError();
       }
     }, function() {
-      return db.update('puzzle_levels', levelData.id, levelData, l.wait());
+      return db.put('puzzle_levels', levelData, l.wait());
     }, function(level) {
       _this.level = level;
       return db.update('puzzles', puzzleName, {

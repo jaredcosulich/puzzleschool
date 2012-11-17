@@ -47,13 +47,23 @@ soma.routes({
     }, function() {
       return db.get('classes', id, l.wait());
     }, function(classInfo) {
-      return _this.send(classInfo);
+      var _ref;
+      _this.classInfo = classInfo;
+      if (!((_ref = _this.classInfo.levels) != null ? _ref.length : void 0)) {
+        _this.send(_this.classInfo);
+        l.stop();
+        return;
+      }
+      return db.multiget('puzzle_levels', _this.classInfo.levels, l.wait());
+    }, function(levelInfo) {
+      _this.classInfo.levels = levelInfo;
+      return _this.send(_this.classInfo);
     });
   }),
-  '/api/classes/levels/:action/:id': requireUser(function(_arg) {
-    var action, id, l, update,
+  '/api/classes/levels/:action/:classId': requireUser(function(_arg) {
+    var action, classId, l, update,
       _this = this;
-    action = _arg.action, id = _arg.id;
+    action = _arg.action, classId = _arg.classId;
     update = {
       levels: {}
     };
@@ -64,9 +74,11 @@ soma.routes({
         return _this.sendError();
       }
     }, function() {
-      return db.update('classes', id, update, l.wait());
-    }, function() {
-      return _this.send();
+      return db.update('classes', classId, update, l.wait());
+    }, function(classInfo) {
+      return _this.send({
+        levels: classInfo.levels || []
+      });
     });
   }),
   '/api/classes/students/:action': requireUser(function(_arg) {
@@ -84,8 +96,10 @@ soma.routes({
       }
     }, function() {
       return db.update('classes', id, update, l.wait());
-    }, function() {
-      return _this.send();
+    }, function(classInfo) {
+      return _this.send({
+        students: classInfo.students || []
+      });
     });
   })
 });

@@ -33,10 +33,21 @@ soma.routes
                 @sendError()
         
             => db.get('classes', id, l.wait())
-            (classInfo) => @send(classInfo)
+                
+            (@classInfo) => 
+                if not @classInfo.levels?.length
+                    @send(@classInfo)
+                    l.stop()
+                    return
+                    
+                db.multiget 'puzzle_levels', @classInfo.levels, l.wait()
+                    
+            (levelInfo) => 
+                @classInfo.levels = levelInfo
+                @send(@classInfo)
             
             
-    '/api/classes/levels/:action/:id': requireUser ({action, id}) ->
+    '/api/classes/levels/:action/:classId': requireUser ({action, classId}) ->
         update = {levels: {}}
         update.levels[action] = [@data.level]
         
@@ -45,10 +56,10 @@ soma.routes
                 console.log('Saving level to class failed:', err)
                 @sendError()
         
-            => db.update('classes', id, update, l.wait())
+            => db.update('classes', classId, update, l.wait())
         
-            => @send()
-        
+            (classInfo) => @send(levels: classInfo.levels or [])        
+
     
     '/api/classes/students/:action': requireUser ({action}) ->
         update = {students: {}}
@@ -61,7 +72,7 @@ soma.routes
     
             => db.update('classes', id, update, l.wait())
     
-            => @send()        
+            (classInfo) => @send(students: classInfo.students or [])        
             
             
             

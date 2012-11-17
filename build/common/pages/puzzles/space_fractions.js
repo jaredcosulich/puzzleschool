@@ -14,24 +14,26 @@ soma.chunks({
     },
     prepare: function(_arg) {
       var _this = this;
-      this.className = _arg.className, this.levelName = _arg.levelName;
+      this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/space_fractions.html");
       this.loadScript('/build/common/pages/puzzles/lib/space_fractions.js');
       if (this.levelName === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/space_fractions_editor.js');
       }
       this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
-      return this.loadData({
-        url: "/api/puzzles/fractions/levels/" + this.className + "/" + this.levelName,
-        success: function(levelInfo) {
-          _this.levelInfo = levelInfo;
-        },
-        error: function() {
-          if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
-            return alert('We were unable to load the information for this level. Please check your internet connection.');
+      if (this.levelId) {
+        return this.loadData({
+          url: "/api/puzzles/levels/" + this.levelId,
+          success: function(levelInfo) {
+            _this.levelInfo = levelInfo;
+          },
+          error: function() {
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load the information for this level. Please check your internet connection.');
+            }
           }
-        }
-      });
+        });
+      }
     },
     build: function() {
       var row, rows, _ref;
@@ -47,9 +49,9 @@ soma.chunks({
         return _results;
       })();
       return this.html = wings.renderTemplate(this.template, {
-        levelName: this.levelName || '',
-        custom: this.levelName === 'custom',
-        editor: this.levelName === 'editor',
+        levelName: this.levelId || '',
+        custom: this.levelId === 'custom',
+        editor: this.levelId === 'editor',
         rows: rows,
         instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0
       });
@@ -236,12 +238,19 @@ soma.views({
 });
 
 soma.routes({
-  '/puzzles/space_fractions/:className/:levelName': function(_arg) {
-    var className, levelName;
-    className = _arg.className, levelName = _arg.levelName;
+  '/puzzles/space_fractions/:classId/:levelId': function(_arg) {
+    var classId, levelId;
+    classId = _arg.classId, levelId = _arg.levelId;
     return new soma.chunks.SpaceFractions({
-      className: className,
-      levelName: levelName
+      classId: classId,
+      levelId: levelId
+    });
+  },
+  '/puzzles/space_fractions/:levelId': function(_arg) {
+    var levelId;
+    levelId = _arg.levelId;
+    return new soma.chunks.SpaceFractions({
+      levelId: levelId
     });
   },
   '/puzzles/space_fractions': function() {
@@ -251,8 +260,15 @@ soma.routes({
     var className, levelName;
     className = _arg.className, levelName = _arg.levelName;
     return new soma.chunks.SpaceFractions({
-      className: className,
-      levelName: levelName
+      classId: classId,
+      levelId: levelId
+    });
+  },
+  '/puzzles/light_it_up/:levelId': function(_arg) {
+    var levelId;
+    levelId = _arg.levelId;
+    return new soma.chunks.SpaceFractions({
+      levelId: levelId
     });
   },
   '/puzzles/light_it_up': function() {

@@ -20,7 +20,15 @@ soma.chunks({
         return this.loadData({
           url: "/api/classes/info/" + this.id,
           success: function(data) {
-            return _this.classInfo = data;
+            var level, _i, _len, _ref, _results;
+            _this.classInfo = data;
+            _ref = _this.classInfo.levels;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              level = _ref[_i];
+              _results.push(level.classId = _this.classInfo.id);
+            }
+            return _results;
           },
           error: function() {
             if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
@@ -31,12 +39,13 @@ soma.chunks({
       }
     },
     build: function() {
-      var _ref, _ref1;
+      var _ref, _ref1, _ref2;
       this.setTitle("Your Class - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
         id: (_ref = this.classInfo) != null ? _ref.id : void 0,
         className: ((_ref1 = this.classInfo) != null ? _ref1.name : void 0) || 'New Class',
-        newClass: !(this.classInfo != null)
+        newClass: !(this.classInfo != null),
+        levels: (_ref2 = this.classInfo) != null ? _ref2.levels : void 0
       });
     }
   }
@@ -92,101 +101,133 @@ soma.views({
       });
     },
     initAddALevel: function() {
-      var displayLevels, hideNewLevel,
-        _this = this;
+      var _this = this;
       this.puzzles = {
         fractions: {
           levels: []
         }
       };
-      displayLevels = function(puzzle, area) {
-        var level, levelNameComponents, tableHtml, _i, _len, _ref;
-        area.html('');
-        tableHtml = '<table>\n    <tbody>\n        <th>Name</th>\n        <th>Difficulty</th>';
-        _ref = _this.puzzles[puzzle].levels;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          level = _ref[_i];
-          levelNameComponents = level.id.split(/\//g);
-          tableHtml += "<tr>\n    <td>\n        <a href='/puzzles/light_it_up/" + (levelNameComponents.slice(1, 3).join('/')) + "' target='_blank'>\n            " + levelNameComponents[2] + "\n        </a>\n    </td>\n    <td>\n        " + level.difficulty + "\n    </td>\n</tr>";
-        }
-        tableHtml += '</tbody></table>';
-        return area.html(tableHtml);
-      };
       this.$('.add_a_level').bind('click', function(e) {
-        var levelSelector;
-        levelSelector = _this.$('.level_selector');
-        levelSelector.css({
-          opacity: 0,
-          top: 100,
-          left: 100
-        });
-        levelSelector.animate({
-          opacity: 1,
-          duration: 250
-        });
-        return $.ajaj({
-          url: '/api/puzzles/fractions/levels',
-          method: 'GET',
-          headers: {
-            'X-CSRF-Token': _this.cookies.get('_csrf', {
-              raw: true
-            })
-          },
-          success: function(levelData) {
-            _this.puzzles.fractions.levels = levelData.levels || [];
-            return displayLevels('fractions', levelSelector.find('.levels'));
-          },
-          error: function() {
-            return levelSelector.find('.levels').html('No levels yet');
-          }
-        });
+        return _this.displayLevelSelector();
       });
       this.$('.create_level').bind('click', function(e) {
-        var link, newLevel;
-        link = $(e.currentTarget);
-        newLevel = link.closest('.level_selector').find('.new_level');
-        newLevel.css({
-          display: 'block'
-        });
-        return newLevel.animate({
-          opacity: 1,
-          duration: 250
-        });
+        return _this.showNewLevelForm($(e.currentTarget).closest('.level_selector').find('.new_level'));
       });
-      hideNewLevel = function(newLevel) {
-        return newLevel.animate({
-          opacity: 0,
-          duration: 250,
-          complete: function() {
-            return newLevel.css({
-              display: 'none'
-            });
-          }
-        });
-      };
       this.$('.save_new_level_button').bind('click', function(e) {
-        var dataHash, newLevel;
-        newLevel = $(e.currentTarget).closest('.new_level');
-        dataHash = newLevel.find('form').data('form').dataHash();
-        dataHash.classId = _this.classInfo.id;
-        return $.ajaj({
-          url: '/api/puzzles/fractions/add_level',
-          method: 'POST',
-          headers: {
-            'X-CSRF-Token': _this.cookies.get('_csrf', {
-              raw: true
-            })
-          },
-          data: dataHash,
-          success: function(levelInfo) {
-            _this.puzzles.fractions.levels.push(levelInfo);
-            displayLevels('fractions', newLevel.find('.levels'));
-            return hideNewLevel(newLevel);
-          }
-        });
+        return _this.addNewLevel($(e.currentTarget).closest('.new_level'));
       });
       return this.$('.cancel_new_level_button').bind('click', function(e) {
-        return hideNewLevel($(e.currentTarget).closest('.new_level'));
+        return _this.hideNewLevelForm($(e.currentTarget).closest('.new_level'));
+      });
+    },
+    displayLevels: function(puzzle, area) {
+      var level, levelNameComponents, tableHtml, _i, _len, _ref;
+      area.html('');
+      tableHtml = '<table>\n    <tbody>\n        <th>Name</th>\n        <th>Difficulty</th>\n        <th>Select</th>';
+      _ref = this.puzzles[puzzle].levels;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        level = _ref[_i];
+        levelNameComponents = level.id.split(/\//g);
+        tableHtml += "<tr>\n    <td>\n        <a href='/puzzles/light_it_up/" + level.id + "' target='_blank'>\n            " + level.name + "\n        </a>\n    </td>\n    <td>\n        " + level.difficulty + "\n    </td>\n    <td>\n        <a class='select_level' data-level=\"" + level.id + "\">\n            Select\n        </a>\n    </td>\n</tr>";
+      }
+      tableHtml += '</tbody></table>';
+      area.html(tableHtml);
+      return this.bindLevelLinks();
+    },
+    bindLevelLinks: function() {
+      var _this = this;
+      this.$('.select_level').unbind('click');
+      return this.$('.select_level').bind('click', function(e) {
+        return _this.selectLevel($(e.currentTarget).data('level'));
+      });
+    },
+    showNewLevelForm: function(newLevel) {
+      newLevel.css({
+        display: 'block'
+      });
+      return newLevel.animate({
+        opacity: 1,
+        duration: 250
+      });
+    },
+    hideNewLevelForm: function(newLevel) {
+      return newLevel.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return newLevel.css({
+            display: 'none'
+          });
+        }
+      });
+    },
+    selectLevel: function(levelId) {
+      var _this = this;
+      return $.ajaj({
+        url: "/api/classes/levels/add/" + this.classInfo.id,
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: {
+          level: levelId
+        },
+        success: function(classLevels) {
+          return console.log(classLevels);
+        }
+      });
+    },
+    addNewLevel: function(newLevelContainer) {
+      var dataHash,
+        _this = this;
+      dataHash = newLevelContainer.find('form').data('form').dataHash();
+      dataHash.classId = this.classInfo.id;
+      return $.ajaj({
+        url: '/api/puzzles/fractions/add_level',
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: dataHash,
+        success: function(levelInfo) {
+          _this.puzzles.fractions.levels.push(levelInfo);
+          _this.displayLevels('fractions', newLevelContainer.find('.levels'));
+          return _this.hideNewLevelForm(newLevelContainer);
+        }
+      });
+    },
+    displayLevelSelector: function() {
+      var levelSelector,
+        _this = this;
+      levelSelector = this.$('.level_selector');
+      levelSelector.css({
+        opacity: 0,
+        top: 100,
+        left: 100
+      });
+      levelSelector.animate({
+        opacity: 1,
+        duration: 250
+      });
+      return $.ajaj({
+        url: '/api/puzzles/fractions/levels',
+        method: 'GET',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        success: function(levelData) {
+          _this.puzzles.fractions.levels = levelData.levels || [];
+          return _this.displayLevels('fractions', levelSelector.find('.levels'));
+        },
+        error: function() {
+          return levelSelector.find('.levels').html('No levels yet');
+        }
       });
     }
   }

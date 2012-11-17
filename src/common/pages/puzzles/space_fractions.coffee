@@ -5,28 +5,29 @@ soma.chunks
     SpaceFractions:
         meta: -> new soma.chunks.Base({ content: @ })
 
-        prepare: ({@className, @levelName}) ->
+        prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/space_fractions.html"
             @loadScript '/build/common/pages/puzzles/lib/space_fractions.js'
             if @levelName == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
             @loadStylesheet '/build/client/css/puzzles/space_fractions.css'     
             
-            @loadData 
-                url: "/api/puzzles/fractions/levels/#{@className}/#{@levelName}"
-                success: (@levelInfo) => 
-                error: () =>
-                    if window?.alert
-                        alert('We were unable to load the information for this level. Please check your internet connection.')
+            if @levelId
+                @loadData 
+                    url: "/api/puzzles/levels/#{@levelId}"
+                    success: (@levelInfo) => 
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load the information for this level. Please check your internet connection.')
                    
         build: ->
             @setTitle("Light It Up - The Puzzle School")
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
-                levelName: (@levelName or '')
-                custom: @levelName == 'custom'
-                editor: @levelName == 'editor'
+                levelName: (@levelId or '')
+                custom: @levelId == 'custom'
+                editor: @levelId == 'editor'
                 rows: rows
                 instructions: @levelInfo?.instructions
             )
@@ -151,17 +152,25 @@ soma.views
             return json
             
 soma.routes
-    '/puzzles/space_fractions/:className/:levelName': ({className, levelName}) -> 
+    '/puzzles/space_fractions/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.SpaceFractions
-            className: className
-            levelName: levelName
+            classId: classId
+            levelId: levelId
+
+    '/puzzles/space_fractions/:levelId': ({levelId}) -> 
+        new soma.chunks.SpaceFractions
+            levelId: levelId
     
     '/puzzles/space_fractions': -> new soma.chunks.SpaceFractions
 
     '/puzzles/light_it_up/:className/:levelName': ({className, levelName}) -> 
         new soma.chunks.SpaceFractions
-            className: className
-            levelName: levelName
+            classId: classId
+            levelId: levelId
+
+    '/puzzles/light_it_up/:levelId': ({levelId}) -> 
+        new soma.chunks.SpaceFractions
+            levelId: levelId
     
     '/puzzles/light_it_up': -> new soma.chunks.SpaceFractions
             
