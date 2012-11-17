@@ -20,20 +20,18 @@ soma.routes({
     if (!((_ref = this.data.id) != null ? _ref.length : void 0)) {
       delete this.data.id;
     }
-    l = new Line({
+    return l = new Line({
       error: function(err) {
         console.log('Saving class failed:', err);
         return _this.sendError();
       }
-    });
-    l.add(function() {
+    }, function() {
       if (_this.data.id) {
         return db.update('classes', _this.data.id, classInfo, l.wait());
       } else {
         return db.put('classes', classInfo, l.wait());
       }
-    });
-    return l.add(function(classInfo) {
+    }, function(classInfo) {
       return _this.send(classInfo);
     });
   }),
@@ -41,16 +39,14 @@ soma.routes({
     var id, l,
       _this = this;
     id = _arg.id;
-    l = new Line({
+    return l = new Line({
       error: function(err) {
         console.log('Retrieving class failed:', err);
         return _this.sendError();
       }
-    });
-    l.add(function() {
+    }, function() {
       return db.get('classes', id, l.wait());
-    });
-    return l.add(function(classInfo) {
+    }, function(classInfo) {
       return _this.send(classInfo);
     });
   }),
@@ -62,16 +58,14 @@ soma.routes({
       levels: {}
     };
     update.levels[action] = [this.data.level];
-    l = new Line({
+    return l = new Line({
       error: function(err) {
         console.log('Saving level to class failed:', err);
         return _this.sendError();
       }
-    });
-    l.add(function() {
+    }, function() {
       return db.update('classes', id, update, l.wait());
-    });
-    return l.add(function() {
+    }, function() {
       return _this.send();
     });
   }),
@@ -83,16 +77,14 @@ soma.routes({
       students: {}
     };
     update.students[action] = [this.user.id];
-    l = new Line({
+    return l = new Line({
       error: function(err) {
         console.log('Saving student for class failed:', err);
         return _this.sendError();
       }
-    });
-    l.add(function() {
+    }, function() {
       return db.update('classes', id, update, l.wait());
-    });
-    return l.add(function() {
+    }, function() {
       return _this.send();
     });
   })

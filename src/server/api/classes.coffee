@@ -17,13 +17,13 @@ soma.routes
                 console.log('Saving class failed:', err)
                 @sendError()
         
-        l.add =>
-            if @data.id
-                db.update('classes', @data.id, classInfo, l.wait())
-            else
-                db.put('classes', classInfo, l.wait())
+            =>
+                if @data.id
+                    db.update('classes', @data.id, classInfo, l.wait())
+                else
+                    db.put('classes', classInfo, l.wait())
 
-        l.add (classInfo) => @send(classInfo)
+            (classInfo) => @send(classInfo)
         
         
     '/api/classes/info/:id': requireUser ({id}) ->
@@ -32,8 +32,8 @@ soma.routes
                 console.log('Retrieving class failed:', err)
                 @sendError()
         
-        l.add => db.get('classes', id, l.wait())
-        l.add (classInfo) => @send(classInfo)
+            => db.get('classes', id, l.wait())
+            (classInfo) => @send(classInfo)
             
             
     '/api/classes/levels/:action/:id': requireUser ({action, id}) ->
@@ -45,15 +45,9 @@ soma.routes
                 console.log('Saving level to class failed:', err)
                 @sendError()
         
-        l.add =>         
-            db.update( 
-                'classes', 
-                id, 
-                update, 
-                l.wait()
-            )
+            => db.update('classes', id, update, l.wait())
         
-        l.add => @send()
+            => @send()
         
     
     '/api/classes/students/:action': requireUser ({action}) ->
@@ -65,12 +59,10 @@ soma.routes
                 console.log('Saving student for class failed:', err)
                 @sendError()
     
-        l.add =>         
-            db.update( 
-                'classes', 
-                id, 
-                update, 
-                l.wait()
-            )
+            => db.update('classes', id, update, l.wait())
     
-        l.add => @send()        
+            => @send()        
+            
+            
+            
+            

@@ -187,6 +187,13 @@ a {
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
+.big_form {
+  font-size: 23px;
+}
+.big_form input,
+.big_form button {
+  font-size: 18px;
+}
 /* iPhone [portrait + landscape] */
 @media only screen and (max-device-width: 480px) {
   #top_nav .logo span {
@@ -365,10 +372,27 @@ a {
   float: left;
   margin: 0 12px 12px 0;
 }
-.big_form {
-  font-size: 23px;
+.class .level_selector {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  text-align: center;
+  background-color: #fafafa;
+  border: 1px solid #949494;
+  padding: 30px;
+  opacity: 0;
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
 }
-.big_form input,
-.big_form button {
-  font-size: 18px;
+.class .level_selector .new_level {
+  display: none;
+  opacity: 0;
+}
+.class .level_selector .new_level form {
+  margin-bottom: 12px;
+}
+.class .level_selector .new_level form input,
+.class .level_selector .new_level form textarea {
+  width: 18em;
 }

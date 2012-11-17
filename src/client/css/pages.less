@@ -177,9 +177,26 @@
     }
 }
 
-.big_form {
-    font-size: @h2size;        
-    input, button {
-        font-size: @h3size;        
+.class {
+    .level_selector {
+        .rounded(6px);
+        text-align: center;
+        background-color: @white;
+        border: 1px solid @grey;
+        padding: 30px;
+        opacity: 0;
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        .new_level {
+            display: none;
+            opacity: 0;
+            form {
+                margin-bottom: 12px;
+                input, textarea {
+                    width: 18em;
+                }
+            }
+        }
     }
 }

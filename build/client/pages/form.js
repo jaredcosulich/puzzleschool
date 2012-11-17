@@ -10,7 +10,7 @@ soma.views({
     dataHash: function() {
       var data, field, fields, name, val, _i, _len, _ref;
       data = {};
-      fields = this.$('input, select');
+      fields = this.$('input, textarea, select');
       for (_i = 0, _len = fields.length; _i < _len; _i++) {
         field = fields[_i];
         if (((_ref = field.type) !== 'radio' && _ref !== 'checkbox') || field.checked) {

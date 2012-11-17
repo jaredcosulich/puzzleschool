@@ -6,8 +6,8 @@
 
     <br/>
     
-    <div class='big_form'>
-        <form>
+    <div class='big_form' {!newClass}style='display: none;'{/newClass}>
+        <form class='class_update'>
             <table class='center'>
                 <tr class="field">
                     <td><label for="name">Class Name:</label></td>
@@ -27,4 +27,62 @@
             </table>
         </form>
     </div>
+    
+    <div class='Puzzles'>
+        <h2>Puzzles</h2>
+        <p>The following puzzles are available through this class.</p>
+        <ul>
+            <li>
+                <h3>Light It Up</h3>
+                <ul>
+                    <li><a class='add_a_level'>Add A New Level</a></li>
+                    {:levels}
+                    <li>{}</li>
+                    {/levels}
+                </ul>
+            </li>
+        </ul>
+        <div class='level_selector'>
+            <h3>Level Selector</h3>
+            <p>Select from a level below of <a class='create_level'>create a new level</a></p>
+            <div class='new_level'>
+                <form>
+                    <table>
+                        <tr class="field">
+                            <td class='text-right'><label for="name">Level Name:</label></td>
+                            <td class='text-left'><input name="name" type="text"></input></td>
+                        </tr>
+                        <tr class="field">
+                            <td class='text-right'><label for="instructions">Instructions:</label></td>
+                            <td class='text-left'><textarea name="instructions"></textarea></td>
+                        </tr>
+                        <tr class="field">
+                            <td class='text-right'><label for="difficulty">Estimated Difficulty (1-10):</label></td>
+                            <td class='text-left'><input name="difficulty" type="text"></input></td>
+                        </tr>
+                    </table>
+                </form>
+                <div class='buttons'>
+                    <button 
+                        class='save_new_level_button submit_feedback' 
+                        data-submitting_text='Saving Level...' 
+                        data-failed_submission_text='An error occurred. If this problem persists please contact support@puzzleschool.com'>
+                        Save
+                    </button>
+                    <button class='cancel_new_level_button'>Cancel</button>
+                </div>
+            </div>
+            <div class='levels'>
+            </div>
+        </div>
+    </div>
+    
+    <br/><br/><br/>
+    
+    <div class='students'>
+        <h2>Students</h2>
+        <p>The following students have attempted at least one puzzle in this class.</p>
+    </div>
+    
+    
 </div>

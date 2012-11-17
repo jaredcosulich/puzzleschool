@@ -11,16 +11,17 @@ db = require('../lib/db');
 requireUser = require('./lib/decorators').requireUser;
 
 soma.routes({
-  '/api/puzzles/:puzzleName': requireUser(function(data) {
-    var l,
+  '/api/puzzles/:puzzleName': requireUser(function(_arg) {
+    var l, puzzleName,
       _this = this;
+    puzzleName = _arg.puzzleName;
     return l = new Line({
       error: function(err) {
         console.log('Loading puzzle data failed:', err);
         return _this.sendError();
       }
     }, function() {
-      return db.get('user_puzzles', "" + _this.user.id + "/" + data.puzzleName, l.wait());
+      return db.get('user_puzzles', "" + _this.user.id + "/" + puzzleName, l.wait());
     }, function(userPuzzle) {
       _this.userPuzzle = userPuzzle;
       if (!_this.userPuzzle) {
@@ -44,6 +45,54 @@ soma.routes({
       });
     });
   }),
+  '/api/puzzles/:puzzleName/levels': function(_arg) {
+    var l, puzzleName,
+      _this = this;
+    puzzleName = _arg.puzzleName;
+    return l = new Line({
+      error: function(err) {
+        console.log('Loading puzzle data failed:', err);
+        return _this.sendError();
+      }
+    }, function() {
+      return db.get('puzzles', "" + puzzleName, l.wait());
+    }, function(puzzle) {
+      return db.multiget('puzzle_levels', puzzle.levels, l.wait());
+    }, function(data) {
+      return _this.send({
+        levels: data.puzzle_levels || []
+      });
+    });
+  },
+  '/api/puzzles/:puzzleName/add_level': function(_arg) {
+    var l, levelData, puzzleName,
+      _this = this;
+    puzzleName = _arg.puzzleName;
+    levelData = {
+      id: "" + puzzleName + "/" + this.data.classId + "/" + this.data.name,
+      "class": this.data.classId,
+      name: this.data.name,
+      instructions: this.data.instructions,
+      difficulty: this.data.difficulty
+    };
+    return l = new Line({
+      error: function(err) {
+        console.log('Saving puzzle level failed:', err);
+        return _this.sendError();
+      }
+    }, function() {
+      return db.update('puzzle_levels', levelData.id, levelData, l.wait());
+    }, function(level) {
+      _this.level = level;
+      return db.update('puzzles', puzzleName, {
+        levels: {
+          add: [_this.level.id]
+        }
+      }, l.wait());
+    }, function() {
+      return _this.send(_this.level);
+    });
+  },
   '/api/puzzles/:puzzleName/update': requireUser(function(data) {
     var l, levelName, levelUpdate, levelsPlayedUpdates, updates, userPuzzle, _ref,
       _this = this;

@@ -6,7 +6,7 @@ soma.views
         create: ->
         dataHash: ->
             data = {}
-            fields = @$('input, select')
+            fields = @$('input, textarea, select')
             for field in fields
                 if field.type not in ['radio', 'checkbox'] or field.checked
                     val = $(field).val()

@@ -5,13 +5,13 @@ db = require('../lib/db')
 {requireUser} = require('./lib/decorators')
 
 soma.routes
-    '/api/puzzles/:puzzleName': requireUser (data) ->
+    '/api/puzzles/:puzzleName': requireUser ({puzzleName}) ->
         l = new Line
             error: (err) => 
                 console.log('Loading puzzle data failed:', err)
                 @sendError()
 
-            => db.get 'user_puzzles', "#{@user.id}/#{data.puzzleName}", l.wait()
+            => db.get 'user_puzzles', "#{@user.id}/#{puzzleName}", l.wait()
             
             (@userPuzzle) => 
                 if not @userPuzzle
@@ -27,6 +27,38 @@ soma.routes
                 delete @userPuzzle.levelsPlayed
                 
             => @send(puzzle: @userPuzzle)
+
+            
+    '/api/puzzles/:puzzleName/levels': ({puzzleName}) ->
+        l = new Line
+            error: (err) => 
+                console.log('Loading puzzle data failed:', err)
+                @sendError()
+
+            => db.get 'puzzles', "#{puzzleName}", l.wait()
+            (puzzle) => db.multiget 'puzzle_levels', puzzle.levels, l.wait()
+
+            (data) => 
+                @send(levels: data.puzzle_levels or []) 
+
+
+    '/api/puzzles/:puzzleName/add_level': ({puzzleName}) ->
+        levelData = 
+            id: "#{puzzleName}/#{@data.classId}/#{@data.name}"
+            class: @data.classId
+            name: @data.name
+            instructions: @data.instructions
+            difficulty: @data.difficulty
+        
+        l = new Line
+            error: (err) => 
+                console.log('Saving puzzle level failed:', err)
+                @sendError()
+
+            => db.update 'puzzle_levels', levelData.id, levelData, l.wait()
+            (@level) => db.update 'puzzles', puzzleName, {levels: {add: [@level.id]}}, l.wait()
+
+            => @send(@level)
         
     '/api/puzzles/:puzzleName/update': requireUser (data) ->
         userPuzzle = "#{@user.id}/#{data.puzzleName}"
