@@ -1,6 +1,12 @@
 soma = require('soma')
 wings = require('wings')
 
+sortLevels = (levels) ->
+    levels.sort (level1,level2) ->
+        a = level1.difficulty + level1.name
+        b = level2.difficulty + level2.name
+        return if a == b then 0 else (if a < b then -1 else 1)
+
 soma.chunks
     Class:
         meta: -> new soma.chunks.Base({ content: @ })
@@ -13,6 +19,7 @@ soma.chunks
                     success: (data) =>
                         @classInfo = data
                         level.classId = @classInfo.id for level in @classInfo.levels
+                        @classInfo.levels = sortLevels(@classInfo.levels)
                     error: () =>
                         if window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
@@ -82,7 +89,7 @@ soma.views
                         <th>Select</th>
             '''
 
-            for level in @puzzles[puzzle].levels.sort((a,b) -> a.difficulty - b.difficulty)
+            for level in sortLevels(@puzzles[puzzle].levels)
                 levelNameComponents = level.id.split(/\//g)
                 tableHtml += """
                     <tr>
@@ -128,7 +135,7 @@ soma.views
                 data: {level: levelId}
                 success: (classLevels) =>
                     levelsListHtml = ''
-                    for level in classLevels.levels
+                    for level in sortLevels(classLevels.levels)
                         levelsListHtml += """
                             <li><a href='/puzzles/fractions/#{@classInfo.id}/{level.id}' target='_blank'>
                                 #{level.name}
