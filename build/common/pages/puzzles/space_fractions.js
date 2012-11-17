@@ -13,16 +13,28 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      this.levelName = _arg.levelName;
+      var _this = this;
+      this.className = _arg.className, this.levelName = _arg.levelName;
       this.template = this.loadTemplate("/build/common/templates/puzzles/space_fractions.html");
       this.loadScript('/build/common/pages/puzzles/lib/space_fractions.js');
       if (this.levelName === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/space_fractions_editor.js');
       }
-      return this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
+      this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
+      return this.loadData({
+        url: "/api/puzzles/fractions/levels/" + this.className + "/" + this.levelName,
+        success: function(levelInfo) {
+          _this.levelInfo = levelInfo;
+        },
+        error: function() {
+          if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+            return alert('We were unable to load the information for this level. Please check your internet connection.');
+          }
+        }
+      });
     },
     build: function() {
-      var row, rows;
+      var row, rows, _ref;
       this.setTitle("Light It Up - The Puzzle School");
       rows = (function() {
         var _i, _results;
@@ -38,7 +50,8 @@ soma.chunks({
         levelName: this.levelName || '',
         custom: this.levelName === 'custom',
         editor: this.levelName === 'editor',
-        rows: rows
+        rows: rows,
+        instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0
       });
     }
   }
@@ -97,14 +110,15 @@ soma.views({
           return _this.viewHelper.loadToPlay(_this.$('.level_description').val());
         });
       }
-      if (window.location.hash) {
-        this.loadLevelData();
-      }
+      this.loadLevelData(window.location.hash || this.$('.level_instructions').html());
       return this.initInstructions();
     },
-    loadLevelData: function() {
+    loadLevelData: function(instructions) {
       var level;
-      level = this.decode(decodeURIComponent(window.location.hash.replace(/^#/, '')));
+      if (!(instructions != null ? instructions.length : void 0)) {
+        return;
+      }
+      level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
       if (this.levelName === 'editor') {
         this.editor.levelDescription.val(level);
         return this.editor.load();
@@ -222,20 +236,22 @@ soma.views({
 });
 
 soma.routes({
-  '/puzzles/space_fractions/:levelName': function(_arg) {
-    var levelName;
-    levelName = _arg.levelName;
+  '/puzzles/space_fractions/:className/:levelName': function(_arg) {
+    var className, levelName;
+    className = _arg.className, levelName = _arg.levelName;
     return new soma.chunks.SpaceFractions({
+      className: className,
       levelName: levelName
     });
   },
   '/puzzles/space_fractions': function() {
     return new soma.chunks.SpaceFractions;
   },
-  '/puzzles/light_it_up/:levelName': function(_arg) {
-    var levelName;
-    levelName = _arg.levelName;
+  '/puzzles/light_it_up/:className/:levelName': function(_arg) {
+    var className, levelName;
+    className = _arg.className, levelName = _arg.levelName;
     return new soma.chunks.SpaceFractions({
+      className: className,
       levelName: levelName
     });
   },

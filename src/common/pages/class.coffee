@@ -61,8 +61,29 @@ soma.views
                     
             displayLevels = (puzzle, area) =>
                 area.html('')
+                tableHtml = '''
+                    <table>
+                        <tbody>
+                            <th>Name</th>
+                            <th>Difficulty</th>
+                '''
+                
                 for level in @puzzles[puzzle].levels
-                    area.append("<p>#{level.id}</p>")
+                    levelNameComponents = level.id.split(/\//g)
+                    tableHtml += """
+                        <tr>
+                            <td>
+                                <a href='/puzzles/light_it_up/#{levelNameComponents[1..2].join('/')}' target='_blank'>
+                                    #{levelNameComponents[2]}
+                                </a>
+                            </td>
+                            <td>
+                                #{level.difficulty}
+                            </td>
+                        </tr>
+                    """
+                tableHtml += '</tbody></table>'
+                area.html(tableHtml)
                     
             @$('.add_a_level').bind 'click', (e) =>
                 levelSelector = @$('.level_selector')
@@ -82,7 +103,8 @@ soma.views
                     success: (levelData) =>
                         @puzzles.fractions.levels = levelData.levels or []
                         displayLevels('fractions', levelSelector.find('.levels'))
-                        
+                    error: => 
+                        levelSelector.find('.levels').html('No levels yet')
                         
             @$('.create_level').bind 'click', (e) =>
                 link = $(e.currentTarget)

@@ -100,15 +100,17 @@ soma.views({
         }
       };
       displayLevels = function(puzzle, area) {
-        var level, _i, _len, _ref, _results;
+        var level, levelNameComponents, tableHtml, _i, _len, _ref;
         area.html('');
+        tableHtml = '<table>\n    <tbody>\n        <th>Name</th>\n        <th>Difficulty</th>';
         _ref = _this.puzzles[puzzle].levels;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           level = _ref[_i];
-          _results.push(area.append("<p>" + level.id + "</p>"));
+          levelNameComponents = level.id.split(/\//g);
+          tableHtml += "<tr>\n    <td>\n        <a href='/puzzles/light_it_up/" + (levelNameComponents.slice(1, 3).join('/')) + "' target='_blank'>\n            " + levelNameComponents[2] + "\n        </a>\n    </td>\n    <td>\n        " + level.difficulty + "\n    </td>\n</tr>";
         }
-        return _results;
+        tableHtml += '</tbody></table>';
+        return area.html(tableHtml);
       };
       this.$('.add_a_level').bind('click', function(e) {
         var levelSelector;
@@ -131,9 +133,11 @@ soma.views({
             })
           },
           success: function(levelData) {
-            console.log(levelData);
             _this.puzzles.fractions.levels = levelData.levels || [];
             return displayLevels('fractions', levelSelector.find('.levels'));
+          },
+          error: function() {
+            return levelSelector.find('.levels').html('No levels yet');
           }
         });
       });

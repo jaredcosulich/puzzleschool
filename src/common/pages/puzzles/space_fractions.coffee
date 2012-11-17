@@ -5,13 +5,20 @@ soma.chunks
     SpaceFractions:
         meta: -> new soma.chunks.Base({ content: @ })
 
-        prepare: ({@levelName}) ->
+        prepare: ({@className, @levelName}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/space_fractions.html"
             @loadScript '/build/common/pages/puzzles/lib/space_fractions.js'
             if @levelName == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
-            @loadStylesheet '/build/client/css/puzzles/space_fractions.css'            
-
+            @loadStylesheet '/build/client/css/puzzles/space_fractions.css'     
+            
+            @loadData 
+                url: "/api/puzzles/fractions/levels/#{@className}/#{@levelName}"
+                success: (@levelInfo) => 
+                error: () =>
+                    if window?.alert
+                        alert('We were unable to load the information for this level. Please check your internet connection.')
+                   
         build: ->
             @setTitle("Light It Up - The Puzzle School")
             
@@ -21,6 +28,7 @@ soma.chunks
                 custom: @levelName == 'custom'
                 editor: @levelName == 'editor'
                 rows: rows
+                instructions: @levelInfo?.instructions
             )
             
         
@@ -66,12 +74,13 @@ soma.views
                 @$('.load_to_play').bind 'click', =>
                     @viewHelper.loadToPlay(@$('.level_description').val())
             
-            @loadLevelData() if window.location.hash
+            @loadLevelData(window.location.hash or @$('.level_instructions').html())
             
             @initInstructions()
                     
-        loadLevelData: ->
-            level = @decode(decodeURIComponent(window.location.hash.replace(/^#/, '')))
+        loadLevelData: (instructions) ->
+            return if not instructions?.length
+            level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
             if @levelName == 'editor'
                 @editor.levelDescription.val(level)
                 @editor.load()
@@ -142,14 +151,16 @@ soma.views
             return json
             
 soma.routes
-    '/puzzles/space_fractions/:levelName': ({levelName}) -> 
+    '/puzzles/space_fractions/:className/:levelName': ({className, levelName}) -> 
         new soma.chunks.SpaceFractions
+            className: className
             levelName: levelName
     
     '/puzzles/space_fractions': -> new soma.chunks.SpaceFractions
 
-    '/puzzles/light_it_up/:levelName': ({levelName}) -> 
+    '/puzzles/light_it_up/:className/:levelName': ({className, levelName}) -> 
         new soma.chunks.SpaceFractions
+            className: className
             levelName: levelName
     
     '/puzzles/light_it_up': -> new soma.chunks.SpaceFractions

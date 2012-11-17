@@ -41,10 +41,19 @@ soma.routes
             (data) => 
                 @send(levels: data.puzzle_levels or []) 
 
+    '/api/puzzles/:puzzleName/levels/:className/:levelName': ({puzzleName, className, levelName}) ->
+        l = new Line
+            error: (err) => 
+                console.log('Loading puzzle level data failed:', err)
+                @sendError()
+
+            => db.get 'puzzle_levels', "#{puzzleName}/#{className}/#{levelName}", l.wait()
+
+            (level) => @send(level) 
 
     '/api/puzzles/:puzzleName/add_level': ({puzzleName}) ->
         levelData = 
-            id: "#{puzzleName}/#{@data.classId}/#{@data.name}"
+            id: "#{puzzleName}/#{@data.classId}/#{@data.name.replace(/\s/g, '_')}"
             class: @data.classId
             name: @data.name
             instructions: @data.instructions

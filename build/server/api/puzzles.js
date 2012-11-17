@@ -64,12 +64,27 @@ soma.routes({
       });
     });
   },
+  '/api/puzzles/:puzzleName/levels/:className/:levelName': function(_arg) {
+    var className, l, levelName, puzzleName,
+      _this = this;
+    puzzleName = _arg.puzzleName, className = _arg.className, levelName = _arg.levelName;
+    return l = new Line({
+      error: function(err) {
+        console.log('Loading puzzle level data failed:', err);
+        return _this.sendError();
+      }
+    }, function() {
+      return db.get('puzzle_levels', "" + puzzleName + "/" + className + "/" + levelName, l.wait());
+    }, function(level) {
+      return _this.send(level);
+    });
+  },
   '/api/puzzles/:puzzleName/add_level': function(_arg) {
     var l, levelData, puzzleName,
       _this = this;
     puzzleName = _arg.puzzleName;
     levelData = {
-      id: "" + puzzleName + "/" + this.data.classId + "/" + this.data.name,
+      id: "" + puzzleName + "/" + this.data.classId + "/" + (this.data.name.replace(/\s/g, '_')),
       "class": this.data.classId,
       name: this.data.name,
       instructions: this.data.instructions,

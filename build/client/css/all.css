@@ -396,3 +396,6 @@ a {
 .class .level_selector .new_level form textarea {
   width: 18em;
 }
+.class .level_selector table {
+  margin: auto;
+}

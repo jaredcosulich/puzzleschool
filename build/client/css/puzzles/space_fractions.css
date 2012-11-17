@@ -386,3 +386,6 @@ body {
   margin-right: 6px;
   float: left;
 }
+.space_fractions .instructions {
+  display: none;
+}
