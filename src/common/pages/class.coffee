@@ -82,7 +82,7 @@ soma.views
                         <th>Select</th>
             '''
 
-            for level in @puzzles[puzzle].levels
+            for level in @puzzles[puzzle].levels.sort((a,b) -> a.difficulty - b.difficulty)
                 levelNameComponents = level.id.split(/\//g)
                 tableHtml += """
                     <tr>
@@ -139,7 +139,7 @@ soma.views
                 data: dataHash
                 success: (levelInfo) =>
                     @puzzles.fractions.levels.push(levelInfo)
-                    @displayLevels('fractions', newLevelContainer.find('.levels'))
+                    @displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'))
                     @hideNewLevelForm(newLevelContainer)
                     
         displayLevelSelector: () ->

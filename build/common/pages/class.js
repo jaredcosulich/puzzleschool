@@ -124,7 +124,9 @@ soma.views({
       var level, levelNameComponents, tableHtml, _i, _len, _ref;
       area.html('');
       tableHtml = '<table>\n    <tbody>\n        <th>Name</th>\n        <th>Difficulty</th>\n        <th>Select</th>';
-      _ref = this.puzzles[puzzle].levels;
+      _ref = this.puzzles[puzzle].levels.sort(function(a, b) {
+        return a.difficulty - b.difficulty;
+      });
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         level = _ref[_i];
         levelNameComponents = level.id.split(/\//g);
@@ -195,7 +197,7 @@ soma.views({
         data: dataHash,
         success: function(levelInfo) {
           _this.puzzles.fractions.levels.push(levelInfo);
-          _this.displayLevels('fractions', newLevelContainer.find('.levels'));
+          _this.displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'));
           return _this.hideNewLevelForm(newLevelContainer);
         }
       });
