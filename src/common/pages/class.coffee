@@ -127,7 +127,15 @@ soma.views
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                 data: {level: levelId}
                 success: (classLevels) =>
-                    console.log(classLevels)
+                    levelsListHtml = ''
+                    for level in classLevels.levels
+                        levelsListHtml += """
+                            <li><a href='/puzzles/fractions/#{@classInfo.id}/{level.id}' target='_blank'>
+                                #{level.name}
+                            </a></li>
+                        """                    
+                    @$('.class_puzzles').html(levelsListHtml)
+                    @hideLevelSelector()
         
         addNewLevel: (newLevelContainer) ->
             dataHash = newLevelContainer.find('form').data('form').dataHash()
@@ -142,7 +150,7 @@ soma.views
                     @displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'))
                     @hideNewLevelForm(newLevelContainer)
                     
-        displayLevelSelector: () ->
+        displayLevelSelector: ->
             levelSelector = @$('.level_selector')
             levelSelector.css
                 opacity: 0
@@ -162,6 +170,17 @@ soma.views
                     @displayLevels('fractions', levelSelector.find('.levels'))
                 error: => 
                     levelSelector.find('.levels').html('No levels yet')
+                    
+        hideLevelSelector: ->
+            levelSelector = @$('.level_selector')                    
+            levelSelector.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    levelSelector.css
+                        top: -1000
+                        left: -1000
+                    
             
             
 soma.routes

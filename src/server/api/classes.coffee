@@ -58,7 +58,9 @@ soma.routes
         
             => db.update('classes', classId, update, l.wait())
         
-            (classInfo) => @send(levels: classInfo.levels or [])        
+            (classInfo) => db.multiget 'puzzle_levels', classInfo.levels, l.wait()
+                
+            (puzzleInfo) => @send(levels: puzzleInfo.puzzle_levels or [])        
 
     
     '/api/classes/students/:action': requireUser ({action}) ->

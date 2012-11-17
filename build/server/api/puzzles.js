@@ -85,6 +85,7 @@ soma.routes({
     puzzleName = _arg.puzzleName;
     levelData = {
       name: this.data.name,
+      puzzle: puzzleName,
       instructions: this.data.instructions,
       difficulty: this.data.difficulty
     };

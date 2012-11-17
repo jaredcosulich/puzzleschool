@@ -54,6 +54,7 @@ soma.routes
     '/api/puzzles/:puzzleName/add_level': ({puzzleName}) ->
         levelData = 
             name: @data.name
+            puzzle: puzzleName
             instructions: @data.instructions
             difficulty: @data.difficulty
         

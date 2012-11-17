@@ -177,7 +177,15 @@ soma.views({
           level: levelId
         },
         success: function(classLevels) {
-          return console.log(classLevels);
+          var level, levelsListHtml, _i, _len, _ref;
+          levelsListHtml = '';
+          _ref = classLevels.levels;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            level = _ref[_i];
+            levelsListHtml += "<li><a href='/puzzles/fractions/" + _this.classInfo.id + "/{level.id}' target='_blank'>\n    " + level.name + "\n</a></li>";
+          }
+          _this.$('.class_puzzles').html(levelsListHtml);
+          return _this.hideLevelSelector();
         }
       });
     },
@@ -229,6 +237,21 @@ soma.views({
         },
         error: function() {
           return levelSelector.find('.levels').html('No levels yet');
+        }
+      });
+    },
+    hideLevelSelector: function() {
+      var levelSelector,
+        _this = this;
+      levelSelector = this.$('.level_selector');
+      return levelSelector.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return levelSelector.css({
+            top: -1000,
+            left: -1000
+          });
         }
       });
     }
