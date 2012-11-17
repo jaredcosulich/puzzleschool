@@ -256,9 +256,9 @@ soma.routes({
   '/puzzles/space_fractions': function() {
     return new soma.chunks.SpaceFractions;
   },
-  '/puzzles/light_it_up/:className/:levelName': function(_arg) {
-    var className, levelName;
-    className = _arg.className, levelName = _arg.levelName;
+  '/puzzles/light_it_up/:classId/:levelId': function(_arg) {
+    var classId, levelId;
+    classId = _arg.classId, levelId = _arg.levelId;
     return new soma.chunks.SpaceFractions({
       classId: classId,
       levelId: levelId

@@ -43,7 +43,7 @@ soma.routes
                 db.multiget 'puzzle_levels', @classInfo.levels, l.wait()
                     
             (levelInfo) => 
-                @classInfo.levels = levelInfo
+                @classInfo.levels = levelInfo.puzzle_levels
                 @send(@classInfo)
             
             

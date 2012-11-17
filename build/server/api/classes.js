@@ -56,7 +56,7 @@ soma.routes({
       }
       return db.multiget('puzzle_levels', _this.classInfo.levels, l.wait());
     }, function(levelInfo) {
-      _this.classInfo.levels = levelInfo;
+      _this.classInfo.levels = levelInfo.puzzle_levels;
       return _this.send(_this.classInfo);
     });
   }),

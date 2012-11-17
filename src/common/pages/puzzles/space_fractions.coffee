@@ -163,7 +163,7 @@ soma.routes
     
     '/puzzles/space_fractions': -> new soma.chunks.SpaceFractions
 
-    '/puzzles/light_it_up/:className/:levelName': ({className, levelName}) -> 
+    '/puzzles/light_it_up/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.SpaceFractions
             classId: classId
             levelId: levelId
