@@ -8,7 +8,7 @@ soma.chunks
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/space_fractions.html"
             @loadScript '/build/common/pages/puzzles/lib/space_fractions.js'
-            if @levelName == 'editor'
+            if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
             @loadStylesheet '/build/client/css/puzzles/space_fractions.css'     
             
@@ -25,7 +25,7 @@ soma.chunks
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
-                levelName: (@levelId or '')
+                levelId: (@levelId or '')
                 custom: @levelId == 'custom'
                 editor: @levelId == 'editor'
                 rows: rows
@@ -42,11 +42,12 @@ soma.views
                 el: $(@selector)
                 rows: 10
                 columns: 10
+                registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 
             @initEncode()
 
-            @levelName = @el.data('level_name')
-            if not @levelName?.length
+            @levelId = @el.data('level_id')
+            if not @levelId or (isNaN(@levelId) and not @levelId.length)
                 introMessage = @$('.intro')
                 introMessage.css
                     top: ($.viewport().height / 2) - (introMessage.height() / 2) + (window.scrollY)
@@ -56,7 +57,7 @@ soma.views
                     opacity: 1
                     duration: 500
                 
-            else if @levelName == 'editor'
+            else if @levelId == 'editor'
                 spaceFractionsEditor = require('./lib/space_fractions_editor')
                 @editor = new spaceFractionsEditor.EditorHelper
                     el: $(@selector)
@@ -66,7 +67,7 @@ soma.views
                     @$('.level_editor').css(height: 'auto')
                     @$('.load_custom_level_data').hide()
                     
-            else if @levelName == 'custom'
+            else if @levelId == 'custom'
                 window.onhashchange = -> window.location.reload()
                 @$('.load_custom_level_data').bind 'click', => 
                     @$('.custom_level').css(height: 'auto')
@@ -80,9 +81,9 @@ soma.views
             @initInstructions()
                     
         loadLevelData: (instructions) ->
-            return if not instructions?.length
+            return if not instructions?.length or not instructions.replace(/\s/g, '').length
             level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
-            if @levelName == 'editor'
+            if @levelId == 'editor'
                 @editor.levelDescription.val(level)
                 @editor.load()
             else
@@ -150,6 +151,26 @@ soma.views
                 regExp = new RegExp('\\' + @extraEncodeMap[extraEncode],'g')
                 json = json.replace(regExp, extraEncode)
             return json
+            
+        registerEvent: ({type, info}) ->
+            # console.log(type, info)
+            return
+            event = 
+                type: type
+                info: info
+                classId: @classInfo.id
+                levelId: @levelId
+                    
+            $.ajaj
+                url: '/api/events/register'
+                method: 'POST'
+                headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                data: eventInfo
+                success: () =>
+                    @puzzles.fractions.levels.push(levelInfo)
+                    @displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'))
+                    @hideNewLevelForm(newLevelContainer)
+            
             
 soma.routes
     '/puzzles/space_fractions/:classId/:levelId': ({classId, levelId}) -> 

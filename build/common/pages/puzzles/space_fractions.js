@@ -17,7 +17,7 @@ soma.chunks({
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/space_fractions.html");
       this.loadScript('/build/common/pages/puzzles/lib/space_fractions.js');
-      if (this.levelName === 'editor') {
+      if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/space_fractions_editor.js');
       }
       this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
@@ -49,7 +49,7 @@ soma.chunks({
         return _results;
       })();
       return this.html = wings.renderTemplate(this.template, {
-        levelName: this.levelId || '',
+        levelId: this.levelId || '',
         custom: this.levelId === 'custom',
         editor: this.levelId === 'editor',
         rows: rows,
@@ -63,17 +63,20 @@ soma.views({
   SpaceFractions: {
     selector: '#content .space_fractions',
     create: function() {
-      var introMessage, spaceFractions, spaceFractionsEditor, _ref,
+      var introMessage, spaceFractions, spaceFractionsEditor,
         _this = this;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
         el: $(this.selector),
         rows: 10,
-        columns: 10
+        columns: 10,
+        registerEvent: function(eventInfo) {
+          return _this.registerEvent(eventInfo);
+        }
       });
       this.initEncode();
-      this.levelName = this.el.data('level_name');
-      if (!((_ref = this.levelName) != null ? _ref.length : void 0)) {
+      this.levelId = this.el.data('level_id');
+      if (!this.levelId || (isNaN(this.levelId) && !this.levelId.length)) {
         introMessage = this.$('.intro');
         introMessage.css({
           top: ($.viewport().height / 2) - (introMessage.height() / 2) + window.scrollY,
@@ -83,7 +86,7 @@ soma.views({
           opacity: 1,
           duration: 500
         });
-      } else if (this.levelName === 'editor') {
+      } else if (this.levelId === 'editor') {
         spaceFractionsEditor = require('./lib/space_fractions_editor');
         this.editor = new spaceFractionsEditor.EditorHelper({
           el: $(this.selector),
@@ -98,7 +101,7 @@ soma.views({
           });
           return _this.$('.load_custom_level_data').hide();
         });
-      } else if (this.levelName === 'custom') {
+      } else if (this.levelId === 'custom') {
         window.onhashchange = function() {
           return window.location.reload();
         };
@@ -117,11 +120,11 @@ soma.views({
     },
     loadLevelData: function(instructions) {
       var level;
-      if (!(instructions != null ? instructions.length : void 0)) {
+      if (!(instructions != null ? instructions.length : void 0) || !instructions.replace(/\s/g, '').length) {
         return;
       }
       level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
-      if (this.levelName === 'editor') {
+      if (this.levelId === 'editor') {
         this.editor.levelDescription.val(level);
         return this.editor.load();
       } else {
@@ -233,6 +236,33 @@ soma.views({
         json = json.replace(regExp, extraEncode);
       }
       return json;
+    },
+    registerEvent: function(_arg) {
+      var event, info, type,
+        _this = this;
+      type = _arg.type, info = _arg.info;
+      return;
+      event = {
+        type: type,
+        info: info,
+        classId: this.classInfo.id,
+        levelId: this.levelId
+      };
+      return $.ajaj({
+        url: '/api/events/register',
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: eventInfo,
+        success: function() {
+          _this.puzzles.fractions.levels.push(levelInfo);
+          _this.displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'));
+          return _this.hideNewLevelForm(newLevelContainer);
+        }
+      });
     }
   }
 });

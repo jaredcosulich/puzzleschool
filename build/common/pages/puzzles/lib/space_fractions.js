@@ -171,7 +171,7 @@ spaceFractions.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     var _this = this;
-    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns;
+    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.registerEvent = _arg.registerEvent;
     this.initBoard();
     this.initOptions();
     this.initHint();
@@ -328,7 +328,7 @@ spaceFractions.ViewHelper = (function() {
         duration: 250
       });
       objectType = option.data('objectType');
-      return option.bind('mousedown.hint', function() {
+      option.bind('mousedown.hint', function() {
         var body;
         body = $(document.body);
         body.bind('mouseup.hint', function() {
@@ -337,6 +337,17 @@ spaceFractions.ViewHelper = (function() {
         return body.bind('mousemove.hint', function() {
           return _this.moveHint(option, square, objectType);
         });
+      });
+      return this.registerEvent({
+        type: 'hint',
+        info: {
+          fromSquare: option.data('index'),
+          fromArea: (option.parent().hasClass('board') ? 'board' : 'options'),
+          toSquare: square.data('index'),
+          toArea: (square.parent().hasClass('board') ? 'board' : 'options'),
+          objectType: objectType,
+          time: new Date()
+        }
       });
     }
   };
@@ -550,6 +561,15 @@ spaceFractions.ViewHelper = (function() {
               occupiedSquare.removeClass('occupied');
             }
           }
+          _this.registerEvent({
+            type: 'move',
+            info: {
+              start: square.data('index'),
+              end: selectedSquare.data('index'),
+              objectType: objectType,
+              time: new Date()
+            }
+          });
         } else {
           _this.initMovableObject(square, callback);
         }
@@ -764,7 +784,7 @@ spaceFractions.ViewHelper = (function() {
         opacity: 1,
         duration: 500
       });
-      return _this.board.one('click.level_selector', function() {
+      _this.board.one('click.level_selector', function() {
         _this.$('.level_selector_link').css({
           top: _this.board.offset().top,
           left: _this.board.offset().left
@@ -777,6 +797,12 @@ spaceFractions.ViewHelper = (function() {
           opacity: 0,
           duration: 500
         });
+      });
+      return _this.registerEvent({
+        type: 'success',
+        info: {
+          time: new Date()
+        }
       });
     });
   };

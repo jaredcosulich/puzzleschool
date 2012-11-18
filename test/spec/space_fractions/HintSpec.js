@@ -6,6 +6,7 @@ describe("Hints:", function() {
             el: $('.space_fractions'),
             rows: 10,
             columns: 10
+            registerEvent: function() {}
         });
         levelDescription = {"objects":[{"type":"turn_up_right","index":11},{"type":"two_split_right_down","index":16}], "verified": true}
         game.loadToPlay(JSON.stringify(levelDescription));

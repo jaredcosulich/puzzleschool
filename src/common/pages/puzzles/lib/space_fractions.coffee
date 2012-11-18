@@ -155,7 +155,7 @@ class spaceFractions.ViewHelper
     baseFolder: '/assets/images/puzzles/space_fractions/'
     objects: OBJECTS
 
-    constructor: ({@el, @rows, @columns}) ->
+    constructor: ({@el, @rows, @columns, @registerEvent}) ->
         @initBoard()
         @initOptions()
         @initHint()
@@ -242,7 +242,18 @@ class spaceFractions.ViewHelper
             option.bind 'mousedown.hint', =>
                 body = $(document.body)
                 body.bind 'mouseup.hint', => body.unbind('mousemove.hint')
-                body.bind 'mousemove.hint', => @moveHint(option, square, objectType)                 
+                body.bind 'mousemove.hint', => @moveHint(option, square, objectType)   
+            
+            @registerEvent
+                type: 'hint'
+                info: 
+                    fromSquare: option.data('index')
+                    fromArea: (if option.parent().hasClass('board') then 'board' else 'options')
+                    toSquare: square.data('index')
+                    toArea: (if square.parent().hasClass('board') then 'board' else 'options')
+                    objectType: objectType
+                    time: new Date()
+                      
                 
     moveHint: (option, square, objectType) ->
         option.unbind('mousedown.hint')
@@ -404,6 +415,14 @@ class spaceFractions.ViewHelper
                     for occupiedSquare in @$('.square.occupied')
                         occupiedSquare = $(occupiedSquare)
                         occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
+                    
+                    @registerEvent
+                        type: 'move'
+                        info: 
+                            start: square.data('index')
+                            end: selectedSquare.data('index')
+                            objectType: objectType
+                            time: new Date()
                 else
                     @initMovableObject(square, callback)
 
@@ -561,6 +580,12 @@ class spaceFractions.ViewHelper
                 successMessage.animate
                     opacity: 0
                     duration: 500
+        
+            @registerEvent
+                type: 'success'
+                info: 
+                    time: new Date()
+    
     
     loadToPlay: (data) ->
         @loading = true
