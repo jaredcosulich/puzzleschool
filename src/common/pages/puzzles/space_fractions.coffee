@@ -26,6 +26,7 @@ soma.chunks
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
                 levelId: (@levelId or '')
+                classId: (@classId or '')
                 custom: @levelId == 'custom'
                 editor: @levelId == 'editor'
                 rows: rows
@@ -44,10 +45,17 @@ soma.views
                 columns: 10
                 registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 
+            @user = @cookies.get('user')
+            
             @initEncode()
 
+            @classId = @el.data('class_id')
+            @classId = null if @classId and (isNaN(@classId) and not @classId.length)
+
             @levelId = @el.data('level_id')
-            if not @levelId or (isNaN(@levelId) and not @levelId.length)
+            @levelId = null if @levelId and (isNaN(@levelId) and not @levelId.length)
+            
+            if not @levelId
                 introMessage = @$('.intro')
                 introMessage.css
                     top: ($.viewport().height / 2) - (introMessage.height() / 2) + (window.scrollY)
@@ -81,8 +89,10 @@ soma.views
             @initInstructions()
                     
         loadLevelData: (instructions) ->
-            return if not instructions?.length or not instructions.replace(/\s/g, '').length
+            instructions = instructions.replace(/\s/g, '')
+            return if not instructions?.length
             level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
+            return unless level[0] == '{'
             if @levelId == 'editor'
                 @editor.levelDescription.val(level)
                 @editor.load()
@@ -153,24 +163,71 @@ soma.views
             return json
             
         registerEvent: ({type, info}) ->
-            # console.log(type, info)
-            return
-            event = 
+            @pendingEvents or= []
+            @pendingEvents.push
                 type: type
-                info: info
-                classId: @classInfo.id
+                info: JSON.stringify(info)
+                puzzle: 'fractions'
+                classId: @classId
                 levelId: @levelId
+            
+            @sendEvents()
+        
+        sendEvents: ->
+            return unless @events?.length 
+            return if @sendingEvents
+            @sendingEvents = true
                     
+            pendingEvents = (event for event in @pendingEvents)
+            @pendingEvents = []
             $.ajaj
-                url: '/api/events/register'
+                url: '/api/events/create'
                 method: 'POST'
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
-                data: eventInfo
+                data: {events: pendingEvents}
                 success: () =>
-                    @puzzles.fractions.levels.push(levelInfo)
-                    @displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'))
-                    @hideNewLevelForm(newLevelContainer)
-            
+                    statUpdates = {
+                        user: {objectType: 'user', objectId: @user.id, actions: []}
+                        class: {objectType: 'class', objectId: @classId, actions: []}
+                        levelClass: {objectType: 'level_class', objectId: "#{@levelId}/#{@classId}", actions: []}
+                        userLevelClass: {objectType: 'user_level_class', objectId: "#{@user.id}/#{@levelId}/#{@classId}", actions: []}
+                    }
+                    statUpdates.user.actions.push(
+                        attribute: 'levelClasses'
+                        action: 'add'
+                        value: ["#{@levelId}/#{@classId}"]
+                    )
+                    statUpdates.class.actions.push(
+                        attribute: 'users'
+                        action: 'add'
+                        value: [@user.id]
+                    )
+                    statUpdates.levelClass.actions.push(
+                        attribute: 'users'
+                        action: 'add'
+                        value: [@user.id]
+                    )
+                    for event in pendingEvents
+                        if event.type == 'move'
+                            statUpdates.userLevelClass.actions.push(
+                                attribute: 'moves'
+                                action: 'add'
+                                value: 1
+                            )
+                        if event.type == 'hint'
+                            statUpdates.userLevelClass.actions.push(
+                                attribute: 'hints'
+                                action: 'add'
+                                value: 1
+                            )
+                            
+                    updates = (JSON.stringify(statUpdates[key]) for key of statUpdates)
+                            
+                    $.ajaj
+                        url: '/api/stats/update'
+                        method: 'POST'
+                        headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                        data: {updates: updates}
             
 soma.routes
     '/puzzles/space_fractions/:classId/:levelId': ({classId, levelId}) -> 

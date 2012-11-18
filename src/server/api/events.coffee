@@ -5,47 +5,34 @@ db = require('../lib/db')
 {requireUser} = require('./lib/decorators')
 
 soma.routes
-    '/api/events/record': requireUser ->
-        eventInfo = 
-            userId: @user.id
-            classId: @data.classId
-            puzzle: @data.puzzle
-            levelId: @data.level
-            info: @data.info
-            type: @data.type
-        
-        eventInfo.environmentId = "#{@user.id}/#{eventInfo.levelId}"
-        eventInfo.environmentId += "/#{eventInfo.classId}" if eventInfo.classId
-            
+    '/api/events/create': requireUser ->
         l = new Line
             error: (err) => 
-                console.log('Saving tracking record failed:', err)
+                console.log('Saving event record failed:', err)
                 @sendError()
+
+        for event in @data.events
+            do (event) =>
+                eventInfo = 
+                    userId: @user.id
+                    puzzle: event.puzzle
+                    levelId:event.levelId
+                    info: event.info
+                    type: event.type
         
-            => db.put('events', eventInfo, l.wait())
-            (@event) => db.update 'event_lists', eventInfo.environmentId, {events: {add: [event.id]}}
-            => db.update 'event_lists', "user-#{eventInfo.userId}", {events: {add: [event.id]}}
-            => db.update 'event_lists', "level-#{eventInfo.levelId}", {events: {add: [event.id]}}
-        
-        if update.classId
-            l.add => db.update 'event_lists', "class-#{eventInfo.classId}", {events: {add: [event.id]}}
-        
-        
-    '/api/events/stats/update': requireUser ->
-        update = 
-            objectTable: @data.objectTable
-            objectId: @data.objectId
+                eventInfo.classId = event.classId if event.classId
             
-        update[@data.attribute] = {}
-        update[@data.attribute][@data.action] = [@data.value]
+                eventInfo.environmentId = "#{@user.id}/#{eventInfo.levelId}"
+                eventInfo.environmentId += "/#{eventInfo.classId}" if eventInfo.classId
+                   
+                l.add => db.put('events', eventInfo, l.wait())
+                l.add (@event) =>
+                    @listUpdate = {events: {add: [@event.id]}} 
+                    db.update 'event_lists', eventInfo.environmentId, @listUpdate, l.wait()
+                l.add => db.update 'event_lists', "user-#{eventInfo.userId}", @listUpdate, l.wait()
+                l.add => db.update 'event_lists', "level-#{eventInfo.levelId}", @listUpdate, l.wait()
         
-        l = new Line
-            error: (err) => 
-                console.log('Saving event stats failed:', err)
-                @sendError()
+                if eventInfo.classId
+                    l.add => db.update 'event_lists', "class-#{eventInfo.classId}", @listUpdate, l.wait()
         
-            => db.update 'event_stats', "#{@data.objectType}/#{@data.objectId}", update, l.wait()
-            
-            (eventStats) => @send(eventStats)
-        
-            
+        l.add => @send()

@@ -1,0 +1,29 @@
+<div class='page stats'>
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
+        {className} Stats
+    </h1>
+
+    <table>
+        <thead>
+            <th>Levels</th>
+            {:users}
+                <th>{}</th>
+            {/users}
+        </thead>
+        <tbody>
+            {:stats}
+                <tr>
+                    <td>{levelName}</td>
+                    {:users}
+                        <td title='{user}&#10;{level}'>
+                            {:attempted}
+                            {moves} moves, {hints} hints
+                            {/attempted}
+                        </td>
+                    {/users}
+                </tr>
+            {/stats}
+        </tbody>
+    </table>
+</div>

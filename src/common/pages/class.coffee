@@ -192,4 +192,4 @@ soma.views
             
 soma.routes
     '/class': -> new soma.chunks.Class
-    '/class/:id': (data) -> new soma.chunks.Class(id: data.id)
+    '/class/:id': ({id}) -> new soma.chunks.Class(id: id)

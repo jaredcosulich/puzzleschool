@@ -50,6 +50,7 @@ soma.chunks({
       })();
       return this.html = wings.renderTemplate(this.template, {
         levelId: this.levelId || '',
+        classId: this.classId || '',
         custom: this.levelId === 'custom',
         editor: this.levelId === 'editor',
         rows: rows,
@@ -74,9 +75,17 @@ soma.views({
           return _this.registerEvent(eventInfo);
         }
       });
+      this.user = this.cookies.get('user');
       this.initEncode();
+      this.classId = this.el.data('class_id');
+      if (this.classId && (isNaN(this.classId) && !this.classId.length)) {
+        this.classId = null;
+      }
       this.levelId = this.el.data('level_id');
-      if (!this.levelId || (isNaN(this.levelId) && !this.levelId.length)) {
+      if (this.levelId && (isNaN(this.levelId) && !this.levelId.length)) {
+        this.levelId = null;
+      }
+      if (!this.levelId) {
         introMessage = this.$('.intro');
         introMessage.css({
           top: ($.viewport().height / 2) - (introMessage.height() / 2) + window.scrollY,
@@ -120,10 +129,14 @@ soma.views({
     },
     loadLevelData: function(instructions) {
       var level;
-      if (!(instructions != null ? instructions.length : void 0) || !instructions.replace(/\s/g, '').length) {
+      instructions = instructions.replace(/\s/g, '');
+      if (!(instructions != null ? instructions.length : void 0)) {
         return;
       }
       level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
+      if (level[0] !== '{') {
+        return;
+      }
       if (this.levelId === 'editor') {
         this.editor.levelDescription.val(level);
         return this.editor.load();
@@ -238,29 +251,126 @@ soma.views({
       return json;
     },
     registerEvent: function(_arg) {
-      var event, info, type,
-        _this = this;
+      var info, type;
       type = _arg.type, info = _arg.info;
-      return;
-      event = {
+      this.pendingEvents || (this.pendingEvents = []);
+      this.pendingEvents.push({
         type: type,
-        info: info,
-        classId: this.classInfo.id,
+        info: JSON.stringify(info),
+        puzzle: 'fractions',
+        classId: this.classId,
         levelId: this.levelId
-      };
+      });
+      return this.sendEvents();
+    },
+    sendEvents: function() {
+      var event, pendingEvents, _ref,
+        _this = this;
+      if (!((_ref = this.events) != null ? _ref.length : void 0)) {
+        return;
+      }
+      if (this.sendingEvents) {
+        return;
+      }
+      this.sendingEvents = true;
+      pendingEvents = (function() {
+        var _i, _len, _ref1, _results;
+        _ref1 = this.pendingEvents;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          event = _ref1[_i];
+          _results.push(event);
+        }
+        return _results;
+      }).call(this);
+      this.pendingEvents = [];
       return $.ajaj({
-        url: '/api/events/register',
+        url: '/api/events/create',
         method: 'POST',
         headers: {
           'X-CSRF-Token': this.cookies.get('_csrf', {
             raw: true
           })
         },
-        data: eventInfo,
+        data: {
+          events: pendingEvents
+        },
         success: function() {
-          _this.puzzles.fractions.levels.push(levelInfo);
-          _this.displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'));
-          return _this.hideNewLevelForm(newLevelContainer);
+          var key, statUpdates, updates, _i, _len;
+          statUpdates = {
+            user: {
+              objectType: 'user',
+              objectId: _this.user.id,
+              actions: []
+            },
+            "class": {
+              objectType: 'class',
+              objectId: _this.classId,
+              actions: []
+            },
+            levelClass: {
+              objectType: 'level_class',
+              objectId: "" + _this.levelId + "/" + _this.classId,
+              actions: []
+            },
+            userLevelClass: {
+              objectType: 'user_level_class',
+              objectId: "" + _this.user.id + "/" + _this.levelId + "/" + _this.classId,
+              actions: []
+            }
+          };
+          statUpdates.user.actions.push({
+            attribute: 'levelClasses',
+            action: 'add',
+            value: ["" + _this.levelId + "/" + _this.classId]
+          });
+          statUpdates["class"].actions.push({
+            attribute: 'users',
+            action: 'add',
+            value: [_this.user.id]
+          });
+          statUpdates.levelClass.actions.push({
+            attribute: 'users',
+            action: 'add',
+            value: [_this.user.id]
+          });
+          for (_i = 0, _len = pendingEvents.length; _i < _len; _i++) {
+            event = pendingEvents[_i];
+            if (event.type === 'move') {
+              statUpdates.userLevelClass.actions.push({
+                attribute: 'moves',
+                action: 'add',
+                value: 1
+              });
+            }
+            if (event.type === 'hint') {
+              statUpdates.userLevelClass.actions.push({
+                attribute: 'hints',
+                action: 'add',
+                value: 1
+              });
+            }
+          }
+          updates = (function() {
+            var _results;
+            _results = [];
+            for (key in statUpdates) {
+              _results.push(JSON.stringify(statUpdates[key]));
+            }
+            return _results;
+          })();
+          return $.ajaj({
+            url: '/api/stats/update',
+            method: 'POST',
+            headers: {
+              'X-CSRF-Token': _this.cookies.get('_csrf', {
+                raw: true
+              })
+            },
+            data: {
+              updates: updates
+            }
+          });
         }
       });
     }

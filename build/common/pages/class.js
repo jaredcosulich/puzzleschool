@@ -276,9 +276,11 @@ soma.routes({
   '/class': function() {
     return new soma.chunks.Class;
   },
-  '/class/:id': function(data) {
+  '/class/:id': function(_arg) {
+    var id;
+    id = _arg.id;
     return new soma.chunks.Class({
-      id: data.id
+      id: id
     });
   }
 });

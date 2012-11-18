@@ -10,76 +10,62 @@ db = require('../lib/db');
 requireUser = require('./lib/decorators').requireUser;
 
 soma.routes({
-  '/api/events/record': requireUser(function() {
-    var eventInfo, l,
+  '/api/events/create': requireUser(function() {
+    var event, l, _fn, _i, _len, _ref,
       _this = this;
-    eventInfo = {
-      userId: this.user.id,
-      classId: this.data.classId,
-      puzzle: this.data.puzzle,
-      levelId: this.data.level,
-      info: this.data.info,
-      type: this.data.type
-    };
-    eventInfo.environmentId = "" + this.user.id + "/" + eventInfo.levelId;
-    if (eventInfo.classId) {
-      eventInfo.environmentId += "/" + eventInfo.classId;
-    }
     l = new Line({
       error: function(err) {
-        console.log('Saving tracking record failed:', err);
+        console.log('Saving event record failed:', err);
         return _this.sendError();
       }
-    }, function() {
-      return db.put('events', eventInfo, l.wait());
-    }, function(event) {
-      _this.event = event;
-      return db.update('event_lists', eventInfo.environmentId, {
-        events: {
-          add: [event.id]
-        }
-      });
-    }, function() {
-      return db.update('event_lists', "user-" + eventInfo.userId, {
-        events: {
-          add: [event.id]
-        }
-      });
-    }, function() {
-      return db.update('event_lists', "level-" + eventInfo.levelId, {
-        events: {
-          add: [event.id]
-        }
-      });
     });
-    if (update.classId) {
-      return l.add(function() {
-        return db.update('event_lists', "class-" + eventInfo.classId, {
-          events: {
-            add: [event.id]
-          }
-        });
-      });
-    }
-  }),
-  '/api/events/stats/update': requireUser(function() {
-    var l, update,
-      _this = this;
-    update = {
-      objectTable: this.data.objectTable,
-      objectId: this.data.objectId
-    };
-    update[this.data.attribute] = {};
-    update[this.data.attribute][this.data.action] = [this.data.value];
-    return l = new Line({
-      error: function(err) {
-        console.log('Saving event stats failed:', err);
-        return _this.sendError();
+    _ref = this.data.events;
+    _fn = function(event) {
+      var eventInfo;
+      eventInfo = {
+        userId: _this.user.id,
+        puzzle: event.puzzle,
+        levelId: event.levelId,
+        info: event.info,
+        type: event.type
+      };
+      if (event.classId) {
+        eventInfo.classId = event.classId;
       }
-    }, function() {
-      return db.update('event_stats', "" + _this.data.objectType + "/" + _this.data.objectId, update, l.wait());
-    }, function(eventStats) {
-      return _this.send(eventStats);
+      eventInfo.environmentId = "" + _this.user.id + "/" + eventInfo.levelId;
+      if (eventInfo.classId) {
+        eventInfo.environmentId += "/" + eventInfo.classId;
+      }
+      l.add(function() {
+        return db.put('events', eventInfo, l.wait());
+      });
+      l.add(function(event) {
+        _this.event = event;
+        _this.listUpdate = {
+          events: {
+            add: [_this.event.id]
+          }
+        };
+        return db.update('event_lists', eventInfo.environmentId, _this.listUpdate, l.wait());
+      });
+      l.add(function() {
+        return db.update('event_lists', "user-" + eventInfo.userId, _this.listUpdate, l.wait());
+      });
+      l.add(function() {
+        return db.update('event_lists', "level-" + eventInfo.levelId, _this.listUpdate, l.wait());
+      });
+      if (eventInfo.classId) {
+        return l.add(function() {
+          return db.update('event_lists', "class-" + eventInfo.classId, _this.listUpdate, l.wait());
+        });
+      }
+    };
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      event = _ref[_i];
+      _fn(event);
+    }
+    return l.add(function() {
+      return _this.send();
     });
   })
 });
