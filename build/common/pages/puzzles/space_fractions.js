@@ -274,7 +274,6 @@ soma.views({
     sendEvents: function(force) {
       var completeEventRecording, event, key, pendingEvents, statUpdates, timeBetweenEvents, updates, _i, _len, _ref,
         _this = this;
-      console.log(this.sendingEvents);
       if (!force) {
         if (!((_ref = this.pendingEvents) != null ? _ref.length : void 0)) {
           return;
@@ -283,7 +282,6 @@ soma.views({
           return;
         }
       }
-      console.log("SENDING");
       this.sendingEvents += 2;
       pendingEvents = (function() {
         var _i, _len, _ref1, _results;

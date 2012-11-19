@@ -183,12 +183,10 @@ soma.views
             @sendEvents(type == 'success')
         
         sendEvents: (force) ->
-            console.log(@sendingEvents)
             unless force
                 return unless @pendingEvents?.length 
                 return if @sendingEvents > 0
 
-            console.log("SENDING")
             @sendingEvents += 2
                     
             pendingEvents = (event for event in @pendingEvents)
