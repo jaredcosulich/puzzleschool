@@ -125,7 +125,8 @@ soma.views({
         });
       }
       this.loadLevelData(window.location.hash || this.$('.level_instructions').html());
-      return this.initInstructions();
+      this.initInstructions();
+      return this.sendingEvents = 0;
     },
     loadLevelData: function(instructions) {
       var level;
@@ -268,18 +269,22 @@ soma.views({
         this.timeBetweenEvents += new Date().getTime() - this.lastEvent.getTime();
         this.lastEvent = new Date();
       }
-      return this.sendEvents();
+      return this.sendEvents(type === 'success');
     },
-    sendEvents: function() {
-      var event, pendingEvents, timeBetweenEvents, _ref,
+    sendEvents: function(force) {
+      var completeEventRecording, event, key, pendingEvents, statUpdates, timeBetweenEvents, updates, _i, _len, _ref,
         _this = this;
-      if (!((_ref = this.pendingEvents) != null ? _ref.length : void 0)) {
-        return;
+      console.log(this.sendingEvents);
+      if (!force) {
+        if (!((_ref = this.pendingEvents) != null ? _ref.length : void 0)) {
+          return;
+        }
+        if (this.sendingEvents > 0) {
+          return;
+        }
       }
-      if (this.sendingEvents) {
-        return;
-      }
-      this.sendingEvents = true;
+      console.log("SENDING");
+      this.sendingEvents += 2;
       pendingEvents = (function() {
         var _i, _len, _ref1, _results;
         _ref1 = this.pendingEvents;
@@ -293,7 +298,88 @@ soma.views({
       this.pendingEvents = [];
       timeBetweenEvents = this.timeBetweenEvents;
       this.timeBetweenEvents = 0;
-      return $.ajaj({
+      statUpdates = {
+        user: {
+          objectType: 'user',
+          objectId: this.user.id,
+          actions: []
+        },
+        "class": {
+          objectType: 'class',
+          objectId: this.classId,
+          actions: []
+        },
+        levelClass: {
+          objectType: 'level_class',
+          objectId: "" + this.levelId + "/" + this.classId,
+          actions: []
+        },
+        userLevelClass: {
+          objectType: 'user_level_class',
+          objectId: "" + this.user.id + "/" + this.levelId + "/" + this.classId,
+          actions: []
+        }
+      };
+      statUpdates.user.actions.push({
+        attribute: 'levelClasses',
+        action: 'add',
+        value: ["" + this.levelId + "/" + this.classId]
+      });
+      statUpdates["class"].actions.push({
+        attribute: 'users',
+        action: 'add',
+        value: [this.user.id]
+      });
+      statUpdates.levelClass.actions.push({
+        attribute: 'users',
+        action: 'add',
+        value: [this.user.id]
+      });
+      statUpdates.userLevelClass.actions.push({
+        attribute: 'duration',
+        action: 'add',
+        value: timeBetweenEvents
+      });
+      for (_i = 0, _len = pendingEvents.length; _i < _len; _i++) {
+        event = pendingEvents[_i];
+        if (event.type === 'move') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'moves',
+            action: 'add',
+            value: 1
+          });
+        }
+        if (event.type === 'hint') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'hints',
+            action: 'add',
+            value: 1
+          });
+        }
+        if (event.type === 'success') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'success',
+            action: 'add',
+            value: [JSON.parse(event.info).time]
+          });
+        }
+      }
+      updates = (function() {
+        var _results;
+        _results = [];
+        for (key in statUpdates) {
+          _results.push(JSON.stringify(statUpdates[key]));
+        }
+        return _results;
+      })();
+      completeEventRecording = function() {
+        _this.sendingEvents -= 1;
+        if (_this.sendingEvents < 0) {
+          _this.sendingEvents = 0;
+        }
+        return _this.sendEvents();
+      };
+      $.ajaj({
         url: '/api/events/create',
         method: 'POST',
         headers: {
@@ -305,97 +391,22 @@ soma.views({
           events: pendingEvents
         },
         success: function() {
-          var key, statUpdates, updates, _i, _len;
-          statUpdates = {
-            user: {
-              objectType: 'user',
-              objectId: _this.user.id,
-              actions: []
-            },
-            "class": {
-              objectType: 'class',
-              objectId: _this.classId,
-              actions: []
-            },
-            levelClass: {
-              objectType: 'level_class',
-              objectId: "" + _this.levelId + "/" + _this.classId,
-              actions: []
-            },
-            userLevelClass: {
-              objectType: 'user_level_class',
-              objectId: "" + _this.user.id + "/" + _this.levelId + "/" + _this.classId,
-              actions: []
-            }
-          };
-          statUpdates.user.actions.push({
-            attribute: 'levelClasses',
-            action: 'add',
-            value: ["" + _this.levelId + "/" + _this.classId]
-          });
-          statUpdates["class"].actions.push({
-            attribute: 'users',
-            action: 'add',
-            value: [_this.user.id]
-          });
-          statUpdates.levelClass.actions.push({
-            attribute: 'users',
-            action: 'add',
-            value: [_this.user.id]
-          });
-          statUpdates.userLevelClass.actions.push({
-            attribute: 'duration',
-            action: 'add',
-            value: timeBetweenEvents
-          });
-          for (_i = 0, _len = pendingEvents.length; _i < _len; _i++) {
-            event = pendingEvents[_i];
-            if (event.type === 'move') {
-              statUpdates.userLevelClass.actions.push({
-                attribute: 'moves',
-                action: 'add',
-                value: 1
-              });
-            }
-            if (event.type === 'hint') {
-              statUpdates.userLevelClass.actions.push({
-                attribute: 'hints',
-                action: 'add',
-                value: 1
-              });
-            }
-            if (event.type === 'success') {
-              statUpdates.userLevelClass.actions.push({
-                attribute: 'success',
-                action: 'add',
-                value: [JSON.parse(event.info).time]
-              });
-            }
-          }
-          updates = (function() {
-            var _results;
-            _results = [];
-            for (key in statUpdates) {
-              _results.push(JSON.stringify(statUpdates[key]));
-            }
-            return _results;
-          })();
-          return $.ajaj({
-            url: '/api/stats/update',
-            method: 'POST',
-            headers: {
-              'X-CSRF-Token': _this.cookies.get('_csrf', {
-                raw: true
-              })
-            },
-            data: {
-              updates: updates
-            },
-            success: function() {
-              _this.sendingEvents = false;
-              return _this.sendEvents();
-            }
-          });
+          return completeEventRecording();
+        }
+      });
+      return $.ajaj({
+        url: '/api/stats/update',
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: {
+          updates: updates
+        },
+        success: function() {
+          return completeEventRecording();
         }
       });
     }

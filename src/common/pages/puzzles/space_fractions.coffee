@@ -87,6 +87,8 @@ soma.views
             @loadLevelData(window.location.hash or @$('.level_instructions').html())
             
             @initInstructions()
+            
+            @sendingEvents = 0
                     
         loadLevelData: (instructions) ->
             instructions = instructions.replace(/\s/g, '')
@@ -178,12 +180,16 @@ soma.views
                 @timeBetweenEvents += new Date().getTime() - @lastEvent.getTime()
                 @lastEvent = new Date()
             
-            @sendEvents()
+            @sendEvents(type == 'success')
         
-        sendEvents: ->
-            return unless @pendingEvents?.length 
-            return if @sendingEvents
-            @sendingEvents = true
+        sendEvents: (force) ->
+            console.log(@sendingEvents)
+            unless force
+                return unless @pendingEvents?.length 
+                return if @sendingEvents > 0
+
+            console.log("SENDING")
+            @sendingEvents += 2
                     
             pendingEvents = (event for event in @pendingEvents)
             @pendingEvents = []
@@ -191,69 +197,73 @@ soma.views
             timeBetweenEvents = @timeBetweenEvents
             @timeBetweenEvents = 0
 
+            statUpdates = {
+                user: {objectType: 'user', objectId: @user.id, actions: []}
+                class: {objectType: 'class', objectId: @classId, actions: []}
+                levelClass: {objectType: 'level_class', objectId: "#{@levelId}/#{@classId}", actions: []}
+                userLevelClass: {objectType: 'user_level_class', objectId: "#{@user.id}/#{@levelId}/#{@classId}", actions: []}
+            }
+            statUpdates.user.actions.push(
+                attribute: 'levelClasses'
+                action: 'add'
+                value: ["#{@levelId}/#{@classId}"]
+            )
+            statUpdates.class.actions.push(
+                attribute: 'users'
+                action: 'add'
+                value: [@user.id]
+            )
+            statUpdates.levelClass.actions.push(
+                attribute: 'users'
+                action: 'add'
+                value: [@user.id]
+            )
+            statUpdates.userLevelClass.actions.push(
+                attribute: 'duration'
+                action: 'add'
+                value: timeBetweenEvents
+            )
+            for event in pendingEvents
+                if event.type == 'move'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'moves'
+                        action: 'add'
+                        value: 1
+                    )
+                if event.type == 'hint'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'hints'
+                        action: 'add'
+                        value: 1
+                    )
+                if event.type == 'success'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'success'
+                        action: 'add'
+                        value: [JSON.parse(event.info).time]
+                    )
+                    
+            updates = (JSON.stringify(statUpdates[key]) for key of statUpdates)
+               
+            completeEventRecording = =>
+                @sendingEvents -= 1
+                @sendingEvents = 0 if @sendingEvents < 0
+                @sendEvents()
+
             $.ajaj
                 url: '/api/events/create'
                 method: 'POST'
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                 data: {events: pendingEvents}
-                success: () =>
-                    statUpdates = {
-                        user: {objectType: 'user', objectId: @user.id, actions: []}
-                        class: {objectType: 'class', objectId: @classId, actions: []}
-                        levelClass: {objectType: 'level_class', objectId: "#{@levelId}/#{@classId}", actions: []}
-                        userLevelClass: {objectType: 'user_level_class', objectId: "#{@user.id}/#{@levelId}/#{@classId}", actions: []}
-                    }
-                    statUpdates.user.actions.push(
-                        attribute: 'levelClasses'
-                        action: 'add'
-                        value: ["#{@levelId}/#{@classId}"]
-                    )
-                    statUpdates.class.actions.push(
-                        attribute: 'users'
-                        action: 'add'
-                        value: [@user.id]
-                    )
-                    statUpdates.levelClass.actions.push(
-                        attribute: 'users'
-                        action: 'add'
-                        value: [@user.id]
-                    )
-                    statUpdates.userLevelClass.actions.push(
-                        attribute: 'duration'
-                        action: 'add'
-                        value: timeBetweenEvents
-                    )
-                    for event in pendingEvents
-                        if event.type == 'move'
-                            statUpdates.userLevelClass.actions.push(
-                                attribute: 'moves'
-                                action: 'add'
-                                value: 1
-                            )
-                        if event.type == 'hint'
-                            statUpdates.userLevelClass.actions.push(
-                                attribute: 'hints'
-                                action: 'add'
-                                value: 1
-                            )
-                        if event.type == 'success'
-                            statUpdates.userLevelClass.actions.push(
-                                attribute: 'success'
-                                action: 'add'
-                                value: [JSON.parse(event.info).time]
-                            )
-                            
-                            
-                    updates = (JSON.stringify(statUpdates[key]) for key of statUpdates)
-                       
-                    $.ajaj
-                        url: '/api/stats/update'
-                        method: 'POST'
-                        headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
-                        data: {updates: updates}
-                        success: =>
-                            @sendingEvents = false
-                            @sendEvents()
+                success: () => completeEventRecording()
+               
+            $.ajaj
+                url: '/api/stats/update'
+                method: 'POST'
+                headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                data: {updates: updates}
+                success: => completeEventRecording()
+
 soma.routes
     '/puzzles/space_fractions/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.SpaceFractions

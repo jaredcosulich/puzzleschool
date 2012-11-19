@@ -478,6 +478,7 @@ class spaceFractions.ViewHelper
         
     showTip: (square) ->
         square = $(square)
+        return unless square.hasClass('occupied')
         square.unbind 'click.tip'
         objectMeta = @objects[square.data('objectType')]
         if (tip = @$(".tip.#{objectMeta.tip}")).length

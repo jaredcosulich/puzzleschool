@@ -649,6 +649,9 @@ spaceFractions.ViewHelper = (function() {
     var objectMeta, offset, tip,
       _this = this;
     square = $(square);
+    if (!square.hasClass('occupied')) {
+      return;
+    }
     square.unbind('click.tip');
     objectMeta = this.objects[square.data('objectType')];
     if ((tip = this.$(".tip." + objectMeta.tip)).length) {
