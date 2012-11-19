@@ -170,16 +170,27 @@ soma.views
                 puzzle: 'fractions'
                 classId: @classId
                 levelId: @levelId
+                
+            if not @lastEvent
+                @timeBetweenEvents = 0
+                @lastEvent = new Date()
+            else    
+                @timeBetweenEvents += new Date().getTime() - @lastEvent.getTime()
+                @lastEvent = new Date()
             
             @sendEvents()
         
         sendEvents: ->
-            return unless @events?.length 
+            return unless @pendingEvents?.length 
             return if @sendingEvents
             @sendingEvents = true
                     
             pendingEvents = (event for event in @pendingEvents)
             @pendingEvents = []
+
+            timeBetweenEvents = @timeBetweenEvents
+            @timeBetweenEvents = 0
+
             $.ajaj
                 url: '/api/events/create'
                 method: 'POST'
@@ -207,6 +218,11 @@ soma.views
                         action: 'add'
                         value: [@user.id]
                     )
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'duration'
+                        action: 'add'
+                        value: timeBetweenEvents
+                    )
                     for event in pendingEvents
                         if event.type == 'move'
                             statUpdates.userLevelClass.actions.push(
@@ -220,15 +236,24 @@ soma.views
                                 action: 'add'
                                 value: 1
                             )
+                        if event.type == 'success'
+                            statUpdates.userLevelClass.actions.push(
+                                attribute: 'success'
+                                action: 'add'
+                                value: [JSON.parse(event.info).time]
+                            )
+                            
                             
                     updates = (JSON.stringify(statUpdates[key]) for key of statUpdates)
-                            
+                       
                     $.ajaj
                         url: '/api/stats/update'
                         method: 'POST'
                         headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                         data: {updates: updates}
-            
+                        success: =>
+                            @sendingEvents = false
+                            @sendEvents()
 soma.routes
     '/puzzles/space_fractions/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.SpaceFractions

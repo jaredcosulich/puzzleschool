@@ -56,12 +56,19 @@ soma.chunks
                                     for level in @classInfo.levels
                                         userInfo = []
                                         for userId in @users
+                                            userStat = statsHash[level.id]?[userId]
+                                            duration = (userStat?.duration or 0)
+                                            seconds = Math.round(duration / 1000)
+                                            minutes = Math.floor(seconds / 60)
+                                            seconds = seconds - (minutes * 60)
                                             userInfo.push
                                                 level: level.name
                                                 user: userId
-                                                attempted: (if statsHash[level.id]?[userId] then true else false)
-                                                moves: statsHash[level.id]?[userId]?.moves or 0
-                                                hints: statsHash[level.id]?[userId]?.hints or 0
+                                                attempted: (if userStat then true else false)
+                                                moves: userStat?.moves or 0
+                                                hints: userStat?.hints or 0
+                                                success: (if userStat?.success?.length then true else false)
+                                                duration: "#{minutes} minutes, #{seconds} seconds"
                                                     
                                         @stats.push
                                             levelName: level.name

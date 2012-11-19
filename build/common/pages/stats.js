@@ -97,7 +97,7 @@ soma.chunks({
                   objectInfos: userLevelClassInfos
                 },
                 success: function(userLevelClassStats) {
-                  var levelId, stat, statsHash, userInfo, _len5, _len6, _len7, _n, _o, _p, _ref10, _ref11, _ref12, _ref5, _ref6, _ref7, _ref8, _ref9, _results;
+                  var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _n, _o, _p, _ref5, _ref6, _ref7, _ref8, _ref9, _results;
                   statsHash = {};
                   _ref5 = userLevelClassStats.stats;
                   for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
@@ -116,12 +116,19 @@ soma.chunks({
                     _ref7 = _this.users;
                     for (_p = 0, _len7 = _ref7.length; _p < _len7; _p++) {
                       userId = _ref7[_p];
+                      userStat = (_ref8 = statsHash[level.id]) != null ? _ref8[userId] : void 0;
+                      duration = (userStat != null ? userStat.duration : void 0) || 0;
+                      seconds = Math.round(duration / 1000);
+                      minutes = Math.floor(seconds / 60);
+                      seconds = seconds - (minutes * 60);
                       userInfo.push({
                         level: level.name,
                         user: userId,
-                        attempted: (((_ref8 = statsHash[level.id]) != null ? _ref8[userId] : void 0) ? true : false),
-                        moves: ((_ref9 = statsHash[level.id]) != null ? (_ref10 = _ref9[userId]) != null ? _ref10.moves : void 0 : void 0) || 0,
-                        hints: ((_ref11 = statsHash[level.id]) != null ? (_ref12 = _ref11[userId]) != null ? _ref12.hints : void 0 : void 0) || 0
+                        attempted: (userStat ? true : false),
+                        moves: (userStat != null ? userStat.moves : void 0) || 0,
+                        hints: (userStat != null ? userStat.hints : void 0) || 0,
+                        success: ((userStat != null ? (_ref9 = userStat.success) != null ? _ref9.length : void 0 : void 0) ? true : false),
+                        duration: "" + minutes + " minutes, " + seconds + " seconds"
                       });
                     }
                     _results.push(_this.stats.push({

@@ -399,3 +399,9 @@ a {
 .class .level_selector table {
   margin: auto;
 }
+.stats table td {
+  border: 1px solid #ccc;
+}
+.stats table td.success {
+  background-color: #24d94c;
+}

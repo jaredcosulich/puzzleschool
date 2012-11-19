@@ -261,12 +261,19 @@ soma.views({
         classId: this.classId,
         levelId: this.levelId
       });
+      if (!this.lastEvent) {
+        this.timeBetweenEvents = 0;
+        this.lastEvent = new Date();
+      } else {
+        this.timeBetweenEvents += new Date().getTime() - this.lastEvent.getTime();
+        this.lastEvent = new Date();
+      }
       return this.sendEvents();
     },
     sendEvents: function() {
-      var event, pendingEvents, _ref,
+      var event, pendingEvents, timeBetweenEvents, _ref,
         _this = this;
-      if (!((_ref = this.events) != null ? _ref.length : void 0)) {
+      if (!((_ref = this.pendingEvents) != null ? _ref.length : void 0)) {
         return;
       }
       if (this.sendingEvents) {
@@ -284,6 +291,8 @@ soma.views({
         return _results;
       }).call(this);
       this.pendingEvents = [];
+      timeBetweenEvents = this.timeBetweenEvents;
+      this.timeBetweenEvents = 0;
       return $.ajaj({
         url: '/api/events/create',
         method: 'POST',
@@ -334,6 +343,11 @@ soma.views({
             action: 'add',
             value: [_this.user.id]
           });
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'duration',
+            action: 'add',
+            value: timeBetweenEvents
+          });
           for (_i = 0, _len = pendingEvents.length; _i < _len; _i++) {
             event = pendingEvents[_i];
             if (event.type === 'move') {
@@ -348,6 +362,13 @@ soma.views({
                 attribute: 'hints',
                 action: 'add',
                 value: 1
+              });
+            }
+            if (event.type === 'success') {
+              statUpdates.userLevelClass.actions.push({
+                attribute: 'success',
+                action: 'add',
+                value: [JSON.parse(event.info).time]
               });
             }
           }
@@ -369,6 +390,10 @@ soma.views({
             },
             data: {
               updates: updates
+            },
+            success: function() {
+              _this.sendingEvents = false;
+              return _this.sendEvents();
             }
           });
         }
