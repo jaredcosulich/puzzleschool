@@ -12,7 +12,7 @@ soma.chunks
                 @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
             @loadStylesheet '/build/client/css/puzzles/space_fractions.css'     
             
-            if @levelId
+            if @levelId and not isNaN(@levelId)
                 @loadData 
                     url: "/api/puzzles/levels/#{@levelId}"
                     success: (@levelInfo) => 
@@ -25,8 +25,8 @@ soma.chunks
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
-                levelId: (@levelId or '')
-                classId: (@classId or '')
+                levelId: (@levelId or 0)
+                classId: (@classId or 0)
                 custom: @levelId == 'custom'
                 editor: @levelId == 'editor'
                 rows: rows
@@ -51,6 +51,10 @@ soma.views
 
             @classId = @el.data('class_id')
             @classId = null if @classId and (isNaN(@classId) and not @classId.length)
+                
+            if @classId
+                if not @user
+                    $('#base').data().base.showRegistration()
 
             @levelId = @el.data('level_id')
             @levelId = null if @levelId and (isNaN(@levelId) and not @levelId.length)
@@ -76,7 +80,17 @@ soma.views
                     @$('.load_custom_level_data').hide()
                     
             else if @levelId == 'custom'
-                window.onhashchange = -> window.location.reload()
+                @currentHash = window.location.hash.toString()
+                existingHashChange = window.onhashchange
+                window.onhashchange = =>
+                    return if window.location.hash.toString() == @currentHash
+                    if  @decode(decodeURIComponent(window.location.hash.replace(/^#/, '')))[0] == '{'
+                        window.location.reload()
+                    else
+                        existingHashChange()
+                        window.location.hash = @currentHash
+                        
+                    
                 @$('.load_custom_level_data').bind 'click', => 
                     @$('.custom_level').css(height: 'auto')
                     @$('.load_custom_level_data').hide()
@@ -165,6 +179,7 @@ soma.views
             return json
             
         registerEvent: ({type, info}) ->
+            return unless @user and @user.id
             @pendingEvents or= []
             @pendingEvents.push
                 type: type

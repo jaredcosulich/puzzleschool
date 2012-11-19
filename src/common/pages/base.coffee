@@ -75,6 +75,8 @@ soma.views
         showRegistration: () ->
             @showModal('.registration_form')
             @$('.registration_form .cancel_button').bind 'click', () => @hideModal('.registration_form')
+            @$('.registration_form .toggle_login').bind 'click', => 
+                @hideModal('.registration_form', => location.hash = 'login')
 
             submitForm = () =>
                 form = @$('.registration_form form')
@@ -95,7 +97,10 @@ soma.views
                 
         showLogIn: () ->  
             @showModal('.login_form')
-            @$('.login_form .cancel_button').bind 'click', () => @hideModal('.login_form')
+            @$('.login_form .cancel_button').bind 'click', => @hideModal('.login_form')
+            @$('.login_form .toggle_registration').bind 'click', => 
+                @hideModal('.login_form', => location.hash = 'register')
+            
             loginButton = @$('.login_form .login_button')
             loginButton.bind 'click', () =>
                 form = @$('.login_form form')
@@ -156,7 +161,8 @@ soma.views
             modal.bind 'click', (e) => e.stop()
             $(@opaqueScreen).bind 'click', () => @hideModal(selector)
         
-        hideModal: (selector) ->
+        hideModal: (selector, callback) ->
+            return unless @opaqueScreen
             $(@opaqueScreen).unbind 'click'
             modal = if selector instanceof String then @$(selector) else $(selector)
             modal = modal.closest('.modal') unless modal.hasClass('modal')
@@ -169,5 +175,6 @@ soma.views
                         top: -1000
                         left: -1000
                     location.hash = ''
+                    callback() if callback
                     
             

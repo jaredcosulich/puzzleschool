@@ -164,6 +164,11 @@ soma.views({
       this.$('.registration_form .cancel_button').bind('click', function() {
         return _this.hideModal('.registration_form');
       });
+      this.$('.registration_form .toggle_login').bind('click', function() {
+        return _this.hideModal('.registration_form', function() {
+          return location.hash = 'login';
+        });
+      });
       submitForm = function() {
         var form;
         form = _this.$('.registration_form form');
@@ -210,6 +215,11 @@ soma.views({
       this.showModal('.login_form');
       this.$('.login_form .cancel_button').bind('click', function() {
         return _this.hideModal('.login_form');
+      });
+      this.$('.login_form .toggle_registration').bind('click', function() {
+        return _this.hideModal('.login_form', function() {
+          return location.hash = 'register';
+        });
       });
       loginButton = this.$('.login_form .login_button');
       loginButton.bind('click', function() {
@@ -305,9 +315,12 @@ soma.views({
         return _this.hideModal(selector);
       });
     },
-    hideModal: function(selector) {
+    hideModal: function(selector, callback) {
       var modal,
         _this = this;
+      if (!this.opaqueScreen) {
+        return;
+      }
       $(this.opaqueScreen).unbind('click');
       modal = selector instanceof String ? this.$(selector) : $(selector);
       if (!modal.hasClass('modal')) {
@@ -331,7 +344,10 @@ soma.views({
             top: -1000,
             left: -1000
           });
-          return location.hash = '';
+          location.hash = '';
+          if (callback) {
+            return callback();
+          }
         }
       });
     }

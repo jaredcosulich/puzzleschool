@@ -21,7 +21,7 @@ soma.chunks({
         this.loadScript('/build/common/pages/puzzles/lib/space_fractions_editor.js');
       }
       this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
-      if (this.levelId) {
+      if (this.levelId && !isNaN(this.levelId)) {
         return this.loadData({
           url: "/api/puzzles/levels/" + this.levelId,
           success: function(levelInfo) {
@@ -49,8 +49,8 @@ soma.chunks({
         return _results;
       })();
       return this.html = wings.renderTemplate(this.template, {
-        levelId: this.levelId || '',
-        classId: this.classId || '',
+        levelId: this.levelId || 0,
+        classId: this.classId || 0,
         custom: this.levelId === 'custom',
         editor: this.levelId === 'editor',
         rows: rows,
@@ -64,7 +64,7 @@ soma.views({
   SpaceFractions: {
     selector: '#content .space_fractions',
     create: function() {
-      var introMessage, spaceFractions, spaceFractionsEditor,
+      var existingHashChange, introMessage, spaceFractions, spaceFractionsEditor,
         _this = this;
       spaceFractions = require('./lib/space_fractions');
       this.viewHelper = new spaceFractions.ViewHelper({
@@ -80,6 +80,11 @@ soma.views({
       this.classId = this.el.data('class_id');
       if (this.classId && (isNaN(this.classId) && !this.classId.length)) {
         this.classId = null;
+      }
+      if (this.classId) {
+        if (!this.user) {
+          $('#base').data().base.showRegistration();
+        }
       }
       this.levelId = this.el.data('level_id');
       if (this.levelId && (isNaN(this.levelId) && !this.levelId.length)) {
@@ -111,8 +116,18 @@ soma.views({
           return _this.$('.load_custom_level_data').hide();
         });
       } else if (this.levelId === 'custom') {
+        this.currentHash = window.location.hash.toString();
+        existingHashChange = window.onhashchange;
         window.onhashchange = function() {
-          return window.location.reload();
+          if (window.location.hash.toString() === _this.currentHash) {
+            return;
+          }
+          if (_this.decode(decodeURIComponent(window.location.hash.replace(/^#/, '')))[0] === '{') {
+            return window.location.reload();
+          } else {
+            existingHashChange();
+            return window.location.hash = _this.currentHash;
+          }
         };
         this.$('.load_custom_level_data').bind('click', function() {
           _this.$('.custom_level').css({
@@ -254,6 +269,9 @@ soma.views({
     registerEvent: function(_arg) {
       var info, type;
       type = _arg.type, info = _arg.info;
+      if (!(this.user && this.user.id)) {
+        return;
+      }
       this.pendingEvents || (this.pendingEvents = []);
       this.pendingEvents.push({
         type: type,
