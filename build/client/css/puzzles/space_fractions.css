@@ -147,7 +147,6 @@ body {
 }
 .space_fractions .sidebar .menu {
   margin-top: 12px;
-  height: 130px;
   background-color: #fafafa;
 }
 .space_fractions .sidebar .menu h3 {
@@ -167,6 +166,8 @@ body {
   opacity: 0;
   background-color: #c7c7c7;
   padding: 6px;
+  top: -1000px;
+  left: -1000px;
 }
 .space_fractions .square .fraction,
 .space_fractions .laser .fraction {

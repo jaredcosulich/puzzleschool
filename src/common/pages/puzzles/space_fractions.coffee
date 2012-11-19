@@ -103,6 +103,30 @@ soma.views
             @initInstructions()
             
             @sendingEvents = 0
+            
+            @$('.show_level_selector').bind 'click.level_selector', =>
+                @$('.success').animate
+                    opacity: 0
+                    duration: 500
+
+                intro = @$('.intro')
+                intro.addClass('only_levels') unless intro.hasClass('only_levels')
+                intro.css
+                    top: @el.offset().top + (@el.height() / 2) - (intro.height() / 2)
+                    left: @el.offset().left + (@el.width() / 2) - (intro.width() / 2)
+
+                intro.animate
+                    opacity: 1
+                    duration: 250
+            
+                @viewHelper.board.one 'click.level_selector', =>
+                    intro.animate
+                        opacity: 0
+                        duration: 250
+                        complete: =>
+                            intro.css
+                                top: -1000
+                                left: -1000
                     
         loadLevelData: (instructions) ->
             instructions = instructions.replace(/\s/g, '')
@@ -179,7 +203,7 @@ soma.views
             return json
             
         registerEvent: ({type, info}) ->
-            return unless @user and @user.id
+            return unless @user and @user.id and @levelId and @classId
             @pendingEvents or= []
             @pendingEvents.push
                 type: type

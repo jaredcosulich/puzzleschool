@@ -759,25 +759,6 @@ spaceFractions.ViewHelper = (function() {
       }
     }
     successMessage = this.$('.success');
-    this.$('.show_level_selector').bind('click.level_selector', function() {
-      var intro;
-      successMessage.animate({
-        opacity: 0,
-        duration: 500
-      });
-      intro = _this.$('.intro');
-      if (!intro.hasClass('only_levels')) {
-        intro.addClass('only_levels');
-      }
-      intro.css({
-        top: _this.el.offset().top + (_this.el.height() / 2) - (intro.height() / 2),
-        left: _this.el.offset().left + (_this.el.width() / 2) - (intro.width() / 2)
-      });
-      return intro.animate({
-        opacity: 1,
-        duration: 250
-      });
-    });
     return $.timeout(500, function() {
       successMessage.css({
         top: _this.el.offset().top + (_this.el.height() / 2) - (successMessage.height() / 2),

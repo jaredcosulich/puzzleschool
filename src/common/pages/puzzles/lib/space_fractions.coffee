@@ -547,21 +547,6 @@ class spaceFractions.ViewHelper
 
         successMessage = @$('.success')
             
-        @$('.show_level_selector').bind 'click.level_selector', =>
-            successMessage.animate
-                opacity: 0
-                duration: 500
-
-            intro = @$('.intro')
-            intro.addClass('only_levels') unless intro.hasClass('only_levels')
-            intro.css
-                top: @el.offset().top + (@el.height() / 2) - (intro.height() / 2)
-                left: @el.offset().left + (@el.width() / 2) - (intro.width() / 2)
-            
-            intro.animate
-                opacity: 1
-                duration: 250
-            
         $.timeout 500, () =>
             successMessage.css
                 top: @el.offset().top + (@el.height() / 2) - (successMessage.height() / 2)

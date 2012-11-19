@@ -141,7 +141,38 @@ soma.views({
       }
       this.loadLevelData(window.location.hash || this.$('.level_instructions').html());
       this.initInstructions();
-      return this.sendingEvents = 0;
+      this.sendingEvents = 0;
+      return this.$('.show_level_selector').bind('click.level_selector', function() {
+        var intro;
+        _this.$('.success').animate({
+          opacity: 0,
+          duration: 500
+        });
+        intro = _this.$('.intro');
+        if (!intro.hasClass('only_levels')) {
+          intro.addClass('only_levels');
+        }
+        intro.css({
+          top: _this.el.offset().top + (_this.el.height() / 2) - (intro.height() / 2),
+          left: _this.el.offset().left + (_this.el.width() / 2) - (intro.width() / 2)
+        });
+        intro.animate({
+          opacity: 1,
+          duration: 250
+        });
+        return _this.viewHelper.board.one('click.level_selector', function() {
+          return intro.animate({
+            opacity: 0,
+            duration: 250,
+            complete: function() {
+              return intro.css({
+                top: -1000,
+                left: -1000
+              });
+            }
+          });
+        });
+      });
     },
     loadLevelData: function(instructions) {
       var level;
@@ -269,7 +300,7 @@ soma.views({
     registerEvent: function(_arg) {
       var info, type;
       type = _arg.type, info = _arg.info;
-      if (!(this.user && this.user.id)) {
+      if (!(this.user && this.user.id && this.levelId && this.classId)) {
         return;
       }
       this.pendingEvents || (this.pendingEvents = []);
