@@ -230,12 +230,30 @@ soma.views({
       levelSelector = this.$('.level_selector');
       levelSelector.css({
         opacity: 0,
-        top: 100,
-        left: 100
+        top: ($.viewport().height / 2) - (levelSelector.height() / 2) + window.scrollY,
+        left: ($.viewport().width / 2) - (levelSelector.width() / 2)
       });
       levelSelector.animate({
         opacity: 1,
         duration: 250
+      });
+      levelSelector.bind('click.level_selector', function(e) {
+        return e.stop();
+      });
+      $.timeout(10, function() {
+        return $(document.body).one('click.level_selector', function() {
+          return levelSelector.animate({
+            opacity: 1,
+            duration: 250,
+            complete: function() {
+              return levelSelector.css({
+                opacity: 0,
+                top: -1000,
+                left: -1000
+              });
+            }
+          });
+        });
       });
       return $.ajaj({
         url: '/api/puzzles/fractions/levels',
