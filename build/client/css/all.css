@@ -402,6 +402,13 @@ a {
 .stats table td {
   border: 1px solid #ccc;
 }
-.stats table td.success {
+.stats table td.success,
+.stats table td.appropriate {
   background-color: #24d94c;
+}
+.stats table td.easy {
+  background-color: #ffbd2a;
+}
+.stats table td.hard {
+  background-color: #ff6e5f;
 }

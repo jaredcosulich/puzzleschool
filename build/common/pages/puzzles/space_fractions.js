@@ -142,37 +142,8 @@ soma.views({
       this.loadLevelData(window.location.hash || this.$('.level_instructions').html());
       this.initInstructions();
       this.sendingEvents = 0;
-      return this.$('.show_level_selector').bind('click.level_selector', function() {
-        var intro;
-        _this.$('.success').animate({
-          opacity: 0,
-          duration: 500
-        });
-        intro = _this.$('.intro');
-        if (!intro.hasClass('only_levels')) {
-          intro.addClass('only_levels');
-        }
-        intro.css({
-          top: _this.el.offset().top + (_this.el.height() / 2) - (intro.height() / 2),
-          left: _this.el.offset().left + (_this.el.width() / 2) - (intro.width() / 2)
-        });
-        intro.animate({
-          opacity: 1,
-          duration: 250
-        });
-        return _this.viewHelper.board.one('click.level_selector', function() {
-          return intro.animate({
-            opacity: 0,
-            duration: 250,
-            complete: function() {
-              return intro.css({
-                top: -1000,
-                left: -1000
-              });
-            }
-          });
-        });
-      });
+      this.initLevelSelector();
+      return this.initChallengeAssessment();
     },
     loadLevelData: function(instructions) {
       var level;
@@ -218,6 +189,71 @@ soma.views({
               }
             });
           });
+        });
+      });
+    },
+    initLevelSelector: function() {
+      var _this = this;
+      return this.$('.show_level_selector').bind('click.level_selector', function() {
+        var intro;
+        _this.$('.success').animate({
+          opacity: 0,
+          duration: 500
+        });
+        intro = _this.$('.intro');
+        if (!intro.hasClass('only_levels')) {
+          intro.addClass('only_levels');
+        }
+        intro.css({
+          top: _this.el.offset().top + (_this.el.height() / 2) - (intro.height() / 2),
+          left: _this.el.offset().left + (_this.el.width() / 2) - (intro.width() / 2)
+        });
+        intro.animate({
+          opacity: 1,
+          duration: 250
+        });
+        return _this.viewHelper.board.one('click.level_selector', function() {
+          return intro.animate({
+            opacity: 0,
+            duration: 250,
+            complete: function() {
+              return intro.css({
+                top: -1000,
+                left: -1000
+              });
+            }
+          });
+        });
+      });
+    },
+    initChallengeAssessment: function() {
+      var _this = this;
+      return this.$('.challenge_assessment a').one('click', function(e) {
+        var challengeAssessment, link;
+        link = $(e.currentTarget);
+        _this.registerEvent({
+          type: 'challenge',
+          info: {
+            assessment: link[0].className,
+            time: new Date()
+          }
+        });
+        challengeAssessment = link.closest('.challenge_assessment');
+        return challengeAssessment.animate({
+          opacity: 0,
+          duration: 250,
+          complete: function() {
+            var nextLevel;
+            challengeAssessment.hide();
+            nextLevel = link.closest('.success').find('.next_level');
+            nextLevel.css({
+              display: 'block'
+            });
+            return nextLevel.animate({
+              opacity: 1,
+              duration: 250
+            });
+          }
         });
       });
     },
@@ -318,7 +354,7 @@ soma.views({
         this.timeBetweenEvents += new Date().getTime() - this.lastEvent.getTime();
         this.lastEvent = new Date();
       }
-      return this.sendEvents(type === 'success');
+      return this.sendEvents(type === 'success' || type === 'challenge');
     },
     sendEvents: function(force) {
       var completeEventRecording, event, key, pendingEvents, statUpdates, timeBetweenEvents, updates, _i, _len, _ref,
@@ -408,6 +444,13 @@ soma.views({
             attribute: 'success',
             action: 'add',
             value: [JSON.parse(event.info).time]
+          });
+        }
+        if (event.type === 'challenge') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'challenge',
+            action: 'add',
+            value: [JSON.parse(event.info).assessment]
           });
         }
       }

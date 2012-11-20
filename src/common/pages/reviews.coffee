@@ -9,6 +9,7 @@
 # Teach with Portals: http://www.teachwithportals.com/
 # Popcorn Maker: https://popcorn.webmaker.org/templates/basic/?savedDataUrl=projects/stop-and-frisk.json
 # Graph Wars: http://www.graphwar.com/
+# Universe Sandbox: http://universesandbox.com/
 
 
 soma = require('soma')

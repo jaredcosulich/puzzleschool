@@ -104,29 +104,9 @@ soma.views
             
             @sendingEvents = 0
             
-            @$('.show_level_selector').bind 'click.level_selector', =>
-                @$('.success').animate
-                    opacity: 0
-                    duration: 500
-
-                intro = @$('.intro')
-                intro.addClass('only_levels') unless intro.hasClass('only_levels')
-                intro.css
-                    top: @el.offset().top + (@el.height() / 2) - (intro.height() / 2)
-                    left: @el.offset().left + (@el.width() / 2) - (intro.width() / 2)
-
-                intro.animate
-                    opacity: 1
-                    duration: 250
-            
-                @viewHelper.board.one 'click.level_selector', =>
-                    intro.animate
-                        opacity: 0
-                        duration: 250
-                        complete: =>
-                            intro.css
-                                top: -1000
-                                left: -1000
+            @initLevelSelector()
+                    
+            @initChallengeAssessment()        
                     
         loadLevelData: (instructions) ->
             instructions = instructions.replace(/\s/g, '')
@@ -160,7 +140,54 @@ soma.views
                                 instructions.css
                                     top: -1000
                                     left: -1000
+                                    
+        initLevelSelector: ->
+            @$('.show_level_selector').bind 'click.level_selector', =>
+                @$('.success').animate
+                    opacity: 0
+                    duration: 500
+
+                intro = @$('.intro')
+                intro.addClass('only_levels') unless intro.hasClass('only_levels')
+                intro.css
+                    top: @el.offset().top + (@el.height() / 2) - (intro.height() / 2)
+                    left: @el.offset().left + (@el.width() / 2) - (intro.width() / 2)
+
+                intro.animate
+                    opacity: 1
+                    duration: 250
+            
+                @viewHelper.board.one 'click.level_selector', =>
+                    intro.animate
+                        opacity: 0
+                        duration: 250
+                        complete: =>
+                            intro.css
+                                top: -1000
+                                left: -1000
                 
+        initChallengeAssessment: ->
+            @$('.challenge_assessment a').one 'click', (e) =>
+                link = $(e.currentTarget)
+                @registerEvent
+                    type: 'challenge'
+                    info: 
+                        assessment: link[0].className
+                        time: new Date()
+                challengeAssessment = link.closest('.challenge_assessment')
+                challengeAssessment.animate
+                    opacity: 0
+                    duration: 250
+                    complete: =>
+                        challengeAssessment.hide()
+                        nextLevel = link.closest('.success').find('.next_level')
+                        nextLevel.css
+                            display: 'block'
+                        nextLevel.animate
+                            opacity: 1
+                            duration: 250
+                        
+        
         initEncode: ->
             @encodeMap =
                 '"objects"': '~o'
@@ -219,7 +246,7 @@ soma.views
                 @timeBetweenEvents += new Date().getTime() - @lastEvent.getTime()
                 @lastEvent = new Date()
             
-            @sendEvents(type == 'success')
+            @sendEvents(type in ['success', 'challenge'])
         
         sendEvents: (force) ->
             unless force
@@ -278,6 +305,12 @@ soma.views
                         attribute: 'success'
                         action: 'add'
                         value: [JSON.parse(event.info).time]
+                    )
+                if event.type == 'challenge'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'challenge'
+                        action: 'add'
+                        value: [JSON.parse(event.info).assessment]
                     )
                     
             updates = (JSON.stringify(statUpdates[key]) for key of statUpdates)

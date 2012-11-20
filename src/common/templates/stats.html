@@ -16,11 +16,12 @@
                 <tr>
                     <td>{levelName}</td>
                     {:users}
-                        <td title='{user}&#10;{level}' {:success}class='success'{/success}>
+                        <td title='{user}&#10;{level}' {:success}class='success {successClass}'{/success}>
                             {:attempted}
                             {moves} moves<br/>
                             {hints} hints<br/>
                             {duration}
+                            {:assessment}<br/>Challenge: {challenge}{/assessment}
                             {/attempted}
                         </td>
                     {/users}

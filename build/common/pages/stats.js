@@ -97,7 +97,7 @@ soma.chunks({
                   objectInfos: userLevelClassInfos
                 },
                 success: function(userLevelClassStats) {
-                  var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _n, _o, _p, _ref5, _ref6, _ref7, _ref8, _ref9, _results;
+                  var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _n, _o, _p, _ref10, _ref11, _ref12, _ref5, _ref6, _ref7, _ref8, _ref9, _results;
                   statsHash = {};
                   _ref5 = userLevelClassStats.stats;
                   for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
@@ -128,7 +128,10 @@ soma.chunks({
                         moves: (userStat != null ? userStat.moves : void 0) || 0,
                         hints: (userStat != null ? userStat.hints : void 0) || 0,
                         success: ((userStat != null ? (_ref9 = userStat.success) != null ? _ref9.length : void 0 : void 0) ? true : false),
-                        duration: "" + minutes + " minutes, " + seconds + " seconds"
+                        successClass: ((userStat != null ? userStat.hints.length : void 0) ? 'hard' : userStat != null ? (_ref10 = userStat.challenge) != null ? _ref10[0] : void 0 : void 0),
+                        duration: "" + minutes + " min, " + seconds + " sec",
+                        assessment: userStat != null ? (_ref11 = userStat.challenge) != null ? _ref11.length : void 0 : void 0,
+                        challenge: userStat != null ? (_ref12 = userStat.challenge) != null ? _ref12[0] : void 0 : void 0
                       });
                     }
                     _results.push(_this.stats.push({
