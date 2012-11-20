@@ -228,34 +228,42 @@ soma.views({
     },
     initChallengeAssessment: function() {
       var _this = this;
-      return this.$('.challenge_assessment a').one('click', function(e) {
-        var challengeAssessment, link;
-        link = $(e.currentTarget);
-        _this.registerEvent({
-          type: 'challenge',
-          info: {
-            assessment: link[0].className,
-            time: new Date()
-          }
+      if (this.levelId === 'custom') {
+        this.$('.success .challenge_assessment').hide();
+        return this.$('.success .next_level').css({
+          opacity: 1
         });
-        challengeAssessment = link.closest('.challenge_assessment');
-        return challengeAssessment.animate({
-          opacity: 0,
-          duration: 250,
-          complete: function() {
-            var nextLevel;
-            challengeAssessment.hide();
-            nextLevel = link.closest('.success').find('.next_level');
-            nextLevel.css({
-              display: 'block'
-            });
-            return nextLevel.animate({
-              opacity: 1,
-              duration: 250
-            });
-          }
+      } else {
+        this.$('.success .next_level').hide();
+        return this.$('.success .challenge_assessment a').one('click', function(e) {
+          var challengeAssessment, link;
+          link = $(e.currentTarget);
+          _this.registerEvent({
+            type: 'challenge',
+            info: {
+              assessment: link[0].className,
+              time: new Date()
+            }
+          });
+          challengeAssessment = link.closest('.challenge_assessment');
+          return challengeAssessment.animate({
+            opacity: 0,
+            duration: 250,
+            complete: function() {
+              var nextLevel;
+              challengeAssessment.hide();
+              nextLevel = link.closest('.success').find('.next_level');
+              nextLevel.css({
+                display: 'block'
+              });
+              return nextLevel.animate({
+                opacity: 1,
+                duration: 250
+              });
+            }
+          });
         });
-      });
+      }
     },
     initEncode: function() {
       var object;

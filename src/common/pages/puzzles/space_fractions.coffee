@@ -167,25 +167,30 @@ soma.views
                                 left: -1000
                 
         initChallengeAssessment: ->
-            @$('.challenge_assessment a').one 'click', (e) =>
-                link = $(e.currentTarget)
-                @registerEvent
-                    type: 'challenge'
-                    info: 
-                        assessment: link[0].className
-                        time: new Date()
-                challengeAssessment = link.closest('.challenge_assessment')
-                challengeAssessment.animate
-                    opacity: 0
-                    duration: 250
-                    complete: =>
-                        challengeAssessment.hide()
-                        nextLevel = link.closest('.success').find('.next_level')
-                        nextLevel.css
-                            display: 'block'
-                        nextLevel.animate
-                            opacity: 1
-                            duration: 250
+            if @levelId == 'custom'
+                @$('.success .challenge_assessment').hide()
+                @$('.success .next_level').css(opacity: 1)                
+            else
+                @$('.success .next_level').hide()                
+                @$('.success .challenge_assessment a').one 'click', (e) =>
+                    link = $(e.currentTarget)
+                    @registerEvent
+                        type: 'challenge'
+                        info: 
+                            assessment: link[0].className
+                            time: new Date()
+                    challengeAssessment = link.closest('.challenge_assessment')
+                    challengeAssessment.animate
+                        opacity: 0
+                        duration: 250
+                        complete: =>
+                            challengeAssessment.hide()
+                            nextLevel = link.closest('.success').find('.next_level')
+                            nextLevel.css
+                                display: 'block'
+                            nextLevel.animate
+                                opacity: 1
+                                duration: 250
                         
         
         initEncode: ->

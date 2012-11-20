@@ -294,7 +294,6 @@ body {
   color: #24d94c;
 }
 .space_fractions .success .next_level {
-  display: none;
   opacity: 0;
 }
 .space_fractions .intro,
