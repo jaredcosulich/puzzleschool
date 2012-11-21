@@ -333,13 +333,13 @@ spaceFractions.ViewHelper = (function() {
         duration: 250
       });
       objectType = option.data('objectType');
-      option.bind('mousedown.hint', function() {
+      option.bind('mousedown.hint touchstart.hint', function() {
         var body;
         body = $(document.body);
-        body.bind('mouseup.hint', function() {
-          return body.unbind('mousemove.hint');
+        body.bind('mouseup.hint touchend.hint', function() {
+          return body.unbind('mousemove.hint touchmove.hint');
         });
-        return body.bind('mousemove.hint', function() {
+        return body.bind('mousemove.hint touchmove.hint', function() {
           return _this.moveHint(option, square, objectType);
         });
       });
@@ -360,10 +360,10 @@ spaceFractions.ViewHelper = (function() {
   ViewHelper.prototype.moveHint = function(option, square, objectType) {
     var body, dragMessage, dropMessage,
       _this = this;
-    option.unbind('mousedown.hint');
+    option.unbind('mousedown.hint touchstart.hint');
     body = $(document.body);
-    body.unbind('mouseup.hint');
-    body.unbind('mousemove.hint');
+    body.unbind('mouseup.hint touchend.hint');
+    body.unbind('mousemove.hint touchmove.hint');
     dragMessage = this.$('.hint_drag_message');
     dragMessage.css({
       opacity: 0
@@ -380,7 +380,7 @@ spaceFractions.ViewHelper = (function() {
       duration: 250
     });
     this.hideHint(square, objectType);
-    return $(document.body).one('mouseup.hint', function() {
+    return $(document.body).one('mouseup.hint touchend.hint', function() {
       return _this.hideHint(square, objectType, true);
     });
   };
@@ -396,7 +396,7 @@ spaceFractions.ViewHelper = (function() {
       });
       return;
     }
-    $(document.body).unbind('mouseup.hint');
+    $(document.body).unbind('mouseup.hint touchend.hint');
     this.$('.hint_message').animate({
       opacity: 0,
       duration: 250
@@ -504,7 +504,9 @@ spaceFractions.ViewHelper = (function() {
     objectMeta = this.objects[objectType];
     moveObject = function(e) {
       var body, data, endMove, move, movingObject;
-      e.stop();
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
       if (_this.movingObject) {
         return;
       }
@@ -515,7 +517,10 @@ spaceFractions.ViewHelper = (function() {
       movingObject = void 0;
       move = function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
-        e.stop();
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+        square.unbind('mouseup.tip touchend.tip');
         if (movingObject === void 0) {
           movingObject = $(square.find('img')[0]);
           _this.el.append(movingObject);
@@ -544,17 +549,15 @@ spaceFractions.ViewHelper = (function() {
         }
         return _results;
       };
-      body.bind('mousemove.move', function(e) {
-        return move(e);
-      });
-      body.bind('touchmove.move', function(e) {
+      body.bind('mousemove.move touchmove.move', function(e) {
         return move(e);
       });
       endMove = function(e) {
         var image, selectedSquare;
-        e.stop();
-        body.unbind('mousemove.move');
-        body.unbind('touchmove.move');
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+        body.unbind('mousemove.move touchmove.move');
         selectedSquare = _this.$('.square.selected');
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
@@ -583,19 +586,12 @@ spaceFractions.ViewHelper = (function() {
           return callback(selectedSquare, data, image);
         }
       };
-      body.one('mouseup.move', function(e) {
-        return endMove(e);
-      });
-      return body.one('touchend.move', function(e) {
+      return body.one('mouseup.move touchend.move', function(e) {
         return endMove(e);
       });
     };
-    square.unbind('mousedown.move');
-    square.unbind('touchstart.move');
-    square.one('mousedown.move', function(e) {
-      return moveObject(e);
-    });
-    return square.one('touchstart.move', function(e) {
+    square.unbind('mousedown.move touchstart.move');
+    return square.one('mousedown.move touchstart.move', function(e) {
       return moveObject(e);
     });
   };
@@ -644,7 +640,7 @@ spaceFractions.ViewHelper = (function() {
     if (objectMeta.movable) {
       this.initMovableObject(square);
     }
-    square.bind('click.tip', function() {
+    square.bind('mouseup.tip touchend.tip', function() {
       return _this.showTip(square);
     });
     return this.setObjectImage(square);
@@ -657,7 +653,7 @@ spaceFractions.ViewHelper = (function() {
     if (!square.hasClass('occupied')) {
       return;
     }
-    square.unbind('click.tip');
+    square.unbind('mouseup.tip touchend.tip');
     objectMeta = this.objects[square.data('objectType')];
     if ((tip = this.$(".tip." + objectMeta.tip)).length) {
       offset = square.offset();
@@ -672,12 +668,12 @@ spaceFractions.ViewHelper = (function() {
       });
     }
     return $.timeout(10, function() {
-      return $(document.body).one('mousedown.tip', function() {
+      return $(document.body).one('mouseup.tip touchend.tip', function() {
         return tip.animate({
           opacity: 0,
           duration: 250,
           complete: function() {
-            square.bind('click.tip', function() {
+            square.bind('mouseup.tip touchend.tip', function() {
               return _this.showTip(square);
             });
             return tip.css({
