@@ -39,7 +39,7 @@ soma.routes({
       l.add(function() {
         return db.put('events', eventInfo, l.wait());
       });
-      l.add(function(event) {
+      return l.add(function(event) {
         _this.event = event;
         _this.listUpdate = {
           events: {
@@ -48,17 +48,6 @@ soma.routes({
         };
         return db.update('event_lists', eventInfo.environmentId, _this.listUpdate, l.wait());
       });
-      l.add(function() {
-        return db.update('event_lists', "user-" + eventInfo.userId, _this.listUpdate, l.wait());
-      });
-      l.add(function() {
-        return db.update('event_lists', "level-" + eventInfo.levelId, _this.listUpdate, l.wait());
-      });
-      if (eventInfo.classId) {
-        return l.add(function() {
-          return db.update('event_lists', "class-" + eventInfo.classId, _this.listUpdate, l.wait());
-        });
-      }
     };
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       event = _ref[_i];

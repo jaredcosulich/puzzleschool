@@ -10,6 +10,7 @@
 # Popcorn Maker: https://popcorn.webmaker.org/templates/basic/?savedDataUrl=projects/stop-and-frisk.json
 # Graph Wars: http://www.graphwar.com/
 # Universe Sandbox: http://universesandbox.com/
+# Eye Paint - http://www.curioushat.com/eye-paint/
 
 
 soma = require('soma')

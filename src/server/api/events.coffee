@@ -29,10 +29,5 @@ soma.routes
                 l.add (@event) =>
                     @listUpdate = {events: {add: [@event.id]}} 
                     db.update 'event_lists', eventInfo.environmentId, @listUpdate, l.wait()
-                l.add => db.update 'event_lists', "user-#{eventInfo.userId}", @listUpdate, l.wait()
-                l.add => db.update 'event_lists', "level-#{eventInfo.levelId}", @listUpdate, l.wait()
-        
-                if eventInfo.classId
-                    l.add => db.update 'event_lists', "class-#{eventInfo.classId}", @listUpdate, l.wait()
         
         l.add => @send()

@@ -354,6 +354,9 @@ class spaceFractions.ViewHelper
         else
             squareOrLaser.append(fraction)
     
+    clientX: (e) => e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX
+    clientY: (e) => e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY
+    
     initMovableObject: (square, callback) ->
         square = $(square)
         objectType = square.data('objectType')
@@ -380,17 +383,17 @@ class spaceFractions.ViewHelper
 
                 return unless movingObject
 
-                left = e.clientX - (square.width() / 2)
-                top = e.clientY - (square.height() / 2)
+                left = @clientX(e) - (square.width() / 2)
+                top = @clientY(e) - (square.height() / 2)
                 movingObject.css
                     left: left
                     top: top
                 for boardSquare in @el.find('.square:not(.occupied)')
                     offset = $(boardSquare).offset()
-                    if e.clientX >= offset.left and
-                       e.clientX < offset.left + offset.width and
-                       e.clientY >= offset.top and
-                       e.clientY < offset.top + offset.height
+                    if @clientX(e) >= offset.left and
+                       @clientX(e) < offset.left + offset.width and
+                       @clientY(e) >= offset.top and
+                       @clientY(e) < offset.top + offset.height
                         $(boardSquare).addClass('selected')
                     else
                         $(boardSquare).removeClass('selected')
