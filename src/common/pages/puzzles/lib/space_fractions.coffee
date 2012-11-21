@@ -311,9 +311,11 @@ class spaceFractions.ViewHelper
             else if totalLaser > fraction
                 state = 'over'
             
-            square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}_#{state}.png")
+            if (square.find('img').attr('src') or '').indexOf("#{objectMeta.image}_#{state}") == -1
+                square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}_#{state}.png")
         else
-            square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}.png")
+            if (square.find('img').attr('src') or '').indexOf(objectMeta.image) == -1
+                square.find('img').attr('src', "#{@baseFolder}#{objectMeta.image}.png")
         
         square.find('img').bind "mousedown", (e) -> e.preventDefault() if e.preventDefault
         
@@ -362,7 +364,7 @@ class spaceFractions.ViewHelper
         objectType = square.data('objectType')
         objectMeta = @objects[objectType]
         moveObject = (e) =>
-            e.preventDefault() if e.preventDefault
+            e.stop()
             return if @movingObject
             @movingObject = true
             
@@ -373,7 +375,7 @@ class spaceFractions.ViewHelper
             
             movingObject = undefined
             move = (e) =>
-                e.preventDefault() if e.preventDefault
+                e.stop()
                 
                 if movingObject == undefined
                     movingObject = $(square.find('img')[0])
@@ -402,12 +404,12 @@ class spaceFractions.ViewHelper
             body.bind 'touchmove.move', (e) => move(e)
 
             endMove = (e) =>
-                e.preventDefault() if e.preventDefault
+                e.stop()
+                body.unbind 'mousemove.move'        
+                body.unbind 'touchmove.move'
                 selectedSquare = @$('.square.selected')
                 selectedSquare = square if not selectedSquare?.length
                 @el.find('.movable_object').off().remove()
-                body.unbind 'mousemove.move'        
-                body.unbind 'touchmove.move'
 
                 if movingObject
                     image = movingObject
@@ -415,10 +417,7 @@ class spaceFractions.ViewHelper
                     image.removeClass('movable_object')
                     @addObjectToSquare(objectType, selectedSquare, image)
                     selectedSquare.removeClass('selected')
-                    for occupiedSquare in @$('.square.occupied')
-                        occupiedSquare = $(occupiedSquare)
-                        occupiedSquare.removeClass('occupied') unless occupiedSquare.find('img').length
-                    
+
                     @registerEvent
                         type: 'move'
                         info: 
@@ -426,6 +425,7 @@ class spaceFractions.ViewHelper
                             end: selectedSquare.data('index')
                             objectType: objectType
                             time: new Date()
+                            
                 else
                     @initMovableObject(square, callback)
 
@@ -444,24 +444,26 @@ class spaceFractions.ViewHelper
     addObjectToSquare: (objectType, square, image) ->
         square = $(square)
         square.html('')
+
+        image = $(document.createElement('IMG')) unless image
+        square.append(image)
+        
         @removeExistingLasers(square)
         square.addClass('occupied')
         square.addClass(objectType)
         square.data('objectType', objectType)
-        object = @objects[objectType]
-        image = $(document.createElement('IMG')) unless image
-        square.append(image)
+        objectMeta = @objects[objectType]
         
-        @showFraction(square) if object.showFraction
+        @showFraction(square) if objectMeta.showFraction
             
         laserData = JSON.parse(square.data('lasers') or '{}')
         
-        if object.accept
-            square.data('acceptDirections', JSON.stringify(object.acceptDirections))
-            square.data('numeratorMultiplier', object.numeratorMultiplier or 1)        
-            square.data('denominatorMultiplier', object.denominatorMultiplier or 1) 
-            square.data('additive', true) if object.additive       
-            for direction in object.acceptDirections
+        if objectMeta.accept
+            square.data('acceptDirections', JSON.stringify(objectMeta.acceptDirections))
+            square.data('numeratorMultiplier', objectMeta.numeratorMultiplier or 1)        
+            square.data('denominatorMultiplier', objectMeta.denominatorMultiplier or 1) 
+            square.data('additive', true) if objectMeta.additive       
+            for direction in objectMeta.acceptDirections
                 if laserData[direction]
                     square.data('numerator', laserData[direction].numerator)
                     square.data('denominator', laserData[direction].denominator)
@@ -469,11 +471,11 @@ class spaceFractions.ViewHelper
         for direction of laserData
             @fireLaser(@board.find(".square.index#{laserData[direction].index}"))
                     
-        if object.distribute
-            square.data('distributeDirections', JSON.stringify(object.distributeDirections))
+        if objectMeta.distribute
+            square.data('distributeDirections', JSON.stringify(objectMeta.distributeDirections))
             @fireLaser(square)
             
-        @initMovableObject(square) if object.movable
+        @initMovableObject(square) if objectMeta.movable
                     
         square.bind 'click.tip', => @showTip(square)
             

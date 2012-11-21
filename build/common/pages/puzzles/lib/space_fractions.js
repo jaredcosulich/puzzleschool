@@ -428,9 +428,13 @@ spaceFractions.ViewHelper = (function() {
       } else if (totalLaser > fraction) {
         state = 'over';
       }
-      square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + "_" + state + ".png");
+      if ((square.find('img').attr('src') || '').indexOf("" + objectMeta.image + "_" + state) === -1) {
+        square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + "_" + state + ".png");
+      }
     } else {
-      square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + ".png");
+      if ((square.find('img').attr('src') || '').indexOf(objectMeta.image) === -1) {
+        square.find('img').attr('src', "" + this.baseFolder + objectMeta.image + ".png");
+      }
     }
     return square.find('img').bind("mousedown", function(e) {
       if (e.preventDefault) {
@@ -500,9 +504,7 @@ spaceFractions.ViewHelper = (function() {
     objectMeta = this.objects[objectType];
     moveObject = function(e) {
       var body, data, endMove, move, movingObject;
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
+      e.stop();
       if (_this.movingObject) {
         return;
       }
@@ -513,9 +515,7 @@ spaceFractions.ViewHelper = (function() {
       movingObject = void 0;
       move = function(e) {
         var boardSquare, left, offset, top, _k, _len2, _ref, _results;
-        if (e.preventDefault) {
-          e.preventDefault();
-        }
+        e.stop();
         if (movingObject === void 0) {
           movingObject = $(square.find('img')[0]);
           _this.el.append(movingObject);
@@ -551,31 +551,21 @@ spaceFractions.ViewHelper = (function() {
         return move(e);
       });
       endMove = function(e) {
-        var image, occupiedSquare, selectedSquare, _k, _len2, _ref;
-        if (e.preventDefault) {
-          e.preventDefault();
-        }
+        var image, selectedSquare;
+        e.stop();
+        body.unbind('mousemove.move');
+        body.unbind('touchmove.move');
         selectedSquare = _this.$('.square.selected');
         if (!(selectedSquare != null ? selectedSquare.length : void 0)) {
           selectedSquare = square;
         }
         _this.el.find('.movable_object').off().remove();
-        body.unbind('mousemove.move');
-        body.unbind('touchmove.move');
         if (movingObject) {
           image = movingObject;
           movingObject = null;
           image.removeClass('movable_object');
           _this.addObjectToSquare(objectType, selectedSquare, image);
           selectedSquare.removeClass('selected');
-          _ref = _this.$('.square.occupied');
-          for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-            occupiedSquare = _ref[_k];
-            occupiedSquare = $(occupiedSquare);
-            if (!occupiedSquare.find('img').length) {
-              occupiedSquare.removeClass('occupied');
-            }
-          }
           _this.registerEvent({
             type: 'move',
             info: {
@@ -611,31 +601,31 @@ spaceFractions.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.addObjectToSquare = function(objectType, square, image) {
-    var laserData, object, _k, _len2, _ref,
+    var laserData, objectMeta, _k, _len2, _ref,
       _this = this;
     square = $(square);
     square.html('');
-    this.removeExistingLasers(square);
-    square.addClass('occupied');
-    square.addClass(objectType);
-    square.data('objectType', objectType);
-    object = this.objects[objectType];
     if (!image) {
       image = $(document.createElement('IMG'));
     }
     square.append(image);
-    if (object.showFraction) {
+    this.removeExistingLasers(square);
+    square.addClass('occupied');
+    square.addClass(objectType);
+    square.data('objectType', objectType);
+    objectMeta = this.objects[objectType];
+    if (objectMeta.showFraction) {
       this.showFraction(square);
     }
     laserData = JSON.parse(square.data('lasers') || '{}');
-    if (object.accept) {
-      square.data('acceptDirections', JSON.stringify(object.acceptDirections));
-      square.data('numeratorMultiplier', object.numeratorMultiplier || 1);
-      square.data('denominatorMultiplier', object.denominatorMultiplier || 1);
-      if (object.additive) {
+    if (objectMeta.accept) {
+      square.data('acceptDirections', JSON.stringify(objectMeta.acceptDirections));
+      square.data('numeratorMultiplier', objectMeta.numeratorMultiplier || 1);
+      square.data('denominatorMultiplier', objectMeta.denominatorMultiplier || 1);
+      if (objectMeta.additive) {
         square.data('additive', true);
       }
-      _ref = object.acceptDirections;
+      _ref = objectMeta.acceptDirections;
       for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
         direction = _ref[_k];
         if (laserData[direction]) {
@@ -647,11 +637,11 @@ spaceFractions.ViewHelper = (function() {
     for (direction in laserData) {
       this.fireLaser(this.board.find(".square.index" + laserData[direction].index));
     }
-    if (object.distribute) {
-      square.data('distributeDirections', JSON.stringify(object.distributeDirections));
+    if (objectMeta.distribute) {
+      square.data('distributeDirections', JSON.stringify(objectMeta.distributeDirections));
       this.fireLaser(square);
     }
-    if (object.movable) {
+    if (objectMeta.movable) {
       this.initMovableObject(square);
     }
     square.bind('click.tip', function() {
