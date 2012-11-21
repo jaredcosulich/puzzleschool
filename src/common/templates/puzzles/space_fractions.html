@@ -71,6 +71,12 @@
                 </div>
                 <h4 class='level_selection_message'>Select A Level</h4>
                 <ul>
+                    {:levels}
+                    <li><a href="/puzzles/light_it_up/{classId}/{id}">
+                        {name}
+                    </a></li>
+                    {/levels}
+                    {!isClass}
                     <li>
                         Basics
                         <ul>
@@ -131,6 +137,7 @@
                             
                         </ul>
                     </li>
+                    {/isClass}
                 </ul>
                 <p>
                     You can also try creating your own level in the

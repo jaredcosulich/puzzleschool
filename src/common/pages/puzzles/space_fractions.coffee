@@ -1,6 +1,13 @@
 soma = require('soma')
 wings = require('wings')
 
+
+sortLevels = (levels) ->
+    levels.sort (level1,level2) ->
+        a = level1.difficulty + level1.name
+        b = level2.difficulty + level2.name
+        return if a == b then 0 else (if a < b then -1 else 1)
+
 soma.chunks
     SpaceFractions:
         meta: -> new soma.chunks.Base({ content: @ })
@@ -19,7 +26,19 @@ soma.chunks
                     error: () =>
                         if window?.alert
                             alert('We were unable to load the information for this level. Please check your internet connection.')
-                   
+            
+            if @classId
+                @loadData 
+                    url: "/api/classes/info/#{@classId}"
+                    success: (data) =>
+                        @classInfo = data
+                        level.classId = @classInfo.id for level in @classInfo.levels
+                        @classInfo.levels = sortLevels(@classInfo.levels)
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load the information for this class. Please check your internet connection.')
+
+                      
         build: ->
             @setTitle("Light It Up - The Puzzle School")
             
@@ -31,6 +50,8 @@ soma.chunks
                 editor: @levelId == 'editor'
                 rows: rows
                 instructions: @levelInfo?.instructions
+                isClass: (if @classInfo then true else false)
+                levels: @classInfo?.levels
             )
             
         
