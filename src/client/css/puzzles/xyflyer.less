@@ -1,0 +1,36 @@
+@import '../variables';
+@import '../methods';
+
+body {
+    background-color: @grey;
+}
+
+@height: 640px;
+@width: 960px;
+
+.xyflyer {
+    height: @height;
+    width: @width;
+    margin-left: -12px;
+    background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
+    position: relative;
+    overflow: hidden;
+    
+    .canvas {
+        width: @height;
+        height: @height;
+        float: right;
+    }
+    
+    .equation_area {
+        background-color: white;
+        .rounded(6px);
+        opacity: 0.8;
+        position: absolute;
+        width: (@width / 3);
+        height: @height;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
