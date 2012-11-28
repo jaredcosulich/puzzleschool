@@ -50,7 +50,7 @@ soma.views
                     @formula = @tdop.compileToJs($(e.currentTarget).val())                
                 catch err
 
-                @viewHelper.plot(@formula, 1)
+                @viewHelper.plot(@formula, 1) if @formula
 
 
 soma.routes

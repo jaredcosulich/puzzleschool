@@ -22,43 +22,76 @@ xyflyer.ViewHelper = (function() {
     if (this.canvas && this.canvas[0].getContext) {
       this.context = this.canvas[0].getContext('2d');
     }
-    this.initCanvas();
+    this.initGrid();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
   };
 
-  ViewHelper.prototype.initCanvas = function() {
+  ViewHelper.prototype.initGrid = function() {
+    var increment, xAxis, xPos, xUnits, yAxis, yPos, yUnits, _i, _j, _ref, _ref1, _ref2, _ref3;
     this.width = this.canvas[0].width = this.canvas.width();
-    return this.height = this.canvas[0].height = this.canvas.height();
+    this.height = this.canvas[0].height = this.canvas.height();
+    this.xUnit = this.width / (this.grid.xMax - this.grid.xMin);
+    this.yUnit = this.height / (this.grid.yMax - this.grid.yMin);
+    this.maxUnits = 10;
+    this.context.strokeStyle = 'rgba(255,255,255,0.4)';
+    this.context.fillStyle = 'rgba(255,255,255,0.4)';
+    this.context.font = 'normal 12px sans-serif';
+    this.context.lineWidth = 1;
+    this.context.beginPath();
+    yAxis = this.height + (this.grid.yMin * this.yUnit);
+    this.context.moveTo(0, yAxis);
+    this.context.lineTo(this.width, yAxis);
+    xAxis = this.width + (this.grid.xMin * this.xUnit);
+    this.context.moveTo(xAxis, 0);
+    this.context.lineTo(xAxis, this.height);
+    xUnits = this.width / this.xUnit;
+    if (xUnits < this.maxUnits) {
+      xUnits = this.maxUnits;
+    }
+    for (increment = _i = 0, _ref = this.width, _ref1 = this.xUnit * (xUnits / this.maxUnits); 0 <= _ref ? _i <= _ref : _i >= _ref; increment = _i += _ref1) {
+      this.context.moveTo(increment, yAxis + 10);
+      this.context.lineTo(increment, yAxis - 10);
+      xPos = increment + 3;
+      if (xPos > this.width) {
+        xPos = this.width - 16;
+      }
+      this.context.fillText(this.grid.xMin + (increment / this.xUnit), xPos, yAxis - 3);
+    }
+    yUnits = this.height / this.yUnit;
+    if (yUnits < this.maxUnits) {
+      yUnits = this.maxUnits;
+    }
+    for (increment = _j = 0, _ref2 = this.height, _ref3 = this.yUnit * (yUnits / this.maxUnits); 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; increment = _j += _ref3) {
+      this.context.moveTo(xAxis + 10, increment);
+      this.context.lineTo(xAxis - 10, increment);
+      yPos = increment - 3;
+      if (yPos < 0) {
+        yPos = 12;
+      }
+      this.context.fillText(this.grid.yMax - (increment / this.yUnit), xAxis + 3, yPos);
+    }
+    this.context.stroke();
+    return this.context.closePath();
   };
 
   ViewHelper.prototype.plot = function(formula) {
-    var brokenLine, plotted, xPos, xUnit, yPos, yUnit, _i, _ref, _ref1;
-    this.initCanvas();
+    var brokenLine, plotted, xPos, yPos, _i, _ref, _ref1;
+    this.initGrid();
     this.context.strokeStyle = '#00ED00';
     this.context.lineWidth = 2;
     xPos = 0;
     brokenLine = 1;
     plotted = 0;
     this.context.beginPath();
-    xUnit = this.xUnit();
-    yUnit = this.yUnit();
     for (xPos = _i = _ref = this.width / -2, _ref1 = this.width / 2; _i <= _ref1; xPos = _i += 1) {
-      yPos = formula(xPos / xUnit) * yUnit;
+      yPos = formula(xPos / this.xUnit) * this.yUnit;
       this.context.lineTo(xPos + (this.width / 2), (this.height / 2) - yPos);
     }
     this.context.stroke();
     return this.context.closePath();
-  };
-
-  ViewHelper.prototype.xUnit = function() {
-    return this.width / (this.grid.xMax - this.grid.xMin);
-  };
-
-  ViewHelper.prototype.yUnit = function() {
-    return this.height / (this.grid.yMax - this.grid.yMin);
   };
 
   return ViewHelper;

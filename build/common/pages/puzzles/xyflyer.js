@@ -57,7 +57,9 @@ soma.views({
         } catch (err) {
 
         }
-        return _this.viewHelper.plot(_this.formula, 1);
+        if (_this.formula) {
+          return _this.viewHelper.plot(_this.formula, 1);
+        }
       });
     }
   }

@@ -4,8 +4,7 @@ var constants, fns, parse, tdop;
 tdop = typeof exports !== "undefined" && exports !== null ? exports : provide('./lib/tdop', {});
 
 tdop.makeParse = function() {
-  var advance, expression, infix, itself, juxMult, originalSymbol, symbol, symbolTable, token, tokenNr, tokens, _ref,
-    _this = this;
+  var advance, expression, infix, itself, juxMult, originalSymbol, symbol, symbolTable, token, tokenNr, tokens, _ref;
   symbolTable = {};
   _ref = [null, null, null], token = _ref[0], tokens = _ref[1], tokenNr = _ref[2];
   originalSymbol = {
@@ -38,7 +37,7 @@ tdop.makeParse = function() {
       value: '*',
       arity: 'binary',
       first: left,
-      second: expression(60, _this)
+      second: expression(60, this)
     };
   };
   itself = function() {

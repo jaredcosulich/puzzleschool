@@ -24,7 +24,7 @@ tdop.makeParse = ->
 
     symbol('(end)')
 
-    juxMult = (left) =>
+    juxMult = (left) ->
         value: '*'
         arity: 'binary'
         first: left
