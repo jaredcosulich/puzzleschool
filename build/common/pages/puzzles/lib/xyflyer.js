@@ -114,7 +114,7 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.plot = function(formula, id) {
-    var brokenLine, canvas, context, plotted, xPos, yPos, _i, _ref, _ref1;
+    var brokenLine, canvas, context, infiniteLine, lastSlope, lastYPos, slope, xPos, yPos, _i, _ref, _ref1;
     context = this.pathContexts[id];
     if (context) {
       context.clearRect(0, 0, this.width, this.height);
@@ -130,13 +130,31 @@ xyflyer.ViewHelper = (function() {
     }
     context.strokeStyle = 'rgba(0,0,0,0.1)';
     context.lineWidth = 2;
-    xPos = 0;
-    brokenLine = 1;
-    plotted = 0;
     context.beginPath();
+    brokenLine = 0;
+    infiniteLine = 0;
     for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
+      lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
-      context.lineTo(xPos + this.xAxis, this.yAxis - yPos);
+      if (lastYPos) {
+        lastSlope = slope;
+        slope = yPos - lastYPos;
+        if (lastSlope && Math.abs(lastSlope - slope) > Math.abs(lastSlope) && Math.abs(lastYPos - yPos) > Math.abs(lastYPos)) {
+          context.lineTo(xPos + this.xAxis + 1, (lastSlope > 0 ? 0 : this.height));
+          context.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
+          brokenLine += 1;
+        }
+      }
+      if (isNaN(yPos) || (yPos === Number.NEGATIVE_INFINITY) || (yPos === Number.POSITIVE_INFINITY) || (Math.abs(yPos) > 2e5)) {
+        brokenLine += 1;
+        yPos = lastYPos || 0;
+      }
+      if (brokenLine > 0) {
+        context.moveTo(xPos + this.xAxis, this.yAxis - yPos);
+        brokenLine -= 1;
+      } else {
+        context.lineTo(xPos + this.xAxis, this.yAxis - yPos);
+      }
     }
     context.stroke();
     return context.closePath();

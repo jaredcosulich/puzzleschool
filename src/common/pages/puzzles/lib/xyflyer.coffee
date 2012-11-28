@@ -108,16 +108,32 @@ class xyflyer.ViewHelper
 
         context.strokeStyle = 'rgba(0,0,0,0.1)'
         context.lineWidth = 2
-
-        xPos = 0
-        brokenLine = 1
-        plotted = 0
-
+        
         context.beginPath()
-
+        
+        brokenLine = 0
+        infiniteLine = 0
         for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
+            lastYPos = yPos
             yPos = formula(xPos / @xUnit) * @yUnit
-            context.lineTo(xPos + @xAxis, @yAxis - yPos)    
+            
+            if lastYPos
+                lastSlope = slope
+                slope = yPos - lastYPos
+                if lastSlope and Math.abs(lastSlope - slope) > Math.abs(lastSlope) and Math.abs(lastYPos - yPos) > Math.abs(lastYPos)
+                    context.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
+                    context.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))   
+                    brokenLine += 1
+                      
+            if (isNaN(yPos) or (yPos == Number.NEGATIVE_INFINITY) or (yPos == Number.POSITIVE_INFINITY) or (Math.abs(yPos) > 2e5)) 
+                brokenLine += 1
+                yPos = lastYPos or 0
+                        
+            if brokenLine > 0
+                context.moveTo(xPos + @xAxis, @yAxis - yPos)    
+                brokenLine -= 1
+            else
+                context.lineTo(xPos + @xAxis, @yAxis - yPos)    
 
         context.stroke()
         context.closePath()
