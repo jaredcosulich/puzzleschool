@@ -52,14 +52,14 @@ soma.views({
     initEquations: function() {
       var _this = this;
       return this.$('.equation').bind('keyup', function(e) {
+        var formula, input;
+        input = e.currentTarget;
         try {
-          _this.formula = _this.tdop.compileToJs($(e.currentTarget).val());
+          formula = _this.tdop.compileToJs($(input).val());
         } catch (err) {
 
         }
-        if (_this.formula) {
-          return _this.viewHelper.plot(_this.formula, 1);
-        }
+        return _this.viewHelper.plot(formula, input.id);
       });
     }
   }

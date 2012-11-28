@@ -43,11 +43,12 @@ soma.views
                 
         initEquations: ->
             @$('.equation').bind 'keyup', (e) =>
+                input = e.currentTarget
                 try
-                    @formula = @tdop.compileToJs($(e.currentTarget).val())                
+                    formula = @tdop.compileToJs($(input).val())                
                 catch err
 
-                @viewHelper.plot(@formula, 1) if @formula
+                @viewHelper.plot(formula, input.id)
 
 
 soma.routes

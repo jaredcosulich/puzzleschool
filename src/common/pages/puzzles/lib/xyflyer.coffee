@@ -40,10 +40,19 @@ class xyflyer.ViewHelper
         @xAxis = @width - (@grid.xMax * @xUnit)
         @yAxis = @height + (@grid.yMin * @yUnit)
         
-        # @scale = 
+        @scale = 1/(Math.log(Math.sqrt(Math.max(@grid.xMax - @grid.xMin, @grid.yMax - @grid.yMin))) - 0.5)
         
         @loadImage 'island', (island) =>
-            @backgroundContext.drawImage(island, @xAxis - ($(island).width() / 2), @yAxis)
+            island = $(island)
+            height = island.height() * @scale
+            width = island.width() * @scale
+            @backgroundContext.drawImage(
+                island[0], 
+                @xAxis - (width / 2), 
+                @yAxis,
+                width,
+                height
+            )
             @drawGrid()
             
     drawGrid: ->    
@@ -95,6 +104,8 @@ class xyflyer.ViewHelper
             @$('.board').append(canvas)
             context = @pathContexts[id] = canvas.getContext('2d')
             
+        return if not formula
+
         context.strokeStyle = 'rgba(0,0,0,0.1)'
         context.lineWidth = 2
 

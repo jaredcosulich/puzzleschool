@@ -35,11 +35,16 @@ body {
         .rounded(6px);
         opacity: 0.8;
         position: absolute;
-        width: (@width / 3);
-        height: @height;
+        width: ((@width / 3) - 3);
+        height: (@height - 6);
         position: absolute;
-        left: 0;
-        top: 0;
+        left: 3px;
+        top: 3px;
+        .equation {
+            margin: 6px 0 0 6px;
+            font-size: @h3size;
+            width: ((@width / 3) - 18)
+        }
     }
     
     .image_cache {

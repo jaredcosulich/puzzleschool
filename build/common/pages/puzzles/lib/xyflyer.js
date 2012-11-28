@@ -59,8 +59,13 @@ xyflyer.ViewHelper = (function() {
     this.yUnit = this.height / (this.grid.yMax - this.grid.yMin);
     this.xAxis = this.width - (this.grid.xMax * this.xUnit);
     this.yAxis = this.height + (this.grid.yMin * this.yUnit);
+    this.scale = 1 / (Math.log(Math.sqrt(Math.max(this.grid.xMax - this.grid.xMin, this.grid.yMax - this.grid.yMin))) - 0.5);
     return this.loadImage('island', function(island) {
-      _this.backgroundContext.drawImage(island, _this.xAxis - ($(island).width() / 2), _this.yAxis);
+      var height, width;
+      island = $(island);
+      height = island.height() * _this.scale;
+      width = island.width() * _this.scale;
+      _this.backgroundContext.drawImage(island[0], _this.xAxis - (width / 2), _this.yAxis, width, height);
       return _this.drawGrid();
     });
   };
@@ -119,6 +124,9 @@ xyflyer.ViewHelper = (function() {
       canvas.height = this.height;
       this.$('.board').append(canvas);
       context = this.pathContexts[id] = canvas.getContext('2d');
+    }
+    if (!formula) {
+      return;
     }
     context.strokeStyle = 'rgba(0,0,0,0.1)';
     context.lineWidth = 2;

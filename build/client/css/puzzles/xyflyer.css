@@ -29,11 +29,16 @@ body {
   border-radius: 6px;
   opacity: 0.8;
   position: absolute;
-  width: 320px;
-  height: 640px;
+  width: 317px;
+  height: 634px;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 3px;
+  top: 3px;
+}
+.xyflyer .equation_area .equation {
+  margin: 6px 0 0 6px;
+  font-size: 18px;
+  width: 302px;
 }
 .xyflyer .image_cache {
   position: absolute;
