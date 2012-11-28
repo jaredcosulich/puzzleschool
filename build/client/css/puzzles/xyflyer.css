@@ -35,6 +35,9 @@ body {
   left: 3px;
   top: 3px;
 }
+.xyflyer .equation_area h2 {
+  text-align: center;
+}
 .xyflyer .equation_area .equation {
   margin: 6px 0 0 6px;
   font-size: 18px;
