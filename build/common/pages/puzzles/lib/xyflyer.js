@@ -15,83 +15,123 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.baseFolder = '/assets/images/puzzles/xyflyer/';
 
+  ViewHelper.prototype.maxUnits = 10;
+
+  ViewHelper.prototype.pathContexts = {};
+
   function ViewHelper(_arg) {
-    var canvas;
-    this.el = _arg.el, canvas = _arg.canvas, this.grid = _arg.grid;
-    this.canvas = $(canvas);
-    if (this.canvas && this.canvas[0].getContext) {
-      this.context = this.canvas[0].getContext('2d');
+    var backgroundCanvas;
+    this.el = _arg.el, backgroundCanvas = _arg.backgroundCanvas, this.grid = _arg.grid;
+    this.backgroundCanvas = $(backgroundCanvas);
+    if (this.backgroundCanvas && this.backgroundCanvas[0].getContext) {
+      this.backgroundContext = this.backgroundCanvas[0].getContext('2d');
     }
-    this.initGrid();
+    this.initBoard();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
   };
 
-  ViewHelper.prototype.initGrid = function() {
-    var increment, xAxis, xPos, xUnits, yAxis, yPos, yUnits, _i, _j, _ref, _ref1, _ref2, _ref3;
-    this.width = this.canvas[0].width = this.canvas.width();
-    this.height = this.canvas[0].height = this.canvas.height();
+  ViewHelper.prototype.loadImage = function(name, callback) {
+    var image,
+      _this = this;
+    if ((image = this.$(".image_cache .image_" + name + " img")).length) {
+      callback(image);
+      return;
+    }
+    image = new Image();
+    if (callback) {
+      $(image).bind('load', function() {
+        return callback(image);
+      });
+    }
+    image.src = "" + this.baseFolder + name + ".png";
+    image.className = "image_" + name;
+    return this.$('.image_cache').append(image);
+  };
+
+  ViewHelper.prototype.initBoard = function() {
+    var _this = this;
+    this.width = this.backgroundCanvas[0].width = this.backgroundCanvas.width();
+    this.height = this.backgroundCanvas[0].height = this.backgroundCanvas.height();
     this.xUnit = this.width / (this.grid.xMax - this.grid.xMin);
     this.yUnit = this.height / (this.grid.yMax - this.grid.yMin);
-    this.maxUnits = 10;
-    this.context.strokeStyle = 'rgba(255,255,255,0.4)';
-    this.context.fillStyle = 'rgba(255,255,255,0.4)';
-    this.context.font = 'normal 12px sans-serif';
-    this.context.lineWidth = 1;
-    this.context.beginPath();
-    yAxis = this.height + (this.grid.yMin * this.yUnit);
-    this.context.moveTo(0, yAxis);
-    this.context.lineTo(this.width, yAxis);
-    xAxis = this.width + (this.grid.xMin * this.xUnit);
-    this.context.moveTo(xAxis, 0);
-    this.context.lineTo(xAxis, this.height);
+    this.xAxis = this.width - (this.grid.xMax * this.xUnit);
+    this.yAxis = this.height + (this.grid.yMin * this.yUnit);
+    return this.loadImage('island', function(island) {
+      _this.backgroundContext.drawImage(island, _this.xAxis - ($(island).width() / 2), _this.yAxis);
+      return _this.drawGrid();
+    });
+  };
+
+  ViewHelper.prototype.drawGrid = function() {
+    var increment, mark, multiple, start, xUnits, yUnits, _i, _j, _ref;
+    this.backgroundContext.strokeStyle = 'rgba(255,255,255,0.4)';
+    this.backgroundContext.fillStyle = 'rgba(255,255,255,0.4)';
+    this.backgroundContext.font = 'normal 12px sans-serif';
+    this.backgroundContext.lineWidth = 1;
+    this.backgroundContext.beginPath();
+    this.backgroundContext.moveTo(this.xAxis, 0);
+    this.backgroundContext.lineTo(this.xAxis, this.height);
+    this.backgroundContext.moveTo(0, this.yAxis);
+    this.backgroundContext.lineTo(this.width, this.yAxis);
     xUnits = this.width / this.xUnit;
     if (xUnits < this.maxUnits) {
       xUnits = this.maxUnits;
     }
-    for (increment = _i = 0, _ref = this.width, _ref1 = this.xUnit * (xUnits / this.maxUnits); 0 <= _ref ? _i <= _ref : _i >= _ref; increment = _i += _ref1) {
-      this.context.moveTo(increment, yAxis + 10);
-      this.context.lineTo(increment, yAxis - 10);
-      xPos = increment + 3;
-      if (xPos > this.width) {
-        xPos = this.width - 16;
+    multiple = Math.floor(xUnits / this.maxUnits);
+    increment = this.xUnit * multiple;
+    start = 0 - (multiple > this.grid.xMin ? (this.grid.xMin * this.xUnit) % increment : increment % (this.grid.xMin * this.xUnit));
+    for (mark = _i = start, _ref = this.width; start <= _ref ? _i <= _ref : _i >= _ref; mark = _i += increment) {
+      this.backgroundContext.moveTo(mark, this.yAxis + 10);
+      this.backgroundContext.lineTo(mark, this.yAxis - 10);
+      if (!(mark < 0)) {
+        this.backgroundContext.fillText(Math.round(this.grid.xMin + (mark / this.xUnit)), mark + 3, this.yAxis - 3);
       }
-      this.context.fillText(this.grid.xMin + (increment / this.xUnit), xPos, yAxis - 3);
     }
     yUnits = this.height / this.yUnit;
     if (yUnits < this.maxUnits) {
       yUnits = this.maxUnits;
     }
-    for (increment = _j = 0, _ref2 = this.height, _ref3 = this.yUnit * (yUnits / this.maxUnits); 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; increment = _j += _ref3) {
-      this.context.moveTo(xAxis + 10, increment);
-      this.context.lineTo(xAxis - 10, increment);
-      yPos = increment - 3;
-      if (yPos < 0) {
-        yPos = 12;
+    multiple = Math.floor(yUnits / this.maxUnits);
+    increment = (this.yUnit * multiple) * -1;
+    start = this.height - (multiple > this.grid.yMin ? increment % (this.grid.yMin * this.yUnit) : (this.grid.yMin * this.yUnit) % increment);
+    for (mark = _j = start; start <= 0 ? _j <= 0 : _j >= 0; mark = _j += increment) {
+      this.backgroundContext.moveTo(this.xAxis + 10, mark);
+      this.backgroundContext.lineTo(this.xAxis - 10, mark);
+      if (!(mark > this.height)) {
+        this.backgroundContext.fillText(Math.round(this.grid.yMax - (mark / this.yUnit)), this.xAxis + 3, mark - 3);
       }
-      this.context.fillText(this.grid.yMax - (increment / this.yUnit), xAxis + 3, yPos);
     }
-    this.context.stroke();
-    return this.context.closePath();
+    this.backgroundContext.stroke();
+    return this.backgroundContext.closePath();
   };
 
-  ViewHelper.prototype.plot = function(formula) {
-    var brokenLine, plotted, xPos, yPos, _i, _ref, _ref1;
-    this.initGrid();
-    this.context.strokeStyle = '#00ED00';
-    this.context.lineWidth = 2;
+  ViewHelper.prototype.plot = function(formula, id) {
+    var brokenLine, canvas, context, plotted, xPos, yPos, _i, _ref, _ref1;
+    context = this.pathContexts[id];
+    if (context) {
+      context.clearRect(0, 0, this.width, this.height);
+    } else {
+      canvas = document.createElement('CANVAS');
+      canvas.width = this.width;
+      canvas.height = this.height;
+      this.$('.board').append(canvas);
+      context = this.pathContexts[id] = canvas.getContext('2d');
+    }
+    context.strokeStyle = 'rgba(0,0,0,0.1)';
+    context.lineWidth = 2;
     xPos = 0;
     brokenLine = 1;
     plotted = 0;
-    this.context.beginPath();
-    for (xPos = _i = _ref = this.width / -2, _ref1 = this.width / 2; _i <= _ref1; xPos = _i += 1) {
+    context.beginPath();
+    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
       yPos = formula(xPos / this.xUnit) * this.yUnit;
-      this.context.lineTo(xPos + (this.width / 2), (this.height / 2) - yPos);
+      context.lineTo(xPos + this.xAxis, this.yAxis - yPos);
     }
-    this.context.stroke();
-    return this.context.closePath();
+    context.stroke();
+    return context.closePath();
   };
 
   return ViewHelper;

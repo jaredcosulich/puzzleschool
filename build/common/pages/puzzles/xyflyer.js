@@ -38,7 +38,7 @@ soma.views({
       xyflyer = require('./lib/xyflyer');
       this.viewHelper = new xyflyer.ViewHelper({
         el: $(this.selector),
-        canvas: this.$('.canvas'),
+        backgroundCanvas: this.$('.board .background_canvas'),
         grid: {
           xMin: -10,
           xMax: 10,

@@ -6,76 +6,110 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     baseFolder: '/assets/images/puzzles/xyflyer/'
-
-    constructor: ({@el, canvas, @grid}) ->
-        @canvas = $(canvas)
-        if (@canvas and @canvas[0].getContext) 
-            @context = @canvas[0].getContext('2d')
+    maxUnits: 10
+    pathContexts: {}
+    
+    constructor: ({@el, backgroundCanvas, @grid}) ->
+        @backgroundCanvas = $(backgroundCanvas)
+        if (@backgroundCanvas and @backgroundCanvas[0].getContext) 
+            @backgroundContext = @backgroundCanvas[0].getContext('2d')
         
-        @initGrid()
+        @initBoard()        
         
     $: (selector) -> $(selector, @el)
+    
+    loadImage: (name, callback) -> 
+        if (image = @$(".image_cache .image_#{name} img")).length
+            callback(image)
+            return
+            
+        image = new Image()
+        if callback
+            $(image).bind 'load', => callback(image)
+        image.src = "#{@baseFolder}#{name}.png"
+        image.className = "image_#{name}"
+        @$('.image_cache').append(image)
 
-    initGrid: ->    
-        @width = @canvas[0].width = @canvas.width()
-        @height = @canvas[0].height = @canvas.height()
+    initBoard: ->    
+        @width = @backgroundCanvas[0].width = @backgroundCanvas.width()
+        @height = @backgroundCanvas[0].height = @backgroundCanvas.height()        
+
         @xUnit = @width / (@grid.xMax - @grid.xMin)
         @yUnit = @height / (@grid.yMax - @grid.yMin)
-        @maxUnits = 10
-        
-        @context.strokeStyle = 'rgba(255,255,255,0.4)'    
-        @context.fillStyle = 'rgba(255,255,255,0.4)'    
-        @context.font = 'normal 12px sans-serif'    
-        @context.lineWidth = 1
-        @context.beginPath()
-        
-        yAxis = @height + (@grid.yMin * @yUnit)
-        @context.moveTo(0, yAxis)
-        @context.lineTo(@width, yAxis)
-        
-        xAxis = @width + (@grid.xMin * @xUnit)
-        @context.moveTo(xAxis, 0)
-        @context.lineTo(xAxis, @height)
 
+        @xAxis = @width - (@grid.xMax * @xUnit)
+        @yAxis = @height + (@grid.yMin * @yUnit)
+        
+        # @scale = 
+        
+        @loadImage 'island', (island) =>
+            @backgroundContext.drawImage(island, @xAxis - ($(island).width() / 2), @yAxis)
+            @drawGrid()
+            
+    drawGrid: ->    
+        @backgroundContext.strokeStyle = 'rgba(255,255,255,0.4)'    
+        @backgroundContext.fillStyle = 'rgba(255,255,255,0.4)'    
+        @backgroundContext.font = 'normal 12px sans-serif'    
+        @backgroundContext.lineWidth = 1
+        @backgroundContext.beginPath()
+        
+        @backgroundContext.moveTo(@xAxis, 0)
+        @backgroundContext.lineTo(@xAxis, @height)
+
+        @backgroundContext.moveTo(0, @yAxis)
+        @backgroundContext.lineTo(@width, @yAxis)
+        
         xUnits = @width / @xUnit
         xUnits = @maxUnits if xUnits < @maxUnits
-        for increment in [0..@width] by (@xUnit * (xUnits / @maxUnits))
-            @context.moveTo(increment, yAxis + 10)
-            @context.lineTo(increment, yAxis - 10)
-            xPos = increment + 3
-            xPos = @width - 16 if xPos > @width
-            @context.fillText(@grid.xMin + (increment / @xUnit), xPos, yAxis - 3)
+        multiple = Math.floor(xUnits / @maxUnits)
+        increment = (@xUnit * multiple) 
+        start = 0 - (if multiple > @grid.xMin then ((@grid.xMin * @xUnit) % increment) else (increment % (@grid.xMin * @xUnit))) 
+        for mark in [start..@width] by increment
+            @backgroundContext.moveTo(mark, @yAxis + 10)
+            @backgroundContext.lineTo(mark, @yAxis - 10)
+            @backgroundContext.fillText(Math.round(@grid.xMin + (mark / @xUnit)), mark + 3, @yAxis - 3) unless mark < 0
 
         yUnits = @height / @yUnit
         yUnits = @maxUnits if yUnits < @maxUnits
-        for increment in [0..@height] by (@yUnit * (yUnits / @maxUnits))
-            @context.moveTo(xAxis + 10, increment)
-            @context.lineTo(xAxis - 10, increment)
-            yPos = increment - 3
-            yPos = 12 if yPos < 0
-            @context.fillText(@grid.yMax - (increment / @yUnit), xAxis + 3, yPos)
+        multiple = Math.floor(yUnits / @maxUnits)
+        increment = (@yUnit * multiple) * -1
+        start = @height - (if multiple > @grid.yMin then (increment % (@grid.yMin * @yUnit)) else ((@grid.yMin * @yUnit) % increment))
+        for mark in [start..0] by increment
+            @backgroundContext.moveTo(@xAxis + 10, mark)
+            @backgroundContext.lineTo(@xAxis - 10, mark)
+            @backgroundContext.fillText(Math.round(@grid.yMax - (mark / @yUnit)), @xAxis + 3, mark - 3) unless mark > @height
 
-        @context.stroke()
-        @context.closePath()
+        @backgroundContext.stroke()
+        @backgroundContext.closePath()        
         
 
-    plot: (formula) ->
-        @initGrid()
-        @context.strokeStyle = '#00ED00'
-        @context.lineWidth = 2
+
+    plot: (formula, id) ->
+        context = @pathContexts[id]
+        if context
+            context.clearRect(0,0,@width,@height)
+        else
+            canvas = document.createElement('CANVAS')
+            canvas.width = @width
+            canvas.height = @height
+            @$('.board').append(canvas)
+            context = @pathContexts[id] = canvas.getContext('2d')
+            
+        context.strokeStyle = 'rgba(0,0,0,0.1)'
+        context.lineWidth = 2
 
         xPos = 0
         brokenLine = 1
         plotted = 0
 
-        @context.beginPath()
+        context.beginPath()
 
-        for xPos in [(@width/-2)..(@width/2)] by 1
+        for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
             yPos = formula(xPos / @xUnit) * @yUnit
-            @context.lineTo(xPos + (@width / 2), (@height / 2) - yPos)    
+            context.lineTo(xPos + @xAxis, @yAxis - yPos)    
 
-        @context.stroke()
-        @context.closePath()
+        context.stroke()
+        context.closePath()
 
     
     

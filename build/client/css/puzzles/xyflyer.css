@@ -9,10 +9,18 @@ body {
   position: relative;
   overflow: hidden;
 }
-.xyflyer .canvas {
+.xyflyer .board {
   width: 640px;
   height: 640px;
   float: right;
+  position: relative;
+}
+.xyflyer .board canvas {
+  width: 640px;
+  height: 640px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .xyflyer .equation_area {
   background-color: white;
@@ -26,4 +34,9 @@ body {
   position: absolute;
   left: 0;
   top: 0;
+}
+.xyflyer .image_cache {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
 }

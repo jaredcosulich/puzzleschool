@@ -11,9 +11,6 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             @loadScript '/build/common/pages/puzzles/lib/tdop.js'
             @loadScript '/assets/third_party/equation_explorer/tokens.js'
-            # @loadScript '/assets/third_party/equation_explorer/tdop_math.js'
-            # @loadScript '/assets/third_party/equation_explorer/graph.js'
-            # @loadScript '/assets/third_party/equation_explorer/ui.js'
             if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/xyflyer_editor.js' 
             @loadStylesheet '/build/client/css/puzzles/xyflyer.css'     
@@ -32,7 +29,7 @@ soma.views
             xyflyer = require('./lib/xyflyer')
             @viewHelper = new xyflyer.ViewHelper
                 el: $(@selector)
-                canvas: @$('.canvas')
+                backgroundCanvas: @$('.board .background_canvas')
                 grid:
                     xMin: -10
                     xMax: 10

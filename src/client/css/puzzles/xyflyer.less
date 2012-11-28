@@ -16,10 +16,18 @@ body {
     position: relative;
     overflow: hidden;
     
-    .canvas {
+    .board {
         width: @height;
         height: @height;
         float: right;
+        position: relative;
+        canvas {
+            width: @height;
+            height: @height;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     }
     
     .equation_area {
@@ -32,5 +40,11 @@ body {
         position: absolute;
         left: 0;
         top: 0;
+    }
+    
+    .image_cache {
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
     }
 }
