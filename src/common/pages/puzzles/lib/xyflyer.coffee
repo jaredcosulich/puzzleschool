@@ -116,6 +116,13 @@ class xyflyer.ViewHelper
         for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
             lastYPos = yPos
             yPos = formula(xPos / @xUnit) * @yUnit
+
+            if yPos == Number.NEGATIVE_INFINITY
+                yPos = @grid.yMin * @xUnit
+                brokenLine += 1
+            else if yPos == Number.POSITIVE_INFINITY
+                yPos = @grid.yMax * @xUnit
+                brokenLine += 1
             
             if lastYPos
                 lastSlope = slope
@@ -124,10 +131,6 @@ class xyflyer.ViewHelper
                     context.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
                     context.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))   
                     brokenLine += 1
-                      
-            if (isNaN(yPos) or (yPos == Number.NEGATIVE_INFINITY) or (yPos == Number.POSITIVE_INFINITY) or (Math.abs(yPos) > 2e5)) 
-                brokenLine += 1
-                yPos = lastYPos or 0
                         
             if brokenLine > 0
                 context.moveTo(xPos + @xAxis, @yAxis - yPos)    

@@ -136,6 +136,13 @@ xyflyer.ViewHelper = (function() {
     for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
+      if (yPos === Number.NEGATIVE_INFINITY) {
+        yPos = this.grid.yMin * this.xUnit;
+        brokenLine += 1;
+      } else if (yPos === Number.POSITIVE_INFINITY) {
+        yPos = this.grid.yMax * this.xUnit;
+        brokenLine += 1;
+      }
       if (lastYPos) {
         lastSlope = slope;
         slope = yPos - lastYPos;
@@ -144,10 +151,6 @@ xyflyer.ViewHelper = (function() {
           context.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
           brokenLine += 1;
         }
-      }
-      if (isNaN(yPos) || (yPos === Number.NEGATIVE_INFINITY) || (yPos === Number.POSITIVE_INFINITY) || (Math.abs(yPos) > 2e5)) {
-        brokenLine += 1;
-        yPos = lastYPos || 0;
       }
       if (brokenLine > 0) {
         context.moveTo(xPos + this.xAxis, this.yAxis - yPos);
