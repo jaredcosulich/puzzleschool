@@ -123,6 +123,8 @@ class xyflyer.ViewHelper
             else if yPos == Number.POSITIVE_INFINITY
                 yPos = @grid.yMax * @xUnit
                 brokenLine += 1
+
+            # console.log(xPos, yPos)
             
             if lastYPos
                 lastSlope = slope

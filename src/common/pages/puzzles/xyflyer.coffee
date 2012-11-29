@@ -47,7 +47,7 @@ soma.views
                 try
                     formula = @tdop.compileToJs($(input).val())                
                 catch err
-
+                    
                 @viewHelper.plot(formula, input.id)
 
 
