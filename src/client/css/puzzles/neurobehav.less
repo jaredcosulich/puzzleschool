@@ -1,0 +1,62 @@
+@import '../variables';
+@import '../methods';
+
+body {
+    background-color: @grey;
+}
+
+@dimension: 630px;
+
+.neurobehav {
+    overflow:hidden;
+    margin-bottom: 60px;
+    width: ((@dimension / 2) * 3);
+    margin-left: -9px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    .board {
+        float: left;
+        width: @dimension;
+        height: @dimension;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: lighten(#000, 10%) url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat; 
+    }
+    
+    .sidebar {
+        float: right;
+        width: (@dimension / 2);
+        height: @dimension;
+        background-color: @blue;
+    }
+    
+    .oscillator {
+        background-color: white;
+        height: (@dimension / 3);
+        width: ((@dimension / 2) - 2);      
+        border: 1px solid #000;      
+        position: relative;
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: (@dimension / 3);
+            width: ((@dimension / 2) - 2);  
+        }
+    }
+    
+    .model {
+        background-color: black;
+        text-align: center;
+        height: (@dimension / 3);
+        line-height: (@dimension / 3);
+        img {
+            vertical-align: middle;
+        }
+    }
+}
