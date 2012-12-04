@@ -1,7 +1,7 @@
 neurobehav = exports ? provide('./lib/neurobehav', {})
 
 BASE_FOLDER = '/assets/images/puzzles/neurobehav/'
-PERIODICITY = 100
+PERIODICITY = 20
 
 class neurobehav.ChunkHelper
     constructor: () ->
@@ -13,7 +13,7 @@ class neurobehav.ViewHelper
 
     constructor: ({@el}) ->
         @initBoard()
-        @initOscillator()
+        @initOscilloscope()
 
         #basic instructions
         @stimulus = @addObject
@@ -21,15 +21,15 @@ class neurobehav.ViewHelper
             position:
                 top: 100
                 left: 100
+            voltage: 1.5
 
         @neuron = @addObject
             type: 'Neuron'
             position:
                 top: 100
                 left: 300
-            threshold: 10
-            amplitude: 100
-            delay: 500
+            threshold: 1
+            spike: 0.5
                 
         @stimulus.connectTo(@neuron)
         
@@ -40,9 +40,9 @@ class neurobehav.ViewHelper
         dimensions = @board.offset()
         @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
         
-    initOscillator: ->
-        @oscillator = new neurobehav.Oscillator
-            container: @$('.oscillator')
+    initOscilloscope: ->
+        @oscilloscope = new neurobehav.Oscilloscope
+            container: @$('.oscilloscope')
             takeReading: => @neuron.takeReading() if @neuron
             
     addObject: (data) ->
@@ -53,8 +53,6 @@ class neurobehav.ViewHelper
 class neurobehav.Object
     periodicity: PERIODICITY
     baseFolder: BASE_FOLDER
-    
-    constructor: ({@paper, @position}) -> @init()
     
     create: ->
         @image = @paper.image(
@@ -74,6 +72,8 @@ class neurobehav.Stimulus extends neurobehav.Object
     width: 50
     fullWidth: 100
         
+    constructor: ({@paper, @position, @voltage}) -> @init()
+    
     init: ->
         @create()
         @state = 0
@@ -85,7 +85,7 @@ class neurobehav.Stimulus extends neurobehav.Object
         @state += 1
         @state = @state % 2
         @setImage()
-        @neuron.adjustVoltage(if @state == 0 then -10 else 10)
+        @neuron.addVoltage(if @state == 0 then (@voltage * -1) else @voltage)
 
     setImage: ->
         @image.attr
@@ -95,11 +95,11 @@ class neurobehav.Stimulus extends neurobehav.Object
     connectTo: (@neuron) ->
         @connection = @paper.path """
             M#{@position.left + (@width/2)},#{@position.top + (@height/2)}
-            L#{@neuron.position.left + (@neuron.width/2)},#{@neuron.position.top + (@neuron.height/2)}
+            L#{@neuron.position.left},#{@neuron.position.top + (@neuron.height/2)}
         """
-        @connection.attr('stroke-width': 2)
+        @connection.attr('stroke-width': 2, 'arrow-end': 'block-wide-long')
         @connection.toBack()
-        @neuron.adjustVoltage(10 * @state)
+        @neuron.addVoltage(@voltage * @state)
         
 class neurobehav.Neuron extends neurobehav.Object
     objectType: 'neuron'
@@ -107,11 +107,21 @@ class neurobehav.Neuron extends neurobehav.Object
     height: 60
     width: 60
 
-    constructor: ({@paper, @position, @threshold, @amplitude, @delay}) -> @init()
+    constructor: ({@paper, @position, @threshold, @spike}) -> @init()
     
     init: -> 
+        ## setup parameters and state variables
+        @timeSinceStart = 0
+        @restTime       = 0                   # initial refractory time
+        @timeDelta      = 0.5
+
+        ## LIF properties
+        @resistance     = 1                   # resistance (kOhm)
+        @capacitance    = 10                  # capacitance (uF)
+        @timeConstant   = @resistance * @capacitance
+        @refractory     = 16                   # refractory period (msec)
+
         @voltage = 0
-        @timeSinceLastSpike = @delay
         @currentVoltage = @voltage
         setInterval(
            (=> @setCurrentVoltage()),
@@ -120,20 +130,31 @@ class neurobehav.Neuron extends neurobehav.Object
         @create()
 
     setCurrentVoltage: ->
-        @timeSinceLastSpike += @periodicity
-        if @voltage < @threshold or @currentVoltage == @amplitude
-            @currentVoltage = @voltage
-        else if @timeSinceLastSpike >= @delay
-            @currentVoltage = @amplitude
-            @timeSinceLastSpike = 0
-            
+        @timeSinceStart += @timeDelta
+        @lastVoltage = @currentVoltage
+        
+        if @timeSinceStart > @restTime
+            @currentVoltage = @lastVoltage + ((-1 * @lastVoltage) + @voltage * @resistance) / @timeConstant * @timeDelta
+        
+            if @currentVoltage >= @threshold
+                @currentVoltage += @spike
+                @restTime = @timeSinceStart + @refractory
+
+        else
+            @currentVoltage = 0
+        
     takeReading: -> @currentVoltage
     
-    adjustVoltage: (amount) -> @voltage += amount
+    addVoltage: (amount) -> @voltage += amount
+    
+    
+    
 
-class neurobehav.Oscillator
+class neurobehav.Oscilloscope
     periodicity: PERIODICITY
     axisLineCount: 5.0
+    xDelta: 1
+    scale: 100
     
     constructor: ({@container, @range, @threshold, @takeReading}) ->
         @init()
@@ -162,7 +183,7 @@ class neurobehav.Oscillator
         @xAxis = @height - (@height / @axisLineCount)
         
     fire: () ->
-        voltage = @xAxis - @takeReading()
+        voltage = @xAxis - (@takeReading() * @scale)
         @firePosition or= 0
         if @firePosition > @width
             @voltageContext.clearRect(0, 0, @width, @height)
@@ -170,7 +191,7 @@ class neurobehav.Oscillator
 
         @voltageContext.beginPath()
         @voltageContext.moveTo(@firePosition, @lastVoltage or @xAxis)
-        @firePosition += 5
+        @firePosition += @xDelta
         @voltageContext.lineTo(@firePosition, voltage)
         @voltageContext.stroke()
         @voltageContext.closePath()

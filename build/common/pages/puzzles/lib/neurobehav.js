@@ -7,7 +7,7 @@ neurobehav = typeof exports !== "undefined" && exports !== null ? exports : prov
 
 BASE_FOLDER = '/assets/images/puzzles/neurobehav/';
 
-PERIODICITY = 100;
+PERIODICITY = 20;
 
 neurobehav.ChunkHelper = (function() {
 
@@ -28,13 +28,14 @@ neurobehav.ViewHelper = (function() {
   function ViewHelper(_arg) {
     this.el = _arg.el;
     this.initBoard();
-    this.initOscillator();
+    this.initOscilloscope();
     this.stimulus = this.addObject({
       type: 'Stimulus',
       position: {
         top: 100,
         left: 100
-      }
+      },
+      voltage: 1.5
     });
     this.neuron = this.addObject({
       type: 'Neuron',
@@ -42,9 +43,8 @@ neurobehav.ViewHelper = (function() {
         top: 100,
         left: 300
       },
-      threshold: 10,
-      amplitude: 100,
-      delay: 500
+      threshold: 1,
+      spike: 0.5
     });
     this.stimulus.connectTo(this.neuron);
   }
@@ -56,10 +56,10 @@ neurobehav.ViewHelper = (function() {
     return this.paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
   };
 
-  ViewHelper.prototype.initOscillator = function() {
+  ViewHelper.prototype.initOscilloscope = function() {
     var _this = this;
-    return this.oscillator = new neurobehav.Oscillator({
-      container: this.$('.oscillator'),
+    return this.oscilloscope = new neurobehav.Oscilloscope({
+      container: this.$('.oscilloscope'),
       takeReading: function() {
         if (_this.neuron) {
           return _this.neuron.takeReading();
@@ -79,14 +79,11 @@ neurobehav.ViewHelper = (function() {
 
 neurobehav.Object = (function() {
 
+  function Object() {}
+
   Object.prototype.periodicity = PERIODICITY;
 
   Object.prototype.baseFolder = BASE_FOLDER;
-
-  function Object(_arg) {
-    this.paper = _arg.paper, this.position = _arg.position;
-    this.init();
-  }
 
   Object.prototype.create = function() {
     return this.image = this.paper.image("" + this.baseFolder + this.imageSrc, this.position.left, this.position.top, this.fullWidth || this.width, this.fullHeight || this.height);
@@ -104,10 +101,6 @@ neurobehav.Stimulus = (function(_super) {
 
   __extends(Stimulus, _super);
 
-  function Stimulus() {
-    return Stimulus.__super__.constructor.apply(this, arguments);
-  }
-
   Stimulus.prototype.objectType = 'stimulus';
 
   Stimulus.prototype.imageSrc = 'stimulus_button.png';
@@ -117,6 +110,11 @@ neurobehav.Stimulus = (function(_super) {
   Stimulus.prototype.width = 50;
 
   Stimulus.prototype.fullWidth = 100;
+
+  function Stimulus(_arg) {
+    this.paper = _arg.paper, this.position = _arg.position, this.voltage = _arg.voltage;
+    this.init();
+  }
 
   Stimulus.prototype.init = function() {
     var _this = this;
@@ -135,7 +133,7 @@ neurobehav.Stimulus = (function(_super) {
     this.state += 1;
     this.state = this.state % 2;
     this.setImage();
-    return this.neuron.adjustVoltage(this.state === 0 ? -10 : 10);
+    return this.neuron.addVoltage(this.state === 0 ? this.voltage * -1 : this.voltage);
   };
 
   Stimulus.prototype.setImage = function() {
@@ -147,12 +145,13 @@ neurobehav.Stimulus = (function(_super) {
 
   Stimulus.prototype.connectTo = function(neuron) {
     this.neuron = neuron;
-    this.connection = this.paper.path("M" + (this.position.left + (this.width / 2)) + "," + (this.position.top + (this.height / 2)) + "\nL" + (this.neuron.position.left + (this.neuron.width / 2)) + "," + (this.neuron.position.top + (this.neuron.height / 2)));
+    this.connection = this.paper.path("M" + (this.position.left + (this.width / 2)) + "," + (this.position.top + (this.height / 2)) + "\nL" + this.neuron.position.left + "," + (this.neuron.position.top + (this.neuron.height / 2)));
     this.connection.attr({
-      'stroke-width': 2
+      'stroke-width': 2,
+      'arrow-end': 'block-wide-long'
     });
     this.connection.toBack();
-    return this.neuron.adjustVoltage(10 * this.state);
+    return this.neuron.addVoltage(this.voltage * this.state);
   };
 
   return Stimulus;
@@ -172,14 +171,20 @@ neurobehav.Neuron = (function(_super) {
   Neuron.prototype.width = 60;
 
   function Neuron(_arg) {
-    this.paper = _arg.paper, this.position = _arg.position, this.threshold = _arg.threshold, this.amplitude = _arg.amplitude, this.delay = _arg.delay;
+    this.paper = _arg.paper, this.position = _arg.position, this.threshold = _arg.threshold, this.spike = _arg.spike;
     this.init();
   }
 
   Neuron.prototype.init = function() {
     var _this = this;
+    this.timeSinceStart = 0;
+    this.restTime = 0;
+    this.timeDelta = 0.5;
+    this.resistance = 1;
+    this.capacitance = 10;
+    this.timeConstant = this.resistance * this.capacitance;
+    this.refractory = 16;
     this.voltage = 0;
-    this.timeSinceLastSpike = this.delay;
     this.currentVoltage = this.voltage;
     setInterval((function() {
       return _this.setCurrentVoltage();
@@ -188,12 +193,16 @@ neurobehav.Neuron = (function(_super) {
   };
 
   Neuron.prototype.setCurrentVoltage = function() {
-    this.timeSinceLastSpike += this.periodicity;
-    if (this.voltage < this.threshold || this.currentVoltage === this.amplitude) {
-      return this.currentVoltage = this.voltage;
-    } else if (this.timeSinceLastSpike >= this.delay) {
-      this.currentVoltage = this.amplitude;
-      return this.timeSinceLastSpike = 0;
+    this.timeSinceStart += this.timeDelta;
+    this.lastVoltage = this.currentVoltage;
+    if (this.timeSinceStart > this.restTime) {
+      this.currentVoltage = this.lastVoltage + ((-1 * this.lastVoltage) + this.voltage * this.resistance) / this.timeConstant * this.timeDelta;
+      if (this.currentVoltage >= this.threshold) {
+        this.currentVoltage += this.spike;
+        return this.restTime = this.timeSinceStart + this.refractory;
+      }
+    } else {
+      return this.currentVoltage = 0;
     }
   };
 
@@ -201,7 +210,7 @@ neurobehav.Neuron = (function(_super) {
     return this.currentVoltage;
   };
 
-  Neuron.prototype.adjustVoltage = function(amount) {
+  Neuron.prototype.addVoltage = function(amount) {
     return this.voltage += amount;
   };
 
@@ -209,13 +218,17 @@ neurobehav.Neuron = (function(_super) {
 
 })(neurobehav.Object);
 
-neurobehav.Oscillator = (function() {
+neurobehav.Oscilloscope = (function() {
 
-  Oscillator.prototype.periodicity = PERIODICITY;
+  Oscilloscope.prototype.periodicity = PERIODICITY;
 
-  Oscillator.prototype.axisLineCount = 5.0;
+  Oscilloscope.prototype.axisLineCount = 5.0;
 
-  function Oscillator(_arg) {
+  Oscilloscope.prototype.xDelta = 1;
+
+  Oscilloscope.prototype.scale = 100;
+
+  function Oscilloscope(_arg) {
     var _this = this;
     this.container = _arg.container, this.range = _arg.range, this.threshold = _arg.threshold, this.takeReading = _arg.takeReading;
     this.init();
@@ -225,7 +238,7 @@ neurobehav.Oscillator = (function() {
     }), this.periodicity);
   }
 
-  Oscillator.prototype.init = function() {
+  Oscilloscope.prototype.init = function() {
     var backgroundCanvas, voltageCanvas;
     backgroundCanvas = document.createElement('CANVAS');
     this.container.append(backgroundCanvas);
@@ -242,9 +255,9 @@ neurobehav.Oscillator = (function() {
     return this.xAxis = this.height - (this.height / this.axisLineCount);
   };
 
-  Oscillator.prototype.fire = function() {
+  Oscilloscope.prototype.fire = function() {
     var voltage;
-    voltage = this.xAxis - this.takeReading();
+    voltage = this.xAxis - (this.takeReading() * this.scale);
     this.firePosition || (this.firePosition = 0);
     if (this.firePosition > this.width) {
       this.voltageContext.clearRect(0, 0, this.width, this.height);
@@ -252,14 +265,14 @@ neurobehav.Oscillator = (function() {
     }
     this.voltageContext.beginPath();
     this.voltageContext.moveTo(this.firePosition, this.lastVoltage || this.xAxis);
-    this.firePosition += 5;
+    this.firePosition += this.xDelta;
     this.voltageContext.lineTo(this.firePosition, voltage);
     this.voltageContext.stroke();
     this.voltageContext.closePath();
     return this.lastVoltage = voltage;
   };
 
-  Oscillator.prototype.drawGrid = function() {
+  Oscilloscope.prototype.drawGrid = function() {
     var y, _i, _ref, _ref1;
     this.backgroundContext.strokeStyle = 'rgba(0, 0, 0, 0.4)';
     this.backgroundContext.lineWidth = 1;
@@ -272,6 +285,6 @@ neurobehav.Oscillator = (function() {
     return this.backgroundContext.closePath();
   };
 
-  return Oscillator;
+  return Oscilloscope;
 
 })();

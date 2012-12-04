@@ -28,14 +28,14 @@ body {
   height: 630px;
   background-color: #24aac3;
 }
-.neurobehav .oscillator {
+.neurobehav .oscilloscope {
   background-color: white;
   height: 210px;
   width: 313px;
   border: 1px solid #000;
   position: relative;
 }
-.neurobehav .oscillator canvas {
+.neurobehav .oscilloscope canvas {
   position: absolute;
   top: 0;
   left: 0;
