@@ -16,6 +16,7 @@ soma.chunks({
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/neurobehav.html");
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav.js');
+      this.loadScript('/assets/third_party/raphael-min.js');
       if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/neurobehav.js');
       }

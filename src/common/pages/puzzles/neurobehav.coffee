@@ -9,6 +9,7 @@ soma.chunks
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/neurobehav.html"
             @loadScript '/build/common/pages/puzzles/lib/neurobehav.js'
+            @loadScript '/assets/third_party/raphael-min.js'
             if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/neurobehav.js' 
             @loadStylesheet '/build/client/css/puzzles/neurobehav.css'     

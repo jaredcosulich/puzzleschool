@@ -20,6 +20,7 @@ body {
   overflow: hidden;
   margin-bottom: 12px;
   background: #1a1a1a url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
+  position: relative;
 }
 .neurobehav .sidebar {
   float: right;
@@ -49,4 +50,12 @@ body {
 }
 .neurobehav .model img {
   vertical-align: middle;
+}
+.neurobehav .properties {
+  background-color: white;
+  height: 210px;
+}
+.neurobehav .object {
+  position: absolute;
+  overflow: hidden;
 }

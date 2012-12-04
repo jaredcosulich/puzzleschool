@@ -26,6 +26,7 @@ body {
         overflow: hidden;
         margin-bottom: 12px;
         background: lighten(#000, 10%) url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat; 
+        position: relative;
     }
     
     .sidebar {
@@ -58,5 +59,15 @@ body {
         img {
             vertical-align: middle;
         }
+    }
+    
+    .properties {
+        background-color: white;
+        height: (@dimension / 3);        
+    }
+    
+    .object {
+        position: absolute;
+        overflow: hidden;
     }
 }
