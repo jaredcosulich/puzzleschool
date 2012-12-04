@@ -13,7 +13,6 @@ class neurobehav.ViewHelper
 
     constructor: ({@el}) ->
         @initBoard()
-        @initOscilloscope()
 
         #basic instructions
         @stimulus = @addObject
@@ -32,18 +31,21 @@ class neurobehav.ViewHelper
             spike: 0.5
                 
         @stimulus.connectTo(@neuron)
-        
+
+        @oscilloscope = @addObject
+            type: 'Oscilloscope'
+            position:
+                top: 80
+                left: 340
+            container: @$('.oscilloscope')
+            
+        @oscilloscope.attachTo(@neuron)
         
 
     initBoard: ->
         @board = @$('.board')
         dimensions = @board.offset()
         @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
-        
-    initOscilloscope: ->
-        @oscilloscope = new neurobehav.Oscilloscope
-            container: @$('.oscilloscope')
-            takeReading: => @neuron.takeReading() if @neuron
             
     addObject: (data) ->
         data.paper = @paper
@@ -150,25 +152,29 @@ class neurobehav.Neuron extends neurobehav.Object
     
     
 
-class neurobehav.Oscilloscope
-    periodicity: PERIODICITY
+class neurobehav.Oscilloscope extends neurobehav.Object
+    objectType: 'oscilloscope'
+    imageSrc: 'oscilloscope.png'
+    width: 80
+    height: 42
     axisLineCount: 5.0
     xDelta: 1
     scale: 100
     
-    constructor: ({@container, @range, @threshold, @takeReading}) ->
+    constructor: ({@paper, @position, @container, @range, @threshold}) ->
         @init()
         @drawGrid()
         setInterval(
            (=> @fire()),
            @periodicity
-        )              
+        )        
+        @create()      
         
     init: ->
         backgroundCanvas = document.createElement('CANVAS')
         @container.append(backgroundCanvas)
-        @width = backgroundCanvas.width = $(backgroundCanvas).width()
-        @height = backgroundCanvas.height = $(backgroundCanvas).height()   
+        @canvasWidth = backgroundCanvas.width = $(backgroundCanvas).width()
+        @canvasHeight = backgroundCanvas.height = $(backgroundCanvas).height()   
         @backgroundContext = backgroundCanvas.getContext('2d')
 
         voltageCanvas = document.createElement('CANVAS')
@@ -180,13 +186,14 @@ class neurobehav.Oscilloscope
         @voltageContext.strokeStyle = 'rgba(255, 92, 92, 1)'    
         @voltageContext.lineWidth = 1
         
-        @xAxis = @height - (@height / @axisLineCount)
+        @xAxis = @canvasHeight - (@canvasHeight / @axisLineCount)
         
     fire: () ->
-        voltage = @xAxis - (@takeReading() * @scale)
+        return unless @neuron
+        voltage = @xAxis - (@neuron.takeReading() * @scale)
         @firePosition or= 0
-        if @firePosition > @width
-            @voltageContext.clearRect(0, 0, @width, @height)
+        if @firePosition > @canvasWidth
+            @voltageContext.clearRect(0, 0, @canvasWidth, @canvasHeight)
             @firePosition = 0
 
         @voltageContext.beginPath()
@@ -204,12 +211,14 @@ class neurobehav.Oscilloscope
         @backgroundContext.lineWidth = 1
         @backgroundContext.beginPath()
         
-        for y in [1...@height] by (@height / @axisLineCount)
+        for y in [1...@canvasHeight] by (@canvasHeight / @axisLineCount)
             @backgroundContext.moveTo(0, y)
-            @backgroundContext.lineTo(@width, y)
+            @backgroundContext.lineTo(@canvasWidth, y)
 
         @backgroundContext.stroke()
         @backgroundContext.closePath()        
+        
+    attachTo: (@neuron) ->
         
     
         

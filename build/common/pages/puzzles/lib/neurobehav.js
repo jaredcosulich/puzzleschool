@@ -28,7 +28,6 @@ neurobehav.ViewHelper = (function() {
   function ViewHelper(_arg) {
     this.el = _arg.el;
     this.initBoard();
-    this.initOscilloscope();
     this.stimulus = this.addObject({
       type: 'Stimulus',
       position: {
@@ -47,6 +46,15 @@ neurobehav.ViewHelper = (function() {
       spike: 0.5
     });
     this.stimulus.connectTo(this.neuron);
+    this.oscilloscope = this.addObject({
+      type: 'Oscilloscope',
+      position: {
+        top: 80,
+        left: 340
+      },
+      container: this.$('.oscilloscope')
+    });
+    this.oscilloscope.attachTo(this.neuron);
   }
 
   ViewHelper.prototype.initBoard = function() {
@@ -54,18 +62,6 @@ neurobehav.ViewHelper = (function() {
     this.board = this.$('.board');
     dimensions = this.board.offset();
     return this.paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
-  };
-
-  ViewHelper.prototype.initOscilloscope = function() {
-    var _this = this;
-    return this.oscilloscope = new neurobehav.Oscilloscope({
-      container: this.$('.oscilloscope'),
-      takeReading: function() {
-        if (_this.neuron) {
-          return _this.neuron.takeReading();
-        }
-      }
-    });
   };
 
   ViewHelper.prototype.addObject = function(data) {
@@ -218,9 +214,17 @@ neurobehav.Neuron = (function(_super) {
 
 })(neurobehav.Object);
 
-neurobehav.Oscilloscope = (function() {
+neurobehav.Oscilloscope = (function(_super) {
 
-  Oscilloscope.prototype.periodicity = PERIODICITY;
+  __extends(Oscilloscope, _super);
+
+  Oscilloscope.prototype.objectType = 'oscilloscope';
+
+  Oscilloscope.prototype.imageSrc = 'oscilloscope.png';
+
+  Oscilloscope.prototype.width = 80;
+
+  Oscilloscope.prototype.height = 42;
 
   Oscilloscope.prototype.axisLineCount = 5.0;
 
@@ -230,20 +234,21 @@ neurobehav.Oscilloscope = (function() {
 
   function Oscilloscope(_arg) {
     var _this = this;
-    this.container = _arg.container, this.range = _arg.range, this.threshold = _arg.threshold, this.takeReading = _arg.takeReading;
+    this.paper = _arg.paper, this.position = _arg.position, this.container = _arg.container, this.range = _arg.range, this.threshold = _arg.threshold;
     this.init();
     this.drawGrid();
     setInterval((function() {
       return _this.fire();
     }), this.periodicity);
+    this.create();
   }
 
   Oscilloscope.prototype.init = function() {
     var backgroundCanvas, voltageCanvas;
     backgroundCanvas = document.createElement('CANVAS');
     this.container.append(backgroundCanvas);
-    this.width = backgroundCanvas.width = $(backgroundCanvas).width();
-    this.height = backgroundCanvas.height = $(backgroundCanvas).height();
+    this.canvasWidth = backgroundCanvas.width = $(backgroundCanvas).width();
+    this.canvasHeight = backgroundCanvas.height = $(backgroundCanvas).height();
     this.backgroundContext = backgroundCanvas.getContext('2d');
     voltageCanvas = document.createElement('CANVAS');
     this.container.append(voltageCanvas);
@@ -252,15 +257,18 @@ neurobehav.Oscilloscope = (function() {
     this.voltageContext = voltageCanvas.getContext('2d');
     this.voltageContext.strokeStyle = 'rgba(255, 92, 92, 1)';
     this.voltageContext.lineWidth = 1;
-    return this.xAxis = this.height - (this.height / this.axisLineCount);
+    return this.xAxis = this.canvasHeight - (this.canvasHeight / this.axisLineCount);
   };
 
   Oscilloscope.prototype.fire = function() {
     var voltage;
-    voltage = this.xAxis - (this.takeReading() * this.scale);
+    if (!this.neuron) {
+      return;
+    }
+    voltage = this.xAxis - (this.neuron.takeReading() * this.scale);
     this.firePosition || (this.firePosition = 0);
-    if (this.firePosition > this.width) {
-      this.voltageContext.clearRect(0, 0, this.width, this.height);
+    if (this.firePosition > this.canvasWidth) {
+      this.voltageContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
       this.firePosition = 0;
     }
     this.voltageContext.beginPath();
@@ -277,14 +285,18 @@ neurobehav.Oscilloscope = (function() {
     this.backgroundContext.strokeStyle = 'rgba(0, 0, 0, 0.4)';
     this.backgroundContext.lineWidth = 1;
     this.backgroundContext.beginPath();
-    for (y = _i = 1, _ref = this.height, _ref1 = this.height / this.axisLineCount; 1 <= _ref ? _i < _ref : _i > _ref; y = _i += _ref1) {
+    for (y = _i = 1, _ref = this.canvasHeight, _ref1 = this.canvasHeight / this.axisLineCount; 1 <= _ref ? _i < _ref : _i > _ref; y = _i += _ref1) {
       this.backgroundContext.moveTo(0, y);
-      this.backgroundContext.lineTo(this.width, y);
+      this.backgroundContext.lineTo(this.canvasWidth, y);
     }
     this.backgroundContext.stroke();
     return this.backgroundContext.closePath();
   };
 
+  Oscilloscope.prototype.attachTo = function(neuron) {
+    this.neuron = neuron;
+  };
+
   return Oscilloscope;
 
-})();
+})(neurobehav.Object);
