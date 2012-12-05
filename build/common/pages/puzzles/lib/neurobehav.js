@@ -26,9 +26,10 @@ neurobehav.ViewHelper = (function() {
   };
 
   function ViewHelper(_arg) {
+    var neuron1, neuron2, oscilloscope, stimulus;
     this.el = _arg.el;
     this.initBoard();
-    this.stimulus = this.addObject({
+    stimulus = this.addObject({
       type: 'Stimulus',
       position: {
         top: 100,
@@ -36,7 +37,7 @@ neurobehav.ViewHelper = (function() {
       },
       voltage: 1.5
     });
-    this.neuron = this.addObject({
+    neuron1 = this.addObject({
       type: 'Neuron',
       position: {
         top: 100,
@@ -45,8 +46,17 @@ neurobehav.ViewHelper = (function() {
       threshold: 1,
       spike: 0.5
     });
-    this.stimulus.connectTo(this.neuron);
-    this.oscilloscope = this.addObject({
+    stimulus.connectTo(neuron1);
+    neuron2 = this.addObject({
+      type: 'Neuron',
+      position: {
+        top: 300,
+        left: 200
+      },
+      threshold: 1,
+      spike: 0.5
+    });
+    oscilloscope = this.addObject({
       type: 'Oscilloscope',
       position: {
         top: 80,
@@ -54,7 +64,7 @@ neurobehav.ViewHelper = (function() {
       },
       container: this.$('.oscilloscope')
     });
-    this.oscilloscope.attachTo(this.neuron);
+    oscilloscope.attachTo(neuron1);
   }
 
   ViewHelper.prototype.initBoard = function() {
@@ -82,7 +92,10 @@ neurobehav.Object = (function() {
   Object.prototype.baseFolder = BASE_FOLDER;
 
   Object.prototype.create = function() {
-    return this.image = this.paper.image("" + this.baseFolder + this.imageSrc, this.position.left, this.position.top, this.fullWidth || this.width, this.fullHeight || this.height);
+    this.image = this.paper.image("" + this.baseFolder + this.imageSrc, this.position.left, this.position.top, this.fullWidth || this.width, this.fullHeight || this.height);
+    this.image.objectType = this.objectType;
+    this.image.object = this;
+    return this.image;
   };
 
   Object.prototype.init = function() {
@@ -166,6 +179,10 @@ neurobehav.Neuron = (function(_super) {
 
   Neuron.prototype.width = 60;
 
+  Neuron.prototype.synapses = [];
+
+  Neuron.prototype.synapseSpikes = [];
+
   function Neuron(_arg) {
     this.paper = _arg.paper, this.position = _arg.position, this.threshold = _arg.threshold, this.spike = _arg.spike;
     this.init();
@@ -173,6 +190,7 @@ neurobehav.Neuron = (function(_super) {
 
   Neuron.prototype.init = function() {
     var _this = this;
+    this.create();
     this.timeSinceStart = 0;
     this.restTime = 0;
     this.timeDelta = 0.5;
@@ -185,17 +203,54 @@ neurobehav.Neuron = (function(_super) {
     setInterval((function() {
       return _this.setCurrentVoltage();
     }), this.periodicity);
-    return this.create();
+    this.createSynapse('excitatory');
+    return this.createSynapse('inhibitory');
   };
 
   Neuron.prototype.setCurrentVoltage = function() {
+    var connection, synapse, synapseSpike, voltage, voltageDiff, _i, _len, _ref, _results;
     this.timeSinceStart += this.timeDelta;
     this.lastVoltage = this.currentVoltage;
+    synapseSpike = 0;
+    if (this.activeSynapseSpike) {
+      this.activeSynapseSpike.used += 2;
+      if (this.activeSynapseSpike.used >= 50) {
+        this.voltage -= this.activeSynapseSpike.voltage;
+        this.activeSynapseSpike = null;
+      } else {
+        voltageDiff = this.activeSynapseSpike.voltage / this.activeSynapseSpike.used;
+        this.activeSynapseSpike.voltage -= voltageDiff;
+        this.voltage -= voltageDiff;
+      }
+    }
+    if (this.synapseSpikes.length && !this.activeSynapseSpike) {
+      voltage = this.synapseSpikes.shift() * 3;
+      if (voltage < 0) {
+        this.voltage += voltage;
+      } else {
+        this.activeSynapseSpike = {
+          used: 2,
+          voltage: this.synapseSpikes.shift() * 3
+        };
+        this.voltage += this.activeSynapseSpike.voltage;
+      }
+    }
     if (this.timeSinceStart > this.restTime) {
       this.currentVoltage = this.lastVoltage + ((-1 * this.lastVoltage) + this.voltage * this.resistance) / this.timeConstant * this.timeDelta;
       if (this.currentVoltage >= this.threshold) {
         this.currentVoltage += this.spike;
-        return this.restTime = this.timeSinceStart + this.refractory;
+        this.restTime = this.timeSinceStart + this.refractory;
+        _ref = this.synapses;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          synapse = _ref[_i];
+          if ((connection = synapse.connection)) {
+            _results.push(connection.addSynapseSpike(this.spike));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
       }
     } else {
       return this.currentVoltage = 0;
@@ -206,8 +261,78 @@ neurobehav.Neuron = (function(_super) {
     return this.currentVoltage;
   };
 
+  Neuron.prototype.addSynapseSpike = function(spike) {
+    return this.synapseSpikes.push(spike);
+  };
+
   Neuron.prototype.addVoltage = function(amount) {
     return this.voltage += amount;
+  };
+
+  Neuron.prototype.createSynapse = function(type) {
+    var endX, endY, fullDX, fullDY, lastDX, lastDY, onDrag, onEnd, onStart, synapse, tip, xShift,
+      _this = this;
+    xShift = (type === 'inhibitory' ? -12 : 12);
+    endX = this.position.left + (this.width / 2) + xShift;
+    endY = this.position.top + this.height + 20;
+    synapse = this.paper.path("M" + (this.position.left + (this.width / 2) + xShift) + "," + (this.position.top + (this.height / 2)) + "\nL" + endX + "," + endY);
+    synapse.attr({
+      'stroke-width': 2
+    });
+    synapse.toBack();
+    if (type === 'inhibitory') {
+      tip = this.paper.circle(endX, endY, 6);
+      tip.attr({
+        'cursor': 'move',
+        'fill': '#000'
+      });
+    } else {
+      tip = this.paper.path("M" + (endX - 6) + "," + (endY + 6) + "\nL" + (endX + 6) + "," + (endY + 6) + "\nL" + endX + "," + endY + "\nL" + (endX - 6) + "," + (endY + 6) + "                ");
+      tip.attr({
+        'cursor': 'move',
+        'fill': '#000'
+      });
+    }
+    lastDX = 0;
+    lastDY = 0;
+    fullDX = 0;
+    fullDY = 0;
+    onDrag = function(dX, dY) {
+      var path;
+      path = synapse.attr('path');
+      fullDX = lastDX + dX;
+      fullDY = lastDY + dY;
+      path[1][1] = endX + fullDX;
+      path[1][2] = endY + fullDY;
+      synapse.attr('path', path);
+      return tip.transform("t" + fullDX + "," + fullDY);
+    };
+    onStart = function() {};
+    onEnd = function() {
+      var element, _i, _len, _ref, _results;
+      lastDX = fullDX;
+      lastDY = fullDY;
+      _ref = _this.paper.getElementsByPoint(endX + fullDX, endY + fullDY);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        element = _ref[_i];
+        if (element.objectType === 'neuron') {
+          _results.push(synapse.connection = {
+            addSynapseSpike: function(spike) {
+              if (type === 'inhibitory') {
+                spike = spike * -1;
+              }
+              return element.object.addSynapseSpike(spike);
+            }
+          });
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+    tip.drag(onDrag, onStart, onEnd);
+    return this.synapses.push(synapse);
   };
 
   return Neuron;
@@ -235,15 +360,16 @@ neurobehav.Oscilloscope = (function(_super) {
   function Oscilloscope(_arg) {
     var _this = this;
     this.paper = _arg.paper, this.position = _arg.position, this.container = _arg.container, this.range = _arg.range, this.threshold = _arg.threshold;
-    this.init();
+    this.initGrid();
     this.drawGrid();
+    this.create();
+    this.initObject();
     setInterval((function() {
       return _this.fire();
     }), this.periodicity);
-    this.create();
   }
 
-  Oscilloscope.prototype.init = function() {
+  Oscilloscope.prototype.initGrid = function() {
     var backgroundCanvas, voltageCanvas;
     backgroundCanvas = document.createElement('CANVAS');
     this.container.append(backgroundCanvas);
@@ -258,6 +384,41 @@ neurobehav.Oscilloscope = (function(_super) {
     this.voltageContext.strokeStyle = 'rgba(255, 92, 92, 1)';
     this.voltageContext.lineWidth = 1;
     return this.xAxis = this.canvasHeight - (this.canvasHeight / this.axisLineCount);
+  };
+
+  Oscilloscope.prototype.initObject = function() {
+    var fullDX, fullDY, lastDX, lastDY, onDrag, onEnd, onStart,
+      _this = this;
+    this.image.attr({
+      cursor: 'move'
+    });
+    lastDX = 0;
+    lastDY = 0;
+    fullDX = 0;
+    fullDY = 0;
+    onDrag = function(dX, dY) {
+      fullDX = lastDX + dX;
+      fullDY = lastDY + dY;
+      return _this.image.transform("t" + fullDX + "," + fullDY);
+    };
+    onStart = function() {};
+    onEnd = function() {
+      var element, _i, _len, _ref, _results;
+      lastDX = fullDX;
+      lastDY = fullDY;
+      _ref = _this.paper.getElementsByPoint(_this.position.left + fullDX, (_this.position.top + _this.height) + fullDY);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        element = _ref[_i];
+        if (element.objectType === 'neuron') {
+          _results.push(_this.attachTo(element.object));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+    return this.image.drag(onDrag, onStart, onEnd);
   };
 
   Oscilloscope.prototype.fire = function() {
