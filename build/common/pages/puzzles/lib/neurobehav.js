@@ -230,7 +230,7 @@ neurobehav.Neuron = (function(_super) {
       } else {
         this.activeSynapseSpike = {
           used: 2,
-          voltage: this.synapseSpikes.shift() * 3
+          voltage: voltage
         };
         this.voltage += this.activeSynapseSpike.voltage;
       }

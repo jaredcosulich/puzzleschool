@@ -174,9 +174,9 @@ class neurobehav.Neuron extends neurobehav.Object
             else
                 @activeSynapseSpike = 
                     used: 2
-                    voltage: @synapseSpikes.shift() * 3
+                    voltage: voltage
                 @voltage += @activeSynapseSpike.voltage
-
+            
         if @timeSinceStart > @restTime
             @currentVoltage = @lastVoltage + ((-1 * @lastVoltage) + @voltage * @resistance) / @timeConstant * @timeDelta
         
