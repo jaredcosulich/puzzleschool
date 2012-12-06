@@ -80,11 +80,23 @@ class neurobehav.Object
         )
         @image.objectType = @objectType
         @image.object = @
+        
         return @image
         
     init: -> raise("no init method for #{@objectType}")
 
-
+    initGlow: (element) ->
+        glow = element.glow(width: 30, fill: true, color: 'yellow')
+        glow.hide()
+        element.hover(
+            () => glow.show(),
+            () => glow.hide()
+        )
+        glow.toFront()
+        element.toFront()
+        return glow
+            
+        
 
 class neurobehav.Stimulus extends neurobehav.Object
     objectType: 'stimulus'
@@ -148,7 +160,7 @@ class neurobehav.Neuron extends neurobehav.Object
         @resistance     = 1                   # resistance (kOhm)
         @capacitance    = 10                  # capacitance (uF)
         @timeConstant   = @resistance * @capacitance
-        @refractory     = 4                  # refractory period (msec)
+        @refractory     = 16                  # refractory period (msec)
 
         @voltage = 0
         @currentVoltage = @voltage
@@ -235,7 +247,8 @@ class neurobehav.Neuron extends neurobehav.Object
             tip.attr
                 'cursor': 'move'
                 'fill': '#000'
-        tip.toFront()
+
+        glow = @initGlow(tip)         
            
         lastDX = 0
         lastDY = 0 
@@ -255,10 +268,14 @@ class neurobehav.Neuron extends neurobehav.Object
                 subPath = @paper.path synapse.getSubpath(@width, synapse.getTotalLength())
                 subPath.toFront()
             
+            glow.transform("t#{fullDX},#{fullDY}")
+            glow.show()
+            glow.toFront()
+
             tip.transform("t#{fullDX},#{fullDY}")
             tip.toFront()
             
-        onStart = () =>
+        onStart = -> glow.show()
         
         onEnd = =>
             lastDX = fullDX
@@ -319,6 +336,8 @@ class neurobehav.Oscilloscope extends neurobehav.Object
     initImage: ->
         @image.attr
             cursor: 'move'
+         
+        glow = @initGlow(@image) 
         
         lastDX = 0
         lastDY = 0 
@@ -328,10 +347,12 @@ class neurobehav.Oscilloscope extends neurobehav.Object
             fullDX = lastDX + dX 
             fullDY = lastDY + dY
             @image.transform("t#{fullDX},#{fullDY}")
+            glow.transform("t#{fullDX},#{fullDY}")
             
-        onStart = ->
+        onStart = -> glow.show()
         
         onEnd = =>
+            glow.hide()
             lastDX = fullDX
             lastDY = fullDY
             for element in @paper.getElementsByPoint(@position.left + fullDX, (@position.top + @height) + fullDY)

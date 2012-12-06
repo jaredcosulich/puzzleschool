@@ -110,6 +110,25 @@ neurobehav.Object = (function() {
     return raise("no init method for " + this.objectType);
   };
 
+  Object.prototype.initGlow = function(element) {
+    var glow,
+      _this = this;
+    glow = element.glow({
+      width: 30,
+      fill: true,
+      color: 'yellow'
+    });
+    glow.hide();
+    element.hover(function() {
+      return glow.show();
+    }, function() {
+      return glow.hide();
+    });
+    glow.toFront();
+    element.toFront();
+    return glow;
+  };
+
   return Object;
 
 })();
@@ -204,7 +223,7 @@ neurobehav.Neuron = (function(_super) {
     this.resistance = 1;
     this.capacitance = 10;
     this.timeConstant = this.resistance * this.capacitance;
-    this.refractory = 4;
+    this.refractory = 16;
     this.voltage = 0;
     this.currentVoltage = this.voltage;
     setInterval((function() {
@@ -276,7 +295,7 @@ neurobehav.Neuron = (function(_super) {
   };
 
   Neuron.prototype.createSynapse = function(type) {
-    var endX, endY, fullDX, fullDY, lastDX, lastDY, onDrag, onEnd, onStart, subPath, synapse, tip, xShift,
+    var endX, endY, fullDX, fullDY, glow, lastDX, lastDY, onDrag, onEnd, onStart, subPath, synapse, tip, xShift,
       _this = this;
     xShift = (type === 'inhibitory' ? -12 : 12);
     endX = this.position.left + (this.width / 2) + xShift;
@@ -301,7 +320,7 @@ neurobehav.Neuron = (function(_super) {
         'fill': '#000'
       });
     }
-    tip.toFront();
+    glow = this.initGlow(tip);
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;
@@ -322,10 +341,15 @@ neurobehav.Neuron = (function(_super) {
         subPath = _this.paper.path(synapse.getSubpath(_this.width, synapse.getTotalLength()));
         subPath.toFront();
       }
+      glow.transform("t" + fullDX + "," + fullDY);
+      glow.show();
+      glow.toFront();
       tip.transform("t" + fullDX + "," + fullDY);
       return tip.toFront();
     };
-    onStart = function() {};
+    onStart = function() {
+      return glow.show();
+    };
     onEnd = function() {
       var element, _i, _len, _ref, _results;
       lastDX = fullDX;
@@ -413,11 +437,12 @@ neurobehav.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.initImage = function() {
-    var fullDX, fullDY, lastDX, lastDY, onDrag, onEnd, onStart,
+    var fullDX, fullDY, glow, lastDX, lastDY, onDrag, onEnd, onStart,
       _this = this;
     this.image.attr({
       cursor: 'move'
     });
+    glow = this.initGlow(this.image);
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;
@@ -425,11 +450,15 @@ neurobehav.Oscilloscope = (function(_super) {
     onDrag = function(dX, dY) {
       fullDX = lastDX + dX;
       fullDY = lastDY + dY;
-      return _this.image.transform("t" + fullDX + "," + fullDY);
+      _this.image.transform("t" + fullDX + "," + fullDY);
+      return glow.transform("t" + fullDX + "," + fullDY);
     };
-    onStart = function() {};
+    onStart = function() {
+      return glow.show();
+    };
     onEnd = function() {
       var element, _i, _len, _ref, _results;
+      glow.hide();
       lastDX = fullDX;
       lastDY = fullDY;
       _ref = _this.paper.getElementsByPoint(_this.position.left + fullDX, (_this.position.top + _this.height) + fullDY);
