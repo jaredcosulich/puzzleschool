@@ -21,7 +21,7 @@ class neurobehav.ViewHelper
                 top: 100
                 left: 100
             voltage: 1.5
-
+        
         neuron1 = @addObject
             type: 'Neuron'
             position:
@@ -31,7 +31,7 @@ class neurobehav.ViewHelper
             spike: 0.5
                 
         stimulus.connectTo(neuron1)
-
+        
         neuron2 = @addObject
             type: 'Neuron'
             position:
@@ -57,14 +57,20 @@ class neurobehav.ViewHelper
             
     addObject: (data) ->
         data.paper = @paper
+        data.id = @nextId()
         new neurobehav[data.type](data)
             
+    nextId: ->
+        @currentId = (@currentId or 0) + 1
+        
         
 class neurobehav.Object
     periodicity: PERIODICITY
     baseFolder: BASE_FOLDER
     
-    create: ->
+    constructor: ({@id, @paper, @position}) -> @init()
+        
+    createImage: ->
         @image = @paper.image(
             "#{@baseFolder}#{@imageSrc}", 
             @position.left, 
@@ -87,10 +93,10 @@ class neurobehav.Stimulus extends neurobehav.Object
     width: 50
     fullWidth: 100
         
-    constructor: ({@paper, @position, @voltage}) -> @init()
+    constructor: ({@voltage}) -> super(arguments...)
     
     init: ->
-        @create()
+        @createImage()
         @state = 0
         @setImage()
         @image.click => @toggleState()
@@ -123,13 +129,15 @@ class neurobehav.Neuron extends neurobehav.Object
     imageSrc: 'neuron.png' 
     height: 60
     width: 60
-    synapses: []
-    synapseSpikes: []
 
-    constructor: ({@paper, @position, @threshold, @spike}) -> @init()
+    constructor: ({@threshold, @spike}) -> super(arguments...)
     
     init: -> 
-        @create()
+        @synapses = []
+        @synapseSpikes = []
+        @activeSynapseSpikes = []
+        
+        @createImage()
             
         ## setup parameters and state variables
         @timeSinceStart = 0
@@ -140,7 +148,7 @@ class neurobehav.Neuron extends neurobehav.Object
         @resistance     = 1                   # resistance (kOhm)
         @capacitance    = 10                  # capacitance (uF)
         @timeConstant   = @resistance * @capacitance
-        @refractory     = 16                  # refractory period (msec)
+        @refractory     = 4                  # refractory period (msec)
 
         @voltage = 0
         @currentVoltage = @voltage
@@ -156,51 +164,39 @@ class neurobehav.Neuron extends neurobehav.Object
         @timeSinceStart += @timeDelta
         @lastVoltage = @currentVoltage
         
-        synapseSpike = 0
-        if @activeSynapseSpike
-            @activeSynapseSpike.used += 2
-            if @activeSynapseSpike.used >= 50
-                @voltage -= @activeSynapseSpike.voltage
-                @activeSynapseSpike = null 
-            else
-                voltageDiff = (@activeSynapseSpike.voltage / @activeSynapseSpike.used)
-                @activeSynapseSpike.voltage -= voltageDiff
-                @voltage -= voltageDiff
+        if @activeSynapseSpikes.length
+            stillActiveSynapseSpikes = []
+            for activeSynapseSpike in @activeSynapseSpikes
+                activeSynapseSpike.used += 2
+                if activeSynapseSpike.used >= 50
+                    @voltage -= activeSynapseSpike.voltage
+                else
+                    voltageDiff = (activeSynapseSpike.voltage / activeSynapseSpike.used)
+                    activeSynapseSpike.voltage -= voltageDiff
+                    @voltage -= voltageDiff
+                    stillActiveSynapseSpikes.push(activeSynapseSpike)
+                    
+            @activeSynapseSpikes = stillActiveSynapseSpikes  
                 
-        if @synapseSpikes.length and not @activeSynapseSpike
+        for synapseSpike in @synapseSpikes
             voltage = @synapseSpikes.shift() * 3
-            if voltage < 0
-                @voltage += voltage
-            else
-                @activeSynapseSpike = 
-                    used: 2
-                    voltage: voltage
-                @voltage += @activeSynapseSpike.voltage
+            @activeSynapseSpikes.push(
+                used: 2
+                voltage: voltage      
+            )      
+            @voltage += voltage
             
         if @timeSinceStart > @restTime
             @currentVoltage = @lastVoltage + ((-1 * @lastVoltage) + @voltage * @resistance) / @timeConstant * @timeDelta
-        
-            # synapseSpike = 0
-            # if @activeSynapseSpike
-            #     @activeSynapseSpike.used += 1
-            #     @activeSynapseSpike = null if @activeSynapseSpike.used >= 40
-            # else if @synapseSpikes.length
-            #     @activeSynapseSpike = 
-            #         used: 10
-            #         voltage: @synapseSpikes.shift()
-            # 
-            # if @activeSynapseSpike
-            #     @currentVoltage += (@activeSynapseSpike.voltage / (@activeSynapseSpike.used^2)) 
-                
+                        
             if @currentVoltage >= @threshold
                 @currentVoltage += @spike
                 @restTime = @timeSinceStart + @refractory
                 for synapse in @synapses
-                    if (connection = synapse.connection)
-                        connection.addSynapseSpike(@spike)
+                    synapse.connection?.addSynapseSpike(@spike)
 
         else
-            @currentVoltage = 0
+            @currentVoltage = (@voltage / 4)
         
     takeReading: -> @currentVoltage
     
@@ -214,11 +210,13 @@ class neurobehav.Neuron extends neurobehav.Object
         endY = @position.top + @height + 20
         
         synapse = @paper.path """
-            M#{@position.left + (@width/2) + xShift},#{@position.top + (@height/2)}
+            M#{@position.left + (@width/2)},#{@position.top + (@height/2)}
             L#{endX},#{endY}
         """
         synapse.attr
             'stroke-width': 2
+        synapse.synapseType = type
+        synapse.id = "#{@id}/#{@synapses.length}"        
         synapse.toBack()
 
         if type == 'inhibitory'
@@ -257,15 +255,18 @@ class neurobehav.Neuron extends neurobehav.Object
             lastDX = fullDX
             lastDY = fullDY
             for element in @paper.getElementsByPoint(endX + fullDX, endY + fullDY)
-                if element.objectType == 'neuron'
-                    synapse.connection = {
-                        addSynapseSpike: (spike) => 
-                            spike = spike * -1 if type == 'inhibitory'
-                            element.object.addSynapseSpike(spike)
-                    }
-        
+                @connectSynapse(synapse, element.object) if element.objectType == 'neuron'
+                
         tip.drag(onDrag, onStart, onEnd)
         @synapses.push(synapse)
+    
+    connectSynapse: (synapse, neuron) ->
+        return unless neuron.objectType == 'neuron'
+        synapse.connection = {
+            addSynapseSpike: (spike) => 
+                spike = spike * -1 if synapse.synapseType == 'inhibitory'
+                neuron.addSynapseSpike(spike)
+        }
             
 
 class neurobehav.Oscilloscope extends neurobehav.Object
@@ -277,17 +278,18 @@ class neurobehav.Oscilloscope extends neurobehav.Object
     xDelta: 1
     scale: 100
     
-    constructor: ({@paper, @position, @container, @range, @threshold}) ->
-        @initGrid()
+    constructor: ({@container, @range, @threshold}) ->
+        super(arguments...)
+        
         @drawGrid()
-        @create()      
-        @initObject()
+        @createImage()      
+        @initImage()
         setInterval(
            (=> @fire()),
            @periodicity
         )        
         
-    initGrid: ->
+    init: ->
         backgroundCanvas = document.createElement('CANVAS')
         @container.append(backgroundCanvas)
         @canvasWidth = backgroundCanvas.width = $(backgroundCanvas).width()
@@ -305,7 +307,7 @@ class neurobehav.Oscilloscope extends neurobehav.Object
         
         @xAxis = @canvasHeight - (@canvasHeight / @axisLineCount)
         
-    initObject: ->
+    initImage: ->
         @image.attr
             cursor: 'move'
         
