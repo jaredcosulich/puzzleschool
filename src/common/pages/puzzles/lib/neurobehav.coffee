@@ -278,7 +278,9 @@ class neurobehav.Neuron extends neurobehav.Object
             tip.transform("t#{fullDX},#{fullDY}")
             tip.toFront()
             
-        onStart = -> glow.attr(opacity: 0.04)
+        onStart = => 
+            @disconnectSynapse(synapse)
+            glow.attr(opacity: 0.04)
         
         onEnd = =>
             lastDX = fullDX
@@ -297,6 +299,8 @@ class neurobehav.Neuron extends neurobehav.Object
                 spike = spike * -1 if synapse.synapseType == 'inhibitory'
                 neuron.addSynapseSpike(spike)
         }
+        
+    disconnectSynapse: (synapse) -> synapse.connection = null
             
 
 class neurobehav.Oscilloscope extends neurobehav.Object
@@ -353,7 +357,9 @@ class neurobehav.Oscilloscope extends neurobehav.Object
             @image.transform("t#{fullDX},#{fullDY}")
             glow.transform("t#{fullDX},#{fullDY}")
             
-        onStart = -> glow.show()
+        onStart = => 
+            @unattach()
+            glow.show()
         
         onEnd = =>
             glow.attr(opacity: 0)
@@ -397,7 +403,11 @@ class neurobehav.Oscilloscope extends neurobehav.Object
         @backgroundContext.closePath()        
         
     attachTo: (@neuron) ->
-        
+    
+    unattach: -> 
+        @neuron = null
+        @voltageContext.clearRect(0, 0, @canvasWidth, @canvasHeight)
+        @firePosition = 0
     
         
 

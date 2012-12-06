@@ -360,6 +360,7 @@ neurobehav.Neuron = (function(_super) {
       return tip.toFront();
     };
     onStart = function() {
+      _this.disconnectSynapse(synapse);
       return glow.attr({
         opacity: 0.04
       });
@@ -398,6 +399,10 @@ neurobehav.Neuron = (function(_super) {
         return neuron.addSynapseSpike(spike);
       }
     };
+  };
+
+  Neuron.prototype.disconnectSynapse = function(synapse) {
+    return synapse.connection = null;
   };
 
   return Neuron;
@@ -469,6 +474,7 @@ neurobehav.Oscilloscope = (function(_super) {
       return glow.transform("t" + fullDX + "," + fullDY);
     };
     onStart = function() {
+      _this.unattach();
       return glow.show();
     };
     onEnd = function() {
@@ -529,6 +535,12 @@ neurobehav.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.attachTo = function(neuron) {
     this.neuron = neuron;
+  };
+
+  Oscilloscope.prototype.unattach = function() {
+    this.neuron = null;
+    this.voltageContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    return this.firePosition = 0;
   };
 
   return Oscilloscope;
