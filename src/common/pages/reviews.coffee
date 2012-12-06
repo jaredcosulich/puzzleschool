@@ -11,6 +11,7 @@
 # Graph Wars: http://www.graphwar.com/
 # Universe Sandbox: http://universesandbox.com/
 # Eye Paint - http://www.curioushat.com/eye-paint/
+# Horse Race (fractions) - http://davidwees.com/horserace/
 
 
 soma = require('soma')

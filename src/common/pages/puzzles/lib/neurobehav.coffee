@@ -58,6 +58,7 @@ class neurobehav.ViewHelper
     addObject: (data) ->
         data.paper = @paper
         data.id = @nextId()
+        data.propertiesArea = @$('.properties')
         new neurobehav[data.type](data)
             
     nextId: ->
@@ -68,7 +69,7 @@ class neurobehav.Object
     periodicity: PERIODICITY
     baseFolder: BASE_FOLDER
     
-    constructor: ({@id, @paper, @position}) -> @init()
+    constructor: ({@id, @paper, @position, @propertiesArea}) -> @init()
         
     createImage: ->
         @image = @paper.image(
@@ -98,16 +99,63 @@ class neurobehav.Object
         glow.toFront()
         element.toFront()
         return glow
-            
         
+    initPropertiesGlow: (element=@image) ->
+        element.propertiesGlow.remove() if element.propertiesGlow
+        element.attr(cursor: 'pointer')
+        if element.forEach
+            glow = @paper.set()
+            element.forEach (e) => glow.push(e.glow(width: 20, fill: true, color: 'red'))
+        else
+            glow = element.glow(width: 20, fill: true, color: 'red')
+        glow.hide()
+        
+        element.hover(
+            () => glow.show(),
+            () => glow.hide() unless element.propertiesDisplayed
+        )
+        element.propertiesGlow = glow
+        return glow
+            
+    initProperties: (properties, element=@image) ->
+        element.properties = JSON.parse(JSON.stringify(properties))
+        @initPropertiesGlow(element)
 
+        element.click => @propertiesClick(element)
+        return element.propertiesGlow
+        
+    propertiesClick: (element=@image) =>
+        return if element.noClick
+        if element.propertiesDisplayed
+            element.propertiesGlow.hide()
+            @hideProperties(element)
+        else
+            element.propertiesGlow.show()
+            @showProperties(element)
+            
+    showProperties: (element=@image) ->
+        return if element.propertiesDisplayed
+        element.propertiesDisplayed = true
+        @propertiesArea.find('.nothing_selected').hide()
+        (ui = @propertiesArea.find('.object_properties')).show()
+        ui.html('')
+        for property of element.properties
+            ui.append("<p>#{property}: #{element.properties[property].value}</p>")
+            
+    hideProperties: (element=@image) ->
+        return unless element.propertiesDisplayed
+        element.propertiesDisplayed = false
+        @propertiesArea.find('.object_properties').hide()
+        @propertiesArea.find('.nothing_selected').show()
+            
 class neurobehav.Stimulus extends neurobehav.Object
     objectType: 'stimulus'
+    objectName: 'Stimulus'
     imageSrc: 'stimulus_button.png' 
     height: 50
     width: 50
     fullWidth: 100
-        
+    
     constructor: ({@voltage}) -> super(arguments...)
     
     init: ->
@@ -116,7 +164,60 @@ class neurobehav.Stimulus extends neurobehav.Object
         @setImage()
         @image.click => @toggleState()
         @image.attr(cursor: 'pointer')
+
+        @initSlider()
+
+    initSlider: ->
+        @slider = @paper.set()
         
+        offset = 9
+        radius = 6
+        left = @position.left
+        right = @position.left + @width
+        top = @position.top + @height + offset
+
+        guide = @paper.path("M#{left},#{top}L#{right},#{top}")
+        guide.attr
+            'stroke': "#ccc"
+            'stroke-width': 5
+            'stroke-linecap': 'round'
+        
+        knob = @paper.circle(@position.left, @position.top + @height + offset, radius)
+        knob.attr
+            cursor: 'move'
+            stroke: '#555'
+            fill: 'r(0.5, 0.5)#ddd-#666'
+        
+        lastDeltaX = 0
+        deltaX = 0
+        onDrag = (dX, dY) =>
+            @showProperties(@slider)
+            deltaX = lastDeltaX + dX
+            deltaX = right - left if deltaX > right - left
+            deltaX = 0 if deltaX < 0
+            knob.transform("t#{deltaX},#{0}")
+            @initPropertiesGlow(@slider)
+            @slider.propertiesGlow.show()
+            
+        onStart = => @slider.noClick = true
+        onEnd = =>
+            if deltaX
+                lastDeltaX = deltaX                
+            else
+                @slider.noClick = false
+            deltaX = 0
+            $.timeout 10, => @slider.noClick = false
+        
+        knob.drag(onDrag, onStart, onEnd)        
+            
+        @slider.push(guide)
+        @slider.push(knob)
+        
+        properties = 
+            'Pulse Rate': {type: 'slider', value: '3'}
+        
+        @initProperties(properties, @slider)
+
     toggleState: ->
         @state += 1
         @state = @state % 2
@@ -144,7 +245,8 @@ class neurobehav.Neuron extends neurobehav.Object
     imageSrc: 'neuron.png' 
     height: 60
     width: 60
-
+    properties: {}
+    
     constructor: ({@threshold, @spike}) -> super(arguments...)
     
     init: -> 
@@ -153,6 +255,7 @@ class neurobehav.Neuron extends neurobehav.Object
         @activeSynapseSpikes = []
         
         @createImage()
+        @initProperties(@properties)
             
         ## setup parameters and state variables
         @timeSinceStart = 0
