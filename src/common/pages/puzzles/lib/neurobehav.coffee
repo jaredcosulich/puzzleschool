@@ -85,7 +85,7 @@ class neurobehav.Object
         
     init: -> raise("no init method for #{@objectType}")
 
-    initGlow: (element) ->
+    initMoveGlow: (element) ->
         glow = element.glow(width: 30, fill: true, color: 'yellow')
         glow.attr(opacity: 0, cursor: 'move')
         set = @paper.set()
@@ -251,7 +251,7 @@ class neurobehav.Neuron extends neurobehav.Object
                 'cursor': 'move'
                 'fill': '#000'
 
-        glow = @initGlow(tip)         
+        glow = @initMoveGlow(tip)         
            
         lastDX = 0
         lastDY = 0 
@@ -345,7 +345,7 @@ class neurobehav.Oscilloscope extends neurobehav.Object
         @image.attr
             cursor: 'move'
          
-        glow = @initGlow(@image) 
+        glow = @initMoveGlow(@image) 
         
         lastDX = 0
         lastDY = 0 

@@ -21,8 +21,9 @@ body {
     
     .board {
         float: left;
-        width: @dimension;
-        height: @dimension;
+        width: (@dimension - 2);
+        height: (@dimension - 2);
+        border: 1px solid #000;
         overflow: hidden;
         margin-bottom: 12px;
         background: lighten(#000, 10%) url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat; 
@@ -31,22 +32,26 @@ body {
     
     .sidebar {
         float: right;
-        width: (@dimension / 2);
-        height: @dimension;
+        width: ((@dimension / 2) - 1);
+        height: (@dimension - 2);
         background-color: @blue;
+        border-top: 1px solid #000;
+        border-right: 1px solid #000;
+        border-bottom: 1px solid #000;
     }
     
     .oscilloscope {
         background-color: white;
-        height: (@dimension / 3);
-        width: ((@dimension / 2) - 2);      
-        border: 1px solid #000;      
+        height: ((@dimension / 3) - 2);
+        width: ((@dimension / 2) - 1);
+        border-bottom: 1px solid #000;  
+        border-top: 1px solid #000;  
         position: relative;
         canvas {
             position: absolute;
             top: 0;
             left: 0;
-            height: (@dimension / 3);
+            height: ((@dimension / 3) - 2);
             width: ((@dimension / 2) - 2);  
         }
     }
@@ -54,7 +59,7 @@ body {
     .model {
         background-color: black;
         text-align: center;
-        height: (@dimension / 3);
+        height: ((@dimension / 3) - 2); 
         line-height: (@dimension / 3);
         img {
             vertical-align: middle;
@@ -63,7 +68,12 @@ body {
     
     .properties {
         background-color: white;
-        height: (@dimension / 3);        
+        padding: 0 6px;
+        height: (@dimension / 3);
+        overflow: auto;
+        h4 {
+            padding: 6px 0;
+        }        
     }
     
     .object {

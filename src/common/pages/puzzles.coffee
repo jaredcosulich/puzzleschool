@@ -236,6 +236,12 @@ LABDATA = [{
                     that is too hard.
                 </li>
                 <li>
+                    We wanted to be able to track students as they progress through levels so that we can
+                    determine if a level is appropriately challenging and improve it if it is not. If you are
+                    interested in using these tracking features (how long a student spends on a puzzle, how many
+                    moves they make, whether they complete it or not), let us know.
+                </li>
+                <li>
                     We wanted to developer the program in html and javascript so that it could more easily
                     be ported to a native mobile application.
                 </li>

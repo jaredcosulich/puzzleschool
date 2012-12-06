@@ -110,7 +110,7 @@ neurobehav.Object = (function() {
     return raise("no init method for " + this.objectType);
   };
 
-  Object.prototype.initGlow = function(element) {
+  Object.prototype.initMoveGlow = function(element) {
     var glow, set,
       _this = this;
     glow = element.glow({
@@ -330,7 +330,7 @@ neurobehav.Neuron = (function(_super) {
         'fill': '#000'
       });
     }
-    glow = this.initGlow(tip);
+    glow = this.initMoveGlow(tip);
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;
@@ -462,7 +462,7 @@ neurobehav.Oscilloscope = (function(_super) {
     this.image.attr({
       cursor: 'move'
     });
-    glow = this.initGlow(this.image);
+    glow = this.initMoveGlow(this.image);
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;

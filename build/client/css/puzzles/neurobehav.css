@@ -15,8 +15,9 @@ body {
 }
 .neurobehav .board {
   float: left;
-  width: 630px;
-  height: 630px;
+  width: 628px;
+  height: 628px;
+  border: 1px solid #000;
   overflow: hidden;
   margin-bottom: 12px;
   background: #1a1a1a url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
@@ -24,28 +25,32 @@ body {
 }
 .neurobehav .sidebar {
   float: right;
-  width: 315px;
-  height: 630px;
+  width: 314px;
+  height: 628px;
   background-color: #24aac3;
+  border-top: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
 }
 .neurobehav .oscilloscope {
   background-color: white;
-  height: 210px;
-  width: 313px;
-  border: 1px solid #000;
+  height: 208px;
+  width: 314px;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
   position: relative;
 }
 .neurobehav .oscilloscope canvas {
   position: absolute;
   top: 0;
   left: 0;
-  height: 210px;
+  height: 208px;
   width: 313px;
 }
 .neurobehav .model {
   background-color: black;
   text-align: center;
-  height: 210px;
+  height: 208px;
   line-height: 210px;
 }
 .neurobehav .model img {
@@ -53,7 +58,12 @@ body {
 }
 .neurobehav .properties {
   background-color: white;
+  padding: 0 6px;
   height: 210px;
+  overflow: auto;
+}
+.neurobehav .properties h4 {
+  padding: 6px 0;
 }
 .neurobehav .object {
   position: absolute;
