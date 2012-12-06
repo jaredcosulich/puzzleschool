@@ -218,7 +218,7 @@ class neurobehav.Neuron extends neurobehav.Object
         synapse.synapseType = type
         synapse.id = "#{@id}/#{@synapses.length}"        
         synapse.toBack()
-
+        
         if type == 'inhibitory'
             tip = @paper.circle(endX, endY, 6)
             tip.attr
@@ -235,11 +235,13 @@ class neurobehav.Neuron extends neurobehav.Object
             tip.attr
                 'cursor': 'move'
                 'fill': '#000'
+        tip.toFront()
            
         lastDX = 0
         lastDY = 0 
         fullDX = 0
         fullDY = 0
+        subPath = null;
         onDrag = (dX, dY) =>
             path = synapse.attr('path')
             fullDX = lastDX + dX 
@@ -247,7 +249,14 @@ class neurobehav.Neuron extends neurobehav.Object
             path[1][1] = endX + fullDX
             path[1][2] = endY + fullDY
             synapse.attr('path', path)
+            
+            subPath.remove() if subPath
+            if synapse.getTotalLength() > @width
+                subPath = @paper.path synapse.getSubpath(@width, synapse.getTotalLength())
+                subPath.toFront()
+            
             tip.transform("t#{fullDX},#{fullDY}")
+            tip.toFront()
             
         onStart = () =>
         

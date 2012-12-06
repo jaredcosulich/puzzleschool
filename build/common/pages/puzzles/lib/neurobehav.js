@@ -276,7 +276,7 @@ neurobehav.Neuron = (function(_super) {
   };
 
   Neuron.prototype.createSynapse = function(type) {
-    var endX, endY, fullDX, fullDY, lastDX, lastDY, onDrag, onEnd, onStart, synapse, tip, xShift,
+    var endX, endY, fullDX, fullDY, lastDX, lastDY, onDrag, onEnd, onStart, subPath, synapse, tip, xShift,
       _this = this;
     xShift = (type === 'inhibitory' ? -12 : 12);
     endX = this.position.left + (this.width / 2) + xShift;
@@ -301,10 +301,12 @@ neurobehav.Neuron = (function(_super) {
         'fill': '#000'
       });
     }
+    tip.toFront();
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;
     fullDY = 0;
+    subPath = null;
     onDrag = function(dX, dY) {
       var path;
       path = synapse.attr('path');
@@ -313,7 +315,15 @@ neurobehav.Neuron = (function(_super) {
       path[1][1] = endX + fullDX;
       path[1][2] = endY + fullDY;
       synapse.attr('path', path);
-      return tip.transform("t" + fullDX + "," + fullDY);
+      if (subPath) {
+        subPath.remove();
+      }
+      if (synapse.getTotalLength() > _this.width) {
+        subPath = _this.paper.path(synapse.getSubpath(_this.width, synapse.getTotalLength()));
+        subPath.toFront();
+      }
+      tip.transform("t" + fullDX + "," + fullDY);
+      return tip.toFront();
     };
     onStart = function() {};
     onEnd = function() {
