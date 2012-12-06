@@ -111,18 +111,28 @@ neurobehav.Object = (function() {
   };
 
   Object.prototype.initGlow = function(element) {
-    var glow,
+    var glow, set,
       _this = this;
     glow = element.glow({
       width: 30,
       fill: true,
       color: 'yellow'
     });
-    glow.hide();
-    element.hover(function() {
-      return glow.show();
+    glow.attr({
+      opacity: 0,
+      cursor: 'move'
+    });
+    set = this.paper.set();
+    set.push(element);
+    set.push(glow);
+    set.hover(function() {
+      return glow.attr({
+        opacity: 0.04
+      });
     }, function() {
-      return glow.hide();
+      return glow.attr({
+        opacity: 0
+      });
     });
     glow.toFront();
     element.toFront();
@@ -342,13 +352,17 @@ neurobehav.Neuron = (function(_super) {
         subPath.toFront();
       }
       glow.transform("t" + fullDX + "," + fullDY);
-      glow.show();
+      glow.attr({
+        opacity: 0.04
+      });
       glow.toFront();
       tip.transform("t" + fullDX + "," + fullDY);
       return tip.toFront();
     };
     onStart = function() {
-      return glow.show();
+      return glow.attr({
+        opacity: 0.04
+      });
     };
     onEnd = function() {
       var element, _i, _len, _ref, _results;
@@ -367,6 +381,7 @@ neurobehav.Neuron = (function(_super) {
       return _results;
     };
     tip.drag(onDrag, onStart, onEnd);
+    glow.drag(onDrag, onStart, onEnd);
     return this.synapses.push(synapse);
   };
 
@@ -458,7 +473,9 @@ neurobehav.Oscilloscope = (function(_super) {
     };
     onEnd = function() {
       var element, _i, _len, _ref, _results;
-      glow.hide();
+      glow.attr({
+        opacity: 0
+      });
       lastDX = fullDX;
       lastDY = fullDY;
       _ref = _this.paper.getElementsByPoint(_this.position.left + fullDX, (_this.position.top + _this.height) + fullDY);
@@ -473,7 +490,8 @@ neurobehav.Oscilloscope = (function(_super) {
       }
       return _results;
     };
-    return this.image.drag(onDrag, onStart, onEnd);
+    this.image.drag(onDrag, onStart, onEnd);
+    return glow.drag(onDrag, onStart, onEnd);
   };
 
   Oscilloscope.prototype.fire = function() {

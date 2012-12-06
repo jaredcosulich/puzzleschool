@@ -87,10 +87,13 @@ class neurobehav.Object
 
     initGlow: (element) ->
         glow = element.glow(width: 30, fill: true, color: 'yellow')
-        glow.hide()
-        element.hover(
-            () => glow.show(),
-            () => glow.hide()
+        glow.attr(opacity: 0, cursor: 'move')
+        set = @paper.set()
+        set.push(element)
+        set.push(glow)
+        set.hover(
+            () => glow.attr(opacity: 0.04),
+            () => glow.attr(opacity: 0)
         )
         glow.toFront()
         element.toFront()
@@ -269,13 +272,13 @@ class neurobehav.Neuron extends neurobehav.Object
                 subPath.toFront()
             
             glow.transform("t#{fullDX},#{fullDY}")
-            glow.show()
+            glow.attr(opacity: 0.04)
             glow.toFront()
 
             tip.transform("t#{fullDX},#{fullDY}")
             tip.toFront()
             
-        onStart = -> glow.show()
+        onStart = -> glow.attr(opacity: 0.04)
         
         onEnd = =>
             lastDX = fullDX
@@ -284,6 +287,7 @@ class neurobehav.Neuron extends neurobehav.Object
                 @connectSynapse(synapse, element.object) if element.objectType == 'neuron'
                 
         tip.drag(onDrag, onStart, onEnd)
+        glow.drag(onDrag, onStart, onEnd)
         @synapses.push(synapse)
     
     connectSynapse: (synapse, neuron) ->
@@ -352,7 +356,7 @@ class neurobehav.Oscilloscope extends neurobehav.Object
         onStart = -> glow.show()
         
         onEnd = =>
-            glow.hide()
+            glow.attr(opacity: 0)
             lastDX = fullDX
             lastDY = fullDY
             for element in @paper.getElementsByPoint(@position.left + fullDX, (@position.top + @height) + fullDY)
@@ -360,6 +364,7 @@ class neurobehav.Oscilloscope extends neurobehav.Object
                     @attachTo(element.object)
             
         @image.drag(onDrag, onStart, onEnd)        
+        glow.drag(onDrag, onStart, onEnd)        
         
     fire: () ->
         return unless @neuron
