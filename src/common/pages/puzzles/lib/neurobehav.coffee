@@ -82,6 +82,7 @@ class neurobehav.Object
             @fullHeight or @height
         )
         @image.objectType = @objectType
+        @image.objectName = @objectName
         @image.object = @
         
         return @image
@@ -147,6 +148,7 @@ class neurobehav.Object
                     <span class='#{property}'>#{element.properties[property].value}</span>
                 </p>
             """
+        @propertiesArea.find('.object_type').html(element.objectName)
             
     hideProperties: (element=@image) ->
         return unless element.propertiesDisplayed
@@ -175,6 +177,8 @@ class neurobehav.Stimulus extends neurobehav.Object
 
     initSlider: ->
         @slider = @paper.set()
+        @slider.objectType = @objectType
+        @slider.objectName = @objectName
         
         value = 3
         range = 10.0

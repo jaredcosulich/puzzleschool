@@ -110,6 +110,7 @@ neurobehav.Object = (function() {
   Object.prototype.createImage = function() {
     this.image = this.paper.image("" + this.baseFolder + this.imageSrc, this.position.left, this.position.top, this.fullWidth || this.width, this.fullHeight || this.height);
     this.image.objectType = this.objectType;
+    this.image.objectName = this.objectName;
     this.image.object = this;
     return this.image;
   };
@@ -217,7 +218,7 @@ neurobehav.Object = (function() {
   };
 
   Object.prototype.showProperties = function(element) {
-    var property, ui, _results;
+    var property, ui;
     if (element == null) {
       element = this.image;
     }
@@ -228,11 +229,10 @@ neurobehav.Object = (function() {
     this.propertiesArea.find('.nothing_selected').hide();
     (ui = this.propertiesArea.find('.object_properties')).show();
     ui.html('');
-    _results = [];
     for (property in element.properties) {
-      _results.push(ui.append("<p>" + element.properties[property].name + ": \n    <span class='" + property + "'>" + element.properties[property].value + "</span>\n</p>"));
+      ui.append("<p>" + element.properties[property].name + ": \n    <span class='" + property + "'>" + element.properties[property].value + "</span>\n</p>");
     }
-    return _results;
+    return this.propertiesArea.find('.object_type').html(element.objectName);
   };
 
   Object.prototype.hideProperties = function(element) {
@@ -290,6 +290,8 @@ neurobehav.Stimulus = (function(_super) {
     var deltaX, guide, knob, lastDeltaX, left, offset, onDrag, onEnd, onStart, properties, pulseRate, radius, range, right, top, unit, value,
       _this = this;
     this.slider = this.paper.set();
+    this.slider.objectType = this.objectType;
+    this.slider.objectName = this.objectName;
     value = 3;
     range = 10.0;
     offset = 9;
@@ -414,7 +416,6 @@ neurobehav.Neuron = (function(_super) {
     this.synapseSpikes = [];
     this.activeSynapseSpikes = [];
     this.createImage();
-    this.initProperties(this.properties);
     this.timeSinceStart = 0;
     this.restTime = 0;
     this.timeDelta = 0.5;
