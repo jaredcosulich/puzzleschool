@@ -76,9 +76,13 @@ neurobehav.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.addObject = function(data) {
+    var _this = this;
     data.paper = this.paper;
     data.id = this.nextId();
     data.propertiesArea = this.$('.properties');
+    data.setProperty = function(property, value) {
+      return _this.$(".properties ." + property).html("" + value);
+    };
     return new neurobehav[data.type](data);
   };
 
@@ -97,7 +101,7 @@ neurobehav.Object = (function() {
   Object.prototype.baseFolder = BASE_FOLDER;
 
   function Object(_arg) {
-    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.propertiesArea = _arg.propertiesArea;
+    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.propertiesArea = _arg.propertiesArea, this.setProperty = _arg.setProperty;
     this.propertiesClick = __bind(this.propertiesClick, this);
 
     this.init();
@@ -200,7 +204,6 @@ neurobehav.Object = (function() {
     if (element == null) {
       element = this.image;
     }
-    console.log(element);
     if (element.noClick) {
       return;
     }
@@ -227,7 +230,7 @@ neurobehav.Object = (function() {
     ui.html('');
     _results = [];
     for (property in element.properties) {
-      _results.push(ui.append("<p>" + property + ": " + element.properties[property].value + "</p>"));
+      _results.push(ui.append("<p>" + element.properties[property].name + ": \n    <span class='" + property + "'>" + element.properties[property].value + "</span>\n</p>"));
     }
     return _results;
   };
@@ -284,14 +287,17 @@ neurobehav.Stimulus = (function(_super) {
   };
 
   Stimulus.prototype.initSlider = function() {
-    var deltaX, guide, knob, lastDeltaX, left, offset, onDrag, onEnd, onStart, properties, radius, right, top,
+    var deltaX, guide, knob, lastDeltaX, left, offset, onDrag, onEnd, onStart, properties, pulseRate, radius, range, right, top, unit, value,
       _this = this;
     this.slider = this.paper.set();
+    value = 3;
+    range = 10.0;
     offset = 9;
     radius = 6;
     left = this.position.left;
     right = this.position.left + this.width;
     top = this.position.top + this.height + offset;
+    unit = this.width / range;
     guide = this.paper.path("M" + left + "," + top + "L" + right + "," + top);
     guide.attr({
       'stroke': "#ccc",
@@ -304,8 +310,12 @@ neurobehav.Stimulus = (function(_super) {
       stroke: '#555',
       fill: 'r(0.5, 0.5)#ddd-#666'
     });
-    lastDeltaX = 0;
+    lastDeltaX = unit * value;
     deltaX = 0;
+    pulseRate = function(dX) {
+      return unit * Math.round(dX / unit);
+    };
+    knob.transform("t" + lastDeltaX + ",0");
     onDrag = function(dX, dY) {
       _this.showProperties(_this.slider);
       deltaX = lastDeltaX + dX;
@@ -315,6 +325,8 @@ neurobehav.Stimulus = (function(_super) {
       if (deltaX < 0) {
         deltaX = 0;
       }
+      deltaX = pulseRate(deltaX);
+      _this.setProperty('pulse_rate', pulseRate(deltaX) / unit);
       knob.transform("t" + deltaX + "," + 0);
       _this.initPropertiesGlow(_this.slider);
       return _this.slider.propertiesGlow.show();
@@ -324,6 +336,8 @@ neurobehav.Stimulus = (function(_super) {
     };
     onEnd = function() {
       if (deltaX) {
+        console.log(pulseRate(deltaX));
+        _this.setProperty('pulse_rate', pulseRate(deltaX) / unit);
         lastDeltaX = deltaX;
       } else {
         _this.slider.noClick = false;
@@ -337,7 +351,8 @@ neurobehav.Stimulus = (function(_super) {
     this.slider.push(guide);
     this.slider.push(knob);
     properties = {
-      'Pulse Rate': {
+      'pulse_rate': {
+        name: 'Pulse Rate',
         type: 'slider',
         value: '3'
       }

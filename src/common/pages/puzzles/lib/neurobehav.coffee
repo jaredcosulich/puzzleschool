@@ -59,6 +59,8 @@ class neurobehav.ViewHelper
         data.paper = @paper
         data.id = @nextId()
         data.propertiesArea = @$('.properties')
+        data.setProperty = (property, value) =>
+            @$(".properties .#{property}").html("#{value}")
         new neurobehav[data.type](data)
             
     nextId: ->
@@ -69,7 +71,7 @@ class neurobehav.Object
     periodicity: PERIODICITY
     baseFolder: BASE_FOLDER
     
-    constructor: ({@id, @paper, @position, @propertiesArea}) -> @init()
+    constructor: ({@id, @paper, @position, @propertiesArea, @setProperty}) -> @init()
         
     createImage: ->
         @image = @paper.image(
@@ -140,7 +142,11 @@ class neurobehav.Object
         (ui = @propertiesArea.find('.object_properties')).show()
         ui.html('')
         for property of element.properties
-            ui.append("<p>#{property}: #{element.properties[property].value}</p>")
+            ui.append """
+                <p>#{element.properties[property].name}: 
+                    <span class='#{property}'>#{element.properties[property].value}</span>
+                </p>
+            """
             
     hideProperties: (element=@image) ->
         return unless element.propertiesDisplayed
@@ -170,11 +176,14 @@ class neurobehav.Stimulus extends neurobehav.Object
     initSlider: ->
         @slider = @paper.set()
         
+        value = 3
+        range = 10.0
         offset = 9
         radius = 6
         left = @position.left
         right = @position.left + @width
         top = @position.top + @height + offset
+        unit = @width / range
 
         guide = @paper.path("M#{left},#{top}L#{right},#{top}")
         guide.attr
@@ -188,13 +197,18 @@ class neurobehav.Stimulus extends neurobehav.Object
             stroke: '#555'
             fill: 'r(0.5, 0.5)#ddd-#666'
         
-        lastDeltaX = 0
+        lastDeltaX = unit * value
         deltaX = 0
+        pulseRate = (dX) -> unit * Math.round(dX/unit)
+        knob.transform("t#{lastDeltaX},0")
+
         onDrag = (dX, dY) =>
             @showProperties(@slider)
             deltaX = lastDeltaX + dX
             deltaX = right - left if deltaX > right - left
             deltaX = 0 if deltaX < 0
+            deltaX = pulseRate(deltaX)
+            @setProperty('pulse_rate', pulseRate(deltaX)/unit)
             knob.transform("t#{deltaX},#{0}")
             @initPropertiesGlow(@slider)
             @slider.propertiesGlow.show()
@@ -202,6 +216,8 @@ class neurobehav.Stimulus extends neurobehav.Object
         onStart = => @slider.noClick = true
         onEnd = =>
             if deltaX
+                console.log(pulseRate(deltaX))
+                @setProperty('pulse_rate', pulseRate(deltaX)/unit)
                 lastDeltaX = deltaX                
             else
                 @slider.noClick = false
@@ -214,7 +230,7 @@ class neurobehav.Stimulus extends neurobehav.Object
         @slider.push(knob)
         
         properties = 
-            'Pulse Rate': {type: 'slider', value: '3'}
+            'pulse_rate': {name: 'Pulse Rate', type: 'slider', value: '3'}
         
         @initProperties(properties, @slider)
 
@@ -255,7 +271,7 @@ class neurobehav.Neuron extends neurobehav.Object
         @activeSynapseSpikes = []
         
         @createImage()
-        @initProperties(@properties)
+        # @initProperties(@properties)
             
         ## setup parameters and state variables
         @timeSinceStart = 0
