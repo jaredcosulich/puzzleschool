@@ -1,4 +1,4 @@
-neurobehavEditor = exports ? provide('./lib/neurobehav_editor', {})
+neurobehavEditor = exports ? provide('./lib/neurobehav/editor', {})
 
 class neurobehavEditor.EditorHelper
     constructor: ({@el, @viewHelper, encodeMethod}) ->

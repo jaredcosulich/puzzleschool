@@ -38,6 +38,7 @@ task 'build:site', 'Build the site files', ->
         'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
         'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/*.coffee'
         'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/*.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib/neurobehav_objects src/common/pages/puzzles/lib/neurobehav_objects/*.coffee'
         'cp -r src/common/templates build/common'
     ]
 

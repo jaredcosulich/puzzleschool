@@ -8,6 +8,12 @@ soma.chunks
 
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/neurobehav.html"
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/game.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/object.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/neuron.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/stimulus.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/oscilloscope.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/index.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav.js'
             @loadScript '/assets/third_party/raphael-min.js'
             if @levelId == 'editor'
@@ -25,7 +31,7 @@ soma.views
         selector: '#content .neurobehav'
         create: ->
             neurobehav = require('./lib/neurobehav')
-            @viewHelper = new neurobehav.ViewHelper
+            @game = new neurobehav.Game
                 el: $(@selector)
                 
 soma.routes

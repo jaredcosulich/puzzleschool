@@ -2,7 +2,7 @@ describe("Voltage: ", function() {
     var game, neuron;
 
     beforeEach(function() {
-        game = new neurobehav.ViewHelper({
+        game = new neurobehav.Game({
             el: $('.neurobehav')
         });
         

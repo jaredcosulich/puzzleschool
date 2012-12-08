@@ -2,7 +2,7 @@ describe("Synapse: ", function() {
     var game, neuron1, neuron2;
 
     beforeEach(function() {
-        game = new neurobehav.ViewHelper({
+        game = new neurobehav.Game({
             el: $('.neurobehav')
         });
         
