@@ -39,13 +39,13 @@ describe("Voltage: ", function() {
             })
 
             it('should respond a voltage stimulus', function() {
-                lightStimulus.toggleState();
+                lightStimulus.setState(true);
                 neuron.setCurrentVoltage();
                 expect(neuron.currentVoltage).toBeGreaterThan(0);
             });
         
             it('should not cross the threshold with a light stimulus', function() {
-                lightStimulus.toggleState();
+                lightStimulus.setState(true);
                 for (var i=0; i<100; ++i) {
                     neuron.setCurrentVoltage();
                     expect(neuron.currentVoltage).toBeLessThan(1);                
@@ -69,7 +69,7 @@ describe("Voltage: ", function() {
             
             it('should spike after crossing threshold', function() {
                 heavyStimulus.connectTo(neuron);
-                heavyStimulus.toggleState();
+                heavyStimulus.setState(true);
                 for (var i=0; i<200; ++i) {
                     neuron.setCurrentVoltage();
                     if (neuron.currentVoltage > 1) break; 
@@ -79,7 +79,7 @@ describe("Voltage: ", function() {
             
             it('should not affect the voltage', function() {
                 heavyStimulus.connectTo(neuron);
-                heavyStimulus.toggleState();
+                heavyStimulus.setState(true);
                 for (var i=0; i<200; ++i) {
                     neuron.setCurrentVoltage();
                     expect(neuron.voltage).toEqual(1.5);                

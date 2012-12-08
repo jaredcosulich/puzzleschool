@@ -11,7 +11,7 @@ object.Object = (function() {
   Object.prototype.baseFolder = '/assets/images/puzzles/neurobehav/';
 
   function Object(_arg) {
-    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.propertiesArea = _arg.propertiesArea, this.setProperty = _arg.setProperty;
+    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.propertyUI = _arg.propertyUI;
     this.propertiesClick = __bind(this.propertiesClick, this);
 
     this.init();
@@ -59,7 +59,7 @@ object.Object = (function() {
   };
 
   Object.prototype.initPropertiesGlow = function(element) {
-    var glow,
+    var glow, s,
       _this = this;
     if (element == null) {
       element = this.image;
@@ -67,9 +67,6 @@ object.Object = (function() {
     if (element.propertiesGlow) {
       element.propertiesGlow.remove();
     }
-    element.attr({
-      cursor: 'pointer'
-    });
     if (element.forEach) {
       glow = this.paper.set();
       element.forEach(function(e) {
@@ -86,75 +83,64 @@ object.Object = (function() {
         color: 'red'
       });
     }
-    glow.hide();
-    element.hover(function() {
-      return glow.show();
+    glow.attr({
+      opacity: 0
+    });
+    s = this.paper.set();
+    s.push(glow);
+    s.push(element);
+    s.attr({
+      cursor: 'pointer'
+    });
+    s.hover(function() {
+      return glow.attr({
+        opacity: 0.04
+      });
     }, function() {
       if (!element.propertiesDisplayed) {
-        return glow.hide();
+        return glow.attr({
+          opacity: 0
+        });
       }
     });
     element.propertiesGlow = glow;
-    return glow;
+    return s;
   };
 
   Object.prototype.initProperties = function(properties, element) {
-    var _this = this;
+    var elementAndGlow,
+      _this = this;
     if (element == null) {
       element = this.image;
     }
-    element.properties = JSON.parse(JSON.stringify(properties));
-    this.initPropertiesGlow(element);
-    element.click(function() {
+    element.properties = properties;
+    elementAndGlow = this.initPropertiesGlow(element);
+    elementAndGlow.click(function() {
       return _this.propertiesClick(element);
     });
     return element.propertiesGlow;
   };
 
-  Object.prototype.propertiesClick = function(element) {
+  Object.prototype.propertiesClick = function(element, display) {
     if (element == null) {
       element = this.image;
     }
-    if (element.noClick) {
+    if (element.noClick && !display) {
       return;
     }
-    if (element.propertiesDisplayed) {
-      element.propertiesGlow.hide();
-      return this.hideProperties(element);
+    if (display || !element.propertiesDisplayed) {
+      element.propertiesGlow.attr({
+        opacity: 0.04
+      });
+      this.propertyUI.show(element.objectName, element.properties);
+      return element.propertiesDisplayed = true;
     } else {
-      element.propertiesGlow.show();
-      return this.showProperties(element);
+      element.propertiesGlow.attr({
+        opacity: 0
+      });
+      this.propertyUI.hide();
+      return element.propertiesDisplayed = false;
     }
-  };
-
-  Object.prototype.showProperties = function(element) {
-    var property, ui;
-    if (element == null) {
-      element = this.image;
-    }
-    if (element.propertiesDisplayed) {
-      return;
-    }
-    element.propertiesDisplayed = true;
-    this.propertiesArea.find('.nothing_selected').hide();
-    (ui = this.propertiesArea.find('.object_properties')).show();
-    ui.html('');
-    for (property in element.properties) {
-      ui.append("<p>" + element.properties[property].name + ": \n    <span class='" + property + "'>" + element.properties[property].value + "</span>\n</p>");
-    }
-    return this.propertiesArea.find('.object_type').html(element.objectName);
-  };
-
-  Object.prototype.hideProperties = function(element) {
-    if (element == null) {
-      element = this.image;
-    }
-    if (!element.propertiesDisplayed) {
-      return;
-    }
-    element.propertiesDisplayed = false;
-    this.propertiesArea.find('.object_properties').hide();
-    return this.propertiesArea.find('.nothing_selected').show();
   };
 
   return Object;

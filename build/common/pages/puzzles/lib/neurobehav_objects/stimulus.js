@@ -23,35 +23,70 @@ stimulus.Stimulus = (function(_super) {
 
   Stimulus.prototype.fullWidth = 100;
 
+  Stimulus.prototype.propertyList = {
+    'voltage': {
+      name: 'Voltage',
+      unit: 0.25,
+      unitName: 'V'
+    },
+    'duration': {
+      name: 'Duration',
+      unit: 1000,
+      max: 10000,
+      unitName: 'msec'
+    }
+  };
+
   function Stimulus(_arg) {
-    this.voltage = _arg.voltage;
+    var duration, voltage;
+    voltage = _arg.voltage, duration = _arg.duration;
+    this.properties = JSON.parse(JSON.stringify(this.propertyList));
+    this.properties.voltage.value = voltage;
+    this.properties.voltage.max = voltage * 2;
+    this.properties.duration.value = duration;
     Stimulus.__super__.constructor.apply(this, arguments);
   }
 
   Stimulus.prototype.init = function() {
-    var _this = this;
+    var minimumMouseDown, mousedown,
+      _this = this;
     this.createImage();
-    this.state = 0;
     this.setImage();
-    this.image.click(function() {
-      return _this.toggleState();
+    mousedown = false;
+    minimumMouseDown = false;
+    this.image.mousedown(function() {
+      _this.propertiesClick(_this.slider, true);
+      mousedown = true;
+      _this.setState(true);
+      minimumMouseDown = false;
+      return setTimeout((function() {
+        if (!mousedown) {
+          _this.setState(false);
+        }
+        return minimumMouseDown = true;
+      }), _this.properties.duration.value);
+    });
+    this.image.mouseup(function() {
+      if (minimumMouseDown) {
+        _this.setState(false);
+      }
+      return mousedown = false;
     });
     this.image.attr({
       cursor: 'pointer'
     });
-    this.initSlider();
-    return this.duration = 3000;
+    return this.initSlider();
   };
 
   Stimulus.prototype.initSlider = function() {
-    var deltaX, guide, knob, lastDeltaX, left, offset, onDrag, onEnd, onStart, properties, radius, range, right, segment, top, unit, value, voltage,
+    var deltaX, guide, knob, lastDeltaX, left, offset, onDrag, onEnd, onStart, radius, range, right, segment, top, unit, value, voltage,
       _this = this;
     this.slider = this.paper.set();
     this.slider.objectType = this.objectType;
     this.slider.objectName = this.objectName;
-    value = 1.5;
-    unit = 0.25;
-    range = 3 / unit;
+    value = this.properties.voltage.value;
+    unit = this.properties.voltage.unit;
+    range = this.properties.voltage.max / unit;
     offset = 9;
     radius = 6;
     left = this.position.left;
@@ -77,7 +112,6 @@ stimulus.Stimulus = (function(_super) {
     };
     knob.transform("t" + lastDeltaX + ",0");
     onDrag = function(dX, dY) {
-      _this.showProperties(_this.slider);
       deltaX = lastDeltaX + dX;
       if (deltaX > right - left) {
         deltaX = right - left;
@@ -86,17 +120,17 @@ stimulus.Stimulus = (function(_super) {
         deltaX = 0;
       }
       deltaX = voltage(deltaX);
-      _this.setProperty('voltage', (voltage(deltaX) / segment) * unit);
       knob.transform("t" + deltaX + "," + 0);
       _this.initPropertiesGlow(_this.slider);
-      return _this.slider.propertiesGlow.show();
+      _this.propertiesClick(_this.slider, true);
+      return _this.propertyUI.set('voltage', (voltage(deltaX) / segment) * unit);
     };
     onStart = function() {
       return _this.slider.noClick = true;
     };
     onEnd = function() {
       if (deltaX) {
-        _this.setProperty('voltage', (voltage(deltaX) / segment) * unit);
+        _this.propertyUI.set('voltage', (voltage(deltaX) / segment) * unit);
         lastDeltaX = deltaX;
       } else {
         _this.slider.noClick = false;
@@ -109,32 +143,19 @@ stimulus.Stimulus = (function(_super) {
     knob.drag(onDrag, onStart, onEnd);
     this.slider.push(guide);
     this.slider.push(knob);
-    properties = {
-      'voltage': {
-        name: 'Voltage',
-        type: 'slider',
-        value: '1.5'
-      },
-      'duration': {
-        name: 'Duration',
-        type: 'slider',
-        value: '10'
-      }
-    };
-    return this.initProperties(properties, this.slider);
+    return this.initProperties(this.properties, this.slider);
   };
 
-  Stimulus.prototype.toggleState = function() {
-    this.state += 1;
-    this.state = this.state % 2;
+  Stimulus.prototype.setState = function(on) {
+    this.on = on;
     this.setImage();
-    return this.neuron.addVoltage(this.state === 0 ? this.voltage * -1 : this.voltage);
+    return this.neuron.addVoltage(this.on ? this.properties.voltage.value : this.properties.voltage.value * -1);
   };
 
   Stimulus.prototype.setImage = function() {
     return this.image.attr({
       'clip-rect': "" + this.position.left + ", " + this.position.top + ", " + this.width + ", " + this.height,
-      transform: "t" + (-1 * this.width * this.state) + ",0"
+      transform: "t" + (-1 * this.width * (this.on ? 1 : 0)) + ",0"
     });
   };
 
@@ -146,7 +167,7 @@ stimulus.Stimulus = (function(_super) {
       'arrow-end': 'block-wide-long'
     });
     this.connection.toBack();
-    return this.neuron.addVoltage(this.voltage * this.state);
+    return this.neuron.addVoltage(this.properties.voltage.value * (this.on ? 1 : 0));
   };
 
   return Stimulus;

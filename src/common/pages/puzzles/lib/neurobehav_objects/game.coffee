@@ -1,10 +1,12 @@
 game = exports ? provide('./game', {})
+Properties = require('./properties').Properties
 
 class game.Game
     $: (selector) -> $(selector, @el)
 
     constructor: ({@el}) ->
         @initBoard()
+        @initProperties()
 
         #basic instructions
         stimulus = @addObject
@@ -13,6 +15,7 @@ class game.Game
                 top: 100
                 left: 100
             voltage: 1.5
+            duration: 3000
         
         neuron1 = @addObject
             type: 'Neuron'
@@ -46,11 +49,15 @@ class game.Game
         @board = @$('.board')
         dimensions = @board.offset()
         @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
+           
+    initProperties: ->
+        @propertyUI = new Properties
+            el: @$('.properties')
             
     addObject: (data) ->
         data.paper = @paper
         data.id = @nextId()
-        data.propertiesArea = @$('.properties')
+        data.propertyUI = @propertyUI
         data.setProperty = (property, value) =>
             @$(".properties .#{property}").html("#{value}")
         new neurobehav[data.type](data)

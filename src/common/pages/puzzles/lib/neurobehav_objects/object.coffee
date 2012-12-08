@@ -4,7 +4,7 @@ class object.Object
     periodicity: 20
     baseFolder: '/assets/images/puzzles/neurobehav/'
     
-    constructor: ({@id, @paper, @position, @propertiesArea, @setProperty}) -> @init()
+    constructor: ({@id, @paper, @position, @propertyUI}) -> @init()
         
     createImage: ->
         @image = @paper.image(
@@ -38,53 +38,39 @@ class object.Object
         
     initPropertiesGlow: (element=@image) ->
         element.propertiesGlow.remove() if element.propertiesGlow
-        element.attr(cursor: 'pointer')
         if element.forEach
             glow = @paper.set()
             element.forEach (e) => glow.push(e.glow(width: 20, fill: true, color: 'red'))
         else
             glow = element.glow(width: 20, fill: true, color: 'red')
-        glow.hide()
+        glow.attr(opacity: 0)
         
-        element.hover(
-            () => glow.show(),
-            () => glow.hide() unless element.propertiesDisplayed
+        s = @paper.set()
+        s.push(glow)
+        s.push(element)
+        s.attr(cursor: 'pointer')
+        s.hover(
+            () => glow.attr(opacity: 0.04),
+            () => glow.attr(opacity: 0) unless element.propertiesDisplayed
         )
         element.propertiesGlow = glow
-        return glow
+        return s
             
     initProperties: (properties, element=@image) ->
-        element.properties = JSON.parse(JSON.stringify(properties))
-        @initPropertiesGlow(element)
+        element.properties = properties
+        elementAndGlow = @initPropertiesGlow(element)
 
-        element.click => @propertiesClick(element)
+        elementAndGlow.click => @propertiesClick(element)
         return element.propertiesGlow
         
-    propertiesClick: (element=@image) =>
-        return if element.noClick
-        if element.propertiesDisplayed
-            element.propertiesGlow.hide()
-            @hideProperties(element)
+    propertiesClick: (element=@image, display) =>
+        return if element.noClick and not display
+        if display or !element.propertiesDisplayed
+            element.propertiesGlow.attr(opacity: 0.04) 
+            @propertyUI.show(element.objectName, element.properties)
+            element.propertiesDisplayed = true
         else
-            element.propertiesGlow.show()
-            @showProperties(element)
+            element.propertiesGlow.attr(opacity: 0) 
+            @propertyUI.hide()
+            element.propertiesDisplayed = false
             
-    showProperties: (element=@image) ->
-        return if element.propertiesDisplayed
-        element.propertiesDisplayed = true
-        @propertiesArea.find('.nothing_selected').hide()
-        (ui = @propertiesArea.find('.object_properties')).show()
-        ui.html('')
-        for property of element.properties
-            ui.append """
-                <p>#{element.properties[property].name}: 
-                    <span class='#{property}'>#{element.properties[property].value}</span>
-                </p>
-            """
-        @propertiesArea.find('.object_type').html(element.objectName)
-            
-    hideProperties: (element=@image) ->
-        return unless element.propertiesDisplayed
-        element.propertiesDisplayed = false
-        @propertiesArea.find('.object_properties').hide()
-        @propertiesArea.find('.nothing_selected').show()
