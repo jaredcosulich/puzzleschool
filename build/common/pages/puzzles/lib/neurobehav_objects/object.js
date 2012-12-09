@@ -143,6 +143,7 @@ object.Object = (function() {
   };
 
   Object.prototype.propertiesClick = function(element, display) {
+    var previouslySelectedElement;
     if (element == null) {
       element = this.image;
     }
@@ -153,13 +154,16 @@ object.Object = (function() {
       element.propertiesGlow.attr({
         opacity: 0.04
       });
-      this.propertyUI.show(element.objectName, element.properties);
+      previouslySelectedElement = this.propertyUI.show(element, element.objectName, element.properties);
+      if (previouslySelectedElement) {
+        this.propertiesClick(previouslySelectedElement);
+      }
       return element.propertiesDisplayed = true;
     } else {
       element.propertiesGlow.attr({
         opacity: 0
       });
-      this.propertyUI.hide();
+      this.propertyUI.hide(element);
       return element.propertiesDisplayed = false;
     }
   };

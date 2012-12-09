@@ -75,10 +75,11 @@ class object.Object
         return if element.noClick and not display
         if display or !element.propertiesDisplayed
             element.propertiesGlow.attr(opacity: 0.04) 
-            @propertyUI.show(element.objectName, element.properties)
+            previouslySelectedElement = @propertyUI.show(element, element.objectName, element.properties)
+            @propertiesClick(previouslySelectedElement) if previouslySelectedElement
             element.propertiesDisplayed = true
         else
             element.propertiesGlow.attr(opacity: 0) 
-            @propertyUI.hide()
+            @propertyUI.hide(element)
             element.propertiesDisplayed = false
             

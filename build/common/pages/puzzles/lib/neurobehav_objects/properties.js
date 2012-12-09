@@ -16,15 +16,17 @@ properties.Properties = (function() {
     return this.objectType = this.el.find('.object_type');
   };
 
-  Properties.prototype.show = function(name, properties, setValue) {
-    var propertyId, _fn,
+  Properties.prototype.show = function(element, name, properties, setValue) {
+    var previouslySelectedElement, propertyId, _fn,
       _this = this;
     this.properties = properties;
+    previouslySelectedElement = this.element;
+    this.element = element;
     this.nothingSelected.hide();
     this.objectProperties.show();
     this.objectProperties.html('');
     _fn = function(propertyId) {
-      var element, property;
+      var property;
       property = _this.properties[propertyId];
       _this.objectProperties.append("<p>" + property.name + ": \n    <span class='" + propertyId + "'>" + (_this["" + property.type + "Element"](property)) + "</span> (" + property.unitName + ")\n</p>");
       element = _this.objectProperties.find("." + propertyId).find('input, select');
@@ -40,10 +42,14 @@ properties.Properties = (function() {
     for (propertyId in this.properties) {
       _fn(propertyId);
     }
-    return this.objectType.html(name);
+    this.objectType.html(name);
+    return previouslySelectedElement;
   };
 
-  Properties.prototype.hide = function() {
+  Properties.prototype.hide = function(element) {
+    if (element && element !== this.element) {
+      return;
+    }
     this.objectProperties.hide();
     return this.nothingSelected.show();
   };
