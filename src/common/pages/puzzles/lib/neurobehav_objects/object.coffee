@@ -64,7 +64,7 @@ class object.Object
         element.propertiesGlow = glow
         return s
             
-    initProperties: (properties, element=@image) ->
+    initProperties: (properties=@properties, element=@image) ->
         element.properties = properties
         elementAndGlow = @initPropertiesGlow(element)
 

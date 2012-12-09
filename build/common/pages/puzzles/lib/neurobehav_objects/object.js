@@ -128,6 +128,9 @@ object.Object = (function() {
   Object.prototype.initProperties = function(properties, element) {
     var elementAndGlow,
       _this = this;
+    if (properties == null) {
+      properties = this.properties;
+    }
     if (element == null) {
       element = this.image;
     }

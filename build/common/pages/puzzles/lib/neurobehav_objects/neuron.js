@@ -21,9 +21,31 @@ neuron.Neuron = (function(_super) {
 
   Neuron.prototype.properties = {};
 
+  Neuron.prototype.propertyList = {
+    'threshold': {
+      name: 'Threshold',
+      type: 'select',
+      unit: 0.25,
+      max: 3,
+      unitName: 'V'
+    },
+    'spike': {
+      name: 'Spike',
+      type: 'select',
+      unit: 0.25,
+      max: 3,
+      unitName: 'V'
+    }
+  };
+
   function Neuron(_arg) {
-    this.threshold = _arg.threshold, this.spike = _arg.spike;
+    var spike, threshold;
+    threshold = _arg.threshold, spike = _arg.spike;
     Neuron.__super__.constructor.apply(this, arguments);
+    this.properties = this.copyProperties(this.propertyList);
+    this.properties.threshold.value = threshold;
+    this.properties.spike.value = spike;
+    this.initProperties();
   }
 
   Neuron.prototype.init = function() {
@@ -81,14 +103,14 @@ neuron.Neuron = (function(_super) {
     }
     if (this.timeSinceStart > this.restTime) {
       this.currentVoltage = this.lastVoltage + ((-1 * this.lastVoltage) + this.voltage * this.resistance) / this.timeConstant * this.timeDelta;
-      if (this.currentVoltage >= this.threshold) {
-        this.currentVoltage += this.spike;
+      if (this.currentVoltage >= this.properties.threshold.value) {
+        this.currentVoltage += this.properties.spike.value;
         this.restTime = this.timeSinceStart + this.refractory;
         _ref2 = this.synapses;
         _results = [];
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           synapse = _ref2[_k];
-          _results.push((_ref3 = synapse.connection) != null ? _ref3.addSynapseSpike(this.spike) : void 0);
+          _results.push((_ref3 = synapse.connection) != null ? _ref3.addSynapseSpike(this.properties.spike.value) : void 0);
         }
         return _results;
       }

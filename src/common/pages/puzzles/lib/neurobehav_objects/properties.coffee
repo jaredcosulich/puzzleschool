@@ -23,8 +23,9 @@ class properties.Properties
                 """
                 element = @objectProperties.find(".#{propertyId}").find('input, select')
                 element.bind 'change keypress', =>
-                    property.value = element.val()
-                    property.set(element.val()) if property.set
+                    value = parseFloat(element.val())
+                    property.value = value
+                    property.set(value) if property.set
                 
         @objectType.html(name)
             
@@ -33,6 +34,7 @@ class properties.Properties
         @nothingSelected.show()
 
     set: (id, value) ->
+        value = parseFloat(value)
         @objectProperties.find(".#{id}").find('input, select').val(value + '')
         @properties[id].value = value if @properties
         

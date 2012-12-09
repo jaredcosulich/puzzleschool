@@ -7,9 +7,21 @@ class neuron.Neuron extends neurobehavObject.Object
     height: 60
     width: 60
     properties: {}
+    propertyList: 
+        'threshold': {name: 'Threshold', type: 'select', unit: 0.25, max: 3, unitName: 'V'}
+        'spike': {name: 'Spike', type: 'select', unit: 0.25, max: 3, unitName: 'V'}
+        # 'resistance': {name: 'Resistance', type: 'select', unit: 0.25, unitName: 'V', set: 'setSlider' }
+        # 'capacitance': {name: 'Capacitance', type: 'select', unit: 250, max: 10000, unitName: 'msec'}
+        # 'refractory': {name: 'Refractory', type: 'select', unit: 0.25, unitName: 'V', set: 'setSlider' }
     
-    constructor: ({@threshold, @spike}) -> super(arguments...)
     
+    constructor: ({threshold, spike}) -> 
+        super(arguments...)
+        @properties = @copyProperties(@propertyList)
+        @properties.threshold.value = threshold
+        @properties.spike.value = spike
+        @initProperties()
+                
     init: -> 
         @synapses = []
         @synapseSpikes = []
@@ -68,11 +80,11 @@ class neuron.Neuron extends neurobehavObject.Object
         if @timeSinceStart > @restTime
             @currentVoltage = @lastVoltage + ((-1 * @lastVoltage) + @voltage * @resistance) / @timeConstant * @timeDelta
                         
-            if @currentVoltage >= @threshold
-                @currentVoltage += @spike
+            if @currentVoltage >= @properties.threshold.value
+                @currentVoltage += @properties.spike.value
                 @restTime = @timeSinceStart + @refractory
                 for synapse in @synapses
-                    synapse.connection?.addSynapseSpike(@spike)
+                    synapse.connection?.addSynapseSpike(@properties.spike.value)
 
         else
             @currentVoltage = (@voltage / 4)

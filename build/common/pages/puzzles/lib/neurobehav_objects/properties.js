@@ -29,9 +29,11 @@ properties.Properties = (function() {
       _this.objectProperties.append("<p>" + property.name + ": \n    <span class='" + propertyId + "'>" + (_this["" + property.type + "Element"](property)) + "</span> (" + property.unitName + ")\n</p>");
       element = _this.objectProperties.find("." + propertyId).find('input, select');
       return element.bind('change keypress', function() {
-        property.value = element.val();
+        var value;
+        value = parseFloat(element.val());
+        property.value = value;
         if (property.set) {
-          return property.set(element.val());
+          return property.set(value);
         }
       });
     };
@@ -47,6 +49,7 @@ properties.Properties = (function() {
   };
 
   Properties.prototype.set = function(id, value) {
+    value = parseFloat(value);
     this.objectProperties.find("." + id).find('input, select').val(value + '');
     if (this.properties) {
       return this.properties[id].value = value;
