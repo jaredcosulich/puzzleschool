@@ -6,6 +6,14 @@ class object.Object
     
     constructor: ({@id, @paper, @position, @propertyUI}) -> @init()
         
+    copyProperties: (propertyList) ->
+        properties = JSON.parse(JSON.stringify(propertyList))
+        for propertyId of properties
+            do (propertyId) =>
+                if (setFunction = properties[propertyId].set)
+                    properties[propertyId].set = (val) => @[setFunction](val)
+        return properties
+        
     createImage: ->
         @image = @paper.image(
             "#{@baseFolder}#{@imageSrc}", 

@@ -16,15 +16,27 @@ properties.Properties = (function() {
     return this.objectType = this.el.find('.object_type');
   };
 
-  Properties.prototype.show = function(name, properties) {
-    var property, propertyId;
+  Properties.prototype.show = function(name, properties, setValue) {
+    var propertyId, _fn,
+      _this = this;
     this.properties = properties;
     this.nothingSelected.hide();
     this.objectProperties.show();
     this.objectProperties.html('');
+    _fn = function(propertyId) {
+      var element, property;
+      property = _this.properties[propertyId];
+      _this.objectProperties.append("<p>" + property.name + ": \n    <span class='" + propertyId + "'>" + (_this["" + property.type + "Element"](property)) + "</span> (" + property.unitName + ")\n</p>");
+      element = _this.objectProperties.find("." + propertyId).find('input, select');
+      return element.bind('change keypress', function() {
+        property.value = element.val();
+        if (property.set) {
+          return property.set(element.val());
+        }
+      });
+    };
     for (propertyId in this.properties) {
-      property = this.properties[propertyId];
-      this.objectProperties.append("<p>" + property.name + ": \n    <span class='" + propertyId + "'>" + property.value + "</span> (" + property.unitName + ")\n</p>");
+      _fn(propertyId);
     }
     return this.objectType.html(name);
   };
@@ -35,10 +47,20 @@ properties.Properties = (function() {
   };
 
   Properties.prototype.set = function(id, value) {
-    this.objectProperties.find("." + id).html('' + value);
+    this.objectProperties.find("." + id).find('input, select').val(value + '');
     if (this.properties) {
       return this.properties[id].value = value;
     }
+  };
+
+  Properties.prototype.selectElement = function(property) {
+    var options, selected, value, _i, _ref, _ref1, _ref2;
+    options = [];
+    for (value = _i = _ref = property.min || 0, _ref1 = property.max, _ref2 = property.unit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; value = _i += _ref2) {
+      selected = ("" + value) === ("" + property.value);
+      options.push("<option value=" + value + " " + (selected ? 'selected=selected' : '') + ">" + value + "</option>");
+    }
+    return "<select>" + (options.join('')) + "</select>";
   };
 
   return Properties;

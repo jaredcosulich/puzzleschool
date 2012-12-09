@@ -17,6 +17,24 @@ object.Object = (function() {
     this.init();
   }
 
+  Object.prototype.copyProperties = function(propertyList) {
+    var properties, propertyId, _fn,
+      _this = this;
+    properties = JSON.parse(JSON.stringify(propertyList));
+    _fn = function(propertyId) {
+      var setFunction;
+      if ((setFunction = properties[propertyId].set)) {
+        return properties[propertyId].set = function(val) {
+          return _this[setFunction](val);
+        };
+      }
+    };
+    for (propertyId in properties) {
+      _fn(propertyId);
+    }
+    return properties;
+  };
+
   Object.prototype.createImage = function() {
     this.image = this.paper.image("" + this.baseFolder + this.imageSrc, this.position.left, this.position.top, this.fullWidth || this.width, this.fullHeight || this.height);
     this.image.objectType = this.objectType;
