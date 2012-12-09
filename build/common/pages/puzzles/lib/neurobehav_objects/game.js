@@ -23,7 +23,7 @@ game.Game = (function() {
         left: 100
       },
       voltage: 1.5,
-      duration: 3000
+      duration: 250
     });
     neuron1 = this.addObject({
       type: 'Neuron',

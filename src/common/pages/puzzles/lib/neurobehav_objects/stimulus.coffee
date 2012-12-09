@@ -10,7 +10,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
     fullWidth: 100
     propertyList: 
         'voltage': {name: 'Voltage', type: 'select', unit: 0.25, unitName: 'V', set: 'setSlider' }
-        'duration': {name: 'Duration', type: 'select', unit: 1000, max: 10000, unitName: 'msec'}
+        'duration': {name: 'Duration', type: 'select', unit: 250, max: 10000, unitName: 'msec'}
     
     constructor: ({voltage, duration}) -> 
         @properties = @copyProperties(@propertyList)

@@ -15,7 +15,7 @@ class game.Game
                 top: 100
                 left: 100
             voltage: 1.5
-            duration: 3000
+            duration: 250
         
         neuron1 = @addObject
             type: 'Neuron'

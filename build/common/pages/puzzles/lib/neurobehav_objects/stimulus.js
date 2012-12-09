@@ -35,7 +35,7 @@ stimulus.Stimulus = (function(_super) {
     'duration': {
       name: 'Duration',
       type: 'select',
-      unit: 1000,
+      unit: 250,
       max: 10000,
       unitName: 'msec'
     }
