@@ -71,15 +71,23 @@ class object.Object
         elementAndGlow.click => @propertiesClick(element)
         return element.propertiesGlow
         
-    propertiesClick: (element=@image, display) =>
+    propertiesClick: (element=@image, display) ->
         return if element.noClick and not display
         if display or !element.propertiesDisplayed
-            element.propertiesGlow.attr(opacity: 0.04) 
-            previouslySelectedElement = @propertyUI.show(element, element.objectName, element.properties)
-            @propertiesClick(previouslySelectedElement) if previouslySelectedElement
-            element.propertiesDisplayed = true
+            @showProperties(element)
         else
-            element.propertiesGlow.attr(opacity: 0) 
-            @propertyUI.hide(element)
-            element.propertiesDisplayed = false
+            @hideProperties(element)
+            
+    showProperties: (element=@image) ->
+        element.propertiesGlow.attr(opacity: 0.04) 
+        previouslySelectedElement = @propertyUI.show(element, element.objectName, element.properties)
+        if previouslySelectedElement and previouslySelectedElement != element
+            @hideProperties(previouslySelectedElement)
+        element.propertiesDisplayed = true
+        
+    hideProperties: (element=@image) ->
+        element.propertiesGlow.attr(opacity: 0) 
+        @propertyUI.hide(element)
+        element.propertiesDisplayed = false
+        
             

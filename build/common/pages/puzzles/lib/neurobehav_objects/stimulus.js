@@ -73,7 +73,7 @@ stimulus.Stimulus = (function(_super) {
         }
         return minimumMouseDown = true;
       }), _this.properties.duration.value);
-      _this.propertiesClick(_this.slider, true);
+      _this.showProperties(_this.slider);
       mousedown = true;
       return _this.setState(true);
     });

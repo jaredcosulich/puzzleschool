@@ -34,7 +34,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
                     minimumMouseDown = true
             ), @properties.duration.value)
             
-            @propertiesClick(@slider, true)
+            @showProperties(@slider)
             mousedown = true
             @setState(true)
 
