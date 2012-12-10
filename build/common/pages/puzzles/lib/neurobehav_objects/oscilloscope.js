@@ -147,7 +147,6 @@ oscilloscope.Oscilloscope = (function(_super) {
     var _this = this;
     this.neuron = neuron;
     $(this.neuron).bind('threshold.change.oscilloscope', function() {
-      console.log('change!');
       return _this.drawGrid();
     });
     return this.drawGrid();
