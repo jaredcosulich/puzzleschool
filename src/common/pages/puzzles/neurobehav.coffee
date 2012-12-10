@@ -32,9 +32,10 @@ soma.views
         selector: '#content .neurobehav'
         create: ->
             neurobehav = require('./lib/neurobehav')
-            @game = new neurobehav.Game
-                el: $(@selector)
-                
+            @viewHelper = new neurobehav.ViewHelper
+                el: @selector
+            @viewHelper.loadFirstLevel()
+            
 soma.routes
     '/puzzles/neurobehav/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Neurobehav

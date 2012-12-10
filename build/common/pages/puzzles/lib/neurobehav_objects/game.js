@@ -12,47 +12,9 @@ game.Game = (function() {
   };
 
   function Game(_arg) {
-    var neuron1, neuron2, oscilloscope, stimulus;
     this.el = _arg.el;
     this.initBoard();
     this.initProperties();
-    stimulus = this.addObject({
-      type: 'Stimulus',
-      position: {
-        top: 100,
-        left: 100
-      },
-      voltage: 1.5,
-      duration: 250
-    });
-    neuron1 = this.addObject({
-      type: 'Neuron',
-      position: {
-        top: 100,
-        left: 300
-      },
-      threshold: 1,
-      spike: 0.5
-    });
-    stimulus.connectTo(neuron1);
-    neuron2 = this.addObject({
-      type: 'Neuron',
-      position: {
-        top: 300,
-        left: 200
-      },
-      threshold: 1,
-      spike: 0.5
-    });
-    oscilloscope = this.addObject({
-      type: 'Oscilloscope',
-      position: {
-        top: 80,
-        left: 340
-      },
-      container: this.$('.oscilloscope')
-    });
-    oscilloscope.attachTo(neuron1);
   }
 
   Game.prototype.initBoard = function() {

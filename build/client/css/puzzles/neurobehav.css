@@ -46,15 +46,30 @@ body {
   left: 0;
   height: 208px;
   width: 313px;
+  z-index: 1;
 }
-.neurobehav .model {
+.neurobehav .oscilloscope .title {
+  z-index: 2;
+  text-align: center;
+  padding: 6px;
+}
+.neurobehav .goal {
   background-color: black;
   text-align: center;
   height: 208px;
-  line-height: 210px;
+  color: white;
 }
-.neurobehav .model img {
-  vertical-align: middle;
+.neurobehav .goal a,
+.neurobehav .goal .brief {
+  font-size: 11px;
+}
+.neurobehav .goal a {
+  color: white;
+  text-decoration: underline;
+}
+.neurobehav .goal .model {
+  display: block;
+  margin: auto;
 }
 .neurobehav .properties {
   background-color: white;
@@ -64,6 +79,20 @@ body {
 }
 .neurobehav .properties h4 {
   padding: 6px 0;
+}
+.neurobehav .more_info {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  width: 314px;
+  background-color: white;
+  overflow: hidden;
+  z-index: 3;
+}
+.neurobehav .more_info .content {
+  margin: 6px;
+  overflow: auto;
+  width: 302px;
 }
 .neurobehav .object {
   position: absolute;

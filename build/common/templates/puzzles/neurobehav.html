@@ -1,8 +1,14 @@
 <div class='neurobehav' data-level_id={levelId} data-class_id={classId}>
     <div class='board'></div>
     <div class='sidebar'>
-        <div class='model'><img src='/assets/images/puzzles/neurobehav/heart.jpg'/></div>
-        <div class='oscilloscope'></div>
+        <div class='goal'>
+            <h4>The Goal:</h4>
+            <span class='brief'>Get the heart to beat once.</span>
+            <a class='show_goal_description'>(more)</a>
+            <img class='model' src='/assets/images/puzzles/neurobehav/heart.jpg'/>
+            <a class='hints'>Show me a hint</a>
+        </div>
+        <div class='oscilloscope'><div class='title'>Oscilloscope</div></div>
         <div class='properties'>
             <h4>Properties Editor: <span class='object_type'></span></h4>
             <div class='nothing_selected'>
@@ -11,6 +17,7 @@
             </div>
             <div class='object_properties'></div>
         </div>
+        <div class='more_info'><div class='content'></div></div>
     </div>
     {:custom}
         <div class='custom_level'>

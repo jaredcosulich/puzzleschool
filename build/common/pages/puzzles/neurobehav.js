@@ -44,9 +44,10 @@ soma.views({
     create: function() {
       var neurobehav;
       neurobehav = require('./lib/neurobehav');
-      return this.game = new neurobehav.Game({
-        el: $(this.selector)
+      this.viewHelper = new neurobehav.ViewHelper({
+        el: this.selector
       });
+      return this.viewHelper.loadFirstLevel();
     }
   }
 });

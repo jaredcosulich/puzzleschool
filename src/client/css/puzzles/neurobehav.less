@@ -52,17 +52,31 @@ body {
             top: 0;
             left: 0;
             height: ((@dimension / 3) - 2);
-            width: ((@dimension / 2) - 2);  
+            width: ((@dimension / 2) - 2);
+            z-index: 1;  
+        }
+        .title {
+            z-index: 2;
+            text-align: center;
+            padding: 6px;
         }
     }
     
-    .model {
+    .goal {
         background-color: black;
         text-align: center;
         height: ((@dimension / 3) - 2); 
-        line-height: (@dimension / 3);
-        img {
-            vertical-align: middle;
+        color: white;
+        a, .brief {
+            font-size: @smallsize;
+        }
+        a {
+            color: white;
+            text-decoration: underline;
+        }
+        .model {
+            display: block;
+            margin: auto;
         }
     }
     
@@ -74,6 +88,21 @@ body {
         h4 {
             padding: 6px 0;
         }        
+    }
+    
+    .more_info {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        width: ((@dimension / 2) - 1);
+        background-color: white;
+        overflow: hidden;
+        z-index: 3;
+        .content {
+            margin: 6px;
+            overflow: auto;
+            width: ((@dimension / 2) - 13);
+        }
     }
     
     .object {

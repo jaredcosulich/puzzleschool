@@ -6,44 +6,7 @@ class game.Game
 
     constructor: ({@el}) ->
         @initBoard()
-        @initProperties()
-
-        #basic instructions
-        stimulus = @addObject
-            type: 'Stimulus'
-            position:
-                top: 100
-                left: 100
-            voltage: 1.5
-            duration: 250
-        
-        neuron1 = @addObject
-            type: 'Neuron'
-            position:
-                top: 100
-                left: 300
-            threshold: 1
-            spike: 0.5
-                
-        stimulus.connectTo(neuron1)
-        
-        neuron2 = @addObject
-            type: 'Neuron'
-            position:
-                top: 300
-                left: 200
-            threshold: 1
-            spike: 0.5
-                
-        oscilloscope = @addObject
-            type: 'Oscilloscope'
-            position:
-                top: 80
-                left: 340
-            container: @$('.oscilloscope')
-            
-        oscilloscope.attachTo(neuron1)
-        
+        @initProperties()        
 
     initBoard: ->
         @board = @$('.board')
