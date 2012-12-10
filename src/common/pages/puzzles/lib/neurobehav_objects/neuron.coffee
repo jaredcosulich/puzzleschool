@@ -8,7 +8,7 @@ class neuron.Neuron extends neurobehavObject.Object
     width: 60
     properties: {}
     propertyList: 
-        'threshold': {name: 'Threshold', type: 'select', unit: 0.25, max: 3, unitName: 'V'}
+        'threshold': {name: 'Threshold', type: 'select', unit: 0.25, max: 3, unitName: 'V', set: 'setThreshold'}
         'spike': {name: 'Spike', type: 'select', unit: 0.25, max: 3, unitName: 'V'}
         # 'resistance': {name: 'Resistance', type: 'select', unit: 0.25, unitName: 'V', set: 'setSlider' }
         # 'capacitance': {name: 'Capacitance', type: 'select', unit: 250, max: 10000, unitName: 'msec'}
@@ -88,6 +88,8 @@ class neuron.Neuron extends neurobehavObject.Object
 
         else
             @currentVoltage = (@voltage / 4)
+            
+    setThreshold: -> $(@).trigger('threshold.change')        
         
     takeReading: -> @currentVoltage
     

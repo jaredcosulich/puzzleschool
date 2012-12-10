@@ -9,7 +9,7 @@ class properties.Properties
         @objectProperties = @el.find('.object_properties')
         @objectType = @el.find('.object_type')
             
-    show: (element, name, @properties, setValue) ->
+    show: (element, name, @properties) ->
         previouslySelectedElement = @element
         @element = element
         @nothingSelected.hide()

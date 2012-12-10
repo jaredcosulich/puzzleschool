@@ -27,7 +27,8 @@ neuron.Neuron = (function(_super) {
       type: 'select',
       unit: 0.25,
       max: 3,
-      unitName: 'V'
+      unitName: 'V',
+      set: 'setThreshold'
     },
     'spike': {
       name: 'Spike',
@@ -117,6 +118,10 @@ neuron.Neuron = (function(_super) {
     } else {
       return this.currentVoltage = this.voltage / 4;
     }
+  };
+
+  Neuron.prototype.setThreshold = function() {
+    return $(this).trigger('threshold.change');
   };
 
   Neuron.prototype.takeReading = function() {

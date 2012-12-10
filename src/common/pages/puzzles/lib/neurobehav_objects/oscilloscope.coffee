@@ -10,7 +10,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
     xDelta: 1
     scale: 100
     
-    constructor: ({@container, @range, @threshold}) ->
+    constructor: ({@container}) ->
         super(arguments...)
         
         @drawGrid()
@@ -87,6 +87,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @lastVoltage = voltage
         
     drawGrid: ->
+        @backgroundContext.clearRect(0,0,@canvasWidth,@canvasHeight)
         @backgroundContext.strokeStyle = 'rgba(0, 0, 0, 0.4)'    
         # @backgroundContext.fillStyle = 'rgba(255,255,255,0.4)'    
         # @backgroundContext.font = 'normal 12px sans-serif'    
@@ -99,10 +100,24 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
 
         @backgroundContext.stroke()
         @backgroundContext.closePath()        
+
+        if (threshold = @neuron?.properties?.threshold?.value)
+            translatedThreshold = @xAxis - (threshold * @scale)
+            @backgroundContext.strokeStyle = '#0C8D28'    
+            @backgroundContext.beginPath()
+            for x in [0..@canvasWidth] by 10
+                @backgroundContext.moveTo(x, translatedThreshold)
+                @backgroundContext.lineTo(x + 5, translatedThreshold)
+            @backgroundContext.stroke()
+            @backgroundContext.closePath()        
         
     attachTo: (@neuron) ->
-    
+        $(@neuron).bind 'threshold.change.oscilloscope', => @drawGrid()
+        @drawGrid()
+        
     unattach: -> 
+        $(@neuron).unbind 'threshold.change.oscilloscope'
         @neuron = null
         @voltageContext.clearRect(0, 0, @canvasWidth, @canvasHeight)
         @firePosition = 0
+        @drawGrid()

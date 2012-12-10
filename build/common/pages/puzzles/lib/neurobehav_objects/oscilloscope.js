@@ -27,7 +27,7 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   function Oscilloscope(_arg) {
     var _this = this;
-    this.container = _arg.container, this.range = _arg.range, this.threshold = _arg.threshold;
+    this.container = _arg.container;
     Oscilloscope.__super__.constructor.apply(this, arguments);
     this.drawGrid();
     this.createImage();
@@ -119,7 +119,8 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.drawGrid = function() {
-    var y, _i, _ref, _ref1;
+    var threshold, translatedThreshold, x, y, _i, _j, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+    this.backgroundContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     this.backgroundContext.strokeStyle = 'rgba(0, 0, 0, 0.4)';
     this.backgroundContext.lineWidth = 1;
     this.backgroundContext.beginPath();
@@ -128,17 +129,36 @@ oscilloscope.Oscilloscope = (function(_super) {
       this.backgroundContext.lineTo(this.canvasWidth, y);
     }
     this.backgroundContext.stroke();
-    return this.backgroundContext.closePath();
+    this.backgroundContext.closePath();
+    if ((threshold = (_ref2 = this.neuron) != null ? (_ref3 = _ref2.properties) != null ? (_ref4 = _ref3.threshold) != null ? _ref4.value : void 0 : void 0 : void 0)) {
+      translatedThreshold = this.xAxis - (threshold * this.scale);
+      this.backgroundContext.strokeStyle = '#0C8D28';
+      this.backgroundContext.beginPath();
+      for (x = _j = 0, _ref5 = this.canvasWidth; _j <= _ref5; x = _j += 10) {
+        this.backgroundContext.moveTo(x, translatedThreshold);
+        this.backgroundContext.lineTo(x + 5, translatedThreshold);
+      }
+      this.backgroundContext.stroke();
+      return this.backgroundContext.closePath();
+    }
   };
 
   Oscilloscope.prototype.attachTo = function(neuron) {
+    var _this = this;
     this.neuron = neuron;
+    $(this.neuron).bind('threshold.change.oscilloscope', function() {
+      console.log('change!');
+      return _this.drawGrid();
+    });
+    return this.drawGrid();
   };
 
   Oscilloscope.prototype.unattach = function() {
+    $(this.neuron).unbind('threshold.change.oscilloscope');
     this.neuron = null;
     this.voltageContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    return this.firePosition = 0;
+    this.firePosition = 0;
+    return this.drawGrid();
   };
 
   return Oscilloscope;

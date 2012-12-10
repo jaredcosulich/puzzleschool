@@ -16,7 +16,7 @@ properties.Properties = (function() {
     return this.objectType = this.el.find('.object_type');
   };
 
-  Properties.prototype.show = function(element, name, properties, setValue) {
+  Properties.prototype.show = function(element, name, properties) {
     var previouslySelectedElement, propertyId, _fn,
       _this = this;
     this.properties = properties;
