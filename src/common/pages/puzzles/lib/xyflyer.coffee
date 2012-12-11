@@ -7,32 +7,37 @@ class xyflyer.ChunkHelper
 class xyflyer.ViewHelper
     baseFolder: '/assets/images/puzzles/xyflyer/'
     maxUnits: 10
-    pathContexts: {}
+    formulas: {}
     
-    constructor: ({@el, backgroundCanvas, @grid}) ->
-        @backgroundCanvas = $(backgroundCanvas)
-        if (@backgroundCanvas and @backgroundCanvas[0].getContext) 
-            @backgroundContext = @backgroundCanvas[0].getContext('2d')
-        
-        @initBoard()        
+    constructor: ({@el, boardElement, @objects, @grid}) ->
+        @initBoard(boardElement)   
         
     $: (selector) -> $(selector, @el)
     
-    loadImage: (name, callback) -> 
-        if (image = @$(".image_cache .image_#{name} img")).length
-            callback(image)
+    addImage: (image, x, y) ->
+        width = image.width() * @scale
+        height = image.height() * @scale
+        @board.image(image.attr('src'), x, y, width, height)
+
+    addIsland: ->
+        island = @objects.find('.island img')
+        
+        width = island.width() * @scale
+        height = island.height() * @scale
+
+        if not width or not height
+            $.timeout 100, => @addIsland()
             return
             
-        image = new Image()
-        if callback
-            $(image).bind 'load', => callback(image)
-        image.src = "#{@baseFolder}#{name}.png"
-        image.className = "image_#{name}"
-        @$('.image_cache').append(image)
+        @addImage(island, @xAxis - (width/2), @yAxis)
+        @movePlane(@xAxis,  @yAxis)
 
-    initBoard: ->    
-        @width = @backgroundCanvas[0].width = @backgroundCanvas.width()
-        @height = @backgroundCanvas[0].height = @backgroundCanvas.height()        
+    initBoard: (boardElement) -> 
+        dimensions = boardElement.offset()
+        @board = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
+
+        @width = dimensions.width
+        @height = dimensions.height        
 
         @xUnit = @width / (@grid.xMax - @grid.xMin)
         @yUnit = @height / (@grid.yMax - @grid.yMin)
@@ -40,33 +45,21 @@ class xyflyer.ViewHelper
         @xAxis = @width - (@grid.xMax * @xUnit)
         @yAxis = @height + (@grid.yMin * @yUnit)
         
-        @scale = 1/(Math.log(Math.sqrt(Math.max(@grid.xMax - @grid.xMin, @grid.yMax - @grid.yMin))) - 0.5)
+        maxDimension = Math.max(@grid.xMax - @grid.xMin, @grid.yMax - @grid.yMin)
+        @scale = 1/(Math.log(Math.sqrt(maxDimension)) - 0.5)
         
-        @loadImage 'island', (island) =>
-            island = $(island)
-            height = island.height() * @scale
-            width = island.width() * @scale
-            @backgroundContext.drawImage(
-                island[0], 
-                @xAxis - (width / 2), 
-                @yAxis,
-                width,
-                height
-            )
-            @drawGrid()
+        @addIsland()
+        @drawGrid()            
             
     drawGrid: ->    
-        @backgroundContext.strokeStyle = 'rgba(255,255,255,0.4)'    
-        @backgroundContext.fillStyle = 'rgba(255,255,255,0.4)'    
-        @backgroundContext.font = 'normal 12px sans-serif'    
-        @backgroundContext.lineWidth = 1
-        @backgroundContext.beginPath()
+        gridString = """
+            M#{@xAxis},0
+            L#{@xAxis},#{@height}
+            M0,#{@yAxis}
+            L#{@width},#{@yAxis}
+        """
         
-        @backgroundContext.moveTo(@xAxis, 0)
-        @backgroundContext.lineTo(@xAxis, @height)
-
-        @backgroundContext.moveTo(0, @yAxis)
-        @backgroundContext.lineTo(@width, @yAxis)
+        stroke = 'rgba(255,255,255,0.4)'
         
         xUnits = @width / @xUnit
         xUnits = @maxUnits if xUnits < @maxUnits
@@ -74,9 +67,11 @@ class xyflyer.ViewHelper
         increment = (@xUnit * multiple) 
         start = 0 - (if multiple > @grid.xMin then ((@grid.xMin * @xUnit) % increment) else (increment % (@grid.xMin * @xUnit))) 
         for mark in [start..@width] by increment
-            @backgroundContext.moveTo(mark, @yAxis + 10)
-            @backgroundContext.lineTo(mark, @yAxis - 10)
-            @backgroundContext.fillText(Math.round(@grid.xMin + (mark / @xUnit)), mark + 3, @yAxis - 3) unless mark < 0
+            gridString += "M#{mark},#{@yAxis + 10}"
+            gridString += "L#{mark},#{@yAxis - 10}"
+            unless mark > @width
+                text = @board.text(mark + 6, @yAxis - 6, Math.round(@grid.xMin + (mark / @xUnit)))
+                text.attr(stroke: stroke, fill: stroke)
 
         yUnits = @height / @yUnit
         yUnits = @maxUnits if yUnits < @maxUnits
@@ -84,64 +79,81 @@ class xyflyer.ViewHelper
         increment = (@yUnit * multiple) * -1
         start = @height - (if multiple > @grid.yMin then (increment % (@grid.yMin * @yUnit)) else ((@grid.yMin * @yUnit) % increment))
         for mark in [start..0] by increment
-            @backgroundContext.moveTo(@xAxis + 10, mark)
-            @backgroundContext.lineTo(@xAxis - 10, mark)
-            @backgroundContext.fillText(Math.round(@grid.yMax - (mark / @yUnit)), @xAxis + 3, mark - 3) unless mark > @height
+            gridString += "M#{@xAxis + 10},#{mark}"
+            gridString += "L#{@xAxis - 10},#{mark}"
+            unless mark > @height
+                text = @board.text(@xAxis + 6, mark - 6, Math.round(@grid.yMax - (mark / @yUnit)))
+                text.attr(stroke: stroke, fill: stroke)
 
-        @backgroundContext.stroke()
-        @backgroundContext.closePath()        
+        grid = @board.path(gridString)
+        grid.attr(stroke: stroke)
         
 
-
-    plot: (formula, id) ->
-        context = @pathContexts[id]
-        if context
-            context.clearRect(0,0,@width,@height)
+    movePlane: (x, y) ->
+        if not @plane
+            plane = @objects.find('.plane img')
+            w = plane.width()
+            h = plane.height()
+            @plane = @addImage(plane, x - (w/2), y - (h/3))
         else
-            canvas = document.createElement('CANVAS')
-            canvas.width = @width
-            canvas.height = @height
-            @$('.board').append(canvas)
-            context = @pathContexts[id] = canvas.getContext('2d')
-            
+            currentX = @plane.attr('x')
+            currentY = @plane.attr('y')
+            w = @plane.attr('width')
+            h = @plane.attr('height')
+            @plane.transform("t#{x-currentX - (w/2)},#{y-currentY - (h/3)}")
+        
+    launchPlane: ->
+        @planeXPos = (@planeXPos or 0) + 1
+        yPos = @activeFormula(@planeXPos / @xUnit) * @yUnit
+        @movePlane(@planeXPos + @xAxis, @yAxis - yPos)
+        if @planeXPos <= (@grid.xMax * @xUnit)
+            $.timeout 5, => @launchPlane()
+    
+    resetPlane: ->
+        @planeXPos = 0
+        @movePlane(@xAxis, @yAxis)
+    
+    plot: (formula, id) ->
         return if not formula
-
-        context.strokeStyle = 'rgba(0,0,0,0.1)'
-        context.lineWidth = 2
         
-        context.beginPath()
-        
+        @formulas[id].line.remove() if @formulas[id]
+        @formulas[id] = 
+            formula: formula
+        @activeFormula = formula
+    
         brokenLine = 0
         infiniteLine = 0
+        pathString = "M0,#{@height}"
         for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
             lastYPos = yPos
             yPos = formula(xPos / @xUnit) * @yUnit
-
+    
             if yPos == Number.NEGATIVE_INFINITY
                 yPos = @grid.yMin * @xUnit
                 brokenLine += 1
             else if yPos == Number.POSITIVE_INFINITY
                 yPos = @grid.yMax * @xUnit
                 brokenLine += 1
-
-            # console.log(xPos, yPos)
-            
+    
             if lastYPos
                 lastSlope = slope
                 slope = yPos - lastYPos
                 if lastSlope and Math.abs(lastSlope - slope) > Math.abs(lastSlope) and Math.abs(lastYPos - yPos) > Math.abs(lastYPos)
-                    context.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
-                    context.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))   
+                    pathString += "L#{xPos + @xAxis + 1},#{(if lastSlope > 0 then 0 else @height)}"
+                    pathString += "M#{xPos + @xAxis + 1},#{(if lastSlope > 0 then @height else 0)}"
                     brokenLine += 1
                         
             if brokenLine > 0
-                context.moveTo(xPos + @xAxis, @yAxis - yPos)    
+                pathString += "M#{xPos + @xAxis},#{@yAxis - yPos}"
                 brokenLine -= 1
             else
-                context.lineTo(xPos + @xAxis, @yAxis - yPos)    
+                pathString += "L#{xPos + @xAxis},#{@yAxis - yPos}"
+                
+        line = @board.path(pathString)
+        line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
 
-        context.stroke()
-        context.closePath()
+        @formulas[id].line = line
+        @resetPlane()
 
     
     

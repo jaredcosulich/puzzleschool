@@ -17,70 +17,61 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.maxUnits = 10;
 
-  ViewHelper.prototype.pathContexts = {};
+  ViewHelper.prototype.formulas = {};
 
   function ViewHelper(_arg) {
-    var backgroundCanvas;
-    this.el = _arg.el, backgroundCanvas = _arg.backgroundCanvas, this.grid = _arg.grid;
-    this.backgroundCanvas = $(backgroundCanvas);
-    if (this.backgroundCanvas && this.backgroundCanvas[0].getContext) {
-      this.backgroundContext = this.backgroundCanvas[0].getContext('2d');
-    }
-    this.initBoard();
+    var boardElement;
+    this.el = _arg.el, boardElement = _arg.boardElement, this.objects = _arg.objects, this.grid = _arg.grid;
+    this.initBoard(boardElement);
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
   };
 
-  ViewHelper.prototype.loadImage = function(name, callback) {
-    var image,
-      _this = this;
-    if ((image = this.$(".image_cache .image_" + name + " img")).length) {
-      callback(image);
-      return;
-    }
-    image = new Image();
-    if (callback) {
-      $(image).bind('load', function() {
-        return callback(image);
-      });
-    }
-    image.src = "" + this.baseFolder + name + ".png";
-    image.className = "image_" + name;
-    return this.$('.image_cache').append(image);
+  ViewHelper.prototype.addImage = function(image, x, y) {
+    var height, width;
+    width = image.width() * this.scale;
+    height = image.height() * this.scale;
+    return this.board.image(image.attr('src'), x, y, width, height);
   };
 
-  ViewHelper.prototype.initBoard = function() {
-    var _this = this;
-    this.width = this.backgroundCanvas[0].width = this.backgroundCanvas.width();
-    this.height = this.backgroundCanvas[0].height = this.backgroundCanvas.height();
+  ViewHelper.prototype.addIsland = function() {
+    var height, island, width,
+      _this = this;
+    island = this.objects.find('.island img');
+    width = island.width() * this.scale;
+    height = island.height() * this.scale;
+    if (!width || !height) {
+      $.timeout(100, function() {
+        return _this.addIsland();
+      });
+      return;
+    }
+    this.addImage(island, this.xAxis - (width / 2), this.yAxis);
+    return this.movePlane(this.xAxis, this.yAxis);
+  };
+
+  ViewHelper.prototype.initBoard = function(boardElement) {
+    var dimensions, maxDimension;
+    dimensions = boardElement.offset();
+    this.board = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
+    this.width = dimensions.width;
+    this.height = dimensions.height;
     this.xUnit = this.width / (this.grid.xMax - this.grid.xMin);
     this.yUnit = this.height / (this.grid.yMax - this.grid.yMin);
     this.xAxis = this.width - (this.grid.xMax * this.xUnit);
     this.yAxis = this.height + (this.grid.yMin * this.yUnit);
-    this.scale = 1 / (Math.log(Math.sqrt(Math.max(this.grid.xMax - this.grid.xMin, this.grid.yMax - this.grid.yMin))) - 0.5);
-    return this.loadImage('island', function(island) {
-      var height, width;
-      island = $(island);
-      height = island.height() * _this.scale;
-      width = island.width() * _this.scale;
-      _this.backgroundContext.drawImage(island[0], _this.xAxis - (width / 2), _this.yAxis, width, height);
-      return _this.drawGrid();
-    });
+    maxDimension = Math.max(this.grid.xMax - this.grid.xMin, this.grid.yMax - this.grid.yMin);
+    this.scale = 1 / (Math.log(Math.sqrt(maxDimension)) - 0.5);
+    this.addIsland();
+    return this.drawGrid();
   };
 
   ViewHelper.prototype.drawGrid = function() {
-    var increment, mark, multiple, start, xUnits, yUnits, _i, _j, _ref;
-    this.backgroundContext.strokeStyle = 'rgba(255,255,255,0.4)';
-    this.backgroundContext.fillStyle = 'rgba(255,255,255,0.4)';
-    this.backgroundContext.font = 'normal 12px sans-serif';
-    this.backgroundContext.lineWidth = 1;
-    this.backgroundContext.beginPath();
-    this.backgroundContext.moveTo(this.xAxis, 0);
-    this.backgroundContext.lineTo(this.xAxis, this.height);
-    this.backgroundContext.moveTo(0, this.yAxis);
-    this.backgroundContext.lineTo(this.width, this.yAxis);
+    var grid, gridString, increment, mark, multiple, start, stroke, text, xUnits, yUnits, _i, _j, _ref;
+    gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
+    stroke = 'rgba(255,255,255,0.4)';
     xUnits = this.width / this.xUnit;
     if (xUnits < this.maxUnits) {
       xUnits = this.maxUnits;
@@ -89,10 +80,14 @@ xyflyer.ViewHelper = (function() {
     increment = this.xUnit * multiple;
     start = 0 - (multiple > this.grid.xMin ? (this.grid.xMin * this.xUnit) % increment : increment % (this.grid.xMin * this.xUnit));
     for (mark = _i = start, _ref = this.width; start <= _ref ? _i <= _ref : _i >= _ref; mark = _i += increment) {
-      this.backgroundContext.moveTo(mark, this.yAxis + 10);
-      this.backgroundContext.lineTo(mark, this.yAxis - 10);
-      if (!(mark < 0)) {
-        this.backgroundContext.fillText(Math.round(this.grid.xMin + (mark / this.xUnit)), mark + 3, this.yAxis - 3);
+      gridString += "M" + mark + "," + (this.yAxis + 10);
+      gridString += "L" + mark + "," + (this.yAxis - 10);
+      if (!(mark > this.width)) {
+        text = this.board.text(mark + 6, this.yAxis - 6, Math.round(this.grid.xMin + (mark / this.xUnit)));
+        text.attr({
+          stroke: stroke,
+          fill: stroke
+        });
       }
     }
     yUnits = this.height / this.yUnit;
@@ -103,36 +98,71 @@ xyflyer.ViewHelper = (function() {
     increment = (this.yUnit * multiple) * -1;
     start = this.height - (multiple > this.grid.yMin ? increment % (this.grid.yMin * this.yUnit) : (this.grid.yMin * this.yUnit) % increment);
     for (mark = _j = start; start <= 0 ? _j <= 0 : _j >= 0; mark = _j += increment) {
-      this.backgroundContext.moveTo(this.xAxis + 10, mark);
-      this.backgroundContext.lineTo(this.xAxis - 10, mark);
+      gridString += "M" + (this.xAxis + 10) + "," + mark;
+      gridString += "L" + (this.xAxis - 10) + "," + mark;
       if (!(mark > this.height)) {
-        this.backgroundContext.fillText(Math.round(this.grid.yMax - (mark / this.yUnit)), this.xAxis + 3, mark - 3);
+        text = this.board.text(this.xAxis + 6, mark - 6, Math.round(this.grid.yMax - (mark / this.yUnit)));
+        text.attr({
+          stroke: stroke,
+          fill: stroke
+        });
       }
     }
-    this.backgroundContext.stroke();
-    return this.backgroundContext.closePath();
+    grid = this.board.path(gridString);
+    return grid.attr({
+      stroke: stroke
+    });
+  };
+
+  ViewHelper.prototype.movePlane = function(x, y) {
+    var currentX, currentY, h, plane, w;
+    if (!this.plane) {
+      plane = this.objects.find('.plane img');
+      w = plane.width();
+      h = plane.height();
+      return this.plane = this.addImage(plane, x - (w / 2), y - (h / 3));
+    } else {
+      currentX = this.plane.attr('x');
+      currentY = this.plane.attr('y');
+      w = this.plane.attr('width');
+      h = this.plane.attr('height');
+      return this.plane.transform("t" + (x - currentX - (w / 2)) + "," + (y - currentY - (h / 3)));
+    }
+  };
+
+  ViewHelper.prototype.launchPlane = function() {
+    var yPos,
+      _this = this;
+    this.planeXPos = (this.planeXPos || 0) + 1;
+    yPos = this.activeFormula(this.planeXPos / this.xUnit) * this.yUnit;
+    this.movePlane(this.planeXPos + this.xAxis, this.yAxis - yPos);
+    if (this.planeXPos <= (this.grid.xMax * this.xUnit)) {
+      return $.timeout(5, function() {
+        return _this.launchPlane();
+      });
+    }
+  };
+
+  ViewHelper.prototype.resetPlane = function() {
+    this.planeXPos = 0;
+    return this.movePlane(this.xAxis, this.yAxis);
   };
 
   ViewHelper.prototype.plot = function(formula, id) {
-    var brokenLine, canvas, context, infiniteLine, lastSlope, lastYPos, slope, xPos, yPos, _i, _ref, _ref1;
-    context = this.pathContexts[id];
-    if (context) {
-      context.clearRect(0, 0, this.width, this.height);
-    } else {
-      canvas = document.createElement('CANVAS');
-      canvas.width = this.width;
-      canvas.height = this.height;
-      this.$('.board').append(canvas);
-      context = this.pathContexts[id] = canvas.getContext('2d');
-    }
+    var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
     if (!formula) {
       return;
     }
-    context.strokeStyle = 'rgba(0,0,0,0.1)';
-    context.lineWidth = 2;
-    context.beginPath();
+    if (this.formulas[id]) {
+      this.formulas[id].line.remove();
+    }
+    this.formulas[id] = {
+      formula: formula
+    };
+    this.activeFormula = formula;
     brokenLine = 0;
     infiniteLine = 0;
+    pathString = "M0," + this.height;
     for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
@@ -147,20 +177,25 @@ xyflyer.ViewHelper = (function() {
         lastSlope = slope;
         slope = yPos - lastYPos;
         if (lastSlope && Math.abs(lastSlope - slope) > Math.abs(lastSlope) && Math.abs(lastYPos - yPos) > Math.abs(lastYPos)) {
-          context.lineTo(xPos + this.xAxis + 1, (lastSlope > 0 ? 0 : this.height));
-          context.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
+          pathString += "L" + (xPos + this.xAxis + 1) + "," + (lastSlope > 0 ? 0 : this.height);
+          pathString += "M" + (xPos + this.xAxis + 1) + "," + (lastSlope > 0 ? this.height : 0);
           brokenLine += 1;
         }
       }
       if (brokenLine > 0) {
-        context.moveTo(xPos + this.xAxis, this.yAxis - yPos);
+        pathString += "M" + (xPos + this.xAxis) + "," + (this.yAxis - yPos);
         brokenLine -= 1;
       } else {
-        context.lineTo(xPos + this.xAxis, this.yAxis - yPos);
+        pathString += "L" + (xPos + this.xAxis) + "," + (this.yAxis - yPos);
       }
     }
-    context.stroke();
-    return context.closePath();
+    line = this.board.path(pathString);
+    line.attr({
+      stroke: 'rgba(0,0,0,0.1)',
+      'stroke-width': 2
+    });
+    this.formulas[id].line = line;
+    return this.resetPlane();
   };
 
   return ViewHelper;

@@ -13,11 +13,22 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
+      var object, _i, _len, _ref;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
       this.loadScript('/build/common/pages/puzzles/lib/tdop.js');
       this.loadScript('/assets/third_party/equation_explorer/tokens.js');
+      this.loadScript('/assets/third_party/raphael-min.js');
+      this.objects = [];
+      _ref = ['island', 'plane'];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        object = _ref[_i];
+        this.objects.push({
+          name: object,
+          image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + ".png")
+        });
+      }
       if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/xyflyer_editor.js');
       }
@@ -25,7 +36,9 @@ soma.chunks({
     },
     build: function() {
       this.setTitle("XYFlyer - The Puzzle School");
-      return this.html = wings.renderTemplate(this.template);
+      return this.html = wings.renderTemplate(this.template, {
+        objects: this.objects
+      });
     }
   }
 });
@@ -34,11 +47,13 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var xyflyer;
+      var xyflyer,
+        _this = this;
       xyflyer = require('./lib/xyflyer');
       this.viewHelper = new xyflyer.ViewHelper({
         el: $(this.selector),
-        backgroundCanvas: this.$('.board .background_canvas'),
+        boardElement: this.$('.board'),
+        objects: this.$('.objects'),
         grid: {
           xMin: -10,
           xMax: 10,
@@ -47,7 +62,10 @@ soma.views({
         }
       });
       this.tdop = require('./lib/tdop');
-      return this.initEquations();
+      this.initEquations();
+      return this.$('.launch').bind('click', function() {
+        return _this.viewHelper.launchPlane();
+      });
     },
     initEquations: function() {
       var _this = this;

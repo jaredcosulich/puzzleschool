@@ -1,13 +1,14 @@
 <div class='xyflyer'>
-    <div class='board'> 
-        <canvas class="background_canvas"></canvas>
-    </div>
+    <div class='board'></div>
     <div class='equation_area'>
         <h2>XYFlyer</h2>
         <p>
             <input class='equation' id='equation1' type='text'></input>
             <input class='equation' id='equation2' type='text'></input>
+            <button class='launch'>Launch!</button>
         </p>
     </div>
-    <div class='image_cache'></div>
+    <div class='objects'>
+        {:objects}<div class='{name}'>{&image}</div>{/objects}
+    </div>
 </div>

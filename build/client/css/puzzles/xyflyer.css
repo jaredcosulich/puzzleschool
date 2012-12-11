@@ -15,13 +15,6 @@ body {
   float: right;
   position: relative;
 }
-.xyflyer .board canvas {
-  width: 640px;
-  height: 640px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 .xyflyer .equation_area {
   background-color: white;
   -webkit-border-radius: 6px;
@@ -43,7 +36,7 @@ body {
   font-size: 18px;
   width: 302px;
 }
-.xyflyer .image_cache {
+.xyflyer .objects {
   position: absolute;
   top: -10000px;
   left: -10000px;

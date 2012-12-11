@@ -11,6 +11,15 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             @loadScript '/build/common/pages/puzzles/lib/tdop.js'
             @loadScript '/assets/third_party/equation_explorer/tokens.js'
+            @loadScript '/assets/third_party/raphael-min.js'
+            
+            @objects = []
+            for object in ['island', 'plane']
+                @objects.push(
+                    name: object
+                    image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
+                )
+            
             if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/xyflyer_editor.js' 
             @loadStylesheet '/build/client/css/puzzles/xyflyer.css'     
@@ -19,7 +28,7 @@ soma.chunks
         build: ->
             @setTitle("XYFlyer - The Puzzle School")
             
-            @html = wings.renderTemplate(@template)
+            @html = wings.renderTemplate(@template, objects: @objects)
             
         
 soma.views
@@ -29,7 +38,8 @@ soma.views
             xyflyer = require('./lib/xyflyer')
             @viewHelper = new xyflyer.ViewHelper
                 el: $(@selector)
-                backgroundCanvas: @$('.board .background_canvas')
+                boardElement: @$('.board')
+                objects: @$('.objects')
                 grid:
                     xMin: -10
                     xMax: 10
@@ -39,6 +49,8 @@ soma.views
             @tdop = require('./lib/tdop')
             
             @initEquations()
+            
+            @$('.launch').bind 'click', => @viewHelper.launchPlane()
 
                 
         initEquations: ->
