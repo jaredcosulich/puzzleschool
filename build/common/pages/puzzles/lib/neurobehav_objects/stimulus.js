@@ -48,11 +48,10 @@ stimulus.Stimulus = (function(_super) {
 
     this.voltageCalc = __bind(this.voltageCalc, this);
 
-    this.properties = this.copyProperties(this.propertyList);
+    Stimulus.__super__.constructor.apply(this, arguments);
     this.properties.voltage.value = voltage;
     this.properties.voltage.max = voltage * 2;
     this.properties.duration.value = duration;
-    Stimulus.__super__.constructor.apply(this, arguments);
   }
 
   Stimulus.prototype.init = function() {
@@ -127,7 +126,7 @@ stimulus.Stimulus = (function(_super) {
     };
     onEnd = function() {
       if (_this.deltaX) {
-        _this.propertyUI.set('voltage', (_this.voltageCalc(_this.deltaX) / _this.segment) * _this.unit);
+        _this.propertyEditor.set('voltage', (_this.voltageCalc(_this.deltaX) / _this.segment) * _this.unit);
         _this.lastDeltaX = _this.deltaX;
       } else {
         _this.slider.noClick = false;
@@ -159,7 +158,7 @@ stimulus.Stimulus = (function(_super) {
     this.knob.transform("t" + this.deltaX + "," + 0);
     this.initPropertiesGlow(this.slider);
     this.propertiesClick(this.slider, true);
-    return this.propertyUI.set('voltage', (this.voltageCalc(this.deltaX) / this.segment) * this.unit);
+    return this.propertyEditor.set('voltage', (this.voltageCalc(this.deltaX) / this.segment) * this.unit);
   };
 
   Stimulus.prototype.setSlider = function(val) {

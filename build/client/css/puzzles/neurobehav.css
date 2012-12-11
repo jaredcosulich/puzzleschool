@@ -80,6 +80,9 @@ body {
 .neurobehav .properties h4 {
   padding: 6px 0;
 }
+.neurobehav .properties .more_description {
+  display: none;
+}
 .neurobehav .more_info {
   position: absolute;
   top: -1000px;
@@ -88,6 +91,7 @@ body {
   background-color: white;
   overflow: hidden;
   z-index: 3;
+  background-color: #ededed;
 }
 .neurobehav .more_info .content {
   margin: 6px;
@@ -97,4 +101,7 @@ body {
 .neurobehav .object {
   position: absolute;
   overflow: hidden;
+}
+.neurobehav .descriptions {
+  display: none;
 }

@@ -6,7 +6,7 @@ properties = typeof exports !== "undefined" && exports !== null ? exports : prov
 properties.Properties = (function() {
 
   function Properties(_arg) {
-    this.el = _arg.el;
+    this.el = _arg.el, this.initDescription = _arg.initDescription;
     this.init();
   }
 
@@ -19,12 +19,13 @@ properties.Properties = (function() {
   Properties.prototype.show = function(element, name, properties) {
     var previouslySelectedElement, propertyId, _fn,
       _this = this;
+    this.name = name;
     this.properties = properties;
     previouslySelectedElement = this.element;
     this.element = element;
     this.nothingSelected.hide();
     this.objectProperties.show();
-    this.objectProperties.html('');
+    this.objectProperties.html(this.formatDescription(this.properties.description));
     _fn = function(propertyId) {
       var property;
       property = _this.properties[propertyId];
@@ -40,10 +41,27 @@ properties.Properties = (function() {
       });
     };
     for (propertyId in this.properties) {
+      if (propertyId === 'description') {
+        continue;
+      }
       _fn(propertyId);
     }
-    this.objectType.html(name);
+    this.objectType.html(this.name);
+    this.initDescription();
     return previouslySelectedElement;
+  };
+
+  Properties.prototype.formatDescription = function(description) {
+    var brief;
+    description = description.replace(/^\s+/, '');
+    if (!(description != null ? description.length : void 0)) {
+      return '';
+    }
+    if (description.length < 22) {
+      return description;
+    }
+    brief = description.slice(0, 40).replace(/<[^>]+\>/, '');
+    return " \n" + brief + "... (<a class='read_more_description'>more</a>)\n<div class='more_description'><h4>" + this.name + "</h4>" + description + "</div>";
   };
 
   Properties.prototype.hide = function(element) {

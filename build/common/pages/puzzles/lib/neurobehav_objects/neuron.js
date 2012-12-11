@@ -13,6 +13,8 @@ neuron.Neuron = (function(_super) {
 
   Neuron.prototype.objectType = 'neuron';
 
+  Neuron.prototype.objectName = 'Neuron';
+
   Neuron.prototype.imageSrc = 'neuron.png';
 
   Neuron.prototype.height = 60;
@@ -40,12 +42,17 @@ neuron.Neuron = (function(_super) {
   };
 
   function Neuron(_arg) {
-    var spike, threshold;
-    threshold = _arg.threshold, spike = _arg.spike;
+    var excitatoryDescription, inhibitoryDescription, spike, threshold;
+    inhibitoryDescription = _arg.inhibitoryDescription, excitatoryDescription = _arg.excitatoryDescription, threshold = _arg.threshold, spike = _arg.spike;
     Neuron.__super__.constructor.apply(this, arguments);
-    this.properties = this.copyProperties(this.propertyList);
     this.properties.threshold.value = threshold;
     this.properties.spike.value = spike;
+    this.inhibitoryProperties = {
+      description: inhibitoryDescription
+    };
+    this.excitatoryProperties = {
+      description: excitatoryDescription
+    };
     this.initProperties();
   }
 

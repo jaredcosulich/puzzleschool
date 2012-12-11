@@ -4,10 +4,13 @@ class object.Object
     periodicity: 20
     baseFolder: '/assets/images/puzzles/neurobehav/'
     
-    constructor: ({@id, @paper, @position, @propertyUI}) -> @init()
+    constructor: ({@id, @paper, @position, @description, @propertyEditor}) -> 
+        @properties = @setProperties(@propertyList)
+        @init()
         
-    copyProperties: (propertyList) ->
-        properties = JSON.parse(JSON.stringify(propertyList))
+    setProperties: (propertyList) ->
+        properties = if propertyList then JSON.parse(JSON.stringify(propertyList)) else {}
+        properties.description = @description
         for propertyId of properties
             do (propertyId) =>
                 if (setFunction = properties[propertyId].set)
@@ -79,15 +82,15 @@ class object.Object
             @hideProperties(element)
             
     showProperties: (element=@image) ->
-        element.propertiesGlow.attr(opacity: 0.04) 
-        previouslySelectedElement = @propertyUI.show(element, element.objectName, element.properties)
+        element.propertiesGlow.attr(opacity: 0.04) if element.propertiesGlow
+        previouslySelectedElement = @propertyEditor.show(element, element.objectName, element.properties)
         if previouslySelectedElement and previouslySelectedElement != element
             @hideProperties(previouslySelectedElement)
         element.propertiesDisplayed = true
         
     hideProperties: (element=@image) ->
-        element.propertiesGlow.attr(opacity: 0) 
-        @propertyUI.hide(element)
+        element.propertiesGlow.attr(opacity: 0) if element.propertiesGlow
+        @propertyEditor.hide(element)
         element.propertiesDisplayed = false
         
             

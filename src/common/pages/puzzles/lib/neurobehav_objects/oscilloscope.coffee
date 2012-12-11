@@ -3,6 +3,7 @@ neurobehavObject = require('./object')
 
 class oscilloscope.Oscilloscope extends neurobehavObject.Object
     objectType: 'oscilloscope'
+    objectName: 'Oscilloscope'
     imageSrc: 'oscilloscope.png'
     width: 80
     height: 42
@@ -40,6 +41,9 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @xAxis = @canvasHeight - (@canvasHeight / @axisLineCount)
         
     initImage: ->
+        @image.properties = 
+            description: @description
+            
         @image.attr
             cursor: 'move'
          
@@ -56,6 +60,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             glow.transform("t#{fullDX},#{fullDY}")
             
         onStart = => 
+            @showProperties(@image)        
             @unattach()
             glow.show()
         

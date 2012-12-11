@@ -12,9 +12,8 @@ game.Game = (function() {
   };
 
   function Game(_arg) {
-    this.el = _arg.el;
+    this.el = _arg.el, this.propertyEditor = _arg.propertyEditor;
     this.initBoard();
-    this.initProperties();
   }
 
   Game.prototype.initBoard = function() {
@@ -24,17 +23,11 @@ game.Game = (function() {
     return this.paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
   };
 
-  Game.prototype.initProperties = function() {
-    return this.propertyUI = new Properties({
-      el: this.$('.properties')
-    });
-  };
-
   Game.prototype.addObject = function(data) {
     var _this = this;
     data.paper = this.paper;
     data.id = this.nextId();
-    data.propertyUI = this.propertyUI;
+    data.propertyEditor = this.propertyEditor;
     data.setProperty = function(property, value) {
       return _this.$(".properties ." + property).html("" + value);
     };

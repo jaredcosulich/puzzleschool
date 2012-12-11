@@ -17,55 +17,54 @@ neurobehav.ViewHelper = (function() {
   };
 
   function ViewHelper(_arg) {
+    var _this = this;
     this.el = _arg.el;
     this.showMoreSidebarContent = __bind(this.showMoreSidebarContent, this);
 
     this.oscilloscopeScreen = this.$('.oscilloscope');
-    this.game = new neurobehav.Game({
-      el: this.el
+    this.propertyEditor = new Properties({
+      el: this.$('.properties'),
+      initDescription: function() {
+        return _this.initDescription();
+      }
     });
-    this.initGoalDescription();
-    this.initHints();
+    this.game = new neurobehav.Game({
+      el: this.el,
+      propertyEditor: this.propertyEditor
+    });
   }
 
   ViewHelper.prototype.initGoalDescription = function() {
-    var goalDescription, showGoalDescription,
-      _this = this;
-    goalDescription = this.$('.show_goal_description');
-    showGoalDescription = function() {
-      var offset;
-      offset = goalDescription.offset();
-      _this.showMoreSidebarContent(_this.goalDescriptionHtml, offset.top + offset.height + 6);
-      return goalDescription.one('click', function() {
-        _this.initGoalDescription();
-        return _this.hideMoreSidebarContent();
-      });
-    };
-    return goalDescription.one('click', function() {
-      return showGoalDescription();
-    });
+    return this.initMoreContent(this.$('.show_goal_description'), false, this.goalDescriptionHtml);
   };
 
   ViewHelper.prototype.initHints = function() {
-    var hints, showHint,
-      _this = this;
-    hints = this.$('.hints');
-    showHint = function() {
+    var html;
+    html = '<br/><br/><p style=\'text-align: center;\'>No Hints Yet</p><br/><br/>';
+    return this.initMoreContent(this.$('.hints'), false, html);
+  };
+
+  ViewHelper.prototype.initDescription = function() {
+    return this.initMoreContent(this.$('.read_more_description'), true, this.$('.more_description').html());
+  };
+
+  ViewHelper.prototype.initMoreContent = function(link, bottom, html) {
+    var _this = this;
+    return link.one('click', function() {
       var offset;
-      offset = hints.offset();
-      _this.showMoreSidebarContent('<br/><br/><p style=\'text-align: center;\'>No Hints Yet</p><br/><br/>', offset.top + offset.height + 6);
-      return hints.one('click', function() {
-        _this.initHints();
-        return _this.hideMoreSidebarContent();
+      offset = link.offset();
+      _this.showMoreSidebarContent(html, link, bottom);
+      return $.timeout(10, function() {
+        return $(document.body).one('click', function() {
+          _this.initMoreContent(link, bottom, html);
+          return _this.hideMoreSidebarContent(bottom);
+        });
       });
-    };
-    return hints.one('click', function() {
-      return showHint();
     });
   };
 
-  ViewHelper.prototype.showMoreSidebarContent = function(html, top) {
-    var content, height;
+  ViewHelper.prototype.showMoreSidebarContent = function(html, anchor, bottom) {
+    var content, height, offset, top;
     this.moreSidebarContent = this.$('.more_info');
     this.moreSidebarContent.css({
       height: 'auto',
@@ -74,27 +73,43 @@ neurobehav.ViewHelper = (function() {
     });
     content = this.moreSidebarContent.find('.content');
     content.html(html);
-    height = this.moreSidebarContent.height();
+    height = Math.min(this.moreSidebarContent.offset().height, this.oscilloscopeScreen.offset().height);
     content.css({
       height: height
     });
+    offset = anchor.offset();
+    if (bottom) {
+      top = offset.top - height - 6;
+    } else {
+      top = offset.top + offset.height + 6;
+    }
     this.moreSidebarContent.css({
       height: 0,
       left: this.oscilloscopeScreen.offset().left,
-      top: top
+      top: (bottom ? offset.top - 6 : top)
     });
     return this.moreSidebarContent.animate({
       height: height,
+      top: top,
       duration: 250
     });
   };
 
-  ViewHelper.prototype.hideMoreSidebarContent = function() {
-    var _this = this;
+  ViewHelper.prototype.hideMoreSidebarContent = function(bottom) {
+    var offset,
+      _this = this;
+    offset = this.moreSidebarContent.offset();
     return this.moreSidebarContent.animate({
       height: 0,
+      top: (bottom ? offset.top + offset.height : top),
       duration: 250,
       complete: function() {
+        var content;
+        content = _this.moreSidebarContent.find('.content');
+        content.html('');
+        content.css({
+          height: 'auto'
+        });
         return _this.moreSidebarContent.css({
           height: 'auto',
           left: -1000,
@@ -113,7 +128,8 @@ neurobehav.ViewHelper = (function() {
         left: 100
       },
       voltage: 1.5,
-      duration: 250
+      duration: 250,
+      description: this.$('.descriptions .stimulus').html()
     });
     neuron1 = this.game.addObject({
       type: 'Neuron',
@@ -122,7 +138,10 @@ neurobehav.ViewHelper = (function() {
         left: 300
       },
       threshold: 1,
-      spike: 0.5
+      spike: 0.5,
+      description: this.$('.descriptions .neuron').html(),
+      inhibitoryDescription: this.$('.descriptions .inhibitory').html(),
+      excitatoryDescription: this.$('.descriptions .excitatory').html()
     });
     stimulus.connectTo(neuron1);
     neuron2 = this.game.addObject({
@@ -132,7 +151,10 @@ neurobehav.ViewHelper = (function() {
         left: 200
       },
       threshold: 1,
-      spike: 0.5
+      spike: 0.5,
+      description: this.$('.descriptions .neuron').html(),
+      inhibitoryDescription: this.$('.descriptions .inhibitory').html(),
+      excitatoryDescription: this.$('.descriptions .excitatory').html()
     });
     oscilloscope = this.game.addObject({
       type: 'Oscilloscope',
@@ -140,10 +162,13 @@ neurobehav.ViewHelper = (function() {
         top: 80,
         left: 340
       },
-      container: this.oscilloscopeScreen
+      container: this.oscilloscopeScreen,
+      description: this.$('.descriptions .oscilloscope').html()
     });
     oscilloscope.attachTo(neuron1);
-    return this.goalDescriptionHtml = "<h4>Get The Heart To Beat</h4>\n<p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>";
+    this.goalDescriptionHtml = "<h4>Get The Heart To Beat</h4>\n<p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>";
+    this.initGoalDescription();
+    return this.initHints();
   };
 
   return ViewHelper;

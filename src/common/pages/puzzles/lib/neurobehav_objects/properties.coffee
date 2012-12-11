@@ -1,7 +1,7 @@
 properties = exports ? provide('./properties', {})
 
 class properties.Properties
-    constructor: ({@el}) -> 
+    constructor: ({@el, @initDescription}) -> 
         @init()
         
     init: ->
@@ -9,13 +9,14 @@ class properties.Properties
         @objectProperties = @el.find('.object_properties')
         @objectType = @el.find('.object_type')
             
-    show: (element, name, @properties) ->
+    show: (element, @name, @properties) ->
         previouslySelectedElement = @element
         @element = element
         @nothingSelected.hide()
         @objectProperties.show()
-        @objectProperties.html('')
+        @objectProperties.html(@formatDescription(@properties.description))
         for propertyId of @properties
+            continue if propertyId == 'description'
             do (propertyId) =>
                 property = @properties[propertyId]
                 @objectProperties.append """
@@ -29,8 +30,19 @@ class properties.Properties
                     property.value = value
                     property.set(value) if property.set
                 
-        @objectType.html(name)
+        @objectType.html(@name)
+        @initDescription()
         return previouslySelectedElement
+        
+    formatDescription: (description) ->
+        description = description.replace(/^\s+/, '')
+        return '' unless description?.length
+        return description if description.length < 22
+        brief = description[0...40].replace(/<[^>]+\>/, '')
+        return """ 
+            #{brief}... (<a class='read_more_description'>more</a>)
+            <div class='more_description'><h4>#{@name}</h4>#{description}</div>
+        """
             
     hide: (element) ->
         return if element and element != @element

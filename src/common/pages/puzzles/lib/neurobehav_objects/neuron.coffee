@@ -3,6 +3,7 @@ neurobehavObject = require('./object')
 
 class neuron.Neuron extends neurobehavObject.Object
     objectType: 'neuron'
+    objectName: 'Neuron'
     imageSrc: 'neuron.png' 
     height: 60
     width: 60
@@ -15,11 +16,12 @@ class neuron.Neuron extends neurobehavObject.Object
         # 'refractory': {name: 'Refractory', type: 'select', unit: 0.25, unitName: 'V', set: 'setSlider' }
     
     
-    constructor: ({threshold, spike}) -> 
+    constructor: ({inhibitoryDescription, excitatoryDescription, threshold, spike}) -> 
         super(arguments...)
-        @properties = @copyProperties(@propertyList)
         @properties.threshold.value = threshold
         @properties.spike.value = spike
+        @inhibitoryProperties = {description: inhibitoryDescription}
+        @excitatoryProperties = {description: excitatoryDescription}
         @initProperties()
                 
     init: -> 

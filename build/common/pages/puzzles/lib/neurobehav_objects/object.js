@@ -10,14 +10,16 @@ object.Object = (function() {
   Object.prototype.baseFolder = '/assets/images/puzzles/neurobehav/';
 
   function Object(_arg) {
-    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.propertyUI = _arg.propertyUI;
+    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.description = _arg.description, this.propertyEditor = _arg.propertyEditor;
+    this.properties = this.setProperties(this.propertyList);
     this.init();
   }
 
-  Object.prototype.copyProperties = function(propertyList) {
+  Object.prototype.setProperties = function(propertyList) {
     var properties, propertyId, _fn,
       _this = this;
-    properties = JSON.parse(JSON.stringify(propertyList));
+    properties = propertyList ? JSON.parse(JSON.stringify(propertyList)) : {};
+    properties.description = this.description;
     _fn = function(propertyId) {
       var setFunction;
       if ((setFunction = properties[propertyId].set)) {
@@ -158,10 +160,12 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
-    element.propertiesGlow.attr({
-      opacity: 0.04
-    });
-    previouslySelectedElement = this.propertyUI.show(element, element.objectName, element.properties);
+    if (element.propertiesGlow) {
+      element.propertiesGlow.attr({
+        opacity: 0.04
+      });
+    }
+    previouslySelectedElement = this.propertyEditor.show(element, element.objectName, element.properties);
     if (previouslySelectedElement && previouslySelectedElement !== element) {
       this.hideProperties(previouslySelectedElement);
     }
@@ -172,10 +176,12 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
-    element.propertiesGlow.attr({
-      opacity: 0
-    });
-    this.propertyUI.hide(element);
+    if (element.propertiesGlow) {
+      element.propertiesGlow.attr({
+        opacity: 0
+      });
+    }
+    this.propertyEditor.hide(element);
     return element.propertiesDisplayed = false;
   };
 

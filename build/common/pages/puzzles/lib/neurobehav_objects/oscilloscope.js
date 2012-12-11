@@ -13,6 +13,8 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.objectType = 'oscilloscope';
 
+  Oscilloscope.prototype.objectName = 'Oscilloscope';
+
   Oscilloscope.prototype.imageSrc = 'oscilloscope.png';
 
   Oscilloscope.prototype.width = 80;
@@ -57,6 +59,9 @@ oscilloscope.Oscilloscope = (function(_super) {
   Oscilloscope.prototype.initImage = function() {
     var fullDX, fullDY, glow, lastDX, lastDY, onDrag, onEnd, onStart,
       _this = this;
+    this.image.properties = {
+      description: this.description
+    };
     this.image.attr({
       cursor: 'move'
     });
@@ -72,6 +77,7 @@ oscilloscope.Oscilloscope = (function(_super) {
       return glow.transform("t" + fullDX + "," + fullDY);
     };
     onStart = function() {
+      _this.showProperties(_this.image);
       _this.unattach();
       return glow.show();
     };
