@@ -27,13 +27,13 @@ properties.Properties = (function() {
     this.objectProperties.show();
     this.objectProperties.html(this.formatDescription(this.properties.description));
     _fn = function(propertyId) {
-      var property;
+      var input, property;
       property = _this.properties[propertyId];
       _this.objectProperties.append("<p>" + property.name + ": \n    <span class='" + propertyId + "'>" + (_this["" + property.type + "Element"](property)) + "</span> (" + property.unitName + ")\n</p>");
-      element = _this.objectProperties.find("." + propertyId).find('input, select');
-      return element.bind('change keypress', function() {
+      input = _this.objectProperties.find("." + propertyId).find('input, select');
+      return input.bind('change keypress', function() {
         var value;
-        value = parseFloat(element.val());
+        value = parseFloat(input.val());
         property.value = value;
         if (property.set) {
           return property.set(value);

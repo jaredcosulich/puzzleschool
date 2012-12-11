@@ -24,9 +24,9 @@ class properties.Properties
                         <span class='#{propertyId}'>#{@["#{property.type}Element"](property)}</span> (#{property.unitName})
                     </p>
                 """
-                element = @objectProperties.find(".#{propertyId}").find('input, select')
-                element.bind 'change keypress', =>
-                    value = parseFloat(element.val())
+                input = @objectProperties.find(".#{propertyId}").find('input, select')
+                input.bind 'change keypress', =>
+                    value = parseFloat(input.val())
                     property.value = value
                     property.set(value) if property.set
                 

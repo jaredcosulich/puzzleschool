@@ -17,6 +17,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @properties.voltage.value = voltage
         @properties.voltage.max = voltage * 2
         @properties.duration.value = duration
+        @initSlider()
 
     init: ->
         @createImage()
@@ -43,7 +44,6 @@ class stimulus.Stimulus extends neurobehavObject.Object
             
         @image.attr(cursor: 'pointer')
 
-        @initSlider()
 
     initSlider: ->
         @slider = @paper.set()
