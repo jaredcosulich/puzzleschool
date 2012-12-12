@@ -7,6 +7,7 @@ class xyflyer.ChunkHelper
 class xyflyer.ViewHelper
     baseFolder: '/assets/images/puzzles/xyflyer/'
     maxUnits: 10
+    increment: 1
     formulas: {}
     
     constructor: ({@el, boardElement, @objects, @grid}) ->
@@ -89,37 +90,57 @@ class xyflyer.ViewHelper
         grid.attr(stroke: stroke)
         
 
-    movePlane: (x, y) ->
+    movePlane: (x, y, time, next) ->
         if not @plane
             plane = @objects.find('.plane img')
             w = plane.width()
             h = plane.height()
             @plane = @addImage(plane, x - (w/2), y - (h/3))
         else
-            currentX = @plane.attr('x')
-            currentY = @plane.attr('y')
             w = @plane.attr('width')
             h = @plane.attr('height')
-            @plane.transform("t#{x-currentX - (w/2)},#{y-currentY - (h/3)}")
+            @plane.animate({x: x - (w/2), y: y - (h/3)}, time, null, next)
         
     launchPlane: ->
-        @planeXPos = (@planeXPos or 0) + 1
-        yPos = @activeFormula(@planeXPos / @xUnit) * @yUnit
-        @movePlane(@planeXPos + @xAxis, @yAxis - yPos)
-        if @planeXPos <= (@grid.xMax * @xUnit)
-            $.timeout 5, => @launchPlane()
-    
+        @calculatePlanePath() if not @path or not Object.keys(@path).length
+        @planeXPos = (@planeXPos or 0) + @increment
+        yPos = @path[@planeXPos]
+        if yPos == undefined or @planeXPos > (@grid.xMax * @xUnit)
+            $.timeout 1000, => @resetPlane()
+            return
+            
+        dX = (@planeXPos + @xAxis) - @plane.attr('x')
+        dY = (@yAxis - yPos) - @plane.attr('y')
+        time = (Math.pow(dX, 2) + Math.pow(dY, 2)) / 100
+        @movePlane(@planeXPos + @xAxis, @yAxis - yPos, time, => @launchPlane())
+            
+    calculatePlanePath: ->
+        @path = {}
+        for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)] by @increment
+            if lastFormula and lastFormula.area(xPos / @xUnit)
+                @path[xPos] = lastFormula.formula(xPos / @xUnit) * @yUnit
+                continue
+                
+            for id of @formulas
+                continue if not @formulas[id].area(xPos / @xUnit)
+                @path[xPos] = @formulas[id].formula(xPos / @xUnit) * @yUnit
+                lastFormula = @formulas[id]
+                break
+
     resetPlane: ->
-        @planeXPos = 0
+        @path = null
+        @planeXPos = null
         @movePlane(@xAxis, @yAxis)
     
-    plot: (formula, id) ->
+    plot: (id, formula, area) ->
         return if not formula
         
         @formulas[id].line.remove() if @formulas[id]
         @formulas[id] = 
             formula: formula
-        @activeFormula = formula
+            area: area
+            
+        @activeFormula = @formulas[id]
     
         brokenLine = 0
         infiniteLine = 0

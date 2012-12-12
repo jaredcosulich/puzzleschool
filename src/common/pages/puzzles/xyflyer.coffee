@@ -55,14 +55,23 @@ soma.views
                 
         initEquations: ->
             @$('.equation').bind 'keyup', (e) =>
-                input = e.currentTarget
+                input = $(e.currentTarget)
                 try
-                    formula = @tdop.compileToJs($(input).val())                
+                    val = input.val()
+                    parts = input.val().replace(/\s/g, '').split(/[{}]/)
+                    formula = @tdop.compileToJs(parts[0])       
+                    area = @calculateArea(parts[1])   
                 catch err
                     
-                @viewHelper.plot(formula, input.id)
+                @viewHelper.plot(input.attr('id'), formula, area)
 
-
+        calculateArea: (areaString) ->
+            parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/)
+            return (x) ->
+                return false if not eval(parts[0] + 'x') 
+                return false if not eval('x' + parts[1]) 
+                return true
+            
 soma.routes
     '/puzzles/xyflyer/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Xyflyer

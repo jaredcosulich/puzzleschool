@@ -70,15 +70,31 @@ soma.views({
     initEquations: function() {
       var _this = this;
       return this.$('.equation').bind('keyup', function(e) {
-        var formula, input;
-        input = e.currentTarget;
+        var area, formula, input, parts, val;
+        input = $(e.currentTarget);
         try {
-          formula = _this.tdop.compileToJs($(input).val());
+          val = input.val();
+          parts = input.val().replace(/\s/g, '').split(/[{}]/);
+          formula = _this.tdop.compileToJs(parts[0]);
+          area = _this.calculateArea(parts[1]);
         } catch (err) {
 
         }
-        return _this.viewHelper.plot(formula, input.id);
+        return _this.viewHelper.plot(input.attr('id'), formula, area);
       });
+    },
+    calculateArea: function(areaString) {
+      var parts;
+      parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/);
+      return function(x) {
+        if (!eval(parts[0] + 'x')) {
+          return false;
+        }
+        if (!eval('x' + parts[1])) {
+          return false;
+        }
+        return true;
+      };
     }
   }
 });

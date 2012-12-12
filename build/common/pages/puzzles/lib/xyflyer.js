@@ -17,6 +17,8 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.maxUnits = 10;
 
+  ViewHelper.prototype.increment = 1;
+
   ViewHelper.prototype.formulas = {};
 
   function ViewHelper(_arg) {
@@ -114,41 +116,78 @@ xyflyer.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.movePlane = function(x, y) {
-    var currentX, currentY, h, plane, w;
+  ViewHelper.prototype.movePlane = function(x, y, time, next) {
+    var h, plane, w;
     if (!this.plane) {
       plane = this.objects.find('.plane img');
       w = plane.width();
       h = plane.height();
       return this.plane = this.addImage(plane, x - (w / 2), y - (h / 3));
     } else {
-      currentX = this.plane.attr('x');
-      currentY = this.plane.attr('y');
       w = this.plane.attr('width');
       h = this.plane.attr('height');
-      return this.plane.transform("t" + (x - currentX - (w / 2)) + "," + (y - currentY - (h / 3)));
+      return this.plane.animate({
+        x: x - (w / 2),
+        y: y - (h / 3)
+      }, time, null, next);
     }
   };
 
   ViewHelper.prototype.launchPlane = function() {
-    var yPos,
+    var dX, dY, time, yPos,
       _this = this;
-    this.planeXPos = (this.planeXPos || 0) + 1;
-    yPos = this.activeFormula(this.planeXPos / this.xUnit) * this.yUnit;
-    this.movePlane(this.planeXPos + this.xAxis, this.yAxis - yPos);
-    if (this.planeXPos <= (this.grid.xMax * this.xUnit)) {
-      return $.timeout(5, function() {
-        return _this.launchPlane();
-      });
+    if (!this.path || !Object.keys(this.path).length) {
+      this.calculatePlanePath();
     }
+    this.planeXPos = (this.planeXPos || 0) + this.increment;
+    yPos = this.path[this.planeXPos];
+    if (yPos === void 0 || this.planeXPos > (this.grid.xMax * this.xUnit)) {
+      $.timeout(1000, function() {
+        return _this.resetPlane();
+      });
+      return;
+    }
+    dX = (this.planeXPos + this.xAxis) - this.plane.attr('x');
+    dY = (this.yAxis - yPos) - this.plane.attr('y');
+    time = (Math.pow(dX, 2) + Math.pow(dY, 2)) / 100;
+    return this.movePlane(this.planeXPos + this.xAxis, this.yAxis - yPos, time, function() {
+      return _this.launchPlane();
+    });
+  };
+
+  ViewHelper.prototype.calculatePlanePath = function() {
+    var id, lastFormula, xPos, _i, _ref, _ref1, _ref2, _results;
+    this.path = {};
+    _results = [];
+    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit, _ref2 = this.increment; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _i += _ref2) {
+      if (lastFormula && lastFormula.area(xPos / this.xUnit)) {
+        this.path[xPos] = lastFormula.formula(xPos / this.xUnit) * this.yUnit;
+        continue;
+      }
+      _results.push((function() {
+        var _results1;
+        _results1 = [];
+        for (id in this.formulas) {
+          if (!this.formulas[id].area(xPos / this.xUnit)) {
+            continue;
+          }
+          this.path[xPos] = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
+          lastFormula = this.formulas[id];
+          break;
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
   };
 
   ViewHelper.prototype.resetPlane = function() {
-    this.planeXPos = 0;
+    this.path = null;
+    this.planeXPos = null;
     return this.movePlane(this.xAxis, this.yAxis);
   };
 
-  ViewHelper.prototype.plot = function(formula, id) {
+  ViewHelper.prototype.plot = function(id, formula, area) {
     var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
     if (!formula) {
       return;
@@ -157,9 +196,10 @@ xyflyer.ViewHelper = (function() {
       this.formulas[id].line.remove();
     }
     this.formulas[id] = {
-      formula: formula
+      formula: formula,
+      area: area
     };
-    this.activeFormula = formula;
+    this.activeFormula = this.formulas[id];
     brokenLine = 0;
     infiniteLine = 0;
     pathString = "M0," + this.height;
