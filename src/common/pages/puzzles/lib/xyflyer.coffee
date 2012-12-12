@@ -137,9 +137,9 @@ class xyflyer.ViewHelper
         @movePlane(@xAxis, @yAxis)
     
     plot: (id, formula, area) ->
+        @formulas[id].line.remove() if @formulas[id]
         return if not formula
         
-        @formulas[id].line.remove() if @formulas[id]
         @formulas[id] = 
             formula: formula
             area: area

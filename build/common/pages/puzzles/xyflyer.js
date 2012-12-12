@@ -85,6 +85,11 @@ soma.views({
     },
     calculateArea: function(areaString) {
       var parts;
+      if (!areaString || !areaString.length) {
+        return (function() {
+          return true;
+        });
+      }
       parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/);
       return function(x) {
         if (!eval(parts[0] + 'x')) {

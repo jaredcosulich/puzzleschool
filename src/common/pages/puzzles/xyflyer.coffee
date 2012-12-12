@@ -66,6 +66,7 @@ soma.views
                 @viewHelper.plot(input.attr('id'), formula, area)
 
         calculateArea: (areaString) ->
+            return (-> true) if not areaString or not areaString.length
             parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/)
             return (x) ->
                 return false if not eval(parts[0] + 'x') 

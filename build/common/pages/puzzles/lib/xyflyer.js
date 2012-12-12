@@ -196,11 +196,11 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.plot = function(id, formula, area) {
     var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
-    if (!formula) {
-      return;
-    }
     if (this.formulas[id]) {
       this.formulas[id].line.remove();
+    }
+    if (!formula) {
+      return;
     }
     this.formulas[id] = {
       formula: formula,
