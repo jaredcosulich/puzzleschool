@@ -17,7 +17,7 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.maxUnits = 10;
 
-  ViewHelper.prototype.increment = 1;
+  ViewHelper.prototype.increment = 0.5;
 
   ViewHelper.prototype.formulas = {};
 
@@ -147,9 +147,9 @@ xyflyer.ViewHelper = (function() {
       });
       return;
     }
-    dX = (this.planeXPos + this.xAxis) - this.plane.attr('x');
-    dY = (this.yAxis - yPos) - this.plane.attr('y');
-    time = (Math.pow(dX, 2) + Math.pow(dY, 2)) / 100;
+    dX = this.increment;
+    dY = yPos - this.path[this.planeXPos - this.increment];
+    time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
     return this.movePlane(this.planeXPos + this.xAxis, this.yAxis - yPos, time, function() {
       return _this.launchPlane();
     });

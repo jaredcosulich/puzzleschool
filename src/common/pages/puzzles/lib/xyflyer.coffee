@@ -7,7 +7,7 @@ class xyflyer.ChunkHelper
 class xyflyer.ViewHelper
     baseFolder: '/assets/images/puzzles/xyflyer/'
     maxUnits: 10
-    increment: 1
+    increment: 5
     formulas: {}
     
     constructor: ({@el, boardElement, @objects, @grid}) ->
@@ -109,9 +109,9 @@ class xyflyer.ViewHelper
             $.timeout 1000, => @resetPlane()
             return
             
-        dX = (@planeXPos + @xAxis) - @plane.attr('x')
-        dY = (@yAxis - yPos) - @plane.attr('y')
-        time = (Math.pow(dX, 2) + Math.pow(dY, 2)) / 100
+        dX = @increment
+        dY = yPos - @path[@planeXPos - @increment]
+        time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2))
         @movePlane(@planeXPos + @xAxis, @yAxis - yPos, time, => @launchPlane())
             
     calculatePlanePath: ->
