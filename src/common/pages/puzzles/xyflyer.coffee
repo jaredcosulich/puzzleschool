@@ -50,7 +50,7 @@ soma.views
             
             @initEquations()
             
-            @$('.launch').bind 'click', => @viewHelper.launchPlane()
+            @$('.launch').bind 'click', => @viewHelper.launchPlane(true)
 
                 
         initEquations: ->

@@ -140,9 +140,13 @@ xyflyer.ViewHelper = (function() {
     }
   };
 
-  ViewHelper.prototype.launchPlane = function() {
+  ViewHelper.prototype.launchPlane = function(force) {
     var dX, dY, time, yPos,
       _this = this;
+    if (this.cancelFlight && !force) {
+      return;
+    }
+    this.cancelFlight = false;
     if (!this.path || !Object.keys(this.path).length) {
       this.calculatePlanePath();
     }
@@ -206,7 +210,8 @@ xyflyer.ViewHelper = (function() {
       formula: formula,
       area: area
     };
-    this.activeFormula = this.formulas[id];
+    this.resetPlane();
+    this.cancelFlight = true;
     brokenLine = 0;
     infiniteLine = 0;
     pathString = "M0," + this.height;

@@ -141,9 +141,9 @@ tdop.makeParse = function() {
       arity: 'binary',
       first: {
         value: 0,
-        arity: 'literal',
-        second: expression(65)
-      }
+        arity: 'literal'
+      },
+      second: expression(65)
     };
   };
   return function(source) {

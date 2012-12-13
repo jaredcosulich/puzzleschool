@@ -64,7 +64,7 @@ soma.views({
       this.tdop = require('./lib/tdop');
       this.initEquations();
       return this.$('.launch').bind('click', function() {
-        return _this.viewHelper.launchPlane();
+        return _this.viewHelper.launchPlane(true);
       });
     },
     initEquations: function() {

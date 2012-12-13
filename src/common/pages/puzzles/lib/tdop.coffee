@@ -138,7 +138,7 @@ tdop.makeParse = ->
             first: 
                 value: 0
                 arity: 'literal'
-                second: expression(65)
+            second: expression(65)
         }
 
     return (source) -> 

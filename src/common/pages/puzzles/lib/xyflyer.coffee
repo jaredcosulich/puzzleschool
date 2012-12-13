@@ -105,7 +105,9 @@ class xyflyer.ViewHelper
             h = @plane.attr('height')
             @plane.animate({transform: transformation}, time, 'linear', next)
         
-    launchPlane: ->
+    launchPlane: (force) ->
+        return if @cancelFlight and not force
+        @cancelFlight = false
         @calculatePlanePath() if not @path or not Object.keys(@path).length
         @planeXPos = (@planeXPos or 0) + @increment
         yPos = @path[@planeXPos]
@@ -144,7 +146,8 @@ class xyflyer.ViewHelper
             formula: formula
             area: area
             
-        @activeFormula = @formulas[id]
+        @resetPlane()
+        @cancelFlight = true
     
         brokenLine = 0
         infiniteLine = 0
