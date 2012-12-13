@@ -71,7 +71,86 @@ xyflyer.ViewHelper = (function() {
     maxDimension = Math.max(this.grid.xMax - this.grid.xMin, this.grid.yMax - this.grid.yMin);
     this.scale = 1 / (Math.log(Math.sqrt(maxDimension)) - 0.5);
     this.addIsland();
-    return this.drawGrid();
+    this.drawGrid();
+    return this.initClicks(boardElement);
+  };
+
+  ViewHelper.prototype.initClicks = function(boardElement) {
+    var _this = this;
+    boardElement.css({
+      zIndex: 9999
+    });
+    return boardElement.bind('click', function(e) {
+      return _this.showXY.apply(_this, _this.findNearestPointOnPath(e.offsetX, e.offsetY));
+    });
+  };
+
+  ViewHelper.prototype.findNearestPointOnPath = function(x, y) {
+    return [x, y];
+  };
+
+  ViewHelper.prototype.showXY = function(x, y) {
+    var boardX, boardY, dot, height, radius, text, width, xyTip,
+      _this = this;
+    width = 75;
+    height = 24;
+    radius = 3;
+    dot = this.board.circle(x, y, 0);
+    dot.attr({
+      fill: '#000',
+      opacity: 0
+    });
+    dot.animate({
+      r: radius,
+      opacity: 1
+    }, 100);
+    xyTip = this.board.rect(x + (width / 2) + (radius * 2), y, 0, 0, 6);
+    xyTip.attr({
+      fill: '#FFF',
+      opacity: 0
+    });
+    boardX = Math.round(1000 * (x - this.xAxis) / this.xUnit) / 1000;
+    boardY = Math.round(1000 * (this.height - y - this.yAxis) / this.yUnit) / 1000;
+    text = this.board.text(x + (width / 2) + (radius * 2), y, "" + boardX + ", " + boardY);
+    text.attr({
+      opacity: 0
+    });
+    xyTip.animate({
+      width: width,
+      height: height,
+      x: x + (radius * 2),
+      y: y - (height / 2)
+    }, 100);
+    xyTip.animate({
+      opacity: 1
+    }, 250);
+    text.animate({
+      opacity: 1
+    }, 250);
+    return $.timeout(2000, function() {
+      var removeTip;
+      xyTip.animate({
+        opacity: 0
+      }, 100);
+      text.animate({
+        opacity: 0
+      }, 100);
+      removeTip = function() {
+        xyTip.remove();
+        text.remove();
+        return dot.remove();
+      };
+      xyTip.animate({
+        width: 0,
+        height: 0,
+        x: x + (radius * 2),
+        y: y
+      }, 250);
+      return dot.animate({
+        r: 0,
+        opacity: 0
+      }, 250, null, removeTip);
+    });
   };
 
   ViewHelper.prototype.drawGrid = function() {

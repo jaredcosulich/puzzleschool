@@ -52,8 +52,48 @@ class xyflyer.ViewHelper
         @scale = 1/(Math.log(Math.sqrt(maxDimension)) - 0.5)
         
         @addIsland()
-        @drawGrid()            
+        @drawGrid()  
+        @initClicks(boardElement)
+        
+    initClicks: (boardElement) ->
+        boardElement.css(zIndex: 9999)
+        boardElement.bind 'click', (e) =>
+            @showXY(@findNearestPointOnPath(e.offsetX, e.offsetY)...)
             
+    findNearestPointOnPath: (x, y) ->
+        return [x,y]
+        # for dX in [0..5]
+        #     for dY in [0..5]
+        #         for side in [-1,1]
+        #             return [x+(dX*side), y+(dY*side)] if @formulas.fullIndex["#{x+(dX*side)},#{y+(dY*side))}"]
+        # return [x,y]
+    
+    showXY: (x, y) ->
+        width = 75
+        height = 24
+        radius = 3
+        dot = @board.circle(x, y, 0)
+        dot.attr(fill: '#000', opacity: 0)
+        dot.animate({r: radius, opacity: 1}, 100)
+        xyTip = @board.rect(x+(width/2)+(radius*2), y, 0, 0, 6)
+        xyTip.attr(fill: '#FFF', opacity: 0)
+        boardX = Math.round(1000 * (x - @xAxis) / @xUnit) / 1000
+        boardY = Math.round(1000 * (@height - y - @yAxis) / @yUnit) / 1000
+        text = @board.text(x+(width/2)+(radius*2), y, "#{boardX}, #{boardY}")
+        text.attr(opacity: 0)
+        xyTip.animate({width: width, height: height, x: x+(radius*2), y: y-(height/2)}, 100)
+        xyTip.animate({opacity: 1}, 250)
+        text.animate({opacity: 1}, 250)
+        $.timeout 2000, =>
+            xyTip.animate({opacity: 0}, 100)
+            text.animate({opacity: 0}, 100)
+            removeTip = =>
+                xyTip.remove()
+                text.remove()
+                dot.remove()
+            xyTip.animate({width: 0, height: 0, x: x+(radius*2), y: y}, 250)
+            dot.animate({r: 0, opacity: 0}, 250, null, removeTip)
+        
     drawGrid: ->    
         gridString = """
             M#{@xAxis},0
