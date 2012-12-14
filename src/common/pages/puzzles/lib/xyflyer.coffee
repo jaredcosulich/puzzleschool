@@ -58,27 +58,77 @@ class xyflyer.ViewHelper
     initClicks: (boardElement) ->
         boardElement.css(zIndex: 9999)
         boardElement.bind 'click', (e) =>
-            @showXY(@findNearestPointOnPath(e.offsetX, e.offsetY)...)
-            
-    findNearestPointOnPath: (x, y) ->
-        return [x,y]
-        # for dX in [0..5]
-        #     for dY in [0..5]
-        #         for side in [-1,1]
-        #             return [x+(dX*side), y+(dY*side)] if @formulas.fullIndex["#{x+(dX*side)},#{y+(dY*side))}"]
-        # return [x,y]
+            result = @findNearestXOnPath(e.offsetX, e.offsetY)
+            onPath = result.x
+            if result.formulas.length
+                formula1 = result.formulas[0]
+                y = @screenY(formula1.formula(@boardX(result.x)))
+                @showXY(result.x, y, true)
+            else
+                @showXY(e.offsetX, e.offsetY)
+         
+    findNearestXOnPath: (x, y, formulas=@formulas, precision=0) ->
+        distances = {}
+        factor = Math.pow(10, precision)
+        distance = 0.5 / factor
+        result = {formulas: [], distance: distance*factor, x: x}
+        for d in [0..distance] by distance/10
+            for side in [-1,1]
+                continue if side == -1 and not d
+                dx = side * d
+                goodFormulas = []
+                for id, formula of formulas
+                    formulaY = formula.formula(@boardX(x)+dx)
+                    distanceY = Math.abs(@boardY(y) - formulaY)
+                    if distanceY <= (distance * factor)
+                        goodFormulas.push(formula)                    
+                        if !result.intersectionDistance and distanceY < result.distance
+                            result.distance = distanceY
+                            result.x = @screenX(@boardX(x) + dx)
+                            result.formulas = [formula]
+                            
+
+                intersectionDistance = -1
+                for formula, index in goodFormulas
+                    formulaY = formula.formula(@boardX(x)+dx)
+
+                    index2 = 0
+                    avgDistance = -1
+                    for formula2 in goodFormulas
+                        continue if formula == formula2
+                        formula2Y = formula2.formula(@boardX(x)+dx)
+                        distance2Y = Math.abs(formulaY - formula2Y)
+                        avgDistance = ((avgDistance * index2) + distance2Y) / (index2 + 1)
+                        index2 += 1
+                        
+                    intersectionDistance = ((intersectionDistance * index) + avgDistance) / (index + 1)  
+                      
+                if (-1 < intersectionDistance and (!result.intersectionDistance or result.intersectionDistance > intersectionDistance))
+                    result.intersectionDistance = intersectionDistance
+                    result.x = @screenX(@boardX(x) + dx)
+                    result.formulas = goodFormulas
+                    
+        if precision < 4
+            result.x = @findNearestXOnPath(result.x, y, formulas, precision+1).x
+        
+        return result        
+
+    boardX: (x,precision=3) -> Math.round(Math.pow(10,precision) * (x - @xAxis) / @xUnit) / Math.pow(10,precision)
+    boardY: (y,precision=3) -> Math.round(Math.pow(10,precision) * (@height - y - @yAxis) / @yUnit) / Math.pow(10,precision)
+    screenX: (x) -> (x * @xUnit) + @xAxis
+    screenY: (y) -> -1 * ((y * @yUnit) + @xAxis - @height)
     
-    showXY: (x, y) ->
+    showXY: (x, y, onPath=false) ->
         width = 75
         height = 24
         radius = 3
         dot = @board.circle(x, y, 0)
-        dot.attr(fill: '#000', opacity: 0)
+        dot.attr(opacity: 0)
         dot.animate({r: radius, opacity: 1}, 100)
         xyTip = @board.rect(x+(width/2)+(radius*2), y, 0, 0, 6)
         xyTip.attr(fill: '#FFF', opacity: 0)
-        boardX = Math.round(1000 * (x - @xAxis) / @xUnit) / 1000
-        boardY = Math.round(1000 * (@height - y - @yAxis) / @yUnit) / 1000
+        boardX = @boardX(x)
+        boardY = @boardY(y)
         text = @board.text(x+(width/2)+(radius*2), y, "#{boardX}, #{boardY}")
         text.attr(opacity: 0)
         xyTip.animate({width: width, height: height, x: x+(radius*2), y: y-(height/2)}, 100)

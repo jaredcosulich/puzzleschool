@@ -81,23 +81,121 @@ xyflyer.ViewHelper = (function() {
       zIndex: 9999
     });
     return boardElement.bind('click', function(e) {
-      return _this.showXY.apply(_this, _this.findNearestPointOnPath(e.offsetX, e.offsetY));
+      var formula1, onPath, result, y;
+      result = _this.findNearestXOnPath(e.offsetX, e.offsetY);
+      onPath = result.x;
+      if (result.formulas.length) {
+        formula1 = result.formulas[0];
+        y = _this.screenY(formula1.formula(_this.boardX(result.x)));
+        return _this.showXY(result.x, y, true);
+      } else {
+        return _this.showXY(e.offsetX, e.offsetY);
+      }
     });
   };
 
-  ViewHelper.prototype.findNearestPointOnPath = function(x, y) {
-    return [x, y];
+  ViewHelper.prototype.findNearestXOnPath = function(x, y, formulas, precision) {
+    var avgDistance, d, distance, distance2Y, distanceY, distances, dx, factor, formula, formula2, formula2Y, formulaY, goodFormulas, id, index, index2, intersectionDistance, result, side, _i, _j, _k, _l, _len, _len1, _len2, _ref, _ref1;
+    if (formulas == null) {
+      formulas = this.formulas;
+    }
+    if (precision == null) {
+      precision = 0;
+    }
+    distances = {};
+    factor = Math.pow(10, precision);
+    distance = 0.5 / factor;
+    result = {
+      formulas: [],
+      distance: distance * factor,
+      x: x
+    };
+    for (d = _i = 0, _ref = distance / 10; 0 <= distance ? _i <= distance : _i >= distance; d = _i += _ref) {
+      _ref1 = [-1, 1];
+      for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+        side = _ref1[_j];
+        if (side === -1 && !d) {
+          continue;
+        }
+        dx = side * d;
+        goodFormulas = [];
+        for (id in formulas) {
+          formula = formulas[id];
+          formulaY = formula.formula(this.boardX(x) + dx);
+          distanceY = Math.abs(this.boardY(y) - formulaY);
+          if (distanceY <= (distance * factor)) {
+            goodFormulas.push(formula);
+            if (!result.intersectionDistance && distanceY < result.distance) {
+              result.distance = distanceY;
+              result.x = this.screenX(this.boardX(x) + dx);
+              result.formulas = [formula];
+            }
+          }
+        }
+        intersectionDistance = -1;
+        for (index = _k = 0, _len1 = goodFormulas.length; _k < _len1; index = ++_k) {
+          formula = goodFormulas[index];
+          formulaY = formula.formula(this.boardX(x) + dx);
+          index2 = 0;
+          avgDistance = -1;
+          for (_l = 0, _len2 = goodFormulas.length; _l < _len2; _l++) {
+            formula2 = goodFormulas[_l];
+            if (formula === formula2) {
+              continue;
+            }
+            formula2Y = formula2.formula(this.boardX(x) + dx);
+            distance2Y = Math.abs(formulaY - formula2Y);
+            avgDistance = ((avgDistance * index2) + distance2Y) / (index2 + 1);
+            index2 += 1;
+          }
+          intersectionDistance = ((intersectionDistance * index) + avgDistance) / (index + 1);
+        }
+        if (-1 < intersectionDistance && (!result.intersectionDistance || result.intersectionDistance > intersectionDistance)) {
+          result.intersectionDistance = intersectionDistance;
+          result.x = this.screenX(this.boardX(x) + dx);
+          result.formulas = goodFormulas;
+        }
+      }
+    }
+    if (precision < 4) {
+      result.x = this.findNearestXOnPath(result.x, y, formulas, precision + 1).x;
+    }
+    return result;
   };
 
-  ViewHelper.prototype.showXY = function(x, y) {
+  ViewHelper.prototype.boardX = function(x, precision) {
+    if (precision == null) {
+      precision = 3;
+    }
+    return Math.round(Math.pow(10, precision) * (x - this.xAxis) / this.xUnit) / Math.pow(10, precision);
+  };
+
+  ViewHelper.prototype.boardY = function(y, precision) {
+    if (precision == null) {
+      precision = 3;
+    }
+    return Math.round(Math.pow(10, precision) * (this.height - y - this.yAxis) / this.yUnit) / Math.pow(10, precision);
+  };
+
+  ViewHelper.prototype.screenX = function(x) {
+    return (x * this.xUnit) + this.xAxis;
+  };
+
+  ViewHelper.prototype.screenY = function(y) {
+    return -1 * ((y * this.yUnit) + this.xAxis - this.height);
+  };
+
+  ViewHelper.prototype.showXY = function(x, y, onPath) {
     var boardX, boardY, dot, height, radius, text, width, xyTip,
       _this = this;
+    if (onPath == null) {
+      onPath = false;
+    }
     width = 75;
     height = 24;
     radius = 3;
     dot = this.board.circle(x, y, 0);
     dot.attr({
-      fill: '#000',
       opacity: 0
     });
     dot.animate({
@@ -109,8 +207,8 @@ xyflyer.ViewHelper = (function() {
       fill: '#FFF',
       opacity: 0
     });
-    boardX = Math.round(1000 * (x - this.xAxis) / this.xUnit) / 1000;
-    boardY = Math.round(1000 * (this.height - y - this.yAxis) / this.yUnit) / 1000;
+    boardX = this.boardX(x);
+    boardY = this.boardY(y);
     text = this.board.text(x + (width / 2) + (radius * 2), y, "" + boardX + ", " + boardY);
     text.attr({
       opacity: 0
