@@ -16,10 +16,15 @@ soma.chunks({
       var object, _i, _len, _ref;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
-      this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
-      this.loadScript('/build/common/pages/puzzles/lib/tdop.js');
       this.loadScript('/assets/third_party/equation_explorer/tokens.js');
       this.loadScript('/assets/third_party/raphael-min.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/tdop.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/parser.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/object.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/board.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/plane.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
       this.objects = [];
       _ref = ['island', 'plane'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -61,45 +66,18 @@ soma.views({
           yMax: 10
         }
       });
-      this.tdop = require('./lib/tdop');
       this.initEquations();
       return this.$('.launch').bind('click', function() {
-        return _this.viewHelper.launchPlane(true);
+        return _this.viewHelper.launchPlane();
       });
     },
     initEquations: function() {
       var _this = this;
       return this.$('.equation').bind('keyup', function(e) {
-        var area, formula, input, parts, val;
+        var input;
         input = $(e.currentTarget);
-        try {
-          val = input.val();
-          parts = input.val().replace(/\s/g, '').split(/[{}]/);
-          formula = _this.tdop.compileToJs(parts[0]);
-          area = _this.calculateArea(parts[1]);
-        } catch (err) {
-
-        }
-        return _this.viewHelper.plot(input.attr('id'), formula, area);
+        return _this.viewHelper.plot(input.attr('id'), input.val());
       });
-    },
-    calculateArea: function(areaString) {
-      var parts;
-      if (!areaString || !areaString.length) {
-        return (function() {
-          return true;
-        });
-      }
-      parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/);
-      return function(x) {
-        if (!eval(parts[0] + 'x')) {
-          return false;
-        }
-        if (!eval('x' + parts[1])) {
-          return false;
-        }
-        return true;
-      };
     }
   }
 });

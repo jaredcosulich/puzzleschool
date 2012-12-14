@@ -1,4 +1,4 @@
-tdop = exports ? provide('./lib/tdop', {})
+tdop = exports ? provide('./tdop', {})
 
 tdop.makeParse = ->
     symbolTable = {}

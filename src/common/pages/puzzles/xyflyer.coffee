@@ -8,10 +8,17 @@ soma.chunks
 
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/xyflyer.html"
-            @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
-            @loadScript '/build/common/pages/puzzles/lib/tdop.js'
+            
             @loadScript '/assets/third_party/equation_explorer/tokens.js'
             @loadScript '/assets/third_party/raphael-min.js'
+            
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/tdop.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/parser.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/object.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/board.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/plane.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             
             @objects = []
             for object in ['island', 'plane']
@@ -46,32 +53,15 @@ soma.views
                     yMin: -10
                     yMax: 10
                 
-            @tdop = require('./lib/tdop')
-            
             @initEquations()
             
-            @$('.launch').bind 'click', => @viewHelper.launchPlane(true)
+            @$('.launch').bind 'click', => @viewHelper.launchPlane()
 
                 
         initEquations: ->
             @$('.equation').bind 'keyup', (e) =>
                 input = $(e.currentTarget)
-                try
-                    val = input.val()
-                    parts = input.val().replace(/\s/g, '').split(/[{}]/)
-                    formula = @tdop.compileToJs(parts[0])       
-                    area = @calculateArea(parts[1])   
-                catch err
-                    
-                @viewHelper.plot(input.attr('id'), formula, area)
-
-        calculateArea: (areaString) ->
-            return (-> true) if not areaString or not areaString.length
-            parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/)
-            return (x) ->
-                return false if not eval(parts[0] + 'x') 
-                return false if not eval('x' + parts[1]) 
-                return true
+                @viewHelper.plot(input.attr('id'), input.val())
             
 soma.routes
     '/puzzles/xyflyer/:classId/:levelId': ({classId, levelId}) -> 
