@@ -36,6 +36,17 @@ body {
   font-size: 18px;
   width: 302px;
 }
+.xyflyer .equation_area .possible_fragments .equation_component {
+  float: left;
+  padding: 3px 6px;
+  background-color: #c7c7c7;
+  border: 1px solid #949494;
+  margin: 6px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  cursor: move;
+}
 .xyflyer .objects {
   position: absolute;
   top: -10000px;

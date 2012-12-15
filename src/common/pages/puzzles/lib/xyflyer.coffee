@@ -9,7 +9,7 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, boardElement, objects, grid}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, grid}) ->
         @board = new xyflyer.Board
             boardElement: boardElement, 
             grid: grid, 
@@ -19,6 +19,7 @@ class xyflyer.ViewHelper
             board: @board
             
         @parser = require('./parser')
+        @initEquations()
         
     $: (selector) -> $(selector, @el)
     
@@ -26,8 +27,18 @@ class xyflyer.ViewHelper
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
         
-    launchPlane: -> @plane.launch(true) 
-
-
+    addRing: (x,y) ->
+        new xyflyer.Ring
+            board: @board
+            x: x
+            y: y
     
+    initEquations: ->
+        @equations = new xyflyer.Equations
+            area: @equationArea
+            submit: => @plane.launch(true) 
+
+    addEquationComponent: (equationFragment, equationAreas) ->
+        @equations.addEquationComponent(equationFragment, equationAreas)
+        
     

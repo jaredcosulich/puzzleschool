@@ -17,6 +17,8 @@ board.Board = (function(_super) {
     var boardElement;
     boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects;
     this.formulas = {};
+    this.rings = [];
+    this.ringFronts = [];
     this.init(boardElement);
   }
 
@@ -57,6 +59,30 @@ board.Board = (function(_super) {
       return;
     }
     return this.addImage(island, this.xAxis - (width / 2), this.yAxis);
+  };
+
+  Board.prototype.addRing = function(ring) {
+    var back, front, ringSet;
+    front = this.paper.path(ring.frontDescription);
+    front.toFront();
+    back = this.paper.path(ring.backDescription);
+    back.toBack();
+    ringSet = this.paper.set();
+    ringSet.push(front, back);
+    this.ringFronts.push(front);
+    this.rings.push(ringSet);
+    return ringSet;
+  };
+
+  Board.prototype.setRingFronts = function() {
+    var ringFront, _i, _len, _ref, _results;
+    _ref = this.ringFronts;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      ringFront = _ref[_i];
+      _results.push(ringFront.toFront());
+    }
+    return _results;
   };
 
   Board.prototype.addPlane = function(plane) {
@@ -334,7 +360,8 @@ board.Board = (function(_super) {
       'stroke-width': 2
     });
     this.formulas[id].line = line;
-    return this.plane.reset();
+    this.plane.reset();
+    return this.setRingFronts();
   };
 
   Board.prototype.calculatePath = function(increment) {

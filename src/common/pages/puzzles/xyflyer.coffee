@@ -17,6 +17,9 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/object.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/board.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/plane.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/ring.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/equation_component.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/equations.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             
@@ -47,6 +50,7 @@ soma.views
                 el: $(@selector)
                 boardElement: @$('.board')
                 objects: @$('.objects')
+                equationArea: @$('.equation_area')
                 grid:
                     xMin: -10
                     xMax: 10
@@ -55,7 +59,11 @@ soma.views
                 
             @initEquations()
             
-            @$('.launch').bind 'click', => @viewHelper.launchPlane()
+            
+            @viewHelper.addRing(3, 3)
+            @viewHelper.addRing(5, 2)
+            
+            @viewHelper.addEquationComponent('sin(x)')
 
                 
         initEquations: ->

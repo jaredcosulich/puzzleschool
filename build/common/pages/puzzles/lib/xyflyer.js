@@ -21,7 +21,7 @@ xyflyer.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     var boardElement, grid, objects;
-    this.el = _arg.el, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid;
     this.board = new xyflyer.Board({
       boardElement: boardElement,
       grid: grid,
@@ -31,6 +31,7 @@ xyflyer.ViewHelper = (function() {
       board: this.board
     });
     this.parser = require('./parser');
+    this.initEquations();
   }
 
   ViewHelper.prototype.$ = function(selector) {
@@ -43,8 +44,26 @@ xyflyer.ViewHelper = (function() {
     return this.board.plot(id, formula, area);
   };
 
-  ViewHelper.prototype.launchPlane = function() {
-    return this.plane.launch(true);
+  ViewHelper.prototype.addRing = function(x, y) {
+    return new xyflyer.Ring({
+      board: this.board,
+      x: x,
+      y: y
+    });
+  };
+
+  ViewHelper.prototype.initEquations = function() {
+    var _this = this;
+    return this.equations = new xyflyer.Equations({
+      area: this.equationArea,
+      submit: function() {
+        return _this.plane.launch(true);
+      }
+    });
+  };
+
+  ViewHelper.prototype.addEquationComponent = function(equationFragment, equationAreas) {
+    return this.equations.addEquationComponent(equationFragment, equationAreas);
   };
 
   return ViewHelper;

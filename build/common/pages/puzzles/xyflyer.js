@@ -23,6 +23,9 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/object.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/board.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/plane.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/ring.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equation_component.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equations.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
       this.objects = [];
@@ -52,13 +55,13 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var xyflyer,
-        _this = this;
+      var xyflyer;
       xyflyer = require('./lib/xyflyer');
       this.viewHelper = new xyflyer.ViewHelper({
         el: $(this.selector),
         boardElement: this.$('.board'),
         objects: this.$('.objects'),
+        equationArea: this.$('.equation_area'),
         grid: {
           xMin: -10,
           xMax: 10,
@@ -67,9 +70,9 @@ soma.views({
         }
       });
       this.initEquations();
-      return this.$('.launch').bind('click', function() {
-        return _this.viewHelper.launchPlane();
-      });
+      this.viewHelper.addRing(3, 3);
+      this.viewHelper.addRing(5, 2);
+      return this.viewHelper.addEquationComponent('sin(x)');
     },
     initEquations: function() {
       var _this = this;

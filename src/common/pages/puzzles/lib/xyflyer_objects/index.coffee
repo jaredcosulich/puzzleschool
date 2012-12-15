@@ -6,4 +6,9 @@ for name, fn of require('./board')
 for name, fn of require('./plane')
     xyflyer_objects[name] = fn
 
+for name, fn of require('./ring')
+    xyflyer_objects[name] = fn
+
+for name, fn of require('./equations')
+    xyflyer_objects[name] = fn
 

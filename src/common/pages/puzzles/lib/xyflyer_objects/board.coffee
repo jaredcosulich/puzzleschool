@@ -6,6 +6,8 @@ class board.Board extends xyflyerObject.Object
 
     constructor: ({boardElement, @grid, @objects}) ->
         @formulas = {}
+        @rings = []
+        @ringFronts = []
         @init(boardElement)
 
     init: (boardElement) -> 
@@ -45,6 +47,20 @@ class board.Board extends xyflyerObject.Object
 
         @addImage(island, @xAxis - (width/2), @yAxis)
         
+    addRing: (ring) ->
+        front = @paper.path(ring.frontDescription)
+        front.toFront()
+        back = @paper.path(ring.backDescription)
+        back.toBack()
+        ringSet = @paper.set()
+        ringSet.push(front, back)
+        @ringFronts.push(front)
+        @rings.push(ringSet)
+        return ringSet    
+    
+    setRingFronts: ->
+        ringFront.toFront() for ringFront in @ringFronts
+    
     addPlane: (@plane) -> @paper.path(@plane.description)
         
     initClicks: (boardElement) ->
@@ -216,6 +232,7 @@ class board.Board extends xyflyerObject.Object
 
         @formulas[id].line = line
         @plane.reset()
+        @setRingFronts()
         
     calculatePath: (increment) ->
         path = {}
