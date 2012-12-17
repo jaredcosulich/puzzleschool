@@ -7,10 +7,13 @@ EquationComponent = require('./equation_component').EquationComponent;
 
 equations.Equations = (function() {
 
+  Equations.prototype.defaultText = 'Drop Equation Fragment Here';
+
   function Equations(_arg) {
     var submit,
       _this = this;
-    this.el = _arg.el, submit = _arg.submit;
+    this.gameArea = _arg.gameArea, this.el = _arg.el, this.plot = _arg.plot, submit = _arg.submit;
+    this.equations = this.$('.equations');
     this.possibleFragments = this.$('.possible_fragments');
     this.$('.launch').bind('click', function() {
       return submit();
@@ -21,13 +24,62 @@ equations.Equations = (function() {
     return $(selector, this.el);
   };
 
-  Equations.prototype.addEquationComponent = function(equationFragment, equationAreas) {
-    var equationComponent;
+  Equations.prototype.add = function() {
+    var equation, equationCount;
+    equationCount = this.equations.find('.equation').length;
+    this.equations.append("<div class='equation' id='equation_" + (equationCount + 1) + "'>\n    " + this.defaultText + "\n</div>");
+    return equation = this.equations.find("#equation_" + equationCount);
+  };
+
+  Equations.prototype.addComponent = function(equationFragment, equationAreas) {
+    var equationComponent,
+      _this = this;
     equationComponent = new EquationComponent({
+      gameArea: this.gameArea,
       equationFragment: equationFragment,
-      equationAreas: equationAreas
+      equationAreas: equationAreas,
+      trackDrag: function(left, top, component) {
+        return _this.trackComponentDragging(left, top, component);
+      },
+      endDrag: function(component) {
+        return _this.endComponentDragging(component);
+      }
     });
-    return this.possibleFragments.append(equationComponent.asHtml());
+    return this.possibleFragments.append(equationComponent.element);
+  };
+
+  Equations.prototype.trackComponentDragging = function(left, top, component) {
+    var e, equation, gameAreaOffset, offset, _i, _len, _results;
+    equations = this.equations.find('.equation');
+    _results = [];
+    for (_i = 0, _len = equations.length; _i < _len; _i++) {
+      e = equations[_i];
+      equation = $(e);
+      equation.removeClass('accept_component');
+      offset = equation.offset();
+      gameAreaOffset = this.gameArea.offset();
+      if (!(left >= offset.left - gameAreaOffset.left && left <= offset.left + offset.width - gameAreaOffset.left && top >= offset.top - gameAreaOffset.top && top <= offset.top + offset.height - gameAreaOffset.top)) {
+        continue;
+      }
+      _results.push(equation.addClass('accept_component'));
+    }
+    return _results;
+  };
+
+  Equations.prototype.endComponentDragging = function(component) {
+    var acceptingComponent, equation;
+    acceptingComponent = $(this.equations.find('.accept_component')[0]);
+    if (!acceptingComponent.length) {
+      return;
+    }
+    acceptingComponent.removeClass('accept_component');
+    acceptingComponent.addClass('with_component');
+    acceptingComponent.html('');
+    acceptingComponent.append("<div class=''>" + component.equationFragment + "</div>");
+    component.element.hide();
+    equation = acceptingComponent.hasClass('equation') ? acceptingComponent : acceptingComponent.closest('.equation');
+    equation.data('formula', component.equationFragment);
+    return this.plot(equation.attr('id'), equation.data('formula'));
   };
 
   return Equations;

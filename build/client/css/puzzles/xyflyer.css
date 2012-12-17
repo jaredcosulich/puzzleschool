@@ -9,11 +9,18 @@ body {
   position: relative;
   overflow: hidden;
 }
+.xyflyer.dragging {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .xyflyer .board {
   width: 640px;
   height: 640px;
   float: right;
-  position: relative;
 }
 .xyflyer .equation_area {
   background-color: white;
@@ -21,27 +28,49 @@ body {
   -moz-border-radius: 6px;
   border-radius: 6px;
   opacity: 0.8;
-  position: absolute;
   width: 317px;
   height: 634px;
-  position: absolute;
-  left: 3px;
-  top: 3px;
 }
 .xyflyer .equation_area h2 {
   text-align: center;
+  padding-top: 12px;
 }
 .xyflyer .equation_area .equation {
-  margin: 6px 0 0 6px;
-  font-size: 18px;
-  width: 302px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 6px;
+  margin: 6px;
+  color: #c7c7c7;
+  border: 1px solid #c7c7c7;
+  position: relative;
+}
+.xyflyer .equation_area .equation.accept_component,
+.xyflyer .equation_area .equation .accept_component {
+  border: 1px solid #0c8d28;
+  color: #0c8d28;
+  font-weight: bold;
+}
+.xyflyer .equation_area .equation.with_component,
+.xyflyer .equation_area .equation .with_component {
+  color: #262626;
+}
+.xyflyer .equation_area .launch {
+  font-size: 15px;
+  margin: 6px;
+  padding: 6px;
+}
+.xyflyer .equation_area .possible_fragments {
+  margin-top: 30px;
+  padding: 6px;
 }
 .xyflyer .equation_area .possible_fragments .equation_component {
   float: left;
+  margin: 6px 6px 0 0;
+}
+.xyflyer .equation_component {
   padding: 3px 6px;
   background-color: #c7c7c7;
   border: 1px solid #949494;
-  margin: 6px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;

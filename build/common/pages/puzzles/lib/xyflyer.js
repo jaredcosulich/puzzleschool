@@ -55,15 +55,23 @@ xyflyer.ViewHelper = (function() {
   ViewHelper.prototype.initEquations = function() {
     var _this = this;
     return this.equations = new xyflyer.Equations({
+      gameArea: this.el,
       area: this.equationArea,
+      plot: function(id, data) {
+        return _this.plot(id, data);
+      },
       submit: function() {
         return _this.plane.launch(true);
       }
     });
   };
 
+  ViewHelper.prototype.addEquation = function(equationFragment, equationAreas) {
+    return this.equations.add();
+  };
+
   ViewHelper.prototype.addEquationComponent = function(equationFragment, equationAreas) {
-    return this.equations.addEquationComponent(equationFragment, equationAreas);
+    return this.equations.addComponent(equationFragment, equationAreas);
   };
 
   return ViewHelper;

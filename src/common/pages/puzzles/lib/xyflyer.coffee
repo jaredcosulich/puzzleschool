@@ -35,10 +35,15 @@ class xyflyer.ViewHelper
     
     initEquations: ->
         @equations = new xyflyer.Equations
+            gameArea: @el
             area: @equationArea
+            plot: (id, data) => @plot(id, data)
             submit: => @plane.launch(true) 
 
+    addEquation: (equationFragment, equationAreas) ->
+        @equations.add()
+
     addEquationComponent: (equationFragment, equationAreas) ->
-        @equations.addEquationComponent(equationFragment, equationAreas)
+        @equations.addComponent(equationFragment, equationAreas)
         
     
