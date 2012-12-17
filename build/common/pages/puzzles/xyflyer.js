@@ -24,6 +24,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/board.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/plane.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/ring.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equation.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equation_component.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equations.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');

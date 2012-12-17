@@ -36,7 +36,6 @@ body {
   padding-top: 12px;
 }
 .xyflyer .equation_area .equation {
-  height: 30px;
   line-height: 30px;
   padding: 0 6px;
   margin: 6px;
@@ -44,25 +43,33 @@ body {
   border: 1px solid #c7c7c7;
   position: relative;
   overflow: hidden;
+  font-size: 18px;
+}
+.xyflyer .equation_area .equation.bad_formula {
+  border: 1px solid #ff6e5f;
 }
 .xyflyer .equation_area .equation.accept_component,
 .xyflyer .equation_area .equation .accept_component {
   border: 1px solid #ffbd2a;
 }
-.xyflyer .equation_area .equation.component_over,
-.xyflyer .equation_area .equation .component_over {
-  border: 1px solid #0c8d28;
-  color: #0c8d28;
-  font-weight: bold;
-}
 .xyflyer .equation_area .equation.with_component,
 .xyflyer .equation_area .equation .with_component {
   color: #262626;
+}
+.xyflyer .equation_area .equation.component_over,
+.xyflyer .equation_area .equation .component_over,
+.xyflyer .equation_area .equation.over_dropped,
+.xyflyer .equation_area .equation .over_dropped {
+  border: 1px solid #0c8d28;
+  color: #0c8d28;
+  font-weight: bold;
+  cursor: move;
 }
 .xyflyer .equation_area .equation .fragment,
 .xyflyer .equation_area .equation .accept_fragment {
   float: left;
   height: 100%;
+  height: 30px;
 }
 .xyflyer .equation_area .launch {
   font-size: 15px;

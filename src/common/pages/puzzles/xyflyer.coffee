@@ -18,6 +18,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/board.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/plane.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/ring.js'
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/equation.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/equation_component.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/equations.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
