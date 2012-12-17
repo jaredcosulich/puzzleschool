@@ -44,15 +44,25 @@ body {
             color: @lightgrey;
             border: 1px solid @lightgrey;
             position: relative;
+            overflow: hidden;
             
             &.accept_component, .accept_component {
+                border: 1px solid @yellow;
+            }
+            
+            &.component_over, .component_over {
                 border: 1px solid @darkgreen;
                 color: @darkgreen;
                 font-weight: bold;
             }
-            
+
             &.with_component, .with_component {
                 color: @black;
+            }
+            
+            .fragment, .accept_fragment {
+                float: left;
+                height: 100%;
             }
         }
         .launch {

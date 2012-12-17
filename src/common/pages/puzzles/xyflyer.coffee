@@ -60,11 +60,11 @@ soma.views
             @initEquations()
             
             @viewHelper.addEquation()
-            @viewHelper.addEquation()
             
             @viewHelper.addRing(3, 3)
             @viewHelper.addRing(5, 2)
             
+            @viewHelper.addEquationComponent(' + 3')
             @viewHelper.addEquationComponent('sin(x)')
 
                 

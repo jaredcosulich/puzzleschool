@@ -43,9 +43,14 @@ body {
   color: #c7c7c7;
   border: 1px solid #c7c7c7;
   position: relative;
+  overflow: hidden;
 }
 .xyflyer .equation_area .equation.accept_component,
 .xyflyer .equation_area .equation .accept_component {
+  border: 1px solid #ffbd2a;
+}
+.xyflyer .equation_area .equation.component_over,
+.xyflyer .equation_area .equation .component_over {
   border: 1px solid #0c8d28;
   color: #0c8d28;
   font-weight: bold;
@@ -53,6 +58,11 @@ body {
 .xyflyer .equation_area .equation.with_component,
 .xyflyer .equation_area .equation .with_component {
   color: #262626;
+}
+.xyflyer .equation_area .equation .fragment,
+.xyflyer .equation_area .equation .accept_fragment {
+  float: left;
+  height: 100%;
 }
 .xyflyer .equation_area .launch {
   font-size: 15px;

@@ -15,6 +15,8 @@ equations.Equations = (function() {
     this.gameArea = _arg.gameArea, this.el = _arg.el, this.plot = _arg.plot, submit = _arg.submit;
     this.equations = this.$('.equations');
     this.possibleFragments = this.$('.possible_fragments');
+    this.dropAreas = [];
+    this.dragAreas = [];
     this.$('.launch').bind('click', function() {
       return submit();
     });
@@ -28,7 +30,33 @@ equations.Equations = (function() {
     var equation, equationCount;
     equationCount = this.equations.find('.equation').length;
     this.equations.append("<div class='equation' id='equation_" + (equationCount + 1) + "'>\n    " + this.defaultText + "\n</div>");
-    return equation = this.equations.find("#equation_" + equationCount);
+    equation = this.equations.find("#equation_" + (equationCount + 1));
+    return this.addDropArea(equation);
+  };
+
+  Equations.prototype.addDropArea = function(dropAreaElement, parent) {
+    var dropArea, gameAreaOffset, offset;
+    offset = dropAreaElement.offset();
+    gameAreaOffset = this.gameArea.offset();
+    dropArea = {
+      id: dropAreaElement.attr('id'),
+      top: offset.top - gameAreaOffset.top,
+      left: offset.left - gameAreaOffset.left,
+      bottom: offset.top + offset.height - gameAreaOffset.top,
+      right: offset.left + (offset.width || 12) - gameAreaOffset.left,
+      element: dropAreaElement,
+      childAreas: []
+    };
+    this.dropAreas.push(dropArea);
+    return this.setParentChildDropAreas(dropArea, parent);
+  };
+
+  Equations.prototype.setParentChildDropAreas = function(dropArea, parent) {
+    if (!(dropArea && parent)) {
+      return;
+    }
+    parent.childAreas.push(dropArea);
+    return dropArea.parentArea = parent;
   };
 
   Equations.prototype.addComponent = function(equationFragment, equationAreas) {
@@ -49,37 +77,95 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
-    var e, equation, gameAreaOffset, offset, _i, _len, _results;
-    equations = this.equations.find('.equation');
+    var dropArea, _i, _len, _ref, _results;
+    this.selectedDropArea = null;
+    left = left + (component.width() / 2);
+    top = top + (component.height() / 2);
+    this.clearDrag();
+    _ref = this.dropAreas;
     _results = [];
-    for (_i = 0, _len = equations.length; _i < _len; _i++) {
-      e = equations[_i];
-      equation = $(e);
-      equation.removeClass('accept_component');
-      offset = equation.offset();
-      gameAreaOffset = this.gameArea.offset();
-      if (!(left >= offset.left - gameAreaOffset.left && left <= offset.left + offset.width - gameAreaOffset.left && top >= offset.top - gameAreaOffset.top && top <= offset.top + offset.height - gameAreaOffset.top)) {
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      dropArea = _ref[_i];
+      if (!(left >= dropArea.left && left <= dropArea.right && top >= dropArea.top && top <= dropArea.bottom)) {
         continue;
       }
-      _results.push(equation.addClass('accept_component'));
+      _results.push(this.highlightDropArea(dropArea, true));
     }
     return _results;
   };
 
+  Equations.prototype.clearDrag = function() {
+    this.$('.component_over').removeClass('component_over');
+    return this.$('.accept_component').removeClass('accept_component').css({
+      width: 'auto'
+    });
+  };
+
+  Equations.prototype.highlightDropArea = function(dropArea, readyToDrop) {
+    var da, _i, _len, _ref, _results;
+    if (dropArea.childAreas.length) {
+      _ref = dropArea.childAreas;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        da = _ref[_i];
+        _results.push(this.highlightDropArea(da));
+      }
+      return _results;
+    } else {
+      if (!dropArea.element.width()) {
+        dropArea.element.width(dropArea.right - dropArea.left);
+      }
+      if (readyToDrop) {
+        dropArea.element.addClass('component_over');
+        return this.selectedDropArea = dropArea;
+      } else {
+        return dropArea.element.addClass('accept_component');
+      }
+    }
+  };
+
   Equations.prototype.endComponentDragging = function(component) {
-    var acceptingComponent, equation;
-    acceptingComponent = $(this.equations.find('.accept_component')[0]);
-    if (!acceptingComponent.length) {
+    var element;
+    this.clearDrag();
+    if (!this.selectedDropArea) {
       return;
     }
-    acceptingComponent.removeClass('accept_component');
-    acceptingComponent.addClass('with_component');
-    acceptingComponent.html('');
-    acceptingComponent.append("<div class=''>" + component.equationFragment + "</div>");
+    element = this.selectedDropArea.element;
+    element.addClass('with_component');
+    this.formatEquationDropAreas(this.selectedDropArea, component);
+    this.plotFormula(this.selectedDropArea);
     component.element.hide();
-    equation = acceptingComponent.hasClass('equation') ? acceptingComponent : acceptingComponent.closest('.equation');
-    equation.data('formula', component.equationFragment);
-    return this.plot(equation.attr('id'), equation.data('formula'));
+    return this.selectedDropArea = null;
+  };
+
+  Equations.prototype.formatEquationDropAreas = function(dropArea, component) {
+    var acceptFragment, fragment, _i, _len, _ref, _results;
+    fragment = component.equationFragment;
+    dropArea.element.html("<div class='accept_fragment'></div>\n<div class='fragment'>" + fragment + "</div>\n<div class='accept_fragment'></div>");
+    _ref = dropArea.element.find('.accept_fragment');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      acceptFragment = _ref[_i];
+      _results.push(this.addDropArea($(acceptFragment), dropArea));
+    }
+    return _results;
+  };
+
+  Equations.prototype.getFormula = function(dropArea) {
+    var element;
+    element = $(dropArea.element)[0];
+    if (element.textContent) {
+      return element.textContent;
+    } else {
+      return element.innerText;
+    }
+  };
+
+  Equations.prototype.plotFormula = function(dropArea) {
+    while (dropArea.parentArea) {
+      dropArea = dropArea.parentArea;
+    }
+    return this.plot(dropArea.id, this.getFormula(dropArea));
   };
 
   return Equations;
