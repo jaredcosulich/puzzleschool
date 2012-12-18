@@ -321,6 +321,7 @@ board.Board = (function(_super) {
       return;
     }
     this.formulas[id] = {
+      id: id,
       formula: formula,
       area: area
     };
@@ -367,16 +368,22 @@ board.Board = (function(_super) {
   Board.prototype.calculatePath = function(increment) {
     var id, lastFormula, path, xPos, _i, _ref, _ref1;
     path = {};
-    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _i += increment) {
+    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _i += increment) {
       if (lastFormula && lastFormula.area(xPos / this.xUnit)) {
-        path[xPos] = lastFormula.formula(xPos / this.xUnit) * this.yUnit;
+        path[xPos] = {
+          formula: lastFormula.id,
+          y: lastFormula.formula(xPos / this.xUnit) * this.yUnit
+        };
         continue;
       }
       for (id in this.formulas) {
         if (!this.formulas[id].area(xPos / this.xUnit)) {
           continue;
         }
-        path[xPos] = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
+        path[xPos] = {
+          formula: id,
+          y: this.formulas[id].formula(xPos / this.xUnit) * this.yUnit
+        };
         lastFormula = this.formulas[id];
         break;
       }

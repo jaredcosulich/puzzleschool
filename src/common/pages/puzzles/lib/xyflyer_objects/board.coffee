@@ -194,6 +194,7 @@ class board.Board extends xyflyerObject.Object
         return if not formula
 
         @formulas[id] = 
+            id: id
             formula: formula
             area: area
 
@@ -236,14 +237,18 @@ class board.Board extends xyflyerObject.Object
         
     calculatePath: (increment) ->
         path = {}
-        for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)] by increment
+        for xPos in [(@grid.xMin * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by increment
             if lastFormula and lastFormula.area(xPos / @xUnit)
-                path[xPos] = lastFormula.formula(xPos / @xUnit) * @yUnit
+                path[xPos] = 
+                    formula: lastFormula.id
+                    y: lastFormula.formula(xPos / @xUnit) * @yUnit
                 continue
 
             for id of @formulas
                 continue if not @formulas[id].area(xPos / @xUnit)
-                path[xPos] = @formulas[id].formula(xPos / @xUnit) * @yUnit
+                path[xPos] = 
+                    formula: id
+                    y: @formulas[id].formula(xPos / @xUnit) * @yUnit
                 lastFormula = @formulas[id]
                 break
         return path

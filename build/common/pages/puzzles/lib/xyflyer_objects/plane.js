@@ -30,11 +30,22 @@ plane.Plane = (function(_super) {
   }
 
   Plane.prototype.move = function(x, y, time, next) {
-    var transformation;
+    var method, transformation;
+    if (this.falling) {
+      return;
+    }
+    method = 'linear';
+    if (x === 'falling') {
+      this.falling = true;
+      x = this.xPos + this.board.xAxis + this.width;
+      y = 1000;
+      time = 2000;
+      method = 'easeIn';
+    }
     transformation = "t" + (x - (this.width / 2)) + "," + (y - (this.height / 2)) + "s-" + this.scale + "," + this.scale;
     this.image.animate({
       transform: transformation
-    }, time, 'linear', next);
+    }, time, method, next);
     return this.track({
       x: x,
       y: y,
@@ -44,23 +55,26 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var dX, dY, time,
+    var dX, dY, formula, time, _ref, _ref1,
       _this = this;
-    if (this.cancelFlight && !force) {
+    if (this.falling || this.cancelFlight && !force) {
       return;
     }
     this.cancelFlight = false;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath(this.increment);
     }
-    this.xPos = (this.xPos || 0) + this.increment;
-    this.yPos = this.path[this.xPos];
-    if (this.yPos === void 0 || this.xPos > (this.board.grid.xMax * this.board.xUnit)) {
-      $.timeout(1000, function() {
+    this.xPos += this.increment;
+    this.yPos = (_ref = this.path[this.xPos]) != null ? _ref.y : void 0;
+    formula = (_ref1 = this.path[this.xPos]) != null ? _ref1.formula : void 0;
+    if ((this.lastFormula !== formula && Math.abs(this.image.attr('y') - this.yPos) > 0.01) || this.yPos === void 0 || this.xPos > ((this.board.grid.xMax + this.width) * this.board.xUnit)) {
+      this.move('falling');
+      $.timeout(2000, function() {
         return _this.reset();
       });
       return;
     }
+    this.lastFormula = formula;
     dX = this.increment;
     dY = this.yPos - this.path[this.xPos - this.increment];
     time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.increment;
@@ -70,9 +84,11 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.reset = function() {
+    this.falling = false;
     this.cancelFlight = true;
     this.path = null;
-    this.xPos = null;
+    this.xPos = this.increment * -1;
+    this.lastFormula = null;
     return this.move(this.board.xAxis, this.board.yAxis);
   };
 

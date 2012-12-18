@@ -14,29 +14,45 @@ class plane.Plane extends xyflyerObject.Object
         @reset()
         
     move: (x, y, time, next) ->
+        return if @falling
+        method = 'linear'
+        if x == 'falling'
+            @falling = true
+            x = @xPos + @board.xAxis + @width
+            y = 1000
+            time = 2000
+            method = 'easeIn'
+        
         transformation = "t#{x - (@width/2)},#{y - (@height/2)}s-#{@scale},#{@scale}"
-        @image.animate({transform: transformation}, time, 'linear', next)
+        @image.animate({transform: transformation}, time, method, next)
         @track(x: x, y: y, width: @width, height: @height)
 
     launch: (force) ->
-        return if @cancelFlight and not force
+        return if @falling or @cancelFlight and not force
         @cancelFlight = false
         @path = @board.calculatePath(@increment) if not @path or not Object.keys(@path).length
-        @xPos = (@xPos or 0) + @increment
-        @yPos = @path[@xPos]
-        if @yPos == undefined or @xPos > (@board.grid.xMax * @board.xUnit)
-            $.timeout 1000, => @reset()
+        @xPos += @increment
+        @yPos = @path[@xPos]?.y
+        
+        formula = @path[@xPos]?.formula
+        if (@lastFormula != formula and Math.abs(@image.attr('y') - @yPos) > 0.01) or
+           @yPos == undefined or @xPos > ((@board.grid.xMax + @width) * @board.xUnit)
+            @move('falling')
+            $.timeout 2000, => @reset()
             return
-
+            
+        @lastFormula = formula
         dX = @increment
         dY = @yPos - @path[@xPos - @increment]
         time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @increment
         @move(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
 
     reset: ->
+        @falling = false
         @cancelFlight = true
         @path = null
-        @xPos = null
+        @xPos = @increment * -1
+        @lastFormula = null
         @move(@board.xAxis, @board.yAxis)
 
         
