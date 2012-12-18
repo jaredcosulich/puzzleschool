@@ -38,23 +38,18 @@ equation.Equation = (function() {
 
   Equation.prototype.initHover = function() {
     var _this = this;
-    this.el.bind('mouseover.fragment', function(e) {
-      var dropArea, overlapping, _i, _len, _results;
-      overlapping = _this.overlappingDropAreas({
+    this.el.bind('mousemove.fragment', function(e) {
+      _this.clear();
+      _this.selectedDropArea = _this.overlappingDropAreas({
         left: _this.clientX(e),
-        top: _this.clientY(e)
-      });
-      _results = [];
-      for (_i = 0, _len = overlapping.length; _i < _len; _i++) {
-        dropArea = overlapping[_i];
-        if (!dropArea.dirty && dropArea.component) {
-          dropArea.element.addClass('component_over');
-          _results.push(_this.selectedDropArea = dropArea);
-        } else {
-          _results.push(void 0);
+        top: _this.clientY(e),
+        test: function(dropArea) {
+          return !dropArea.dirty && dropArea.component;
         }
+      });
+      if (_this.selectedDropArea) {
+        return _this.selectedDropArea.element.addClass('component_over');
       }
-      return _results;
     });
     this.el.bind('mouseout.fragment', function() {
       return _this.clear();
@@ -93,37 +88,41 @@ equation.Equation = (function() {
     return this.addDropArea();
   };
 
-  Equation.prototype.overlappingDropAreas = function(area) {
-    var dropArea, overlapping, _i, _len, _ref;
-    if (!area.right) {
-      area.right = area.left;
+  Equation.prototype.overlappingDropAreas = function(_arg) {
+    var bottom, dropArea, gameAreaOffset, left, offset, overlapping, right, test, top, _i, _len, _ref;
+    left = _arg.left, right = _arg.right, top = _arg.top, bottom = _arg.bottom, test = _arg.test;
+    if (!right) {
+      right = left;
     }
-    if (!area.bottom) {
-      area.bottom = area.top;
+    if (!bottom) {
+      bottom = top;
     }
     overlapping = [];
+    gameAreaOffset = this.gameArea.offset();
     _ref = this.dropAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       dropArea = _ref[_i];
-      if (!((area.left >= dropArea.left && area.left <= dropArea.right && area.top >= dropArea.top && area.top <= dropArea.bottom) || (area.right >= dropArea.left && area.right <= dropArea.right && area.bottom >= dropArea.top && area.bottom <= dropArea.bottom))) {
+      offset = dropArea.element.offset();
+      offset.left -= gameAreaOffset.left;
+      offset.top -= gameAreaOffset.top;
+      if (!((left >= offset.left && left <= offset.left + offset.width && top >= offset.top && top <= offset.top + offset.height) || (right >= offset.left && right <= offset.left + offset.width && bottom >= offset.top && bottom <= offset.top + offset.height))) {
         continue;
       }
-      overlapping.push(dropArea);
+      if (test(dropArea)) {
+        return dropArea;
+      }
     }
-    return overlapping;
+    return false;
   };
 
-  Equation.prototype.addDropArea = function(dropAreaElement, parent, hiddenIndex) {
+  Equation.prototype.addDropArea = function(dropAreaElement, parentArea) {
     var dropArea, gameAreaOffset, hiddenWidth, offset,
       _this = this;
     if (dropAreaElement == null) {
       dropAreaElement = this.el;
     }
-    if (parent == null) {
-      parent = null;
-    }
-    if (hiddenIndex == null) {
-      hiddenIndex = 0;
+    if (parentArea == null) {
+      parentArea = null;
     }
     hiddenWidth = 30;
     offset = dropAreaElement.offset();
@@ -132,10 +131,6 @@ equation.Equation = (function() {
       id: dropAreaElement.attr('id'),
       index: this.dropAreas.length,
       defaultText: (dropAreaElement === this.el ? this.defaultText : ''),
-      top: offset.top - gameAreaOffset.top,
-      left: offset.left - gameAreaOffset.left + (hiddenIndex * hiddenWidth),
-      bottom: offset.top + offset.height - gameAreaOffset.top,
-      right: offset.left + (offset.width || hiddenWidth) - gameAreaOffset.left + (hiddenIndex * hiddenWidth),
       width: offset.width || hiddenWidth,
       height: offset.height,
       element: dropAreaElement,
@@ -150,28 +145,21 @@ equation.Equation = (function() {
     dropArea.plot = function() {
       return _this.plot(dropArea);
     };
-    this.dropAreas.push(dropArea);
-    return this.setParentChildDropAreas(dropArea, parent);
-  };
-
-  Equation.prototype.setParentChildDropAreas = function(dropArea, parent) {
-    if (!(dropArea && parent)) {
-      return;
+    if (parentArea) {
+      parentArea.childAreas.push(dropArea);
+      dropArea.parentArea = parentArea;
     }
-    parent.childAreas.push(dropArea);
-    return dropArea.parentArea = parent;
+    return this.dropAreas.push(dropArea);
   };
 
   Equation.prototype.highlightDropArea = function(dropArea, readyToDrop) {
-    var da, _i, _len, _ref, _results;
+    var da, _i, _len, _ref;
     if (dropArea.childAreas.length) {
       _ref = dropArea.childAreas;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         da = _ref[_i];
-        _results.push(this.highlightDropArea(da));
+        this.highlightDropArea(da);
       }
-      return _results;
     } else {
       if (!dropArea.element.width()) {
         dropArea.element.width(dropArea.width);
@@ -180,20 +168,21 @@ equation.Equation = (function() {
         dropArea.element.addClass('component_over');
         return true;
       } else {
-        return dropArea.element.addClass('accept_component');
+        dropArea.element.addClass('accept_component');
       }
     }
+    return false;
   };
 
   Equation.prototype.formatDropArea = function(dropArea, component) {
-    var acceptFragment, fragment, index, _i, _len, _ref, _results;
+    var acceptFragment, fragment, _i, _len, _ref, _results;
     fragment = component.equationFragment;
     dropArea.element.html("<div class='accept_fragment'></div>\n<div class='fragment'>" + fragment + "</div>\n<div class='accept_fragment'></div>");
     _ref = dropArea.element.find('.accept_fragment');
     _results = [];
-    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-      acceptFragment = _ref[index];
-      _results.push(this.addDropArea($(acceptFragment), dropArea, index));
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      acceptFragment = _ref[_i];
+      _results.push(this.addDropArea($(acceptFragment), dropArea));
     }
     return _results;
   };

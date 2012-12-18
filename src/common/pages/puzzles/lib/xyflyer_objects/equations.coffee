@@ -42,13 +42,13 @@ class equations.Equations
         @selectedDropArea = null
         @clearDrag()
         for equation in @equations
-            overlapping = equation.overlappingDropAreas
+             @selectedDropArea = equation.overlappingDropAreas
                 left: left
                 right: right
                 top: top
                 bottom: bottom
-            for dropArea in overlapping
-                @selectedDropArea = dropArea if dropArea?.highlight(true) 
+                test: (dropArea) => dropArea?.highlight(true)
+            return if @selectedDropArea
 
     clearDrag: ->
         equation.clear() for equation in @equations
@@ -59,7 +59,7 @@ class equations.Equations
         element = @selectedDropArea.element
         element.addClass('with_component')
         @selectedDropArea.component = component
-        @selectedDropArea.parent.dirty = true if @selectedDropArea.parent
+        @selectedDropArea.parentArea.dirty = true if @selectedDropArea.parentArea
         @selectedDropArea.format(component)
         @selectedDropArea.plot()
         @selectedDropArea.width = @selectedDropArea.element.width()

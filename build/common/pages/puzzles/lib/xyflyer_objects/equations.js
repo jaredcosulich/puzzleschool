@@ -58,7 +58,8 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
-    var bottom, dropArea, equation, overlapping, right, x, y, _i, _len, _ref, _results;
+    var bottom, equation, right, x, y, _i, _len, _ref,
+      _this = this;
     x = left + (component.width() / 2);
     y = top + (component.height() / 2);
     left = x - (component.width() / 3);
@@ -68,30 +69,21 @@ equations.Equations = (function() {
     this.selectedDropArea = null;
     this.clearDrag();
     _ref = this.equations;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
-      overlapping = equation.overlappingDropAreas({
+      this.selectedDropArea = equation.overlappingDropAreas({
         left: left,
         right: right,
         top: top,
-        bottom: bottom
-      });
-      _results.push((function() {
-        var _j, _len1, _results1;
-        _results1 = [];
-        for (_j = 0, _len1 = overlapping.length; _j < _len1; _j++) {
-          dropArea = overlapping[_j];
-          if (dropArea != null ? dropArea.highlight(true) : void 0) {
-            _results1.push(this.selectedDropArea = dropArea);
-          } else {
-            _results1.push(void 0);
-          }
+        bottom: bottom,
+        test: function(dropArea) {
+          return dropArea != null ? dropArea.highlight(true) : void 0;
         }
-        return _results1;
-      }).call(this));
+      });
     }
-    return _results;
+    if (this.selectedDropArea) {
+
+    }
   };
 
   Equations.prototype.clearDrag = function() {
@@ -114,8 +106,8 @@ equations.Equations = (function() {
     element = this.selectedDropArea.element;
     element.addClass('with_component');
     this.selectedDropArea.component = component;
-    if (this.selectedDropArea.parent) {
-      this.selectedDropArea.parent.dirty = true;
+    if (this.selectedDropArea.parentArea) {
+      this.selectedDropArea.parentArea.dirty = true;
     }
     this.selectedDropArea.format(component);
     this.selectedDropArea.plot();

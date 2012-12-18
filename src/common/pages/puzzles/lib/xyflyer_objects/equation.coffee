@@ -18,16 +18,15 @@ class equation.Equation
     clientY: (e) => (e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY) - @gameArea.offset().top
     
     initHover: () ->
-        @el.bind 'mouseover.fragment', (e) =>
-            overlapping = @overlappingDropAreas
+        @el.bind 'mousemove.fragment', (e) =>
+            @clear()
+            @selectedDropArea = @overlappingDropAreas
                 left: @clientX(e)
                 top: @clientY(e)
-                
-            for dropArea in overlapping
-                if not dropArea.dirty and dropArea.component
-                    dropArea.element.addClass('component_over') 
-                    @selectedDropArea = dropArea
+                test: (dropArea) => !dropArea.dirty and dropArea.component
 
+            @selectedDropArea.element.addClass('component_over') if @selectedDropArea
+            
         @el.bind 'mouseout.fragment', => @clear()
         
         @el.bind 'mousedown.fragment', (e) => 
@@ -52,26 +51,30 @@ class equation.Equation
         container.append(@el)
         @addDropArea()  
 
-    overlappingDropAreas: (area) ->
-        area.right = area.left if not area.right
-        area.bottom = area.top if not area.bottom
+    overlappingDropAreas: ({left, right, top, bottom, test}) ->
+        right = left if not right
+        bottom = top if not bottom
         overlapping = []
+        gameAreaOffset = @gameArea.offset()
         for dropArea in @dropAreas
+            offset = dropArea.element.offset()
+            offset.left -= gameAreaOffset.left
+            offset.top -= gameAreaOffset.top
             continue unless (
-                area.left >= dropArea.left and
-                area.left <= dropArea.right and
-                area.top >= dropArea.top and
-                area.top <= dropArea.bottom   
+                left >= offset.left and
+                left <= offset.left + offset.width and
+                top >= offset.top and
+                top <= offset.top + offset.height   
             ) or (
-                area.right >= dropArea.left and
-                area.right <= dropArea.right and
-                area.bottom >= dropArea.top and
-                area.bottom <= dropArea.bottom   
+                right >= offset.left and
+                right <= offset.left + offset.width and
+                bottom >= offset.top and
+                bottom <= offset.top + offset.height  
             )  
-            overlapping.push(dropArea)
-        return overlapping
-
-    addDropArea: (dropAreaElement=@el, parent=null, hiddenIndex=0) ->
+            return dropArea if test(dropArea)   
+        return false
+            
+    addDropArea: (dropAreaElement=@el, parentArea=null) ->
         hiddenWidth = 30
         offset = dropAreaElement.offset()
         gameAreaOffset = @gameArea.offset()
@@ -79,10 +82,6 @@ class equation.Equation
             id: dropAreaElement.attr('id')
             index: @dropAreas.length
             defaultText: (if dropAreaElement == @el then @defaultText else '')
-            top: offset.top - gameAreaOffset.top
-            left: offset.left - gameAreaOffset.left + (hiddenIndex * hiddenWidth)
-            bottom: offset.top + offset.height - gameAreaOffset.top
-            right: offset.left + (offset.width or hiddenWidth) - gameAreaOffset.left + (hiddenIndex * hiddenWidth)
             width: (offset.width or hiddenWidth)
             height: offset.height
             element: dropAreaElement
@@ -91,14 +90,12 @@ class equation.Equation
         dropArea.highlight = (readyToDrop) => @highlightDropArea(dropArea, readyToDrop) 
         dropArea.format = (component) => @formatDropArea(dropArea, component) 
         dropArea.plot = () => @plot(dropArea)
-        
-        @dropAreas.push(dropArea)    
-        @setParentChildDropAreas(dropArea, parent)
 
-    setParentChildDropAreas: (dropArea, parent) ->
-        return unless dropArea and parent
-        parent.childAreas.push(dropArea)
-        dropArea.parentArea = parent
+        if parentArea
+            parentArea.childAreas.push(dropArea)
+            dropArea.parentArea = parentArea
+            
+        @dropAreas.push(dropArea)  
 
     highlightDropArea: (dropArea, readyToDrop) ->
         if dropArea.childAreas.length
@@ -110,6 +107,7 @@ class equation.Equation
                 return true 
             else
                 dropArea.element.addClass('accept_component')
+        return false
                 
     formatDropArea: (dropArea, component) ->
         fragment = component.equationFragment
@@ -118,6 +116,6 @@ class equation.Equation
             <div class='fragment'>#{fragment}</div>
             <div class='accept_fragment'></div>
         """
-        for acceptFragment, index in dropArea.element.find('.accept_fragment')
-            @addDropArea($(acceptFragment), dropArea, index)
+        for acceptFragment in dropArea.element.find('.accept_fragment')
+            @addDropArea($(acceptFragment), dropArea)
     
