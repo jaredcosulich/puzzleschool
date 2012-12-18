@@ -26,11 +26,15 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.add = function() {
-    var equation, equationCount;
+    var equation, equationCount,
+      _this = this;
     equationCount = this.equationsArea.find('.equation').length;
     equation = new Equation({
       gameArea: this.gameArea,
-      id: "equation_" + (equationCount + 1)
+      id: "equation_" + (equationCount + 1),
+      plot: function(dropArea) {
+        return _this.plotFormula(dropArea);
+      }
     });
     this.equations.push(equation);
     return equation.appendTo(this.equationsArea);
@@ -54,7 +58,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
-    var bottom, dropArea, equation, right, x, y, _i, _len, _ref, _results;
+    var bottom, dropArea, equation, overlapping, right, x, y, _i, _len, _ref, _results;
     x = left + (component.width() / 2);
     y = top + (component.height() / 2);
     left = x - (component.width() / 3);
@@ -67,16 +71,18 @@ equations.Equations = (function() {
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
+      overlapping = equation.overlappingDropAreas({
+        left: left,
+        right: right,
+        top: top,
+        bottom: bottom
+      });
       _results.push((function() {
-        var _j, _len1, _ref1, _results1;
-        _ref1 = equation.dropAreas;
+        var _j, _len1, _results1;
         _results1 = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          dropArea = _ref1[_j];
-          if (!((left >= dropArea.left && left <= dropArea.right && top >= dropArea.top && top <= dropArea.bottom) || (right >= dropArea.left && right <= dropArea.right && bottom >= dropArea.top && bottom <= dropArea.bottom))) {
-            continue;
-          }
-          if (dropArea.highlight(true)) {
+        for (_j = 0, _len1 = overlapping.length; _j < _len1; _j++) {
+          dropArea = overlapping[_j];
+          if (dropArea != null ? dropArea.highlight(true) : void 0) {
             _results1.push(this.selectedDropArea = dropArea);
           } else {
             _results1.push(void 0);
@@ -89,10 +95,14 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.clearDrag = function() {
-    this.$('.component_over').removeClass('component_over');
-    return this.$('.accept_component').removeClass('accept_component').css({
-      width: 'auto'
-    });
+    var equation, _i, _len, _ref, _results;
+    _ref = this.equations;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      equation = _ref[_i];
+      _results.push(equation.clear());
+    }
+    return _results;
   };
 
   Equations.prototype.endComponentDragging = function(component) {
@@ -104,8 +114,11 @@ equations.Equations = (function() {
     element = this.selectedDropArea.element;
     element.addClass('with_component');
     this.selectedDropArea.component = component;
+    if (this.selectedDropArea.parent) {
+      this.selectedDropArea.parent.dirty = true;
+    }
     this.selectedDropArea.format(component);
-    this.plotFormula(this.selectedDropArea);
+    this.selectedDropArea.plot();
     this.selectedDropArea.width = this.selectedDropArea.element.width();
     component.element.hide();
     return this.selectedDropArea = null;
@@ -122,12 +135,16 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.plotFormula = function(dropArea) {
+    var data;
     while (dropArea.parentArea) {
       dropArea = dropArea.parentArea;
     }
-    if (this.plot(dropArea.id, this.getFormula(dropArea))) {
-      return dropArea.element.removeClass('bad_formula');
-    } else {
+    dropArea.element.removeClass('bad_formula');
+    data = this.getFormula(dropArea);
+    if (!data.length || data === dropArea.defaultText) {
+      return;
+    }
+    if (!this.plot(dropArea.id, data)) {
       return dropArea.element.addClass('bad_formula');
     }
   };

@@ -16,6 +16,8 @@ class equations.Equations
         equation = new Equation
             gameArea: @gameArea
             id: "equation_#{equationCount + 1}"
+            plot: (dropArea) => @plotFormula(dropArea)
+            
             
         @equations.push(equation)
         equation.appendTo(@equationsArea)
@@ -40,23 +42,16 @@ class equations.Equations
         @selectedDropArea = null
         @clearDrag()
         for equation in @equations
-            for dropArea in equation.dropAreas
-                continue unless (
-                    left >= dropArea.left and
-                    left <= dropArea.right and
-                    top >= dropArea.top and
-                    top <= dropArea.bottom   
-                ) or (
-                    right >= dropArea.left and
-                    right <= dropArea.right and
-                    bottom >= dropArea.top and
-                    bottom <= dropArea.bottom   
-                )  
-                @selectedDropArea = dropArea if dropArea.highlight(true) 
+            overlapping = equation.overlappingDropAreas
+                left: left
+                right: right
+                top: top
+                bottom: bottom
+            for dropArea in overlapping
+                @selectedDropArea = dropArea if dropArea?.highlight(true) 
 
     clearDrag: ->
-        @$('.component_over').removeClass('component_over')
-        @$('.accept_component').removeClass('accept_component').css(width: 'auto')
+        equation.clear() for equation in @equations
             
     endComponentDragging: (component) ->
         @clearDrag()
@@ -64,8 +59,9 @@ class equations.Equations
         element = @selectedDropArea.element
         element.addClass('with_component')
         @selectedDropArea.component = component
+        @selectedDropArea.parent.dirty = true if @selectedDropArea.parent
         @selectedDropArea.format(component)
-        @plotFormula(@selectedDropArea)
+        @selectedDropArea.plot()
         @selectedDropArea.width = @selectedDropArea.element.width()
         component.element.hide()
         @selectedDropArea = null
@@ -76,10 +72,11 @@ class equations.Equations
         
     plotFormula: (dropArea) ->
         dropArea = dropArea.parentArea while dropArea.parentArea
-        if @plot(dropArea.id, @getFormula(dropArea))    
-            dropArea.element.removeClass('bad_formula')
-        else
-            dropArea.element.addClass('bad_formula')
+        dropArea.element.removeClass('bad_formula')
+        data = @getFormula(dropArea)
+        return if not data.length or data == dropArea.defaultText
+        dropArea.element.addClass('bad_formula') unless @plot(dropArea.id, data)    
+            
         
         
         

@@ -70,20 +70,11 @@ soma.views({
           yMax: 10
         }
       });
-      this.initEquations();
       this.viewHelper.addEquation();
       this.viewHelper.addRing(3, 3);
       this.viewHelper.addRing(5, 2);
       this.viewHelper.addEquationComponent(' + 3');
       return this.viewHelper.addEquationComponent('sin(x)');
-    },
-    initEquations: function() {
-      var _this = this;
-      return this.$('.equation').bind('keyup', function(e) {
-        var input;
-        input = $(e.currentTarget);
-        return _this.viewHelper.plot(input.attr('id'), input.val());
-      });
     }
   }
 });

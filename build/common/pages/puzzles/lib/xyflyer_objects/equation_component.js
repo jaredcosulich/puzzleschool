@@ -43,48 +43,52 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.initMove = function() {
-    var mousedown,
-      _this = this;
-    mousedown = function(e) {
-      var body, endMove, move;
-      _this.gameArea.addClass('dragging');
-      body = $(document.body);
-      move = function(e) {
-        var left, top;
-        if (e.preventDefault) {
-          e.preventDefault();
-        }
-        left = _this.clientX(e) - (_this.element.width() / 2);
-        top = _this.clientY(e) - (_this.element.height() / 2);
-        _this.element.css({
-          position: 'absolute',
-          left: left,
-          top: top
-        });
-        if (_this.trackDrag) {
-          return _this.trackDrag(left, top, _this);
-        }
-      };
-      body.bind('mousemove.move touchmove.move', function(e) {
-        return move(e);
-      });
-      endMove = function(e) {
-        _this.element.css({
-          position: 'static',
-          top: 'auto',
-          left: 'auto'
-        });
-        _this.gameArea.removeClass('dragging');
-        _this.endDrag(_this);
-        return body.unbind('mousemove.move touchmove.move');
-      };
-      return body.one('mouseup.move touchend.move', function(e) {
-        return endMove(e);
-      });
-    };
+    var _this = this;
     return this.element.bind('mousedown.move touchstart.move', function(e) {
-      return mousedown(e);
+      return _this.mousedown(e);
     });
+  };
+
+  EquationComponent.prototype.mousedown = function(e) {
+    var body,
+      _this = this;
+    this.gameArea.addClass('dragging');
+    body = $(document.body);
+    body.bind('mousemove.move touchmove.move', function(e) {
+      return _this.move(e);
+    });
+    body.one('mouseup.move touchend.move', function(e) {
+      return _this.endMove(e);
+    });
+    return this.element.show();
+  };
+
+  EquationComponent.prototype.move = function(e) {
+    var left, top;
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    left = this.clientX(e) - (this.element.width() / 2);
+    top = this.clientY(e) - (this.element.height() / 2);
+    this.element.css({
+      position: 'absolute',
+      left: left,
+      top: top
+    });
+    if (this.trackDrag) {
+      return this.trackDrag(left, top, this);
+    }
+  };
+
+  EquationComponent.prototype.endMove = function(e) {
+    this.element.css({
+      position: 'static',
+      top: 'auto',
+      left: 'auto'
+    });
+    this.gameArea.removeClass('dragging');
+    this.endDrag(this);
+    return $(document.body).unbind('mousemove.move touchmove.move');
   };
 
   return EquationComponent;

@@ -19,34 +19,34 @@ class equationComponent.EquationComponent
         @element.html(@equationFragment)
 
     initMove: ->
-        mousedown = (e) =>    
-            @gameArea.addClass('dragging')
-            body = $(document.body)
-            move = (e) =>
-                e.preventDefault() if e.preventDefault
-                left = @clientX(e) - (@element.width() / 2)
-                top = @clientY(e) - (@element.height() / 2)
-                @element.css
-                    position: 'absolute'
-                    left: left
-                    top: top
-                @trackDrag(left, top, @) if @trackDrag
-                
-            body.bind 'mousemove.move touchmove.move', (e) => move(e)
+        @element.bind 'mousedown.move touchstart.move', (e) => @mousedown(e)
+
+    mousedown: (e) ->
+        @gameArea.addClass('dragging')
+        body = $(document.body)
+        body.bind 'mousemove.move touchmove.move', (e) => @move(e)
+        body.one 'mouseup.move touchend.move', (e) => @endMove(e) 
+        @element.show()
+
+    move: (e) ->
+        e.preventDefault() if e.preventDefault
+        left = @clientX(e) - (@element.width() / 2)
+        top = @clientY(e) - (@element.height() / 2)
+        @element.css
+            position: 'absolute'
+            left: left
+            top: top
+        @trackDrag(left, top, @) if @trackDrag
+        
+    endMove: (e) ->
+        @element.css
+            position: 'static'
+            top: 'auto'
+            left: 'auto'
             
-            endMove = (e) =>
-                @element.css
-                    position: 'static'
-                    top: 'auto'
-                    left: 'auto'
-                    
-                @gameArea.removeClass('dragging')
-                
-                @endDrag(@)
-                
-                body.unbind('mousemove.move touchmove.move')
-                
-            body.one 'mouseup.move touchend.move', (e) => endMove(e)   
-            
-        @element.bind 'mousedown.move touchstart.move', (e) => mousedown(e)
+        @gameArea.removeClass('dragging')
+        
+        @endDrag(@)
+        
+        $(document.body).unbind('mousemove.move touchmove.move')
         

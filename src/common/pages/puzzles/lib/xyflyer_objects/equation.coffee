@@ -3,7 +3,7 @@ equation = exports ? provide('./equation', {})
 class equation.Equation
     defaultText: 'Drop Equation Fragment Here'
 
-    constructor: ({@gameArea, @id}) ->
+    constructor: ({@gameArea, @id, @plot}) ->
         @dropAreas = []
         @el = $(document.createElement('DIV'))
         @el.addClass('equation')
@@ -12,16 +12,64 @@ class equation.Equation
 
         @initHover()
         
+    $: (selector) -> $(selector, @el)
+        
+    clientX: (e) => (e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX) - @gameArea.offset().left
+    clientY: (e) => (e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY) - @gameArea.offset().top
+    
     initHover: () ->
-        @el.bind 'mouseover.fragment', =>
-            # dropArea.element.addClass('over_dropped')    
+        @el.bind 'mouseover.fragment', (e) =>
+            overlapping = @overlappingDropAreas
+                left: @clientX(e)
+                top: @clientY(e)
+                
+            for dropArea in overlapping
+                if not dropArea.dirty and dropArea.component
+                    dropArea.element.addClass('component_over') 
+                    @selectedDropArea = dropArea
 
-        @el.bind 'mouseout.fragment', =>
-            # dropArea.element.removeClass('over_dropped')  
+        @el.bind 'mouseout.fragment', => @clear()
+        
+        @el.bind 'mousedown.fragment', (e) => 
+            return if @selectedDropArea.dirty or !@selectedDropArea?.component
+            @selectedDropArea.element.removeClass('with_component')
+            @selectedDropArea.element.html(@selectedDropArea.defaultText)
+            @selectedDropArea.component.mousedown(e)
+            @selectedDropArea.component = null
+            for dropArea in @selectedDropArea.childAreas
+                @dropAreas.splice(dropArea.index, 1)
+            @selectedDropArea.childAreas = []
+            @selectedDropArea.plot()
+            
+    clear: ->
+        @selectedDropArea = null
+        @el.removeClass('component_over')
+        @el.removeClass('accept_component')
+        @$('.component_over').removeClass('component_over')
+        @$('.accept_component').removeClass('accept_component').css(width: 'auto')
             
     appendTo: (container) ->
         container.append(@el)
         @addDropArea()  
+
+    overlappingDropAreas: (area) ->
+        area.right = area.left if not area.right
+        area.bottom = area.top if not area.bottom
+        overlapping = []
+        for dropArea in @dropAreas
+            continue unless (
+                area.left >= dropArea.left and
+                area.left <= dropArea.right and
+                area.top >= dropArea.top and
+                area.top <= dropArea.bottom   
+            ) or (
+                area.right >= dropArea.left and
+                area.right <= dropArea.right and
+                area.bottom >= dropArea.top and
+                area.bottom <= dropArea.bottom   
+            )  
+            overlapping.push(dropArea)
+        return overlapping
 
     addDropArea: (dropAreaElement=@el, parent=null, hiddenIndex=0) ->
         hiddenWidth = 30
@@ -29,6 +77,8 @@ class equation.Equation
         gameAreaOffset = @gameArea.offset()
         dropArea = 
             id: dropAreaElement.attr('id')
+            index: @dropAreas.length
+            defaultText: (if dropAreaElement == @el then @defaultText else '')
             top: offset.top - gameAreaOffset.top
             left: offset.left - gameAreaOffset.left + (hiddenIndex * hiddenWidth)
             bottom: offset.top + offset.height - gameAreaOffset.top
@@ -40,6 +90,8 @@ class equation.Equation
             
         dropArea.highlight = (readyToDrop) => @highlightDropArea(dropArea, readyToDrop) 
         dropArea.format = (component) => @formatDropArea(dropArea, component) 
+        dropArea.plot = () => @plot(dropArea)
+        
         @dropAreas.push(dropArea)    
         @setParentChildDropAreas(dropArea, parent)
 

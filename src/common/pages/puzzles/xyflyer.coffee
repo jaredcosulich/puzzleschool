@@ -57,8 +57,6 @@ soma.views
                     xMax: 10
                     yMin: -10
                     yMax: 10
-                
-            @initEquations()
             
             @viewHelper.addEquation()
             
@@ -68,11 +66,6 @@ soma.views
             @viewHelper.addEquationComponent(' + 3')
             @viewHelper.addEquationComponent('sin(x)')
 
-                
-        initEquations: ->
-            @$('.equation').bind 'keyup', (e) =>
-                input = $(e.currentTarget)
-                @viewHelper.plot(input.attr('id'), input.val())
             
 soma.routes
     '/puzzles/xyflyer/:classId/:levelId': ({classId, levelId}) -> 
