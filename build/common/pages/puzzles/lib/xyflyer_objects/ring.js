@@ -39,6 +39,36 @@ ring.Ring = (function(_super) {
     return this.image.transform("t" + this.screenX + "," + this.screenY + "s-" + this.scale + "," + this.scale);
   };
 
+  Ring.prototype.highlightIfPassingThrough = function(_arg) {
+    var h, height, width, x, y,
+      _this = this;
+    x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
+    if (this.screenX > x - (width / 2) && this.screenX < x + (width / 2) && this.screenY > y - (height / 2) && this.screenY < y + (height / 2)) {
+      if (!this.highlighted) {
+        this.highlighted = this.board.paper.set();
+        this.image.forEach(function(half) {
+          return _this.highlighted.push(half.glow({
+            color: 'white'
+          }));
+        });
+        this.highlighted.attr({
+          opacity: 0
+        });
+        return this.highlighted.animate({
+          opacity: 0.2
+        }, 250);
+      }
+    } else if (this.highlighted) {
+      h = this.highlighted;
+      this.highlighted = null;
+      return h.animate({
+        opacity: 0
+      }, 500, function() {
+        return h.remove();
+      });
+    }
+  };
+
   return Ring;
 
 })(xyflyerObject.Object);

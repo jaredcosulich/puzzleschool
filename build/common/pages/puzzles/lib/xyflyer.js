@@ -20,15 +20,20 @@ xyflyer.ChunkHelper = (function() {
 xyflyer.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    var boardElement, grid, objects;
+    var boardElement, grid, objects,
+      _this = this;
     this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid;
+    this.rings = [];
     this.board = new xyflyer.Board({
       boardElement: boardElement,
       grid: grid,
       objects: objects
     });
     this.plane = new xyflyer.Plane({
-      board: this.board
+      board: this.board,
+      track: function(info) {
+        return _this.trackPlane(info);
+      }
     });
     this.parser = require('./parser');
     this.initEquations();
@@ -44,12 +49,23 @@ xyflyer.ViewHelper = (function() {
     return this.board.plot(id, formula, area);
   };
 
+  ViewHelper.prototype.trackPlane = function(info) {
+    var ring, _i, _len, _ref1, _results;
+    _ref1 = this.rings;
+    _results = [];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      ring = _ref1[_i];
+      _results.push(ring.highlightIfPassingThrough(info));
+    }
+    return _results;
+  };
+
   ViewHelper.prototype.addRing = function(x, y) {
-    return new xyflyer.Ring({
+    return this.rings.push(new xyflyer.Ring({
       board: this.board,
       x: x,
       y: y
-    });
+    }));
   };
 
   ViewHelper.prototype.initEquations = function() {

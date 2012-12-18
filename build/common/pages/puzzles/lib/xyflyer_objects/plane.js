@@ -20,7 +20,7 @@ plane.Plane = (function(_super) {
   Plane.prototype.height = 30;
 
   function Plane(_arg) {
-    this.board = _arg.board;
+    this.board = _arg.board, this.track = _arg.track;
     this.scale = 0.6;
     this.image = this.board.addPlane(this);
     this.image.attr({
@@ -32,9 +32,15 @@ plane.Plane = (function(_super) {
   Plane.prototype.move = function(x, y, time, next) {
     var transformation;
     transformation = "t" + (x - (this.width / 2)) + "," + (y - (this.height / 2)) + "s-" + this.scale + "," + this.scale;
-    return this.image.animate({
+    this.image.animate({
       transform: transformation
     }, time, 'linear', next);
+    return this.track({
+      x: x,
+      y: y,
+      width: this.width,
+      height: this.height
+    });
   };
 
   Plane.prototype.launch = function(force) {

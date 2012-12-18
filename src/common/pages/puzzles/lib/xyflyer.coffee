@@ -10,6 +10,7 @@ class xyflyer.ChunkHelper
 class xyflyer.ViewHelper
     
     constructor: ({@el, @equationArea, boardElement, objects, grid}) ->
+        @rings = []
         @board = new xyflyer.Board
             boardElement: boardElement, 
             grid: grid, 
@@ -17,6 +18,7 @@ class xyflyer.ViewHelper
     
         @plane = new xyflyer.Plane
             board: @board
+            track: (info) => @trackPlane(info)
             
         @parser = require('./parser')
         @initEquations()
@@ -27,11 +29,17 @@ class xyflyer.ViewHelper
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
         
+    trackPlane: (info) ->
+        ring.highlightIfPassingThrough(info) for ring in @rings
+            
+        
     addRing: (x,y) ->
-        new xyflyer.Ring
-            board: @board
-            x: x
-            y: y
+        @rings.push(
+            new xyflyer.Ring
+                board: @board
+                x: x
+                y: y
+        )
     
     initEquations: ->
         @equations = new xyflyer.Equations

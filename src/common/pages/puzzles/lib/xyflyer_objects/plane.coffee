@@ -7,7 +7,7 @@ class plane.Plane extends xyflyerObject.Object
     width: 50
     height: 30
 
-    constructor: ({@board}) ->
+    constructor: ({@board, @track}) ->
         @scale = 0.6
         @image = @board.addPlane(@)
         @image.attr(fill: '#000')
@@ -16,6 +16,7 @@ class plane.Plane extends xyflyerObject.Object
     move: (x, y, time, next) ->
         transformation = "t#{x - (@width/2)},#{y - (@height/2)}s-#{@scale},#{@scale}"
         @image.animate({transform: transformation}, time, 'linear', next)
+        @track(x: x, y: y, width: @width, height: @height)
 
     launch: (force) ->
         return if @cancelFlight and not force
