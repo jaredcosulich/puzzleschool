@@ -73,7 +73,7 @@ soma.views({
       this.viewHelper.addEquation();
       this.viewHelper.addRing(3, 3);
       this.viewHelper.addRing(5, 2);
-      this.viewHelper.addEquationComponent(' + 3');
+      this.viewHelper.addEquationComponent('+3');
       return this.viewHelper.addEquationComponent('sin(x)');
     }
   }

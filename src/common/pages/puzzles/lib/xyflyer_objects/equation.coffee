@@ -115,9 +115,17 @@ class equation.Equation
         fragment = component.equationFragment
         dropArea.element.html """
             <div class='accept_fragment'></div>
-            <div class='fragment'>#{fragment}</div>
+            #{@formatFragment(fragment)}
             <div class='accept_fragment'></div>
         """
         for acceptFragment in dropArea.element.find('.accept_fragment')
             @addDropArea($(acceptFragment), dropArea)
     
+    formatFragment: (fragment) ->
+        constant = '<div class=\'fragment\'>'
+        accept = '<div class=\'accept_fragment\'></div>'
+        fragment.replace(
+            /(.*)\((.*)\)/, 
+            "#{constant}$1(</div>#{accept}#{constant}$2</div>#{accept}#{constant})</div>"
+        )
+        

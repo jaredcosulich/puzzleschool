@@ -181,7 +181,7 @@ equation.Equation = (function() {
   Equation.prototype.formatDropArea = function(dropArea, component) {
     var acceptFragment, fragment, _i, _len, _ref, _results;
     fragment = component.equationFragment;
-    dropArea.element.html("<div class='accept_fragment'></div>\n<div class='fragment'>" + fragment + "</div>\n<div class='accept_fragment'></div>");
+    dropArea.element.html("<div class='accept_fragment'></div>\n" + (this.formatFragment(fragment)) + "\n<div class='accept_fragment'></div>");
     _ref = dropArea.element.find('.accept_fragment');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -189,6 +189,13 @@ equation.Equation = (function() {
       _results.push(this.addDropArea($(acceptFragment), dropArea));
     }
     return _results;
+  };
+
+  Equation.prototype.formatFragment = function(fragment) {
+    var accept, constant;
+    constant = '<div class=\'fragment\'>';
+    accept = '<div class=\'accept_fragment\'></div>';
+    return fragment.replace(/(.*)\((.*)\)/, "" + constant + "$1(</div>" + accept + constant + "$2</div>" + accept + constant + ")</div>");
   };
 
   return Equation;

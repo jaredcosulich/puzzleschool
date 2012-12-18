@@ -68,7 +68,6 @@ body {
 .xyflyer .equation_area .equation .fragment,
 .xyflyer .equation_area .equation .accept_fragment {
   float: left;
-  height: 100%;
   height: 30px;
 }
 .xyflyer .equation_area .launch {

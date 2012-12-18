@@ -63,7 +63,7 @@ soma.views
             @viewHelper.addRing(3, 3)
             @viewHelper.addRing(5, 2)
             
-            @viewHelper.addEquationComponent(' + 3')
+            @viewHelper.addEquationComponent('+3')
             @viewHelper.addEquationComponent('sin(x)')
 
             
