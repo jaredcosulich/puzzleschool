@@ -59,7 +59,7 @@ class equations.Equations
         element = @selectedDropArea.element
         element.addClass('with_component')
         @selectedDropArea.component = component
-        @selectedDropArea.parentArea.dirty = true if @selectedDropArea.parentArea
+        @selectedDropArea.parentArea.dirtyCount += 1 if @selectedDropArea.parentArea
         @selectedDropArea.format(component)
         @selectedDropArea.plot()
         @selectedDropArea.width = @selectedDropArea.element.width()

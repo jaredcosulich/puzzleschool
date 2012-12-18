@@ -44,7 +44,7 @@ equation.Equation = (function() {
         left: _this.clientX(e),
         top: _this.clientY(e),
         test: function(dropArea) {
-          return !dropArea.dirty && dropArea.component;
+          return !dropArea.dirtyCount && dropArea.component;
         }
       });
       if (_this.selectedDropArea) {
@@ -56,7 +56,7 @@ equation.Equation = (function() {
     });
     return this.el.bind('mousedown.fragment', function(e) {
       var dropArea, _i, _len, _ref, _ref1;
-      if (_this.selectedDropArea.dirty || !((_ref = _this.selectedDropArea) != null ? _ref.component : void 0)) {
+      if (_this.selectedDropArea.dirtyCount || !((_ref = _this.selectedDropArea) != null ? _ref.component : void 0)) {
         return;
       }
       _this.selectedDropArea.element.removeClass('with_component');
@@ -69,6 +69,9 @@ equation.Equation = (function() {
         _this.dropAreas.splice(dropArea.index, 1);
       }
       _this.selectedDropArea.childAreas = [];
+      if (_this.selectedDropArea.parentArea) {
+        _this.selectedDropArea.parentArea.dirtyCount -= 1;
+      }
       return _this.selectedDropArea.plot();
     });
   };
@@ -134,7 +137,8 @@ equation.Equation = (function() {
       width: offset.width || hiddenWidth,
       height: offset.height,
       element: dropAreaElement,
-      childAreas: []
+      childAreas: [],
+      dirtyCount: 0
     };
     dropArea.highlight = function(readyToDrop) {
       return _this.highlightDropArea(dropArea, readyToDrop);

@@ -23,14 +23,14 @@ class equation.Equation
             @selectedDropArea = @overlappingDropAreas
                 left: @clientX(e)
                 top: @clientY(e)
-                test: (dropArea) => !dropArea.dirty and dropArea.component
+                test: (dropArea) => !dropArea.dirtyCount and dropArea.component
 
             @selectedDropArea.element.addClass('component_over') if @selectedDropArea
             
         @el.bind 'mouseout.fragment', => @clear()
         
         @el.bind 'mousedown.fragment', (e) => 
-            return if @selectedDropArea.dirty or !@selectedDropArea?.component
+            return if @selectedDropArea.dirtyCount or !@selectedDropArea?.component
             @selectedDropArea.element.removeClass('with_component')
             @selectedDropArea.element.html(@selectedDropArea.defaultText)
             @selectedDropArea.component.mousedown(e)
@@ -38,6 +38,7 @@ class equation.Equation
             for dropArea in @selectedDropArea.childAreas
                 @dropAreas.splice(dropArea.index, 1)
             @selectedDropArea.childAreas = []
+            @selectedDropArea.parentArea.dirtyCount -= 1 if @selectedDropArea.parentArea
             @selectedDropArea.plot()
             
     clear: ->
@@ -86,6 +87,7 @@ class equation.Equation
             height: offset.height
             element: dropAreaElement
             childAreas: []
+            dirtyCount: 0
             
         dropArea.highlight = (readyToDrop) => @highlightDropArea(dropArea, readyToDrop) 
         dropArea.format = (component) => @formatDropArea(dropArea, component) 

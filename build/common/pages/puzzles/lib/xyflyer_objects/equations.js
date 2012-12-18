@@ -107,7 +107,7 @@ equations.Equations = (function() {
     element.addClass('with_component');
     this.selectedDropArea.component = component;
     if (this.selectedDropArea.parentArea) {
-      this.selectedDropArea.parentArea.dirty = true;
+      this.selectedDropArea.parentArea.dirtyCount += 1;
     }
     this.selectedDropArea.format(component);
     this.selectedDropArea.plot();
