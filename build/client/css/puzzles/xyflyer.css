@@ -21,6 +21,7 @@ body {
   width: 640px;
   height: 640px;
   float: right;
+  position: relative;
 }
 .xyflyer .equation_area {
   background-color: white;
