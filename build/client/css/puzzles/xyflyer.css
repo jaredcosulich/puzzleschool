@@ -45,16 +45,20 @@ body {
   overflow: hidden;
   font-size: 18px;
 }
+.xyflyer .equation_area .equation.with_component,
+.xyflyer .equation_area .equation .with_component {
+  color: #262626;
+}
 .xyflyer .equation_area .equation.bad_formula {
   border: 1px solid #ff6e5f;
+  color: red;
+}
+.xyflyer .equation_area .equation.bad_formula .with_component {
+  color: red;
 }
 .xyflyer .equation_area .equation.accept_component,
 .xyflyer .equation_area .equation .accept_component {
   border: 1px solid #ffbd2a;
-}
-.xyflyer .equation_area .equation.with_component,
-.xyflyer .equation_area .equation .with_component {
-  color: #262626;
 }
 .xyflyer .equation_area .equation.component_over,
 .xyflyer .equation_area .equation .component_over,

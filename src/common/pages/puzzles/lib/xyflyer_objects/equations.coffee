@@ -74,8 +74,10 @@ class equations.Equations
         dropArea = dropArea.parentArea while dropArea.parentArea
         dropArea.element.removeClass('bad_formula')
         data = @getFormula(dropArea)
-        return if not data.length or data == dropArea.defaultText
-        dropArea.element.addClass('bad_formula') unless @plot(dropArea.id, data)    
+        if data == dropArea.defaultText
+            @plot(dropArea.id, '')  
+        else
+            dropArea.element.addClass('bad_formula') unless @plot(dropArea.id, data)    
             
         
         

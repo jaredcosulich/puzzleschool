@@ -37,14 +37,33 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.initHover = function() {
-    var _this = this;
+    var testDropArea,
+      _this = this;
+    testDropArea = function(dropArea, over) {
+      var da, _i, _len, _ref;
+      if (dropArea.dirtyCount) {
+        _ref = dropArea.childAreas;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          da = _ref[_i];
+          if (testDropArea(da)) {
+            return true;
+          }
+        }
+      } else if (dropArea.component) {
+        if (over) {
+          return true;
+        }
+        dropArea.element.addClass('accept_component');
+      }
+      return false;
+    };
     this.el.bind('mousemove.fragment', function(e) {
       _this.clear();
       _this.selectedDropArea = _this.overlappingDropAreas({
         left: _this.clientX(e),
         top: _this.clientY(e),
         test: function(dropArea) {
-          return !dropArea.dirtyCount && dropArea.component;
+          return testDropArea(dropArea, true);
         }
       });
       if (_this.selectedDropArea) {

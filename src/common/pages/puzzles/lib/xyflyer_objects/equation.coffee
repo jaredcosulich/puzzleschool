@@ -18,12 +18,21 @@ class equation.Equation
     clientY: (e) => (e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY) - @gameArea.offset().top
     
     initHover: () ->
+        testDropArea = (dropArea, over) =>
+            if dropArea.dirtyCount
+                for da in dropArea.childAreas
+                    return true if testDropArea(da)
+            else if dropArea.component
+                return true if over
+                dropArea.element.addClass('accept_component')
+            return false
+        
         @el.bind 'mousemove.fragment', (e) =>
             @clear()
             @selectedDropArea = @overlappingDropAreas
                 left: @clientX(e)
                 top: @clientY(e)
-                test: (dropArea) => !dropArea.dirtyCount and dropArea.component
+                test: (dropArea) => testDropArea(dropArea, true)
 
             @selectedDropArea.element.addClass('component_over') if @selectedDropArea
             
@@ -128,4 +137,3 @@ class equation.Equation
             /(.*)\((.*)\)/, 
             "#{constant}$1(</div>#{accept}#{constant}$2</div>#{accept}#{constant})</div>"
         )
-        

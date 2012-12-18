@@ -133,11 +133,12 @@ equations.Equations = (function() {
     }
     dropArea.element.removeClass('bad_formula');
     data = this.getFormula(dropArea);
-    if (!data.length || data === dropArea.defaultText) {
-      return;
-    }
-    if (!this.plot(dropArea.id, data)) {
-      return dropArea.element.addClass('bad_formula');
+    if (data === dropArea.defaultText) {
+      return this.plot(dropArea.id, '');
+    } else {
+      if (!this.plot(dropArea.id, data)) {
+        return dropArea.element.addClass('bad_formula');
+      }
     }
   };
 

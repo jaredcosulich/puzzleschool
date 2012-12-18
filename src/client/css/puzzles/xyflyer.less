@@ -46,18 +46,22 @@ body {
             overflow: hidden;
             font-size: @h3size;
             
+            &.with_component, .with_component {
+                color: @black;
+            }
+            
             &.bad_formula {
                 border: 1px solid @red;
+                color: red;
+                .with_component {
+                    color: red;
+                }
             }
             
             &.accept_component, .accept_component {
                 border: 1px solid @yellow;
             }
 
-            &.with_component, .with_component {
-                color: @black;
-            }
-            
             &.component_over, .component_over, &.over_dropped, .over_dropped {
                 border: 1px solid @darkgreen;
                 color: @darkgreen;
