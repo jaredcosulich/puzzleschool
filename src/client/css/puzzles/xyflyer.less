@@ -52,48 +52,71 @@ body {
                  }
             }
         }
-        .equation {
-            line-height: 30px;
-            padding: 0 6px;
-            margin: 6px;
-            color: @lightgrey;
-            border: 1px solid @lightgrey;
-            position: relative;
+        .equation_container {
             overflow: hidden;
             font-size: @h2size;
-            cursor: move;
-            
-            &.with_component, .with_component {
-                color: @black;
-            }
-            
-            &.bad_formula {
-                border: 1px solid @red;
-                color: red;
-                .with_component {
-                    color: red;
-                }
-            }
-            
-            .accept_component {
-                border: 1px solid @yellow;
-            }
-            
-            &.component_over, .component_over, &.over_dropped, .over_dropped {
-                border: 1px solid @darkgreen;
-                color: @darkgreen;
-                font-weight: bold;
-                width: 45px;
-                &.with_component {
-                    width: auto;
-                }
-            }
-            
-            .fragment, .accept_fragment {
+            margin-bottom: 12px;
+            .intro {
                 float: left;
-                height: 30px;
+                margin: 0 6px;
+                line-height: 30px;
             }
-        }
+            .equation {
+                padding: 0 6px;
+                margin-right: 6px;
+                color: @lightgrey;
+                border: 1px solid @lightgrey;
+                position: relative;
+                overflow: hidden;
+                cursor: move;
+                line-height: 30px;
+            
+                &.with_component, .with_component {
+                    color: @black;
+                }
+            
+                &.bad_formula {
+                    border: 1px solid @red;
+                    color: red;
+                    .with_component {
+                        color: red;
+                    }
+                }
+            
+                .accept_component {
+                    border: 1px solid @yellow;
+                }
+            
+                &.component_over, .component_over, &.over_dropped, .over_dropped {
+                    border: 1px solid @darkgreen;
+                    color: @darkgreen;
+                    font-weight: bold;
+                    width: 45px;
+                    &.equation, &.with_component {
+                        width: auto;
+                    }
+                }
+            
+                .fragment, .accept_fragment {
+                    float: left;
+                    height: 30px;
+                }
+            }
+            
+            .range {
+                font-size: @smallsize;
+                border: 1px solid #ccc;
+                border-top: none;
+                width: 78%;
+                margin-left: 14%;
+                padding: 3px 6px;
+                input {
+                    width: 3em;
+                }
+            }
+        }    
+            
+            
         .launch {
             font-size: @h4size;
             margin: 6px;

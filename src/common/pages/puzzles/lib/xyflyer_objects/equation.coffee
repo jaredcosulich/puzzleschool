@@ -5,13 +5,20 @@ class equation.Equation
 
     constructor: ({@gameArea, @id, @plot}) ->
         @dropAreas = []
+        @container = $(document.createElement('DIV'))
+        @container.addClass('equation_container')
+        @container.html('<div class=\'intro\'>Y=</div>')
+        
         @el = $(document.createElement('DIV'))
-        @el.addClass('equation')
         @el.addClass('equation accept_fragment')
         @el.attr('id', @id)
         @el.html(@defaultText)
 
+        @container.append(@el)
+        
         @initHover()
+        
+        @initRange()
         
     $: (selector) -> $(selector, @el)
         
@@ -39,7 +46,7 @@ class equation.Equation
         @el.bind 'mouseout.fragment', => @clear()
         
         @el.bind 'mousedown.fragment', (e) => 
-            return if @selectedDropArea.dirtyCount or !@selectedDropArea?.component
+            return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
             @selectedDropArea.element.removeClass('with_component')
             @selectedDropArea.element.html(@selectedDropArea.defaultText)
             @selectedDropArea.component.mousedown(e)
@@ -58,8 +65,8 @@ class equation.Equation
         @$('.component_over').removeClass('component_over')
         @$('.accept_component').removeClass('accept_component')
             
-    appendTo: (container) ->
-        container.append(@el)
+    appendTo: (area) ->
+        area.append(@container)
         @addDropArea()  
 
     overlappingDropAreas: ({x, y, test}) ->
@@ -88,6 +95,7 @@ class equation.Equation
             element: dropAreaElement
             childAreas: []
             dirtyCount: 0
+            formula: => @formula()
             
         dropArea.highlight = (readyToDrop) => @highlightDropArea(dropArea, readyToDrop) 
         dropArea.format = (component) => @formatDropArea(dropArea, component) 
@@ -129,3 +137,57 @@ class equation.Equation
             fragment = "#{constant}#{fragment}</div>"
         
         return fragment
+    
+    formula: ->
+        element = @el[0]
+        text = if element.textContent then element.textContent else element.innerText      
+        text = '' if text == @defaultText
+        return text if not @range.from
+        range = "{#{@range.from}<=x<=#{@range.to}}"
+        return "#{text}#{range}"
+       
+    initRange: ->
+        element = $(document.createElement('DIV'))
+        element.addClass('range')
+        element.html('From X = <input type=\'text\' class=\'from\'></input> to X = <input type=\'text\' class=\'to\'></input>')
+        @container.append(element)
+        
+        setTimeout(
+            (=>
+                element.find('input').bind 'keyup', =>
+                    @setRange(element.find('.from').val(), element.find('.to').val())
+                
+                @range =
+                   element: element
+                   hidden: false
+                   height: element.css('height')
+                   padding: element.css('paddingTop')
+                @hideRange()
+            ), 10
+        )
+        
+    showRange: ->
+        return unless @range.hidden
+        @range.element.animate
+            height: @range.height
+            paddingTop: @range.padding
+            paddingBottom: @range.padding
+            duration: 250
+        @range.hidden = false
+        
+    hideRange: ->
+        return if @range.hidden
+        @range.element.animate
+            height: 0
+            paddingTop: 0
+            paddingBottom: 0
+            duration: 250
+        @range.hidden = true
+            
+    setRange: (from=null, to=null) ->
+        @range.element.find('.from').val(if from? then from else '')
+        @range.element.find('.to').val(if to? then to else '')
+        @range.from = from
+        @range.to = to
+        @plot(@dropAreas[0])
+        

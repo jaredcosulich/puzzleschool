@@ -47,9 +47,9 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.plot = function(id, data) {
-    var area, formula, _ref1;
-    _ref1 = this.parser.parse(data), formula = _ref1[0], area = _ref1[1];
-    return this.board.plot(id, formula, area);
+    var area, areaMax, areaMin, formula, _ref1;
+    _ref1 = this.parser.parse(data), formula = _ref1[0], area = _ref1[1], areaMin = _ref1[2], areaMax = _ref1[3];
+    return this.board.plot(id, formula, area, areaMin, areaMax);
   };
 
   ViewHelper.prototype.trackPlane = function(info) {

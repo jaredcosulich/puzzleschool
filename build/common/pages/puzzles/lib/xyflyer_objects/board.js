@@ -312,7 +312,7 @@ board.Board = (function(_super) {
     });
   };
 
-  Board.prototype.plot = function(id, formula, area) {
+  Board.prototype.plot = function(id, formula, area, areaMin, areaMax) {
     var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
     if (this.formulas[id]) {
       this.formulas[id].line.remove();
@@ -323,7 +323,9 @@ board.Board = (function(_super) {
     this.formulas[id] = {
       id: id,
       formula: formula,
-      area: area
+      area: area,
+      min: areaMin,
+      max: areaMax
     };
     this.resetLevel();
     brokenLine = 0;
@@ -384,10 +386,19 @@ board.Board = (function(_super) {
           formula: id,
           y: this.formulas[id].formula(xPos / this.xUnit) * this.yUnit
         };
+        path[this.formulas[id].min * this.xUnit] = {
+          formula: id,
+          y: this.formulas[id].formula(this.formulas[id].min) * this.yUnit
+        };
+        path[this.formulas[id].max * this.xUnit] = {
+          formula: id,
+          y: this.formulas[id].formula(this.formulas[id].max) * this.yUnit
+        };
         lastFormula = this.formulas[id];
         break;
       }
     }
+    console.log(Object.keys(path));
     return path;
   };
 

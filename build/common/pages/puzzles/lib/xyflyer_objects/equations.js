@@ -111,30 +111,43 @@ equations.Equations = (function() {
     return this.selectedDropArea = null;
   };
 
-  Equations.prototype.getFormula = function(dropArea) {
-    var element;
-    element = $(dropArea.element)[0];
-    if (element.textContent) {
-      return element.textContent;
-    } else {
-      return element.innerText;
-    }
-  };
-
   Equations.prototype.plotFormula = function(dropArea) {
-    var data;
+    var formula;
+    this.checkMultipleEquations();
     while (dropArea.parentArea) {
       dropArea = dropArea.parentArea;
     }
     dropArea.element.removeClass('bad_formula');
-    data = this.getFormula(dropArea);
-    if (data === dropArea.defaultText) {
-      return this.plot(dropArea.id, '');
-    } else {
-      if (!this.plot(dropArea.id, data)) {
-        return dropArea.element.addClass('bad_formula');
+    formula = dropArea.formula();
+    if (!(this.plot(dropArea.id, formula) || !formula.length)) {
+      return dropArea.element.addClass('bad_formula');
+    }
+  };
+
+  Equations.prototype.checkMultipleEquations = function() {
+    var equation, inUseEquations, _i, _j, _len, _len1, _ref, _ref1, _results;
+    inUseEquations = 0;
+    _ref = this.equations;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      equation = _ref[_i];
+      if (equation.el.html() !== equation.defaultText) {
+        inUseEquations += 1;
+        if (inUseEquations > 1) {
+          break;
+        }
       }
     }
+    _ref1 = this.equations;
+    _results = [];
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      equation = _ref1[_j];
+      if (inUseEquations > 1) {
+        _results.push(equation.showRange());
+      } else {
+        _results.push(equation.hideRange());
+      }
+    }
+    return _results;
   };
 
   return Equations;

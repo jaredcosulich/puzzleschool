@@ -61,19 +61,29 @@ class equations.Equations
         component.element.hide()
         @selectedDropArea = null
             
-    getFormula: (dropArea) ->
-        element = $(dropArea.element)[0]
-        if element.textContent then element.textContent else element.innerText      
-        
     plotFormula: (dropArea) ->
+        @checkMultipleEquations()
         dropArea = dropArea.parentArea while dropArea.parentArea
         dropArea.element.removeClass('bad_formula')
-        data = @getFormula(dropArea)
-        if data == dropArea.defaultText
-            @plot(dropArea.id, '')  
-        else
-            dropArea.element.addClass('bad_formula') unless @plot(dropArea.id, data)    
+        formula = dropArea.formula()
+        dropArea.element.addClass('bad_formula') unless @plot(dropArea.id, formula) or !formula.length
             
+    checkMultipleEquations: ->
+        inUseEquations = 0
+        for equation in @equations
+            if equation.el.html() != equation.defaultText 
+                inUseEquations += 1 
+                break if inUseEquations > 1
+            
+        for equation in @equations
+            if inUseEquations > 1
+                equation.showRange()
+            else
+                equation.hideRange()
+        
+        
+        
+        
         
         
         

@@ -15,12 +15,16 @@ equation.Equation = (function() {
     this.clientX = __bind(this.clientX, this);
 
     this.dropAreas = [];
+    this.container = $(document.createElement('DIV'));
+    this.container.addClass('equation_container');
+    this.container.html('<div class=\'intro\'>Y=</div>');
     this.el = $(document.createElement('DIV'));
-    this.el.addClass('equation');
     this.el.addClass('equation accept_fragment');
     this.el.attr('id', this.id);
     this.el.html(this.defaultText);
+    this.container.append(this.el);
     this.initHover();
+    this.initRange();
   }
 
   Equation.prototype.$ = function(selector) {
@@ -74,8 +78,8 @@ equation.Equation = (function() {
       return _this.clear();
     });
     return this.el.bind('mousedown.fragment', function(e) {
-      var dropArea, _i, _len, _ref, _ref1;
-      if (_this.selectedDropArea.dirtyCount || !((_ref = _this.selectedDropArea) != null ? _ref.component : void 0)) {
+      var dropArea, _i, _len, _ref, _ref1, _ref2;
+      if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
       _this.selectedDropArea.element.removeClass('with_component');
@@ -83,9 +87,9 @@ equation.Equation = (function() {
       _this.selectedDropArea.component.mousedown(e);
       _this.selectedDropArea.component.move(e);
       _this.selectedDropArea.component = null;
-      _ref1 = _this.selectedDropArea.childAreas;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        dropArea = _ref1[_i];
+      _ref2 = _this.selectedDropArea.childAreas;
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        dropArea = _ref2[_i];
         _this.dropAreas.splice(dropArea.index, 1);
       }
       _this.selectedDropArea.childAreas = [];
@@ -104,8 +108,8 @@ equation.Equation = (function() {
     return this.$('.accept_component').removeClass('accept_component');
   };
 
-  Equation.prototype.appendTo = function(container) {
-    container.append(this.el);
+  Equation.prototype.appendTo = function(area) {
+    area.append(this.container);
     return this.addDropArea();
   };
 
@@ -145,7 +149,10 @@ equation.Equation = (function() {
       defaultText: (dropAreaElement === this.el ? this.defaultText : ''),
       element: dropAreaElement,
       childAreas: [],
-      dirtyCount: 0
+      dirtyCount: 0,
+      formula: function() {
+        return _this.formula();
+      }
     };
     dropArea.highlight = function(readyToDrop) {
       return _this.highlightDropArea(dropArea, readyToDrop);
@@ -198,6 +205,81 @@ equation.Equation = (function() {
       fragment = "" + constant + fragment + "</div>";
     }
     return fragment;
+  };
+
+  Equation.prototype.formula = function() {
+    var element, range, text;
+    element = this.el[0];
+    text = element.textContent ? element.textContent : element.innerText;
+    if (text === this.defaultText) {
+      text = '';
+    }
+    if (!this.range.from) {
+      return text;
+    }
+    range = "{" + this.range.from + "<=x<=" + this.range.to + "}";
+    return "" + text + range;
+  };
+
+  Equation.prototype.initRange = function() {
+    var element,
+      _this = this;
+    element = $(document.createElement('DIV'));
+    element.addClass('range');
+    element.html('From X = <input type=\'text\' class=\'from\'></input> to X = <input type=\'text\' class=\'to\'></input>');
+    this.container.append(element);
+    return setTimeout((function() {
+      element.find('input').bind('keyup', function() {
+        return _this.setRange(element.find('.from').val(), element.find('.to').val());
+      });
+      _this.range = {
+        element: element,
+        hidden: false,
+        height: element.css('height'),
+        padding: element.css('paddingTop')
+      };
+      return _this.hideRange();
+    }), 10);
+  };
+
+  Equation.prototype.showRange = function() {
+    if (!this.range.hidden) {
+      return;
+    }
+    this.range.element.animate({
+      height: this.range.height,
+      paddingTop: this.range.padding,
+      paddingBottom: this.range.padding,
+      duration: 250
+    });
+    return this.range.hidden = false;
+  };
+
+  Equation.prototype.hideRange = function() {
+    if (this.range.hidden) {
+      return;
+    }
+    this.range.element.animate({
+      height: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+      duration: 250
+    });
+    return this.range.hidden = true;
+  };
+
+  Equation.prototype.setRange = function(from, to) {
+    if (from == null) {
+      from = null;
+    }
+    if (to == null) {
+      to = null;
+    }
+    this.range.element.find('.from').val(from != null ? from : '');
+    this.range.element.find('.to').val(to != null ? to : '');
+    this.range.from = from;
+    this.range.to = to;
+    return this.plot(this.dropAreas[0]);
   };
 
   return Equation;

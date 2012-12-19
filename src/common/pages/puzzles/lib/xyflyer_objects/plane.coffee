@@ -41,11 +41,12 @@ class plane.Plane extends xyflyerObject.Object
             $.timeout 2000, => @reset()
             return
             
-        @lastFormula = formula
-        dX = @increment
-        dY = @yPos - @path[@xPos - @increment].y
-        time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @increment
+        if @lastFormula
+            dX = @increment
+            dY = @yPos - @path[@xPos - @increment].y
+            time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @increment
         @move(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
+        @lastFormula = formula
 
     reset: ->
         @falling = false
