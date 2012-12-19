@@ -15,10 +15,7 @@ body {
     background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
     position: relative;
     overflow: hidden;
-    
-    &.dragging {
-        .no_select();            
-    }
+    .no_select();            
     
     .board {
         width: @height;
@@ -64,6 +61,7 @@ body {
             position: relative;
             overflow: hidden;
             font-size: @h2size;
+            cursor: move;
             
             &.with_component, .with_component {
                 color: @black;
@@ -85,7 +83,6 @@ body {
                 border: 1px solid @darkgreen;
                 color: @darkgreen;
                 font-weight: bold;
-                cursor: move;
                 width: 45px;
                 &.with_component {
                     width: auto;

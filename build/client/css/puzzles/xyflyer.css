@@ -8,8 +8,6 @@ body {
   background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
   position: relative;
   overflow: hidden;
-}
-.xyflyer.dragging {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -59,6 +57,7 @@ body {
   position: relative;
   overflow: hidden;
   font-size: 23px;
+  cursor: move;
 }
 .xyflyer .equation_area .equation.with_component,
 .xyflyer .equation_area .equation .with_component {
@@ -81,7 +80,6 @@ body {
   border: 1px solid #0c8d28;
   color: #0c8d28;
   font-weight: bold;
-  cursor: move;
   width: 45px;
 }
 .xyflyer .equation_area .equation.component_over.with_component,
