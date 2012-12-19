@@ -38,7 +38,7 @@ class equations.Equations
         y = top + (component.height()/2)
         @selectedDropArea = null
         for equation in @equations
-             @selectedDropArea = equation.overlappingDropAreas
+            @selectedDropArea = equation.overlappingDropAreas
                 x: x
                 y: y
                 test: (dropArea, over) => dropArea?.highlight(over)

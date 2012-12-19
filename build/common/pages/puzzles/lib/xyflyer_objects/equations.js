@@ -74,9 +74,9 @@ equations.Equations = (function() {
           return dropArea != null ? dropArea.highlight(over) : void 0;
         }
       });
-    }
-    if (this.selectedDropArea) {
-
+      if (this.selectedDropArea) {
+        return;
+      }
     }
   };
 
