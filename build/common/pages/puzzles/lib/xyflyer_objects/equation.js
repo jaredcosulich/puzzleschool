@@ -60,8 +60,8 @@ equation.Equation = (function() {
     };
     this.el.bind('mousemove.fragment', function(e) {
       _this.selectedDropArea = _this.overlappingDropAreas({
-        left: _this.clientX(e),
-        top: _this.clientY(e),
+        x: _this.clientX(e),
+        y: _this.clientY(e),
         test: function(dropArea, over) {
           return testDropArea(dropArea, over);
         }
@@ -110,14 +110,8 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.overlappingDropAreas = function(_arg) {
-    var bottom, dropArea, gameAreaOffset, left, offset, over, overlapping, right, test, top, _i, _len, _ref;
-    left = _arg.left, right = _arg.right, top = _arg.top, bottom = _arg.bottom, test = _arg.test;
-    if (!right) {
-      right = left;
-    }
-    if (!bottom) {
-      bottom = top;
-    }
+    var dropArea, gameAreaOffset, offset, over, overlapping, test, x, y, _i, _len, _ref;
+    x = _arg.x, y = _arg.y, test = _arg.test;
     overlapping = [];
     gameAreaOffset = this.gameArea.offset();
     _ref = this.dropAreas;
@@ -126,7 +120,7 @@ equation.Equation = (function() {
       offset = dropArea.element.offset();
       offset.left -= gameAreaOffset.left;
       offset.top -= gameAreaOffset.top;
-      over = (left >= offset.left && left <= offset.left + offset.width && top >= offset.top && top <= offset.top + offset.height) || (right >= offset.left && right <= offset.left + offset.width && bottom >= offset.top && bottom <= offset.top + offset.height);
+      over = x >= offset.left && x <= offset.left + offset.width && y >= offset.top && y <= offset.top + offset.height;
       if (test(dropArea, over)) {
         return dropArea;
       }

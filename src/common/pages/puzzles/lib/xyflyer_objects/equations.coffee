@@ -36,17 +36,11 @@ class equations.Equations
         @el.addClass('show_places')
         x = left + (component.width()/2)
         y = top + (component.height()/2)
-        left = x - (component.width()/3)
-        right = x + (component.width()/3)
-        top = y - (component.height()/3)
-        bottom = y + (component.height()/3)
         @selectedDropArea = null
         for equation in @equations
              @selectedDropArea = equation.overlappingDropAreas
-                left: left
-                right: right
-                top: top
-                bottom: bottom
+                x: x
+                y: y
                 test: (dropArea, over) => dropArea?.highlight(over)
             return if @selectedDropArea
 

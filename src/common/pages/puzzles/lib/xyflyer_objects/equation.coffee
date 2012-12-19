@@ -30,8 +30,8 @@ class equation.Equation
         
         @el.bind 'mousemove.fragment', (e) =>
             @selectedDropArea = @overlappingDropAreas
-                left: @clientX(e)
-                top: @clientY(e)
+                x: @clientX(e)
+                y: @clientY(e)
                 test: (dropArea, over) => testDropArea(dropArea, over)
 
             @selectedDropArea.element.addClass('component_over') if @selectedDropArea
@@ -62,9 +62,7 @@ class equation.Equation
         container.append(@el)
         @addDropArea()  
 
-    overlappingDropAreas: ({left, right, top, bottom, test}) ->
-        right = left if not right
-        bottom = top if not bottom
+    overlappingDropAreas: ({x, y, test}) ->
         overlapping = []
         gameAreaOffset = @gameArea.offset()
         for dropArea in @dropAreas
@@ -72,15 +70,10 @@ class equation.Equation
             offset.left -= gameAreaOffset.left
             offset.top -= gameAreaOffset.top
             over = (
-                left >= offset.left and
-                left <= offset.left + offset.width and
-                top >= offset.top and
-                top <= offset.top + offset.height   
-            ) or (
-                right >= offset.left and
-                right <= offset.left + offset.width and
-                bottom >= offset.top and
-                bottom <= offset.top + offset.height  
+                x >= offset.left and
+                x <= offset.left + offset.width and
+                y >= offset.top and
+                y <= offset.top + offset.height   
             )  
             return dropArea if test(dropArea, over)
             
