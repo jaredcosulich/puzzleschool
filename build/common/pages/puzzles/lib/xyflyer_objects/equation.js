@@ -193,7 +193,11 @@ equation.Equation = (function() {
     var accept, constant;
     constant = '<div class=\'fragment\'>';
     accept = '<div class=\'accept_fragment\'></div>';
-    return fragment.replace(/(.*)\((.*)\)/, "" + constant + "$1(</div>" + accept + constant + "$2</div>" + accept + constant + ")</div>");
+    fragment = fragment.replace(/(.*)\((.*)\)/, "" + constant + "$1(</div>" + accept + constant + "$2</div>" + accept + constant + ")</div>");
+    if (fragment.indexOf(constant) === -1) {
+      fragment = "" + constant + fragment + "</div>";
+    }
+    return fragment;
   };
 
   return Equation;

@@ -15,7 +15,7 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     var boardElement;
-    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects;
+    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects, this.resetLevel = _arg.resetLevel;
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
@@ -325,7 +325,7 @@ board.Board = (function(_super) {
       formula: formula,
       area: area
     };
-    this.plane.reset();
+    this.resetLevel();
     brokenLine = 0;
     infiniteLine = 0;
     pathString = "M0," + this.height;
@@ -361,7 +361,7 @@ board.Board = (function(_super) {
       'stroke-width': 2
     });
     this.formulas[id].line = line;
-    this.plane.reset();
+    this.resetLevel();
     return this.setRingFronts();
   };
 

@@ -121,7 +121,11 @@ class equation.Equation
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
         accept = '<div class=\'accept_fragment\'></div>'
-        fragment.replace(
+        fragment = fragment.replace(
             /(.*)\((.*)\)/, 
             "#{constant}$1(</div>#{accept}#{constant}$2</div>#{accept}#{constant})</div>"
         )
+        if fragment.indexOf(constant) == -1
+            fragment = "#{constant}#{fragment}</div>"
+        
+        return fragment

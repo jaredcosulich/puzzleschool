@@ -9,12 +9,13 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, @equationArea, boardElement, objects, grid}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel}) ->
         @rings = []
         @board = new xyflyer.Board
             boardElement: boardElement, 
             grid: grid, 
             objects: objects
+            resetLevel: => @resetLevel()
     
         @plane = new xyflyer.Plane
             board: @board
@@ -30,8 +31,11 @@ class xyflyer.ViewHelper
         @board.plot(id, formula, area)
         
     trackPlane: (info) ->
-        ring.highlightIfPassingThrough(info) for ring in @rings
-            
+        allPassedThrough = @rings.length > 0
+        for ring in @rings
+            ring.highlightIfPassingThrough(info) 
+            allPassedThrough = false unless ring.passedThrough
+        @completeLevel() if allPassedThrough
         
     addRing: (x,y) ->
         @rings.push(
@@ -54,4 +58,11 @@ class xyflyer.ViewHelper
     addEquationComponent: (equationFragment, equationAreas) ->
         @equations.addComponent(equationFragment, equationAreas)
         
+    resetLevel: ->
+        @plane.reset()
+        ring.reset() for ring in @rings
     
+    completeLevel: ->
+        return if @complete
+        @complete = true
+        @nextLevel()

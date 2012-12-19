@@ -22,12 +22,15 @@ xyflyer.ViewHelper = (function() {
   function ViewHelper(_arg) {
     var boardElement, grid, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel;
     this.rings = [];
     this.board = new xyflyer.Board({
       boardElement: boardElement,
       grid: grid,
-      objects: objects
+      objects: objects,
+      resetLevel: function() {
+        return _this.resetLevel();
+      }
     });
     this.plane = new xyflyer.Plane({
       board: this.board,
@@ -50,14 +53,19 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.trackPlane = function(info) {
-    var ring, _i, _len, _ref1, _results;
+    var allPassedThrough, ring, _i, _len, _ref1;
+    allPassedThrough = this.rings.length > 0;
     _ref1 = this.rings;
-    _results = [];
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       ring = _ref1[_i];
-      _results.push(ring.highlightIfPassingThrough(info));
+      ring.highlightIfPassingThrough(info);
+      if (!ring.passedThrough) {
+        allPassedThrough = false;
+      }
     }
-    return _results;
+    if (allPassedThrough) {
+      return this.completeLevel();
+    }
   };
 
   ViewHelper.prototype.addRing = function(x, y) {
@@ -88,6 +96,26 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.addEquationComponent = function(equationFragment, equationAreas) {
     return this.equations.addComponent(equationFragment, equationAreas);
+  };
+
+  ViewHelper.prototype.resetLevel = function() {
+    var ring, _i, _len, _ref1, _results;
+    this.plane.reset();
+    _ref1 = this.rings;
+    _results = [];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      ring = _ref1[_i];
+      _results.push(ring.reset());
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.completeLevel = function() {
+    if (this.complete) {
+      return;
+    }
+    this.complete = true;
+    return this.nextLevel();
   };
 
   return ViewHelper;

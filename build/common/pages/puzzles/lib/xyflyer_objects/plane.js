@@ -76,7 +76,7 @@ plane.Plane = (function(_super) {
     }
     this.lastFormula = formula;
     dX = this.increment;
-    dY = this.yPos - this.path[this.xPos - this.increment];
+    dY = this.yPos - this.path[this.xPos - this.increment].y;
     time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.increment;
     return this.move(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time, function() {
       return _this.launch();

@@ -43,7 +43,7 @@ class plane.Plane extends xyflyerObject.Object
             
         @lastFormula = formula
         dX = @increment
-        dY = @yPos - @path[@xPos - @increment]
+        dY = @yPos - @path[@xPos - @increment].y
         time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @increment
         @move(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
 

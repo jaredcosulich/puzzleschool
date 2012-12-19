@@ -4,7 +4,7 @@ xyflyerObject = require('./object')
 class board.Board extends xyflyerObject.Object
     maxUnits: 10
 
-    constructor: ({boardElement, @grid, @objects}) ->
+    constructor: ({boardElement, @grid, @objects, @resetLevel}) ->
         @formulas = {}
         @rings = []
         @ringFronts = []
@@ -198,7 +198,7 @@ class board.Board extends xyflyerObject.Object
             formula: formula
             area: area
 
-        @plane.reset()
+        @resetLevel()
 
         brokenLine = 0
         infiniteLine = 0
@@ -232,7 +232,7 @@ class board.Board extends xyflyerObject.Object
         line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
 
         @formulas[id].line = line
-        @plane.reset()
+        @resetLevel()
         @setRingFronts()
         
     calculatePath: (increment) ->

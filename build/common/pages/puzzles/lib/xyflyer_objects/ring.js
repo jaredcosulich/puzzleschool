@@ -54,11 +54,15 @@ ring.Ring = (function(_super) {
         this.highlighted.attr({
           opacity: 0
         });
-        return this.highlighted.animate({
+        this.animating = true;
+        this.highlighted.animate({
           opacity: 0.2
-        }, 250);
+        }, 250, function() {
+          return _this.animating = false;
+        });
+        return this.passedThrough = true;
       }
-    } else if (this.highlighted) {
+    } else if (this.highlighted && !this.animating) {
       h = this.highlighted;
       this.highlighted = null;
       return h.animate({
@@ -67,6 +71,10 @@ ring.Ring = (function(_super) {
         return h.remove();
       });
     }
+  };
+
+  Ring.prototype.reset = function() {
+    return this.passedThrough = false;
   };
 
   return Ring;

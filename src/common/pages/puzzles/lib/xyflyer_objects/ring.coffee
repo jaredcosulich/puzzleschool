@@ -30,8 +30,10 @@ class ring.Ring extends xyflyerObject.Object
                     @highlighted.push(half.glow(color: 'white'))
                     
                 @highlighted.attr(opacity: 0)
-                @highlighted.animate({opacity: 0.2}, 250)
-        else if @highlighted
+                @animating = true
+                @highlighted.animate({opacity: 0.2}, 250, => @animating = false)
+                @passedThrough = true
+        else if @highlighted and not @animating
             h = @highlighted
             @highlighted = null
             h.animate(
@@ -40,4 +42,5 @@ class ring.Ring extends xyflyerObject.Object
                 -> h.remove()
             )
             
-    
+    reset: ->
+        @passedThrough = false
