@@ -6,7 +6,7 @@ equation = typeof exports !== "undefined" && exports !== null ? exports : provid
 
 equation.Equation = (function() {
 
-  Equation.prototype.defaultText = 'Drop Equation Fragment Here';
+  Equation.prototype.defaultText = 'Drop Equation Here';
 
   function Equation(_arg) {
     this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot;

@@ -44,7 +44,7 @@ body {
   border: 1px solid #c7c7c7;
   position: relative;
   overflow: hidden;
-  font-size: 18px;
+  font-size: 23px;
 }
 .xyflyer .equation_area .equation.with_component,
 .xyflyer .equation_area .equation .with_component {
@@ -59,7 +59,7 @@ body {
 }
 .xyflyer .equation_area .equation.accept_component,
 .xyflyer .equation_area .equation .accept_component {
-  border: 1px solid #ffbd2a;
+  border-bottom: 2px solid #ffbd2a;
 }
 .xyflyer .equation_area .equation.component_over,
 .xyflyer .equation_area .equation .component_over,

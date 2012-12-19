@@ -1,7 +1,7 @@
 equation = exports ? provide('./equation', {})
 
 class equation.Equation
-    defaultText: 'Drop Equation Fragment Here'
+    defaultText: 'Drop Equation Here'
 
     constructor: ({@gameArea, @id, @plot}) ->
         @dropAreas = []
