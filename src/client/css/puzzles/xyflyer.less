@@ -37,6 +37,24 @@ body {
             text-align: center;
             padding-top: 12px;
         }
+        
+        &.show_places {
+            .accept_fragment {
+                 border-bottom: 2px solid @yellow;
+                 width: 12px;
+                 
+                 &.equation, &.with_component {
+                     width: auto;
+                 }
+                 
+                 &.with_component {
+                    border-bottom: none;
+                    &.equation {
+                        border: 1px solid @lightgrey;
+                    }
+                 }
+            }
+        }
         .equation {
             line-height: 30px;
             padding: 0 6px;
@@ -59,15 +77,19 @@ body {
                 }
             }
             
-            &.accept_component, .accept_component {
-                border-bottom: 2px solid @yellow;
+            .accept_component {
+                border: 1px solid @yellow;
             }
-
+            
             &.component_over, .component_over, &.over_dropped, .over_dropped {
                 border: 1px solid @darkgreen;
                 color: @darkgreen;
                 font-weight: bold;
                 cursor: move;
+                width: 45px;
+                &.with_component {
+                    width: auto;
+                }
             }
             
             .fragment, .accept_fragment {

@@ -3,7 +3,7 @@ Equation = require('./equation').Equation
 EquationComponent = require('./equation_component').EquationComponent
 
 class equations.Equations
-    constructor: ({@gameArea, @el, @plot, submit}) ->
+    constructor: ({@el, @gameArea, @plot, submit}) ->
         @equationsArea = @$('.equations')
         @possibleFragments = @$('.possible_fragments')
         @equations = []
@@ -33,6 +33,7 @@ class equations.Equations
         @possibleFragments.append(equationComponent.element)
         
     trackComponentDragging: (left, top, component) ->
+        @el.addClass('show_places')
         x = left + (component.width()/2)
         y = top + (component.height()/2)
         left = x - (component.width()/3)
@@ -40,17 +41,17 @@ class equations.Equations
         top = y - (component.height()/3)
         bottom = y + (component.height()/3)
         @selectedDropArea = null
-        @clearDrag()
         for equation in @equations
              @selectedDropArea = equation.overlappingDropAreas
                 left: left
                 right: right
                 top: top
                 bottom: bottom
-                test: (dropArea) => dropArea?.highlight(true)
+                test: (dropArea, over) => dropArea?.highlight(over)
             return if @selectedDropArea
 
     clearDrag: ->
+        @el.removeClass('show_places')
         equation.clear() for equation in @equations
             
     endComponentDragging: (component) ->

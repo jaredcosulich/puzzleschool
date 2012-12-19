@@ -43,8 +43,8 @@ class xyflyer.ViewHelper
     
     initEquations: ->
         @equations = new xyflyer.Equations
+            el: @equationArea
             gameArea: @el
-            area: @equationArea
             plot: (id, data) => @plot(id, data)
             submit: => @plane.launch(true) 
 

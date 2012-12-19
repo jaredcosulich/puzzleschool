@@ -17,6 +17,7 @@ equation.Equation = (function() {
     this.dropAreas = [];
     this.el = $(document.createElement('DIV'));
     this.el.addClass('equation');
+    this.el.addClass('equation accept_fragment');
     this.el.attr('id', this.id);
     this.el.html(this.defaultText);
     this.initHover();
@@ -58,12 +59,11 @@ equation.Equation = (function() {
       return false;
     };
     this.el.bind('mousemove.fragment', function(e) {
-      _this.clear();
       _this.selectedDropArea = _this.overlappingDropAreas({
         left: _this.clientX(e),
         top: _this.clientY(e),
-        test: function(dropArea) {
-          return testDropArea(dropArea, true);
+        test: function(dropArea, over) {
+          return testDropArea(dropArea, over);
         }
       });
       if (_this.selectedDropArea) {
@@ -81,6 +81,7 @@ equation.Equation = (function() {
       _this.selectedDropArea.element.removeClass('with_component');
       _this.selectedDropArea.element.html(_this.selectedDropArea.defaultText);
       _this.selectedDropArea.component.mousedown(e);
+      _this.selectedDropArea.component.move(e);
       _this.selectedDropArea.component = null;
       _ref1 = _this.selectedDropArea.childAreas;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -100,9 +101,7 @@ equation.Equation = (function() {
     this.el.removeClass('component_over');
     this.el.removeClass('accept_component');
     this.$('.component_over').removeClass('component_over');
-    return this.$('.accept_component').removeClass('accept_component').css({
-      width: 'auto'
-    });
+    return this.$('.accept_component').removeClass('accept_component');
   };
 
   Equation.prototype.appendTo = function(container) {
@@ -111,7 +110,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.overlappingDropAreas = function(_arg) {
-    var bottom, dropArea, gameAreaOffset, left, offset, overlapping, right, test, top, _i, _len, _ref;
+    var bottom, dropArea, gameAreaOffset, left, offset, over, overlapping, right, test, top, _i, _len, _ref;
     left = _arg.left, right = _arg.right, top = _arg.top, bottom = _arg.bottom, test = _arg.test;
     if (!right) {
       right = left;
@@ -127,14 +126,11 @@ equation.Equation = (function() {
       offset = dropArea.element.offset();
       offset.left -= gameAreaOffset.left;
       offset.top -= gameAreaOffset.top;
-      if (!((left >= offset.left && left <= offset.left + offset.width && top >= offset.top && top <= offset.top + offset.height) || (right >= offset.left && right <= offset.left + offset.width && bottom >= offset.top && bottom <= offset.top + offset.height))) {
-        continue;
-      }
-      if (test(dropArea)) {
+      over = (left >= offset.left && left <= offset.left + offset.width && top >= offset.top && top <= offset.top + offset.height) || (right >= offset.left && right <= offset.left + offset.width && bottom >= offset.top && bottom <= offset.top + offset.height);
+      if (test(dropArea, over)) {
         return dropArea;
       }
     }
-    return false;
   };
 
   Equation.prototype.addDropArea = function(dropAreaElement, parentArea) {
@@ -153,8 +149,6 @@ equation.Equation = (function() {
       id: dropAreaElement.attr('id'),
       index: this.dropAreas.length,
       defaultText: (dropAreaElement === this.el ? this.defaultText : ''),
-      width: offset.width || hiddenWidth,
-      height: offset.height,
       element: dropAreaElement,
       childAreas: [],
       dirtyCount: 0
@@ -176,25 +170,16 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.highlightDropArea = function(dropArea, readyToDrop) {
-    var da, _i, _len, _ref;
     if (dropArea.childAreas.length) {
-      _ref = dropArea.childAreas;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        da = _ref[_i];
-        this.highlightDropArea(da);
-      }
-    } else {
-      if (!dropArea.element.width()) {
-        dropArea.element.width(dropArea.width);
-      }
-      if (readyToDrop) {
-        dropArea.element.addClass('component_over');
-        return true;
-      } else {
-        dropArea.element.addClass('accept_component');
-      }
+      return false;
     }
-    return false;
+    if (readyToDrop) {
+      dropArea.element.addClass('component_over');
+      return true;
+    } else {
+      dropArea.element.removeClass('component_over');
+      return false;
+    }
   };
 
   Equation.prototype.formatDropArea = function(dropArea, component) {

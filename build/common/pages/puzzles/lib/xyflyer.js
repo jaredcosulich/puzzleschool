@@ -71,8 +71,8 @@ xyflyer.ViewHelper = (function() {
   ViewHelper.prototype.initEquations = function() {
     var _this = this;
     return this.equations = new xyflyer.Equations({
+      el: this.equationArea,
       gameArea: this.el,
-      area: this.equationArea,
       plot: function(id, data) {
         return _this.plot(id, data);
       },

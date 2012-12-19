@@ -7,6 +7,7 @@ class equation.Equation
         @dropAreas = []
         @el = $(document.createElement('DIV'))
         @el.addClass('equation')
+        @el.addClass('equation accept_fragment')
         @el.attr('id', @id)
         @el.html(@defaultText)
 
@@ -28,11 +29,10 @@ class equation.Equation
             return false
         
         @el.bind 'mousemove.fragment', (e) =>
-            @clear()
             @selectedDropArea = @overlappingDropAreas
                 left: @clientX(e)
                 top: @clientY(e)
-                test: (dropArea) => testDropArea(dropArea, true)
+                test: (dropArea, over) => testDropArea(dropArea, over)
 
             @selectedDropArea.element.addClass('component_over') if @selectedDropArea
             
@@ -43,6 +43,7 @@ class equation.Equation
             @selectedDropArea.element.removeClass('with_component')
             @selectedDropArea.element.html(@selectedDropArea.defaultText)
             @selectedDropArea.component.mousedown(e)
+            @selectedDropArea.component.move(e)
             @selectedDropArea.component = null
             for dropArea in @selectedDropArea.childAreas
                 @dropAreas.splice(dropArea.index, 1)
@@ -55,7 +56,7 @@ class equation.Equation
         @el.removeClass('component_over')
         @el.removeClass('accept_component')
         @$('.component_over').removeClass('component_over')
-        @$('.accept_component').removeClass('accept_component').css(width: 'auto')
+        @$('.accept_component').removeClass('accept_component')
             
     appendTo: (container) ->
         container.append(@el)
@@ -70,7 +71,7 @@ class equation.Equation
             offset = dropArea.element.offset()
             offset.left -= gameAreaOffset.left
             offset.top -= gameAreaOffset.top
-            continue unless (
+            over = (
                 left >= offset.left and
                 left <= offset.left + offset.width and
                 top >= offset.top and
@@ -81,8 +82,7 @@ class equation.Equation
                 bottom >= offset.top and
                 bottom <= offset.top + offset.height  
             )  
-            return dropArea if test(dropArea)   
-        return false
+            return dropArea if test(dropArea, over)
             
     addDropArea: (dropAreaElement=@el, parentArea=null) ->
         hiddenWidth = 30
@@ -92,8 +92,6 @@ class equation.Equation
             id: dropAreaElement.attr('id')
             index: @dropAreas.length
             defaultText: (if dropAreaElement == @el then @defaultText else '')
-            width: (offset.width or hiddenWidth)
-            height: offset.height
             element: dropAreaElement
             childAreas: []
             dirtyCount: 0
@@ -109,16 +107,13 @@ class equation.Equation
         @dropAreas.push(dropArea)  
 
     highlightDropArea: (dropArea, readyToDrop) ->
-        if dropArea.childAreas.length
-            @highlightDropArea(da) for da in dropArea.childAreas
-        else 
-            dropArea.element.width(dropArea.width) if not dropArea.element.width()
-            if readyToDrop
-                dropArea.element.addClass('component_over')
-                return true 
-            else
-                dropArea.element.addClass('accept_component')
-        return false
+        return false if dropArea.childAreas.length
+        if readyToDrop
+            dropArea.element.addClass('component_over')
+            return true 
+        else
+            dropArea.element.removeClass('component_over')
+            return false
                 
     formatDropArea: (dropArea, component) ->
         fragment = component.equationFragment

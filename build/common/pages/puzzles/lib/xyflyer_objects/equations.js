@@ -12,7 +12,7 @@ equations.Equations = (function() {
   function Equations(_arg) {
     var submit,
       _this = this;
-    this.gameArea = _arg.gameArea, this.el = _arg.el, this.plot = _arg.plot, submit = _arg.submit;
+    this.el = _arg.el, this.gameArea = _arg.gameArea, this.plot = _arg.plot, submit = _arg.submit;
     this.equationsArea = this.$('.equations');
     this.possibleFragments = this.$('.possible_fragments');
     this.equations = [];
@@ -60,6 +60,7 @@ equations.Equations = (function() {
   Equations.prototype.trackComponentDragging = function(left, top, component) {
     var bottom, equation, right, x, y, _i, _len, _ref,
       _this = this;
+    this.el.addClass('show_places');
     x = left + (component.width() / 2);
     y = top + (component.height() / 2);
     left = x - (component.width() / 3);
@@ -67,7 +68,6 @@ equations.Equations = (function() {
     top = y - (component.height() / 3);
     bottom = y + (component.height() / 3);
     this.selectedDropArea = null;
-    this.clearDrag();
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
@@ -76,8 +76,8 @@ equations.Equations = (function() {
         right: right,
         top: top,
         bottom: bottom,
-        test: function(dropArea) {
-          return dropArea != null ? dropArea.highlight(true) : void 0;
+        test: function(dropArea, over) {
+          return dropArea != null ? dropArea.highlight(over) : void 0;
         }
       });
     }
@@ -88,6 +88,7 @@ equations.Equations = (function() {
 
   Equations.prototype.clearDrag = function() {
     var equation, _i, _len, _ref, _results;
+    this.el.removeClass('show_places');
     _ref = this.equations;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
