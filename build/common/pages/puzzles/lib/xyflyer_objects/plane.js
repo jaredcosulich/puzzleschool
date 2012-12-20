@@ -64,32 +64,37 @@ plane.Plane = (function(_super) {
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath(this.increment);
     }
-    this.xPos += this.increment;
+    this.xPos += 1;
     this.yPos = (_ref = this.path[this.xPos]) != null ? _ref.y : void 0;
     formula = (_ref1 = this.path[this.xPos]) != null ? _ref1.formula : void 0;
-    if ((this.lastFormula !== formula && Math.abs(this.image.attr('y') - this.yPos) > 0.01) || this.yPos === void 0 || this.xPos > ((this.board.grid.xMax + this.width) * this.board.xUnit)) {
+    if (this.yPos === void 0 || this.xPos > ((this.board.grid.xMax + this.width) * this.board.xUnit)) {
+      console.log('falling', this.xPos, this.xPos / this.board.xUnit);
       this.move('falling');
       $.timeout(2000, function() {
         return _this.reset();
       });
       return;
     }
-    if (this.lastFormula) {
-      dX = this.increment;
-      dY = this.yPos - this.path[this.xPos - this.increment].y;
-      time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.increment;
+    if (this.xPos % this.increment === 0) {
+      if (this.lastFormula) {
+        dX = this.increment;
+        dY = this.yPos - this.path[this.xPos - this.increment].y;
+        time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.increment;
+      }
+      this.move(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time, function() {
+        return _this.launch();
+      });
+      return this.lastFormula = formula;
+    } else {
+      return this.launch();
     }
-    this.move(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time, function() {
-      return _this.launch();
-    });
-    return this.lastFormula = formula;
   };
 
   Plane.prototype.reset = function() {
     this.falling = false;
     this.cancelFlight = true;
     this.path = null;
-    this.xPos = this.increment * -1;
+    this.xPos = -1;
     this.lastFormula = null;
     return this.move(this.board.xAxis, this.board.yAxis);
   };

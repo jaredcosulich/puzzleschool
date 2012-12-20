@@ -6,15 +6,15 @@ parser = typeof exports !== "undefined" && exports !== null ? exports : provide(
 tdop = require('./tdop');
 
 parser.parse = function(data) {
-  var area, areaMax, areaMin, formula, parts, _ref;
+  var area, formula, parts;
   try {
     parts = data.replace(/\s/g, '').split(/[{}]/);
     formula = tdop.compileToJs(parts[0]);
-    _ref = parser.calculateArea(parts[1]), area = _ref[0], areaMin = _ref[1], areaMax = _ref[2];
+    area = parser.calculateArea(parts[1]);
   } catch (err) {
 
   }
-  return [formula, area, areaMin, areaMax];
+  return [formula, area];
 };
 
 parser.calculateArea = function(areaString) {
@@ -25,15 +25,13 @@ parser.calculateArea = function(areaString) {
     });
   }
   parts = areaString.replace(/[^=0-9.<>xy-]/g, '').split(/x/);
-  return [
-    (function(x) {
-      if (!eval(parts[0] + 'x')) {
-        return false;
-      }
-      if (!eval('x' + parts[1])) {
-        return false;
-      }
-      return true;
-    }), parts[0].replace(/[^0-9.-]/g, ''), parts[1].replace(/[^0-9.-]/g, '')
-  ];
+  return function(x) {
+    if (!eval(parts[0] + 'x')) {
+      return false;
+    }
+    if (!eval('x' + parts[1])) {
+      return false;
+    }
+    return true;
+  };
 };

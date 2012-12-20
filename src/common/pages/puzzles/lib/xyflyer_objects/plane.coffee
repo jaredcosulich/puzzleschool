@@ -31,28 +31,31 @@ class plane.Plane extends xyflyerObject.Object
         return if @falling or @cancelFlight and not force
         @cancelFlight = false
         @path = @board.calculatePath(@increment) if not @path or not Object.keys(@path).length
-        @xPos += @increment
+        @xPos += 1
         @yPos = @path[@xPos]?.y
         
         formula = @path[@xPos]?.formula
-        if (@lastFormula != formula and Math.abs(@image.attr('y') - @yPos) > 0.01) or
-           @yPos == undefined or @xPos > ((@board.grid.xMax + @width) * @board.xUnit)
+        if @yPos == undefined or @xPos > ((@board.grid.xMax + @width) * @board.xUnit)
+            console.log('falling', @xPos, @xPos / @board.xUnit)
             @move('falling')
             $.timeout 2000, => @reset()
             return
             
-        if @lastFormula
-            dX = @increment
-            dY = @yPos - @path[@xPos - @increment].y
-            time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @increment
-        @move(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
-        @lastFormula = formula
-
+        if @xPos % @increment == 0   
+            if @lastFormula
+                dX = @increment
+                dY = @yPos - @path[@xPos - @increment].y
+                time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @increment
+            @move(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
+            @lastFormula = formula
+        else
+            @launch()
+            
     reset: ->
         @falling = false
         @cancelFlight = true
         @path = null
-        @xPos = @increment * -1
+        @xPos = -1
         @lastFormula = null
         @move(@board.xAxis, @board.yAxis)
 

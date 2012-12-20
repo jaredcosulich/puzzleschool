@@ -312,7 +312,7 @@ board.Board = (function(_super) {
     });
   };
 
-  Board.prototype.plot = function(id, formula, area, areaMin, areaMax) {
+  Board.prototype.plot = function(id, formula, area) {
     var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
     if (this.formulas[id]) {
       this.formulas[id].line.remove();
@@ -323,9 +323,7 @@ board.Board = (function(_super) {
     this.formulas[id] = {
       id: id,
       formula: formula,
-      area: area,
-      min: areaMin,
-      max: areaMax
+      area: area
     };
     this.resetLevel();
     brokenLine = 0;
@@ -368,37 +366,50 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function(increment) {
-    var id, lastFormula, path, xPos, _i, _ref, _ref1;
+    var id, intersection, intersectionY, lastFormula, lf, path, xPos, y, _i, _ref, _ref1;
     path = {};
-    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _i += increment) {
-      if (lastFormula && lastFormula.area(xPos / this.xUnit)) {
-        path[xPos] = {
-          formula: lastFormula.id,
-          y: lastFormula.formula(xPos / this.xUnit) * this.yUnit
-        };
-        continue;
+    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
+      xPos = Math.round(xPos);
+      if (lastFormula) {
+        if (lastFormula.area(xPos / this.xUnit)) {
+          path[xPos] = {
+            formula: lastFormula.id,
+            y: lastFormula.formula(xPos / this.xUnit) * this.yUnit
+          };
+          continue;
+        } else {
+          intersection = xPos - 1;
+          lf = lastFormula;
+          lastFormula = null;
+          while (lf.area(intersection / this.xUnit)) {
+            path[intersection] = {
+              formula: lf.id,
+              y: lf.formula(intersection / this.xUnit) * this.yUnit
+            };
+            intersection += this.xUnit * 0.001;
+          }
+        }
       }
       for (id in this.formulas) {
         if (!this.formulas[id].area(xPos / this.xUnit)) {
           continue;
         }
+        if (intersection) {
+          intersection -= this.xUnit * 0.001;
+          intersectionY = this.formulas[id].formula(intersection / this.xUnit) * this.yUnit;
+          if (Math.abs(path[intersection].y - intersectionY) > 0.01) {
+            return path;
+          }
+        }
+        y = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
         path[xPos] = {
           formula: id,
-          y: this.formulas[id].formula(xPos / this.xUnit) * this.yUnit
-        };
-        path[this.formulas[id].min * this.xUnit] = {
-          formula: id,
-          y: this.formulas[id].formula(this.formulas[id].min) * this.yUnit
-        };
-        path[this.formulas[id].max * this.xUnit] = {
-          formula: id,
-          y: this.formulas[id].formula(this.formulas[id].max) * this.yUnit
+          y: y
         };
         lastFormula = this.formulas[id];
         break;
       }
     }
-    console.log(Object.keys(path));
     return path;
   };
 

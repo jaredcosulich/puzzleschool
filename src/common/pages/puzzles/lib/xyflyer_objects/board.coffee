@@ -237,19 +237,38 @@ class board.Board extends xyflyerObject.Object
         
     calculatePath: (increment) ->
         path = {}
-        for xPos in [(@grid.xMin * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by increment
-            if lastFormula and lastFormula.area(xPos / @xUnit)
-                path[xPos] = 
-                    formula: lastFormula.id
-                    y: lastFormula.formula(xPos / @xUnit) * @yUnit
-                continue
-
+        for xPos in [(@grid.xMin * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
+            xPos = Math.round(xPos)
+            if lastFormula 
+                if lastFormula.area(xPos / @xUnit)
+                    path[xPos] = 
+                        formula: lastFormula.id
+                        y: lastFormula.formula(xPos / @xUnit) * @yUnit
+                    continue
+                else
+                    intersection = xPos - 1
+                    lf = lastFormula
+                    lastFormula = null
+                    while lf.area(intersection / @xUnit)
+                        path[intersection] = 
+                            formula: lf.id
+                            y: lf.formula(intersection / @xUnit) * @yUnit                        
+                        intersection += (@xUnit * 0.001)
+                
             for id of @formulas
                 continue if not @formulas[id].area(xPos / @xUnit)
+                if intersection
+                    intersection -= (@xUnit * 0.001)
+                    intersectionY = @formulas[id].formula(intersection / @xUnit) * @yUnit
+                    return path if Math.abs(path[intersection].y - intersectionY) > 0.01 
+                    
+                y = @formulas[id].formula(xPos / @xUnit) * @yUnit
                 path[xPos] = 
                     formula: id
-                    y: @formulas[id].formula(xPos / @xUnit) * @yUnit
+                    y: y
+
                 lastFormula = @formulas[id]
                 break
+                
         return path
 
