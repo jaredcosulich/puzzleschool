@@ -15,7 +15,14 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     var boardElement;
-    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects, this.resetLevel = _arg.resetLevel;
+    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects, this.center = _arg.center, this.resetLevel = _arg.resetLevel;
+    this.center || (this.center = {});
+    if (!this.center.x) {
+      this.center.x = 0;
+    }
+    if (!this.center.y) {
+      this.center.y = 0;
+    }
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
@@ -58,7 +65,7 @@ board.Board = (function(_super) {
       });
       return;
     }
-    return this.addImage(island, this.xAxis - (width / 2), this.yAxis);
+    return this.addImage(island, this.xAxis + (this.center.x * this.xUnit) - (width / 2), this.yAxis - (this.center.y * this.yUnit));
   };
 
   Board.prototype.addRing = function(ring) {
@@ -86,8 +93,11 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addPlane = function(plane) {
+    var planeImage;
     this.plane = plane;
-    return this.paper.path(this.plane.description);
+    planeImage = this.paper.path(this.plane.description);
+    planeImage.transform("s" + this.scale + "," + this.scale);
+    return planeImage;
   };
 
   Board.prototype.initClicks = function(boardElement) {
@@ -182,22 +192,22 @@ board.Board = (function(_super) {
     if (precision == null) {
       precision = 3;
     }
-    return Math.round(Math.pow(10, precision) * (x - this.xAxis) / this.xUnit) / Math.pow(10, precision);
+    return Math.round(Math.pow(10, precision) * ((x - this.xAxis) / this.xUnit) + this.center.x) / Math.pow(10, precision);
   };
 
   Board.prototype.paperY = function(y, precision) {
     if (precision == null) {
       precision = 3;
     }
-    return Math.round(Math.pow(10, precision) * (this.height - y - this.yAxis) / this.yUnit) / Math.pow(10, precision);
+    return Math.round(Math.pow(10, precision) * ((this.yAxis - y) / this.yUnit) - this.center.y) / Math.pow(10, precision);
   };
 
   Board.prototype.screenX = function(x) {
-    return (x * this.xUnit) + this.xAxis;
+    return ((x + this.center.x) * this.xUnit) + this.xAxis;
   };
 
   Board.prototype.screenY = function(y) {
-    return -1 * ((y * this.yUnit) + this.xAxis - this.height);
+    return this.yAxis - ((y + this.center.y) * this.yUnit);
   };
 
   Board.prototype.showXY = function(x, y, onPath) {

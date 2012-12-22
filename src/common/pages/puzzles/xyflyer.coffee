@@ -102,7 +102,7 @@ soma.routes
     '/puzzles/xyflyer': -> new soma.chunks.Xyflyer
 
 LEVELS = [
-    {},
+    {}
     {
         equationCount: 1
         grid:
@@ -134,6 +134,70 @@ LEVELS = [
             '4x', '(1/4)x'
         ]
     }
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
+            xMax: 40
+            yMin: -10
+            yMax: 40
+        rings: [
+            {x: 12, y: 6}
+            {x: 20, y: 10}
+            {x: 31, y: 15.5}
+        ]
+        fragments: [
+            'x', '*3', '*.25', '/2', '/5'
+        ]
+    }    
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
+            xMax: 20
+            yMin: -10
+            yMax: 60
+        rings: [
+            {x: 3, y: 19.5}
+            {x: 5, y: 32.5}
+            {x: 9, y: 58.5}
+        ]
+        fragments: [
+            'x', '*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '*6', '*6.5', '*7', '*7.5', '*8', '*8.5', '*9', '*9.5', '*10'
+        ]
+    }    
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
+            xMax: 30
+            yMin: -10
+            yMax: 30
+        rings: [
+            {x: 19.25, y: 5.58}
+            {x: 14, y: 4}
+            {x: 7, y: 2}
+        ]
+        fragments: [
+            'x', '*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '/2', '/2.5', '/3', '/3.5', '/4', '/4.5', '/5', '/5.5'
+        ]
+    }    
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
+            xMax: 40
+            yMin: -10
+            yMax: 40
+        rings: [
+            {x: 4, y: 10}
+            {x: 8, y: 20}
+            {x: 12, y: 30}
+        ]
+        fragments: [
+            'x', '*5', '*3', '/2', '/8'
+        ]
+    }    
     {
         equationCount: 2
         grid:

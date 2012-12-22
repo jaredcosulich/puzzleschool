@@ -9,12 +9,13 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel, center}) ->
         @rings = []
         @board = new xyflyer.Board
             boardElement: boardElement, 
             grid: grid, 
             objects: objects
+            center: center
             resetLevel: => @resetLevel()
     
         @plane = new xyflyer.Plane

@@ -4,7 +4,10 @@ xyflyerObject = require('./object')
 class board.Board extends xyflyerObject.Object
     maxUnits: 10
 
-    constructor: ({boardElement, @grid, @objects, @resetLevel}) ->
+    constructor: ({boardElement, @grid, @objects, @center, @resetLevel}) ->
+        @center or= {}
+        @center.x = 0 if not @center.x
+        @center.y = 0 if not @center.y
         @formulas = {}
         @rings = []
         @ringFronts = []
@@ -45,7 +48,7 @@ class board.Board extends xyflyerObject.Object
             $.timeout 100, => @addIsland()
             return
 
-        @addImage(island, @xAxis - (width/2), @yAxis)
+        @addImage(island, @xAxis + (@center.x * @xUnit) - (width/2), @yAxis - (@center.y * @yUnit))
         
     addRing: (ring) ->
         front = @paper.path(ring.frontDescription)
@@ -61,7 +64,10 @@ class board.Board extends xyflyerObject.Object
     setRingFronts: ->
         ringFront.toFront() for ringFront in @ringFronts
     
-    addPlane: (@plane) -> @paper.path(@plane.description)
+    addPlane: (@plane) -> 
+        planeImage = @paper.path(@plane.description)
+        planeImage.transform("s#{@scale},#{@scale}")
+        return planeImage
         
     initClicks: (boardElement) ->
         boardElement.css(zIndex: 9999)
@@ -121,10 +127,10 @@ class board.Board extends xyflyerObject.Object
 
         return result        
 
-    paperX: (x,precision=3) -> Math.round(Math.pow(10,precision) * (x - @xAxis) / @xUnit) / Math.pow(10,precision)
-    paperY: (y,precision=3) -> Math.round(Math.pow(10,precision) * (@height - y - @yAxis) / @yUnit) / Math.pow(10,precision)
-    screenX: (x) -> (x * @xUnit) + @xAxis
-    screenY: (y) -> -1 * ((y * @yUnit) + @xAxis - @height)
+    paperX: (x,precision=3) -> Math.round(Math.pow(10,precision) * ((x - @xAxis) / @xUnit) + @center.x) / Math.pow(10,precision)
+    paperY: (y,precision=3) -> Math.round(Math.pow(10,precision) * ((@yAxis - y) / @yUnit) - @center.y) / Math.pow(10,precision)
+    screenX: (x) -> ((x + @center.x) * @xUnit) + @xAxis
+    screenY: (y) -> @yAxis - ((y + @center.y) * @yUnit) 
 
     showXY: (x, y, onPath=false) ->
         width = 75
