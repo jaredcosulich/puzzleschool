@@ -76,9 +76,6 @@ soma.views
             boardOffset = @$('.board').offset()
             areaOffset = @el.offset()
             
-            complete.find('a').bind 'click', =>
-                @go("/puzzles/xyflyer/#{@level + 1}")
-            
             complete.css
                 opacity: 0
                 top: (boardOffset.top - areaOffset.top) + (boardOffset.height/2) - (offset.height/2)
@@ -87,6 +84,13 @@ soma.views
             complete.animate
                 opacity: 0.9
                 duration: 500
+
+            complete.find('button').bind 'click', =>
+                @go("/puzzles/xyflyer/#{@level + 1}")
+                
+            @$('.launch').html('Success! Go To The Next Level >')
+            @$('.launch').bind 'click', =>
+                @go("/puzzles/xyflyer/#{@level + 1}")
                 
             
 soma.routes
@@ -174,7 +178,7 @@ LEVELS = [
             yMin: -10
             yMax: 30
         rings: [
-            {x: 19.25, y: 5.58}
+            {x: 19.25, y: 5.5}
             {x: 14, y: 4}
             {x: 7, y: 2}
         ]

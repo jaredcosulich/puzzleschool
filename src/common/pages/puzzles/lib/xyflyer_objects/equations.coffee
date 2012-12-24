@@ -33,7 +33,7 @@ class equations.Equations
         @possibleFragments.append(equationComponent.element)
         
     trackComponentDragging: (left, top, component) ->
-        @el.addClass('show_places')
+        @el.addClass('show_places') unless @el.hasClass('show_places')
         x = left + (component.width()/2)
         y = top + (component.height()/2)
         @selectedDropArea = null

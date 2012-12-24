@@ -8,12 +8,20 @@ body {
   background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
   position: relative;
   overflow: hidden;
+}
+.xyflyer.dragging {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+.xyflyer.dragging .equation_component {
+  -webkit-box-shadow: 4px 5px 4px #b69c63;
+  -webkit-box-shadow: 5px 5px 4px #b69c632;
+  -webkit-box-shadow: 5px 6px 5px #b69c63;
+  cursor: move;
 }
 .xyflyer .board {
   width: 640px;
@@ -38,6 +46,9 @@ body {
   border-bottom: 2px solid #ffbd2a;
   width: 12px;
 }
+.xyflyer .equation_area.show_places .accept_fragment:last-child {
+  width: 45px;
+}
 .xyflyer .equation_area.show_places .accept_fragment.equation,
 .xyflyer .equation_area.show_places .accept_fragment.with_component {
   width: auto;
@@ -50,13 +61,13 @@ body {
 }
 .xyflyer .equation_area .equation_container {
   overflow: hidden;
-  font-size: 23px;
   margin-bottom: 12px;
 }
 .xyflyer .equation_area .equation_container .intro {
   float: left;
   margin: 0 6px;
   line-height: 30px;
+  font-size: 23px;
 }
 .xyflyer .equation_area .equation_container .equation {
   padding: 0 6px;
@@ -65,12 +76,13 @@ body {
   border: 1px solid #c7c7c7;
   position: relative;
   overflow: hidden;
-  cursor: move;
   line-height: 30px;
 }
 .xyflyer .equation_area .equation_container .equation.with_component,
 .xyflyer .equation_area .equation_container .equation .with_component {
   color: #262626;
+  cursor: pointer;
+  font-size: 23px;
 }
 .xyflyer .equation_area .equation_container .equation.bad_formula {
   border: 1px solid #ff6e5f;
@@ -126,6 +138,9 @@ body {
   margin-top: 30px;
   padding: 6px;
 }
+.xyflyer .equation_area .possible_fragments p {
+  font-size: 11px;
+}
 .xyflyer .equation_area .possible_fragments .equation_component {
   float: left;
   margin: 6px 6px 0 0;
@@ -139,6 +154,10 @@ body {
   -moz-border-radius: 3px;
   border-radius: 3px;
   cursor: move;
+  background-image: -webkit-gradient(linear, right bottom, left top, color-stop(0.5, #dec48b), color-stop(0.7, #e6cc93));
+  -webkit-box-shadow: 0 1px 0 #b69c63;
+  -webkit-box-shadow: 1px 1px 0 #b69c632;
+  -webkit-box-shadow: 1px 2px 1px #b69c63;
 }
 .xyflyer .objects {
   position: absolute;
@@ -150,7 +169,7 @@ body {
   top: -1000px;
   left: -1000px;
   background-color: white;
-  padding: 30px;
+  padding: 30px 60px;
   text-align: center;
   z-index: 9999;
 }

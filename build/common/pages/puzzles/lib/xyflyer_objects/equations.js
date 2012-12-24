@@ -60,7 +60,9 @@ equations.Equations = (function() {
   Equations.prototype.trackComponentDragging = function(left, top, component) {
     var equation, x, y, _i, _len, _ref,
       _this = this;
-    this.el.addClass('show_places');
+    if (!this.el.hasClass('show_places')) {
+      this.el.addClass('show_places');
+    }
     x = left + (component.width() / 2);
     y = top + (component.height() / 2);
     this.selectedDropArea = null;

@@ -1,7 +1,7 @@
 equation = exports ? provide('./equation', {})
 
 class equation.Equation
-    defaultText: 'Drop Equation Here'
+    defaultText: 'Drag equations from below and drop here'
 
     constructor: ({@gameArea, @id, @plot}) ->
         @dropAreas = []
@@ -118,14 +118,15 @@ class equation.Equation
                 
     formatDropArea: (dropArea, component) ->
         fragment = component.equationFragment
-        dropArea.element.html """
+        element = dropArea.element
+        element.html """
             <div class='accept_fragment'></div>
             #{@formatFragment(fragment)}
             <div class='accept_fragment'></div>
         """
-        for acceptFragment in dropArea.element.find('.accept_fragment')
+        for acceptFragment in element.find('.accept_fragment')
             @addDropArea($(acceptFragment), dropArea)
-    
+        
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
         accept = '<div class=\'accept_fragment\'></div>'

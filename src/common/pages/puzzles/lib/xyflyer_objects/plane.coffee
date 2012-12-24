@@ -36,7 +36,6 @@ class plane.Plane extends xyflyerObject.Object
         
         formula = @path[@xPos]?.formula
         if @yPos == undefined or @xPos > ((@board.grid.xMax + @width) * @board.xUnit)
-            console.log('falling', @xPos, @xPos / @board.xUnit)
             @move('falling')
             $.timeout 2000, => @reset()
             return

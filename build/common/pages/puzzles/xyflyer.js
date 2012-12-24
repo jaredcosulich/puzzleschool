@@ -97,17 +97,21 @@ soma.views({
       offset = complete.offset();
       boardOffset = this.$('.board').offset();
       areaOffset = this.el.offset();
-      complete.find('a').bind('click', function() {
-        return _this.go("/puzzles/xyflyer/" + (_this.level + 1));
-      });
       complete.css({
         opacity: 0,
         top: (boardOffset.top - areaOffset.top) + (boardOffset.height / 2) - (offset.height / 2),
         left: (boardOffset.left - areaOffset.left) + (boardOffset.width / 2) - (offset.width / 2)
       });
-      return complete.animate({
+      complete.animate({
         opacity: 0.9,
         duration: 500
+      });
+      complete.find('button').bind('click', function() {
+        return _this.go("/puzzles/xyflyer/" + (_this.level + 1));
+      });
+      this.$('.launch').html('Success! Go To The Next Level >');
+      return this.$('.launch').bind('click', function() {
+        return _this.go("/puzzles/xyflyer/" + (_this.level + 1));
       });
     }
   }
@@ -227,7 +231,7 @@ LEVELS = [
     rings: [
       {
         x: 19.25,
-        y: 5.58
+        y: 5.5
       }, {
         x: 14,
         y: 4

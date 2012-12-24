@@ -68,7 +68,6 @@ plane.Plane = (function(_super) {
     this.yPos = (_ref = this.path[this.xPos]) != null ? _ref.y : void 0;
     formula = (_ref1 = this.path[this.xPos]) != null ? _ref1.formula : void 0;
     if (this.yPos === void 0 || this.xPos > ((this.board.grid.xMax + this.width) * this.board.xUnit)) {
-      console.log('falling', this.xPos, this.xPos / this.board.xUnit);
       this.move('falling');
       $.timeout(2000, function() {
         return _this.reset();

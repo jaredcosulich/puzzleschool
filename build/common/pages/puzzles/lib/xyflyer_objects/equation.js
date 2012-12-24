@@ -6,7 +6,7 @@ equation = typeof exports !== "undefined" && exports !== null ? exports : provid
 
 equation.Equation = (function() {
 
-  Equation.prototype.defaultText = 'Drop Equation Here';
+  Equation.prototype.defaultText = 'Drag equations from below and drop here';
 
   function Equation(_arg) {
     this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot;
@@ -184,10 +184,11 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.formatDropArea = function(dropArea, component) {
-    var acceptFragment, fragment, _i, _len, _ref, _results;
+    var acceptFragment, element, fragment, _i, _len, _ref, _results;
     fragment = component.equationFragment;
-    dropArea.element.html("<div class='accept_fragment'></div>\n" + (this.formatFragment(fragment)) + "\n<div class='accept_fragment'></div>");
-    _ref = dropArea.element.find('.accept_fragment');
+    element = dropArea.element;
+    element.html("<div class='accept_fragment'></div>\n" + (this.formatFragment(fragment)) + "\n<div class='accept_fragment'></div>");
+    _ref = element.find('.accept_fragment');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       acceptFragment = _ref[_i];

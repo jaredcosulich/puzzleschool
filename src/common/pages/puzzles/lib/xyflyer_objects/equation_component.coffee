@@ -29,7 +29,7 @@ class equationComponent.EquationComponent
         @element.show()
 
     move: (e) ->
-        e.preventDefault() if e.preventDefault
+        e.preventDefault() if e.preventDefault        
         left = @clientX(e) - (@element.width() / 2)
         top = @clientY(e) - (@element.height() / 2)
         @element.css
