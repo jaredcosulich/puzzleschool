@@ -54,7 +54,7 @@ equations.Equations = (function() {
         return _this.endComponentDragging(component);
       }
     });
-    return this.possibleFragments.append(equationComponent.element);
+    return equationComponent.appendTo(this.possibleFragments);
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
@@ -98,7 +98,7 @@ equations.Equations = (function() {
     var element;
     this.clearDrag();
     if (!this.selectedDropArea) {
-      return;
+      return false;
     }
     element = this.selectedDropArea.element;
     element.addClass('with_component');
@@ -109,8 +109,8 @@ equations.Equations = (function() {
     this.selectedDropArea.format(component);
     this.selectedDropArea.plot();
     this.selectedDropArea.width = this.selectedDropArea.element.width();
-    component.element.hide();
-    return this.selectedDropArea = null;
+    this.selectedDropArea = null;
+    return true;
   };
 
   Equations.prototype.plotFormula = function(dropArea) {

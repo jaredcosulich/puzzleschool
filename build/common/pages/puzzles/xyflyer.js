@@ -280,5 +280,23 @@ LEVELS = [
       }
     ],
     fragments: ['2x', '.5x', '+2']
+  }, {
+    equationCount: 2,
+    grid: {
+      xMin: -10,
+      xMax: 10,
+      yMin: -10,
+      yMax: 10
+    },
+    rings: [
+      {
+        x: 4,
+        y: 3.41
+      }, {
+        x: 6.667,
+        y: -2
+      }
+    ],
+    fragments: ['ln(x)', '-3(x)', '+0.14', '+2', '-4', '+6']
   }
 ];

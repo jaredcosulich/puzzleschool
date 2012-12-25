@@ -19,7 +19,7 @@ body {
     &.dragging {
         .no_select();   
         
-        .equation_component {
+        .dragging {
             -webkit-box-shadow: 4px 5px 4px #b69c63;
             -webkit-box-shadow: 5px 5px 4px #b69c632;
             -webkit-box-shadow: 5px 6px 5px #b69c63;
@@ -40,6 +40,7 @@ body {
         opacity: 0.8;
         width: ((@width / 3) - 3);
         height: (@height - 6);
+        margin: 3px 0 0 3px;
         h2 {
             text-align: center;
             padding-top: 12px;
@@ -90,14 +91,6 @@ body {
                     font-size: @h2size;
                 }
             
-                &.bad_formula {
-                    border: 1px solid @red;
-                    color: red;
-                    .with_component {
-                        color: red;
-                    }
-                }
-            
                 .accept_component {
                     border: 1px solid @yellow;
                 }
@@ -116,6 +109,16 @@ body {
                     float: left;
                     height: 30px;
                 }
+                
+                
+                &.bad_formula {
+                    border: 1px solid @red;
+                    color: red;
+                    .with_component {
+                        color: red;
+                    }
+                }
+            
             }
             
             .range {
@@ -144,7 +147,7 @@ body {
                 font-size: @smallsize;
             }
             
-            .equation_component {
+            .equation_component, .place_holder {
                 float: left;
                 margin: 6px 6px 0 0;
                 cursor: move;

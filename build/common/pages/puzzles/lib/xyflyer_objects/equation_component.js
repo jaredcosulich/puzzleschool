@@ -39,7 +39,9 @@ equationComponent.EquationComponent = (function() {
     this.element = $(document.createElement('DIV'));
     this.element.addClass('equation_component');
     this.element.addClass(this.equationAreas.join(' '));
-    return this.element.html(this.equationFragment);
+    this.element.html(this.equationFragment);
+    this.placeHolder = $(document.createElement('DIV'));
+    return this.placeHolder.addClass('place_holder');
   };
 
   EquationComponent.prototype.initMove = function() {
@@ -47,6 +49,12 @@ equationComponent.EquationComponent = (function() {
     return this.element.bind('mousedown.move touchstart.move', function(e) {
       return _this.mousedown(e);
     });
+  };
+
+  EquationComponent.prototype.appendTo = function(container) {
+    container.append(this.element);
+    container.append(this.placeHolder);
+    return this.placeHolder.hide();
   };
 
   EquationComponent.prototype.mousedown = function(e) {
@@ -60,6 +68,7 @@ equationComponent.EquationComponent = (function() {
     body.one('mouseup.move touchend.move', function(e) {
       return _this.endMove(e);
     });
+    this.element.addClass('dragging');
     return this.element.show();
   };
 
@@ -75,6 +84,11 @@ equationComponent.EquationComponent = (function() {
       left: left,
       top: top
     });
+    this.placeHolder.show();
+    this.placeHolder.css({
+      height: this.element.height(),
+      width: this.element.width()
+    });
     if (this.trackDrag) {
       return this.trackDrag(left, top, this);
     }
@@ -86,8 +100,15 @@ equationComponent.EquationComponent = (function() {
       top: 'auto',
       left: 'auto'
     });
+    this.element.removeClass('dragging');
     this.gameArea.removeClass('dragging');
-    this.endDrag(this);
+    if (this.endDrag(this)) {
+      this.element.hide();
+      this.placeHolder.show();
+    } else {
+      this.element.show();
+      this.placeHolder.hide();
+    }
     return $(document.body).unbind('mousemove.move touchmove.move');
   };
 

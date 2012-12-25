@@ -407,11 +407,14 @@ board.Board = (function(_super) {
         if (intersection) {
           intersection -= this.xUnit * 0.001;
           intersectionY = this.formulas[id].formula(intersection / this.xUnit) * this.yUnit;
-          if (Math.abs(path[intersection].y - intersectionY) > 0.01) {
+          if (Math.abs(path[intersection].y - intersectionY) / this.yUnit > 0.01) {
             return path;
           }
         }
         y = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
+        if (isNaN(y)) {
+          continue;
+        }
         path[xPos] = {
           formula: id,
           y: y

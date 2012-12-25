@@ -266,9 +266,10 @@ class board.Board extends xyflyerObject.Object
                 if intersection
                     intersection -= (@xUnit * 0.001)
                     intersectionY = @formulas[id].formula(intersection / @xUnit) * @yUnit
-                    return path if Math.abs(path[intersection].y - intersectionY) > 0.01 
+                    return path if Math.abs(path[intersection].y - intersectionY) / @yUnit > 0.01 
                     
                 y = @formulas[id].formula(xPos / @xUnit) * @yUnit
+                continue if isNaN(y)
                 path[xPos] = 
                     formula: id
                     y: y

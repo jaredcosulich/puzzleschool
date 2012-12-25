@@ -17,15 +17,24 @@ class equationComponent.EquationComponent
         @element.addClass('equation_component')
         @element.addClass(@equationAreas.join(' '))
         @element.html(@equationFragment)
-
+        
+        @placeHolder = $(document.createElement('DIV'))
+        @placeHolder.addClass('place_holder')
+        
     initMove: ->
         @element.bind 'mousedown.move touchstart.move', (e) => @mousedown(e)
+        
+    appendTo: (container) ->
+        container.append(@element)
+        container.append(@placeHolder) 
+        @placeHolder.hide()
 
     mousedown: (e) ->
         @gameArea.addClass('dragging')
         body = $(document.body)
         body.bind 'mousemove.move touchmove.move', (e) => @move(e)
         body.one 'mouseup.move touchend.move', (e) => @endMove(e) 
+        @element.addClass('dragging')
         @element.show()
 
     move: (e) ->
@@ -36,6 +45,12 @@ class equationComponent.EquationComponent
             position: 'absolute'
             left: left
             top: top
+
+        @placeHolder.show()
+        @placeHolder.css
+            height: @element.height()
+            width: @element.width()
+
         @trackDrag(left, top, @) if @trackDrag
         
     endMove: (e) ->
@@ -43,10 +58,16 @@ class equationComponent.EquationComponent
             position: 'static'
             top: 'auto'
             left: 'auto'
-            
+
+        @element.removeClass('dragging')
         @gameArea.removeClass('dragging')
         
-        @endDrag(@)
+        if @endDrag(@)
+            @element.hide()
+            @placeHolder.show()
+        else
+            @element.show()
+            @placeHolder.hide()
         
         $(document.body).unbind('mousemove.move touchmove.move')
         

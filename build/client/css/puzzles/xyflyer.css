@@ -17,7 +17,7 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
-.xyflyer.dragging .equation_component {
+.xyflyer.dragging .dragging {
   -webkit-box-shadow: 4px 5px 4px #b69c63;
   -webkit-box-shadow: 5px 5px 4px #b69c632;
   -webkit-box-shadow: 5px 6px 5px #b69c63;
@@ -37,6 +37,7 @@ body {
   opacity: 0.8;
   width: 317px;
   height: 634px;
+  margin: 3px 0 0 3px;
 }
 .xyflyer .equation_area h2 {
   text-align: center;
@@ -84,13 +85,6 @@ body {
   cursor: pointer;
   font-size: 23px;
 }
-.xyflyer .equation_area .equation_container .equation.bad_formula {
-  border: 1px solid #ff6e5f;
-  color: red;
-}
-.xyflyer .equation_area .equation_container .equation.bad_formula .with_component {
-  color: red;
-}
 .xyflyer .equation_area .equation_container .equation .accept_component {
   border: 1px solid #ffbd2a;
 }
@@ -118,6 +112,13 @@ body {
   float: left;
   height: 30px;
 }
+.xyflyer .equation_area .equation_container .equation.bad_formula {
+  border: 1px solid #ff6e5f;
+  color: red;
+}
+.xyflyer .equation_area .equation_container .equation.bad_formula .with_component {
+  color: red;
+}
 .xyflyer .equation_area .equation_container .range {
   font-size: 11px;
   border: 1px solid #ccc;
@@ -141,7 +142,8 @@ body {
 .xyflyer .equation_area .possible_fragments p {
   font-size: 11px;
 }
-.xyflyer .equation_area .possible_fragments .equation_component {
+.xyflyer .equation_area .possible_fragments .equation_component,
+.xyflyer .equation_area .possible_fragments .place_holder {
   float: left;
   margin: 6px 6px 0 0;
   cursor: move;

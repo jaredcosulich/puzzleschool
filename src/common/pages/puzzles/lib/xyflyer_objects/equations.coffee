@@ -30,7 +30,7 @@ class equations.Equations
             trackDrag: (left, top, component) => @trackComponentDragging(left, top, component)
             endDrag: (component) => @endComponentDragging(component)
 
-        @possibleFragments.append(equationComponent.element)
+        equationComponent.appendTo(@possibleFragments)
         
     trackComponentDragging: (left, top, component) ->
         @el.addClass('show_places') unless @el.hasClass('show_places')
@@ -50,7 +50,7 @@ class equations.Equations
             
     endComponentDragging: (component) ->
         @clearDrag()
-        return unless @selectedDropArea
+        return false unless @selectedDropArea
         element = @selectedDropArea.element
         element.addClass('with_component')
         @selectedDropArea.component = component
@@ -58,8 +58,8 @@ class equations.Equations
         @selectedDropArea.format(component)
         @selectedDropArea.plot()
         @selectedDropArea.width = @selectedDropArea.element.width()
-        component.element.hide()
         @selectedDropArea = null
+        return true
             
     plotFormula: (dropArea) ->
         @checkMultipleEquations()
