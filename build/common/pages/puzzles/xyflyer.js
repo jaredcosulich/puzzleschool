@@ -70,6 +70,7 @@ soma.views({
         objects: this.$('.objects'),
         equationArea: this.$('.equation_area'),
         grid: this.data.grid,
+        islandCoordinates: this.data.islandCoordinates,
         nextLevel: function() {
           return _this.nextLevel();
         }
@@ -199,6 +200,28 @@ LEVELS = [
       }
     ],
     fragments: ['x', '*3', '*.25', '/2', '/5']
+  }, {
+    equationCount: 1,
+    grid: {
+      xMin: -10,
+      xMax: 20,
+      yMin: -10,
+      yMax: 20
+    },
+    rings: [
+      {
+        x: 10,
+        y: 8
+      }, {
+        x: 15,
+        y: 3
+      }
+    ],
+    islandCoordinates: {
+      x: 4,
+      y: 14
+    },
+    fragments: ['-x', '-6', '-12', '-18', '+6', '+12', '+18']
   }, {
     equationCount: 1,
     grid: {

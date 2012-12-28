@@ -15,13 +15,13 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     var boardElement;
-    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects, this.center = _arg.center, this.resetLevel = _arg.resetLevel;
-    this.center || (this.center = {});
-    if (!this.center.x) {
-      this.center.x = 0;
+    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, this.resetLevel = _arg.resetLevel;
+    this.islandCoordinates || (this.islandCoordinates = {});
+    if (!this.islandCoordinates.x) {
+      this.islandCoordinates.x = 0;
     }
-    if (!this.center.y) {
-      this.center.y = 0;
+    if (!this.islandCoordinates.y) {
+      this.islandCoordinates.y = 0;
     }
     this.formulas = {};
     this.rings = [];
@@ -65,7 +65,7 @@ board.Board = (function(_super) {
       });
       return;
     }
-    return this.addImage(island, this.xAxis + (this.center.x * this.xUnit) - (width / 2), this.yAxis - (this.center.y * this.yUnit));
+    return this.addImage(island, this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2), this.yAxis - (this.islandCoordinates.y * this.yUnit));
   };
 
   Board.prototype.addRing = function(ring) {
@@ -192,22 +192,22 @@ board.Board = (function(_super) {
     if (precision == null) {
       precision = 3;
     }
-    return Math.round(Math.pow(10, precision) * ((x - this.xAxis) / this.xUnit) + this.center.x) / Math.pow(10, precision);
+    return Math.round(Math.pow(10, precision) * (x - this.xAxis) / this.xUnit) / Math.pow(10, precision);
   };
 
   Board.prototype.paperY = function(y, precision) {
     if (precision == null) {
       precision = 3;
     }
-    return Math.round(Math.pow(10, precision) * ((this.yAxis - y) / this.yUnit) - this.center.y) / Math.pow(10, precision);
+    return Math.round(Math.pow(10, precision) * (this.yAxis - y) / this.yUnit) / Math.pow(10, precision);
   };
 
   Board.prototype.screenX = function(x) {
-    return ((x + this.center.x) * this.xUnit) + this.xAxis;
+    return (x * this.xUnit) + this.xAxis;
   };
 
   Board.prototype.screenY = function(y) {
-    return this.yAxis - ((y + this.center.y) * this.yUnit);
+    return this.yAxis - (y * this.yUnit);
   };
 
   Board.prototype.showXY = function(x, y, onPath) {
@@ -377,8 +377,12 @@ board.Board = (function(_super) {
 
   Board.prototype.calculatePath = function(increment) {
     var id, intersection, intersectionY, lastFormula, lf, path, xPos, y, _i, _ref, _ref1;
+    intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {};
-    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
+    path[this.islandCoordinates.x * this.xUnit] = {
+      y: this.islandCoordinates.y * this.yUnit
+    };
+    for (xPos = _i = _ref = this.islandCoordinates.x * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
       xPos = Math.round(xPos);
       if (lastFormula) {
         if (lastFormula.area(xPos / this.xUnit)) {

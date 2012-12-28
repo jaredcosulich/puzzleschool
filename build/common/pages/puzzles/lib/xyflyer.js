@@ -20,15 +20,15 @@ xyflyer.ChunkHelper = (function() {
 xyflyer.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    var boardElement, center, grid, objects,
+    var boardElement, grid, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel, center = _arg.center;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.islandCoordinates = _arg.islandCoordinates;
     this.rings = [];
     this.board = new xyflyer.Board({
       boardElement: boardElement,
       grid: grid,
       objects: objects,
-      center: center,
+      islandCoordinates: this.islandCoordinates,
       resetLevel: function() {
         return _this.resetLevel();
       }

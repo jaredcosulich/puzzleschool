@@ -21,7 +21,7 @@ plane.Plane = (function(_super) {
 
   function Plane(_arg) {
     this.board = _arg.board, this.track = _arg.track;
-    this.scale = 0.6;
+    this.scale = this.board.scale / 2;
     this.image = this.board.addPlane(this);
     this.image.attr({
       fill: '#000'
@@ -37,7 +37,7 @@ plane.Plane = (function(_super) {
     method = 'linear';
     if (x === 'falling') {
       this.falling = true;
-      x = this.xPos + this.board.xAxis + this.width;
+      x = this.xPos + this.board.xAxis + this.width + (this.board.islandCoordinates.x * this.board.xUnit);
       y = 1000;
       time = 2000;
       method = 'easeIn';
@@ -93,9 +93,9 @@ plane.Plane = (function(_super) {
     this.falling = false;
     this.cancelFlight = true;
     this.path = null;
-    this.xPos = -1;
+    this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit) - 1;
     this.lastFormula = null;
-    return this.move(this.board.xAxis, this.board.yAxis);
+    return this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
   };
 
   return Plane;

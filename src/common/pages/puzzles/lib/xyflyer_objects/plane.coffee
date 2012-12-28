@@ -8,7 +8,7 @@ class plane.Plane extends xyflyerObject.Object
     height: 30
 
     constructor: ({@board, @track}) ->
-        @scale = 0.6
+        @scale = @board.scale / 2
         @image = @board.addPlane(@)
         @image.attr(fill: '#000')
         @reset()
@@ -18,7 +18,7 @@ class plane.Plane extends xyflyerObject.Object
         method = 'linear'
         if x == 'falling'
             @falling = true
-            x = @xPos + @board.xAxis + @width
+            x = @xPos + @board.xAxis + @width + (@board.islandCoordinates.x * @board.xUnit)
             y = 1000
             time = 2000
             method = 'easeIn'
@@ -54,8 +54,8 @@ class plane.Plane extends xyflyerObject.Object
         @falling = false
         @cancelFlight = true
         @path = null
-        @xPos = -1
+        @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit) - 1
         @lastFormula = null
-        @move(@board.xAxis, @board.yAxis)
+        @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
 
         

@@ -4,10 +4,10 @@ xyflyerObject = require('./object')
 class board.Board extends xyflyerObject.Object
     maxUnits: 10
 
-    constructor: ({boardElement, @grid, @objects, @center, @resetLevel}) ->
-        @center or= {}
-        @center.x = 0 if not @center.x
-        @center.y = 0 if not @center.y
+    constructor: ({boardElement, @grid, @objects, @islandCoordinates, @resetLevel}) ->
+        @islandCoordinates or= {}
+        @islandCoordinates.x = 0 if not @islandCoordinates.x
+        @islandCoordinates.y = 0 if not @islandCoordinates.y
         @formulas = {}
         @rings = []
         @ringFronts = []
@@ -48,7 +48,7 @@ class board.Board extends xyflyerObject.Object
             $.timeout 100, => @addIsland()
             return
 
-        @addImage(island, @xAxis + (@center.x * @xUnit) - (width/2), @yAxis - (@center.y * @yUnit))
+        @addImage(island, @xAxis + (@islandCoordinates.x * @xUnit) - (width/2), @yAxis - (@islandCoordinates.y * @yUnit))
         
     addRing: (ring) ->
         front = @paper.path(ring.frontDescription)
@@ -127,10 +127,10 @@ class board.Board extends xyflyerObject.Object
 
         return result        
 
-    paperX: (x,precision=3) -> Math.round(Math.pow(10,precision) * ((x - @xAxis) / @xUnit) + @center.x) / Math.pow(10,precision)
-    paperY: (y,precision=3) -> Math.round(Math.pow(10,precision) * ((@yAxis - y) / @yUnit) - @center.y) / Math.pow(10,precision)
-    screenX: (x) -> ((x + @center.x) * @xUnit) + @xAxis
-    screenY: (y) -> @yAxis - ((y + @center.y) * @yUnit) 
+    paperX: (x,precision=3) -> Math.round(Math.pow(10,precision) * (x - @xAxis) / @xUnit) / Math.pow(10,precision)
+    paperY: (y,precision=3) -> Math.round(Math.pow(10,precision) * (@yAxis - y) / @yUnit) / Math.pow(10,precision)
+    screenX: (x) -> (x * @xUnit) + @xAxis
+    screenY: (y) -> @yAxis - (y * @yUnit) 
 
     showXY: (x, y, onPath=false) ->
         width = 75
@@ -242,8 +242,10 @@ class board.Board extends xyflyerObject.Object
         @setRingFronts()
         
     calculatePath: (increment) ->
+        intersection = (@islandCoordinates.x * @xUnit) + (@xUnit * 0.001)
         path = {}
-        for xPos in [(@grid.xMin * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
+        path[@islandCoordinates.x * @xUnit] = {y: (@islandCoordinates.y * @yUnit)}
+        for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
             xPos = Math.round(xPos)
             if lastFormula 
                 if lastFormula.area(xPos / @xUnit)

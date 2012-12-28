@@ -60,6 +60,7 @@ soma.views
                 objects: @$('.objects')
                 equationArea: @$('.equation_area')
                 grid: @data.grid
+                islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
                 
             @viewHelper.addEquation() for i in [0...@data.equationCount]   
@@ -154,6 +155,39 @@ LEVELS = [
             'x', '*3', '*.25', '/2', '/5'
         ]
     }    
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
+            xMax: 20
+            yMin: -10
+            yMax: 20
+        rings: [
+            {x: 10, y: 8}
+            {x: 15, y: 3}
+        ]
+        islandCoordinates: {x: 4, y: 14}
+        fragments: [
+            '-x', '-6', '-12', '-18', '+6', '+12', '+18'
+        ]
+    }    
+    # {
+    #     equationCount: 1
+    #     grid:
+    #         xMin: -10
+    #         xMax: 40
+    #         yMin: -10
+    #         yMax: 40
+    #     rings: [
+    #         {x: 12, y: 6}
+    #         {x: 20, y: 10}
+    #         {x: 31, y: 15.5}
+    #     ]
+    #     islandCoordinates: {x: 10, y: 20}
+    #     fragments: [
+    #         '-((0.25(x-10))^2)+25'
+    #     ]
+    # }    
     {
         equationCount: 1
         grid:
