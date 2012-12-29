@@ -39,7 +39,8 @@ body {
   height: 634px;
   margin: 3px 0 0 3px;
 }
-.xyflyer .equation_area h2 {
+.xyflyer .equation_area h2,
+.xyflyer .equation_area h3 {
   text-align: center;
   padding-top: 12px;
 }
@@ -166,7 +167,8 @@ body {
   top: -10000px;
   left: -10000px;
 }
-.xyflyer .complete {
+.xyflyer .complete,
+.xyflyer .intro {
   position: absolute;
   top: -1000px;
   left: -1000px;

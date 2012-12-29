@@ -52,8 +52,12 @@ soma.views
             xyflyer = require('./lib/xyflyer')
             
             @level = @el.data('level')
-            @data = LEVELS[@level] unless isNaN(@level)
-            
+            if isNaN(parseInt(@level))
+                @showIntroMessage()
+                return
+                
+            @data = LEVELS[@level]
+        
             @viewHelper = new xyflyer.ViewHelper
                 el: $(@selector)
                 boardElement: @$('.board')
@@ -62,30 +66,40 @@ soma.views
                 grid: @data.grid
                 islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
-                
-            @viewHelper.addEquation() for i in [0...@data.equationCount]   
             
+            @viewHelper.addEquation() for i in [0...@data.equationCount]   
+        
             for ring in @data.rings
                 @viewHelper.addRing(ring.x, ring.y)
-                
+            
             for fragment in @data.fragments
                 @viewHelper.addEquationComponent(fragment)
-                
-        nextLevel: ->
-            complete = @$('.complete')
-            offset = complete.offset()
+          
+        centerAndShow: (element, board) ->
+            offset = element.offset()
             boardOffset = @$('.board').offset()
             areaOffset = @el.offset()
             
-            complete.css
+            element.css
                 opacity: 0
                 top: (boardOffset.top - areaOffset.top) + (boardOffset.height/2) - (offset.height/2)
                 left: (boardOffset.left - areaOffset.left) + (boardOffset.width/2) - (offset.width/2)
                 
-            complete.animate
+            element.animate
                 opacity: 0.9
-                duration: 500
-
+                duration: 500              
+            
+        showIntroMessage: ->
+            equationArea = @$('.equation_area')
+            equationArea.html(@$('.intro').html())
+            equationArea.css(padding: '0 30px', textAlign: 'center')
+            equationArea.find('button').bind 'click', =>
+                @go('/puzzles/xyflyer/1') 
+        
+        nextLevel: ->
+            complete = @$('.complete')
+            @centerAndShow(complete)
+            
             complete.find('button').bind 'click', =>
                 @go("/puzzles/xyflyer/#{@level + 1}")
                 
@@ -186,6 +200,22 @@ LEVELS = [
     #     islandCoordinates: {x: 10, y: 20}
     #     fragments: [
     #         '-((0.25(x-10))^2)+25'
+    #     ]
+    # }    
+    # {
+    #     equationCount: 1
+    #     grid:
+    #         xMin: -10
+    #         xMax: 20
+    #         yMin: -10
+    #         yMax: 60
+    #     rings: [
+    #         {x: 3, y: 19.5}
+    #         {x: 5, y: 32.5}
+    #         {x: 9, y: 58.5}
+    #     ]
+    #     fragments: [
+    #         'ax'
     #     ]
     # }    
     {

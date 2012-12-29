@@ -61,9 +61,11 @@ soma.views({
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.level = this.el.data('level');
-      if (!isNaN(this.level)) {
-        this.data = LEVELS[this.level];
+      if (isNaN(parseInt(this.level))) {
+        this.showIntroMessage();
+        return;
       }
+      this.data = LEVELS[this.level];
       this.viewHelper = new xyflyer.ViewHelper({
         el: $(this.selector),
         boardElement: this.$('.board'),
@@ -91,22 +93,39 @@ soma.views({
       }
       return _results;
     },
-    nextLevel: function() {
-      var areaOffset, boardOffset, complete, offset,
-        _this = this;
-      complete = this.$('.complete');
-      offset = complete.offset();
+    centerAndShow: function(element, board) {
+      var areaOffset, boardOffset, offset;
+      offset = element.offset();
       boardOffset = this.$('.board').offset();
       areaOffset = this.el.offset();
-      complete.css({
+      element.css({
         opacity: 0,
         top: (boardOffset.top - areaOffset.top) + (boardOffset.height / 2) - (offset.height / 2),
         left: (boardOffset.left - areaOffset.left) + (boardOffset.width / 2) - (offset.width / 2)
       });
-      complete.animate({
+      return element.animate({
         opacity: 0.9,
         duration: 500
       });
+    },
+    showIntroMessage: function() {
+      var equationArea,
+        _this = this;
+      equationArea = this.$('.equation_area');
+      equationArea.html(this.$('.intro').html());
+      equationArea.css({
+        padding: '0 30px',
+        textAlign: 'center'
+      });
+      return equationArea.find('button').bind('click', function() {
+        return _this.go('/puzzles/xyflyer/1');
+      });
+    },
+    nextLevel: function() {
+      var complete,
+        _this = this;
+      complete = this.$('.complete');
+      this.centerAndShow(complete);
       complete.find('button').bind('click', function() {
         return _this.go("/puzzles/xyflyer/" + (_this.level + 1));
       });
