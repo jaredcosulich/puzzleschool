@@ -77,7 +77,7 @@ equation.Equation = (function() {
       return _this.clear();
     });
     return this.el.bind('mousedown.fragment', function(e) {
-      var dropArea, _i, _len, _ref, _ref1, _ref2;
+      var childArea, dropArea, emptyIndex, emptyIndices, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
@@ -88,10 +88,33 @@ equation.Equation = (function() {
       _this.selectedDropArea.component = null;
       _ref2 = _this.selectedDropArea.childAreas;
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        dropArea = _ref2[_i];
-        _this.dropAreas.splice(dropArea.index, 1);
+        childArea = _ref2[_i];
+        _this.dropAreas.splice(childArea.index, 1);
       }
       _this.selectedDropArea.childAreas = [];
+      emptyIndices = [];
+      _ref3 = _this.dropAreas;
+      for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
+        dropArea = _ref3[_j];
+        if (!(!dropArea.component)) {
+          continue;
+        }
+        dropArea.element.remove();
+        emptyIndices.push(dropArea.index);
+      }
+      _ref4 = emptyIndices.reverse();
+      for (_k = 0, _len2 = _ref4.length; _k < _len2; _k++) {
+        emptyIndex = _ref4[_k];
+        _this.dropAreas.splice(emptyIndex, 1);
+      }
+      _ref5 = _this.dropAreas;
+      for (_l = 0, _len3 = _ref5.length; _l < _len3; _l++) {
+        dropArea = _ref5[_l];
+        dropArea.wrap();
+      }
+      if (!_this.dropAreas.length) {
+        _this.addFirstDropArea();
+      }
       if (_this.selectedDropArea.parentArea) {
         _this.selectedDropArea.parentArea.dirtyCount -= 1;
       }
@@ -108,8 +131,12 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.appendTo = function(area) {
-    var dropArea;
     area.append(this.container);
+    return this.addFirstDropArea();
+  };
+
+  Equation.prototype.addFirstDropArea = function() {
+    var dropArea;
     dropArea = this.newDropArea();
     dropArea.html(this.defaultText);
     this.el.append(dropArea);
@@ -183,13 +210,11 @@ equation.Equation = (function() {
   Equation.prototype.wrap = function(dropArea) {
     var afterDropArea, beforeDropArea, next, previous;
     if (!(previous = dropArea.element.previous()).length || previous.hasClass('with_component')) {
-      console.log(dropArea.element.previous());
       beforeDropArea = this.newDropArea();
       dropArea.element.before(beforeDropArea);
       this.addDropArea(beforeDropArea);
     }
     if (!(next = dropArea.element.next()).length || next.hasClass('with_component')) {
-      console.log(dropArea.element.next());
       afterDropArea = this.newDropArea();
       dropArea.element.after(afterDropArea);
       return this.addDropArea(afterDropArea);

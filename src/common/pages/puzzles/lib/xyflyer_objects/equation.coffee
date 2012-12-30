@@ -51,9 +51,21 @@ class equation.Equation
             @selectedDropArea.component.mousedown(e)
             @selectedDropArea.component.move(e)
             @selectedDropArea.component = null
-            for dropArea in @selectedDropArea.childAreas
-                @dropAreas.splice(dropArea.index, 1)
+
+            for childArea in @selectedDropArea.childAreas
+                @dropAreas.splice(childArea.index, 1)
             @selectedDropArea.childAreas = []
+                
+            emptyIndices = []
+            for dropArea in @dropAreas when not dropArea.component
+                dropArea.element.remove()
+                emptyIndices.push(dropArea.index)
+                
+            @dropAreas.splice(emptyIndex, 1) for emptyIndex in emptyIndices.reverse()
+            dropArea.wrap() for dropArea in @dropAreas
+            
+            @addFirstDropArea() if not @dropAreas.length
+            
             @selectedDropArea.parentArea.dirtyCount -= 1 if @selectedDropArea.parentArea
             @selectedDropArea.plot()
             
@@ -66,11 +78,14 @@ class equation.Equation
             
     appendTo: (area) ->
         area.append(@container)
+        @addFirstDropArea()
+        
+    addFirstDropArea: ->
         dropArea = @newDropArea()
         dropArea.html(@defaultText)
         @el.append(dropArea)
         @addDropArea(dropArea)
-
+        
     newDropArea: ->
         dropArea = $(document.createElement('DIV'))
         dropArea.addClass('accept_fragment')
@@ -117,13 +132,11 @@ class equation.Equation
 
     wrap: (dropArea) ->
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')
-            console.log(dropArea.element.previous())
             beforeDropArea = @newDropArea()
             dropArea.element.before(beforeDropArea)
             @addDropArea(beforeDropArea)
 
         if !(next = dropArea.element.next()).length or next.hasClass('with_component')
-            console.log(dropArea.element.next())
             afterDropArea = @newDropArea()
             dropArea.element.after(afterDropArea)
             @addDropArea(afterDropArea)
