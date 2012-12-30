@@ -116,13 +116,17 @@ class equation.Equation
         @dropAreas.push(dropArea)  
 
     wrap: (dropArea) ->
-        beforeDropArea = @newDropArea()
-        dropArea.element.before(beforeDropArea)
-        @addDropArea(beforeDropArea)
+        if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')
+            console.log(dropArea.element.previous())
+            beforeDropArea = @newDropArea()
+            dropArea.element.before(beforeDropArea)
+            @addDropArea(beforeDropArea)
 
-        afterDropArea = @newDropArea()
-        dropArea.element.after(afterDropArea)
-        @addDropArea(afterDropArea)
+        if !(next = dropArea.element.next()).length or next.hasClass('with_component')
+            console.log(dropArea.element.next())
+            afterDropArea = @newDropArea()
+            dropArea.element.after(afterDropArea)
+            @addDropArea(afterDropArea)
         
     highlightDropArea: (dropArea, readyToDrop) ->
         return false if dropArea.childAreas.length or dropArea.component

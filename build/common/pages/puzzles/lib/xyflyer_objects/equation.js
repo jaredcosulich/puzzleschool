@@ -181,13 +181,19 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.wrap = function(dropArea) {
-    var afterDropArea, beforeDropArea;
-    beforeDropArea = this.newDropArea();
-    dropArea.element.before(beforeDropArea);
-    this.addDropArea(beforeDropArea);
-    afterDropArea = this.newDropArea();
-    dropArea.element.after(afterDropArea);
-    return this.addDropArea(afterDropArea);
+    var afterDropArea, beforeDropArea, next, previous;
+    if (!(previous = dropArea.element.previous()).length || previous.hasClass('with_component')) {
+      console.log(dropArea.element.previous());
+      beforeDropArea = this.newDropArea();
+      dropArea.element.before(beforeDropArea);
+      this.addDropArea(beforeDropArea);
+    }
+    if (!(next = dropArea.element.next()).length || next.hasClass('with_component')) {
+      console.log(dropArea.element.next());
+      afterDropArea = this.newDropArea();
+      dropArea.element.after(afterDropArea);
+      return this.addDropArea(afterDropArea);
+    }
   };
 
   Equation.prototype.highlightDropArea = function(dropArea, readyToDrop) {
