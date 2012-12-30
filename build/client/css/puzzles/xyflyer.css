@@ -51,15 +51,11 @@ body {
 .xyflyer .equation_area.show_places .accept_fragment:last-child {
   width: 45px;
 }
-.xyflyer .equation_area.show_places .accept_fragment.equation,
 .xyflyer .equation_area.show_places .accept_fragment.with_component {
   width: auto;
 }
 .xyflyer .equation_area.show_places .accept_fragment.with_component {
   border-bottom: none;
-}
-.xyflyer .equation_area.show_places .accept_fragment.with_component.equation {
-  border: 1px solid #c7c7c7;
 }
 .xyflyer .equation_area .equation_container {
   overflow: hidden;
@@ -98,10 +94,6 @@ body {
   font-weight: bold;
   width: 45px;
 }
-.xyflyer .equation_area .equation_container .equation.component_over.equation,
-.xyflyer .equation_area .equation_container .equation .component_over.equation,
-.xyflyer .equation_area .equation_container .equation.over_dropped.equation,
-.xyflyer .equation_area .equation_container .equation .over_dropped.equation,
 .xyflyer .equation_area .equation_container .equation.component_over.with_component,
 .xyflyer .equation_area .equation_container .equation .component_over.with_component,
 .xyflyer .equation_area .equation_container .equation.over_dropped.with_component,

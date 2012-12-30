@@ -10,12 +10,11 @@ class equation.Equation
         @container.html('<div class=\'intro\'>Y=</div>')
         
         @el = $(document.createElement('DIV'))
-        @el.addClass('equation accept_fragment')
+        @el.addClass('equation')
         @el.attr('id', @id)
-        @el.html(@defaultText)
-
-        @container.append(@el)
         
+        @container.append(@el)
+
         @initHover()
         
         @initRange()
@@ -67,8 +66,16 @@ class equation.Equation
             
     appendTo: (area) ->
         area.append(@container)
-        @addDropArea()  
+        dropArea = @newDropArea()
+        dropArea.html(@defaultText)
+        @el.append(dropArea)
+        @addDropArea(dropArea)
 
+    newDropArea: ->
+        dropArea = $(document.createElement('DIV'))
+        dropArea.addClass('accept_fragment')
+        return dropArea
+        
     overlappingDropAreas: ({x, y, test}) ->
         overlapping = []
         gameAreaOffset = @gameArea.offset()
@@ -84,7 +91,7 @@ class equation.Equation
             )  
             return dropArea if test(dropArea, over)
             
-    addDropArea: (dropAreaElement=@el, parentArea=null) ->
+    addDropArea: (dropAreaElement, parentArea=null) ->
         hiddenWidth = 30
         offset = dropAreaElement.offset()
         gameAreaOffset = @gameArea.offset()
@@ -100,6 +107,7 @@ class equation.Equation
         dropArea.highlight = (readyToDrop) => @highlightDropArea(dropArea, readyToDrop) 
         dropArea.format = (component) => @formatDropArea(dropArea, component) 
         dropArea.plot = () => @plot(dropArea)
+        dropArea.wrap = () => @wrap(dropArea)
 
         if parentArea
             parentArea.childAreas.push(dropArea)
@@ -107,8 +115,17 @@ class equation.Equation
             
         @dropAreas.push(dropArea)  
 
+    wrap: (dropArea) ->
+        beforeDropArea = @newDropArea()
+        dropArea.element.before(beforeDropArea)
+        @addDropArea(beforeDropArea)
+
+        afterDropArea = @newDropArea()
+        dropArea.element.after(afterDropArea)
+        @addDropArea(afterDropArea)
+        
     highlightDropArea: (dropArea, readyToDrop) ->
-        return false if dropArea.childAreas.length
+        return false if dropArea.childAreas.length or dropArea.component
         if readyToDrop
             dropArea.element.addClass('component_over')
             return true 
@@ -119,11 +136,7 @@ class equation.Equation
     formatDropArea: (dropArea, component) ->
         fragment = component.equationFragment
         element = dropArea.element
-        element.html """
-            <div class='accept_fragment'></div>
-            #{@formatFragment(fragment)}
-            <div class='accept_fragment'></div>
-        """
+        element.html(@formatFragment(fragment))
         for acceptFragment in element.find('.accept_fragment')
             @addDropArea($(acceptFragment), dropArea)
         

@@ -19,9 +19,8 @@ equation.Equation = (function() {
     this.container.addClass('equation_container');
     this.container.html('<div class=\'intro\'>Y=</div>');
     this.el = $(document.createElement('DIV'));
-    this.el.addClass('equation accept_fragment');
+    this.el.addClass('equation');
     this.el.attr('id', this.id);
-    this.el.html(this.defaultText);
     this.container.append(this.el);
     this.initHover();
     this.initRange();
@@ -109,8 +108,19 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.appendTo = function(area) {
+    var dropArea;
     area.append(this.container);
-    return this.addDropArea();
+    dropArea = this.newDropArea();
+    dropArea.html(this.defaultText);
+    this.el.append(dropArea);
+    return this.addDropArea(dropArea);
+  };
+
+  Equation.prototype.newDropArea = function() {
+    var dropArea;
+    dropArea = $(document.createElement('DIV'));
+    dropArea.addClass('accept_fragment');
+    return dropArea;
   };
 
   Equation.prototype.overlappingDropAreas = function(_arg) {
@@ -134,9 +144,6 @@ equation.Equation = (function() {
   Equation.prototype.addDropArea = function(dropAreaElement, parentArea) {
     var dropArea, gameAreaOffset, hiddenWidth, offset,
       _this = this;
-    if (dropAreaElement == null) {
-      dropAreaElement = this.el;
-    }
     if (parentArea == null) {
       parentArea = null;
     }
@@ -163,6 +170,9 @@ equation.Equation = (function() {
     dropArea.plot = function() {
       return _this.plot(dropArea);
     };
+    dropArea.wrap = function() {
+      return _this.wrap(dropArea);
+    };
     if (parentArea) {
       parentArea.childAreas.push(dropArea);
       dropArea.parentArea = parentArea;
@@ -170,8 +180,18 @@ equation.Equation = (function() {
     return this.dropAreas.push(dropArea);
   };
 
+  Equation.prototype.wrap = function(dropArea) {
+    var afterDropArea, beforeDropArea;
+    beforeDropArea = this.newDropArea();
+    dropArea.element.before(beforeDropArea);
+    this.addDropArea(beforeDropArea);
+    afterDropArea = this.newDropArea();
+    dropArea.element.after(afterDropArea);
+    return this.addDropArea(afterDropArea);
+  };
+
   Equation.prototype.highlightDropArea = function(dropArea, readyToDrop) {
-    if (dropArea.childAreas.length) {
+    if (dropArea.childAreas.length || dropArea.component) {
       return false;
     }
     if (readyToDrop) {
@@ -187,7 +207,7 @@ equation.Equation = (function() {
     var acceptFragment, element, fragment, _i, _len, _ref, _results;
     fragment = component.equationFragment;
     element = dropArea.element;
-    element.html("<div class='accept_fragment'></div>\n" + (this.formatFragment(fragment)) + "\n<div class='accept_fragment'></div>");
+    element.html(this.formatFragment(fragment));
     _ref = element.find('.accept_fragment');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {

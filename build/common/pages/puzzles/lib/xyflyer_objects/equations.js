@@ -102,6 +102,7 @@ equations.Equations = (function() {
     }
     element = this.selectedDropArea.element;
     element.addClass('with_component');
+    this.selectedDropArea.wrap();
     this.selectedDropArea.component = component;
     if (this.selectedDropArea.parentArea) {
       this.selectedDropArea.parentArea.dirtyCount += 1;
