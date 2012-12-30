@@ -81,10 +81,11 @@ class equation.Equation
         @addFirstDropArea()
         
     addFirstDropArea: ->
-        dropArea = @newDropArea()
-        dropArea.html(@defaultText)
-        @el.append(dropArea)
-        @addDropArea(dropArea)
+        dropAreaElement = @newDropArea()
+        dropAreaElement.html(@defaultText)
+        dropAreaElement.addClass('only_area')
+        @el.append(dropAreaElement)
+        @addDropArea(dropAreaElement)
         
     newDropArea: ->
         dropArea = $(document.createElement('DIV'))
@@ -107,9 +108,6 @@ class equation.Equation
             return dropArea if test(dropArea, over)
             
     addDropArea: (dropAreaElement, parentArea=null) ->
-        hiddenWidth = 30
-        offset = dropAreaElement.offset()
-        gameAreaOffset = @gameArea.offset()
         dropArea = 
             id: dropAreaElement.attr('id')
             index: @dropAreas.length
@@ -129,6 +127,8 @@ class equation.Equation
             dropArea.parentArea = parentArea
             
         @dropAreas.push(dropArea)  
+        
+        @el.find('.only_area').removeClass('only_area') if @el.find('.accept_fragment').length > 1
 
     wrap: (dropArea) ->
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')

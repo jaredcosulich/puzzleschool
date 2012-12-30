@@ -136,11 +136,12 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.addFirstDropArea = function() {
-    var dropArea;
-    dropArea = this.newDropArea();
-    dropArea.html(this.defaultText);
-    this.el.append(dropArea);
-    return this.addDropArea(dropArea);
+    var dropAreaElement;
+    dropAreaElement = this.newDropArea();
+    dropAreaElement.html(this.defaultText);
+    dropAreaElement.addClass('only_area');
+    this.el.append(dropAreaElement);
+    return this.addDropArea(dropAreaElement);
   };
 
   Equation.prototype.newDropArea = function() {
@@ -169,14 +170,11 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.addDropArea = function(dropAreaElement, parentArea) {
-    var dropArea, gameAreaOffset, hiddenWidth, offset,
+    var dropArea,
       _this = this;
     if (parentArea == null) {
       parentArea = null;
     }
-    hiddenWidth = 30;
-    offset = dropAreaElement.offset();
-    gameAreaOffset = this.gameArea.offset();
     dropArea = {
       id: dropAreaElement.attr('id'),
       index: this.dropAreas.length,
@@ -204,7 +202,10 @@ equation.Equation = (function() {
       parentArea.childAreas.push(dropArea);
       dropArea.parentArea = parentArea;
     }
-    return this.dropAreas.push(dropArea);
+    this.dropAreas.push(dropArea);
+    if (this.el.find('.accept_fragment').length > 1) {
+      return this.el.find('.only_area').removeClass('only_area');
+    }
   };
 
   Equation.prototype.wrap = function(dropArea) {

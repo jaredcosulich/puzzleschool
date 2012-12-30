@@ -46,6 +46,11 @@ body {
             padding-top: 12px;
         }
         
+        .only_area {
+            width: ((@width / 3) - 30);
+            padding: 0 3px;            
+        }
+        
         &.show_places {
             .accept_fragment {
                  border-bottom: 2px solid @yellow;
@@ -56,11 +61,12 @@ body {
                  }
                  
                  &.with_component {
-                     width: auto;
+                    width: auto;
+                    border-bottom: none;
                  }
                  
-                 &.with_component {
-                    border-bottom: none;
+                 &.only_area {
+                     width: ((@width / 3) - 30);                                 
                  }
             }
         }
@@ -100,6 +106,9 @@ body {
                     &.with_component {
                         width: auto;
                     }
+                    &.only_area {
+                        width: ((@width / 3) - 30);                                 
+                    }
                 }
             
                 .fragment, .accept_fragment {
@@ -123,7 +132,7 @@ body {
                 border: 1px solid #ccc;
                 border-top: none;
                 width: 78%;
-                margin-left: 14%;
+                margin-left: 10%;
                 padding: 3px 6px;
                 input {
                     width: 3em;
