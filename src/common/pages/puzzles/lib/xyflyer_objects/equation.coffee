@@ -52,16 +52,15 @@ class equation.Equation
             @selectedDropArea.component.move(e)
             @selectedDropArea.component = null
 
-            for childArea in @selectedDropArea.childAreas
-                @dropAreas.splice(childArea.index, 1)
+            @removeDropArea(childArea) for childArea in @selectedDropArea.childAreas
             @selectedDropArea.childAreas = []
                 
-            emptyIndices = []
+            removeDropAreas = []
             for dropArea in @dropAreas when not dropArea.component
                 dropArea.element.remove()
-                emptyIndices.push(dropArea.index)
+                removeDropAreas.push(dropArea)
                 
-            @dropAreas.splice(emptyIndex, 1) for emptyIndex in emptyIndices.reverse()
+            @removeDropArea(dropArea) for dropArea in removeDropAreas
             dropArea.wrap() for dropArea in @dropAreas
             
             @addFirstDropArea() if not @dropAreas.length
@@ -69,6 +68,14 @@ class equation.Equation
             @selectedDropArea.parentArea.dirtyCount -= 1 if @selectedDropArea.parentArea
             @selectedDropArea.plot()
             
+    removeDropArea: (dropAreaToRemove) ->
+        removeIndex = -1
+        for dropArea, index in @dropAreas
+            if dropArea == dropAreaToRemove       
+                removeIndex = index  
+                break                
+        @dropAreas.splice(removeIndex, 1) if removeIndex > -1
+        
     clear: ->
         @selectedDropArea = null
         @el.removeClass('component_over')

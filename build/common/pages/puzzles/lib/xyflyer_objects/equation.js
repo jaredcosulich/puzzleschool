@@ -77,10 +77,11 @@ equation.Equation = (function() {
       return _this.clear();
     });
     return this.el.bind('mousedown.fragment', function(e) {
-      var childArea, dropArea, emptyIndex, emptyIndices, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+      var childArea, dropArea, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
+      console.log(2, _this.dropAreas.length);
       _this.selectedDropArea.element.removeClass('with_component');
       _this.selectedDropArea.element.html(_this.selectedDropArea.defaultText);
       _this.selectedDropArea.component.mousedown(e);
@@ -89,10 +90,10 @@ equation.Equation = (function() {
       _ref2 = _this.selectedDropArea.childAreas;
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         childArea = _ref2[_i];
-        _this.dropAreas.splice(childArea.index, 1);
+        _this.removeDropArea(childArea);
       }
       _this.selectedDropArea.childAreas = [];
-      emptyIndices = [];
+      removeDropAreas = [];
       _ref3 = _this.dropAreas;
       for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
         dropArea = _ref3[_j];
@@ -100,16 +101,16 @@ equation.Equation = (function() {
           continue;
         }
         dropArea.element.remove();
-        emptyIndices.push(dropArea.index);
+        removeDropAreas.push(dropArea);
       }
-      _ref4 = emptyIndices.reverse();
-      for (_k = 0, _len2 = _ref4.length; _k < _len2; _k++) {
-        emptyIndex = _ref4[_k];
-        _this.dropAreas.splice(emptyIndex, 1);
+      for (_k = 0, _len2 = removeDropAreas.length; _k < _len2; _k++) {
+        dropArea = removeDropAreas[_k];
+        _this.removeDropArea(dropArea);
       }
-      _ref5 = _this.dropAreas;
-      for (_l = 0, _len3 = _ref5.length; _l < _len3; _l++) {
-        dropArea = _ref5[_l];
+      console.log(1, _this.dropAreas.length);
+      _ref4 = _this.dropAreas;
+      for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
+        dropArea = _ref4[_l];
         dropArea.wrap();
       }
       if (!_this.dropAreas.length) {
@@ -120,6 +121,22 @@ equation.Equation = (function() {
       }
       return _this.selectedDropArea.plot();
     });
+  };
+
+  Equation.prototype.removeDropArea = function(dropAreaToRemove) {
+    var dropArea, index, removeIndex, _i, _len, _ref;
+    removeIndex = -1;
+    _ref = this.dropAreas;
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      dropArea = _ref[index];
+      if (dropArea === dropAreaToRemove) {
+        removeIndex = index;
+        break;
+      }
+    }
+    if (removeIndex > -1) {
+      return this.dropAreas.splice(removeIndex, 1);
+    }
   };
 
   Equation.prototype.clear = function() {
