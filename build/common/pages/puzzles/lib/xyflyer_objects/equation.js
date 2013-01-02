@@ -10,7 +10,7 @@ equation.Equation = (function() {
 
   function Equation(_arg) {
     var _ref;
-    this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot, this.startingFragment = _arg.startingFragment;
+    this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -313,14 +313,18 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.formula = function() {
-    var element, text, variable;
+    var element, info, text, variable;
     element = this.el[0];
     text = element.textContent ? element.textContent : element.innerText;
     if (text === this.defaultText) {
       text = '';
     }
     for (variable in this.variables) {
-      text = text.replace(variable, this.variables[variable].get());
+      info = this.variables[variable];
+      if (!info.get) {
+        continue;
+      }
+      text = text.replace(variable, info.get());
     }
     return text;
   };
@@ -388,13 +392,10 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.initVariables = function() {
-    var formula, variable, _i, _len, _ref, _results;
-    this.variables = {};
+    var formula, variable, _results;
     formula = this.formula();
-    _ref = ['a', 'b', 'c', 'd'];
     _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      variable = _ref[_i];
+    for (variable in this.variables) {
       if (formula.indexOf(variable) > -1) {
         _results.push(this.initVariable(variable));
       } else {
@@ -405,25 +406,65 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.initVariable = function(variable) {
-    var element,
+    var element, info,
       _this = this;
     element = $(document.createElement('DIV'));
     element.addClass('variable');
-    element.html("" + variable + " = <input type='text' value='1'/>");
+    element.html("" + variable + " = <input type='text' value='1'/><div class='slider'><div class='track'></div><div class='knob'></div>");
     this.container.append(element);
+    info = this.variables[variable];
     setTimeout((function() {
-      return element.find('input').bind('keyup', function() {
-        return _this.variables[variable].set(_this.variables[variable].get());
+      var input, knob, trackWidth;
+      input = element.find('input');
+      knob = element.find('.knob');
+      trackWidth = element.find('.track').width();
+      input.bind('keyup', function() {
+        return _this.variables[variable].set(input.val());
+      });
+      return knob.bind('mousedown.drag_knob', function(e) {
+        var body, startingX;
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+        body = $(document.body);
+        startingX = e.clientX - parseInt(knob.css('left'));
+        body.bind('mousemove.drag_knob', function(e) {
+          var left, percentage;
+          if (e.preventDefault) {
+            e.preventDefault();
+          }
+          left = e.clientX - startingX;
+          if (left < 0) {
+            left = 0;
+          }
+          if (left > trackWidth) {
+            left = trackWidth;
+          }
+          knob.css({
+            left: left
+          });
+          percentage = left / trackWidth;
+          return info.set(info.min + (percentage * Math.abs(info.max - info.min)));
+        });
+        return body.one('mouseup.drag_knob', function() {
+          return body.unbind('mousemove.drag_knob');
+        });
       });
     }), 10);
-    return this.variables[variable] = {
-      get: function() {
-        return element.find('input').val();
-      },
-      set: function(val) {
-        element.find('input').val(val);
-        return _this.plot(_this);
+    info.get = function() {
+      return element.find('input').val();
+    };
+    return info.set = function(val) {
+      var decimalPosition, incrementedVal;
+      incrementedVal = Math.round(val / info.increment) * info.increment;
+      if (info.increment < 1) {
+        decimalPosition = ("" + info.increment).length - 2;
       }
+      if (decimalPosition > -1) {
+        incrementedVal = incrementedVal.toFixed(decimalPosition);
+      }
+      element.find('input').val("" + incrementedVal);
+      return _this.plot(_this);
     };
   };
 

@@ -11,14 +11,14 @@ class equations.Equations
 
     $: (selector) -> $(selector, @el)
 
-    add: (startingFragment) ->
+    add: (startingFragment, variables) ->
         equationCount = @equationsArea.find('.equation').length
         equation = new Equation
             gameArea: @gameArea
             startingFragment: startingFragment
+            variables: variables
             id: "equation_#{equationCount + 1}"
             plot: (eq) => @plotFormula(eq)
-            
             
         @equations.push(equation)
         equation.appendTo(@equationsArea)

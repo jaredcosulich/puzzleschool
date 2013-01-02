@@ -3,7 +3,7 @@ equation = exports ? provide('./equation', {})
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
 
-    constructor: ({@gameArea, @id, @plot, @startingFragment}) ->
+    constructor: ({@gameArea, @id, @plot, @startingFragment, @variables}) ->
         @dropAreas = []
         @container = $(document.createElement('DIV'))
         @container.addClass('equation_container')
@@ -212,7 +212,9 @@ class equation.Equation
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
         for variable of @variables
-            text = text.replace(variable, @variables[variable].get())
+            info = @variables[variable]
+            continue if not info.get
+            text = text.replace(variable, info.get())
             
         return text
         
@@ -262,28 +264,48 @@ class equation.Equation
         @plot(@)
         
     initVariables: ->
-        @variables = {}
         formula = @formula()
-        for variable in ['a', 'b', 'c', 'd']
+        for variable of @variables
             @initVariable(variable) if formula.indexOf(variable) > -1
                 
     initVariable: (variable) ->
         element = $(document.createElement('DIV'))
         element.addClass('variable')
-        element.html("#{variable} = <input type='text' value='1'/>")
+        element.html("#{variable} = <input type='text' value='1'/><div class='slider'><div class='track'></div><div class='knob'></div>")
         @container.append(element)
 
+        info = @variables[variable] 
         setTimeout(
             (=>
-                element.find('input').bind 'keyup', => @variables[variable].set(@variables[variable].get())
-            ), 10
+                input = element.find('input')
+                knob = element.find('.knob') 
+                trackWidth = element.find('.track').width()
+                input.bind 'keyup', => @variables[variable].set(input.val())
+                knob.bind 'mousedown.drag_knob', (e) =>
+                    e.preventDefault() if e.preventDefault
+                    body = $(document.body)
+                    startingX = e.clientX - parseInt(knob.css('left'))
+                    body.bind 'mousemove.drag_knob', (e) =>
+                        e.preventDefault() if e.preventDefault
+                        left = e.clientX - startingX
+                        left = 0 if left < 0
+                        left = trackWidth if left > trackWidth
+                        knob.css(left: left)
+                        percentage = left/trackWidth
+                        info.set(info.min + (percentage * Math.abs(info.max - info.min)))
+                        
+                    body.one 'mouseup.drag_knob', =>
+                        body.unbind 'mousemove.drag_knob'
+                        
+            ), 10   
         )
 
-        @variables[variable] =
-            get: =>
-                element.find('input').val()
-            set: (val) => 
-                element.find('input').val(val)
-                @plot(@)
-
+        info.get = => element.find('input').val()
+        info.set = (val) =>
+            incrementedVal = Math.round(val / info.increment) * info.increment
+            decimalPosition = "#{info.increment}".length - 2 if info.increment < 1
+            incrementedVal = incrementedVal.toFixed(decimalPosition) if decimalPosition > -1
+            element.find('input').val("#{incrementedVal}")
+            @plot(@)
+            
                 

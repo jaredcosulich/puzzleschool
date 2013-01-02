@@ -145,6 +145,28 @@ body {
 .xyflyer .equation_area .equations .equation_container .variable input {
   width: 3em;
 }
+.xyflyer .equation_area .equations .equation_container .range .slider,
+.xyflyer .equation_area .equations .equation_container .variable .slider {
+  position: relative;
+  float: right;
+  width: 75%;
+}
+.xyflyer .equation_area .equations .equation_container .range .slider .track,
+.xyflyer .equation_area .equations .equation_container .variable .slider .track {
+  margin: 9px 3px;
+  background-color: red;
+  height: 6px;
+}
+.xyflyer .equation_area .equations .equation_container .range .slider .knob,
+.xyflyer .equation_area .equations .equation_container .variable .slider .knob {
+  position: absolute;
+  background-color: green;
+  width: 12px;
+  height: 12px;
+  top: 6px;
+  left: 0;
+  cursor: move;
+}
 .xyflyer .equation_area .launch {
   font-size: 15px;
   -moz-box-shadow: inset 0px 1px 0px 0px #f29c93;

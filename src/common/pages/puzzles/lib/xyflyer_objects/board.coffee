@@ -196,15 +196,7 @@ class board.Board extends xyflyerObject.Object
         grid.attr(stroke: stroke)
         
     plot: (id, formula, area) ->
-        @formulas[id].line.remove() if @formulas[id]
         return if not formula
-
-        @formulas[id] = 
-            id: id
-            formula: formula
-            area: area
-
-        @resetLevel()
 
         brokenLine = 0
         infiniteLine = 0
@@ -234,10 +226,18 @@ class board.Board extends xyflyerObject.Object
             else
                 pathString += "L#{xPos + @xAxis},#{@yAxis - yPos}"
 
-        line = @paper.path(pathString)
-        line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
+        if @formulas[id]
+            @formulas[id].line.animate({path: pathString}, 50)
+        else
+            line = @paper.path(pathString)
+            line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
+            @formulas[id] = 
+                id: id
+                line: line
 
-        @formulas[id].line = line
+        @formulas[id].area = area
+        @formulas[id].formula = formula
+
         @resetLevel()
         @setRingFronts()
         

@@ -78,7 +78,7 @@ soma.views({
         }
       });
       for (i = _i = 0, _ref = this.data.equationCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        this.viewHelper.addEquation((_ref1 = this.data.startingFragments) != null ? _ref1[i] : void 0);
+        this.viewHelper.addEquation((_ref1 = this.data.startingFragments) != null ? _ref1[i] : void 0, this.data.variables);
       }
       _ref2 = this.data.rings;
       for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
@@ -269,7 +269,14 @@ LEVELS = [
       x: 0,
       y: 3
     },
-    startingFragments: ['ax + 3']
+    startingFragments: ['ax + 3'],
+    variables: {
+      a: {
+        min: 0,
+        max: 10,
+        increment: 0.1
+      }
+    }
   }, {
     equationCount: 1,
     grid: {

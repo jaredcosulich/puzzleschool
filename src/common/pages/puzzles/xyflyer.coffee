@@ -67,7 +67,7 @@ soma.views
                 islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
             
-            @viewHelper.addEquation(@data.startingFragments?[i]) for i in [0...@data.equationCount]   
+            @viewHelper.addEquation(@data.startingFragments?[i], @data.variables) for i in [0...@data.equationCount]   
         
             for ring in @data.rings
                 @viewHelper.addRing(ring.x, ring.y)
@@ -203,6 +203,12 @@ LEVELS = [
         ]
         islandCoordinates: {x: 0, y: 3}
         startingFragments: ['ax + 3']
+        variables:
+            a:
+                min: 0
+                max: 10
+                increment: 0.1
+                
     }    
     # {
     #     equationCount: 1

@@ -149,6 +149,27 @@ body {
                     input {
                         width: 3em;
                     }
+                    .slider {
+                        position: relative;
+                        float: right;
+                        width: 75%;
+                        
+                        .track {
+                            margin: 9px 3px;
+                            background-color: red;
+                            height: 6px;
+                        }
+                        
+                        .knob {
+                            position: absolute;
+                            background-color: green;
+                            width: 12px;
+                            height: 12px;
+                            top: 6px;
+                            left: 0;
+                            cursor: move;
+                        }
+                    }
                 }
             }    
         }

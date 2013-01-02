@@ -324,18 +324,9 @@ board.Board = (function(_super) {
 
   Board.prototype.plot = function(id, formula, area) {
     var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
-    if (this.formulas[id]) {
-      this.formulas[id].line.remove();
-    }
     if (!formula) {
       return;
     }
-    this.formulas[id] = {
-      id: id,
-      formula: formula,
-      area: area
-    };
-    this.resetLevel();
     brokenLine = 0;
     infiniteLine = 0;
     pathString = "M0," + this.height;
@@ -365,12 +356,23 @@ board.Board = (function(_super) {
         pathString += "L" + (xPos + this.xAxis) + "," + (this.yAxis - yPos);
       }
     }
-    line = this.paper.path(pathString);
-    line.attr({
-      stroke: 'rgba(0,0,0,0.1)',
-      'stroke-width': 2
-    });
-    this.formulas[id].line = line;
+    if (this.formulas[id]) {
+      this.formulas[id].line.animate({
+        path: pathString
+      }, 50);
+    } else {
+      line = this.paper.path(pathString);
+      line.attr({
+        stroke: 'rgba(0,0,0,0.1)',
+        'stroke-width': 2
+      });
+      this.formulas[id] = {
+        id: id,
+        line: line
+      };
+    }
+    this.formulas[id].area = area;
+    this.formulas[id].formula = formula;
     this.resetLevel();
     return this.setRingFronts();
   };

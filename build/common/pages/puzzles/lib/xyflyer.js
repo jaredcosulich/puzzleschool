@@ -91,8 +91,8 @@ xyflyer.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.addEquation = function(startingFragment) {
-    return this.equations.add(startingFragment);
+  ViewHelper.prototype.addEquation = function(startingFragment, variables) {
+    return this.equations.add(startingFragment, variables);
   };
 
   ViewHelper.prototype.addEquationComponent = function(equationFragment, equationAreas) {
