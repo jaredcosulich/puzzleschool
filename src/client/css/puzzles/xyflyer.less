@@ -95,11 +95,14 @@ body {
                     position: relative;
                     overflow: hidden;
                     line-height: 30px;
+                    
+                    &.starting_fragment, &.with_component, .with_component {
+                        color: @black;
+                        font-size: @h2size;
+                    }
             
                     &.with_component, .with_component {
-                        color: @black;
                         cursor: pointer;
-                        font-size: @h2size;
                     }
             
                     .accept_component {

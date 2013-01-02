@@ -9,7 +9,8 @@ equation.Equation = (function() {
   Equation.prototype.defaultText = 'Drag equations below and drop here';
 
   function Equation(_arg) {
-    this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot;
+    var _ref;
+    this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot, this.startingFragment = _arg.startingFragment;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -21,6 +22,11 @@ equation.Equation = (function() {
     this.el = $(document.createElement('DIV'));
     this.el.addClass('equation');
     this.el.attr('id', this.id);
+    if ((_ref = this.startingFragment) != null ? _ref.length : void 0) {
+      this.el.addClass('starting_fragment');
+    } else {
+      this.startingFragment = this.defaultText;
+    }
     this.container.append(this.el);
     this.initHover();
     this.initRange();
@@ -82,7 +88,7 @@ equation.Equation = (function() {
         return;
       }
       _this.selectedDropArea.element.removeClass('with_component');
-      _this.selectedDropArea.element.html(_this.selectedDropArea.defaultText);
+      _this.selectedDropArea.element.html(_this.selectedDropArea.startingFragment);
       _this.selectedDropArea.component.mousedown(e);
       _this.selectedDropArea.component.move(e);
       _this.selectedDropArea.component = null;
@@ -153,7 +159,7 @@ equation.Equation = (function() {
   Equation.prototype.addFirstDropArea = function() {
     var dropAreaElement;
     dropAreaElement = this.newDropArea();
-    dropAreaElement.html(this.defaultText);
+    dropAreaElement.html(this.startingFragment);
     dropAreaElement.addClass('only_area');
     this.el.append(dropAreaElement);
     return this.addDropArea(dropAreaElement);
@@ -193,7 +199,7 @@ equation.Equation = (function() {
     dropArea = {
       id: this.id,
       index: this.dropAreas.length,
-      defaultText: (dropAreaElement === this.el ? this.defaultText : ''),
+      startingFragment: (dropAreaElement === this.el ? this.startingFragment : ''),
       element: dropAreaElement,
       childAreas: [],
       dirtyCount: 0,
@@ -295,7 +301,7 @@ equation.Equation = (function() {
     var element, range, text;
     element = this.el[0];
     text = element.textContent ? element.textContent : element.innerText;
-    if (text === this.defaultText) {
+    if (text === this.startingFragment) {
       text = '';
     }
     if (!this.range.from) {

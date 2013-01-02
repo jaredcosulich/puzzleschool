@@ -3,7 +3,7 @@ equation = exports ? provide('./equation', {})
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
 
-    constructor: ({@gameArea, @id, @plot}) ->
+    constructor: ({@gameArea, @id, @plot, @startingFragment}) ->
         @dropAreas = []
         @container = $(document.createElement('DIV'))
         @container.addClass('equation_container')
@@ -12,6 +12,11 @@ class equation.Equation
         @el = $(document.createElement('DIV'))
         @el.addClass('equation')
         @el.attr('id', @id)
+
+        if @startingFragment?.length
+            @el.addClass('starting_fragment')
+        else
+            @startingFragment = @defaultText 
         
         @container.append(@el)
 
@@ -47,7 +52,7 @@ class equation.Equation
         @el.bind 'mousedown.fragment', (e) => 
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
             @selectedDropArea.element.removeClass('with_component')
-            @selectedDropArea.element.html(@selectedDropArea.defaultText)
+            @selectedDropArea.element.html(@selectedDropArea.startingFragment)
             @selectedDropArea.component.mousedown(e)
             @selectedDropArea.component.move(e)
             @selectedDropArea.component = null
@@ -89,7 +94,7 @@ class equation.Equation
         
     addFirstDropArea: ->
         dropAreaElement = @newDropArea()
-        dropAreaElement.html(@defaultText)
+        dropAreaElement.html(@startingFragment)
         dropAreaElement.addClass('only_area')
         @el.append(dropAreaElement)
         @addDropArea(dropAreaElement)
@@ -118,7 +123,7 @@ class equation.Equation
         dropArea = 
             id: @id
             index: @dropAreas.length
-            defaultText: (if dropAreaElement == @el then @defaultText else '')
+            startingFragment: (if dropAreaElement == @el then @startingFragment else '')
             element: dropAreaElement
             childAreas: []
             dirtyCount: 0
@@ -192,7 +197,7 @@ class equation.Equation
     formula: ->
         element = @el[0]
         text = if element.textContent then element.textContent else element.innerText      
-        text = '' if text == @defaultText
+        text = '' if text == @startingFragment
         return text if not @range.from
         range = "{#{@range.from}<=x<=#{@range.to}}"
         return "#{text}#{range}"

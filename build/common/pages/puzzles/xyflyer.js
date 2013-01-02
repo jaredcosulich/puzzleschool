@@ -57,7 +57,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var fragment, i, ring, xyflyer, _i, _j, _k, _len, _len1, _ref, _ref1, _ref2, _results,
+      var fragment, i, ring, xyflyer, _i, _j, _k, _len, _len1, _ref, _ref1, _ref2, _ref3, _results,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.level = this.el.data('level');
@@ -78,20 +78,24 @@ soma.views({
         }
       });
       for (i = _i = 0, _ref = this.data.equationCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        this.viewHelper.addEquation();
+        this.viewHelper.addEquation((_ref1 = this.data.startingFragments) != null ? _ref1[i] : void 0);
       }
-      _ref1 = this.data.rings;
-      for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
-        ring = _ref1[_j];
+      _ref2 = this.data.rings;
+      for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
+        ring = _ref2[_j];
         this.viewHelper.addRing(ring.x, ring.y);
       }
-      _ref2 = this.data.fragments;
-      _results = [];
-      for (_k = 0, _len1 = _ref2.length; _k < _len1; _k++) {
-        fragment = _ref2[_k];
-        _results.push(this.viewHelper.addEquationComponent(fragment));
+      if (this.data.fragments) {
+        _ref3 = this.data.fragments;
+        _results = [];
+        for (_k = 0, _len1 = _ref3.length; _k < _len1; _k++) {
+          fragment = _ref3[_k];
+          _results.push(this.viewHelper.addEquationComponent(fragment));
+        }
+        return _results;
+      } else {
+        return this.$('.possible_fragments').hide();
       }
-      return _results;
     },
     centerAndShow: function(element, board) {
       var areaOffset, boardOffset, offset;
@@ -241,6 +245,31 @@ LEVELS = [
       y: 14
     },
     fragments: ['-x', '-6', '-12', '-18', '+6', '+12', '+18']
+  }, {
+    equationCount: 1,
+    grid: {
+      xMin: -10,
+      xMax: 30,
+      yMin: -10,
+      yMax: 30
+    },
+    rings: [
+      {
+        x: 4,
+        y: 5
+      }, {
+        x: 12,
+        y: 9
+      }, {
+        x: 20,
+        y: 13
+      }
+    ],
+    islandCoordinates: {
+      x: 0,
+      y: 3
+    },
+    startingFragments: ['ax + 3']
   }, {
     equationCount: 1,
     grid: {

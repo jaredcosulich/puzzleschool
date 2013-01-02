@@ -25,12 +25,13 @@ equations.Equations = (function() {
     return $(selector, this.el);
   };
 
-  Equations.prototype.add = function() {
+  Equations.prototype.add = function(startingFragment) {
     var equation, equationCount,
       _this = this;
     equationCount = this.equationsArea.find('.equation').length;
     equation = new Equation({
       gameArea: this.gameArea,
+      startingFragment: startingFragment,
       id: "equation_" + (equationCount + 1),
       plot: function(dropArea) {
         return _this.plotFormula(dropArea);

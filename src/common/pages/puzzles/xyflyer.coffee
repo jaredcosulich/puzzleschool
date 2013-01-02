@@ -67,14 +67,18 @@ soma.views
                 islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
             
-            @viewHelper.addEquation() for i in [0...@data.equationCount]   
+            @viewHelper.addEquation(@data.startingFragments?[i]) for i in [0...@data.equationCount]   
         
             for ring in @data.rings
                 @viewHelper.addRing(ring.x, ring.y)
             
-            for fragment in @data.fragments
-                @viewHelper.addEquationComponent(fragment)
-          
+            if @data.fragments
+                for fragment in @data.fragments
+                    @viewHelper.addEquationComponent(fragment)
+            else
+                @$('.possible_fragments').hide()
+                
+                
         centerAndShow: (element, board) ->
             offset = element.offset()
             boardOffset = @$('.board').offset()
@@ -184,6 +188,21 @@ LEVELS = [
         fragments: [
             '-x', '-6', '-12', '-18', '+6', '+12', '+18'
         ]
+    }    
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
+            xMax: 30
+            yMin: -10
+            yMax: 30
+        rings: [
+            {x: 4, y: 5}
+            {x: 12, y: 9}
+            {x: 20, y: 13}
+        ]
+        islandCoordinates: {x: 0, y: 3}
+        startingFragments: ['ax + 3']
     }    
     # {
     #     equationCount: 1

@@ -53,8 +53,8 @@ class xyflyer.ViewHelper
             plot: (id, data) => @plot(id, data)
             submit: => @plane.launch(true) 
 
-    addEquation: (equationFragment, equationAreas) ->
-        @equations.add()
+    addEquation: (startingFragment) ->
+        @equations.add(startingFragment)
 
     addEquationComponent: (equationFragment, equationAreas) ->
         @equations.addComponent(equationFragment, equationAreas)
