@@ -53,10 +53,10 @@ class equations.Equations
         return false unless @selectedDropArea
         element = @selectedDropArea.element
         element.addClass('with_component')
-        @selectedDropArea.wrap()
         @selectedDropArea.component = component
         @selectedDropArea.parentArea.dirtyCount += 1 if @selectedDropArea.parentArea
         @selectedDropArea.format(component)
+        @selectedDropArea.wrap()
         @selectedDropArea.plot()
         @selectedDropArea.width = @selectedDropArea.element.width()
         @selectedDropArea = null

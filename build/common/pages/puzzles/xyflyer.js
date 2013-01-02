@@ -112,7 +112,7 @@ soma.views({
       var equationArea,
         _this = this;
       equationArea = this.$('.equation_area');
-      equationArea.html(this.$('.intro').html());
+      equationArea.html(this.$('.intro_message').html());
       equationArea.css({
         padding: '0 30px',
         textAlign: 'center'

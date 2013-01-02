@@ -91,7 +91,7 @@ soma.views
             
         showIntroMessage: ->
             equationArea = @$('.equation_area')
-            equationArea.html(@$('.intro').html())
+            equationArea.html(@$('.intro_message').html())
             equationArea.css(padding: '0 30px', textAlign: 'center')
             equationArea.find('button').bind 'click', =>
                 @go('/puzzles/xyflyer/1') 

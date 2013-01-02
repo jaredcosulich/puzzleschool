@@ -102,12 +102,12 @@ equations.Equations = (function() {
     }
     element = this.selectedDropArea.element;
     element.addClass('with_component');
-    this.selectedDropArea.wrap();
     this.selectedDropArea.component = component;
     if (this.selectedDropArea.parentArea) {
       this.selectedDropArea.parentArea.dirtyCount += 1;
     }
     this.selectedDropArea.format(component);
+    this.selectedDropArea.wrap();
     this.selectedDropArea.plot();
     this.selectedDropArea.width = this.selectedDropArea.element.width();
     this.selectedDropArea = null;

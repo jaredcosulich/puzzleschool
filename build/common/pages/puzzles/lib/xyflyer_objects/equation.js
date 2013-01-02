@@ -6,7 +6,7 @@ equation = typeof exports !== "undefined" && exports !== null ? exports : provid
 
 equation.Equation = (function() {
 
-  Equation.prototype.defaultText = 'Drag equations from below and drop here';
+  Equation.prototype.defaultText = 'Drag equations below and drop here';
 
   function Equation(_arg) {
     this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot;
@@ -81,7 +81,6 @@ equation.Equation = (function() {
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
-      console.log(2, _this.dropAreas.length);
       _this.selectedDropArea.element.removeClass('with_component');
       _this.selectedDropArea.element.html(_this.selectedDropArea.defaultText);
       _this.selectedDropArea.component.mousedown(e);
@@ -107,7 +106,6 @@ equation.Equation = (function() {
         dropArea = removeDropAreas[_k];
         _this.removeDropArea(dropArea);
       }
-      console.log(1, _this.dropAreas.length);
       _ref4 = _this.dropAreas;
       for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
         dropArea = _ref4[_l];
@@ -193,7 +191,7 @@ equation.Equation = (function() {
       parentArea = null;
     }
     dropArea = {
-      id: dropAreaElement.attr('id'),
+      id: this.id,
       index: this.dropAreas.length,
       defaultText: (dropAreaElement === this.el ? this.defaultText : ''),
       element: dropAreaElement,
@@ -235,8 +233,32 @@ equation.Equation = (function() {
     if (!(next = dropArea.element.next()).length || next.hasClass('with_component')) {
       afterDropArea = this.newDropArea();
       dropArea.element.after(afterDropArea);
-      return this.addDropArea(afterDropArea);
+      this.addDropArea(afterDropArea);
     }
+    return this.wrapChildren(dropArea);
+  };
+
+  Equation.prototype.wrapChildren = function(dropArea) {
+    var afterDropArea, beforeDropArea, fragment, next, previous, _i, _len, _ref, _results;
+    _ref = dropArea.element.find('.fragment');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      fragment = _ref[_i];
+      fragment = $(fragment);
+      if ((previous = fragment.previous()).hasClass('fragment')) {
+        beforeDropArea = this.newDropArea();
+        fragment.before(beforeDropArea);
+        this.addDropArea(beforeDropArea, dropArea);
+      }
+      if ((next = fragment.next()).hasClass('fragment')) {
+        afterDropArea = this.newDropArea();
+        fragment.after(afterDropArea);
+        _results.push(this.addDropArea(afterDropArea, dropArea));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
 
   Equation.prototype.highlightDropArea = function(dropArea, readyToDrop) {
@@ -253,24 +275,16 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.formatDropArea = function(dropArea, component) {
-    var acceptFragment, element, fragment, _i, _len, _ref, _results;
+    var element, fragment;
     fragment = component.equationFragment;
     element = dropArea.element;
-    element.html(this.formatFragment(fragment));
-    _ref = element.find('.accept_fragment');
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      acceptFragment = _ref[_i];
-      _results.push(this.addDropArea($(acceptFragment), dropArea));
-    }
-    return _results;
+    return element.html(this.formatFragment(fragment));
   };
 
   Equation.prototype.formatFragment = function(fragment) {
-    var accept, constant;
+    var constant;
     constant = '<div class=\'fragment\'>';
-    accept = '<div class=\'accept_fragment\'></div>';
-    fragment = fragment.replace(/(.*)\((.*)\)/, "" + constant + "$1(</div>" + accept + constant + "$2</div>" + accept + constant + ")</div>");
+    fragment = fragment.replace(/(.*)\((.*)\)/, "" + constant + "$1(</div>" + constant + "$2</div>" + constant + ")</div>");
     if (fragment.indexOf(constant) === -1) {
       fragment = "" + constant + fragment + "</div>";
     }

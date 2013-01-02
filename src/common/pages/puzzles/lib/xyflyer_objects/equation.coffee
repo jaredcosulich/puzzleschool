@@ -1,7 +1,7 @@
 equation = exports ? provide('./equation', {})
 
 class equation.Equation
-    defaultText: 'Drag equations from below and drop here'
+    defaultText: 'Drag equations below and drop here'
 
     constructor: ({@gameArea, @id, @plot}) ->
         @dropAreas = []
@@ -116,7 +116,7 @@ class equation.Equation
             
     addDropArea: (dropAreaElement, parentArea=null) ->
         dropArea = 
-            id: dropAreaElement.attr('id')
+            id: @id
             index: @dropAreas.length
             defaultText: (if dropAreaElement == @el then @defaultText else '')
             element: dropAreaElement
@@ -147,6 +147,22 @@ class equation.Equation
             afterDropArea = @newDropArea()
             dropArea.element.after(afterDropArea)
             @addDropArea(afterDropArea)
+            
+        @wrapChildren(dropArea)
+
+    wrapChildren: (dropArea) ->
+        for fragment in dropArea.element.find('.fragment')
+            fragment = $(fragment)
+            if (previous = fragment.previous()).hasClass('fragment')
+                beforeDropArea = @newDropArea()
+                fragment.before(beforeDropArea)
+                @addDropArea(beforeDropArea, dropArea)
+
+            if (next = fragment.next()).hasClass('fragment')
+                afterDropArea = @newDropArea()
+                fragment.after(afterDropArea)
+                @addDropArea(afterDropArea, dropArea)
+            
         
     highlightDropArea: (dropArea, readyToDrop) ->
         return false if dropArea.childAreas.length or dropArea.component
@@ -161,15 +177,12 @@ class equation.Equation
         fragment = component.equationFragment
         element = dropArea.element
         element.html(@formatFragment(fragment))
-        for acceptFragment in element.find('.accept_fragment')
-            @addDropArea($(acceptFragment), dropArea)
         
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
-        accept = '<div class=\'accept_fragment\'></div>'
         fragment = fragment.replace(
             /(.*)\((.*)\)/, 
-            "#{constant}$1(</div>#{accept}#{constant}$2</div>#{accept}#{constant})</div>"
+            "#{constant}$1(</div>#{constant}$2</div>#{constant})</div>"
         )
         if fragment.indexOf(constant) == -1
             fragment = "#{constant}#{fragment}</div>"
