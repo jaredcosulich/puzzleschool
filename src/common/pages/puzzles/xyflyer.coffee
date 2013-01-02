@@ -96,7 +96,7 @@ soma.views
         showIntroMessage: ->
             equationArea = @$('.equation_area')
             equationArea.html(@$('.intro_message').html())
-            equationArea.css(padding: '0 30px', textAlign: 'center')
+            equationArea.css(padding: '0 12px', textAlign: 'center')
             equationArea.find('button').bind 'click', =>
                 @go('/puzzles/xyflyer/1') 
         
@@ -170,8 +170,9 @@ LEVELS = [
             {x: 31, y: 15.5}
         ]
         fragments: [
-            'x', '*3', '*.25', '/2', '/5'
+            '*3', '*.25', '/2', '/5'
         ]
+        startingFragments: ['x']
     }    
     {
         equationCount: 1
@@ -186,8 +187,9 @@ LEVELS = [
         ]
         islandCoordinates: {x: 4, y: 14}
         fragments: [
-            '-x', '-6', '-12', '-18', '+6', '+12', '+18'
+            '-6', '-12', '-18', '+6', '+12', '+18'
         ]
+        startingFragments: ['-x']
     }    
     {
         equationCount: 1

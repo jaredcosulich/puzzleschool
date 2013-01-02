@@ -118,7 +118,7 @@ soma.views({
       equationArea = this.$('.equation_area');
       equationArea.html(this.$('.intro_message').html());
       equationArea.css({
-        padding: '0 30px',
+        padding: '0 12px',
         textAlign: 'center'
       });
       return equationArea.find('button').bind('click', function() {
@@ -222,7 +222,8 @@ LEVELS = [
         y: 15.5
       }
     ],
-    fragments: ['x', '*3', '*.25', '/2', '/5']
+    fragments: ['*3', '*.25', '/2', '/5'],
+    startingFragments: ['x']
   }, {
     equationCount: 1,
     grid: {
@@ -244,7 +245,8 @@ LEVELS = [
       x: 4,
       y: 14
     },
-    fragments: ['-x', '-6', '-12', '-18', '+6', '+12', '+18']
+    fragments: ['-6', '-12', '-18', '+6', '+12', '+18'],
+    startingFragments: ['-x']
   }, {
     equationCount: 1,
     grid: {

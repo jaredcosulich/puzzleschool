@@ -52,12 +52,7 @@ class equations.Equations
     endComponentDragging: (component) ->
         @clearDrag()
         return false unless @selectedDropArea
-        element = @selectedDropArea.element
-        element.addClass('with_component')
-        @selectedDropArea.component = component
-        @selectedDropArea.parentArea.dirtyCount += 1 if @selectedDropArea.parentArea
         @selectedDropArea.accept(component)
-        @selectedDropArea.width = @selectedDropArea.element.width()
         @selectedDropArea = null
         return true
             

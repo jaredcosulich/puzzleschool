@@ -51,6 +51,9 @@ equation.Equation = (function() {
       _this = this;
     testDropArea = function(dropArea, over) {
       var da, _i, _len, _ref;
+      if (dropArea.fixed) {
+        return false;
+      }
       if (dropArea.dirtyCount) {
         _ref = dropArea.childAreas;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -157,12 +160,20 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.addFirstDropArea = function() {
-    var dropAreaElement;
+    var dropArea, dropAreaElement;
     dropAreaElement = this.newDropArea();
-    dropAreaElement.html(this.startingFragment);
-    dropAreaElement.addClass('only_area');
     this.el.append(dropAreaElement);
     this.addDropArea(dropAreaElement);
+    dropAreaElement.html(this.startingFragment);
+    if (this.startingFragment === this.defaultText) {
+      dropAreaElement.addClass('only_area');
+    } else {
+      dropAreaElement.addClass('with_component');
+      dropArea = this.dropAreas[this.dropAreas.length - 1];
+      dropArea.fixed = true;
+      this.wrap(dropArea);
+      dropArea.width = dropAreaElement.width();
+    }
     this.initVariables();
     return this.plot(this);
   };
@@ -226,10 +237,18 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.accept = function(dropArea, component) {
+    var element;
+    element = dropArea.element;
+    element.addClass('with_component');
+    dropArea.component = component;
+    if (dropArea.parentArea) {
+      dropArea.parentArea.dirtyCount += 1;
+    }
     this.formatDropArea(dropArea, component);
     this.wrap(dropArea);
     this.plot(this);
-    return this.initVariables();
+    this.initVariables();
+    return dropArea.width = dropArea.element.width();
   };
 
   Equation.prototype.wrap = function(dropArea) {

@@ -31,6 +31,7 @@ class equation.Equation
     
     initHover: () ->
         testDropArea = (dropArea, over) =>
+            return false if dropArea.fixed
             if dropArea.dirtyCount
                 for da in dropArea.childAreas
                     return true if testDropArea(da)
@@ -94,10 +95,19 @@ class equation.Equation
         
     addFirstDropArea: ->
         dropAreaElement = @newDropArea()
-        dropAreaElement.html(@startingFragment)
-        dropAreaElement.addClass('only_area')
         @el.append(dropAreaElement)
         @addDropArea(dropAreaElement)
+        
+        dropAreaElement.html(@startingFragment)
+        if @startingFragment == @defaultText
+            dropAreaElement.addClass('only_area')
+        else
+            dropAreaElement.addClass('with_component')
+            dropArea = @dropAreas[@dropAreas.length - 1]
+            dropArea.fixed = true
+            @wrap(dropArea)
+            dropArea.width = dropAreaElement.width()
+            
         @initVariables()
         @plot(@)
         
@@ -143,10 +153,15 @@ class equation.Equation
         @el.find('.only_area').removeClass('only_area') if @el.find('.accept_fragment').length > 1
 
     accept: (dropArea, component) ->
+        element = dropArea.element
+        element.addClass('with_component')
+        dropArea.component = component
+        dropArea.parentArea.dirtyCount += 1 if dropArea.parentArea
         @formatDropArea(dropArea, component)
         @wrap(dropArea)
         @plot(@)
         @initVariables()
+        dropArea.width = dropArea.element.width()
 
     wrap: (dropArea) ->
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')

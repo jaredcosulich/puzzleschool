@@ -97,19 +97,11 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.endComponentDragging = function(component) {
-    var element;
     this.clearDrag();
     if (!this.selectedDropArea) {
       return false;
     }
-    element = this.selectedDropArea.element;
-    element.addClass('with_component');
-    this.selectedDropArea.component = component;
-    if (this.selectedDropArea.parentArea) {
-      this.selectedDropArea.parentArea.dirtyCount += 1;
-    }
     this.selectedDropArea.accept(component);
-    this.selectedDropArea.width = this.selectedDropArea.element.width();
     this.selectedDropArea = null;
     return true;
   };
