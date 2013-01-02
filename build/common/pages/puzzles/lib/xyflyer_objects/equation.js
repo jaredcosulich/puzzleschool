@@ -168,7 +168,8 @@ equation.Equation = (function() {
     if (this.startingFragment === this.defaultText) {
       dropAreaElement.addClass('only_area');
     } else {
-      dropAreaElement.addClass('with_component');
+      dropAreaElement.addClass('fragment');
+      dropAreaElement.removeClass('accept_fragment');
       dropArea = this.dropAreas[this.dropAreas.length - 1];
       dropArea.fixed = true;
       this.wrap(dropArea);
@@ -290,7 +291,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.highlightDropArea = function(dropArea, readyToDrop) {
-    if (dropArea.childAreas.length || dropArea.component) {
+    if (dropArea.childAreas.length || dropArea.component || dropArea.fixed) {
       return false;
     }
     if (readyToDrop) {
@@ -427,13 +428,14 @@ equation.Equation = (function() {
   Equation.prototype.initVariable = function(variable) {
     var element, info,
       _this = this;
+    info = this.variables[variable];
     element = $(document.createElement('DIV'));
     element.addClass('variable');
-    element.html("" + variable + " = <input type='text' value='1'/><div class='slider'><div class='track'></div><div class='knob'></div>");
+    element.html("" + variable + " = <input type='text' value='" + info.start + "'/>\n<div class='slider'><div class='track'></div><div class='knob'></div>");
     this.container.append(element);
-    info = this.variables[variable];
     setTimeout((function() {
       var input, knob, trackWidth;
+      info.set(info.start);
       input = element.find('input');
       knob = element.find('.knob');
       trackWidth = element.find('.track').width();
@@ -474,15 +476,19 @@ equation.Equation = (function() {
       return element.find('input').val();
     };
     return info.set = function(val) {
-      var decimalPosition, incrementedVal;
+      var decimalPosition, incrementedVal, trackWidth, _ref;
       incrementedVal = Math.round(val / info.increment) * info.increment;
-      if (info.increment < 1) {
+      if ((-1 < (_ref = info.increment) && _ref < 1)) {
         decimalPosition = ("" + info.increment).length - 2;
       }
       if (decimalPosition > -1) {
         incrementedVal = incrementedVal.toFixed(decimalPosition);
       }
       element.find('input').val("" + incrementedVal);
+      trackWidth = element.find('.track').width();
+      element.find('.knob').css({
+        left: trackWidth * (Math.abs(info.min - val) / Math.abs(info.max - info.min))
+      });
       return _this.plot(_this);
     };
   };

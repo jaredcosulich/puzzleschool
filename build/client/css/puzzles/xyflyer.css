@@ -94,6 +94,7 @@ body {
 .xyflyer .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .equation_area .equations .equation_container .equation .with_component {
   cursor: pointer;
+  border: 1px solid #fafafa;
 }
 .xyflyer .equation_area .equations .equation_container .equation .accept_component {
   border: 1px solid #ffbd2a;

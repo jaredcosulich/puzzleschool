@@ -103,7 +103,8 @@ class equation.Equation
         if @startingFragment == @defaultText
             dropAreaElement.addClass('only_area')
         else
-            dropAreaElement.addClass('with_component')
+            dropAreaElement.addClass('fragment')
+            dropAreaElement.removeClass('accept_fragment')
             dropArea = @dropAreas[@dropAreas.length - 1]
             dropArea.fixed = true
             @wrap(dropArea)
@@ -192,7 +193,7 @@ class equation.Equation
             
         
     highlightDropArea: (dropArea, readyToDrop) ->
-        return false if dropArea.childAreas.length or dropArea.component
+        return false if dropArea.childAreas.length or dropArea.component or dropArea.fixed
         if readyToDrop
             dropArea.element.addClass('component_over')
             return true 
@@ -285,14 +286,18 @@ class equation.Equation
             @initVariable(variable) if formula.indexOf(variable) > -1
                 
     initVariable: (variable) ->
+        info = @variables[variable] 
         element = $(document.createElement('DIV'))
         element.addClass('variable')
-        element.html("#{variable} = <input type='text' value='1'/><div class='slider'><div class='track'></div><div class='knob'></div>")
+        element.html """
+            #{variable} = <input type='text' value='#{info.start}'/>
+            <div class='slider'><div class='track'></div><div class='knob'></div>
+        """
         @container.append(element)
 
-        info = @variables[variable] 
         setTimeout(
             (=>
+                info.set(info.start)
                 input = element.find('input')
                 knob = element.find('.knob') 
                 trackWidth = element.find('.track').width()
@@ -319,9 +324,12 @@ class equation.Equation
         info.get = => element.find('input').val()
         info.set = (val) =>
             incrementedVal = Math.round(val / info.increment) * info.increment
-            decimalPosition = "#{info.increment}".length - 2 if info.increment < 1
+            decimalPosition = "#{info.increment}".length - 2 if -1 < info.increment < 1
             incrementedVal = incrementedVal.toFixed(decimalPosition) if decimalPosition > -1
             element.find('input').val("#{incrementedVal}")
+
+            trackWidth = element.find('.track').width()
+            element.find('.knob').css(left: trackWidth * (Math.abs(info.min - val) / Math.abs(info.max - info.min)))
             @plot(@)
             
                 

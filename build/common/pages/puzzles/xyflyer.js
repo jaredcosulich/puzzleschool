@@ -228,29 +228,6 @@ LEVELS = [
     equationCount: 1,
     grid: {
       xMin: -10,
-      xMax: 20,
-      yMin: -10,
-      yMax: 20
-    },
-    rings: [
-      {
-        x: 10,
-        y: 8
-      }, {
-        x: 15,
-        y: 3
-      }
-    ],
-    islandCoordinates: {
-      x: 4,
-      y: 14
-    },
-    fragments: ['-6', '-12', '-18', '+6', '+12', '+18'],
-    startingFragments: ['-x']
-  }, {
-    equationCount: 1,
-    grid: {
-      xMin: -10,
       xMax: 30,
       yMin: -10,
       yMax: 30
@@ -274,11 +251,35 @@ LEVELS = [
     startingFragments: ['ax + 3'],
     variables: {
       a: {
-        min: 0,
+        start: 0,
+        min: -10,
         max: 10,
-        increment: 0.1
+        increment: 0.5
       }
     }
+  }, {
+    equationCount: 1,
+    grid: {
+      xMin: -10,
+      xMax: 20,
+      yMin: -10,
+      yMax: 20
+    },
+    rings: [
+      {
+        x: 10,
+        y: 8
+      }, {
+        x: 15,
+        y: 3
+      }
+    ],
+    islandCoordinates: {
+      x: 4,
+      y: 14
+    },
+    startingFragments: ['x'],
+    fragments: ['-1*', '-6', '-12', '-18', '+6', '+12', '+18']
   }, {
     equationCount: 1,
     grid: {
@@ -299,7 +300,8 @@ LEVELS = [
         y: 58.5
       }
     ],
-    fragments: ['x', '*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '*6', '*6.5', '*7', '*7.5', '*8', '*8.5', '*9', '*9.5', '*10']
+    startingFragments: ['x'],
+    fragments: ['*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '*6', '*6.5', '*7', '*7.5', '*8', '*8.5', '*9', '*9.5', '*10']
   }, {
     equationCount: 1,
     grid: {
