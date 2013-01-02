@@ -52,17 +52,18 @@ class equation.Equation
         
         @el.bind 'mousedown.fragment', (e) => 
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
-            @selectedDropArea.element.removeClass('with_component')
-            @selectedDropArea.element.html(@selectedDropArea.startingFragment)
             @selectedDropArea.component.mousedown(e)
             @selectedDropArea.component.move(e)
             @selectedDropArea.component = null
+
+            @selectedDropArea.element.removeClass('with_component')
+            @selectedDropArea.element.html(@selectedDropArea.startingFragment)
 
             @removeDropArea(childArea) for childArea in @selectedDropArea.childAreas
             @selectedDropArea.childAreas = []
                 
             removeDropAreas = []
-            for dropArea in @dropAreas when not dropArea.component
+            for dropArea in @dropAreas when not dropArea.component and not dropArea.fixed
                 dropArea.element.remove()
                 removeDropAreas.push(dropArea)
                 

@@ -90,11 +90,11 @@ equation.Equation = (function() {
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
-      _this.selectedDropArea.element.removeClass('with_component');
-      _this.selectedDropArea.element.html(_this.selectedDropArea.startingFragment);
       _this.selectedDropArea.component.mousedown(e);
       _this.selectedDropArea.component.move(e);
       _this.selectedDropArea.component = null;
+      _this.selectedDropArea.element.removeClass('with_component');
+      _this.selectedDropArea.element.html(_this.selectedDropArea.startingFragment);
       _ref2 = _this.selectedDropArea.childAreas;
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         childArea = _ref2[_i];
@@ -105,7 +105,7 @@ equation.Equation = (function() {
       _ref3 = _this.dropAreas;
       for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
         dropArea = _ref3[_j];
-        if (!(!dropArea.component)) {
+        if (!(!dropArea.component && !dropArea.fixed)) {
           continue;
         }
         dropArea.element.remove();
