@@ -66,12 +66,12 @@ class equation.Equation
                 removeDropAreas.push(dropArea)
                 
             @removeDropArea(dropArea) for dropArea in removeDropAreas
-            dropArea.wrap() for dropArea in @dropAreas
+            @wrap(dropArea) for dropArea in @dropAreas
             
             @addFirstDropArea() if not @dropAreas.length
             
             @selectedDropArea.parentArea.dirtyCount -= 1 if @selectedDropArea.parentArea
-            @selectedDropArea.plot()
+            @plot(@)
             
     removeDropArea: (dropAreaToRemove) ->
         removeIndex = -1
@@ -98,6 +98,8 @@ class equation.Equation
         dropAreaElement.addClass('only_area')
         @el.append(dropAreaElement)
         @addDropArea(dropAreaElement)
+        @initVariables()
+        @plot(@)
         
     newDropArea: ->
         dropArea = $(document.createElement('DIV'))
@@ -127,12 +129,10 @@ class equation.Equation
             element: dropAreaElement
             childAreas: []
             dirtyCount: 0
-            formula: => @formula()
+            formulaData: => @formulaData()
             
         dropArea.highlight = (readyToDrop) => @highlightDropArea(dropArea, readyToDrop) 
-        dropArea.format = (component) => @formatDropArea(dropArea, component) 
-        dropArea.plot = () => @plot(dropArea)
-        dropArea.wrap = () => @wrap(dropArea)
+        dropArea.accept = (component) => @accept(dropArea, component) 
 
         if parentArea
             parentArea.childAreas.push(dropArea)
@@ -141,6 +141,12 @@ class equation.Equation
         @dropAreas.push(dropArea)  
         
         @el.find('.only_area').removeClass('only_area') if @el.find('.accept_fragment').length > 1
+
+    accept: (dropArea, component) ->
+        @formatDropArea(dropArea, component)
+        @wrap(dropArea)
+        @plot(@)
+        @initVariables()
 
     wrap: (dropArea) ->
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')
@@ -194,14 +200,22 @@ class equation.Equation
         
         return fragment
     
+    formulaData: ->
+        "#{@formula()}#{@rangeText()}"
+
+    rangeText: ->
+        return '' if not @range?.from
+        "{#{@range.from}<=x<=#{@range.to}}"
+        
     formula: ->
         element = @el[0]
         text = if element.textContent then element.textContent else element.innerText      
-        text = '' if text == @startingFragment
-        return text if not @range.from
-        range = "{#{@range.from}<=x<=#{@range.to}}"
-        return "#{text}#{range}"
-       
+        text = '' if text == @defaultText
+        for variable of @variables
+            text = text.replace(variable, @variables[variable].get())
+            
+        return text
+        
     initRange: ->
         element = $(document.createElement('DIV'))
         element.addClass('range')
@@ -223,7 +237,7 @@ class equation.Equation
         )
         
     showRange: ->
-        return unless @range.hidden
+        return unless @range?.hidden
         @range.element.animate
             height: @range.height
             paddingTop: @range.padding
@@ -232,7 +246,7 @@ class equation.Equation
         @range.hidden = false
         
     hideRange: ->
-        return if @range.hidden
+        return if not @range or @range.hidden
         @range.element.animate
             height: 0
             paddingTop: 0
@@ -245,5 +259,31 @@ class equation.Equation
         @range.element.find('.to').val(if to? then to else '')
         @range.from = from
         @range.to = to
-        @plot(@dropAreas[0])
+        @plot(@)
         
+    initVariables: ->
+        @variables = {}
+        formula = @formula()
+        for variable in ['a', 'b', 'c', 'd']
+            @initVariable(variable) if formula.indexOf(variable) > -1
+                
+    initVariable: (variable) ->
+        element = $(document.createElement('DIV'))
+        element.addClass('variable')
+        element.html("#{variable} = <input type='text' value='1'/>")
+        @container.append(element)
+
+        setTimeout(
+            (=>
+                element.find('input').bind 'keyup', => @variables[variable].set(@variables[variable].get())
+            ), 10
+        )
+
+        @variables[variable] =
+            get: =>
+                element.find('input').val()
+            set: (val) => 
+                element.find('input').val(val)
+                @plot(@)
+
+                

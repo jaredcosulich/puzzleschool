@@ -33,8 +33,8 @@ equations.Equations = (function() {
       gameArea: this.gameArea,
       startingFragment: startingFragment,
       id: "equation_" + (equationCount + 1),
-      plot: function(dropArea) {
-        return _this.plotFormula(dropArea);
+      plot: function(eq) {
+        return _this.plotFormula(eq);
       }
     });
     this.equations.push(equation);
@@ -107,24 +107,19 @@ equations.Equations = (function() {
     if (this.selectedDropArea.parentArea) {
       this.selectedDropArea.parentArea.dirtyCount += 1;
     }
-    this.selectedDropArea.format(component);
-    this.selectedDropArea.wrap();
-    this.selectedDropArea.plot();
+    this.selectedDropArea.accept(component);
     this.selectedDropArea.width = this.selectedDropArea.element.width();
     this.selectedDropArea = null;
     return true;
   };
 
-  Equations.prototype.plotFormula = function(dropArea) {
-    var formula;
+  Equations.prototype.plotFormula = function(equation) {
+    var formulaData;
     this.checkMultipleEquations();
-    while (dropArea.parentArea) {
-      dropArea = dropArea.parentArea;
-    }
-    dropArea.element.removeClass('bad_formula');
-    formula = dropArea.formula();
-    if (!(this.plot(dropArea.id, formula) || !formula.length)) {
-      return dropArea.element.addClass('bad_formula');
+    equation.el.removeClass('bad_formula');
+    formulaData = equation.formulaData();
+    if (!(this.plot(equation.id, formulaData) || !formulaData.length)) {
+      return equation.el.addClass('bad_formula');
     }
   };
 

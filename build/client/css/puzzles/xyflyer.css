@@ -131,15 +131,18 @@ body {
 .xyflyer .equation_area .equations .equation_container .equation.bad_formula .with_component {
   color: red;
 }
-.xyflyer .equation_area .equations .equation_container .range {
+.xyflyer .equation_area .equations .equation_container .range,
+.xyflyer .equation_area .equations .equation_container .variable {
   font-size: 11px;
   border: 1px solid #ccc;
   border-top: none;
   width: 78%;
   margin-left: 14%;
   padding: 3px 6px;
+  overflow: hidden;
 }
-.xyflyer .equation_area .equations .equation_container .range input {
+.xyflyer .equation_area .equations .equation_container .range input,
+.xyflyer .equation_area .equations .equation_container .variable input {
   width: 3em;
 }
 .xyflyer .equation_area .launch {

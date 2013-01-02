@@ -17,7 +17,7 @@ class equations.Equations
             gameArea: @gameArea
             startingFragment: startingFragment
             id: "equation_#{equationCount + 1}"
-            plot: (dropArea) => @plotFormula(dropArea)
+            plot: (eq) => @plotFormula(eq)
             
             
         @equations.push(equation)
@@ -56,19 +56,16 @@ class equations.Equations
         element.addClass('with_component')
         @selectedDropArea.component = component
         @selectedDropArea.parentArea.dirtyCount += 1 if @selectedDropArea.parentArea
-        @selectedDropArea.format(component)
-        @selectedDropArea.wrap()
-        @selectedDropArea.plot()
+        @selectedDropArea.accept(component)
         @selectedDropArea.width = @selectedDropArea.element.width()
         @selectedDropArea = null
         return true
             
-    plotFormula: (dropArea) ->
+    plotFormula: (equation) ->
         @checkMultipleEquations()
-        dropArea = dropArea.parentArea while dropArea.parentArea
-        dropArea.element.removeClass('bad_formula')
-        formula = dropArea.formula()
-        dropArea.element.addClass('bad_formula') unless @plot(dropArea.id, formula) or !formula.length
+        equation.el.removeClass('bad_formula')
+        formulaData = equation.formulaData()
+        equation.el.addClass('bad_formula') unless @plot(equation.id, formulaData) or !formulaData.length
             
     checkMultipleEquations: ->
         inUseEquations = 0

@@ -115,7 +115,7 @@ equation.Equation = (function() {
       _ref4 = _this.dropAreas;
       for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
         dropArea = _ref4[_l];
-        dropArea.wrap();
+        _this.wrap(dropArea);
       }
       if (!_this.dropAreas.length) {
         _this.addFirstDropArea();
@@ -123,7 +123,7 @@ equation.Equation = (function() {
       if (_this.selectedDropArea.parentArea) {
         _this.selectedDropArea.parentArea.dirtyCount -= 1;
       }
-      return _this.selectedDropArea.plot();
+      return _this.plot(_this);
     });
   };
 
@@ -162,7 +162,9 @@ equation.Equation = (function() {
     dropAreaElement.html(this.startingFragment);
     dropAreaElement.addClass('only_area');
     this.el.append(dropAreaElement);
-    return this.addDropArea(dropAreaElement);
+    this.addDropArea(dropAreaElement);
+    this.initVariables();
+    return this.plot(this);
   };
 
   Equation.prototype.newDropArea = function() {
@@ -203,21 +205,15 @@ equation.Equation = (function() {
       element: dropAreaElement,
       childAreas: [],
       dirtyCount: 0,
-      formula: function() {
-        return _this.formula();
+      formulaData: function() {
+        return _this.formulaData();
       }
     };
     dropArea.highlight = function(readyToDrop) {
       return _this.highlightDropArea(dropArea, readyToDrop);
     };
-    dropArea.format = function(component) {
-      return _this.formatDropArea(dropArea, component);
-    };
-    dropArea.plot = function() {
-      return _this.plot(dropArea);
-    };
-    dropArea.wrap = function() {
-      return _this.wrap(dropArea);
+    dropArea.accept = function(component) {
+      return _this.accept(dropArea, component);
     };
     if (parentArea) {
       parentArea.childAreas.push(dropArea);
@@ -227,6 +223,13 @@ equation.Equation = (function() {
     if (this.el.find('.accept_fragment').length > 1) {
       return this.el.find('.only_area').removeClass('only_area');
     }
+  };
+
+  Equation.prototype.accept = function(dropArea, component) {
+    this.formatDropArea(dropArea, component);
+    this.wrap(dropArea);
+    this.plot(this);
+    return this.initVariables();
   };
 
   Equation.prototype.wrap = function(dropArea) {
@@ -297,18 +300,29 @@ equation.Equation = (function() {
     return fragment;
   };
 
+  Equation.prototype.formulaData = function() {
+    return "" + (this.formula()) + (this.rangeText());
+  };
+
+  Equation.prototype.rangeText = function() {
+    var _ref;
+    if (!((_ref = this.range) != null ? _ref.from : void 0)) {
+      return '';
+    }
+    return "{" + this.range.from + "<=x<=" + this.range.to + "}";
+  };
+
   Equation.prototype.formula = function() {
-    var element, range, text;
+    var element, text, variable;
     element = this.el[0];
     text = element.textContent ? element.textContent : element.innerText;
-    if (text === this.startingFragment) {
+    if (text === this.defaultText) {
       text = '';
     }
-    if (!this.range.from) {
-      return text;
+    for (variable in this.variables) {
+      text = text.replace(variable, this.variables[variable].get());
     }
-    range = "{" + this.range.from + "<=x<=" + this.range.to + "}";
-    return "" + text + range;
+    return text;
   };
 
   Equation.prototype.initRange = function() {
@@ -333,7 +347,8 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.showRange = function() {
-    if (!this.range.hidden) {
+    var _ref;
+    if (!((_ref = this.range) != null ? _ref.hidden : void 0)) {
       return;
     }
     this.range.element.animate({
@@ -346,7 +361,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.hideRange = function() {
-    if (this.range.hidden) {
+    if (!this.range || this.range.hidden) {
       return;
     }
     this.range.element.animate({
@@ -369,7 +384,47 @@ equation.Equation = (function() {
     this.range.element.find('.to').val(to != null ? to : '');
     this.range.from = from;
     this.range.to = to;
-    return this.plot(this.dropAreas[0]);
+    return this.plot(this);
+  };
+
+  Equation.prototype.initVariables = function() {
+    var formula, variable, _i, _len, _ref, _results;
+    this.variables = {};
+    formula = this.formula();
+    _ref = ['a', 'b', 'c', 'd'];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      variable = _ref[_i];
+      if (formula.indexOf(variable) > -1) {
+        _results.push(this.initVariable(variable));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
+  Equation.prototype.initVariable = function(variable) {
+    var element,
+      _this = this;
+    element = $(document.createElement('DIV'));
+    element.addClass('variable');
+    element.html("" + variable + " = <input type='text' value='1'/>");
+    this.container.append(element);
+    setTimeout((function() {
+      return element.find('input').bind('keyup', function() {
+        return _this.variables[variable].set(_this.variables[variable].get());
+      });
+    }), 10);
+    return this.variables[variable] = {
+      get: function() {
+        return element.find('input').val();
+      },
+      set: function(val) {
+        element.find('input').val(val);
+        return _this.plot(_this);
+      }
+    };
   };
 
   return Equation;
