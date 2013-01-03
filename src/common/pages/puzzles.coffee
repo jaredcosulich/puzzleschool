@@ -79,6 +79,34 @@ PUZZLEDATA = [{
 }]
 
 LABDATA = [{
+    id: 'xyflyer'
+    title: 'XYFlyer'
+    website: '/puzzles/xyflyer'
+    thumbnail: '/assets/images/reviews/xyflyer.jpg'
+    company: 'The Puzzle School'
+    companyWebsite: 'http://puzzleschool.com'
+    material: 'Graphing Equations'
+    availability: 'Web, Mobile, Tablet'
+    cost: 'Free'
+    overall:
+        explanation:
+            """
+            <p>
+                XYFlyer is a simple game that demonstrates the stimulating nature of learning through puzzles.
+            </p>
+            <p>
+                Each level presents a number of rings that you must fly a remote-controlled airplane through, using 
+                graphed equations to control the plane.
+            </p>
+            <p>
+                Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.
+            </p>
+            <p>
+                Even at this beta stage, though, you can see how stimulating and enjoyable it is to try to solve
+                the challenges even though all you are doing is interacting with equations and graphing.
+            </p>
+            """
+}, {
     id: 'language_scramble'
     title: 'Language Scramble'
     website: '/puzzles/language_scramble'
