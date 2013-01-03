@@ -200,6 +200,35 @@ LEVELS = [
         equationCount: 1
         grid:
             xMin: -10
+            xMax: 30
+            yMin: -10
+            yMax: 30
+        rings: [
+            {x: 7.852, y: 4}
+            {x: 13.087, y: 6}
+            {x: 18.324, y: 4}
+        ]
+        islandCoordinates: {x: 0, y: 5}
+        fragments: [
+            'sin(ax)', '+b', '+3.14'
+        ]
+        variables:
+            a:
+                start: 1
+                min: -10
+                max: 10
+                increment: 0.2
+            b:
+                start: 2
+                min: -10
+                max: 10
+                increment: 1
+                
+    }    
+    {
+        equationCount: 1
+        grid:
+            xMin: -10
             xMax: 20
             yMin: -10
             yMax: 20
