@@ -20,9 +20,9 @@ body {
         .no_select();   
         
         .dragging {
-            -webkit-box-shadow: 4px 5px 4px #b69c63;
-            -webkit-box-shadow: 5px 5px 4px #b69c632;
-            -webkit-box-shadow: 5px 6px 5px #b69c63;
+            .box-shadow(4px 5px 4px #b69c63);
+            .box-shadow(5px 5px 4px #b69c632);
+            .box-shadow(5px 6px 5px #b69c63);
             cursor: move;
         }         
     }
@@ -230,10 +230,12 @@ body {
         border: 1px solid @grey;
         .rounded(3px);
         cursor: move;
-        background-image: -webkit-gradient(linear, right bottom, left top, color-stop(0.5, rgb(222,196,139)), color-stop(0.7, rgb(230,204,147)));
-        -webkit-box-shadow: 0 1px 0 #b69c63;
-        -webkit-box-shadow: 1px 1px 0 #b69c632;
-        -webkit-box-shadow: 1px 2px 1px #b69c63;
+        background:-webkit-gradient(linear, right bottom, left top, color-stop(0.5, rgb(222,196,139)), color-stop(0.7, rgb(230,204,147)));
+        background:-moz-linear-gradient( center top,  rgb(222,196,139) 50%, rgb(230,204,147) 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='rgb(222,196,139)', endColorstr='rgb(230,204,147)');
+        .box-shadow(0 1px 0 #b69c63);
+        .box-shadow(1px 1px 0 #b69c632);
+        .box-shadow(1px 2px 1px #b69c63);
     }
     
     .objects {
