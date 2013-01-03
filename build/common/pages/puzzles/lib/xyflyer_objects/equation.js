@@ -439,8 +439,14 @@ equation.Equation = (function() {
       input = element.find('input');
       knob = element.find('.knob');
       trackWidth = element.find('.track').width();
-      input.bind('keyup', function() {
-        return _this.variables[variable].set(input.val());
+      input.bind('keyup.variable', function(e) {
+        var _ref, _ref1;
+        if (!((47 < (_ref = e.keyCode) && _ref < 58) || (188 < (_ref1 = e.keyCode) && _ref1 < 191))) {
+          return;
+        }
+        if (!isNaN(input.val())) {
+          return _this.variables[variable].set(input.val());
+        }
       });
       return knob.bind('mousedown.drag_knob', function(e) {
         var body, startingX;

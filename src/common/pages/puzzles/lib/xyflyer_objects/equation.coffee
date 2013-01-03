@@ -301,7 +301,10 @@ class equation.Equation
                 input = element.find('input')
                 knob = element.find('.knob') 
                 trackWidth = element.find('.track').width()
-                input.bind 'keyup', => @variables[variable].set(input.val())
+                input.bind 'keyup.variable', (e) => 
+                    return unless 47 < e.keyCode < 58 or 188 < e.keyCode < 191
+                    @variables[variable].set(input.val()) unless isNaN(input.val())       
+                           
                 knob.bind 'mousedown.drag_knob', (e) =>
                     e.preventDefault() if e.preventDefault
                     body = $(document.body)
