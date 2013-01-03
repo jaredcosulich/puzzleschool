@@ -53,10 +53,14 @@ soma.views
             
             @level = @el.data('level')
             if isNaN(parseInt(@level))
-                @showIntroMessage()
+                @showMessage('intro')
                 return
                 
             @data = LEVELS[@level]
+            
+            if not @data
+                @showMessage('exit')
+                return
         
             @viewHelper = new xyflyer.ViewHelper
                 el: $(@selector)
@@ -93,9 +97,9 @@ soma.views
                 opacity: 0.9
                 duration: 500              
             
-        showIntroMessage: ->
+        showMessage: (type) ->
             equationArea = @$('.equation_area')
-            equationArea.html(@$('.intro_message').html())
+            equationArea.html(@$(".#{type}_message").html())
             equationArea.css(padding: '0 12px', textAlign: 'center')
             equationArea.find('button').bind 'click', =>
                 @go('/puzzles/xyflyer/1') 

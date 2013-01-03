@@ -62,10 +62,14 @@ soma.views({
       xyflyer = require('./lib/xyflyer');
       this.level = this.el.data('level');
       if (isNaN(parseInt(this.level))) {
-        this.showIntroMessage();
+        this.showMessage('intro');
         return;
       }
       this.data = LEVELS[this.level];
+      if (!this.data) {
+        this.showMessage('exit');
+        return;
+      }
       this.viewHelper = new xyflyer.ViewHelper({
         el: $(this.selector),
         boardElement: this.$('.board'),
@@ -112,11 +116,11 @@ soma.views({
         duration: 500
       });
     },
-    showIntroMessage: function() {
+    showMessage: function(type) {
       var equationArea,
         _this = this;
       equationArea = this.$('.equation_area');
-      equationArea.html(this.$('.intro_message').html());
+      equationArea.html(this.$("." + type + "_message").html());
       equationArea.css({
         padding: '0 12px',
         textAlign: 'center'
