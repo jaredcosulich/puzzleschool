@@ -93,6 +93,7 @@ equation.Equation = (function() {
       _this.selectedDropArea.component.mousedown(e);
       _this.selectedDropArea.component.move(e);
       _this.selectedDropArea.component = null;
+      _this.el.find('.accept_component').removeClass('accept_component');
       _this.selectedDropArea.element.removeClass('with_component');
       _this.selectedDropArea.element.html(_this.selectedDropArea.startingFragment);
       _ref2 = _this.selectedDropArea.childAreas;

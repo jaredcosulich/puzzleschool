@@ -55,6 +55,8 @@ class equation.Equation
             @selectedDropArea.component.mousedown(e)
             @selectedDropArea.component.move(e)
             @selectedDropArea.component = null
+            
+            @el.find('.accept_component').removeClass('accept_component')
 
             @selectedDropArea.element.removeClass('with_component')
             @selectedDropArea.element.html(@selectedDropArea.startingFragment)
