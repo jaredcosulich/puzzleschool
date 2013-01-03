@@ -15,6 +15,7 @@ class ring.Ring extends xyflyerObject.Object
         @image = @board.addRing(@)
         @image.attr(stroke: '#FFF')
         @move(@x, @y)
+        @board.showXY(@screenX, @screenY, false, true)
         
     move: (@x, @y) ->
         @image.transform("t#{@screenX},#{@screenY}s-#{@scale},#{@scale}")

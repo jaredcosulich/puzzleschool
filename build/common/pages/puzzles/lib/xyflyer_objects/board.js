@@ -210,31 +210,37 @@ board.Board = (function(_super) {
     return this.yAxis - (y * this.yUnit);
   };
 
-  Board.prototype.showXY = function(x, y, onPath) {
-    var dot, height, paperX, paperY, radius, text, width, xyTip,
+  Board.prototype.showXY = function(x, y, onPath, permanent) {
+    var dot, height, opacity, paperX, paperY, radius, string, text, width, xyTip,
       _this = this;
     if (onPath == null) {
       onPath = false;
     }
-    width = 75;
-    height = 24;
+    if (permanent == null) {
+      permanent = false;
+    }
+    paperX = this.paperX(x);
+    paperY = this.paperY(y);
+    string = "" + paperX + ", " + paperY;
+    width = (string.length * 6) + 2;
+    height = 18;
     radius = 3;
-    dot = this.paper.circle(x, y, 0);
-    dot.attr({
-      opacity: 0
-    });
-    dot.animate({
-      r: radius,
-      opacity: 1
-    }, 100);
+    if (!permanent) {
+      dot = this.paper.circle(x, y, 0);
+      dot.attr({
+        opacity: 0
+      });
+      dot.animate({
+        r: radius,
+        opacity: 1
+      }, 100);
+    }
     xyTip = this.paper.rect(x + (width / 2) + (radius * 2), y, 0, 0, 6);
     xyTip.attr({
       fill: '#FFF',
       opacity: 0
     });
-    paperX = this.paperX(x);
-    paperY = this.paperY(y);
-    text = this.paper.text(x + (width / 2) + (radius * 2), y, "" + paperX + ", " + paperY);
+    text = this.paper.text(x + (width / 2) + (radius * 2), y, string);
     text.attr({
       opacity: 0
     });
@@ -244,36 +250,39 @@ board.Board = (function(_super) {
       x: x + (radius * 2),
       y: y - (height / 2)
     }, 100);
+    opacity = (permanent ? 0.75 : 1);
     xyTip.animate({
-      opacity: 1
+      opacity: opacity
     }, 250);
     text.animate({
-      opacity: 1
+      opacity: opacity
     }, 250);
-    return $.timeout(2000, function() {
-      var removeTip;
-      xyTip.animate({
-        opacity: 0
-      }, 100);
-      text.animate({
-        opacity: 0
-      }, 100);
-      removeTip = function() {
-        xyTip.remove();
-        text.remove();
-        return dot.remove();
-      };
-      xyTip.animate({
-        width: 0,
-        height: 0,
-        x: x + (radius * 2),
-        y: y
-      }, 250);
-      return dot.animate({
-        r: 0,
-        opacity: 0
-      }, 250, null, removeTip);
-    });
+    if (!permanent) {
+      return $.timeout(2000, function() {
+        var removeTip;
+        xyTip.animate({
+          opacity: 0
+        }, 100);
+        text.animate({
+          opacity: 0
+        }, 100);
+        removeTip = function() {
+          xyTip.remove();
+          text.remove();
+          return dot.remove();
+        };
+        xyTip.animate({
+          width: 0,
+          height: 0,
+          x: x + (radius * 2),
+          y: y
+        }, 250);
+        return dot.animate({
+          r: 0,
+          opacity: 0
+        }, 250, null, removeTip);
+      });
+    }
   };
 
   Board.prototype.drawGrid = function() {

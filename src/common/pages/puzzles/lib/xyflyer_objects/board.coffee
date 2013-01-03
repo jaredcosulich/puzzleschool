@@ -132,31 +132,40 @@ class board.Board extends xyflyerObject.Object
     screenX: (x) -> (x * @xUnit) + @xAxis
     screenY: (y) -> @yAxis - (y * @yUnit) 
 
-    showXY: (x, y, onPath=false) ->
-        width = 75
-        height = 24
-        radius = 3
-        dot = @paper.circle(x, y, 0)
-        dot.attr(opacity: 0)
-        dot.animate({r: radius, opacity: 1}, 100)
-        xyTip = @paper.rect(x+(width/2)+(radius*2), y, 0, 0, 6)
-        xyTip.attr(fill: '#FFF', opacity: 0)
+    showXY: (x, y, onPath=false, permanent=false) ->
         paperX = @paperX(x)
         paperY = @paperY(y)
-        text = @paper.text(x+(width/2)+(radius*2), y, "#{paperX}, #{paperY}")
+
+        string = "#{paperX}, #{paperY}"
+        width = (string.length * 6) + 2
+        height = 18
+        radius = 3
+
+        unless permanent
+            dot = @paper.circle(x, y, 0)
+            dot.attr(opacity: 0)
+            dot.animate({r: radius, opacity: 1}, 100)
+
+        xyTip = @paper.rect(x+(width/2)+(radius*2), y, 0, 0, 6)
+        xyTip.attr(fill: '#FFF', opacity: 0)
+        text = @paper.text(x+(width/2)+(radius*2), y, string)
         text.attr(opacity: 0)
         xyTip.animate({width: width, height: height, x: x+(radius*2), y: y-(height/2)}, 100)
-        xyTip.animate({opacity: 1}, 250)
-        text.animate({opacity: 1}, 250)
-        $.timeout 2000, =>
-            xyTip.animate({opacity: 0}, 100)
-            text.animate({opacity: 0}, 100)
-            removeTip = =>
-                xyTip.remove()
-                text.remove()
-                dot.remove()
-            xyTip.animate({width: 0, height: 0, x: x+(radius*2), y: y}, 250)
-            dot.animate({r: 0, opacity: 0}, 250, null, removeTip)
+        
+        opacity = (if permanent then 0.75 else 1)
+        xyTip.animate({opacity: opacity}, 250)
+        text.animate({opacity: opacity}, 250)
+        
+        unless permanent
+            $.timeout 2000, =>
+                xyTip.animate({opacity: 0}, 100)
+                text.animate({opacity: 0}, 100)
+                removeTip = =>
+                    xyTip.remove()
+                    text.remove()
+                    dot.remove()
+                xyTip.animate({width: 0, height: 0, x: x+(radius*2), y: y}, 250)
+                dot.animate({r: 0, opacity: 0}, 250, null, removeTip)
 
     drawGrid: ->    
         gridString = """

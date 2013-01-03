@@ -31,6 +31,7 @@ ring.Ring = (function(_super) {
       stroke: '#FFF'
     });
     this.move(this.x, this.y);
+    this.board.showXY(this.screenX, this.screenY, false, true);
   }
 
   Ring.prototype.move = function(x, y) {
