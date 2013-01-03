@@ -12,6 +12,7 @@ class equation.Equation
         @el = $(document.createElement('DIV'))
         @el.addClass('equation')
         @el.attr('id', @id)
+        @el.bind "touchstart touchmove touchend", (e) -> e.preventDefault() if e.preventDefault
 
         if @startingFragment?.length
             @el.addClass('starting_fragment')
@@ -50,10 +51,10 @@ class equation.Equation
             
         @el.bind 'mouseout.fragment', => @clear()
         
-        @el.bind 'mousedown.fragment', (e) => 
+        @el.bind 'mousedown.fragment touchstart.fragment', (e) => 
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
             c = @selectedDropArea.component
-            $(document.body).one 'mouseup.component', -> c.endMove(e)
+            $(document.body).one 'mouseup.component touchend.component', -> c.endMove(e)
             @removeFragment(@selectedDropArea, e)
 
     removeFragment: (dropArea, e) ->
@@ -327,21 +328,21 @@ class equation.Equation
                     return unless 47 < e.keyCode < 58 or 188 < e.keyCode < 191
                     @variables[variable].set(input.val()) unless isNaN(input.val())       
                            
-                knob.bind 'mousedown.drag_knob', (e) =>
+                knob.bind 'mousedown.drag_knob touchstart.drag_knob', (e) =>
                     e.preventDefault() if e.preventDefault
                     body = $(document.body)
-                    startingX = e.clientX - parseInt(knob.css('left'))
-                    body.bind 'mousemove.drag_knob', (e) =>
+                    startingX = @clientX(e) - parseInt(knob.css('left'))
+                    body.bind 'mousemove.drag_knob touchmove.drag_knob', (e) =>
                         e.preventDefault() if e.preventDefault
-                        left = e.clientX - startingX
+                        left = @clientX(e) - startingX
                         left = 0 if left < 0
                         left = trackWidth if left > trackWidth
                         knob.css(left: left)
                         percentage = left/trackWidth
                         info.set(info.min + (percentage * Math.abs(info.max - info.min)))
                         
-                    body.one 'mouseup.drag_knob', =>
-                        body.unbind 'mousemove.drag_knob'
+                    body.one 'mouseup.drag_knob touchend.drag_knob', =>
+                        body.unbind 'mousemove.drag_knob touchmove.drag_knob'
                         
             ), 10   
         )

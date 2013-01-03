@@ -22,6 +22,11 @@ equation.Equation = (function() {
     this.el = $(document.createElement('DIV'));
     this.el.addClass('equation');
     this.el.attr('id', this.id);
+    this.el.bind("touchstart touchmove touchend", function(e) {
+      if (e.preventDefault) {
+        return e.preventDefault();
+      }
+    });
     if ((_ref = this.startingFragment) != null ? _ref.length : void 0) {
       this.el.addClass('starting_fragment');
     } else {
@@ -85,13 +90,13 @@ equation.Equation = (function() {
     this.el.bind('mouseout.fragment', function() {
       return _this.clear();
     });
-    return this.el.bind('mousedown.fragment', function(e) {
+    return this.el.bind('mousedown.fragment touchstart.fragment', function(e) {
       var c, _ref, _ref1;
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
       c = _this.selectedDropArea.component;
-      $(document.body).one('mouseup.component', function() {
+      $(document.body).one('mouseup.component touchend.component', function() {
         return c.endMove(e);
       });
       return _this.removeFragment(_this.selectedDropArea, e);
@@ -476,19 +481,19 @@ equation.Equation = (function() {
           return _this.variables[variable].set(input.val());
         }
       });
-      return knob.bind('mousedown.drag_knob', function(e) {
+      return knob.bind('mousedown.drag_knob touchstart.drag_knob', function(e) {
         var body, startingX;
         if (e.preventDefault) {
           e.preventDefault();
         }
         body = $(document.body);
-        startingX = e.clientX - parseInt(knob.css('left'));
-        body.bind('mousemove.drag_knob', function(e) {
+        startingX = _this.clientX(e) - parseInt(knob.css('left'));
+        body.bind('mousemove.drag_knob touchmove.drag_knob', function(e) {
           var left, percentage;
           if (e.preventDefault) {
             e.preventDefault();
           }
-          left = e.clientX - startingX;
+          left = _this.clientX(e) - startingX;
           if (left < 0) {
             left = 0;
           }
@@ -501,8 +506,8 @@ equation.Equation = (function() {
           percentage = left / trackWidth;
           return info.set(info.min + (percentage * Math.abs(info.max - info.min)));
         });
-        return body.one('mouseup.drag_knob', function() {
-          return body.unbind('mousemove.drag_knob');
+        return body.one('mouseup.drag_knob touchend.drag_knob', function() {
+          return body.unbind('mousemove.drag_knob touchmove.drag_knob');
         });
       });
     }), 10);
