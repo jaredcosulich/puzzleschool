@@ -205,8 +205,11 @@ class board.Board extends xyflyerObject.Object
         grid.attr(stroke: stroke)
         
     plot: (id, formula, area) ->
-        return if not formula
-
+        if not formula or not formula.length
+            @formulas[id]?.line?.remove()
+            delete @formulas[id]
+            return
+            
         brokenLine = 0
         infiniteLine = 0
         pathString = "M0,#{@height}"

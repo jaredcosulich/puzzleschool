@@ -73,6 +73,7 @@ class equation.Equation
             @addFirstDropArea() if not @dropAreas.length
             
             @selectedDropArea.parentArea.dirtyCount -= 1 if @selectedDropArea.parentArea
+            @initVariables()
             @plot(@)
             
     removeDropArea: (dropAreaToRemove) ->
@@ -224,10 +225,14 @@ class equation.Equation
         return '' if not @range?.from
         "{#{@range.from}<=x<=#{@range.to}}"
         
-    formula: ->
+    straightFormula: ->
         element = @el[0]
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
+        return text
+        
+    formula: ->
+        text = @straightFormula()
         for variable of @variables
             info = @variables[variable]
             continue if not info.get
@@ -281,12 +286,16 @@ class equation.Equation
         @plot(@)
         
     initVariables: ->
-        formula = @formula()
+        formula = @straightFormula()
         for variable of @variables
-            @initVariable(variable) if formula.indexOf(variable) > -1
+            if formula.indexOf(variable) > -1
+                @initVariable(variable) 
+            else if @variables[variable].element
+                @removeVariable(variable)
                 
     initVariable: (variable) ->
         info = @variables[variable] 
+        return if info.element
         element = $(document.createElement('DIV'))
         element.addClass('variable')
         element.html """
@@ -334,5 +343,15 @@ class equation.Equation
             trackWidth = element.find('.track').width()
             element.find('.knob').css(left: trackWidth * (Math.abs(info.min - val) / Math.abs(info.max - info.min)))
             @plot(@)
+        info.element = element
             
-                
+    removeVariable: (variable) ->
+        element = @variables[variable].element
+        element.animate
+            height: 0
+            duration: 250
+            complete: -> element.remove()
+        delete @variables[variable].element
+        delete @variables[variable].get
+        delete @variables[variable].set
+        

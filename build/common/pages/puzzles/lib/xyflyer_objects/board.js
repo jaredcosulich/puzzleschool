@@ -332,14 +332,20 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1;
-    if (!formula) {
+    var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1, _ref2, _ref3;
+    if (!formula || !formula.length) {
+      if ((_ref = this.formulas[id]) != null) {
+        if ((_ref1 = _ref.line) != null) {
+          _ref1.remove();
+        }
+      }
+      delete this.formulas[id];
       return;
     }
     brokenLine = 0;
     infiniteLine = 0;
     pathString = "M0," + this.height;
-    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
+    for (xPos = _i = _ref2 = this.grid.xMin * this.xUnit, _ref3 = this.grid.xMax * this.xUnit; _ref2 <= _ref3 ? _i <= _ref3 : _i >= _ref3; xPos = _ref2 <= _ref3 ? ++_i : --_i) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
       if (yPos === Number.NEGATIVE_INFINITY) {

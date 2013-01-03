@@ -126,6 +126,7 @@ equation.Equation = (function() {
       if (_this.selectedDropArea.parentArea) {
         _this.selectedDropArea.parentArea.dirtyCount -= 1;
       }
+      _this.initVariables();
       return _this.plot(_this);
     });
   };
@@ -332,13 +333,19 @@ equation.Equation = (function() {
     return "{" + this.range.from + "<=x<=" + this.range.to + "}";
   };
 
-  Equation.prototype.formula = function() {
-    var element, info, text, variable;
+  Equation.prototype.straightFormula = function() {
+    var element, text;
     element = this.el[0];
     text = element.textContent ? element.textContent : element.innerText;
     if (text === this.defaultText) {
       text = '';
     }
+    return text;
+  };
+
+  Equation.prototype.formula = function() {
+    var info, text, variable;
+    text = this.straightFormula();
     for (variable in this.variables) {
       info = this.variables[variable];
       if (!info.get) {
@@ -413,11 +420,13 @@ equation.Equation = (function() {
 
   Equation.prototype.initVariables = function() {
     var formula, variable, _results;
-    formula = this.formula();
+    formula = this.straightFormula();
     _results = [];
     for (variable in this.variables) {
       if (formula.indexOf(variable) > -1) {
         _results.push(this.initVariable(variable));
+      } else if (this.variables[variable].element) {
+        _results.push(this.removeVariable(variable));
       } else {
         _results.push(void 0);
       }
@@ -429,6 +438,9 @@ equation.Equation = (function() {
     var element, info,
       _this = this;
     info = this.variables[variable];
+    if (info.element) {
+      return;
+    }
     element = $(document.createElement('DIV'));
     element.addClass('variable');
     element.html("" + variable + " = <input type='text' value='" + info.start + "'/>\n<div class='slider'><div class='track'></div><div class='knob'></div>");
@@ -481,7 +493,7 @@ equation.Equation = (function() {
     info.get = function() {
       return element.find('input').val();
     };
-    return info.set = function(val) {
+    info.set = function(val) {
       var decimalPosition, incrementedVal, trackWidth, _ref;
       incrementedVal = Math.round(val / info.increment) * info.increment;
       if ((-1 < (_ref = info.increment) && _ref < 1)) {
@@ -497,6 +509,22 @@ equation.Equation = (function() {
       });
       return _this.plot(_this);
     };
+    return info.element = element;
+  };
+
+  Equation.prototype.removeVariable = function(variable) {
+    var element;
+    element = this.variables[variable].element;
+    element.animate({
+      height: 0,
+      duration: 250,
+      complete: function() {
+        return element.remove();
+      }
+    });
+    delete this.variables[variable].element;
+    delete this.variables[variable].get;
+    return delete this.variables[variable].set;
   };
 
   return Equation;
