@@ -52,31 +52,38 @@ class equation.Equation
         
         @el.bind 'mousedown.fragment', (e) => 
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
-            @selectedDropArea.component.mousedown(e)
-            @selectedDropArea.component.move(e)
-            @selectedDropArea.component = null
-            
-            @el.find('.accept_component').removeClass('accept_component')
+            c = @selectedDropArea.component
+            $(document.body).one 'mouseup.component', -> c.endMove(e)
+            @removeFragment(@selectedDropArea, e)
 
-            @selectedDropArea.element.removeClass('with_component')
-            @selectedDropArea.element.html(@selectedDropArea.startingFragment)
+    removeFragment: (dropArea, e) ->
+        dropArea.component.mousedown(e)
+        dropArea.component.move(e)
+        
+        @el.find('.accept_component').removeClass('accept_component')
+        
+        dropArea.element.removeClass('with_component')
+        dropArea.element.html(dropArea.startingFragment)
 
-            @removeDropArea(childArea) for childArea in @selectedDropArea.childAreas
-            @selectedDropArea.childAreas = []
-                
-            removeDropAreas = []
-            for dropArea in @dropAreas when not dropArea.component and not dropArea.fixed
-                dropArea.element.remove()
-                removeDropAreas.push(dropArea)
-                
-            @removeDropArea(dropArea) for dropArea in removeDropAreas
-            @wrap(dropArea) for dropArea in @dropAreas
+        dropArea.component = null
+
+        @removeDropArea(childArea) for childArea in dropArea.childAreas
+        dropArea.childAreas = []
             
-            @addFirstDropArea() if not @dropAreas.length
+        removeDropAreas = []
+        for da in @dropAreas when not da.component and not da.fixed
+            da.element.remove()
+            removeDropAreas.push(da)
             
-            @selectedDropArea.parentArea.dirtyCount -= 1 if @selectedDropArea.parentArea
-            @initVariables()
-            @plot(@)
+        @removeDropArea(da) for da in removeDropAreas
+        @wrap(da) for da in @dropAreas
+        
+        @addFirstDropArea() if not @dropAreas.length
+        
+        dropArea.parentArea.dirtyCount -= 1 if dropArea.parentArea
+        @initVariables()
+        @plot(@)
+        
             
     removeDropArea: (dropAreaToRemove) ->
         removeIndex = -1
@@ -167,7 +174,11 @@ class equation.Equation
         @plot(@)
         @initVariables()
         dropArea.width = dropArea.element.width()
-
+        component.placeHolder.unbind('click.placeholder')
+        component.placeHolder.one 'click.placeholder', (e) =>
+            @removeFragment(dropArea, e)
+            component.endMove(e)
+            
     wrap: (dropArea) ->
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')
             beforeDropArea = @newDropArea()

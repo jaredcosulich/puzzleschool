@@ -88,23 +88,23 @@ equationComponent.EquationComponent = (function() {
       top: top
     });
     this.placeHolder.show();
-    this.placeHolder.css({
-      height: this.element.height(),
-      width: this.element.width()
-    });
+    this.placeHolder.html(this.element.html());
     if (this.trackDrag) {
       return this.trackDrag(left, top, this);
     }
   };
 
   EquationComponent.prototype.endMove = function(e) {
+    if (!this.element.hasClass('dragging')) {
+      return;
+    }
+    this.element.removeClass('dragging');
+    this.gameArea.removeClass('dragging');
     this.element.css({
       position: 'static',
       top: 'auto',
       left: 'auto'
     });
-    this.element.removeClass('dragging');
-    this.gameArea.removeClass('dragging');
     if (this.endDrag(this)) {
       this.element.hide();
       this.placeHolder.show();

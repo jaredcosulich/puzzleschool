@@ -48,21 +48,20 @@ class equationComponent.EquationComponent
             top: top
 
         @placeHolder.show()
-        @placeHolder.css
-            height: @element.height()
-            width: @element.width()
+        @placeHolder.html(@element.html())   
 
         @trackDrag(left, top, @) if @trackDrag
         
     endMove: (e) ->
+        return unless @element.hasClass('dragging')
+        @element.removeClass('dragging')
+        @gameArea.removeClass('dragging')
+        
         @element.css
             position: 'static'
             top: 'auto'
             left: 'auto'
 
-        @element.removeClass('dragging')
-        @gameArea.removeClass('dragging')
-        
         if @endDrag(@)
             @element.hide()
             @placeHolder.show()

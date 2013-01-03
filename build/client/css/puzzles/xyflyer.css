@@ -218,11 +218,22 @@ body {
 .xyflyer .equation_area .possible_fragments .place_holder {
   float: left;
   margin: 6px 6px 0 0;
+}
+.xyflyer .equation_area .possible_fragments .equation_component {
   cursor: move;
+}
+.xyflyer .equation_area .possible_fragments .place_holder {
+  padding: 6px 9px;
+  color: #c7c7c7;
+  border: 1px solid #c7c7c7;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: url('/assets/images/puzzles/xyflyer/fragment_down_arrow.png') no-repeat top center;
+  cursor: pointer;
 }
 .xyflyer .equation_component {
   padding: 6px 9px;
-  background-color: #c7c7c7;
   border: 1px solid #949494;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;

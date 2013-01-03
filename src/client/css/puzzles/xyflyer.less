@@ -84,7 +84,7 @@ body {
 
                 .only_area {
                     width: ((@width / 3) - 69);
-                    padding: 0 3px;            
+                    padding: 0 3px;  
                 }
 
                 .equation {
@@ -219,14 +219,25 @@ body {
             .equation_component, .place_holder {
                 float: left;
                 margin: 6px 6px 0 0;
+            }
+
+            .equation_component {
                 cursor: move;
+            }
+            
+            .place_holder {
+                padding: 6px 9px;
+                color: @lightgrey;
+                border: 1px solid @lightgrey;
+                .rounded(3px);
+                background: url('/assets/images/puzzles/xyflyer/fragment_down_arrow.png') no-repeat top center;
+                cursor: pointer;
             }
         }
     }
 
     .equation_component {
         padding: 6px 9px;
-        background-color: @lightgrey;
         border: 1px solid @grey;
         .rounded(3px);
         cursor: move;

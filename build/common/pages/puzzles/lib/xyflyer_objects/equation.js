@@ -86,50 +86,59 @@ equation.Equation = (function() {
       return _this.clear();
     });
     return this.el.bind('mousedown.fragment', function(e) {
-      var childArea, dropArea, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
+      var c, _ref, _ref1;
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
-      _this.selectedDropArea.component.mousedown(e);
-      _this.selectedDropArea.component.move(e);
-      _this.selectedDropArea.component = null;
-      _this.el.find('.accept_component').removeClass('accept_component');
-      _this.selectedDropArea.element.removeClass('with_component');
-      _this.selectedDropArea.element.html(_this.selectedDropArea.startingFragment);
-      _ref2 = _this.selectedDropArea.childAreas;
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        childArea = _ref2[_i];
-        _this.removeDropArea(childArea);
-      }
-      _this.selectedDropArea.childAreas = [];
-      removeDropAreas = [];
-      _ref3 = _this.dropAreas;
-      for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
-        dropArea = _ref3[_j];
-        if (!(!dropArea.component && !dropArea.fixed)) {
-          continue;
-        }
-        dropArea.element.remove();
-        removeDropAreas.push(dropArea);
-      }
-      for (_k = 0, _len2 = removeDropAreas.length; _k < _len2; _k++) {
-        dropArea = removeDropAreas[_k];
-        _this.removeDropArea(dropArea);
-      }
-      _ref4 = _this.dropAreas;
-      for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
-        dropArea = _ref4[_l];
-        _this.wrap(dropArea);
-      }
-      if (!_this.dropAreas.length) {
-        _this.addFirstDropArea();
-      }
-      if (_this.selectedDropArea.parentArea) {
-        _this.selectedDropArea.parentArea.dirtyCount -= 1;
-      }
-      _this.initVariables();
-      return _this.plot(_this);
+      c = _this.selectedDropArea.component;
+      $(document.body).one('mouseup.component', function() {
+        return c.endMove(e);
+      });
+      return _this.removeFragment(_this.selectedDropArea, e);
     });
+  };
+
+  Equation.prototype.removeFragment = function(dropArea, e) {
+    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2;
+    dropArea.component.mousedown(e);
+    dropArea.component.move(e);
+    this.el.find('.accept_component').removeClass('accept_component');
+    dropArea.element.removeClass('with_component');
+    dropArea.element.html(dropArea.startingFragment);
+    dropArea.component = null;
+    _ref = dropArea.childAreas;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      childArea = _ref[_i];
+      this.removeDropArea(childArea);
+    }
+    dropArea.childAreas = [];
+    removeDropAreas = [];
+    _ref1 = this.dropAreas;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      da = _ref1[_j];
+      if (!(!da.component && !da.fixed)) {
+        continue;
+      }
+      da.element.remove();
+      removeDropAreas.push(da);
+    }
+    for (_k = 0, _len2 = removeDropAreas.length; _k < _len2; _k++) {
+      da = removeDropAreas[_k];
+      this.removeDropArea(da);
+    }
+    _ref2 = this.dropAreas;
+    for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
+      da = _ref2[_l];
+      this.wrap(da);
+    }
+    if (!this.dropAreas.length) {
+      this.addFirstDropArea();
+    }
+    if (dropArea.parentArea) {
+      dropArea.parentArea.dirtyCount -= 1;
+    }
+    this.initVariables();
+    return this.plot(this);
   };
 
   Equation.prototype.removeDropArea = function(dropAreaToRemove) {
@@ -240,7 +249,8 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.accept = function(dropArea, component) {
-    var element;
+    var element,
+      _this = this;
     element = dropArea.element;
     element.addClass('with_component');
     dropArea.component = component;
@@ -251,7 +261,12 @@ equation.Equation = (function() {
     this.wrap(dropArea);
     this.plot(this);
     this.initVariables();
-    return dropArea.width = dropArea.element.width();
+    dropArea.width = dropArea.element.width();
+    component.placeHolder.unbind('click.placeholder');
+    return component.placeHolder.one('click.placeholder', function(e) {
+      _this.removeFragment(dropArea, e);
+      return component.endMove(e);
+    });
   };
 
   Equation.prototype.wrap = function(dropArea) {
