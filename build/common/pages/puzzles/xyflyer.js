@@ -235,13 +235,13 @@ LEVELS = [
     rings: [
       {
         x: 2,
-        y: 5
+        y: 8
       }, {
         x: 6,
-        y: 15
+        y: 18
       }, {
         x: 10,
-        y: 25
+        y: 28
       }
     ],
     islandCoordinates: {
