@@ -422,7 +422,7 @@ board.Board = (function(_super) {
         if (intersection) {
           intersection -= this.xUnit * 0.001;
           intersectionY = this.formulas[id].formula(intersection / this.xUnit) * this.yUnit;
-          if (Math.abs(path[intersection].y - intersectionY) / this.yUnit > 0.01) {
+          if (Math.abs(path[intersection].y - intersectionY) / this.yUnit > 0.05) {
             return path;
           }
         }
