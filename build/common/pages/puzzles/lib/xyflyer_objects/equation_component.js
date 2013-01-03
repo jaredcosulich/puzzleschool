@@ -79,6 +79,9 @@ equationComponent.EquationComponent = (function() {
     }
     left = this.clientX(e) - (this.element.width() / 2);
     top = this.clientY(e) - (this.element.height() / 2);
+    if (e.type === 'touchmove') {
+      top -= 90;
+    }
     this.element.css({
       position: 'absolute',
       left: left,

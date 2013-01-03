@@ -41,6 +41,7 @@ class equationComponent.EquationComponent
         e.preventDefault() if e.preventDefault        
         left = @clientX(e) - (@element.width() / 2)
         top = @clientY(e) - (@element.height() / 2)
+        top -= 90 if e.type == 'touchmove'
         @element.css
             position: 'absolute'
             left: left
