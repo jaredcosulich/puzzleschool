@@ -234,14 +234,14 @@ LEVELS = [
     },
     rings: [
       {
-        x: 4,
+        x: 2,
         y: 5
       }, {
-        x: 12,
-        y: 9
+        x: 6,
+        y: 15
       }, {
-        x: 20,
-        y: 13
+        x: 10,
+        y: 25
       }
     ],
     islandCoordinates: {

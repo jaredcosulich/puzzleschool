@@ -182,9 +182,9 @@ LEVELS = [
             yMin: -10
             yMax: 30
         rings: [
-            {x: 4, y: 5}
-            {x: 12, y: 9}
-            {x: 20, y: 13}
+            {x: 2, y: 5}
+            {x: 6, y: 15}
+            {x: 10, y: 25}
         ]
         islandCoordinates: {x: 0, y: 3}
         startingFragments: ['ax + 3']
