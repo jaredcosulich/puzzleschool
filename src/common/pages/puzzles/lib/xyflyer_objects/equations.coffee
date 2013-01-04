@@ -10,6 +10,7 @@ class equations.Equations
         @equationComponents = []
         @$('.launch').bind 'click', => submit()
         @initHints()
+        @initBackspace()
 
     $: (selector) -> $(selector, @el)
 
@@ -57,6 +58,7 @@ class equations.Equations
     endComponentDragging: (component) ->
         @clearDrag()
         return false unless @selectedDropArea
+        @lastComponent = component
         @selectedDropArea.accept(component)
         @selectedDropArea = null
         return true
@@ -80,6 +82,9 @@ class equations.Equations
             else
                 equation.hideRange()
         
+    initBackspace: ->
+        window.onkeydown = (e) => e.preventDefault() if e.preventDefault if e.keyCode == 9
+            
     initHints: ->
         @el.find('.hint').bind 'click', => @showHint()
         

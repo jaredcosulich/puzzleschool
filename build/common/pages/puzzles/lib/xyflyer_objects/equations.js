@@ -21,6 +21,7 @@ equations.Equations = (function() {
       return submit();
     });
     this.initHints();
+    this.initBackspace();
   }
 
   Equations.prototype.$ = function(selector) {
@@ -106,6 +107,7 @@ equations.Equations = (function() {
     if (!this.selectedDropArea) {
       return false;
     }
+    this.lastComponent = component;
     this.selectedDropArea.accept(component);
     this.selectedDropArea = null;
     return true;
@@ -145,6 +147,15 @@ equations.Equations = (function() {
       }
     }
     return _results;
+  };
+
+  Equations.prototype.initBackspace = function() {
+    var _this = this;
+    return window.onkeydown = function(e) {
+      if (e.keyCode === 9 ? e.preventDefault : void 0) {
+        return e.preventDefault();
+      }
+    };
   };
 
   Equations.prototype.initHints = function() {
