@@ -90,7 +90,6 @@ class equations.Equations
 
     displayHint: (component, dropAreaElement, equation, solutionComponent) ->
         gameAreaOffset = @gameArea.offset()
-        dragThis = @$('.drag_this')
         
         if component.top() == 0
             dragElement = component.dropArea.element
@@ -101,6 +100,7 @@ class equations.Equations
         top = offset.top + offset.height - gameAreaOffset.top
         left = offset.left + (offset.width/2) - gameAreaOffset.left
     
+        dragThis = @$('.drag_this')
         dragThis.css
             opacity: 0
             top: top
@@ -158,13 +158,13 @@ class equations.Equations
         for equation in @equations
             formula = equation.formula()
             straightFormula = equation.straightFormula()
-            solution = equation.solution
-            if formula != solution
-                if solution != straightFormula
-                    for dropArea in equation.dropAreas when dropArea.component
-                        if solution.indexOf(dropArea.component.equationFragment) == -1
-                            @displayHint(dropArea.component, dropArea.component.placeHolder)
-                            
+            completedSolution = solution = equation.solution
+            for variable of equation.variables
+                info = equation.variables[variable]
+                completedSolution = completedSolution.replace(variable, info.solution) if info.solution
+                
+            if formula != completedSolution
+                if solution != straightFormula                            
                     if (solutionComponents = equation.solutionComponents)
                         for solutionComponent in solutionComponents when not solutionComponent.set 
                             component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
@@ -175,6 +175,11 @@ class equations.Equations
                                 solutionComponent.set = true
                                 return 
                     else
+                        for dropArea in equation.dropAreas when dropArea.component
+                            if solution.indexOf(dropArea.component.equationFragment) == -1
+                                @displayHint(dropArea.component, dropArea.component.placeHolder)
+                                return
+                    
                         components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
                         for component in components
                             fragment = component.equationFragment
@@ -185,8 +190,9 @@ class equations.Equations
                                     element.html(fragment)
                                     test = @testFragment(fragment, solution, equation.formula(), true)
                                     element.html('')
-                                    @displayHint(component, dropArea.element) if test 
-                                    return
+                                    if test 
+                                        @displayHint(component, dropArea.element) 
+                                        return
                 else
                     for variable of equation.variables
                         info = equation.variables[variable]
@@ -205,7 +211,22 @@ class equations.Equations
                             """
                         return
             else    
-                console.log('LAUNCH!')
+                launch = @$('.launch_hint')
+                launchOffset = @$('.launch').offset()
+                launch.css
+                    opacity: 0
+                    top: launchOffset.top + launchOffset.height - @gameArea.offset().top
+                    left: launchOffset.left + (launchOffset.width/2) - @gameArea.offset().left
+                launch.animate
+                    opacity: 1
+                    duration: 250
+                    complete: => 
+                        @$('.launch').one 'mouseup.hint', =>
+                            launch.animate
+                                opacity: 0
+                                duration: 250
+                                complete: => launch.css(top: -1000, left: -1000)
+                
         
         
         

@@ -238,7 +238,7 @@ LEVELS = [
     fragments: ['*3', '*.25', '/2', '/5']
   }, {
     equations: {
-      'ax + 3': {
+      '2.5x + 3': {
         start: 'ax + 3'
       }
     },

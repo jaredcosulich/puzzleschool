@@ -184,7 +184,7 @@ LEVELS = [
     }    
     {
         equations: 
-            'ax + 3': {start: 'ax + 3'}
+            '2.5x + 3': {start: 'ax + 3'}
         grid:
             xMin: -10
             xMax: 30
@@ -309,7 +309,7 @@ LEVELS = [
     }    
     {
         equations: 
-            'sin(ax+3.14)+b': 
+            'sin(ax+3.14)+b':
                 solutionComponents: [
                     {fragment: 'sin(ax)', after: ''},
                     {fragment: '+3.14', after: 'ax'},
