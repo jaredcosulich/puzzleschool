@@ -161,6 +161,10 @@ class equations.Equations
             solution = equation.solution
             if formula != solution
                 if solution != straightFormula
+                    for dropArea in equation.dropAreas when dropArea.component
+                        if solution.indexOf(dropArea.component.equationFragment) == -1
+                            @displayHint(dropArea.component, dropArea.component.placeHolder)
+                            
                     if (solutionComponents = equation.solutionComponents)
                         for solutionComponent in solutionComponents when not solutionComponent.set 
                             component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]

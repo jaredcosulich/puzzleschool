@@ -264,7 +264,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, c, component, components, dropArea, element, equation, existing, formula, fragment, info, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1,
+    var accept, c, component, components, dropArea, element, equation, existing, formula, fragment, info, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2,
       _this = this;
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -274,18 +274,27 @@ equations.Equations = (function() {
       solution = equation.solution;
       if (formula !== solution) {
         if (solution !== straightFormula) {
+          _ref1 = equation.dropAreas;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            dropArea = _ref1[_j];
+            if (dropArea.component) {
+              if (solution.indexOf(dropArea.component.equationFragment) === -1) {
+                this.displayHint(dropArea.component, dropArea.component.placeHolder);
+              }
+            }
+          }
           if ((solutionComponents = equation.solutionComponents)) {
-            for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
-              solutionComponent = solutionComponents[_j];
+            for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
+              solutionComponent = solutionComponents[_k];
               if (!(!solutionComponent.set)) {
                 continue;
               }
               component = ((function() {
-                var _k, _len2, _ref1, _results;
-                _ref1 = this.equationComponents;
+                var _l, _len3, _ref2, _results;
+                _ref2 = this.equationComponents;
                 _results = [];
-                for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-                  c = _ref1[_k];
+                for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
+                  c = _ref2[_l];
                   if (c.equationFragment === solutionComponent.fragment) {
                     _results.push(c);
                   }
@@ -306,13 +315,13 @@ equations.Equations = (function() {
             components = this.equationComponents.sort(function(a, b) {
               return b.equationFragment.length - a.equationFragment.length;
             });
-            for (_k = 0, _len2 = components.length; _k < _len2; _k++) {
-              component = components[_k];
+            for (_l = 0, _len3 = components.length; _l < _len3; _l++) {
+              component = components[_l];
               fragment = component.equationFragment;
               if (this.testFragment(fragment, solution, formula)) {
-                _ref1 = equation.dropAreas;
-                for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
-                  dropArea = _ref1[_l];
+                _ref2 = equation.dropAreas;
+                for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+                  dropArea = _ref2[_m];
                   if (dropArea.component || dropArea.fixed) {
                     continue;
                   }
