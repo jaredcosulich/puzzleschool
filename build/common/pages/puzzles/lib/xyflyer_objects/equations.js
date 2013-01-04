@@ -196,7 +196,13 @@ equations.Equations = (function() {
             $(document.body).unbind('mouseup.hint');
             dragThis.animate({
               opacity: 0,
-              duration: 250
+              duration: 250,
+              complete: function() {
+                return dragThis.css({
+                  top: -1000,
+                  left: -1000
+                });
+              }
             });
             dropHere = _this.$('.drop_here');
             dropHere.css({
@@ -266,7 +272,6 @@ equations.Equations = (function() {
             } else {
               accept = $(possible[0]);
             }
-            console.log(solutionComponent, solutionComponent.after, accept.length);
             if (accept) {
               this.displayHint(component, accept);
               solutionComponent.set = true;

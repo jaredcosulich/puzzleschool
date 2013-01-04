@@ -105,12 +105,15 @@ class equations.Equations
                         dragThis.animate
                             opacity: 0
                             duration: 250
-                            complete: =>
-                                dragThis.css(top: -1000, left: -1000)
+                            complete: => dragThis.css(top: -1000, left: -1000)
                         
                     $(document.body).one 'mousemove.hint', =>
                         $(document.body).unbind 'mouseup.hint'
-                        dragThis.animate(opacity: 0, duration: 250)
+                        dragThis.animate
+                            opacity: 0
+                            duration: 250
+                            complete: => dragThis.css(top: -1000, left: -1000)
+
                         dropHere = @$('.drop_here')
                         dropHere.css
                             opacity: 0
@@ -124,8 +127,7 @@ class equations.Equations
                                     dropHere.animate
                                         opacity: 0, 
                                         duration: 250
-                                        complete: =>
-                                            dropHere.css(top: -1000, left: -1000)
+                                        complete: => dropHere.css(top: -1000, left: -1000)
                            
         
 

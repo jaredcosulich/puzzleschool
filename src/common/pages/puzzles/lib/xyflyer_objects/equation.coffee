@@ -181,12 +181,12 @@ class equation.Equation
             component.endMove(e)
             
     wrap: (dropArea) ->
-        if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component')
+        if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component') or previous.hasClass('fragment')
             beforeDropArea = @newDropArea()
             dropArea.element.before(beforeDropArea)
             @addDropArea(beforeDropArea)
 
-        if !(next = dropArea.element.next()).length or next.hasClass('with_component')
+        if !(next = dropArea.element.next()).length or next.hasClass('with_component') or next.hasClass('fragment')
             afterDropArea = @newDropArea()
             dropArea.element.after(afterDropArea)
             @addDropArea(afterDropArea)
