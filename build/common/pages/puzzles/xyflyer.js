@@ -57,7 +57,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var equation, fragment, ring, xyflyer, _i, _j, _len, _len1, _ref, _ref1, _results,
+      var equation, fragment, info, ring, xyflyer, _i, _j, _len, _len1, _ref, _ref1, _results,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.level = this.el.data('level');
@@ -82,7 +82,8 @@ soma.views({
         }
       });
       for (equation in this.data.equations) {
-        this.viewHelper.addEquation(equation, this.data.equations[equation].start, this.data.variables);
+        info = this.data.equations[equation];
+        this.viewHelper.addEquation(equation, info.start, info.solutionComponents, this.data.variables);
       }
       _ref = this.data.rings;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -273,7 +274,21 @@ LEVELS = [
       }
     }
   }, {
-    equationCount: 1,
+    equations: {
+      'sin(ax+3.14)+b': {
+        solutionComponents: [
+          {
+            fragment: 'sin(ax)'
+          }, {
+            fragment: '+3.14',
+            after: 'ax'
+          }, {
+            fragment: '+b',
+            after: 'sin(ax+3.14)'
+          }
+        ]
+      }
+    },
     grid: {
       xMin: -10,
       xMax: 30,
@@ -302,13 +317,15 @@ LEVELS = [
         start: 1,
         min: -10,
         max: 10,
-        increment: 0.2
+        increment: 0.2,
+        solution: -0.6
       },
       b: {
         start: 2,
         min: -10,
         max: 10,
-        increment: 1
+        increment: 1,
+        solution: 5
       }
     }
   }, {

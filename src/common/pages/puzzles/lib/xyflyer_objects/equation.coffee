@@ -3,7 +3,7 @@ equation = exports ? provide('./equation', {})
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
 
-    constructor: ({@id, @gameArea, @solution, @startingFragment, @variables, @plot}) ->
+    constructor: ({@id, @gameArea, @solution, @solutionComponents, @startingFragment, @variables, @plot}) ->
         @dropAreas = []
         @container = $(document.createElement('DIV'))
         @container.addClass('equation_container')
@@ -239,8 +239,8 @@ class equation.Equation
         return '' if not @range?.from
         "{#{@range.from}<=x<=#{@range.to}}"
         
-    straightFormula: ->
-        element = @el[0]
+    straightFormula: (el = @el) ->
+        element = el[0]
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
         return text

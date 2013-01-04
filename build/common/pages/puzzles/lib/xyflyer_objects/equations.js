@@ -27,7 +27,7 @@ equations.Equations = (function() {
     return $(selector, this.el);
   };
 
-  Equations.prototype.add = function(solution, startingFragment, variables) {
+  Equations.prototype.add = function(solution, startingFragment, solutionComponents, variables) {
     var equation, equationCount,
       _this = this;
     equationCount = this.equationsArea.find('.equation').length;
@@ -35,6 +35,7 @@ equations.Equations = (function() {
       id: "equation_" + (equationCount + 1),
       gameArea: this.gameArea,
       solution: solution,
+      solutionComponents: solutionComponents,
       startingFragment: startingFragment,
       variables: variables,
       plot: function(eq) {
@@ -162,94 +163,147 @@ equations.Equations = (function() {
     return (complete ? solutionIndex === formula.indexOf(fragment) : solutionIndex !== formula.indexOf(fragment));
   };
 
-  Equations.prototype.showHint = function() {
-    var component, components, dragThis, equation, formula, fragment, gameAreaOffset, solution, _i, _len, _ref, _results;
+  Equations.prototype.displayHint = function(component, dropAreaElement) {
+    var dragThis, gameAreaOffset,
+      _this = this;
     gameAreaOffset = this.gameArea.offset();
+    dragThis = this.$('.drag_this');
+    dragThis.css({
+      opacity: 0,
+      top: component.top() + component.height() - gameAreaOffset.top,
+      left: component.left() + (component.width() / 2) - gameAreaOffset.left
+    });
+    return dragThis.animate({
+      opacity: 1,
+      duration: 250,
+      complete: function() {
+        return component.element.one('mousedown.hint', function() {
+          $(document.body).one('mouseup.hint', function() {
+            $(document.body).unbind('mousemove.hint');
+            return dragThis.animate({
+              opacity: 0,
+              duration: 250,
+              complete: function() {
+                return dragThis.css({
+                  top: -1000,
+                  left: -1000
+                });
+              }
+            });
+          });
+          return $(document.body).one('mousemove.hint', function() {
+            var dropHere;
+            $(document.body).unbind('mouseup.hint');
+            dragThis.animate({
+              opacity: 0,
+              duration: 250
+            });
+            dropHere = _this.$('.drop_here');
+            dropHere.css({
+              opacity: 0,
+              top: dropAreaElement.offset().top + dropAreaElement.height() - gameAreaOffset.top,
+              left: dropAreaElement.offset().left + (dropAreaElement.width() / 2) - gameAreaOffset.left
+            });
+            return dropHere.animate({
+              opacity: 1,
+              duration: 250,
+              complete: function() {
+                return component.element.one('mouseup.hint', function() {
+                  return dropHere.animate({
+                    opacity: 0,
+                    duration: 250,
+                    complete: function() {
+                      return dropHere.css({
+                        top: -1000,
+                        left: -1000
+                      });
+                    }
+                  });
+                });
+              }
+            });
+          });
+        });
+      }
+    });
+  };
+
+  Equations.prototype.showHint = function() {
+    var accept, c, component, components, dropArea, element, equation, formula, fragment, p, possible, solution, solutionComponent, solutionComponents, test, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
     _ref = this.equations;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
       formula = equation.formula();
       solution = equation.solution;
       if (formula !== solution) {
-        components = this.equationComponents.sort(function(a, b) {
-          return b.equationFragment.length - a.equationFragment.length;
-        });
-        _results.push((function() {
-          var _j, _len1, _results1,
-            _this = this;
-          _results1 = [];
-          for (_j = 0, _len1 = components.length; _j < _len1; _j++) {
-            component = components[_j];
-            fragment = component.equationFragment;
-            if (this.testFragment(fragment, solution, formula)) {
-              dragThis = this.$('.drag_this');
-              dragThis.css({
-                opacity: 0,
-                top: component.top() + component.height() - gameAreaOffset.top,
-                left: component.left() + (component.width() / 2) - gameAreaOffset.left
-              });
-              dragThis.animate({
-                opacity: 1,
-                duration: 250,
-                complete: function() {
-                  return component.element.one('mousedown.hint', function() {
-                    return $(document.body).one('mousemove.hint', function() {
-                      var dropArea, dropHere, element, test, _k, _len2, _ref1, _results2;
-                      _ref1 = equation.dropAreas;
-                      _results2 = [];
-                      for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-                        dropArea = _ref1[_k];
-                        if (dropArea.component || dropArea.fixed) {
-                          continue;
-                        }
-                        element = dropArea.element;
-                        element.html(fragment);
-                        test = _this.testFragment(fragment, solution, equation.formula(), true);
-                        element.html('');
-                        if (test) {
-                          dragThis.animate({
-                            opacity: 0,
-                            duration: 250
-                          });
-                          dropHere = _this.$('.drop_here');
-                          dropHere.css({
-                            opacity: 0,
-                            top: element.offset().top + element.height() - gameAreaOffset.top,
-                            left: element.offset().left + (element.width() / 2) - gameAreaOffset.left
-                          });
-                          dropHere.animate({
-                            opacity: 1,
-                            duration: 250,
-                            complete: function() {
-                              return component.element.one('mouseup.hint', function() {
-                                return dropHere.animate({
-                                  opacity: 0,
-                                  duration: 250
-                                });
-                              });
-                            }
-                          });
-                        }
-                        break;
-                      }
-                      return _results2;
-                    });
-                  });
+        if ((solutionComponents = equation.solutionComponents)) {
+          for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
+            solutionComponent = solutionComponents[_j];
+            if (!(!solutionComponent.set)) {
+              continue;
+            }
+            component = ((function() {
+              var _k, _len2, _ref1, _results;
+              _ref1 = this.equationComponents;
+              _results = [];
+              for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+                c = _ref1[_k];
+                if (c.equationFragment === solutionComponent.fragment) {
+                  _results.push(c);
                 }
-              });
-              break;
+              }
+              return _results;
+            }).call(this))[0];
+            possible = equation.el.find('div');
+            if (solutionComponent.after) {
+              for (_k = 0, _len2 = possible.length; _k < _len2; _k++) {
+                p = possible[_k];
+                if (equation.straightFormula($(p)) === solutionComponent.after) {
+                  accept = $(p).next();
+                  break;
+                }
+              }
             } else {
-              _results1.push(void 0);
+              accept = $(possible[0]);
+            }
+            console.log(solutionComponent, solutionComponent.after, accept.length);
+            if (accept) {
+              this.displayHint(component, accept);
+              solutionComponent.set = true;
+              return;
             }
           }
-          return _results1;
-        }).call(this));
+        } else {
+          components = this.equationComponents.sort(function(a, b) {
+            return b.equationFragment.length - a.equationFragment.length;
+          });
+          for (_l = 0, _len3 = components.length; _l < _len3; _l++) {
+            component = components[_l];
+            fragment = component.equationFragment;
+            if (this.testFragment(fragment, solution, formula)) {
+              _ref1 = equation.dropAreas;
+              for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
+                dropArea = _ref1[_m];
+                if (dropArea.component || dropArea.fixed) {
+                  continue;
+                }
+                element = dropArea.element;
+                element.html(fragment);
+                test = this.testFragment(fragment, solution, equation.formula(), true);
+                element.html('');
+                if (test) {
+                  this.displayHint(component, dropArea.element);
+                }
+                return;
+              }
+            }
+          }
+        }
+        console.log('VARIABLE!');
       } else {
-        _results.push(void 0);
+        console.log('LAUNCH!');
       }
     }
-    return _results;
   };
 
   return Equations;

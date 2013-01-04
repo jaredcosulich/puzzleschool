@@ -13,12 +13,13 @@ class equations.Equations
 
     $: (selector) -> $(selector, @el)
 
-    add: (solution, startingFragment, variables) ->
+    add: (solution, startingFragment, solutionComponents, variables) ->
         equationCount = @equationsArea.find('.equation').length
         equation = new Equation
             id: "equation_#{equationCount + 1}"
             gameArea: @gameArea
             solution: solution
+            solutionComponents: solutionComponents
             startingFragment: startingFragment
             variables: variables
             plot: (eq) => @plotFormula(eq)
@@ -82,60 +83,90 @@ class equations.Equations
     initHints: ->
         @el.find('.hint').bind 'click', => @showHint()
         
-
     testFragment: (fragment, solution, formula, complete) ->
         solutionIndex = solution.indexOf(fragment)
         return false unless formula[solutionIndex - 1] == solution[solutionIndex - 1]
         return (if complete then solutionIndex == formula.indexOf(fragment) else solutionIndex != formula.indexOf(fragment))
 
-    showHint: ->
+    displayHint: (component, dropAreaElement) ->
         gameAreaOffset = @gameArea.offset()
+        dragThis = @$('.drag_this')
+        dragThis.css
+            opacity: 0
+            top: component.top() + component.height() - gameAreaOffset.top
+            left: component.left() + (component.width()/2) - gameAreaOffset.left
+        dragThis.animate
+            opacity: 1
+            duration: 250
+            complete: => 
+                component.element.one 'mousedown.hint', =>
+                    $(document.body).one 'mouseup.hint', =>
+                        $(document.body).unbind 'mousemove.hint'    
+                        dragThis.animate
+                            opacity: 0
+                            duration: 250
+                            complete: =>
+                                dragThis.css(top: -1000, left: -1000)
+                        
+                    $(document.body).one 'mousemove.hint', =>
+                        $(document.body).unbind 'mouseup.hint'
+                        dragThis.animate(opacity: 0, duration: 250)
+                        dropHere = @$('.drop_here')
+                        dropHere.css
+                            opacity: 0
+                            top: dropAreaElement.offset().top + dropAreaElement.height() - gameAreaOffset.top
+                            left: dropAreaElement.offset().left + (dropAreaElement.width()/2) - gameAreaOffset.left
+                        dropHere.animate
+                            opacity: 1
+                            duration: 250
+                            complete: => 
+                                component.element.one 'mouseup.hint', =>
+                                    dropHere.animate
+                                        opacity: 0, 
+                                        duration: 250
+                                        complete: =>
+                                            dropHere.css(top: -1000, left: -1000)
+                           
+        
+
+    showHint: ->
         for equation in @equations
             formula = equation.formula()
             solution = equation.solution
             if formula != solution
-                components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
-                for component in components
-                    fragment = component.equationFragment
-                    if @testFragment(fragment, solution, formula)
-                        dragThis = @$('.drag_this')
-                        dragThis.css
-                            opacity: 0
-                            top: component.top() + component.height() - gameAreaOffset.top
-                            left: component.left() + (component.width()/2) - gameAreaOffset.left
-                        dragThis.animate
-                            opacity: 1
-                            duration: 250
-                            complete: => 
-                                component.element.one 'mousedown.hint', =>
-                                    $(document.body).one 'mouseup.hint', =>
-                                        $(document.body).unbind 'mousemove.hint'    
-                                        dragThis.animate(opacity: 0, duration: 250)
-                                        
-                                    $(document.body).one 'mousemove.hint', =>
-                                        $(document.body).unbind 'mouseup.hint'
-                                        for dropArea in equation.dropAreas
-                                            continue if dropArea.component or dropArea.fixed
-                                            element = dropArea.element
-                                            element.html(fragment)
-                                            test = @testFragment(fragment, solution, equation.formula(), true)
-                                            element.html('')
-                                            if test
-                                                dragThis.animate(opacity: 0, duration: 250)
-                                                dropHere = @$('.drop_here')
-                                                dropHere.css
-                                                    opacity: 0
-                                                    top: element.offset().top + element.height() - gameAreaOffset.top
-                                                    left: element.offset().left + (element.width()/2) - gameAreaOffset.left
-                                                dropHere.animate
-                                                    opacity: 1
-                                                    duration: 250
-                                                    complete: => 
-                                                        component.element.one 'mouseup.hint', =>
-                                                            dropHere.animate(opacity: 0, duration: 250)
-                                            break
-                        break
-        
+                if (solutionComponents = equation.solutionComponents)
+                    for solutionComponent in solutionComponents when not solutionComponent.set 
+                        component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
+                        
+                        possible = equation.el.find('div')
+                        if solutionComponent.after
+                            for p in possible
+                                if equation.straightFormula($(p)) == solutionComponent.after
+                                    accept = $(p).next()
+                                    break
+                        else
+                            accept = $(possible[0])
+                        
+                        if accept
+                            @displayHint(component, accept)
+                            solutionComponent.set = true
+                            return 
+                else
+                    components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
+                    for component in components
+                        fragment = component.equationFragment
+                        if @testFragment(fragment, solution, formula)
+                            for dropArea in equation.dropAreas
+                                continue if dropArea.component or dropArea.fixed
+                                element = dropArea.element
+                                element.html(fragment)
+                                test = @testFragment(fragment, solution, equation.formula(), true)
+                                element.html('')
+                                @displayHint(component, dropArea.element) if test 
+                                return
+                console.log('VARIABLE!')
+            else
+                console.log('LAUNCH!')
         
         
         

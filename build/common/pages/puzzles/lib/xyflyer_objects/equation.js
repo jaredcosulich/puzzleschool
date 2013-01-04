@@ -10,7 +10,7 @@ equation.Equation = (function() {
 
   function Equation(_arg) {
     var _ref;
-    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
+    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.solutionComponents = _arg.solutionComponents, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -354,9 +354,12 @@ equation.Equation = (function() {
     return "{" + this.range.from + "<=x<=" + this.range.to + "}";
   };
 
-  Equation.prototype.straightFormula = function() {
+  Equation.prototype.straightFormula = function(el) {
     var element, text;
-    element = this.el[0];
+    if (el == null) {
+      el = this.el;
+    }
+    element = el[0];
     text = element.textContent ? element.textContent : element.innerText;
     if (text === this.defaultText) {
       text = '';

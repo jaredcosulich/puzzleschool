@@ -72,7 +72,8 @@ soma.views
                 nextLevel: => @nextLevel()
             
             for equation of @data.equations
-                @viewHelper.addEquation(equation, @data.equations[equation].start, @data.variables)    
+                info = @data.equations[equation]
+                @viewHelper.addEquation(equation, info.start, info.solutionComponents, @data.variables)    
         
             for ring in @data.rings
                 @viewHelper.addRing(ring.x, ring.y)
@@ -209,7 +210,13 @@ LEVELS = [
                 
     }    
     {
-        equationCount: 1
+        equations: 
+            'sin(ax+3.14)+b': 
+                solutionComponents: [
+                    {fragment: 'sin(ax)'},
+                    {fragment: '+3.14', after: 'ax'},
+                    {fragment: '+b', after: 'sin(ax+3.14)'}
+                ]
         grid:
             xMin: -10
             xMax: 30
@@ -230,11 +237,13 @@ LEVELS = [
                 min: -10
                 max: 10
                 increment: 0.2
+                solution: -0.6
             b:
                 start: 2
                 min: -10
                 max: 10
                 increment: 1
+                solution: 5
                 
     }    
     {
