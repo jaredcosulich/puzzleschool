@@ -163,21 +163,29 @@ equations.Equations = (function() {
     return (complete ? solutionIndex === formula.indexOf(fragment) : solutionIndex !== formula.indexOf(fragment));
   };
 
-  Equations.prototype.displayHint = function(component, dropAreaElement) {
-    var dragThis, gameAreaOffset,
+  Equations.prototype.displayHint = function(component, dropAreaElement, equation, solutionComponent) {
+    var dragElement, dragThis, gameAreaOffset, left, offset, top,
       _this = this;
     gameAreaOffset = this.gameArea.offset();
     dragThis = this.$('.drag_this');
+    if (component.top() === 0) {
+      dragElement = component.dropArea.element;
+    } else {
+      dragElement = component.element;
+    }
+    offset = dragElement.offset();
+    top = offset.top + offset.height - gameAreaOffset.top;
+    left = offset.left + (offset.width / 2) - gameAreaOffset.left;
     dragThis.css({
       opacity: 0,
-      top: component.top() + component.height() - gameAreaOffset.top,
-      left: component.left() + (component.width() / 2) - gameAreaOffset.left
+      top: top,
+      left: left
     });
     return dragThis.animate({
       opacity: 1,
       duration: 250,
       complete: function() {
-        return component.element.one('mousedown.hint', function() {
+        return dragElement.one('mousedown.hint', function() {
           $(document.body).one('mouseup.hint', function() {
             $(document.body).unbind('mousemove.hint');
             return dragThis.animate({
@@ -205,10 +213,13 @@ equations.Equations = (function() {
               }
             });
             dropHere = _this.$('.drop_here');
+            if ((offset = dropAreaElement.offset()).top === 0) {
+              offset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
+            }
             dropHere.css({
               opacity: 0,
-              top: dropAreaElement.offset().top + dropAreaElement.height() - gameAreaOffset.top,
-              left: dropAreaElement.offset().left + (dropAreaElement.width() / 2) - gameAreaOffset.left
+              top: offset.top + offset.height - gameAreaOffset.top,
+              left: offset.left + (offset.width / 2) - gameAreaOffset.left
             });
             return dropHere.animate({
               opacity: 1,
@@ -234,8 +245,26 @@ equations.Equations = (function() {
     });
   };
 
+  Equations.prototype.findComponentDropAreaElement = function(equation, solutionComponent) {
+    var accept, p, possible, sf, _i, _len;
+    possible = equation.el.find('div');
+    if (solutionComponent.after.length) {
+      for (_i = 0, _len = possible.length; _i < _len; _i++) {
+        p = possible[_i];
+        sf = equation.straightFormula($(p));
+        if (sf === solutionComponent.after || sf.replace(solutionComponent.fragment, '') === solutionComponent.after) {
+          accept = $(p).next();
+          break;
+        }
+      }
+    } else {
+      accept = $(possible[0]);
+    }
+    return accept;
+  };
+
   Equations.prototype.showHint = function() {
-    var accept, c, component, components, dropArea, element, equation, existing, formula, fragment, info, p, possible, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1,
+    var accept, c, component, components, dropArea, element, equation, existing, formula, fragment, info, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1,
       _this = this;
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -266,20 +295,9 @@ equations.Equations = (function() {
               if (component.after === solutionComponent.after) {
                 continue;
               }
-              possible = equation.el.find('div');
-              if (solutionComponent.after.length) {
-                for (_k = 0, _len2 = possible.length; _k < _len2; _k++) {
-                  p = possible[_k];
-                  if (equation.straightFormula($(p)) === solutionComponent.after) {
-                    accept = $(p).next();
-                    break;
-                  }
-                }
-              } else {
-                accept = $(possible[0]);
-              }
+              accept = this.findComponentDropAreaElement(equation, solutionComponent);
               if (accept != null ? accept.length : void 0) {
-                this.displayHint(component, accept);
+                this.displayHint(component, accept, equation, solutionComponent);
                 solutionComponent.set = true;
                 return;
               }
@@ -288,13 +306,13 @@ equations.Equations = (function() {
             components = this.equationComponents.sort(function(a, b) {
               return b.equationFragment.length - a.equationFragment.length;
             });
-            for (_l = 0, _len3 = components.length; _l < _len3; _l++) {
-              component = components[_l];
+            for (_k = 0, _len2 = components.length; _k < _len2; _k++) {
+              component = components[_k];
               fragment = component.equationFragment;
               if (this.testFragment(fragment, solution, formula)) {
                 _ref1 = equation.dropAreas;
-                for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
-                  dropArea = _ref1[_m];
+                for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
+                  dropArea = _ref1[_l];
                   if (dropArea.component || dropArea.fixed) {
                     continue;
                   }

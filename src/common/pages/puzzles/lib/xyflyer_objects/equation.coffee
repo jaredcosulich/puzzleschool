@@ -171,6 +171,7 @@ class equation.Equation
         element = dropArea.element
         element.addClass('with_component')
         dropArea.component = component
+        component.dropArea = dropArea
         dropArea.parentArea.dirtyCount += 1 if dropArea.parentArea
         @formatDropArea(dropArea, component)
         @wrap(dropArea)

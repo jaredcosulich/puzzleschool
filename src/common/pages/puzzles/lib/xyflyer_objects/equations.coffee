@@ -88,18 +88,28 @@ class equations.Equations
         return false unless formula[solutionIndex - 1] == solution[solutionIndex - 1]
         return (if complete then solutionIndex == formula.indexOf(fragment) else solutionIndex != formula.indexOf(fragment))
 
-    displayHint: (component, dropAreaElement) ->
+    displayHint: (component, dropAreaElement, equation, solutionComponent) ->
         gameAreaOffset = @gameArea.offset()
         dragThis = @$('.drag_this')
+        
+        if component.top() == 0
+            dragElement = component.dropArea.element
+        else
+            dragElement = component.element
+            
+        offset = dragElement.offset()
+        top = offset.top + offset.height - gameAreaOffset.top
+        left = offset.left + (offset.width/2) - gameAreaOffset.left
+    
         dragThis.css
             opacity: 0
-            top: component.top() + component.height() - gameAreaOffset.top
-            left: component.left() + (component.width()/2) - gameAreaOffset.left
+            top: top
+            left: left
         dragThis.animate
             opacity: 1
             duration: 250
             complete: => 
-                component.element.one 'mousedown.hint', =>
+                dragElement.one 'mousedown.hint', =>
                     $(document.body).one 'mouseup.hint', =>
                         $(document.body).unbind 'mousemove.hint'    
                         dragThis.animate
@@ -114,11 +124,14 @@ class equations.Equations
                             duration: 250
                             complete: => dragThis.css(top: -1000, left: -1000)
 
-                        dropHere = @$('.drop_here')
+                        dropHere = @$('.drop_here') 
+                        if (offset = dropAreaElement.offset()).top == 0
+                            offset = @findComponentDropAreaElement(equation, solutionComponent).offset()
+                        
                         dropHere.css
                             opacity: 0
-                            top: dropAreaElement.offset().top + dropAreaElement.height() - gameAreaOffset.top
-                            left: dropAreaElement.offset().left + (dropAreaElement.width()/2) - gameAreaOffset.left
+                            top: offset.top + offset.height - gameAreaOffset.top
+                            left: offset.left + (offset.width/2) - gameAreaOffset.left
                         dropHere.animate
                             opacity: 1
                             duration: 250
@@ -128,8 +141,18 @@ class equations.Equations
                                         opacity: 0, 
                                         duration: 250
                                         complete: => dropHere.css(top: -1000, left: -1000)
-                           
-        
+                                   
+    findComponentDropAreaElement: (equation, solutionComponent) ->
+        possible = equation.el.find('div')
+        if solutionComponent.after.length
+            for p in possible
+                sf = equation.straightFormula($(p))
+                if sf == solutionComponent.after or sf.replace(solutionComponent.fragment, '') == solutionComponent.after
+                    accept = $(p).next()
+                    break
+        else
+            accept = $(possible[0])
+        return accept
 
     showHint: ->
         for equation in @equations
@@ -142,17 +165,9 @@ class equations.Equations
                         for solutionComponent in solutionComponents when not solutionComponent.set 
                             component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
                             continue if component.after == solutionComponent.after
-                            possible = equation.el.find('div')
-                            if solutionComponent.after.length
-                                for p in possible
-                                    if equation.straightFormula($(p)) == solutionComponent.after
-                                        accept = $(p).next()
-                                        break
-                            else
-                                accept = $(possible[0])
-                        
+                            accept = @findComponentDropAreaElement(equation, solutionComponent)
                             if accept?.length
-                                @displayHint(component, accept)
+                                @displayHint(component, accept, equation, solutionComponent)
                                 solutionComponent.set = true
                                 return 
                     else

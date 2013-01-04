@@ -260,6 +260,7 @@ equation.Equation = (function() {
     element = dropArea.element;
     element.addClass('with_component');
     dropArea.component = component;
+    component.dropArea = dropArea;
     if (dropArea.parentArea) {
       dropArea.parentArea.dirtyCount += 1;
     }
