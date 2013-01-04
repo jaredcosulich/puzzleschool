@@ -171,9 +171,21 @@ class equations.Equations
                 else
                     for variable of equation.variables
                         info = equation.variables[variable]
-                        continue if not info.element or info.get() == info.solution
-                        console.log(variable, info.solution)
-            else
+                        continue if not info.element or "#{info.get()}" == "#{info.solution}"
+                        if (existing = @$(".hints .#{variable}_hint")).length
+                            existing.animate
+                                opacity: 0
+                                duration: 500
+                                complete: =>
+                                    existing.animate
+                                        opacity: 1
+                                        duration: 500
+                        else
+                            @$('.hints').append """
+                                <p class='#{variable}_hint'>Set #{variable} = #{info.solution}</p>
+                            """
+                        return
+            else    
                 console.log('LAUNCH!')
         
         

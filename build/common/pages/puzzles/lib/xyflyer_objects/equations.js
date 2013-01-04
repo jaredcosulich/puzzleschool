@@ -235,7 +235,8 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, c, component, components, dropArea, element, equation, formula, fragment, info, p, possible, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
+    var accept, c, component, components, dropArea, element, equation, existing, formula, fragment, info, p, possible, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1,
+      _this = this;
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
@@ -312,10 +313,24 @@ equations.Equations = (function() {
         } else {
           for (variable in equation.variables) {
             info = equation.variables[variable];
-            if (!info.element || info.get() === info.solution) {
+            if (!info.element || ("" + (info.get())) === ("" + info.solution)) {
               continue;
             }
-            console.log(variable, info.solution);
+            if ((existing = this.$(".hints ." + variable + "_hint")).length) {
+              existing.animate({
+                opacity: 0,
+                duration: 500,
+                complete: function() {
+                  return existing.animate({
+                    opacity: 1,
+                    duration: 500
+                  });
+                }
+              });
+            } else {
+              this.$('.hints').append("<p class='" + variable + "_hint'>Set " + variable + " = " + info.solution + "</p>");
+            }
+            return;
           }
         }
       } else {
