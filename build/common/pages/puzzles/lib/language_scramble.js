@@ -302,8 +302,8 @@ languageScramble.ViewHelper = (function() {
       if (letter == null) {
         return;
       }
-      $(letter).trigger('mousedown');
-      return $(letter).trigger('mouseup');
+      $(letter).trigger('keypress.start');
+      return $(letter).trigger('keypress.end');
     });
   };
 
@@ -328,11 +328,11 @@ languageScramble.ViewHelper = (function() {
       if (_this.dragging) {
         return;
       }
-      if (e.preventDefault != null) {
+      if ((e != null ? e.preventDefault : void 0) != null) {
         e.preventDefault();
       }
       _this.dragging = letter;
-      if (_this.clientX(e)) {
+      if (e && _this.clientX(e)) {
         _this.dragPathX = [];
         _this.dragPathY = [];
         relativeParent = $(letter[0].parentNode);
@@ -343,25 +343,13 @@ languageScramble.ViewHelper = (function() {
         _this.dragAdjustmentY = _this.clientY(e) - letter.offset().top + relativeParent.offset().top;
       }
       if (_this.actualLetter(letter) != null) {
-        return letter.addClass('recently_static_guess');
+        letter.addClass('recently_static_guess');
       } else {
-        return letter.addClass('recently_static_letter');
+        letter.addClass('recently_static_letter');
       }
+      $(document.body).bind('mousemove.drag touchmove.drag', handleMove);
+      return $(document.body).one('mouseup.drag touchend.drag', endDrag);
     };
-    if (window.AppMobi) {
-      $(document.body).bind('touchstart', function(e) {
-        var dims, x, y;
-        x = e.targetTouches[0].clientX;
-        y = e.targetTouches[0].clientY;
-        dims = letter.offset();
-        if (x > dims.left - 1 && x < dims.left + dims.width + 1 && y > dims.top - 1 && y < dims.top + dims.height + 1) {
-          return startDrag(e);
-        }
-      });
-    } else {
-      letter.bind('mousedown', startDrag);
-      letter.bind('touchstart', startDrag);
-    }
     handleMove = function(e) {
       if (_this.initializingScramble) {
         return;
@@ -399,12 +387,6 @@ languageScramble.ViewHelper = (function() {
         left: _this.clientX(e) - _this.dragAdjustmentX
       });
     };
-    if (window.AppMobi) {
-      $(document.body).bind('touchmove', handleMove);
-    } else {
-      letter.bind('mousemove', handleMove);
-      letter.bind('touchmove', handleMove);
-    }
     endDrag = function(e) {
       var alreadyDragged, containerClass, currentX, currentY, guess, lastX, lastY, x, y;
       if (_this.initializingScramble) {
@@ -413,9 +395,10 @@ languageScramble.ViewHelper = (function() {
       if (_this.dragging !== letter) {
         return;
       }
-      if (e.preventDefault != null) {
+      if ((e != null ? e.preventDefault : void 0) != null) {
         e.preventDefault();
       }
+      $(document.body).unbind('mousemove.drag touchmove.drag');
       if (_this.dragging.css('position') === 'absolute') {
         alreadyDragged = true;
       }
@@ -476,12 +459,17 @@ languageScramble.ViewHelper = (function() {
       }
       return _this.dragging = null;
     };
-    if (window.AppMobi) {
-      return $(document.body).bind('touchend', endDrag);
-    } else {
-      letter.bind('mouseup', endDrag);
-      return letter.bind('touchend', endDrag);
-    }
+    $(document.body).bind('mousedown.drag touchstart.drag', function(e) {
+      var dims, x, y;
+      x = _this.clientX(e);
+      y = _this.clientY(e);
+      dims = letter.offset();
+      if (x > dims.left - 1 && x < dims.left + dims.width + 1 && y > dims.top - 1 && y < dims.top + dims.height + 1) {
+        return startDrag(e);
+      }
+    });
+    letter.bind('keypress.start', startDrag);
+    return letter.bind('keypress.end', endDrag);
   };
 
   ViewHelper.prototype.newScramble = function() {

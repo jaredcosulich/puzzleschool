@@ -190,8 +190,8 @@ class languageScramble.ViewHelper
                 return
                 
             return unless letter?
-            $(letter).trigger 'mousedown'
-            $(letter).trigger 'mouseup'
+            $(letter).trigger 'keypress.start'
+            $(letter).trigger 'keypress.end'
             
     actualLetter: (letter) ->
         return letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)
@@ -208,10 +208,10 @@ class languageScramble.ViewHelper
         startDrag = (e) =>
             return if @initializingScramble
             return if @dragging 
-            e.preventDefault() if e.preventDefault?
+            e.preventDefault() if e?.preventDefault?
             @dragging = letter
             
-            if @clientX(e)
+            if e and @clientX(e)
                 @dragPathX = []
                 @dragPathY = []
             
@@ -225,21 +225,10 @@ class languageScramble.ViewHelper
                 letter.addClass('recently_static_guess')
             else
                 letter.addClass('recently_static_letter')
+                
+            $(document.body).bind 'mousemove.drag touchmove.drag', handleMove
+            $(document.body).one 'mouseup.drag touchend.drag', endDrag
 
-        if window.AppMobi   
-            $(document.body).bind 'touchstart', (e) =>
-                x = e.targetTouches[0].clientX
-                y = e.targetTouches[0].clientY
-                dims = letter.offset()
-                if x > dims.left - 1 and
-                   x < dims.left + dims.width + 1 and
-                   y > dims.top - 1 and
-                   y < dims.top + dims.height + 1
-                    startDrag(e)          
-        else
-            letter.bind 'mousedown', startDrag 
-            letter.bind 'touchstart', startDrag
-        
         handleMove = (e) =>
             return if @initializingScramble
             return unless @dragging == letter
@@ -259,19 +248,15 @@ class languageScramble.ViewHelper
             @dragPathX.push(@clientX(e)) unless @dragPathX[@dragPathX.length - 1] == @clientX(e)
             @dragPathY.push(@clientY(e)) unless @dragPathY[@dragPathY.length - 1] == @clientY(e)
             letter.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)  
-  
-        if window.AppMobi
-            $(document.body).bind 'touchmove', handleMove
-        else
-            letter.bind 'mousemove', handleMove 
-            letter.bind 'touchmove', handleMove
         
         endDrag = (e) =>
             return if @initializingScramble
 
             return unless @dragging == letter
 
-            e.preventDefault() if e.preventDefault?
+            e.preventDefault() if e?.preventDefault?
+            
+            $(document.body).unbind('mousemove.drag touchmove.drag')
 
             alreadyDragged = true if @dragging.css('position') == 'absolute'
             
@@ -300,12 +285,20 @@ class languageScramble.ViewHelper
                     @replaceBlankWithLetter(letter)
             @dragging = null
 
-        if window.AppMobi
-            $(document.body).bind 'touchend', endDrag
-        else
-            letter.bind 'mouseup', endDrag 
-            letter.bind 'touchend', endDrag
-            
+        $(document.body).bind 'mousedown.drag touchstart.drag', (e) =>
+            x = @clientX(e)
+            y = @clientY(e)
+            dims = letter.offset()
+            if x > dims.left - 1 and
+               x < dims.left + dims.width + 1 and
+               y > dims.top - 1 and
+               y < dims.top + dims.height + 1
+                startDrag(e)          
+                
+        letter.bind 'keypress.start', startDrag
+        letter.bind 'keypress.end', endDrag
+
+        
     newScramble: ->
         @initializingScramble = true
         @answerTimes or= []
