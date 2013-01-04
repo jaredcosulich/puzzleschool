@@ -589,6 +589,35 @@ CLASSES = {
         fragments: ['3x', '1+', '1-', '2+', '2-']
       }, {
         equations: {
+          '4+0.2x': {
+            start: 'x'
+          }
+        },
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -6,
+          yMax: 10
+        },
+        rings: [
+          {
+            x: -1,
+            y: 3.8
+          }, {
+            x: 3,
+            y: 4.6
+          }, {
+            x: 8,
+            y: 5.6
+          }
+        ],
+        islandCoordinates: {
+          x: -8,
+          y: 2.4
+        },
+        fragments: ['4+', '2+', '0.2', '0.5', '2']
+      }, {
+        equations: {
           '(3/2)x-4': {
             solutionComponents: [
               {
