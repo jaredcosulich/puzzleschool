@@ -210,6 +210,7 @@ body {
 .xyflyer .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
+  overflow: hidden;
 }
 .xyflyer .equation_area .possible_fragments p {
   font-size: 11px;
@@ -269,4 +270,14 @@ body {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
+}
+.xyflyer .hints {
+  padding: 60px 0 0 6px;
+}
+.xyflyer .hints .drag_this,
+.xyflyer .hints .drop_here {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  z-index: 9999;
 }

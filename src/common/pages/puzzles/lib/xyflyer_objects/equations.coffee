@@ -7,17 +7,20 @@ class equations.Equations
         @equationsArea = @$('.equations')
         @possibleFragments = @$('.possible_fragments')
         @equations = []
+        @equationComponents = []
         @$('.launch').bind 'click', => submit()
+        @initHints()
 
     $: (selector) -> $(selector, @el)
 
-    add: (startingFragment, variables) ->
+    add: (solution, startingFragment, variables) ->
         equationCount = @equationsArea.find('.equation').length
         equation = new Equation
+            id: "equation_#{equationCount + 1}"
             gameArea: @gameArea
+            solution: solution
             startingFragment: startingFragment
             variables: variables
-            id: "equation_#{equationCount + 1}"
             plot: (eq) => @plotFormula(eq)
             
         @equations.push(equation)
@@ -32,6 +35,7 @@ class equations.Equations
             endDrag: (component) => @endComponentDragging(component)
 
         equationComponent.appendTo(@possibleFragments)
+        @equationComponents.push(equationComponent)
         
     trackComponentDragging: (left, top, component) ->
         @el.addClass('show_places') unless @el.hasClass('show_places')
@@ -75,6 +79,62 @@ class equations.Equations
             else
                 equation.hideRange()
         
+    initHints: ->
+        @el.find('.hint').bind 'click', => @showHint()
+        
+
+    testFragment: (fragment, solution, formula, complete) ->
+        solutionIndex = solution.indexOf(fragment)
+        return false unless formula[solutionIndex - 1] == solution[solutionIndex - 1]
+        return (if complete then solutionIndex == formula.indexOf(fragment) else solutionIndex != formula.indexOf(fragment))
+
+    showHint: ->
+        gameAreaOffset = @gameArea.offset()
+        for equation in @equations
+            formula = equation.formula()
+            solution = equation.solution
+            if formula != solution
+                components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
+                for component in components
+                    fragment = component.equationFragment
+                    if @testFragment(fragment, solution, formula)
+                        dragThis = @$('.drag_this')
+                        dragThis.css
+                            opacity: 0
+                            top: component.top() + component.height() - gameAreaOffset.top
+                            left: component.left() + (component.width()/2) - gameAreaOffset.left
+                        dragThis.animate
+                            opacity: 1
+                            duration: 250
+                            complete: => 
+                                component.element.one 'mousedown.hint', =>
+                                    $(document.body).one 'mouseup.hint', =>
+                                        $(document.body).unbind 'mousemove.hint'    
+                                        dragThis.animate(opacity: 0, duration: 250)
+                                        
+                                    $(document.body).one 'mousemove.hint', =>
+                                        $(document.body).unbind 'mouseup.hint'
+                                        for dropArea in equation.dropAreas
+                                            continue if dropArea.component or dropArea.fixed
+                                            element = dropArea.element
+                                            element.html(fragment)
+                                            test = @testFragment(fragment, solution, equation.formula(), true)
+                                            element.html('')
+                                            if test
+                                                dragThis.animate(opacity: 0, duration: 250)
+                                                dropHere = @$('.drop_here')
+                                                dropHere.css
+                                                    opacity: 0
+                                                    top: element.offset().top + element.height() - gameAreaOffset.top
+                                                    left: element.offset().left + (element.width()/2) - gameAreaOffset.left
+                                                dropHere.animate
+                                                    opacity: 1
+                                                    duration: 250
+                                                    complete: => 
+                                                        component.element.one 'mouseup.hint', =>
+                                                            dropHere.animate(opacity: 0, duration: 250)
+                                            break
+                        break
         
         
         

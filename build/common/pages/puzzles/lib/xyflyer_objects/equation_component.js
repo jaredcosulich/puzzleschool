@@ -7,12 +7,11 @@ equationComponent = typeof exports !== "undefined" && exports !== null ? exports
 equationComponent.EquationComponent = (function() {
 
   function EquationComponent(_arg) {
-    this.gameArea = _arg.gameArea, this.equationFragment = _arg.equationFragment, this.equationAreas = _arg.equationAreas, this.trackDrag = _arg.trackDrag, this.endDrag = _arg.endDrag;
+    this.gameArea = _arg.gameArea, this.equationFragment = _arg.equationFragment, this.trackDrag = _arg.trackDrag, this.endDrag = _arg.endDrag;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
 
-    this.equationAreas || (this.equationAreas = []);
     this.initElement();
     this.initMove();
   }
@@ -27,6 +26,14 @@ equationComponent.EquationComponent = (function() {
     return (e.clientY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0)) - this.gameArea.offset().top;
   };
 
+  EquationComponent.prototype.top = function() {
+    return this.element.offset().top;
+  };
+
+  EquationComponent.prototype.left = function() {
+    return this.element.offset().left;
+  };
+
   EquationComponent.prototype.width = function() {
     return this.element.width();
   };
@@ -38,7 +45,6 @@ equationComponent.EquationComponent = (function() {
   EquationComponent.prototype.initElement = function() {
     this.element = $(document.createElement('DIV'));
     this.element.addClass('equation_component');
-    this.element.addClass(this.equationAreas.join(' '));
     this.element.html(this.equationFragment);
     this.placeHolder = $(document.createElement('DIV'));
     return this.placeHolder.addClass('place_holder');

@@ -16,24 +16,27 @@ equations.Equations = (function() {
     this.equationsArea = this.$('.equations');
     this.possibleFragments = this.$('.possible_fragments');
     this.equations = [];
+    this.equationComponents = [];
     this.$('.launch').bind('click', function() {
       return submit();
     });
+    this.initHints();
   }
 
   Equations.prototype.$ = function(selector) {
     return $(selector, this.el);
   };
 
-  Equations.prototype.add = function(startingFragment, variables) {
+  Equations.prototype.add = function(solution, startingFragment, variables) {
     var equation, equationCount,
       _this = this;
     equationCount = this.equationsArea.find('.equation').length;
     equation = new Equation({
+      id: "equation_" + (equationCount + 1),
       gameArea: this.gameArea,
+      solution: solution,
       startingFragment: startingFragment,
       variables: variables,
-      id: "equation_" + (equationCount + 1),
       plot: function(eq) {
         return _this.plotFormula(eq);
       }
@@ -56,7 +59,8 @@ equations.Equations = (function() {
         return _this.endComponentDragging(component);
       }
     });
-    return equationComponent.appendTo(this.possibleFragments);
+    equationComponent.appendTo(this.possibleFragments);
+    return this.equationComponents.push(equationComponent);
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
@@ -137,6 +141,112 @@ equations.Equations = (function() {
         _results.push(equation.showRange());
       } else {
         _results.push(equation.hideRange());
+      }
+    }
+    return _results;
+  };
+
+  Equations.prototype.initHints = function() {
+    var _this = this;
+    return this.el.find('.hint').bind('click', function() {
+      return _this.showHint();
+    });
+  };
+
+  Equations.prototype.testFragment = function(fragment, solution, formula, complete) {
+    var solutionIndex;
+    solutionIndex = solution.indexOf(fragment);
+    if (formula[solutionIndex - 1] !== solution[solutionIndex - 1]) {
+      return false;
+    }
+    return (complete ? solutionIndex === formula.indexOf(fragment) : solutionIndex !== formula.indexOf(fragment));
+  };
+
+  Equations.prototype.showHint = function() {
+    var component, components, dragThis, equation, formula, fragment, gameAreaOffset, solution, _i, _len, _ref, _results;
+    gameAreaOffset = this.gameArea.offset();
+    _ref = this.equations;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      equation = _ref[_i];
+      formula = equation.formula();
+      solution = equation.solution;
+      if (formula !== solution) {
+        components = this.equationComponents.sort(function(a, b) {
+          return b.equationFragment.length - a.equationFragment.length;
+        });
+        _results.push((function() {
+          var _j, _len1, _results1,
+            _this = this;
+          _results1 = [];
+          for (_j = 0, _len1 = components.length; _j < _len1; _j++) {
+            component = components[_j];
+            fragment = component.equationFragment;
+            if (this.testFragment(fragment, solution, formula)) {
+              dragThis = this.$('.drag_this');
+              dragThis.css({
+                opacity: 0,
+                top: component.top() + component.height() - gameAreaOffset.top,
+                left: component.left() + (component.width() / 2) - gameAreaOffset.left
+              });
+              dragThis.animate({
+                opacity: 1,
+                duration: 250,
+                complete: function() {
+                  return component.element.one('mousedown.hint', function() {
+                    return $(document.body).one('mousemove.hint', function() {
+                      var dropArea, dropHere, element, test, _k, _len2, _ref1, _results2;
+                      _ref1 = equation.dropAreas;
+                      _results2 = [];
+                      for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+                        dropArea = _ref1[_k];
+                        if (dropArea.component || dropArea.fixed) {
+                          continue;
+                        }
+                        element = dropArea.element;
+                        element.html(fragment);
+                        test = _this.testFragment(fragment, solution, equation.formula(), true);
+                        element.html('');
+                        if (test) {
+                          dragThis.animate({
+                            opacity: 0,
+                            duration: 250
+                          });
+                          dropHere = _this.$('.drop_here');
+                          dropHere.css({
+                            opacity: 0,
+                            top: element.offset().top + element.height() - gameAreaOffset.top,
+                            left: element.offset().left + (element.width() / 2) - gameAreaOffset.left
+                          });
+                          dropHere.animate({
+                            opacity: 1,
+                            duration: 250,
+                            complete: function() {
+                              return component.element.one('mouseup.hint', function() {
+                                return dropHere.animate({
+                                  opacity: 0,
+                                  duration: 250
+                                });
+                              });
+                            }
+                          });
+                        }
+                        break;
+                      }
+                      return _results2;
+                    });
+                  });
+                }
+              });
+              break;
+            } else {
+              _results1.push(void 0);
+            }
+          }
+          return _results1;
+        }).call(this));
+      } else {
+        _results.push(void 0);
       }
     }
     return _results;

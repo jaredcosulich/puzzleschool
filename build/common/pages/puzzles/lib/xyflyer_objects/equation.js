@@ -10,7 +10,7 @@ equation.Equation = (function() {
 
   function Equation(_arg) {
     var _ref;
-    this.gameArea = _arg.gameArea, this.id = _arg.id, this.plot = _arg.plot, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables;
+    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);

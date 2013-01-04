@@ -3,7 +3,7 @@ equation = exports ? provide('./equation', {})
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
 
-    constructor: ({@gameArea, @id, @plot, @startingFragment, @variables}) ->
+    constructor: ({@id, @gameArea, @solution, @startingFragment, @variables, @plot}) ->
         @dropAreas = []
         @container = $(document.createElement('DIV'))
         @container.addClass('equation_container')

@@ -71,7 +71,8 @@ soma.views
                 islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
             
-            @viewHelper.addEquation(@data.startingFragments?[i], @data.variables) for i in [0...@data.equationCount]   
+            for equation of @data.equations
+                @viewHelper.addEquation(equation, @data.equations[equation].start, @data.variables)    
         
             for ring in @data.rings
                 @viewHelper.addRing(ring.x, ring.y)
@@ -131,7 +132,9 @@ soma.routes
 LEVELS = [
     {}
     {
-        equationCount: 1
+        equations: {
+            '2x': {}
+        }
         grid:
             xMin: -10
             xMax: 10
@@ -146,7 +149,9 @@ LEVELS = [
         ]
     }
     {
-        equationCount: 1
+        equations: {
+            '(1/4)x': {}
+        }
         grid:
             xMin: -10
             xMax: 10
@@ -162,7 +167,9 @@ LEVELS = [
         ]
     }
     {
-        equationCount: 1
+        equations: {
+            'x/2': {start: 'x'}
+        }
         grid:
             xMin: -10
             xMax: 40
@@ -176,10 +183,11 @@ LEVELS = [
         fragments: [
             '*3', '*.25', '/2', '/5'
         ]
-        startingFragments: ['x']
     }    
     {
-        equationCount: 1
+        equations: {
+            'ax + 3': {start: 'ax + 3'}
+        }
         grid:
             xMin: -10
             xMax: 30
@@ -191,13 +199,13 @@ LEVELS = [
             {x: 10, y: 28}
         ]
         islandCoordinates: {x: 0, y: 3}
-        startingFragments: ['ax + 3']
         variables:
             a:
                 start: 0
                 min: -10
                 max: 10
                 increment: 0.5
+                solution: 2.5
                 
     }    
     {
@@ -230,7 +238,9 @@ LEVELS = [
                 
     }    
     {
-        equationCount: 1
+        equations: {
+            '-1*x+18': {start: 'x'}
+        }
         grid:
             xMin: -10
             xMax: 20
@@ -241,7 +251,6 @@ LEVELS = [
             {x: 15, y: 3}
         ]
         islandCoordinates: {x: 4, y: 14}
-        startingFragments: ['x']
         fragments: [
             '-1*', '-6', '-12', '-18', '+6', '+12', '+18'
         ]

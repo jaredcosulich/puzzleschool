@@ -2,20 +2,20 @@ equationComponent = exports ? provide('./equation_component', {})
 
 class equationComponent.EquationComponent
     
-    constructor: ({@gameArea, @equationFragment, @equationAreas, @trackDrag, @endDrag}) ->
-        @equationAreas or= []
+    constructor: ({@gameArea, @equationFragment, @trackDrag, @endDrag}) ->
         @initElement()
         @initMove()
         
     clientX: (e) => (e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX) - @gameArea.offset().left
     clientY: (e) => (e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY) - @gameArea.offset().top
+    top: -> @element.offset().top
+    left: -> @element.offset().left
     width: -> @element.width()
     height: -> @element.height()
         
     initElement: ->
         @element = $(document.createElement('DIV'))
         @element.addClass('equation_component')
-        @element.addClass(@equationAreas.join(' '))
         @element.html(@equationFragment)
         
         @placeHolder = $(document.createElement('DIV'))
