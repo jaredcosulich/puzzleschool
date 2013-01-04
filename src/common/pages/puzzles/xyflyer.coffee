@@ -133,9 +133,8 @@ soma.routes
 LEVELS = [
     {}
     {
-        equations: {
+        equations: 
             '2x': {}
-        }
         grid:
             xMin: -10
             xMax: 10
@@ -150,9 +149,8 @@ LEVELS = [
         ]
     }
     {
-        equations: {
+        equations: 
             '(1/4)x': {}
-        }
         grid:
             xMin: -10
             xMax: 10
@@ -168,9 +166,8 @@ LEVELS = [
         ]
     }
     {
-        equations: {
+        equations: 
             'x/2': {start: 'x'}
-        }
         grid:
             xMin: -10
             xMax: 40
@@ -186,9 +183,8 @@ LEVELS = [
         ]
     }    
     {
-        equations: {
+        equations: 
             'ax + 3': {start: 'ax + 3'}
-        }
         grid:
             xMin: -10
             xMax: 30
@@ -211,45 +207,7 @@ LEVELS = [
     }    
     {
         equations: 
-            'sin(ax+3.14)+b': 
-                solutionComponents: [
-                    {fragment: 'sin(ax)', after: ''},
-                    {fragment: '+3.14', after: 'ax'},
-                    {fragment: '+b', after: 'sin(ax+3.14)'}
-                ]
-        grid:
-            xMin: -10
-            xMax: 30
-            yMin: -10
-            yMax: 30
-        rings: [
-            {x: 7.852, y: 4}
-            {x: 13.087, y: 6}
-            {x: 18.324, y: 4}
-        ]
-        islandCoordinates: {x: 0, y: 5}
-        fragments: [
-            'sin(ax)', '+b', '+3.14'
-        ]
-        variables:
-            a:
-                start: 1
-                min: -10
-                max: 10
-                increment: 0.2
-                solution: -0.6
-            b:
-                start: 2
-                min: -10
-                max: 10
-                increment: 1
-                solution: 5
-                
-    }    
-    {
-        equations: {
             '-1*x+18': {start: 'x'}
-        }
         grid:
             xMin: -10
             xMax: 20
@@ -298,7 +256,8 @@ LEVELS = [
     #     ]
     # }    
     {
-        equationCount: 1
+        equations: 
+            'x*6.5': {}
         grid:
             xMin: -10
             xMax: 20
@@ -315,7 +274,8 @@ LEVELS = [
         ]
     }    
     {
-        equationCount: 1
+        equations: 
+            'x/3.5': {}
         grid:
             xMin: -10
             xMax: 30
@@ -331,7 +291,8 @@ LEVELS = [
         ]
     }    
     {
-        equationCount: 1
+        equations: 
+            'x*5/2': {}
         grid:
             xMin: -10
             xMax: 40
@@ -347,7 +308,46 @@ LEVELS = [
         ]
     }    
     {
-        equationCount: 2
+        equations: 
+            'sin(ax+3.14)+b': 
+                solutionComponents: [
+                    {fragment: 'sin(ax)', after: ''},
+                    {fragment: '+3.14', after: 'ax'},
+                    {fragment: '+b', after: 'sin(ax+3.14)'}
+                ]
+        grid:
+            xMin: -10
+            xMax: 30
+            yMin: -10
+            yMax: 30
+        rings: [
+            {x: 7.852, y: 4}
+            {x: 13.087, y: 6}
+            {x: 18.324, y: 4}
+        ]
+        islandCoordinates: {x: 0, y: 5}
+        fragments: [
+            'sin(ax)', '+b', '+3.14'
+        ]
+        variables:
+            a:
+                start: 1
+                min: -10
+                max: 10
+                increment: 0.2
+                solution: -0.6
+            b:
+                start: 2
+                min: -10
+                max: 10
+                increment: 1
+                solution: 5
+                
+    }    
+    {
+        equations:
+            '2x': {}
+            '.5x+2': {}
         grid:
             xMin: -10
             xMax: 10
@@ -362,7 +362,18 @@ LEVELS = [
         ]
     }    
     {
-        equationCount: 2
+        equations:
+            'ln(x+0.14)+2': solutionComponents: [
+                {fragment: 'ln(x)', after: ''},
+                {fragment: '+0.14', after: 'x'},
+                {fragment: '+2', after: 'ln(x+0.14)'}
+            ]
+            '-3(x-4)+6': solutionComponents: [
+                {fragment: '-3(x)', after: ''},
+                {fragment: '-4', after: 'x'},
+                {fragment: '+6', after: '-3(x-4)'}
+            ]
+            
         grid:
             xMin: -10
             xMax: 10

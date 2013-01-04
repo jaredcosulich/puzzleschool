@@ -275,6 +275,102 @@ LEVELS = [
     }
   }, {
     equations: {
+      '-1*x+18': {
+        start: 'x'
+      }
+    },
+    grid: {
+      xMin: -10,
+      xMax: 20,
+      yMin: -10,
+      yMax: 20
+    },
+    rings: [
+      {
+        x: 10,
+        y: 8
+      }, {
+        x: 15,
+        y: 3
+      }
+    ],
+    islandCoordinates: {
+      x: 4,
+      y: 14
+    },
+    fragments: ['-1*', '-6', '-12', '-18', '+6', '+12', '+18']
+  }, {
+    equations: {
+      'x*6.5': {}
+    },
+    grid: {
+      xMin: -10,
+      xMax: 20,
+      yMin: -10,
+      yMax: 60
+    },
+    rings: [
+      {
+        x: 3,
+        y: 19.5
+      }, {
+        x: 5,
+        y: 32.5
+      }, {
+        x: 9,
+        y: 58.5
+      }
+    ],
+    startingFragments: ['x'],
+    fragments: ['*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '*6', '*6.5', '*7', '*7.5', '*8', '*8.5', '*9', '*9.5', '*10']
+  }, {
+    equations: {
+      'x/3.5': {}
+    },
+    grid: {
+      xMin: -10,
+      xMax: 30,
+      yMin: -10,
+      yMax: 30
+    },
+    rings: [
+      {
+        x: 19.25,
+        y: 5.5
+      }, {
+        x: 14,
+        y: 4
+      }, {
+        x: 7,
+        y: 2
+      }
+    ],
+    fragments: ['x', '*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '/2', '/2.5', '/3', '/3.5', '/4', '/4.5', '/5', '/5.5']
+  }, {
+    equations: {
+      'x*5/2': {}
+    },
+    grid: {
+      xMin: -10,
+      xMax: 40,
+      yMin: -10,
+      yMax: 40
+    },
+    rings: [
+      {
+        x: 4,
+        y: 10
+      }, {
+        x: 8,
+        y: 20
+      }, {
+        x: 12,
+        y: 30
+      }
+    ],
+    fragments: ['x', '*5', '*3', '/2', '/8']
+  }, {
+    equations: {
       'sin(ax+3.14)+b': {
         solutionComponents: [
           {
@@ -331,96 +427,9 @@ LEVELS = [
     }
   }, {
     equations: {
-      '-1*x+18': {
-        start: 'x'
-      }
+      '2x': {},
+      '.5x+2': {}
     },
-    grid: {
-      xMin: -10,
-      xMax: 20,
-      yMin: -10,
-      yMax: 20
-    },
-    rings: [
-      {
-        x: 10,
-        y: 8
-      }, {
-        x: 15,
-        y: 3
-      }
-    ],
-    islandCoordinates: {
-      x: 4,
-      y: 14
-    },
-    fragments: ['-1*', '-6', '-12', '-18', '+6', '+12', '+18']
-  }, {
-    equationCount: 1,
-    grid: {
-      xMin: -10,
-      xMax: 20,
-      yMin: -10,
-      yMax: 60
-    },
-    rings: [
-      {
-        x: 3,
-        y: 19.5
-      }, {
-        x: 5,
-        y: 32.5
-      }, {
-        x: 9,
-        y: 58.5
-      }
-    ],
-    startingFragments: ['x'],
-    fragments: ['*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '*6', '*6.5', '*7', '*7.5', '*8', '*8.5', '*9', '*9.5', '*10']
-  }, {
-    equationCount: 1,
-    grid: {
-      xMin: -10,
-      xMax: 30,
-      yMin: -10,
-      yMax: 30
-    },
-    rings: [
-      {
-        x: 19.25,
-        y: 5.5
-      }, {
-        x: 14,
-        y: 4
-      }, {
-        x: 7,
-        y: 2
-      }
-    ],
-    fragments: ['x', '*2', '*2.5', '*3', '*3.5', '*4', '*4.5', '*5', '*5.5', '/2', '/2.5', '/3', '/3.5', '/4', '/4.5', '/5', '/5.5']
-  }, {
-    equationCount: 1,
-    grid: {
-      xMin: -10,
-      xMax: 40,
-      yMin: -10,
-      yMax: 40
-    },
-    rings: [
-      {
-        x: 4,
-        y: 10
-      }, {
-        x: 8,
-        y: 20
-      }, {
-        x: 12,
-        y: 30
-      }
-    ],
-    fragments: ['x', '*5', '*3', '/2', '/8']
-  }, {
-    equationCount: 2,
     grid: {
       xMin: -10,
       xMax: 10,
@@ -438,7 +447,36 @@ LEVELS = [
     ],
     fragments: ['2x', '.5x', '+2']
   }, {
-    equationCount: 2,
+    equations: {
+      'ln(x+0.14)+2': {
+        solutionComponents: [
+          {
+            fragment: 'ln(x)',
+            after: ''
+          }, {
+            fragment: '+0.14',
+            after: 'x'
+          }, {
+            fragment: '+2',
+            after: 'ln(x+0.14)'
+          }
+        ]
+      },
+      '-3(x-4)+6': {
+        solutionComponents: [
+          {
+            fragment: '-3(x)',
+            after: ''
+          }, {
+            fragment: '-4',
+            after: 'x'
+          }, {
+            fragment: '+6',
+            after: '-3(x-4)'
+          }
+        ]
+      }
+    },
     grid: {
       xMin: -10,
       xMax: 10,

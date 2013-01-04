@@ -272,6 +272,19 @@ body {
     .hints {
         padding: 60px 0 0 6px;
         
+        h4 {
+            display: inline;
+        }
+        
+        a {
+            border: 1px solid #ccc;
+            padding: 3px 6px;
+            .rounded(6px);
+            background-color: @blue;
+            color: white;
+            .box-shadow(2px)
+        }
+        
         .drag_this, .drop_here {
             position: absolute;
             top: -1000px;
