@@ -81,6 +81,8 @@ class equation.Equation
         
         @addFirstDropArea() if not @dropAreas.length
         
+        @recordComponentPositions()
+        
         dropArea.parentArea.dirtyCount -= 1 if dropArea.parentArea
         @initVariables()
         @plot(@)
@@ -178,7 +180,17 @@ class equation.Equation
         component.placeHolder.unbind('click.placeholder')
         component.placeHolder.one 'click.placeholder', (e) =>
             @removeFragment(dropArea, e)
-            component.endMove(e)
+            component.endMove(e)        
+        @recordComponentPositions()
+            
+    recordComponentPositions: ->
+        for dropArea in @dropAreas when dropArea.component
+            previousWithComponent = dropArea.element.previous()
+            if previousWithComponent
+                previousWithComponent = previousWithComponent.previous() unless previousWithComponent.hasClass('with_component')
+                dropArea.component.after = @straightFormula(previousWithComponent)
+            else 
+                delete dropArea.component.after
             
     wrap: (dropArea) ->
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component') or previous.hasClass('fragment')
@@ -240,6 +252,7 @@ class equation.Equation
         "{#{@range.from}<=x<=#{@range.to}}"
         
     straightFormula: (el = @el) ->
+        return '' if not el.length
         element = el[0]
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText

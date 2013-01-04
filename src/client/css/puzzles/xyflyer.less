@@ -157,18 +157,19 @@ body {
                         
                         .track {
                             margin: 9px 3px;
-                            background-color: red;
+                            background-color: @red;
                             height: 6px;
                         }
                         
                         .knob {
                             position: absolute;
-                            background-color: green;
+                            background-color: @green;
                             width: 12px;
                             height: 12px;
                             top: 6px;
                             left: 0;
                             cursor: move;
+                            .rounded(6px)
                         }
                     }
                 }

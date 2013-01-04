@@ -235,76 +235,89 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, c, component, components, dropArea, element, equation, formula, fragment, p, possible, solution, solutionComponent, solutionComponents, test, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
+    var accept, c, component, components, dropArea, element, equation, formula, fragment, info, p, possible, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
       formula = equation.formula();
+      straightFormula = equation.straightFormula();
       solution = equation.solution;
       if (formula !== solution) {
-        if ((solutionComponents = equation.solutionComponents)) {
-          for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
-            solutionComponent = solutionComponents[_j];
-            if (!(!solutionComponent.set)) {
-              continue;
-            }
-            component = ((function() {
-              var _k, _len2, _ref1, _results;
-              _ref1 = this.equationComponents;
-              _results = [];
-              for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-                c = _ref1[_k];
-                if (c.equationFragment === solutionComponent.fragment) {
-                  _results.push(c);
-                }
+        if (solution !== straightFormula) {
+          if ((solutionComponents = equation.solutionComponents)) {
+            for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
+              solutionComponent = solutionComponents[_j];
+              if (!(!solutionComponent.set)) {
+                continue;
               }
-              return _results;
-            }).call(this))[0];
-            possible = equation.el.find('div');
-            if (solutionComponent.after) {
-              for (_k = 0, _len2 = possible.length; _k < _len2; _k++) {
-                p = possible[_k];
-                if (equation.straightFormula($(p)) === solutionComponent.after) {
-                  accept = $(p).next();
-                  break;
+              component = ((function() {
+                var _k, _len2, _ref1, _results;
+                _ref1 = this.equationComponents;
+                _results = [];
+                for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+                  c = _ref1[_k];
+                  if (c.equationFragment === solutionComponent.fragment) {
+                    _results.push(c);
+                  }
                 }
+                return _results;
+              }).call(this))[0];
+              if (component.after === solutionComponent.after) {
+                continue;
               }
-            } else {
-              accept = $(possible[0]);
-            }
-            if (accept) {
-              this.displayHint(component, accept);
-              solutionComponent.set = true;
-              return;
-            }
-          }
-        } else {
-          components = this.equationComponents.sort(function(a, b) {
-            return b.equationFragment.length - a.equationFragment.length;
-          });
-          for (_l = 0, _len3 = components.length; _l < _len3; _l++) {
-            component = components[_l];
-            fragment = component.equationFragment;
-            if (this.testFragment(fragment, solution, formula)) {
-              _ref1 = equation.dropAreas;
-              for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
-                dropArea = _ref1[_m];
-                if (dropArea.component || dropArea.fixed) {
-                  continue;
+              possible = equation.el.find('div');
+              if (solutionComponent.after.length) {
+                for (_k = 0, _len2 = possible.length; _k < _len2; _k++) {
+                  p = possible[_k];
+                  if (equation.straightFormula($(p)) === solutionComponent.after) {
+                    accept = $(p).next();
+                    break;
+                  }
                 }
-                element = dropArea.element;
-                element.html(fragment);
-                test = this.testFragment(fragment, solution, equation.formula(), true);
-                element.html('');
-                if (test) {
-                  this.displayHint(component, dropArea.element);
-                }
+              } else {
+                accept = $(possible[0]);
+              }
+              if (accept != null ? accept.length : void 0) {
+                this.displayHint(component, accept);
+                solutionComponent.set = true;
                 return;
               }
             }
+          } else {
+            components = this.equationComponents.sort(function(a, b) {
+              return b.equationFragment.length - a.equationFragment.length;
+            });
+            for (_l = 0, _len3 = components.length; _l < _len3; _l++) {
+              component = components[_l];
+              fragment = component.equationFragment;
+              if (this.testFragment(fragment, solution, formula)) {
+                _ref1 = equation.dropAreas;
+                for (_m = 0, _len4 = _ref1.length; _m < _len4; _m++) {
+                  dropArea = _ref1[_m];
+                  if (dropArea.component || dropArea.fixed) {
+                    continue;
+                  }
+                  element = dropArea.element;
+                  element.html(fragment);
+                  test = this.testFragment(fragment, solution, equation.formula(), true);
+                  element.html('');
+                  if (test) {
+                    this.displayHint(component, dropArea.element);
+                  }
+                  return;
+                }
+              }
+            }
+          }
+        } else {
+          for (variable in equation.variables) {
+            info = equation.variables[variable];
+            if (!info.element || info.get() === info.solution) {
+              continue;
+            }
+            console.log(variable, info.solution);
           }
         }
-        console.log('VARIABLE!');
       } else {
         console.log('LAUNCH!');
       }

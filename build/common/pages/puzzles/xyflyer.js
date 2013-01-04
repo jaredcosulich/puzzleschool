@@ -278,7 +278,8 @@ LEVELS = [
       'sin(ax+3.14)+b': {
         solutionComponents: [
           {
-            fragment: 'sin(ax)'
+            fragment: 'sin(ax)',
+            after: ''
           }, {
             fragment: '+3.14',
             after: 'ax'

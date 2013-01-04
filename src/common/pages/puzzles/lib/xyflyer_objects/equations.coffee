@@ -134,39 +134,45 @@ class equations.Equations
     showHint: ->
         for equation in @equations
             formula = equation.formula()
+            straightFormula = equation.straightFormula()
             solution = equation.solution
             if formula != solution
-                if (solutionComponents = equation.solutionComponents)
-                    for solutionComponent in solutionComponents when not solutionComponent.set 
-                        component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
+                if solution != straightFormula
+                    if (solutionComponents = equation.solutionComponents)
+                        for solutionComponent in solutionComponents when not solutionComponent.set 
+                            component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
+                            continue if component.after == solutionComponent.after
+                            possible = equation.el.find('div')
+                            if solutionComponent.after.length
+                                for p in possible
+                                    if equation.straightFormula($(p)) == solutionComponent.after
+                                        accept = $(p).next()
+                                        break
+                            else
+                                accept = $(possible[0])
                         
-                        possible = equation.el.find('div')
-                        if solutionComponent.after
-                            for p in possible
-                                if equation.straightFormula($(p)) == solutionComponent.after
-                                    accept = $(p).next()
-                                    break
-                        else
-                            accept = $(possible[0])
-                        
-                        if accept
-                            @displayHint(component, accept)
-                            solutionComponent.set = true
-                            return 
+                            if accept?.length
+                                @displayHint(component, accept)
+                                solutionComponent.set = true
+                                return 
+                    else
+                        components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
+                        for component in components
+                            fragment = component.equationFragment
+                            if @testFragment(fragment, solution, formula)
+                                for dropArea in equation.dropAreas
+                                    continue if dropArea.component or dropArea.fixed
+                                    element = dropArea.element
+                                    element.html(fragment)
+                                    test = @testFragment(fragment, solution, equation.formula(), true)
+                                    element.html('')
+                                    @displayHint(component, dropArea.element) if test 
+                                    return
                 else
-                    components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
-                    for component in components
-                        fragment = component.equationFragment
-                        if @testFragment(fragment, solution, formula)
-                            for dropArea in equation.dropAreas
-                                continue if dropArea.component or dropArea.fixed
-                                element = dropArea.element
-                                element.html(fragment)
-                                test = @testFragment(fragment, solution, equation.formula(), true)
-                                element.html('')
-                                @displayHint(component, dropArea.element) if test 
-                                return
-                console.log('VARIABLE!')
+                    for variable of equation.variables
+                        info = equation.variables[variable]
+                        continue if not info.element or info.get() == info.solution
+                        console.log(variable, info.solution)
             else
                 console.log('LAUNCH!')
         

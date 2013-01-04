@@ -139,6 +139,7 @@ equation.Equation = (function() {
     if (!this.dropAreas.length) {
       this.addFirstDropArea();
     }
+    this.recordComponentPositions();
     if (dropArea.parentArea) {
       dropArea.parentArea.dirtyCount -= 1;
     }
@@ -268,10 +269,33 @@ equation.Equation = (function() {
     this.initVariables();
     dropArea.width = dropArea.element.width();
     component.placeHolder.unbind('click.placeholder');
-    return component.placeHolder.one('click.placeholder', function(e) {
+    component.placeHolder.one('click.placeholder', function(e) {
       _this.removeFragment(dropArea, e);
       return component.endMove(e);
     });
+    return this.recordComponentPositions();
+  };
+
+  Equation.prototype.recordComponentPositions = function() {
+    var dropArea, previousWithComponent, _i, _len, _ref, _results;
+    _ref = this.dropAreas;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      dropArea = _ref[_i];
+      if (!dropArea.component) {
+        continue;
+      }
+      previousWithComponent = dropArea.element.previous();
+      if (previousWithComponent) {
+        if (!previousWithComponent.hasClass('with_component')) {
+          previousWithComponent = previousWithComponent.previous();
+        }
+        _results.push(dropArea.component.after = this.straightFormula(previousWithComponent));
+      } else {
+        _results.push(delete dropArea.component.after);
+      }
+    }
+    return _results;
   };
 
   Equation.prototype.wrap = function(dropArea) {
@@ -358,6 +382,9 @@ equation.Equation = (function() {
     var element, text;
     if (el == null) {
       el = this.el;
+    }
+    if (!el.length) {
+      return '';
     }
     element = el[0];
     text = element.textContent ? element.textContent : element.innerText;

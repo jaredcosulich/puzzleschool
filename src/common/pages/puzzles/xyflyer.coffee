@@ -213,7 +213,7 @@ LEVELS = [
         equations: 
             'sin(ax+3.14)+b': 
                 solutionComponents: [
-                    {fragment: 'sin(ax)'},
+                    {fragment: 'sin(ax)', after: ''},
                     {fragment: '+3.14', after: 'ax'},
                     {fragment: '+b', after: 'sin(ax+3.14)'}
                 ]
