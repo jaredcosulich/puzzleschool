@@ -448,4 +448,27 @@ CLASSES =
                     '3x', '1+', '1-', '2+', '2-'
                 ]
             }
+            {
+                equations: 
+                    '(3/2)x-4': solutionComponents: [
+                        {fragment: '(3)x', after: ''},
+                        {fragment: '/2', after: '3'},
+                        {fragment: '-4', after: '(3/2)x'}
+                    ]
+                grid:
+                    xMin: -10
+                    xMax: 20
+                    yMin: -10
+                    yMax: 20
+                rings: [
+                    {x: 3, y: 0.5}
+                    {x: 8, y: 8}
+                    {x: 12, y: 14}
+                ]
+                islandCoordinates: {x: -2, y: -7}
+                fragments: [
+                    '(3)x', '/2', '/4', '*2', '*4', '-2', '-4'
+                ]
+            }
+            
         ]
