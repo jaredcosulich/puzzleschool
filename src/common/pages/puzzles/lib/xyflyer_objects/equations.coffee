@@ -166,13 +166,12 @@ class equations.Equations
             if formula != completedSolution
                 if solution != straightFormula                            
                     if (solutionComponents = equation.solutionComponents)
-                        for solutionComponent in solutionComponents when not solutionComponent.set 
+                        for solutionComponent in solutionComponents
                             component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
                             continue if component.after == solutionComponent.after
                             accept = @findComponentDropAreaElement(equation, solutionComponent)
                             if accept?.length
                                 @displayHint(component, accept, equation, solutionComponent)
-                                solutionComponent.set = true
                                 return 
                     else
                         for dropArea in equation.dropAreas when dropArea.component

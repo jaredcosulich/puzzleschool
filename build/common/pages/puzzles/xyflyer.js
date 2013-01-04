@@ -627,6 +627,42 @@ CLASSES = {
           y: -7
         },
         fragments: ['(3)x', '/2', '/4', '*2', '*4', '-2', '-4']
+      }, {
+        equations: {
+          '-4-(3/a)x': {}
+        },
+        grid: {
+          xMin: -30,
+          xMax: 30,
+          yMin: -30,
+          yMax: 30
+        },
+        rings: [
+          {
+            x: -6,
+            y: 5
+          }, {
+            x: 2,
+            y: -7
+          }, {
+            x: 8,
+            y: -16
+          }
+        ],
+        islandCoordinates: {
+          x: -12,
+          y: 14
+        },
+        fragments: ['-(3/a)x', '-4', '-2', '2', '4'],
+        variables: {
+          a: {
+            start: -10,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: 2
+          }
+        }
       }
     ]
   }

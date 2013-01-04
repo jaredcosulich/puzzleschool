@@ -283,9 +283,6 @@ equations.Equations = (function() {
           if ((solutionComponents = equation.solutionComponents)) {
             for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
               solutionComponent = solutionComponents[_j];
-              if (!(!solutionComponent.set)) {
-                continue;
-              }
               component = ((function() {
                 var _k, _len2, _ref1, _results;
                 _ref1 = this.equationComponents;
@@ -304,7 +301,6 @@ equations.Equations = (function() {
               accept = this.findComponentDropAreaElement(equation, solutionComponent);
               if (accept != null ? accept.length : void 0) {
                 this.displayHint(component, accept, equation, solutionComponent);
-                solutionComponent.set = true;
                 return;
               }
             }
