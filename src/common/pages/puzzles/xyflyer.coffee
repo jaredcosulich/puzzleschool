@@ -41,6 +41,7 @@ soma.chunks
             
             @html = wings.renderTemplate(@template, 
                 objects: @objects
+                class: @classId
                 level: @levelId
             )
             
@@ -51,13 +52,17 @@ soma.views
         create: ->
             xyflyer = require('./lib/xyflyer')
             
+            @class = @el.data('class')
             @level = @el.data('level')
-            if isNaN(parseInt(@level))
-                @showMessage('intro')
-                return
-                
-            @data = LEVELS[@level]
             
+            if @class
+                @data = CLASSES[@class].levels[@level]
+            else    
+                if isNaN(parseInt(@level))
+                    @showMessage('intro')
+                    return
+                @data = LEVELS[@level]
+                
             if not @data
                 @showMessage('exit')
                 return
@@ -110,12 +115,10 @@ soma.views
             complete = @$('.complete')
             @centerAndShow(complete)
             
-            complete.find('button').bind 'click', =>
-                @go("/puzzles/xyflyer/#{@level + 1}")
-                
+            go = => @go("/puzzles/xyflyer/#{if @class then @class + '/' else ''}#{@level + 1}")
+            complete.find('button').bind 'click', => go()
             @$('.launch').html('Success! Go To The Next Level >')
-            @$('.launch').bind 'click', =>
-                @go("/puzzles/xyflyer/#{@level + 1}")
+            @$('.launch').bind 'click', => go()
                 
             
 soma.routes
@@ -388,3 +391,61 @@ LEVELS = [
     }
 ]
     
+    
+CLASSES = 
+    '1': 
+        levels: [
+            {}
+            {
+                equations: 
+                    '2x': {}
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                rings: [
+                    {x: 1, y: 2}
+                    {x: 3, y: 6}
+                ]
+                fragments: [
+                    '2x'
+                ]
+            }
+            {
+                equations: 
+                    '2+3x': {}
+                grid:
+                    xMin: -10
+                    xMax: 20
+                    yMin: -10
+                    yMax: 20
+                rings: [
+                    {x: 1, y: 5}
+                    {x: 3, y: 11}
+                    {x: 5, y: 17}
+                ]
+                islandCoordinates: {x: 0, y: 2}
+                fragments: [
+                    '3x', '1+', '2+', '3+'
+                ]
+            }
+            {
+                equations: 
+                    '2-3x': {}
+                grid:
+                    xMin: -20
+                    xMax: 20
+                    yMin: -20
+                    yMax: 20
+                rings: [
+                    {x: -2, y: 8}
+                    {x: 3, y: -7}
+                    {x: 5, y: -13}
+                ]
+                islandCoordinates: {x: -5, y: 17}
+                fragments: [
+                    '3x', '1+', '1-', '2+', '2-'
+                ]
+            }
+        ]
