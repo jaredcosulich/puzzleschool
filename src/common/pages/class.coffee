@@ -31,8 +31,8 @@ soma.chunks
                 id: @classInfo?.id
                 className: @classInfo?.name or 'New Class'
                 newClass: !@classInfo?
-                fractions_levels: (l for l in @classInfo?.levels when l.puzzle == 'fractions')
-                xyflyer_levels: (l for l in @classInfo?.levels when l.puzzle == 'xyflyer')
+                fractions_levels: (l for l in @classInfo?.levels or [] when l.puzzle == 'fractions')
+                xyflyer_levels: (l for l in @classInfo?.levels or [] when l.puzzle == 'xyflyer')
             )
         
 soma.views

@@ -63,7 +63,7 @@ soma.chunks({
         newClass: !(this.classInfo != null),
         fractions_levels: (function() {
           var _i, _len, _ref2, _ref3, _results;
-          _ref3 = (_ref2 = this.classInfo) != null ? _ref2.levels : void 0;
+          _ref3 = ((_ref2 = this.classInfo) != null ? _ref2.levels : void 0) || [];
           _results = [];
           for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
             l = _ref3[_i];
@@ -75,7 +75,7 @@ soma.chunks({
         }).call(this),
         xyflyer_levels: (function() {
           var _i, _len, _ref2, _ref3, _results;
-          _ref3 = (_ref2 = this.classInfo) != null ? _ref2.levels : void 0;
+          _ref3 = ((_ref2 = this.classInfo) != null ? _ref2.levels : void 0) || [];
           _results = [];
           for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
             l = _ref3[_i];
