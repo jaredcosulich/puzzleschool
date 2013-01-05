@@ -43,6 +43,26 @@ soma.chunks({
           }
         });
       }
+      if (this.classId) {
+        this.loadData({
+          url: "/api/classes/info/" + this.classId,
+          success: function(data) {
+            var level, _i, _len, _ref;
+            _this.classInfo = data;
+            _ref = _this.classInfo.levels;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              level = _ref[_i];
+              level.classId = _this.classInfo.id;
+            }
+            return _this.classInfo.levels = sortLevels(_this.classInfo.levels);
+          },
+          error: function() {
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load the information for this class. Please check your internet connection.');
+            }
+          }
+        });
+      }
       this.objects = [];
       _ref = ['island'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -84,7 +104,11 @@ soma.views({
         this.showMessage('intro');
         return;
       }
-      this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
+      if (this.classId) {
+        this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
+      } else {
+        this.data = LEVELS[this.levelId];
+      }
       if (!this.data) {
         this.showMessage('exit');
         return;

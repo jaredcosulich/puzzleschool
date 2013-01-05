@@ -31,6 +31,18 @@ soma.chunks
                     error: () =>
                         if window?.alert
                             alert('We were unable to load the information for this level. Please check your internet connection.')
+                    
+            if @classId
+                @loadData 
+                    url: "/api/classes/info/#{@classId}"
+                    success: (data) =>
+                        @classInfo = data
+                        level.classId = @classInfo.id for level in @classInfo.levels
+                        @classInfo.levels = sortLevels(@classInfo.levels)
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load the information for this class. Please check your internet connection.')
+        
                         
             @objects = []
             for object in ['island']
@@ -69,8 +81,11 @@ soma.views
             if isNaN(parseInt(@levelId))
                 @showMessage('intro')
                 return
-
-            @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
+                
+            if @classId
+                @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
+            else
+                @data = LEVELS[@levelId]
                 
             if not @data
                 @showMessage('exit')
