@@ -92,6 +92,15 @@ equation.Equation = (function() {
     });
     return this.el.bind('mousedown.fragment touchstart.fragment', function(e) {
       var c, _ref, _ref1;
+      if (!_this.selectedDropArea) {
+        _this.selectedDropArea = _this.overlappingDropAreas({
+          x: _this.clientX(e),
+          y: _this.clientY(e),
+          test: function(dropArea, over) {
+            return testDropArea(dropArea, over);
+          }
+        });
+      }
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }

@@ -52,6 +52,12 @@ class equation.Equation
         @el.bind 'mouseout.fragment', => @clear()
         
         @el.bind 'mousedown.fragment touchstart.fragment', (e) => 
+            if not @selectedDropArea
+                @selectedDropArea = @overlappingDropAreas
+                    x: @clientX(e)
+                    y: @clientY(e)
+                    test: (dropArea, over) => testDropArea(dropArea, over)
+                    
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
             c = @selectedDropArea.component
             $(document.body).one 'mouseup.component touchend.component', -> c.endMove(e)
