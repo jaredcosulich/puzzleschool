@@ -155,7 +155,7 @@ equations.Equations = (function() {
       if ($('.opaque_screen').css('opacity') > 0) {
         return;
       }
-      if (e.keyCode === 9 ? e.preventDefault : void 0) {
+      if (e.keyCode === 8 ? e.preventDefault : void 0) {
         return e.preventDefault();
       }
     };

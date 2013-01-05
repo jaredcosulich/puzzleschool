@@ -85,7 +85,7 @@ class equations.Equations
     initBackspace: ->
         window.onkeydown = (e) => 
             return if $('.opaque_screen').css('opacity') > 0
-            e.preventDefault() if e.preventDefault if e.keyCode == 9
+            e.preventDefault() if e.preventDefault if e.keyCode == 8
             
     initHints: ->
         @el.find('.hint').bind 'click', => @showHint()

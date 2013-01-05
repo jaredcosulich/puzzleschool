@@ -242,8 +242,8 @@ languageScramble.ViewHelper = (function() {
         guessedLetters = $(".guesses .letter_" + lastLetterAdded);
         if (guessedLetters.length) {
           guessedLetter = $(guessedLetters[guessedLetters.length - 1]);
-          guessedLetter.trigger('mousedown');
-          guessedLetter.trigger('mouseup');
+          guessedLetter.trigger('keypress.start');
+          guessedLetter.trigger('keypress.end');
         }
       }
     });
