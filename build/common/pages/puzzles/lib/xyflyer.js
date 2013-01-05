@@ -22,7 +22,7 @@ xyflyer.ViewHelper = (function() {
   function ViewHelper(_arg) {
     var boardElement, grid, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.islandCoordinates = _arg.islandCoordinates;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent, this.islandCoordinates = _arg.islandCoordinates;
     this.rings = [];
     this.board = new xyflyer.Board({
       boardElement: boardElement,
@@ -87,7 +87,8 @@ xyflyer.ViewHelper = (function() {
       },
       submit: function() {
         return _this.plane.launch(true);
-      }
+      },
+      registerEvent: this.registerEvent
     });
   };
 

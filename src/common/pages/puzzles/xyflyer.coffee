@@ -24,8 +24,16 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             
+            if @levelId and not isNaN(@levelId)
+                @loadData 
+                    url: "/api/puzzles/levels/#{@levelId}"
+                    success: (@levelInfo) => 
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load the information for this level. Please check your internet connection.')
+                        
             @objects = []
-            for object in ['island', 'plane']
+            for object in ['island']
                 @objects.push(
                     name: object
                     image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
@@ -43,6 +51,7 @@ soma.chunks
                 objects: @objects
                 class: @classId
                 level: @levelId
+                instructions: @levelInfo?.instructions
             )
             
         
@@ -52,16 +61,16 @@ soma.views
         create: ->
             xyflyer = require('./lib/xyflyer')
             
-            @class = @el.data('class')
-            @level = @el.data('level')
+            @user = @cookies.get('user')
             
-            if @class
-                @data = CLASSES[@class].levels[@level]
-            else    
-                if isNaN(parseInt(@level))
-                    @showMessage('intro')
-                    return
-                @data = LEVELS[@level]
+            @classId = @el.data('class')
+            @levelId = @el.data('level')
+            
+            if isNaN(parseInt(@levelId))
+                @showMessage('intro')
+                return
+
+            @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
                 
             if not @data
                 @showMessage('exit')
@@ -75,6 +84,7 @@ soma.views
                 grid: @data.grid
                 islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
+                registerEvent: (eventInfo) => @registerEvent(eventInfo)
             
             for equation of @data.equations
                 info = @data.equations[equation]
@@ -112,13 +122,124 @@ soma.views
                 @go('/puzzles/xyflyer/1') 
         
         nextLevel: ->
+            @registerEvent
+                type: 'success'
+                info: 
+                    time: new Date()
+            
             complete = @$('.complete')
             @centerAndShow(complete)
             
-            go = => @go("/puzzles/xyflyer/#{if @class then @class + '/' else ''}#{@level + 1}")
+            go = => @go("/puzzles/xyflyer/#{if @classId then @classId + '/' else ''}#{@levelId + 1}")
             complete.find('button').bind 'click', => go()
             @$('.launch').html('Success! Go To The Next Level >')
             @$('.launch').bind 'click', => go()
+            
+        registerEvent: ({type, info}) ->
+            return unless @user and @user.id and @levelId and @classId
+            @pendingEvents or= []
+            @pendingEvents.push
+                type: type
+                info: JSON.stringify(info)
+                puzzle: 'xyflyer'
+                classId: @classId
+                levelId: @levelId
+
+            if not @lastEvent
+                @timeBetweenEvents = 0
+                @lastEvent = new Date()
+            else    
+                @timeBetweenEvents += new Date().getTime() - @lastEvent.getTime()
+                @lastEvent = new Date()
+
+            @sendEvents(type in ['success', 'challenge'])
+
+        sendEvents: (force) ->
+            unless force
+                return unless @pendingEvents?.length 
+                return if @sendingEvents > 0
+
+            @sendingEvents += 2
+
+            pendingEvents = (event for event in @pendingEvents)
+            @pendingEvents = []
+
+            timeBetweenEvents = @timeBetweenEvents
+            @timeBetweenEvents = 0
+
+            statUpdates = {
+                user: {objectType: 'user', objectId: @user.id, actions: []}
+                class: {objectType: 'class', objectId: @classId, actions: []}
+                levelClass: {objectType: 'level_class', objectId: "#{@levelId}/#{@classId}", actions: []}
+                userLevelClass: {objectType: 'user_level_class', objectId: "#{@user.id}/#{@levelId}/#{@classId}", actions: []}
+            }
+            statUpdates.user.actions.push(
+                attribute: 'levelClasses'
+                action: 'add'
+                value: ["#{@levelId}/#{@classId}"]
+            )
+            statUpdates.class.actions.push(
+                attribute: 'users'
+                action: 'add'
+                value: [@user.id]
+            )
+            statUpdates.levelClass.actions.push(
+                attribute: 'users'
+                action: 'add'
+                value: [@user.id]
+            )
+            statUpdates.userLevelClass.actions.push(
+                attribute: 'duration'
+                action: 'add'
+                value: timeBetweenEvents
+            )
+            for event in pendingEvents
+                if event.type == 'move'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'moves'
+                        action: 'add'
+                        value: 1
+                    )
+                if event.type == 'hint'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'hints'
+                        action: 'add'
+                        value: 1
+                    )
+                if event.type == 'success'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'success'
+                        action: 'add'
+                        value: [JSON.parse(event.info).time]
+                    )
+                if event.type == 'challenge'
+                    statUpdates.userLevelClass.actions.push(
+                        attribute: 'challenge'
+                        action: 'add'
+                        value: [JSON.parse(event.info).assessment]
+                    )
+
+            updates = (JSON.stringify(statUpdates[key]) for key of statUpdates)
+
+            completeEventRecording = =>
+                @sendingEvents -= 1
+                @sendingEvents = 0 if @sendingEvents < 0
+                @sendEvents()
+
+            $.ajaj
+                url: '/api/events/create'
+                method: 'POST'
+                headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                data: {events: pendingEvents}
+                success: () => completeEventRecording()
+
+            $.ajaj
+                url: '/api/stats/update'
+                method: 'POST'
+                headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                data: {updates: updates}
+                success: => completeEventRecording()
+            
                 
             
 soma.routes

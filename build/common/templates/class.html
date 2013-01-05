@@ -43,19 +43,31 @@
         <ul>
             <li>
                 <h3>Light It Up</h3>
-                <p><a class='add_a_level'>Add A New Level</a></p>
-                <ul class='class_puzzles'>
-                    {:levels}
+                <p><a class='add_a_level' data-puzzle=Fractions>Add A New Level</a></p>
+                <ul class='class_puzzles fractions'>
+                    {:fraction_levels}
                     <li><a href='/puzzles/light_it_up/{classId}/{id}' target='_blank'>
                         {name}
                     </a></li>
-                    {/levels}
+                    {/fraction_levels}
+                </ul>
+            </li>
+            <li>
+                <h3>XYFlyer</h3>
+                <p><a class='add_a_level' data-puzzle=XYFlyer>Add A New Level</a></p>
+                <ul class='class_puzzles xyflyer'>
+                    {:xyflyer_levels}
+                    <li><a href='/puzzles/xyflyer/{classId}/{id}' target='_blank'>
+                        {name}
+                    </a></li>
+                    {/xyflyer_levels}
                 </ul>
             </li>
         </ul>
+        
         <div class='level_selector'>
-            <h3>Level Selector</h3>
-            <p>Select from a level below of <a class='create_level'>create a new level</a></p>
+            <h3><span class='puzzle_name'></span> Level Selector</h3>
+            <p>Select from a level below or <a class='create_level'>create a new level</a></p>
             <div class='new_level'>
                 <form>
                     <table>

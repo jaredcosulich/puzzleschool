@@ -13,7 +13,8 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var object, _i, _len, _ref;
+      var object, _i, _len, _ref,
+        _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
       this.loadScript('/assets/third_party/equation_explorer/tokens.js');
@@ -29,8 +30,21 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equations.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
+      if (this.levelId && !isNaN(this.levelId)) {
+        this.loadData({
+          url: "/api/puzzles/levels/" + this.levelId,
+          success: function(levelInfo) {
+            _this.levelInfo = levelInfo;
+          },
+          error: function() {
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load the information for this level. Please check your internet connection.');
+            }
+          }
+        });
+      }
       this.objects = [];
-      _ref = ['island', 'plane'];
+      _ref = ['island'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
         this.objects.push({
@@ -44,11 +58,13 @@ soma.chunks({
       return this.loadStylesheet('/build/client/css/puzzles/xyflyer.css');
     },
     build: function() {
+      var _ref;
       this.setTitle("XYFlyer - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
         objects: this.objects,
         "class": this.classId,
-        level: this.levelId
+        level: this.levelId,
+        instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0
       });
     }
   }
@@ -61,17 +77,14 @@ soma.views({
       var equation, fragment, info, ring, xyflyer, _i, _j, _len, _len1, _ref, _ref1, _results,
         _this = this;
       xyflyer = require('./lib/xyflyer');
-      this["class"] = this.el.data('class');
-      this.level = this.el.data('level');
-      if (this["class"]) {
-        this.data = CLASSES[this["class"]].levels[this.level];
-      } else {
-        if (isNaN(parseInt(this.level))) {
-          this.showMessage('intro');
-          return;
-        }
-        this.data = LEVELS[this.level];
+      this.user = this.cookies.get('user');
+      this.classId = this.el.data('class');
+      this.levelId = this.el.data('level');
+      if (isNaN(parseInt(this.levelId))) {
+        this.showMessage('intro');
+        return;
       }
+      this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
       if (!this.data) {
         this.showMessage('exit');
         return;
@@ -85,6 +98,9 @@ soma.views({
         islandCoordinates: this.data.islandCoordinates,
         nextLevel: function() {
           return _this.nextLevel();
+        },
+        registerEvent: function(eventInfo) {
+          return _this.registerEvent(eventInfo);
         }
       });
       for (equation in this.data.equations) {
@@ -139,10 +155,16 @@ soma.views({
     nextLevel: function() {
       var complete, go,
         _this = this;
+      this.registerEvent({
+        type: 'success',
+        info: {
+          time: new Date()
+        }
+      });
       complete = this.$('.complete');
       this.centerAndShow(complete);
       go = function() {
-        return _this.go("/puzzles/xyflyer/" + (_this["class"] ? _this["class"] + '/' : '') + (_this.level + 1));
+        return _this.go("/puzzles/xyflyer/" + (_this.classId ? _this.classId + '/' : '') + (_this.levelId + 1));
       };
       complete.find('button').bind('click', function() {
         return go();
@@ -150,6 +172,173 @@ soma.views({
       this.$('.launch').html('Success! Go To The Next Level >');
       return this.$('.launch').bind('click', function() {
         return go();
+      });
+    },
+    registerEvent: function(_arg) {
+      var info, type;
+      type = _arg.type, info = _arg.info;
+      if (!(this.user && this.user.id && this.levelId && this.classId)) {
+        return;
+      }
+      this.pendingEvents || (this.pendingEvents = []);
+      this.pendingEvents.push({
+        type: type,
+        info: JSON.stringify(info),
+        puzzle: 'xyflyer',
+        classId: this.classId,
+        levelId: this.levelId
+      });
+      if (!this.lastEvent) {
+        this.timeBetweenEvents = 0;
+        this.lastEvent = new Date();
+      } else {
+        this.timeBetweenEvents += new Date().getTime() - this.lastEvent.getTime();
+        this.lastEvent = new Date();
+      }
+      return this.sendEvents(type === 'success' || type === 'challenge');
+    },
+    sendEvents: function(force) {
+      var completeEventRecording, event, key, pendingEvents, statUpdates, timeBetweenEvents, updates, _i, _len, _ref,
+        _this = this;
+      if (!force) {
+        if (!((_ref = this.pendingEvents) != null ? _ref.length : void 0)) {
+          return;
+        }
+        if (this.sendingEvents > 0) {
+          return;
+        }
+      }
+      this.sendingEvents += 2;
+      pendingEvents = (function() {
+        var _i, _len, _ref1, _results;
+        _ref1 = this.pendingEvents;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          event = _ref1[_i];
+          _results.push(event);
+        }
+        return _results;
+      }).call(this);
+      this.pendingEvents = [];
+      timeBetweenEvents = this.timeBetweenEvents;
+      this.timeBetweenEvents = 0;
+      statUpdates = {
+        user: {
+          objectType: 'user',
+          objectId: this.user.id,
+          actions: []
+        },
+        "class": {
+          objectType: 'class',
+          objectId: this.classId,
+          actions: []
+        },
+        levelClass: {
+          objectType: 'level_class',
+          objectId: "" + this.levelId + "/" + this.classId,
+          actions: []
+        },
+        userLevelClass: {
+          objectType: 'user_level_class',
+          objectId: "" + this.user.id + "/" + this.levelId + "/" + this.classId,
+          actions: []
+        }
+      };
+      statUpdates.user.actions.push({
+        attribute: 'levelClasses',
+        action: 'add',
+        value: ["" + this.levelId + "/" + this.classId]
+      });
+      statUpdates["class"].actions.push({
+        attribute: 'users',
+        action: 'add',
+        value: [this.user.id]
+      });
+      statUpdates.levelClass.actions.push({
+        attribute: 'users',
+        action: 'add',
+        value: [this.user.id]
+      });
+      statUpdates.userLevelClass.actions.push({
+        attribute: 'duration',
+        action: 'add',
+        value: timeBetweenEvents
+      });
+      for (_i = 0, _len = pendingEvents.length; _i < _len; _i++) {
+        event = pendingEvents[_i];
+        if (event.type === 'move') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'moves',
+            action: 'add',
+            value: 1
+          });
+        }
+        if (event.type === 'hint') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'hints',
+            action: 'add',
+            value: 1
+          });
+        }
+        if (event.type === 'success') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'success',
+            action: 'add',
+            value: [JSON.parse(event.info).time]
+          });
+        }
+        if (event.type === 'challenge') {
+          statUpdates.userLevelClass.actions.push({
+            attribute: 'challenge',
+            action: 'add',
+            value: [JSON.parse(event.info).assessment]
+          });
+        }
+      }
+      updates = (function() {
+        var _results;
+        _results = [];
+        for (key in statUpdates) {
+          _results.push(JSON.stringify(statUpdates[key]));
+        }
+        return _results;
+      })();
+      completeEventRecording = function() {
+        _this.sendingEvents -= 1;
+        if (_this.sendingEvents < 0) {
+          _this.sendingEvents = 0;
+        }
+        return _this.sendEvents();
+      };
+      $.ajaj({
+        url: '/api/events/create',
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: {
+          events: pendingEvents
+        },
+        success: function() {
+          return completeEventRecording();
+        }
+      });
+      return $.ajaj({
+        url: '/api/stats/update',
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: {
+          updates: updates
+        },
+        success: function() {
+          return completeEventRecording();
+        }
       });
     }
   }

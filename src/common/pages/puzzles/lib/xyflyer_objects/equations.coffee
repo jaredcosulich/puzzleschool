@@ -3,7 +3,7 @@ Equation = require('./equation').Equation
 EquationComponent = require('./equation_component').EquationComponent
 
 class equations.Equations
-    constructor: ({@el, @gameArea, @plot, submit}) ->
+    constructor: ({@el, @gameArea, @plot, submit, @registerEvent}) ->
         @equationsArea = @$('.equations')
         @possibleFragments = @$('.possible_fragments')
         @equations = []
@@ -60,6 +60,14 @@ class equations.Equations
         return false unless @selectedDropArea
         @lastComponent = component
         @selectedDropArea.accept(component)
+        
+        @registerEvent
+            type: 'move'
+            info: 
+                equationId: @selectedDropArea.id
+                fragment: component.equationFragment
+                time: new Date()
+        
         @selectedDropArea = null
         return true
             
@@ -96,6 +104,13 @@ class equations.Equations
         return (if complete then solutionIndex == formula.indexOf(fragment) else solutionIndex != formula.indexOf(fragment))
 
     displayHint: (component, dropAreaElement, equation, solutionComponent) ->
+        @registerEvent
+            type: 'hint'
+            info: 
+                equationId: dropAreaElement.id
+                fragment: component.equationFragment
+                time: new Date()
+        
         gameAreaOffset = @gameArea.offset()
         
         if component.top() == 0

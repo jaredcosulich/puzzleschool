@@ -18,7 +18,7 @@ soma.chunks
                     url: "/api/classes/info/#{@id}"
                     success: (data) =>
                         @classInfo = data
-                        level.classId = @classInfo.id for level in @classInfo.levels
+                        level.classId = @classInfo.id for level in @classInfo.levels or []
                         @classInfo.levels = sortLevels(@classInfo.levels)
                     error: () =>
                         if window?.alert
@@ -31,7 +31,8 @@ soma.chunks
                 id: @classInfo?.id
                 className: @classInfo?.name or 'New Class'
                 newClass: !@classInfo?
-                levels: @classInfo?.levels
+                fractions_levels: (l for l in @classInfo?.levels when l.puzzle == 'fractions')
+                xyflyer_levels: (l for l in @classInfo?.levels when l.puzzle == 'xyflyer')
             )
         
 soma.views
@@ -66,9 +67,9 @@ soma.views
                     @go("/class/#{classInfo.id}")
                 
         initAddALevel: ->
-            @puzzles = {fractions: {levels: []}}
+            @puzzles = {fractions: {levels: []}, xyflyer: {levels: []}}
                                                         
-            @$('.add_a_level').bind 'click', (e) => @displayLevelSelector()
+            @$('.add_a_level').bind 'click', (e) => @displayLevelSelector($(e.currentTarget).data('puzzle'))
                         
             @$('.create_level').bind 'click', (e) =>
                 @showNewLevelForm($(e.currentTarget).closest('.level_selector').find('.new_level'))
@@ -80,6 +81,8 @@ soma.views
                 @hideNewLevelForm($(e.currentTarget).closest('.new_level'))
                 
         displayLevels: (puzzle, area) ->
+            puzzleName = puzzle
+            puzzleName = 'light_it_up' if puzzleName == 'fractions'
             area.html('')
             tableHtml = '''
                 <table>
@@ -94,7 +97,7 @@ soma.views
                 tableHtml += """
                     <tr>
                         <td>
-                            <a href='/puzzles/light_it_up/#{level.id}' target='_blank'>
+                            <a href='/puzzles/#{puzzleName}/#{level.id}' target='_blank'>
                                 #{level.name}
                             </a>
                         </td>
@@ -136,29 +139,33 @@ soma.views
                 success: (classLevels) =>
                     levelsListHtml = ''
                     for level in sortLevels(classLevels.levels)
+                        console.log(level)
                         levelsListHtml += """
-                            <li><a href='/puzzles/fractions/#{@classInfo.id}/{level.id}' target='_blank'>
+                            <li><a href='/puzzles/#{level.puzzle}/#{@classInfo.id}/{level.id}' target='_blank'>
                                 #{level.name}
                             </a></li>
                         """                    
-                    @$('.class_puzzles').html(levelsListHtml)
+                    @$(".class_puzzles .#{puzzle}").html(levelsListHtml)
                     @hideLevelSelector()
         
         addNewLevel: (newLevelContainer) ->
+            puzzle = newLevelContainer.data('puzzle').toLowerCase()
             dataHash = newLevelContainer.find('form').data('form').dataHash()
             dataHash.classId = @classInfo.id
             $.ajaj
-                url: '/api/puzzles/fractions/add_level'
+                url: "/api/puzzles/#{puzzle}/add_level"
                 method: 'POST'
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                 data: dataHash
                 success: (levelInfo) =>
-                    @puzzles.fractions.levels.push(levelInfo)
-                    @displayLevels('fractions', newLevelContainer.closest('.level_selector').find('.levels'))
+                    @puzzles[puzzle].levels.push(levelInfo)
+                    @displayLevels(puzzle, newLevelContainer.closest('.level_selector').find('.levels'))
                     @hideNewLevelForm(newLevelContainer)
                     
-        displayLevelSelector: ->
+        displayLevelSelector: (puzzle) ->
+            @$('.puzzle_name').html(puzzle)
             levelSelector = @$('.level_selector')
+            levelSelector.find('.new_level').data('puzzle', puzzle)
             levelSelector.css
                 opacity: 0
                 top: ($.viewport().height / 2) - (levelSelector.height() / 2) + (window.scrollY)
@@ -182,13 +189,14 @@ soma.views
                                 left: -1000
                         
                 
+            lowerPuzzle = puzzle.toLowerCase()
             $.ajaj
-                url: '/api/puzzles/fractions/levels'
+                url: "/api/puzzles/#{lowerPuzzle}/levels"
                 method: 'GET'
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                 success: (levelData) =>
-                    @puzzles.fractions.levels = levelData.levels or []
-                    @displayLevels('fractions', levelSelector.find('.levels'))
+                    @puzzles[lowerPuzzle].levels = levelData.levels or []
+                    @displayLevels(lowerPuzzle, levelSelector.find('.levels'))
                 error: => 
                     levelSelector.find('.levels').html('No levels yet')
                     

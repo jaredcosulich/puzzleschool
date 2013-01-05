@@ -9,7 +9,7 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel, @islandCoordinates}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel, @registerEvent, @islandCoordinates}) ->
         @rings = []
         @board = new xyflyer.Board
             boardElement: boardElement, 
@@ -52,6 +52,7 @@ class xyflyer.ViewHelper
             gameArea: @el
             plot: (id, data) => @plot(id, data)
             submit: => @plane.launch(true) 
+            registerEvent: @registerEvent
 
     addEquation: (solution, startingFragment, solutionComponents, variables) ->
         @equations.add(solution, startingFragment, solutionComponents, variables)

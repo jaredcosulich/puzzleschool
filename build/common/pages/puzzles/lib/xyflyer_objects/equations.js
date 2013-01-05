@@ -12,7 +12,7 @@ equations.Equations = (function() {
   function Equations(_arg) {
     var submit,
       _this = this;
-    this.el = _arg.el, this.gameArea = _arg.gameArea, this.plot = _arg.plot, submit = _arg.submit;
+    this.el = _arg.el, this.gameArea = _arg.gameArea, this.plot = _arg.plot, submit = _arg.submit, this.registerEvent = _arg.registerEvent;
     this.equationsArea = this.$('.equations');
     this.possibleFragments = this.$('.possible_fragments');
     this.equations = [];
@@ -109,6 +109,14 @@ equations.Equations = (function() {
     }
     this.lastComponent = component;
     this.selectedDropArea.accept(component);
+    this.registerEvent({
+      type: 'move',
+      info: {
+        equationId: this.selectedDropArea.id,
+        fragment: component.equationFragment,
+        time: new Date()
+      }
+    });
     this.selectedDropArea = null;
     return true;
   };
@@ -180,6 +188,14 @@ equations.Equations = (function() {
   Equations.prototype.displayHint = function(component, dropAreaElement, equation, solutionComponent) {
     var dragElement, dragThis, gameAreaOffset, left, offset, top,
       _this = this;
+    this.registerEvent({
+      type: 'hint',
+      info: {
+        equationId: dropAreaElement.id,
+        fragment: component.equationFragment,
+        time: new Date()
+      }
+    });
     gameAreaOffset = this.gameArea.offset();
     if (component.top() === 0) {
       dragElement = component.dropArea.element;
