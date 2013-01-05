@@ -70,7 +70,7 @@ class board.Board extends xyflyerObject.Object
         return planeImage
         
     initClicks: (boardElement) ->
-        boardElement.css(zIndex: 9999)
+        boardElement.css(zIndex: 97)
         boardElement.bind 'click', (e) =>
             result = @findNearestXOnPath(e.offsetX, e.offsetY)
             onPath = result.x

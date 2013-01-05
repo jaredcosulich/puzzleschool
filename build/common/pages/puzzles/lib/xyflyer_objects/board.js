@@ -103,7 +103,7 @@ board.Board = (function(_super) {
   Board.prototype.initClicks = function(boardElement) {
     var _this = this;
     boardElement.css({
-      zIndex: 9999
+      zIndex: 97
     });
     return boardElement.bind('click', function(e) {
       var formula1, onPath, result, y;

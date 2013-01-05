@@ -269,7 +269,7 @@ body {
   background-color: white;
   padding: 30px 60px;
   text-align: center;
-  z-index: 9999;
+  z-index: 98;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -298,5 +298,5 @@ body {
   position: absolute;
   top: -1000px;
   left: -1000px;
-  z-index: 9999;
+  z-index: 99;
 }

@@ -83,7 +83,9 @@ class equations.Equations
                 equation.hideRange()
         
     initBackspace: ->
-        window.onkeydown = (e) => e.preventDefault() if e.preventDefault if e.keyCode == 9
+        window.onkeydown = (e) => 
+            return if $('.opaque_screen').css('opacity') > 0
+            e.preventDefault() if e.preventDefault if e.keyCode == 9
             
     initHints: ->
         @el.find('.hint').bind 'click', => @showHint()
