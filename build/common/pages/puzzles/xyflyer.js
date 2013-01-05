@@ -140,21 +140,17 @@ soma.views({
       });
     },
     showMessage: function(type) {
-      var equationArea,
-        _this = this;
+      var equationArea;
       equationArea = this.$('.equation_area');
       equationArea.html(this.$("." + type + "_message").html());
       equationArea.css({
         padding: '0 12px',
         textAlign: 'center'
       });
-      return equationArea.find('button').bind('click', function() {
-        return _this.go('/puzzles/xyflyer/1');
-      });
+      return equationArea.find('.button').attr('href', '/puzzles/xyflyer/1');
     },
     nextLevel: function() {
-      var complete, go,
-        _this = this;
+      var complete;
       this.registerEvent({
         type: 'success',
         info: {
@@ -163,16 +159,8 @@ soma.views({
       });
       complete = this.$('.complete');
       this.centerAndShow(complete);
-      go = function() {
-        return _this.go("/puzzles/xyflyer/" + (_this.classId ? _this.classId + '/' : '') + (_this.levelId + 1));
-      };
-      complete.find('button').bind('click', function() {
-        return go();
-      });
       this.$('.launch').html('Success! Go To The Next Level >');
-      return this.$('.launch').bind('click', function() {
-        return go();
-      });
+      return this.$('.go').attr('href', "/puzzles/xyflyer/" + (this.classId ? this.classId + '/' : '') + (this.levelId + 1));
     },
     registerEvent: function(_arg) {
       var info, type;

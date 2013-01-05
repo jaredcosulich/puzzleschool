@@ -118,8 +118,7 @@ soma.views
             equationArea = @$('.equation_area')
             equationArea.html(@$(".#{type}_message").html())
             equationArea.css(padding: '0 12px', textAlign: 'center')
-            equationArea.find('button').bind 'click', =>
-                @go('/puzzles/xyflyer/1') 
+            equationArea.find('.button').attr('href', '/puzzles/xyflyer/1') 
         
         nextLevel: ->
             @registerEvent
@@ -130,10 +129,8 @@ soma.views
             complete = @$('.complete')
             @centerAndShow(complete)
             
-            go = => @go("/puzzles/xyflyer/#{if @classId then @classId + '/' else ''}#{@levelId + 1}")
-            complete.find('button').bind 'click', => go()
             @$('.launch').html('Success! Go To The Next Level >')
-            @$('.launch').bind 'click', => go()
+            @$('.go').attr('href', "/puzzles/xyflyer/#{if @classId then @classId + '/' else ''}#{@levelId + 1}")
             
         registerEvent: ({type, info}) ->
             return unless @user and @user.id and @levelId and @classId
