@@ -68,7 +68,7 @@ soma.chunks
                                                 moves: userStat?.moves or 0
                                                 hints: userStat?.hints or 0
                                                 success: (if userStat?.success?.length then true else false)
-                                                successClass: (if userStat?.hints.length then 'hard' else userStat?.challenge?[0])
+                                                successClass: (if userStat?.hints?.length then 'hard' else userStat?.challenge?[0])
                                                 duration: "#{minutes} min, #{seconds} sec"
                                                 assessment: userStat?.challenge?.length
                                                 challenge: userStat?.challenge?[0] 
