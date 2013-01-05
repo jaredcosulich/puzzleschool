@@ -131,16 +131,16 @@ class equations.Equations
             opacity: 1
             duration: 250
             complete: => 
-                dragElement.one 'mousedown.hint', =>
-                    $(document.body).one 'mouseup.hint', =>
-                        $(document.body).unbind 'mousemove.hint'    
+                dragElement.one 'mousedown.hint touchstart.hint', =>
+                    $(document.body).one 'mouseup.hint touchend.hint', =>
+                        $(document.body).unbind 'mousemove.hint touchmove.hint'    
                         dragThis.animate
                             opacity: 0
                             duration: 250
                             complete: => dragThis.css(top: -1000, left: -1000)
                         
-                    $(document.body).one 'mousemove.hint', =>
-                        $(document.body).unbind 'mouseup.hint'
+                    $(document.body).one 'mousemove.hint touchmove.hint', =>
+                        $(document.body).unbind 'mouseup.hint touchend.hint'
                         dragThis.animate
                             opacity: 0
                             duration: 250
@@ -158,7 +158,7 @@ class equations.Equations
                             opacity: 1
                             duration: 250
                             complete: => 
-                                component.element.one 'mouseup.hint', =>
+                                component.element.one 'mouseup.hint touchend.hint', =>
                                     dropHere.animate
                                         opacity: 0, 
                                         duration: 250
@@ -242,7 +242,7 @@ class equations.Equations
                     opacity: 1
                     duration: 250
                     complete: => 
-                        @$('.launch').one 'mouseup.hint', =>
+                        @$('.launch').one 'mouseup.hint touchend.hint', =>
                             launch.animate
                                 opacity: 0
                                 duration: 250

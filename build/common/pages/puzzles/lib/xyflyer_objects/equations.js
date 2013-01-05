@@ -215,9 +215,9 @@ equations.Equations = (function() {
       opacity: 1,
       duration: 250,
       complete: function() {
-        return dragElement.one('mousedown.hint', function() {
-          $(document.body).one('mouseup.hint', function() {
-            $(document.body).unbind('mousemove.hint');
+        return dragElement.one('mousedown.hint touchstart.hint', function() {
+          $(document.body).one('mouseup.hint touchend.hint', function() {
+            $(document.body).unbind('mousemove.hint touchmove.hint');
             return dragThis.animate({
               opacity: 0,
               duration: 250,
@@ -229,9 +229,9 @@ equations.Equations = (function() {
               }
             });
           });
-          return $(document.body).one('mousemove.hint', function() {
+          return $(document.body).one('mousemove.hint touchmove.hint', function() {
             var dropHere;
-            $(document.body).unbind('mouseup.hint');
+            $(document.body).unbind('mouseup.hint touchend.hint');
             dragThis.animate({
               opacity: 0,
               duration: 250,
@@ -255,7 +255,7 @@ equations.Equations = (function() {
               opacity: 1,
               duration: 250,
               complete: function() {
-                return component.element.one('mouseup.hint', function() {
+                return component.element.one('mouseup.hint touchend.hint', function() {
                   return dropHere.animate({
                     opacity: 0,
                     duration: 250,
@@ -405,7 +405,7 @@ equations.Equations = (function() {
           opacity: 1,
           duration: 250,
           complete: function() {
-            return _this.$('.launch').one('mouseup.hint', function() {
+            return _this.$('.launch').one('mouseup.hint touchend.hint', function() {
               return launch.animate({
                 opacity: 0,
                 duration: 250,
