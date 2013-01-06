@@ -70,9 +70,9 @@ soma.chunks
             
             @html = wings.renderTemplate(@template, 
                 objects: @objects
-                class: @classId
+                class: @classId or 0
                 level: @levelId
-                nextLevel: @nextLevelId
+                nextLevel: @nextLevelId or -1
                 instructions: @levelInfo?.instructions
             )
             
@@ -747,6 +747,31 @@ LEVELS = [
                 max: 10
                 increment: 0.5
                 solution: 3        
+    }         
+    {
+        equations: 
+            '(a/2)x+10': {start: 'x'}
+        grid:
+            xMin: -50
+            xMax: 50
+            yMin: -50
+            yMax: 50
+        rings: [
+            {x: -8, y: -6}
+            {x: 8, y: 26}
+            {x: 16, y: 42}
+        ]
+        islandCoordinates: {x: -24, y: -38}
+        fragments: [
+            '(a/2)', '-4', '-6', '-8'
+        ]
+        variables:
+            a:
+                start: 0
+                min: 0
+                max: 10
+                increment: 0.5
+                solution: 4
     }         
        
 ]
