@@ -1,6 +1,11 @@
 soma = require('soma')
 wings = require('wings')
 
+sortLevels = (levels) ->
+    levels.sort (level1,level2) ->
+        a = level1.difficulty + level1.name
+        b = level2.difficulty + level2.name
+        return if a == b then 0 else (if a < b then -1 else 1)
 
 soma.chunks
     Xyflyer:
@@ -24,25 +29,29 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             
-            if @levelId and not isNaN(@levelId)
-                @loadData 
-                    url: "/api/puzzles/levels/#{@levelId}"
-                    success: (@levelInfo) => 
-                    error: () =>
-                        if window?.alert
-                            alert('We were unable to load the information for this level. Please check your internet connection.')
-                    
             if @classId
+                if @levelId and not isNaN(@levelId)
+                    @loadData 
+                        url: "/api/puzzles/levels/#{@levelId}"
+                        success: (@levelInfo) => 
+                        error: () =>
+                            if window?.alert
+                                alert('We were unable to load the information for this level. Please check your internet connection.')
+
                 @loadData 
                     url: "/api/classes/info/#{@classId}"
                     success: (data) =>
-                        @classInfo = data
-                        level.classId = @classInfo.id for level in @classInfo.levels
-                        @classInfo.levels = sortLevels(@classInfo.levels)
+                        levels = sortLevels(data.levels)
+                        @nextLevelId = 0
+                        for level, index in levels
+                            if "#{level.id}" == "#{@levelId}"
+                                @nextLevelId = levels[index + 1].id
+                                
+                        @nextLevelId = -1 if not @nextLevelId
                     error: () =>
                         if window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
-        
+                    
                         
             @objects = []
             for object in ['island']
@@ -63,6 +72,7 @@ soma.chunks
                 objects: @objects
                 class: @classId
                 level: @levelId
+                nextLevel: @nextLevelId
                 instructions: @levelInfo?.instructions
             )
             
@@ -77,6 +87,7 @@ soma.views
             
             @classId = @el.data('class')
             @levelId = @el.data('level')
+            @nextLevelId = @el.data('nextlevel')
             
             if isNaN(parseInt(@levelId))
                 @showMessage('intro')
@@ -145,7 +156,7 @@ soma.views
             @centerAndShow(complete)
             
             @$('.launch').html('Success! Go To The Next Level >')
-            @$('.go').attr('href', "/puzzles/xyflyer/#{if @classId then @classId + '/' else ''}#{@levelId + 1}")
+            @$('.go').attr('href', "/puzzles/xyflyer/#{if @classId then "#{@classId}/#{@nextLevelId}" else (@levelId + 1)}")
             
         registerEvent: ({type, info}) ->
             return unless @user and @user.id and @levelId and @classId
@@ -522,128 +533,220 @@ LEVELS = [
             'ln(x)', '-3(x)', '+0.14', '+2', '-4', '+6'
         ]
     }
-]
-    
-    
-CLASSES = 
-    '1': 
-        levels: [
-            {}
-            {
-                equations: 
-                    '2x': {}
-                grid:
-                    xMin: -10
-                    xMax: 10
-                    yMin: -10
-                    yMax: 10
-                rings: [
-                    {x: 1, y: 2}
-                    {x: 3, y: 6}
-                ]
-                fragments: [
-                    '2x'
-                ]
-            }
-            {
-                equations: 
-                    '2+3x': {}
-                grid:
-                    xMin: -10
-                    xMax: 20
-                    yMin: -10
-                    yMax: 20
-                rings: [
-                    {x: 1, y: 5}
-                    {x: 3, y: 11}
-                    {x: 5, y: 17}
-                ]
-                islandCoordinates: {x: 0, y: 2}
-                fragments: [
-                    '3x', '1+', '2+', '3+'
-                ]
-            }
-            {
-                equations: 
-                    '2-3x': {}
-                grid:
-                    xMin: -20
-                    xMax: 20
-                    yMin: -20
-                    yMax: 20
-                rings: [
-                    {x: -2, y: 8}
-                    {x: 3, y: -7}
-                    {x: 5, y: -13}
-                ]
-                islandCoordinates: {x: -5, y: 17}
-                fragments: [
-                    '3x', '1+', '1-', '2+', '2-'
-                ]
-            }
-            {
-                equations: 
-                    '4+0.2x': {start: 'x'}
-                grid:
-                    xMin: -10
-                    xMax: 10
-                    yMin: -6
-                    yMax: 10
-                rings: [
-                    {x: -1, y: 3.8}
-                    {x: 3, y: 4.6}
-                    {x: 8, y: 5.6}
-                ]
-                islandCoordinates: {x: -8, y: 2.4}
-                fragments: [
-                    '4+', '2+', '0.2', '0.5', '2'
-                ]
-            }
-            {
-                equations: 
-                    '(3/2)x-4': solutionComponents: [
-                        {fragment: '(3)x', after: ''},
-                        {fragment: '/2', after: '3'},
-                        {fragment: '-4', after: '(3/2)x'}
-                    ]
-                grid:
-                    xMin: -10
-                    xMax: 20
-                    yMin: -10
-                    yMax: 20
-                rings: [
-                    {x: 3, y: 0.5}
-                    {x: 8, y: 8}
-                    {x: 12, y: 14}
-                ]
-                islandCoordinates: {x: -2, y: -7}
-                fragments: [
-                    '(3)x', '/2', '/4', '*2', '*4', '-2', '-4'
-                ]
-            }
-            {
-                equations: 
-                    '-4-(3/a)x': {}
-                grid:
-                    xMin: -30
-                    xMax: 30
-                    yMin: -30
-                    yMax: 30
-                rings: [
-                    {x: -6, y: 5}
-                    {x: 2, y: -7 }
-                    {x: 8, y: -16}
-                ]
-                islandCoordinates: {x: -12, y: 14}
-                fragments: [
-                    '-(3/a)x', '-4', '-2', '2', '4'
-                ]
-                variables:
-                    a:
-                        start: -10
-                        min: -10
-                        max: 10
-                        increment: 1
-                        solution: 2
-            }            
+    {
+        equations: 
+            '2+3x': {}
+        grid:
+            xMin: -10
+            xMax: 20
+            yMin: -10
+            yMax: 20
+        rings: [
+            {x: 1, y: 5}
+            {x: 3, y: 11}
+            {x: 5, y: 17}
         ]
+        islandCoordinates: {x: 0, y: 2}
+        fragments: [
+            '3x', '1+', '2+', '3+'
+        ]
+    }
+    {
+        equations: 
+            '2-3x': {}
+        grid:
+            xMin: -20
+            xMax: 20
+            yMin: -20
+            yMax: 20
+        rings: [
+            {x: -2, y: 8}
+            {x: 3, y: -7}
+            {x: 5, y: -13}
+        ]
+        islandCoordinates: {x: -5, y: 17}
+        fragments: [
+            '3x', '1+', '1-', '2+', '2-'
+        ]
+    }
+    {
+        equations: 
+            '4+0.2x': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -6
+            yMax: 10
+        rings: [
+            {x: -1, y: 3.8}
+            {x: 3, y: 4.6}
+            {x: 8, y: 5.6}
+        ]
+        islandCoordinates: {x: -8, y: 2.4}
+        fragments: [
+            '4+', '2+', '0.2', '0.5', '2'
+        ]
+    }
+    {
+        equations: 
+            '(3/2)x-4': solutionComponents: [
+                {fragment: '(3)x', after: ''},
+                {fragment: '/2', after: '3'},
+                {fragment: '-4', after: '(3/2)x'}
+            ]
+        grid:
+            xMin: -10
+            xMax: 20
+            yMin: -10
+            yMax: 20
+        rings: [
+            {x: 3, y: 0.5}
+            {x: 8, y: 8}
+            {x: 12, y: 14}
+        ]
+        islandCoordinates: {x: -2, y: -7}
+        fragments: [
+            '(3)x', '/2', '/4', '*2', '*4', '-2', '-4'
+        ]
+    }
+    {
+        equations: 
+            '-4-(3/a)x': {}
+        grid:
+            xMin: -30
+            xMax: 30
+            yMin: -30
+            yMax: 30
+        rings: [
+            {x: -6, y: 5}
+            {x: 2, y: -7 }
+            {x: 8, y: -16}
+        ]
+        islandCoordinates: {x: -12, y: 14}
+        fragments: [
+            '-(3/a)x', '-4', '-2', '2', '4'
+        ]
+        variables:
+            a:
+                start: -10
+                min: -10
+                max: 10
+                increment: 1
+                solution: 2
+    }         
+    {
+        equations: 
+            'x+4+8': {start: 'x'}
+        grid:
+            xMin: -30
+            xMax: 30
+            yMin: -30
+            yMax: 30
+        rings: [
+            {x: 0, y: 12}
+            {x: 12, y: 24 }
+        ]
+        islandCoordinates: {x: -12, y: 0}
+        fragments: [
+            '+2', '-2', '+4', '-4', '+8', '-8'
+        ]
+    }         
+    {
+        equations: 
+            'x-5+2': {start: 'x'}
+        grid:
+            xMin: -30
+            xMax: 30
+            yMin: -30
+            yMax: 30
+        rings: [
+            {x: 0, y: -3}
+            {x: 6, y: 3}
+            {x: 15, y: 12}
+        ]
+        islandCoordinates: {x: -10, y: -13}
+        fragments: [
+            '+2', '-2', '+5', '-5'
+        ]
+    }         
+    {
+        equations: 
+            '3-x+4': {start: '-x'}
+        grid:
+            xMin: -50
+            xMax: 50
+            yMin: -50
+            yMax: 50
+        rings: [
+            {x: -15, y: 22}
+            {x: 0, y: 7}
+            {x: 25, y: -18}
+        ]
+        islandCoordinates: {x: -35, y: 42}
+        fragments: [
+            '1', '2', '3', '4', '+1', '+2', '+3', '+4'
+        ]
+    }         
+    {
+        equations: 
+            '-6-4+x': {start: 'x'}
+        grid:
+            xMin: -30
+            xMax: 30
+            yMin: -30
+            yMax: 30
+        rings: [
+            {x: 0, y: -10}
+            {x: 10, y: 0}
+            {x: 20, y: 10}
+        ]
+        islandCoordinates: {x: -10, y: -20}
+        fragments: [
+            '-2', '-4', '-6', '-', '+'
+        ]
+    }         
+    {
+        equations: 
+            '2x+7+8': {start: 'x'}
+        grid:
+            xMin: -30
+            xMax: 30
+            yMin: -10
+            yMax: 50
+        rings: [
+            {x: 0, y: 15}
+            {x: 5, y: 25}
+            {x: 10, y: 35}
+        ]
+        islandCoordinates: {x: -5, y: 5}
+        fragments: [
+            '2', '4', '6', '+5', '+6', '+7', '+8'
+        ]
+    }         
+    {
+        equations: 
+            '-ax+5': {start: 'x'}
+        grid:
+            xMin: -50
+            xMax: 50
+            yMin: -50
+            yMax: 50
+        rings: [
+            {x: 0, y: 5}
+            {x: 5, y: -10}
+            {x: 10, y: -25}
+        ]
+        islandCoordinates: {x: -10, y: 35}
+        fragments: [
+            '-a', '+a', '+2', '+5', '-2', '-5'
+        ]
+        variables:
+            a:
+                start: 0
+                min: 0
+                max: 10
+                increment: 0.5
+                solution: 3        
+    }         
+       
+]

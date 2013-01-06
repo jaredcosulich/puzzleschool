@@ -351,7 +351,7 @@ equations.Equations = (function() {
             for (_l = 0, _len3 = components.length; _l < _len3; _l++) {
               component = components[_l];
               fragment = component.equationFragment;
-              if (this.testFragment(fragment, solution, formula)) {
+              if (this.testFragment(fragment, solution, straightFormula)) {
                 _ref2 = equation.dropAreas;
                 for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
                   dropArea = _ref2[_m];
@@ -360,7 +360,7 @@ equations.Equations = (function() {
                   }
                   element = dropArea.element;
                   element.html(fragment);
-                  test = this.testFragment(fragment, solution, equation.formula(), true);
+                  test = this.testFragment(fragment, solution, equation.straightFormula(), true);
                   element.html('');
                   if (test) {
                     this.displayHint(component, dropArea.element);
@@ -373,7 +373,7 @@ equations.Equations = (function() {
         } else {
           for (variable in equation.variables) {
             info = equation.variables[variable];
-            if (!info.element || ("" + (info.get())) === ("" + info.solution)) {
+            if (!info.element || parseFloat(info.get()) === parseFloat(info.solution)) {
               continue;
             }
             if ((existing = this.$(".hints ." + variable + "_hint")).length) {
@@ -393,33 +393,32 @@ equations.Equations = (function() {
             return;
           }
         }
-      } else {
-        launch = this.$('.launch_hint');
-        launchOffset = this.$('.launch').offset();
-        launch.css({
-          opacity: 0,
-          top: launchOffset.top + launchOffset.height - this.gameArea.offset().top,
-          left: launchOffset.left + (launchOffset.width / 2) - this.gameArea.offset().left
-        });
-        launch.animate({
-          opacity: 1,
-          duration: 250,
-          complete: function() {
-            return _this.$('.launch').one('mouseup.hint touchend.hint', function() {
-              return launch.animate({
-                opacity: 0,
-                duration: 250,
-                complete: function() {
-                  return launch.css({
-                    top: -1000,
-                    left: -1000
-                  });
-                }
-              });
-            });
-          }
-        });
       }
+      launch = this.$('.launch_hint');
+      launchOffset = this.$('.launch').offset();
+      launch.css({
+        opacity: 0,
+        top: launchOffset.top + launchOffset.height - this.gameArea.offset().top,
+        left: launchOffset.left + (launchOffset.width / 2) - this.gameArea.offset().left
+      });
+      launch.animate({
+        opacity: 1,
+        duration: 250,
+        complete: function() {
+          return _this.$('.launch').one('mouseup.hint touchend.hint', function() {
+            return launch.animate({
+              opacity: 0,
+              duration: 250,
+              complete: function() {
+                return launch.css({
+                  top: -1000,
+                  left: -1000
+                });
+              }
+            });
+          });
+        }
+      });
     }
   };
 

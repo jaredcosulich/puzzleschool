@@ -121,7 +121,6 @@ soma.chunks({
                       seconds = Math.round(duration / 1000);
                       minutes = Math.floor(seconds / 60);
                       seconds = seconds - (minutes * 60);
-                      console.log(userStat);
                       userInfo.push({
                         level: level.name,
                         user: userId,

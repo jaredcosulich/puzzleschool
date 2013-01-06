@@ -204,12 +204,12 @@ class equations.Equations
                         components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
                         for component in components
                             fragment = component.equationFragment
-                            if @testFragment(fragment, solution, formula)
+                            if @testFragment(fragment, solution, straightFormula)
                                 for dropArea in equation.dropAreas
                                     continue if dropArea.component or dropArea.fixed
                                     element = dropArea.element
                                     element.html(fragment)
-                                    test = @testFragment(fragment, solution, equation.formula(), true)
+                                    test = @testFragment(fragment, solution, equation.straightFormula(), true)
                                     element.html('')
                                     if test 
                                         @displayHint(component, dropArea.element) 
@@ -217,7 +217,7 @@ class equations.Equations
                 else
                     for variable of equation.variables
                         info = equation.variables[variable]
-                        continue if not info.element or "#{info.get()}" == "#{info.solution}"
+                        continue if not info.element or parseFloat(info.get()) == parseFloat(info.solution)
                         if (existing = @$(".hints .#{variable}_hint")).length
                             existing.animate
                                 opacity: 0
@@ -231,22 +231,22 @@ class equations.Equations
                                 <p class='#{variable}_hint'>Set #{variable} = #{info.solution}</p>
                             """
                         return
-            else    
-                launch = @$('.launch_hint')
-                launchOffset = @$('.launch').offset()
-                launch.css
-                    opacity: 0
-                    top: launchOffset.top + launchOffset.height - @gameArea.offset().top
-                    left: launchOffset.left + (launchOffset.width/2) - @gameArea.offset().left
-                launch.animate
-                    opacity: 1
-                    duration: 250
-                    complete: => 
-                        @$('.launch').one 'mouseup.hint touchend.hint', =>
-                            launch.animate
-                                opacity: 0
-                                duration: 250
-                                complete: => launch.css(top: -1000, left: -1000)
+
+            launch = @$('.launch_hint')
+            launchOffset = @$('.launch').offset()
+            launch.css
+                opacity: 0
+                top: launchOffset.top + launchOffset.height - @gameArea.offset().top
+                left: launchOffset.left + (launchOffset.width/2) - @gameArea.offset().left
+            launch.animate
+                opacity: 1
+                duration: 250
+                complete: => 
+                    @$('.launch').one 'mouseup.hint touchend.hint', =>
+                        launch.animate
+                            opacity: 0
+                            duration: 250
+                            complete: => launch.css(top: -1000, left: -1000)
                 
         
         
