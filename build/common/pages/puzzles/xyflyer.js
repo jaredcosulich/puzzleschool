@@ -1072,7 +1072,7 @@ LEVELS = [
     }
   }, {
     equations: {
-      '(a/2)x+10': {
+      '(a/2)x+6+8-4': {
         start: 'x'
       }
     },
@@ -1098,7 +1098,7 @@ LEVELS = [
       x: -24,
       y: -38
     },
-    fragments: ['(a/2)', '-4', '-6', '-8'],
+    fragments: ['(a/2)', '+6', '+8', '-4', '-2'],
     variables: {
       a: {
         start: 0,
@@ -1106,6 +1106,97 @@ LEVELS = [
         max: 10,
         increment: 0.5,
         solution: 4
+      }
+    }
+  }, {
+    equations: {
+      '(2/3)x-a/2': {
+        start: 'x'
+      }
+    },
+    grid: {
+      xMin: -100,
+      xMax: 100,
+      yMin: -100,
+      yMax: 100
+    },
+    rings: [
+      {
+        x: -24,
+        y: -18.5
+      }, {
+        x: 30,
+        y: 17.5
+      }, {
+        x: 66,
+        y: 41.5
+      }
+    ],
+    islandCoordinates: {
+      x: -75,
+      y: -52.5
+    },
+    fragments: ['(2/3)', '3', '(3/2)', '-a', '/2', '/3'],
+    variables: {
+      a: {
+        start: 0,
+        min: -10,
+        max: 10,
+        increment: 0.5,
+        solution: 5
+      }
+    }
+  }, {
+    equations: {
+      '(-4/6)x+(3*a)': {
+        start: 'x',
+        solutionComponents: [
+          {
+            fragment: '(-4/)',
+            after: ''
+          }, {
+            fragment: '6',
+            after: '-4/'
+          }, {
+            fragment: '+(a)',
+            after: 'x'
+          }, {
+            fragment: '3*',
+            after: '+('
+          }
+        ]
+      }
+    },
+    grid: {
+      xMin: -100,
+      xMax: 100,
+      yMin: -100,
+      yMax: 100
+    },
+    rings: [
+      {
+        x: -30,
+        y: 35
+      }, {
+        x: 24,
+        y: -1
+      }, {
+        x: 72,
+        y: -33
+      }
+    ],
+    islandCoordinates: {
+      x: -75,
+      y: 65
+    },
+    fragments: ['3*', '4*', '(-3/)', '(3/)', '(-4/)', '(4/)', '+(a)', '5', '6'],
+    variables: {
+      a: {
+        start: 0,
+        min: -10,
+        max: 10,
+        increment: 1,
+        solution: 5
       }
     }
   }

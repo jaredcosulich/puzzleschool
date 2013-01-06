@@ -294,8 +294,9 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, c, completedSolution, component, components, dropArea, element, equation, existing, formula, fragment, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2,
+    var accept, allEquationsSet, c, completedSolution, component, components, dropArea, element, equation, existing, formula, fragment, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2,
       _this = this;
+    allEquationsSet = true;
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
@@ -309,6 +310,7 @@ equations.Equations = (function() {
         }
       }
       if (formula !== completedSolution) {
+        allEquationsSet = false;
         if (solution !== straightFormula) {
           if ((solutionComponents = equation.solutionComponents)) {
             for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
@@ -394,6 +396,8 @@ equations.Equations = (function() {
           }
         }
       }
+    }
+    if (allEquationsSet) {
       launch = this.$('.launch_hint');
       launchOffset = this.$('.launch').offset();
       launch.css({
@@ -401,7 +405,7 @@ equations.Equations = (function() {
         top: launchOffset.top + launchOffset.height - this.gameArea.offset().top,
         left: launchOffset.left + (launchOffset.width / 2) - this.gameArea.offset().left
       });
-      launch.animate({
+      return launch.animate({
         opacity: 1,
         duration: 250,
         complete: function() {

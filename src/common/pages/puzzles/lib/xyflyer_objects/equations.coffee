@@ -177,6 +177,7 @@ class equations.Equations
         return accept
 
     showHint: ->
+        allEquationsSet = true
         for equation in @equations
             formula = equation.formula()
             straightFormula = equation.straightFormula()
@@ -186,6 +187,7 @@ class equations.Equations
                 completedSolution = completedSolution.replace(variable, info.solution) if info.solution
                 
             if formula != completedSolution
+                allEquationsSet = false
                 if solution != straightFormula                            
                     if (solutionComponents = equation.solutionComponents)
                         for solutionComponent in solutionComponents
@@ -232,6 +234,7 @@ class equations.Equations
                             """
                         return
 
+        if allEquationsSet
             launch = @$('.launch_hint')
             launchOffset = @$('.launch').offset()
             launch.css
