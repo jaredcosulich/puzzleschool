@@ -48,13 +48,13 @@ exports.checkPassword = function(fn) {
 
 exports.requireUser = function(fn) {
   return function() {
-    var args, l, userCookie,
+    var args, l, userCookie, _ref,
       _this = this;
     args = Array.prototype.slice.call(arguments);
     userCookie = this.cookies.get('user', {
       signed: true
     });
-    this.cookies.set('returnTo', this.parent.href);
+    this.cookies.set('returnTo', (_ref = this.parent) != null ? _ref.href : void 0);
     if (!userCookie) {
       return this.go('/register');
     }

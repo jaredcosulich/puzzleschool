@@ -31,7 +31,7 @@ exports.requireUser = (fn) ->->
     args = Array.prototype.slice.call(arguments)
     userCookie = @cookies.get('user', { signed: true })
     
-    @cookies.set('returnTo', @parent.href)
+    @cookies.set('returnTo', @parent?.href)
     return @go('/register') unless userCookie
 
     l = new Line
