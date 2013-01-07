@@ -234,6 +234,29 @@ class equations.Equations
                             """
                         return
 
+        if @equations.length > 1
+            for equation, index in @equations
+                if not equation.rangeText.length
+                    if (existing = @$(".hints .#{equation.id}_range_hint")).length
+                        existing.animate
+                            opacity: 0
+                            duration: 500
+                            complete: =>
+                                existing.animate
+                                    opacity: 1
+                                    duration: 500
+                        return
+                    else
+                        @$('.hints').append """
+                            <p class='#{equation.id}_range_hint'>
+                                Set the start and end point for equation #{index + 1}.
+                                <br/>
+                                Click on the graph to get the exact coordinate.
+                            </p>
+                        """
+                        return
+                    
+                    
         if allEquationsSet
             launch = @$('.launch_hint')
             launchOffset = @$('.launch').offset()

@@ -294,7 +294,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, allEquationsSet, c, completedSolution, component, components, dropArea, element, equation, existing, formula, fragment, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2,
+    var accept, allEquationsSet, c, completedSolution, component, components, dropArea, element, equation, existing, formula, fragment, index, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3,
       _this = this;
     allEquationsSet = true;
     _ref = this.equations;
@@ -392,6 +392,30 @@ equations.Equations = (function() {
             } else {
               this.$('.hints').append("<p class='" + variable + "_hint'>Set " + variable + " = " + info.solution + "</p>");
             }
+            return;
+          }
+        }
+      }
+    }
+    if (this.equations.length > 1) {
+      _ref3 = this.equations;
+      for (index = _n = 0, _len5 = _ref3.length; _n < _len5; index = ++_n) {
+        equation = _ref3[index];
+        if (!equation.rangeText.length) {
+          if ((existing = this.$(".hints ." + equation.id + "_range_hint")).length) {
+            existing.animate({
+              opacity: 0,
+              duration: 500,
+              complete: function() {
+                return existing.animate({
+                  opacity: 1,
+                  duration: 500
+                });
+              }
+            });
+            return;
+          } else {
+            this.$('.hints').append("<p class='" + equation.id + "_range_hint'>\n    Set the start and end point for equation " + (index + 1) + ".\n    <br/>\n    Click on the graph to get the exact coordinate.\n</p>");
             return;
           }
         }
