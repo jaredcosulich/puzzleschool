@@ -8,13 +8,13 @@ exports.checkPassword = (fn) ->->
     args = Array.prototype.slice.call(arguments)
     @data.email = @user.email if @user and not @data.email
 
-    return @sendError() unless @data.email and /.+@.+\..+/.test(@data.email)
-    return @sendError() unless @data.password and /\S{3,}/.test(@data.password)
+    return false unless @data.email and /.+@.+\..+/.test(@data.email)
+    return false unless @data.password and /\S{3,}/.test(@data.password)
 
     l = new Line
         error: (err) => 
             console.log('checkPassword failed:', err)
-            @sendError()
+            return false
             
         => db.get 'login', @data.email.toLowerCase(), l.wait()
 
@@ -36,7 +36,7 @@ exports.requireUser = (fn) ->->
     l = new Line
         error: (err) => 
             console.log('checkUser failed:', err)
-            @sendError()
+            return false
             
         => db.get 'users', userCookie.id, l.wait()
     

@@ -183,6 +183,7 @@ soma.views({
           data: form.data('form').dataHash(),
           success: function() {
             var postRegistrationMethod, _i, _len, _ref, _results;
+            _this.$('.registration_form .submit_feedback').data('form-button').success();
             _this.hideModal(form);
             if (window.postRegistration.length) {
               _ref = window.postRegistration;
@@ -197,6 +198,9 @@ soma.views({
             } else {
               return _this.checkLoggedIn();
             }
+          },
+          error: function() {
+            return _this.$('.registration_form .submit_feedback').data('form-button').error();
           }
         });
       };

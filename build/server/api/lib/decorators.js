@@ -18,15 +18,15 @@ exports.checkPassword = function(fn) {
       this.data.email = this.user.email;
     }
     if (!(this.data.email && /.+@.+\..+/.test(this.data.email))) {
-      return this.sendError();
+      return false;
     }
     if (!(this.data.password && /\S{3,}/.test(this.data.password))) {
-      return this.sendError();
+      return false;
     }
     return l = new Line({
       error: function(err) {
         console.log('checkPassword failed:', err);
-        return _this.sendError();
+        return false;
       }
     }, function() {
       return db.get('login', _this.data.email.toLowerCase(), l.wait());
@@ -60,7 +60,7 @@ exports.requireUser = function(fn) {
     return l = new Line({
       error: function(err) {
         console.log('checkUser failed:', err);
-        return _this.sendError();
+        return false;
       }
     }, function() {
       return db.get('users', userCookie.id, l.wait());

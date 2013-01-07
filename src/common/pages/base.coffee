@@ -86,11 +86,14 @@ soma.views
                     headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                     data: form.data('form').dataHash()
                     success: () =>
+                        @$('.registration_form .submit_feedback').data('form-button').success()
                         @hideModal(form)
                         if window.postRegistration.length
                             (postRegistrationMethod => @checkLoggedIn()) for postRegistrationMethod in window.postRegistration
                         else
                             @checkLoggedIn()
+                    error: =>
+                        @$('.registration_form .submit_feedback').data('form-button').error()
                 
             @$('.registration_form input').bind 'keypress', (e) => submitForm() if e.keyCode == 13
             @$('.registration_form .register_button').bind 'click', () => submitForm()

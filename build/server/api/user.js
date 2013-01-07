@@ -48,7 +48,7 @@ soma.routes({
     if (!(this.data.password && /\S{3,}/.test(this.data.password))) {
       return this.sendError(new Error('Password was invalid'));
     }
-    if (!(this.data.year && this.data.month && this.data.day && isFinite(this.data.year) && isFinite(this.data.month) && isFinite(this.data.day))) {
+    if (!(this.data.year && isFinite(this.data.year))) {
       return this.sendError(new Error('Birthday was invalid'));
     }
     this.data.birthday = "" + this.data.year + "-" + this.data.month + "-" + this.data.day;

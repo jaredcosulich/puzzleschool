@@ -46,7 +46,7 @@ soma.routes
         return @sendError(new Error('Name was invalid')) unless @data.name and /\S{3,}/.test(@data.name)
         return @sendError(new Error('Email was invalid')) unless @data.email and /.+@.+\..+/.test(@data.email)
         return @sendError(new Error('Password was invalid')) unless @data.password and /\S{3,}/.test(@data.password)
-        return @sendError(new Error('Birthday was invalid')) unless @data.year and @data.month and @data.day and isFinite(@data.year) and isFinite(@data.month) and isFinite(@data.day)
+        return @sendError(new Error('Birthday was invalid')) unless @data.year and isFinite(@data.year)
 
         @data.birthday = "#{@data.year}-#{@data.month}-#{@data.day}"
         @data.year = parseInt(@data.year)

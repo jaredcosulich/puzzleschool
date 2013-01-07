@@ -2,7 +2,7 @@ dynode = require('dynode')
 
 db = exports
 
-unimoTable = process.env.UNIMO or 'puzzleschool'
+unimoTable = process.env.UNIMO or 'puzzleschool-dev'
 
 dynodeClient = new dynode.Client
     accessKeyId: 'AKIAJ4DV2JSOSNOBJFNA'
