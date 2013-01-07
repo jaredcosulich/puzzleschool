@@ -5,7 +5,7 @@ dynode = require('dynode');
 
 db = exports;
 
-unimoTable = process.env.UNIMO || 'puzzleschool-dev';
+unimoTable = process.env.UNIMO || 'puzzleschool';
 
 dynodeClient = new dynode.Client({
   accessKeyId: 'AKIAJ4DV2JSOSNOBJFNA',

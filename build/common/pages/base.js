@@ -99,7 +99,7 @@ soma.chunks({
         }).apply(this),
         years: (function() {
           _results1 = [];
-          for (var _j = _ref = (new Date).getFullYear() - 18; _ref <= 1900 ? _j <= 1900 : _j >= 1900; _ref <= 1900 ? _j++ : _j--){ _results1.push(_j); }
+          for (var _j = _ref = (new Date).getFullYear() - 1; _ref <= 1900 ? _j <= 1900 : _j >= 1900; _ref <= 1900 ? _j++ : _j--){ _results1.push(_j); }
           return _results1;
         }).apply(this)
       };

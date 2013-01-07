@@ -280,9 +280,6 @@ body {
 .xyflyer .hints {
   padding: 60px 0 0 6px;
 }
-.xyflyer .hints h4 {
-  display: inline;
-}
 .xyflyer .hints a {
   border: 1px solid #ccc;
   padding: 3px 6px;

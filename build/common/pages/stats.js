@@ -59,7 +59,7 @@ soma.chunks({
               objectInfos: levelClassInfos
             },
             success: function(levelClassStats) {
-              var stats, userId, userIdHash, userLevelClassInfos, _j, _k, _l, _len1, _len2, _len3, _len4, _m, _ref1, _ref2, _ref3, _ref4;
+              var i, stats, userId, userIdHash, userLevelClassInfos, _j, _k, _l, _len1, _len2, _len3, _len4, _m, _n, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
               userIdHash = {};
               _ref1 = levelClassStats.stats;
               for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -91,62 +91,68 @@ soma.chunks({
                   });
                 }
               }
-              return _this.loadData({
-                url: "/api/stats",
-                data: {
-                  objectInfos: userLevelClassInfos
-                },
-                success: function(userLevelClassStats) {
-                  var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _n, _o, _p, _ref10, _ref11, _ref12, _ref13, _ref5, _ref6, _ref7, _ref8, _ref9, _results;
-                  statsHash = {};
-                  _ref5 = userLevelClassStats.stats;
-                  for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
-                    stat = _ref5[_n];
-                    userId = stat.objectId.split('/')[0];
-                    levelId = stat.objectId.split('/')[1];
-                    statsHash[levelId] || (statsHash[levelId] = {});
-                    statsHash[levelId][userId] = stat;
-                  }
-                  _this.stats = [];
-                  _ref6 = _this.classInfo.levels;
-                  _results = [];
-                  for (_o = 0, _len6 = _ref6.length; _o < _len6; _o++) {
-                    level = _ref6[_o];
-                    userInfo = [];
-                    _ref7 = _this.users;
-                    for (_p = 0, _len7 = _ref7.length; _p < _len7; _p++) {
-                      userId = _ref7[_p];
-                      userStat = (_ref8 = statsHash[level.id]) != null ? _ref8[userId] : void 0;
-                      duration = (userStat != null ? userStat.duration : void 0) || 0;
-                      seconds = Math.round(duration / 1000);
-                      minutes = Math.floor(seconds / 60);
-                      seconds = seconds - (minutes * 60);
-                      userInfo.push({
-                        level: level.name,
-                        user: userId,
-                        attempted: (userStat ? true : false),
-                        moves: (userStat != null ? userStat.moves : void 0) || 0,
-                        hints: (userStat != null ? userStat.hints : void 0) || 0,
-                        success: ((userStat != null ? (_ref9 = userStat.success) != null ? _ref9.length : void 0 : void 0) ? true : false),
-                        successClass: ((userStat != null ? (_ref10 = userStat.hints) != null ? _ref10.length : void 0 : void 0) ? 'hard' : userStat != null ? (_ref11 = userStat.challenge) != null ? _ref11[0] : void 0 : void 0),
-                        duration: "" + minutes + " min, " + seconds + " sec",
-                        assessment: userStat != null ? (_ref12 = userStat.challenge) != null ? _ref12.length : void 0 : void 0,
-                        challenge: userStat != null ? (_ref13 = userStat.challenge) != null ? _ref13[0] : void 0 : void 0
-                      });
+              _this.stats = [];
+              _results = [];
+              for (i = _n = 0, _ref5 = userLevelClassInfos.length; _n <= _ref5; i = _n += 50) {
+                _this.loadData({
+                  url: "/api/stats",
+                  data: {
+                    objectInfos: userLevelClassInfos.slice(i, i + 50)
+                  },
+                  success: function(userLevelClassStats) {
+                    var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _o, _p, _q, _ref10, _ref11, _ref12, _ref13, _ref14, _ref6, _ref7, _ref8, _ref9, _results1;
+                    statsHash = {};
+                    _ref6 = userLevelClassStats.stats;
+                    for (_o = 0, _len5 = _ref6.length; _o < _len5; _o++) {
+                      stat = _ref6[_o];
+                      userId = stat.objectId.split('/')[0];
+                      levelId = stat.objectId.split('/')[1];
+                      statsHash[levelId] || (statsHash[levelId] = {});
+                      statsHash[levelId][userId] = stat;
                     }
-                    _results.push(_this.stats.push({
-                      levelName: level.name,
-                      users: userInfo
-                    }));
+                    _ref7 = _this.classInfo.levels;
+                    _results1 = [];
+                    for (_p = 0, _len6 = _ref7.length; _p < _len6; _p++) {
+                      level = _ref7[_p];
+                      userInfo = [];
+                      _ref8 = _this.users;
+                      for (_q = 0, _len7 = _ref8.length; _q < _len7; _q++) {
+                        userId = _ref8[_q];
+                        userStat = (_ref9 = statsHash[level.id]) != null ? _ref9[userId] : void 0;
+                        duration = (userStat != null ? userStat.duration : void 0) || 0;
+                        seconds = Math.round(duration / 1000);
+                        minutes = Math.floor(seconds / 60);
+                        seconds = seconds - (minutes * 60);
+                        userInfo.push({
+                          level: level.name,
+                          user: userId,
+                          attempted: (userStat ? true : false),
+                          moves: (userStat != null ? userStat.moves : void 0) || 0,
+                          hints: (userStat != null ? userStat.hints : void 0) || 0,
+                          success: ((userStat != null ? (_ref10 = userStat.success) != null ? _ref10.length : void 0 : void 0) ? true : false),
+                          successClass: ((userStat != null ? (_ref11 = userStat.hints) != null ? _ref11.length : void 0 : void 0) ? 'hard' : userStat != null ? (_ref12 = userStat.challenge) != null ? _ref12[0] : void 0 : void 0),
+                          duration: "" + minutes + " min, " + seconds + " sec",
+                          assessment: userStat != null ? (_ref13 = userStat.challenge) != null ? _ref13.length : void 0 : void 0,
+                          challenge: userStat != null ? (_ref14 = userStat.challenge) != null ? _ref14[0] : void 0 : void 0
+                        });
+                      }
+                      _results1.push(_this.stats.push({
+                        levelName: level.name,
+                        users: userInfo
+                      }));
+                    }
+                    return _results1;
                   }
-                  return _results;
-                },
-                error: function() {
-                  if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
-                    return alert('We were unable to load stats for this class. Please check your internet connection.');
+                });
+                _results.push({
+                  error: function() {
+                    if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+                      return alert('We were unable to load stats for this class. Please check your internet connection.');
+                    }
                   }
-                }
-              });
+                });
+              }
+              return _results;
             },
             error: function() {
               if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {

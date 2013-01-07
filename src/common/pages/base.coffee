@@ -39,7 +39,7 @@ soma.chunks
                 content: @content
                 months: ({ label: @shortMonths[i-1], value: i } for i in [1..12])
                 days: [1..31]
-                years: [((new Date).getFullYear() - 18)..1900]
+                years: [((new Date).getFullYear() - 1)..1900]
             
             @html = wings.renderTemplate(@template, data)
             

@@ -48,34 +48,12 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
       if (this.classId) {
-        if (this.levelId && !isNaN(this.levelId)) {
-          this.loadData({
-            url: "/api/puzzles/levels/" + this.levelId,
-            success: function(levelInfo) {
-              _this.levelInfo = levelInfo;
-            },
-            error: function() {
-              if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
-                return alert('We were unable to load the information for this level. Please check your internet connection.');
-              }
-            }
-          });
-        }
         this.loadData({
           url: "/api/classes/info/" + this.classId,
           success: function(data) {
-            var index, level, levels, _i, _len;
+            var levels;
             levels = sortLevels(data.levels);
-            _this.nextLevelId = 0;
-            for (index = _i = 0, _len = levels.length; _i < _len; index = ++_i) {
-              level = levels[index];
-              if (("" + level.id) === ("" + _this.levelId)) {
-                _this.nextLevelId = levels[index + 1].id;
-              }
-            }
-            if (!_this.nextLevelId) {
-              return _this.nextLevelId = -1;
-            }
+            return _this.classLevelId = levels[_this.levelId].id;
           },
           error: function() {
             if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
@@ -84,6 +62,17 @@ soma.chunks({
           }
         });
       }
+      this.loadData({
+        url: "/api/puzzles/levels/" + (this.classLevelId || this.levelId),
+        success: function(levelInfo) {
+          _this.levelInfo = levelInfo;
+        },
+        error: function() {
+          if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+            return alert('We were unable to load the information for this level. Please check your internet connection.');
+          }
+        }
+      });
       this.objects = [];
       _ref = ['island'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -105,7 +94,7 @@ soma.chunks({
         objects: this.objects,
         "class": this.classId || 0,
         level: this.levelId,
-        nextLevel: this.nextLevelId || -1,
+        classLevel: this.classLevelId || 0,
         instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0
       });
     }
@@ -122,13 +111,17 @@ soma.views({
       this.user = this.cookies.get('user');
       this.classId = this.el.data('class');
       this.levelId = this.el.data('level');
-      this.nextLevelId = this.el.data('nextlevel');
+      this.classLevelId = this.el.data('classlevel');
       if (isNaN(parseInt(this.levelId))) {
         this.showMessage('intro');
         return;
       }
       if (this.classId) {
-        this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
+        try {
+          this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
+        } catch (e) {
+
+        }
       } else {
         this.data = LEVELS[this.levelId];
       }
@@ -207,12 +200,12 @@ soma.views({
       complete = this.$('.complete');
       this.centerAndShow(complete);
       this.$('.launch').html('Success! Go To The Next Level >');
-      return this.$('.go').attr('href', "/puzzles/xyflyer/" + (this.classId ? "" + this.classId + "/" + this.nextLevelId : this.levelId + 1));
+      return this.$('.go').attr('href', "/puzzles/xyflyer/" + (this.classId ? "" + this.classId + "/" : '') + (this.levelId + 1));
     },
     registerEvent: function(_arg) {
       var info, type;
       type = _arg.type, info = _arg.info;
-      if (!(this.user && this.user.id && this.levelId && this.classId)) {
+      if (!(this.user && this.user.id && (this.classLevelId || this.levelId) && this.classId)) {
         return;
       }
       this.pendingEvents || (this.pendingEvents = []);
@@ -221,7 +214,7 @@ soma.views({
         info: JSON.stringify(info),
         puzzle: 'xyflyer',
         classId: this.classId,
-        levelId: this.levelId
+        levelId: this.classLevelId || this.levelId
       });
       if (!this.lastEvent) {
         this.timeBetweenEvents = 0;
@@ -270,19 +263,19 @@ soma.views({
         },
         levelClass: {
           objectType: 'level_class',
-          objectId: "" + this.levelId + "/" + this.classId,
+          objectId: "" + (this.classLevelId || this.levelId) + "/" + this.classId,
           actions: []
         },
         userLevelClass: {
           objectType: 'user_level_class',
-          objectId: "" + this.user.id + "/" + this.levelId + "/" + this.classId,
+          objectId: "" + this.user.id + "/" + (this.classLevelId || this.levelId) + "/" + this.classId,
           actions: []
         }
       };
       statUpdates.user.actions.push({
         attribute: 'levelClasses',
         action: 'add',
-        value: ["" + this.levelId + "/" + this.classId]
+        value: ["" + (this.classLevelId || this.levelId) + "/" + this.classId]
       });
       statUpdates["class"].actions.push({
         attribute: 'users',

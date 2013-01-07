@@ -30,27 +30,22 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             
             if @classId
-                if @levelId and not isNaN(@levelId)
-                    @loadData 
-                        url: "/api/puzzles/levels/#{@levelId}"
-                        success: (@levelInfo) => 
-                        error: () =>
-                            if window?.alert
-                                alert('We were unable to load the information for this level. Please check your internet connection.')
-
                 @loadData 
                     url: "/api/classes/info/#{@classId}"
                     success: (data) =>
                         levels = sortLevels(data.levels)
-                        @nextLevelId = 0
-                        for level, index in levels
-                            if "#{level.id}" == "#{@levelId}"
-                                @nextLevelId = levels[index + 1].id
-                                
-                        @nextLevelId = -1 if not @nextLevelId
+                        @classLevelId = levels[@levelId].id
                     error: () =>
                         if window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
+
+            @loadData 
+                url: "/api/puzzles/levels/#{@classLevelId or @levelId}"
+                success: (@levelInfo) => 
+                error: () =>
+                    if window?.alert
+                        alert('We were unable to load the information for this level. Please check your internet connection.')
+
                     
                         
             @objects = []
@@ -72,7 +67,7 @@ soma.chunks
                 objects: @objects
                 class: @classId or 0
                 level: @levelId
-                nextLevel: @nextLevelId or -1
+                classLevel: @classLevelId or 0
                 instructions: @levelInfo?.instructions
             )
             
@@ -87,14 +82,16 @@ soma.views
             
             @classId = @el.data('class')
             @levelId = @el.data('level')
-            @nextLevelId = @el.data('nextlevel')
+            @classLevelId = @el.data('classlevel')
             
             if isNaN(parseInt(@levelId))
                 @showMessage('intro')
                 return
                 
             if @classId
-                @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
+                try
+                    @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
+                catch e
             else
                 @data = LEVELS[@levelId]
                 
@@ -156,17 +153,17 @@ soma.views
             @centerAndShow(complete)
             
             @$('.launch').html('Success! Go To The Next Level >')
-            @$('.go').attr('href', "/puzzles/xyflyer/#{if @classId then "#{@classId}/#{@nextLevelId}" else (@levelId + 1)}")
+            @$('.go').attr('href', "/puzzles/xyflyer/#{if @classId then "#{@classId}/" else ''}#{@levelId + 1}")
             
         registerEvent: ({type, info}) ->
-            return unless @user and @user.id and @levelId and @classId
+            return unless @user and @user.id and (@classLevelId or @levelId) and @classId
             @pendingEvents or= []
             @pendingEvents.push
                 type: type
                 info: JSON.stringify(info)
                 puzzle: 'xyflyer'
                 classId: @classId
-                levelId: @levelId
+                levelId: (@classLevelId or @levelId)
 
             if not @lastEvent
                 @timeBetweenEvents = 0
@@ -193,13 +190,13 @@ soma.views
             statUpdates = {
                 user: {objectType: 'user', objectId: @user.id, actions: []}
                 class: {objectType: 'class', objectId: @classId, actions: []}
-                levelClass: {objectType: 'level_class', objectId: "#{@levelId}/#{@classId}", actions: []}
-                userLevelClass: {objectType: 'user_level_class', objectId: "#{@user.id}/#{@levelId}/#{@classId}", actions: []}
+                levelClass: {objectType: 'level_class', objectId: "#{(@classLevelId or @levelId)}/#{@classId}", actions: []}
+                userLevelClass: {objectType: 'user_level_class', objectId: "#{@user.id}/#{(@classLevelId or @levelId)}/#{@classId}", actions: []}
             }
             statUpdates.user.actions.push(
                 attribute: 'levelClasses'
                 action: 'add'
-                value: ["#{@levelId}/#{@classId}"]
+                value: ["#{(@classLevelId or @levelId)}/#{@classId}"]
             )
             statUpdates.class.actions.push(
                 attribute: 'users'

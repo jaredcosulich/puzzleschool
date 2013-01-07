@@ -41,41 +41,42 @@ soma.chunks
                                         objectId: "#{userId}/#{level.id}/#{@classId}"
                                     )
                             
-                            @loadData 
-                                url: "/api/stats"
-                                data: {objectInfos: userLevelClassInfos}
-                                success: (userLevelClassStats) =>
-                                    statsHash = {}
-                                    for stat in userLevelClassStats.stats
-                                        userId = stat.objectId.split('/')[0]
-                                        levelId = stat.objectId.split('/')[1]
-                                        statsHash[levelId] or= {}
-                                        statsHash[levelId][userId] = stat
+                            @stats = []
+                            for i in [0..userLevelClassInfos.length] by 50
+                                @loadData 
+                                    url: "/api/stats"
+                                    data: {objectInfos: userLevelClassInfos[i...i+50]}
+                                    success: (userLevelClassStats) =>
+                                        statsHash = {}
+                                        for stat in userLevelClassStats.stats
+                                            userId = stat.objectId.split('/')[0]
+                                            levelId = stat.objectId.split('/')[1]
+                                            statsHash[levelId] or= {}
+                                            statsHash[levelId][userId] = stat
                                         
-                                    @stats = []
-                                    for level in @classInfo.levels
-                                        userInfo = []
-                                        for userId in @users
-                                            userStat = statsHash[level.id]?[userId]
-                                            duration = (userStat?.duration or 0)
-                                            seconds = Math.round(duration / 1000)
-                                            minutes = Math.floor(seconds / 60)
-                                            seconds = seconds - (minutes * 60)
-                                            userInfo.push
-                                                level: level.name
-                                                user: userId
-                                                attempted: (if userStat then true else false)
-                                                moves: userStat?.moves or 0
-                                                hints: userStat?.hints or 0
-                                                success: (if userStat?.success?.length then true else false)
-                                                successClass: (if userStat?.hints?.length then 'hard' else userStat?.challenge?[0])
-                                                duration: "#{minutes} min, #{seconds} sec"
-                                                assessment: userStat?.challenge?.length
-                                                challenge: userStat?.challenge?[0] 
+                                        for level in @classInfo.levels
+                                            userInfo = []
+                                            for userId in @users
+                                                userStat = statsHash[level.id]?[userId]
+                                                duration = (userStat?.duration or 0)
+                                                seconds = Math.round(duration / 1000)
+                                                minutes = Math.floor(seconds / 60)
+                                                seconds = seconds - (minutes * 60)
+                                                userInfo.push
+                                                    level: level.name
+                                                    user: userId
+                                                    attempted: (if userStat then true else false)
+                                                    moves: userStat?.moves or 0
+                                                    hints: userStat?.hints or 0
+                                                    success: (if userStat?.success?.length then true else false)
+                                                    successClass: (if userStat?.hints?.length then 'hard' else userStat?.challenge?[0])
+                                                    duration: "#{minutes} min, #{seconds} sec"
+                                                    assessment: userStat?.challenge?.length
+                                                    challenge: userStat?.challenge?[0] 
                                                     
-                                        @stats.push
-                                            levelName: level.name
-                                            users: userInfo
+                                            @stats.push
+                                                levelName: level.name
+                                                users: userInfo
                                         
                                 error: () =>
                                     if window?.alert
