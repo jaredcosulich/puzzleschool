@@ -17,7 +17,7 @@
         "line": "*",
         "mailgun": "*",
         "wings": "*",
-        "soma": "*"
+        "soma": "*0.6.8"
     },
     
     "soma": {
