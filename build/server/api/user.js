@@ -48,13 +48,13 @@ soma.routes({
     if (!(this.data.password && /\S{3,}/.test(this.data.password))) {
       return this.sendError(new Error('Password was invalid'));
     }
-    if (!(this.data.year && this.data.month && this.data.day && isFinite(this.data.year) && isFinite(this.data.month) && isFinite(this.data.day))) {
+    if (!(this.data.year && isFinite(this.data.year))) {
       return this.sendError(new Error('Birthday was invalid'));
     }
     this.data.birthday = "" + this.data.year + "-" + this.data.month + "-" + this.data.day;
     this.data.year = parseInt(this.data.year);
-    this.data.month = parseInt(this.data.month);
-    this.data.day = parseInt(this.data.day);
+    this.data.month = parseInt(this.data.month || -1);
+    this.data.day = parseInt(this.data.day || -1);
     this.data.email = this.data.email.toLowerCase();
     return l = new Line({
       error: function(err) {

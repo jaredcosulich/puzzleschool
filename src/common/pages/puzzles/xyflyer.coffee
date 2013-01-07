@@ -44,18 +44,16 @@ soma.chunks
                                     alert('We were unable to load the information for this level. Please check your internet connection.')
                     
                     error: () =>
-                        if window?.alert
+                        if (@user = @cookies.get('user')) and window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
                             
-            else
-                @loadData 
-                    url: "/api/puzzles/levels/#{@levelId}"
-                    success: (@levelInfo) => 
-                    error: () =>
-                        if window?.alert
-                            alert('We were unable to load the information for this level. Please check your internet connection.')
-
-                    
+            # else
+            #     @loadData 
+            #         url: "/api/puzzles/levels/#{@levelId}"
+            #         success: (@levelInfo) => 
+            #         error: () =>
+            #             if window?.alert
+            #                 alert('We were unable to load the information for this level. Please check your internet connection.')
                         
             @objects = []
             for object in ['island']
@@ -98,6 +96,10 @@ soma.views
                 return
                 
             if @classId
+                if not @user
+                    window?.location?.reload()                 
+                    return
+                    
                 try
                     @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
                 catch e

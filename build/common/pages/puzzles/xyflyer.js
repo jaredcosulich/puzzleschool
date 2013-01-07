@@ -67,20 +67,8 @@ soma.chunks({
             });
           },
           error: function() {
-            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+            if ((_this.user = _this.cookies.get('user')) && (typeof window !== "undefined" && window !== null ? window.alert : void 0)) {
               return alert('We were unable to load the information for this class. Please check your internet connection.');
-            }
-          }
-        });
-      } else {
-        this.loadData({
-          url: "/api/puzzles/levels/" + this.levelId,
-          success: function(levelInfo) {
-            _this.levelInfo = levelInfo;
-          },
-          error: function() {
-            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
-              return alert('We were unable to load the information for this level. Please check your internet connection.');
             }
           }
         });
@@ -117,7 +105,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var equation, fragment, info, ring, xyflyer, _i, _j, _len, _len1, _ref, _ref1, _results,
+      var equation, fragment, info, ring, xyflyer, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.user = this.cookies.get('user');
@@ -129,6 +117,14 @@ soma.views({
         return;
       }
       if (this.classId) {
+        if (!this.user) {
+          if (typeof window !== "undefined" && window !== null) {
+            if ((_ref = window.location) != null) {
+              _ref.reload();
+            }
+          }
+          return;
+        }
         try {
           this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
         } catch (e) {
@@ -159,16 +155,16 @@ soma.views({
         info = this.data.equations[equation];
         this.viewHelper.addEquation(equation, info.start, info.solutionComponents, this.data.variables);
       }
-      _ref = this.data.rings;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        ring = _ref[_i];
+      _ref1 = this.data.rings;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        ring = _ref1[_i];
         this.viewHelper.addRing(ring.x, ring.y);
       }
       if (this.data.fragments) {
-        _ref1 = this.data.fragments;
+        _ref2 = this.data.fragments;
         _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          fragment = _ref1[_j];
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          fragment = _ref2[_j];
           _results.push(this.viewHelper.addEquationComponent(fragment));
         }
         return _results;
