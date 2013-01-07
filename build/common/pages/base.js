@@ -182,7 +182,7 @@ soma.views({
           },
           data: form.data('form').dataHash(),
           success: function() {
-            var postRegistrationMethod, _i, _len, _ref, _results;
+            var go, postRegistrationMethod, _i, _len, _ref, _results;
             _this.$('.registration_form .submit_feedback').data('form-button').success();
             _this.hideModal(form);
             if (window.postRegistration.length) {
@@ -196,7 +196,11 @@ soma.views({
               }
               return _results;
             } else {
-              return _this.checkLoggedIn();
+              _this.checkLoggedIn();
+              if ((go = _this.cookies.get('returnTo'))) {
+                _this.cookies.set('returnTo', null);
+                return window.location = go;
+              }
             }
           },
           error: function() {
@@ -239,8 +243,13 @@ soma.views({
             })
           },
           success: function() {
+            var go;
             _this.hideModal(form);
-            return _this.checkLoggedIn();
+            _this.checkLoggedIn();
+            if ((go = _this.cookies.get('returnTo'))) {
+              _this.cookies.set('returnTo', null);
+              return window.location = go;
+            }
           },
           error: function() {
             return _this.$('.login_form .login_button').data('form-button').error();

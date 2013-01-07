@@ -31,7 +31,8 @@ exports.requireUser = (fn) ->->
     args = Array.prototype.slice.call(arguments)
     userCookie = @cookies.get('user', { signed: true })
     
-    return @go('/') unless userCookie
+    @cookies.set('returnTo', @parent.href)
+    return @go('/register') unless userCookie
 
     l = new Line
         error: (err) => 
@@ -42,8 +43,9 @@ exports.requireUser = (fn) ->->
     
         (@user) =>
             if !@user or @user.session != userCookie.session
+                console.log(@user, @user.session, userCookie.session)
                 @cookies.set('user', null)
-                @go('/')
+                @go('/register')
             
             else
                 @cookies.set('user', @user, { signed: true })

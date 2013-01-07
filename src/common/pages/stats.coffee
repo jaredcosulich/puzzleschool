@@ -11,7 +11,9 @@ soma.chunks
     Stats:
         meta: -> new soma.chunks.Base({ content: @ })
 
-        prepare: ({@classId}) ->            
+        prepare: ({@classId, page}) ->      
+            @page = parseInt(page or 0)
+                  
             @template = @loadTemplate '/build/common/templates/stats.html'
 
             @loadData 
@@ -31,7 +33,8 @@ soma.chunks
                             userIdHash = {}
                             for stats in levelClassStats.stats
                                 userIdHash[userId] = true for userId in (stats.users or [])
-                            @users = (userId for userId of userIdHash)
+                            @users = (userId for userId of userIdHash)[(@page*5)...(@page+1)*5]
+                            @nextPage = true if @users.length >= (@page+1)*5
                             
                             userLevelClassInfos = []
                             for level in @classInfo.levels
@@ -42,10 +45,10 @@ soma.chunks
                                     )
                             
                             @stats = []
-                            for i in [0..userLevelClassInfos.length] by 50
+                            for i in [0..userLevelClassInfos.length] by 100
                                 @loadData 
                                     url: "/api/stats"
-                                    data: {objectInfos: userLevelClassInfos[i...i+50]}
+                                    data: {objectInfos: userLevelClassInfos[i...i+100]}
                                     success: (userLevelClassStats) =>
                                         statsHash = {}
                                         for stat in userLevelClassStats.stats
@@ -97,6 +100,8 @@ soma.chunks
                 className: @classInfo.name
                 users: @users
                 stats: @stats
+                nextPage: @nextPage
+                nextPageLink: "/stats/#{@classId}/{@page + 1}"
             )
         
 soma.views
@@ -108,3 +113,6 @@ soma.views
             
 soma.routes
     '/stats/class/:classId': ({classId}) -> new soma.chunks.Stats(classId: classId)
+    '/stats/class/:classId/:page': ({classId, page}) -> new soma.chunks.Stats(classId: classId, page: page)
+        
+        

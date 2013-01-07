@@ -92,6 +92,9 @@ soma.views
                             (postRegistrationMethod => @checkLoggedIn()) for postRegistrationMethod in window.postRegistration
                         else
                             @checkLoggedIn()
+                            if (go = @cookies.get('returnTo'))
+                                @cookies.set('returnTo', null)
+                                window.location = go
                     error: =>
                         @$('.registration_form .submit_feedback').data('form-button').error()
                 
@@ -115,6 +118,10 @@ soma.views
                     success: () => 
                         @hideModal(form)
                         @checkLoggedIn()
+                        if (go = @cookies.get('returnTo'))
+                            @cookies.set('returnTo', null)
+                            window.location = go
+                            
                     error: () => 
                         @$('.login_form .login_button').data('form-button').error()
 

@@ -30,8 +30,10 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var _this = this;
-      this.classId = _arg.classId;
+      var page,
+        _this = this;
+      this.classId = _arg.classId, page = _arg.page;
+      this.page = parseInt(page || 0);
       this.template = this.loadTemplate('/build/common/templates/stats.html');
       return this.loadData({
         url: "/api/classes/info/" + this.classId,
@@ -70,14 +72,17 @@ soma.chunks({
                   userIdHash[userId] = true;
                 }
               }
-              _this.users = (function() {
+              _this.users = ((function() {
                 var _results;
                 _results = [];
                 for (userId in userIdHash) {
                   _results.push(userId);
                 }
                 return _results;
-              })();
+              })()).slice(_this.page * 5, (_this.page + 1) * 5);
+              if (_this.users.length >= (_this.page + 1) * 5) {
+                _this.nextPage = true;
+              }
               userLevelClassInfos = [];
               _ref3 = _this.classInfo.levels;
               for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
@@ -93,11 +98,11 @@ soma.chunks({
               }
               _this.stats = [];
               _results = [];
-              for (i = _n = 0, _ref5 = userLevelClassInfos.length; _n <= _ref5; i = _n += 50) {
+              for (i = _n = 0, _ref5 = userLevelClassInfos.length; _n <= _ref5; i = _n += 100) {
                 _this.loadData({
                   url: "/api/stats",
                   data: {
-                    objectInfos: userLevelClassInfos.slice(i, i + 50)
+                    objectInfos: userLevelClassInfos.slice(i, i + 100)
                   },
                   success: function(userLevelClassStats) {
                     var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _o, _p, _q, _ref10, _ref11, _ref12, _ref13, _ref14, _ref6, _ref7, _ref8, _ref9, _results1;
@@ -173,7 +178,9 @@ soma.chunks({
       return this.html = wings.renderTemplate(this.template, {
         className: this.classInfo.name,
         users: this.users,
-        stats: this.stats
+        stats: this.stats,
+        nextPage: this.nextPage,
+        nextPageLink: "/stats/" + this.classId + "/{@page + 1}"
       });
     }
   }
@@ -194,6 +201,14 @@ soma.routes({
     classId = _arg.classId;
     return new soma.chunks.Stats({
       classId: classId
+    });
+  },
+  '/stats/class/:classId/:page': function(_arg) {
+    var classId, page;
+    classId = _arg.classId, page = _arg.page;
+    return new soma.chunks.Stats({
+      classId: classId,
+      page: page
     });
   }
 });

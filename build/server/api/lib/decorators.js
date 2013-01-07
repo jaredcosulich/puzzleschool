@@ -54,8 +54,9 @@ exports.requireUser = function(fn) {
     userCookie = this.cookies.get('user', {
       signed: true
     });
+    this.cookies.set('returnTo', this.parent.href);
     if (!userCookie) {
-      return this.go('/');
+      return this.go('/register');
     }
     return l = new Line({
       error: function(err) {
@@ -67,8 +68,9 @@ exports.requireUser = function(fn) {
     }, function(user) {
       _this.user = user;
       if (!_this.user || _this.user.session !== userCookie.session) {
+        console.log(_this.user, _this.user.session, userCookie.session);
         _this.cookies.set('user', null);
-        return _this.go('/');
+        return _this.go('/register');
       } else {
         _this.cookies.set('user', _this.user, {
           signed: true
