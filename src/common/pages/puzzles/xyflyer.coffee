@@ -3,8 +3,8 @@ wings = require('wings')
 
 sortLevels = (levels) ->
     levels.sort (level1,level2) ->
-        a = level1.difficulty + level1.name
-        b = level2.difficulty + level2.name
+        a = level1.difficulty + level1.id
+        b = level2.difficulty + level2.id
         return if a == b then 0 else (if a < b then -1 else 1)
 
 soma.chunks
@@ -34,17 +34,26 @@ soma.chunks
                     url: "/api/classes/info/#{@classId}"
                     success: (data) =>
                         levels = sortLevels(data.levels)
-                        @classLevelId = levels[@levelId].id
+                        @classLevelId = levels[@levelId - 1].id
+                        
+                        @loadData 
+                            url: "/api/puzzles/levels/#{@classLevelId}"
+                            success: (@levelInfo) => 
+                            error: () =>
+                                if window?.alert
+                                    alert('We were unable to load the information for this level. Please check your internet connection.')
+                    
                     error: () =>
                         if window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
-
-            @loadData 
-                url: "/api/puzzles/levels/#{@classLevelId or @levelId}"
-                success: (@levelInfo) => 
-                error: () =>
-                    if window?.alert
-                        alert('We were unable to load the information for this level. Please check your internet connection.')
+                            
+            else
+                @loadData 
+                    url: "/api/puzzles/levels/#{@levelId}"
+                    success: (@levelInfo) => 
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load the information for this level. Please check your internet connection.')
 
                     
                         

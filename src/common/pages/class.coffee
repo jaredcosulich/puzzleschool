@@ -3,8 +3,8 @@ wings = require('wings')
 
 sortLevels = (levels) ->
     levels.sort (level1,level2) ->
-        a = level1.difficulty + level1.name
-        b = level2.difficulty + level2.name
+        a = level1.difficulty + level1.id
+        b = level2.difficulty + level2.id
         return if a == b then 0 else (if a < b then -1 else 1)
 
 soma.chunks

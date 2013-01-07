@@ -8,8 +8,8 @@ wings = require('wings');
 sortLevels = function(levels) {
   return levels.sort(function(level1, level2) {
     var a, b;
-    a = level1.difficulty + level1.name;
-    b = level2.difficulty + level2.name;
+    a = level1.difficulty + level1.id;
+    b = level2.difficulty + level2.id;
     if (a === b) {
       return 0;
     } else {
@@ -53,7 +53,18 @@ soma.chunks({
           success: function(data) {
             var levels;
             levels = sortLevels(data.levels);
-            return _this.classLevelId = levels[_this.levelId].id;
+            _this.classLevelId = levels[_this.levelId - 1].id;
+            return _this.loadData({
+              url: "/api/puzzles/levels/" + _this.classLevelId,
+              success: function(levelInfo) {
+                _this.levelInfo = levelInfo;
+              },
+              error: function() {
+                if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+                  return alert('We were unable to load the information for this level. Please check your internet connection.');
+                }
+              }
+            });
           },
           error: function() {
             if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
@@ -61,18 +72,19 @@ soma.chunks({
             }
           }
         });
-      }
-      this.loadData({
-        url: "/api/puzzles/levels/" + (this.classLevelId || this.levelId),
-        success: function(levelInfo) {
-          _this.levelInfo = levelInfo;
-        },
-        error: function() {
-          if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
-            return alert('We were unable to load the information for this level. Please check your internet connection.');
+      } else {
+        this.loadData({
+          url: "/api/puzzles/levels/" + this.levelId,
+          success: function(levelInfo) {
+            _this.levelInfo = levelInfo;
+          },
+          error: function() {
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load the information for this level. Please check your internet connection.');
+            }
           }
-        }
-      });
+        });
+      }
       this.objects = [];
       _ref = ['island'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
