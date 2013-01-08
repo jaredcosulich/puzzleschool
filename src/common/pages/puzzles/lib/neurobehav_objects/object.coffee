@@ -82,6 +82,7 @@ class object.Object
             @hideProperties(element)
             
     showProperties: (element=@image) ->
+        return
         element.propertiesGlow.attr(opacity: 0.04) if element.propertiesGlow
         previouslySelectedElement = @propertyEditor.show(element, element.objectName, element.properties)
         if previouslySelectedElement and previouslySelectedElement != element
@@ -89,6 +90,7 @@ class object.Object
         element.propertiesDisplayed = true
         
     hideProperties: (element=@image) ->
+        return
         element.propertiesGlow.attr(opacity: 0) if element.propertiesGlow
         @propertyEditor.hide(element)
         element.propertiesDisplayed = false

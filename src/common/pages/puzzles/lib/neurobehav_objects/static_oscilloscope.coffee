@@ -1,7 +1,7 @@
 oscilloscope = exports ? provide('./oscilloscope', {})
 neurobehavObject = require('./object')
 
-class oscilloscope.Oscilloscope extends neurobehavObject.Object
+class oscilloscope.StaticOscilloscope extends neurobehavObject.Object
     objectType: 'oscilloscope'
     objectName: 'Oscilloscope'
     imageSrc: 'oscilloscope.png'
@@ -9,8 +9,9 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
     height: 42
     axisLineCount: 5.0
     xDelta: 1
+    scale: 100
     
-    constructor: ({@board}) ->
+    constructor: ({@container}) ->
         super(arguments...)
         
         @drawGrid()
@@ -22,16 +23,10 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         )        
         
     init: ->
-        @container = $(document.createElement('DIV'))
-        @container.addClass('oscilloscope')
-        @positionContainer()
-        @board.append(@container)
-        
         backgroundCanvas = document.createElement('CANVAS')
         @container.append(backgroundCanvas)
         @canvasWidth = backgroundCanvas.width = $(backgroundCanvas).width()
         @canvasHeight = backgroundCanvas.height = $(backgroundCanvas).height()   
-        @scale = @canvasHeight / 2
         @backgroundContext = backgroundCanvas.getContext('2d')
 
         voltageCanvas = document.createElement('CANVAS')
@@ -63,7 +58,6 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             fullDY = lastDY + dY
             @image.transform("t#{fullDX},#{fullDY}")
             glow.transform("t#{fullDX},#{fullDY}")
-            @positionContainer(fullDX, fullDY)
             
         onStart = => 
             @showProperties(@image)        
@@ -79,10 +73,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
                     @attachTo(element.object)
             
         @image.drag(onDrag, onStart, onEnd)        
-        glow.drag(onDrag, onStart, onEnd)
-        
-    positionContainer: (dx=0, dy=0) ->
-        @container.css(top: @position.top + dy - 36, left: @position.left + dx + 48)
+        glow.drag(onDrag, onStart, onEnd)        
         
     fire: () ->
         return unless @neuron

@@ -18,6 +18,7 @@ class game.Game
         data.propertyEditor = @propertyEditor
         data.setProperty = (property, value) =>
             @$(".properties .#{property}").html("#{value}")
+        
         new neurobehav[data.type](data)
             
     nextId: ->

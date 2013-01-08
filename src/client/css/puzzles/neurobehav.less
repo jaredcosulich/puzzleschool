@@ -42,21 +42,22 @@ body {
     
     .oscilloscope {
         background-color: white;
-        height: ((@dimension / 3) - 2);
-        width: ((@dimension / 2) - 1);
-        border-bottom: 1px solid #000;  
-        border-top: 1px solid #000;  
-        position: relative;
+        height: 90px;
+        width: 150px;
+        border: 1px solid #000;  
+        .rounded(6px);
+        position: absolute;
+        z-index: 97;
         canvas {
             position: absolute;
             top: 0;
             left: 0;
-            height: ((@dimension / 3) - 2);
-            width: ((@dimension / 2) - 2);
-            z-index: 1;  
+            height:90px;
+            width: 150px;
+            z-index: 98;  
         }
         .title {
-            z-index: 2;
+            z-index: 99;
             text-align: center;
             padding: 6px;
         }
@@ -80,36 +81,16 @@ body {
         }
     }
     
-    .properties {
+    .explicit {
         background-color: white;
         padding: 0 6px;
-        height: (@dimension / 3);
+        height: 2 * (@dimension / 3);
         overflow: auto;
         h4 {
             padding: 6px 0;
         }        
+    }
         
-        .more_description {
-            display: none;
-        }
-    }
-    
-    .more_info {
-        position: absolute;
-        top: -1000px;
-        left: -1000px;
-        width: ((@dimension / 2) - 1);
-        background-color: white;
-        overflow: hidden;
-        z-index: 3;
-        background-color: @lightestgrey;
-        .content {
-            margin: 6px;
-            overflow: auto;
-            width: ((@dimension / 2) - 13);
-        }
-    }
-    
     .object {
         position: absolute;
         overflow: hidden;

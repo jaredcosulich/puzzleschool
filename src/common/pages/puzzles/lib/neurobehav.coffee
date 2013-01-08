@@ -7,8 +7,6 @@ class neurobehav.ViewHelper
     $: (selector) -> $(selector, @el)
     
     constructor: ({@el}) ->
-        @oscilloscopeScreen = @$('.oscilloscope')
-        
         @propertyEditor = new Properties
             el: @$('.properties')
             initDescription: => @initDescription()
@@ -119,7 +117,7 @@ class neurobehav.ViewHelper
             position:
                 top: 80
                 left: 340
-            container: @oscilloscopeScreen
+            board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 
         oscilloscope.attachTo(neuron1)

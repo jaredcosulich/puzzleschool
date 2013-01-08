@@ -160,6 +160,7 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
+    return;
     if (element.propertiesGlow) {
       element.propertiesGlow.attr({
         opacity: 0.04
@@ -176,6 +177,7 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
+    return;
     if (element.propertiesGlow) {
       element.propertiesGlow.attr({
         opacity: 0

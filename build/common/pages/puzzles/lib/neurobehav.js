@@ -21,7 +21,6 @@ neurobehav.ViewHelper = (function() {
     this.el = _arg.el;
     this.showMoreSidebarContent = __bind(this.showMoreSidebarContent, this);
 
-    this.oscilloscopeScreen = this.$('.oscilloscope');
     this.propertyEditor = new Properties({
       el: this.$('.properties'),
       initDescription: function() {
@@ -162,7 +161,7 @@ neurobehav.ViewHelper = (function() {
         top: 80,
         left: 340
       },
-      container: this.oscilloscopeScreen,
+      board: this.game.board,
       description: this.$('.descriptions .oscilloscope').html()
     });
     oscilloscope.attachTo(neuron1);

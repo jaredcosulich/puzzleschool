@@ -34,22 +34,25 @@ body {
 }
 .neurobehav .oscilloscope {
   background-color: white;
-  height: 208px;
-  width: 314px;
-  border-bottom: 1px solid #000;
-  border-top: 1px solid #000;
-  position: relative;
+  height: 90px;
+  width: 150px;
+  border: 1px solid #000;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 97;
 }
 .neurobehav .oscilloscope canvas {
   position: absolute;
   top: 0;
   left: 0;
-  height: 208px;
-  width: 313px;
-  z-index: 1;
+  height: 90px;
+  width: 150px;
+  z-index: 98;
 }
 .neurobehav .oscilloscope .title {
-  z-index: 2;
+  z-index: 99;
   text-align: center;
   padding: 6px;
 }
@@ -71,32 +74,14 @@ body {
   display: block;
   margin: auto;
 }
-.neurobehav .properties {
+.neurobehav .explicit {
   background-color: white;
   padding: 0 6px;
-  height: 210px;
+  height: 420px;
   overflow: auto;
 }
-.neurobehav .properties h4 {
+.neurobehav .explicit h4 {
   padding: 6px 0;
-}
-.neurobehav .properties .more_description {
-  display: none;
-}
-.neurobehav .more_info {
-  position: absolute;
-  top: -1000px;
-  left: -1000px;
-  width: 314px;
-  background-color: white;
-  overflow: hidden;
-  z-index: 3;
-  background-color: #ededed;
-}
-.neurobehav .more_info .content {
-  margin: 6px;
-  overflow: auto;
-  width: 302px;
 }
 .neurobehav .object {
   position: absolute;
