@@ -579,7 +579,7 @@ LEVELS = [
     }
     {
         equations: 
-            '4+0.2x': {start: 'x'}
+            '4+(1/5)x': {start: 'x'}
         grid:
             xMin: -10
             xMax: 10
@@ -592,7 +592,7 @@ LEVELS = [
         ]
         islandCoordinates: {x: -8, y: 2.4}
         fragments: [
-            '4+', '2+', '0.2', '0.5', '2'
+            '4+', '2+', '(1/5)', '1/2', '2'
         ]
     }
     {

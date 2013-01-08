@@ -8,8 +8,8 @@ wings = require('wings');
 sortLevels = function(levels) {
   return levels.sort(function(level1, level2) {
     var a, b;
-    a = level1.difficulty + level1.name;
-    b = level2.difficulty + level2.name;
+    a = level1.difficulty + level1.id;
+    b = level2.difficulty + level2.id;
     if (a === b) {
       return 0;
     } else {
@@ -79,7 +79,7 @@ soma.chunks({
                   _results.push(userId);
                 }
                 return _results;
-              })()).slice(_this.page * 5, (_this.page + 1) * 5);
+              })()).sort().slice(_this.page * 5, (_this.page + 1) * 5);
               if (_this.users.length >= (_this.page + 1) * 5) {
                 _this.nextPage = true;
               }

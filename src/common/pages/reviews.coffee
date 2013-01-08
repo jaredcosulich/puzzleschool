@@ -12,6 +12,7 @@
 # Universe Sandbox: http://universesandbox.com/
 # Eye Paint - http://www.curioushat.com/eye-paint/
 # Horse Race (fractions) - http://davidwees.com/horserace/
+# Save Our Dumb Planet - http://www.mangahigh.com/en_us/games/saveourdumbplanet
 
 
 soma = require('soma')

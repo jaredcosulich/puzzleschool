@@ -3,8 +3,8 @@ wings = require('wings')
 
 sortLevels = (levels) ->
     levels.sort (level1,level2) ->
-        a = level1.difficulty + level1.name
-        b = level2.difficulty + level2.name
+        a = level1.difficulty + level1.id
+        b = level2.difficulty + level2.id
         return if a == b then 0 else (if a < b then -1 else 1)
 
 soma.chunks
@@ -33,7 +33,7 @@ soma.chunks
                             userIdHash = {}
                             for stats in levelClassStats.stats
                                 userIdHash[userId] = true for userId in (stats.users or [])
-                            @users = (userId for userId of userIdHash)[(@page*5)...(@page+1)*5]
+                            @users = (userId for userId of userIdHash).sort()[(@page*5)...(@page+1)*5]
                             @nextPage = true if @users.length >= (@page+1)*5
                             
                             userLevelClassInfos = []
