@@ -3,7 +3,7 @@ var fn, name, neurobehav_objects, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
 
 neurobehav_objects = typeof exports !== "undefined" && exports !== null ? exports : provide('./neurobehav_objects/index', {});
 
-_ref = require('./properties');
+_ref = require('./object_editor');
 for (name in _ref) {
   fn = _ref[name];
   neurobehav_objects[name] = fn;

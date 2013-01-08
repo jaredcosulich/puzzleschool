@@ -1,20 +1,26 @@
-properties = exports ? provide('./properties', {})
+objectEditor = exports ? provide('./object_editor', {})
 
-class properties.Properties
-    constructor: ({@el, @initDescription}) -> 
+class objectEditor.ObjectEditor
+    constructor: ({@el}) -> 
         @init()
         
+    $: (selector) -> @el.find(selector)
+    
     init: ->
-        @nothingSelected = @el.find('.nothing_selected')
-        @objectProperties = @el.find('.object_properties')
-        @objectType = @el.find('.object_type')
+        @explicitContent = @$('.explicit_content')
+        @nothingSelected = @$('.nothing_selected')
+        @objectProperties = @$('.object_properties')
+        @objectType = @$('.object_type')
             
     show: (element, @name, @properties) ->
+        @hideExtraContent()
+        @explicitContent.html(@properties.description)
+
         previouslySelectedElement = @element
         @element = element
         @nothingSelected.hide()
         @objectProperties.show()
-        @objectProperties.html(@formatDescription(@properties.description))
+        @objectProperties.html('')
         for propertyId of @properties
             continue if propertyId == 'description'
             do (propertyId) =>
@@ -31,19 +37,8 @@ class properties.Properties
                     property.set(value) if property.set
                 
         @objectType.html(@name)
-        @initDescription()
         return previouslySelectedElement
         
-    formatDescription: (description) ->
-        description = description.replace(/^\s+/, '')
-        return '' unless description?.length
-        return description if description.length < 22
-        brief = description[0...40].replace(/<[^>]+\>/, '')
-        return """ 
-            #{brief}... (<a class='read_more_description'>more</a>)
-            <div class='more_description'><h4>#{@name}</h4>#{description}</div>
-        """
-            
     hide: (element) ->
         return if element and element != @element
         @objectProperties.hide()
@@ -61,5 +56,26 @@ class properties.Properties
             options.push("<option value=#{value} #{if selected then 'selected=selected' else ''}>#{value}</option>")
         
         return "<select>#{options.join('')}</select>"
+        
+    showExtraContent: (html) ->
+        @extraContent = html
+        content = $(document.createElement('DIV'))
+        content.html(html)
+        content.addClass('extra_content')
+        content.height(0)
+        @el.append(content)
+        content.animate
+            height: @el.height()
+            duration: 750
+
+    hideExtraContent: ->
+        @extraContent = null
+        @$('.extra_content').animate
+            height: 0
+            duration: 250
+            complete: =>
+                @$('.extra_content').remove()
+            
+        
         
         

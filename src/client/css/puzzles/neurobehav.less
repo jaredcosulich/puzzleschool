@@ -19,6 +19,11 @@ body {
     -ms-user-select: none;
     user-select: none;
     
+    p {
+        margin: 0;
+        padding: 0 0 12px 0;
+    }
+    
     .board {
         float: left;
         width: (@dimension - 2);
@@ -81,14 +86,39 @@ body {
         }
     }
     
-    .explicit {
+    .object_editor {
         background-color: white;
-        padding: 0 6px;
-        height: 2 * (@dimension / 3);
-        overflow: auto;
+        overflow: hidden;
+        color: white;
+        position: relative;
+
         h4 {
             padding: 6px 0;
         }        
+
+        .properties, .explicit_content {
+            padding: 0 6px;
+            background-color: #49494A;
+            height: (@dimension / 3);
+            overflow: auto;
+            
+            img {
+                float: left;
+                margin: 3px 12px 3px 0;
+            }
+        }
+        
+        .extra_content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 94%;
+            padding: 0 3%;
+            overflow: auto;
+            background-color: white;
+            color: @black;
+        }
     }
         
     .object {

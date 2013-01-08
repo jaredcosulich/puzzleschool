@@ -1,10 +1,10 @@
 game = exports ? provide('./game', {})
-Properties = require('./properties').Properties
+ObjectEditor = require('./object_editor').ObjectEditor
 
 class game.Game
     $: (selector) -> $(selector, @el)
 
-    constructor: ({@el, @propertyEditor}) ->
+    constructor: ({@el, @objectEditor, @showExplicitContent}) ->
         @initBoard()
 
     initBoard: ->
@@ -15,10 +15,10 @@ class game.Game
     addObject: (data) ->
         data.paper = @paper
         data.id = @nextId()
-        data.propertyEditor = @propertyEditor
-        data.setProperty = (property, value) =>
-            @$(".properties .#{property}").html("#{value}")
-        
+        data.objectEditor = @objectEditor
+        data.setProperty = (property, value) => @$(".properties .#{property}").html("#{value}")
+        data.showExplicitContent = (content) => @showExplicitContent(content)    
+                
         new neurobehav[data.type](data)
             
     nextId: ->

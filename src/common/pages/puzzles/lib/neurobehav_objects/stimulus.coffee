@@ -81,7 +81,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
             
         onEnd = =>
             if @deltaX
-                @propertyEditor.set('voltage', (@voltageCalc(@deltaX)/@segment)*@unit)
+                @objectEditor.set('voltage', (@voltageCalc(@deltaX)/@segment)*@unit)
                 @lastDeltaX = @deltaX                
             else
                 @slider.noClick = false
@@ -105,7 +105,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @knob.transform("t#{@deltaX},#{0}")
         @initPropertiesGlow(@slider)
         @propertiesClick(@slider, true)
-        @propertyEditor.set('voltage', (@voltageCalc(@deltaX)/@segment)*@unit)
+        @objectEditor.set('voltage', (@voltageCalc(@deltaX)/@segment)*@unit)
         
     setSlider: (val) ->
         @lastDeltaX = @segment * (val / @unit)

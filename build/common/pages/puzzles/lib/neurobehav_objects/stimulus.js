@@ -126,7 +126,7 @@ stimulus.Stimulus = (function(_super) {
     };
     onEnd = function() {
       if (_this.deltaX) {
-        _this.propertyEditor.set('voltage', (_this.voltageCalc(_this.deltaX) / _this.segment) * _this.unit);
+        _this.objectEditor.set('voltage', (_this.voltageCalc(_this.deltaX) / _this.segment) * _this.unit);
         _this.lastDeltaX = _this.deltaX;
       } else {
         _this.slider.noClick = false;
@@ -158,7 +158,7 @@ stimulus.Stimulus = (function(_super) {
     this.knob.transform("t" + this.deltaX + "," + 0);
     this.initPropertiesGlow(this.slider);
     this.propertiesClick(this.slider, true);
-    return this.propertyEditor.set('voltage', (this.voltageCalc(this.deltaX) / this.segment) * this.unit);
+    return this.objectEditor.set('voltage', (this.voltageCalc(this.deltaX) / this.segment) * this.unit);
   };
 
   Stimulus.prototype.setSlider = function(val) {

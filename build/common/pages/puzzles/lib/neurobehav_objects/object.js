@@ -10,7 +10,7 @@ object.Object = (function() {
   Object.prototype.baseFolder = '/assets/images/puzzles/neurobehav/';
 
   function Object(_arg) {
-    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.description = _arg.description, this.propertyEditor = _arg.propertyEditor;
+    this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.description = _arg.description, this.objectEditor = _arg.objectEditor;
     this.properties = this.setProperties(this.propertyList);
     this.init();
   }
@@ -160,13 +160,12 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
-    return;
     if (element.propertiesGlow) {
       element.propertiesGlow.attr({
         opacity: 0.04
       });
     }
-    previouslySelectedElement = this.propertyEditor.show(element, element.objectName, element.properties);
+    previouslySelectedElement = this.objectEditor.show(element, element.objectName, element.properties);
     if (previouslySelectedElement && previouslySelectedElement !== element) {
       this.hideProperties(previouslySelectedElement);
     }
@@ -177,13 +176,12 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
-    return;
     if (element.propertiesGlow) {
       element.propertiesGlow.attr({
         opacity: 0
       });
     }
-    this.propertyEditor.hide(element);
+    this.objectEditor.hide(element);
     return element.propertiesDisplayed = false;
   };
 

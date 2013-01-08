@@ -7,77 +7,29 @@ class neurobehav.ViewHelper
     $: (selector) -> $(selector, @el)
     
     constructor: ({@el}) ->
-        @propertyEditor = new Properties
-            el: @$('.properties')
-            initDescription: => @initDescription()
+        @objectEditor = new ObjectEditor
+            el: @$('.object_editor')
         
         @game = new neurobehav.Game
             el: @el
-            propertyEditor: @propertyEditor
+            objectEditor: @objectEditor
+            showExplicitContent: (html) => @showExplicitContent(html)
         
     initGoalDescription: ->
-        @initMoreContent(@$('.show_goal_description'), false, @goalDescriptionHtml)
+        @initExtraContent(@$('.show_goal_description'), @goalDescriptionHtml)
+        @objectEditor.showExtraContent(@goalDescriptionHtml)
 
     initHints: ->
         html = '<br/><br/><p style=\'text-align: center;\'>No Hints Yet</p><br/><br/>'
-        @initMoreContent(@$('.hints'), false, html)
+        @initExtraContent(@$('.hints'), html)
         
-    initDescription: ->
-        @initMoreContent(@$('.read_more_description'), true, @$('.more_description').html())
-
-    initMoreContent: (link, bottom, html) ->
-        link.one 'click', => 
-            offset = link.offset()
-            @showMoreSidebarContent(html, link, bottom)
-            $.timeout 10, =>
-                $(document.body).one 'click', => 
-                    @initMoreContent(link, bottom, html)
-                    @hideMoreSidebarContent(bottom)
+    initExtraContent: (link, html) ->
+        link.bind 'click', => 
+            if @objectEditor.extraContent == html 
+                @objectEditor.hideExtraContent()
+            else
+                @objectEditor.showExtraContent(html)
                 
-    showMoreSidebarContent: (html, anchor, bottom) =>
-        @moreSidebarContent = @$('.more_info')
-        @moreSidebarContent.css
-            height: 'auto'
-            left: -1000
-            top: -1000
-            
-        content = @moreSidebarContent.find('.content')
-        content.html(html)
-            
-        height = Math.min(@moreSidebarContent.offset().height, @oscilloscopeScreen.offset().height)
-        content.css(height: height)
-        
-        offset = anchor.offset()
-        if bottom
-            top = offset.top - height - 6
-        else
-            top = offset.top + offset.height + 6
-            
-        @moreSidebarContent.css
-            height: 0
-            left: @oscilloscopeScreen.offset().left
-            top: (if bottom then offset.top - 6 else top)
-            
-        @moreSidebarContent.animate
-            height: height
-            top: top
-            duration: 250
-            
-    hideMoreSidebarContent: (bottom) ->
-        offset = @moreSidebarContent.offset()
-        @moreSidebarContent.animate
-            height: 0
-            top: (if bottom then offset.top + offset.height else top)
-            duration: 250
-            complete: =>
-                content = @moreSidebarContent.find('.content')
-                content.html('') 
-                content.css(height: 'auto')
-                @moreSidebarContent.css
-                    height: 'auto'
-                    left: -1000
-                    top: -1000
-
     loadFirstLevel: ->        
         stimulus = @game.addObject
             type: 'Stimulus'
@@ -123,7 +75,7 @@ class neurobehav.ViewHelper
         oscilloscope.attachTo(neuron1)
 
         @goalDescriptionHtml = """
-            <h4>Get The Heart To Beat</h4>
+            <h4>The Goal: Get The Heart To Beat</h4>
             <p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>
             <p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>
         """

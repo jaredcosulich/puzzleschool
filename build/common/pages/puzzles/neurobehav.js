@@ -15,7 +15,7 @@ soma.chunks({
     prepare: function(_arg) {
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/neurobehav.html");
-      this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/properties.js');
+      this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/object_editor.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/game.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/object.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/neuron.js');

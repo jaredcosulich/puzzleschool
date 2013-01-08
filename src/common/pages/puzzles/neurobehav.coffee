@@ -8,7 +8,7 @@ soma.chunks
 
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/neurobehav.html"
-            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/properties.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/object_editor.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/game.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/object.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/neuron.js'

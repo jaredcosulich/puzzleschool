@@ -13,6 +13,10 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+.neurobehav p {
+  margin: 0;
+  padding: 0 0 12px 0;
+}
 .neurobehav .board {
   float: left;
   width: 628px;
@@ -74,14 +78,37 @@ body {
   display: block;
   margin: auto;
 }
-.neurobehav .explicit {
+.neurobehav .object_editor {
   background-color: white;
+  overflow: hidden;
+  color: white;
+  position: relative;
+}
+.neurobehav .object_editor h4 {
+  padding: 6px 0;
+}
+.neurobehav .object_editor .properties,
+.neurobehav .object_editor .explicit_content {
   padding: 0 6px;
-  height: 420px;
+  background-color: #49494A;
+  height: 210px;
   overflow: auto;
 }
-.neurobehav .explicit h4 {
-  padding: 6px 0;
+.neurobehav .object_editor .properties img,
+.neurobehav .object_editor .explicit_content img {
+  float: left;
+  margin: 3px 12px 3px 0;
+}
+.neurobehav .object_editor .extra_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 94%;
+  padding: 0 3%;
+  overflow: auto;
+  background-color: white;
+  color: #262626;
 }
 .neurobehav .object {
   position: absolute;
