@@ -216,13 +216,14 @@ class board.Board extends xyflyerObject.Object
         for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
             lastYPos = yPos
             yPos = formula(xPos / @xUnit) * @yUnit
-
+            continue if isNaN(yPos)
+            
             if yPos == Number.NEGATIVE_INFINITY
                 yPos = @grid.yMin * @xUnit
                 brokenLine += 1
             else if yPos == Number.POSITIVE_INFINITY
                 yPos = @grid.yMax * @xUnit
-                brokenLine += 1
+                brokenLine += 1            
 
             if lastYPos
                 lastSlope = slope
@@ -238,17 +239,21 @@ class board.Board extends xyflyerObject.Object
             else
                 pathString += "L#{xPos + @xAxis},#{@yAxis - yPos}"
 
-        if @formulas[id]
-            @formulas[id].line.animate({path: pathString}, 50)
+        if pathString.indexOf('L') == -1
+            @formulas[id]?.line?.remove()
+            delete @formulas[id]
         else
-            line = @paper.path(pathString)
-            line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
-            @formulas[id] = 
-                id: id
-                line: line
+            if @formulas[id]
+                @formulas[id].line.animate({path: pathString}, 50)
+            else
+                line = @paper.path(pathString)
+                line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
+                @formulas[id] = 
+                    id: id
+                    line: line
 
-        @formulas[id].area = area
-        @formulas[id].formula = formula
+            @formulas[id].area = area
+            @formulas[id].formula = formula
 
         @resetLevel()
         @setRingFronts()

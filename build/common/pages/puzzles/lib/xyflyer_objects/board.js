@@ -332,7 +332,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1, _ref2, _ref3;
+    var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     if (!formula || !formula.length) {
       if ((_ref = this.formulas[id]) != null) {
         if ((_ref1 = _ref.line) != null) {
@@ -348,6 +348,9 @@ board.Board = (function(_super) {
     for (xPos = _i = _ref2 = this.grid.xMin * this.xUnit, _ref3 = this.grid.xMax * this.xUnit; _ref2 <= _ref3 ? _i <= _ref3 : _i >= _ref3; xPos = _ref2 <= _ref3 ? ++_i : --_i) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
+      if (isNaN(yPos)) {
+        continue;
+      }
       if (yPos === Number.NEGATIVE_INFINITY) {
         yPos = this.grid.yMin * this.xUnit;
         brokenLine += 1;
@@ -371,23 +374,32 @@ board.Board = (function(_super) {
         pathString += "L" + (xPos + this.xAxis) + "," + (this.yAxis - yPos);
       }
     }
-    if (this.formulas[id]) {
-      this.formulas[id].line.animate({
-        path: pathString
-      }, 50);
+    if (pathString.indexOf('L') === -1) {
+      if ((_ref4 = this.formulas[id]) != null) {
+        if ((_ref5 = _ref4.line) != null) {
+          _ref5.remove();
+        }
+      }
+      delete this.formulas[id];
     } else {
-      line = this.paper.path(pathString);
-      line.attr({
-        stroke: 'rgba(0,0,0,0.1)',
-        'stroke-width': 2
-      });
-      this.formulas[id] = {
-        id: id,
-        line: line
-      };
+      if (this.formulas[id]) {
+        this.formulas[id].line.animate({
+          path: pathString
+        }, 50);
+      } else {
+        line = this.paper.path(pathString);
+        line.attr({
+          stroke: 'rgba(0,0,0,0.1)',
+          'stroke-width': 2
+        });
+        this.formulas[id] = {
+          id: id,
+          line: line
+        };
+      }
+      this.formulas[id].area = area;
+      this.formulas[id].formula = formula;
     }
-    this.formulas[id].area = area;
-    this.formulas[id].formula = formula;
     this.resetLevel();
     return this.setRingFronts();
   };

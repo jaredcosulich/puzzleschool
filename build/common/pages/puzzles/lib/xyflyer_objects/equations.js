@@ -311,7 +311,7 @@ equations.Equations = (function() {
       }
       if (formula !== completedSolution) {
         allEquationsSet = false;
-        if (solution !== straightFormula) {
+        if (straightFormula !== solution) {
           if ((solutionComponents = equation.solutionComponents)) {
             for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
               solutionComponent = solutionComponents[_j];

@@ -188,7 +188,7 @@ class equations.Equations
                 
             if formula != completedSolution
                 allEquationsSet = false
-                if solution != straightFormula                            
+                if straightFormula != solution                     
                     if (solutionComponents = equation.solutionComponents)
                         for solutionComponent in solutionComponents
                             component = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)[0]
