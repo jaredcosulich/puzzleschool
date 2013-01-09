@@ -53,6 +53,7 @@ class neuron.Neuron extends neurobehavObject.Object
         @createSynapse('excitatory')
         @createSynapse('inhibitory')
 
+
     setCurrentVoltage: ->
         @timeSinceStart += @timeDelta
         @lastVoltage = @currentVoltage

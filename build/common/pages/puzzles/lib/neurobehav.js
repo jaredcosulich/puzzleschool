@@ -31,8 +31,7 @@ neurobehav.ViewHelper = (function() {
   }
 
   ViewHelper.prototype.initGoalDescription = function() {
-    this.initExtraContent(this.$('.show_goal_description'), this.goalDescriptionHtml);
-    return this.objectEditor.showExtraContent(this.goalDescriptionHtml);
+    return this.initExtraContent(this.$('.show_goal_description'), this.goalDescriptionHtml);
   };
 
   ViewHelper.prototype.initHints = function() {
@@ -101,7 +100,8 @@ neurobehav.ViewHelper = (function() {
     oscilloscope.attachTo(neuron1);
     this.goalDescriptionHtml = "<h4>The Goal: Get The Heart To Beat</h4>\n<p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>";
     this.initGoalDescription();
-    return this.initHints();
+    this.initHints();
+    return neuron1.showProperties();
   };
 
   return ViewHelper;

@@ -52,7 +52,6 @@ stimulus.Stimulus = (function(_super) {
     this.properties.voltage.value = voltage;
     this.properties.voltage.max = voltage * 2;
     this.properties.duration.value = duration;
-    this.initSlider();
   }
 
   Stimulus.prototype.init = function() {
@@ -83,9 +82,10 @@ stimulus.Stimulus = (function(_super) {
       }
       return mousedown = false;
     });
-    return this.image.attr({
+    this.image.attr({
       cursor: 'pointer'
     });
+    return this.initSlider();
   };
 
   Stimulus.prototype.initSlider = function() {

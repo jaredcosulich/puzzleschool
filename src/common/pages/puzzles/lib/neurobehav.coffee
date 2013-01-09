@@ -17,7 +17,6 @@ class neurobehav.ViewHelper
         
     initGoalDescription: ->
         @initExtraContent(@$('.show_goal_description'), @goalDescriptionHtml)
-        @objectEditor.showExtraContent(@goalDescriptionHtml)
 
     initHints: ->
         html = '<br/><br/><p style=\'text-align: center;\'>No Hints Yet</p><br/><br/>'
@@ -82,4 +81,5 @@ class neurobehav.ViewHelper
         
         @initGoalDescription()
         @initHints()
+        neuron1.showProperties()
         

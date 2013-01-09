@@ -17,7 +17,6 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @properties.voltage.value = voltage
         @properties.voltage.max = voltage * 2
         @properties.duration.value = duration
-        @initSlider()
 
     init: ->
         @createImage()
@@ -41,9 +40,10 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @image.mouseup => 
             @setState(false) if minimumMouseDown
             mousedown = false
-            
+                    
         @image.attr(cursor: 'pointer')
 
+        @initSlider()
 
     initSlider: ->
         @slider = @paper.set()
@@ -116,6 +116,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @neuron.addVoltage(if @on then @properties.voltage.value else (@properties.voltage.value * -1))
 
     setImage: ->
+        # this isn't working in firefox
         @image.attr
             'clip-rect': "#{@position.left}, #{@position.top}, #{@width}, #{@height}"
             transform: "t#{-1 * @width * (if @on then 1 else 0)},0"
