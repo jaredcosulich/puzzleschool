@@ -266,9 +266,20 @@ class board.Board extends xyflyerObject.Object
             xPos = Math.round(xPos)
             if lastFormula 
                 if lastFormula.area(xPos / @xUnit)
+                    yPos = lastFormula.formula(xPos / @xUnit) * @yUnit
+                    for id of @formulas when id != lastFormula.id
+                        continue if not @formulas[id].area(xPos / @xUnit)
+                        otherYPos = @formulas[id].formula(xPos / @xUnit) * @yUnit
+                        prevYPos = @formulas[id].formula((xPos - 1) / @xUnit) * @yUnit
+                        if (otherYPos - yPos <= 0 and otherYPos - prevYPos > 0) or
+                           (otherYPos - yPos >= 0 and otherYPos - prevYPos < 0)  
+                            yPos = otherYPos
+                            lastFormula = @formulas[id]
+                            break
+                    
                     path[xPos] = 
                         formula: lastFormula.id
-                        y: lastFormula.formula(xPos / @xUnit) * @yUnit
+                        y: yPos
                     continue
                 else
                     intersection = xPos - 1
@@ -280,21 +291,26 @@ class board.Board extends xyflyerObject.Object
                             y: lf.formula(intersection / @xUnit) * @yUnit                        
                         intersection += (@xUnit * 0.001)
                 
+            intersection -= (@xUnit * 0.001) if intersection
+            
+            validPathFound = false
             for id of @formulas
                 continue if not @formulas[id].area(xPos / @xUnit)
-                if intersection
-                    intersection -= (@xUnit * 0.001)
+                if intersection?
                     intersectionY = @formulas[id].formula(intersection / @xUnit) * @yUnit
-                    return path if Math.abs(path[intersection].y - intersectionY) / @yUnit > 0.05
+                    continue if Math.abs(path[intersection].y - intersectionY) / @yUnit > 0.05
                     
                 y = @formulas[id].formula(xPos / @xUnit) * @yUnit
                 continue if isNaN(y)
+                validPathFound = true
                 path[xPos] = 
                     formula: id
                     y: y
 
                 lastFormula = @formulas[id]
                 break
-                
+            
+            return path unless validPathFound
+            
         return path
 

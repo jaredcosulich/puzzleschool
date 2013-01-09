@@ -295,6 +295,7 @@ class equation.Equation
         )
         
     showRange: ->
+        return
         return unless @range?.hidden
         @range.element.animate
             height: @range.height

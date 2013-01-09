@@ -405,7 +405,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function(increment) {
-    var id, intersection, intersectionY, lastFormula, lf, path, xPos, y, _i, _ref, _ref1;
+    var id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {};
     path[this.islandCoordinates.x * this.xUnit] = {
@@ -415,9 +415,25 @@ board.Board = (function(_super) {
       xPos = Math.round(xPos);
       if (lastFormula) {
         if (lastFormula.area(xPos / this.xUnit)) {
+          yPos = lastFormula.formula(xPos / this.xUnit) * this.yUnit;
+          for (id in this.formulas) {
+            if (!(id !== lastFormula.id)) {
+              continue;
+            }
+            if (!this.formulas[id].area(xPos / this.xUnit)) {
+              continue;
+            }
+            otherYPos = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
+            prevYPos = this.formulas[id].formula((xPos - 1) / this.xUnit) * this.yUnit;
+            if ((otherYPos - yPos <= 0 && otherYPos - prevYPos > 0) || (otherYPos - yPos >= 0 && otherYPos - prevYPos < 0)) {
+              yPos = otherYPos;
+              lastFormula = this.formulas[id];
+              break;
+            }
+          }
           path[xPos] = {
             formula: lastFormula.id,
-            y: lastFormula.formula(xPos / this.xUnit) * this.yUnit
+            y: yPos
           };
           continue;
         } else {
@@ -433,27 +449,34 @@ board.Board = (function(_super) {
           }
         }
       }
+      if (intersection) {
+        intersection -= this.xUnit * 0.001;
+      }
+      validPathFound = false;
       for (id in this.formulas) {
         if (!this.formulas[id].area(xPos / this.xUnit)) {
           continue;
         }
-        if (intersection) {
-          intersection -= this.xUnit * 0.001;
+        if (intersection != null) {
           intersectionY = this.formulas[id].formula(intersection / this.xUnit) * this.yUnit;
           if (Math.abs(path[intersection].y - intersectionY) / this.yUnit > 0.05) {
-            return path;
+            continue;
           }
         }
         y = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
         if (isNaN(y)) {
           continue;
         }
+        validPathFound = true;
         path[xPos] = {
           formula: id,
           y: y
         };
         lastFormula = this.formulas[id];
         break;
+      }
+      if (!validPathFound) {
+        return path;
       }
     }
     return path;

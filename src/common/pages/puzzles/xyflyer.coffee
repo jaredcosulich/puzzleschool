@@ -525,6 +525,23 @@ LEVELS = [
                 solution: 5
     }
     {
+        equations:
+            '2x': {}
+            '.5x+2': {}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -10
+            yMax: 10
+        rings: [
+            {x: .5, y: 1}
+            {x: 6, y: 5}
+        ]
+        fragments: [
+            '2x', '.5x', '+2'
+        ]
+    }    
+    {
         equations: 
             'x/2': {start: 'x'}
         grid:
@@ -700,23 +717,6 @@ LEVELS = [
                 increment: 1
                 solution: 5
                 
-    }    
-    {
-        equations:
-            '2x': {}
-            '.5x+2': {}
-        grid:
-            xMin: -10
-            xMax: 10
-            yMin: -10
-            yMax: 10
-        rings: [
-            {x: .5, y: 1}
-            {x: 6, y: 5}
-        ]
-        fragments: [
-            '2x', '.5x', '+2'
-        ]
     }    
     {
         equations:

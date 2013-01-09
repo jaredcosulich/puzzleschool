@@ -440,6 +440,7 @@ equation.Equation = (function() {
 
   Equation.prototype.showRange = function() {
     var _ref;
+    return;
     if (!((_ref = this.range) != null ? _ref.hidden : void 0)) {
       return;
     }
