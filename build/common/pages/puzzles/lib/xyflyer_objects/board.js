@@ -424,8 +424,9 @@ board.Board = (function(_super) {
               continue;
             }
             otherYPos = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
-            prevYPos = this.formulas[id].formula((xPos - 1) / this.xUnit) * this.yUnit;
-            if ((otherYPos - yPos <= 0 && otherYPos - prevYPos > 0) || (otherYPos - yPos >= 0 && otherYPos - prevYPos < 0)) {
+            prevYPos = lastFormula.formula((xPos - 1) / this.xUnit) * this.yUnit;
+            console.log(xPos / this.xUnit, yPos - otherYPos, prevYPos - otherYPos);
+            if ((yPos - otherYPos <= 0 && prevYPos - otherYPos > 0) || (yPos - otherYPos >= 0 && prevYPos - otherYPos < 0)) {
               yPos = otherYPos;
               lastFormula = this.formulas[id];
               break;

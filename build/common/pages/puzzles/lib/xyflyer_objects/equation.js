@@ -9,8 +9,8 @@ equation.Equation = (function() {
   Equation.prototype.defaultText = 'Drag equations below and drop here';
 
   function Equation(_arg) {
-    var _ref;
-    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.solutionComponents = _arg.solutionComponents, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
+    var startingFragment;
+    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.solutionComponents = _arg.solutionComponents, startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -27,7 +27,8 @@ equation.Equation = (function() {
         return e.preventDefault();
       }
     });
-    if ((_ref = this.startingFragment) != null ? _ref.length : void 0) {
+    if (startingFragment != null ? startingFragment.length : void 0) {
+      this.startingFragment = this.formatFragment(startingFragment);
       this.el.addClass('starting_fragment');
     } else {
       this.startingFragment = this.defaultText;
@@ -369,7 +370,7 @@ equation.Equation = (function() {
   Equation.prototype.formatFragment = function(fragment) {
     var constant;
     constant = '<div class=\'fragment\'>';
-    fragment = fragment.replace(/(.*)\((.*)\)/, "" + constant + "$1(</div>" + constant + "$2</div>" + constant + ")</div>");
+    fragment = fragment.replace(/(.*\()(.*)\)/, "" + constant + "$1</div>" + constant + "$2</div>" + constant + ")</div>");
     if (fragment.indexOf(constant) === -1) {
       fragment = "" + constant + fragment + "</div>";
     }
@@ -481,13 +482,13 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.initVariables = function() {
-    var formula, variable, _results;
+    var formula, variable, _ref, _results;
     formula = this.straightFormula();
     _results = [];
     for (variable in this.variables) {
       if (formula.indexOf(variable) > -1) {
         _results.push(this.initVariable(variable));
-      } else if (this.variables[variable].element) {
+      } else if (((_ref = this.variables[variable].element) != null ? _ref.closest('.equation_container')[0] : void 0) === this.container[0]) {
         _results.push(this.removeVariable(variable));
       } else {
         _results.push(void 0);

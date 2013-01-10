@@ -3,7 +3,7 @@ equation = exports ? provide('./equation', {})
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
 
-    constructor: ({@id, @gameArea, @solution, @solutionComponents, @startingFragment, @variables, @plot}) ->
+    constructor: ({@id, @gameArea, @solution, @solutionComponents, startingFragment, @variables, @plot}) ->
         @dropAreas = []
         @container = $(document.createElement('DIV'))
         @container.addClass('equation_container')
@@ -14,7 +14,8 @@ class equation.Equation
         @el.attr('id', @id)
         @el.bind "touchstart touchmove touchend", (e) -> e.preventDefault() if e.preventDefault
 
-        if @startingFragment?.length
+        if startingFragment?.length
+            @startingFragment = @formatFragment(startingFragment)
             @el.addClass('starting_fragment')
         else
             @startingFragment = @defaultText 
@@ -200,6 +201,7 @@ class equation.Equation
                 delete dropArea.component.after
             
     wrap: (dropArea) ->
+        # return unless dropArea.element?.parent()?.length
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component') or previous.hasClass('fragment')
             beforeDropArea = @newDropArea()
             dropArea.element.before(beforeDropArea)
@@ -243,12 +245,12 @@ class equation.Equation
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
         fragment = fragment.replace(
-            /(.*)\((.*)\)/, 
-            "#{constant}$1(</div>#{constant}$2</div>#{constant})</div>"
+            /(.*\()(.*)\)/, 
+            "#{constant}$1</div>#{constant}$2</div>#{constant})</div>"
         )
         if fragment.indexOf(constant) == -1
             fragment = "#{constant}#{fragment}</div>"
-        
+
         return fragment
     
     formulaData: ->
@@ -325,7 +327,7 @@ class equation.Equation
         for variable of @variables
             if formula.indexOf(variable) > -1
                 @initVariable(variable) 
-            else if @variables[variable].element
+            else if @variables[variable].element?.closest('.equation_container')[0] == @container[0]
                 @removeVariable(variable)
                 
     initVariable: (variable) ->
