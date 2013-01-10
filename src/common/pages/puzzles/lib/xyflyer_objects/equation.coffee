@@ -64,7 +64,7 @@ class equation.Equation
 
     removeFragment: (dropArea, e) ->
         @el.find('.accept_component').removeClass('accept_component')
-        @el.find('.accept_fragment').removeClass('accept_fragment')
+        @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
         
         dropArea.component.mousedown(e)
         dropArea.component.move(e)        
@@ -104,6 +104,7 @@ class equation.Equation
         
     clear: ->
         @selectedDropArea = null
+        @el.find('.accept_fragment').css(width: '')
         @el.removeClass('component_over')
         @el.removeClass('accept_component')
         @$('.component_over').removeClass('component_over')
@@ -392,4 +393,13 @@ class equation.Equation
         delete @variables[variable].element
         delete @variables[variable].get
         delete @variables[variable].set
+        
+    expandLastAccept: ->
+        lastAccept = @el.find('.accept_fragment:last-child')
+        prevOffset = lastAccept.previous()?.offset()
+        if prevOffset
+            remainder =  prevOffset.left + prevOffset.width - @el.offset().left
+        else
+            remainder = 0
+        lastAccept.width(@el.width() - remainder - 12)
         

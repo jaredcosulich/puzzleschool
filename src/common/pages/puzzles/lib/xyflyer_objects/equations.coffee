@@ -45,6 +45,7 @@ class equations.Equations
         y = top + (component.height()/2)
         @selectedDropArea = null
         for equation in @equations
+            equation.expandLastAccept()
             @selectedDropArea = equation.overlappingDropAreas
                 x: x
                 y: y

@@ -77,6 +77,7 @@ equations.Equations = (function() {
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
+      equation.expandLastAccept();
       this.selectedDropArea = equation.overlappingDropAreas({
         x: x,
         y: y,

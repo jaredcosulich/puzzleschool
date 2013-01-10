@@ -112,7 +112,7 @@ equation.Equation = (function() {
   Equation.prototype.removeFragment = function(dropArea, e) {
     var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2;
     this.el.find('.accept_component').removeClass('accept_component');
-    this.el.find('.accept_fragment').removeClass('accept_fragment');
+    this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.component.mousedown(e);
     dropArea.component.move(e);
     dropArea.element.removeClass('with_component');
@@ -172,6 +172,9 @@ equation.Equation = (function() {
 
   Equation.prototype.clear = function() {
     this.selectedDropArea = null;
+    this.el.find('.accept_fragment').css({
+      width: ''
+    });
     this.el.removeClass('component_over');
     this.el.removeClass('accept_component');
     this.$('.component_over').removeClass('component_over');
@@ -591,6 +594,18 @@ equation.Equation = (function() {
     delete this.variables[variable].element;
     delete this.variables[variable].get;
     return delete this.variables[variable].set;
+  };
+
+  Equation.prototype.expandLastAccept = function() {
+    var lastAccept, prevOffset, remainder, _ref;
+    lastAccept = this.el.find('.accept_fragment:last-child');
+    prevOffset = (_ref = lastAccept.previous()) != null ? _ref.offset() : void 0;
+    if (prevOffset) {
+      remainder = prevOffset.left + prevOffset.width - this.el.offset().left;
+    } else {
+      remainder = 0;
+    }
+    return lastAccept.width(this.el.width() - remainder - 12);
   };
 
   return Equation;
