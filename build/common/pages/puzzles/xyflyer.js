@@ -572,6 +572,154 @@ LEVELS = [
     }
   }, {
     equations: {
+      '-x-b': {
+        start: '-x'
+      }
+    },
+    grid: {
+      xMin: -20,
+      xMax: 20,
+      yMin: -20,
+      yMax: 20
+    },
+    rings: [
+      {
+        x: -8,
+        y: 0
+      }, {
+        x: 0,
+        y: -8
+      }, {
+        x: 8,
+        y: -16
+      }
+    ],
+    islandCoordinates: {
+      x: -16,
+      y: 8
+    },
+    fragments: ['+a', '-b'],
+    variables: {
+      a: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1
+      },
+      b: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1,
+        solution: 8
+      }
+    }
+  }, {
+    equations: {
+      '-x-b': {
+        start: '-x'
+      }
+    },
+    grid: {
+      xMin: -5,
+      xMax: 35,
+      yMin: -35,
+      yMax: 5
+    },
+    rings: [
+      {
+        x: 10,
+        y: -15
+      }, {
+        x: 15,
+        y: -20
+      }, {
+        x: 20,
+        y: -25
+      }
+    ],
+    islandCoordinates: {
+      x: 0,
+      y: -5
+    },
+    fragments: ['+a', '-b'],
+    variables: {
+      a: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1
+      },
+      b: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1,
+        solution: 5
+      }
+    }
+  }, {
+    equations: {
+      '-x-c': {
+        start: '-x'
+      },
+      'x-d': {
+        start: 'x'
+      }
+    },
+    grid: {
+      xMin: -20,
+      xMax: 20,
+      yMin: -20,
+      yMax: 20
+    },
+    rings: [
+      {
+        x: -5,
+        y: -5
+      }, {
+        x: 5,
+        y: -5
+      }, {
+        x: 15,
+        y: 5
+      }
+    ],
+    fragments: ['+a', '+b', '-c', '-d'],
+    islandCoordinates: {
+      x: -15,
+      y: 5
+    },
+    variables: {
+      a: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1
+      },
+      b: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1
+      },
+      c: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1,
+        solution: 10
+      },
+      d: {
+        start: 1,
+        min: 0,
+        max: 10,
+        increment: 1,
+        solution: 10
+      }
+    }
+  }, {
+    equations: {
       '(1/b)x+c': {
         start: 'x'
       }
