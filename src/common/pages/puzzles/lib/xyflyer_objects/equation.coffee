@@ -60,15 +60,14 @@ class equation.Equation
                     test: (dropArea, over) => testDropArea(dropArea, over)
                     
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
-            c = @selectedDropArea.component
-            $(document.body).one 'mouseup.component touchend.component', -> c.endMove(e)
             @removeFragment(@selectedDropArea, e)
 
     removeFragment: (dropArea, e) ->
-        dropArea.component.mousedown(e)
-        dropArea.component.move(e)
-        
         @el.find('.accept_component').removeClass('accept_component')
+        @el.find('.accept_fragment').removeClass('accept_fragment')
+        
+        dropArea.component.mousedown(e)
+        dropArea.component.move(e)        
         
         dropArea.element.removeClass('with_component')
         dropArea.element.html(dropArea.startingFragment)
@@ -142,6 +141,8 @@ class equation.Equation
         overlapping = []
         gameAreaOffset = @gameArea.offset()
         for dropArea in @dropAreas
+            continue unless dropArea.element.hasClass('accept_fragment')
+            
             offset = dropArea.element.offset()
             offset.left -= gameAreaOffset.left
             offset.top -= gameAreaOffset.top
@@ -201,7 +202,7 @@ class equation.Equation
                 delete dropArea.component.after
             
     wrap: (dropArea) ->
-        # return unless dropArea.element?.parent()?.length
+        return unless dropArea.element?.parent()?.length
         if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component') or previous.hasClass('fragment')
             beforeDropArea = @newDropArea()
             dropArea.element.before(beforeDropArea)

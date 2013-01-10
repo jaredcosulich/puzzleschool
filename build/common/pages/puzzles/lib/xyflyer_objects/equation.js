@@ -92,7 +92,7 @@ equation.Equation = (function() {
       return _this.clear();
     });
     return this.el.bind('mousedown.fragment touchstart.fragment', function(e) {
-      var c, _ref, _ref1;
+      var _ref, _ref1;
       if (!_this.selectedDropArea) {
         _this.selectedDropArea = _this.overlappingDropAreas({
           x: _this.clientX(e),
@@ -105,19 +105,16 @@ equation.Equation = (function() {
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
-      c = _this.selectedDropArea.component;
-      $(document.body).one('mouseup.component touchend.component', function() {
-        return c.endMove(e);
-      });
       return _this.removeFragment(_this.selectedDropArea, e);
     });
   };
 
   Equation.prototype.removeFragment = function(dropArea, e) {
     var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2;
+    this.el.find('.accept_component').removeClass('accept_component');
+    this.el.find('.accept_fragment').removeClass('accept_fragment');
     dropArea.component.mousedown(e);
     dropArea.component.move(e);
-    this.el.find('.accept_component').removeClass('accept_component');
     dropArea.element.removeClass('with_component');
     dropArea.element.html(dropArea.startingFragment);
     dropArea.component = null;
@@ -221,6 +218,9 @@ equation.Equation = (function() {
     _ref = this.dropAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       dropArea = _ref[_i];
+      if (!dropArea.element.hasClass('accept_fragment')) {
+        continue;
+      }
       offset = dropArea.element.offset();
       offset.left -= gameAreaOffset.left;
       offset.top -= gameAreaOffset.top;
@@ -310,7 +310,10 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.wrap = function(dropArea) {
-    var afterDropArea, beforeDropArea, next, previous;
+    var afterDropArea, beforeDropArea, next, previous, _ref, _ref1;
+    if (!((_ref = dropArea.element) != null ? (_ref1 = _ref.parent()) != null ? _ref1.length : void 0 : void 0)) {
+      return;
+    }
     if (!(previous = dropArea.element.previous()).length || previous.hasClass('with_component') || previous.hasClass('fragment')) {
       beforeDropArea = this.newDropArea();
       dropArea.element.before(beforeDropArea);
