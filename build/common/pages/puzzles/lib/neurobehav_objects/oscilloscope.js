@@ -15,9 +15,9 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.objectName = 'Oscilloscope';
 
-  Oscilloscope.prototype.width = 80;
+  Oscilloscope.prototype.width = 180;
 
-  Oscilloscope.prototype.height = 42;
+  Oscilloscope.prototype.height = 48;
 
   Oscilloscope.prototype.screenWidth = 150;
 
@@ -45,17 +45,39 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.draw = function() {
+    var connection, connectionLength, endX, endY, innerNeedle, needle, slope, startingX, startingY;
     this.image = this.paper.set();
     this.graph = this.paper.rect(this.position.left + (this.screenWidth / 2) - 6, this.position.top - (this.screenHeight / 2) - 6, this.screenWidth + 12, this.screenHeight + 12, 6);
     this.graph.attr({
       fill: '#ACACAD'
     });
     this.image.push(this.graph);
+    startingX = this.graph.attr('x');
+    startingY = this.graph.attr('y') + (this.graph.attr('height') / 2);
     this.screen = this.paper.rect(this.position.left + (this.screenWidth / 2), this.position.top - (this.screenHeight / 2), this.screenWidth, this.screenHeight, 6);
     this.screen.attr({
       fill: 'black'
     });
-    return this.image.push(this.screen);
+    this.image.push(this.screen);
+    connectionLength = 20;
+    slope = ((this.position.top + this.height) - startingY) / ((startingX - connectionLength) - this.position.left);
+    endX = startingX - connectionLength - 10;
+    endY = startingY + (slope * 10);
+    connection = this.paper.path("M" + startingX + "," + startingY + "\nL" + (startingX - connectionLength) + "," + startingY + "\nL" + endX + "," + endY);
+    connection.attr({
+      'stroke-width': 2
+    });
+    this.image.push(connection);
+    needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + this.position.left + ", " + (this.position.top + this.height) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
+    needle.attr({
+      fill: 'white'
+    });
+    this.image.push(needle);
+    innerNeedle = this.paper.path("M" + (endX - 3) + "," + (endY - (3 * (1 / slope))) + "\nL" + this.position.left + ", " + (this.position.top + this.height) + "\nL" + (endX + 3) + "," + (endY + (3 * (1 / slope))));
+    innerNeedle.attr({
+      stroke: '#ccc'
+    });
+    return this.image.push(innerNeedle);
   };
 
   Oscilloscope.prototype.initImage = function() {
@@ -126,24 +148,25 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.fire = function() {
-    var part, voltage, _i, _len, _ref;
+    var bbox, part, voltage, _i, _len, _ref;
     if (!this.neuron) {
       return;
     }
     voltage = this.xAxis - (this.neuron.takeReading() * this.scale);
     this.firePosition || (this.firePosition = this.screenWidth);
+    bbox = this.screen.getBBox();
     if (this.firePosition >= this.screenWidth) {
       if (this.voltageDisplay) {
         this.voltageDisplay.remove();
       }
       this.firePosition = 0;
-      this.voltageDisplay = this.screenPath("M" + (this.screen.attr('x')) + ", " + (this.screen.attr('y') + (this.lastVoltage || this.xAxis)));
+      this.voltageDisplay = this.screenPath("M" + bbox.x + ", " + (bbox.y + (this.lastVoltage || this.xAxis)));
     }
     _ref = this.voltageDisplay.items;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       part.attr({
-        path: "" + (part.attr('path')) + "\nL" + (this.screen.attr('x') + this.firePosition) + ", " + (this.screen.attr('y') + voltage)
+        path: "" + (part.attr('path')) + "\nL" + (bbox.x + this.firePosition) + ", " + (bbox.y + voltage)
       });
     }
     this.firePosition += this.xDelta;
@@ -151,16 +174,17 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.drawThreshold = function() {
-    var path, threshold, translatedThreshold, x, _i, _ref, _ref1, _ref2, _ref3;
+    var bbox, path, threshold, translatedThreshold, x, _i, _ref, _ref1, _ref2, _ref3;
     if (this.thresholdLine) {
       this.thresholdLine.remove();
     }
     if ((threshold = (_ref = this.neuron) != null ? (_ref1 = _ref.properties) != null ? (_ref2 = _ref1.threshold) != null ? _ref2.value : void 0 : void 0 : void 0)) {
-      translatedThreshold = this.screen.attr('y') + this.xAxis - (threshold * this.scale);
+      bbox = this.screen.getBBox();
+      translatedThreshold = bbox.y + this.xAxis - (threshold * this.scale);
       path = [];
       for (x = _i = 0, _ref3 = this.screenWidth; _i < _ref3; x = _i += 10) {
-        path.push("M" + (this.screen.attr('x') + x) + "," + translatedThreshold);
-        path.push("L" + (this.screen.attr('x') + x + 5) + "," + translatedThreshold);
+        path.push("M" + (bbox.x + x) + "," + translatedThreshold);
+        path.push("L" + (bbox.x + x + 5) + "," + translatedThreshold);
       }
       this.thresholdLine = this.screenPath(path.join(''));
       return this.thresholdLine.toFront();

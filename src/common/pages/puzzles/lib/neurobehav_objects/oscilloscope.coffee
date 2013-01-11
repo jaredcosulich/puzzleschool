@@ -4,8 +4,8 @@ neurobehavObject = require('./object')
 class oscilloscope.Oscilloscope extends neurobehavObject.Object
     objectType: 'oscilloscope'
     objectName: 'Oscilloscope'
-    width: 80
-    height: 42
+    width: 180
+    height: 48
     screenWidth: 150
     screenHeight: 90
     screenColor: '#64A539'
@@ -39,6 +39,9 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             fill: '#ACACAD'
         @image.push(@graph)
 
+        startingX = @graph.attr('x')
+        startingY = @graph.attr('y') + (@graph.attr('height') / 2)
+
         @screen = @paper.rect(
             @position.left + (@screenWidth/2), 
             @position.top - (@screenHeight/2), 
@@ -49,6 +52,36 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @screen.attr
             fill: 'black'
         @image.push(@screen)
+        
+        connectionLength = 20
+        slope = ((@position.top + @height) - startingY) / ((startingX - connectionLength) - @position.left)
+        
+        endX = startingX - connectionLength - 10
+        endY = startingY + (slope * 10)
+        connection = @paper.path """
+            M#{startingX},#{startingY}
+            L#{startingX - (connectionLength)},#{startingY}
+            L#{endX},#{endY}
+        """
+        connection.attr('stroke-width': 2)
+        @image.push(connection)
+        
+        needle = @paper.path """
+            M#{endX - 5},#{endY - (5*(1/slope))}
+            L#{@position.left}, #{@position.top + @height}
+            L#{endX + 5},#{endY + (5*(1/slope))}
+            L#{endX - 5},#{endY - (5*(1/slope))}
+        """
+        needle.attr(fill: 'white')
+        @image.push(needle)
+        
+        innerNeedle = @paper.path """
+            M#{endX - 3},#{endY - (3*(1/slope))}
+            L#{@position.left}, #{@position.top + @height}
+            L#{endX + 3},#{endY + (3*(1/slope))}
+        """
+        innerNeedle.attr(stroke: '#ccc')
+        @image.push(innerNeedle)
         
     initImage: ->
         @image.properties = 
@@ -100,18 +133,19 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         return unless @neuron
         voltage = @xAxis - (@neuron.takeReading() * @scale)
         @firePosition or= @screenWidth
+        bbox = @screen.getBBox()
         if @firePosition >= @screenWidth
             @voltageDisplay.remove() if @voltageDisplay
             @firePosition = 0
             @voltageDisplay = @screenPath """
-                M#{@screen.attr('x')}, #{@screen.attr('y') + (@lastVoltage or @xAxis)}
+                M#{bbox.x}, #{bbox.y + (@lastVoltage or @xAxis)}
             """
             
         for part in @voltageDisplay.items
             part.attr
                 path: """
                     #{part.attr('path')}
-                    L#{@screen.attr('x') + @firePosition}, #{@screen.attr('y') + voltage}
+                    L#{bbox.x + @firePosition}, #{bbox.y + voltage}
                 """
             
         @firePosition += @xDelta
@@ -120,11 +154,12 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
     drawThreshold: ->
         @thresholdLine.remove() if @thresholdLine
         if (threshold = @neuron?.properties?.threshold?.value)
-            translatedThreshold = @screen.attr('y') + @xAxis - (threshold * @scale)
+            bbox = @screen.getBBox()
+            translatedThreshold = bbox.y + @xAxis - (threshold * @scale)
             path = []
             for x in [0...@screenWidth] by 10
-                path.push("M#{@screen.attr('x') + x},#{translatedThreshold}")
-                path.push("L#{@screen.attr('x') + x+5},#{translatedThreshold}")
+                path.push("M#{bbox.x + x},#{translatedThreshold}")
+                path.push("L#{bbox.x + x+5},#{translatedThreshold}")
                 
             @thresholdLine = @screenPath(path.join(''))
             @thresholdLine.toFront()
