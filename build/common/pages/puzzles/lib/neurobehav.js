@@ -52,7 +52,7 @@ neurobehav.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.loadFirstLevel = function() {
-    var neuron1, neuron2, oscilloscope, stimulus;
+    var neuron1, neuron2, oscilloscope1, oscilloscope2, stimulus;
     stimulus = this.game.addObject({
       type: 'Stimulus',
       position: {
@@ -88,20 +88,29 @@ neurobehav.ViewHelper = (function() {
       inhibitoryDescription: this.$('.descriptions .inhibitory').html(),
       excitatoryDescription: this.$('.descriptions .excitatory').html()
     });
-    oscilloscope = this.game.addObject({
+    oscilloscope1 = this.game.addObject({
       type: 'Oscilloscope',
       position: {
-        top: 80,
-        left: 340
+        top: 40,
+        left: 380
       },
       board: this.game.board,
       description: this.$('.descriptions .oscilloscope').html()
     });
-    oscilloscope.attachTo(neuron1);
+    oscilloscope1.attachTo(neuron1);
+    oscilloscope2 = this.game.addObject({
+      type: 'Oscilloscope',
+      position: {
+        top: 240,
+        left: 280
+      },
+      board: this.game.board,
+      description: this.$('.descriptions .oscilloscope').html()
+    });
+    oscilloscope2.attachTo(neuron2);
     this.goalDescriptionHtml = "<h4>The Goal: Get The Heart To Beat</h4>\n<p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>";
     this.initGoalDescription();
-    this.initHints();
-    return neuron1.showProperties();
+    return this.initHints();
   };
 
   return ViewHelper;

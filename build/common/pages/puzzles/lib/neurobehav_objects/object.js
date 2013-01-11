@@ -13,6 +13,7 @@ object.Object = (function() {
     this.id = _arg.id, this.paper = _arg.paper, this.position = _arg.position, this.description = _arg.description, this.objectEditor = _arg.objectEditor;
     this.properties = this.setProperties(this.propertyList);
     this.init();
+    this.initDescriptionIcon();
   }
 
   Object.prototype.setProperties = function(propertyList) {
@@ -36,20 +37,42 @@ object.Object = (function() {
 
   Object.prototype.createImage = function() {
     this.image = this.paper.image("" + this.baseFolder + this.imageSrc, this.position.left, this.position.top, this.fullWidth || this.width, this.fullHeight || this.height);
-    this.image.objectType = this.objectType;
-    this.image.objectName = this.objectName;
-    this.image.object = this;
+    this.setImage();
     return this.image;
+  };
+
+  Object.prototype.draw = function() {
+    return this.setImage();
+  };
+
+  Object.prototype.setImage = function() {
+    var item, set, _i, _len, _ref, _results,
+      _this = this;
+    set = function(element) {
+      element.objectType = _this.objectType;
+      element.objectName = _this.objectName;
+      return element.object = _this;
+    };
+    set(this.image);
+    if (this.image.type === 'set') {
+      _ref = this.image.items;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        _results.push(set(item));
+      }
+      return _results;
+    }
   };
 
   Object.prototype.init = function() {
     return raise("no init method for " + this.objectType);
   };
 
-  Object.prototype.initMoveGlow = function(element) {
-    var glow, set,
+  Object.prototype.initMoveGlow = function(element, item) {
+    var glow, set, _i, _len, _ref,
       _this = this;
-    glow = element.glow({
+    glow = (element.items ? element.items[0] : element).glow({
       width: 30,
       fill: true,
       color: 'yellow'
@@ -59,7 +82,15 @@ object.Object = (function() {
       cursor: 'move'
     });
     set = this.paper.set();
-    set.push(element);
+    if (element.type === 'set') {
+      _ref = element.items;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        set.push(item);
+      }
+    } else {
+      set.push(element);
+    }
     set.push(glow);
     set.hover(function() {
       return glow.attr({
@@ -75,41 +106,71 @@ object.Object = (function() {
     return glow;
   };
 
-  Object.prototype.initPropertiesGlow = function(element) {
-    var glow, s,
+  Object.prototype.initDescriptionIcon = function() {
+    var glow, icon, image, _ref,
       _this = this;
-    if (element == null) {
-      element = this.image;
+    icon = this.paper.set();
+    image = this.paper.path("M16,1.466C7.973,1.466,1.466,7.973,1.466,16c0,8.027,6.507,14.534,14.534,14.534c8.027,0,14.534-6.507,14.534-14.534C30.534,7.973,24.027,1.466,16,1.466z M17.328,24.371h-2.707v-2.596h2.707V24.371zM17.328,19.003v0.858h-2.707v-1.057c0-3.19,3.63-3.696,3.63-5.963c0-1.034-0.924-1.826-2.134-1.826c-1.254,0-2.354,0.924-2.354,0.924l-1.541-1.915c0,0,1.519-1.584,4.137-1.584c2.487,0,4.796,1.54,4.796,4.136C21.156,16.208,17.328,16.627,17.328,19.003z        ");
+    image.attr({
+      fill: "#000",
+      stroke: "none"
+    });
+    icon.push(image);
+    if (((_ref = this.image) != null ? _ref.type : void 0) === 'set') {
+      this.image.push(image);
     }
-    if (element.propertiesGlow) {
-      element.propertiesGlow.remove();
-    }
-    if (element.forEach) {
-      glow = this.paper.set();
-      element.forEach(function(e) {
-        return glow.push(e.glow({
-          width: 20,
-          fill: true,
-          color: 'red'
-        }));
-      });
-    } else {
-      glow = element.glow({
-        width: 20,
-        fill: true,
-        color: 'red'
-      });
-    }
+    glow = image.glow({
+      width: 10,
+      fill: true,
+      color: 'red'
+    });
     glow.attr({
       opacity: 0
     });
-    s = this.paper.set();
-    s.push(glow);
-    s.push(element);
-    s.attr({
+    icon.push(glow);
+    icon.transform("t" + (this.position.left - 20) + "," + (this.position.top - 10) + "s0.5");
+    icon.attr({
       cursor: 'pointer'
     });
-    s.hover(function() {
+    icon.hover(function() {
+      return glow.attr({
+        opacity: 0.04
+      });
+    }, function() {
+      return glow.attr({
+        opacity: 0
+      });
+    });
+    return icon;
+  };
+
+  Object.prototype.initPropertiesIcon = function(element) {
+    var glow, icon, image, _ref,
+      _this = this;
+    icon = this.paper.set();
+    image = this.paper.path("M16,1.466C7.973,1.466,1.466,7.973,1.466,16c0,8.027,6.507,14.534,14.534,14.534c8.027,0,14.534-6.507,14.534-14.534C30.534,7.973,24.027,1.466,16,1.466zM24.386,14.968c-1.451,1.669-3.706,2.221-5.685,1.586l-7.188,8.266c-0.766,0.88-2.099,0.97-2.979,0.205s-0.973-2.099-0.208-2.979l7.198-8.275c-0.893-1.865-0.657-4.164,0.787-5.824c1.367-1.575,3.453-2.151,5.348-1.674l-2.754,3.212l0.901,2.621l2.722,0.529l2.761-3.22C26.037,11.229,25.762,13.387,24.386,14.968z        ");
+    image.attr({
+      fill: "#000",
+      stroke: "none"
+    });
+    icon.push(image);
+    if (((_ref = this.image) != null ? _ref.type : void 0) === 'set') {
+      this.image.push(image);
+    }
+    glow = image.glow({
+      width: 10,
+      fill: true,
+      color: 'red'
+    });
+    glow.attr({
+      opacity: 0
+    });
+    icon.push(glow);
+    icon.transform("t" + (this.position.left - 36) + "," + (this.position.top - 10) + "s0.5");
+    icon.attr({
+      cursor: 'pointer'
+    });
+    icon.hover(function() {
       return glow.attr({
         opacity: 0.04
       });
@@ -120,12 +181,11 @@ object.Object = (function() {
         });
       }
     });
-    element.propertiesGlow = glow;
-    return s;
+    return icon;
   };
 
   Object.prototype.initProperties = function(properties, element) {
-    var elementAndGlow,
+    var icon,
       _this = this;
     if (properties == null) {
       properties = this.properties;
@@ -133,12 +193,11 @@ object.Object = (function() {
     if (element == null) {
       element = this.image;
     }
+    icon = this.initPropertiesIcon(element);
     element.properties = properties;
-    elementAndGlow = this.initPropertiesGlow(element);
-    elementAndGlow.click(function() {
-      return _this.propertiesClick(element);
+    return icon.click(function() {
+      return console.log(element.properties);
     });
-    return element.propertiesGlow;
   };
 
   Object.prototype.propertiesClick = function(element, display) {

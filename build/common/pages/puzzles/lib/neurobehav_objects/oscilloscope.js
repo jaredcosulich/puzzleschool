@@ -17,7 +17,9 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.width = 180;
 
-  Oscilloscope.prototype.height = 48;
+  Oscilloscope.prototype.height = 96;
+
+  Oscilloscope.prototype.connectionLength = 60;
 
   Oscilloscope.prototype.screenWidth = 150;
 
@@ -45,39 +47,40 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.draw = function() {
-    var connection, connectionLength, endX, endY, innerNeedle, needle, slope, startingX, startingY;
+    var connection, connectionSegment, endX, endY, graph, innerNeedle, needle, slope, startingX, startingY;
     this.image = this.paper.set();
-    this.graph = this.paper.rect(this.position.left + (this.screenWidth / 2) - 6, this.position.top - (this.screenHeight / 2) - 6, this.screenWidth + 12, this.screenHeight + 12, 6);
-    this.graph.attr({
+    graph = this.paper.rect(this.position.left + 9, this.position.top, this.screenWidth + 12, this.screenHeight + 12, 6);
+    graph.attr({
       fill: '#ACACAD'
     });
-    this.image.push(this.graph);
-    startingX = this.graph.attr('x');
-    startingY = this.graph.attr('y') + (this.graph.attr('height') / 2);
-    this.screen = this.paper.rect(this.position.left + (this.screenWidth / 2), this.position.top - (this.screenHeight / 2), this.screenWidth, this.screenHeight, 6);
+    this.image.push(graph);
+    startingX = graph.attr('x');
+    startingY = graph.attr('y') + (graph.attr('height') / 2);
+    this.screen = this.paper.rect(graph.attr('x') + 6, graph.attr('y') + 6, this.screenWidth, this.screenHeight, 6);
     this.screen.attr({
       fill: 'black'
     });
     this.image.push(this.screen);
-    connectionLength = 20;
-    slope = ((this.position.top + this.height) - startingY) / ((startingX - connectionLength) - this.position.left);
-    endX = startingX - connectionLength - 10;
-    endY = startingY + (slope * 10);
-    connection = this.paper.path("M" + startingX + "," + startingY + "\nL" + (startingX - connectionLength) + "," + startingY + "\nL" + endX + "," + endY);
+    connectionSegment = this.connectionLength / 10;
+    slope = ((this.position.top + this.height) - startingY) / ((startingX - (connectionSegment * 4)) - (startingX - this.connectionLength));
+    endX = startingX - (connectionSegment * 5);
+    endY = startingY + (slope * connectionSegment);
+    connection = this.paper.path("M" + startingX + "," + startingY + "\nL" + (startingX - (connectionSegment * 4)) + "," + startingY + "\nL" + endX + "," + endY);
     connection.attr({
       'stroke-width': 2
     });
     this.image.push(connection);
-    needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + this.position.left + ", " + (this.position.top + this.height) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
+    needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
     needle.attr({
       fill: 'white'
     });
     this.image.push(needle);
-    innerNeedle = this.paper.path("M" + (endX - 3) + "," + (endY - (3 * (1 / slope))) + "\nL" + this.position.left + ", " + (this.position.top + this.height) + "\nL" + (endX + 3) + "," + (endY + (3 * (1 / slope))));
+    innerNeedle = this.paper.path("M" + (endX - 3) + "," + (endY - (3 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 3) + "," + (endY + (3 * (1 / slope))));
     innerNeedle.attr({
       stroke: '#ccc'
     });
-    return this.image.push(innerNeedle);
+    this.image.push(innerNeedle);
+    return Oscilloscope.__super__.draw.call(this);
   };
 
   Oscilloscope.prototype.initImage = function() {
@@ -89,8 +92,7 @@ oscilloscope.Oscilloscope = (function(_super) {
     this.image.attr({
       cursor: 'move'
     });
-    glow = this.initMoveGlow(this.graph);
-    this.image.toFront();
+    glow = this.initMoveGlow(this.image);
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;
@@ -113,7 +115,7 @@ oscilloscope.Oscilloscope = (function(_super) {
       });
       lastDX = fullDX;
       lastDY = fullDY;
-      _ref = _this.paper.getElementsByPoint(_this.position.left + fullDX, (_this.position.top + _this.height) + fullDY);
+      _ref = _this.paper.getElementsByPoint(_this.position.left - _this.connectionLength + fullDX, (_this.position.top + _this.height) + fullDY);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         element = _ref[_i];
@@ -161,6 +163,9 @@ oscilloscope.Oscilloscope = (function(_super) {
       }
       this.firePosition = 0;
       this.voltageDisplay = this.screenPath("M" + bbox.x + ", " + (bbox.y + (this.lastVoltage || this.xAxis)));
+      this.voltageDisplay.attr({
+        'clip-rect': "" + bbox.x + ", " + bbox.y + ", " + bbox.width + ", " + bbox.height
+      });
     }
     _ref = this.voltageDisplay.items;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -187,6 +192,9 @@ oscilloscope.Oscilloscope = (function(_super) {
         path.push("L" + (bbox.x + x + 5) + "," + translatedThreshold);
       }
       this.thresholdLine = this.screenPath(path.join(''));
+      this.thresholdLine.attr({
+        opacity: 0.75
+      });
       return this.thresholdLine.toFront();
     }
   };

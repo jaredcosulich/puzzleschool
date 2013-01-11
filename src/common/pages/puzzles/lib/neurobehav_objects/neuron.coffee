@@ -4,7 +4,6 @@ neurobehavObject = require('./object')
 class neuron.Neuron extends neurobehavObject.Object
     objectType: 'neuron'
     objectName: 'Neuron'
-    imageSrc: 'neuron.png' 
     height: 60
     width: 60
     properties: {}
@@ -29,8 +28,7 @@ class neuron.Neuron extends neurobehavObject.Object
         @synapseSpikes = []
         @activeSynapseSpikes = []
         
-        @createImage()
-        # @initProperties(@properties)
+        @draw()
             
         ## setup parameters and state variables
         @timeSinceStart = 0
@@ -53,6 +51,12 @@ class neuron.Neuron extends neurobehavObject.Object
         @createSynapse('excitatory')
         @createSynapse('inhibitory')
 
+    draw: ->
+        @image = @paper.set()
+        circle = @paper.circle(@position.left + (@width/2), @position.top + (@height/2), @width/2)
+        circle.attr(stroke: '#2B4590', fill: 'r(0.35, 0.35)#8CA0CF-#2B4590')
+        @image.push(circle)
+        super()
 
     setCurrentVoltage: ->
         @timeSinceStart += @timeDelta

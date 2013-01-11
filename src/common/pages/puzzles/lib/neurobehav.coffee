@@ -63,15 +63,26 @@ class neurobehav.ViewHelper
             inhibitoryDescription: @$('.descriptions .inhibitory').html()
             excitatoryDescription: @$('.descriptions .excitatory').html()
 
-        oscilloscope = @game.addObject
+        oscilloscope1 = @game.addObject
             type: 'Oscilloscope'
             position:
-                top: 80
-                left: 340
+                top: 40
+                left: 380
             board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 
-        oscilloscope.attachTo(neuron1)
+        oscilloscope1.attachTo(neuron1)
+
+
+        oscilloscope2 = @game.addObject
+            type: 'Oscilloscope'
+            position:
+                top: 240
+                left: 280
+            board: @game.board
+            description: @$('.descriptions .oscilloscope').html()
+
+        oscilloscope2.attachTo(neuron2)
 
         @goalDescriptionHtml = """
             <h4>The Goal: Get The Heart To Beat</h4>
@@ -81,5 +92,4 @@ class neurobehav.ViewHelper
         
         @initGoalDescription()
         @initHints()
-        neuron1.showProperties()
         

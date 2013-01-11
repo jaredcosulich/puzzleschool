@@ -5,7 +5,8 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
     objectType: 'oscilloscope'
     objectName: 'Oscilloscope'
     width: 180
-    height: 48
+    height: 96
+    connectionLength: 60
     screenWidth: 150
     screenHeight: 90
     screenColor: '#64A539'
@@ -28,23 +29,23 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         
     draw: ->
         @image = @paper.set()
-        @graph = @paper.rect(
-            @position.left + (@screenWidth/2) - 6, 
-            @position.top - (@screenHeight/2) - 6, 
+        graph = @paper.rect(
+            @position.left + 9, 
+            @position.top, 
             @screenWidth + 12, 
             @screenHeight + 12, 
             6
         )
-        @graph.attr
+        graph.attr
             fill: '#ACACAD'
-        @image.push(@graph)
+        @image.push(graph)
 
-        startingX = @graph.attr('x')
-        startingY = @graph.attr('y') + (@graph.attr('height') / 2)
+        startingX = graph.attr('x')
+        startingY = graph.attr('y') + (graph.attr('height') / 2)
 
         @screen = @paper.rect(
-            @position.left + (@screenWidth/2), 
-            @position.top - (@screenHeight/2), 
+            graph.attr('x') + 6, 
+            graph.attr('y') + 6, 
             @screenWidth, 
             @screenHeight, 
             6
@@ -53,14 +54,14 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             fill: 'black'
         @image.push(@screen)
         
-        connectionLength = 20
-        slope = ((@position.top + @height) - startingY) / ((startingX - connectionLength) - @position.left)
+        connectionSegment = @connectionLength/10
+        slope = ((@position.top + @height) - startingY) / ((startingX - (connectionSegment*4)) - (startingX - (@connectionLength)))
         
-        endX = startingX - connectionLength - 10
-        endY = startingY + (slope * 10)
+        endX = startingX - (connectionSegment*5)
+        endY = startingY + (slope * connectionSegment)
         connection = @paper.path """
             M#{startingX},#{startingY}
-            L#{startingX - (connectionLength)},#{startingY}
+            L#{startingX - (connectionSegment*4)},#{startingY}
             L#{endX},#{endY}
         """
         connection.attr('stroke-width': 2)
@@ -68,7 +69,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         
         needle = @paper.path """
             M#{endX - 5},#{endY - (5*(1/slope))}
-            L#{@position.left}, #{@position.top + @height}
+            L#{(startingX - (@connectionLength))}, #{@position.top + @height}
             L#{endX + 5},#{endY + (5*(1/slope))}
             L#{endX - 5},#{endY - (5*(1/slope))}
         """
@@ -77,11 +78,12 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         
         innerNeedle = @paper.path """
             M#{endX - 3},#{endY - (3*(1/slope))}
-            L#{@position.left}, #{@position.top + @height}
+            L#{(startingX - (@connectionLength))}, #{@position.top + @height}
             L#{endX + 3},#{endY + (3*(1/slope))}
         """
         innerNeedle.attr(stroke: '#ccc')
         @image.push(innerNeedle)
+        super()
         
     initImage: ->
         @image.properties = 
@@ -90,8 +92,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @image.attr
             cursor: 'move'
          
-        glow = @initMoveGlow(@graph) 
-        @image.toFront()
+        glow = @initMoveGlow(@image) 
         
         lastDX = 0
         lastDY = 0 
@@ -112,7 +113,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             glow.attr(opacity: 0)
             lastDX = fullDX
             lastDY = fullDY
-            for element in @paper.getElementsByPoint(@position.left + fullDX, (@position.top + @height) + fullDY)
+            for element in @paper.getElementsByPoint(@position.left - @connectionLength + fullDX, (@position.top + @height) + fullDY)
                 if element.objectType == 'neuron'
                     @attachTo(element.object)
             
@@ -140,6 +141,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             @voltageDisplay = @screenPath """
                 M#{bbox.x}, #{bbox.y + (@lastVoltage or @xAxis)}
             """
+            @voltageDisplay.attr('clip-rect': "#{bbox.x}, #{bbox.y}, #{bbox.width}, #{bbox.height}")
             
         for part in @voltageDisplay.items
             part.attr
@@ -162,6 +164,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
                 path.push("L#{bbox.x + x+5},#{translatedThreshold}")
                 
             @thresholdLine = @screenPath(path.join(''))
+            @thresholdLine.attr(opacity: 0.75)
             @thresholdLine.toFront()
             
     attachTo: (@neuron) ->

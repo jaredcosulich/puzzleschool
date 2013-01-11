@@ -15,8 +15,6 @@ neuron.Neuron = (function(_super) {
 
   Neuron.prototype.objectName = 'Neuron';
 
-  Neuron.prototype.imageSrc = 'neuron.png';
-
   Neuron.prototype.height = 60;
 
   Neuron.prototype.width = 60;
@@ -61,7 +59,7 @@ neuron.Neuron = (function(_super) {
     this.synapses = [];
     this.synapseSpikes = [];
     this.activeSynapseSpikes = [];
-    this.createImage();
+    this.draw();
     this.timeSinceStart = 0;
     this.restTime = 0;
     this.timeDelta = 0.5;
@@ -76,6 +74,18 @@ neuron.Neuron = (function(_super) {
     }), this.periodicity);
     this.createSynapse('excitatory');
     return this.createSynapse('inhibitory');
+  };
+
+  Neuron.prototype.draw = function() {
+    var circle;
+    this.image = this.paper.set();
+    circle = this.paper.circle(this.position.left + (this.width / 2), this.position.top + (this.height / 2), this.width / 2);
+    circle.attr({
+      stroke: '#2B4590',
+      fill: 'r(0.35, 0.35)#8CA0CF-#2B4590'
+    });
+    this.image.push(circle);
+    return Neuron.__super__.draw.call(this);
   };
 
   Neuron.prototype.setCurrentVoltage = function() {
