@@ -15,13 +15,15 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.objectName = 'Oscilloscope';
 
-  Oscilloscope.prototype.imageSrc = 'oscilloscope.png';
-
   Oscilloscope.prototype.width = 80;
 
   Oscilloscope.prototype.height = 42;
 
-  Oscilloscope.prototype.axisLineCount = 5.0;
+  Oscilloscope.prototype.screenWidth = 150;
+
+  Oscilloscope.prototype.screenHeight = 90;
+
+  Oscilloscope.prototype.screenColor = '#64A539';
 
   Oscilloscope.prototype.xDelta = 1;
 
@@ -29,8 +31,8 @@ oscilloscope.Oscilloscope = (function(_super) {
     var _this = this;
     this.board = _arg.board;
     Oscilloscope.__super__.constructor.apply(this, arguments);
-    this.drawGrid();
-    this.createImage();
+    this.draw();
+    this.drawThreshold();
     this.initImage();
     setInterval((function() {
       return _this.fire();
@@ -38,25 +40,22 @@ oscilloscope.Oscilloscope = (function(_super) {
   }
 
   Oscilloscope.prototype.init = function() {
-    var backgroundCanvas, voltageCanvas;
-    this.container = $(document.createElement('DIV'));
-    this.container.addClass('oscilloscope');
-    this.positionContainer();
-    this.board.append(this.container);
-    backgroundCanvas = document.createElement('CANVAS');
-    this.container.append(backgroundCanvas);
-    this.canvasWidth = backgroundCanvas.width = $(backgroundCanvas).width();
-    this.canvasHeight = backgroundCanvas.height = $(backgroundCanvas).height();
-    this.scale = this.canvasHeight / 2;
-    this.backgroundContext = backgroundCanvas.getContext('2d');
-    voltageCanvas = document.createElement('CANVAS');
-    this.container.append(voltageCanvas);
-    voltageCanvas.width = $(voltageCanvas).width();
-    voltageCanvas.height = $(voltageCanvas).height();
-    this.voltageContext = voltageCanvas.getContext('2d');
-    this.voltageContext.strokeStyle = 'rgba(255, 92, 92, 1)';
-    this.voltageContext.lineWidth = 1;
-    return this.xAxis = this.canvasHeight - (this.canvasHeight / this.axisLineCount);
+    this.scale = this.screenHeight / 2;
+    return this.xAxis = this.screenHeight - 12;
+  };
+
+  Oscilloscope.prototype.draw = function() {
+    this.image = this.paper.set();
+    this.graph = this.paper.rect(this.position.left + (this.screenWidth / 2) - 6, this.position.top - (this.screenHeight / 2) - 6, this.screenWidth + 12, this.screenHeight + 12, 6);
+    this.graph.attr({
+      fill: '#ACACAD'
+    });
+    this.image.push(this.graph);
+    this.screen = this.paper.rect(this.position.left + (this.screenWidth / 2), this.position.top - (this.screenHeight / 2), this.screenWidth, this.screenHeight, 6);
+    this.screen.attr({
+      fill: 'black'
+    });
+    return this.image.push(this.screen);
   };
 
   Oscilloscope.prototype.initImage = function() {
@@ -68,7 +67,8 @@ oscilloscope.Oscilloscope = (function(_super) {
     this.image.attr({
       cursor: 'move'
     });
-    glow = this.initMoveGlow(this.image);
+    glow = this.initMoveGlow(this.graph);
+    this.image.toFront();
     lastDX = 0;
     lastDY = 0;
     fullDX = 0;
@@ -77,8 +77,7 @@ oscilloscope.Oscilloscope = (function(_super) {
       fullDX = lastDX + dX;
       fullDY = lastDY + dY;
       _this.image.transform("t" + fullDX + "," + fullDY);
-      glow.transform("t" + fullDX + "," + fullDY);
-      return _this.positionContainer(fullDX, fullDY);
+      return glow.transform("t" + fullDX + "," + fullDY);
     };
     onStart = function() {
       _this.showProperties(_this.image);
@@ -108,61 +107,63 @@ oscilloscope.Oscilloscope = (function(_super) {
     return glow.drag(onDrag, onStart, onEnd);
   };
 
-  Oscilloscope.prototype.positionContainer = function(dx, dy) {
-    if (dx == null) {
-      dx = 0;
-    }
-    if (dy == null) {
-      dy = 0;
-    }
-    return this.container.css({
-      top: this.position.top + dy - 36,
-      left: this.position.left + dx + 48
+  Oscilloscope.prototype.screenPath = function(path) {
+    var border, line, set;
+    set = this.paper.set();
+    border = this.paper.path(path);
+    line = this.paper.path(path);
+    border.attr({
+      stroke: this.screenColor,
+      'stroke-opacity': 0.5,
+      'stroke-width': 3
     });
+    line.attr({
+      stroke: this.screenColor
+    });
+    set.push(border, line);
+    this.image.push(set);
+    return set;
   };
 
   Oscilloscope.prototype.fire = function() {
-    var voltage;
+    var part, voltage, _i, _len, _ref;
     if (!this.neuron) {
       return;
     }
     voltage = this.xAxis - (this.neuron.takeReading() * this.scale);
-    this.firePosition || (this.firePosition = 0);
-    if (this.firePosition > this.canvasWidth) {
-      this.voltageContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.firePosition || (this.firePosition = this.screenWidth);
+    if (this.firePosition >= this.screenWidth) {
+      if (this.voltageDisplay) {
+        this.voltageDisplay.remove();
+      }
       this.firePosition = 0;
+      this.voltageDisplay = this.screenPath("M" + (this.screen.attr('x')) + ", " + (this.screen.attr('y') + (this.lastVoltage || this.xAxis)));
     }
-    this.voltageContext.beginPath();
-    this.voltageContext.moveTo(this.firePosition, this.lastVoltage || this.xAxis);
+    _ref = this.voltageDisplay.items;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      part = _ref[_i];
+      part.attr({
+        path: "" + (part.attr('path')) + "\nL" + (this.screen.attr('x') + this.firePosition) + ", " + (this.screen.attr('y') + voltage)
+      });
+    }
     this.firePosition += this.xDelta;
-    this.voltageContext.lineTo(this.firePosition, voltage);
-    this.voltageContext.stroke();
-    this.voltageContext.closePath();
     return this.lastVoltage = voltage;
   };
 
-  Oscilloscope.prototype.drawGrid = function() {
-    var threshold, translatedThreshold, x, y, _i, _j, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
-    this.backgroundContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.backgroundContext.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-    this.backgroundContext.lineWidth = 1;
-    this.backgroundContext.beginPath();
-    for (y = _i = 1, _ref = this.canvasHeight, _ref1 = this.canvasHeight / this.axisLineCount; 1 <= _ref ? _i < _ref : _i > _ref; y = _i += _ref1) {
-      this.backgroundContext.moveTo(0, y);
-      this.backgroundContext.lineTo(this.canvasWidth, y);
+  Oscilloscope.prototype.drawThreshold = function() {
+    var path, threshold, translatedThreshold, x, _i, _ref, _ref1, _ref2, _ref3;
+    if (this.thresholdLine) {
+      this.thresholdLine.remove();
     }
-    this.backgroundContext.stroke();
-    this.backgroundContext.closePath();
-    if ((threshold = (_ref2 = this.neuron) != null ? (_ref3 = _ref2.properties) != null ? (_ref4 = _ref3.threshold) != null ? _ref4.value : void 0 : void 0 : void 0)) {
-      translatedThreshold = this.xAxis - (threshold * this.scale);
-      this.backgroundContext.strokeStyle = '#0C8D28';
-      this.backgroundContext.beginPath();
-      for (x = _j = 0, _ref5 = this.canvasWidth; _j <= _ref5; x = _j += 10) {
-        this.backgroundContext.moveTo(x, translatedThreshold);
-        this.backgroundContext.lineTo(x + 5, translatedThreshold);
+    if ((threshold = (_ref = this.neuron) != null ? (_ref1 = _ref.properties) != null ? (_ref2 = _ref1.threshold) != null ? _ref2.value : void 0 : void 0 : void 0)) {
+      translatedThreshold = this.screen.attr('y') + this.xAxis - (threshold * this.scale);
+      path = [];
+      for (x = _i = 0, _ref3 = this.screenWidth; _i < _ref3; x = _i += 10) {
+        path.push("M" + (this.screen.attr('x') + x) + "," + translatedThreshold);
+        path.push("L" + (this.screen.attr('x') + x + 5) + "," + translatedThreshold);
       }
-      this.backgroundContext.stroke();
-      return this.backgroundContext.closePath();
+      this.thresholdLine = this.screenPath(path.join(''));
+      return this.thresholdLine.toFront();
     }
   };
 
@@ -170,17 +171,19 @@ oscilloscope.Oscilloscope = (function(_super) {
     var _this = this;
     this.neuron = neuron;
     $(this.neuron).bind('threshold.change.oscilloscope', function() {
-      return _this.drawGrid();
+      return _this.drawThreshold();
     });
-    return this.drawGrid();
+    return this.drawThreshold();
   };
 
   Oscilloscope.prototype.unattach = function() {
-    $(this.neuron).unbind('threshold.change.oscilloscope');
+    if (this.neuron) {
+      $(this.neuron).unbind('threshold.change.oscilloscope');
+    }
     this.neuron = null;
-    this.voltageContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.voltageDisplay.remove();
     this.firePosition = 0;
-    return this.drawGrid();
+    return this.drawThreshold();
   };
 
   return Oscilloscope;

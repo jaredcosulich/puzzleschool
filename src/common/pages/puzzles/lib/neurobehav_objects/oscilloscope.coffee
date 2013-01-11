@@ -4,17 +4,18 @@ neurobehavObject = require('./object')
 class oscilloscope.Oscilloscope extends neurobehavObject.Object
     objectType: 'oscilloscope'
     objectName: 'Oscilloscope'
-    imageSrc: 'oscilloscope.png'
     width: 80
     height: 42
-    axisLineCount: 5.0
+    screenWidth: 150
+    screenHeight: 90
+    screenColor: '#64A539'
     xDelta: 1
     
     constructor: ({@board}) ->
         super(arguments...)
         
-        @drawGrid()
-        @createImage()      
+        @draw()
+        @drawThreshold()
         @initImage()
         setInterval(
            (=> @fire()),
@@ -22,28 +23,32 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         )        
         
     init: ->
-        @container = $(document.createElement('DIV'))
-        @container.addClass('oscilloscope')
-        @positionContainer()
-        @board.append(@container)
+        @scale = @screenHeight/2
+        @xAxis = @screenHeight - 12
         
-        backgroundCanvas = document.createElement('CANVAS')
-        @container.append(backgroundCanvas)
-        @canvasWidth = backgroundCanvas.width = $(backgroundCanvas).width()
-        @canvasHeight = backgroundCanvas.height = $(backgroundCanvas).height()   
-        @scale = @canvasHeight / 2
-        @backgroundContext = backgroundCanvas.getContext('2d')
+    draw: ->
+        @image = @paper.set()
+        @graph = @paper.rect(
+            @position.left + (@screenWidth/2) - 6, 
+            @position.top - (@screenHeight/2) - 6, 
+            @screenWidth + 12, 
+            @screenHeight + 12, 
+            6
+        )
+        @graph.attr
+            fill: '#ACACAD'
+        @image.push(@graph)
 
-        voltageCanvas = document.createElement('CANVAS')
-        @container.append(voltageCanvas)
-        voltageCanvas.width = $(voltageCanvas).width()
-        voltageCanvas.height = $(voltageCanvas).height()   
-        @voltageContext = voltageCanvas.getContext('2d')
-
-        @voltageContext.strokeStyle = 'rgba(255, 92, 92, 1)'    
-        @voltageContext.lineWidth = 1
-        
-        @xAxis = @canvasHeight - (@canvasHeight / @axisLineCount)
+        @screen = @paper.rect(
+            @position.left + (@screenWidth/2), 
+            @position.top - (@screenHeight/2), 
+            @screenWidth, 
+            @screenHeight, 
+            6
+        ) 
+        @screen.attr
+            fill: 'black'
+        @image.push(@screen)
         
     initImage: ->
         @image.properties = 
@@ -52,7 +57,8 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @image.attr
             cursor: 'move'
          
-        glow = @initMoveGlow(@image) 
+        glow = @initMoveGlow(@graph) 
+        @image.toFront()
         
         lastDX = 0
         lastDY = 0 
@@ -63,7 +69,6 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             fullDY = lastDY + dY
             @image.transform("t#{fullDX},#{fullDY}")
             glow.transform("t#{fullDX},#{fullDY}")
-            @positionContainer(fullDX, fullDY)
             
         onStart = => 
             @showProperties(@image)        
@@ -81,57 +86,56 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @image.drag(onDrag, onStart, onEnd)        
         glow.drag(onDrag, onStart, onEnd)
         
-    positionContainer: (dx=0, dy=0) ->
-        @container.css(top: @position.top + dy - 36, left: @position.left + dx + 48)
+    screenPath: (path) ->
+        set = @paper.set()
+        border = @paper.path(path)
+        line = @paper.path(path)
+        border.attr(stroke: @screenColor, 'stroke-opacity': 0.5, 'stroke-width': 3)
+        line.attr(stroke: @screenColor)
+        set.push(border, line)
+        @image.push(set)
+        return set
         
     fire: () ->
         return unless @neuron
         voltage = @xAxis - (@neuron.takeReading() * @scale)
-        @firePosition or= 0
-        if @firePosition > @canvasWidth
-            @voltageContext.clearRect(0, 0, @canvasWidth, @canvasHeight)
+        @firePosition or= @screenWidth
+        if @firePosition >= @screenWidth
+            @voltageDisplay.remove() if @voltageDisplay
             @firePosition = 0
-
-        @voltageContext.beginPath()
-        @voltageContext.moveTo(@firePosition, @lastVoltage or @xAxis)
+            @voltageDisplay = @screenPath """
+                M#{@screen.attr('x')}, #{@screen.attr('y') + (@lastVoltage or @xAxis)}
+            """
+            
+        for part in @voltageDisplay.items
+            part.attr
+                path: """
+                    #{part.attr('path')}
+                    L#{@screen.attr('x') + @firePosition}, #{@screen.attr('y') + voltage}
+                """
+            
         @firePosition += @xDelta
-        @voltageContext.lineTo(@firePosition, voltage)
-        @voltageContext.stroke()
-        @voltageContext.closePath()
         @lastVoltage = voltage
         
-    drawGrid: ->
-        @backgroundContext.clearRect(0,0,@canvasWidth,@canvasHeight)
-        @backgroundContext.strokeStyle = 'rgba(0, 0, 0, 0.4)'    
-        # @backgroundContext.fillStyle = 'rgba(255,255,255,0.4)'    
-        # @backgroundContext.font = 'normal 12px sans-serif'    
-        @backgroundContext.lineWidth = 1
-        @backgroundContext.beginPath()
-        
-        for y in [1...@canvasHeight] by (@canvasHeight / @axisLineCount)
-            @backgroundContext.moveTo(0, y)
-            @backgroundContext.lineTo(@canvasWidth, y)
-
-        @backgroundContext.stroke()
-        @backgroundContext.closePath()        
-
+    drawThreshold: ->
+        @thresholdLine.remove() if @thresholdLine
         if (threshold = @neuron?.properties?.threshold?.value)
-            translatedThreshold = @xAxis - (threshold * @scale)
-            @backgroundContext.strokeStyle = '#0C8D28'    
-            @backgroundContext.beginPath()
-            for x in [0..@canvasWidth] by 10
-                @backgroundContext.moveTo(x, translatedThreshold)
-                @backgroundContext.lineTo(x + 5, translatedThreshold)
-            @backgroundContext.stroke()
-            @backgroundContext.closePath()        
-        
+            translatedThreshold = @screen.attr('y') + @xAxis - (threshold * @scale)
+            path = []
+            for x in [0...@screenWidth] by 10
+                path.push("M#{@screen.attr('x') + x},#{translatedThreshold}")
+                path.push("L#{@screen.attr('x') + x+5},#{translatedThreshold}")
+                
+            @thresholdLine = @screenPath(path.join(''))
+            @thresholdLine.toFront()
+            
     attachTo: (@neuron) ->
-        $(@neuron).bind 'threshold.change.oscilloscope', => @drawGrid()
-        @drawGrid()
+        $(@neuron).bind 'threshold.change.oscilloscope', => @drawThreshold()
+        @drawThreshold()
         
     unattach: -> 
-        $(@neuron).unbind 'threshold.change.oscilloscope'
+        $(@neuron).unbind 'threshold.change.oscilloscope' if @neuron
         @neuron = null
-        @voltageContext.clearRect(0, 0, @canvasWidth, @canvasHeight)
+        @voltageDisplay.remove()
         @firePosition = 0
-        @drawGrid()
+        @drawThreshold()

@@ -19,22 +19,13 @@ body {
 }
 .neurobehav .board {
   float: left;
-  width: 628px;
+  width: 943px;
   height: 628px;
   border: 1px solid #000;
   overflow: hidden;
   margin-bottom: 12px;
   background: #1a1a1a url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
   position: relative;
-}
-.neurobehav .sidebar {
-  float: right;
-  width: 314px;
-  height: 628px;
-  background-color: #24aac3;
-  border-top: 1px solid #000;
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
 }
 .neurobehav .oscilloscope {
   background-color: white;
@@ -60,24 +51,6 @@ body {
   text-align: center;
   padding: 6px;
 }
-.neurobehav .goal {
-  background-color: black;
-  text-align: center;
-  height: 208px;
-  color: white;
-}
-.neurobehav .goal a,
-.neurobehav .goal .brief {
-  font-size: 11px;
-}
-.neurobehav .goal a {
-  color: white;
-  text-decoration: underline;
-}
-.neurobehav .goal .model {
-  display: block;
-  margin: auto;
-}
 .neurobehav .object_editor {
   background-color: white;
   overflow: hidden;
@@ -86,29 +59,6 @@ body {
 }
 .neurobehav .object_editor h4 {
   padding: 6px 0;
-}
-.neurobehav .object_editor .properties,
-.neurobehav .object_editor .explicit_content {
-  padding: 0 6px;
-  background-color: #49494A;
-  height: 210px;
-  overflow: auto;
-}
-.neurobehav .object_editor .properties img,
-.neurobehav .object_editor .explicit_content img {
-  float: left;
-  margin: 3px 12px 3px 0;
-}
-.neurobehav .object_editor .extra_content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 94%;
-  padding: 0 3%;
-  overflow: auto;
-  background-color: white;
-  color: #262626;
 }
 .neurobehav .object {
   position: absolute;

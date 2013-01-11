@@ -5,12 +5,12 @@ body {
     background-color: @grey;
 }
 
-@dimension: 630px;
+@dimension: 945px;
 
 .neurobehav {
     overflow:hidden;
     margin-bottom: 60px;
-    width: ((@dimension / 2) * 3);
+    width: @dimension;
     margin-left: -9px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -26,23 +26,13 @@ body {
     
     .board {
         float: left;
-        width: (@dimension - 2);
-        height: (@dimension - 2);
+        width: @dimension - 2;
+        height: ((2*@dimension/3) - 2);
         border: 1px solid #000;
         overflow: hidden;
         margin-bottom: 12px;
         background: lighten(#000, 10%) url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat; 
         position: relative;
-    }
-    
-    .sidebar {
-        float: right;
-        width: ((@dimension / 2) - 1);
-        height: (@dimension - 2);
-        background-color: @blue;
-        border-top: 1px solid #000;
-        border-right: 1px solid #000;
-        border-bottom: 1px solid #000;
     }
     
     .oscilloscope {
@@ -68,24 +58,6 @@ body {
         }
     }
     
-    .goal {
-        background-color: black;
-        text-align: center;
-        height: ((@dimension / 3) - 2); 
-        color: white;
-        a, .brief {
-            font-size: @smallsize;
-        }
-        a {
-            color: white;
-            text-decoration: underline;
-        }
-        .model {
-            display: block;
-            margin: auto;
-        }
-    }
-    
     .object_editor {
         background-color: white;
         overflow: hidden;
@@ -95,30 +67,6 @@ body {
         h4 {
             padding: 6px 0;
         }        
-
-        .properties, .explicit_content {
-            padding: 0 6px;
-            background-color: #49494A;
-            height: (@dimension / 3);
-            overflow: auto;
-            
-            img {
-                float: left;
-                margin: 3px 12px 3px 0;
-            }
-        }
-        
-        .extra_content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 94%;
-            padding: 0 3%;
-            overflow: auto;
-            background-color: white;
-            color: @black;
-        }
     }
         
     .object {
