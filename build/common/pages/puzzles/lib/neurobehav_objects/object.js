@@ -69,23 +69,28 @@ object.Object = (function() {
     return raise("no init method for " + this.objectType);
   };
 
-  Object.prototype.initMoveGlow = function(element, item) {
-    var glow, set, _i, _len, _ref,
+  Object.prototype.initMoveGlow = function(element) {
+    var glow, item, set, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
-    glow = (element.items ? element.items[0] : element).glow({
-      width: 30,
-      fill: true,
-      color: 'yellow'
-    });
+    glow = this.paper.set();
+    _ref = element.items || [element];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      item = _ref[_i];
+      glow.push(item.glow({
+        width: 20,
+        fill: true,
+        color: 'yellow'
+      }));
+    }
     glow.attr({
       opacity: 0,
       cursor: 'move'
     });
     set = this.paper.set();
     if (element.type === 'set') {
-      _ref = element.items;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        item = _ref[_i];
+      _ref1 = element.items;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        item = _ref1[_j];
         set.push(item);
       }
     } else {

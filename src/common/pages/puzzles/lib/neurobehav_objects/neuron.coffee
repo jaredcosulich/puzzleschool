@@ -24,6 +24,7 @@ class neuron.Neuron extends neurobehavObject.Object
         @initProperties()
                 
     init: -> 
+        @image = @paper.set()
         @synapses = []
         @synapseSpikes = []
         @activeSynapseSpikes = []
@@ -52,7 +53,6 @@ class neuron.Neuron extends neurobehavObject.Object
         @createSynapse('inhibitory')
 
     draw: ->
-        @image = @paper.set()
         circle = @paper.circle(@position.left + (@width/2), @position.top + (@height/2), @width/2)
         circle.attr(stroke: '#2B4590', fill: 'r(0.35, 0.35)#8CA0CF-#2B4590')
         @image.push(circle)

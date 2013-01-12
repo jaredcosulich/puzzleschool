@@ -56,6 +56,7 @@ neuron.Neuron = (function(_super) {
 
   Neuron.prototype.init = function() {
     var _this = this;
+    this.image = this.paper.set();
     this.synapses = [];
     this.synapseSpikes = [];
     this.activeSynapseSpikes = [];
@@ -78,7 +79,6 @@ neuron.Neuron = (function(_super) {
 
   Neuron.prototype.draw = function() {
     var circle;
-    this.image = this.paper.set();
     circle = this.paper.circle(this.position.left + (this.width / 2), this.position.top + (this.height / 2), this.width / 2);
     circle.attr({
       stroke: '#2B4590',

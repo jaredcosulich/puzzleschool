@@ -44,8 +44,11 @@ class object.Object
         
     init: -> raise("no init method for #{@objectType}")
     
-    initMoveGlow: (element, item) ->
-        glow = (if element.items then element.items[0] else element).glow(width: 30, fill: true, color: 'yellow')
+    initMoveGlow: (element) ->
+        glow = @paper.set()
+        for item in element.items or [element]
+            glow.push(item.glow(width: 20, fill: true, color: 'yellow'))
+            
         glow.attr(opacity: 0, cursor: 'move')
         set = @paper.set()
         if element.type == 'set'

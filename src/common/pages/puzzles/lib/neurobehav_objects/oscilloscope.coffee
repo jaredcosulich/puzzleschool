@@ -24,11 +24,11 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         )        
         
     init: ->
+        @image = @paper.set()
         @scale = @screenHeight/2
         @xAxis = @screenHeight - 12
         
     draw: ->
-        @image = @paper.set()
         graph = @paper.rect(
             @position.left + 9, 
             @position.top, 
@@ -67,14 +67,14 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         connection.attr('stroke-width': 2)
         @image.push(connection)
         
-        needle = @paper.path """
+        @needle = @paper.path """
             M#{endX - 5},#{endY - (5*(1/slope))}
             L#{(startingX - (@connectionLength))}, #{@position.top + @height}
             L#{endX + 5},#{endY + (5*(1/slope))}
             L#{endX - 5},#{endY - (5*(1/slope))}
         """
-        needle.attr(fill: 'white')
-        @image.push(needle)
+        @needle.attr(fill: 'white')
+        @image.push(@needle)
         
         innerNeedle = @paper.path """
             M#{endX - 3},#{endY - (3*(1/slope))}
@@ -95,14 +95,13 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         glow = @initMoveGlow(@image) 
         
         lastDX = 0
-        lastDY = 0 
-        fullDX = 0
-        fullDY = 0
+        lastDY = 0
         onDrag = (dX, dY) =>
-            fullDX = lastDX + dX 
-            fullDY = lastDY + dY
-            @image.transform("t#{fullDX},#{fullDY}")
-            glow.transform("t#{fullDX},#{fullDY}")
+            @image.toFront()
+            @image.transform("...T#{dX - lastDX},#{dY - lastDY}")
+            glow.transform("...T#{dX - lastDX},#{dY - lastDY}")
+            lastDX = dX 
+            lastDY = dY
             
         onStart = => 
             @showProperties(@image)        
@@ -111,9 +110,10 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         
         onEnd = =>
             glow.attr(opacity: 0)
-            lastDX = fullDX
-            lastDY = fullDY
-            for element in @paper.getElementsByPoint(@position.left - @connectionLength + fullDX, (@position.top + @height) + fullDY)
+            lastDX = 0
+            lastDY = 0
+            bbox = @needle.getBBox()
+            for element in @paper.getElementsByPoint(bbox.x, bbox.y + bbox.height)
                 if element.objectType == 'neuron'
                     @attachTo(element.object)
             

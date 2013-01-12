@@ -42,13 +42,13 @@ oscilloscope.Oscilloscope = (function(_super) {
   }
 
   Oscilloscope.prototype.init = function() {
+    this.image = this.paper.set();
     this.scale = this.screenHeight / 2;
     return this.xAxis = this.screenHeight - 12;
   };
 
   Oscilloscope.prototype.draw = function() {
-    var connection, connectionSegment, endX, endY, graph, innerNeedle, needle, slope, startingX, startingY;
-    this.image = this.paper.set();
+    var connection, connectionSegment, endX, endY, graph, innerNeedle, slope, startingX, startingY;
     graph = this.paper.rect(this.position.left + 9, this.position.top, this.screenWidth + 12, this.screenHeight + 12, 6);
     graph.attr({
       fill: '#ACACAD'
@@ -70,11 +70,11 @@ oscilloscope.Oscilloscope = (function(_super) {
       'stroke-width': 2
     });
     this.image.push(connection);
-    needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
-    needle.attr({
+    this.needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
+    this.needle.attr({
       fill: 'white'
     });
-    this.image.push(needle);
+    this.image.push(this.needle);
     innerNeedle = this.paper.path("M" + (endX - 3) + "," + (endY - (3 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 3) + "," + (endY + (3 * (1 / slope))));
     innerNeedle.attr({
       stroke: '#ccc'
@@ -84,7 +84,7 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.initImage = function() {
-    var fullDX, fullDY, glow, lastDX, lastDY, onDrag, onEnd, onStart,
+    var glow, lastDX, lastDY, onDrag, onEnd, onStart,
       _this = this;
     this.image.properties = {
       description: this.description
@@ -95,13 +95,12 @@ oscilloscope.Oscilloscope = (function(_super) {
     glow = this.initMoveGlow(this.image);
     lastDX = 0;
     lastDY = 0;
-    fullDX = 0;
-    fullDY = 0;
     onDrag = function(dX, dY) {
-      fullDX = lastDX + dX;
-      fullDY = lastDY + dY;
-      _this.image.transform("t" + fullDX + "," + fullDY);
-      return glow.transform("t" + fullDX + "," + fullDY);
+      _this.image.toFront();
+      _this.image.transform("...T" + (dX - lastDX) + "," + (dY - lastDY));
+      glow.transform("...T" + (dX - lastDX) + "," + (dY - lastDY));
+      lastDX = dX;
+      return lastDY = dY;
     };
     onStart = function() {
       _this.showProperties(_this.image);
@@ -109,13 +108,14 @@ oscilloscope.Oscilloscope = (function(_super) {
       return glow.show();
     };
     onEnd = function() {
-      var element, _i, _len, _ref, _results;
+      var bbox, element, _i, _len, _ref, _results;
       glow.attr({
         opacity: 0
       });
-      lastDX = fullDX;
-      lastDY = fullDY;
-      _ref = _this.paper.getElementsByPoint(_this.position.left - _this.connectionLength + fullDX, (_this.position.top + _this.height) + fullDY);
+      lastDX = 0;
+      lastDY = 0;
+      bbox = _this.needle.getBBox();
+      _ref = _this.paper.getElementsByPoint(bbox.x, bbox.y + bbox.height);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         element = _ref[_i];
