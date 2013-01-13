@@ -12,6 +12,8 @@ slider.Slider = (function() {
     this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.min = _arg.min, this.max = _arg.max, this.unit = _arg.unit, this.val = _arg.val;
     this.moveKnob = __bind(this.moveKnob, this);
 
+    this.segment = this.width / (this.max - this.min);
+    this.listeners = [];
     this.init();
   }
 
@@ -44,7 +46,6 @@ slider.Slider = (function() {
     };
     onEnd = function() {
       if (_this.deltaX) {
-        _this.propertiesEditor.set('voltage', (_this.voltageCalc(_this.deltaX) / _this.segment) * _this.unit);
         _this.lastDeltaX = _this.deltaX;
       } else {
         _this.el.noClick = false;
@@ -59,25 +60,41 @@ slider.Slider = (function() {
     return this.el.push(this.knob);
   };
 
+  Slider.prototype.addListener = function(listener) {
+    return this.listeners.push(listener);
+  };
+
   Slider.prototype.moveKnob = function(dX, dY) {
+    var listener, segments, _i, _len, _ref, _results;
+    if (dX == null) {
+      dX = 0;
+    }
+    if (dY == null) {
+      dY = 0;
+    }
     this.deltaX = this.lastDeltaX + dX;
-    if (this.deltaX > this.right - this.left) {
-      this.deltaX = this.right - this.left;
+    if (this.deltaX > this.width) {
+      this.deltaX = this.width;
     }
-    if (this.deltaX < 0) {
-      this.deltaX = 0;
+    if (this.deltaX < this.min) {
+      this.deltaX = this.min;
     }
-    this.deltaX = this.voltageCalc(this.deltaX);
-    this.knob.transform("t" + this.deltaX + "," + 0);
-    this.initPropertiesGlow(this.el);
-    this.propertiesClick(this.el, true);
-    return this.propertiesEditor.set('voltage', (this.voltageCalc(this.deltaX) / this.segment) * this.unit);
+    segments = Math.round(this.deltaX / this.segment);
+    this.val = this.unit * segments;
+    this.knob.transform("t" + (segments * this.segment) + "," + 0);
+    _ref = this.listeners;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      listener = _ref[_i];
+      _results.push(listener(this.val));
+    }
+    return _results;
   };
 
   Slider.prototype.set = function(val) {
     this.val = val;
     this.lastDeltaX = this.segment * (this.val / this.unit);
-    return this.moveKnob(0, 0);
+    return this.moveKnob();
   };
 
   return Slider;

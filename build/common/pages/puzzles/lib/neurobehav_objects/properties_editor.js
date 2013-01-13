@@ -98,20 +98,32 @@ propertiesEditor.PropertiesEditor = (function() {
   PropertiesEditor.prototype.createSlider = function(property) {};
 
   PropertiesEditor.prototype.show = function() {
+    if (this.container) {
+      return;
+    }
     this.createContainer();
     return this.createProperties();
   };
 
   PropertiesEditor.prototype.hide = function() {
-    return this.container.remove();
+    if (!this.container) {
+      return;
+    }
+    this.container.remove();
+    return this.container = null;
+  };
+
+  PropertiesEditor.prototype.toggle = function() {
+    if (this.container != null) {
+      return this.hide();
+    } else {
+      return this.show();
+    }
   };
 
   PropertiesEditor.prototype.set = function(id, value) {
     value = parseFloat(value);
-    this.objectProperties.find("." + id).find('input, select').val(value + '');
-    if (this.properties) {
-      return this.properties[id].value = value;
-    }
+    return console.log(id, value);
   };
 
   PropertiesEditor.prototype.selectElement = function(property) {

@@ -214,48 +214,8 @@ object.Object = (function() {
     icon = this.initPropertiesIcon(element);
     this.initPropertiesEditor(icon);
     return icon.click(function() {
-      return _this.propertiesClick(element);
+      return _this.propertiesEditor.toggle();
     });
-  };
-
-  Object.prototype.propertiesClick = function(element, display) {
-    if (element == null) {
-      element = this.image;
-    }
-    if (element.noClick && !display) {
-      return;
-    }
-    if (display || !element.propertiesDisplayed) {
-      return this.showProperties(element);
-    } else {
-      return this.hideProperties(element);
-    }
-  };
-
-  Object.prototype.showProperties = function(element) {
-    if (element == null) {
-      element = this.image;
-    }
-    if (element.propertiesGlow) {
-      element.propertiesGlow.attr({
-        opacity: 0.04
-      });
-    }
-    this.propertiesEditor.show();
-    return element.propertiesDisplayed = true;
-  };
-
-  Object.prototype.hideProperties = function(element) {
-    if (element == null) {
-      element = this.image;
-    }
-    if (element.propertiesGlow) {
-      element.propertiesGlow.attr({
-        opacity: 0
-      });
-    }
-    this.propertiesEditor.hide();
-    return element.propertiesDisplayed = false;
   };
 
   return Object;

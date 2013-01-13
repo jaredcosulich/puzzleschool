@@ -121,23 +121,6 @@ class object.Object
     initProperties: (properties=@properties, element=@image) ->
         icon = @initPropertiesIcon(element)
         @initPropertiesEditor(icon)
-        icon.click => @propertiesClick(element)
-        
-    propertiesClick: (element=@image, display) ->
-        return if element.noClick and not display
-        if display or !element.propertiesDisplayed
-            @showProperties(element)
-        else
-            @hideProperties(element)
+        icon.click => @propertiesEditor.toggle()
             
-    showProperties: (element=@image) ->
-        element.propertiesGlow.attr(opacity: 0.04) if element.propertiesGlow
-        @propertiesEditor.show()
-        element.propertiesDisplayed = true
-        
-    hideProperties: (element=@image) ->
-        element.propertiesGlow.attr(opacity: 0) if element.propertiesGlow
-        @propertiesEditor.hide()
-        element.propertiesDisplayed = false
-        
             

@@ -4,6 +4,8 @@ class slider.Slider
     radius: 6
     
     constructor: ({@paper, @x, @y, @width, @min, @max, @unit, @val}) ->
+        @segment = @width / (@max - @min)   
+        @listeners = []
         @init()
         
     init: ->
@@ -33,7 +35,6 @@ class slider.Slider
             
         onEnd = =>
             if @deltaX
-                @propertiesEditor.set('voltage', (@voltageCalc(@deltaX)/@segment)*@unit)
                 @lastDeltaX = @deltaX                
             else
                 @el.noClick = false
@@ -44,18 +45,21 @@ class slider.Slider
             
         @el.push(guide)
         @el.push(@knob)
-    
-    moveKnob: (dX, dY) =>    
+        
+    addListener: (listener) ->
+        @listeners.push(listener)
+            
+    moveKnob: (dX=0, dY=0) =>    
         @deltaX = @lastDeltaX + dX
-        @deltaX = @right - @left if @deltaX > @right - @left
-        @deltaX = 0 if @deltaX < 0
-        @deltaX = @voltageCalc(@deltaX)
-        @knob.transform("t#{@deltaX},#{0}")
-        @initPropertiesGlow(@el)
-        @propertiesClick(@el, true)
-        @propertiesEditor.set('voltage', (@voltageCalc(@deltaX)/@segment)*@unit)
-
+        @deltaX = @width if @deltaX > @width
+        @deltaX = @min if @deltaX < @min   
+        segments = Math.round(@deltaX / @segment)
+        @val = @unit * segments
+        @knob.transform("t#{segments * @segment},#{0}")        
+        for listener in @listeners
+            listener(@val)
+        
     set: (@val) ->
         @lastDeltaX = @segment * (@val / @unit)
-        @moveKnob(0,0)
+        @moveKnob()
 

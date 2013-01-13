@@ -71,15 +71,22 @@ class propertiesEditor.PropertiesEditor
             
         
     show: ->
+        return if @container
         @createContainer()
         @createProperties()
         
-    hide: -> @container.remove()
+    hide: -> 
+        return unless @container
+        @container.remove()
+        @container = null
+        
+    toggle: -> if @container? then @hide() else @show()
             
     set: (id, value) ->
         value = parseFloat(value)
-        @objectProperties.find(".#{id}").find('input, select').val(value + '')
-        @properties[id].value = value if @properties
+        console.log(id, value)
+        # @objectProperties.find(".#{id}").find('input, select').val(value + '')
+        # @properties[id].value = value if @properties
         
     selectElement: (property) ->
         options = []

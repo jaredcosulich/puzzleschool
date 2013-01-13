@@ -18,6 +18,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @properties.voltage.value = voltage
         @properties.voltage.max = voltage * 2
         @properties.duration.value = duration
+        @initProperties()
         @initSlider()
 
     init: ->
@@ -57,9 +58,12 @@ class stimulus.Stimulus extends neurobehavObject.Object
             unit: @properties.voltage.unit
             val: @properties.voltage.value
             
-        @initProperties(@properties, @slider)
-        
-    voltageCalc: => @segment * Math.round(@deltaX/@segment)
+        tempShowProperties = null
+        @slider.addListener (val) =>
+            @propertiesEditor.show()
+            clearTimeout(tempShowProperties) if tempShowProperties
+            tempShowProperties = setTimeout((=> @propertiesEditor.hide()), 1000)
+            @propertiesEditor.set('voltage', val)
         
     setState: (@on) ->
         @setImage()
