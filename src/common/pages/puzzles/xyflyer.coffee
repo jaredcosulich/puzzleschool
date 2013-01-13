@@ -152,8 +152,14 @@ soma.views
             equationArea = @$('.equation_area')
             equationArea.html(@$(".#{type}_message").html())
             equationArea.css(padding: '0 12px', textAlign: 'center')
-            equationArea.find('.button').attr('href', '/puzzles/xyflyer/1') 
-        
+            path = '/puzzles/xyflyer/1'
+            if @isIos()
+                equationArea.find('.button').attr('href', path) 
+            else
+                equationArea.find('.button').bind 'click', => @go(path)
+                
+        isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
+            
         nextLevel: ->
             @registerEvent
                 type: 'success'
@@ -164,8 +170,12 @@ soma.views
             @centerAndShow(complete)
             
             @$('.launch').html('Success! Go To The Next Level >')
-            @$('.go').attr('href', "/puzzles/xyflyer/#{if @classId then "#{@classId}/" else ''}#{@levelId + 1}")
-            
+            path = "/puzzles/xyflyer/#{if @classId then "#{@classId}/" else ''}#{@levelId + 1}"
+            if @isIos()
+                @$('.go').attr('href', path)
+            else
+                @$('.go').bind 'click', => @go(path)
+                
         registerEvent: ({type, info}) ->
             return unless @user and @user.id and (@classLevelId or @levelId) and @classId
             @pendingEvents or= []

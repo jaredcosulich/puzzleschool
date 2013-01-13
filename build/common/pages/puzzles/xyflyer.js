@@ -188,17 +188,29 @@ soma.views({
       });
     },
     showMessage: function(type) {
-      var equationArea;
+      var equationArea, path,
+        _this = this;
       equationArea = this.$('.equation_area');
       equationArea.html(this.$("." + type + "_message").html());
       equationArea.css({
         padding: '0 12px',
         textAlign: 'center'
       });
-      return equationArea.find('.button').attr('href', '/puzzles/xyflyer/1');
+      path = '/puzzles/xyflyer/1';
+      if (this.isIos()) {
+        return equationArea.find('.button').attr('href', path);
+      } else {
+        return equationArea.find('.button').bind('click', function() {
+          return _this.go(path);
+        });
+      }
+    },
+    isIos: function() {
+      return navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
     },
     nextLevel: function() {
-      var complete;
+      var complete, path,
+        _this = this;
       this.registerEvent({
         type: 'success',
         info: {
@@ -208,7 +220,14 @@ soma.views({
       complete = this.$('.complete');
       this.centerAndShow(complete);
       this.$('.launch').html('Success! Go To The Next Level >');
-      return this.$('.go').attr('href', "/puzzles/xyflyer/" + (this.classId ? "" + this.classId + "/" : '') + (this.levelId + 1));
+      path = "/puzzles/xyflyer/" + (this.classId ? "" + this.classId + "/" : '') + (this.levelId + 1);
+      if (this.isIos()) {
+        return this.$('.go').attr('href', path);
+      } else {
+        return this.$('.go').bind('click', function() {
+          return _this.go(path);
+        });
+      }
     },
     registerEvent: function(_arg) {
       var info, type;
