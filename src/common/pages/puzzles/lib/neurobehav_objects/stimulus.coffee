@@ -56,18 +56,20 @@ class stimulus.Stimulus extends neurobehavObject.Object
             min: 0
             max: @properties.voltage.max
             unit: @properties.voltage.unit
-            val: @properties.voltage.value
+        @slider.set(@properties.voltage.value)    
             
         tempShowProperties = null
         @slider.addListener (val) =>
             @propertiesEditor.show()
             clearTimeout(tempShowProperties) if tempShowProperties
-            tempShowProperties = setTimeout((=> @propertiesEditor.hide()), 1000)
+            tempShowProperties = setTimeout((=> @propertiesEditor.hide()), 3000)
             @propertiesEditor.set('voltage', val)
         
     setState: (@on) ->
         @setImage()
         @neuron.addVoltage(if @on then @properties.voltage.value else (@properties.voltage.value * -1))
+
+    setSlider: (val) -> @slider.set(val)
 
     setImage: ->
         # this isn't working in firefox

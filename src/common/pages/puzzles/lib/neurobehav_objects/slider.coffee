@@ -3,7 +3,7 @@ slider = exports ? provide('./slider', {})
 class slider.Slider
     radius: 6
     
-    constructor: ({@paper, @x, @y, @width, @min, @max, @unit, @val}) ->
+    constructor: ({@paper, @x, @y, @width, @min, @max, @unit}) ->
         @segment = @width / (@max - @min)   
         @listeners = []
         @init()
@@ -27,7 +27,7 @@ class slider.Slider
             fill: 'r(0.5, 0.5)#ddd-#666'
         
         @lastDeltaX = (@segment * @val)/@unit
-        @deltaX = 0
+        @deltaX = 0        
         @knob.transform("t#{@lastDeltaX},0")
 
         onDrag = (dX, dY) => @moveKnob(dX, dY)
@@ -55,11 +55,12 @@ class slider.Slider
         @deltaX = @min if @deltaX < @min   
         segments = Math.round(@deltaX / @segment)
         @val = @unit * segments
-        @knob.transform("t#{segments * @segment},#{0}")        
+        @knob.transform("t#{@deltaX},#{0}")        
         for listener in @listeners
             listener(@val)
         
-    set: (@val) ->
-        @lastDeltaX = @segment * (@val / @unit)
+    set: (val) ->
+        return if val == @val
+        @lastDeltaX = @segment * (val / @unit)
         @moveKnob()
 

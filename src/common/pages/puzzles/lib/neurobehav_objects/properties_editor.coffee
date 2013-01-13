@@ -2,9 +2,10 @@ propertiesEditor = exports ? provide('./properties_editor', {})
 Slider = require('./slider').Slider
 
 class propertiesEditor.PropertiesEditor
-    width: 180
+    width: 210
     arrowHeight: 15
     arrowWidth: 20
+    arrowOffset: 24
     spacing: 20
     backgroundColor: '#49494A'
     
@@ -19,13 +20,14 @@ class propertiesEditor.PropertiesEditor
     createContainer: ->    
         @container = @paper.set()
         bbox = @element.getBBox()        
-        @x = bbox.x - 24
+        @x = bbox.x - @arrowOffset
         @y = bbox.y - (@height + @arrowHeight) 
         @base = @paper.rect(@x, @y, @width, @height, 12)
         @container.push(@base)
         
-        startX = bbox.x + (bbox.width/2)
-        startY = bbox.y-(@arrowHeight+2)
+        start = @start()
+        startX = start.x
+        startY = start.y-(@arrowHeight+2)
         @arrow = @paper.path """
             M#{startX-(@arrowWidth/2)},#{startY}
             L#{startX},#{startY+@arrowHeight}
@@ -62,31 +64,66 @@ class propertiesEditor.PropertiesEditor
                         min: 0
                         max: property.max
                         unit: property.unit
-                        val: property.value
-                    @container.push(slider.el)
-                    
+                    slider.addListener (value) =>   
+                        property.value = value
+                        @display(property)
                         
-    
-    createSlider: (property) ->
-            
+                    property.object = slider
+                    @container.push(slider.el)
+                @display(property, @x + 144, y)
+                    
+    start: ->
+        bbox = @element.getBBox()
+        return {
+            x: bbox.x + (bbox.width/2)
+            y: bbox.y - 3
+        }
+        
+    display: (property, x, y) ->
+        text = "#{property.value} #{property.unitName}"
+        if property.display
+            property.display.attr(text: text)
+        else
+            property.display = @paper.text(x, y, text)
+            property.display.attr(fill: '#F6E631', stroke: 'none', 'font-size': 11, 'text-anchor': 'start')
+            @container.push(property.display)
+        property.set(property.value) if property.set
         
     show: ->
         return if @container
         @createContainer()
         @createProperties()
+        start = @start()
+        @container.attr(transform: "s0,0,#{start.x},#{start.y}")
+        @container.animate(
+            {transform: "s1"}, 
+            250, 
+            'linear',
+            => property.object?.set(property.value) for propertyId, property of @properties
+        )
         
     hide: -> 
         return unless @container
-        @container.remove()
-        @container = null
+        start = @start()
+        @container.animate(
+            {transform: "s0,0,#{start.x},#{start.y}"}, 
+            250, 
+            'linear', 
+            => 
+                @container.remove()
+                @container = null
+                property.display = null for propertyId, property of @properties
+        )
         
     toggle: -> if @container? then @hide() else @show()
             
     set: (id, value) ->
         value = parseFloat(value)
-        console.log(id, value)
-        # @objectProperties.find(".#{id}").find('input, select').val(value + '')
-        # @properties[id].value = value if @properties
+        property = @properties[id]
+        return if property.value == value
+        property.value = value
+        property.object?.set(value)
+        @display(property)
         
     selectElement: (property) ->
         options = []

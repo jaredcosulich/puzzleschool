@@ -7,11 +7,13 @@ Slider = require('./slider').Slider;
 
 propertiesEditor.PropertiesEditor = (function() {
 
-  PropertiesEditor.prototype.width = 180;
+  PropertiesEditor.prototype.width = 210;
 
   PropertiesEditor.prototype.arrowHeight = 15;
 
   PropertiesEditor.prototype.arrowWidth = 20;
+
+  PropertiesEditor.prototype.arrowOffset = 24;
 
   PropertiesEditor.prototype.spacing = 20;
 
@@ -31,15 +33,16 @@ propertiesEditor.PropertiesEditor = (function() {
   };
 
   PropertiesEditor.prototype.createContainer = function() {
-    var bbox, startX, startY;
+    var bbox, start, startX, startY;
     this.container = this.paper.set();
     bbox = this.element.getBBox();
-    this.x = bbox.x - 24;
+    this.x = bbox.x - this.arrowOffset;
     this.y = bbox.y - (this.height + this.arrowHeight);
     this.base = this.paper.rect(this.x, this.y, this.width, this.height, 12);
     this.container.push(this.base);
-    startX = bbox.x + (bbox.width / 2);
-    startY = bbox.y - (this.arrowHeight + 2);
+    start = this.start();
+    startX = start.x;
+    startY = start.y - (this.arrowHeight + 2);
     this.arrow = this.paper.path("M" + (startX - (this.arrowWidth / 2)) + "," + startY + "\nL" + startX + "," + (startY + this.arrowHeight) + "\nL" + (startX + (this.arrowWidth / 2)) + "," + startY);
     this.container.push(this.arrow);
     this.container.attr({
@@ -85,32 +88,99 @@ propertiesEditor.PropertiesEditor = (function() {
             width: 60,
             min: 0,
             max: property.max,
-            unit: property.unit,
-            val: property.value
+            unit: property.unit
           });
-          return _this.container.push(slider.el);
+          slider.addListener(function(value) {
+            property.value = value;
+            return _this.display(property);
+          });
+          property.object = slider;
+          _this.container.push(slider.el);
         }
+        return _this.display(property, _this.x + 144, y);
       })(property));
     }
     return _results;
   };
 
-  PropertiesEditor.prototype.createSlider = function(property) {};
+  PropertiesEditor.prototype.start = function() {
+    var bbox;
+    bbox = this.element.getBBox();
+    return {
+      x: bbox.x + (bbox.width / 2),
+      y: bbox.y - 3
+    };
+  };
+
+  PropertiesEditor.prototype.display = function(property, x, y) {
+    var text;
+    text = "" + property.value + " " + property.unitName;
+    if (property.display) {
+      property.display.attr({
+        text: text
+      });
+    } else {
+      property.display = this.paper.text(x, y, text);
+      property.display.attr({
+        fill: '#F6E631',
+        stroke: 'none',
+        'font-size': 11,
+        'text-anchor': 'start'
+      });
+      this.container.push(property.display);
+    }
+    if (property.set) {
+      return property.set(property.value);
+    }
+  };
 
   PropertiesEditor.prototype.show = function() {
+    var start,
+      _this = this;
     if (this.container) {
       return;
     }
     this.createContainer();
-    return this.createProperties();
+    this.createProperties();
+    start = this.start();
+    this.container.attr({
+      transform: "s0,0," + start.x + "," + start.y
+    });
+    return this.container.animate({
+      transform: "s1"
+    }, 250, 'linear', function() {
+      var property, propertyId, _ref, _ref1, _results;
+      _ref = _this.properties;
+      _results = [];
+      for (propertyId in _ref) {
+        property = _ref[propertyId];
+        _results.push((_ref1 = property.object) != null ? _ref1.set(property.value) : void 0);
+      }
+      return _results;
+    });
   };
 
   PropertiesEditor.prototype.hide = function() {
+    var start,
+      _this = this;
     if (!this.container) {
       return;
     }
-    this.container.remove();
-    return this.container = null;
+    start = this.start();
+    return this.container.animate({
+      transform: "s0,0," + start.x + "," + start.y
+    }, 250, 'linear', function() {
+      var property, propertyId, _ref, _results;
+      _this.container.remove();
+      _this.container = null;
+      _ref = _this.properties;
+      _results = [];
+      for (propertyId in _ref) {
+        property = _ref[propertyId];
+        _results.push(property.display = null);
+      }
+      return _results;
+    });
   };
 
   PropertiesEditor.prototype.toggle = function() {
@@ -122,8 +192,17 @@ propertiesEditor.PropertiesEditor = (function() {
   };
 
   PropertiesEditor.prototype.set = function(id, value) {
+    var property, _ref;
     value = parseFloat(value);
-    return console.log(id, value);
+    property = this.properties[id];
+    if (property.value === value) {
+      return;
+    }
+    property.value = value;
+    if ((_ref = property.object) != null) {
+      _ref.set(value);
+    }
+    return this.display(property);
   };
 
   PropertiesEditor.prototype.selectElement = function(property) {

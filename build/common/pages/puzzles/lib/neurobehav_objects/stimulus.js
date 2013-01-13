@@ -96,9 +96,9 @@ stimulus.Stimulus = (function(_super) {
       width: this.width,
       min: 0,
       max: this.properties.voltage.max,
-      unit: this.properties.voltage.unit,
-      val: this.properties.voltage.value
+      unit: this.properties.voltage.unit
     });
+    this.slider.set(this.properties.voltage.value);
     tempShowProperties = null;
     return this.slider.addListener(function(val) {
       _this.propertiesEditor.show();
@@ -107,7 +107,7 @@ stimulus.Stimulus = (function(_super) {
       }
       tempShowProperties = setTimeout((function() {
         return _this.propertiesEditor.hide();
-      }), 1000);
+      }), 3000);
       return _this.propertiesEditor.set('voltage', val);
     });
   };
@@ -116,6 +116,10 @@ stimulus.Stimulus = (function(_super) {
     this.on = on;
     this.setImage();
     return this.neuron.addVoltage(this.on ? this.properties.voltage.value : this.properties.voltage.value * -1);
+  };
+
+  Stimulus.prototype.setSlider = function(val) {
+    return this.slider.set(val);
   };
 
   Stimulus.prototype.setImage = function() {

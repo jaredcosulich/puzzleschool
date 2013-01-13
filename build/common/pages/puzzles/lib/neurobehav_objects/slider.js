@@ -9,7 +9,7 @@ slider.Slider = (function() {
   Slider.prototype.radius = 6;
 
   function Slider(_arg) {
-    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.min = _arg.min, this.max = _arg.max, this.unit = _arg.unit, this.val = _arg.val;
+    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.min = _arg.min, this.max = _arg.max, this.unit = _arg.unit;
     this.moveKnob = __bind(this.moveKnob, this);
 
     this.segment = this.width / (this.max - this.min);
@@ -81,7 +81,7 @@ slider.Slider = (function() {
     }
     segments = Math.round(this.deltaX / this.segment);
     this.val = this.unit * segments;
-    this.knob.transform("t" + (segments * this.segment) + "," + 0);
+    this.knob.transform("t" + this.deltaX + "," + 0);
     _ref = this.listeners;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -92,8 +92,10 @@ slider.Slider = (function() {
   };
 
   Slider.prototype.set = function(val) {
-    this.val = val;
-    this.lastDeltaX = this.segment * (this.val / this.unit);
+    if (val === this.val) {
+      return;
+    }
+    this.lastDeltaX = this.segment * (val / this.unit);
     return this.moveKnob();
   };
 
