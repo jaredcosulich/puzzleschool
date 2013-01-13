@@ -71,7 +71,6 @@ stimulus.Stimulus = (function(_super) {
         }
         return minimumMouseDown = true;
       }), _this.properties.duration.value);
-      _this.showProperties(_this.slider);
       mousedown = true;
       return _this.setState(true);
     });
@@ -107,7 +106,7 @@ stimulus.Stimulus = (function(_super) {
       }
       tempShowProperties = setTimeout((function() {
         return _this.propertiesEditor.hide();
-      }), 3000);
+      }), 1500);
       return _this.propertiesEditor.set('voltage', val);
     });
   };

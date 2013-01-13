@@ -36,7 +36,6 @@ class stimulus.Stimulus extends neurobehavObject.Object
                     minimumMouseDown = true
             ), @properties.duration.value)
             
-            @showProperties(@slider)
             mousedown = true
             @setState(true)
 
@@ -62,7 +61,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @slider.addListener (val) =>
             @propertiesEditor.show()
             clearTimeout(tempShowProperties) if tempShowProperties
-            tempShowProperties = setTimeout((=> @propertiesEditor.hide()), 3000)
+            tempShowProperties = setTimeout((=> @propertiesEditor.hide()), 1500)
             @propertiesEditor.set('voltage', val)
         
     setState: (@on) ->
