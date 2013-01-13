@@ -150,7 +150,7 @@ oscilloscope.Oscilloscope = (function(_super) {
   };
 
   Oscilloscope.prototype.fire = function() {
-    var bbox, part, voltage, _i, _len, _ref;
+    var bbox, part, start, voltage, _i, _j, _len, _len1, _ref, _ref1;
     if (!this.neuron) {
       return;
     }
@@ -158,18 +158,26 @@ oscilloscope.Oscilloscope = (function(_super) {
     this.firePosition || (this.firePosition = this.screenWidth);
     bbox = this.screen.getBBox();
     if (this.firePosition >= this.screenWidth) {
-      if (this.voltageDisplay) {
-        this.voltageDisplay.remove();
-      }
       this.firePosition = 0;
-      this.voltageDisplay = this.screenPath("M" + bbox.x + ", " + (bbox.y + (this.lastVoltage || this.xAxis)));
+      start = "M" + bbox.x + ", " + (bbox.y + (this.lastVoltage || this.xAxis));
+      if (this.voltageDisplay) {
+        _ref = this.voltageDisplay.items;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          part = _ref[_i];
+          part.attr({
+            path: start
+          });
+        }
+      } else {
+        this.voltageDisplay = this.screenPath(start);
+      }
       this.voltageDisplay.attr({
         'clip-rect': "" + bbox.x + ", " + bbox.y + ", " + bbox.width + ", " + bbox.height
       });
     }
-    _ref = this.voltageDisplay.items;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      part = _ref[_i];
+    _ref1 = this.voltageDisplay.items;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      part = _ref1[_j];
       part.attr({
         path: "" + (part.attr('path')) + "\nL" + (bbox.x + this.firePosition) + ", " + (bbox.y + voltage)
       });

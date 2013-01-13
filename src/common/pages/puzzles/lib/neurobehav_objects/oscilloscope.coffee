@@ -136,11 +136,13 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @firePosition or= @screenWidth
         bbox = @screen.getBBox()
         if @firePosition >= @screenWidth
-            @voltageDisplay.remove() if @voltageDisplay
             @firePosition = 0
-            @voltageDisplay = @screenPath """
-                M#{bbox.x}, #{bbox.y + (@lastVoltage or @xAxis)}
-            """
+            start = "M#{bbox.x}, #{bbox.y + (@lastVoltage or @xAxis)}"
+            if @voltageDisplay
+                for part in @voltageDisplay.items
+                    part.attr(path: start)
+            else
+                @voltageDisplay = @screenPath(start)
             @voltageDisplay.attr('clip-rect': "#{bbox.x}, #{bbox.y}, #{bbox.width}, #{bbox.height}")
             
         for part in @voltageDisplay.items

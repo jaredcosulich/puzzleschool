@@ -1,10 +1,9 @@
 game = exports ? provide('./game', {})
-ObjectEditor = require('./object_editor').ObjectEditor
 
 class game.Game
     $: (selector) -> $(selector, @el)
 
-    constructor: ({@el, @objectEditor, @showExplicitContent}) ->
+    constructor: ({@el, @showExplicitContent}) ->
         @initBoard()
 
     initBoard: ->
@@ -15,7 +14,6 @@ class game.Game
     addObject: (data) ->
         data.paper = @paper
         data.id = @nextId()
-        data.objectEditor = @objectEditor
         data.setProperty = (property, value) => @$(".properties .#{property}").html("#{value}")
         data.showExplicitContent = (content) => @showExplicitContent(content)    
                 

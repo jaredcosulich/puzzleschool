@@ -24,7 +24,7 @@ neuron.Neuron = (function(_super) {
   Neuron.prototype.propertyList = {
     'threshold': {
       name: 'Threshold',
-      type: 'select',
+      type: 'slider',
       unit: 0.25,
       max: 3,
       unitName: 'V',
@@ -32,7 +32,7 @@ neuron.Neuron = (function(_super) {
     },
     'spike': {
       name: 'Spike',
-      type: 'select',
+      type: 'slider',
       unit: 0.25,
       max: 3,
       unitName: 'V'

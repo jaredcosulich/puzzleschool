@@ -1,8 +1,5 @@
 neurobehav_objects = exports ? provide('./neurobehav_objects/index', {})
 
-for name, fn of require('./object_editor')
-    neurobehav_objects[name] = fn
-
 for name, fn of require('./game')
     neurobehav_objects[name] = fn
 

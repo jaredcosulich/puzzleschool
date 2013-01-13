@@ -1,17 +1,17 @@
 object = exports ? provide('./object', {})
+PropertiesEditor = require('./properties_editor').PropertiesEditor
 
 class object.Object
     periodicity: 20
     baseFolder: '/assets/images/puzzles/neurobehav/'
     
-    constructor: ({@id, @paper, @position, @description, @objectEditor}) -> 
+    constructor: ({@id, @paper, @position, @description}) -> 
         @properties = @setProperties(@propertyList)
         @init()
         @initDescriptionIcon()
         
     setProperties: (propertyList) ->
         properties = if propertyList then JSON.parse(JSON.stringify(propertyList)) else {}
-        properties.description = @description
         for propertyId of properties
             do (propertyId) =>
                 if (setFunction = properties[propertyId].set)
@@ -110,12 +110,18 @@ class object.Object
         
         return icon    
             
+    initPropertiesEditor: (icon) ->
+        return if not @image
+        @propertiesEditor = new PropertiesEditor
+            element: icon
+            paper: @paper
+            properties: @properties
+            name: @objectName
+            
     initProperties: (properties=@properties, element=@image) ->
         icon = @initPropertiesIcon(element)
-        element.properties = properties
-        icon.click => 
-            console.log(element.properties)
-            #@propertiesClick(element)
+        @initPropertiesEditor(icon)
+        icon.click => @propertiesClick(element)
         
     propertiesClick: (element=@image, display) ->
         return if element.noClick and not display
@@ -126,14 +132,12 @@ class object.Object
             
     showProperties: (element=@image) ->
         element.propertiesGlow.attr(opacity: 0.04) if element.propertiesGlow
-        previouslySelectedElement = @objectEditor.show(element, element.objectName, element.properties)
-        if previouslySelectedElement and previouslySelectedElement != element
-            @hideProperties(previouslySelectedElement)
+        @propertiesEditor.show()
         element.propertiesDisplayed = true
         
     hideProperties: (element=@image) ->
         element.propertiesGlow.attr(opacity: 0) if element.propertiesGlow
-        @objectEditor.hide(element)
+        @propertiesEditor.hide()
         element.propertiesDisplayed = false
         
             

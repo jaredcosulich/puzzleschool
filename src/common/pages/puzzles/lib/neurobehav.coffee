@@ -7,9 +7,6 @@ class neurobehav.ViewHelper
     $: (selector) -> $(selector, @el)
     
     constructor: ({@el}) ->
-        @objectEditor = new ObjectEditor
-            el: @$('.object_editor')
-        
         @game = new neurobehav.Game
             el: @el
             objectEditor: @objectEditor
@@ -74,15 +71,15 @@ class neurobehav.ViewHelper
         oscilloscope1.attachTo(neuron1)
 
 
-        oscilloscope2 = @game.addObject
-            type: 'Oscilloscope'
-            position:
-                top: 240
-                left: 280
-            board: @game.board
-            description: @$('.descriptions .oscilloscope').html()
-
-        oscilloscope2.attachTo(neuron2)
+        # oscilloscope2 = @game.addObject
+        #     type: 'Oscilloscope'
+        #     position:
+        #         top: 240
+        #         left: 280
+        #     board: @game.board
+        #     description: @$('.descriptions .oscilloscope').html()
+        # 
+        # oscilloscope2.attachTo(neuron2)
 
         @goalDescriptionHtml = """
             <h4>The Goal: Get The Heart To Beat</h4>
