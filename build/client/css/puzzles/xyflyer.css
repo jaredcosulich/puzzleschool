@@ -150,7 +150,7 @@ body {
 }
 .xyflyer .equation_area .equations .equation_container .range input,
 .xyflyer .equation_area .equations .equation_container .variable input {
-  width: 33px;
+  width: 30px;
 }
 .xyflyer .equation_area .equations .equation_container .range .slider,
 .xyflyer .equation_area .equations .equation_container .variable .slider {
