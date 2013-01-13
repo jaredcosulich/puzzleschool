@@ -256,6 +256,7 @@ class equation.Equation
         return fragment
     
     formulaData: ->
+        return @formula()
         "#{@formula()}#{@rangeText()}"
 
     rangeText: ->
@@ -279,6 +280,7 @@ class equation.Equation
         return text
         
     initRange: ->
+        return
         element = $(document.createElement('DIV'))
         element.addClass('range')
         element.html('From X = <input type=\'text\' class=\'from\'></input> to X = <input type=\'text\' class=\'to\'></input>')
@@ -309,6 +311,7 @@ class equation.Equation
         @range.hidden = false
         
     hideRange: ->
+        return
         return if not @range or @range.hidden
         @range.element.animate
             height: 0
@@ -318,6 +321,7 @@ class equation.Equation
         @range.hidden = true
             
     setRange: (from=null, to=null) ->
+        return
         @range.element.find('.from').val(if from? then from else '')
         @range.element.find('.to').val(if to? then to else '')
         @range.from = from

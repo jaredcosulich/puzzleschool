@@ -384,6 +384,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.formulaData = function() {
+    return this.formula();
     return "" + (this.formula()) + (this.rangeText());
   };
 
@@ -427,6 +428,7 @@ equation.Equation = (function() {
   Equation.prototype.initRange = function() {
     var element,
       _this = this;
+    return;
     element = $(document.createElement('DIV'));
     element.addClass('range');
     element.html('From X = <input type=\'text\' class=\'from\'></input> to X = <input type=\'text\' class=\'to\'></input>');
@@ -461,6 +463,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.hideRange = function() {
+    return;
     if (!this.range || this.range.hidden) {
       return;
     }
@@ -480,6 +483,7 @@ equation.Equation = (function() {
     if (to == null) {
       to = null;
     }
+    return;
     this.range.element.find('.from').val(from != null ? from : '');
     this.range.element.find('.to').val(to != null ? to : '');
     this.range.from = from;
