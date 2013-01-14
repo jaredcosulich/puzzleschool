@@ -54,7 +54,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addIsland = function() {
-    var height, island, width,
+    var height, island, text, width, x, y,
       _this = this;
     island = this.objects.find('.island img');
     width = island.width() * this.scale;
@@ -65,7 +65,15 @@ board.Board = (function(_super) {
       });
       return;
     }
-    return this.addImage(island, this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2), this.yAxis - (this.islandCoordinates.y * this.yUnit));
+    x = this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2);
+    y = this.yAxis - (this.islandCoordinates.y * this.yUnit);
+    this.addImage(island, x, y);
+    text = "" + (this.scale > 0.6 ? 'Launching From:\n' : '') + this.islandCoordinates.x + ", " + this.islandCoordinates.y;
+    return this.paper.text(x + (width / 2) - (15 * this.scale), y + (height / 2) - (15 * this.scale), text).attr({
+      fill: '#ddd',
+      stroke: 'none',
+      'font-size': 9 + (2 * this.scale)
+    }).toFront();
   };
 
   Board.prototype.addRing = function(ring) {
@@ -242,6 +250,8 @@ board.Board = (function(_super) {
     });
     text = this.paper.text(x + (width / 2) + (radius * 2), y, string);
     text.attr({
+      fill: '#000',
+      stroke: 'none',
       opacity: 0
     });
     xyTip.animate({
@@ -286,9 +296,9 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawGrid = function() {
-    var grid, gridString, increment, mark, multiple, start, stroke, text, xUnits, yUnits, _i, _j, _ref;
+    var color, grid, gridString, increment, mark, multiple, start, text, xUnits, yUnits, _i, _j, _ref;
     gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
-    stroke = 'rgba(255,255,255,0.4)';
+    color = 'rgba(255,255,255,0.4)';
     xUnits = this.width / this.xUnit;
     if (xUnits < this.maxUnits) {
       xUnits = this.maxUnits;
@@ -302,8 +312,8 @@ board.Board = (function(_super) {
       if (!(mark > this.width)) {
         text = this.paper.text(mark + 6, this.yAxis - 6, Math.round(this.grid.xMin + (mark / this.xUnit)));
         text.attr({
-          stroke: stroke,
-          fill: stroke
+          stroke: 'none',
+          fill: color
         });
       }
     }
@@ -320,14 +330,14 @@ board.Board = (function(_super) {
       if (!(mark > this.height)) {
         text = this.paper.text(this.xAxis + 6, mark - 6, Math.round(this.grid.yMax - (mark / this.yUnit)));
         text.attr({
-          stroke: stroke,
-          fill: stroke
+          stroke: 'none',
+          fill: color
         });
       }
     }
     grid = this.paper.path(gridString);
     return grid.attr({
-      stroke: stroke
+      stroke: color
     });
   };
 

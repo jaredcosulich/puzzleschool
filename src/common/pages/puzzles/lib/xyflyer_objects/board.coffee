@@ -48,7 +48,15 @@ class board.Board extends xyflyerObject.Object
             $.timeout 100, => @addIsland()
             return
 
-        @addImage(island, @xAxis + (@islandCoordinates.x * @xUnit) - (width/2), @yAxis - (@islandCoordinates.y * @yUnit))
+        x = @xAxis + (@islandCoordinates.x * @xUnit) - (width/2)
+        y = @yAxis - (@islandCoordinates.y * @yUnit)
+        @addImage(island, x, y)
+        text = "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
+        @paper.text(
+            x + (width/2) - (15*@scale)
+            y + (height/2) - (15*@scale)
+            text
+        ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
         
     addRing: (ring) ->
         front = @paper.path(ring.frontDescription)
@@ -149,7 +157,7 @@ class board.Board extends xyflyerObject.Object
         xyTip = @paper.rect(x+(width/2)+(radius*2), y, 0, 0, 6)
         xyTip.attr(fill: '#FFF', opacity: 0)
         text = @paper.text(x+(width/2)+(radius*2), y, string)
-        text.attr(opacity: 0)
+        text.attr(fill: '#000', stroke: 'none', opacity: 0)
         xyTip.animate({width: width, height: height, x: x+(radius*2), y: y-(height/2)}, 100)
         
         opacity = (if permanent then 0.75 else 1)
@@ -175,7 +183,7 @@ class board.Board extends xyflyerObject.Object
             L#{@width},#{@yAxis}
         """
 
-        stroke = 'rgba(255,255,255,0.4)'
+        color = 'rgba(255,255,255,0.4)'
 
         xUnits = @width / @xUnit
         xUnits = @maxUnits if xUnits < @maxUnits
@@ -187,7 +195,7 @@ class board.Board extends xyflyerObject.Object
             gridString += "L#{mark},#{@yAxis - 10}"
             unless mark > @width
                 text = @paper.text(mark + 6, @yAxis - 6, Math.round(@grid.xMin + (mark / @xUnit)))
-                text.attr(stroke: stroke, fill: stroke)
+                text.attr(stroke: 'none', fill: color)
 
         yUnits = @height / @yUnit
         yUnits = @maxUnits if yUnits < @maxUnits
@@ -199,10 +207,10 @@ class board.Board extends xyflyerObject.Object
             gridString += "L#{@xAxis - 10},#{mark}"
             unless mark > @height
                 text = @paper.text(@xAxis + 6, mark - 6, Math.round(@grid.yMax - (mark / @yUnit)))
-                text.attr(stroke: stroke, fill: stroke)
+                text.attr(stroke: 'none', fill: color)
 
         grid = @paper.path(gridString)
-        grid.attr(stroke: stroke)
+        grid.attr(stroke: color)
         
     plot: (id, formula, area) ->
         if not formula or not formula.length
