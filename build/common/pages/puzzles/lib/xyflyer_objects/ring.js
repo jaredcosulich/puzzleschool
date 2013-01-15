@@ -31,7 +31,7 @@ ring.Ring = (function(_super) {
       stroke: '#FFF'
     });
     this.move(this.x, this.y);
-    this.board.showXY(this.screenX, this.screenY, false, true);
+    this.label = this.board.showXY(this.screenX, this.screenY, false, true);
   }
 
   Ring.prototype.move = function(x, y) {
@@ -44,7 +44,7 @@ ring.Ring = (function(_super) {
     var h, height, width, x, y,
       _this = this;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
-    if (this.screenX > x - (width / 2) && this.screenX < x + (width / 2) && this.screenY > y - (height / 2) && this.screenY < y + (height / 2)) {
+    if (this.touches(x, y, width, height)) {
       if (!this.highlighted) {
         this.highlighted = this.board.paper.set();
         this.image.forEach(function(half) {
@@ -72,6 +72,10 @@ ring.Ring = (function(_super) {
         return h.remove();
       });
     }
+  };
+
+  Ring.prototype.touches = function(x, y, width, height) {
+    return this.screenX > x - (width / 2) && this.screenX < x + (width / 2) && this.screenY > y - (height / 2) && this.screenY < y + (height / 2);
   };
 
   Ring.prototype.reset = function() {

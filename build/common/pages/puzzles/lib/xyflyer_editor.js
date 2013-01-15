@@ -79,23 +79,25 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.initButtons = function() {
     var _this = this;
     this.$('.editor .edit_board').bind('click', function() {
-      _this.grid = {
-        xMin: parseFloat(prompt('What is the minimum X value?')),
-        yMin: parseFloat(prompt('What is the minimum Y value?')),
-        xMax: parseFloat(prompt('What is the maximum X value?')),
-        yMax: parseFloat(prompt('What is the maximum Y value?'))
-      };
-      return _this.initBoard({
-        grid: _this.grid
+      return _this.showDialog({
+        text: 'What should the bounds of the board be?',
+        fields: [['xMin', 'Minimum X'], ['xMax', 'Maximum X'], [], ['yMin', 'Minimum Y'], ['yMax', 'Maximum Y']],
+        callback: function(data) {
+          return _this.initBoard({
+            grid: data
+          });
+        }
       });
     });
     this.$('.editor .edit_island').bind('click', function() {
-      _this.islandCoordinates = {
-        x: parseFloat(prompt('What should the x coordinate of the island be?')),
-        y: parseFloat(prompt('What should the y coordinate of the island be?'))
-      };
-      return _this.initBoard({
-        islandCoordinates: _this.islandCoordinates
+      return _this.showDialog({
+        text: 'What should the coordinates of the island be?',
+        fields: [['x', 'X'], ['y', 'Y']],
+        callback: function(data) {
+          return _this.initBoard({
+            islandCoordinates: data
+          });
+        }
       });
     });
     this.$('.editor .add_equation').bind('click', function() {
@@ -114,7 +116,13 @@ xyflyerEditor.EditorHelper = (function() {
       }
     });
     this.$('.editor .add_fragment').bind('click', function() {
-      return _this.equations.addComponent(prompt('What equation fragment do you want to add?'));
+      return _this.showDialog({
+        text: 'What equation fragment do you want to add?',
+        fields: [['fragment', 'Fragment', 'text']],
+        callback: function(data) {
+          return _this.equations.addComponent(data.fragment);
+        }
+      });
     });
     this.$('.editor .remove_fragment').bind('click', function() {
       var component, _i, _len, _ref, _results;
@@ -136,16 +144,38 @@ xyflyerEditor.EditorHelper = (function() {
       return _results;
     });
     this.$('.editor .add_ring').bind('click', function() {
-      var x, y;
-      x = prompt('What is the x coordinate of this ring?');
-      y = prompt('What is the y coordinate of this ring?');
-      return _this.rings.push(new xyflyer.Ring({
-        board: _this.board,
-        x: x,
-        y: y
-      }));
+      return _this.showDialog({
+        text: 'What should the coordinates of this new ring be?',
+        fields: [['x', 'X'], ['y', 'Y']],
+        callback: function(data) {
+          return _this.rings.push(new xyflyer.Ring({
+            board: _this.board,
+            x: data.x,
+            y: data.y
+          }));
+        }
+      });
     });
-    return this.$('.editor .remove_ring').bind('click', function() {});
+    return this.$('.editor .remove_ring').bind('click', function() {
+      alert('Please click on the ring you want to remove.');
+      _this.boardElement.bind('click.remove_ring', function(e) {
+        var index, ring, _i, _len, _ref;
+        _this.boardElement.unbind('click.remove_ring');
+        _this.board.initClicks(_this.boardElement);
+        _ref = _this.rings;
+        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+          ring = _ref[index];
+          if (ring.touches(e.offsetX, e.offsetY, 12, 12)) {
+            _this.rings.splice(index, 1);
+            ring.image.remove();
+            ring.label.remove();
+            return;
+          }
+        }
+        return alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.');
+      });
+      return _this.boardElement.unbind('click.showxy');
+    });
   };
 
   EditorHelper.prototype.plot = function(id, data) {
@@ -181,6 +211,60 @@ xyflyerEditor.EditorHelper = (function() {
       }
     }
     return _results;
+  };
+
+  EditorHelper.prototype.showDialog = function(_arg) {
+    var callback, closeDialog, dialog, fieldInfo, fields, lastRow, text, _i, _len,
+      _this = this;
+    text = _arg.text, fields = _arg.fields, callback = _arg.callback;
+    dialog = $(document.createElement('DIV'));
+    dialog.addClass('dialog');
+    dialog.html("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<button class='button'>Save</button> &nbsp; <a class='blue_button'>Cancel</a>");
+    for (_i = 0, _len = fields.length; _i < _len; _i++) {
+      fieldInfo = fields[_i];
+      if (!fieldInfo.length) {
+        dialog.find('tbody').append('<tr></tr>');
+        continue;
+      }
+      lastRow = dialog.find('tr:last-child');
+      lastRow.append("<td>" + fieldInfo[1] + ":</td><td><input name='" + fieldInfo[0] + "' class='" + (fieldInfo[2] || 'number') + "'/></td>");
+    }
+    this.el.append(dialog);
+    dialog.css({
+      opacity: 0,
+      left: (this.el.width() / 2) - (dialog.width() / 2)
+    });
+    dialog.animate({
+      opacity: 1,
+      duration: 250,
+      complete: function() {
+        return dialog.find('input:first-child').focus();
+      }
+    });
+    closeDialog = function() {
+      return dialog.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return dialog.remove();
+        }
+      });
+    };
+    dialog.find('button').bind('click', function() {
+      var data, i, input, _j, _len1, _ref;
+      closeDialog();
+      data = {};
+      _ref = dialog.find('input');
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        i = _ref[_j];
+        input = $(i);
+        data[input.attr('name')] = (input.hasClass('number') ? parseFloat(input.val()) : input.val());
+      }
+      return callback(data);
+    });
+    return dialog.find('a').bind('click', function() {
+      return closeDialog();
+    });
   };
 
   return EditorHelper;

@@ -79,7 +79,7 @@ class board.Board extends xyflyerObject.Object
         
     initClicks: (boardElement) ->
         boardElement.css(zIndex: 97)
-        boardElement.bind 'click', (e) =>
+        boardElement.bind 'click.showxy', (e) =>
             result = @findNearestXOnPath(e.offsetX, e.offsetY)
             onPath = result.x
             if result.formulas.length
@@ -164,16 +164,18 @@ class board.Board extends xyflyerObject.Object
         xyTip.animate({opacity: opacity}, 250)
         text.animate({opacity: opacity}, 250)
         
+        xy = @paper.set()
+        xy.push(xyTip, text, dot)
+        
         unless permanent
             $.timeout 2000, =>
                 xyTip.animate({opacity: 0}, 100)
                 text.animate({opacity: 0}, 100)
                 removeTip = =>
-                    xyTip.remove()
-                    text.remove()
-                    dot.remove()
+                    xy.remove()
                 xyTip.animate({width: 0, height: 0, x: x+(radius*2), y: y}, 250)
                 dot.animate({r: 0, opacity: 0}, 250, null, removeTip)
+        return xy
 
     drawGrid: ->    
         gridString = """

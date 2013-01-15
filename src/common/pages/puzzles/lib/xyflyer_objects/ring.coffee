@@ -15,16 +15,13 @@ class ring.Ring extends xyflyerObject.Object
         @image = @board.addRing(@)
         @image.attr(stroke: '#FFF')
         @move(@x, @y)
-        @board.showXY(@screenX, @screenY, false, true)
+        @label = @board.showXY(@screenX, @screenY, false, true)
         
     move: (@x, @y) ->
         @image.transform("t#{@screenX},#{@screenY}s-#{@scale},#{@scale}")
         
     highlightIfPassingThrough: ({x, y, width, height}) ->
-        if @screenX > x - (width/2) and
-           @screenX < x + (width/2) and
-           @screenY > y - (height/2) and
-           @screenY < y + (height/2)
+        if @touches(x,y,width,height)
             if not @highlighted
                 @highlighted = @board.paper.set()
                 @image.forEach (half) =>
@@ -43,5 +40,11 @@ class ring.Ring extends xyflyerObject.Object
                 -> h.remove()
             )
             
+    touches: (x,y,width,height) ->
+        @screenX > x - (width/2) and
+        @screenX < x + (width/2) and
+        @screenY > y - (height/2) and
+        @screenY < y + (height/2)        
+    
     reset: ->
         @passedThrough = false

@@ -113,7 +113,7 @@ board.Board = (function(_super) {
     boardElement.css({
       zIndex: 97
     });
-    return boardElement.bind('click', function(e) {
+    return boardElement.bind('click.showxy', function(e) {
       var formula1, onPath, result, y;
       result = _this.findNearestXOnPath(e.offsetX, e.offsetY);
       onPath = result.x;
@@ -219,7 +219,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.showXY = function(x, y, onPath, permanent) {
-    var dot, height, opacity, paperX, paperY, radius, string, text, width, xyTip,
+    var dot, height, opacity, paperX, paperY, radius, string, text, width, xy, xyTip,
       _this = this;
     if (onPath == null) {
       onPath = false;
@@ -267,8 +267,10 @@ board.Board = (function(_super) {
     text.animate({
       opacity: opacity
     }, 250);
+    xy = this.paper.set();
+    xy.push(xyTip, text, dot);
     if (!permanent) {
-      return $.timeout(2000, function() {
+      $.timeout(2000, function() {
         var removeTip;
         xyTip.animate({
           opacity: 0
@@ -277,9 +279,7 @@ board.Board = (function(_super) {
           opacity: 0
         }, 100);
         removeTip = function() {
-          xyTip.remove();
-          text.remove();
-          return dot.remove();
+          return xy.remove();
         };
         xyTip.animate({
           width: 0,
@@ -293,6 +293,7 @@ board.Board = (function(_super) {
         }, 250, null, removeTip);
       });
     }
+    return xy;
   };
 
   Board.prototype.drawGrid = function() {
