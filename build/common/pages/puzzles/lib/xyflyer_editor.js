@@ -18,18 +18,7 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.init = function() {
     var _this = this;
-    this.initBoard({
-      grid: {
-        xMin: -10,
-        xMax: 10,
-        yMin: -10,
-        yMax: 10
-      },
-      islandCoordinates: {
-        x: 0,
-        y: 0
-      }
-    });
+    this.initBoard({});
     this.equations = new xyflyer.Equations({
       el: this.equationArea,
       gameArea: this.el,
@@ -49,14 +38,32 @@ xyflyerEditor.EditorHelper = (function() {
     var grid, islandCoordinates,
       _this = this;
     grid = _arg.grid, islandCoordinates = _arg.islandCoordinates;
+    if (grid) {
+      this.grid = grid;
+    } else if (!this.grid) {
+      this.grid = {
+        xMin: -10,
+        xMax: 10,
+        yMin: -10,
+        yMax: 10
+      };
+    }
+    if (islandCoordinates) {
+      this.islandCoordinates = islandCoordinates;
+    } else if (!this.islandCoordinates) {
+      this.islandCoordinates = {
+        x: 0,
+        y: 0
+      };
+    }
     if (this.board) {
       this.board.paper.clear();
     }
     this.board = new xyflyer.Board({
       boardElement: this.boardElement,
       objects: this.objects,
-      grid: grid,
-      islandCoordinates: islandCoordinates,
+      grid: this.grid,
+      islandCoordinates: this.islandCoordinates,
       resetLevel: function() {
         return _this.resetLevel();
       }
@@ -71,6 +78,26 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.initButtons = function() {
     var _this = this;
+    this.$('.editor .edit_board').bind('click', function() {
+      _this.grid = {
+        xMin: parseFloat(prompt('What is the minimum X value?')),
+        yMin: parseFloat(prompt('What is the minimum Y value?')),
+        xMax: parseFloat(prompt('What is the maximum X value?')),
+        yMax: parseFloat(prompt('What is the maximum Y value?'))
+      };
+      return _this.initBoard({
+        grid: _this.grid
+      });
+    });
+    this.$('.editor .edit_island').bind('click', function() {
+      _this.islandCoordinates = {
+        x: parseFloat(prompt('What should the x coordinate of the island be?')),
+        y: parseFloat(prompt('What should the y coordinate of the island be?'))
+      };
+      return _this.initBoard({
+        islandCoordinates: _this.islandCoordinates
+      });
+    });
     this.$('.editor .add_equation').bind('click', function() {
       if (_this.equations.length < 3) {
         return _this.equations.add();

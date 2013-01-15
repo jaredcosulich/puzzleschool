@@ -9,13 +9,7 @@ class xyflyerEditor.EditorHelper
         @init()
         
     init: ->
-        @initBoard
-            grid: 
-                xMin: -10
-                xMax: 10
-                yMin: -10
-                yMax: 10 
-            islandCoordinates: {x: 0, y: 0}
+        @initBoard({})
                         
         @equations = new xyflyer.Equations
             el: @equationArea
@@ -28,13 +22,27 @@ class xyflyerEditor.EditorHelper
         @initButtons()
             
     initBoard: ({grid, islandCoordinates}) ->
+        if grid
+            @grid = grid
+        else if not @grid
+            @grid = 
+                xMin: -10
+                xMax: 10
+                yMin: -10
+                yMax: 10 
+            
+        if islandCoordinates
+            @islandCoordinates = islandCoordinates
+        else if not @islandCoordinates
+            @islandCoordinates = {x: 0, y: 0} 
+        
         @board.paper.clear() if @board
         
         @board = new xyflyer.Board
             boardElement: @boardElement 
             objects: @objects
-            grid: grid 
-            islandCoordinates: islandCoordinates
+            grid: @grid 
+            islandCoordinates: @islandCoordinates
             resetLevel: => @resetLevel()
     
         @plane = new xyflyer.Plane
@@ -42,6 +50,22 @@ class xyflyerEditor.EditorHelper
             track: (info) => @trackPlane(info)
 
     initButtons: ->
+        @$('.editor .edit_board').bind 'click', =>
+            @grid = 
+                xMin: parseFloat(prompt('What is the minimum X value?'))
+                yMin: parseFloat(prompt('What is the minimum Y value?'))
+                xMax: parseFloat(prompt('What is the maximum X value?'))
+                yMax: parseFloat(prompt('What is the maximum Y value?'))
+            
+            @initBoard(grid: @grid)
+
+        @$('.editor .edit_island').bind 'click', =>
+            @islandCoordinates = 
+                x: parseFloat(prompt('What should the x coordinate of the island be?'))
+                y: parseFloat(prompt('What should the y coordinate of the island be?'))
+            @initBoard(islandCoordinates: @islandCoordinates)
+
+
         @$('.editor .add_equation').bind 'click', =>
             if @equations.length < 3
                 @equations.add()
