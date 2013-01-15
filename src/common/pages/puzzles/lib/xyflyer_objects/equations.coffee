@@ -11,6 +11,7 @@ class equations.Equations
         @$('.launch').bind 'click', => submit()
         @initHints()
         @initBackspace()
+        @length = 0
 
     $: (selector) -> $(selector, @el)
 
@@ -26,18 +27,30 @@ class equations.Equations
             plot: (eq) => @plotFormula(eq)
             
         @equations.push(equation)
+        @length = @equations.length
         equation.appendTo(@equationsArea)
+    
+    remove: (equation) ->
+        index = (if equation then @equations.indexOf(equation) else @equations.length - 1)
+        equation = @equations.splice(index-1, 1)[0]
+        equation.container.remove()
+        @length = @equations.length
         
-    addComponent: (equationFragment, equationAreas) ->
+    addComponent: (equationFragment) ->
         equationComponent = new EquationComponent
             gameArea: @gameArea
             equationFragment: equationFragment
-            equationAreas: equationAreas
             trackDrag: (left, top, component) => @trackComponentDragging(left, top, component)
             endDrag: (component) => @endComponentDragging(component)
 
         equationComponent.appendTo(@possibleFragments)
         @equationComponents.push(equationComponent)
+        
+    removeComponent: (equationComponent) ->
+        index = (if equation then @equationComponents.indexOf(equation) else @equationComponents.length - 1)
+        equationComponent = @equationComponents.splice(index-1, 1)[0]
+        equationComponent.element.remove()
+        
         
     trackComponentDragging: (left, top, component) ->
         @el.addClass('show_places') unless @el.hasClass('show_places')
@@ -62,12 +75,13 @@ class equations.Equations
         @lastComponent = component
         @selectedDropArea.accept(component)
         
-        @registerEvent
-            type: 'move'
-            info: 
-                equationId: @selectedDropArea.id
-                fragment: component.equationFragment
-                time: new Date()
+        if @registerEvent
+            @registerEvent
+                type: 'move'
+                info: 
+                    equationId: @selectedDropArea.id
+                    fragment: component.equationFragment
+                    time: new Date()
         
         @selectedDropArea = null
         return true
@@ -105,12 +119,13 @@ class equations.Equations
         return (if complete then solutionIndex == formula.indexOf(fragment) else solutionIndex != formula.indexOf(fragment))
 
     displayHint: (component, dropAreaElement, equation, solutionComponent) ->
-        @registerEvent
-            type: 'hint'
-            info: 
-                equationId: dropAreaElement.id
-                fragment: component.equationFragment
-                time: new Date()
+        if @registerEvent
+            @registerEvent
+                type: 'hint'
+                info: 
+                    equationId: dropAreaElement.id
+                    fragment: component.equationFragment
+                    time: new Date()
         
         gameAreaOffset = @gameArea.offset()
         

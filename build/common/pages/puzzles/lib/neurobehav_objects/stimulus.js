@@ -56,7 +56,7 @@ stimulus.Stimulus = (function(_super) {
   Stimulus.prototype.init = function() {
     var minimumMouseDown, mousedown,
       _this = this;
-    this.createImage();
+    this.draw();
     this.setImage();
     mousedown = false;
     minimumMouseDown = true;
@@ -83,6 +83,12 @@ stimulus.Stimulus = (function(_super) {
     return this.image.attr({
       cursor: 'pointer'
     });
+  };
+
+  Stimulus.prototype.draw = function() {
+    var button;
+    this.image = this.paper.set();
+    return button = this.paper.circle();
   };
 
   Stimulus.prototype.initSlider = function() {

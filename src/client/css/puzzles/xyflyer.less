@@ -180,7 +180,7 @@ body {
             text-align: center;
         }
 
-        .possible_fragments {
+        .possible_fragments, .editor {
             margin-top: 30px;
             padding: 6px;
             overflow: hidden;
@@ -275,21 +275,21 @@ body {
     
     .hints {
         padding: 60px 0 0 6px;
-        
-        a {
-            border: 1px solid #ccc;
-            padding: 3px 6px;
-            .rounded(6px);
-            background-color: @blue;
-            color: white;
-            .box-shadow(2px)
-        }
-        
+                
         .drag_this, .drop_here, .launch_hint {
             position: absolute;
             top: -1000px;
             left: -1000px;
             z-index: 99;
         }
+    }
+    
+    .blue_button {
+        border: 1px solid #ccc;
+        padding: 3px 6px;
+        .rounded(6px);
+        background-color: @blue;
+        color: white;
+        .box-shadow(2px)
     }
 }

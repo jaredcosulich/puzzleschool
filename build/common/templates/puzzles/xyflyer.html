@@ -7,12 +7,29 @@
         
         <div class='possible_fragments'>
             <h4>Equation Fragments</h4>
+            {!editor}
             <p>Mix and match these equation fragments by dragging and dropping them in the equation area above.</p>
+            {/editor}
+            {!editor}
+            <p>Create equation fragments using the editor buttons below to use in this level.</p>
+            {/editor}
         </div>
 
+        {:editor}
+            <div class='editor'>
+                <h4>Editor</h4>
+                <p>Use these controls to edit this level</p>
+                <p><a class='blue_button'>Edit Board</a></p>
+                <p><a class='blue_button add_equation'>Add Equation</a> / <a class='blue_button remove_equation'>Remove</a></p>
+                <p><a class='blue_button add_fragment'>Add Equation Fragment</a> / <a class='blue_button remove_fragment'>Remove</a></p>
+                <p><a class='blue_button add_ring'>Add Ring</a> / <a class='blue_button remove_ring'>Remove</a></p>
+            </div>
+        {/editor}
+
+        {!editor}
         <div class='hints'>
             <h4>Can't Figure It Out?</h4> 
-            <p><a class='hint'>Show Me Part Of The Solution</a></p>
+            <p><a class='hint blue_button'>Show Me Part Of The Solution</a></p>
             <div class='drag_this'>
                 <img src='/assets/images/puzzles/xyflyer/drag_this.png'/>
             </div>
@@ -23,6 +40,7 @@
                 <img src='/assets/images/puzzles/xyflyer/launch.png'/>
             </div>
         </div>
+        {/editor}
     </div>
     <div class='complete'>
         <h2>Nice Job!</h2>

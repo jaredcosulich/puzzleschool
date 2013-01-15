@@ -95,7 +95,8 @@ soma.chunks({
         "class": this.classId || 0,
         level: this.levelId,
         classLevel: this.classLevelId || 0,
-        instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0
+        instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0,
+        editor: this.levelId === 'editor'
       });
     }
   }
@@ -105,7 +106,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var equation, fragment, info, ring, xyflyer, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
+      var equation, fragment, info, ring, xyflyer, xyflyerEditor, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.user = this.cookies.get('user');
@@ -113,7 +114,17 @@ soma.views({
       this.levelId = this.el.data('level');
       this.classLevelId = this.el.data('classlevel');
       if (isNaN(parseInt(this.levelId))) {
-        this.showMessage('intro');
+        if (this.levelId === 'editor') {
+          xyflyerEditor = require('./lib/xyflyer_editor');
+          this.editor = new xyflyerEditor.EditorHelper({
+            el: $(this.selector),
+            boardElement: this.$('.board'),
+            equationArea: this.$('.equation_area'),
+            objects: this.$('.objects')
+          });
+        } else {
+          this.showMessage('intro');
+        }
         return;
       }
       if (this.classId) {

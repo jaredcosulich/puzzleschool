@@ -57,8 +57,8 @@ class xyflyer.ViewHelper
     addEquation: (solution, startingFragment, solutionComponents, variables) ->
         @equations.add(solution, startingFragment, solutionComponents, variables)
 
-    addEquationComponent: (equationFragment, equationAreas) ->
-        @equations.addComponent(equationFragment, equationAreas)
+    addEquationComponent: (equationFragment) ->
+        @equations.addComponent(equationFragment)
         
     resetLevel: ->
         @plane.reset()

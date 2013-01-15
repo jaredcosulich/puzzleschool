@@ -22,6 +22,7 @@ equations.Equations = (function() {
     });
     this.initHints();
     this.initBackspace();
+    this.length = 0;
   }
 
   Equations.prototype.$ = function(selector) {
@@ -44,16 +45,24 @@ equations.Equations = (function() {
       }
     });
     this.equations.push(equation);
+    this.length = this.equations.length;
     return equation.appendTo(this.equationsArea);
   };
 
-  Equations.prototype.addComponent = function(equationFragment, equationAreas) {
+  Equations.prototype.remove = function(equation) {
+    var index;
+    index = (equation ? this.equations.indexOf(equation) : this.equations.length - 1);
+    equation = this.equations.splice(index - 1, 1)[0];
+    equation.container.remove();
+    return this.length = this.equations.length;
+  };
+
+  Equations.prototype.addComponent = function(equationFragment) {
     var equationComponent,
       _this = this;
     equationComponent = new EquationComponent({
       gameArea: this.gameArea,
       equationFragment: equationFragment,
-      equationAreas: equationAreas,
       trackDrag: function(left, top, component) {
         return _this.trackComponentDragging(left, top, component);
       },
@@ -63,6 +72,13 @@ equations.Equations = (function() {
     });
     equationComponent.appendTo(this.possibleFragments);
     return this.equationComponents.push(equationComponent);
+  };
+
+  Equations.prototype.removeComponent = function(equationComponent) {
+    var index;
+    index = (equation ? this.equationComponents.indexOf(equation) : this.equationComponents.length - 1);
+    equationComponent = this.equationComponents.splice(index - 1, 1)[0];
+    return equationComponent.element.remove();
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
@@ -110,14 +126,16 @@ equations.Equations = (function() {
     }
     this.lastComponent = component;
     this.selectedDropArea.accept(component);
-    this.registerEvent({
-      type: 'move',
-      info: {
-        equationId: this.selectedDropArea.id,
-        fragment: component.equationFragment,
-        time: new Date()
-      }
-    });
+    if (this.registerEvent) {
+      this.registerEvent({
+        type: 'move',
+        info: {
+          equationId: this.selectedDropArea.id,
+          fragment: component.equationFragment,
+          time: new Date()
+        }
+      });
+    }
     this.selectedDropArea = null;
     return true;
   };
@@ -189,14 +207,16 @@ equations.Equations = (function() {
   Equations.prototype.displayHint = function(component, dropAreaElement, equation, solutionComponent) {
     var dragElement, dragThis, gameAreaOffset, left, offset, top,
       _this = this;
-    this.registerEvent({
-      type: 'hint',
-      info: {
-        equationId: dropAreaElement.id,
-        fragment: component.equationFragment,
-        time: new Date()
-      }
-    });
+    if (this.registerEvent) {
+      this.registerEvent({
+        type: 'hint',
+        info: {
+          equationId: dropAreaElement.id,
+          fragment: component.equationFragment,
+          time: new Date()
+        }
+      });
+    }
     gameAreaOffset = this.gameArea.offset();
     if (component.top() === 0) {
       dragElement = component.dropArea.element;

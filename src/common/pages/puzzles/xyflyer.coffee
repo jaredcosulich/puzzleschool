@@ -76,6 +76,7 @@ soma.chunks
                 level: @levelId
                 classLevel: @classLevelId or 0
                 instructions: @levelInfo?.instructions
+                editor: @levelId == 'editor'
             )
             
         
@@ -92,7 +93,16 @@ soma.views
             @classLevelId = @el.data('classlevel')
             
             if isNaN(parseInt(@levelId))
-                @showMessage('intro')
+                if @levelId == 'editor'
+                    xyflyerEditor = require('./lib/xyflyer_editor')
+                    @editor = new xyflyerEditor.EditorHelper
+                        el: $(@selector)
+                        boardElement: @$('.board')
+                        equationArea: @$('.equation_area')
+                        objects: @$('.objects')
+                    
+                else
+                    @showMessage('intro')
                 return
                 
             if @classId

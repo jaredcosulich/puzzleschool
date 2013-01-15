@@ -5,13 +5,155 @@ xyflyerEditor = typeof exports !== "undefined" && exports !== null ? exports : p
 
 xyflyerEditor.EditorHelper = (function() {
 
-  function EditorHelper(_arg) {
-    var encodeMethod;
-    this.el = _arg.el, this.viewHelper = _arg.viewHelper, encodeMethod = _arg.encodeMethod;
-  }
-
   EditorHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
+  };
+
+  function EditorHelper(_arg) {
+    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects;
+    this.rings = [];
+    this.parser = require('./parser');
+    this.init();
+  }
+
+  EditorHelper.prototype.init = function() {
+    var _this = this;
+    this.initBoard({
+      grid: {
+        xMin: -10,
+        xMax: 10,
+        yMin: -10,
+        yMax: 10
+      },
+      islandCoordinates: {
+        x: 0,
+        y: 0
+      }
+    });
+    this.equations = new xyflyer.Equations({
+      el: this.equationArea,
+      gameArea: this.el,
+      plot: function(id, data) {
+        return _this.plot(id, data);
+      },
+      submit: function() {
+        var _ref;
+        return (_ref = _this.plane) != null ? _ref.launch(true) : void 0;
+      }
+    });
+    this.equations.add();
+    return this.initButtons();
+  };
+
+  EditorHelper.prototype.initBoard = function(_arg) {
+    var grid, islandCoordinates,
+      _this = this;
+    grid = _arg.grid, islandCoordinates = _arg.islandCoordinates;
+    if (this.board) {
+      this.board.paper.clear();
+    }
+    this.board = new xyflyer.Board({
+      boardElement: this.boardElement,
+      objects: this.objects,
+      grid: grid,
+      islandCoordinates: islandCoordinates,
+      resetLevel: function() {
+        return _this.resetLevel();
+      }
+    });
+    return this.plane = new xyflyer.Plane({
+      board: this.board,
+      track: function(info) {
+        return _this.trackPlane(info);
+      }
+    });
+  };
+
+  EditorHelper.prototype.initButtons = function() {
+    var _this = this;
+    this.$('.editor .add_equation').bind('click', function() {
+      if (_this.equations.length < 3) {
+        return _this.equations.add();
+      } else {
+        return alert("You've already added the maximum number of equations.");
+      }
+    });
+    this.$('.editor .remove_equation').bind('click', function() {
+      var equation;
+      if (_this.equations.length <= 1) {
+        return alert('You must have at least one equation.');
+      } else {
+        return equation = _this.equations.remove();
+      }
+    });
+    this.$('.editor .add_fragment').bind('click', function() {
+      return _this.equations.addComponent(prompt('What equation fragment do you want to add?'));
+    });
+    this.$('.editor .remove_fragment').bind('click', function() {
+      var component, _i, _len, _ref, _results;
+      alert('Please click on the equation fragment you want to remove.');
+      _ref = _this.equations.equationComponents;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        component = _ref[_i];
+        _results.push(component.element.bind('click.remove', function() {
+          var c, _j, _len1, _ref1;
+          _ref1 = _this.equations.equationComponents;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            c = _ref1[_j];
+            c.element.unbind('click.remove');
+          }
+          return _this.equations.removeComponent(component);
+        }));
+      }
+      return _results;
+    });
+    this.$('.editor .add_ring').bind('click', function() {
+      var x, y;
+      x = prompt('What is the x coordinate of this ring?');
+      y = prompt('What is the y coordinate of this ring?');
+      return _this.rings.push(new xyflyer.Ring({
+        board: _this.board,
+        x: x,
+        y: y
+      }));
+    });
+    return this.$('.editor .remove_ring').bind('click', function() {});
+  };
+
+  EditorHelper.prototype.plot = function(id, data) {
+    var area, formula, _ref;
+    _ref = this.parser.parse(data), formula = _ref[0], area = _ref[1];
+    return this.board.plot(id, formula, area);
+  };
+
+  EditorHelper.prototype.resetLevel = function() {
+    var ring, _i, _len, _ref, _results;
+    this.plane.reset();
+    _ref = this.rings;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      ring = _ref[_i];
+      _results.push(ring.reset());
+    }
+    return _results;
+  };
+
+  EditorHelper.prototype.trackPlane = function(info) {
+    var allPassedThrough, ring, _i, _len, _ref, _results;
+    allPassedThrough = this.rings.length > 0;
+    _ref = this.rings;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      ring = _ref[_i];
+      ring.highlightIfPassingThrough(info);
+      if (!ring.passedThrough) {
+        _results.push(allPassedThrough = false);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
 
   return EditorHelper;

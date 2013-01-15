@@ -22,7 +22,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @initSlider()
 
     init: ->
-        @createImage()
+        @draw()
         @setImage()
         
         mousedown = false
@@ -45,6 +45,9 @@ class stimulus.Stimulus extends neurobehavObject.Object
                     
         @image.attr(cursor: 'pointer')
 
+    draw: ->
+        @image = @paper.set()
+        button = @paper.circle()
 
     initSlider: ->
         @slider = new Slider

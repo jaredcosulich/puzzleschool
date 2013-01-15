@@ -96,8 +96,8 @@ xyflyer.ViewHelper = (function() {
     return this.equations.add(solution, startingFragment, solutionComponents, variables);
   };
 
-  ViewHelper.prototype.addEquationComponent = function(equationFragment, equationAreas) {
-    return this.equations.addComponent(equationFragment, equationAreas);
+  ViewHelper.prototype.addEquationComponent = function(equationFragment) {
+    return this.equations.addComponent(equationFragment);
   };
 
   ViewHelper.prototype.resetLevel = function() {

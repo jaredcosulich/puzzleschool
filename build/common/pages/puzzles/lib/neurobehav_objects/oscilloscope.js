@@ -103,7 +103,6 @@ oscilloscope.Oscilloscope = (function(_super) {
       return lastDY = dY;
     };
     onStart = function() {
-      _this.showProperties(_this.image);
       _this.unattach();
       return glow.show();
     };

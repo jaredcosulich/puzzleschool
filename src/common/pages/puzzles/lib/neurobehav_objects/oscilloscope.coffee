@@ -104,7 +104,6 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             lastDY = dY
             
         onStart = => 
-            @showProperties(@image)        
             @unattach()
             glow.show()
         
