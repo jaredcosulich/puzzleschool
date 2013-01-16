@@ -120,7 +120,10 @@ soma.views({
             el: $(this.selector),
             boardElement: this.$('.board'),
             equationArea: this.$('.equation_area'),
-            objects: this.$('.objects')
+            objects: this.$('.objects'),
+            encode: function(instructions) {
+              return _this.encode(instructions);
+            }
           });
         } else {
           this.showMessage('intro');
@@ -239,6 +242,82 @@ soma.views({
           return _this.go(path);
         });
       }
+    },
+    initEncode: function() {
+      var object;
+      this.encodeMap = {
+        '"objects"': '~o',
+        '"type"': '~t',
+        '"index"': '~i',
+        '"numerator"': '~n',
+        '"denominator"': '~d',
+        '"fullNumerator"': '~fN',
+        '"fullDenominator"': '~fD',
+        '"verified"': '~v',
+        'true': '~u',
+        'false': '~f'
+      };
+      for (object in this.viewHelper.objects) {
+        this.encodeMap['"' + object + '"'] = "!" + (object.split(/_/ig).map(function(section) {
+          return section[0];
+        }).join(''));
+      }
+      return this.extraEncodeMap = {
+        ':': '-',
+        '"': '*',
+        ',': "'",
+        '=': '+',
+        '{': '(',
+        '}': ')'
+      };
+    },
+    encode: function(json) {
+      var encode, extraEncode, key, regExp, _i, _len, _ref,
+        _this = this;
+      _ref = ((function() {
+        var _results;
+        _results = [];
+        for (key in this.encodeMap) {
+          _results.push(key);
+        }
+        return _results;
+      }).call(this)).sort(function(a, b) {
+        return b.length - a.length;
+      });
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        encode = _ref[_i];
+        regExp = new RegExp(encode, 'g');
+        json = json.replace(regExp, this.encodeMap[encode]);
+      }
+      for (extraEncode in this.extraEncodeMap) {
+        regExp = new RegExp('\\' + extraEncode, 'g');
+        json = json.replace(regExp, this.extraEncodeMap[extraEncode]);
+      }
+      return json;
+    },
+    decode: function(json) {
+      var encode, extraEncode, key, regExp, _i, _len, _ref,
+        _this = this;
+      _ref = ((function() {
+        var _results;
+        _results = [];
+        for (key in this.encodeMap) {
+          _results.push(key);
+        }
+        return _results;
+      }).call(this)).sort(function(a, b) {
+        return b.length - a.length;
+      });
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        encode = _ref[_i];
+        regExp = new RegExp(this.encodeMap[encode], 'g');
+        json = json.replace(regExp, encode);
+      }
+      for (extraEncode in this.extraEncodeMap) {
+        regExp = new RegExp('\\' + this.extraEncodeMap[extraEncode], 'g');
+        json = json.replace(regExp, extraEncode);
+      }
+      return json;
     },
     registerEvent: function(_arg) {
       var info, type;

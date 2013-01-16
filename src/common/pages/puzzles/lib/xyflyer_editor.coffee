@@ -3,7 +3,7 @@ xyflyerEditor = exports ? provide('./lib/xyflyer_editor', {})
 class xyflyerEditor.EditorHelper
     $: (selector) -> $(selector, @el)
 
-    constructor: ({@el, @equationArea, @boardElement, @objects}) ->
+    constructor: ({@el, @equationArea, @boardElement, @objects, @encode}) ->
         @rings = []
         @parser = require('./parser')
         @init()
@@ -15,7 +15,7 @@ class xyflyerEditor.EditorHelper
             el: @equationArea
             gameArea: @el
             plot: (id, data) => @plot(id, data)
-            submit: => @plane?.launch(true) 
+            submit: => @launch()
 
         @equations.add()
         
@@ -48,6 +48,9 @@ class xyflyerEditor.EditorHelper
         @plane = new xyflyer.Plane
             board: @board
             track: (info) => @trackPlane(info)
+            
+        if @equations
+            @equations.plotFormula(equation) for equation in @equations?.equations
 
     initButtons: ->
         @$('.editor .edit_board').bind 'click', =>
@@ -73,6 +76,7 @@ class xyflyerEditor.EditorHelper
 
         @$('.editor .add_equation').bind 'click', =>
             if @equations.length < 3
+                @hideInstructions()
                 @equations.add()
             else    
                 alert("You've already added the maximum number of equations.")
@@ -81,6 +85,7 @@ class xyflyerEditor.EditorHelper
             if @equations.length <= 1
                 alert('You must have at least one equation.')
             else
+                @hideInstructions()
                 equation = @equations.remove()
 
         @$('.editor .add_fragment').bind 'click', =>
@@ -95,6 +100,7 @@ class xyflyerEditor.EditorHelper
             alert('Please click on the equation fragment you want to remove.')
             for component in @equations.equationComponents
                 component.element.bind 'click.remove', =>
+                    @hideInstructions()
                     c.element.unbind('click.remove') for c in @equations.equationComponents
                     @equations.removeComponent(component)
 
@@ -116,6 +122,7 @@ class xyflyerEditor.EditorHelper
         @$('.editor .remove_ring').bind 'click', =>
             alert('Please click on the ring you want to remove.')
             @boardElement.bind 'click.remove_ring', (e) =>
+                @hideInstructions()
                 @boardElement.unbind('click.remove_ring')
                 @board.initClicks(@boardElement)
                 for ring, index in @rings
@@ -131,6 +138,8 @@ class xyflyerEditor.EditorHelper
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
         
+    launch: -> @plane?.launch(true) 
+        
     resetLevel: ->
         @plane.reset()
         ring.reset() for ring in @rings
@@ -140,7 +149,7 @@ class xyflyerEditor.EditorHelper
         for ring in @rings
             ring.highlightIfPassingThrough(info) 
             allPassedThrough = false unless ring.passedThrough
-#        @completeLevel() if allPassedThrough
+        @showInstructions() if allPassedThrough
 
     showDialog: ({text, fields, callback}) ->
         dialog = $(document.createElement('DIV'))
@@ -160,6 +169,19 @@ class xyflyerEditor.EditorHelper
         @el.append(dialog)
         dialog.css(opacity: 0, left: (@el.width()/2) - (dialog.width()/2))
         dialog.animate(opacity: 1, duration: 250, complete: -> dialog.find('input:first-child').focus())
+        dialog.bind 'mousedown', (e) =>
+            e.preventDefault() if e.preventDefault
+            body = $(document.body)
+            leftStart = dialog.offset().left - @el.offset().left
+            leftClick = e.clientX
+            topStart = dialog.offset().top - @el.offset().top
+            topClick = e.clientY
+            body.bind 'mousemove.dialog', (e) =>
+                e.preventDefault() if e.preventDefault
+                dialog.css(left: leftStart+(e.clientX-leftClick), top: topStart+(e.clientY-topClick))
+                
+            body.one 'mouseup', =>
+                body.unbind('mousemove.dialog')    
         
         closeDialog = ->
             dialog.animate
@@ -168,6 +190,7 @@ class xyflyerEditor.EditorHelper
                 complete: -> dialog.remove()
         
         dialog.find('button').bind 'click', =>
+            @hideInstructions()
             closeDialog()
             data = {}
             for i in dialog.find('input')
@@ -176,4 +199,33 @@ class xyflyerEditor.EditorHelper
             callback(data)
             
         dialog.find('a').bind 'click', => closeDialog()
+        
+    showInstructions: ->
+        @$('.instructions p').hide()
+        @$('.instructions input').show()
+        instructions = {equations: {}, rings: []}
+        
+        for equation in @equations.equations
+            instructions.equations[equation.straightFormula()] = {}
+            
+        instructions.grid = @grid
+        
+        instructions.islandCoordinates = @islandCoordinates
+        
+        for ring in @rings
+            instructions.rings.push(x: ring.x, y: ring.y)
+            
+        for component in @equations.equationComponents
+            instructions.fragments or= []
+            instructions.fragments.push(component.equationFragment)
+            
+        @$('.instructions input').val(JSON.stringify(instructions))
+        
+    hideInstructions: ->
+        @$('.instructions input').hide()
+        @$('.instructions p').show()
+        
+        
+        
+        
         

@@ -10,7 +10,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   function EditorHelper(_arg) {
-    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects, this.encode = _arg.encode;
     this.rings = [];
     this.parser = require('./parser');
     this.init();
@@ -26,8 +26,7 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.plot(id, data);
       },
       submit: function() {
-        var _ref;
-        return (_ref = _this.plane) != null ? _ref.launch(true) : void 0;
+        return _this.launch();
       }
     });
     this.equations.add();
@@ -35,7 +34,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initBoard = function(_arg) {
-    var grid, islandCoordinates,
+    var equation, grid, islandCoordinates, _i, _len, _ref, _ref1, _results,
       _this = this;
     grid = _arg.grid, islandCoordinates = _arg.islandCoordinates;
     if (grid) {
@@ -68,12 +67,21 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.resetLevel();
       }
     });
-    return this.plane = new xyflyer.Plane({
+    this.plane = new xyflyer.Plane({
       board: this.board,
       track: function(info) {
         return _this.trackPlane(info);
       }
     });
+    if (this.equations) {
+      _ref1 = (_ref = this.equations) != null ? _ref.equations : void 0;
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        equation = _ref1[_i];
+        _results.push(this.equations.plotFormula(equation));
+      }
+      return _results;
+    }
   };
 
   EditorHelper.prototype.initButtons = function() {
@@ -102,6 +110,7 @@ xyflyerEditor.EditorHelper = (function() {
     });
     this.$('.editor .add_equation').bind('click', function() {
       if (_this.equations.length < 3) {
+        _this.hideInstructions();
         return _this.equations.add();
       } else {
         return alert("You've already added the maximum number of equations.");
@@ -112,6 +121,7 @@ xyflyerEditor.EditorHelper = (function() {
       if (_this.equations.length <= 1) {
         return alert('You must have at least one equation.');
       } else {
+        _this.hideInstructions();
         return equation = _this.equations.remove();
       }
     });
@@ -133,6 +143,7 @@ xyflyerEditor.EditorHelper = (function() {
         component = _ref[_i];
         _results.push(component.element.bind('click.remove', function() {
           var c, _j, _len1, _ref1;
+          _this.hideInstructions();
           _ref1 = _this.equations.equationComponents;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             c = _ref1[_j];
@@ -160,6 +171,7 @@ xyflyerEditor.EditorHelper = (function() {
       alert('Please click on the ring you want to remove.');
       _this.boardElement.bind('click.remove_ring', function(e) {
         var index, ring, _i, _len, _ref;
+        _this.hideInstructions();
         _this.boardElement.unbind('click.remove_ring');
         _this.board.initClicks(_this.boardElement);
         _ref = _this.rings;
@@ -184,6 +196,11 @@ xyflyerEditor.EditorHelper = (function() {
     return this.board.plot(id, formula, area);
   };
 
+  EditorHelper.prototype.launch = function() {
+    var _ref;
+    return (_ref = this.plane) != null ? _ref.launch(true) : void 0;
+  };
+
   EditorHelper.prototype.resetLevel = function() {
     var ring, _i, _len, _ref, _results;
     this.plane.reset();
@@ -197,20 +214,19 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.trackPlane = function(info) {
-    var allPassedThrough, ring, _i, _len, _ref, _results;
+    var allPassedThrough, ring, _i, _len, _ref;
     allPassedThrough = this.rings.length > 0;
     _ref = this.rings;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       ring = _ref[_i];
       ring.highlightIfPassingThrough(info);
       if (!ring.passedThrough) {
-        _results.push(allPassedThrough = false);
-      } else {
-        _results.push(void 0);
+        allPassedThrough = false;
       }
     }
-    return _results;
+    if (allPassedThrough) {
+      return this.showInstructions();
+    }
   };
 
   EditorHelper.prototype.showDialog = function(_arg) {
@@ -241,6 +257,29 @@ xyflyerEditor.EditorHelper = (function() {
         return dialog.find('input:first-child').focus();
       }
     });
+    dialog.bind('mousedown', function(e) {
+      var body, leftClick, leftStart, topClick, topStart;
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      body = $(document.body);
+      leftStart = dialog.offset().left - _this.el.offset().left;
+      leftClick = e.clientX;
+      topStart = dialog.offset().top - _this.el.offset().top;
+      topClick = e.clientY;
+      body.bind('mousemove.dialog', function(e) {
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+        return dialog.css({
+          left: leftStart + (e.clientX - leftClick),
+          top: topStart + (e.clientY - topClick)
+        });
+      });
+      return body.one('mouseup', function() {
+        return body.unbind('mousemove.dialog');
+      });
+    });
     closeDialog = function() {
       return dialog.animate({
         opacity: 0,
@@ -252,6 +291,7 @@ xyflyerEditor.EditorHelper = (function() {
     };
     dialog.find('button').bind('click', function() {
       var data, i, input, _j, _len1, _ref;
+      _this.hideInstructions();
       closeDialog();
       data = {};
       _ref = dialog.find('input');
@@ -265,6 +305,43 @@ xyflyerEditor.EditorHelper = (function() {
     return dialog.find('a').bind('click', function() {
       return closeDialog();
     });
+  };
+
+  EditorHelper.prototype.showInstructions = function() {
+    var component, equation, instructions, ring, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+    this.$('.instructions p').hide();
+    this.$('.instructions input').show();
+    instructions = {
+      equations: {},
+      rings: []
+    };
+    _ref = this.equations.equations;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      equation = _ref[_i];
+      instructions.equations[equation.straightFormula()] = {};
+    }
+    instructions.grid = this.grid;
+    instructions.islandCoordinates = this.islandCoordinates;
+    _ref1 = this.rings;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      ring = _ref1[_j];
+      instructions.rings.push({
+        x: ring.x,
+        y: ring.y
+      });
+    }
+    _ref2 = this.equations.equationComponents;
+    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+      component = _ref2[_k];
+      instructions.fragments || (instructions.fragments = []);
+      instructions.fragments.push(component.equationFragment);
+    }
+    return this.$('.instructions input').val(JSON.stringify(instructions));
+  };
+
+  EditorHelper.prototype.hideInstructions = function() {
+    this.$('.instructions input').hide();
+    return this.$('.instructions p').show();
   };
 
   return EditorHelper;

@@ -100,6 +100,7 @@ soma.views
                         boardElement: @$('.board')
                         equationArea: @$('.equation_area')
                         objects: @$('.objects')
+                        encode: (instructions) => @encode(instructions)
                     
                 else
                     @showMessage('intro')
@@ -185,6 +186,48 @@ soma.views
                 @$('.go').attr('href', path)
             else
                 @$('.go').bind 'click', => @go(path)
+                
+        initEncode: ->
+            @encodeMap =
+                '"objects"': '~o'
+                '"type"': '~t'
+                '"index"': '~i'
+                '"numerator"': '~n'
+                '"denominator"': '~d'
+                '"fullNumerator"': '~fN'
+                '"fullDenominator"': '~fD'
+                '"verified"': '~v'
+                'true': '~u'
+                'false': '~f'
+            for object of @viewHelper.objects
+                @encodeMap['"' + object + '"'] = "!#{object.split(/_/ig).map((section) -> return section[0]).join('')}"
+
+            @extraEncodeMap = 
+                ':': '-'
+                '"': '*'
+                ',': "'"
+                '=': '+'
+                '{': '('
+                '}': ')'
+
+        encode: (json) ->
+            for encode in (key for key of @encodeMap).sort((a,b) => b.length - a.length)
+                regExp = new RegExp(encode,'g')
+                json = json.replace(regExp, @encodeMap[encode])
+            for extraEncode of @extraEncodeMap
+                regExp = new RegExp('\\' + extraEncode,'g')
+                json = json.replace(regExp, @extraEncodeMap[extraEncode])
+            return json
+
+        decode: (json) ->
+            for encode in (key for key of @encodeMap).sort((a,b) => b.length - a.length)
+                regExp = new RegExp(@encodeMap[encode],'g')
+                json = json.replace(regExp, encode)
+            for extraEncode of @extraEncodeMap
+                regExp = new RegExp('\\' + @extraEncodeMap[extraEncode],'g')
+                json = json.replace(regExp, extraEncode)
+            return json
+            
                 
         registerEvent: ({type, info}) ->
             return unless @user and @user.id and (@classLevelId or @levelId) and @classId
