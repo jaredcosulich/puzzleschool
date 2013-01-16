@@ -173,6 +173,7 @@ class xyflyerEditor.EditorHelper
         for ring in @rings
             ring.highlightIfPassingThrough(info) 
             allPassedThrough = false unless ring.passedThrough
+            
         @showInstructions() if allPassedThrough
 
     showDialog: ({text, fields, callback}) ->
@@ -193,8 +194,7 @@ class xyflyerEditor.EditorHelper
         @el.append(dialog)
         dialog.css(opacity: 0, left: (@el.width()/2) - (dialog.width()/2))
         dialog.animate(opacity: 1, duration: 250, complete: -> dialog.find('input:first-child').focus())
-        dialog.bind 'mousedown', (e) =>
-            e.preventDefault() if e.preventDefault
+        dialog.bind 'mousedown.dialog', (e) =>
             body = $(document.body)
             leftStart = dialog.offset().left - @el.offset().left
             leftClick = e.clientX

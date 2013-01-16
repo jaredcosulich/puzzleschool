@@ -180,29 +180,23 @@ body {
 .xyflyer .equation_area .launch_button {
   text-align: center;
 }
-.xyflyer .equation_area .possible_fragments,
-.xyflyer .equation_area .editor {
+.xyflyer .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
   overflow: hidden;
 }
-.xyflyer .equation_area .possible_fragments p,
-.xyflyer .equation_area .editor p {
+.xyflyer .equation_area .possible_fragments p {
   font-size: 11px;
 }
 .xyflyer .equation_area .possible_fragments .equation_component,
-.xyflyer .equation_area .editor .equation_component,
-.xyflyer .equation_area .possible_fragments .place_holder,
-.xyflyer .equation_area .editor .place_holder {
+.xyflyer .equation_area .possible_fragments .place_holder {
   float: left;
   margin: 6px 6px 0 0;
 }
-.xyflyer .equation_area .possible_fragments .equation_component,
-.xyflyer .equation_area .editor .equation_component {
+.xyflyer .equation_area .possible_fragments .equation_component {
   cursor: move;
 }
-.xyflyer .equation_area .possible_fragments .place_holder,
-.xyflyer .equation_area .editor .place_holder {
+.xyflyer .equation_area .possible_fragments .place_holder {
   padding: 6px 9px;
   color: #c7c7c7;
   border: 1px solid #c7c7c7;
@@ -294,17 +288,23 @@ body {
   left: -1000px;
   z-index: 99;
 }
-.xyflyer .blue_button {
+.xyflyer .blue_button,
+.xyflyer .red_button {
   border: 1px solid #ccc;
   padding: 3px 6px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
-  background-color: #24aac3;
   color: white;
   box-shadow: 2px;
   -webkit-box-shadow: 2px;
   -moz-box-shadow: 2px;
+}
+.xyflyer .blue_button {
+  background-color: #24aac3;
+}
+.xyflyer .red_button {
+  background-color: #ff6e5f;
 }
 .xyflyer .dialog {
   background-color: white;
@@ -333,7 +333,18 @@ body {
   padding: 3px 12px;
   font-size: 15px;
 }
+.xyflyer .editor,
 .xyflyer .instructions {
+  margin-top: 18px;
+  padding: 6px;
+  overflow: hidden;
+}
+.xyflyer .editor p,
+.xyflyer .instructions p {
+  font-size: 11px;
+}
+.xyflyer .editor input,
+.xyflyer .instructions input {
   width: 240px;
   height: 30px;
 }

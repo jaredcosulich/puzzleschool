@@ -298,11 +298,8 @@ xyflyerEditor.EditorHelper = (function() {
         return dialog.find('input:first-child').focus();
       }
     });
-    dialog.bind('mousedown', function(e) {
+    dialog.bind('mousedown.dialog', function(e) {
       var body, leftClick, leftStart, topClick, topStart;
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
       body = $(document.body);
       leftStart = dialog.offset().left - _this.el.offset().left;
       leftClick = e.clientX;

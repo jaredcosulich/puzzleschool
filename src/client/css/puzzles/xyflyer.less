@@ -180,7 +180,7 @@ body {
             text-align: center;
         }
 
-        .possible_fragments, .editor {
+        .possible_fragments {
             margin-top: 30px;
             padding: 6px;
             overflow: hidden;
@@ -284,13 +284,20 @@ body {
         }
     }
     
-    .blue_button {
+    .blue_button, .red_button {
         border: 1px solid #ccc;
         padding: 3px 6px;
         .rounded(6px);
-        background-color: @blue;
         color: white;
         .box-shadow(2px)
+    }
+    
+    .blue_button {
+        background-color: @blue;
+    }
+    
+    .red_button {
+        background-color: @red;
     }
     
     .dialog {
@@ -319,8 +326,16 @@ body {
         }
     }
 
-    .instructions {
-        width: 240px;
-        height: 30px;
+    .editor, .instructions {
+        margin-top: 18px;
+        padding: 6px;
+        overflow: hidden;
+        p {
+            font-size: @smallsize;
+        }
+        input {
+            width: 240px;
+            height: 30px;
+        }
     }
 }
