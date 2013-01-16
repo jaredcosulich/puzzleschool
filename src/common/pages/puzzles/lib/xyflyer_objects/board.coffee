@@ -50,13 +50,18 @@ class board.Board extends xyflyerObject.Object
 
         x = @xAxis + (@islandCoordinates.x * @xUnit) - (width/2)
         y = @yAxis - (@islandCoordinates.y * @yUnit)
-        @addImage(island, x, y)
-        text = "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
-        @paper.text(
+        @island = @paper.set()
+        @island.push(@addImage(island, x, y))
+        text = @islandText()
+        @islandLabel = @paper.text(
             x + (width/2) - (15*@scale)
             y + (height/2) - (15*@scale)
             text
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
+        @island.push(@islandLabel)
+        
+    islandText: ->
+        "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
         
     addRing: (ring) ->
         front = @paper.path(ring.frontDescription)

@@ -67,13 +67,19 @@ board.Board = (function(_super) {
     }
     x = this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2);
     y = this.yAxis - (this.islandCoordinates.y * this.yUnit);
-    this.addImage(island, x, y);
-    text = "" + (this.scale > 0.6 ? 'Launching From:\n' : '') + this.islandCoordinates.x + ", " + this.islandCoordinates.y;
-    return this.paper.text(x + (width / 2) - (15 * this.scale), y + (height / 2) - (15 * this.scale), text).attr({
+    this.island = this.paper.set();
+    this.island.push(this.addImage(island, x, y));
+    text = this.islandText();
+    this.islandLabel = this.paper.text(x + (width / 2) - (15 * this.scale), y + (height / 2) - (15 * this.scale), text).attr({
       fill: '#ddd',
       stroke: 'none',
       'font-size': 9 + (2 * this.scale)
     }).toFront();
+    return this.island.push(this.islandLabel);
+  };
+
+  Board.prototype.islandText = function() {
+    return "" + (this.scale > 0.6 ? 'Launching From:\n' : '') + this.islandCoordinates.x + ", " + this.islandCoordinates.y;
   };
 
   Board.prototype.addRing = function(ring) {

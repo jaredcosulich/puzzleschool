@@ -85,7 +85,14 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initButtons = function() {
-    var _this = this;
+    var _ref,
+      _this = this;
+    if (!((_ref = this.board) != null ? _ref.island : void 0)) {
+      $.timeout(100, function() {
+        return _this.initButtons();
+      });
+      return;
+    }
     this.$('.editor .edit_board').bind('click', function() {
       return _this.showDialog({
         text: 'What should the bounds of the board be?',
@@ -135,18 +142,18 @@ xyflyerEditor.EditorHelper = (function() {
       });
     });
     this.$('.editor .remove_fragment').bind('click', function() {
-      var component, _i, _len, _ref, _results;
+      var component, _i, _len, _ref1, _results;
       alert('Please click on the equation fragment you want to remove.');
-      _ref = _this.equations.equationComponents;
+      _ref1 = _this.equations.equationComponents;
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        component = _ref[_i];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        component = _ref1[_i];
         _results.push(component.element.bind('click.remove', function() {
-          var c, _j, _len1, _ref1;
+          var c, _j, _len1, _ref2;
           _this.hideInstructions();
-          _ref1 = _this.equations.equationComponents;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            c = _ref1[_j];
+          _ref2 = _this.equations.equationComponents;
+          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+            c = _ref2[_j];
             c.element.unbind('click.remove');
           }
           return _this.equations.removeComponent(component);
@@ -167,16 +174,16 @@ xyflyerEditor.EditorHelper = (function() {
         }
       });
     });
-    return this.$('.editor .remove_ring').bind('click', function() {
+    this.$('.editor .remove_ring').bind('click', function() {
       alert('Please click on the ring you want to remove.');
       _this.boardElement.bind('click.remove_ring', function(e) {
-        var index, ring, _i, _len, _ref;
+        var index, ring, _i, _len, _ref1;
         _this.hideInstructions();
         _this.boardElement.unbind('click.remove_ring');
         _this.board.initClicks(_this.boardElement);
-        _ref = _this.rings;
-        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-          ring = _ref[index];
+        _ref1 = _this.rings;
+        for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+          ring = _ref1[index];
           if (ring.touches(e.offsetX, e.offsetY, 12, 12)) {
             _this.rings.splice(index, 1);
             ring.image.remove();
@@ -187,6 +194,40 @@ xyflyerEditor.EditorHelper = (function() {
         return alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.');
       });
       return _this.boardElement.unbind('click.showxy');
+    });
+    return this.boardElement.bind('mousedown.dragisland', function(e) {
+      var element, elements, xStart, yStart, _i, _len, _ref1, _ref2, _results;
+      elements = _this.board.paper.getElementsByPoint(e.offsetX, e.offsetY);
+      _results = [];
+      for (_i = 0, _len = elements.length; _i < _len; _i++) {
+        element = elements[_i];
+        if (!((_ref1 = element[0].href) != null ? (_ref2 = _ref1.toString()) != null ? _ref2.indexOf('island') : void 0 : void 0)) {
+          continue;
+        }
+        xStart = e.clientX;
+        yStart = e.clientY;
+        _this.boardElement.bind('mousemove.dragisland', function(e) {
+          var x, y;
+          _this.board.island.transform("...t" + (e.clientX - xStart) + "," + (e.clientY - yStart));
+          x = _this.board.screenX(_this.islandCoordinates.x) + (e.clientX - xStart);
+          y = _this.board.screenY(_this.islandCoordinates.y) + (e.clientY - yStart);
+          _this.plane.move(x, y, 0);
+          _this.board.islandCoordinates = _this.islandCoordinates = {
+            x: _this.board.paperX(x),
+            y: _this.board.paperY(y)
+          };
+          _this.board.islandLabel.attr({
+            text: _this.board.islandText()
+          });
+          xStart = e.clientX;
+          return yStart = e.clientY;
+        });
+        _results.push(_this.boardElement.one('mouseup.dragisland', function() {
+          _this.initBoard({});
+          return _this.boardElement.unbind('mousemove.dragisland');
+        }));
+      }
+      return _results;
     });
   };
 

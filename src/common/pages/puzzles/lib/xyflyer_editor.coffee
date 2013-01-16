@@ -53,6 +53,10 @@ class xyflyerEditor.EditorHelper
             @equations.plotFormula(equation) for equation in @equations?.equations
 
     initButtons: ->
+        if not @board?.island
+            $.timeout 100, => @initButtons()
+            return
+            
         @$('.editor .edit_board').bind 'click', =>
             @showDialog
                 text: 'What should the bounds of the board be?'
@@ -133,7 +137,27 @@ class xyflyerEditor.EditorHelper
                         return
                 alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.')
             @boardElement.unbind('click.showxy')
-            
+        
+        @boardElement.bind 'mousedown.dragisland', (e) =>
+            elements = @board.paper.getElementsByPoint(e.offsetX, e.offsetY)
+            for element in elements when element[0].href?.toString()?.indexOf('island')
+                xStart = e.clientX
+                yStart = e.clientY
+                @boardElement.bind 'mousemove.dragisland', (e) =>
+                    @board.island.transform("...t#{e.clientX - xStart},#{e.clientY - yStart}")
+                    x = @board.screenX(@islandCoordinates.x)+(e.clientX - xStart)
+                    y = @board.screenY(@islandCoordinates.y)+(e.clientY - yStart)
+                    @plane.move(x, y, 0)
+                    @board.islandCoordinates = @islandCoordinates = {x: @board.paperX(x), y: @board.paperY(y)}
+                    @board.islandLabel.attr(text: @board.islandText())
+                    xStart = e.clientX
+                    yStart = e.clientY
+                    
+                @boardElement.one 'mouseup.dragisland', => 
+                    @initBoard({})
+                    @boardElement.unbind('mousemove.dragisland')
+                    
+                
     plot: (id, data) ->
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
