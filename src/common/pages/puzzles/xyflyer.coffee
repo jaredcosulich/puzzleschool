@@ -106,8 +106,8 @@ soma.views
                         boardElement: @$('.board')
                         equationArea: @$('.equation_area')
                         objects: @$('.objects')
-                        grid: @data.grid
-                        islandCoordinates: @data.islandCoordinates                        
+                        grid: @data?.grid
+                        islandCoordinates: @data?.islandCoordinates                        
                         encode: (instructions) => @encode(instructions)
                     @loadLevel()
                     
@@ -145,15 +145,13 @@ soma.views
             
             
         loadLevel: ->
-            return unless @data
-            for equation of @data.equations
-                info = @data.equations[equation]
-                @helper.addEquation(equation, info.start, info.solutionComponents, @data.variables)    
+            for equation, info of @data?.equations or {'': {}}
+                @helper.addEquation(equation, info.start, info.solutionComponents, @data?.variables)    
         
-            for ring in @data.rings
+            for ring in @data?.rings or []
                 @helper.addRing(ring.x, ring.y)
             
-            if @data.fragments
+            if @data?.fragments
                 for fragment in @data.fragments
                     @helper.addEquationComponent(fragment)
             else if @levelId != 'editor'

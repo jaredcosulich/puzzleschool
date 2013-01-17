@@ -106,7 +106,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var instructions, level, xyflyer, xyflyerEditor, _ref, _ref1,
+      var instructions, level, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.user = this.cookies.get('user');
@@ -126,8 +126,8 @@ soma.views({
             boardElement: this.$('.board'),
             equationArea: this.$('.equation_area'),
             objects: this.$('.objects'),
-            grid: this.data.grid,
-            islandCoordinates: this.data.islandCoordinates,
+            grid: (_ref1 = this.data) != null ? _ref1.grid : void 0,
+            islandCoordinates: (_ref2 = this.data) != null ? _ref2.islandCoordinates : void 0,
             encode: function(instructions) {
               return _this.encode(instructions);
             }
@@ -143,8 +143,8 @@ soma.views({
       if (this.classId) {
         if (!this.user) {
           if (typeof window !== "undefined" && window !== null) {
-            if ((_ref1 = window.location) != null) {
-              _ref1.reload();
+            if ((_ref3 = window.location) != null) {
+              _ref3.reload();
             }
           }
           return;
@@ -178,24 +178,24 @@ soma.views({
       return this.loadLevel();
     },
     loadLevel: function() {
-      var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _results;
-      if (!this.data) {
-        return;
+      var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _results;
+      _ref1 = ((_ref = this.data) != null ? _ref.equations : void 0) || {
+        '': {}
+      };
+      for (equation in _ref1) {
+        info = _ref1[equation];
+        this.helper.addEquation(equation, info.start, info.solutionComponents, (_ref2 = this.data) != null ? _ref2.variables : void 0);
       }
-      for (equation in this.data.equations) {
-        info = this.data.equations[equation];
-        this.helper.addEquation(equation, info.start, info.solutionComponents, this.data.variables);
-      }
-      _ref = this.data.rings;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        ring = _ref[_i];
+      _ref4 = ((_ref3 = this.data) != null ? _ref3.rings : void 0) || [];
+      for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
+        ring = _ref4[_i];
         this.helper.addRing(ring.x, ring.y);
       }
-      if (this.data.fragments) {
-        _ref1 = this.data.fragments;
+      if ((_ref5 = this.data) != null ? _ref5.fragments : void 0) {
+        _ref6 = this.data.fragments;
         _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          fragment = _ref1[_j];
+        for (_j = 0, _len1 = _ref6.length; _j < _len1; _j++) {
+          fragment = _ref6[_j];
           _results.push(this.helper.addEquationComponent(fragment));
         }
         return _results;
