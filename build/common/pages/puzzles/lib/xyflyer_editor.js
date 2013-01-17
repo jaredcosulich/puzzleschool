@@ -10,7 +10,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   function EditorHelper(_arg) {
-    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects, this.encode = _arg.encode;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects, this.encode = _arg.encode, this.islandCoordinates = _arg.islandCoordinates, this.grid = _arg.grid;
     this.rings = [];
     this.parser = require('./parser');
     this.init();
@@ -29,7 +29,6 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.launch();
       }
     });
-    this.equations.add();
     return this.initButtons();
   };
 
@@ -117,8 +116,8 @@ xyflyerEditor.EditorHelper = (function() {
     });
     this.$('.editor .add_equation').bind('click', function() {
       if (_this.equations.length < 3) {
-        _this.hideInstructions();
-        return _this.equations.add();
+        _this.handleModification();
+        return _this.addEquation();
       } else {
         return alert("You've already added the maximum number of equations.");
       }
@@ -128,7 +127,7 @@ xyflyerEditor.EditorHelper = (function() {
       if (_this.equations.length <= 1) {
         return alert('You must have at least one equation.');
       } else {
-        _this.hideInstructions();
+        _this.handleModification();
         return equation = _this.equations.remove();
       }
     });
@@ -137,7 +136,7 @@ xyflyerEditor.EditorHelper = (function() {
         text: 'What equation fragment do you want to add?',
         fields: [['fragment', 'Fragment', 'text']],
         callback: function(data) {
-          return _this.equations.addComponent(data.fragment);
+          return _this.addEquationComponent(data.fragment);
         }
       });
     });
@@ -150,7 +149,7 @@ xyflyerEditor.EditorHelper = (function() {
         component = _ref1[_i];
         _results.push(component.element.bind('click.remove', function() {
           var c, _j, _len1, _ref2;
-          _this.hideInstructions();
+          _this.handleModification();
           _ref2 = _this.equations.equationComponents;
           for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
             c = _ref2[_j];
@@ -166,11 +165,7 @@ xyflyerEditor.EditorHelper = (function() {
         text: 'What should the coordinates of this new ring be?',
         fields: [['x', 'X'], ['y', 'Y']],
         callback: function(data) {
-          return _this.rings.push(new xyflyer.Ring({
-            board: _this.board,
-            x: data.x,
-            y: data.y
-          }));
+          return _this.addRing(data.x, data.y);
         }
       });
     });
@@ -178,7 +173,7 @@ xyflyerEditor.EditorHelper = (function() {
       alert('Please click on the ring you want to remove.');
       _this.boardElement.bind('click.remove_ring', function(e) {
         var index, ring, _i, _len, _ref1;
-        _this.hideInstructions();
+        _this.handleModification();
         _this.boardElement.unbind('click.remove_ring');
         _this.board.initClicks(_this.boardElement);
         _ref1 = _this.rings;
@@ -229,6 +224,22 @@ xyflyerEditor.EditorHelper = (function() {
       }
       return _results;
     });
+  };
+
+  EditorHelper.prototype.addEquation = function() {
+    return this.equations.add();
+  };
+
+  EditorHelper.prototype.addEquationComponent = function(fragment) {
+    return this.equations.addComponent(fragment);
+  };
+
+  EditorHelper.prototype.addRing = function(x, y) {
+    return this.rings.push(new xyflyer.Ring({
+      board: this.board,
+      x: x,
+      y: y
+    }));
   };
 
   EditorHelper.prototype.plot = function(id, data) {
@@ -306,6 +317,9 @@ xyflyerEditor.EditorHelper = (function() {
       topStart = dialog.offset().top - _this.el.offset().top;
       topClick = e.clientY;
       body.bind('mousemove.dialog', function(e) {
+        if (document.activeElement.type === 'text') {
+          return;
+        }
         if (e.preventDefault) {
           e.preventDefault();
         }
@@ -329,7 +343,6 @@ xyflyerEditor.EditorHelper = (function() {
     };
     dialog.find('button').bind('click', function() {
       var data, i, input, _j, _len1, _ref;
-      _this.hideInstructions();
       closeDialog();
       data = {};
       _ref = dialog.find('input');
@@ -338,17 +351,16 @@ xyflyerEditor.EditorHelper = (function() {
         input = $(i);
         data[input.attr('name')] = (input.hasClass('number') ? parseFloat(input.val()) : input.val());
       }
-      return callback(data);
+      callback(data);
+      return _this.handleModification();
     });
     return dialog.find('a').bind('click', function() {
       return closeDialog();
     });
   };
 
-  EditorHelper.prototype.showInstructions = function() {
+  EditorHelper.prototype.getInstructions = function() {
     var component, equation, instructions, ring, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-    this.$('.instructions p').hide();
-    this.$('.instructions input').show();
     instructions = {
       equations: {},
       rings: []
@@ -374,7 +386,25 @@ xyflyerEditor.EditorHelper = (function() {
       instructions.fragments || (instructions.fragments = []);
       instructions.fragments.push(component.equationFragment);
     }
-    return this.$('.instructions input').val(JSON.stringify(instructions));
+    return this.encode(JSON.stringify(instructions));
+  };
+
+  EditorHelper.prototype.handleModification = function() {
+    this.hashInstructions();
+    return this.hideInstructions();
+  };
+
+  EditorHelper.prototype.hashInstructions = function() {
+    var levelString;
+    levelString = this.getInstructions();
+    return window.location.hash = levelString;
+  };
+
+  EditorHelper.prototype.showInstructions = function() {
+    this.$('.instructions p').hide();
+    this.$('.instructions input').show();
+    this.$('.instructions input').val(this.getInstructions);
+    return this.hashInstructions();
   };
 
   EditorHelper.prototype.hideInstructions = function() {

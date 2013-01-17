@@ -106,35 +106,45 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var equation, fragment, info, ring, xyflyer, xyflyerEditor, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
+      var instructions, level, xyflyer, xyflyerEditor, _ref, _ref1,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.user = this.cookies.get('user');
       this.classId = this.el.data('class');
       this.levelId = this.el.data('level');
       this.classLevelId = this.el.data('classlevel');
+      this.initEncode();
       if (isNaN(parseInt(this.levelId))) {
+        if ((_ref = (instructions = window.location.hash.replace(/\s/g, ''))) != null ? _ref.length : void 0) {
+          level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
+          this.data = JSON.parse(level);
+        }
         if (this.levelId === 'editor') {
           xyflyerEditor = require('./lib/xyflyer_editor');
-          this.editor = new xyflyerEditor.EditorHelper({
+          this.helper = new xyflyerEditor.EditorHelper({
             el: $(this.selector),
             boardElement: this.$('.board'),
             equationArea: this.$('.equation_area'),
             objects: this.$('.objects'),
+            grid: this.data.grid,
+            islandCoordinates: this.data.islandCoordinates,
             encode: function(instructions) {
               return _this.encode(instructions);
             }
           });
-        } else {
+          this.loadLevel();
+        } else if (!this.data) {
           this.showMessage('intro');
         }
-        return;
+        if (!(this.levelId === 'custom' && this.data)) {
+          return;
+        }
       }
       if (this.classId) {
         if (!this.user) {
           if (typeof window !== "undefined" && window !== null) {
-            if ((_ref = window.location) != null) {
-              _ref.reload();
+            if ((_ref1 = window.location) != null) {
+              _ref1.reload();
             }
           }
           return;
@@ -144,14 +154,14 @@ soma.views({
         } catch (e) {
 
         }
-      } else {
+      } else if (!this.data) {
         this.data = LEVELS[this.levelId];
       }
       if (!this.data) {
         this.showMessage('exit');
         return;
       }
-      this.viewHelper = new xyflyer.ViewHelper({
+      this.helper = new xyflyer.ViewHelper({
         el: $(this.selector),
         boardElement: this.$('.board'),
         objects: this.$('.objects'),
@@ -165,24 +175,31 @@ soma.views({
           return _this.registerEvent(eventInfo);
         }
       });
+      return this.loadLevel();
+    },
+    loadLevel: function() {
+      var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _results;
+      if (!this.data) {
+        return;
+      }
       for (equation in this.data.equations) {
         info = this.data.equations[equation];
-        this.viewHelper.addEquation(equation, info.start, info.solutionComponents, this.data.variables);
+        this.helper.addEquation(equation, info.start, info.solutionComponents, this.data.variables);
       }
-      _ref1 = this.data.rings;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        ring = _ref1[_i];
-        this.viewHelper.addRing(ring.x, ring.y);
+      _ref = this.data.rings;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ring = _ref[_i];
+        this.helper.addRing(ring.x, ring.y);
       }
       if (this.data.fragments) {
-        _ref2 = this.data.fragments;
+        _ref1 = this.data.fragments;
         _results = [];
-        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-          fragment = _ref2[_j];
-          _results.push(this.viewHelper.addEquationComponent(fragment));
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          fragment = _ref1[_j];
+          _results.push(this.helper.addEquationComponent(fragment));
         }
         return _results;
-      } else {
+      } else if (this.levelId !== 'editor') {
         return this.$('.possible_fragments').hide();
       }
     },
@@ -244,24 +261,37 @@ soma.views({
       }
     },
     initEncode: function() {
-      var object;
       this.encodeMap = {
-        '"objects"': '~o',
-        '"type"': '~t',
-        '"index"': '~i',
-        '"numerator"': '~n',
-        '"denominator"': '~d',
-        '"fullNumerator"': '~fN',
-        '"fullDenominator"': '~fD',
-        '"verified"': '~v',
-        'true': '~u',
-        'false': '~f'
+        '"equations":': '~a',
+        '"rings":': '~b',
+        '"grid":': '~c',
+        '"islandCoordinates":': '~d',
+        '"fragments":': '~e',
+        '"variables":': '~f',
+        '"x":': '~g',
+        '"y":': '~h',
+        '"xMin":': '~i',
+        '"yMin":': '~j',
+        '"xMax":': '~k',
+        '"yMax":': '~l',
+        '-': '~m',
+        '\\+': '~n',
+        '\\*': '~o',
+        '\\/': '~p',
+        '\\(': '~q',
+        '\\)': '~r',
+        '0': '~s',
+        '1': '~t',
+        '2': '~u',
+        '3': '~v',
+        '4': '~w',
+        '5': '~x',
+        '6': '~y',
+        '7': '~z',
+        '8': '~A',
+        '9': '~B',
+        '"verified"': '~V'
       };
-      for (object in this.viewHelper.objects) {
-        this.encodeMap['"' + object + '"'] = "!" + (object.split(/_/ig).map(function(section) {
-          return section[0];
-        }).join(''));
-      }
       return this.extraEncodeMap = {
         ':': '-',
         '"': '*',
@@ -298,6 +328,10 @@ soma.views({
     decode: function(json) {
       var encode, extraEncode, key, regExp, _i, _len, _ref,
         _this = this;
+      for (extraEncode in this.extraEncodeMap) {
+        regExp = new RegExp('\\' + this.extraEncodeMap[extraEncode], 'g');
+        json = json.replace(regExp, extraEncode);
+      }
       _ref = ((function() {
         var _results;
         _results = [];
@@ -311,11 +345,7 @@ soma.views({
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         encode = _ref[_i];
         regExp = new RegExp(this.encodeMap[encode], 'g');
-        json = json.replace(regExp, encode);
-      }
-      for (extraEncode in this.extraEncodeMap) {
-        regExp = new RegExp('\\' + this.extraEncodeMap[extraEncode], 'g');
-        json = json.replace(regExp, extraEncode);
+        json = json.replace(regExp, encode.replace(/\\/g, ''));
       }
       return json;
     },
@@ -556,8 +586,8 @@ LEVELS = [
     fragments: ['4x', '(1/4)x']
   }, {
     equations: {
-      'ax + 12': {
-        start: 'ax + 12'
+      'ax+12': {
+        start: 'ax+12'
       }
     },
     grid: {

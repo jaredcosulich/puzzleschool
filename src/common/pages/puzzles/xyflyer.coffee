@@ -92,19 +92,29 @@ soma.views
             @levelId = @el.data('level')
             @classLevelId = @el.data('classlevel')
             
+            @initEncode()
+            
             if isNaN(parseInt(@levelId))
+                if (instructions = window.location.hash.replace(/\s/g, ''))?.length
+                    level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
+                    @data = JSON.parse(level)
+                    
                 if @levelId == 'editor'
                     xyflyerEditor = require('./lib/xyflyer_editor')
-                    @editor = new xyflyerEditor.EditorHelper
+                    @helper = new xyflyerEditor.EditorHelper
                         el: $(@selector)
                         boardElement: @$('.board')
                         equationArea: @$('.equation_area')
                         objects: @$('.objects')
+                        grid: @data.grid
+                        islandCoordinates: @data.islandCoordinates                        
                         encode: (instructions) => @encode(instructions)
+                    @loadLevel()
                     
-                else
+                else if not @data
                     @showMessage('intro')
-                return
+            
+                return unless @levelId == 'custom' and @data
                 
             if @classId
                 if not @user
@@ -114,14 +124,14 @@ soma.views
                 try
                     @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
                 catch e
-            else
+            else if not @data
                 @data = LEVELS[@levelId]
                 
             if not @data
                 @showMessage('exit')
                 return
         
-            @viewHelper = new xyflyer.ViewHelper
+            @helper = new xyflyer.ViewHelper
                 el: $(@selector)
                 boardElement: @$('.board')
                 objects: @$('.objects')
@@ -130,20 +140,25 @@ soma.views
                 islandCoordinates: @data.islandCoordinates
                 nextLevel: => @nextLevel()
                 registerEvent: (eventInfo) => @registerEvent(eventInfo)
+                
+            @loadLevel()    
             
+            
+        loadLevel: ->
+            return unless @data
             for equation of @data.equations
                 info = @data.equations[equation]
-                @viewHelper.addEquation(equation, info.start, info.solutionComponents, @data.variables)    
+                @helper.addEquation(equation, info.start, info.solutionComponents, @data.variables)    
         
             for ring in @data.rings
-                @viewHelper.addRing(ring.x, ring.y)
+                @helper.addRing(ring.x, ring.y)
             
             if @data.fragments
                 for fragment in @data.fragments
-                    @viewHelper.addEquationComponent(fragment)
-            else
+                    @helper.addEquationComponent(fragment)
+            else if @levelId != 'editor'
                 @$('.possible_fragments').hide()
-                
+                            
                 
         centerAndShow: (element, board) ->
             offset = element.offset()
@@ -189,19 +204,36 @@ soma.views
                 
         initEncode: ->
             @encodeMap =
-                '"objects"': '~o'
-                '"type"': '~t'
-                '"index"': '~i'
-                '"numerator"': '~n'
-                '"denominator"': '~d'
-                '"fullNumerator"': '~fN'
-                '"fullDenominator"': '~fD'
-                '"verified"': '~v'
-                'true': '~u'
-                'false': '~f'
-            for object of @viewHelper.objects
-                @encodeMap['"' + object + '"'] = "!#{object.split(/_/ig).map((section) -> return section[0]).join('')}"
-
+                '"equations":': '~a'
+                '"rings":': '~b'
+                '"grid":': '~c'
+                '"islandCoordinates":': '~d'
+                '"fragments":': '~e'
+                '"variables":': '~f'
+                '"x":': '~g'
+                '"y":': '~h'
+                '"xMin":': '~i'
+                '"yMin":': '~j'
+                '"xMax":': '~k'
+                '"yMax":': '~l'
+                '-': '~m'
+                '\\+': '~n'
+                '\\*': '~o'
+                '\\/': '~p'
+                '\\(': '~q'
+                '\\)': '~r'
+                '0': '~s'
+                '1': '~t'
+                '2': '~u'
+                '3': '~v'
+                '4': '~w'
+                '5': '~x'
+                '6': '~y'
+                '7': '~z'
+                '8': '~A'
+                '9': '~B' 
+                '"verified"': '~V'
+                
             @extraEncodeMap = 
                 ':': '-'
                 '"': '*'
@@ -220,12 +252,12 @@ soma.views
             return json
 
         decode: (json) ->
-            for encode in (key for key of @encodeMap).sort((a,b) => b.length - a.length)
-                regExp = new RegExp(@encodeMap[encode],'g')
-                json = json.replace(regExp, encode)
             for extraEncode of @extraEncodeMap
                 regExp = new RegExp('\\' + @extraEncodeMap[extraEncode],'g')
                 json = json.replace(regExp, extraEncode)
+            for encode in (key for key of @encodeMap).sort((a,b) => b.length - a.length)
+                regExp = new RegExp(@encodeMap[encode],'g')
+                json = json.replace(regExp, encode.replace(/\\/g, ''))
             return json
             
                 
@@ -385,7 +417,7 @@ LEVELS = [
     }
     {
         equations: 
-            'ax + 12': {start: 'ax + 12'}
+            'ax+12': {start: 'ax+12'}
         grid:
             xMin: -40
             xMax: 60
