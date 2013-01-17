@@ -18,6 +18,7 @@ class xyflyerEditor.EditorHelper
             submit: => @launch()
 
         @initButtons()
+        @hideInstructions()
             
     initBoard: ({grid, islandCoordinates}) ->
         if grid
@@ -250,14 +251,15 @@ class xyflyerEditor.EditorHelper
         window.location.hash = levelString
         
     showInstructions: ->
-        @$('.instructions p').hide()
-        @$('.instructions input').show()
-        @$('.instructions input').val(@getInstructions)
+        @$('.instructions .invalid').hide()
+        @$('.instructions .valid').show()
+        href = location.protocol+'//'+location.host+location.pathname
+        @$('.instructions .link').val("#{href.replace(/editor/, 'custom')}##{@getInstructions()}")
         @hashInstructions()
         
     hideInstructions: ->
-        @$('.instructions input').hide()
-        @$('.instructions p').show()
+        @$('.instructions .valid').hide()
+        @$('.instructions .invalid').show()
         
         
         

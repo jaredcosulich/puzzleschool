@@ -29,7 +29,8 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.launch();
       }
     });
-    return this.initButtons();
+    this.initButtons();
+    return this.hideInstructions();
   };
 
   EditorHelper.prototype.initBoard = function(_arg) {
@@ -401,15 +402,17 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.showInstructions = function() {
-    this.$('.instructions p').hide();
-    this.$('.instructions input').show();
-    this.$('.instructions input').val(this.getInstructions);
+    var href;
+    this.$('.instructions .invalid').hide();
+    this.$('.instructions .valid').show();
+    href = location.protocol + '//' + location.host + location.pathname;
+    this.$('.instructions .link').val("" + (href.replace(/editor/, 'custom')) + "#" + (this.getInstructions()));
     return this.hashInstructions();
   };
 
   EditorHelper.prototype.hideInstructions = function() {
-    this.$('.instructions input').hide();
-    return this.$('.instructions p').show();
+    this.$('.instructions .valid').hide();
+    return this.$('.instructions .invalid').show();
   };
 
   return EditorHelper;

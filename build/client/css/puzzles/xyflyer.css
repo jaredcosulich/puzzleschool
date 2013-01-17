@@ -265,7 +265,8 @@ body {
   left: -10000px;
 }
 .xyflyer .complete,
-.xyflyer .intro_message {
+.xyflyer .intro_message,
+.xyflyer .exit_message {
   position: absolute;
   top: -1000px;
   left: -1000px;
