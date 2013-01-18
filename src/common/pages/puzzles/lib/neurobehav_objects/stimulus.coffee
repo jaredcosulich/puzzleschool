@@ -6,9 +6,10 @@ class stimulus.Stimulus extends neurobehavObject.Object
     objectType: 'stimulus'
     objectName: 'Stimulus'
     imageSrc: 'stimulus_button.png' 
-    height: 50
-    width: 50
-    fullWidth: 100
+    width: 180
+    height: 120
+    connectionLength: 60
+    buttonRadius: 30
     propertyList: 
         'voltage': {name: 'Voltage', type: 'slider', unit: 0.25, unitName: 'V', set: 'setSlider' }
         'duration': {name: 'Duration', type: 'slider', unit: 250, max: 10000, unitName: 'msec'}
@@ -23,7 +24,6 @@ class stimulus.Stimulus extends neurobehavObject.Object
 
     init: ->
         @draw()
-        @setImage()
         
         mousedown = false
         minimumMouseDown = true
@@ -47,14 +47,47 @@ class stimulus.Stimulus extends neurobehavObject.Object
 
     draw: ->
         @image = @paper.set()
-        button = @paper.circle()
-
+        @button = @paper.circle(@position.left + @buttonRadius, @position.top + @buttonRadius, @buttonRadius)
+        @button.attr('stroke-width': 4, fill: 'white')
+        @image.push(@button)
+        
+        startX = @position.left
+        startY = @position.top + @buttonRadius
+        voltageConnector = @paper.path """
+            M#{startX},#{startY}
+            L#{startX-(@buttonRadius/2)},#{startY}
+            L#{startX-(@buttonRadius/2)},#{startY + (@buttonRadius*2)}
+            L#{startX + (@buttonRadius/2)},#{startY + (@buttonRadius*2)}
+            M#{startX + (@buttonRadius/2) + 24},#{startY + (@buttonRadius*2)}
+            L#{startX + (@buttonRadius*2)},#{startY + (@buttonRadius*2)}
+            L#{startX + (@buttonRadius*2)},#{startY + (@buttonRadius*2.5)}
+            M#{startX + (@buttonRadius*2) - 12},#{startY + (@buttonRadius*2.5)}
+            L#{startX + (@buttonRadius*2) + 12},#{startY + (@buttonRadius*2.5)}
+            M#{startX + (@buttonRadius*2) - 8},#{startY + (@buttonRadius*2.5) + 4}
+            L#{startX + (@buttonRadius*2) + 8},#{startY + (@buttonRadius*2.5) + 4}
+            M#{startX + (@buttonRadius*2) - 4},#{startY + (@buttonRadius*2.5) + 8}
+            L#{startX + (@buttonRadius*2) + 4},#{startY + (@buttonRadius*2.5) + 8}
+        """
+        voltageConnector.attr('stroke-width': 2)
+        
+        middleThingy = @paper.path(
+            (
+                for i in [0...@buttonRadius] by 6
+                    height = 8 * (((i/6) % 2) + 1)
+                    """
+                        M#{startX + (@buttonRadius/2) + i},#{startY + (@buttonRadius*2) + height}
+                        L#{startX + (@buttonRadius/2) + i},#{startY + (@buttonRadius*2) - height}
+                    """
+            ).join('\n')
+        )
+        middleThingy.attr('stroke-width': 3)
+        
     initSlider: ->
         @slider = new Slider
             paper: @paper
             x: @position.left
             y: @position.top + @height + 9
-            width: @width
+            width: @width/3
             min: 0
             max: @properties.voltage.max
             unit: @properties.voltage.unit
@@ -68,22 +101,15 @@ class stimulus.Stimulus extends neurobehavObject.Object
             @propertiesEditor.set('voltage', val)
         
     setState: (@on) ->
-        @setImage()
         @neuron.addVoltage(if @on then @properties.voltage.value else (@properties.voltage.value * -1))
 
     setSlider: (val) -> @slider.set(val)
 
-    setImage: ->
-        # this isn't working in firefox
-        @image.attr
-            'clip-rect': "#{@position.left}, #{@position.top}, #{@width}, #{@height}"
-            transform: "t#{-1 * @width * (if @on then 1 else 0)},0"
-
     connectTo: (@neuron) ->
-        @connection = @paper.path """
-            M#{@position.left + (@width/2)},#{@position.top + (@height/2)}
-            L#{@neuron.position.left},#{@neuron.position.top + (@neuron.height/2)}
-        """
-        @connection.attr('stroke-width': 2, 'arrow-end': 'block-wide-long')
-        @connection.toBack()
+        # @connection = @paper.path """
+        #     M#{@position.left + (@width/2)},#{@position.top + (@height/2)}
+        #     L#{@neuron.position.left},#{@neuron.position.top + (@neuron.height/2)}
+        # """
+        # @connection.attr('stroke-width': 2, 'arrow-end': 'block-wide-long')
+        # @connection.toBack()
         @neuron.addVoltage(@properties.voltage.value * (if @on then 1 else 0))
