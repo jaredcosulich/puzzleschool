@@ -25,7 +25,7 @@ stimulus.Stimulus = (function(_super) {
 
   Stimulus.prototype.connectionLength = 60;
 
-  Stimulus.prototype.buttonRadius = 30;
+  Stimulus.prototype.centerOffset = 30;
 
   Stimulus.prototype.propertyList = {
     'voltage': {
@@ -87,32 +87,55 @@ stimulus.Stimulus = (function(_super) {
   };
 
   Stimulus.prototype.draw = function() {
-    var height, i, middleThingy, startX, startY, voltageConnector;
+    var connection, connectionSegment, endX, endY, height, i, innerNeedle, middleThingy, slope, startX, startY, startingX, startingY, voltageConnector;
     this.image = this.paper.set();
-    this.button = this.paper.circle(this.position.left + this.buttonRadius, this.position.top + this.buttonRadius, this.buttonRadius);
+    this.button = this.paper.circle(this.position.left + this.centerOffset, this.position.top + this.centerOffset, this.centerOffset);
     this.button.attr({
       'stroke-width': 4,
       fill: 'white'
     });
     this.image.push(this.button);
     startX = this.position.left;
-    startY = this.position.top + this.buttonRadius;
-    voltageConnector = this.paper.path("M" + startX + "," + startY + "\nL" + (startX - (this.buttonRadius / 2)) + "," + startY + "\nL" + (startX - (this.buttonRadius / 2)) + "," + (startY + (this.buttonRadius * 2)) + "\nL" + (startX + (this.buttonRadius / 2)) + "," + (startY + (this.buttonRadius * 2)) + "\nM" + (startX + (this.buttonRadius / 2) + 24) + "," + (startY + (this.buttonRadius * 2)) + "\nL" + (startX + (this.buttonRadius * 2)) + "," + (startY + (this.buttonRadius * 2)) + "\nL" + (startX + (this.buttonRadius * 2)) + "," + (startY + (this.buttonRadius * 2.5)) + "\nM" + (startX + (this.buttonRadius * 2) - 12) + "," + (startY + (this.buttonRadius * 2.5)) + "\nL" + (startX + (this.buttonRadius * 2) + 12) + "," + (startY + (this.buttonRadius * 2.5)) + "\nM" + (startX + (this.buttonRadius * 2) - 8) + "," + (startY + (this.buttonRadius * 2.5) + 4) + "\nL" + (startX + (this.buttonRadius * 2) + 8) + "," + (startY + (this.buttonRadius * 2.5) + 4) + "\nM" + (startX + (this.buttonRadius * 2) - 4) + "," + (startY + (this.buttonRadius * 2.5) + 8) + "\nL" + (startX + (this.buttonRadius * 2) + 4) + "," + (startY + (this.buttonRadius * 2.5) + 8));
+    startY = this.position.top + this.centerOffset;
+    voltageConnector = this.paper.path("M" + startX + "," + startY + "\nL" + (startX - (this.centerOffset / 2)) + "," + startY + "\nL" + (startX - (this.centerOffset / 2)) + "," + (startY + (this.centerOffset * 2)) + "\nL" + (startX + (this.centerOffset / 2)) + "," + (startY + (this.centerOffset * 2)) + "\nM" + (startX + (this.centerOffset / 2) + 24) + "," + (startY + (this.centerOffset * 2)) + "\nL" + (startX + (this.centerOffset * 2)) + "," + (startY + (this.centerOffset * 2)) + "\nL" + (startX + (this.centerOffset * 2)) + "," + (startY + (this.centerOffset * 2.5)) + "\nM" + (startX + (this.centerOffset * 2) - 12) + "," + (startY + (this.centerOffset * 2.5)) + "\nL" + (startX + (this.centerOffset * 2) + 12) + "," + (startY + (this.centerOffset * 2.5)) + "\nM" + (startX + (this.centerOffset * 2) - 8) + "," + (startY + (this.centerOffset * 2.5) + 4) + "\nL" + (startX + (this.centerOffset * 2) + 8) + "," + (startY + (this.centerOffset * 2.5) + 4) + "\nM" + (startX + (this.centerOffset * 2) - 4) + "," + (startY + (this.centerOffset * 2.5) + 8) + "\nL" + (startX + (this.centerOffset * 2) + 4) + "," + (startY + (this.centerOffset * 2.5) + 8));
     voltageConnector.attr({
       'stroke-width': 2
     });
     middleThingy = this.paper.path(((function() {
       var _i, _ref, _results;
       _results = [];
-      for (i = _i = 0, _ref = this.buttonRadius; _i < _ref; i = _i += 6) {
+      for (i = _i = 0, _ref = this.centerOffset; _i < _ref; i = _i += 6) {
         height = 8 * (((i / 6) % 2) + 1);
-        _results.push("M" + (startX + (this.buttonRadius / 2) + i) + "," + (startY + (this.buttonRadius * 2) + height) + "\nL" + (startX + (this.buttonRadius / 2) + i) + "," + (startY + (this.buttonRadius * 2) - height));
+        _results.push("M" + (startX + (this.centerOffset / 2) + i) + "," + (startY + (this.centerOffset * 2) + height) + "\nL" + (startX + (this.centerOffset / 2) + i) + "," + (startY + (this.centerOffset * 2) - height));
       }
       return _results;
     }).call(this)).join('\n'));
-    return middleThingy.attr({
+    middleThingy.attr({
       'stroke-width': 3
     });
+    this.image.push(middleThingy);
+    startingX = startX + this.centerOffset * 2;
+    startingY = startY;
+    connectionSegment = this.connectionLength / 10;
+    slope = ((this.position.top + (this.height / 1.5)) - startingY) / ((startingX + (connectionSegment * 4)) - (startingX + this.connectionLength));
+    endX = startingX + (connectionSegment * 5);
+    endY = startingY - (slope * connectionSegment);
+    connection = this.paper.path("M" + startingX + "," + startingY + "\nL" + (startingX + (connectionSegment * 4)) + "," + startingY + "\nL" + endX + "," + endY);
+    connection.attr({
+      'stroke-width': 2
+    });
+    this.image.push(connection);
+    this.needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + (startingX + this.connectionLength) + ", " + (this.position.top + (this.height / 1.5)) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
+    this.needle.attr({
+      fill: 'white'
+    });
+    this.image.push(this.needle);
+    innerNeedle = this.paper.path("M" + (endX - 3) + "," + (endY - (3 * (1 / slope))) + "\nL" + (startingX + this.connectionLength) + ", " + (this.position.top + (this.height / 1.5)) + "\nL" + (endX + 3) + "," + (endY + (3 * (1 / slope))));
+    innerNeedle.attr({
+      stroke: '#ccc'
+    });
+    this.image.push(innerNeedle);
+    return Stimulus.__super__.draw.call(this);
   };
 
   Stimulus.prototype.initSlider = function() {
@@ -122,7 +145,7 @@ stimulus.Stimulus = (function(_super) {
       paper: this.paper,
       x: this.position.left,
       y: this.position.top + this.height + 9,
-      width: this.width / 3,
+      width: this.centerOffset * 2,
       min: 0,
       max: this.properties.voltage.max,
       unit: this.properties.voltage.unit
@@ -152,6 +175,7 @@ stimulus.Stimulus = (function(_super) {
 
   Stimulus.prototype.connectTo = function(neuron) {
     this.neuron = neuron;
+    this.image.toFront();
     return this.neuron.addVoltage(this.properties.voltage.value * (this.on ? 1 : 0));
   };
 

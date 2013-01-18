@@ -6,6 +6,7 @@ class neuron.Neuron extends neurobehavObject.Object
     objectName: 'Neuron'
     height: 60
     width: 60
+    centerOffset: 30
     properties: {}
     propertyList: 
         'threshold': {name: 'Threshold', type: 'slider', unit: 0.25, max: 3, unitName: 'V', set: 'setThreshold'}

@@ -9,6 +9,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
     connectionLength: 60
     screenWidth: 150
     screenHeight: 90
+    centerOffset: 75
     screenColor: '#64A539'
     xDelta: 1
     
@@ -30,7 +31,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         
     draw: ->
         graph = @paper.rect(
-            @position.left + 9, 
+            @position.left, 
             @position.top, 
             @screenWidth + 12, 
             @screenHeight + 12, 

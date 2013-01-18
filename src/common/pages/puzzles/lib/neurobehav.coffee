@@ -39,8 +39,8 @@ class neurobehav.ViewHelper
         neuron1 = @game.addObject
             type: 'Neuron'
             position:
-                top: 100
-                left: 300
+                top: 150
+                left: 210
             threshold: 1
             spike: 0.5
             description: @$('.descriptions .neuron').html()
@@ -52,8 +52,8 @@ class neurobehav.ViewHelper
         neuron2 = @game.addObject
             type: 'Neuron'
             position:
-                top: 300
-                left: 200
+                top: 360
+                left: 210
             threshold: 1
             spike: 0.5
             description: @$('.descriptions .neuron').html()
@@ -63,8 +63,8 @@ class neurobehav.ViewHelper
         oscilloscope1 = @game.addObject
             type: 'Oscilloscope'
             position:
-                top: 40
-                left: 380
+                top: 80
+                left: 320
             board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 

@@ -25,6 +25,8 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.screenHeight = 90;
 
+  Oscilloscope.prototype.centerOffset = 75;
+
   Oscilloscope.prototype.screenColor = '#64A539';
 
   Oscilloscope.prototype.xDelta = 1;
@@ -49,7 +51,7 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.draw = function() {
     var connection, connectionSegment, endX, endY, graph, innerNeedle, slope, startingX, startingY;
-    graph = this.paper.rect(this.position.left + 9, this.position.top, this.screenWidth + 12, this.screenHeight + 12, 6);
+    graph = this.paper.rect(this.position.left, this.position.top, this.screenWidth + 12, this.screenHeight + 12, 6);
     graph.attr({
       fill: '#ACACAD'
     });

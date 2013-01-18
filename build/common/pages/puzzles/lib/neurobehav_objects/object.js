@@ -134,7 +134,7 @@ object.Object = (function() {
       opacity: 0
     });
     icon.push(glow);
-    icon.transform("t" + (this.position.left - 20) + "," + (this.position.top - 10) + "s0.5");
+    icon.transform("t" + (this.position.left + this.centerOffset - 6) + "," + (this.position.top - 27) + "s0.5");
     icon.attr({
       cursor: 'pointer'
     });
@@ -172,7 +172,7 @@ object.Object = (function() {
       opacity: 0
     });
     icon.push(glow);
-    icon.transform("t" + (this.position.left - 36) + "," + (this.position.top - 10) + "s0.5");
+    icon.transform("t" + (this.position.left + this.centerOffset - 24) + "," + (this.position.top - 27) + "s0.5");
     icon.attr({
       cursor: 'pointer'
     });

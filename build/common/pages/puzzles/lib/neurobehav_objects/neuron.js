@@ -19,6 +19,8 @@ neuron.Neuron = (function(_super) {
 
   Neuron.prototype.width = 60;
 
+  Neuron.prototype.centerOffset = 30;
+
   Neuron.prototype.properties = {};
 
   Neuron.prototype.propertyList = {
