@@ -8,7 +8,7 @@ class bubble.Bubble
     spacing: 20
     backgroundColor: '#49494A'
     
-    constructor: ({@paper, @x, @y, @width, @height}) -> 
+    constructor: ({@paper, @x, @y, @width, @height, @position}) -> 
         @init()
         
     $: (selector) -> @el.find(selector)
@@ -17,23 +17,48 @@ class bubble.Bubble
         
     createContainer: ->    
         @container = @paper.set()
-        @base = @paper.rect(@x - @arrowOffset, @y - @arrowHeight - @height, @width, @height, 12)
-        @container.push(@base)
-        
-        @arrow = @paper.path """
-            M#{@x-(@arrowWidth/2)},#{@y-@arrowHeight-2}
-            L#{@x},#{@y}
-            L#{@x+(@arrowWidth/2)},#{@y-@arrowHeight-2}
-        """
-        @container.push(@arrow)
+        @createBase()
+        @createArrow()
         @container.attr(fill: @backgroundColor, stroke: 'none')
         @container.toFront()
         bbox = @container.getBBox()
+    
+    createBase: ->
+        x = switch @position
+            when 'right' then @x + @arrowHeight
+            else @x - @arrowOffset
+        
+        y = switch @position
+            when 'right' then @y - @arrowOffset
+            else @y - @arrowHeight - @height
+        
+        @base = @paper.rect(x, y, @width, @height, 12)
+        @container.push(@base)
+                            
+    createArrow: ->
+        @arrow = switch @position
+            when 'right'
+                @paper.path """
+                    M#{@x+@arrowHeight+2},#{@y-(@arrowWidth/2)}
+                    L#{@x},#{@y}
+                    L#{@x+@arrowHeight+2},#{@y+(@arrowWidth/2)}
+                """
+            else
+                @paper.path """
+                    M#{@x-(@arrowWidth/2)},#{@y-@arrowHeight-2}
+                    L#{@x},#{@y}
+                    L#{@x+(@arrowWidth/2)},#{@y-@arrowHeight-2}
+                """
+        @container.push(@arrow)
+                                
                             
     show: ({content, callback})->
         return if @container
         @createContainer()
-        content(@container)
+        if content
+            content(@container)
+        # else
+            
         @container.attr(transform: "s0,0,#{@x},#{@y}")
         @container.animate(
             {transform: "s1"}, 
@@ -42,6 +67,7 @@ class bubble.Bubble
             => callback() if callback
         )
         @visible = true
+        @container.toFront()
         
     hide: ({callback}) -> 
         return unless @container

@@ -18,7 +18,7 @@ bubble.Bubble = (function() {
   Bubble.prototype.backgroundColor = '#49494A';
 
   function Bubble(_arg) {
-    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height;
+    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position;
     this.init();
   }
 
@@ -31,16 +31,48 @@ bubble.Bubble = (function() {
   Bubble.prototype.createContainer = function() {
     var bbox;
     this.container = this.paper.set();
-    this.base = this.paper.rect(this.x - this.arrowOffset, this.y - this.arrowHeight - this.height, this.width, this.height, 12);
-    this.container.push(this.base);
-    this.arrow = this.paper.path("M" + (this.x - (this.arrowWidth / 2)) + "," + (this.y - this.arrowHeight - 2) + "\nL" + this.x + "," + this.y + "\nL" + (this.x + (this.arrowWidth / 2)) + "," + (this.y - this.arrowHeight - 2));
-    this.container.push(this.arrow);
+    this.createBase();
+    this.createArrow();
     this.container.attr({
       fill: this.backgroundColor,
       stroke: 'none'
     });
     this.container.toFront();
     return bbox = this.container.getBBox();
+  };
+
+  Bubble.prototype.createBase = function() {
+    var x, y;
+    x = (function() {
+      switch (this.position) {
+        case 'right':
+          return this.x + this.arrowHeight;
+        default:
+          return this.x - this.arrowOffset;
+      }
+    }).call(this);
+    y = (function() {
+      switch (this.position) {
+        case 'right':
+          return this.y - this.arrowOffset;
+        default:
+          return this.y - this.arrowHeight - this.height;
+      }
+    }).call(this);
+    this.base = this.paper.rect(x, y, this.width, this.height, 12);
+    return this.container.push(this.base);
+  };
+
+  Bubble.prototype.createArrow = function() {
+    this.arrow = (function() {
+      switch (this.position) {
+        case 'right':
+          return this.paper.path("M" + (this.x + this.arrowHeight + 2) + "," + (this.y - (this.arrowWidth / 2)) + "\nL" + this.x + "," + this.y + "\nL" + (this.x + this.arrowHeight + 2) + "," + (this.y + (this.arrowWidth / 2)));
+        default:
+          return this.paper.path("M" + (this.x - (this.arrowWidth / 2)) + "," + (this.y - this.arrowHeight - 2) + "\nL" + this.x + "," + this.y + "\nL" + (this.x + (this.arrowWidth / 2)) + "," + (this.y - this.arrowHeight - 2));
+      }
+    }).call(this);
+    return this.container.push(this.arrow);
   };
 
   Bubble.prototype.show = function(_arg) {
@@ -51,7 +83,9 @@ bubble.Bubble = (function() {
       return;
     }
     this.createContainer();
-    content(this.container);
+    if (content) {
+      content(this.container);
+    }
     this.container.attr({
       transform: "s0,0," + this.x + "," + this.y
     });
@@ -62,7 +96,8 @@ bubble.Bubble = (function() {
         return callback();
       }
     });
-    return this.visible = true;
+    this.visible = true;
+    return this.container.toFront();
   };
 
   Bubble.prototype.hide = function(_arg) {

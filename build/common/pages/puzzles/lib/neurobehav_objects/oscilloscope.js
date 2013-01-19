@@ -98,6 +98,9 @@ oscilloscope.Oscilloscope = (function(_super) {
     lastDX = 0;
     lastDY = 0;
     onDrag = function(dX, dY) {
+      if (_this.neuron) {
+        _this.unattach();
+      }
       _this.image.toFront();
       _this.image.transform("...T" + (dX - lastDX) + "," + (dY - lastDY));
       glow.transform("...T" + (dX - lastDX) + "," + (dY - lastDY));
@@ -105,7 +108,6 @@ oscilloscope.Oscilloscope = (function(_super) {
       return lastDY = dY;
     };
     onStart = function() {
-      _this.unattach();
       return glow.show();
     };
     onEnd = function() {

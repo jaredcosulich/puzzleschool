@@ -98,6 +98,7 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         lastDX = 0
         lastDY = 0
         onDrag = (dX, dY) =>
+            @unattach() if @neuron
             @image.toFront()
             @image.transform("...T#{dX - lastDX},#{dY - lastDY}")
             glow.transform("...T#{dX - lastDX},#{dY - lastDY}")
@@ -105,7 +106,6 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             lastDY = dY
             
         onStart = => 
-            @unattach()
             glow.show()
         
         onEnd = =>

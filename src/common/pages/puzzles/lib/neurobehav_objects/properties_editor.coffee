@@ -4,9 +4,6 @@ Slider = require('./slider').Slider
 
 class propertiesEditor.PropertiesEditor
     width: 210
-    arrowHeight: 15
-    arrowWidth: 20
-    arrowOffset: 24
     spacing: 20
     backgroundColor: '#49494A'
     

@@ -11,12 +11,6 @@ propertiesEditor.PropertiesEditor = (function() {
 
   PropertiesEditor.prototype.width = 210;
 
-  PropertiesEditor.prototype.arrowHeight = 15;
-
-  PropertiesEditor.prototype.arrowWidth = 20;
-
-  PropertiesEditor.prototype.arrowOffset = 24;
-
   PropertiesEditor.prototype.spacing = 20;
 
   PropertiesEditor.prototype.backgroundColor = '#49494A';

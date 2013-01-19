@@ -85,6 +85,21 @@ class object.Object
             () => glow.attr(opacity: 0.04),
             () => glow.attr(opacity: 0)
         )
+        
+        bbox = icon.getBBox()
+        @descriptionBubble = new Bubble
+            paper: @paper, 
+            x: bbox.x + bbox.width
+            y: bbox.y + (bbox.height/2)
+            width: 240
+            height: 300
+            position: 'right'
+        
+        icon.click => 
+            if @descriptionBubble.visible
+                @descriptionBubble.hide({})
+            else
+                @descriptionBubble.show({})
 
         return icon    
 
