@@ -47,19 +47,15 @@ class stimulus.Stimulus extends neurobehavObject.Object
 
     draw: ->
         @image = @paper.set()
-        @button = @paper.circle(@position.left + @centerOffset, @position.top + @centerOffset, @centerOffset)
-        @button.attr('stroke-width': 4, fill: 'white')
-        @buttonGlow = @button.glow
-            width: 4
-            opacity: 0.8
-            offsetx: 2
-            offsety: 2
-            color: 'black'
+        @button = @paper.circle(@position.left + @centerOffset + 2, @position.top + @centerOffset - 5, @centerOffset)
+        @button.attr('stroke-width': 2, fill: 'white')
+        @buttonGlow = @paper.circle(@position.left + @centerOffset, @position.top + @centerOffset, @centerOffset)
+        @buttonGlow.attr('stroke-width': 1, stroke: '#555', fill: '#555')
         @image.push(@buttonGlow)
         @image.push(@button)
         
-        lightStartX = @position.left + (@centerOffset*0.8)
-        lightStartY = @position.top + (@centerOffset/2)
+        lightStartX = @position.left + (@centerOffset*0.8) + 2
+        lightStartY = @position.top + (@centerOffset/2) - 5
         @lightningBolt = @paper.path """
             M#{lightStartX},#{lightStartY}
             L#{lightStartX + (@centerOffset*0.4)},#{lightStartY}}
@@ -162,8 +158,8 @@ class stimulus.Stimulus extends neurobehavObject.Object
         if @on
             @buttonGlow.hide()
             @button.attr(fill: 'orange')
-            @button.transform('t2,2')
-            @lightningBolt.transform('t2,2')
+            @button.transform('t-2,5')
+            @lightningBolt.transform('t-2,5')
         else
             @buttonGlow.show()
             @button.attr(fill: 'white')

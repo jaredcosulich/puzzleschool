@@ -1,5 +1,6 @@
 object = exports ? provide('./object', {})
 PropertiesEditor = require('./properties_editor').PropertiesEditor
+Bubble = require('./bubble').Bubble
 
 class object.Object
     periodicity: 20

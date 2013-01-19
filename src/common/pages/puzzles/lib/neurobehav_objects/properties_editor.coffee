@@ -1,4 +1,5 @@
 propertiesEditor = exports ? provide('./properties_editor', {})
+Bubble = require('./bubble').Bubble
 Slider = require('./slider').Slider
 
 class propertiesEditor.PropertiesEditor
@@ -16,49 +17,38 @@ class propertiesEditor.PropertiesEditor
     
     init: ->
         @height = (Object.keys(@properties).length * @spacing) + (@spacing*2)
+        bbox = @element.getBBox()                
+        @bubble = new Bubble
+            paper: @paper
+            x: bbox.x + (bbox.width/2)
+            y: bbox.y
+            width: @width
+            height: @height
+            
         
-    createContainer: ->    
-        @container = @paper.set()
-        bbox = @element.getBBox()        
-        @x = bbox.x - @arrowOffset
-        @y = bbox.y - (@height + @arrowHeight) 
-        @base = @paper.rect(@x, @y, @width, @height, 12)
-        @container.push(@base)
-        
-        start = @start()
-        startX = start.x
-        startY = start.y-(@arrowHeight+2)
-        @arrow = @paper.path """
-            M#{startX-(@arrowWidth/2)},#{startY}
-            L#{startX},#{startY+@arrowHeight}
-            L#{startX+(@arrowWidth/2)},#{startY}
-        """
-        @container.push(@arrow)
-        @container.attr(fill: @backgroundColor, stroke: 'none')
-        @container.toFront()
-
-    createProperties: ->
-        title = @paper.text(@x + (@width/2), @y + 18, @name)
+    createProperties: (container) ->
+        bbox = container.getBBox()
+        title = @paper.text(bbox.x + (@width/2), bbox.y + 18, @name)
         title.attr(fill: 'white', stroke: 'none', 'font-size': 14)
-        @container.push(title)
+        container.push(title)
         propertiesDisplayed = 0
         for propertyId, property of @properties
             do (property) =>    
-                y = @y + (@spacing*2) + (propertiesDisplayed * @spacing)
-                name = @paper.text(@x + 12, y, property.name.toLowerCase())
+                y = bbox.y + (@spacing*2) + (propertiesDisplayed * @spacing)
+                name = @paper.text(bbox.x + 12, y, property.name.toLowerCase())
                 name.attr
                     fill: '#ccc'
                     stroke: 'none'
                     'font-size': 12, 
                     'font-weight': 1
                     'text-anchor': 'start'
-                @container.push(name)
+                container.push(name)
                 propertiesDisplayed += 1
                 
                 if property.type == 'slider'
                     slider = new Slider
                         paper: @paper
-                        x: @x + 72
+                        x: bbox.x + 72
                         y: y
                         width: 60
                         min: 0
@@ -69,53 +59,31 @@ class propertiesEditor.PropertiesEditor
                         @display(property)
                         
                     property.object = slider
-                    @container.push(slider.el)
-                @display(property, @x + 144, y)
+                    container.push(slider.el)
+                @display(property, container, bbox.x + 144, y)
                     
-    start: ->
-        bbox = @element.getBBox()
-        return {
-            x: bbox.x + (bbox.width/2)
-            y: bbox.y - 3
-        }
-        
-    display: (property, x, y) ->
+    display: (property, container, x, y) ->
         text = "#{property.value} #{property.unitName}"
         if property.display
             property.display.attr(text: text)
         else
             property.display = @paper.text(x, y, text)
             property.display.attr(fill: '#F6E631', stroke: 'none', 'font-size': 11, 'text-anchor': 'start')
-            @container.push(property.display)
+            container.push(property.display)
         property.set(property.value) if property.set
         
-    show: ->
-        return if @container
-        @createContainer()
-        @createProperties()
-        start = @start()
-        @container.attr(transform: "s0,0,#{start.x},#{start.y}")
-        @container.animate(
-            {transform: "s1"}, 
-            100, 
-            'linear',
-            => property.object?.set(property.value) for propertyId, property of @properties
-        )
+    show: -> 
+        @bubble.show
+            content: (container) => @createProperties(container)
+            callback: => property.object?.set(property.value) for propertyId, property of @properties
+
         
     hide: -> 
-        return unless @container
-        start = @start()
-        @container.animate(
-            {transform: "s0,0,#{start.x},#{start.y}"}, 
-            100, 
-            'linear', 
-            => 
-                @container.remove()
-                @container = null
+        @bubble.hide
+            callback: =>
                 property.display = null for propertyId, property of @properties
-        )
         
-    toggle: -> if @container? then @hide() else @show()
+    toggle: -> if @bubble.visible then @hide() else @show()
             
     set: (id, value) ->
         value = parseFloat(value)
