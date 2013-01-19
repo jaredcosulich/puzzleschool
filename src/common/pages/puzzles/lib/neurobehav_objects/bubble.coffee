@@ -8,7 +8,7 @@ class bubble.Bubble
     spacing: 20
     backgroundColor: '#49494A'
     
-    constructor: ({@paper, @x, @y, @width, @height, @position}) -> 
+    constructor: ({@paper, @x, @y, @width, @height, @position, @html}) -> 
         @init()
         
     $: (selector) -> @el.find(selector)
@@ -57,7 +57,11 @@ class bubble.Bubble
         @createContainer()
         if content
             content(@container)
-        # else
+        else
+            if @htmlContainer
+                @htmlContainer.show()
+            else
+                @createHtml()
             
         @container.attr(transform: "s0,0,#{@x},#{@y}")
         @container.animate(
@@ -80,7 +84,26 @@ class bubble.Bubble
                 @container = null
                 callback() if callback
         )
+        @htmlContainer.hide()
+        
         @visible = false
+
+    createHtml: ->
+        @htmlContainer = $(document.createElement('DIV'))
+        @htmlContainer.addClass('bubble_description')
+        bbox = @base.getBBox()
+        offsetX = @paper.canvas.offsetLeft
+        offsetY = @paper.canvas.offsetTop
+        padding = 12
+        @htmlContainer.css
+            backgroundColor: @backgroundColor
+            top: offsetY + bbox.y + padding
+            left: offsetX + bbox.x + padding
+            width: bbox.width - (padding*2)
+            height: bbox.height - (padding*2)
+        @htmlContainer.html(@html)
+        $(document.body).append(@htmlContainer)    
+        
     
     
 

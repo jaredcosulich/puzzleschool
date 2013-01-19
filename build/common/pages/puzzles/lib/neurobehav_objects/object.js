@@ -154,9 +154,10 @@ object.Object = (function() {
       paper: this.paper,
       x: bbox.x + bbox.width,
       y: bbox.y + (bbox.height / 2),
-      width: 240,
+      width: 300,
       height: 300,
-      position: 'right'
+      position: 'right',
+      html: this.description
     });
     icon.click(function() {
       if (_this.descriptionBubble.visible) {

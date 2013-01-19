@@ -91,9 +91,10 @@ class object.Object
             paper: @paper, 
             x: bbox.x + bbox.width
             y: bbox.y + (bbox.height/2)
-            width: 240
+            width: 300
             height: 300
             position: 'right'
+            html: @description
         
         icon.click => 
             if @descriptionBubble.visible

@@ -67,3 +67,19 @@ body {
 .neurobehav .descriptions {
   display: none;
 }
+.bubble_description {
+  position: absolute;
+  color: white;
+  overflow: auto;
+}
+.bubble_description img {
+  float: left;
+  margin: 3px 12px 12px 0;
+}
+.bubble_description h4 {
+  padding-bottom: 6px;
+}
+.bubble_description p {
+  margin: 0;
+  padding: 0 0 12px 0;
+}

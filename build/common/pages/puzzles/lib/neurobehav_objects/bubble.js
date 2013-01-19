@@ -18,7 +18,7 @@ bubble.Bubble = (function() {
   Bubble.prototype.backgroundColor = '#49494A';
 
   function Bubble(_arg) {
-    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position;
+    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position, this.html = _arg.html;
     this.init();
   }
 
@@ -85,6 +85,12 @@ bubble.Bubble = (function() {
     this.createContainer();
     if (content) {
       content(this.container);
+    } else {
+      if (this.htmlContainer) {
+        this.htmlContainer.show();
+      } else {
+        this.createHtml();
+      }
     }
     this.container.attr({
       transform: "s0,0," + this.x + "," + this.y
@@ -116,7 +122,27 @@ bubble.Bubble = (function() {
         return callback();
       }
     });
+    this.htmlContainer.hide();
     return this.visible = false;
+  };
+
+  Bubble.prototype.createHtml = function() {
+    var bbox, offsetX, offsetY, padding;
+    this.htmlContainer = $(document.createElement('DIV'));
+    this.htmlContainer.addClass('bubble_description');
+    bbox = this.base.getBBox();
+    offsetX = this.paper.canvas.offsetLeft;
+    offsetY = this.paper.canvas.offsetTop;
+    padding = 12;
+    this.htmlContainer.css({
+      backgroundColor: this.backgroundColor,
+      top: offsetY + bbox.y + padding,
+      left: offsetX + bbox.x + padding,
+      width: bbox.width - (padding * 2),
+      height: bbox.height - (padding * 2)
+    });
+    this.htmlContainer.html(this.html);
+    return $(document.body).append(this.htmlContainer);
   };
 
   return Bubble;
