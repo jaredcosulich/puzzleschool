@@ -177,5 +177,6 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         $(@neuron).unbind 'threshold.change.oscilloscope' if @neuron
         @neuron = null
         @voltageDisplay.remove()
+        @voltageDisplay = null
         @firePosition = 0
         @drawThreshold()

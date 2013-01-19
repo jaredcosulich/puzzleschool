@@ -148,7 +148,7 @@ propertiesEditor.PropertiesEditor = (function() {
     });
     return this.container.animate({
       transform: "s1"
-    }, 250, 'linear', function() {
+    }, 100, 'linear', function() {
       var property, propertyId, _ref, _ref1, _results;
       _ref = _this.properties;
       _results = [];
@@ -169,7 +169,7 @@ propertiesEditor.PropertiesEditor = (function() {
     start = this.start();
     return this.container.animate({
       transform: "s0,0," + start.x + "," + start.y
-    }, 250, 'linear', function() {
+    }, 100, 'linear', function() {
       var property, propertyId, _ref, _results;
       _this.container.remove();
       _this.container = null;

@@ -223,6 +223,7 @@ oscilloscope.Oscilloscope = (function(_super) {
     }
     this.neuron = null;
     this.voltageDisplay.remove();
+    this.voltageDisplay = null;
     this.firePosition = 0;
     return this.drawThreshold();
   };

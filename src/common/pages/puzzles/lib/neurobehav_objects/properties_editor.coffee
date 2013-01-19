@@ -97,7 +97,7 @@ class propertiesEditor.PropertiesEditor
         @container.attr(transform: "s0,0,#{start.x},#{start.y}")
         @container.animate(
             {transform: "s1"}, 
-            250, 
+            100, 
             'linear',
             => property.object?.set(property.value) for propertyId, property of @properties
         )
@@ -107,7 +107,7 @@ class propertiesEditor.PropertiesEditor
         start = @start()
         @container.animate(
             {transform: "s0,0,#{start.x},#{start.y}"}, 
-            250, 
+            100, 
             'linear', 
             => 
                 @container.remove()
