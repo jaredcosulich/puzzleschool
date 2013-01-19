@@ -78,7 +78,7 @@ class object.Object
         glow.attr(opacity: 0)
         icon.push(glow)
 
-        icon.transform("t#{@position.left+@centerOffset-6},#{@position.top-27}s0.5")
+        icon.transform("t#{@position.left+@centerOffset-8},#{@position.top-27}s0.5")
         icon.attr(cursor: 'pointer')
         icon.hover(
             () => glow.attr(opacity: 0.04),
@@ -101,7 +101,7 @@ class object.Object
         glow.attr(opacity: 0)
         icon.push(glow)
         
-        icon.transform("t#{@position.left+@centerOffset-24},#{@position.top-27}s0.5")
+        icon.transform("t#{@position.left+@centerOffset-26},#{@position.top-27}s0.5")
         icon.attr(cursor: 'pointer')
         icon.hover(
             () => glow.attr(opacity: 0.04),

@@ -87,14 +87,29 @@ stimulus.Stimulus = (function(_super) {
   };
 
   Stimulus.prototype.draw = function() {
-    var connection, connectionSegment, endX, endY, height, i, innerNeedle, middleThingy, slope, startX, startY, startingX, startingY, voltageConnector;
+    var connection, connectionSegment, endX, endY, height, i, innerNeedle, lightStartX, lightStartY, middleThingy, slope, startX, startY, startingX, startingY, voltageConnector;
     this.image = this.paper.set();
     this.button = this.paper.circle(this.position.left + this.centerOffset, this.position.top + this.centerOffset, this.centerOffset);
     this.button.attr({
       'stroke-width': 4,
       fill: 'white'
     });
+    this.buttonGlow = this.button.glow({
+      width: 4,
+      opacity: 0.8,
+      offsetx: 2,
+      offsety: 2,
+      color: 'black'
+    });
+    this.image.push(this.buttonGlow);
     this.image.push(this.button);
+    lightStartX = this.position.left + (this.centerOffset * 0.8);
+    lightStartY = this.position.top + (this.centerOffset / 2);
+    this.lightningBolt = this.paper.path("M" + lightStartX + "," + lightStartY + "\nL" + (lightStartX + (this.centerOffset * 0.4)) + "," + lightStartY + "}\nL" + (lightStartX + (this.centerOffset * 0.3)) + "," + (lightStartY + (this.centerOffset * 0.3)) + "\nL" + (lightStartX + (this.centerOffset * 0.6)) + "," + (lightStartY + (this.centerOffset * 0.3)) + "\nL" + (lightStartX + (this.centerOffset * 0.15)) + "," + (lightStartY + (this.centerOffset * 1.15)) + "\nL" + (lightStartX + (this.centerOffset * 0.15)) + "," + (lightStartY + (this.centerOffset * 0.6)) + "\nL" + (lightStartX - (this.centerOffset * 0.15)) + "," + (lightStartY + (this.centerOffset * 0.6)) + "\nL" + lightStartX + "," + lightStartY);
+    this.lightningBolt.attr({
+      fill: 'yellow'
+    });
+    this.image.push(this.lightningBolt);
     startX = this.position.left;
     startY = this.position.top + this.centerOffset;
     voltageConnector = this.paper.path("M" + startX + "," + startY + "\nL" + (startX - (this.centerOffset / 2)) + "," + startY + "\nL" + (startX - (this.centerOffset / 2)) + "," + (startY + (this.centerOffset * 2)) + "\nL" + (startX + (this.centerOffset / 2)) + "," + (startY + (this.centerOffset * 2)) + "\nM" + (startX + (this.centerOffset / 2) + 24) + "," + (startY + (this.centerOffset * 2)) + "\nL" + (startX + (this.centerOffset * 2)) + "," + (startY + (this.centerOffset * 2)) + "\nL" + (startX + (this.centerOffset * 2)) + "," + (startY + (this.centerOffset * 2.5)) + "\nM" + (startX + (this.centerOffset * 2) - 12) + "," + (startY + (this.centerOffset * 2.5)) + "\nL" + (startX + (this.centerOffset * 2) + 12) + "," + (startY + (this.centerOffset * 2.5)) + "\nM" + (startX + (this.centerOffset * 2) - 8) + "," + (startY + (this.centerOffset * 2.5) + 4) + "\nL" + (startX + (this.centerOffset * 2) + 8) + "," + (startY + (this.centerOffset * 2.5) + 4) + "\nM" + (startX + (this.centerOffset * 2) - 4) + "," + (startY + (this.centerOffset * 2.5) + 8) + "\nL" + (startX + (this.centerOffset * 2) + 4) + "," + (startY + (this.centerOffset * 2.5) + 8));
@@ -166,6 +181,21 @@ stimulus.Stimulus = (function(_super) {
 
   Stimulus.prototype.setState = function(on) {
     this.on = on;
+    if (this.on) {
+      this.buttonGlow.hide();
+      this.button.attr({
+        fill: 'orange'
+      });
+      this.button.transform('t2,2');
+      this.lightningBolt.transform('t2,2');
+    } else {
+      this.buttonGlow.show();
+      this.button.attr({
+        fill: 'white'
+      });
+      this.button.transform('');
+      this.lightningBolt.transform('');
+    }
     return this.neuron.addVoltage(this.on ? this.properties.voltage.value : this.properties.voltage.value * -1);
   };
 

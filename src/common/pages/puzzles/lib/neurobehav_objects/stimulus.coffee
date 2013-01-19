@@ -49,7 +49,29 @@ class stimulus.Stimulus extends neurobehavObject.Object
         @image = @paper.set()
         @button = @paper.circle(@position.left + @centerOffset, @position.top + @centerOffset, @centerOffset)
         @button.attr('stroke-width': 4, fill: 'white')
+        @buttonGlow = @button.glow
+            width: 4
+            opacity: 0.8
+            offsetx: 2
+            offsety: 2
+            color: 'black'
+        @image.push(@buttonGlow)
         @image.push(@button)
+        
+        lightStartX = @position.left + (@centerOffset*0.8)
+        lightStartY = @position.top + (@centerOffset/2)
+        @lightningBolt = @paper.path """
+            M#{lightStartX},#{lightStartY}
+            L#{lightStartX + (@centerOffset*0.4)},#{lightStartY}}
+            L#{lightStartX + (@centerOffset*0.3)},#{lightStartY + (@centerOffset*0.3)}
+            L#{lightStartX + (@centerOffset*0.6)},#{lightStartY + (@centerOffset*0.3)}
+            L#{lightStartX + (@centerOffset*0.15)},#{lightStartY + (@centerOffset*1.15)}
+            L#{lightStartX + (@centerOffset*0.15)},#{lightStartY + (@centerOffset*0.6)}
+            L#{lightStartX - (@centerOffset*0.15)},#{lightStartY + (@centerOffset*0.6)}
+            L#{lightStartX},#{lightStartY}
+        """
+        @lightningBolt.attr(fill: 'yellow')
+        @image.push(@lightningBolt)
         
         startX = @position.left
         startY = @position.top + @centerOffset
@@ -115,6 +137,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         """
         innerNeedle.attr(stroke: '#ccc')
         @image.push(innerNeedle)
+        
         super()
         
     initSlider: ->
@@ -136,6 +159,17 @@ class stimulus.Stimulus extends neurobehavObject.Object
             @propertiesEditor.set('voltage', val)
         
     setState: (@on) ->
+        if @on
+            @buttonGlow.hide()
+            @button.attr(fill: 'orange')
+            @button.transform('t2,2')
+            @lightningBolt.transform('t2,2')
+        else
+            @buttonGlow.show()
+            @button.attr(fill: 'white')
+            @button.transform('')
+            @lightningBolt.transform('')
+            
         @neuron.addVoltage(if @on then @properties.voltage.value else (@properties.voltage.value * -1))
 
     setSlider: (val) -> @slider.set(val)

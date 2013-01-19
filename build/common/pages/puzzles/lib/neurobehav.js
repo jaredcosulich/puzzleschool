@@ -53,7 +53,7 @@ neurobehav.ViewHelper = (function() {
     stimulus = this.game.addObject({
       type: 'Stimulus',
       position: {
-        top: 100,
+        top: 120,
         left: 100
       },
       voltage: 1.5,
@@ -63,8 +63,8 @@ neurobehav.ViewHelper = (function() {
     neuron1 = this.game.addObject({
       type: 'Neuron',
       position: {
-        top: 150,
-        left: 210
+        top: 174,
+        left: 216
       },
       threshold: 1,
       spike: 0.5,
@@ -88,8 +88,8 @@ neurobehav.ViewHelper = (function() {
     oscilloscope1 = this.game.addObject({
       type: 'Oscilloscope',
       position: {
-        top: 80,
-        left: 320
+        top: 102,
+        left: 330
       },
       board: this.game.board,
       description: this.$('.descriptions .oscilloscope').html()
