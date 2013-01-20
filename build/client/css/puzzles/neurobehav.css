@@ -70,16 +70,19 @@ body {
 .bubble_description {
   position: absolute;
   color: white;
+  overflow: hidden;
+}
+.bubble_description .description {
   overflow: auto;
 }
-.bubble_description img {
+.bubble_description .description img {
   float: left;
   margin: 3px 12px 12px 0;
 }
-.bubble_description h4 {
+.bubble_description .description h4 {
   padding-bottom: 6px;
 }
-.bubble_description p {
+.bubble_description .description p {
   margin: 0;
   padding: 0 0 12px 0;
 }

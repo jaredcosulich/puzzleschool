@@ -58,10 +58,8 @@ class bubble.Bubble
         if content
             content(@container)
         else
-            if @htmlContainer
-                @htmlContainer.show()
-            else
-                @createHtml()
+            @createHtml()
+                
             
         @container.attr(transform: "s0,0,#{@x},#{@y}")
         @container.animate(
@@ -70,6 +68,9 @@ class bubble.Bubble
             'linear',
             => callback() if callback
         )
+
+        @animateHtml()
+        
         @visible = true
         @container.toFront()
         
@@ -84,13 +85,32 @@ class bubble.Bubble
                 @container = null
                 callback() if callback
         )
-        @htmlContainer.hide()
+
+        @animateHtml(false)
         
         @visible = false
 
+    animateHtml: (grow=true) =>
+        height = parseInt(@htmlContainer.height())
+        toHeight = if grow then parseInt(@htmlContainer.data('height')) else 0
+        return if height == toHeight
+        width = parseInt(@htmlContainer.width())
+        toWidth = if grow then parseInt(@htmlContainer.data('width')) else 0
+        increment = if grow then 20 else -20
+        diffHeight = toHeight - height
+        diffWidth = toWidth - width
+        heightDiff = if grow then Math.min(diffHeight, increment) else Math.max(diffHeight, increment)
+        widthDiff = if grow then Math.min(diffWidth, increment) else Math.max(diffWidth, increment)
+        @htmlContainer.height(height + heightDiff)
+        @htmlContainer.width(width + widthDiff)
+        setTimeout((=> @animateHtml(grow)), 1)
+        
     createHtml: ->
+        return if @htmlContainer
         @htmlContainer = $(document.createElement('DIV'))
         @htmlContainer.addClass('bubble_description')
+        @htmlContainer.html("<div class='description'>#{@html}</div>")
+
         bbox = @base.getBBox()
         offsetX = @paper.canvas.offsetLeft
         offsetY = @paper.canvas.offsetTop
@@ -99,9 +119,14 @@ class bubble.Bubble
             backgroundColor: @backgroundColor
             top: offsetY + bbox.y + padding
             left: offsetX + bbox.x + padding
-            width: bbox.width - (padding*2)
-            height: bbox.height - (padding*2)
-        @htmlContainer.html(@html)
+            width: 0 
+            height: 0 
+            
+        width = bbox.width - (padding*2)
+        height = bbox.height - (padding*2)
+        @htmlContainer.data('width', width)
+        @htmlContainer.data('height', height)
+        @htmlContainer.find('.description').width(width).height(height)
         $(document.body).append(@htmlContainer)    
         
     

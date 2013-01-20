@@ -82,18 +82,21 @@ body {
 .bubble_description {
     position: absolute;
     color: white;
-    overflow: auto;
-    img {
-        float: left;
-        margin: 3px 12px 12px 0;        
-    }
-    
-    h4 {
-        padding-bottom: 6px;
-    }
-    
-    p {
-        margin: 0;
-        padding: 0 0 12px 0;
+    overflow: hidden;
+    .description {
+        overflow: auto;
+        img {
+            float: left;
+            margin: 3px 12px 12px 0;        
+        }
+
+        h4 {
+            padding-bottom: 6px;
+        }
+
+        p {
+            margin: 0;
+            padding: 0 0 12px 0;
+        }
     }
 }
