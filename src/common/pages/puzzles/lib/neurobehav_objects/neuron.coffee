@@ -55,9 +55,43 @@ class neuron.Neuron extends neurobehavObject.Object
 
     draw: ->
         circle = @paper.circle(@position.left + (@width/2), @position.top + (@height/2), @width/2)
-        circle.attr(stroke: '#2B4590', fill: 'r(0.35, 0.35)#8CA0CF-#2B4590')
+        circle.attr(stroke: '#2B4590', fill: 'r(0.35, 0.35)#8CA0CF-#2B4590')        
         @image.push(circle)
+        @tendril(230, (@height/2.5))
+        @tendril(260, (@height/3))
+        @tendril(320, (@height/2.25))
+        @tendril(50, (@height/3.5))
+        @tendril(120, (@height/2.5))
         super()
+        
+    tendril: (angle, length) ->
+        rad = angle * Math.PI/180
+        radius = @width/2
+        centerX = @position.left + radius
+        centerY = @position.top + radius
+        slope = Math.tan(rad)
+        
+        xDelta = if angle > 180 then -1 else 1
+        yDelta = xDelta / slope
+        distance = Math.sqrt(Math.pow(xDelta,2) + Math.pow(yDelta,2))
+        units = (radius-6)/distance
+        lengthUnits = length/distance
+        
+        startX = centerX + (xDelta * units)
+        startY = centerY - (yDelta * units) 
+
+        perpYDelta = xDelta * slope
+        perpDistance = Math.sqrt(Math.pow(xDelta,2) + Math.pow(perpYDelta,2))
+        perpUnits = (length/6)/perpDistance
+        
+        tendril = @paper.path """
+            M#{startX + (xDelta*perpUnits)},#{startY + (perpYDelta*perpUnits)}
+            L#{startX + (xDelta*lengthUnits) + (xDelta*perpUnits/2)},#{startY - (lengthUnits*yDelta) + (perpYDelta * (perpUnits/2))}
+            L#{startX + (xDelta*lengthUnits) - (xDelta*perpUnits/2)},#{startY - (lengthUnits*yDelta) - (perpYDelta * (perpUnits/2))}
+            L#{startX - (xDelta*perpUnits)},#{startY - (perpYDelta*perpUnits)}
+        """
+        tendril.attr(stroke: '#2B4590', fill: "#{360-angle}-#8CA0CF-#2B4590-#8CA0CF")
+        @image.push(tendril)
 
     setCurrentVoltage: ->
         @timeSinceStart += @timeDelta

@@ -87,7 +87,37 @@ neuron.Neuron = (function(_super) {
       fill: 'r(0.35, 0.35)#8CA0CF-#2B4590'
     });
     this.image.push(circle);
+    this.tendril(230, this.height / 2.5);
+    this.tendril(260, this.height / 3);
+    this.tendril(320, this.height / 2.25);
+    this.tendril(50, this.height / 3.5);
+    this.tendril(120, this.height / 2.5);
     return Neuron.__super__.draw.call(this);
+  };
+
+  Neuron.prototype.tendril = function(angle, length) {
+    var centerX, centerY, distance, lengthUnits, perpDistance, perpUnits, perpYDelta, rad, radius, slope, startX, startY, tendril, units, xDelta, yDelta;
+    rad = angle * Math.PI / 180;
+    radius = this.width / 2;
+    centerX = this.position.left + radius;
+    centerY = this.position.top + radius;
+    slope = Math.tan(rad);
+    xDelta = angle > 180 ? -1 : 1;
+    yDelta = xDelta / slope;
+    distance = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+    units = (radius - 6) / distance;
+    lengthUnits = length / distance;
+    startX = centerX + (xDelta * units);
+    startY = centerY - (yDelta * units);
+    perpYDelta = xDelta * slope;
+    perpDistance = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(perpYDelta, 2));
+    perpUnits = (length / 6) / perpDistance;
+    tendril = this.paper.path("M" + (startX + (xDelta * perpUnits)) + "," + (startY + (perpYDelta * perpUnits)) + "\nL" + (startX + (xDelta * lengthUnits) + (xDelta * perpUnits / 2)) + "," + (startY - (lengthUnits * yDelta) + (perpYDelta * (perpUnits / 2))) + "\nL" + (startX + (xDelta * lengthUnits) - (xDelta * perpUnits / 2)) + "," + (startY - (lengthUnits * yDelta) - (perpYDelta * (perpUnits / 2))) + "\nL" + (startX - (xDelta * perpUnits)) + "," + (startY - (perpYDelta * perpUnits)));
+    tendril.attr({
+      stroke: '#2B4590',
+      fill: "" + (360 - angle) + "-#8CA0CF-#2B4590-#8CA0CF"
+    });
+    return this.image.push(tendril);
   };
 
   Neuron.prototype.setCurrentVoltage = function() {
