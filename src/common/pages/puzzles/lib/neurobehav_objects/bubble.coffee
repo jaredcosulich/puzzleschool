@@ -91,6 +91,7 @@ class bubble.Bubble
         @visible = false
 
     animateHtml: (grow=true) =>
+        return unless @htmlContainer
         height = parseInt(@htmlContainer.height())
         toHeight = if grow then parseInt(@htmlContainer.data('height')) else 0
         return if height == toHeight

@@ -132,6 +132,9 @@ bubble.Bubble = (function() {
     if (grow == null) {
       grow = true;
     }
+    if (!this.htmlContainer) {
+      return;
+    }
     height = parseInt(this.htmlContainer.height());
     toHeight = grow ? parseInt(this.htmlContainer.data('height')) : 0;
     if (height === toHeight) {
