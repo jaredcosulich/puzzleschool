@@ -49,7 +49,8 @@ neurobehav.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.loadFirstLevel = function() {
-    var goal, neuron1, neuron2, oscilloscope1, stimulus;
+    var goal, neuron1, neuron2, oscilloscope1, stimulus,
+      _this = this;
     stimulus = this.game.addObject({
       type: 'Stimulus',
       position: {
@@ -96,7 +97,13 @@ neurobehav.ViewHelper = (function() {
     });
     oscilloscope1.attachTo(neuron1);
     goal = this.game.createGoal({
-      radius: 210
+      radius: 210,
+      interaction: function() {
+        return neuron1.currentVoltage >= neuron1.properties.threshold.value;
+      },
+      test: function() {
+        return neuron1.currentVoltage >= neuron1.properties.threshold.value;
+      }
     });
     this.goalDescriptionHtml = "<h4>The Goal: Get The Heart To Beat</h4>\n<p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>";
     this.initGoalDescription();

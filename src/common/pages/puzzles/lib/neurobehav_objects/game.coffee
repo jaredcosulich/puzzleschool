@@ -11,10 +11,12 @@ class game.Game
         dimensions = @board.offset()
         @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
            
-    createGoal: ({radius}) ->
+    createGoal: ({radius, interaction, test}) ->
         new neurobehav.Goal
             paper: @paper
             radius: radius
+            interaction: interaction
+            test: test
            
     addObject: (data) ->
         data.paper = @paper

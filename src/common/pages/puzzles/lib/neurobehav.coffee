@@ -83,6 +83,11 @@ class neurobehav.ViewHelper
         
         goal = @game.createGoal
             radius: 210
+            interaction: =>
+                neuron1.currentVoltage >= neuron1.properties.threshold.value
+            test: =>
+                neuron1.currentVoltage >= neuron1.properties.threshold.value
+                    
 
         @goalDescriptionHtml = """
             <h4>The Goal: Get The Heart To Beat</h4>

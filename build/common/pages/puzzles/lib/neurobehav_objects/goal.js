@@ -5,28 +5,40 @@ goal = typeof exports !== "undefined" && exports !== null ? exports : provide('.
 
 goal.Goal = (function() {
 
+  Goal.prototype.periodicity = 20;
+
   Goal.prototype.offset = 90;
 
   function Goal(_arg) {
-    this.paper = _arg.paper, this.radius = _arg.radius;
+    this.paper = _arg.paper, this.radius = _arg.radius, this.interaction = _arg.interaction, this.test = _arg.test;
     this.init();
   }
 
   Goal.prototype.init = function() {
-    return this.draw();
+    var _this = this;
+    this.draw();
+    return setInterval((function() {
+      _this.interact(_this.interaction());
+      if (_this.test()) {
+        return _this.success();
+      }
+    }), this.periodicity);
   };
 
   Goal.prototype.draw = function() {
     this.image = this.paper.set();
-    this.centerX = (this.paper.width - this.offset) / 2;
-    this.centerY = this.paper.height / 2;
-    this.circle = this.paper.circle(this.centerX, this.centerY, this.radius);
+    this.center = {
+      x: (this.paper.width - this.offset) / 2,
+      y: this.paper.height / 2
+    };
+    this.circle = this.paper.circle(this.center.x, this.center.y, this.radius);
     this.circle.attr({
       fill: 'white'
     });
     this.image.push(this.circle);
     this.lineFrom(60);
     this.lineFrom(120);
+    this.worm();
     return this.image.toBack();
   };
 
@@ -35,10 +47,43 @@ goal.Goal = (function() {
     yUnit = 1 / (Math.tan(angle * Math.PI / 180));
     distance = Math.sqrt(Math.pow(yUnit, 2) + 1);
     units = this.radius / distance;
-    startX = this.centerX + units;
-    startY = this.centerY + (units * yUnit);
-    line = this.paper.path("M" + startX + "," + startY + "\nL" + (this.centerX + this.radius + this.offset) + "," + this.centerY);
+    startX = this.center.x + units;
+    startY = this.center.y + (units * yUnit);
+    line = this.paper.path("M" + startX + "," + startY + "\nL" + (this.center.x + this.radius + this.offset) + "," + this.center.y);
     return this.image.push(line);
+  };
+
+  Goal.prototype.worm = function() {
+    var startX, wormWidth;
+    wormWidth = 90;
+    startX = this.center.x + this.radius + this.offset - (wormWidth / 2);
+    this.wormPath = "M" + startX + "," + this.center.y + "\nc12,-8 18,-12 " + (wormWidth / 3) + ",3\nc6,6 12,12 " + (wormWidth / 6) + ",0\nc6,-16 18,-16 " + (wormWidth / 3) + ",-3\nc4,2 6,3 " + (wormWidth / 6) + ",3";
+    this.animatedPath = "M" + startX + "," + this.center.y + "\nc12,8 18,12 " + (wormWidth / 3) + ",-3\nc6,-6 12,-12 " + (wormWidth / 6) + ",0\nc6,16 18,16 " + (wormWidth / 3) + ",3\nc4,-2 6,-3 " + (wormWidth / 6) + ",-3";
+    this.worm = this.paper.path(this.wormPath);
+    return this.worm.attr({
+      'stroke-width': 6,
+      'stroke-linecap': 'round'
+    });
+  };
+
+  Goal.prototype.interact = function(interaction) {
+    var path,
+      _this = this;
+    if (this.animating || this.interactionState === interaction) {
+      return;
+    }
+    this.animating = true;
+    this.interactionState = interaction;
+    path = interaction ? this.animatedPath : this.wormPath;
+    return this.worm.animate({
+      path: path
+    }, 1000, 'linear', function() {
+      return _this.animating = false;
+    });
+  };
+
+  Goal.prototype.success = function() {
+    return console.log('SUCCESS!');
   };
 
   return Goal;

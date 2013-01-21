@@ -22,11 +22,13 @@ game.Game = (function() {
   };
 
   Game.prototype.createGoal = function(_arg) {
-    var radius;
-    radius = _arg.radius;
+    var interaction, radius, test;
+    radius = _arg.radius, interaction = _arg.interaction, test = _arg.test;
     return new neurobehav.Goal({
       paper: this.paper,
-      radius: radius
+      radius: radius,
+      interaction: interaction,
+      test: test
     });
   };
 
