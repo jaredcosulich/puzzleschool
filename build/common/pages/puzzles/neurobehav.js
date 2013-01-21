@@ -18,6 +18,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/bubble.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/slider.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/properties_editor.js');
+      this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/goal.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/game.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/object.js');
       this.loadScript('/build/common/pages/puzzles/lib/neurobehav_objects/neuron.js');

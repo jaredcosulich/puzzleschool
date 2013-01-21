@@ -259,7 +259,7 @@ class board.Board extends xyflyerObject.Object
             delete @formulas[id]
         else
             if @formulas[id]
-                @formulas[id].line.animate({path: pathString}, 50)
+                @formulas[id].line.attr(path: pathString)
             else
                 line = @paper.path(pathString)
                 line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)

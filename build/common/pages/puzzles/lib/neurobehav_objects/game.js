@@ -21,6 +21,15 @@ game.Game = (function() {
     return this.paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
   };
 
+  Game.prototype.createGoal = function(_arg) {
+    var radius;
+    radius = _arg.radius;
+    return new neurobehav.Goal({
+      paper: this.paper,
+      radius: radius
+    });
+  };
+
   Game.prototype.addObject = function(data) {
     var _this = this;
     data.paper = this.paper;

@@ -400,9 +400,9 @@ board.Board = (function(_super) {
       delete this.formulas[id];
     } else {
       if (this.formulas[id]) {
-        this.formulas[id].line.animate({
+        this.formulas[id].line.attr({
           path: pathString
-        }, 50);
+        });
       } else {
         line = this.paper.path(pathString);
         line.attr({

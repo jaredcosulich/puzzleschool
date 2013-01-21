@@ -31,7 +31,7 @@ class neurobehav.ViewHelper
             type: 'Stimulus'
             position:
                 top: 120
-                left: 100
+                left: 284
             voltage: 1.5
             duration: 250
             description: @$('.descriptions .stimulus').html()
@@ -40,7 +40,7 @@ class neurobehav.ViewHelper
             type: 'Neuron'
             position:
                 top: 174
-                left: 216
+                left: 400
             threshold: 1
             spike: 0.5
             description: @$('.descriptions .neuron').html()
@@ -53,7 +53,7 @@ class neurobehav.ViewHelper
             type: 'Neuron'
             position:
                 top: 360
-                left: 210
+                left: 400
             threshold: 1
             spike: 0.5
             description: @$('.descriptions .neuron').html()
@@ -63,8 +63,8 @@ class neurobehav.ViewHelper
         oscilloscope1 = @game.addObject
             type: 'Oscilloscope'
             position:
-                top: 102
-                left: 330
+                top: 106
+                left: 514
             board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 
@@ -80,6 +80,9 @@ class neurobehav.ViewHelper
         #     description: @$('.descriptions .oscilloscope').html()
         # 
         # oscilloscope2.attachTo(neuron2)
+        
+        goal = @game.createGoal
+            radius: 210
 
         @goalDescriptionHtml = """
             <h4>The Goal: Get The Heart To Beat</h4>

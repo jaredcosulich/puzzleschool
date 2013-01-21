@@ -11,6 +11,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/bubble.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/slider.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/properties_editor.js'
+            @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/goal.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/game.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/object.js'
             @loadScript '/build/common/pages/puzzles/lib/neurobehav_objects/neuron.js'
