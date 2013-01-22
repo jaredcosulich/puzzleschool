@@ -10,7 +10,7 @@ goal.Goal = (function() {
   Goal.prototype.offset = 90;
 
   function Goal(_arg) {
-    this.paper = _arg.paper, this.radius = _arg.radius, this.interaction = _arg.interaction, this.test = _arg.test;
+    this.paper = _arg.paper, this.radius = _arg.radius, this.interaction = _arg.interaction, this.test = _arg.test, this.html = _arg.html;
     this.init();
   }
 
@@ -78,8 +78,7 @@ goal.Goal = (function() {
     this.icon = this.paper.set();
     background = this.paper.rect(x, y, width, height, 6);
     background.attr({
-      fill: 'black',
-      cursor: 'pointer'
+      fill: 'black'
     });
     glow = background.glow({
       width: 10,
@@ -97,6 +96,9 @@ goal.Goal = (function() {
       stroke: 'none'
     });
     this.icon.push(text);
+    this.icon.attr({
+      cursor: 'pointer'
+    });
     this.icon.hover(function() {
       return glow.attr({
         opacity: 0.04
@@ -114,7 +116,7 @@ goal.Goal = (function() {
       width: 400,
       height: 400,
       position: 'left',
-      html: 'HEY!'
+      html: this.html
     });
     return this.icon.click(function() {
       if (_this.goalBubble.visible) {
@@ -123,6 +125,10 @@ goal.Goal = (function() {
         return _this.goalBubble.show({});
       }
     });
+  };
+
+  Goal.prototype.display = function() {
+    return this.goalBubble.show({});
   };
 
   Goal.prototype.interact = function(interaction) {

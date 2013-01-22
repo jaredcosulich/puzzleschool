@@ -73,6 +73,7 @@ body {
   overflow: hidden;
 }
 .bubble_description .description {
+  margin: 12px;
   overflow: auto;
 }
 .bubble_description .description img {

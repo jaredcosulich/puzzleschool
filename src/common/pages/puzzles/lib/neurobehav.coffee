@@ -87,13 +87,14 @@ class neurobehav.ViewHelper
                 neuron1.currentVoltage >= neuron1.properties.threshold.value
             test: =>
                 neuron1.currentVoltage >= neuron1.properties.threshold.value
-                    
-
-        @goalDescriptionHtml = """
-            <h4>The Goal: Get The Heart To Beat</h4>
-            <p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>
-            <p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>
-        """
+            html: """
+                <h4>The Goal: Get The Worm To Wiggle</h4>
+                <p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>
+                <p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>
+                <p>When the neuron reaches its threshold it fires, causing the worm to wiggle.</p>
+            """
+        
+        goal.display()
         
         @initGoalDescription()
         @initHints()

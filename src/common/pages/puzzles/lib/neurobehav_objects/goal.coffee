@@ -4,7 +4,7 @@ class goal.Goal
     periodicity: 20
     offset: 90
     
-    constructor: ({@paper, @radius, @interaction, @test}) -> 
+    constructor: ({@paper, @radius, @interaction, @test, @html}) -> 
         @init()
         
     init: ->
@@ -74,7 +74,7 @@ class goal.Goal
         @icon = @paper.set()
 
         background = @paper.rect(x, y, width, height, 6)
-        background.attr(fill: 'black', cursor: 'pointer')
+        background.attr(fill: 'black')
 
         glow = background.glow(width: 10, fill: true, color: 'red')
         glow.attr(opacity: 0)
@@ -86,6 +86,7 @@ class goal.Goal
         text.attr(fill: 'white', stroke: 'none')
         @icon.push(text)
         
+        @icon.attr(cursor: 'pointer')
         @icon.hover(
             () => glow.attr(opacity: 0.04),
             () => glow.attr(opacity: 0)
@@ -99,7 +100,7 @@ class goal.Goal
             width: 400
             height: 400
             position: 'left'
-            html: 'HEY!'
+            html: @html
         
         @icon.click => 
             if @goalBubble.visible
@@ -107,6 +108,7 @@ class goal.Goal
             else
                 @goalBubble.show({})
             
+    display: -> @goalBubble.show({})
         
     interact: (interaction) ->        
         return if @animating or @interactionState == interaction

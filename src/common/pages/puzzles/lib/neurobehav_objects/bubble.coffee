@@ -66,83 +66,98 @@ class bubble.Bubble
                                 
                             
     show: ({content, callback})->
-        return if @container
+        return if @animating or @container
+        @animating = true
         @createContainer()
         if content
             content(@container)
         else
             @createHtml()
                 
-            
         @container.attr(transform: "s0,0,#{@x},#{@y}")
         @container.animate(
             {transform: "s1"}, 
-            100, 
+            250, 
             'linear',
-            => callback() if callback
-        )
+            => 
+                callback() if callback
+                @animating = false
+        )   
 
-        @animateHtml()
+        @syncHtml()
         
         @visible = true
         @container.toFront()
         
+        $(document.body).bind 'mousedown.hide_bubble', (e) =>
+            if @container not in @paper.getElementsByPoint(e.offsetX, e.offsetY)
+                @hide({})
+                $(document.body).unbind('mousedown.hide_bubble')
+        
     hide: ({callback}) -> 
-        return unless @container
+        return if @animating or not @container
+        @animating = true
         @container.animate(
             {transform: "s0,0,#{@x},#{@y}"}, 
-            100, 
+            250, 
             'linear', 
             => 
                 @container.remove()
                 @container = null
                 callback() if callback
+                @animating = false
         )
 
-        @animateHtml(false)
+        @syncHtml(false)
         
         @visible = false
 
-    animateHtml: (grow=true) =>
+    syncHtml: (show=true, equalTimes=0) =>
         return unless @htmlContainer
         height = parseInt(@htmlContainer.height())
-        toHeight = if grow then parseInt(@htmlContainer.data('height')) else 0
-        return if height == toHeight
         width = parseInt(@htmlContainer.width())
-        toWidth = if grow then parseInt(@htmlContainer.data('width')) else 0
-        increment = if grow then 50 else -50
-        diffHeight = toHeight - height
-        diffWidth = toWidth - width
-        heightDiff = if grow then Math.min(diffHeight, increment) else Math.max(diffHeight, increment)
-        widthDiff = if grow then Math.min(diffWidth, increment) else Math.max(diffWidth, increment)
+        
+        bbox = @base.getBBox()
+        toHeight = bbox?.height or 0
+        toWidth = bbox?.width or 0
+
+        unless show
+            toWidth = Math.max(toWidth - 50, 0)
+            toHeight = Math.max(toHeight - 50, 0)
+            
+        if height == toHeight and width == toWidth
+            equalTimes += 1
+        else
+            equalTimes = 0
+        
+        return if equalTimes > 10
+
+        toLeft = @paper.canvas.offsetLeft + (bbox?.x or 0)
+        toTop = @paper.canvas.offsetTop + (bbox?.y or 0)
+        
         @htmlContainer.css
-            height: height + heightDiff
-            width: width + widthDiff
-            left: @htmlContainer.offset().left - (if @position == 'left' then widthDiff else 0)
-        setTimeout((=> @animateHtml(grow)), 1)
+            height: toHeight
+            width: toWidth
+            left: toLeft
+            top: toTop
+        setTimeout((=> @syncHtml(show, equalTimes)), 1)
         
     createHtml: ->
         return if @htmlContainer
         @htmlContainer = $(document.createElement('DIV'))
         @htmlContainer.addClass('bubble_description')
         @htmlContainer.html("<div class='description'>#{@html}</div>")
-
-        bbox = @base.getBBox()
-        offsetX = @paper.canvas.offsetLeft
-        offsetY = @paper.canvas.offsetTop
-        padding = 12
         @htmlContainer.css
-            backgroundColor: @backgroundColor
-            top: offsetY + bbox.y + padding
-            left: offsetX + (if @position == 'left' then bbox.x + bbox.width - padding else bbox.x + padding)
+            top: 0
+            left: 0
             width: 0 
             height: 0 
             
+        padding = 12
+        bbox = @base.getBBox()
         width = bbox.width - (padding*2)
         height = bbox.height - (padding*2)
-        @htmlContainer.data('width', width)
-        @htmlContainer.data('height', height)
-        @htmlContainer.find('.description').width(width).height(height)
+        @htmlContainer.find('.description').css(width: width, height: height, backgroundColor: @backgroundColor)
         $(document.body).append(@htmlContainer)    
         
     

@@ -103,9 +103,10 @@ neurobehav.ViewHelper = (function() {
       },
       test: function() {
         return neuron1.currentVoltage >= neuron1.properties.threshold.value;
-      }
+      },
+      html: "<h4>The Goal: Get The Worm To Wiggle</h4>\n<p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>\n<p>When the neuron reaches its threshold it fires, causing the worm to wiggle.</p>"
     });
-    this.goalDescriptionHtml = "<h4>The Goal: Get The Heart To Beat</h4>\n<p>Using the red button add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>";
+    goal.display();
     this.initGoalDescription();
     return this.initHints();
   };
