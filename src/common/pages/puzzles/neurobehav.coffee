@@ -29,15 +29,23 @@ soma.chunks
             
             @html = wings.renderTemplate @template,
                 editor: false
+                level: @levelId
         
 soma.views
     Neurobehav:
         selector: '#content .neurobehav'
         create: ->
             neurobehav = require('./lib/neurobehav')
+            @levelId = @el.data('level') or 1
             @viewHelper = new neurobehav.ViewHelper
                 el: @selector
-            @viewHelper.loadFirstLevel()
+                nextLevel: => @nextLevel()
+
+            @viewHelper.loadLevel(@levelId)
+
+        nextLevel: ->
+            @go("/puzzles/neurobehav/#{@levelId + 1}")
+
             
 soma.routes
     '/puzzles/neurobehav/:classId/:levelId': ({classId, levelId}) -> 

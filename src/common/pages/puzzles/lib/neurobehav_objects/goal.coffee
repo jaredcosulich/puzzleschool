@@ -4,7 +4,7 @@ class goal.Goal
     periodicity: 20
     offset: 90
     
-    constructor: ({@paper, @radius, @interaction, @test, @html}) -> 
+    constructor: ({@paper, @radius, @interaction, @test, @html, @onSuccess}) -> 
         @init()
         
     init: ->
@@ -99,6 +99,7 @@ class goal.Goal
             y: bbox.y + (bbox.height/2)
             width: 400
             height: 400
+            arrowOffset: 180
             position: 'left'
             html: @html
         
@@ -123,5 +124,9 @@ class goal.Goal
         )
         
     success: ->
-        console.log('SUCCESS!')
+        if @animating
+            setTimeout((=> @success()), 100)
+            return
+        @onSuccess(@goalBubble) if @onSuccess
+        $(document.body).unbind('mousedown.hide_bubble')
         

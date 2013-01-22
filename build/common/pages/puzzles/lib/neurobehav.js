@@ -17,7 +17,7 @@ neurobehav.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     var _this = this;
-    this.el = _arg.el;
+    this.el = _arg.el, this.nextLevel = _arg.nextLevel;
     this.game = new neurobehav.Game({
       el: this.el,
       objectEditor: this.objectEditor,
@@ -27,29 +27,74 @@ neurobehav.ViewHelper = (function() {
     });
   }
 
-  ViewHelper.prototype.initGoalDescription = function() {
-    return this.initExtraContent(this.$('.show_goal_description'), this.goalDescriptionHtml);
+  ViewHelper.prototype.loadLevel = function(level) {
+    return this["loadLevel" + level]();
   };
 
-  ViewHelper.prototype.initHints = function() {
-    var html;
-    html = '<br/><br/><p style=\'text-align: center;\'>No Hints Yet</p><br/><br/>';
-    return this.initExtraContent(this.$('.hints'), html);
-  };
-
-  ViewHelper.prototype.initExtraContent = function(link, html) {
-    var _this = this;
-    return link.bind('click', function() {
-      if (_this.objectEditor.extraContent === html) {
-        return _this.objectEditor.hideExtraContent();
-      } else {
-        return _this.objectEditor.showExtraContent(html);
+  ViewHelper.prototype.loadLevel1 = function() {
+    var goal, neuron1, oscilloscope1, stimulus,
+      _this = this;
+    stimulus = this.game.addObject({
+      type: 'Stimulus',
+      position: {
+        top: 160,
+        left: 284
+      },
+      voltage: 1.5,
+      duration: 250,
+      description: this.$('.descriptions .stimulus').html()
+    });
+    neuron1 = this.game.addObject({
+      type: 'Neuron',
+      position: {
+        top: 214,
+        left: 400
+      },
+      threshold: 1,
+      spike: 0.5,
+      description: this.$('.descriptions .neuron').html(),
+      inhibitoryDescription: this.$('.descriptions .inhibitory').html(),
+      excitatoryDescription: this.$('.descriptions .excitatory').html()
+    });
+    stimulus.connectTo(neuron1);
+    oscilloscope1 = this.game.addObject({
+      type: 'Oscilloscope',
+      position: {
+        top: 146,
+        left: 514
+      },
+      board: this.game.board,
+      description: this.$('.descriptions .oscilloscope').html()
+    });
+    oscilloscope1.attachTo(neuron1);
+    goal = this.game.createGoal({
+      radius: 150,
+      interaction: function() {
+        return neuron1.currentVoltage >= neuron1.properties.threshold.value;
+      },
+      test: function() {
+        return neuron1.currentVoltage >= neuron1.properties.threshold.value;
+      },
+      html: "<h3>The Goal: Get The Worm To Wiggle</h3>\n<br/>\n<p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>\n<p>When the neuron reaches its threshold it fires, causing the worm to wiggle.</p>\n<p>Click anywhere outside this bubble to get started!</p>",
+      onSuccess: function(bubble) {
+        bubble.setHtml("<h3>Success!</h3>\n<br/>\n<p>\n    You were able to introduce enough electricity in to the neuron to get it to cross it's voltage\n    threshold and fire.\n</p>\n<p>The neuron firing resulted in the worm wiggling!</p>\n<br/>\n<h4>Congrats!</h4>\n<p><a>Continue to the next level ></a></p>");
+        bubble.show({});
+        return bubble.htmlContainer.find('a').bind('click', function() {
+          return bubble.hide({
+            callback: function() {
+              return _this.nextLevel();
+            }
+          });
+        });
       }
     });
+    return setTimeout((function() {
+      return goal.display();
+    }), 500);
   };
 
-  ViewHelper.prototype.loadFirstLevel = function() {
-    var goal, neuron1, neuron2, oscilloscope1, stimulus,
+  ViewHelper.prototype.loadLevel2 = function() {
+    var goal, neuron1, neuron2, oscilloscope1, oscilloscope2, stimulus,
       _this = this;
     stimulus = this.game.addObject({
       type: 'Stimulus',
@@ -96,19 +141,33 @@ neurobehav.ViewHelper = (function() {
       description: this.$('.descriptions .oscilloscope').html()
     });
     oscilloscope1.attachTo(neuron1);
+    oscilloscope2 = this.game.addObject({
+      type: 'Oscilloscope',
+      position: {
+        top: 306,
+        left: 214
+      },
+      board: this.game.board,
+      description: this.$('.descriptions .oscilloscope').html()
+    });
+    oscilloscope2.attachTo(neuron2);
     goal = this.game.createGoal({
       radius: 210,
       interaction: function() {
-        return neuron1.currentVoltage >= neuron1.properties.threshold.value;
+        return neuron2.currentVoltage >= neuron2.properties.threshold.value;
       },
       test: function() {
-        return neuron1.currentVoltage >= neuron1.properties.threshold.value;
+        return neuron2.currentVoltage >= neuron2.properties.threshold.value;
       },
-      html: "<h4>The Goal: Get The Worm To Wiggle</h4>\n<p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>\n<p>When the neuron reaches its threshold it fires, causing the worm to wiggle.</p>"
+      html: "<h3>The Goal: Get The Worm To Wiggle</h3>\n<br/>\n<p>Using the stimulus add enough electricity to both neurons to cause them to exceed their thresholds and fire.</p>\n<p>Click anywhere outside this bubble to get started!</p>",
+      onSuccess: function(bubble) {
+        bubble.setHtml("<h3>Success!</h3>\n<br/>\n<p>\n    You were able to introduce enough electricity in to the neuron to get it to cross it's voltage\n    threshold and fire.\n</p>\n<p>The neuron firing resulted in the worm wiggling!</p>\n<br/>\n<h4>Congrats!</h4>\n<p>Unfortunately those are all of the levels we have so far.</p>");
+        return bubble.show({});
+      }
     });
-    goal.display();
-    this.initGoalDescription();
-    return this.initHints();
+    return setTimeout((function() {
+      return goal.display();
+    }), 500);
   };
 
   return ViewHelper;

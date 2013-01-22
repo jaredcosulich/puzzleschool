@@ -7,13 +7,13 @@ class bubble.Bubble
     spacing: 20
     backgroundColor: '#49494A'
     
-    constructor: ({@paper, @x, @y, @width, @height, @position, @html}) -> 
+    constructor: ({@paper, @x, @y, @width, @height, @position, @arrowOffset, @html}) -> 
         @init()
                 
     $: (selector) -> @el.find(selector)
     
     init: ->
-        @arrowOffset = 24
+        @arrowOffset or= 24
         if @position in ['left', 'right']
             if @y - @arrowOffset < 3
                 @arrowOffset = @y - 3
@@ -90,7 +90,9 @@ class bubble.Bubble
         @container.toFront()
         
         $(document.body).bind 'mousedown.hide_bubble', (e) =>
-            if @container not in @paper.getElementsByPoint(e.offsetX, e.offsetY)
+            x = e.clientX - @paper.canvas.offsetLeft
+            y = e.clientY - @paper.canvas.offsetTop
+            if @base not in @paper.getElementsByPoint(x, y)
                 @hide({})
                 $(document.body).unbind('mousedown.hide_bubble')
         
@@ -160,6 +162,7 @@ class bubble.Bubble
         @htmlContainer.find('.description').css(width: width, height: height, backgroundColor: @backgroundColor)
         $(document.body).append(@htmlContainer)    
         
-    
+    setHtml: (@html) ->
+        @htmlContainer?.find('.description')?.html(@html)
     
 

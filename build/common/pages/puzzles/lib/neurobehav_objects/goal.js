@@ -10,7 +10,7 @@ goal.Goal = (function() {
   Goal.prototype.offset = 90;
 
   function Goal(_arg) {
-    this.paper = _arg.paper, this.radius = _arg.radius, this.interaction = _arg.interaction, this.test = _arg.test, this.html = _arg.html;
+    this.paper = _arg.paper, this.radius = _arg.radius, this.interaction = _arg.interaction, this.test = _arg.test, this.html = _arg.html, this.onSuccess = _arg.onSuccess;
     this.init();
   }
 
@@ -115,6 +115,7 @@ goal.Goal = (function() {
       y: bbox.y + (bbox.height / 2),
       width: 400,
       height: 400,
+      arrowOffset: 180,
       position: 'left',
       html: this.html
     });
@@ -148,7 +149,17 @@ goal.Goal = (function() {
   };
 
   Goal.prototype.success = function() {
-    return console.log('SUCCESS!');
+    var _this = this;
+    if (this.animating) {
+      setTimeout((function() {
+        return _this.success();
+      }), 100);
+      return;
+    }
+    if (this.onSuccess) {
+      this.onSuccess(this.goalBubble);
+    }
+    return $(document.body).unbind('mousedown.hide_bubble');
   };
 
   return Goal;

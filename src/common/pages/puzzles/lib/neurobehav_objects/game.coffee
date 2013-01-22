@@ -11,14 +11,15 @@ class game.Game
         dimensions = @board.offset()
         @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
            
-    createGoal: ({radius, interaction, test, html}) ->
-        new neurobehav.Goal
+    createGoal: ({radius, interaction, test, html, onSuccess}) ->
+        goal = new neurobehav.Goal
             paper: @paper
             radius: radius
             interaction: interaction
             test: test
             html: html
-           
+            onSuccess: onSuccess
+            
     addObject: (data) ->
         data.paper = @paper
         data.id = @nextId()
@@ -29,4 +30,7 @@ class game.Game
             
     nextId: ->
         @currentId = (@currentId or 0) + 1
-
+        
+    clear: -> 
+        @paper.clear()
+        $(document.body).find('.bubble_description').remove()

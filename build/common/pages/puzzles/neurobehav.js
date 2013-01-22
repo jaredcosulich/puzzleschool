@@ -35,7 +35,8 @@ soma.chunks({
     build: function() {
       this.setTitle("The Neurobiology of Behavior - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
-        editor: false
+        editor: false,
+        level: this.levelId
       });
     }
   }
@@ -45,12 +46,20 @@ soma.views({
   Neurobehav: {
     selector: '#content .neurobehav',
     create: function() {
-      var neurobehav;
+      var neurobehav,
+        _this = this;
       neurobehav = require('./lib/neurobehav');
+      this.levelId = this.el.data('level') || 1;
       this.viewHelper = new neurobehav.ViewHelper({
-        el: this.selector
+        el: this.selector,
+        nextLevel: function() {
+          return _this.nextLevel();
+        }
       });
-      return this.viewHelper.loadFirstLevel();
+      return this.viewHelper.loadLevel(this.levelId);
+    },
+    nextLevel: function() {
+      return this.go("/puzzles/neurobehav/" + (this.levelId + 1));
     }
   }
 });

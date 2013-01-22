@@ -18,7 +18,7 @@ bubble.Bubble = (function() {
   Bubble.prototype.backgroundColor = '#49494A';
 
   function Bubble(_arg) {
-    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position, this.html = _arg.html;
+    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position, this.arrowOffset = _arg.arrowOffset, this.html = _arg.html;
     this.syncHtml = __bind(this.syncHtml, this);
 
     this.init();
@@ -30,7 +30,7 @@ bubble.Bubble = (function() {
 
   Bubble.prototype.init = function() {
     var _ref;
-    this.arrowOffset = 24;
+    this.arrowOffset || (this.arrowOffset = 24);
     if ((_ref = this.position) === 'left' || _ref === 'right') {
       if (this.y - this.arrowOffset < 3) {
         this.arrowOffset = this.y - 3;
@@ -122,8 +122,10 @@ bubble.Bubble = (function() {
     this.visible = true;
     this.container.toFront();
     return $(document.body).bind('mousedown.hide_bubble', function(e) {
-      var _ref;
-      if (_ref = _this.container, __indexOf.call(_this.paper.getElementsByPoint(e.offsetX, e.offsetY), _ref) < 0) {
+      var x, y, _ref;
+      x = e.clientX - _this.paper.canvas.offsetLeft;
+      y = e.clientY - _this.paper.canvas.offsetTop;
+      if (_ref = _this.base, __indexOf.call(_this.paper.getElementsByPoint(x, y), _ref) < 0) {
         _this.hide({});
         return $(document.body).unbind('mousedown.hide_bubble');
       }
@@ -218,6 +220,12 @@ bubble.Bubble = (function() {
       backgroundColor: this.backgroundColor
     });
     return $(document.body).append(this.htmlContainer);
+  };
+
+  Bubble.prototype.setHtml = function(html) {
+    var _ref, _ref1;
+    this.html = html;
+    return (_ref = this.htmlContainer) != null ? (_ref1 = _ref.find('.description')) != null ? _ref1.html(this.html) : void 0 : void 0;
   };
 
   return Bubble;

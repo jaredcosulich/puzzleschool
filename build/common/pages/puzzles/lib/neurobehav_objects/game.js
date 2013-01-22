@@ -22,14 +22,15 @@ game.Game = (function() {
   };
 
   Game.prototype.createGoal = function(_arg) {
-    var html, interaction, radius, test;
-    radius = _arg.radius, interaction = _arg.interaction, test = _arg.test, html = _arg.html;
-    return new neurobehav.Goal({
+    var goal, html, interaction, onSuccess, radius, test;
+    radius = _arg.radius, interaction = _arg.interaction, test = _arg.test, html = _arg.html, onSuccess = _arg.onSuccess;
+    return goal = new neurobehav.Goal({
       paper: this.paper,
       radius: radius,
       interaction: interaction,
       test: test,
-      html: html
+      html: html,
+      onSuccess: onSuccess
     });
   };
 
@@ -48,6 +49,11 @@ game.Game = (function() {
 
   Game.prototype.nextId = function() {
     return this.currentId = (this.currentId || 0) + 1;
+  };
+
+  Game.prototype.clear = function() {
+    this.paper.clear();
+    return $(document.body).find('.bubble_description').remove();
   };
 
   return Game;
