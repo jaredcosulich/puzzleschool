@@ -38,7 +38,8 @@ goal.Goal = (function() {
     this.image.push(this.circle);
     this.lineFrom(60);
     this.lineFrom(120);
-    this.worm();
+    this.initWorm();
+    this.initMessage();
     return this.image.toBack();
   };
 
@@ -53,16 +54,74 @@ goal.Goal = (function() {
     return this.image.push(line);
   };
 
-  Goal.prototype.worm = function() {
+  Goal.prototype.initWorm = function() {
     var startX, wormWidth;
     wormWidth = 90;
     startX = this.center.x + this.radius + this.offset - (wormWidth / 2);
     this.wormPath = "M" + startX + "," + this.center.y + "\nc12,-8 18,-12 " + (wormWidth / 3) + ",3\nc6,6 12,12 " + (wormWidth / 6) + ",0\nc6,-16 18,-16 " + (wormWidth / 3) + ",-3\nc4,2 6,3 " + (wormWidth / 6) + ",3";
-    this.animatedPath = "M" + startX + "," + this.center.y + "\nc12,8 18,12 " + (wormWidth / 3) + ",-3\nc6,-6 12,-12 " + (wormWidth / 6) + ",0\nc6,16 18,16 " + (wormWidth / 3) + ",3\nc4,-2 6,-3 " + (wormWidth / 6) + ",-3";
+    this.animatedPath = "M" + startX + "," + this.center.y + "\nc12,6 18,4 " + (wormWidth / 3) + ",-1\nc6,-2 12,-1 " + (wormWidth / 6) + ",1\nc6,4 18,6 " + (wormWidth / 3) + ",1\nc4,-2 6,-3 " + (wormWidth / 6) + ",-2";
     this.worm = this.paper.path(this.wormPath);
     return this.worm.attr({
-      'stroke-width': 6,
-      'stroke-linecap': 'round'
+      'stroke-width': 8,
+      'stroke-linecap': 'round',
+      stroke: '#411B17'
+    });
+  };
+
+  Goal.prototype.initMessage = function() {
+    var background, bbox, glow, height, text, width, x, y,
+      _this = this;
+    width = 60;
+    height = 18;
+    x = this.center.x + this.radius + this.offset - (width / 2);
+    y = this.center.y - (height * 2);
+    this.icon = this.paper.set();
+    background = this.paper.rect(x, y, width, height, 6);
+    background.attr({
+      fill: 'black',
+      cursor: 'pointer'
+    });
+    glow = background.glow({
+      width: 10,
+      fill: true,
+      color: 'red'
+    });
+    glow.attr({
+      opacity: 0
+    });
+    this.icon.push(glow);
+    this.icon.push(background);
+    text = this.paper.text(x + (width / 2), y + (height / 2), 'The Goal');
+    text.attr({
+      fill: 'white',
+      stroke: 'none'
+    });
+    this.icon.push(text);
+    this.icon.hover(function() {
+      return glow.attr({
+        opacity: 0.04
+      });
+    }, function() {
+      return glow.attr({
+        opacity: 0
+      });
+    });
+    bbox = this.icon.getBBox();
+    this.goalBubble = new Bubble({
+      paper: this.paper,
+      x: bbox.x,
+      y: bbox.y + (bbox.height / 2),
+      width: 400,
+      height: 400,
+      position: 'left',
+      html: 'HEY!'
+    });
+    return this.icon.click(function() {
+      if (_this.goalBubble.visible) {
+        return _this.goalBubble.hide({});
+      } else {
+        return _this.goalBubble.show({});
+      }
     });
   };
 
@@ -77,7 +136,7 @@ goal.Goal = (function() {
     path = interaction ? this.animatedPath : this.wormPath;
     return this.worm.animate({
       path: path
-    }, 1000, 'linear', function() {
+    }, 300, 'ease-out', function() {
       return _this.animating = false;
     });
   };

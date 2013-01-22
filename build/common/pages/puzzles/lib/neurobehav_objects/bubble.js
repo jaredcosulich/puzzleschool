@@ -12,8 +12,6 @@ bubble.Bubble = (function() {
 
   Bubble.prototype.arrowWidth = 20;
 
-  Bubble.prototype.arrowOffset = 24;
-
   Bubble.prototype.spacing = 20;
 
   Bubble.prototype.backgroundColor = '#49494A';
@@ -29,7 +27,18 @@ bubble.Bubble = (function() {
     return this.el.find(selector);
   };
 
-  Bubble.prototype.init = function() {};
+  Bubble.prototype.init = function() {
+    var _ref;
+    this.arrowOffset = 24;
+    if ((_ref = this.position) === 'left' || _ref === 'right') {
+      if (this.y - this.arrowOffset < 3) {
+        this.arrowOffset = this.y - 3;
+      }
+      if (this.y - this.arrowOffset + this.height > this.paper.height) {
+        return this.arrowOffset = this.height - this.y - 3;
+      }
+    }
+  };
 
   Bubble.prototype.createContainer = function() {
     var bbox;
@@ -50,6 +59,8 @@ bubble.Bubble = (function() {
       switch (this.position) {
         case 'right':
           return this.x + this.arrowHeight;
+        case 'left':
+          return this.x - this.arrowHeight - this.width;
         default:
           return this.x - this.arrowOffset;
       }
@@ -57,6 +68,7 @@ bubble.Bubble = (function() {
     y = (function() {
       switch (this.position) {
         case 'right':
+        case 'left':
           return this.y - this.arrowOffset;
         default:
           return this.y - this.arrowHeight - this.height;
@@ -71,6 +83,8 @@ bubble.Bubble = (function() {
       switch (this.position) {
         case 'right':
           return this.paper.path("M" + (this.x + this.arrowHeight + 2) + "," + (this.y - (this.arrowWidth / 2)) + "\nL" + this.x + "," + this.y + "\nL" + (this.x + this.arrowHeight + 2) + "," + (this.y + (this.arrowWidth / 2)));
+        case 'left':
+          return this.paper.path("M" + (this.x - this.arrowHeight - 2) + "," + (this.y - (this.arrowWidth / 2)) + "\nL" + this.x + "," + this.y + "\nL" + (this.x - this.arrowHeight - 2) + "," + (this.y + (this.arrowWidth / 2)));
         default:
           return this.paper.path("M" + (this.x - (this.arrowWidth / 2)) + "," + (this.y - this.arrowHeight - 2) + "\nL" + this.x + "," + this.y + "\nL" + (this.x + (this.arrowWidth / 2)) + "," + (this.y - this.arrowHeight - 2));
       }
@@ -142,13 +156,16 @@ bubble.Bubble = (function() {
     }
     width = parseInt(this.htmlContainer.width());
     toWidth = grow ? parseInt(this.htmlContainer.data('width')) : 0;
-    increment = grow ? 20 : -20;
+    increment = grow ? 50 : -50;
     diffHeight = toHeight - height;
     diffWidth = toWidth - width;
     heightDiff = grow ? Math.min(diffHeight, increment) : Math.max(diffHeight, increment);
     widthDiff = grow ? Math.min(diffWidth, increment) : Math.max(diffWidth, increment);
-    this.htmlContainer.height(height + heightDiff);
-    this.htmlContainer.width(width + widthDiff);
+    this.htmlContainer.css({
+      height: height + heightDiff,
+      width: width + widthDiff,
+      left: this.htmlContainer.offset().left - (this.position === 'left' ? widthDiff : 0)
+    });
     return setTimeout((function() {
       return _this.animateHtml(grow);
     }), 1);
@@ -169,7 +186,7 @@ bubble.Bubble = (function() {
     this.htmlContainer.css({
       backgroundColor: this.backgroundColor,
       top: offsetY + bbox.y + padding,
-      left: offsetX + bbox.x + padding,
+      left: offsetX + (this.position === 'left' ? bbox.x + bbox.width - padding : bbox.x + padding),
       width: 0,
       height: 0
     });

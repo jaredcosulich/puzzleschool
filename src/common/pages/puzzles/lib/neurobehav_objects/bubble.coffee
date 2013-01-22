@@ -4,16 +4,22 @@ class bubble.Bubble
     width: 210
     arrowHeight: 15
     arrowWidth: 20
-    arrowOffset: 24
     spacing: 20
     backgroundColor: '#49494A'
     
     constructor: ({@paper, @x, @y, @width, @height, @position, @html}) -> 
         @init()
-        
+                
     $: (selector) -> @el.find(selector)
     
     init: ->
+        @arrowOffset = 24
+        if @position in ['left', 'right']
+            if @y - @arrowOffset < 3
+                @arrowOffset = @y - 3
+                
+            if @y - @arrowOffset + @height > @paper.height
+                @arrowOffset = @height - @y - 3
         
     createContainer: ->    
         @container = @paper.set()
@@ -26,10 +32,11 @@ class bubble.Bubble
     createBase: ->
         x = switch @position
             when 'right' then @x + @arrowHeight
+            when 'left' then @x - @arrowHeight - @width
             else @x - @arrowOffset
         
         y = switch @position
-            when 'right' then @y - @arrowOffset
+            when 'right', 'left' then @y - @arrowOffset
             else @y - @arrowHeight - @height
         
         @base = @paper.rect(x, y, @width, @height, 12)
@@ -42,6 +49,12 @@ class bubble.Bubble
                     M#{@x+@arrowHeight+2},#{@y-(@arrowWidth/2)}
                     L#{@x},#{@y}
                     L#{@x+@arrowHeight+2},#{@y+(@arrowWidth/2)}
+                """
+            when 'left'
+                @paper.path """
+                    M#{@x-@arrowHeight-2},#{@y-(@arrowWidth/2)}
+                    L#{@x},#{@y}
+                    L#{@x-@arrowHeight-2},#{@y+(@arrowWidth/2)}
                 """
             else
                 @paper.path """
@@ -97,13 +110,15 @@ class bubble.Bubble
         return if height == toHeight
         width = parseInt(@htmlContainer.width())
         toWidth = if grow then parseInt(@htmlContainer.data('width')) else 0
-        increment = if grow then 20 else -20
+        increment = if grow then 50 else -50
         diffHeight = toHeight - height
         diffWidth = toWidth - width
         heightDiff = if grow then Math.min(diffHeight, increment) else Math.max(diffHeight, increment)
         widthDiff = if grow then Math.min(diffWidth, increment) else Math.max(diffWidth, increment)
-        @htmlContainer.height(height + heightDiff)
-        @htmlContainer.width(width + widthDiff)
+        @htmlContainer.css
+            height: height + heightDiff
+            width: width + widthDiff
+            left: @htmlContainer.offset().left - (if @position == 'left' then widthDiff else 0)
         setTimeout((=> @animateHtml(grow)), 1)
         
     createHtml: ->
@@ -119,7 +134,7 @@ class bubble.Bubble
         @htmlContainer.css
             backgroundColor: @backgroundColor
             top: offsetY + bbox.y + padding
-            left: offsetX + bbox.x + padding
+            left: offsetX + (if @position == 'left' then bbox.x + bbox.width - padding else bbox.x + padding)
             width: 0 
             height: 0 
             
