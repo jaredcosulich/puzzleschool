@@ -42,17 +42,11 @@ neuron.Neuron = (function(_super) {
   };
 
   function Neuron(_arg) {
-    var excitatoryDescription, inhibitoryDescription, spike, threshold;
-    inhibitoryDescription = _arg.inhibitoryDescription, excitatoryDescription = _arg.excitatoryDescription, threshold = _arg.threshold, spike = _arg.spike;
+    var spike, threshold;
+    this.inhibitoryDescription = _arg.inhibitoryDescription, this.excitatoryDescription = _arg.excitatoryDescription, threshold = _arg.threshold, spike = _arg.spike;
     Neuron.__super__.constructor.apply(this, arguments);
     this.properties.threshold.value = threshold;
     this.properties.spike.value = spike;
-    this.inhibitoryProperties = {
-      description: inhibitoryDescription
-    };
-    this.excitatoryProperties = {
-      description: excitatoryDescription
-    };
     this.initProperties();
   }
 
@@ -186,7 +180,7 @@ neuron.Neuron = (function(_super) {
   };
 
   Neuron.prototype.createSynapse = function(type) {
-    var endX, endY, fullDX, fullDY, glow, lastDX, lastDY, onDrag, onEnd, onStart, subPath, synapse, tip, xShift,
+    var bbox, descriptionBubble, endX, endY, fullDX, fullDY, glow, lastDX, lastDY, onDrag, onEnd, onStart, subPath, synapse, tip, xShift,
       _this = this;
     xShift = (type === 'inhibitory' ? -12 : 12);
     endX = this.position.left + (this.width / 2) + xShift;
@@ -264,6 +258,23 @@ neuron.Neuron = (function(_super) {
     };
     tip.drag(onDrag, onStart, onEnd);
     glow.drag(onDrag, onStart, onEnd);
+    bbox = tip.getBBox();
+    descriptionBubble = new Bubble({
+      paper: this.paper,
+      x: bbox.x + bbox.width,
+      y: bbox.y + (bbox.height / 2),
+      width: 240,
+      height: 240,
+      position: 'right',
+      html: this["" + type + "Description"]
+    });
+    tip.click(function() {
+      if (descriptionBubble.visible) {
+        return descriptionBubble.hide({});
+      } else {
+        return descriptionBubble.show({});
+      }
+    });
     return this.synapses.push(synapse);
   };
 

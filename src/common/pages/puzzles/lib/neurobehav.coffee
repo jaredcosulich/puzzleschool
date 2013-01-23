@@ -59,7 +59,7 @@ class neurobehav.ViewHelper
                 <br/>
                 <p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>
                 <p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>
-                <p>When the neuron reaches its threshold it fires, causing the worm to wiggle.</p>
+                <p>When the neuron reaches its threshold it fires, causing the worm's muscle to contract and making the worm wiggle.</p>
                 <p>Click anywhere outside this bubble to get started!</p>
             """
             onSuccess: (bubble) =>
@@ -67,10 +67,10 @@ class neurobehav.ViewHelper
                     <h3>Success!</h3>
                     <br/>
                     <p>
-                        You were able to introduce enough electricity in to the neuron to get it to cross it's voltage
-                        threshold and fire.
+                        You were able to introduce enough electricity in to the neuron to get it to generate it's 
+                        action potential and fire.
                     </p>
-                    <p>The neuron firing resulted in the worm wiggling!</p>
+                    <p>The motor neuron firing resulted in the worm contracting it's muscles and wiggling!</p>
                     <br/>
                     <h4>Congrats!</h4>
                     <p><a>Continue to the next level ></a></p>

@@ -17,12 +17,14 @@ goal.Goal = (function() {
   Goal.prototype.init = function() {
     var _this = this;
     this.draw();
-    return setInterval((function() {
+    setInterval((function() {
       _this.interact(_this.interaction());
       if (_this.test()) {
         return _this.success();
       }
     }), this.periodicity);
+    this.initWorm();
+    return this.initMessage();
   };
 
   Goal.prototype.draw = function() {
@@ -36,10 +38,13 @@ goal.Goal = (function() {
       fill: 'white'
     });
     this.image.push(this.circle);
+    this.littleCircle = this.paper.circle(this.center.x + this.radius + this.offset, this.center.y, 3);
+    this.littleCircle.attr({
+      fill: 'white'
+    });
+    this.image.push(this.littleCircle);
     this.lineFrom(60);
     this.lineFrom(120);
-    this.initWorm();
-    this.initMessage();
     return this.image.toBack();
   };
 
@@ -61,11 +66,12 @@ goal.Goal = (function() {
     this.wormPath = "M" + startX + "," + this.center.y + "\nc12,-8 18,-12 " + (wormWidth / 3) + ",3\nc6,6 12,12 " + (wormWidth / 6) + ",0\nc6,-16 18,-16 " + (wormWidth / 3) + ",-3\nc4,2 6,3 " + (wormWidth / 6) + ",3";
     this.animatedPath = "M" + startX + "," + this.center.y + "\nc12,6 18,4 " + (wormWidth / 3) + ",-1\nc6,-2 12,-1 " + (wormWidth / 6) + ",1\nc6,4 18,6 " + (wormWidth / 3) + ",1\nc4,-2 6,-3 " + (wormWidth / 6) + ",-2";
     this.worm = this.paper.path(this.wormPath);
-    return this.worm.attr({
+    this.worm.attr({
       'stroke-width': 8,
       'stroke-linecap': 'round',
       stroke: '#411B17'
     });
+    return this.worm.toBack();
   };
 
   Goal.prototype.initMessage = function() {

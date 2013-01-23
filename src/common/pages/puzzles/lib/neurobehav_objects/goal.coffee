@@ -16,6 +16,8 @@ class goal.Goal
             ),
             @periodicity
         )
+        @initWorm()
+        @initMessage()
         
         
     draw: ->
@@ -26,10 +28,11 @@ class goal.Goal
         @circle = @paper.circle(@center.x, @center.y, @radius)
         @circle.attr(fill: 'white')
         @image.push(@circle)
+        @littleCircle = @paper.circle(@center.x + @radius + @offset, @center.y, 3)
+        @littleCircle.attr(fill: 'white')
+        @image.push(@littleCircle)
         @lineFrom(60)
         @lineFrom(120)
-        @initWorm()
-        @initMessage()
         @image.toBack()
         
     lineFrom: (angle) ->
@@ -64,6 +67,7 @@ class goal.Goal
         """
         @worm = @paper.path(@wormPath)
         @worm.attr('stroke-width': 8, 'stroke-linecap': 'round', stroke: '#411B17')
+        @worm.toBack()
         
     initMessage: ->
         width = 60

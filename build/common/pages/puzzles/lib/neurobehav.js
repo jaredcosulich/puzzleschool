@@ -75,9 +75,9 @@ neurobehav.ViewHelper = (function() {
       test: function() {
         return neuron1.currentVoltage >= neuron1.properties.threshold.value;
       },
-      html: "<h3>The Goal: Get The Worm To Wiggle</h3>\n<br/>\n<p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>\n<p>When the neuron reaches its threshold it fires, causing the worm to wiggle.</p>\n<p>Click anywhere outside this bubble to get started!</p>",
+      html: "<h3>The Goal: Get The Worm To Wiggle</h3>\n<br/>\n<p>Using the stimulus add enough electricity to the neuron to cause it to exceed it's threshold.</p>\n<p>The threshold line is depicted below in the oscilloscope screen as a dashed green line.</p>\n<p>When the neuron reaches its threshold it fires, causing the worm's muscle to contract and making the worm wiggle.</p>\n<p>Click anywhere outside this bubble to get started!</p>",
       onSuccess: function(bubble) {
-        bubble.setHtml("<h3>Success!</h3>\n<br/>\n<p>\n    You were able to introduce enough electricity in to the neuron to get it to cross it's voltage\n    threshold and fire.\n</p>\n<p>The neuron firing resulted in the worm wiggling!</p>\n<br/>\n<h4>Congrats!</h4>\n<p><a>Continue to the next level ></a></p>");
+        bubble.setHtml("<h3>Success!</h3>\n<br/>\n<p>\n    You were able to introduce enough electricity in to the neuron to get it to generate it's \n    action potential and fire.\n</p>\n<p>The motor neuron firing resulted in the worm contracting it's muscles and wiggling!</p>\n<br/>\n<h4>Congrats!</h4>\n<p><a>Continue to the next level ></a></p>");
         bubble.show({});
         return bubble.htmlContainer.find('a').bind('click', function() {
           return bubble.hide({

@@ -16,12 +16,10 @@ class neuron.Neuron extends neurobehavObject.Object
         # 'refractory': {name: 'Refractory', type: 'select', unit: 0.25, unitName: 'V', set: 'setSlider' }
     
     
-    constructor: ({inhibitoryDescription, excitatoryDescription, threshold, spike}) -> 
+    constructor: ({@inhibitoryDescription, @excitatoryDescription, threshold, spike}) -> 
         super(arguments...)
         @properties.threshold.value = threshold
         @properties.spike.value = spike
-        @inhibitoryProperties = {description: inhibitoryDescription}
-        @excitatoryProperties = {description: excitatoryDescription}
         @initProperties()
                 
     init: -> 
@@ -207,9 +205,26 @@ class neuron.Neuron extends neurobehavObject.Object
             lastDY = fullDY
             for element in @paper.getElementsByPoint(endX + fullDX, endY + fullDY)
                 @connectSynapse(synapse, element.object) if element.objectType == 'neuron'
-                
+
         tip.drag(onDrag, onStart, onEnd)
         glow.drag(onDrag, onStart, onEnd)
+               
+        bbox = tip.getBBox()
+        descriptionBubble = new Bubble
+            paper: @paper, 
+            x: bbox.x + bbox.width
+            y: bbox.y + (bbox.height/2)
+            width: 240
+            height: 240
+            position: 'right'
+            html: @["#{type}Description"]
+
+        tip.click => 
+            if descriptionBubble.visible
+                descriptionBubble.hide({})
+            else
+                descriptionBubble.show({})
+                
         @synapses.push(synapse)
     
     connectSynapse: (synapse, neuron) ->
