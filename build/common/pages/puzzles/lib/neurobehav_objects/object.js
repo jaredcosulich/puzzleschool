@@ -161,9 +161,9 @@ object.Object = (function() {
     });
     icon.click(function() {
       if (_this.descriptionBubble.visible) {
-        return _this.descriptionBubble.hide({});
+        return _this.descriptionBubble.hide();
       } else {
-        return _this.descriptionBubble.show({});
+        return _this.descriptionBubble.show();
       }
     });
     return icon;

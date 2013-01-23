@@ -25,7 +25,8 @@ propertiesEditor.PropertiesEditor = (function() {
   };
 
   PropertiesEditor.prototype.init = function() {
-    var bbox;
+    var bbox,
+      _this = this;
     this.height = (Object.keys(this.properties).length * this.spacing) + (this.spacing * 2);
     bbox = this.element.getBBox();
     return this.bubble = new Bubble({
@@ -33,7 +34,27 @@ propertiesEditor.PropertiesEditor = (function() {
       x: bbox.x + (bbox.width / 2),
       y: bbox.y,
       width: this.width,
-      height: this.height
+      height: this.height,
+      onHide: function() {
+        var property, propertyId, _ref, _results;
+        _ref = _this.properties;
+        _results = [];
+        for (propertyId in _ref) {
+          property = _ref[propertyId];
+          _results.push(property.display = null);
+        }
+        return _results;
+      },
+      onShow: function() {
+        var property, propertyId, _ref, _ref1, _results;
+        _ref = _this.properties;
+        _results = [];
+        for (propertyId in _ref) {
+          property = _ref[propertyId];
+          _results.push((_ref1 = property.object) != null ? _ref1.set(property.value) : void 0);
+        }
+        return _results;
+      }
     });
   };
 
@@ -113,37 +134,13 @@ propertiesEditor.PropertiesEditor = (function() {
 
   PropertiesEditor.prototype.show = function() {
     var _this = this;
-    return this.bubble.show({
-      content: function(container) {
-        return _this.createProperties(container);
-      },
-      callback: function() {
-        var property, propertyId, _ref, _ref1, _results;
-        _ref = _this.properties;
-        _results = [];
-        for (propertyId in _ref) {
-          property = _ref[propertyId];
-          _results.push((_ref1 = property.object) != null ? _ref1.set(property.value) : void 0);
-        }
-        return _results;
-      }
+    return this.bubble.show(function(container) {
+      return _this.createProperties(container);
     });
   };
 
   PropertiesEditor.prototype.hide = function() {
-    var _this = this;
-    return this.bubble.hide({
-      callback: function() {
-        var property, propertyId, _ref, _results;
-        _ref = _this.properties;
-        _results = [];
-        for (propertyId in _ref) {
-          property = _ref[propertyId];
-          _results.push(property.display = null);
-        }
-        return _results;
-      }
-    });
+    return this.bubble.hide();
   };
 
   PropertiesEditor.prototype.toggle = function() {

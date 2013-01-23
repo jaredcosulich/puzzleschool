@@ -7,7 +7,7 @@ class bubble.Bubble
     spacing: 20
     backgroundColor: '#49494A'
     
-    constructor: ({@paper, @x, @y, @width, @height, @position, @arrowOffset, @html}) -> 
+    constructor: ({@paper, @x, @y, @width, @height, @position, @arrowOffset, @html, @onHide, @onShow}) -> 
         @init()
                 
     $: (selector) -> @el.find(selector)
@@ -65,7 +65,7 @@ class bubble.Bubble
         @container.push(@arrow)
                                 
                             
-    show: ({content, callback})->
+    show: (content)->
         return if @animating or @container
         @animating = true
         @createContainer()
@@ -80,7 +80,7 @@ class bubble.Bubble
             250, 
             'linear',
             => 
-                callback() if callback
+                @onShow() if @onShow
                 @animating = false
         )   
 
@@ -93,10 +93,10 @@ class bubble.Bubble
             x = e.clientX - @paper.canvas.offsetLeft
             y = e.clientY - @paper.canvas.offsetTop
             if @base not in @paper.getElementsByPoint(x, y)
-                @hide({})
+                @hide()
                 $(document.body).unbind('mousedown.hide_bubble')
         
-    hide: ({callback}) -> 
+    hide: () -> 
         return if @animating or not @container
         @animating = true
         @container.animate(
@@ -106,7 +106,7 @@ class bubble.Bubble
             => 
                 @container.remove()
                 @container = null
-                callback() if callback
+                @onHide() if @onHide
                 @animating = false
         )
 

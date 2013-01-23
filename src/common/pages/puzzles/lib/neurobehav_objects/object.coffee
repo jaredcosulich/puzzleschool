@@ -98,9 +98,9 @@ class object.Object
         
         icon.click => 
             if @descriptionBubble.visible
-                @descriptionBubble.hide({})
+                @descriptionBubble.hide()
             else
-                @descriptionBubble.show({})
+                @descriptionBubble.show()
 
         return icon    
 

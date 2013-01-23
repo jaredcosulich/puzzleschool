@@ -63,7 +63,7 @@ neuron.Neuron = (function(_super) {
     this.resistance = 1;
     this.capacitance = 10;
     this.timeConstant = this.resistance * this.capacitance;
-    this.refractory = 16;
+    this.refractory = 1;
     this.voltage = 0;
     this.currentVoltage = this.voltage;
     setInterval((function() {
@@ -270,9 +270,9 @@ neuron.Neuron = (function(_super) {
     });
     tip.click(function() {
       if (descriptionBubble.visible) {
-        return descriptionBubble.hide({});
+        return descriptionBubble.hide();
       } else {
-        return descriptionBubble.show({});
+        return descriptionBubble.show();
       }
     });
     return this.synapses.push(synapse);

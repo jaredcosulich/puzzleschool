@@ -75,9 +75,8 @@ class neurobehav.ViewHelper
                     <h4>Congrats!</h4>
                     <p><a>Continue to the next level ></a></p>
                 """
-                bubble.show({})
-                bubble.htmlContainer.find('a').bind 'click', => 
-                    bubble.hide(callback: => @nextLevel())
+                bubble.show()
+                bubble.htmlContainer.find('a').bind 'click', => @nextLevel()
                     
         setTimeout((=> goal.display()), 500)
 
@@ -163,7 +162,7 @@ class neurobehav.ViewHelper
                     <h4>Congrats!</h4>
                     <p>Unfortunately those are all of the levels we have so far.</p>
                 """
-                bubble.show({})
+                bubble.show()
 
         setTimeout((=> goal.display()), 500)
     

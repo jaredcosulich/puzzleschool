@@ -21,6 +21,8 @@ class propertiesEditor.PropertiesEditor
             y: bbox.y
             width: @width
             height: @height
+            onHide: => property.display = null for propertyId, property of @properties
+            onShow: => property.object?.set(property.value) for propertyId, property of @properties
             
         
     createProperties: (container) ->
@@ -70,15 +72,9 @@ class propertiesEditor.PropertiesEditor
         property.set(property.value) if property.set
         
     show: -> 
-        @bubble.show
-            content: (container) => @createProperties(container)
-            callback: => property.object?.set(property.value) for propertyId, property of @properties
-
+        @bubble.show((container) => @createProperties(container))
         
-    hide: -> 
-        @bubble.hide
-            callback: =>
-                property.display = null for propertyId, property of @properties
+    hide: -> @bubble.hide()
         
     toggle: -> if @bubble.visible then @hide() else @show()
             

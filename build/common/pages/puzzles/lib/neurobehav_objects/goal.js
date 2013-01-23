@@ -127,15 +127,15 @@ goal.Goal = (function() {
     });
     return this.icon.click(function() {
       if (_this.goalBubble.visible) {
-        return _this.goalBubble.hide({});
+        return _this.goalBubble.hide();
       } else {
-        return _this.goalBubble.show({});
+        return _this.goalBubble.show();
       }
     });
   };
 
   Goal.prototype.display = function() {
-    return this.goalBubble.show({});
+    return this.goalBubble.show();
   };
 
   Goal.prototype.interact = function(interaction) {

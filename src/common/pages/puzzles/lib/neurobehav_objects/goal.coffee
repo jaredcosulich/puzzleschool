@@ -109,11 +109,11 @@ class goal.Goal
         
         @icon.click => 
             if @goalBubble.visible
-                @goalBubble.hide({})
+                @goalBubble.hide()
             else
-                @goalBubble.show({})
+                @goalBubble.show()
             
-    display: -> @goalBubble.show({})
+    display: -> @goalBubble.show()
         
     interact: (interaction) ->        
         return if @animating or @interactionState == interaction

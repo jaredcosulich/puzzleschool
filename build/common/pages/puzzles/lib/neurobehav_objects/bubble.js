@@ -18,7 +18,7 @@ bubble.Bubble = (function() {
   Bubble.prototype.backgroundColor = '#49494A';
 
   function Bubble(_arg) {
-    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position, this.arrowOffset = _arg.arrowOffset, this.html = _arg.html;
+    this.paper = _arg.paper, this.x = _arg.x, this.y = _arg.y, this.width = _arg.width, this.height = _arg.height, this.position = _arg.position, this.arrowOffset = _arg.arrowOffset, this.html = _arg.html, this.onHide = _arg.onHide, this.onShow = _arg.onShow;
     this.syncHtml = __bind(this.syncHtml, this);
 
     this.init();
@@ -93,10 +93,8 @@ bubble.Bubble = (function() {
     return this.container.push(this.arrow);
   };
 
-  Bubble.prototype.show = function(_arg) {
-    var callback, content,
-      _this = this;
-    content = _arg.content, callback = _arg.callback;
+  Bubble.prototype.show = function(content) {
+    var _this = this;
     if (this.animating || this.container) {
       return;
     }
@@ -113,8 +111,8 @@ bubble.Bubble = (function() {
     this.container.animate({
       transform: "s1"
     }, 250, 'linear', function() {
-      if (callback) {
-        callback();
+      if (_this.onShow) {
+        _this.onShow();
       }
       return _this.animating = false;
     });
@@ -126,16 +124,14 @@ bubble.Bubble = (function() {
       x = e.clientX - _this.paper.canvas.offsetLeft;
       y = e.clientY - _this.paper.canvas.offsetTop;
       if (_ref = _this.base, __indexOf.call(_this.paper.getElementsByPoint(x, y), _ref) < 0) {
-        _this.hide({});
+        _this.hide();
         return $(document.body).unbind('mousedown.hide_bubble');
       }
     });
   };
 
-  Bubble.prototype.hide = function(_arg) {
-    var callback,
-      _this = this;
-    callback = _arg.callback;
+  Bubble.prototype.hide = function() {
+    var _this = this;
     if (this.animating || !this.container) {
       return;
     }
@@ -145,8 +141,8 @@ bubble.Bubble = (function() {
     }, 250, 'linear', function() {
       _this.container.remove();
       _this.container = null;
-      if (callback) {
-        callback();
+      if (_this.onHide) {
+        _this.onHide();
       }
       return _this.animating = false;
     });

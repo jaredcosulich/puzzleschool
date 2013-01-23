@@ -39,7 +39,7 @@ class neuron.Neuron extends neurobehavObject.Object
         @resistance     = 1                   # resistance (kOhm)
         @capacitance    = 10                  # capacitance (uF)
         @timeConstant   = @resistance * @capacitance
-        @refractory     = 16                  # refractory period (msec)
+        @refractory     = 1                  # refractory period (msec)
 
         @voltage = 0
         @currentVoltage = @voltage
@@ -221,9 +221,9 @@ class neuron.Neuron extends neurobehavObject.Object
 
         tip.click => 
             if descriptionBubble.visible
-                descriptionBubble.hide({})
+                descriptionBubble.hide()
             else
-                descriptionBubble.show({})
+                descriptionBubble.show()
                 
         @synapses.push(synapse)
     
