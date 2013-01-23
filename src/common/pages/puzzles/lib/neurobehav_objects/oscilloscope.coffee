@@ -6,14 +6,13 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
     objectName: 'Oscilloscope'
     width: 180
     height: 96
-    connectionLength: 60
     screenWidth: 150
     screenHeight: 90
     centerOffset: 75
     screenColor: '#64A539'
     xDelta: 1
     
-    constructor: ({@board}) ->
+    constructor: ({@board, @connectorPosition}) ->
         super(arguments...)
         
         @draw()
@@ -29,6 +28,11 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
         @scale = @screenHeight/2
         @xAxis = @screenHeight - 12
         
+        if not @connectorPosition
+            @connectorPosition = 
+                top: @position.top + @height
+                left: @position.left - 72
+        
     draw: ->
         graph = @paper.rect(
             @position.left, 
@@ -41,8 +45,9 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             fill: '#ACACAD'
         @image.push(graph)
 
-        startingX = graph.attr('x')
-        startingY = graph.attr('y') + (graph.attr('height') / 2)
+        bbox = graph.getBBox()
+        startingX = (if @connectorPosition.left > bbox.x then bbox.x + bbox.width else bbox.x)
+        startingY = bbox.y + (bbox.height / 2)
 
         @screen = @paper.rect(
             graph.attr('x') + 6, 
@@ -55,32 +60,33 @@ class oscilloscope.Oscilloscope extends neurobehavObject.Object
             fill: 'black'
         @image.push(@screen)
         
-        connectionSegment = @connectionLength/10
-        slope = ((@position.top + @height) - startingY) / ((startingX - (connectionSegment*4)) - (startingX - (@connectionLength)))
-        
-        endX = startingX - (connectionSegment*5)
-        endY = startingY + (slope * connectionSegment)
+        endX = startingX + ((@connectorPosition.left - startingX)/2)
+        endY = startingY + ((@connectorPosition.top - startingY)/2)
         connection = @paper.path """
             M#{startingX},#{startingY}
-            L#{startingX - (connectionSegment*4)},#{startingY}
             L#{endX},#{endY}
         """
         connection.attr('stroke-width': 2)
         @image.push(connection)
         
+        slope = (endY - startingY) / (startingX - endX)
+        xDistance = if slope < 0 then 5 else -5
+        xDistance = if Math.abs(slope) < 1 then xDistance * slope else xDistance
         @needle = @paper.path """
-            M#{endX - 5},#{endY - (5*(1/slope))}
-            L#{(startingX - (@connectionLength))}, #{@position.top + @height}
-            L#{endX + 5},#{endY + (5*(1/slope))}
-            L#{endX - 5},#{endY - (5*(1/slope))}
+            M#{endX - xDistance},#{endY - (xDistance*(1/slope))}
+            L#{@connectorPosition.left}, #{@connectorPosition.top}
+            L#{endX + xDistance},#{endY + (xDistance*(1/slope))}
+            L#{endX - xDistance},#{endY - (xDistance*(1/slope))}
         """
         @needle.attr(fill: 'white')
         @image.push(@needle)
         
+        xDistance = if slope < 0 then 3 else -3
+        xDistance = if Math.abs(slope) < 1 then xDistance * slope else xDistance
         innerNeedle = @paper.path """
-            M#{endX - 3},#{endY - (3*(1/slope))}
-            L#{(startingX - (@connectionLength))}, #{@position.top + @height}
-            L#{endX + 3},#{endY + (3*(1/slope))}
+            M#{endX - xDistance},#{endY - (xDistance*(1/slope))}
+            L#{@connectorPosition.left}, #{@connectorPosition.top}
+            L#{endX + xDistance},#{endY + (xDistance*(1/slope))}
         """
         innerNeedle.attr(stroke: '#ccc')
         @image.push(innerNeedle)

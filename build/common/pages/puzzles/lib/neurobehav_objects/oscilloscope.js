@@ -19,8 +19,6 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   Oscilloscope.prototype.height = 96;
 
-  Oscilloscope.prototype.connectionLength = 60;
-
   Oscilloscope.prototype.screenWidth = 150;
 
   Oscilloscope.prototype.screenHeight = 90;
@@ -33,7 +31,7 @@ oscilloscope.Oscilloscope = (function(_super) {
 
   function Oscilloscope(_arg) {
     var _this = this;
-    this.board = _arg.board;
+    this.board = _arg.board, this.connectorPosition = _arg.connectorPosition;
     Oscilloscope.__super__.constructor.apply(this, arguments);
     this.draw();
     this.drawThreshold();
@@ -46,38 +44,48 @@ oscilloscope.Oscilloscope = (function(_super) {
   Oscilloscope.prototype.init = function() {
     this.image = this.paper.set();
     this.scale = this.screenHeight / 2;
-    return this.xAxis = this.screenHeight - 12;
+    this.xAxis = this.screenHeight - 12;
+    if (!this.connectorPosition) {
+      return this.connectorPosition = {
+        top: this.position.top + this.height,
+        left: this.position.left - 72
+      };
+    }
   };
 
   Oscilloscope.prototype.draw = function() {
-    var connection, connectionSegment, endX, endY, graph, innerNeedle, slope, startingX, startingY;
+    var bbox, connection, endX, endY, graph, innerNeedle, slope, startingX, startingY, xDistance;
     graph = this.paper.rect(this.position.left, this.position.top, this.screenWidth + 12, this.screenHeight + 12, 6);
     graph.attr({
       fill: '#ACACAD'
     });
     this.image.push(graph);
-    startingX = graph.attr('x');
-    startingY = graph.attr('y') + (graph.attr('height') / 2);
+    bbox = graph.getBBox();
+    startingX = (this.connectorPosition.left > bbox.x ? bbox.x + bbox.width : bbox.x);
+    startingY = bbox.y + (bbox.height / 2);
     this.screen = this.paper.rect(graph.attr('x') + 6, graph.attr('y') + 6, this.screenWidth, this.screenHeight, 6);
     this.screen.attr({
       fill: 'black'
     });
     this.image.push(this.screen);
-    connectionSegment = this.connectionLength / 10;
-    slope = ((this.position.top + this.height) - startingY) / ((startingX - (connectionSegment * 4)) - (startingX - this.connectionLength));
-    endX = startingX - (connectionSegment * 5);
-    endY = startingY + (slope * connectionSegment);
-    connection = this.paper.path("M" + startingX + "," + startingY + "\nL" + (startingX - (connectionSegment * 4)) + "," + startingY + "\nL" + endX + "," + endY);
+    endX = startingX + ((this.connectorPosition.left - startingX) / 2);
+    endY = startingY + ((this.connectorPosition.top - startingY) / 2);
+    connection = this.paper.path("M" + startingX + "," + startingY + "\nL" + endX + "," + endY);
     connection.attr({
       'stroke-width': 2
     });
     this.image.push(connection);
-    this.needle = this.paper.path("M" + (endX - 5) + "," + (endY - (5 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 5) + "," + (endY + (5 * (1 / slope))) + "\nL" + (endX - 5) + "," + (endY - (5 * (1 / slope))));
+    slope = (endY - startingY) / (startingX - endX);
+    xDistance = slope < 0 ? 5 : -5;
+    xDistance = Math.abs(slope) < 1 ? xDistance * slope : xDistance;
+    this.needle = this.paper.path("M" + (endX - xDistance) + "," + (endY - (xDistance * (1 / slope))) + "\nL" + this.connectorPosition.left + ", " + this.connectorPosition.top + "\nL" + (endX + xDistance) + "," + (endY + (xDistance * (1 / slope))) + "\nL" + (endX - xDistance) + "," + (endY - (xDistance * (1 / slope))));
     this.needle.attr({
       fill: 'white'
     });
     this.image.push(this.needle);
-    innerNeedle = this.paper.path("M" + (endX - 3) + "," + (endY - (3 * (1 / slope))) + "\nL" + (startingX - this.connectionLength) + ", " + (this.position.top + this.height) + "\nL" + (endX + 3) + "," + (endY + (3 * (1 / slope))));
+    xDistance = slope < 0 ? 3 : -3;
+    xDistance = Math.abs(slope) < 1 ? xDistance * slope : xDistance;
+    innerNeedle = this.paper.path("M" + (endX - xDistance) + "," + (endY - (xDistance * (1 / slope))) + "\nL" + this.connectorPosition.left + ", " + this.connectorPosition.top + "\nL" + (endX + xDistance) + "," + (endY + (xDistance * (1 / slope))));
     innerNeedle.attr({
       stroke: '#ccc'
     });

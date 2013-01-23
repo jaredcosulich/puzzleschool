@@ -41,8 +41,8 @@ class neurobehav.ViewHelper
         oscilloscope1 = @game.addObject
             type: 'Oscilloscope'
             position:
-                top: 146
-                left: 514
+                top: 150
+                left: 520
             board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 
@@ -118,8 +118,8 @@ class neurobehav.ViewHelper
         oscilloscope1 = @game.addObject
             type: 'Oscilloscope'
             position:
-                top: 106
-                left: 514
+                top: 104
+                left: 524
             board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 
@@ -129,7 +129,10 @@ class neurobehav.ViewHelper
             type: 'Oscilloscope'
             position:
                 top: 306
-                left: 214
+                left: 174
+            connectorPosition:
+                top: 390
+                left: 410            
             board: @game.board
             description: @$('.descriptions .oscilloscope').html()
 

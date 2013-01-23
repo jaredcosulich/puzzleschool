@@ -60,8 +60,8 @@ neurobehav.ViewHelper = (function() {
     oscilloscope1 = this.game.addObject({
       type: 'Oscilloscope',
       position: {
-        top: 146,
-        left: 514
+        top: 150,
+        left: 520
       },
       board: this.game.board,
       description: this.$('.descriptions .oscilloscope').html()
@@ -134,8 +134,8 @@ neurobehav.ViewHelper = (function() {
     oscilloscope1 = this.game.addObject({
       type: 'Oscilloscope',
       position: {
-        top: 106,
-        left: 514
+        top: 104,
+        left: 524
       },
       board: this.game.board,
       description: this.$('.descriptions .oscilloscope').html()
@@ -145,7 +145,11 @@ neurobehav.ViewHelper = (function() {
       type: 'Oscilloscope',
       position: {
         top: 306,
-        left: 214
+        left: 174
+      },
+      connectorPosition: {
+        top: 390,
+        left: 410
       },
       board: this.game.board,
       description: this.$('.descriptions .oscilloscope').html()
