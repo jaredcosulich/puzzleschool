@@ -156,16 +156,19 @@ goal.Goal = (function() {
 
   Goal.prototype.success = function() {
     var _this = this;
+    if (this.successAchieved) {
+      return;
+    }
     if (this.animating) {
       setTimeout((function() {
         return _this.success();
       }), 100);
       return;
     }
+    this.successAchieved = true;
     if (this.onSuccess) {
-      this.onSuccess(this.goalBubble);
+      return this.onSuccess(this.goalBubble);
     }
-    return $(document.body).unbind('mousedown.hide_bubble');
   };
 
   return Goal;

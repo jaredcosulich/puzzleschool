@@ -128,9 +128,11 @@ class goal.Goal
         )
         
     success: ->
+        return if @successAchieved
         if @animating
             setTimeout((=> @success()), 100)
             return
+        @successAchieved = true
         @onSuccess(@goalBubble) if @onSuccess
-        $(document.body).unbind('mousedown.hide_bubble')
+        # $(document.body).unbind('mousedown.hide_bubble')
         
