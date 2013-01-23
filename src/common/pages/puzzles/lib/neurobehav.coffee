@@ -14,6 +14,26 @@ class neurobehav.ViewHelper
 
     loadLevel: (level) ->
         @["loadLevel#{level}"]()
+        
+    initNextLevel: ->
+        width = 120
+        height = 36
+        x = $(@el).width()/2
+        y = 12
+        
+        paper = @game.paper
+        button = paper.set()
+        background = paper.rect(x, y, width, height, 6)
+        background.attr(fill: 'black')
+        button.push(background)
+        
+        text = paper.text(x+(width/2), y+(height/2), 'Go To Next Level >')
+        text.attr(fill: 'white', stroke: 'none', 'font-size': 12)
+        button.push(text)
+        
+        button.attr(cursor: 'pointer')
+        button.click => @nextLevel()
+                 
                         
     loadLevel1: ->        
         stimulus = @game.addObject
@@ -62,8 +82,8 @@ class neurobehav.ViewHelper
                 <p>When the neuron reaches its threshold it fires, causing the worm's muscle to contract and making the worm wiggle.</p>
                 <p>Click anywhere outside this bubble to get started!</p>
             """
-            onSuccess: (bubble) =>
-                bubble.setHtml """
+            onSuccess: =>
+                container = goal.setHtml """
                     <h3>Success!</h3>
                     <br/>
                     <p>
@@ -75,8 +95,9 @@ class neurobehav.ViewHelper
                     <h4>Congrats!</h4>
                     <p><a>Continue to the next level ></a></p>
                 """
-                bubble.show()
-                bubble.htmlContainer.find('a').bind 'click', => @nextLevel()
+                goal.display()
+                container.find('a').bind 'click', => @nextLevel()
+                @initNextLevel()
                     
         setTimeout((=> goal.display()), 500)
 
@@ -149,8 +170,8 @@ class neurobehav.ViewHelper
                 <p>Using the stimulus add enough electricity to both neurons to cause them to exceed their thresholds and fire.</p>
                 <p>Click anywhere outside this bubble to get started!</p>
             """
-            onSuccess: (bubble) =>
-                bubble.setHtml """
+            onSuccess: =>
+                goal.setHtml """
                     <h3>Success!</h3>
                     <br/>
                     <p>
@@ -162,7 +183,7 @@ class neurobehav.ViewHelper
                     <h4>Congrats!</h4>
                     <p>Unfortunately those are all of the levels we have so far.</p>
                 """
-                bubble.show()
+                goal.display()
 
         setTimeout((=> goal.display()), 500)
     

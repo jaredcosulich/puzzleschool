@@ -114,6 +114,10 @@ class goal.Goal
                 @goalBubble.show()
             
     display: -> @goalBubble.show()
+    
+    setHtml: (html) -> 
+        @goalBubble.setHtml(html)
+        return @goalBubble.htmlContainer
         
     interact: (interaction) ->        
         return if @animating or @interactionState == interaction
@@ -133,6 +137,4 @@ class goal.Goal
             setTimeout((=> @success()), 100)
             return
         @successAchieved = true
-        @onSuccess(@goalBubble) if @onSuccess
-        # $(document.body).unbind('mousedown.hide_bubble')
-        
+        @onSuccess() if @onSuccess

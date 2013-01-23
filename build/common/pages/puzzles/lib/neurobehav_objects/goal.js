@@ -138,6 +138,11 @@ goal.Goal = (function() {
     return this.goalBubble.show();
   };
 
+  Goal.prototype.setHtml = function(html) {
+    this.goalBubble.setHtml(html);
+    return this.goalBubble.htmlContainer;
+  };
+
   Goal.prototype.interact = function(interaction) {
     var path,
       _this = this;
@@ -167,7 +172,7 @@ goal.Goal = (function() {
     }
     this.successAchieved = true;
     if (this.onSuccess) {
-      return this.onSuccess(this.goalBubble);
+      return this.onSuccess();
     }
   };
 
