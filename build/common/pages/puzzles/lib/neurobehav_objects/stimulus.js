@@ -56,10 +56,10 @@ stimulus.Stimulus = (function(_super) {
   }
 
   Stimulus.prototype.init = function() {
-    var minimumMouseDown, mousedown, mouseup,
+    var minimumMouseDown, mouseIsDown, mousedown, mouseup,
       _this = this;
     this.draw();
-    mousedown = false;
+    mouseIsDown = false;
     minimumMouseDown = true;
     mousedown = function() {
       if (!minimumMouseDown) {
@@ -67,19 +67,19 @@ stimulus.Stimulus = (function(_super) {
       }
       minimumMouseDown = false;
       setTimeout((function() {
-        if (!mousedown) {
+        if (!mouseIsDown) {
           _this.setState(false);
         }
         return minimumMouseDown = true;
       }), _this.properties.duration.value);
-      mousedown = true;
+      mouseIsDown = true;
       return _this.setState(true);
     };
     mouseup = function() {
       if (minimumMouseDown) {
         _this.setState(false);
       }
-      return mousedown = false;
+      return mouseIsDown = false;
     };
     this.image.mousedown(function() {
       return mousedown();

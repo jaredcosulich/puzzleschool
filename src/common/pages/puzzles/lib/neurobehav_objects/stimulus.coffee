@@ -25,23 +25,23 @@ class stimulus.Stimulus extends neurobehavObject.Object
     init: ->
         @draw()
         
-        mousedown = false
+        mouseIsDown = false
         minimumMouseDown = true
         mousedown = =>
             return unless minimumMouseDown
             minimumMouseDown = false
             setTimeout((
                 => 
-                    @setState(false) unless mousedown
+                    @setState(false) unless mouseIsDown
                     minimumMouseDown = true
             ), @properties.duration.value)
             
-            mousedown = true
+            mouseIsDown = true
             @setState(true)
 
         mouseup = => 
             @setState(false) if minimumMouseDown
-            mousedown = false
+            mouseIsDown = false
                  
         @image.mousedown -> mousedown()
         @image.touchstart -> mousedown()
