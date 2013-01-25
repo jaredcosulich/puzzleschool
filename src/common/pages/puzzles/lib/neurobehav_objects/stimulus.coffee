@@ -27,7 +27,7 @@ class stimulus.Stimulus extends neurobehavObject.Object
         
         mousedown = false
         minimumMouseDown = true
-        @image.mousedown =>
+        mousedown = =>
             return unless minimumMouseDown
             minimumMouseDown = false
             setTimeout((
@@ -39,9 +39,14 @@ class stimulus.Stimulus extends neurobehavObject.Object
             mousedown = true
             @setState(true)
 
-        @image.mouseup => 
+        mouseup = => 
             @setState(false) if minimumMouseDown
             mousedown = false
+                 
+        @image.mousedown -> mousedown()
+        @image.touchstart -> mousedown()
+        @image.mouseup -> mouseup()
+        @image.touchend -> mouseup()         
                     
         @image.attr(cursor: 'pointer')
 
