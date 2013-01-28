@@ -10,6 +10,7 @@ soma.chunks
         shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
         prepare: ({@content}) ->
+            @setIcon('/assets/images/favicon.ico')
             @setMeta('apple-mobile-web-app-capable', 'yes')
             @setMeta('apple-mobile-web-app-status-bar-style', 'black')
 
@@ -24,8 +25,6 @@ soma.chunks
             @loadStylesheet '/build/client/css/all.css'
 
             @loadScript '/build/client/pages/form.js'
-
-            @loadScript '/build/common/pages/base.js'
 
             @loadScript '/assets/analytics.js'
                         
