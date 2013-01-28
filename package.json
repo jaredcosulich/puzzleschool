@@ -3,8 +3,8 @@
     "name": "puzzleschool",
     "version": "0.0.2",
     "engines": {
-        "node": "0.8.7",
-        "npm":  "1.1.49"
+        "node": "0.8.14",
+        "npm":  "1.1.71"
     },
     "devDependencies": {
         "coffee-script": "latest"

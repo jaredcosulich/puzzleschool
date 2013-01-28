@@ -35,7 +35,45 @@ soma.chunks({
       this.setIcon('/assets/images/favicon.ico');
       this.setMeta('apple-mobile-web-app-capable', 'yes');
       this.setMeta('apple-mobile-web-app-status-bar-style', 'black');
+      this.loadElement('link', {
+        href: '/assets/images/favicon.ico',
+        rel: 'shortcut icon',
+        type: 'image/x-icon'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-icon',
+        sizes: '57x57',
+        href: '/assets/images/touch-icon-iphone.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-icon',
+        sizes: '72x72',
+        href: '/assets/images/touch-icon-ipad.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-icon',
+        sizes: '114x114',
+        href: '/assets/images/touch-icon-iphone4.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-startup-image',
+        sizes: '1024x748',
+        href: '/assets/images/startup1024x748.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-startup-image',
+        sizes: '768x1004',
+        href: '/assets/images/startup768x1004.png'
+      });
+      this.loadElement("link", {
+        rel: 'apple-touch-startup-image',
+        sizes: '320x460',
+        href: '/assets/images/startup320x460.png'
+      });
       this.loadStylesheet('/build/client/css/all.css');
+      this.loadScript('/build/client/pages/form.js');
+      this.loadScript('/build/common/pages/base.js');
+      this.loadScript('/assets/analytics.js');
       this.template = this.loadTemplate('/build/common/templates/base.html');
       return this.loadChunk(this.content);
     },

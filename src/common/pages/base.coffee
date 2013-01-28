@@ -26,6 +26,8 @@ soma.chunks
 
             @loadScript '/build/client/pages/form.js'
 
+            @loadScript '/build/common/pages/base.js'
+
             @loadScript '/assets/analytics.js'
                         
             @template = @loadTemplate '/build/common/templates/base.html'
