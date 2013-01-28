@@ -452,12 +452,13 @@
       var time = duration || thousand
         , self = this
         , diff = to - from
-        , start = +new Date()
+        , start = null
         , stop = 0
         , end = 0
       live(run)
   
       function run(t) {
+        if (!start) start = t; 
         var delta = t - start
         if (delta > time || stop) {
           to = isFinite(to) ? to : 1
