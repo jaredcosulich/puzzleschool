@@ -30,16 +30,16 @@ class bubble.Bubble
         bbox = @container.getBBox()
     
     createBase: ->
-        x = switch @position
+        @baseX = switch @position
             when 'right' then @x + @arrowHeight
             when 'left' then @x - @arrowHeight - @width
             else @x - @arrowOffset
         
-        y = switch @position
+        @baseY = switch @position
             when 'right', 'left' then @y - @arrowOffset
             else @y - @arrowHeight - @height
         
-        @base = @paper.rect(x, y, @width, @height, 12)
+        @base = @paper.rect(@baseX, @baseY, @width, @height, 12)
         @container.push(@base)
                             
     createArrow: ->
@@ -84,7 +84,13 @@ class bubble.Bubble
                 @animating = false
         )   
 
-        @syncHtml()
+        if @htmlContainer
+            @htmlContainer.animate
+                left: @baseX + @paper.canvas.offsetLeft 
+                top: @baseY + @paper.canvas.offsetTop
+                height: @width
+                width: @height
+                duration: 250
         
         @visible = true
         @container.toFront()
@@ -109,49 +115,25 @@ class bubble.Bubble
                 @onHide() if @onHide
                 @animating = false
         )
-
-        @syncHtml(false)
         
+        if @htmlContainer
+            @htmlContainer.animate
+                left: @x + @paper.canvas.offsetLeft 
+                top: @y + @paper.canvas.offsetTop
+                height: 0
+                width: 0
+                duration: 250
+
         @visible = false
 
-    syncHtml: (show=true, equalTimes=0) =>
-        return unless @htmlContainer
-        height = parseInt(@htmlContainer.height())
-        width = parseInt(@htmlContainer.width())
-        
-        bbox = @base.getBBox()
-        toHeight = bbox?.height or 0
-        toWidth = bbox?.width or 0
-
-        unless show
-            toWidth = Math.max(toWidth - 50, 0)
-            toHeight = Math.max(toHeight - 50, 0)
-            
-        if height == toHeight and width == toWidth
-            equalTimes += 1
-        else
-            equalTimes = 0
-        
-        return if equalTimes > 10
-
-        toLeft = @paper.canvas.offsetLeft + (bbox?.x or 0)
-        toTop = @paper.canvas.offsetTop + (bbox?.y or 0)
-        
-        @htmlContainer.css
-            height: toHeight
-            width: toWidth
-            left: toLeft
-            top: toTop
-        setTimeout((=> @syncHtml(show, equalTimes)), 1)
-        
     createHtml: ->
         return if @htmlContainer
         @htmlContainer = $(document.createElement('DIV'))
         @htmlContainer.addClass('bubble_description')
         @htmlContainer.html("<div class='description'>#{@html}</div>")
         @htmlContainer.css
-            top: 0
-            left: 0
+            top: @y + @paper.canvas.offsetTop
+            left: @x + @paper.canvas.offsetLeft 
             width: 0 
             height: 0 
             
