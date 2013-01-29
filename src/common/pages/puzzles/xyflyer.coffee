@@ -398,7 +398,43 @@ LEVELS = [
     }
     {
         equations: 
-            '(1/4)x': {}
+            'x+4': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -10
+            yMax: 10
+        rings: [
+            {x: -2, y: 2}
+            {x: 0, y: 4}
+            {x: 4, y: 8}
+        ]
+        islandCoordinates: {x: -6, y: -2}
+        fragments: [
+            '+4', '-4'
+        ]
+    }
+    {
+        equations: 
+            'x-2': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -10
+            yMax: 10
+        rings: [
+            {x: 0, y: -2}
+            {x: 4, y: 2}
+            {x: 8, y: 6}
+        ]
+        islandCoordinates: {x: -4, y: -6}
+        fragments: [
+            '+2', '-2', '+4', '-4'
+        ]
+    }
+    {
+        equations: 
+            '(1/4)x': {start: 'x'}
         grid:
             xMin: -10
             xMax: 10
@@ -410,30 +446,62 @@ LEVELS = [
             {x: 6, y: 1.5}
         ]
         fragments: [
-            '4x', '(1/4)x'
+            '4*', '(1/4)*'
         ]
     }
     {
         equations: 
-            'ax+12': {start: 'ax+12'}
+            '2*x+3': {start: 'x'}
         grid:
-            xMin: -40
-            xMax: 60
-            yMin: -60
-            yMax: 40
+            xMin: -10
+            xMax: 10
+            yMin: -10
+            yMax: 10
+        islandCoordinates: {x: -5, y: -7}
         rings: [
-            {x: 5, y: -13}
-            {x: 10, y: -38}
-            {x: 12, y: -48}
+            {x: -2, y: -1}
+            {x: 0, y: 3}
+            {x: 2, y: 7}
         ]
-        islandCoordinates: {x: 0, y: 12}
-        variables:
-            a:
-                start: 1
-                min: -10
-                max: 10
-                increment: 1
-                solution: -5
+        fragments: [
+            '2*', '(1/2)*', '+3', '-3'
+        ]
+    }
+    {
+        equations: 
+            '(1/3)*x+6': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -5
+            yMax: 15
+        islandCoordinates: {x: -6, y: 4}
+        rings: [
+            {x: -3, y: 5}
+            {x: 0, y: 6}
+            {x: 6, y: 8}
+        ]
+        fragments: [
+            '(1/6)*', '(1/3)*', '3*', '6*', '-6', '+6'
+        ]
+    }
+    {
+        equations: 
+            '2*x-2': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -10
+            yMax: 10
+        islandCoordinates: {x: -3, y: -8}
+        rings: [
+            {x: 0, y: -2}
+            {x: 2, y: 2}
+            {x: 4, y: 6}
+        ]
+        fragments: [
+            '(1/4)*', '(1/2)*', '2*', '4*', '-2', '+2', '-4', '4'
+        ]
     }
     {
         equations: 
@@ -556,47 +624,27 @@ LEVELS = [
                 solution: 5
     }
     {
-        equations:
-            '-x-c': {start: '-x'}
-            'x-d': {start: 'x'}
+        equations: 
+            'ax+12': {start: 'ax+12'}
         grid:
-            xMin: -20
-            xMax: 20
-            yMin: -20
-            yMax: 20
+            xMin: -40
+            xMax: 60
+            yMin: -60
+            yMax: 40
         rings: [
-            {x: -5, y: -5}
-            {x: 5, y: -5}
-            {x: 15, y: 5}
+            {x: 5, y: -13}
+            {x: 10, y: -38}
+            {x: 12, y: -48}
         ]
-        fragments: [
-            '+a', '+b', '-c', '-d'
-        ]
-        islandCoordinates: {x: -15, y: 5}
+        islandCoordinates: {x: 0, y: 12}
         variables:
             a:
                 start: 1
-                min: 0
+                min: -10
                 max: 10
                 increment: 1
-            b:
-                start: 1
-                min: 0
-                max: 10
-                increment: 1  
-            c:
-                start: 1
-                min: 0
-                max: 10
-                increment: 1  
-                solution: 10
-            d:
-                start: 1
-                min: 0
-                max: 10
-                increment: 1
-                solution: 10  
-    }        
+                solution: -5
+    }    
     {
         equations: 
             '(1/b)x+c': {start: 'x'}
@@ -721,6 +769,48 @@ LEVELS = [
     }
     {
         equations:
+            '-x-c': {start: '-x'}
+            'x-d': {start: 'x'}
+        grid:
+            xMin: -20
+            xMax: 20
+            yMin: -20
+            yMax: 20
+        rings: [
+            {x: -5, y: -5}
+            {x: 5, y: -5}
+            {x: 15, y: 5}
+        ]
+        fragments: [
+            '+a', '+b', '-c', '-d'
+        ]
+        islandCoordinates: {x: -15, y: 5}
+        variables:
+            a:
+                start: 1
+                min: 0
+                max: 10
+                increment: 1
+            b:
+                start: 1
+                min: 0
+                max: 10
+                increment: 1  
+            c:
+                start: 1
+                min: 0
+                max: 10
+                increment: 1  
+                solution: 10
+            d:
+                start: 1
+                min: 0
+                max: 10
+                increment: 1
+                solution: 10  
+    }        
+    {
+        equations:
             '2x': {}
             '(1/2)x+2': {}
         grid:
@@ -787,6 +877,11 @@ LEVELS = [
             '4*', '2*', '(1/2)', '(1/5)', '+6', '+12', '-6', '-12'
         ]
     }    
+    
+    
+    
+    
+    
     {
         equations: 
             'x/2': {start: 'x'}

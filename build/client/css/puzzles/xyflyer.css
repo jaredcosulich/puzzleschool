@@ -160,7 +160,7 @@ body {
 }
 .xyflyer .equation_area .equations .equation_container .range .slider .track,
 .xyflyer .equation_area .equations .equation_container .variable .slider .track {
-  margin: 9px 3px;
+  margin: 9px 12px;
   background-color: #ff6e5f;
   height: 6px;
 }
@@ -168,14 +168,14 @@ body {
 .xyflyer .equation_area .equations .equation_container .variable .slider .knob {
   position: absolute;
   background-color: #24d94c;
-  width: 12px;
-  height: 12px;
-  top: 6px;
+  width: 24px;
+  height: 24px;
+  top: 0;
   left: 0;
   cursor: move;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
 }
 .xyflyer .equation_area .launch_button {
   text-align: center;
