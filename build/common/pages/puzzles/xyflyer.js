@@ -1277,6 +1277,54 @@ LEVELS = [
     fragments: ['4*', '2*', '(1/2)', '(1/5)', '+6', '+12', '-6', '-12']
   }, {
     equations: {
+      '((1/3)*x)^2-32': {
+        start: '(x)^2'
+      },
+      '(1/6)*x+12': {
+        start: 'x'
+      }
+    },
+    grid: {
+      xMin: -50,
+      xMax: 50,
+      yMin: -50,
+      yMax: 50
+    },
+    rings: [
+      {
+        x: -9,
+        y: -23
+      }, {
+        x: 12,
+        y: -16
+      }, {
+        x: 36,
+        y: 26
+      }
+    ],
+    fragments: ['(1/3)*', '(1/6)*', '-32', '+20'],
+    islandCoordinates: {
+      x: -18,
+      y: 4
+    },
+    variables: {
+      a: {
+        start: 1,
+        min: -10,
+        max: 10,
+        increment: 1,
+        solution: -4
+      },
+      b: {
+        start: 1,
+        min: -10,
+        max: 10,
+        increment: 1,
+        solution: -5
+      }
+    }
+  }, {
+    equations: {
       'x/2': {
         start: 'x'
       }
