@@ -138,6 +138,7 @@ body {
 .xyflyer .equation_area .equations .equation_container .equation.bad_formula .with_component {
   color: red;
 }
+.xyflyer .equation_area .equations .equation_container .bad_formula_message,
 .xyflyer .equation_area .equations .equation_container .range,
 .xyflyer .equation_area .equations .equation_container .variable {
   font-size: 11px;
@@ -148,16 +149,19 @@ body {
   padding: 3px 6px;
   overflow: hidden;
 }
+.xyflyer .equation_area .equations .equation_container .bad_formula_message input,
 .xyflyer .equation_area .equations .equation_container .range input,
 .xyflyer .equation_area .equations .equation_container .variable input {
   width: 24px;
 }
+.xyflyer .equation_area .equations .equation_container .bad_formula_message .slider,
 .xyflyer .equation_area .equations .equation_container .range .slider,
 .xyflyer .equation_area .equations .equation_container .variable .slider {
   position: relative;
   float: right;
   width: 75%;
 }
+.xyflyer .equation_area .equations .equation_container .bad_formula_message .slider .track,
 .xyflyer .equation_area .equations .equation_container .range .slider .track,
 .xyflyer .equation_area .equations .equation_container .variable .slider .track {
   margin: 9px 10px;
@@ -167,6 +171,7 @@ body {
   background-color: #fe1a00;
   height: 6px;
 }
+.xyflyer .equation_area .equations .equation_container .bad_formula_message .slider .knob,
 .xyflyer .equation_area .equations .equation_container .range .slider .knob,
 .xyflyer .equation_area .equations .equation_container .variable .slider .knob {
   position: absolute;
@@ -183,6 +188,10 @@ body {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
+}
+.xyflyer .equation_area .equations .equation_container .bad_formula_message {
+  border: none;
+  color: red;
 }
 .xyflyer .equation_area .launch_button {
   text-align: center;

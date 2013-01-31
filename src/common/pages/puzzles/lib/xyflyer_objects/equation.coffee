@@ -407,3 +407,30 @@ class equation.Equation
             remainder = 0
         lastAccept.width(@el.width() - remainder - 12)
         
+    hideBadFormula: ->
+        @el.removeClass('bad_formula')
+        if @badFormula
+            @badFormula.animate
+                height: 0
+                paddingTop: 0
+                paddingBottom: 0
+                duration: 500
+                complete: => 
+                    @badFormula.remove()
+                    delete @badFormula = null
+                    
+    showBadFormula: ->
+        @el.addClass('bad_formula')
+        if not @badFormula
+            @badFormula = $(document.createElement('DIV'))
+            @badFormula.addClass('bad_formula_message')
+            @badFormula.html('This equation is not valid.')
+            @container.append(@badFormula)
+            @badFormula.data('height', @badFormula.height())
+            @badFormula.height(0)
+        
+        @badFormula.animate
+            height: @badFormula.data('height')
+            duration: 500
+
+

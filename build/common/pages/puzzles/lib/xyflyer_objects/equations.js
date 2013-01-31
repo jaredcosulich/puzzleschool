@@ -143,10 +143,10 @@ equations.Equations = (function() {
   Equations.prototype.plotFormula = function(equation) {
     var formulaData;
     this.checkMultipleEquations();
-    equation.el.removeClass('bad_formula');
+    equation.hideBadFormula();
     formulaData = equation.formulaData();
     if (!(this.plot(equation.id, formulaData) || !formulaData.length)) {
-      return equation.el.addClass('bad_formula');
+      return equation.showBadFormula();
     }
   };
 

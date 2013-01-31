@@ -612,6 +612,39 @@ equation.Equation = (function() {
     return lastAccept.width(this.el.width() - remainder - 12);
   };
 
+  Equation.prototype.hideBadFormula = function() {
+    var _this = this;
+    this.el.removeClass('bad_formula');
+    if (this.badFormula) {
+      return this.badFormula.animate({
+        height: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+        duration: 500,
+        complete: function() {
+          _this.badFormula.remove();
+          return delete (_this.badFormula = null);
+        }
+      });
+    }
+  };
+
+  Equation.prototype.showBadFormula = function() {
+    this.el.addClass('bad_formula');
+    if (!this.badFormula) {
+      this.badFormula = $(document.createElement('DIV'));
+      this.badFormula.addClass('bad_formula_message');
+      this.badFormula.html('This equation is not valid.');
+      this.container.append(this.badFormula);
+      this.badFormula.data('height', this.badFormula.height());
+      this.badFormula.height(0);
+    }
+    return this.badFormula.animate({
+      height: this.badFormula.data('height'),
+      duration: 500
+    });
+  };
+
   return Equation;
 
 })();

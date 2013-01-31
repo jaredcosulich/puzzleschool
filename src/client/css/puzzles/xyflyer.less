@@ -128,7 +128,6 @@ body {
                         height: 30px;
                     }
                 
-                
                     &.bad_formula {
                         border: 1px solid @red;
                         color: red;
@@ -138,8 +137,8 @@ body {
                     }
             
                 }
-            
-                .range, .variable {
+                
+                .bad_formula_message, .range, .variable {
                     font-size: @smallsize;
                     border: 1px solid #ccc;
                     border-top: none;
@@ -180,6 +179,12 @@ body {
                         }
                     }
                 }
+                
+                .bad_formula_message {
+                    border: none;
+                    color: red;
+                }
+            
             }    
         }
                     

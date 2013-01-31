@@ -88,9 +88,9 @@ class equations.Equations
             
     plotFormula: (equation) ->
         @checkMultipleEquations()
-        equation.el.removeClass('bad_formula')
+        equation.hideBadFormula()
         formulaData = equation.formulaData()
-        equation.el.addClass('bad_formula') unless @plot(equation.id, formulaData) or !formulaData.length
+        equation.showBadFormula() unless @plot(equation.id, formulaData) or !formulaData.length
             
     checkMultipleEquations: ->
         inUseEquations = 0
