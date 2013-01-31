@@ -52,6 +52,19 @@ task 'build:language_scramble', 'Build the language scramble app', ->
         'cp -r apps/language_scramble/* ~/workspace/puzzleschoolapps/languagescramble/'
     ]
 
+task 'build:xyflyer', 'Build the xyflyer app', ->
+    execCmds [
+        'cake build:site'
+        'coffee --compile --bare --output apps/xyflyer/web src/apps/xyflyer/js/*.coffee'
+        'cp build/common/pages/puzzles/lib/xyflyer.js apps/xyflyer/web/xyflyer.js'
+        'cp build/common/pages/puzzles/lib/xyflyer_objects/* apps/xyflyer/web/objects/'
+        'cp ender.js apps/xyflyer/web/ender.js'
+        'cp assets/third_party/equation_explorer/tokens.js apps/xyflyer/web/token.js'
+        'cp assets/third_party/raphael-min.js apps/xyflyer/web/raphael-min.js'
+        'cp assets/images/puzzles/xyflyer/* apps/xyflyer/css/images/'
+        'cp -r apps/xyflyer/* ~/workspace/puzzleschoolapps/xyflyer/'
+    ]
+
     
 task 'build:ender', 'Build the ender modules', ->
     execCmds [

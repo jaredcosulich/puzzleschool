@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name = "format-detection" content = "telephone=no"/>
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1;" />
+        
+        <!-- <script src="http://debug.appmobi.com/target/target-script-min.js#af6ef072-5a70-4b53-82ef-f5d0af8793b0"></script> -->
+        <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script> 
+        <script type="text/javascript" charset="utf-8" charset="utf-8" src="web/ender.js"></script>
+        <script type="text/javascript" charset="utf-8" charset="utf-8" src="web/token.js"></script>
+        <script type="text/javascript" charset="utf-8" charset="utf-8" src="web/raphael-min.js"></script>
+
+        <script type="text/javascript" charset="utf-8" src="web/objects/tdop.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/parser.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/object.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/board.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/plane.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/ring.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/equation.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/equation_component.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/equations.js"></script>
+        <script type="text/javascript" charset="utf-8" src="web/objects/index.js"></script>
+
+
+        <script type="text/javascript" charset="utf-8" src="web/xyflyer.js"></script>
+
+        <script type="text/javascript" charset="utf-8" src="web/index.js"></script>
+        
+        <script type="text/javascript">
+            /* This code prevents users from dragging the page */
+            var preventDefaultScroll = function(event) {
+            	event.preventDefault();
+            	window.scroll(0, 0);
+            	return false;
+            };
+            document.addEventListener('touchmove', preventDefaultScroll, false);
+
+            /* This code is used to run as soon as appMobi activates */
+            var onDeviceReady = function() {
+                //user AppMobi viewport
+                AppMobi.display.useViewport(300,480);
+
+                //lock orientation
+                AppMobi.device.setRotateOrientation("landscape");
+                AppMobi.device.setAutoRotate(false);
+
+                //manage power
+                AppMobi.device.managePower(true,false);
+
+            	//any app-specific initialization
+    	        window.app.initialize();
+    	         
+    	        //hide splash screen
+    			AppMobi.device.hideSplashScreen();
+    			
+            };
+    		document.addEventListener("appMobi.device.ready",onDeviceReady,false);
+
+        </script>		
+        
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>XYFlyer</title>
+    </head>
+    
+    <body class='xyflyer'>
+        <div class='board'></div>
+        <div class='equation_area'>
+            <h2>XYFlyer</h2>
+            <div class='equations'></div>
+            <div class='launch_button'><a class='launch button go'>Launch!</a></div>
+
+            <div class='possible_fragments'>
+                <h4>Equation Fragments</h4>
+                <p>Mix and match these equation fragments by dragging and dropping them in the equation area above.</p>
+            </div>
+            <div class='hints'>
+                <h4>Can't Figure It Out?</h4> 
+                <p><a class='hint blue_button'>Show Me Part Of The Solution</a></p>
+                <div class='drag_this'>
+                    <img src='css/images/drag_this.png'/>
+                </div>
+                <div class='drop_here'>
+                    <img src='css/images/drop_here.png'/>
+                </div>
+                <div class='launch_hint'>
+                    <img src='css/images/launch.png'/>
+                </div>
+            </div>
+        </div>
+        <div class='complete'>
+            <h2>Nice Job!</h2>
+            <p><a class='button go'>Next Level ></a></p>
+        </div>
+        <div class='intro_message'>
+            <h2>Welcome To XYFlyer</h2>
+            <br/>
+            <p>XYFlyer allows you to explore equations and graphing by solving various puzzles.</p>
+            <p>Fly a remote controlled airplane through hoops using equations to chart the airplane's path.</p>
+            <br/>
+            <h4>XYFlyer is currently in beta</h4>
+            <p>We only have a few levels so far, but we're adding more levels every day.</p>
+            <br/>
+            <a class='button go'>Start ></a>
+        </div>
+        <div class='exit_message'>
+            <h2>That's all we've got!</h2>
+            <br/>
+            <p>XYFlyer is still very much in development and we are adding new levels frequently.</p>
+            <p>We love to hear feedback and encouragement. So let us know what you think about XYFlyer!</p>
+            <br/>
+            <h4>Contact Us</h4>
+            <p><a mailto='xyflyer@puzzleschool.com'>xyflyer@puzzleschool.com</a></p>
+        </div>
+    </body>
+</html>
+
