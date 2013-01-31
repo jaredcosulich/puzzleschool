@@ -622,6 +622,9 @@ equation.Equation = (function() {
         paddingBottom: 0,
         duration: 500,
         complete: function() {
+          if (!_this.badFormula) {
+            return;
+          }
           _this.badFormula.remove();
           return delete (_this.badFormula = null);
         }

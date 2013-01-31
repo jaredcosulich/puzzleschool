@@ -64,8 +64,9 @@ class equations.Equations
                 x: x
                 y: y
                 test: (dropArea, over) => 
-                    dropArea?.highlight(over)
+                    result = dropArea?.highlight(over)
                     equation.expandLastAccept()
+                    return result
                 
             return if @selectedDropArea
 

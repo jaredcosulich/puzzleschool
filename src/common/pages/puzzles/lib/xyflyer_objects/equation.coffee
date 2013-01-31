@@ -416,6 +416,7 @@ class equation.Equation
                 paddingBottom: 0
                 duration: 500
                 complete: => 
+                    return unless @badFormula
                     @badFormula.remove()
                     delete @badFormula = null
                     
