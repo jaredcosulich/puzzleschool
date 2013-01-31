@@ -59,10 +59,14 @@ class equations.Equations
         @selectedDropArea = null
         for equation in @equations
             equation.expandLastAccept()
+            
             @selectedDropArea = equation.overlappingDropAreas
                 x: x
                 y: y
-                test: (dropArea, over) => dropArea?.highlight(over)
+                test: (dropArea, over) => 
+                    dropArea?.highlight(over)
+                    equation.expandLastAccept()
+                
             return if @selectedDropArea
 
     clearDrag: ->

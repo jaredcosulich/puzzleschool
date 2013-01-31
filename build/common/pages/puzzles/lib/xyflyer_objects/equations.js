@@ -98,7 +98,10 @@ equations.Equations = (function() {
         x: x,
         y: y,
         test: function(dropArea, over) {
-          return dropArea != null ? dropArea.highlight(over) : void 0;
+          if (dropArea != null) {
+            dropArea.highlight(over);
+          }
+          return equation.expandLastAccept();
         }
       });
       if (this.selectedDropArea) {
