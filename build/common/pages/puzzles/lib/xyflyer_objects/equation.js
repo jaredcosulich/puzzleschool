@@ -279,8 +279,8 @@ equation.Equation = (function() {
     }
     this.formatDropArea(dropArea, component);
     this.wrap(dropArea);
-    this.plot(this);
     this.initVariables();
+    this.plot(this);
     dropArea.width = dropArea.element.width();
     component.placeHolder.unbind('click.placeholder');
     component.placeHolder.one('click.placeholder', function(e) {
@@ -616,7 +616,10 @@ equation.Equation = (function() {
     var _this = this;
     this.el.removeClass('bad_formula');
     if (this.badFormula) {
-      return this.badFormula.animate({
+      if (this.badFormula.animation) {
+        this.badFormula.animation.stop();
+      }
+      return this.badFormula.animation = this.badFormula.animate({
         height: 0,
         paddingTop: 0,
         paddingBottom: 0,
@@ -642,7 +645,10 @@ equation.Equation = (function() {
       this.badFormula.data('height', this.badFormula.height());
       this.badFormula.height(0);
     }
-    return this.badFormula.animate({
+    if (this.badFormula.animation) {
+      this.badFormula.animation.stop();
+    }
+    return this.badFormula.animation = this.badFormula.animate({
       height: this.badFormula.data('height'),
       duration: 500
     });

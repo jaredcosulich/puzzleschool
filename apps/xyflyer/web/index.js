@@ -16,7 +16,7 @@ window.app = {
     }), false);
     xyflyer = require('./lib/xyflyer');
     this.el = $('.xyflyer');
-    this.levelId = 1;
+    this.levelId = 27;
     this.data = LEVELS[this.levelId];
     if (!this.data) {
       this.showMessage('exit');

@@ -4,7 +4,6 @@ body {
 .xyflyer {
   height: 640px;
   width: 960px;
-  margin-left: -12px;
   background-image: url('images/skygradient1.jpg');
   position: relative;
   overflow: hidden;

@@ -9,7 +9,7 @@ window.app =
         
         @el = $('.xyflyer')
         
-        @levelId = 1
+        @levelId = 27
         @data = LEVELS[@levelId]
 
         if not @data

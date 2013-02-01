@@ -184,8 +184,8 @@ class equation.Equation
         dropArea.parentArea.dirtyCount += 1 if dropArea.parentArea
         @formatDropArea(dropArea, component)
         @wrap(dropArea)
-        @plot(@)
         @initVariables()
+        @plot(@)
         dropArea.width = dropArea.element.width()
         component.placeHolder.unbind('click.placeholder')
         component.placeHolder.one 'click.placeholder', (e) =>
@@ -410,7 +410,8 @@ class equation.Equation
     hideBadFormula: ->
         @el.removeClass('bad_formula')
         if @badFormula
-            @badFormula.animate
+            @badFormula.animation.stop() if @badFormula.animation
+            @badFormula.animation = @badFormula.animate
                 height: 0
                 paddingTop: 0
                 paddingBottom: 0
@@ -430,7 +431,8 @@ class equation.Equation
             @badFormula.data('height', @badFormula.height())
             @badFormula.height(0)
         
-        @badFormula.animate
+        @badFormula.animation.stop() if @badFormula.animation
+        @badFormula.animation = @badFormula.animate
             height: @badFormula.data('height')
             duration: 500
 
