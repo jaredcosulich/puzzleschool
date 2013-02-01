@@ -351,6 +351,7 @@ class equation.Equation
         setTimeout(
             (=>
                 input = element.find('input')
+                track = element.find('.track')
                 knob = element.find('.knob') 
 
                 info.knobTransformer = new Transformer(knob)           
@@ -361,13 +362,16 @@ class equation.Equation
                     return unless 47 < e.keyCode < 58 or 188 < e.keyCode < 191
                     @variables[variable].set(input.val()) unless isNaN(input.val())       
                            
-                knob.bind 'mousedown.drag_knob touchstart.drag_knob', (e) =>
+                element.bind 'mousedown.drag_knob touchstart.drag_knob', (e) =>
                     e.preventDefault() if e.preventDefault
                     body = $(document.body)
-                    startingX = @clientX(e) - info.knobTransformer.dx
+                    x = @clientX(e)
+                    offsetLeft = knob.offset().left - @gameArea.offset().left + (knob.width()/2)
+                    return if x < offsetLeft
+                    startingX = x - offsetLeft
                     body.bind 'mousemove.drag_knob touchmove.drag_knob', (e) =>
                         e.preventDefault() if e.preventDefault
-                        dx = @clientX(e) - startingX
+                        dx = @clientX(e) - offsetLeft
                         dx = 0 if dx < 0
                         dx = trackWidth if dx > trackWidth 
                         info.knobTransformer.translate(dx, 0)

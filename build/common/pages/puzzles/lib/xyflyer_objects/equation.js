@@ -521,8 +521,9 @@ equation.Equation = (function() {
     element.html("" + variable + " = <input type='text' value='" + info.start + "'/>\n<div class='slider'><div class='track'></div><div class='knob'></div>");
     this.container.append(element);
     setTimeout((function() {
-      var input, knob, trackWidth;
+      var input, knob, track, trackWidth;
       input = element.find('input');
+      track = element.find('.track');
       knob = element.find('.knob');
       info.knobTransformer = new Transformer(knob);
       info.set(info.start);
@@ -536,19 +537,24 @@ equation.Equation = (function() {
           return _this.variables[variable].set(input.val());
         }
       });
-      return knob.bind('mousedown.drag_knob touchstart.drag_knob', function(e) {
-        var body, startingX;
+      return element.bind('mousedown.drag_knob touchstart.drag_knob', function(e) {
+        var body, offsetLeft, startingX, x;
         if (e.preventDefault) {
           e.preventDefault();
         }
         body = $(document.body);
-        startingX = _this.clientX(e) - info.knobTransformer.dx;
+        x = _this.clientX(e);
+        offsetLeft = knob.offset().left - _this.gameArea.offset().left + (knob.width() / 2);
+        if (x < offsetLeft) {
+          return;
+        }
+        startingX = x - offsetLeft;
         body.bind('mousemove.drag_knob touchmove.drag_knob', function(e) {
           var dx, percentage;
           if (e.preventDefault) {
             e.preventDefault();
           }
-          dx = _this.clientX(e) - startingX;
+          dx = _this.clientX(e) - offsetLeft;
           if (dx < 0) {
             dx = 0;
           }
