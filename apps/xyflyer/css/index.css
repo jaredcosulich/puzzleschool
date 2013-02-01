@@ -198,7 +198,7 @@ body {
 .xyflyer .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
-  overflow: hidden;
+/*  overflow: hidden;*/
 }
 .xyflyer .equation_area .possible_fragments p {
   font-size: 11px;

@@ -43,7 +43,25 @@ board.Board = (function(_super) {
     this.scale = 1 / (Math.log(Math.sqrt(maxDimension)) - 0.5);
     this.addIsland();
     this.drawGrid();
+    this.initPlotArea(boardElement);
     return this.initClicks(boardElement);
+  };
+
+  Board.prototype.initPlotArea = function(boardElement) {
+    var canvas;
+    canvas = $(document.createElement('CANVAS'));
+    canvas.css({
+      top: 0,
+      left: 0,
+      height: boardElement.height(),
+      width: boardElement.width()
+    });
+    canvas.attr({
+      height: boardElement.height(),
+      width: boardElement.width()
+    });
+    boardElement.append(canvas);
+    return this.plotArea = canvas[0].getContext('2d');
   };
 
   Board.prototype.addImage = function(image, x, y) {
@@ -349,20 +367,22 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, infiniteLine, lastSlope, lastYPos, line, pathString, slope, xPos, yPos, _i, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
-    if (!formula || !formula.length) {
-      if ((_ref = this.formulas[id]) != null) {
-        if ((_ref1 = _ref.line) != null) {
-          _ref1.remove();
-        }
-      }
-      delete this.formulas[id];
+    var brokenLine, infiniteLine, lastSlope, lastYPos, slope, xPos, yPos, _i, _ref, _ref1;
+    if (this.plotting) {
       return;
     }
+    this.plotting = true;
+    this.plotArea.clearRect(0, 0, this.width, this.height);
+    if (!formula) {
+      this.plotting = false;
+      return;
+    }
+    this.plotArea.strokeStyle = 'rgba(0,0,0,0.25)';
+    this.plotArea.lineWidth = 1;
+    this.plotArea.beginPath();
     brokenLine = 0;
     infiniteLine = 0;
-    pathString = "M0," + this.height;
-    for (xPos = _i = _ref2 = this.grid.xMin * this.xUnit, _ref3 = this.grid.xMax * this.xUnit; _ref2 <= _ref3 ? _i <= _ref3 : _i >= _ref3; xPos = _ref2 <= _ref3 ? ++_i : --_i) {
+    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
       if (isNaN(yPos)) {
@@ -379,44 +399,26 @@ board.Board = (function(_super) {
         lastSlope = slope;
         slope = yPos - lastYPos;
         if (lastSlope && Math.abs(lastSlope - slope) > Math.abs(lastSlope) && Math.abs(lastYPos - yPos) > Math.abs(lastYPos)) {
-          pathString += "L" + (xPos + this.xAxis + 1) + "," + (lastSlope > 0 ? 0 : this.height);
-          pathString += "M" + (xPos + this.xAxis + 1) + "," + (lastSlope > 0 ? this.height : 0);
+          this.plotArea.lineTo(xPos + this.xAxis + 1, (lastSlope > 0 ? 0 : this.height));
+          this.plotArea.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
           brokenLine += 1;
         }
       }
       if (brokenLine > 0) {
-        pathString += "M" + (xPos + this.xAxis) + "," + (this.yAxis - yPos);
+        this.plotArea.moveTo(xPos + this.xAxis, this.yAxis - yPos);
         brokenLine -= 1;
       } else {
-        pathString += "L" + (xPos + this.xAxis) + "," + (this.yAxis - yPos);
+        this.plotArea.lineTo(xPos + this.xAxis, this.yAxis - yPos);
       }
     }
-    if (pathString.indexOf('L') === -1) {
-      if ((_ref4 = this.formulas[id]) != null) {
-        if ((_ref5 = _ref4.line) != null) {
-          _ref5.remove();
-        }
-      }
-      delete this.formulas[id];
-    } else {
-      if (this.formulas[id]) {
-        this.formulas[id].line.attr({
-          path: pathString
-        });
-      } else {
-        line = this.paper.path(pathString);
-        line.attr({
-          stroke: 'rgba(0,0,0,0.1)',
-          'stroke-width': 2
-        });
-        this.formulas[id] = {
-          id: id,
-          line: line
-        };
-      }
-      this.formulas[id].area = area;
-      this.formulas[id].formula = formula;
-    }
+    this.plotArea.stroke();
+    this.plotArea.closePath();
+    this.formulas[id] = {
+      id: id,
+      area: area,
+      formula: formula
+    };
+    this.plotting = false;
     this.resetLevel();
     return this.setRingFronts();
   };

@@ -1,4 +1,5 @@
 equation = exports ? provide('./equation', {})
+Transformer = require('./transformer').Transformer
 
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
@@ -349,9 +350,12 @@ class equation.Equation
 
         setTimeout(
             (=>
-                info.set(info.start)
                 input = element.find('input')
                 knob = element.find('.knob') 
+
+                info.knobTransformer = new Transformer(knob)           
+                info.set(info.start)
+
                 trackWidth = element.find('.track').width()
                 input.bind 'keyup.variable', (e) => 
                     return unless 47 < e.keyCode < 58 or 188 < e.keyCode < 191
@@ -360,19 +364,19 @@ class equation.Equation
                 knob.bind 'mousedown.drag_knob touchstart.drag_knob', (e) =>
                     e.preventDefault() if e.preventDefault
                     body = $(document.body)
-                    startingX = @clientX(e) - parseInt(knob.css('left'))
+                    startingX = @clientX(e) - info.knobTransformer.dx
                     body.bind 'mousemove.drag_knob touchmove.drag_knob', (e) =>
                         e.preventDefault() if e.preventDefault
-                        left = @clientX(e) - startingX
-                        left = 0 if left < 0
-                        left = trackWidth if left > trackWidth
-                        knob.css(left: left)
-                        percentage = left/trackWidth
+                        dx = @clientX(e) - startingX
+                        dx = 0 if dx < 0
+                        dx = trackWidth if dx > trackWidth 
+                        info.knobTransformer.translate(dx, 0)
+                        percentage = dx/trackWidth
                         info.set(info.min + (percentage * Math.abs(info.max - info.min)))
                         
                     body.one 'mouseup.drag_knob touchend.drag_knob', =>
                         body.unbind 'mousemove.drag_knob touchmove.drag_knob'
-                        
+                        info.knobTransformer.end()
             ), 10   
         )
 
@@ -384,7 +388,8 @@ class equation.Equation
             element.find('input').val("#{incrementedVal}")
 
             trackWidth = element.find('.track').width()
-            element.find('.knob').css(left: trackWidth * (Math.abs(info.min - val) / Math.abs(info.max - info.min)))
+            left = trackWidth * (Math.abs(info.min - val) / Math.abs(info.max - info.min))
+            info.knobTransformer.translate(left, 0)
             @plot(@)
         info.element = element
             

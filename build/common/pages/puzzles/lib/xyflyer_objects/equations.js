@@ -82,21 +82,19 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, component) {
-    var equation, x, y, _i, _len, _ref,
+    var equation, _i, _len, _ref,
       _this = this;
     if (!this.el.hasClass('show_places')) {
       this.el.addClass('show_places');
     }
-    x = left + (component.width() / 2);
-    y = top + (component.height() / 2);
     this.selectedDropArea = null;
     _ref = this.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
       equation.expandLastAccept();
       this.selectedDropArea = equation.overlappingDropAreas({
-        x: x,
-        y: y,
+        x: left,
+        y: top,
         test: function(dropArea, over) {
           var result;
           result = dropArea != null ? dropArea.highlight(over) : void 0;

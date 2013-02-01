@@ -199,17 +199,16 @@ body {
 .xyflyer .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
-  overflow: hidden;
+  /*            overflow: hidden;*/
+
+  position: relative;
 }
 .xyflyer .equation_area .possible_fragments p {
   font-size: 11px;
 }
-.xyflyer .equation_area .possible_fragments .equation_component,
-.xyflyer .equation_area .possible_fragments .place_holder {
+.xyflyer .equation_area .possible_fragments .equation_component {
   float: left;
   margin: 6px 6px 0 0;
-}
-.xyflyer .equation_area .possible_fragments .equation_component {
   cursor: move;
 }
 .xyflyer .equation_area .possible_fragments .place_holder {

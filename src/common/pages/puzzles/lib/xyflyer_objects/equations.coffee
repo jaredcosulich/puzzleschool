@@ -54,15 +54,13 @@ class equations.Equations
         
     trackComponentDragging: (left, top, component) ->
         @el.addClass('show_places') unless @el.hasClass('show_places')
-        x = left + (component.width()/2)
-        y = top + (component.height()/2)
         @selectedDropArea = null
         for equation in @equations
             equation.expandLastAccept()
             
             @selectedDropArea = equation.overlappingDropAreas
-                x: x
-                y: y
+                x: left
+                y: top
                 test: (dropArea, over) => 
                     result = dropArea?.highlight(over)
                     equation.expandLastAccept()

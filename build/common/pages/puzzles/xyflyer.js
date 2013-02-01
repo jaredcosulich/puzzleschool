@@ -36,6 +36,7 @@ soma.chunks({
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
       this.loadScript('/assets/third_party/equation_explorer/tokens.js');
       this.loadScript('/assets/third_party/raphael-min.js');
+      this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/transformer.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/tdop.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/parser.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/object.js');

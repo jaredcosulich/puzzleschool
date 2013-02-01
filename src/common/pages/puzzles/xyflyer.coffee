@@ -17,6 +17,7 @@ soma.chunks
             @loadScript '/assets/third_party/equation_explorer/tokens.js'
             @loadScript '/assets/third_party/raphael-min.js'
             
+            @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/transformer.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/tdop.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/parser.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/object.js'

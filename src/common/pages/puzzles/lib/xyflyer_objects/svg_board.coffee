@@ -30,21 +30,9 @@ class board.Board extends xyflyerObject.Object
         @scale = 1/(Math.log(Math.sqrt(maxDimension)) - 0.5)
 
         @addIsland()
-        @drawGrid() 
-        @initPlotArea(boardElement) 
+        @drawGrid()  
         @initClicks(boardElement)
 
-    initPlotArea: (boardElement) ->
-        canvas = $(document.createElement('CANVAS'))
-        canvas.css
-            top: 0
-            left: 0
-            height: boardElement.height()
-            width: boardElement.width()
-        canvas.attr(height: boardElement.height(), width: boardElement.width())            
-        boardElement.append(canvas)
-        @plotArea = canvas[0].getContext('2d')
-        
     addImage: (image, x, y) ->
         width = image.width() * @scale
         height = image.height() * @scale
@@ -70,7 +58,6 @@ class board.Board extends xyflyerObject.Object
             y + (height/2) - (15*@scale)
             text
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
-
         @island.push(@islandLabel)
         
     islandText: ->
@@ -233,26 +220,19 @@ class board.Board extends xyflyerObject.Object
         grid.attr(stroke: color)
         
     plot: (id, formula, area) ->
-        return if @plotting
-        @plotting = true
-        @plotArea.clearRect(0,0,@width,@height)
-
-        if not formula
-            @plotting = false
+        if not formula or not formula.length
+            @formulas[id]?.line?.remove()
+            delete @formulas[id]
             return
             
-        @plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
-        @plotArea.lineWidth = 1
-
-        @plotArea.beginPath()
-
         brokenLine = 0
         infiniteLine = 0
+        pathString = "M0,#{@height}"
         for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
             lastYPos = yPos
             yPos = formula(xPos / @xUnit) * @yUnit
             continue if isNaN(yPos)
-
+            
             if yPos == Number.NEGATIVE_INFINITY
                 yPos = @grid.yMin * @xUnit
                 brokenLine += 1
@@ -264,28 +244,34 @@ class board.Board extends xyflyerObject.Object
                 lastSlope = slope
                 slope = yPos - lastYPos
                 if lastSlope and Math.abs(lastSlope - slope) > Math.abs(lastSlope) and Math.abs(lastYPos - yPos) > Math.abs(lastYPos)
-                    @plotArea.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
-                    @plotArea.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))
+                    pathString += "L#{xPos + @xAxis + 1},#{(if lastSlope > 0 then 0 else @height)}"
+                    pathString += "M#{xPos + @xAxis + 1},#{(if lastSlope > 0 then @height else 0)}"
                     brokenLine += 1
 
             if brokenLine > 0
-                @plotArea.moveTo(xPos + @xAxis, @yAxis - yPos)
+                pathString += "M#{xPos + @xAxis},#{@yAxis - yPos}"
                 brokenLine -= 1
             else
-                @plotArea.lineTo(xPos + @xAxis, @yAxis - yPos)
+                pathString += "L#{xPos + @xAxis},#{@yAxis - yPos}"
 
-        @plotArea.stroke()
-        @plotArea.closePath()
+        if pathString.indexOf('L') == -1
+            @formulas[id]?.line?.remove()
+            delete @formulas[id]
+        else
+            if @formulas[id]
+                @formulas[id].line.attr(path: pathString)
+            else
+                line = @paper.path(pathString)
+                line.attr(stroke: 'rgba(0,0,0,0.1)', 'stroke-width': 2)
+                @formulas[id] = 
+                    id: id
+                    line: line
 
-        @formulas[id] = 
-            id: id
-            area: area
-            formula: formula
+            @formulas[id].area = area
+            @formulas[id].formula = formula
 
-        @plotting = false
         @resetLevel()
         @setRingFronts()
-            
         
     calculatePath: (increment) ->
         intersection = (@islandCoordinates.x * @xUnit) + (@xUnit * 0.001)
