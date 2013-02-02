@@ -4,17 +4,17 @@ xyflyerObject = require('./object')
 class board.Board extends xyflyerObject.Object
     maxUnits: 10
 
-    constructor: ({boardElement, @grid, @objects, @islandCoordinates, @resetLevel}) ->
+    constructor: ({@el, @grid, @objects, @islandCoordinates, @resetLevel}) ->
         @islandCoordinates or= {}
         @islandCoordinates.x = 0 if not @islandCoordinates.x
         @islandCoordinates.y = 0 if not @islandCoordinates.y
         @formulas = {}
         @rings = []
         @ringFronts = []
-        @init(boardElement)
+        @init()
 
-    init: (boardElement) -> 
-        dimensions = boardElement.offset()
+    init: -> 
+        dimensions = @el.offset()
         @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
 
         @width = dimensions.width
@@ -31,18 +31,18 @@ class board.Board extends xyflyerObject.Object
 
         @addIsland()
         @drawGrid() 
-        @initPlotArea(boardElement) 
-        @initClicks(boardElement)
+        @initPlotArea() 
+        @initClicks()
 
-    initPlotArea: (boardElement) ->
+    initPlotArea: ->
         canvas = $(document.createElement('CANVAS'))
         canvas.css
             top: 0
             left: 0
-            height: boardElement.height()
-            width: boardElement.width()
-        canvas.attr(height: boardElement.height(), width: boardElement.width())            
-        boardElement.append(canvas)
+            height: @el.height()
+            width: @el.width()
+        canvas.attr(height: @el.height(), width: @el.width())            
+        @el.append(canvas)
         @plotArea = canvas[0].getContext('2d')
         
     addImage: (image, x, y) ->
@@ -95,9 +95,9 @@ class board.Board extends xyflyerObject.Object
         planeImage.transform("s#{@scale},#{@scale}")
         return planeImage
         
-    initClicks: (boardElement) ->
-        boardElement.css(zIndex: 97)
-        boardElement.bind 'click.showxy', (e) =>
+    initClicks: ->
+        @el.css(zIndex: 97)
+        @el.bind 'click.showxy', (e) =>
             result = @findNearestXOnPath(e.offsetX, e.offsetY)
             onPath = result.x
             if result.formulas.length

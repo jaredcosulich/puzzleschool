@@ -11,8 +11,9 @@ class xyflyer.ViewHelper
     
     constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel, @registerEvent, @islandCoordinates}) ->
         @rings = []
+        @flip(boardElement)
         @board = new xyflyer.Board
-            boardElement: boardElement, 
+            el: boardElement, 
             grid: grid, 
             objects: objects
             islandCoordinates: @islandCoordinates
@@ -26,7 +27,14 @@ class xyflyer.ViewHelper
         @initEquations()
         
     $: (selector) -> $(selector, @el)
-    
+
+    flip: (boardElement) ->
+        boardElement.css
+            float: 'left'
+        
+        @equationArea.css
+            float: 'right'
+            
     plot: (id, data) ->
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)

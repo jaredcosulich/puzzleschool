@@ -14,8 +14,7 @@ board.Board = (function(_super) {
   Board.prototype.maxUnits = 10;
 
   function Board(_arg) {
-    var boardElement;
-    boardElement = _arg.boardElement, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, this.resetLevel = _arg.resetLevel;
+    this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, this.resetLevel = _arg.resetLevel;
     this.islandCoordinates || (this.islandCoordinates = {});
     if (!this.islandCoordinates.x) {
       this.islandCoordinates.x = 0;
@@ -26,12 +25,12 @@ board.Board = (function(_super) {
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
-    this.init(boardElement);
+    this.init();
   }
 
-  Board.prototype.init = function(boardElement) {
+  Board.prototype.init = function() {
     var dimensions, maxDimension;
-    dimensions = boardElement.offset();
+    dimensions = this.el.offset();
     this.paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
     this.width = dimensions.width;
     this.height = dimensions.height;
@@ -43,24 +42,24 @@ board.Board = (function(_super) {
     this.scale = 1 / (Math.log(Math.sqrt(maxDimension)) - 0.5);
     this.addIsland();
     this.drawGrid();
-    this.initPlotArea(boardElement);
-    return this.initClicks(boardElement);
+    this.initPlotArea();
+    return this.initClicks();
   };
 
-  Board.prototype.initPlotArea = function(boardElement) {
+  Board.prototype.initPlotArea = function() {
     var canvas;
     canvas = $(document.createElement('CANVAS'));
     canvas.css({
       top: 0,
       left: 0,
-      height: boardElement.height(),
-      width: boardElement.width()
+      height: this.el.height(),
+      width: this.el.width()
     });
     canvas.attr({
-      height: boardElement.height(),
-      width: boardElement.width()
+      height: this.el.height(),
+      width: this.el.width()
     });
-    boardElement.append(canvas);
+    this.el.append(canvas);
     return this.plotArea = canvas[0].getContext('2d');
   };
 
@@ -132,12 +131,12 @@ board.Board = (function(_super) {
     return planeImage;
   };
 
-  Board.prototype.initClicks = function(boardElement) {
+  Board.prototype.initClicks = function() {
     var _this = this;
-    boardElement.css({
+    this.el.css({
       zIndex: 97
     });
-    return boardElement.bind('click.showxy', function(e) {
+    return this.el.bind('click.showxy', function(e) {
       var formula1, onPath, result, y;
       result = _this.findNearestXOnPath(e.offsetX, e.offsetY);
       onPath = result.x;
