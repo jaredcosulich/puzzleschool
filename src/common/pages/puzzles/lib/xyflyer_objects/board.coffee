@@ -31,19 +31,7 @@ class board.Board extends xyflyerObject.Object
 
         @addIsland()
         @drawGrid() 
-        @initPlotArea() 
         @initClicks()
-
-    initPlotArea: ->
-        canvas = $(document.createElement('CANVAS'))
-        canvas.css
-            top: 0
-            left: 0
-            height: @el.height()
-            width: @el.width()
-        canvas.attr(height: @el.height(), width: @el.width())            
-        @el.append(canvas)
-        @plotArea = canvas[0].getContext('2d')
         
     addImage: (image, x, y) ->
         width = image.width() * @scale
@@ -233,18 +221,26 @@ class board.Board extends xyflyerObject.Object
         grid.attr(stroke: color)
         
     plot: (id, formula, area) ->
-        return if @plotting
-        @plotting = true
-        @plotArea.clearRect(0,0,@width,@height)
+        return if not formula
+        
+        if (plotArea = @formulas[id]?.plotArea)
+            plotArea.clearRect(0,0,@width,@height)
+        else
+            console.log('new', formula)
+            canvas = $(document.createElement('CANVAS'))
+            canvas.css
+                top: 0
+                left: 0
+                height: @el.height()
+                width: @el.width()
+            canvas.attr(height: @el.height(), width: @el.width())            
+            @el.append(canvas)
+            plotArea = canvas[0].getContext('2d')
+        
+        plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
+        plotArea.lineWidth = 1
 
-        if not formula
-            @plotting = false
-            return
-            
-        @plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
-        @plotArea.lineWidth = 1
-
-        @plotArea.beginPath()
+        plotArea.beginPath()
 
         brokenLine = 0
         infiniteLine = 0
@@ -264,25 +260,25 @@ class board.Board extends xyflyerObject.Object
                 lastSlope = slope
                 slope = yPos - lastYPos
                 if lastSlope and Math.abs(lastSlope - slope) > Math.abs(lastSlope) and Math.abs(lastYPos - yPos) > Math.abs(lastYPos)
-                    @plotArea.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
-                    @plotArea.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))
+                    plotArea.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
+                    plotArea.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))
                     brokenLine += 1
 
             if brokenLine > 0
-                @plotArea.moveTo(xPos + @xAxis, @yAxis - yPos)
+                plotArea.moveTo(xPos + @xAxis, @yAxis - yPos)
                 brokenLine -= 1
             else
-                @plotArea.lineTo(xPos + @xAxis, @yAxis - yPos)
+                plotArea.lineTo(xPos + @xAxis, @yAxis - yPos)
 
-        @plotArea.stroke()
-        @plotArea.closePath()
+        plotArea.stroke()
+        plotArea.closePath()
 
         @formulas[id] = 
             id: id
             area: area
             formula: formula
+            plotArea: plotArea
 
-        @plotting = false
         @resetLevel()
         @setRingFronts()
             

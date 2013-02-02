@@ -35,6 +35,9 @@ body {
   float: right;
   position: relative;
 }
+.xyflyer .board canvas {
+  position: absolute;
+}
 .xyflyer .equation_area {
   background-color: white;
   -webkit-border-radius: 6px;

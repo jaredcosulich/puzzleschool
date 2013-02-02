@@ -42,25 +42,7 @@ board.Board = (function(_super) {
     this.scale = 1 / (Math.log(Math.sqrt(maxDimension)) - 0.5);
     this.addIsland();
     this.drawGrid();
-    this.initPlotArea();
     return this.initClicks();
-  };
-
-  Board.prototype.initPlotArea = function() {
-    var canvas;
-    canvas = $(document.createElement('CANVAS'));
-    canvas.css({
-      top: 0,
-      left: 0,
-      height: this.el.height(),
-      width: this.el.width()
-    });
-    canvas.attr({
-      height: this.el.height(),
-      width: this.el.width()
-    });
-    this.el.append(canvas);
-    return this.plotArea = canvas[0].getContext('2d');
   };
 
   Board.prototype.addImage = function(image, x, y) {
@@ -366,22 +348,34 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, infiniteLine, lastSlope, lastYPos, slope, xPos, yPos, _i, _ref, _ref1;
-    if (this.plotting) {
-      return;
-    }
-    this.plotting = true;
-    this.plotArea.clearRect(0, 0, this.width, this.height);
+    var brokenLine, canvas, infiniteLine, lastSlope, lastYPos, plotArea, slope, xPos, yPos, _i, _ref, _ref1, _ref2;
     if (!formula) {
-      this.plotting = false;
       return;
     }
-    this.plotArea.strokeStyle = 'rgba(0,0,0,0.25)';
-    this.plotArea.lineWidth = 1;
-    this.plotArea.beginPath();
+    if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
+      plotArea.clearRect(0, 0, this.width, this.height);
+    } else {
+      console.log('new', formula);
+      canvas = $(document.createElement('CANVAS'));
+      canvas.css({
+        top: 0,
+        left: 0,
+        height: this.el.height(),
+        width: this.el.width()
+      });
+      canvas.attr({
+        height: this.el.height(),
+        width: this.el.width()
+      });
+      this.el.append(canvas);
+      plotArea = canvas[0].getContext('2d');
+    }
+    plotArea.strokeStyle = 'rgba(0,0,0,0.25)';
+    plotArea.lineWidth = 1;
+    plotArea.beginPath();
     brokenLine = 0;
     infiniteLine = 0;
-    for (xPos = _i = _ref = this.grid.xMin * this.xUnit, _ref1 = this.grid.xMax * this.xUnit; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; xPos = _ref <= _ref1 ? ++_i : --_i) {
+    for (xPos = _i = _ref1 = this.grid.xMin * this.xUnit, _ref2 = this.grid.xMax * this.xUnit; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; xPos = _ref1 <= _ref2 ? ++_i : --_i) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
       if (isNaN(yPos)) {
@@ -398,26 +392,26 @@ board.Board = (function(_super) {
         lastSlope = slope;
         slope = yPos - lastYPos;
         if (lastSlope && Math.abs(lastSlope - slope) > Math.abs(lastSlope) && Math.abs(lastYPos - yPos) > Math.abs(lastYPos)) {
-          this.plotArea.lineTo(xPos + this.xAxis + 1, (lastSlope > 0 ? 0 : this.height));
-          this.plotArea.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
+          plotArea.lineTo(xPos + this.xAxis + 1, (lastSlope > 0 ? 0 : this.height));
+          plotArea.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
           brokenLine += 1;
         }
       }
       if (brokenLine > 0) {
-        this.plotArea.moveTo(xPos + this.xAxis, this.yAxis - yPos);
+        plotArea.moveTo(xPos + this.xAxis, this.yAxis - yPos);
         brokenLine -= 1;
       } else {
-        this.plotArea.lineTo(xPos + this.xAxis, this.yAxis - yPos);
+        plotArea.lineTo(xPos + this.xAxis, this.yAxis - yPos);
       }
     }
-    this.plotArea.stroke();
-    this.plotArea.closePath();
+    plotArea.stroke();
+    plotArea.closePath();
     this.formulas[id] = {
       id: id,
       area: area,
-      formula: formula
+      formula: formula,
+      plotArea: plotArea
     };
-    this.plotting = false;
     this.resetLevel();
     return this.setRingFronts();
   };

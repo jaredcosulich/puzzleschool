@@ -16,7 +16,15 @@ window.app = {
     }), false);
     xyflyer = require('./lib/xyflyer');
     this.el = $('.xyflyer');
-    this.levelId = 27;
+    this.originalHtml = this.el.html();
+    this.levelId = 16;
+    return this.load();
+  },
+  $: function(selector) {
+    return $(selector, this.el);
+  },
+  load: function() {
+    var _this = this;
     this.data = LEVELS[this.levelId];
     if (!this.data) {
       this.showMessage('exit');
@@ -34,9 +42,6 @@ window.app = {
       }
     });
     return this.loadLevel();
-  },
-  $: function(selector) {
-    return $(selector, this.el);
   },
   loadLevel: function() {
     var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _results;
@@ -98,10 +103,16 @@ window.app = {
     }
   },
   nextLevel: function() {
-    var complete;
+    var complete,
+      _this = this;
     complete = this.$('.complete');
     this.centerAndShow(complete);
-    return this.$('.launch').html('Success! Go To The Next Level >');
+    this.$('.launch').html('Success! Go To The Next Level >');
+    return this.$('.go').one('click', function() {
+      _this.el.html(_this.originalHtml);
+      _this.levelId += 1;
+      return _this.load();
+    });
   }
 };
 

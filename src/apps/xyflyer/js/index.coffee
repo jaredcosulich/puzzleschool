@@ -8,8 +8,14 @@ window.app =
         xyflyer = require('./lib/xyflyer')
         
         @el = $('.xyflyer')
+        @originalHtml = @el.html()
+
+        @levelId = 16
+        @load()
+
+    $: (selector) -> $(selector, @el)
         
-        @levelId = 27
+    load: ->
         @data = LEVELS[@levelId]
 
         if not @data
@@ -26,8 +32,6 @@ window.app =
             nextLevel: => @nextLevel()
 
         @loadLevel()    
-
-    $: (selector) -> $(selector, @el)
 
     loadLevel: ->
         for equation, info of @data?.equations or {'': {}}
@@ -73,7 +77,11 @@ window.app =
         @centerAndShow(complete)
 
         @$('.launch').html('Success! Go To The Next Level >')
-
+        @$('.go').one 'click', =>
+            @el.html(@originalHtml)
+            @levelId += 1
+            @load()
+        
 
 LEVELS = [
     {}
