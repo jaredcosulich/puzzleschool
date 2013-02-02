@@ -36,6 +36,11 @@ body {
   float: right;
   position: relative;
 }
+
+.xyflyer .board canvas {
+    position: absolute;
+}
+
 .xyflyer .equation_area {
   background-color: white;
   -webkit-border-radius: 6px;
@@ -362,4 +367,22 @@ body {
 .xyflyer .instructions input {
   width: 240px;
   height: 30px;
+}
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+    .xyflyer {
+        height: 748px;
+        width: 1024px;
+    }
+    
+    .xyflyer .board { 
+        height: 748px;
+        width: 702px;
+        margin-left: -6px;
+    }
+    
+    .xyflyer .equation_area {
+        margin: 6px 6px 0 0;
+        height: 736px;
+    }
 }
