@@ -124,7 +124,6 @@ equationComponent.EquationComponent = (function() {
     }
     this.element.removeClass('dragging');
     this.gameArea.removeClass('dragging');
-    this.transformer.end();
     if (this.endDrag(this)) {
       this.element.css({
         visibility: 'hidden'

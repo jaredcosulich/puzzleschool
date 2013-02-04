@@ -396,7 +396,6 @@ class equation.Equation
                         
                     body.one 'mouseup.drag_knob touchend.drag_knob', =>
                         body.unbind 'mousemove.drag_knob touchmove.drag_knob'
-                        info.knobTransformer.end()
             ), 10   
         )
 

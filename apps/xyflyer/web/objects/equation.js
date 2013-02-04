@@ -590,8 +590,7 @@ equation.Equation = (function() {
           return info.set(info.min + (percentage * Math.abs(info.max - info.min)));
         });
         return body.one('mouseup.drag_knob touchend.drag_knob', function() {
-          body.unbind('mousemove.drag_knob touchmove.drag_knob');
-          return info.knobTransformer.end();
+          return body.unbind('mousemove.drag_knob touchmove.drag_knob');
         });
       });
     }), 10);

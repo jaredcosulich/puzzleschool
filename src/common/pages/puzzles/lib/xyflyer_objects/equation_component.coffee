@@ -72,8 +72,6 @@ class equationComponent.EquationComponent
         @element.removeClass('dragging')
         @gameArea.removeClass('dragging')
         
-        @transformer.end()
-
         if @endDrag(@)
             @element.css(visibility: 'hidden')
             @placeHolder.show()

@@ -28,6 +28,7 @@ body {
   -webkit-box-shadow: 5px 6px 5px #b69c63;
   -moz-box-shadow: 5px 6px 5px #b69c63;
   cursor: move;
+  overflow: hidden;
 }
 .xyflyer .board {
   width: 640px;

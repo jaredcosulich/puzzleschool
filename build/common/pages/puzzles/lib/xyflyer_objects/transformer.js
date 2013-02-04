@@ -13,22 +13,11 @@ transformer.Transformer = (function() {
 
   Transformer.prototype.run = function() {
     return this.el.css({
-      backfaceVisibility: 'hidden',
-      webkitBackfaceVisibility: 'hidden',
-      MozBackfaceVisibility: 'hidden',
       webkitTransform: "matrix(1,0,0,1, " + this.dx + ", " + this.dy + ")",
       MozTransform: "matrix(1,0,0,1, " + this.dx + "px, " + this.dy + "px)",
       msTransform: "matrix(1,0,0,1, " + this.dx + ", " + this.dy + ")",
       OTransform: "matrix(1,0,0,1, " + this.dx + ", " + this.dy + ")",
       transform: "matrix(1,0,0,1, " + this.dx + ", " + this.dy + ")"
-    });
-  };
-
-  Transformer.prototype.end = function() {
-    return this.el.css({
-      backfaceVisibility: 'visible',
-      webkitBackfaceVisibility: 'visible',
-      MozBackfaceVisibility: 'visible'
     });
   };
 
