@@ -17,7 +17,7 @@ window.app = {
     xyflyer = require('./lib/xyflyer');
     this.el = $('.xyflyer');
     this.originalHtml = this.el.html();
-    this.levelId = 16;
+    this.levelId = 1;
     return this.load();
   },
   $: function(selector) {

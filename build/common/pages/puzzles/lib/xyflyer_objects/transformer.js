@@ -12,10 +12,10 @@ transformer.Transformer = (function() {
   }
 
   Transformer.prototype.run = function() {
-    this.el.css({
-      webkitBackfaceVisibility: 'hidden'
-    });
     return this.el.css({
+      backfaceVisibility: 'hidden',
+      webkitBackfaceVisibility: 'hidden',
+      MozBackfaceVisibility: 'hidden',
       webkitTransform: "matrix(1,0,0,1, " + this.dx + ", " + this.dy + ")",
       MozTransform: "matrix(1,0,0,1, " + this.dx + "px, " + this.dy + "px)",
       msTransform: "matrix(1,0,0,1, " + this.dx + ", " + this.dy + ")",
@@ -26,7 +26,9 @@ transformer.Transformer = (function() {
 
   Transformer.prototype.end = function() {
     return this.el.css({
-      webkitBackfaceVisibility: 'visible'
+      backfaceVisibility: 'visible',
+      webkitBackfaceVisibility: 'visible',
+      MozBackfaceVisibility: 'visible'
     });
   };
 

@@ -221,12 +221,12 @@ class board.Board extends xyflyerObject.Object
         grid.attr(stroke: color)
         
     plot: (id, formula, area) ->
-        return if not formula
-        
         if (plotArea = @formulas[id]?.plotArea)
             plotArea.clearRect(0,0,@width,@height)
-        else
-            console.log('new', formula)
+
+        return if not formula
+        
+        if not plotArea
             canvas = $(document.createElement('CANVAS'))
             canvas.css
                 top: 0

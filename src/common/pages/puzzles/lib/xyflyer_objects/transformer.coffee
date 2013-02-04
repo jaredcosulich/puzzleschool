@@ -11,16 +11,22 @@ class transformer.Transformer
         # -moz-backface-visibility:hidden; /* Firefox */
                 
     run: ->
-        @el.css(webkitBackfaceVisibility: 'hidden')    
         @el.css
+            backfaceVisibility:         'hidden'
+            webkitBackfaceVisibility:   'hidden'
+            MozBackfaceVisibility:      'hidden'
             webkitTransform:    "matrix(1,0,0,1, #{@dx}, #{@dy})"
             MozTransform:       "matrix(1,0,0,1, #{@dx}px, #{@dy}px)"
             msTransform:        "matrix(1,0,0,1, #{@dx}, #{@dy})"
             OTransform:         "matrix(1,0,0,1, #{@dx}, #{@dy})"
             transform:          "matrix(1,0,0,1, #{@dx}, #{@dy})"
 
-    end: -> @el.css(webkitBackfaceVisibility: 'visible')    
-        
+    end: -> 
+        @el.css
+            backfaceVisibility:         'visible'
+            webkitBackfaceVisibility:   'visible'
+            MozBackfaceVisibility:      'visible'
+            
     translate: (dx, dy, adjustment=false) ->
         @["#{if adjustment then 'adjust' else 'set'}Translation"](dx, dy)
         @run()

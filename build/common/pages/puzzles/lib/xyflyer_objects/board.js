@@ -349,13 +349,13 @@ board.Board = (function(_super) {
 
   Board.prototype.plot = function(id, formula, area) {
     var brokenLine, canvas, infiniteLine, lastSlope, lastYPos, plotArea, slope, xPos, yPos, _i, _ref, _ref1, _ref2;
+    if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
+      plotArea.clearRect(0, 0, this.width, this.height);
+    }
     if (!formula) {
       return;
     }
-    if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
-      plotArea.clearRect(0, 0, this.width, this.height);
-    } else {
-      console.log('new', formula);
+    if (!plotArea) {
       canvas = $(document.createElement('CANVAS'));
       canvas.css({
         top: 0,

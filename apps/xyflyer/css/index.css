@@ -137,6 +137,9 @@ body {
   float: left;
   height: 30px;
 }
+.xyflyer .equation_area .equations .equation_container .equation .removing {
+  display: none;
+}
 .xyflyer .equation_area .equations .equation_container .equation.bad_formula {
   border: 1px solid #ff6e5f;
   color: red;

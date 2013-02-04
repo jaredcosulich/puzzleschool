@@ -10,7 +10,7 @@ window.app =
         @el = $('.xyflyer')
         @originalHtml = @el.html()
 
-        @levelId = 16
+        @levelId = 1
         @load()
 
     $: (selector) -> $(selector, @el)

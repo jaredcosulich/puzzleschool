@@ -112,13 +112,13 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.removeFragment = function(dropArea, e) {
-    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2;
+    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
+      _this = this;
     this.el.find('.accept_component').removeClass('accept_component');
     this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.component.mousedown(e);
     dropArea.component.move(e);
     dropArea.element.removeClass('with_component');
-    dropArea.element.html(dropArea.startingFragment);
     dropArea.component = null;
     _ref = dropArea.childAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -133,9 +133,12 @@ equation.Equation = (function() {
       if (!(!da.component && !da.fixed)) {
         continue;
       }
-      da.element.remove();
+      da.element.addClass('removing');
       removeDropAreas.push(da);
     }
+    $(document.body).one('mouseup.removing_drop_area touchend.removing_drop_area', function() {
+      return _this.$('.removing').remove();
+    });
     for (_k = 0, _len2 = removeDropAreas.length; _k < _len2; _k++) {
       da = removeDropAreas[_k];
       this.removeDropArea(da);
@@ -319,12 +322,20 @@ equation.Equation = (function() {
     if (!((_ref = dropArea.element) != null ? (_ref1 = _ref.parent()) != null ? _ref1.length : void 0 : void 0)) {
       return;
     }
-    if (!(previous = dropArea.element.previous()).length || previous.hasClass('with_component') || previous.hasClass('fragment')) {
+    previous = dropArea.element.previous();
+    while (previous.hasClass('removing')) {
+      previous = previous.previous();
+    }
+    if (!previous.length || previous.hasClass('with_component') || previous.hasClass('fragment')) {
       beforeDropArea = this.newDropArea();
       dropArea.element.before(beforeDropArea);
       this.addDropArea(beforeDropArea);
     }
-    if (!(next = dropArea.element.next()).length || next.hasClass('with_component') || next.hasClass('fragment')) {
+    next = dropArea.element.next();
+    while (next.hasClass('removing')) {
+      next = next.next();
+    }
+    if (!next.length || next.hasClass('with_component') || next.hasClass('fragment')) {
       afterDropArea = this.newDropArea();
       dropArea.element.after(afterDropArea);
       this.addDropArea(afterDropArea);
@@ -334,17 +345,25 @@ equation.Equation = (function() {
 
   Equation.prototype.wrapChildren = function(dropArea) {
     var afterDropArea, beforeDropArea, fragment, next, previous, _i, _len, _ref, _results;
-    _ref = dropArea.element.find('.fragment');
+    _ref = dropArea.element.find('.fragment:not(.removing)');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       fragment = _ref[_i];
       fragment = $(fragment);
-      if ((previous = fragment.previous()).hasClass('fragment')) {
+      previous = fragment.previous();
+      while (previous.hasClass('removing')) {
+        previous = previous.previous();
+      }
+      if (previous.hasClass('fragment')) {
         beforeDropArea = this.newDropArea();
         fragment.before(beforeDropArea);
         this.addDropArea(beforeDropArea, dropArea);
       }
-      if ((next = fragment.next()).hasClass('fragment')) {
+      next = fragment.next();
+      while (next.hasClass('removing')) {
+        next = next.next();
+      }
+      if (next.hasClass('fragment')) {
         afterDropArea = this.newDropArea();
         fragment.after(afterDropArea);
         _results.push(this.addDropArea(afterDropArea, dropArea));
@@ -399,7 +418,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.straightFormula = function(el) {
-    var element, text;
+    var element, tempEl, text;
     if (el == null) {
       el = this.el;
     }
@@ -407,6 +426,11 @@ equation.Equation = (function() {
       return '';
     }
     element = el[0];
+    if (el.find('.removing').length > 0) {
+      tempEl = element.cloneNode(true);
+      $(tempEl).find('.removing').remove();
+      element = tempEl;
+    }
     text = element.textContent ? element.textContent : element.innerText;
     if (text === this.defaultText) {
       text = '';
@@ -609,7 +633,7 @@ equation.Equation = (function() {
 
   Equation.prototype.expandLastAccept = function() {
     var lastAccept, prevOffset, remainder, _ref;
-    lastAccept = this.el.find('.accept_fragment:last-child');
+    lastAccept = this.el.find('.accept_fragment:last-child:not(.removing)');
     prevOffset = (_ref = lastAccept.previous()) != null ? _ref.offset() : void 0;
     if (prevOffset) {
       remainder = prevOffset.left + prevOffset.width - this.el.offset().left;

@@ -68,21 +68,23 @@ class equation.Equation
         @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
         
         dropArea.component.mousedown(e)
-        dropArea.component.move(e)        
+        dropArea.component.move(e)
         
         dropArea.element.removeClass('with_component')
-        dropArea.element.html(dropArea.startingFragment)
-
+            
         dropArea.component = null
-
+        
         @removeDropArea(childArea) for childArea in dropArea.childAreas
         dropArea.childAreas = []
-            
+         
         removeDropAreas = []
         for da in @dropAreas when not da.component and not da.fixed
-            da.element.remove()
+            da.element.addClass('removing')
             removeDropAreas.push(da)
-            
+    
+        $(document.body).one 'mouseup.removing_drop_area touchend.removing_drop_area', =>
+            @$('.removing').remove()      
+    
         @removeDropArea(da) for da in removeDropAreas
         @wrap(da) for da in @dropAreas
         
@@ -205,12 +207,16 @@ class equation.Equation
             
     wrap: (dropArea) ->
         return unless dropArea.element?.parent()?.length
-        if !(previous = dropArea.element.previous()).length or previous.hasClass('with_component') or previous.hasClass('fragment')
+        previous = dropArea.element.previous()
+        previous = previous.previous() while previous.hasClass('removing')
+        if !previous.length or previous.hasClass('with_component') or previous.hasClass('fragment')
             beforeDropArea = @newDropArea()
             dropArea.element.before(beforeDropArea)
             @addDropArea(beforeDropArea)
 
-        if !(next = dropArea.element.next()).length or next.hasClass('with_component') or next.hasClass('fragment')
+        next = dropArea.element.next()
+        next = next.next() while next.hasClass('removing')
+        if !next.length or next.hasClass('with_component') or next.hasClass('fragment')
             afterDropArea = @newDropArea()
             dropArea.element.after(afterDropArea)
             @addDropArea(afterDropArea)
@@ -218,14 +224,18 @@ class equation.Equation
         @wrapChildren(dropArea)
 
     wrapChildren: (dropArea) ->
-        for fragment in dropArea.element.find('.fragment')
+        for fragment in dropArea.element.find('.fragment:not(.removing)')
             fragment = $(fragment)
-            if (previous = fragment.previous()).hasClass('fragment')
+            previous = fragment.previous()
+            previous = previous.previous() while previous.hasClass('removing')
+            if previous.hasClass('fragment')
                 beforeDropArea = @newDropArea()
                 fragment.before(beforeDropArea)
                 @addDropArea(beforeDropArea, dropArea)
 
-            if (next = fragment.next()).hasClass('fragment')
+            next = fragment.next()
+            next = next.next() while next.hasClass('removing')
+            if next.hasClass('fragment')
                 afterDropArea = @newDropArea()
                 fragment.after(afterDropArea)
                 @addDropArea(afterDropArea, dropArea)
@@ -267,6 +277,12 @@ class equation.Equation
     straightFormula: (el = @el) ->
         return '' if not el.length
         element = el[0]
+        
+        if el.find('.removing').length > 0
+            tempEl = element.cloneNode(true)
+            $(tempEl).find('.removing').remove()
+            element = tempEl
+        
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
         return text
@@ -408,7 +424,7 @@ class equation.Equation
         delete @variables[variable].set
         
     expandLastAccept: ->
-        lastAccept = @el.find('.accept_fragment:last-child')
+        lastAccept = @el.find('.accept_fragment:last-child:not(.removing)')
         prevOffset = lastAccept.previous()?.offset()
         if prevOffset
             remainder =  prevOffset.left + prevOffset.width - @el.offset().left
