@@ -22,6 +22,7 @@ ring.Ring = (function(_super) {
   Ring.prototype.height = 39;
 
   function Ring(_arg) {
+    var _this = this;
     this.board = _arg.board, this.x = _arg.x, this.y = _arg.y;
     this.screenX = this.board.screenX(this.x);
     this.screenY = this.board.screenY(this.y);
@@ -32,6 +33,15 @@ ring.Ring = (function(_super) {
     });
     this.move(this.x, this.y);
     this.label = this.board.showXY(this.screenX, this.screenY, false, true);
+    this.highlighted = this.board.paper.set();
+    this.image.forEach(function(half) {
+      return _this.highlighted.push(half.glow({
+        color: 'white'
+      }));
+    });
+    this.highlighted.attr({
+      opacity: 0
+    });
   }
 
   Ring.prototype.move = function(x, y) {
@@ -41,20 +51,12 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.highlightIfPassingThrough = function(_arg) {
-    var h, height, width, x, y,
+    var height, width, x, y,
       _this = this;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
     if (this.touches(x, y, width, height)) {
-      if (!this.highlighted) {
-        this.highlighted = this.board.paper.set();
-        this.image.forEach(function(half) {
-          return _this.highlighted.push(half.glow({
-            color: 'white'
-          }));
-        });
-        this.highlighted.attr({
-          opacity: 0
-        });
+      if (!this.highlighting) {
+        this.highlighting = true;
         this.animating = true;
         this.highlighted.animate({
           opacity: 0.2
@@ -63,14 +65,11 @@ ring.Ring = (function(_super) {
         });
         return this.passedThrough = true;
       }
-    } else if (this.highlighted && !this.animating) {
-      h = this.highlighted;
-      this.highlighted = null;
-      return h.animate({
+    } else if (this.highlighting && !this.animating) {
+      this.highlighted.animate({
         opacity: 0
-      }, 500, function() {
-        return h.remove();
-      });
+      }, 500);
+      return this.highlighting = false;
     }
   };
 

@@ -24,9 +24,13 @@ class plane.Plane extends xyflyerObject.Object
             method = 'easeIn'
         
         transformation = "t#{x - (@width/2)},#{y - (@height/2)}s-#{@scale},#{@scale}"
-        @image.animate({transform: transformation}, time, method, next)
+        if time > 100
+            @image.animate({transform: transformation}, time, method, next) 
+        else 
+            @image.attr({transform: transformation})
+            setTimeout(next,time) if next
         @track(x: x, y: y, width: @width, height: @height)
-
+    
     launch: (force) ->
         return if @falling or @cancelFlight and not force
         @cancelFlight = false

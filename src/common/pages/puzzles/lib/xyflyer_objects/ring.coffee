@@ -16,29 +16,27 @@ class ring.Ring extends xyflyerObject.Object
         @image.attr(stroke: '#FFF')
         @move(@x, @y)
         @label = @board.showXY(@screenX, @screenY, false, true)
+        @highlighted = @board.paper.set()
+        @image.forEach (half) =>
+            @highlighted.push(half.glow(color: 'white'))
+        @highlighted.attr(opacity: 0)
         
     move: (@x, @y) ->
         @image.transform("t#{@screenX},#{@screenY}s-#{@scale},#{@scale}")
         
     highlightIfPassingThrough: ({x, y, width, height}) ->
         if @touches(x,y,width,height)
-            if not @highlighted
-                @highlighted = @board.paper.set()
-                @image.forEach (half) =>
-                    @highlighted.push(half.glow(color: 'white'))
-                    
-                @highlighted.attr(opacity: 0)
+            if not @highlighting
+                @highlighting = true
                 @animating = true
                 @highlighted.animate({opacity: 0.2}, 250, => @animating = false)
                 @passedThrough = true
-        else if @highlighted and not @animating
-            h = @highlighted
-            @highlighted = null
-            h.animate(
+        else if @highlighting and not @animating
+            @highlighted.animate(
                 {opacity: 0}, 
-                500, 
-                -> h.remove()
+                500
             )
+            @highlighting = false
             
     touches: (x,y,width,height) ->
         @screenX > x - (width/2) and

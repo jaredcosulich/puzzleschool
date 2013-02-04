@@ -43,9 +43,18 @@ plane.Plane = (function(_super) {
       method = 'easeIn';
     }
     transformation = "t" + (x - (this.width / 2)) + "," + (y - (this.height / 2)) + "s-" + this.scale + "," + this.scale;
-    this.image.animate({
-      transform: transformation
-    }, time, method, next);
+    if (time > 100) {
+      this.image.animate({
+        transform: transformation
+      }, time, method, next);
+    } else {
+      this.image.attr({
+        transform: transformation
+      });
+      if (next) {
+        setTimeout(next, time);
+      }
+    }
     return this.track({
       x: x,
       y: y,
