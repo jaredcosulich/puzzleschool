@@ -13,14 +13,15 @@ class xyflyer.ViewHelper
         @rings = []
         @flip(boardElement)
         @board = new xyflyer.Board
-            el: boardElement, 
-            grid: grid, 
+            el: boardElement 
+            grid: grid 
             objects: objects
             islandCoordinates: @islandCoordinates
             resetLevel: => @resetLevel()
     
         @plane = new xyflyer.Plane
             board: @board
+            objects: objects
             track: (info) => @trackPlane(info)
             
         @parser = require('./parser')
@@ -75,4 +76,4 @@ class xyflyer.ViewHelper
     completeLevel: ->
         return if @complete
         @complete = true
-        @nextLevel()
+        $.timeout 500, => @nextLevel()

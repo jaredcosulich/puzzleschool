@@ -57,7 +57,7 @@ soma.chunks
             #                 alert('We were unable to load the information for this level. Please check your internet connection.')
                         
             @objects = []
-            for object in ['island']
+            for object in ['island', 'plane']
                 @objects.push(
                     name: object
                     image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")

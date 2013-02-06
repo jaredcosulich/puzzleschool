@@ -36,6 +36,7 @@ xyflyer.ViewHelper = (function() {
     });
     this.plane = new xyflyer.Plane({
       board: this.board,
+      objects: objects,
       track: function(info) {
         return _this.trackPlane(info);
       }
@@ -123,11 +124,14 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.completeLevel = function() {
+    var _this = this;
     if (this.complete) {
       return;
     }
     this.complete = true;
-    return this.nextLevel();
+    return $.timeout(500, function() {
+      return _this.nextLevel();
+    });
   };
 
   return ViewHelper;

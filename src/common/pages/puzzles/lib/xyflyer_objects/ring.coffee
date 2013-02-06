@@ -25,7 +25,7 @@ class ring.Ring extends xyflyerObject.Object
         @image.transform("t#{@screenX},#{@screenY}s-#{@scale},#{@scale}")
         
     highlightIfPassingThrough: ({x, y, width, height}) ->
-        if @touches(x,y,width,height)
+        if not @passedThrough and @touches(x,y,width,height)
             if not @highlighting
                 @highlighting = true
                 @animating = true

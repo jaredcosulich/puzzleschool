@@ -33,6 +33,17 @@ class board.Board extends xyflyerObject.Object
         @drawGrid() 
         @initClicks()
         
+    createCanvas: ->
+        canvas = $(document.createElement('CANVAS'))
+        canvas.css
+            top: 0
+            left: 0
+            height: @el.height()
+            width: @el.width()
+        canvas.attr(height: @el.height(), width: @el.width())            
+        @el.append(canvas)            
+        return canvas[0].getContext('2d')
+    
     addImage: (image, x, y) ->
         width = image.width() * @scale
         height = image.height() * @scale
@@ -226,16 +237,7 @@ class board.Board extends xyflyerObject.Object
 
         return if not formula
         
-        if not plotArea
-            canvas = $(document.createElement('CANVAS'))
-            canvas.css
-                top: 0
-                left: 0
-                height: @el.height()
-                width: @el.width()
-            canvas.attr(height: @el.height(), width: @el.width())            
-            @el.append(canvas)
-            plotArea = canvas[0].getContext('2d')
+        plotArea = @createCanvas() if not plotArea
         
         plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
         plotArea.lineWidth = 1

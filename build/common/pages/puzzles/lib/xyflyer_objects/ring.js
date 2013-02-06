@@ -51,18 +51,11 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.highlightIfPassingThrough = function(_arg) {
-    var height, width, x, y,
-      _this = this;
+    var height, width, x, y;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
-    if (this.touches(x, y, width, height)) {
+    if (!this.passedThrough && this.touches(x, y, width, height)) {
       if (!this.highlighting) {
         this.highlighting = true;
-        this.animating = true;
-        this.highlighted.animate({
-          opacity: 0.2
-        }, 250, function() {
-          return _this.animating = false;
-        });
         return this.passedThrough = true;
       }
     } else if (this.highlighting && !this.animating) {

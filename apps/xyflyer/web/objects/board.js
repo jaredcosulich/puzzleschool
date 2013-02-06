@@ -45,6 +45,23 @@ board.Board = (function(_super) {
     return this.initClicks();
   };
 
+  Board.prototype.createCanvas = function() {
+    var canvas;
+    canvas = $(document.createElement('CANVAS'));
+    canvas.css({
+      top: 0,
+      left: 0,
+      height: this.el.height(),
+      width: this.el.width()
+    });
+    canvas.attr({
+      height: this.el.height(),
+      width: this.el.width()
+    });
+    this.el.append(canvas);
+    return canvas[0].getContext('2d');
+  };
+
   Board.prototype.addImage = function(image, x, y) {
     var height, width;
     width = image.width() * this.scale;
@@ -348,7 +365,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, canvas, infiniteLine, lastSlope, lastYPos, plotArea, slope, xPos, yPos, _i, _ref, _ref1, _ref2;
+    var brokenLine, infiniteLine, lastSlope, lastYPos, plotArea, slope, xPos, yPos, _i, _ref, _ref1, _ref2;
     if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
       plotArea.clearRect(0, 0, this.width, this.height);
     }
@@ -356,19 +373,7 @@ board.Board = (function(_super) {
       return;
     }
     if (!plotArea) {
-      canvas = $(document.createElement('CANVAS'));
-      canvas.css({
-        top: 0,
-        left: 0,
-        height: this.el.height(),
-        width: this.el.width()
-      });
-      canvas.attr({
-        height: this.el.height(),
-        width: this.el.width()
-      });
-      this.el.append(canvas);
-      plotArea = canvas[0].getContext('2d');
+      plotArea = this.createCanvas();
     }
     plotArea.strokeStyle = 'rgba(0,0,0,0.25)';
     plotArea.lineWidth = 1;

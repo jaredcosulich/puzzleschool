@@ -75,7 +75,7 @@ soma.chunks({
         });
       }
       this.objects = [];
-      _ref = ['island'];
+      _ref = ['island', 'plane'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
         this.objects.push({
