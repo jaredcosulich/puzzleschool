@@ -4,7 +4,7 @@ Animation = require('./animation').Animation
 
 class plane.Plane extends xyflyerObject.Object
     increment: 5
-    incrementTime: 5
+    incrementTime: 7
     
     constructor: ({@board, @track, @objects}) ->
         @scale = @board.scale / 2
@@ -47,10 +47,14 @@ class plane.Plane extends xyflyerObject.Object
             @move(toX, toY, next)
             return
 
-        startX = @currentXPos
-        startY = @currentYPos            
-        @animation.start time, (portion) =>
-            if portion >= 1
+        startX = null
+        startY = null             
+        @animation.queueAnimation time, (portion, remaining) =>
+            startX = @currentXPos if not startX?
+            startY = @currentYPos if not startY?
+            return false if portion <= 0
+            return true if portion > 1
+            if remaining < 20
                 @move(toX, toY, next)
                 return true
             
@@ -61,9 +65,9 @@ class plane.Plane extends xyflyerObject.Object
     
     fall: ->
         @falling = true
-        x = @xPos + @board.xAxis + @width + (@board.islandCoordinates.x * @board.xUnit)
+        x = @xPos + @board.xAxis + 20
         y = 1000
-        @animate(x, y, 2000, => @reset()) 
+        @animate(x, y, 4000, => @reset()) 
     
     launch: (force) ->
         return if @falling or @cancelFlight and not force
@@ -77,6 +81,7 @@ class plane.Plane extends xyflyerObject.Object
         if @yPos == undefined or @xPos > ((@board.grid.xMax + @width) * @board.xUnit)
             # Plane Crashed Message
             @fall()
+            @animation.start()
             return
             
         if @xPos % @increment == 0   
@@ -86,9 +91,9 @@ class plane.Plane extends xyflyerObject.Object
                 time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @incrementTime
 
             @lastFormula = formula            
-            @animate(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
-        else
-            @launch()
+            @animate(@xPos + @board.xAxis, @board.yAxis - @yPos, time)
+            
+        @launch()
             
     reset: ->
         @falling = false

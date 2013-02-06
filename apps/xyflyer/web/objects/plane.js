@@ -15,7 +15,7 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.increment = 5;
 
-  Plane.prototype.incrementTime = 5;
+  Plane.prototype.incrementTime = 7;
 
   function Plane(_arg) {
     this.board = _arg.board, this.track = _arg.track, this.objects = _arg.objects;
@@ -70,11 +70,23 @@ plane.Plane = (function(_super) {
       this.move(toX, toY, next);
       return;
     }
-    startX = this.currentXPos;
-    startY = this.currentYPos;
-    return this.animation.start(time, function(portion) {
+    startX = null;
+    startY = null;
+    return this.animation.queueAnimation(time, function(portion, remaining) {
       var portionX, portionY;
-      if (portion >= 1) {
+      if (!(startX != null)) {
+        startX = _this.currentXPos;
+      }
+      if (!(startY != null)) {
+        startY = _this.currentYPos;
+      }
+      if (portion <= 0) {
+        return false;
+      }
+      if (portion > 1) {
+        return true;
+      }
+      if (remaining < 20) {
         _this.move(toX, toY, next);
         return true;
       }
@@ -89,16 +101,15 @@ plane.Plane = (function(_super) {
     var x, y,
       _this = this;
     this.falling = true;
-    x = this.xPos + this.board.xAxis + this.width + (this.board.islandCoordinates.x * this.board.xUnit);
+    x = this.xPos + this.board.xAxis + 20;
     y = 1000;
-    return this.animate(x, y, 2000, function() {
+    return this.animate(x, y, 4000, function() {
       return _this.reset();
     });
   };
 
   Plane.prototype.launch = function(force) {
-    var dX, dY, formula, time, _ref, _ref1,
-      _this = this;
+    var dX, dY, formula, time, _ref, _ref1;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
@@ -111,6 +122,7 @@ plane.Plane = (function(_super) {
     formula = (_ref1 = this.path[this.xPos]) != null ? _ref1.formula : void 0;
     if (this.yPos === void 0 || this.xPos > ((this.board.grid.xMax + this.width) * this.board.xUnit)) {
       this.fall();
+      this.animation.start();
       return;
     }
     if (this.xPos % this.increment === 0) {
@@ -120,12 +132,9 @@ plane.Plane = (function(_super) {
         time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.incrementTime;
       }
       this.lastFormula = formula;
-      return this.animate(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time, function() {
-        return _this.launch();
-      });
-    } else {
-      return this.launch();
+      this.animate(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time);
     }
+    return this.launch();
   };
 
   Plane.prototype.reset = function() {
