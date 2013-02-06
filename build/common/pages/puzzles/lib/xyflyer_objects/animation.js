@@ -26,13 +26,19 @@ animation.Animation = (function() {
     });
   };
 
-  Animation.prototype.start = function() {
+  Animation.prototype.start = function(time, method) {
     var _this = this;
-    if (this.animating || !this.nextAnimation()) {
-      return;
+    if (time && method) {
+      this.time = time;
+      this.method = method;
+    } else {
+      if (!this.nextAnimation()) {
+        return;
+      }
     }
     this.stopped = false;
     this.lastTime = null;
+    this.elapsed = 0;
     return this.frame()(function(t) {
       return _this.tick(t);
     });
@@ -42,7 +48,6 @@ animation.Animation = (function() {
     if (!this.animations.length) {
       return false;
     }
-    this.elapsed = this.time ? this.time - this.elapsed : 0;
     animation = this.animations.splice(0, 1)[0];
     this.time = animation.time;
     this.method = animation.method;
@@ -56,15 +61,17 @@ animation.Animation = (function() {
     if (this.stopped) {
       return;
     }
-    this.animating = true;
     if (this.lastTime != null) {
       this.elapsed += time - this.lastTime;
-      portion = this.elapsed / this.time;
-      if (this.method(portion, this.time - this.elapsed)) {
-        this.animating = false;
-        if (!this.nextAnimation()) {
-          return;
-        }
+      if (this.elapsed <= this.time) {
+        portion = this.elapsed / this.time;
+        this.method(portion);
+      } else if (this.animations.length) {
+        this.elapsed -= this.time;
+        this.nextAnimation();
+      } else {
+        this.method(1);
+        return;
       }
     }
     this.lastTime = time;

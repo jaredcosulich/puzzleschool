@@ -57,7 +57,7 @@ plane.Plane = (function(_super) {
         width: _this.width,
         height: _this.height
       });
-    }), 10);
+    }), 0);
     if (next) {
       return next();
     }
@@ -72,7 +72,7 @@ plane.Plane = (function(_super) {
     }
     startX = null;
     startY = null;
-    return this.animation.queueAnimation(time, function(portion, remaining) {
+    return this.animation.queueAnimation(time, function(portion) {
       var portionX, portionY;
       if (!(startX != null)) {
         startX = _this.currentXPos;
@@ -80,26 +80,16 @@ plane.Plane = (function(_super) {
       if (!(startY != null)) {
         startY = _this.currentYPos;
       }
-      if (portion <= 0) {
-        return false;
-      }
-      if (portion > 1) {
-        return true;
-      }
-      if (remaining < 20) {
-        _this.move(toX, toY, next);
-        return true;
-      }
       portionX = (toX - startX) * portion;
       portionY = (toY - startY) * portion;
-      _this.move(startX + portionX, startY + portionY);
-      return false;
+      return _this.move(startX + portionX, startY + portionY);
     });
   };
 
   Plane.prototype.fall = function() {
     var x, y,
       _this = this;
+    return;
     this.falling = true;
     x = this.xPos + this.board.xAxis + 20;
     y = 1000;

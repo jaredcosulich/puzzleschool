@@ -39,7 +39,7 @@ class plane.Plane extends xyflyerObject.Object
         )
         @currentXPos = x
         @currentYPos = y
-        setTimeout((=> @track(x: x, y: y, width: @width, height: @height)), 10)
+        setTimeout((=> @track(x: x, y: y, width: @width, height: @height)), 0)
         next() if next
     
     animate: (toX, toY, time, next) ->
@@ -49,21 +49,15 @@ class plane.Plane extends xyflyerObject.Object
 
         startX = null
         startY = null             
-        @animation.queueAnimation time, (portion, remaining) =>
+        @animation.queueAnimation time, (portion) =>
             startX = @currentXPos if not startX?
             startY = @currentYPos if not startY?
-            return false if portion <= 0
-            return true if portion > 1
-            if remaining < 20
-                @move(toX, toY, next)
-                return true
-            
             portionX = (toX - startX) * portion
             portionY = (toY - startY) * portion
             @move(startX + portionX, startY + portionY)
-            return false
     
     fall: ->
+        return
         @falling = true
         x = @xPos + @board.xAxis + 20
         y = 1000

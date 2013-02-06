@@ -22,15 +22,20 @@ class animation.Animation
             time: time
             index: @animationIndex += 1
         
-    start: () ->
-        return if @animating or not @nextAnimation() 
+    start: (time, method) ->
+        if time and method
+            @time = time
+            @method = method
+        else
+            return unless @nextAnimation() 
+        
         @stopped = false
         @lastTime = null
+        @elapsed = 0
         @frame()((t) => @tick(t))
     
     nextAnimation: ->        
         return false unless @animations.length
-        @elapsed = if @time then @time - @elapsed else 0
         animation = @animations.splice(0,1)[0]
         @time = animation.time
         @method = animation.method
@@ -39,13 +44,18 @@ class animation.Animation
         
     tick: (time) ->
         return if @stopped
-        @animating = true
         if @lastTime?
             @elapsed += (time - @lastTime)
-            portion = @elapsed/@time
-            if @method(portion, @time - @elapsed)
-                @animating = false
-                return if not @nextAnimation()
+            
+            if @elapsed <= @time
+                portion = @elapsed/@time
+                @method(portion) 
+            else if @animations.length    
+                @elapsed -= @time
+                @nextAnimation()
+            else
+                @method(1)
+                return
 
         @lastTime = time    
         setTimeout((=> @frame()((t) => @tick(t))), 0)   
