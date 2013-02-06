@@ -59,9 +59,6 @@ ring.Ring = (function(_super) {
         return this.passedThrough = true;
       }
     } else if (this.highlighting && !this.animating) {
-      this.highlighted.animate({
-        opacity: 0
-      }, 500);
       return this.highlighting = false;
     }
   };

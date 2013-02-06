@@ -1,14 +1,15 @@
 plane = exports ? provide('./plane', {})
 xyflyerObject = require('./object')
+Animation = require('./animation').Animation
 
 class plane.Plane extends xyflyerObject.Object
     increment: 5
-    incrementTime: 3
-    animationPortion: 5
+    incrementTime: 5
     
     constructor: ({@board, @track, @objects}) ->
         @scale = @board.scale / 2
         @initCanvas()
+        @animation = new Animation()
         @reset()
 
     initCanvas: ->
@@ -21,10 +22,10 @@ class plane.Plane extends xyflyerObject.Object
         @height = @image.height() * @scale
         @canvas = @board.createCanvas()
         
-    move: (x, y, time, next) ->
+    move: (x, y, next) ->
         if not @canvas
             setTimeout((=>
-                @move(x, y, time, next)
+                @move(x, y, next)
             ), 50)
             return 
 
@@ -38,18 +39,25 @@ class plane.Plane extends xyflyerObject.Object
         )
         @currentXPos = x
         @currentYPos = y
-        @track(x: x, y: y, width: @width, height: @height)
-        setTimeout(next,time) if next
+        setTimeout((=> @track(x: x, y: y, width: @width, height: @height)), 10)
+        next() if next
     
-    animate: (toX, toY, time, next, totalTime) ->
-        if not time or time < @animationPortion
-            @move(toX, toY, time, next)
+    animate: (toX, toY, time, next) ->
+        if not time
+            @move(toX, toY, next)
             return
+
+        startX = @currentXPos
+        startY = @currentYPos            
+        @animation.start time, (portion) =>
+            if portion >= 1
+                @move(toX, toY, next)
+                return true
             
-        portion = (totalTime or time)/@animationPortion
-        newToX = @currentXPos + ((toX - @currentXPos)/portion)
-        newToY = @currentYPos + ((toY - @currentYPos)/portion) 
-        @move(newToX, newToY, 0, => @animate(toX, toY, time-@animationPortion, next, totalTime or time))
+            portionX = (toX - startX) * portion
+            portionY = (toY - startY) * portion
+            @move(startX + portionX, startY + portionY)
+            return false
     
     fall: ->
         @falling = true
@@ -76,9 +84,9 @@ class plane.Plane extends xyflyerObject.Object
                 dX = @increment
                 dY = @yPos - @path[@xPos - @increment].y
                 time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @incrementTime
-            
+
+            @lastFormula = formula            
             @animate(@xPos + @board.xAxis, @board.yAxis - @yPos, time, => @launch())
-            @lastFormula = formula
         else
             @launch()
             
