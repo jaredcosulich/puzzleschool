@@ -3,8 +3,8 @@ xyflyerObject = require('./object')
 Animation = require('./animation').Animation
 
 class plane.Plane extends xyflyerObject.Object
-    increment: 5
-    incrementTime: 7
+    increment: 100
+    incrementTime: 6
     
     constructor: ({@board, @track, @objects}) ->
         @scale = @board.scale / 2
@@ -29,6 +29,7 @@ class plane.Plane extends xyflyerObject.Object
             ), 50)
             return 
 
+        console.log(@currentYPos - y, y)
         @canvas.clearRect(@currentXPos - @width,@currentYPos - @height,@width*4,@height*4)
         @canvas.drawImage(
             @image[0], 
@@ -46,15 +47,16 @@ class plane.Plane extends xyflyerObject.Object
         if not time
             @move(toX, toY, next)
             return
-
-        startX = null
-        startY = null             
+        
+        startX = @endingX or @currentXPos
+        startY = @endingY or @currentYPos
+        @endingX = toX
+        @endingY = toY
         @animation.queueAnimation time, (portion) =>
-            startX = @currentXPos if not startX?
-            startY = @currentYPos if not startY?
             portionX = (toX - startX) * portion
             portionY = (toY - startY) * portion
             @move(startX + portionX, startY + portionY)
+        
     
     fall: ->
         return
@@ -79,12 +81,9 @@ class plane.Plane extends xyflyerObject.Object
             return
             
         if @xPos % @increment == 0   
-            if @lastFormula
-                dX = @increment
-                dY = @yPos - @path[@xPos - @increment].y
-                time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @incrementTime
-
-            @lastFormula = formula            
+            dX = @increment
+            dY = @yPos - (@path[@xPos - @increment]?.y or (@board.yAxis - @currentYPos))
+            time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @incrementTime
             @animate(@xPos + @board.xAxis, @board.yAxis - @yPos, time)
             
         @launch()
@@ -94,7 +93,6 @@ class plane.Plane extends xyflyerObject.Object
         @cancelFlight = true
         @path = null
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit) - 1
-        @lastFormula = null
         @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
 
         

@@ -13,9 +13,9 @@ plane.Plane = (function(_super) {
 
   __extends(Plane, _super);
 
-  Plane.prototype.increment = 5;
+  Plane.prototype.increment = 100;
 
-  Plane.prototype.incrementTime = 7;
+  Plane.prototype.incrementTime = 6;
 
   function Plane(_arg) {
     this.board = _arg.board, this.track = _arg.track, this.objects = _arg.objects;
@@ -46,6 +46,7 @@ plane.Plane = (function(_super) {
       }), 50);
       return;
     }
+    console.log(this.currentYPos - y, y);
     this.canvas.clearRect(this.currentXPos - this.width, this.currentYPos - this.height, this.width * 4, this.height * 4);
     this.canvas.drawImage(this.image[0], x - (this.width / 2), y - (this.height / 2), this.width, this.height);
     this.currentXPos = x;
@@ -70,16 +71,12 @@ plane.Plane = (function(_super) {
       this.move(toX, toY, next);
       return;
     }
-    startX = null;
-    startY = null;
+    startX = this.endingX || this.currentXPos;
+    startY = this.endingY || this.currentYPos;
+    this.endingX = toX;
+    this.endingY = toY;
     return this.animation.queueAnimation(time, function(portion) {
       var portionX, portionY;
-      if (!(startX != null)) {
-        startX = _this.currentXPos;
-      }
-      if (!(startY != null)) {
-        startY = _this.currentYPos;
-      }
       portionX = (toX - startX) * portion;
       portionY = (toY - startY) * portion;
       return _this.move(startX + portionX, startY + portionY);
@@ -99,7 +96,7 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var dX, dY, formula, time, _ref, _ref1;
+    var dX, dY, formula, time, _ref, _ref1, _ref2;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
@@ -116,12 +113,9 @@ plane.Plane = (function(_super) {
       return;
     }
     if (this.xPos % this.increment === 0) {
-      if (this.lastFormula) {
-        dX = this.increment;
-        dY = this.yPos - this.path[this.xPos - this.increment].y;
-        time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.incrementTime;
-      }
-      this.lastFormula = formula;
+      dX = this.increment;
+      dY = this.yPos - (((_ref2 = this.path[this.xPos - this.increment]) != null ? _ref2.y : void 0) || (this.board.yAxis - this.currentYPos));
+      time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.incrementTime;
       this.animate(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time);
     }
     return this.launch();
@@ -132,7 +126,6 @@ plane.Plane = (function(_super) {
     this.cancelFlight = true;
     this.path = null;
     this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit) - 1;
-    this.lastFormula = null;
     return this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
   };
 
