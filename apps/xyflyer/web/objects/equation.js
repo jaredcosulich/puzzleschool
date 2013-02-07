@@ -397,7 +397,7 @@ equation.Equation = (function() {
   Equation.prototype.formatFragment = function(fragment) {
     var constant;
     constant = '<div class=\'fragment\'>';
-    fragment = fragment.replace(/(.*\()(.*)\)/, "" + constant + "$1</div>" + constant + "$2</div>" + constant + ")</div>");
+    fragment = fragment.replace(/(.*\()(.*)\)(\^\d+)*/g, "" + constant + "$1</div>" + constant + "$2</div>" + constant + ")$3</div>");
     if (fragment.indexOf(constant) === -1) {
       fragment = "" + constant + fragment + "</div>";
     }

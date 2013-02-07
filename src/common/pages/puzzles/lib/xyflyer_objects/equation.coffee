@@ -25,7 +25,7 @@ class equation.Equation
 
         @initHover()
         
-        @initRange()
+        @initRange()        
         
     $: (selector) -> $(selector, @el)
         
@@ -135,6 +135,7 @@ class equation.Equation
             
         @initVariables()
         @plot(@)
+        
         
     newDropArea: ->
         dropArea = $(document.createElement('DIV'))
@@ -258,8 +259,8 @@ class equation.Equation
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
         fragment = fragment.replace(
-            /(.*\()(.*)\)/, 
-            "#{constant}$1</div>#{constant}$2</div>#{constant})</div>"
+            /(.*\()(.*)\)(\^\d+)*/g, 
+            "#{constant}$1</div>#{constant}$2</div>#{constant})$3</div>"
         )
         if fragment.indexOf(constant) == -1
             fragment = "#{constant}#{fragment}</div>"
