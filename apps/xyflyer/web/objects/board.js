@@ -448,7 +448,7 @@ board.Board = (function(_super) {
               break;
             }
           }
-          if ((this.grid.yMin * 1.1 <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax * 1.1)) {
+          if ((this.grid.yMin <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax)) {
             path[xPos] = {
               formula: lastFormula.id,
               y: yPos
@@ -487,7 +487,7 @@ board.Board = (function(_super) {
           continue;
         }
         validPathFound = true;
-        if ((this.grid.yMin * 1.1 <= (_ref3 = y / this.yUnit) && _ref3 <= this.grid.yMax * 1.1)) {
+        if ((this.grid.yMin <= (_ref3 = y / this.yUnit) && _ref3 <= this.grid.yMax)) {
           path[xPos] = {
             formula: id,
             y: y

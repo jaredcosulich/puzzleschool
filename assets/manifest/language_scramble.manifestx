@@ -1,0 +1,24 @@
+CACHE MANIFEST
+/assets/images/transparent_icon_tiny.png
+/assets/images/puzzles/language_scramble/keyboard.gif
+
+/ender.js
+
+/build/client/css/all.css
+/build/client/css/puzzles/language_scramble.css
+
+/build/client/pages/local_storage.js
+
+/build/common/pages/base.js
+/build/common/pages/puzzles/lib/language_scramble.js
+/build/common/pages/puzzles/language_scramble.js
+
+/build/common/templates/base.html
+/build/common/templates/puzzles/language_scramble.html
+
+/build/client/pages/form.js
+
+NETWORK:
+/assets/analytics.js
+http://www.google-analytics.com/ga.js
+/api/puzzles/language_scramble
