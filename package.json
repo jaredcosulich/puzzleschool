@@ -17,14 +17,12 @@
         "line": "*",
         "mailgun": "*",
         "wings": "*",
-        "soma": "0.6.8"
+        "soma": "*"
     },
     
     "soma": {
         "port": 5000,
-        "shared": ["build/common/pages/base.js", "build/common/pages", "build/common/templates"],
-        "server": ["build/server"],
-        "client": ["build/client/pages", "build/client/css", "assets", "apps", "test"],
-        "init": ["ender.js"]
+        "app": ["build/common", "build/client", "assets"],
+        "api": ["build/server"],
     }
 }

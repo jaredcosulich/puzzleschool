@@ -8,7 +8,7 @@
 /*!
   * Ender: open module JavaScript framework (client-lib)
   * copyright Dustin Diaz & Jacob Thornton 2011-2012 (@ded @fat)
-  * http://ender.no.de
+  * http://ender.jit.su
   * License MIT
   */
 (function (context) {
@@ -289,9 +289,11 @@
     else this[name] = definition()
   }('morpheus', function () {
   
-    var context = this
-      , doc = document
+    var doc = document
       , win = window
+      , perf = win.performance
+      , perfNow = perf && (perf.now || perf.webkitNow || perf.msNow || perf.mozNow)
+      , now = perfNow ? function () { return perfNow.call(perf) } : function () { return +new Date() }
       , html = doc.documentElement
       , thousand = 1000
       , rgbOhex = /^rgb\(|#/
@@ -304,66 +306,69 @@
         // these elements do not require 'px'
       , unitless = { lineHeight: 1, zoom: 1, zIndex: 1, opacity: 1, transform: 1}
   
-        // which property name does this browser use for transform
-      , transform = function () {
-          var styles = doc.createElement('a').style
-            , props = ['webkitTransform','MozTransform','OTransform','msTransform','Transform'], i
-          for (i = 0; i < props.length; i++) {
-            if (props[i] in styles) return props[i]
+    // which property name does this browser use for transform
+    var transform = function () {
+      var styles = doc.createElement('a').style
+        , props = ['webkitTransform', 'MozTransform', 'OTransform', 'msTransform', 'Transform']
+        , i
+      for (i = 0; i < props.length; i++) {
+        if (props[i] in styles) return props[i]
+      }
+    }()
+  
+    // does this browser support the opacity property?
+    var opasity = function () {
+      return typeof doc.createElement('a').style.opacity !== 'undefined'
+    }()
+  
+    // initial style is determined by the elements themselves
+    var getStyle = doc.defaultView && doc.defaultView.getComputedStyle ?
+      function (el, property) {
+        property = property == 'transform' ? transform : property
+        var value = null
+          , computed = doc.defaultView.getComputedStyle(el, '')
+        computed && (value = computed[camelize(property)])
+        return el.style[property] || value
+      } : html.currentStyle ?
+  
+      function (el, property) {
+        property = camelize(property)
+  
+        if (property == 'opacity') {
+          var val = 100
+          try {
+            val = el.filters['DXImageTransform.Microsoft.Alpha'].opacity
+          } catch (e1) {
+            try {
+              val = el.filters('alpha').opacity
+            } catch (e2) {}
           }
-        }()
+          return val / 100
+        }
+        var value = el.currentStyle ? el.currentStyle[property] : null
+        return el.style[property] || value
+      } :
+      function (el, property) {
+        return el.style[camelize(property)]
+      }
   
-        // does this browser support the opacity property?
-      , opasity = function () {
-          return typeof doc.createElement('a').style.opacity !== 'undefined'
-        }()
+    var frame = function () {
+      // native animation frames
+      // http://webstuff.nfshost.com/anim-timing/Overview.html
+      // http://dev.chromium.org/developers/design-documents/requestanimationframe-implementation
+      return win.requestAnimationFrame  ||
+        win.webkitRequestAnimationFrame ||
+        win.mozRequestAnimationFrame    ||
+        win.msRequestAnimationFrame     ||
+        win.oRequestAnimationFrame      ||
+        function (callback) {
+          win.setTimeout(function () {
+            callback(+new Date())
+          }, 17) // when I was 17..
+        }
+    }()
   
-        // initial style is determined by the elements themselves
-      , getStyle = doc.defaultView && doc.defaultView.getComputedStyle ?
-          function (el, property) {
-            property = property == 'transform' ? transform : property
-            var value = null
-              , computed = doc.defaultView.getComputedStyle(el, '')
-            computed && (value = computed[camelize(property)])
-            return el.style[property] || value
-          } : html.currentStyle ?
-  
-          function (el, property) {
-            property = camelize(property)
-  
-            if (property == 'opacity') {
-              var val = 100
-              try {
-                val = el.filters['DXImageTransform.Microsoft.Alpha'].opacity
-              } catch (e1) {
-                try {
-                  val = el.filters('alpha').opacity
-                } catch (e2) {}
-              }
-              return val / 100
-            }
-            var value = el.currentStyle ? el.currentStyle[property] : null
-            return el.style[property] || value
-          } :
-          function (el, property) {
-            return el.style[camelize(property)]
-          }
-      , frame = function () {
-          // native animation frames
-          // http://webstuff.nfshost.com/anim-timing/Overview.html
-          // http://dev.chromium.org/developers/design-documents/requestanimationframe-implementation
-          return win.requestAnimationFrame  ||
-            win.webkitRequestAnimationFrame ||
-            win.mozRequestAnimationFrame    ||
-            win.oRequestAnimationFrame      ||
-            win.msRequestAnimationFrame     ||
-            function (callback) {
-              win.setTimeout(function () {
-                callback(+new Date())
-              }, 11) // these go to eleven
-            }
-        }()
-      , children = []
+    var children = []
   
     function has(array, elem, i) {
       if (Array.prototype.indexOf) return array.indexOf(elem)
@@ -372,10 +377,13 @@
       }
     }
   
-    function render(t) {
+    function render(timestamp) {
       var i, count = children.length
+      // if we're using a high res timer, make sure timestamp is not the old epoch-based value.
+      // http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision
+      if (perfNow && timestamp > 1e12) timestamp = now()
       for (i = count; i--;) {
-        children[i](t)
+        children[i](timestamp)
       }
       children.length && frame(render)
     }
@@ -385,9 +393,9 @@
     }
   
     function die(f) {
-      var i, rest, index = has(children, f)
+      var rest, index = has(children, f)
       if (index >= 0) {
-        rest = children.slice(index+1)
+        rest = children.slice(index + 1)
         children.length = index
         children = children.concat(rest)
       }
@@ -417,7 +425,7 @@
   
     // convert rgb and short hex to long hex
     function toHex(c) {
-      var m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c)
+      var m = c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
       return (m ? rgb(m[1], m[2], m[3]) : c)
         .replace(/#(\w)(\w)(\w)$/, '#$1$1$2$2$3$3') // short skirt to long jacket
     }
@@ -434,6 +442,11 @@
       return typeof f == 'function'
     }
   
+    function nativeTween(t) {
+      // default to a pleasant-to-the-eye easeOut (like native animations)
+      return Math.sin(t * Math.PI / 2)
+    }
+  
     /**
       * Core tween method that requests each frame
       * @param duration: time in milliseconds. defaults to 1000
@@ -445,20 +458,15 @@
       * @returns method to stop the animation
       */
     function tween(duration, fn, done, ease, from, to) {
-      ease = fun(ease) ? ease : morpheus.easings[ease] || function (t) {
-        // default to a pleasant-to-the-eye easeOut (like native animations)
-        return Math.sin(t * Math.PI / 2)
-      }
+      ease = fun(ease) ? ease : morpheus.easings[ease] || nativeTween
       var time = duration || thousand
         , self = this
         , diff = to - from
-        , start = null
+        , start = now()
         , stop = 0
         , end = 0
-      live(run)
   
       function run(t) {
-        if (!start) start = t; 
         var delta = t - start
         if (delta > time || stop) {
           to = isFinite(to) ? to : 1
@@ -472,6 +480,9 @@
           fn((diff * ease(delta / time)) + from) :
           fn(ease(delta / time))
       }
+  
+      live(run)
+  
       return {
         stop: function (jump) {
           stop = 1
@@ -522,7 +533,7 @@
     function getTweenVal(pos, units, begin, end, k, i, v) {
       if (k == 'transform') {
         v = {}
-        for(var t in begin[i][k]) {
+        for (var t in begin[i][k]) {
           v[t] = (t in end[i][k]) ? Math.round(((end[i][k][t] - begin[i][k][t]) * pos + begin[i][k][t]) * thousand) / thousand : begin[i][k][t]
         }
         return v
@@ -571,11 +582,6 @@
         , originalLeft
         , originalTop
   
-      delete options.complete;
-      delete options.duration;
-      delete options.easing;
-      delete options.bezier;
-  
       if (points) {
         // remember the original values for top|left
         originalLeft = options.left;
@@ -604,12 +610,20 @@
           bez[i] = fun(points) ? points(els[i], xy) : points
           bez[i].push(xy)
           bez[i].unshift([
-              parseInt(left, 10)
-            , parseInt(top, 10)
+            parseInt(left, 10),
+            parseInt(top, 10)
           ])
         }
   
         for (var k in options) {
+          switch (k) {
+          case 'complete':
+          case 'duration':
+          case 'easing':
+          case 'bezier':
+            continue;
+            break
+          }
           var v = getStyle(els[i], k), unit
             , tmp = fun(options[k]) ? options[k](els[i]) : options[k]
           if (typeof tmp == 'string' &&
@@ -624,7 +638,7 @@
             typeof tmp == 'string' && rgbOhex.test(tmp) ?
               toHex(v).slice(1) :
               parseFloat(v)
-          end[i][k] = k == 'transform' ? parseTransform(tmp,begin[i][k]) :
+          end[i][k] = k == 'transform' ? parseTransform(tmp, begin[i][k]) :
             typeof tmp == 'string' && tmp.charAt(0) == '#' ?
               toHex(tmp).slice(1) :
               by(tmp, parseFloat(v));
@@ -665,7 +679,7 @@
   
     return morpheus
   
-  })
+  });
   
 
   provide("morpheus", module.exports);
@@ -1780,7 +1794,7 @@
           return roots.map(function(root) {
             return qSA(selector, root);
           }).reduce(extend, []);
-        } catch (e) {
+        } catch (err) {
   
         }
       }
@@ -1817,14 +1831,14 @@
         } else {
           return [];
         }
-      } else if (typeof selector === 'object' && isFinite(selector.length)) {
-        return selector;
-      } else if (tagPattern.test(selector)) {
-        return create(selector, roots[0]);
       } else if (selector === window || selector === 'window') {
         return [window];
       } else if (selector === document || selector === 'document') {
         return [document];
+      } else if (typeof selector === 'object' && isFinite(selector.length)) {
+        return selector;
+      } else if (tagPattern.test(selector)) {
+        return create(selector, roots[0]);
       } else {
         return select(selector, roots, matchRoots);
       }
@@ -1832,6 +1846,7 @@
     matchesSelector = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
     matchesDisconnected = matchesSelector && matchesSelector.call(document.createElement('div'), 'div');
     sel.matching = matching = function(els, selector) {
+      var e;
       if (matchesSelector && (matchesDisconnected || els.every(function(el) {
         return el.document && el.document.nodeType !== 11;
       }))) {
@@ -1839,7 +1854,7 @@
           return els.filter(function(el) {
             return matchesSelector.call(el, selector);
           });
-        } catch (e) {
+        } catch (err) {
   
         }
       }
@@ -1900,11 +1915,14 @@
     * https://github.com/fat/bean
     * MIT license
     */
-  !(function (name, context, definition) {
-    if (typeof module != 'undefined' && module.exports) module.exports = definition(name, context);
-    else if (typeof define == 'function' && typeof define.amd  == 'object') define(definition);
-    else context[name] = definition(name, context);
-  }('bean', this, function (name, context) {
+  (function (name, context, definition) {
+    if (typeof module != 'undefined' && module.exports) module.exports = definition()
+    else if (typeof define == 'function' && define.amd) define(definition)
+    else context[name] = definition()
+  })('bean', this, function (name, context) {
+    name    = name    || 'bean'
+    context = context || this
+  
     var win            = window
       , old            = context[name]
       , namespaceRegex = /[^\.]*(?=\..*)\.|.*/
@@ -2453,7 +2471,7 @@
           }
   
           type = isTypeStr && typeSpec.replace(nameRegex, '')
-          if (type && customEvents[type]) type = customEvents[type].type
+          if (type && customEvents[type]) type = customEvents[type].base
   
           if (!typeSpec || isTypeStr) {
             // off(el) or off(el, t1.ns) or off(el, .ns) or off(el, .ns1.ns2.ns3)
@@ -2631,8 +2649,7 @@
     setSelectorEngine()
   
     return bean
-  }));
-  
+  });
 
   provide("bean", module.exports);
 
@@ -2713,18 +2730,19 @@
     * https://github.com/ded/bonzo
     * License MIT
     */
-  (function (name, definition, context) {
+  (function (name, context, definition) {
     if (typeof module != 'undefined' && module.exports) module.exports = definition()
-    else if (typeof context['define'] == 'function' && context['define']['amd']) define(name, definition)
+    else if (typeof define == 'function' && define.amd) define(definition)
     else context[name] = definition()
-  })('bonzo', function() {
+  })('bonzo', this, function() {
     var win = window
       , doc = win.document
       , html = doc.documentElement
       , parentNode = 'parentNode'
-      , query = null // used for setting a selector engine host
       , specialAttributes = /^(checked|value|selected|disabled)$/i
-      , specialTags = /^(select|fieldset|table|tbody|tfoot|td|tr|colgroup)$/i // tags that we have trouble inserting *into*
+        // tags that we have trouble inserting *into*
+      , specialTags = /^(select|fieldset|table|tbody|tfoot|td|tr|colgroup)$/i
+      , simpleScriptTagRe = /\s*<script +src=['"]([^'"]+)['"]>/
       , table = ['<table>', '</table>', 1]
       , td = ['<table><tbody><tr>', '</tr></tbody></table>', 3]
       , option = ['<select>', '</select>', 1]
@@ -2774,6 +2792,7 @@
       , whitespaceRegex = /\s+/
       , toString = String.prototype.toString
       , unitless = { lineHeight: 1, zoom: 1, zIndex: 1, opacity: 1, boxFlex: 1, WebkitBoxFlex: 1, MozBoxFlex: 1 }
+      , query = doc.querySelectorAll && function (selector) { return doc.querySelectorAll(selector) }
       , trim = String.prototype.trim ?
           function (s) {
             return s.trim()
@@ -2782,13 +2801,63 @@
             return s.replace(trimReplace, '')
           }
   
+      , getStyle = features.computedStyle
+          ? function (el, property) {
+              var value = null
+                , computed = doc.defaultView.getComputedStyle(el, '')
+              computed && (value = computed[property])
+              return el.style[property] || value
+            }
+          : !(ie && html.currentStyle)
+            ? function (el, property) {
+                return el.style[property]
+              }
+            :
+            /**
+             * @param {Element} el
+             * @param {string} property
+             * @return {string|number}
+             */
+            function (el, property) {
+              var val, value
+              if (property == 'opacity' && !features.opasity) {
+                val = 100
+                try {
+                  val = el['filters']['DXImageTransform.Microsoft.Alpha'].opacity
+                } catch (e1) {
+                  try {
+                    val = el['filters']('alpha').opacity
+                  } catch (e2) {}
+                }
+                return val / 100
+              }
+              value = el.currentStyle ? el.currentStyle[property] : null
+              return el.style[property] || value
+            }
+  
+    function isNode(node) {
+      return node && node.nodeName && (node.nodeType == 1 || node.nodeType == 11)
+    }
+  
+  
+    function normalize(node, host, clone) {
+      var i, l, ret
+      if (typeof node == 'string') return bonzo.create(node)
+      if (isNode(node)) node = [ node ]
+      if (clone) {
+        ret = [] // don't change original array
+        for (i = 0, l = node.length; i < l; i++) ret[i] = cloneNode(host, node[i])
+        return ret
+      }
+      return node
+    }
   
     /**
      * @param {string} c a class name to test
      * @return {boolean}
      */
     function classReg(c) {
-      return new RegExp("(^|\\s+)" + c + "(\\s+|$)")
+      return new RegExp('(^|\\s+)' + c + '(\\s+|$)')
     }
   
   
@@ -2879,10 +2948,6 @@
       return undefined
     }
   
-    function isNode(node) {
-      return node && node.nodeName && (node.nodeType == 1 || node.nodeType == 11)
-    }
-  
   
     /**
      * @param {Bonzo|Array} ar
@@ -2910,41 +2975,6 @@
           (p == 'float' && (p = features.cssFloat))
         return p ? camelize(p) : null
     }
-  
-    var getStyle = features.computedStyle ?
-      function (el, property) {
-        var value = null
-          , computed = doc.defaultView.getComputedStyle(el, '')
-        computed && (value = computed[property])
-        return el.style[property] || value
-      } :
-  
-      (ie && html.currentStyle) ?
-  
-      /**
-       * @param {Element} el
-       * @param {string} property
-       * @return {string|number}
-       */
-      function (el, property) {
-        if (property == 'opacity' && !features.opasity) {
-          var val = 100
-          try {
-            val = el['filters']['DXImageTransform.Microsoft.Alpha'].opacity
-          } catch (e1) {
-            try {
-              val = el['filters']('alpha').opacity
-            } catch (e2) {}
-          }
-          return val / 100
-        }
-        var value = el.currentStyle ? el.currentStyle[property] : null
-        return el.style[property] || value
-      } :
-  
-      function (el, property) {
-        return el.style[property]
-      }
   
     // this insert method is intense
     function insert(target, host, fn, rev) {
@@ -3033,6 +3063,21 @@
      */
     function setter(el, v) {
       return typeof v == 'function' ? v(el) : v
+    }
+  
+    function scroll(x, y, type) {
+      var el = this[0]
+      if (!el) return this
+      if (x == null && y == null) {
+        return (isBody(el) ? getWindowScroll() : { x: el.scrollLeft, y: el.scrollTop })[type]
+      }
+      if (isBody(el)) {
+        win.scrollTo(x, y)
+      } else {
+        x != null && (el.scrollLeft = x)
+        y != null && (el.scrollTop = y)
+      }
+      return this
     }
   
     /**
@@ -3253,6 +3298,17 @@
           return this.remove()
         }
   
+        /**
+         * @param {Object=} opt_host an optional host scope (primarily used when integrated with Ender)
+         * @return {Bonzo}
+         */
+      , clone: function (opt_host) {
+          var ret = [] // don't change original array
+            , l, i
+          for (i = 0, l = this.length; i < l; i++) ret[i] = cloneNode(opt_host || this, this[i])
+          return bonzo(ret)
+        }
+  
         // class management
   
         /**
@@ -3311,7 +3367,7 @@
             each(c, function (c) {
               if (c) {
                 typeof opt_condition !== 'undefined' ?
-                  opt_condition ? addClass(el, c) : removeClass(el, c) :
+                  opt_condition ? !hasClass(el, c) && addClass(el, c) : removeClass(el, c) :
                   hasClass(el, c) ? removeClass(el, c) : addClass(el, c)
               }
             })
@@ -3405,7 +3461,7 @@
          * @return {Element|Node}
          */
       , related: function (method) {
-          return this.map(
+          return bonzo(this.map(
             function (el) {
               el = el[method]
               while (el && el.nodeType !== 1) {
@@ -3416,7 +3472,7 @@
             function (el) {
               return el
             }
-          )
+          ))
         }
   
   
@@ -3491,7 +3547,11 @@
          * @return {Bonzo|number}
          */
       , offset: function (opt_x, opt_y) {
-          if (typeof opt_x == 'number' || typeof opt_y == 'number') {
+          if (opt_x && typeof opt_x == 'object' && (typeof opt_x.top == 'number' || typeof opt_x.left == 'number')) {
+            return this.each(function (el) {
+              xy(el, opt_x.left, opt_x.top)
+            })
+          } else if (typeof opt_x == 'number' || typeof opt_y == 'number') {
             return this.each(function (el) {
               xy(el, opt_x, opt_y)
             })
@@ -3503,19 +3563,13 @@
             , width: 0
           }
           var el = this[0]
+            , de = el.ownerDocument.documentElement
+            , bcr = el.getBoundingClientRect()
+            , scroll = getWindowScroll()
             , width = el.offsetWidth
             , height = el.offsetHeight
-            , top = el.offsetTop
-            , left = el.offsetLeft
-          while (el = el.offsetParent) {
-            top = top + el.offsetTop
-            left = left + el.offsetLeft
-  
-            if (el != doc.body) {
-              top -= el.scrollTop
-              left -= el.scrollLeft
-            }
-          }
+            , top = bcr.top + scroll.y - Math.max(0, de && de.clientTop, doc.body.clientTop)
+            , left = bcr.left + scroll.x - Math.max(0, de && de.clientLeft, doc.body.clientLeft)
   
           return {
               top: top
@@ -3532,7 +3586,8 @@
       , dim: function () {
           if (!this.length) return { height: 0, width: 0 }
           var el = this[0]
-            , orig = !el.offsetWidth && !el.offsetHeight ?
+            , de = el.nodeType == 9 && el.documentElement // document
+            , orig = !de && !!el.style && !el.offsetWidth && !el.offsetHeight ?
                // el isn't visible, can't be measured properly, so fix that
                function (t) {
                  var s = {
@@ -3547,8 +3602,12 @@
                  })
                  return s
               }(this) : null
-            , width = el.offsetWidth
-            , height = el.offsetHeight
+            , width = de
+                ? Math.max(el.body.scrollWidth, el.body.offsetWidth, de.scrollWidth, de.offsetWidth, de.clientWidth)
+                : el.offsetWidth
+            , height = de
+                ? Math.max(el.body.scrollHeight, el.body.offsetHeight, de.scrollHeight, de.offsetHeight, de.clientHeight)
+                : el.offsetHeight
   
           orig && this.first().css(orig)
           return {
@@ -3566,12 +3625,15 @@
          */
       , attr: function (k, opt_v) {
           var el = this[0]
+            , n
+  
           if (typeof k != 'string' && !(k instanceof String)) {
-            for (var n in k) {
+            for (n in k) {
               k.hasOwnProperty(n) && this.attr(n, k[n])
             }
             return this
           }
+  
           return typeof opt_v == 'undefined' ?
             !el ? null : specialAttributes.test(k) ?
               stateAttributes.test(k) && typeof el[k] == 'string' ?
@@ -3638,10 +3700,7 @@
          */
       , remove: function () {
           this.deepEach(clearData)
-  
-          return this.each(function (el) {
-            el[parentNode] && el[parentNode].removeChild(el)
-          })
+          return this.detach()
         }
   
   
@@ -3664,7 +3723,7 @@
          */
       , detach: function () {
           return this.each(function (el) {
-            el[parentNode].removeChild(el)
+            el[parentNode] && el[parentNode].removeChild(el)
           })
         }
   
@@ -3687,22 +3746,12 @@
   
     }
   
-    function normalize(node, host, clone) {
-      var i, l, ret
-      if (typeof node == 'string') return bonzo.create(node)
-      if (isNode(node)) node = [ node ]
-      if (clone) {
-        ret = [] // don't change original array
-        for (i = 0, l = node.length; i < l; i++) ret[i] = cloneNode(host, node[i])
-        return ret
-      }
-      return node
-    }
   
     function cloneNode(host, el) {
       var c = el.cloneNode(true)
         , cloneElems
         , elElems
+        , i
   
       // check for existence of an event cloner
       // preferably https://github.com/fat/bean
@@ -3714,25 +3763,10 @@
         cloneElems = host.$(c).find('*')
         elElems = host.$(el).find('*')
   
-        for (var i = 0; i < elElems.length; i++)
+        for (i = 0; i < elElems.length; i++)
           host.$(cloneElems[i]).cloneEvents(elElems[i])
       }
       return c
-    }
-  
-    function scroll(x, y, type) {
-      var el = this[0]
-      if (!el) return this
-      if (x == null && y == null) {
-        return (isBody(el) ? getWindowScroll() : { x: el.scrollLeft, y: el.scrollTop })[type]
-      }
-      if (isBody(el)) {
-        win.scrollTo(x, y)
-      } else {
-        x != null && (el.scrollLeft = x)
-        y != null && (el.scrollTop = y)
-      }
-      return this
     }
   
     function isBody(element) {
@@ -3741,6 +3775,13 @@
   
     function getWindowScroll() {
       return { x: win.pageXOffset || html.scrollLeft, y: win.pageYOffset || html.scrollTop }
+    }
+  
+    function createScriptFromHtml(html) {
+      var scriptEl = document.createElement('script')
+        , matches = html.match(simpleScriptTagRe)
+      scriptEl.src = matches[1]
+      return scriptEl
     }
   
     /**
@@ -3767,7 +3808,8 @@
       // hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
       return typeof node == 'string' && node !== '' ?
         function () {
-          var tag = /^\s*<([^\s>]+)/.exec(node)
+          if (simpleScriptTagRe.test(node)) return [createScriptFromHtml(node)]
+          var tag = node.match(/^\s*<([^\s>]+)/)
             , el = doc.createElement('div')
             , els = []
             , p = tag ? tagMap[tag[1].toLowerCase()] : null
@@ -3783,7 +3825,7 @@
           do {
             // tbody special case for IE<8, creates tbody on any empty table
             // we don't want it if we're just after a <thead>, <caption>, etc.
-            if ((!tag || el.nodeType == 1) && (!tb || el.tagName.toLowerCase() != 'tbody')) {
+            if ((!tag || el.nodeType == 1) && (!tb || (el.tagName && el.tagName != 'TBODY'))) {
               els.push(el)
             }
           } while (el = el.nextSibling)
@@ -3833,7 +3875,7 @@
       }
   
     return bonzo
-  }, this); // the only line we care about using a semi-colon. placed here for concatenation tools
+  }); // the only line we care about using a semi-colon. placed here for concatenation tools
   
 
   provide("bonzo", module.exports);
@@ -3914,6 +3956,10 @@
         return $(b(this).previous())
       }
   
+    , related: function (t) {
+        return $(b(this).related(t))
+      }
+  
     , appendTo: function (t) {
         return b(this.selector).appendTo(t, this)
       }
@@ -3928,6 +3974,10 @@
   
     , insertBefore: function (t) {
         return b(this.selector).insertBefore(t, this)
+      }
+  
+    , clone: function () {
+        return $(b(this).clone(this))
       }
   
     , siblings: function () {
@@ -4132,8 +4182,6 @@
 
   provide("ender-events", module.exports);
 
-  $.ender(module.exports);
-
 }());
 
 (function () {
@@ -4142,15 +4190,15 @@
 
   /*!
     * Reqwest! A general purpose XHR connection manager
-    * (c) Dustin Diaz 2011
+    * (c) Dustin Diaz 2012
     * https://github.com/ded/reqwest
     * license MIT
     */
-  !function (name, definition) {
-    if (typeof module != 'undefined') module.exports = definition()
-    else if (typeof define == 'function' && define.amd) define(name, definition)
-    else this[name] = definition()
-  }('reqwest', function () {
+  (function (name, context, definition) {
+    if (typeof module != 'undefined' && module.exports) module.exports = definition()
+    else if (typeof define == 'function' && define.amd) define(definition)
+    else context[name] = definition()
+  })('reqwest', this, function () {
   
     var win = window
       , doc = document
@@ -4161,34 +4209,38 @@
       , requestedWith = 'X-Requested-With'
       , head = doc[byTag]('head')[0]
       , uniqid = 0
+      , callbackPrefix = 'reqwest_' + (+new Date())
       , lastValue // data stored by the most recent JSONP callback
       , xmlHttpRequest = 'XMLHttpRequest'
-      , isArray = typeof Array.isArray == 'function' ? Array.isArray : function (a) {
-          return a instanceof Array
+      , noop = function () {}
+  
+    var isArray = typeof Array.isArray == 'function' ? Array.isArray : function (a) {
+      return a instanceof Array
+    }
+    var defaultHeaders = {
+        contentType: 'application/x-www-form-urlencoded'
+      , requestedWith: xmlHttpRequest
+      , accept: {
+          '*':  'text/javascript, text/html, application/xml, text/xml, */*'
+        , xml:  'application/xml, text/xml'
+        , html: 'text/html'
+        , text: 'text/plain'
+        , json: 'application/json, text/javascript'
+        , js:   'application/javascript, text/javascript'
         }
-      , defaultHeaders = {
-            contentType: 'application/x-www-form-urlencoded'
-          , accept: {
-                '*':  'text/javascript, text/html, application/xml, text/xml, */*'
-              , xml:  'application/xml, text/xml'
-              , html: 'text/html'
-              , text: 'text/plain'
-              , json: 'application/json, text/javascript'
-              , js:   'application/javascript, text/javascript'
-            }
-          , requestedWith: xmlHttpRequest
-        }
-      , xhr = win[xmlHttpRequest] ?
-          function () {
-            return new XMLHttpRequest()
-          } :
-          function () {
-            return new ActiveXObject('Microsoft.XMLHTTP')
-          }
+      }
+    var xhr = win[xmlHttpRequest] ?
+      function () {
+        return new XMLHttpRequest()
+      } :
+      function () {
+        return new ActiveXObject('Microsoft.XMLHTTP')
+      }
   
     function handleReadyState(o, success, error) {
       return function () {
         if (o && o[readyState] == 4) {
+          o.onreadystatechange = noop;
           if (twoHundo.test(o.status)) {
             success(o)
           } else {
@@ -4209,6 +4261,12 @@
       }
     }
   
+    function setCredentials(http, o) {
+      if (typeof o.withCredentials !== "undefined" && typeof http.withCredentials !== "undefined") {
+        http.withCredentials = !!o.withCredentials
+      }
+    }
+  
     function generalCallback(data) {
       lastValue = data
     }
@@ -4220,11 +4278,13 @@
     function handleJsonp(o, fn, err, url) {
       var reqId = uniqid++
         , cbkey = o.jsonpCallback || 'callback' // the 'callback' key
-        , cbval = o.jsonpCallbackName || ('reqwest_' + reqId) // the 'callback' value
+        , cbval = o.jsonpCallbackName || reqwest.getcallbackPrefix(reqId)
+        // , cbval = o.jsonpCallbackName || ('reqwest_' + reqId) // the 'callback' value
         , cbreg = new RegExp('((^|\\?|&)' + cbkey + ')=([^&]+)')
         , match = url.match(cbreg)
         , script = doc.createElement('script')
         , loaded = 0
+        , isIE10 = navigator.userAgent.indexOf('MSIE 10.0') !== -1
   
       if (match) {
         if (match[3] === '?') {
@@ -4241,12 +4301,14 @@
       script.type = 'text/javascript'
       script.src = url
       script.async = true
-      if (typeof script.onreadystatechange !== 'undefined') {
-          // need this for IE due to out-of-order onreadystatechange(), binding script
-          // execution to an event listener gives us control over when the script
-          // is executed. See http://jaubourg.net/2010/07/loading-script-as-onclick-handler-of.html
-          script.event = 'onclick'
-          script.htmlFor = script.id = '_reqwest_' + reqId
+      if (typeof script.onreadystatechange !== 'undefined' && !isIE10) {
+        // need this for IE due to out-of-order onreadystatechange(), binding script
+        // execution to an event listener gives us control over when the script
+        // is executed. See http://jaubourg.net/2010/07/loading-script-as-onclick-handler-of.html
+        //
+        // if this hack is used in IE10 jsonp callback are never called
+        script.event = 'onclick'
+        script.htmlFor = script.id = '_reqwest_' + reqId
       }
   
       script.onload = script.onreadystatechange = function () {
@@ -4287,6 +4349,7 @@
       http = xhr()
       http.open(method, url, true)
       setHeaders(http, o)
+      setCredentials(http, o)
       http.onreadystatechange = handleReadyState(http, fn, err)
       o.before && o.before(http)
       http.send(data)
@@ -4296,6 +4359,7 @@
     function Reqwest(o, fn) {
       this.o = o
       this.fn = fn
+  
       init.apply(this, arguments)
     }
   
@@ -4305,10 +4369,25 @@
     }
   
     function init(o, fn) {
+  
       this.url = typeof o == 'string' ? o : o.url
       this.timeout = null
-      var type = o.type || setType(this.url)
-        , self = this
+  
+      // whether request has been fulfilled for purpose
+      // of tracking the Promises
+      this._fulfilled = false
+      // success handlers
+      this._fulfillmentHandlers = []
+      // error handlers
+      this._errorHandlers = []
+      // complete (both success and fail) handlers
+      this._completeHandlers = []
+      this._erred = false
+      this._responseArgs = {}
+  
+      var self = this
+        , type = o.type || setType(this.url)
+  
       fn = fn || function () {}
   
       if (o.timeout) {
@@ -4317,10 +4396,30 @@
         }, o.timeout)
       }
   
+      if (o.success) {
+        this._fulfillmentHandlers.push(function () {
+          o.success.apply(o, arguments)
+        })
+      }
+  
+      if (o.error) {
+        this._errorHandlers.push(function () {
+          o.error.apply(o, arguments)
+        })
+      }
+  
+      if (o.complete) {
+        this._completeHandlers.push(function () {
+          o.complete.apply(o, arguments)
+        })
+      }
+  
       function complete(resp) {
         o.timeout && clearTimeout(self.timeout)
         self.timeout = null
-        o.complete && o.complete(resp)
+        while (self._completeHandlers.length > 0) {
+          self._completeHandlers.shift()(resp)
+        }
       }
   
       function success(resp) {
@@ -4340,17 +4439,30 @@
           case 'html':
             resp = r
             break;
+          case 'xml':
+            resp = resp.responseXML;
+            break;
           }
         }
   
+        self._responseArgs.resp = resp
+        self._fulfilled = true
         fn(resp)
-        o.success && o.success(resp)
+        while (self._fulfillmentHandlers.length > 0) {
+          self._fulfillmentHandlers.shift()(resp)
+        }
   
         complete(resp)
       }
   
       function error(resp, msg, t) {
-        o.error && o.error(resp, msg, t)
+        self._responseArgs.resp = resp
+        self._responseArgs.msg = msg
+        self._responseArgs.t = t
+        self._erred = true
+        while (self._errorHandlers.length > 0) {
+          self._errorHandlers.shift()(resp, msg, t)
+        }
         complete(resp)
       }
   
@@ -4364,6 +4476,50 @@
   
     , retry: function () {
         init.call(this, this.o, this.fn)
+      }
+  
+      /**
+       * Small deviation from the Promises A CommonJs specification
+       * http://wiki.commonjs.org/wiki/Promises/A
+       */
+  
+      /**
+       * `then` will execute upon successful requests
+       */
+    , then: function (success, fail) {
+        if (this._fulfilled) {
+          success(this._responseArgs.resp)
+        } else if (this._erred) {
+          fail(this._responseArgs.resp, this._responseArgs.msg, this._responseArgs.t)
+        } else {
+          this._fulfillmentHandlers.push(success)
+          this._errorHandlers.push(fail)
+        }
+        return this
+      }
+  
+      /**
+       * `always` will execute whether the request succeeds or fails
+       */
+    , always: function (fn) {
+        if (this._fulfilled || this._erred) {
+          fn(this._responseArgs.resp)
+        } else {
+          this._completeHandlers.push(fn)
+        }
+        return this
+      }
+  
+      /**
+       * `fail` will execute when the request fails
+       */
+    , fail: function (fn) {
+        if (this._erred) {
+          fn(this._responseArgs.resp, this._responseArgs.msg, this._responseArgs.t)
+        } else {
+          this._errorHandlers.push(fn)
+        }
+        return this
       }
     }
   
@@ -4379,7 +4535,7 @@
     function serial(el, cb) {
       var n = el.name
         , t = el.tagName.toLowerCase()
-        , optCb = function(o) {
+        , optCb = function (o) {
             // IE gives value="" even where there is no value attribute
             // 'specified' ref: http://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-862529273
             if (o && !o.disabled)
@@ -4420,7 +4576,7 @@
     function eachFormElement() {
       var cb = this
         , e, i, j
-        , serializeSubtags = function(e, tags) {
+        , serializeSubtags = function (e, tags) {
           for (var i = 0; i < tags.length; i++) {
             var fa = e[byTag](tags[i])
             for (j = 0; j < fa.length; j++) serial(fa[j], cb)
@@ -4454,7 +4610,7 @@
     // [ { name: 'name', value: 'value' }, ... ] style serialization
     reqwest.serializeArray = function () {
       var arr = []
-      eachFormElement.apply(function(name, value) {
+      eachFormElement.apply(function (name, value) {
         arr.push({name: name, value: value})
       }, arguments)
       return arr
@@ -4496,7 +4652,11 @@
       }
   
       // spaces should be + according to spec
-      return qs.replace(/&$/, '').replace(/%20/g,'+')
+      return qs.replace(/&$/, '').replace(/%20/g, '+')
+    }
+  
+    reqwest.getcallbackPrefix = function (reqId) {
+      return callbackPrefix
     }
   
     // jQuery and Zepto compatibility, differences can be remapped here so you can call
@@ -4512,7 +4672,7 @@
     }
   
     return reqwest
-  })
+  });
   
 
   provide("reqwest", module.exports);
@@ -4583,6 +4743,7 @@
               return '(.*?)';
           }
         });
+        pattern = pattern.replace(/\[([^\]]*)\]/g, '(?:$1)?');
         this.routes.push({
           expr: expr,
           params: params,
@@ -4625,37 +4786,6 @@
   (function($) {
     return $.ender({
       route: new require('route').Router
-    });
-  })(ender);
-  
-
-}());
-
-(function () {
-
-  var module = { exports: {} }, exports = module.exports;
-
-  // Generated by CoffeeScript 1.3.3
-  
-  
-  
-
-  provide("ajaj", module.exports);
-
-  // Generated by CoffeeScript 1.3.3
-  
-  (function($) {
-    return $.ender({
-      ajaj: function(options) {
-        options.method || (options.method = 'GET');
-        options.type = 'json';
-        options.headers || (options.headers = {});
-        options.headers['Content-Type'] = 'application/json';
-        if (options.data) {
-          options.data = JSON.stringify(options.data);
-        }
-        return $.ajax(options);
-      }
     });
   })(ender);
   
@@ -4868,276 +4998,209 @@
 
   var module = { exports: {} }, exports = module.exports;
 
-  // Generated by CoffeeScript 1.3.3
-  (function() {
-    var collect, decamelize, events, extend, soma,
-      __hasProp = {}.hasOwnProperty,
-      __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-      __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  // Generated by CoffeeScript 1.4.0
+  var events, soma, _function_cache,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
   
-    soma = typeof exports !== "undefined" && exports !== null ? exports : (this['soma'] = {});
+  soma = exports;
   
-    events = require('events');
+  events = require('events');
   
-    soma.config = {};
+  soma.bundled = {};
   
-    soma.Router = require('route').Router;
+  soma.config = {};
   
-    soma.router = new soma.Router;
+  soma.Router = require('route').Router;
   
-    soma.routes = function(ob) {
-      return soma.router.add(ob);
-    };
+  soma.router = new soma.Router;
   
-    collect = function(cls, fn, ob) {
-      var arr, item, name, _i, _len;
-      if (Array.isArray(ob)) {
-        arr = ob;
-        ob = {};
-        for (_i = 0, _len = arr.length; _i < _len; _i++) {
-          item = arr[_i];
-          ob[item.name] = item;
-        }
-      }
-      for (name in ob) {
-        item = ob[name];
-        if (typeof item === 'object') {
-          item = (function(_super) {
-            var key, value;
-  
-            __extends(_Class, _super);
-  
-            function _Class() {
-              return _Class.__super__.constructor.apply(this, arguments);
+  soma.routes = function(layout, routes, prefix) {
+    var block, expr;
+    if (typeof layout === 'object') {
+      prefix = routes;
+      routes = layout;
+      layout = null;
+    }
+    for (expr in routes) {
+      block = routes[expr];
+      expr = (prefix || '/') + expr;
+      if (typeof block === 'function') {
+        soma.router.add(expr, block);
+      } else if (typeof block === 'object') {
+        some.routes(layout, block, expr + '/');
+      } else if (typeof block === 'string') {
+        (function(chunk) {
+          return soma.router.add(expr, function(params) {
+            var _this = this;
+            this.params = params;
+            if (layout) {
+              return this.loadChunk(layout, {
+                chunk: chunk
+              }, function(err, html) {
+                if (err) {
+                  throw err;
+                }
+                _this.build(html);
+              });
+            } else {
+              return this.loadChunk(chunk, function(err, html) {
+                if (err) {
+                  throw err;
+                }
+                _this.build(html);
+              });
             }
-  
-            for (key in item) {
-              value = item[key];
-              _Class.prototype[key] = value;
-            }
-  
-            return _Class;
-  
-          })(cls);
-        }
-        item.prototype._src = soma._src;
-        item.prototype.name = name;
-        fn[name] = item;
+          });
+        })(block);
       }
-    };
+    }
+  };
   
-    soma.chunks = function(ob) {
-      return collect(soma.Chunk, soma.chunks, ob);
-    };
+  _function_cache = {};
   
-    soma.views = function(ob) {
-      return collect(soma.View, soma.views, ob);
-    };
+  soma.Context = (function(_super) {
   
-    extend = function(ob1, ob2) {
-      var key, value, _results;
-      _results = [];
-      for (key in ob2) {
-        value = ob2[key];
-        _results.push(ob1[key] = value);
-      }
-      return _results;
-    };
+    __extends(Context, _super);
   
-    decamelize = function(s) {
-      return s && s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-    };
-  
-    soma.EventMonitor = (function(_super) {
-  
-      __extends(EventMonitor, _super);
-  
-      EventMonitor.prototype.events = [];
-  
-      function EventMonitor() {
-        var event, _i, _len, _ref;
-        _ref = this.events;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          event = _ref[_i];
-          if (event in this) {
-            this.on(event, this[event]);
-          }
-        }
-      }
-  
-      return EventMonitor;
-  
-    })(events.EventEmitter);
-  
-    soma.Widget = (function(_super) {
-  
-      __extends(Widget, _super);
-  
-      Widget.prototype.defaults = {};
-  
-      function Widget(options) {
-        this.options = {};
-        extend(this.options, this.defaults);
-        extend(this.options, options);
-        Widget.__super__.constructor.call(this, this.options);
-        this.status = null;
-      }
-  
-      Widget.prototype.emit = function(event) {
-        if (__indexOf.call(this.events, event) >= 0) {
-          this.status = event;
-        }
-        return Widget.__super__.emit.apply(this, arguments);
-      };
-  
-      return Widget;
-  
-    })(soma.EventMonitor);
-  
-    soma.Context = (function() {
-  
-      function Context() {}
-  
-      return Context;
-  
-    })();
-  
-    soma.View = (function(_super) {
-  
-      __extends(View, _super);
-  
-      View.prototype.events = ['create', 'complete', 'destroy'];
-  
-      function View() {
-        var dataName,
-          _this = this;
-        View.__super__.constructor.apply(this, arguments);
-        this.context = this.options.context;
-        this.cookies = this.context.cookies;
-        this.go = function() {
-          return _this.context.go.apply(_this.context, arguments);
-        };
-        dataName = decamelize(this.name);
-        this.el = $(this.options.el);
-        this.el.data(dataName, this);
-        this.el.one('remove', function(event) {
-          if (event.target === _this.el[0]) {
-            _this.el.data(dataName, null);
-            return _this.emit('destroy');
-          }
-        });
-        this.emit('create');
-      }
-  
-      View.prototype.$ = function(selector) {
-        return $(selector, this.el);
-      };
-  
-      return View;
-  
-    })(soma.Widget);
-  
-    soma.Chunk = (function(_super) {
-  
-      __extends(Chunk, _super);
-  
-      Chunk.prototype.events = ['prepare', 'loading', 'ready', 'error', 'build', 'complete', 'render', 'halt'];
-  
-      function Chunk() {
-        Chunk.__super__.constructor.apply(this, arguments);
-        this.errors = [];
-        this.waiting = 0;
-      }
-  
-      Chunk.prototype.emit = function(event) {
-        var _i, _len, _ref, _results;
-        if (this.status !== 'halt') {
-          Chunk.__super__.emit.apply(this, arguments);
-        }
-        if (event === 'halt') {
-          Chunk.__super__.emit.apply(this, arguments);
-          _ref = this.events;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            event = _ref[_i];
-            _results.push(this.removeAllListeners(event));
-          }
-          return _results;
-        }
-      };
-  
-      Chunk.prototype.load = function(context) {
-        var _this = this;
-        this.context = context;
-        this.cookies = this.context.cookies;
-        this.go = function() {
-          return _this.context.go.apply(_this.context, arguments);
-        };
-        if (!this.status) {
-          setTimeout(this.wait(), 1);
-          return this.emit('prepare', this.options);
-        }
-      };
-  
-      Chunk.prototype.toString = function() {
-        return this.html;
-      };
-  
-      Chunk.prototype.error = function() {
-        var args;
-        args = Array.prototype.slice.call(arguments);
-        return this.errors.push(args);
-      };
-  
-      Chunk.prototype.ready = function() {
-        if (!this.html) {
-          this.emit('build', this.errors);
-          return this.emit('complete');
-        }
-      };
-  
-      Chunk.prototype.wait = function(fn) {
-        var _this = this;
-        if (!this.waiting++) {
-          this.emit('loading');
-        }
-        return function() {
-          if (fn) {
-            fn.apply(_this, arguments);
-          }
-          if (!--_this.waiting && _this.status !== 'abort') {
-            return _this.emit('ready');
-          }
-        };
-      };
-  
-      Chunk.prototype.loadChunk = function(chunk, options) {
-        if (typeof chunk === 'function') {
-          chunk = new chunk(options);
-        } else if (typeof chunk === 'string') {
-          chunk = new soma.chunks[chunk](options);
-        }
-        if (!chunk.html) {
-          chunk.on('complete', this.wait());
-          chunk.load(this.context);
-        }
-        return chunk;
-      };
-  
-      return Chunk;
-  
-    })(soma.Widget);
-  
-    if (typeof process !== "undefined" && process !== null ? process.pid : void 0) {
-      require('./node');
+    function Context() {
+      this.modules = {};
+      this.globals = {};
+      this.views = [];
+      this.url = '/';
     }
   
-  }).call(this);
+    Context.prototype.resolve = function(url) {
+      var i, parts;
+      if (url.charAt(0) === '/' || /^https?:/.test(url)) {
+        return url;
+      }
+      if (~(i = this.url.lastIndexOf('/'))) {
+        url = this.url.substr(0, i + 1) + url;
+      }
+      parts = url.substr(1).split('/');
+      while (~(i = parts.indexOf('.'))) {
+        parts.splice(i, 1);
+      }
+      while (~(i = parts.indexOf('..'))) {
+        if (i) {
+          parts.splice(i - 1, 2);
+        } else {
+          parts.shift();
+        }
+      }
+      return '/' + parts.join('/');
+    };
+  
+    Context.prototype.loadCode = function(url, params, callback) {
+      var args, key;
+      if (params == null) {
+        params = [];
+      }
+      url = this.resolve(url);
+      if (typeof params === 'function') {
+        callback = params;
+        args = [];
+      }
+      key = [url].concat(params).join(':');
+      if (key in _function_cache) {
+        callback(null, _function_cache[key]);
+      } else {
+        this.loadFile(url, function(err, js) {
+          if (err) {
+            return callback.apply(null, arguments);
+          }
+          js += "\n//@ sourceURL=" + url;
+          callback(null, (_function_cache[key] = Function.apply(null, params.concat([js]))));
+        });
+      }
+    };
+  
+    Context.prototype.loadChunk = function(url, data, callback) {
+      var subcontext;
+      url = this.resolve(url);
+      if (typeof data === 'function') {
+        callback = data;
+        data = {};
+      }
+      subcontext = this.createSubcontext({
+        url: url,
+        data: data
+      });
+      this.loadCode(url, ['require', 'callback'], function(err, fn) {
+        if (err) {
+          return callback.apply(null, arguments);
+        }
+        fn.call(subcontext, require, callback);
+      });
+    };
+  
+    Context.prototype.loadView = function(url, callback) {
+      this.views.push(url);
+      return this.loadScript({
+        src: url,
+        type: 'text/plain'
+      }, callback);
+    };
+  
+    Context.prototype.loadModule = function(url, force, callback) {
+      var _this = this;
+      url = this.resolve(url);
+      if (typeof force === 'function') {
+        callback = force;
+        force = void 0;
+      }
+      if (url in this.modules) {
+        callback(null, this.modules[url].exports);
+      }
+      return this.loadCode(url, ['require', 'module', 'exports'], function(err, fn) {
+        var module;
+        if (err) {
+          return callback.apply(null, arguments);
+        }
+        _this.modules[url] = module = {
+          exports: {}
+        };
+        fn.call(_this.globals, require, module, module.exports);
+        return callback(null, module.exports);
+      });
+    };
+  
+    Context.prototype.createSubcontext = function(attributes) {
+      var parent;
+      parent = this;
+      return new ((function() {
+  
+        _Class.prototype = parent;
+  
+        _Class.prototype.constructor = _Class;
+  
+        function _Class() {
+          var name, value;
+          for (name in attributes) {
+            value = attributes[name];
+            this[name] = value;
+          }
+          return;
+        }
+  
+        return _Class;
+  
+      })());
+    };
+  
+    return Context;
+  
+  })(events.EventEmitter);
+  
+  if (typeof process !== "undefined" && process !== null ? process.pid : void 0) {
+    require('./node');
+  }
   
 
   provide("soma", module.exports);
 
-  // Generated by CoffeeScript 1.3.3
+  // Generated by CoffeeScript 1.4.0
   var $, soma,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -5149,36 +5212,24 @@
   soma.config.engine = 'browser';
   
   $.ender({
-    enhance: function(context) {
-      return $(document).enhance(context);
+    enhance: function() {
+      return $(document).enhance();
     }
   });
   
   $.ender({
-    enhance: function(context) {
-      var form, name, value, view, views, _i, _j, _len, _len1, _ref, _ref1;
-      views = [];
-      _ref = soma.views;
-      for (name in _ref) {
-        if (!__hasProp.call(_ref, name)) continue;
-        value = _ref[name];
-        $(value.prototype.selector, this).each(function() {
-          return views.push(new soma.views[name]({
-            el: this,
-            context: context
-          }));
+    enhance: function() {
+      if (history.pushState) {
+        $('a[data-precache != "true"]:local-link(0)', this).each(function() {
+          return $(this).bind('click', function(event) {
+            history.pushState(true, '', this.pathname);
+            soma.load(this.pathname);
+            event.stop();
+          });
         });
-      }
-      for (_i = 0, _len = views.length; _i < _len; _i++) {
-        view = views[_i];
-        view.emit('complete');
-      }
-      _ref1 = $('form');
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        form = _ref1[_j];
-        $(form).append("<input type=\"hidden\" name=\"_csrf\" value=\"" + ($.jar.get('_csrf', {
-          raw: true
-        })) + "\" />");
+        return $('a[data-precache = "true"]:local-link(0)', this).each(function() {
+          $(this).bind('click', soma.precache(this.pathname));
+        });
       }
     },
     outerHTML: function(html) {
@@ -5194,30 +5245,19 @@
   
   $('document').ready(function() {
     var context;
-    context = new soma.BrowserContext(document.location.pathname);
-    $.enhance(context);
+    context = new soma.Context(document.location.pathname);
+    context.views = soma._initialViews;
+    context.emit('render');
     if (history.pushState) {
       $('document').one('load', function() {
         return history.replaceState(true, '', document.location);
       });
-      window.onpopstate = function(event) {
+      return window.onpopstate = function(event) {
         if (!event.state) {
           return;
         }
         return soma.load(document.location.pathname);
       };
-      $('a[data-precache != "true"]:local-link(0)').each(function() {
-        var path;
-        path = this.pathname;
-        return $(this).bind('click', function(event) {
-          history.pushState(true, '', path);
-          soma.load(path);
-          event.stop();
-        });
-      });
-      return $('a[data-precache = "true"]:local-link(0)').each(function() {
-        $(this).bind('click', soma.precache(this.pathname));
-      });
     }
   });
   
@@ -5226,7 +5266,7 @@
     if (history.pushState) {
       context = soma.load(path, true);
       return function(event) {
-        history.pushState({}, '', context.path);
+        history.pushState(true, '', context.path);
         context.render();
         if (event) {
           event.stop();
@@ -5246,26 +5286,186 @@
   
   soma.load = function(path, lazy) {
     var context;
-    context = new soma.BrowserContext(path, lazy);
+    context = new soma.Context(path, lazy);
     context.begin();
     return context;
   };
   
-  soma.Chunk = (function(_super) {
+  soma.Context = (function(_super) {
   
-    __extends(Chunk, _super);
+    __extends(Context, _super);
   
-    function Chunk() {
-      return Chunk.__super__.constructor.apply(this, arguments);
+    function Context(path, lazy) {
+      var m,
+        _this = this;
+      this.path = path;
+      this.lazy = lazy;
+      Context.__super__.constructor.apply(this, arguments);
+      this.cookies = $.jar;
+      this.child = null;
+      this.built = false;
+      this.rendered = false;
+      this.stopped = false;
+      if ((m = /(.*?)(#.*)/.exec(this.path))) {
+        this.path = m[1];
+        this.hash = m[2];
+      }
+      if ((m = /(.*?)(\?.*)?/.exec(this.path))) {
+        this.pathname = m[1];
+        this.search = m[2];
+      }
+      this.query = {};
+      while ((m = /([^=]*)=([^&]*)(&|$)/g.exec(this.search))) {
+        this.query[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+      }
+      this.on('render', function() {
+        var context, url, _i, _len, _ref, _results;
+        $.enhance();
+        context = _this;
+        _ref = _this.views;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          url = _ref[_i];
+          _results.push(_this.loadCode(url, ['require'], function(err, fn) {
+            if (err) {
+              throw err;
+            }
+            fn.call(context, require);
+          }));
+        }
+        return _results;
+      });
     }
   
-    Chunk.prototype.complete = function() {
-      this.el || (this.el = $(this.html));
-      return this.el.data('view', this);
+    Context.prototype.begin = function() {
+      this.results = soma.router.run(this.pathname, this);
+      if (!this.lazy) {
+        this.render();
+      }
     };
   
-    Chunk.prototype.loadElement = function(tag, attributes, text, callback) {
-      var done, el, url, urlAttr,
+    Context.prototype.send = function(chunk) {
+      if (!(chunk instanceof soma.Chunk)) {
+        throw new Error('Must send chunks on the client');
+      } else if (this.chunk) {
+        throw new Error('Cannot send multiple chunks');
+      }
+      this.chunk.load(this);
+      if (!this.lazy) {
+        this.render();
+      }
+    };
+  
+    Context.prototype.build = function(html) {
+      this.html = html;
+      this.built = true;
+      this.emit('build', this.html);
+    };
+  
+    Context.prototype.render = function() {
+      var done,
+        _this = this;
+      if (this.child) {
+        return this.child.render();
+      }
+      this.lazy = false;
+      if (!this.results.length) {
+        document.location = this.path;
+        return;
+      }
+      done = function() {
+        if (!_this.stopped) {
+          $('body').unbind().html(_this.html);
+          _this.rendered = true;
+          return _this.emit('render');
+        }
+      };
+      if (this.built) {
+        done();
+      } else {
+        this.on('build', done);
+      }
+    };
+  
+    Context.prototype.go = function(path, replace) {
+      if (history.pushState) {
+        if (!this.lazy) {
+          if (replace) {
+            history.replaceState(true, '', path);
+          } else {
+            history.pushState(true, '', path);
+          }
+        }
+        this.stopped = true;
+        this.child = new soma.Context(path, this.lazy);
+        this.child.begin();
+      } else {
+        document.location = path;
+      }
+    };
+  
+    Context.prototype.setTitle = function(title) {
+      var _this = this;
+      if (!this.rendered) {
+        this.on('render', function() {
+          return _this.setTitle(title);
+        });
+      } else {
+        $('title').text(title);
+      }
+    };
+  
+    Context.prototype.setIcon = function(attributes) {
+      var el,
+        _this = this;
+      if (!this.rendered) {
+        this.on('render', function() {
+          return _this.setIcon(attributes);
+        });
+      } else {
+        if (typeof attributes === 'string') {
+          attributes = {
+            href: attributes
+          };
+        }
+        attributes.rel || (attributes.rel = 'icon');
+        attributes.type || (attributes.type = 'image/png');
+        el = $("link[rel=\"" + attributes.rel + "\"][href=\"" + attributes.href + "\"]");
+        if (!el.length) {
+          el = $(document.createElement('link'));
+          $('head').append(el);
+        }
+        el.attr(attributes);
+      }
+    };
+  
+    Context.prototype.setMeta = function(nameOrAttributes, value) {
+      var attributes, el,
+        _this = this;
+      if (!this.rendered) {
+        this.on('render', function() {
+          return _this.setMeta(attributes, value);
+        });
+      } else {
+        if (value) {
+          attributes = {
+            name: nameOrAttributes,
+            value: value
+          };
+        } else {
+          attributes = nameOrAttributes;
+        }
+        el = $("meta[name=\"" + attributes.name + "\"]");
+        if (!el.length) {
+          el = $(document.createElement('meta'));
+          $('head').append(el);
+        }
+        el.attr(attributes);
+      }
+    };
+  
+    Context.prototype.loadElement = function(tag, attributes, text, callback) {
+      var el, url, urlAttr,
         _this = this;
       urlAttr = (tag === 'img' || tag === 'script' ? 'src' : 'href');
       url = attributes[urlAttr];
@@ -5294,7 +5494,7 @@
                 el.text(text);
                 return el.trigger('load');
               },
-              error: function(xhr, status, e, data) {
+              error: function(xhr) {
                 return el.trigger('error');
               }
             });
@@ -5310,233 +5510,136 @@
         el.attr(attributes);
       }
       if (el.attr('data-loading')) {
-        done = this.wait(callback);
         el.bind('load', function() {
-          return done(el);
+          return callback(null, el);
         });
         el.bind('error', function() {
-          _this.emit('error', 'loadElement', tag, attributes, text);
-          return done(el);
+          return callback(new Error('loadElement failed'), tag, attributes, text);
         });
       } else if (callback) {
-        callback(el);
+        callback(null, el);
       }
       return el;
     };
   
-    Chunk.prototype.setTitle = function(title) {
-      return $('title').text(title);
+    Context.prototype.loadFile = function(url, callback) {
+      var attributes, hash;
+      url = this.resolve(url);
+      if (url in soma.bundled) {
+        hash = soma.bundled[url];
+        attributes = {
+          src: "/bundles/" + hash + ".js",
+          type: 'text/javascript'
+        };
+        this.loadElement('script', attributes, null, function(err) {
+          if (err) {
+            return callback.apply(null, arguments);
+          }
+          return callback(null, soma.bundles[sha][url]);
+        });
+      } else {
+        attributes = {
+          src: url,
+          type: 'text/plain'
+        };
+        this.loadElement('script', attributes, null, function(err, el) {
+          if (err) {
+            return callback.apply(null, arguments);
+          }
+          return callback(null, el.text());
+        });
+      }
     };
   
-    Chunk.prototype.setIcon = function(attributes) {
-      var el;
+    Context.prototype.loadScript = function(attributes, text, callback) {
+      if (typeof text === 'function') {
+        callback = text;
+        text = null;
+      }
+      if (typeof attributes === 'string') {
+        attributes = {
+          src: attributes
+        };
+      }
+      attributes.src && (attributes.src = this.resolve(attributes.src));
+      attributes.type || (attributes.type = 'text/javascript');
+      this.loadElement('script', attributes, text, callback);
+    };
+  
+    Context.prototype.loadStylesheet = function(attributes, text, callback) {
+      var tag;
+      if (typeof text === 'function') {
+        callback = text;
+        text = null;
+      }
       if (typeof attributes === 'string') {
         attributes = {
           href: attributes
         };
       }
-      attributes.rel || (attributes.rel = 'icon');
-      attributes.type || (attributes.type = 'image/png');
-      el = $("link[rel=\"" + attributes.rel + "\"][href=\"" + attributes.href + "\"]");
-      if (!el.length) {
-        el = $(document.createElement('link'));
-        $('head').append(el);
+      if (attributes.href) {
+        tag = 'link';
+        attributes.href = this.resolve(attributes.href);
+        attributes.rel || (attributes.rel = 'stylesheet');
+        attributes.type || (attributes.type = 'text/css');
+        attributes.charset || (attributes.charset = 'utf8');
+      } else {
+        tag = 'style';
       }
-      el.attr(attributes);
-      return el;
+      this.loadElement(tag, attributes, text, callback);
     };
   
-    Chunk.prototype.setMeta = function(attributes, value) {
-      var el, name;
-      if (typeof attributes === 'string') {
-        name = attributes;
-        attributes = {
-          name: name,
-          value: value
-        };
-      }
-      el = $("meta[name=\"" + attributes.name + "\"]");
-      if (!el.length) {
-        el = $(document.createElement('meta'));
-        $('head').append(el);
-      }
-      el.attr(attributes);
-      return el;
-    };
-  
-    Chunk.prototype.loadScript = function(attributes, callback) {
-      if (typeof attributes === 'string') {
-        attributes = {
-          src: attributes
-        };
-      }
-      attributes.type = 'text/javascript';
-      return this.loadElement('script', attributes, null, callback);
-    };
-  
-    Chunk.prototype.loadStylesheet = function(attributes) {
-      if (typeof attributes === 'string') {
-        attributes = {
-          href: attributes
-        };
-      }
-      attributes.type = 'text/css';
-      attributes.rel = 'stylesheet';
-      return this.loadElement('link', attributes);
-    };
-  
-    Chunk.prototype.loadTemplate = function(attributes) {
+    Context.prototype.loadImage = function(attributes, callback) {
       var el;
       if (typeof attributes === 'string') {
         attributes = {
           src: attributes
         };
       }
-      attributes.type = 'text/html';
-      el = this.loadElement('script', attributes);
-      el.toString = function() {
-        return el.html();
-      };
-      return el;
-    };
-  
-    Chunk.prototype.loadImage = function(attributes) {
-      var el;
-      if (typeof attributes === 'string') {
-        attributes = {
-          src: attributes
-        };
-      }
-      el = this.loadElement('img', attributes);
+      attributes.src = this.resolve(attributes.src);
+      el = this.loadElement('img', attributes, null, callback);
       el.toString = function() {
         return el.outerHTML();
       };
-      return el;
     };
   
-    Chunk.prototype.loadData = function(options) {
-      var done, result, _error, _success,
+    Context.prototype.loadData = function(options, callback) {
+      var _error, _success,
         _this = this;
-      result = {};
-      done = this.wait();
+      if (typeof options === 'string') {
+        options = {
+          url: options
+        };
+      }
       _success = options.success;
       _error = options.error;
+      options.url = this.resolve(options.url);
+      options.method || (options.method = 'GET');
+      options.type = 'json';
       options.headers || (options.headers = {});
       options.headers['X-CSRF-Token'] = this.cookies.get('_csrf', {
         raw: true
       });
+      options.headers['Content-Type'] = 'application/json';
+      if (options.data && typeof options.data !== 'string') {
+        options.data = JSON.stringify(options.data);
+      }
       options.success = function(data) {
-        var key, _i, _len;
-        for (_i = 0, _len = data.length; _i < _len; _i++) {
-          key = data[_i];
-          result[key] = data[key];
-        }
         if (_success) {
           _success(data);
         }
-        return done();
+        return callback(null, data);
       };
       options.error = function(xhr) {
         if (_error) {
           _error(xhr.status, xhr.response, options);
-        } else {
-          _this.emit('error', 'loadData', xhr.status, xhr.response, options);
         }
-        return done();
+        return callback(xhr.status, xhr.response, options, xhr);
       };
-      $.ajaj(options);
-      return result;
+      $.ajax(options);
     };
   
-    return Chunk;
-  
-  })(soma.Chunk);
-  
-  soma.BrowserContext = (function(_super) {
-  
-    __extends(BrowserContext, _super);
-  
-    function BrowserContext(path, lazy) {
-      this.path = path;
-      this.lazy = lazy;
-      this.cookies = $.jar;
-    }
-  
-    BrowserContext.prototype.begin = function() {
-      var result, _i, _len, _ref;
-      this.results = soma.router.run(this.path, this);
-      if (this.results && this.results.length) {
-        _ref = this.results;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          result = _ref[_i];
-          if (result instanceof soma.Chunk) {
-            this.send(result);
-          }
-        }
-      } else {
-        if (!this.lazy) {
-          this.render();
-        }
-      }
-    };
-  
-    BrowserContext.prototype.send = function(chunk) {
-      if (!(chunk instanceof soma.Chunk)) {
-        throw new Error('Must send chunks on the client');
-      } else if (this.chunk) {
-        throw new Error('Cannot send multiple chunks');
-      }
-      this.chunk = chunk;
-      while (this.chunk.meta) {
-        this.chunk = this.chunk.meta();
-      }
-      this.chunk.load(this);
-      if (!this.lazy) {
-        this.render();
-      }
-    };
-  
-    BrowserContext.prototype.render = function() {
-      var done,
-        _this = this;
-      this.lazy = false;
-      if (!this.chunk) {
-        document.location = this.path;
-        return;
-      }
-      done = function() {
-        _this.chunk.emit('render');
-        $('body').html(_this.chunk.html);
-        return $.enhance(_this);
-      };
-      if (this.chunk.status === 'complete') {
-        done();
-      } else {
-        this.chunk.on('complete', done);
-      }
-    };
-  
-    BrowserContext.prototype.go = function(path, replace) {
-      if (history.pushState) {
-        if (!this.lazy) {
-          if (replace) {
-            history.replaceState(true, '', path);
-          } else {
-            history.pushState(true, '', path);
-          }
-        }
-        if (this.chunk) {
-          this.chunk.emit('halt');
-          this.chunk = null;
-        }
-        this.path = path;
-        this.begin();
-      } else {
-        document.location = path;
-      }
-    };
-  
-    return BrowserContext;
+    return Context;
   
   })(soma.Context);
   
