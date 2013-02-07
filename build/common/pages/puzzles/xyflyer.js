@@ -233,7 +233,7 @@ soma.views({
       if (this.isIos()) {
         return equationArea.find('.button').attr('href', path);
       } else {
-        return equationArea.find('.button').bind('click', function() {
+        return equationArea.find('.button').bind('mousedown.go touchstart.go', function() {
           return _this.go(path);
         });
       }

@@ -182,7 +182,7 @@ soma.views
             if @isIos()
                 equationArea.find('.button').attr('href', path) 
             else
-                equationArea.find('.button').bind 'click', => @go(path)
+                equationArea.find('.button').bind 'mousedown.go touchstart.go', => @go(path)
                 
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
             

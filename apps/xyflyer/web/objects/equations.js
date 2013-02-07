@@ -17,7 +17,7 @@ equations.Equations = (function() {
     this.possibleFragments = this.$('.possible_fragments');
     this.equations = [];
     this.equationComponents = [];
-    this.$('.launch').bind('click', function() {
+    this.$('.launch').bind('mousedown.launch touchstart.launch', function() {
       return submit();
     });
     this.initHints();
