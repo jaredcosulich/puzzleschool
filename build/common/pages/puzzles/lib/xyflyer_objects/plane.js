@@ -13,7 +13,7 @@ plane.Plane = (function(_super) {
 
   __extends(Plane, _super);
 
-  Plane.prototype.increment = 100;
+  Plane.prototype.increment = 5;
 
   Plane.prototype.incrementTime = 6;
 
@@ -67,6 +67,9 @@ plane.Plane = (function(_super) {
   Plane.prototype.animate = function(toX, toY, time, next) {
     var startX, startY,
       _this = this;
+    if (toX === this.currentXPos && toY === this.currentYPos) {
+      return;
+    }
     if (!time) {
       this.move(toX, toY, next);
       return;

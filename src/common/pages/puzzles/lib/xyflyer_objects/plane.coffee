@@ -3,7 +3,7 @@ xyflyerObject = require('./object')
 Animation = require('./animation').Animation
 
 class plane.Plane extends xyflyerObject.Object
-    increment: 100
+    increment: 5
     incrementTime: 6
     
     constructor: ({@board, @track, @objects}) ->
@@ -29,7 +29,6 @@ class plane.Plane extends xyflyerObject.Object
             ), 50)
             return 
 
-        console.log(@currentYPos - y, y)
         @canvas.clearRect(@currentXPos - @width,@currentYPos - @height,@width*4,@height*4)
         @canvas.drawImage(
             @image[0], 
@@ -44,6 +43,7 @@ class plane.Plane extends xyflyerObject.Object
         next() if next
     
     animate: (toX, toY, time, next) ->
+        return if toX == @currentXPos and toY == @currentYPos
         if not time
             @move(toX, toY, next)
             return
@@ -80,7 +80,7 @@ class plane.Plane extends xyflyerObject.Object
             @animation.start()
             return
             
-        if @xPos % @increment == 0   
+        if @xPos % @increment == 0
             dX = @increment
             dY = @yPos - (@path[@xPos - @increment]?.y or (@board.yAxis - @currentYPos))
             time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @incrementTime
