@@ -45,16 +45,17 @@ class animation.Animation
     tick: (time) ->
         return if @stopped
         if @lastTime?
-            @elapsed += (time - @lastTime)
+            deltaTime = (time - @lastTime)
+            @elapsed += deltaTime
             
             if @elapsed <= @time
                 portion = @elapsed/@time
-                @method(portion) 
+                @method(deltaTime, portion, @elapsed) 
             else if @animations.length    
                 @elapsed -= @time
                 @nextAnimation()
             else
-                @method(1)
+                @method(time, 1)
                 return
 
         @lastTime = time    

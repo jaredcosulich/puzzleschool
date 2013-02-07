@@ -46,7 +46,6 @@ plane.Plane = (function(_super) {
       }), 50);
       return;
     }
-    console.log(this.currentYPos - y, y);
     this.canvas.clearRect(this.currentXPos - this.width, this.currentYPos - this.height, this.width * 4, this.height * 4);
     this.canvas.drawImage(this.image[0], x - (this.width / 2), y - (this.height / 2), this.width, this.height);
     this.currentXPos = x;
@@ -78,28 +77,28 @@ plane.Plane = (function(_super) {
     startY = this.endingY || this.currentYPos;
     this.endingX = toX;
     this.endingY = toY;
-    return this.animation.queueAnimation(time, function(portion) {
+    return this.animation.start(time, function(deltaTime, portion) {
       var portionX, portionY;
       portionX = (toX - startX) * portion;
       portionY = (toY - startY) * portion;
-      return _this.move(startX + portionX, startY + portionY);
+      return _this.move(startX + portionX, startY + portionY, (portion === 1 ? next : null));
     });
   };
 
   Plane.prototype.fall = function() {
     var x, y,
       _this = this;
-    return;
     this.falling = true;
     x = this.xPos + this.board.xAxis + 20;
     y = 1000;
-    return this.animate(x, y, 4000, function() {
+    return this.animate(x, y, 3000, function() {
       return _this.reset();
     });
   };
 
   Plane.prototype.launch = function(force) {
-    var dX, dY, formula, time, _ref, _ref1, _ref2;
+    var distance, duration, startX, unit, values,
+      _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
@@ -107,28 +106,33 @@ plane.Plane = (function(_super) {
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath(this.increment);
     }
-    this.xPos += 1;
-    this.yPos = (_ref = this.path[this.xPos]) != null ? _ref.y : void 0;
-    formula = (_ref1 = this.path[this.xPos]) != null ? _ref1.formula : void 0;
-    if (this.yPos === void 0 || this.xPos > ((this.board.grid.xMax + this.width) * this.board.xUnit)) {
-      this.fall();
-      this.animation.start();
-      return;
-    }
-    if (this.xPos % this.increment === 0) {
-      dX = this.increment;
-      dY = this.yPos - (((_ref2 = this.path[this.xPos - this.increment]) != null ? _ref2.y : void 0) || (this.board.yAxis - this.currentYPos));
-      time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * this.incrementTime;
-      this.animate(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos, time);
-    }
-    return this.launch();
+    duration = 2000;
+    distance = Object.keys(this.path).length;
+    unit = distance / duration;
+    values = [];
+    startX = this.xPos;
+    return this.animation.start(duration, function(deltaTime, progress, totalTime) {
+      var _ref;
+      _this.xPos = startX + Math.round(totalTime * unit);
+      _this.yPos = (_ref = _this.path[_this.xPos]) != null ? _ref.y : void 0;
+      values.push(_this.xPos + _this.board.xAxis - _this.currentXPos);
+      if (isNaN(_this.yPos)) {
+        console.log(values);
+        _this.animation.stop();
+        if (!(_this.board.paperY(_this.currentYPos) > _this.board.grid.yMax)) {
+          return _this.fall();
+        }
+      } else {
+        return _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
+      }
+    });
   };
 
   Plane.prototype.reset = function() {
     this.falling = false;
     this.cancelFlight = true;
     this.path = null;
-    this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit) - 1;
+    this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit);
     return this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
   };
 

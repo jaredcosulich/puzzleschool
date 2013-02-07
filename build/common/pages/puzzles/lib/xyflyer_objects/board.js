@@ -422,7 +422,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function(increment) {
-    var id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1;
+    var id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1, _ref2, _ref3;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {};
     path[this.islandCoordinates.x * this.xUnit] = {
@@ -448,10 +448,12 @@ board.Board = (function(_super) {
               break;
             }
           }
-          path[xPos] = {
-            formula: lastFormula.id,
-            y: yPos
-          };
+          if ((this.grid.yMin * 1.1 <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax * 1.1)) {
+            path[xPos] = {
+              formula: lastFormula.id,
+              y: yPos
+            };
+          }
           continue;
         } else {
           intersection = xPos - 1;
@@ -485,10 +487,12 @@ board.Board = (function(_super) {
           continue;
         }
         validPathFound = true;
-        path[xPos] = {
-          formula: id,
-          y: y
-        };
+        if ((this.grid.yMin * 1.1 <= (_ref3 = y / this.yUnit) && _ref3 <= this.grid.yMax * 1.1)) {
+          path[xPos] = {
+            formula: id,
+            y: y
+          };
+        }
         lastFormula = this.formulas[id];
         break;
       }

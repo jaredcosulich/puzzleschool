@@ -304,9 +304,10 @@ class board.Board extends xyflyerObject.Object
                             lastFormula = @formulas[id]
                             break
                     
-                    path[xPos] = 
-                        formula: lastFormula.id
-                        y: yPos
+                    if @grid.yMin * 1.1 <= (yPos / @yUnit) <= @grid.yMax * 1.1
+                        path[xPos] = 
+                            formula: lastFormula.id
+                            y: yPos
                     continue
                 else
                     intersection = xPos - 1
@@ -330,9 +331,11 @@ class board.Board extends xyflyerObject.Object
                 y = @formulas[id].formula(xPos / @xUnit) * @yUnit
                 continue if isNaN(y)
                 validPathFound = true
-                path[xPos] = 
-                    formula: id
-                    y: y
+                
+                if @grid.yMin * 1.1 <= (y / @yUnit) <= @grid.yMax * 1.1
+                    path[xPos] = 
+                        formula: id
+                        y: y
 
                 lastFormula = @formulas[id]
                 break

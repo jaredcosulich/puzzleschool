@@ -52,47 +52,39 @@ class plane.Plane extends xyflyerObject.Object
         startY = @endingY or @currentYPos
         @endingX = toX
         @endingY = toY
-        @animation.queueAnimation time, (portion) =>
+        @animation.start time, (deltaTime, portion) =>
             portionX = (toX - startX) * portion
             portionY = (toY - startY) * portion
-            @move(startX + portionX, startY + portionY)
-        
+            @move(startX + portionX, startY + portionY, (if portion == 1 then next else null))
     
     fall: ->
-        return
         @falling = true
         x = @xPos + @board.xAxis + 20
         y = 1000
-        @animate(x, y, 4000, => @reset()) 
+        @animate(x, y, 3000, => @reset()) 
     
     launch: (force) ->
         return if @falling or @cancelFlight and not force
         @cancelFlight = false
         @path = @board.calculatePath(@increment) if not @path or not Object.keys(@path).length
-
-        @xPos += 1
-        @yPos = @path[@xPos]?.y
-        
-        formula = @path[@xPos]?.formula
-        if @yPos == undefined or @xPos > ((@board.grid.xMax + @width) * @board.xUnit)
-            # Plane Crashed Message
-            @fall()
-            @animation.start()
-            return
-            
-        if @xPos % @increment == 0
-            dX = @increment
-            dY = @yPos - (@path[@xPos - @increment]?.y or (@board.yAxis - @currentYPos))
-            time = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) * @incrementTime
-            @animate(@xPos + @board.xAxis, @board.yAxis - @yPos, time)
-            
-        @launch()
-            
+        duration = 2000
+        distance = Object.keys(@path).length
+        unit = distance / duration
+        startX = @xPos
+        @animation.start duration, (deltaTime, progress, totalTime) =>
+            @xPos = startX + Math.round(totalTime * unit)
+            @yPos = @path[@xPos]?.y 
+            if isNaN(@yPos)   
+                @animation.stop()
+                @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
+            else
+                @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
+                        
     reset: ->
         @falling = false
         @cancelFlight = true
         @path = null
-        @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit) - 1
+        @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)
         @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
 
         

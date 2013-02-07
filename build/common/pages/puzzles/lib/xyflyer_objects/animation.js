@@ -56,21 +56,22 @@ animation.Animation = (function() {
   };
 
   Animation.prototype.tick = function(time) {
-    var portion,
+    var deltaTime, portion,
       _this = this;
     if (this.stopped) {
       return;
     }
     if (this.lastTime != null) {
-      this.elapsed += time - this.lastTime;
+      deltaTime = time - this.lastTime;
+      this.elapsed += deltaTime;
       if (this.elapsed <= this.time) {
         portion = this.elapsed / this.time;
-        this.method(portion);
+        this.method(deltaTime, portion, this.elapsed);
       } else if (this.animations.length) {
         this.elapsed -= this.time;
         this.nextAnimation();
       } else {
-        this.method(1);
+        this.method(time, 1);
         return;
       }
     }
