@@ -457,7 +457,7 @@ board.Board = (function(_super) {
               break;
             }
           }
-          if ((this.grid.yMin <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax)) {
+          if ((this.grid.yMin - 50 <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax + 50)) {
             path[xPos] = {
               formula: lastFormula.id,
               y: yPos

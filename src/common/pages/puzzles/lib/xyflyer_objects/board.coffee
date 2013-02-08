@@ -311,7 +311,7 @@ class board.Board extends xyflyerObject.Object
                             lastFormula = @formulas[id]
                             break
                     
-                    if @grid.yMin <= (yPos / @yUnit) <= @grid.yMax
+                    if @grid.yMin - 50 <= (yPos / @yUnit) <= @grid.yMax + 50
                         path[xPos] = 
                             formula: lastFormula.id
                             y: yPos
