@@ -365,7 +365,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, infiniteLine, lastSlope, lastYPos, plotArea, slope, xPos, yPos, _i, _ref, _ref1, _ref2;
+    var brokenLine, i, infiniteLine, lastSlope, lastYPos, newYPos, plotArea, slope, testYPos, xPos, yPos, _i, _j, _ref, _ref1, _ref2;
     if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
       plotArea.clearRect(0, 0, this.width, this.height);
     }
@@ -387,19 +387,28 @@ board.Board = (function(_super) {
         continue;
       }
       if (yPos === Number.NEGATIVE_INFINITY) {
-        yPos = this.grid.yMin * this.xUnit;
+        plotArea.lineTo(xPos + this.xAxis, this.height);
+        yPos = this.grid.yMin * this.yUnit;
         brokenLine += 1;
       } else if (yPos === Number.POSITIVE_INFINITY) {
-        yPos = this.grid.yMax * this.xUnit;
+        plotArea.lineTo(xPos + this.xAxis, 0);
+        yPos = this.grid.yMax * this.yUnit;
         brokenLine += 1;
       }
       if (lastYPos) {
         lastSlope = slope;
         slope = yPos - lastYPos;
-        if (lastSlope && Math.abs(lastSlope - slope) > Math.abs(lastSlope) && Math.abs(lastYPos - yPos) > Math.abs(lastYPos)) {
-          plotArea.lineTo(xPos + this.xAxis + 1, (lastSlope > 0 ? 0 : this.height));
-          plotArea.moveTo(xPos + this.xAxis + 1, (lastSlope > 0 ? this.height : 0));
-          brokenLine += 1;
+        if (lastSlope && ((lastSlope > 0 && lastYPos > yPos) || (lastSlope < 0 && lastYPos < yPos))) {
+          for (i = _j = -1; _j <= 0; i = _j += 0.001) {
+            testYPos = formula((xPos + i) / this.xUnit) * this.yUnit;
+            if ((yPos > 0 && testYPos < 0) || (yPos < this.height && testYPos > this.height)) {
+              plotArea.lineTo(xPos + this.xAxis + i, this.yAxis - testYPos);
+              newYPos = (testYPos < 0 ? 0 : this.height);
+              plotArea.moveTo(xPos + this.xAxis + i, newYPos);
+              slope = yPos - (this.yAxis - newYPos);
+              break;
+            }
+          }
         }
       }
       if (brokenLine > 0) {

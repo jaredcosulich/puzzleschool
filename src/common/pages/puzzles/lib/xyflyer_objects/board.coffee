@@ -252,19 +252,26 @@ class board.Board extends xyflyerObject.Object
             continue if isNaN(yPos)
 
             if yPos == Number.NEGATIVE_INFINITY
-                yPos = @grid.yMin * @xUnit
+                plotArea.lineTo(xPos + @xAxis, @height)
+                yPos = @grid.yMin * @yUnit
                 brokenLine += 1
             else if yPos == Number.POSITIVE_INFINITY
-                yPos = @grid.yMax * @xUnit
+                plotArea.lineTo(xPos + @xAxis, 0)
+                yPos = @grid.yMax * @yUnit
                 brokenLine += 1            
 
             if lastYPos
                 lastSlope = slope
                 slope = yPos - lastYPos
-                if lastSlope and Math.abs(lastSlope - slope) > Math.abs(lastSlope) and Math.abs(lastYPos - yPos) > Math.abs(lastYPos)
-                    plotArea.lineTo(xPos + @xAxis + 1, (if lastSlope > 0 then 0 else @height))
-                    plotArea.moveTo(xPos + @xAxis + 1, (if lastSlope > 0 then @height else 0))
-                    brokenLine += 1
+                if lastSlope and ((lastSlope > 0 and lastYPos > yPos) or (lastSlope < 0 and lastYPos < yPos))
+                    for i in [-1..0] by 0.001
+                        testYPos = formula((xPos+i) / @xUnit) * @yUnit
+                        if (yPos > 0 and testYPos < 0) or (yPos < @height and testYPos > @height)
+                            plotArea.lineTo(xPos + @xAxis + i, @yAxis - testYPos)
+                            newYPos = (if testYPos < 0 then 0 else @height)
+                            plotArea.moveTo(xPos + @xAxis + i, newYPos)
+                            slope = yPos - (@yAxis - newYPos)
+                            break
 
             if brokenLine > 0
                 plotArea.moveTo(xPos + @xAxis, @yAxis - yPos)

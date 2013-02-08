@@ -293,7 +293,7 @@ class equation.Equation
         for variable of @variables
             info = @variables[variable]
             continue if not info.get
-            text = text.replace(variable, info.get())
+            text = text.replace(///(^|[^a-z])#{variable}($|[^a-z])///, "$1#{info.get()}$2")
             
         return text
         
@@ -349,7 +349,7 @@ class equation.Equation
     initVariables: ->
         formula = @straightFormula()
         for variable of @variables
-            if formula.indexOf(variable) > -1
+            if ///(^|[^a-z])#{variable}($|[^a-z])///.test(formula)
                 @initVariable(variable) 
             else if @variables[variable].element?.closest('.equation_container')[0] == @container[0]
                 @removeVariable(variable)
