@@ -76,4 +76,4 @@ class xyflyer.ViewHelper
     completeLevel: ->
         return if @complete
         @complete = true
-        $.timeout 1000, => @nextLevel()
+        $.timeout 500, => @nextLevel()

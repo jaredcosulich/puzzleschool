@@ -182,6 +182,7 @@ soma.views
             if @isIos()
                 equationArea.find('.button').attr('href', path) 
             else
+                @$('.launch').unbind 'mousedown.launch touchstart.launch'
                 equationArea.find('.button').bind 'mousedown.go touchstart.go', => @go(path)
                 
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
@@ -200,7 +201,8 @@ soma.views
             if @isIos()
                 @$('.go').attr('href', path)
             else
-                @$('.go').bind 'click', => @go(path)
+                @$('.launch').unbind 'mousedown.launch touchstart.launch'
+                @$('.go').bind 'mousedown.go touchstart.go', => @go(path)
                 
         initEncode: ->
             @encodeMap =

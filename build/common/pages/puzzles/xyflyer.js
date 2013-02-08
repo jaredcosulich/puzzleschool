@@ -233,6 +233,7 @@ soma.views({
       if (this.isIos()) {
         return equationArea.find('.button').attr('href', path);
       } else {
+        this.$('.launch').unbind('mousedown.launch touchstart.launch');
         return equationArea.find('.button').bind('mousedown.go touchstart.go', function() {
           return _this.go(path);
         });
@@ -257,7 +258,8 @@ soma.views({
       if (this.isIos()) {
         return this.$('.go').attr('href', path);
       } else {
-        return this.$('.go').bind('click', function() {
+        this.$('.launch').unbind('mousedown.launch touchstart.launch');
+        return this.$('.go').bind('mousedown.go touchstart.go', function() {
           return _this.go(path);
         });
       }

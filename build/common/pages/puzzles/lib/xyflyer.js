@@ -129,7 +129,7 @@ xyflyer.ViewHelper = (function() {
       return;
     }
     this.complete = true;
-    return $.timeout(1000, function() {
+    return $.timeout(500, function() {
       return _this.nextLevel();
     });
   };

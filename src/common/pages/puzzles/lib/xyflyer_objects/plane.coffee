@@ -71,12 +71,9 @@ class plane.Plane extends xyflyerObject.Object
             @path = @board.calculatePath() 
             @fall() unless @path.distance
         
-        lastX = null    
         duration = @path.distance * timeFactor
         @animation.start duration, (deltaTime, progress, totalTime) =>
             position = @path[Math.round(totalTime/timeFactor*10)]
-            # console.log((position.x - lastX)/deltaTime) if lastX?
-            lastX = position.x
             if !position   
                 @animation.stop()
                 @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
