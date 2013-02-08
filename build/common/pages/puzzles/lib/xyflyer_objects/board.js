@@ -461,7 +461,8 @@ board.Board = (function(_super) {
             }
           }
           if ((this.grid.yMin - 50 <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax + 50)) {
-            distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - yPos, 2) + 1);
+            prevYPos = lastFormula.formula((xPos - 1) / this.xUnit) * this.yUnit;
+            distance = Math.sqrt(Math.pow(prevYPos - yPos, 2) + 1);
             for (d = _j = 1, _ref3 = Math.ceil(distance); 1 <= _ref3 ? _j <= _ref3 : _j >= _ref3; d = 1 <= _ref3 ? ++_j : --_j) {
               path[Math.floor(path.distance + d)] = {
                 formula: lastFormula.id,

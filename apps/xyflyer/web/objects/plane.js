@@ -106,6 +106,9 @@ plane.Plane = (function(_super) {
     timeFactor = 3 / this.scale;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
+      if (!this.path.distance) {
+        this.fall();
+      }
     }
     duration = this.path.distance * timeFactor;
     distance = Object.keys(this.path).length;

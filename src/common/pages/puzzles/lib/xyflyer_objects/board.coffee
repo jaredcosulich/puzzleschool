@@ -315,7 +315,8 @@ class board.Board extends xyflyerObject.Object
                             break
                     
                     if @grid.yMin - 50 <= (yPos / @yUnit) <= @grid.yMax + 50
-                        distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - yPos, 2) + 1)
+                        prevYPos = lastFormula.formula((xPos - 1) / @xUnit) * @yUnit
+                        distance = Math.sqrt(Math.pow(prevYPos - yPos, 2) + 1)
                         for d in [1..Math.ceil(distance)]
                             path[Math.floor(path.distance + d)] = 
                                 formula: lastFormula.id

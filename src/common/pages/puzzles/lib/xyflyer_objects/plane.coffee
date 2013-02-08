@@ -67,7 +67,9 @@ class plane.Plane extends xyflyerObject.Object
         return if @falling or @cancelFlight and not force
         @cancelFlight = false
         timeFactor = 3/@scale
-        @path = @board.calculatePath() if not @path or not Object.keys(@path).length
+        if not @path or not Object.keys(@path).length
+            @path = @board.calculatePath() 
+            @fall() unless @path.distance
         duration = @path.distance * timeFactor
         distance = Object.keys(@path).length
         unit = distance / duration
