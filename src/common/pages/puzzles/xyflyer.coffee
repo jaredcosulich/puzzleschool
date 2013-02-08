@@ -882,7 +882,7 @@ LEVELS = [
     {
         equations:
             '((1/3)*x)^2-32': {start: '(x)^2'}
-            '(1/6)*x+12': {start: 'x'}
+            '(1/6)*x+20': {start: 'x'}
         grid:
             xMin: -50
             xMax: 50

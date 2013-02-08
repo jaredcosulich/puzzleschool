@@ -97,7 +97,7 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var distance, duration, startX, unit,
+    var distance, duration, unit,
       _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
@@ -106,20 +106,20 @@ plane.Plane = (function(_super) {
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
     }
-    duration = 2000;
+    duration = this.path.distance * 3;
     distance = Object.keys(this.path).length;
     unit = distance / duration;
-    startX = this.xPos;
     return this.animation.start(duration, function(deltaTime, progress, totalTime) {
-      var _ref;
-      _this.xPos = startX + Math.round(totalTime * unit);
-      _this.yPos = (_ref = _this.path[_this.xPos]) != null ? _ref.y : void 0;
-      if (isNaN(_this.yPos)) {
+      var position;
+      position = _this.path[Math.round(totalTime / 3)];
+      if (!position) {
         _this.animation.stop();
         if (!(_this.board.paperY(_this.currentYPos) > _this.board.grid.yMax)) {
           return _this.fall();
         }
       } else {
+        _this.xPos = position.x;
+        _this.yPos = position.y;
         return _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
       }
     });

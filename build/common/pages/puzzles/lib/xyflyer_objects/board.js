@@ -431,10 +431,13 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function(increment) {
-    var id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1, _ref2, _ref3;
+    var d, distance, id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _j, _k, _l, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
-    path = {};
-    path[this.islandCoordinates.x * this.xUnit] = {
+    path = {
+      distance: 0
+    };
+    path[0] = {
+      x: this.islandCoordinates.x * this.xUnit,
       y: this.islandCoordinates.y * this.yUnit
     };
     for (xPos = _i = _ref = this.islandCoordinates.x * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
@@ -458,10 +461,15 @@ board.Board = (function(_super) {
             }
           }
           if ((this.grid.yMin - 50 <= (_ref2 = yPos / this.yUnit) && _ref2 <= this.grid.yMax + 50)) {
-            path[xPos] = {
-              formula: lastFormula.id,
-              y: yPos
-            };
+            distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - yPos, 2) + 1);
+            for (d = _j = 1, _ref3 = Math.ceil(distance); 1 <= _ref3 ? _j <= _ref3 : _j >= _ref3; d = 1 <= _ref3 ? ++_j : --_j) {
+              path[Math.floor(path.distance + d)] = {
+                formula: lastFormula.id,
+                x: xPos + (d / distance),
+                y: lastFormula.formula((xPos + (d / distance)) / this.xUnit) * this.yUnit
+              };
+            }
+            path.distance += distance;
           }
           continue;
         } else {
@@ -469,10 +477,16 @@ board.Board = (function(_super) {
           lf = lastFormula;
           lastFormula = null;
           while (lf.area(intersection / this.xUnit)) {
-            path[intersection] = {
-              formula: lf.id,
-              y: lf.formula(intersection / this.xUnit) * this.yUnit
-            };
+            intersectionY = lf.formula(intersection / this.xUnit) * this.yUnit;
+            distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - intersectionY, 2) + 1);
+            for (d = _k = 1, _ref4 = Math.ceil(distance); 1 <= _ref4 ? _k <= _ref4 : _k >= _ref4; d = 1 <= _ref4 ? ++_k : --_k) {
+              path[Math.floor(path.distance + d)] = {
+                formula: lf.id,
+                x: intersection + (d / distance),
+                y: lf.formula((intersection + (d / distance)) / this.xUnit) * this.yUnit
+              };
+            }
+            path.distance += distance;
             intersection += this.xUnit * 0.001;
           }
         }
@@ -487,7 +501,7 @@ board.Board = (function(_super) {
         }
         if (intersection != null) {
           intersectionY = this.formulas[id].formula(intersection / this.xUnit) * this.yUnit;
-          if (Math.abs(path[intersection].y - intersectionY) / this.yUnit > 0.05) {
+          if (Math.abs(path[Math.floor(path.distance)].y - intersectionY) / this.yUnit > 0.05) {
             continue;
           }
         }
@@ -496,11 +510,16 @@ board.Board = (function(_super) {
           continue;
         }
         validPathFound = true;
-        if ((this.grid.yMin <= (_ref3 = y / this.yUnit) && _ref3 <= this.grid.yMax)) {
-          path[xPos] = {
-            formula: id,
-            y: y
-          };
+        if ((this.grid.yMin <= (_ref5 = y / this.yUnit) && _ref5 <= this.grid.yMax)) {
+          distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - y, 2) + 1);
+          for (d = _l = 1, _ref6 = Math.ceil(distance); 1 <= _ref6 ? _l <= _ref6 : _l >= _ref6; d = 1 <= _ref6 ? ++_l : --_l) {
+            path[Math.floor(path.distance + d)] = {
+              formula: id,
+              x: xPos + (d / distance),
+              y: this.formulas[id].formula((xPos + (d / distance)) / this.xUnit) * this.yUnit
+            };
+          }
+          path.distance += distance;
         }
         lastFormula = this.formulas[id];
         break;
