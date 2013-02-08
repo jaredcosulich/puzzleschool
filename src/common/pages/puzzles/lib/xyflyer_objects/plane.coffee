@@ -71,10 +71,8 @@ class plane.Plane extends xyflyerObject.Object
             @path = @board.calculatePath() 
             @fall() unless @path.distance
         duration = @path.distance * timeFactor
-        distance = Object.keys(@path).length
-        unit = distance / duration
         @animation.start duration, (deltaTime, progress, totalTime) =>
-            position = @path[Math.round(totalTime / timeFactor)]
+            position = @path[Math.round(totalTime/timeFactor*10)]
             if !position   
                 @animation.stop()
                 @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax

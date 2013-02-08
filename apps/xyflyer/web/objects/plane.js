@@ -97,7 +97,7 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var distance, duration, timeFactor, unit,
+    var duration, timeFactor,
       _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
@@ -111,11 +111,9 @@ plane.Plane = (function(_super) {
       }
     }
     duration = this.path.distance * timeFactor;
-    distance = Object.keys(this.path).length;
-    unit = distance / duration;
     return this.animation.start(duration, function(deltaTime, progress, totalTime) {
       var position;
-      position = _this.path[Math.round(totalTime / timeFactor)];
+      position = _this.path[Math.round(totalTime / timeFactor * 10)];
       if (!position) {
         _this.animation.stop();
         if (!(_this.board.paperY(_this.currentYPos) > _this.board.grid.yMax)) {

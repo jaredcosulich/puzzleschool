@@ -299,6 +299,22 @@ class board.Board extends xyflyerObject.Object
             x: @islandCoordinates.x * @xUnit
             y: @islandCoordinates.y * @yUnit
             
+        addToPath = (x, y, formula) =>
+            return unless @grid.yMin - 50 <= (y / @yUnit) <= @grid.yMax + 50
+            significantDigits = 1
+            formattedFullDistance = Math.ceil(path.distance * Math.pow(10, significantDigits))
+            prevPos = path[formattedFullDistance]
+            return if prevPos.x == x and prevPos.y == y
+            distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2))
+            formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits))
+            for d in [1..formattedDistance]
+                path[formattedFullDistance + d] = 
+                    formula: formula.id
+                    x: x + (d/formattedDistance)
+                    y: formula.formula((x + (d/formattedDistance)) / @xUnit) * @yUnit
+            path.distance += distance
+            
+            
         for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
             xPos = Math.round(xPos)
             if lastFormula 
@@ -314,16 +330,7 @@ class board.Board extends xyflyerObject.Object
                             lastFormula = @formulas[id]
                             break
                     
-                    if @grid.yMin - 50 <= (yPos / @yUnit) <= @grid.yMax + 50
-                        prevYPos = lastFormula.formula((xPos - 1) / @xUnit) * @yUnit
-                        distance = Math.sqrt(Math.pow(prevYPos - yPos, 2) + 1)
-                        for d in [1..Math.ceil(distance)]
-                            path[Math.floor(path.distance + d)] = 
-                                formula: lastFormula.id
-                                x: xPos + (d/distance)
-                                y: lastFormula.formula((xPos + (d/distance)) / @xUnit) * @yUnit
-                        path.distance += distance
-                        
+                    addToPath(xPos, yPos, lastFormula)
                     continue
                 else
                     intersection = xPos - 1
@@ -331,14 +338,7 @@ class board.Board extends xyflyerObject.Object
                     lastFormula = null
                     while lf.area(intersection / @xUnit)
                         intersectionY = lf.formula(intersection / @xUnit) * @yUnit
-                        distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - intersectionY, 2) + 1)
-                        for d in [1..Math.ceil(distance)]
-                            path[Math.floor(path.distance + d)] = 
-                                formula: lf.id
-                                x: intersection + (d/distance)
-                                y: lf.formula((intersection + (d/distance)) / @xUnit) * @yUnit  
-                        path.distance += distance
-
+                        addToPath(intersection, intersectionY, lf)
                         intersection += (@xUnit * 0.001)
                 
             intersection -= (@xUnit * 0.001) if intersection
@@ -354,16 +354,8 @@ class board.Board extends xyflyerObject.Object
                 continue if isNaN(y)
                 validPathFound = true
                 
-                if @grid.yMin <= (y / @yUnit) <= @grid.yMax
-                    distance = Math.sqrt(Math.pow(path[Math.floor(path.distance)].y - y, 2) + 1)                    
-                    for d in [1..Math.ceil(distance)]
-                        path[Math.floor(path.distance + d)] =
-                            formula: id
-                            x: xPos + (d/distance)
-                            y: @formulas[id].formula((xPos + (d/distance)) / @xUnit) * @yUnit
-                    path.distance += distance
-                    
                 lastFormula = @formulas[id]
+                addToPath(xPos, y, lastFormula)                    
                 break
             
             return path unless validPathFound
