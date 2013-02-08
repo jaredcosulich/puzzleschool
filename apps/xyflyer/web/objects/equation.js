@@ -446,7 +446,7 @@ equation.Equation = (function() {
       if (!info.get) {
         continue;
       }
-      text = text.replace(RegExp("(^|[^a-z])" + variable + "($|[^a-z])"), "$1" + (info.get()) + "$2");
+      text = text.replace(RegExp("(^|[^a-w])" + variable + "($|[^a-w])"), "$1" + (info.get()) + "$2");
     }
     return text;
   };
@@ -522,7 +522,7 @@ equation.Equation = (function() {
     formula = this.straightFormula();
     _results = [];
     for (variable in this.variables) {
-      if (RegExp("(^|[^a-z])" + variable + "($|[^a-z])").test(formula)) {
+      if (RegExp("(^|[^a-w])" + variable + "($|[^a-w])").test(formula)) {
         _results.push(this.initVariable(variable));
       } else if (((_ref = this.variables[variable].element) != null ? _ref.closest('.equation_container')[0] : void 0) === this.container[0]) {
         _results.push(this.removeVariable(variable));
