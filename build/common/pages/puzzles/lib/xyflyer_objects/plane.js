@@ -97,21 +97,22 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var distance, duration, unit,
+    var distance, duration, timeFactor, unit,
       _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
     this.cancelFlight = false;
+    timeFactor = 3 / this.scale;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
     }
-    duration = this.path.distance * 3;
+    duration = this.path.distance * timeFactor;
     distance = Object.keys(this.path).length;
     unit = distance / duration;
     return this.animation.start(duration, function(deltaTime, progress, totalTime) {
       var position;
-      position = _this.path[Math.round(totalTime / 3)];
+      position = _this.path[Math.round(totalTime / timeFactor)];
       if (!position) {
         _this.animation.stop();
         if (!(_this.board.paperY(_this.currentYPos) > _this.board.grid.yMax)) {
