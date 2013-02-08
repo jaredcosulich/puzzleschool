@@ -442,7 +442,7 @@ board.Board = (function(_super) {
       y: this.islandCoordinates.y * this.yUnit
     };
     addToPath = function(x, y, formula) {
-      var d, distance, formattedDistance, formattedFullDistance, prevPos, significantDigits, _i, _ref;
+      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, significantDigits, _i, _ref;
       if (!((_this.grid.yMin - 50 <= (_ref = y / _this.yUnit) && _ref <= _this.grid.yMax + 50))) {
         return;
       }
@@ -455,10 +455,11 @@ board.Board = (function(_super) {
       distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2));
       formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits));
       for (d = _i = 1; 1 <= formattedDistance ? _i <= formattedDistance : _i >= formattedDistance; d = 1 <= formattedDistance ? ++_i : --_i) {
+        incrementalX = prevPos.x + (d * ((x - prevPos.x) / formattedDistance));
         path[formattedFullDistance + d] = {
           formula: formula.id,
-          x: x + (d / formattedDistance),
-          y: formula.formula((x + (d / formattedDistance)) / _this.xUnit) * _this.yUnit
+          x: incrementalX,
+          y: formula.formula(incrementalX / _this.xUnit) * _this.yUnit
         };
       }
       return path.distance += distance;

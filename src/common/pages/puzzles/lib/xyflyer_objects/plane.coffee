@@ -66,13 +66,17 @@ class plane.Plane extends xyflyerObject.Object
     launch: (force) ->
         return if @falling or @cancelFlight and not force
         @cancelFlight = false
-        timeFactor = 3/@scale
+        timeFactor = 2/@scale
         if not @path or not Object.keys(@path).length
             @path = @board.calculatePath() 
             @fall() unless @path.distance
+        
+        lastX = null    
         duration = @path.distance * timeFactor
         @animation.start duration, (deltaTime, progress, totalTime) =>
             position = @path[Math.round(totalTime/timeFactor*10)]
+            # console.log((position.x - lastX)/deltaTime) if lastX?
+            lastX = position.x
             if !position   
                 @animation.stop()
                 @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax

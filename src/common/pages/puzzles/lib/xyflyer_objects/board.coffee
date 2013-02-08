@@ -308,12 +308,12 @@ class board.Board extends xyflyerObject.Object
             distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2))
             formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits))
             for d in [1..formattedDistance]
+                incrementalX = prevPos.x + (d*((x - prevPos.x)/formattedDistance))
                 path[formattedFullDistance + d] = 
                     formula: formula.id
-                    x: x + (d/formattedDistance)
-                    y: formula.formula((x + (d/formattedDistance)) / @xUnit) * @yUnit
+                    x: incrementalX
+                    y: formula.formula(incrementalX / @xUnit) * @yUnit
             path.distance += distance
-            
             
         for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
             xPos = Math.round(xPos)

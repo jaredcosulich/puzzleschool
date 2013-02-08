@@ -97,23 +97,25 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var duration, timeFactor,
+    var duration, lastX, timeFactor,
       _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
     this.cancelFlight = false;
-    timeFactor = 3 / this.scale;
+    timeFactor = 2 / this.scale;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
       if (!this.path.distance) {
         this.fall();
       }
     }
+    lastX = null;
     duration = this.path.distance * timeFactor;
     return this.animation.start(duration, function(deltaTime, progress, totalTime) {
       var position;
       position = _this.path[Math.round(totalTime / timeFactor * 10)];
+      lastX = position.x;
       if (!position) {
         _this.animation.stop();
         if (!(_this.board.paperY(_this.currentYPos) > _this.board.grid.yMax)) {
