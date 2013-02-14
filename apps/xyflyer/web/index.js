@@ -16,6 +16,11 @@ window.app = {
     }), false);
     xyflyer = require('./lib/xyflyer');
     this.el = $('.xyflyer');
+    this.el.bind('touchstart', function(e) {
+      if (e.preventDefault) {
+        return e.preventDefault();
+      }
+    });
     this.originalHtml = this.el.html();
     this.levelId = 1;
     return this.load();
@@ -107,8 +112,9 @@ window.app = {
       _this = this;
     complete = this.$('.complete');
     this.centerAndShow(complete);
+    this.$('.launch').unbind('mousedown.launch touchstart.launch');
     this.$('.launch').html('Success! Go To The Next Level >');
-    return this.$('.go').one('click', function() {
+    return this.$('.go').one('touchstart.go', function() {
       _this.el.html(_this.originalHtml);
       _this.levelId += 1;
       return _this.load();

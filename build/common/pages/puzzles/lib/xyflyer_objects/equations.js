@@ -17,9 +17,15 @@ equations.Equations = (function() {
     this.possibleFragments = this.$('.possible_fragments');
     this.equations = [];
     this.equationComponents = [];
-    this.$('.launch').bind('mousedown.launch touchstart.launch', function() {
-      return submit();
-    });
+    if (window.AppMobi) {
+      this.$('.launch').bind('touchstart.launch', function() {
+        return submit();
+      });
+    } else {
+      this.$('.launch').bind('mousedown.launch', function() {
+        return submit();
+      });
+    }
     this.initHints();
     this.initBackspace();
     this.length = 0;

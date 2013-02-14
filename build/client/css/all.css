@@ -267,6 +267,19 @@ a {
   height: 120px;
   text-align: center;
 }
+.home .section .example {
+  position: absolute;
+  background-color: white;
+  opacity: 0;
+  top: -1000px;
+  left: 540px;
+  padding: 12px;
+  width: 330px;
+  border: 1px solid #24aac3;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
 .puzzles #labs,
 .reviews #labs {
   padding-top: 45px;

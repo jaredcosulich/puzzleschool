@@ -42,6 +42,7 @@ class equationComponent.EquationComponent
             left: @offset.left - @container.offset().left
 
     mousedown: (e) ->
+        e.preventDefault() if e.preventDefault
         @initMeasurements()
         
         @gameArea.addClass('dragging')

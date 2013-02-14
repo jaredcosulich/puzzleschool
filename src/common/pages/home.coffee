@@ -17,6 +17,24 @@ soma.views
         selector: '#content .home'
         create: ->
             $('.register_flag').hide()    
+            @$('.examples a').bind 'click', (e) =>
+                offset = $(e.currentTarget).offset()
+                example = $("div.#{e.currentTarget.className}")
+                    
+                close = ->
+                    example.animate
+                        opacity: 0
+                        duration: 300
+                        complete: ->
+                            example.css(top: -1000)
+                
+                if example.css('opacity') > 0
+                    close()
+                else        
+                    example.css(top: offset.top + offset.height)
+                    example.animate(opacity: 1, duration: 300)                   
+                    $.timeout 100, -> $(document.body).one 'click', close
+            
             
 
 soma.routes

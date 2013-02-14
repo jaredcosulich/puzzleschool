@@ -26,7 +26,38 @@ soma.views({
   Home: {
     selector: '#content .home',
     create: function() {
-      return $('.register_flag').hide();
+      var _this = this;
+      $('.register_flag').hide();
+      return this.$('.examples a').bind('click', function(e) {
+        var close, example, offset;
+        offset = $(e.currentTarget).offset();
+        example = $("div." + e.currentTarget.className);
+        close = function() {
+          return example.animate({
+            opacity: 0,
+            duration: 300,
+            complete: function() {
+              return example.css({
+                top: -1000
+              });
+            }
+          });
+        };
+        if (example.css('opacity') > 0) {
+          return close();
+        } else {
+          example.css({
+            top: offset.top + offset.height
+          });
+          example.animate({
+            opacity: 1,
+            duration: 300
+          });
+          return $.timeout(100, function() {
+            return $(document.body).one('click', close);
+          });
+        }
+      });
     }
   }
 });

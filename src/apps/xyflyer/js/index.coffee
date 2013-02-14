@@ -8,6 +8,7 @@ window.app =
         xyflyer = require('./lib/xyflyer')
         
         @el = $('.xyflyer')
+        @el.bind('touchstart', (e) -> e.preventDefault() if e.preventDefault)
         @originalHtml = @el.html()
 
         @levelId = 1
@@ -76,8 +77,9 @@ window.app =
         complete = @$('.complete')
         @centerAndShow(complete)
 
+        @$('.launch').unbind('mousedown.launch touchstart.launch')
         @$('.launch').html('Success! Go To The Next Level >')
-        @$('.go').one 'click', =>
+        @$('.go').one 'touchstart.go', =>
             @el.html(@originalHtml)
             @levelId += 1
             @load()

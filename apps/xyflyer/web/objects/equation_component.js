@@ -83,6 +83,9 @@ equationComponent.EquationComponent = (function() {
   EquationComponent.prototype.mousedown = function(e) {
     var body,
       _this = this;
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
     this.initMeasurements();
     this.gameArea.addClass('dragging');
     body = $(document.body);
