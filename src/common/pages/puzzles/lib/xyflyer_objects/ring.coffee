@@ -28,14 +28,14 @@ class ring.Ring extends xyflyerObject.Object
         if not @passedThrough and @touches(x,y,width,height)
             if not @highlighting
                 @highlighting = true
-                # @animating = true
-                # @highlighted.animate({opacity: 0.2}, 250, => @animating = false)
+                @animating = true
+                @highlighted.animate({opacity: 0.2}, 250, => @animating = false)
                 @passedThrough = true
         else if @highlighting and not @animating
-            # @highlighted.animate(
-            #     {opacity: 0}, 
-            #     500
-            # )
+            @highlighted.animate(
+                {opacity: 0}, 
+                500
+            )
             @highlighting = false
             
     touches: (x,y,width,height) ->
