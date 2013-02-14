@@ -103,7 +103,7 @@ plane.Plane = (function(_super) {
       return;
     }
     this.cancelFlight = false;
-    timeFactor = 1.5 / this.scale;
+    timeFactor = 1.9 / this.scale;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
       if (!this.path.distance) {
