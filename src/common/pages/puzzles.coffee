@@ -105,10 +105,6 @@ LABDATA = [{
             <p>
                 Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.
             </p>
-            <p>
-                Even at this beta stage, though, you can see how stimulating and enjoyable it is to try to solve
-                the challenges even though all you are doing is interacting with equations and graphing.
-            </p>
             """
 }, {
     id: 'language_scramble'
