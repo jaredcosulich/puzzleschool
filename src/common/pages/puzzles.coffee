@@ -92,12 +92,16 @@ LABDATA = [{
         explanation:
             """
             <p>
-                XYFlyer is a simple game that demonstrates the stimulating nature of learning through puzzles.
+                We had a simple goal with XYFlyer. We wanted to make it easy and fun for students to become 
+                comfortable with equations and graphing.
             </p>
             <p>
-                Each level presents a number of rings that you must fly a remote-controlled airplane through, using 
-                graphed equations to control the plane.
+                So we created a puzzle-game where students work directly with equations and graphs to solve simple 
+                challenges.
             </p>
+            <p>
+                XYFlyer requires no previous math experience. A beginner can start out playing and, with the help
+                of immediate feedback loops, gain some basic understanding and familiarity with equations and graphing.
             <p>
                 Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.
             </p>
