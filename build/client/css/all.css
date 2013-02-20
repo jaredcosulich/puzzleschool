@@ -272,7 +272,7 @@ a {
   background-color: white;
   opacity: 0;
   top: -1000px;
-  left: 540px;
+  left: -1000px;
   padding: 12px;
   width: 330px;
   border: 1px solid #24aac3;

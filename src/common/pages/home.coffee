@@ -31,7 +31,7 @@ soma.views
                 if example.css('opacity') > 0
                     close()
                 else        
-                    example.css(top: offset.top + offset.height)
+                    example.css(left: offset.left - (example.width()/3), top: offset.top + offset.height)
                     example.animate(opacity: 1, duration: 300)                   
                     $.timeout 100, -> $(document.body).one 'click', close
             

@@ -47,6 +47,7 @@ soma.views({
           return close();
         } else {
           example.css({
+            left: offset.left - (example.width() / 3),
             top: offset.top + offset.height
           });
           example.animate({
