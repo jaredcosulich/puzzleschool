@@ -77,6 +77,7 @@ class equation.Equation
         @removeDropArea(childArea) for childArea in dropArea.childAreas
         dropArea.childAreas = []
          
+         
         removeDropAreas = []
         for da in @dropAreas when not da.component and not da.fixed
             da.element.addClass('removing')
@@ -87,7 +88,6 @@ class equation.Equation
     
         @removeDropArea(da) for da in removeDropAreas
         @wrap(da) for da in @dropAreas
-        
         @addFirstDropArea() if not @dropAreas.length
         
         @recordComponentPositions()
@@ -95,7 +95,6 @@ class equation.Equation
         dropArea.parentArea.dirtyCount -= 1 if dropArea.parentArea
         @initVariables()
         @plot(@)
-        
             
     removeDropArea: (dropAreaToRemove) ->
         removeIndex = -1
@@ -259,7 +258,7 @@ class equation.Equation
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
         fragment = fragment.replace(
-            /(.*\()(.*)\)(\^\d+)*/g, 
+            /(.*\()(.*)\)(\^*\d*\**\/*)*/g, 
             "#{constant}$1</div>#{constant}$2</div>#{constant})$3</div>"
         )
         if fragment.indexOf(constant) == -1
