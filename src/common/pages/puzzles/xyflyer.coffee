@@ -473,42 +473,6 @@ LEVELS = [
     }
     {
         equations: 
-            '(1/3)*x+6': {start: 'x'}
-        grid:
-            xMin: -10
-            xMax: 10
-            yMin: -5
-            yMax: 15
-        islandCoordinates: {x: -6, y: 4}
-        rings: [
-            {x: -3, y: 5}
-            {x: 0, y: 6}
-            {x: 6, y: 8}
-        ]
-        fragments: [
-            '(1/6)*', '(1/3)*', '3*', '6*', '-6', '+6'
-        ]
-    }
-    {
-        equations: 
-            '2*x-2': {start: 'x'}
-        grid:
-            xMin: -10
-            xMax: 10
-            yMin: -10
-            yMax: 10
-        islandCoordinates: {x: -3, y: -8}
-        rings: [
-            {x: 0, y: -2}
-            {x: 2, y: 2}
-            {x: 4, y: 6}
-        ]
-        fragments: [
-            '(1/4)*', '(1/2)*', '2*', '4*', '-2', '+2', '-4', '4'
-        ]
-    }
-    {
-        equations: 
             'x+a': {start: 'x'}
         grid:
             xMin: -20
@@ -938,7 +902,44 @@ LEVELS = [
             '*3', '*(1/4)', '*(1/2)', '*(1/5)'
         ]
         
-    }    
+    }
+    {
+        equations: 
+            '(1/3)*x+6': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -5
+            yMax: 15
+        islandCoordinates: {x: -6, y: 4}
+        rings: [
+            {x: -3, y: 5}
+            {x: 0, y: 6}
+            {x: 6, y: 8}
+        ]
+        fragments: [
+            '(1/6)*', '(1/3)*', '3*', '6*', '-6', '+6'
+        ]
+    }
+    {
+        equations: 
+            '2*x-2': {start: 'x'}
+        grid:
+            xMin: -10
+            xMax: 10
+            yMin: -10
+            yMax: 10
+        islandCoordinates: {x: -3, y: -8}
+        rings: [
+            {x: 0, y: -2}
+            {x: 2, y: 2}
+            {x: 4, y: 6}
+        ]
+        fragments: [
+            '(1/4)*', '(1/2)*', '2*', '4*', '-2', '+2', '-4', '4'
+        ]
+    }
+        
     {
         equations: 
             '2.5x + 3': {start: 'ax + 3'}
