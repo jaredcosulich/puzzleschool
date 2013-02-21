@@ -29,9 +29,15 @@ class ring.Ring extends xyflyerObject.Object
         @drawHalfRing(@backCanvas, -1, highlightRadius)
         
     drawHalfRing: (canvas, xDirection, highlightRadius=0) ->
-        canvas.clearRect(@screenX - @width, @screenY - @height, @width * 2, @height * 2)
+        canvas.clearRect(
+            @screenX - 100#((@width + highlightRadius) * 2), 
+            @screenY - 100#((@height + highlightRadius) * 2), 
+            200,#(@width + highlightRadius) * 2 , 
+            200,#(@height + highlightRadius) * 2 
+        )
+        
         for h in [(highlightRadius * -1)..highlightRadius]
-            canvas.strokeStyle = "rgba(255, 255, 255, #{1 - Math.abs(h/highlightRadius)})"
+            canvas.strokeStyle = "rgba(255, 255, 255, #{if highlightRadius then 1 - Math.abs(h/highlightRadius) else 1})"
             canvas.lineWidth = 1
             canvas.beginPath()
             for yDirection in [-1,1]
@@ -46,17 +52,25 @@ class ring.Ring extends xyflyerObject.Object
             canvas.stroke()
             canvas.closePath()
 
-    glow: (callback) ->
-        radius = 6
-        @animation.start 2500, (deltaTime, progress, totalTime) =>
-            @draw(radius * progress)        
+    glow: ->
+        @animating = true
+        radius = 8
+        time = 500
+        @animation.start time, (deltaTime, progress, totalTime) =>
+            @draw(radius * progress)      
+            if progress == 1
+                @animation.start time, (deltaTime, progress, totalTime) =>
+                    @draw(radius * (1-progress))
+                    if progress == 1
+                        @draw()
+                        @animating = false      
+                
         
     highlightIfPassingThrough: ({x, y, width, height}) ->
         if not @passedThrough and @touches(x,y,width,height)
             if not @highlighting
                 @highlighting = true
-                @animating = true
-                @glow => @animating = false
+                @glow()
                 @passedThrough = true
             
     touches: (x,y,width,height) ->

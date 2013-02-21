@@ -49,10 +49,10 @@ ring.Ring = (function(_super) {
     if (highlightRadius == null) {
       highlightRadius = 0;
     }
-    canvas.clearRect(this.screenX - this.width, this.screenY - this.height, this.width * 2, this.height * 2);
+    canvas.clearRect(this.screenX - 100, this.screenY - 100, 200, 200);
     _results = [];
     for (h = _i = _ref = highlightRadius * -1; _ref <= highlightRadius ? _i <= highlightRadius : _i >= highlightRadius; h = _ref <= highlightRadius ? ++_i : --_i) {
-      canvas.strokeStyle = "rgba(255, 255, 255, " + (1 - Math.abs(h / highlightRadius)) + ")";
+      canvas.strokeStyle = "rgba(255, 255, 255, " + (highlightRadius ? 1 - Math.abs(h / highlightRadius) : 1) + ")";
       canvas.lineWidth = 1;
       canvas.beginPath();
       _ref1 = [-1, 1];
@@ -75,26 +75,33 @@ ring.Ring = (function(_super) {
     return _results;
   };
 
-  Ring.prototype.glow = function(callback) {
-    var radius,
+  Ring.prototype.glow = function() {
+    var radius, time,
       _this = this;
-    radius = 6;
-    return this.animation.start(2500, function(deltaTime, progress, totalTime) {
-      return _this.draw(radius * progress);
+    this.animating = true;
+    radius = 8;
+    time = 500;
+    return this.animation.start(time, function(deltaTime, progress, totalTime) {
+      _this.draw(radius * progress);
+      if (progress === 1) {
+        return _this.animation.start(time, function(deltaTime, progress, totalTime) {
+          _this.draw(radius * (1 - progress));
+          if (progress === 1) {
+            _this.draw();
+            return _this.animating = false;
+          }
+        });
+      }
     });
   };
 
   Ring.prototype.highlightIfPassingThrough = function(_arg) {
-    var height, width, x, y,
-      _this = this;
+    var height, width, x, y;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
     if (!this.passedThrough && this.touches(x, y, width, height)) {
       if (!this.highlighting) {
         this.highlighting = true;
-        this.animating = true;
-        this.glow(function() {
-          return _this.animating = false;
-        });
+        this.glow();
         return this.passedThrough = true;
       }
     }
