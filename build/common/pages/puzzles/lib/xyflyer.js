@@ -64,13 +64,19 @@ xyflyer.ViewHelper = (function() {
     return this.board.plot(id, formula, area);
   };
 
-  ViewHelper.prototype.trackPlane = function(info) {
-    var allPassedThrough, ring, _i, _len, _ref1;
+  ViewHelper.prototype.trackPlane = function(_arg) {
+    var allPassedThrough, height, ring, width, x, y, _i, _len, _ref1;
+    x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
     allPassedThrough = this.rings.length > 0;
     _ref1 = this.rings;
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       ring = _ref1[_i];
-      ring.highlightIfPassingThrough(info);
+      ring.highlightIfPassingThrough({
+        x: x,
+        y: y,
+        width: width,
+        height: height
+      });
       if (!ring.passedThrough) {
         allPassedThrough = false;
       }

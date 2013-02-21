@@ -40,10 +40,10 @@ class xyflyer.ViewHelper
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
         
-    trackPlane: (info) ->
+    trackPlane: ({x, y, width, height}) ->
         allPassedThrough = @rings.length > 0
         for ring in @rings
-            ring.highlightIfPassingThrough(info) 
+            ring.highlightIfPassingThrough(x: x, y: y, width: width, height: height) 
             allPassedThrough = false unless ring.passedThrough
         @completeLevel() if allPassedThrough
         
