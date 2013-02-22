@@ -29,35 +29,35 @@ class ring.Ring extends xyflyerObject.Object
         @drawHalfRing(@backCanvas, -1, highlightRadius)
         
     drawHalfRing: (canvas, xDirection, highlightRadius=0) ->
-        canvas.clearRect(
-            @screenX - 100#((@width + highlightRadius) * 2), 
-            @screenY - 100#((@height + highlightRadius) * 2), 
-            200,#(@width + highlightRadius) * 2 , 
-            200,#(@height + highlightRadius) * 2 
-        )
+        canvas.clearRect(0, 0, @board.width, @board.height)
         
         for h in [(highlightRadius * -1)..highlightRadius]
+            xRadius = (@width/2) + h
+            yRadius = (@height/2) + h
+            continue if xRadius < 0
+
             canvas.strokeStyle = "rgba(255, 255, 255, #{if highlightRadius then 1 - Math.abs(h/highlightRadius) else 1})"
             canvas.lineWidth = 1
             canvas.beginPath()
             for yDirection in [-1,1]
-                for x in [0..(@width/2) + 0.1] by 0.1
-                    y = Math.sqrt((@height/2) * ((@height/2) - Math.pow(x,2)))
+                for x in [0..xRadius + 0.1] by 0.1
+                    y = Math.sqrt(yRadius * (yRadius - Math.pow(x,2)))
                     if x == 0
-                        canvas.moveTo(@screenX + (x * xDirection) + h, @screenY + (y * yDirection))
-                    else if x >= @width/2
-                        canvas.lineTo(@screenX + (@width/2 * xDirection) + h, @screenY)
+                        canvas.moveTo(@screenX + (x * xDirection), @screenY + (y * yDirection))
+                    else if x >= xRadius
+                        canvas.lineTo(@screenX + (x * xDirection), @screenY)
                     else
-                        canvas.lineTo(@screenX + (x * xDirection) + h, @screenY + (y * yDirection))            
+                        canvas.lineTo(@screenX + (x * xDirection), @screenY + (y * yDirection))            
             canvas.stroke()
             canvas.closePath()
 
     glow: ->
         @animating = true
         radius = 8
-        time = 500
+        time = 400
         @animation.start time, (deltaTime, progress, totalTime) =>
-            @draw(radius * progress)      
+            easedProgress = Math.pow(progress, 1/5)
+            @draw(radius * easedProgress)      
             if progress == 1
                 @animation.start time, (deltaTime, progress, totalTime) =>
                     @draw(radius * (1-progress))

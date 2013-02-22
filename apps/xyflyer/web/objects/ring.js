@@ -45,27 +45,32 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.drawHalfRing = function(canvas, xDirection, highlightRadius) {
-    var h, x, y, yDirection, _i, _j, _k, _len, _ref, _ref1, _ref2, _results;
+    var h, x, xRadius, y, yDirection, yRadius, _i, _j, _k, _len, _ref, _ref1, _ref2, _results;
     if (highlightRadius == null) {
       highlightRadius = 0;
     }
-    canvas.clearRect(this.screenX - 100, this.screenY - 100, 200, 200);
+    canvas.clearRect(0, 0, this.board.width, this.board.height);
     _results = [];
     for (h = _i = _ref = highlightRadius * -1; _ref <= highlightRadius ? _i <= highlightRadius : _i >= highlightRadius; h = _ref <= highlightRadius ? ++_i : --_i) {
+      xRadius = (this.width / 2) + h;
+      yRadius = (this.height / 2) + h;
+      if (xRadius < 0) {
+        continue;
+      }
       canvas.strokeStyle = "rgba(255, 255, 255, " + (highlightRadius ? 1 - Math.abs(h / highlightRadius) : 1) + ")";
       canvas.lineWidth = 1;
       canvas.beginPath();
       _ref1 = [-1, 1];
       for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
         yDirection = _ref1[_j];
-        for (x = _k = 0, _ref2 = (this.width / 2) + 0.1; 0 <= _ref2 ? _k <= _ref2 : _k >= _ref2; x = _k += 0.1) {
-          y = Math.sqrt((this.height / 2) * ((this.height / 2) - Math.pow(x, 2)));
+        for (x = _k = 0, _ref2 = xRadius + 0.1; 0 <= _ref2 ? _k <= _ref2 : _k >= _ref2; x = _k += 0.1) {
+          y = Math.sqrt(yRadius * (yRadius - Math.pow(x, 2)));
           if (x === 0) {
-            canvas.moveTo(this.screenX + (x * xDirection) + h, this.screenY + (y * yDirection));
-          } else if (x >= this.width / 2) {
-            canvas.lineTo(this.screenX + (this.width / 2 * xDirection) + h, this.screenY);
+            canvas.moveTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));
+          } else if (x >= xRadius) {
+            canvas.lineTo(this.screenX + (x * xDirection), this.screenY);
           } else {
-            canvas.lineTo(this.screenX + (x * xDirection) + h, this.screenY + (y * yDirection));
+            canvas.lineTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));
           }
         }
       }
@@ -80,9 +85,11 @@ ring.Ring = (function(_super) {
       _this = this;
     this.animating = true;
     radius = 8;
-    time = 500;
+    time = 400;
     return this.animation.start(time, function(deltaTime, progress, totalTime) {
-      _this.draw(radius * progress);
+      var easedProgress;
+      easedProgress = Math.pow(progress, 1 / 5);
+      _this.draw(radius * easedProgress);
       if (progress === 1) {
         return _this.animation.start(time, function(deltaTime, progress, totalTime) {
           _this.draw(radius * (1 - progress));
