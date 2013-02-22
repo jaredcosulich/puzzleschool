@@ -45,14 +45,15 @@ board.Board = (function(_super) {
     return this.initClicks();
   };
 
-  Board.prototype.createCanvas = function() {
+  Board.prototype.createCanvas = function(zIndex) {
     var canvas;
     canvas = $(document.createElement('CANVAS'));
     canvas.css({
       top: 0,
       left: 0,
       height: this.el.height(),
-      width: this.el.width()
+      width: this.el.width(),
+      zIndex: zIndex
     });
     canvas.attr({
       height: this.el.height(),
@@ -98,44 +99,12 @@ board.Board = (function(_super) {
     return "" + (this.scale > 0.6 ? 'Launching From:\n' : '') + this.islandCoordinates.x + ", " + this.islandCoordinates.y;
   };
 
-  Board.prototype.addRing = function(ring) {
-    var back, front, ringSet;
-    front = this.paper.path(ring.frontDescription);
-    front.toFront();
-    back = this.paper.path(ring.backDescription);
-    back.toBack();
-    ringSet = this.paper.set();
-    ringSet.push(front, back);
-    this.ringFronts.push(front);
-    this.rings.push(ringSet);
-    return ringSet;
-  };
-
-  Board.prototype.setRingFronts = function() {
-    var ringFront, _i, _len, _ref, _results;
-    _ref = this.ringFronts;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      ringFront = _ref[_i];
-      _results.push(ringFront.toFront());
-    }
-    return _results;
-  };
-
-  Board.prototype.addPlane = function(plane) {
-    var planeImage;
-    this.plane = plane;
-    planeImage = this.paper.path(this.plane.description);
-    planeImage.transform("s" + this.scale + "," + this.scale);
-    return planeImage;
-  };
-
   Board.prototype.initClicks = function() {
     var _this = this;
     this.el.css({
       zIndex: 97
     });
-    return this.el.bind('click.showxy', function(e) {
+    return this.el.bind('mousedown.showxy touchstart.showxy', function(e) {
       var formula1, onPath, result, y;
       result = _this.findNearestXOnPath(e.offsetX, e.offsetY);
       onPath = result.x;
@@ -426,8 +395,7 @@ board.Board = (function(_super) {
       formula: formula,
       plotArea: plotArea
     };
-    this.resetLevel();
-    return this.setRingFronts();
+    return this.resetLevel();
   };
 
   Board.prototype.calculatePath = function(increment) {

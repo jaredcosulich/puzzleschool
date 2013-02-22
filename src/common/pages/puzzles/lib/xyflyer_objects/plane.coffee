@@ -20,7 +20,7 @@ class plane.Plane extends xyflyerObject.Object
             return 
         @width = @image.width() * @scale
         @height = @image.height() * @scale
-        @canvas = @board.createCanvas()
+        @canvas = @board.createCanvas(2)
         
     move: (x, y, next) ->
         if not @canvas

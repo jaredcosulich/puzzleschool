@@ -21,8 +21,8 @@ class ring.Ring extends xyflyerObject.Object
         @animation = new Animation()
         
     initCanvas: ->
-        @frontCanvas = @board.createCanvas()
-        @backCanvas = @board.createCanvas()
+        @frontCanvas = @board.createCanvas(3)
+        @backCanvas = @board.createCanvas(1)
         
     draw: (highlightRadius)->
         @drawHalfRing(@frontCanvas, 1, highlightRadius)

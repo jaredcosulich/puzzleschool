@@ -33,13 +33,14 @@ class board.Board extends xyflyerObject.Object
         @drawGrid() 
         @initClicks()
         
-    createCanvas: ->
+    createCanvas: (zIndex) ->
         canvas = $(document.createElement('CANVAS'))
         canvas.css
             top: 0
             left: 0
             height: @el.height()
             width: @el.width()
+            zIndex: zIndex
         canvas.attr(height: @el.height(), width: @el.width())            
         @el.append(canvas)            
         return canvas[0].getContext('2d')
@@ -75,28 +76,9 @@ class board.Board extends xyflyerObject.Object
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
         
-    addRing: (ring) ->
-        front = @paper.path(ring.frontDescription)
-        front.toFront()
-        back = @paper.path(ring.backDescription)
-        back.toBack()
-        ringSet = @paper.set()
-        ringSet.push(front, back)
-        @ringFronts.push(front)
-        @rings.push(ringSet)
-        return ringSet    
-    
-    setRingFronts: ->
-        ringFront.toFront() for ringFront in @ringFronts
-    
-    addPlane: (@plane) -> 
-        planeImage = @paper.path(@plane.description)
-        planeImage.transform("s#{@scale},#{@scale}")
-        return planeImage
-        
     initClicks: ->
         @el.css(zIndex: 97)
-        @el.bind 'click.showxy', (e) =>
+        @el.bind 'mousedown.showxy touchstart.showxy', (e) =>
             result = @findNearestXOnPath(e.offsetX, e.offsetY)
             onPath = result.x
             if result.formulas.length
@@ -289,7 +271,6 @@ class board.Board extends xyflyerObject.Object
             plotArea: plotArea
 
         @resetLevel()
-        @setRingFronts()
             
         
     calculatePath: (increment) ->

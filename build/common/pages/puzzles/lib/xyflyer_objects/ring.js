@@ -35,8 +35,8 @@ ring.Ring = (function(_super) {
   }
 
   Ring.prototype.initCanvas = function() {
-    this.frontCanvas = this.board.createCanvas();
-    return this.backCanvas = this.board.createCanvas();
+    this.frontCanvas = this.board.createCanvas(3);
+    return this.backCanvas = this.board.createCanvas(1);
   };
 
   Ring.prototype.draw = function(highlightRadius) {

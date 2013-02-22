@@ -35,7 +35,7 @@ plane.Plane = (function(_super) {
     }
     this.width = this.image.width() * this.scale;
     this.height = this.image.height() * this.scale;
-    return this.canvas = this.board.createCanvas();
+    return this.canvas = this.board.createCanvas(2);
   };
 
   Plane.prototype.move = function(x, y, next) {
