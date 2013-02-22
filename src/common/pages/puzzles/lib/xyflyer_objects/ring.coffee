@@ -24,31 +24,26 @@ class ring.Ring extends xyflyerObject.Object
         @frontCanvas = @board.createCanvas()
         @backCanvas = @board.createCanvas()
         
-    clear: (canvas) ->
-        canvas.clearRect(0, 0, @board.width, @board.height)
-        
-    draw: ->
-        @clear(@frontCanvas)
-        @clear(@backCanvas)
-        @drawHalfRing(@frontCanvas, 1)
-        @drawHalfRing(@backCanvas, -1)
+    draw: (highlightRadius)->
+        @drawHalfRing(@frontCanvas, 1, highlightRadius)
+        @drawHalfRing(@backCanvas, -1, highlightRadius)
         
     drawHalfRing: (canvas, xDirection, highlightRadius=0) ->
-        for h in [(highlightRadius * -1)..highlightRadius]
-            xRadius = (@width/2) + h
-            yRadius = (@height/2) + h
-            continue if xRadius < 2
+        canvas.clearRect(0, 0, @board.width, @board.height)
 
-            canvas.strokeStyle = "rgba(255, 255, 255, #{if highlightRadius then 1/(2*highlightRadius) else 1})"
-            canvas.lineWidth = 1
+        for h in [0..highlightRadius] by 2
+            canvas.strokeStyle = "rgba(255, 255, 255, #{if highlightRadius then 1- Math.abs(h/highlightRadius) else 1})"
+            canvas.lineWidth = h or 1
             canvas.beginPath()
+
+            xRadius = (@width/2)
+            yRadius = (@height/2)
             for yDirection in [-1,1]
                 for x in [0..xRadius + 0.1] by 0.1
+                    x = xRadius if x > xRadius
                     y = Math.sqrt(yRadius * (yRadius - Math.pow(x,2)))
                     if x == 0
                         canvas.moveTo(@screenX + (x * xDirection), @screenY + (y * yDirection))
-                    else if x >= xRadius
-                        canvas.lineTo(@screenX + (x * xDirection), @screenY)
                     else
                         canvas.lineTo(@screenX + (x * xDirection), @screenY + (y * yDirection))            
             canvas.stroke()
@@ -56,27 +51,17 @@ class ring.Ring extends xyflyerObject.Object
 
     glow: ->
         @animating = true
-        radius = 8
-        time = 400
-        canvii = []
+        radius = 16
+        time = 400        
         @animation.start time, (deltaTime, progress, totalTime) =>
-            easedProgress = Math.pow(progress, 1/5)
-            front = @board.createCanvas()
-            back = @board.createCanvas()
-            @drawHalfRing(front, 1, easedProgress * radius)
-            @drawHalfRing(back, -1, easedProgress * radius)            
-            canvii.push([front, back]) 
-            @draw(radius * easedProgress)      
-            if progress == 1
-                @animation.start time, (deltaTime, progress, totalTime) =>
-                    for i in [0...canvii.length * progress]
-                        unless canvii[i][2]
-                            @clear(canvii[i][0])
-                            @clear(canvii[i][1])    
-                            canvii[i].push('cleared')
-                            
-                    if progress == 1
-                        @animating = false      
+           easedProgress = Math.pow(progress, 1/5)
+           @draw(radius * easedProgress)
+           if progress == 1
+               @animation.start time, (deltaTime, progress, totalTime) =>
+                   @draw(radius * (1-progress))
+                   if progress == 1
+                       @draw()
+                       @animating = false      
                 
         
     highlightIfPassingThrough: ({x, y, width, height}) ->

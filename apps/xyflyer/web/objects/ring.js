@@ -39,41 +39,34 @@ ring.Ring = (function(_super) {
     return this.backCanvas = this.board.createCanvas();
   };
 
-  Ring.prototype.clear = function(canvas) {
-    return canvas.clearRect(0, 0, this.board.width, this.board.height);
-  };
-
-  Ring.prototype.draw = function() {
-    this.clear(this.frontCanvas);
-    this.clear(this.backCanvas);
-    this.drawHalfRing(this.frontCanvas, 1);
-    return this.drawHalfRing(this.backCanvas, -1);
+  Ring.prototype.draw = function(highlightRadius) {
+    this.drawHalfRing(this.frontCanvas, 1, highlightRadius);
+    return this.drawHalfRing(this.backCanvas, -1, highlightRadius);
   };
 
   Ring.prototype.drawHalfRing = function(canvas, xDirection, highlightRadius) {
-    var h, x, xRadius, y, yDirection, yRadius, _i, _j, _k, _len, _ref, _ref1, _ref2, _results;
+    var h, x, xRadius, y, yDirection, yRadius, _i, _j, _k, _len, _ref, _ref1, _results;
     if (highlightRadius == null) {
       highlightRadius = 0;
     }
+    canvas.clearRect(0, 0, this.board.width, this.board.height);
     _results = [];
-    for (h = _i = _ref = highlightRadius * -1; _ref <= highlightRadius ? _i <= highlightRadius : _i >= highlightRadius; h = _ref <= highlightRadius ? ++_i : --_i) {
-      xRadius = (this.width / 2) + h;
-      yRadius = (this.height / 2) + h;
-      if (xRadius < 2) {
-        continue;
-      }
-      canvas.strokeStyle = "rgba(255, 255, 255, " + (highlightRadius ? 1 / (2 * highlightRadius) : 1) + ")";
-      canvas.lineWidth = 1;
+    for (h = _i = 0; _i <= highlightRadius; h = _i += 2) {
+      canvas.strokeStyle = "rgba(255, 255, 255, " + (highlightRadius ? 1 - Math.abs(h / highlightRadius) : 1) + ")";
+      canvas.lineWidth = h || 1;
       canvas.beginPath();
-      _ref1 = [-1, 1];
-      for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
-        yDirection = _ref1[_j];
-        for (x = _k = 0, _ref2 = xRadius + 0.1; 0 <= _ref2 ? _k <= _ref2 : _k >= _ref2; x = _k += 0.1) {
+      xRadius = this.width / 2;
+      yRadius = this.height / 2;
+      _ref = [-1, 1];
+      for (_j = 0, _len = _ref.length; _j < _len; _j++) {
+        yDirection = _ref[_j];
+        for (x = _k = 0, _ref1 = xRadius + 0.1; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; x = _k += 0.1) {
+          if (x > xRadius) {
+            x = xRadius;
+          }
           y = Math.sqrt(yRadius * (yRadius - Math.pow(x, 2)));
           if (x === 0) {
             canvas.moveTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));
-          } else if (x >= xRadius) {
-            canvas.lineTo(this.screenX + (x * xDirection), this.screenY);
           } else {
             canvas.lineTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));
           }
@@ -86,32 +79,20 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.glow = function() {
-    var canvii, radius, time,
+    var radius, time,
       _this = this;
     this.animating = true;
-    radius = 8;
+    radius = 16;
     time = 400;
-    canvii = [];
     return this.animation.start(time, function(deltaTime, progress, totalTime) {
-      var back, easedProgress, front;
+      var easedProgress;
       easedProgress = Math.pow(progress, 1 / 5);
-      front = _this.board.createCanvas();
-      back = _this.board.createCanvas();
-      _this.drawHalfRing(front, 1, easedProgress * radius);
-      _this.drawHalfRing(back, -1, easedProgress * radius);
-      canvii.push([front, back]);
       _this.draw(radius * easedProgress);
       if (progress === 1) {
         return _this.animation.start(time, function(deltaTime, progress, totalTime) {
-          var i, _i, _ref;
-          for (i = _i = 0, _ref = canvii.length * progress; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-            if (!canvii[i][2]) {
-              _this.clear(canvii[i][0]);
-              _this.clear(canvii[i][1]);
-              canvii[i].push('cleared');
-            }
-          }
+          _this.draw(radius * (1 - progress));
           if (progress === 1) {
+            _this.draw();
             return _this.animating = false;
           }
         });
