@@ -19,23 +19,27 @@ plane.Plane = (function(_super) {
 
   function Plane(_arg) {
     this.board = _arg.board, this.track = _arg.track, this.objects = _arg.objects;
-    this.scale = this.board.scale / 2;
     this.initCanvas();
     this.animation = new Animation();
     this.reset();
   }
 
+  Plane.prototype.setBoard = function(board) {
+    this.board = board;
+  };
+
   Plane.prototype.initCanvas = function() {
-    var _this = this;
-    if (!(this.image = this.objects.find('.plane img')).height()) {
-      setTimeout((function() {
-        return _this.initCanvas();
-      }), 50);
-      return;
-    }
-    this.width = this.image.width() * this.scale;
-    this.height = this.image.height() * this.scale;
     return this.canvas = this.board.createCanvas(2);
+  };
+
+  Plane.prototype.clear = function() {
+    return this.canvas.clearRect(this.currentXPos - this.width, this.currentYPos - this.height, this.width * 4, this.height * 4);
+  };
+
+  Plane.prototype.size = function() {
+    this.scale = this.board.scale / 2;
+    this.width = this.image.width() * this.scale;
+    return this.height = this.image.height() * this.scale;
   };
 
   Plane.prototype.move = function(x, y, next) {
@@ -46,7 +50,7 @@ plane.Plane = (function(_super) {
       }), 50);
       return;
     }
-    this.canvas.clearRect(this.currentXPos - this.width, this.currentYPos - this.height, this.width * 4, this.height * 4);
+    this.clear();
     this.canvas.drawImage(this.image[0], x - (this.width / 2), y - (this.height / 2), this.width, this.height);
     this.currentXPos = x;
     this.currentYPos = y;
@@ -128,9 +132,17 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.reset = function() {
+    var _this = this;
+    if (!(this.image = this.objects.find('.plane img')).height()) {
+      setTimeout((function() {
+        return _this.reset();
+      }), 50);
+      return;
+    }
     this.falling = false;
     this.cancelFlight = true;
     this.path = null;
+    this.size();
     this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit);
     return this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
   };

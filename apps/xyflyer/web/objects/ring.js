@@ -27,7 +27,7 @@ ring.Ring = (function(_super) {
     this.board = _arg.board, this.x = _arg.x, this.y = _arg.y;
     this.screenX = this.board.screenX(this.x);
     this.screenY = this.board.screenY(this.y);
-    this.scale = 1;
+    this.scale = this.board.scale;
     this.initCanvas();
     this.draw();
     this.label = this.board.showXY(this.screenX, this.screenY, false, true);
@@ -55,18 +55,17 @@ ring.Ring = (function(_super) {
       canvas.strokeStyle = "rgba(255, 255, 255, " + (highlightRadius ? 1 - Math.abs(h / highlightRadius) : 1) + ")";
       canvas.lineWidth = h || 1;
       canvas.beginPath();
-      xRadius = this.width / 2;
-      yRadius = this.height / 2;
+      xRadius = (this.width / 2) * this.scale;
+      yRadius = (this.height / 2) * this.scale;
       _ref = [-1, 1];
       for (_j = 0, _len = _ref.length; _j < _len; _j++) {
         yDirection = _ref[_j];
-        for (x = _k = 0, _ref1 = xRadius + 0.1; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; x = _k += 0.1) {
-          if (x > xRadius) {
-            x = xRadius;
-          }
+        for (x = _k = 0, _ref1 = xRadius + 0.01; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; x = _k += 0.01) {
           y = Math.sqrt(yRadius * (yRadius - Math.pow(x, 2)));
           if (x === 0) {
             canvas.moveTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));
+          } else if (x > xRadius) {
+            canvas.lineTo(this.screenX + (xRadius * xDirection), this.screenY);
           } else {
             canvas.lineTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));
           }

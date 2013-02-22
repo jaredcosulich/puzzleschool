@@ -7,29 +7,30 @@ class plane.Plane extends xyflyerObject.Object
     incrementTime: 6
     
     constructor: ({@board, @track, @objects}) ->
-        @scale = @board.scale / 2
         @initCanvas()
         @animation = new Animation()
         @reset()
 
+    setBoard: (@board) ->
+        
     initCanvas: ->
-        if not (@image = @objects.find('.plane img')).height()
-            setTimeout((=>
-                @initCanvas()
-            ), 50)
-            return 
+        @canvas = @board.createCanvas(2)
+
+    clear: -> @canvas.clearRect(@currentXPos - @width,@currentYPos - @height,@width*4,@height*4)
+    
+    size: ->
+        @scale = @board.scale / 2
         @width = @image.width() * @scale
         @height = @image.height() * @scale
-        @canvas = @board.createCanvas(2)
-        
+    
     move: (x, y, next) ->
         if not @canvas
             setTimeout((=>
                 @move(x, y, next)
             ), 50)
             return 
-
-        @canvas.clearRect(@currentXPos - @width,@currentYPos - @height,@width*4,@height*4)
+            
+        @clear()
         @canvas.drawImage(
             @image[0], 
             x - (@width/2), 
@@ -83,9 +84,16 @@ class plane.Plane extends xyflyerObject.Object
                 @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
                         
     reset: ->
+        if not (@image = @objects.find('.plane img')).height()
+            setTimeout((=>
+                @reset()
+            ), 50)
+            return 
+        
         @falling = false
         @cancelFlight = true
         @path = null
+        @size()
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)
         @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
 

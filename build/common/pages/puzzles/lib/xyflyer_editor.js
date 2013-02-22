@@ -59,7 +59,7 @@ xyflyerEditor.EditorHelper = (function() {
       this.board.paper.clear();
     }
     this.board = new xyflyer.Board({
-      boardElement: this.boardElement,
+      el: this.boardElement,
       objects: this.objects,
       grid: this.grid,
       islandCoordinates: this.islandCoordinates,
@@ -67,12 +67,18 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.resetLevel();
       }
     });
-    this.plane = new xyflyer.Plane({
-      board: this.board,
-      track: function(info) {
-        return _this.trackPlane(info);
-      }
-    });
+    if (this.plane) {
+      this.plane.setBoard(this.board);
+      this.plane.reset();
+    } else {
+      this.plane = new xyflyer.Plane({
+        board: this.board,
+        objects: this.objects,
+        track: function(info) {
+          return _this.trackPlane(info);
+        }
+      });
+    }
     if (this.equations) {
       _ref1 = (_ref = this.equations) != null ? _ref.equations : void 0;
       _results = [];

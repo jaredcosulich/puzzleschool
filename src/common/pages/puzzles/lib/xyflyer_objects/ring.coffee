@@ -13,8 +13,8 @@ class ring.Ring extends xyflyerObject.Object
     constructor: ({@board, @x, @y}) ->
         @screenX = @board.screenX(@x)
         @screenY = @board.screenY(@y)
-        @scale = 1
-
+        @scale = @board.scale
+        
         @initCanvas()
         @draw()        
         @label = @board.showXY(@screenX, @screenY, false, true)
@@ -36,14 +36,15 @@ class ring.Ring extends xyflyerObject.Object
             canvas.lineWidth = h or 1
             canvas.beginPath()
 
-            xRadius = (@width/2)
-            yRadius = (@height/2)
+            xRadius = (@width/2) * @scale
+            yRadius = (@height/2) * @scale
             for yDirection in [-1,1]
-                for x in [0..xRadius + 0.1] by 0.1
-                    x = xRadius if x > xRadius
+                for x in [0..xRadius + 0.01] by 0.01
                     y = Math.sqrt(yRadius * (yRadius - Math.pow(x,2)))
                     if x == 0
                         canvas.moveTo(@screenX + (x * xDirection), @screenY + (y * yDirection))
+                    else if x > xRadius
+                        canvas.lineTo(@screenX + (xRadius * xDirection), @screenY)
                     else
                         canvas.lineTo(@screenX + (x * xDirection), @screenY + (y * yDirection))            
             canvas.stroke()

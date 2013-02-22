@@ -36,17 +36,22 @@ class xyflyerEditor.EditorHelper
             @islandCoordinates = {x: 0, y: 0} 
         
         @board.paper.clear() if @board
-        
+
         @board = new xyflyer.Board
-            boardElement: @boardElement 
+            el: @boardElement 
             objects: @objects
             grid: @grid 
             islandCoordinates: @islandCoordinates
             resetLevel: => @resetLevel()
     
-        @plane = new xyflyer.Plane
-            board: @board
-            track: (info) => @trackPlane(info)
+        if @plane
+            @plane.setBoard(@board)
+            @plane.reset()
+        else    
+            @plane = new xyflyer.Plane
+                board: @board
+                objects: @objects
+                track: (info) => @trackPlane(info)
             
         if @equations
             @equations.plotFormula(equation) for equation in @equations?.equations
