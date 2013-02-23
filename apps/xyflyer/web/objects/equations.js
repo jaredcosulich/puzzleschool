@@ -226,7 +226,7 @@ equations.Equations = (function() {
       });
     }
     gameAreaOffset = this.gameArea.offset();
-    if (component.top() === 0) {
+    if (component.inUse) {
       dragElement = component.dropArea.element;
     } else {
       dragElement = component.element;

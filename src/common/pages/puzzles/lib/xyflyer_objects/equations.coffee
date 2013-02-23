@@ -135,7 +135,7 @@ class equations.Equations
         
         gameAreaOffset = @gameArea.offset()
         
-        if component.top() == 0
+        if component.inUse
             dragElement = component.dropArea.element
         else
             dragElement = component.element

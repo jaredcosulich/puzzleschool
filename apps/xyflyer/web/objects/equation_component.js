@@ -16,6 +16,7 @@ equationComponent.EquationComponent = (function() {
 
     this.initElement();
     this.initMove();
+    this.inUse = false;
   }
 
   EquationComponent.prototype.clientX = function(e) {
@@ -132,11 +133,13 @@ equationComponent.EquationComponent = (function() {
         visibility: 'hidden'
       });
       this.placeHolder.show();
+      this.inUse = true;
     } else {
       this.element.css({
         visibility: 'visible'
       });
       this.placeHolder.hide();
+      this.inUse = false;
     }
     this.transformer.translate(0, 0);
     return $(document.body).unbind('mousemove.move touchmove.move');

@@ -77,7 +77,6 @@ class equation.Equation
         @removeDropArea(childArea) for childArea in dropArea.childAreas
         dropArea.childAreas = []
          
-         
         removeDropAreas = []
         for da in @dropAreas when not da.component and not da.fixed
             da.element.addClass('removing')

@@ -6,6 +6,7 @@ class equationComponent.EquationComponent
     constructor: ({@gameArea, @equationFragment, @trackDrag, @endDrag}) ->
         @initElement()
         @initMove()
+        @inUse = false
         
     clientX: (e) => (e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX) - @gameArea.offset().left
     clientY: (e) => (e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY) - @gameArea.offset().top
@@ -76,9 +77,11 @@ class equationComponent.EquationComponent
         if @endDrag(@)
             @element.css(visibility: 'hidden')
             @placeHolder.show()
+            @inUse = true
         else
             @element.css(visibility: 'visible')
             @placeHolder.hide()
+            @inUse = false
 
         @transformer.translate(0, 0)
         

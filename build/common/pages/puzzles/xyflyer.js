@@ -624,7 +624,7 @@ LEVELS = [
     fragments: ['+2', '-2', '+4', '-4']
   }, {
     equations: {
-      '(1/4)x': {
+      '(1/4)*x': {
         start: 'x'
       }
     },
@@ -1142,7 +1142,7 @@ LEVELS = [
     fragments: ['2x', '(1/2)x', '+2']
   }, {
     equations: {
-      'ax-64': {
+      'a*x-64': {
         start: 'x'
       },
       '(1/b)x-8': {
@@ -1167,7 +1167,7 @@ LEVELS = [
         y: -12
       }
     ],
-    fragments: ['a', '(1/b)', '+8', '-8', '+64', '-64'],
+    fragments: ['a*', '(1/b)', '+8', '-8', '+64', '-64'],
     islandCoordinates: {
       x: -20,
       y: 16

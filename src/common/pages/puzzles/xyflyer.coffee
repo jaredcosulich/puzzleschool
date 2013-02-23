@@ -438,7 +438,7 @@ LEVELS = [
     }
     {
         equations: 
-            '(1/4)x': {start: 'x'}
+            '(1/4)*x': {start: 'x'}
         grid:
             xMin: -10
             xMax: 10
@@ -796,7 +796,7 @@ LEVELS = [
     }    
     {
         equations:
-            'ax-64': {start: 'x'}
+            'a*x-64': {start: 'x'}
             '(1/b)x-8': {start: 'x'}
         grid:
             xMin: -30
@@ -809,7 +809,7 @@ LEVELS = [
             {x: 20, y: -12}
         ]
         fragments: [
-            'a', '(1/b)', '+8', '-8', '+64', '-64'
+            'a*', '(1/b)', '+8', '-8', '+64', '-64'
         ]
         islandCoordinates: {x: -20, y: 16}
         variables:
