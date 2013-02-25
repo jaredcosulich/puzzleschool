@@ -1,20 +1,26 @@
 animation = exports ? provide('./animation', {})
 
 class animation.Animation
-    constructor: () ->
+    constructor: (@calculation=false) ->
         @animations = []
         @animationIndex = 0
         
     frame: ->
-        return window.requestAnimationFrame  ||
-               window.webkitRequestAnimationFrame ||
-               window.mozRequestAnimationFrame    ||
-               window.oRequestAnimationFrame      ||
-               window.msRequestAnimationFrame     ||
-               (callback) ->
-                   window.setTimeout((->
-                       callback(+new Date())
-                   ), 11)
+        if @calculation
+            (callback) ->
+                window.setTimeout((->
+                    callback(+new Date())
+                ), 11)
+        else
+            return window.requestAnimationFrame  ||
+                   window.webkitRequestAnimationFrame ||
+                   window.mozRequestAnimationFrame    ||
+                   window.oRequestAnimationFrame      ||
+                   window.msRequestAnimationFrame     ||
+                   (callback) ->
+                       window.setTimeout((->
+                           callback(+new Date())
+                       ), 11)
 
     queueAnimation: (time, method) ->  
         @animations.push

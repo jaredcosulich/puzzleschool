@@ -7,37 +7,29 @@ class plane.Plane extends xyflyerObject.Object
     incrementTime: 6
     
     constructor: ({@board, @track, @objects}) ->
-        @initCanvas()
-        @animation = new Animation()
+        @animation = new Animation(true)
+        @addToBoard()
         @reset()
 
     setBoard: (@board) ->
         
-    initCanvas: ->
-        @canvas = @board.createCanvas(2)
-
-    clear: -> @canvas.clearRect(@currentXPos - @width,@currentYPos - @height,@width*4,@height*4)
-    
+    addToBoard: -> @board.addToCanvas(@, 2)
+        
+    draw: (ctx, t) ->
+        ctx.drawImage(
+            @image[0], 
+            @currentXPos - (@width/2), 
+            @currentYPos - (@height/2), 
+            @width,
+            @height
+        )
+        
     size: ->
         @scale = @board.scale / 2
         @width = @image.width() * @scale
         @height = @image.height() * @scale
     
     move: (x, y, next) ->
-        if not @canvas
-            setTimeout((=>
-                @move(x, y, next)
-            ), 50)
-            return 
-            
-        @clear()
-        @canvas.drawImage(
-            @image[0], 
-            x - (@width/2), 
-            y - (@height/2), 
-            @width,
-            @height
-        )
         @currentXPos = x
         @currentYPos = y
         setTimeout((=> @track(x: x, y: y, width: @width, height: @height)), 0)

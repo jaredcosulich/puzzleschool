@@ -5,17 +5,26 @@ animation = typeof exports !== "undefined" && exports !== null ? exports : provi
 
 animation.Animation = (function() {
 
-  function Animation() {
+  function Animation(calculation) {
+    this.calculation = calculation != null ? calculation : false;
     this.animations = [];
     this.animationIndex = 0;
   }
 
   Animation.prototype.frame = function() {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
-      return window.setTimeout((function() {
-        return callback(+new Date());
-      }), 11);
-    };
+    if (this.calculation) {
+      return function(callback) {
+        return window.setTimeout((function() {
+          return callback(+new Date());
+        }), 11);
+      };
+    } else {
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+        return window.setTimeout((function() {
+          return callback(+new Date());
+        }), 11);
+      };
+    }
   };
 
   Animation.prototype.queueAnimation = function(time, method) {

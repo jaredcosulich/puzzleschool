@@ -19,8 +19,8 @@ plane.Plane = (function(_super) {
 
   function Plane(_arg) {
     this.board = _arg.board, this.track = _arg.track, this.objects = _arg.objects;
-    this.initCanvas();
-    this.animation = new Animation();
+    this.animation = new Animation(true);
+    this.addToBoard();
     this.reset();
   }
 
@@ -28,12 +28,12 @@ plane.Plane = (function(_super) {
     this.board = board;
   };
 
-  Plane.prototype.initCanvas = function() {
-    return this.canvas = this.board.createCanvas(2);
+  Plane.prototype.addToBoard = function() {
+    return this.board.addToCanvas(this, 2);
   };
 
-  Plane.prototype.clear = function() {
-    return this.canvas.clearRect(this.currentXPos - this.width, this.currentYPos - this.height, this.width * 4, this.height * 4);
+  Plane.prototype.draw = function(ctx, t) {
+    return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
   };
 
   Plane.prototype.size = function() {
@@ -44,14 +44,6 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.move = function(x, y, next) {
     var _this = this;
-    if (!this.canvas) {
-      setTimeout((function() {
-        return _this.move(x, y, next);
-      }), 50);
-      return;
-    }
-    this.clear();
-    this.canvas.drawImage(this.image[0], x - (this.width / 2), y - (this.height / 2), this.width, this.height);
     this.currentXPos = x;
     this.currentYPos = y;
     setTimeout((function() {
@@ -103,7 +95,6 @@ plane.Plane = (function(_super) {
   Plane.prototype.launch = function(force) {
     var duration, timeFactor,
       _this = this;
-    alert('launch3');
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
