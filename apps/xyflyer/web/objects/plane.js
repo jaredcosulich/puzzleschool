@@ -103,6 +103,7 @@ plane.Plane = (function(_super) {
   Plane.prototype.launch = function(force) {
     var duration, timeFactor,
       _this = this;
+    alert('launch3');
     if (this.falling || this.cancelFlight && !force) {
       return;
     }

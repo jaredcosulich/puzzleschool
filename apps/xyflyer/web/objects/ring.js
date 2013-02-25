@@ -45,22 +45,22 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.drawHalfRing = function(canvas, xDirection, highlightRadius) {
-    var h, x, xRadius, y, yDirection, yRadius, _i, _j, _k, _len, _ref, _ref1, _results;
+    var h, x, xRadius, y, yDirection, yRadius, _i, _j, _k, _len, _ref, _ref1, _ref2, _results;
     if (highlightRadius == null) {
       highlightRadius = 0;
     }
     canvas.clearRect(0, 0, this.board.width, this.board.height);
     _results = [];
-    for (h = _i = 0; _i <= highlightRadius; h = _i += 2) {
+    for (h = _i = 0, _ref = Math.floor(highlightRadius / 4) || 1; 0 <= highlightRadius ? _i <= highlightRadius : _i >= highlightRadius; h = _i += _ref) {
       canvas.strokeStyle = "rgba(255, 255, 255, " + (highlightRadius ? 1 - Math.abs(h / highlightRadius) : 1) + ")";
       canvas.lineWidth = h || 1;
       canvas.beginPath();
       xRadius = (this.width / 2) * this.scale;
       yRadius = (this.height / 2) * this.scale;
-      _ref = [-1, 1];
-      for (_j = 0, _len = _ref.length; _j < _len; _j++) {
-        yDirection = _ref[_j];
-        for (x = _k = 0, _ref1 = xRadius + 0.01; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; x = _k += 0.01) {
+      _ref1 = [-1, 1];
+      for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+        yDirection = _ref1[_j];
+        for (x = _k = 0, _ref2 = xRadius + 0.01; 0 <= _ref2 ? _k <= _ref2 : _k >= _ref2; x = _k += 0.01) {
           y = Math.sqrt(yRadius * (yRadius - Math.pow(x, 2)));
           if (x === 0) {
             canvas.moveTo(this.screenX + (x * xDirection), this.screenY + (y * yDirection));

@@ -31,8 +31,8 @@ class ring.Ring extends xyflyerObject.Object
     drawHalfRing: (canvas, xDirection, highlightRadius=0) ->
         canvas.clearRect(0, 0, @board.width, @board.height)
 
-        for h in [0..highlightRadius] by 2
-            canvas.strokeStyle = "rgba(255, 255, 255, #{if highlightRadius then 1- Math.abs(h/highlightRadius) else 1})"
+        for h in [0..highlightRadius] by Math.floor(highlightRadius/4) or 1
+            canvas.strokeStyle = "rgba(255, 255, 255, #{if highlightRadius then 1-Math.abs(h/highlightRadius) else 1})"
             canvas.lineWidth = h or 1
             canvas.beginPath()
 
