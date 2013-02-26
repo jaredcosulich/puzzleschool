@@ -16,6 +16,20 @@ class plane.Plane extends xyflyerObject.Object
     addToBoard: -> @board.addToCanvas(@, 2)
         
     draw: (ctx, t) ->
+        @latestTime = t
+        @startTime = @latestTime if not @startTime
+        
+        if @path
+            position = @path[Math.round((@latestTime-@startTime)/@timeFactor*10)]
+            if !position   
+                @path = null
+                @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
+            else
+                @xPos = position.x
+                @yPos = position.y
+                position.ring.highlight() if position.ring
+                @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
+        
         ctx.drawImage(
             @image[0], 
             @currentXPos - (@width/2), 
@@ -28,6 +42,7 @@ class plane.Plane extends xyflyerObject.Object
         @scale = @board.scale / 2
         @width = @image.width() * @scale
         @height = @image.height() * @scale
+        @timeFactor = 1.9/@scale
     
     move: (x, y, next) ->
         @currentXPos = x
@@ -59,22 +74,12 @@ class plane.Plane extends xyflyerObject.Object
     launch: (force) ->
         return if @falling or @cancelFlight and not force
         @cancelFlight = false
-        timeFactor = 1.9/@scale
+        @startTime = null
+        @latestTime = null
         if not @path or not Object.keys(@path).length
             @path = @board.calculatePath() 
             @fall() unless @path.distance
-        
-        duration = @path.distance * timeFactor
-        @animation.start duration, (deltaTime, progress, totalTime) =>
-            position = @path[Math.round(totalTime/timeFactor*10)]
-            if !position   
-                @animation.stop()
-                @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
-            else
-                @xPos = position.x
-                @yPos = position.y
-                position.ring.highlight() if position.ring
-                @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
+            @duration = @path.distance * @timeFactor
                         
     reset: ->
         if not (@image = @objects.find('.plane img')).height()
@@ -85,6 +90,8 @@ class plane.Plane extends xyflyerObject.Object
         
         @falling = false
         @cancelFlight = true
+        @startTime = null
+        @latestTime = null
         @path = null
         @size()
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)

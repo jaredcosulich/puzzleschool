@@ -33,13 +33,35 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.draw = function(ctx, t) {
+    var position;
+    this.latestTime = t;
+    if (!this.startTime) {
+      this.startTime = this.latestTime;
+    }
+    if (this.path) {
+      position = this.path[Math.round((this.latestTime - this.startTime) / this.timeFactor * 10)];
+      if (!position) {
+        this.path = null;
+        if (!(this.board.paperY(this.currentYPos) > this.board.grid.yMax)) {
+          this.fall();
+        }
+      } else {
+        this.xPos = position.x;
+        this.yPos = position.y;
+        if (position.ring) {
+          position.ring.highlight();
+        }
+        this.move(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos);
+      }
+    }
     return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
   };
 
   Plane.prototype.size = function() {
     this.scale = this.board.scale / 2;
     this.width = this.image.width() * this.scale;
-    return this.height = this.image.height() * this.scale;
+    this.height = this.image.height() * this.scale;
+    return this.timeFactor = 1.9 / this.scale;
   };
 
   Plane.prototype.move = function(x, y, next) {
@@ -93,37 +115,19 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var duration, timeFactor,
-      _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
     this.cancelFlight = false;
-    timeFactor = 1.9 / this.scale;
+    this.startTime = null;
+    this.latestTime = null;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
       if (!this.path.distance) {
         this.fall();
       }
+      return this.duration = this.path.distance * this.timeFactor;
     }
-    duration = this.path.distance * timeFactor;
-    return this.animation.start(duration, function(deltaTime, progress, totalTime) {
-      var position;
-      position = _this.path[Math.round(totalTime / timeFactor * 10)];
-      if (!position) {
-        _this.animation.stop();
-        if (!(_this.board.paperY(_this.currentYPos) > _this.board.grid.yMax)) {
-          return _this.fall();
-        }
-      } else {
-        _this.xPos = position.x;
-        _this.yPos = position.y;
-        if (position.ring) {
-          position.ring.highlight();
-        }
-        return _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
-      }
-    });
   };
 
   Plane.prototype.reset = function() {
@@ -136,6 +140,8 @@ plane.Plane = (function(_super) {
     }
     this.falling = false;
     this.cancelFlight = true;
+    this.startTime = null;
+    this.latestTime = null;
     this.path = null;
     this.size();
     this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit);
