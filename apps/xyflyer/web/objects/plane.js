@@ -118,6 +118,9 @@ plane.Plane = (function(_super) {
       } else {
         _this.xPos = position.x;
         _this.yPos = position.y;
+        if (position.ring) {
+          position.ring.highlight();
+        }
         return _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
       }
     });

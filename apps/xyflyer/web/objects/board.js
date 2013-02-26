@@ -68,6 +68,10 @@ board.Board = (function(_super) {
     return this.animate();
   };
 
+  Board.prototype.addRing = function(ring) {
+    return this.rings.push(ring);
+  };
+
   Board.prototype.addToCanvas = function(object, zIndex) {
     var _base;
     (_base = this.animationObjects)[zIndex] || (_base[zIndex] = []);
@@ -446,7 +450,7 @@ board.Board = (function(_super) {
     return this.resetLevel();
   };
 
-  Board.prototype.calculatePath = function(increment) {
+  Board.prototype.calculatePath = function() {
     var addToPath, id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
       _this = this;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
@@ -458,7 +462,7 @@ board.Board = (function(_super) {
       y: this.islandCoordinates.y * this.yUnit
     };
     addToPath = function(x, y, formula) {
-      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, significantDigits, _i, _ref;
+      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, ring, significantDigits, _i, _j, _len, _ref, _ref1;
       if (!((_this.grid.yMin - 50 <= (_ref = y / _this.yUnit) && _ref <= _this.grid.yMax + 50))) {
         return;
       }
@@ -477,6 +481,13 @@ board.Board = (function(_super) {
           x: incrementalX,
           y: formula.formula(incrementalX / _this.xUnit) * _this.yUnit
         };
+        _ref1 = _this.rings;
+        for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+          ring = _ref1[_j];
+          if (ring.inPath(incrementalX / _this.xUnit, formula.formula)) {
+            path[formattedFullDistance + d].ring = ring;
+          }
+        }
       }
       return path.distance += distance;
     };

@@ -33,11 +33,12 @@ ring.Ring = (function(_super) {
         return _this.drawHalfRing(ctxFunction, 1);
       }
     }, 3);
-    return this.board.addToCanvas({
+    this.board.addToCanvas({
       draw: function(ctxFunction) {
         return _this.drawHalfRing(ctxFunction, -1);
       }
     }, 1);
+    return this.board.addRing(this);
   };
 
   Ring.prototype.drawHalfRing = function(ctx, xDirection) {
@@ -78,15 +79,28 @@ ring.Ring = (function(_super) {
     });
   };
 
+  Ring.prototype.inPath = function(x, formula) {
+    if (formula(this.x) !== this.y) {
+      return false;
+    }
+    if (x + (0.5 * this.scale) > this.x) {
+      return true;
+    }
+  };
+
+  Ring.prototype.highlight = function() {
+    if (!this.passedThrough && !this.highlighting) {
+      this.highlighting = true;
+      this.passedThrough = true;
+      return this.glow();
+    }
+  };
+
   Ring.prototype.highlightIfPassingThrough = function(_arg) {
     var height, width, x, y;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
-    if (!this.passedThrough && this.touches(x, y, width, height)) {
-      if (!this.highlighting) {
-        this.highlighting = true;
-        this.glow();
-        return this.passedThrough = true;
-      }
+    if (this.touches(x, y, width, height)) {
+      return this.highlight;
     }
   };
 

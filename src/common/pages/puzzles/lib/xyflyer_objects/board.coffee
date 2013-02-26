@@ -49,6 +49,8 @@ class board.Board extends xyflyerObject.Object
         @animationObjects = []
         @animate()
         
+    addRing: (ring) -> @rings.push(ring)
+        
     addToCanvas: (object, zIndex) ->
         @animationObjects[zIndex] or= []
         @animationObjects[zIndex].push(object)
@@ -301,7 +303,7 @@ class board.Board extends xyflyerObject.Object
         @resetLevel()
             
         
-    calculatePath: (increment) ->
+    calculatePath: ->
         intersection = (@islandCoordinates.x * @xUnit) + (@xUnit * 0.001)
         path = {distance: 0}
         path[0] = 
@@ -322,6 +324,10 @@ class board.Board extends xyflyerObject.Object
                     formula: formula.id
                     x: incrementalX
                     y: formula.formula(incrementalX / @xUnit) * @yUnit
+            
+                for ring in @rings when ring.inPath(incrementalX/@xUnit, formula.formula)
+                    path[formattedFullDistance + d].ring = ring
+                    
             path.distance += distance
             
         for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
@@ -368,6 +374,6 @@ class board.Board extends xyflyerObject.Object
                 break
             
             return path unless validPathFound
-            
+        
         return path
 

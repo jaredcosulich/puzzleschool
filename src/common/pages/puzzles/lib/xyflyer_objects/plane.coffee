@@ -73,6 +73,7 @@ class plane.Plane extends xyflyerObject.Object
             else
                 @xPos = position.x
                 @yPos = position.y
+                position.ring.highlight() if position.ring
                 @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
                         
     reset: ->

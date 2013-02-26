@@ -25,6 +25,7 @@ class ring.Ring extends xyflyerObject.Object
             {draw: (ctxFunction) => @drawHalfRing(ctxFunction, -1)}
             1
         )
+        @board.addRing(@)
                 
     drawHalfRing: (ctx, xDirection) ->
         for h in [0..@highlightRadius] by Math.floor(@highlightRadius/4) or 1
@@ -58,13 +59,18 @@ class ring.Ring extends xyflyerObject.Object
                        @highlightRadius = 0
                        @animating = false      
                 
-        
+    inPath: (x, formula) ->
+        return false unless formula(@x) == @y
+        return true if x + (0.5*@scale) > @x
+
+    highlight: ->
+        if not @passedThrough and not @highlighting
+            @highlighting = true
+            @passedThrough = true
+            @glow()
+
     highlightIfPassingThrough: ({x, y, width, height}) ->
-        if not @passedThrough and @touches(x,y,width,height)
-            if not @highlighting
-                @highlighting = true
-                @glow()
-                @passedThrough = true
+        @highlight if @touches(x,y,width,height)
             
     touches: (x,y,width,height) ->
         @screenX > x - (width/2) and
