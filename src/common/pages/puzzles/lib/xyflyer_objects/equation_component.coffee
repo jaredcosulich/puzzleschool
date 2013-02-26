@@ -27,7 +27,7 @@ class equationComponent.EquationComponent
         @transformer = new Transformer(@element)
         
     initMove: ->
-        @element.bind 'mousedown.move touchstart.move', (e) => @mousedown(e)
+        @element.bind 'mousedown.drag touchstart.drag', (e) => @mousedown(e)
         
     appendTo: (@container) ->
         @container.append(@placeHolder) 
@@ -49,11 +49,14 @@ class equationComponent.EquationComponent
         @gameArea.addClass('dragging')
         body = $(document.body)
         
-        body.bind 'mousemove.move touchmove.move', (e) => @move(e)
-        body.one 'mouseup.move touchend.move', (e) => @endMove(e) 
+        body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)
+        body.one 'mouseup.drag touchend.drag', (e) => @endMove(e) 
         @element.addClass('dragging')
         @element.css(visibility: 'visible')
-
+        @placeHolder.show()
+        @placeHolder.html(@element.html())   
+        @move(e)
+        
     move: (e) ->
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
@@ -63,9 +66,6 @@ class equationComponent.EquationComponent
         dy = y - @offset.top - (@offset.height/2) + @gameAreaOffset.top
 
         @transformer.translate(dx, dy)
-
-        @placeHolder.show()
-        @placeHolder.html(@element.html())   
 
         @trackDrag(x, y, @) if @trackDrag
         
@@ -85,5 +85,5 @@ class equationComponent.EquationComponent
 
         @transformer.translate(0, 0)
         
-        $(document.body).unbind('mousemove.move touchmove.move')
+        $(document.body).unbind('mousemove.drag touchmove.drag')
         

@@ -50,23 +50,19 @@ board.Board = (function(_super) {
 
   Board.prototype.initAnimation = function() {
     var canvas;
-    if (false && window.AppMobi) {
-      AppMobi.canvas.execute("_.ctx.width=1024;_.ctx.height=768;");
-    } else {
-      canvas = $(document.createElement('CANVAS'));
-      canvas.css({
-        top: 0,
-        left: 0,
-        height: this.el.height(),
-        width: this.el.width()
-      });
-      canvas.attr({
-        height: this.el.height(),
-        width: this.el.width()
-      });
-      this.el.append(canvas);
-      this.animationCtx = canvas[0].getContext('2d');
-    }
+    canvas = $(document.createElement('CANVAS'));
+    canvas.css({
+      top: 0,
+      left: 0,
+      height: this.el.height(),
+      width: this.el.width()
+    });
+    canvas.attr({
+      height: this.el.height(),
+      width: this.el.width()
+    });
+    this.el.append(canvas);
+    this.animationCtx = canvas[0].getContext('2d');
     this.animation = new Animation();
     this.animationObjects = [];
     return this.animate();
@@ -82,7 +78,7 @@ board.Board = (function(_super) {
     var _this = this;
     return this.animation.frame()(function(t) {
       var animationSet, object, _i, _j, _len, _len1, _ref;
-      _this.executeContext("ctx.clearRect(0,0," + _this.width + "," + _this.height + ")");
+      _this.animationCtx.clearRect(0, 0, _this.width, _this.height);
       _ref = _this.animationObjects;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         animationSet = _ref[_i];
@@ -96,16 +92,6 @@ board.Board = (function(_super) {
       }
       return _this.animate();
     });
-  };
-
-  Board.prototype.executeContext = function(command) {
-    var ctx;
-    if (false && window.AppMobi) {
-      return AppMobi.canvas.execute("var ctx = AppMobi.canvas.getContext(\"2d\");\nctx.strokeStyle = \"rgba(255,128,128,0.5)\"; \nctx.rect(30,30,500,500); \nctx.stroke(); \nctx.present();");
-    } else {
-      ctx = this.animationCtx;
-      return eval(command);
-    }
   };
 
   Board.prototype.createCanvas = function() {

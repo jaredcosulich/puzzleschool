@@ -36,18 +36,15 @@ class board.Board extends xyflyerObject.Object
         @initAnimation()
     
     initAnimation: ->
-        if false and window.AppMobi
-            AppMobi.canvas.execute("_.ctx.width=1024;_.ctx.height=768;");
-        else
-            canvas = $(document.createElement('CANVAS'))
-            canvas.css
-                top: 0
-                left: 0
-                height: @el.height()
-                width: @el.width()
-            canvas.attr(height: @el.height(), width: @el.width())            
-            @el.append(canvas)            
-            @animationCtx = canvas[0].getContext('2d')
+        canvas = $(document.createElement('CANVAS'))
+        canvas.css
+            top: 0
+            left: 0
+            height: @el.height()
+            width: @el.width()
+        canvas.attr(height: @el.height(), width: @el.width())            
+        @el.append(canvas)            
+        @animationCtx = canvas[0].getContext('2d')
         @animation = new Animation()
         @animationObjects = []
         @animate()
@@ -58,29 +55,13 @@ class board.Board extends xyflyerObject.Object
     
     animate: ->
         @animation.frame() (t) => 
-            @executeContext("ctx.clearRect(0,0,#{@width},#{@height})")
+            @animationCtx.clearRect(0,0,@width,@height)
             for animationSet in @animationObjects
                 continue unless animationSet
                 for object in animationSet
                     object.draw(@animationCtx, t)
-                    # object.draw(((command) => @executeContext(command)), t)
             @animate()
         
-    executeContext: (command) ->
-        if false and window.AppMobi
-            AppMobi.canvas.execute """
-                var ctx = AppMobi.canvas.getContext("2d");
-                ctx.strokeStyle = "rgba(255,128,128,0.5)"; 
-                ctx.rect(30,30,500,500); 
-                ctx.stroke(); 
-                ctx.present();
-            """
-            # #{command}
-            # ctx.present()
-        else
-            ctx = @animationCtx
-            eval(command)
-            
     createCanvas: ->
         canvas = $(document.createElement('CANVAS'))
         canvas.css

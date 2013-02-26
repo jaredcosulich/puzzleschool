@@ -57,7 +57,7 @@ equationComponent.EquationComponent = (function() {
 
   EquationComponent.prototype.initMove = function() {
     var _this = this;
-    return this.element.bind('mousedown.move touchstart.move', function(e) {
+    return this.element.bind('mousedown.drag touchstart.drag', function(e) {
       return _this.mousedown(e);
     });
   };
@@ -90,16 +90,19 @@ equationComponent.EquationComponent = (function() {
     this.initMeasurements();
     this.gameArea.addClass('dragging');
     body = $(document.body);
-    body.bind('mousemove.move touchmove.move', function(e) {
+    body.bind('mousemove.drag touchmove.drag', function(e) {
       return _this.move(e);
     });
-    body.one('mouseup.move touchend.move', function(e) {
+    body.one('mouseup.drag touchend.drag', function(e) {
       return _this.endMove(e);
     });
     this.element.addClass('dragging');
-    return this.element.css({
+    this.element.css({
       visibility: 'visible'
     });
+    this.placeHolder.show();
+    this.placeHolder.html(this.element.html());
+    return this.move(e);
   };
 
   EquationComponent.prototype.move = function(e) {
@@ -115,8 +118,6 @@ equationComponent.EquationComponent = (function() {
     dx = x - this.offset.left - (this.offset.width / 2) + this.gameAreaOffset.left;
     dy = y - this.offset.top - (this.offset.height / 2) + this.gameAreaOffset.top;
     this.transformer.translate(dx, dy);
-    this.placeHolder.show();
-    this.placeHolder.html(this.element.html());
     if (this.trackDrag) {
       return this.trackDrag(x, y, this);
     }
@@ -142,7 +143,7 @@ equationComponent.EquationComponent = (function() {
       this.inUse = false;
     }
     this.transformer.translate(0, 0);
-    return $(document.body).unbind('mousemove.move touchmove.move');
+    return $(document.body).unbind('mousemove.drag touchmove.drag');
   };
 
   return EquationComponent;

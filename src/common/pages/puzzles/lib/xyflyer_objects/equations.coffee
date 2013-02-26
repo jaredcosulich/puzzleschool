@@ -117,7 +117,9 @@ class equations.Equations
             e.preventDefault() if e.preventDefault if e.keyCode == 8 and document.activeElement?.type != 'text'
             
     initHints: ->
-        @el.find('.hint').bind 'click', => @showHint()
+        hint = @el.find('.hint')
+        hint.bind 'mousedown.hint touchstart.hint', =>
+            hint.one 'mouseup.hint touchend.hint', => @showHint()
         
     testFragment: (fragment, solution, formula, complete) ->
         solutionIndex = solution.indexOf(fragment)
@@ -153,38 +155,24 @@ class equations.Equations
             opacity: 1
             duration: 250
             complete: => 
-                dragElement.one 'mousedown.hint touchstart.hint', =>
-                    $(document.body).one 'mouseup.hint touchend.hint', =>
-                        $(document.body).unbind 'mousemove.hint touchmove.hint'    
-                        dragThis.animate
-                            opacity: 0
-                            duration: 250
-                            complete: => dragThis.css(top: -1000, left: -1000)
-                        
-                    $(document.body).one 'mousemove.hint touchmove.hint', =>
-                        $(document.body).unbind 'mouseup.hint touchend.hint'
-                        dragThis.animate
-                            opacity: 0
-                            duration: 250
-                            complete: => dragThis.css(top: -1000, left: -1000)
+                $(document.body).one 'mousedown.hint touchstart.hint', ->
+                    dragThis.css(opacity: 0, top: -1000, left: -1000)
 
-                        dropHere = @$('.drop_here') 
-                        if (offset = dropAreaElement.offset()).top == 0
-                            offset = @findComponentDropAreaElement(equation, solutionComponent).offset()
-                        
-                        dropHere.css
-                            opacity: 0
-                            top: offset.top + offset.height - gameAreaOffset.top
-                            left: offset.left + (offset.width/2) - gameAreaOffset.left
+                dragElement.one 'mousedown.hint touchstart.hint', =>
+                    dropHere = @$('.drop_here') 
+                    if (offset = dropAreaElement.offset()).top == 0
+                        offset = @findComponentDropAreaElement(equation, solutionComponent).offset()
+
+                    component.element.one 'mouseup.hint touchend.hint', =>
                         dropHere.animate
-                            opacity: 1
+                            opacity: 0, 
                             duration: 250
-                            complete: => 
-                                component.element.one 'mouseup.hint touchend.hint', =>
-                                    dropHere.animate
-                                        opacity: 0, 
-                                        duration: 250
-                                        complete: => dropHere.css(top: -1000, left: -1000)
+                            complete: => dropHere.css(top: -1000, left: -1000)
+                    
+                    dropHere.css
+                        opacity: 1
+                        top: offset.top + offset.height - gameAreaOffset.top
+                        left: offset.left + Math.min(30, (offset.width/2)) - gameAreaOffset.left
                                    
     findComponentDropAreaElement: (equation, solutionComponent) ->
         possible = equation.el.find('div')
@@ -283,18 +271,11 @@ class equations.Equations
             launch = @$('.launch_hint')
             launchOffset = @$('.launch').offset()
             launch.css
-                opacity: 0
+                opacity: 1
                 top: launchOffset.top + launchOffset.height - @gameArea.offset().top
                 left: launchOffset.left + (launchOffset.width/2) - @gameArea.offset().left
-            launch.animate
-                opacity: 1
-                duration: 250
-                complete: => 
-                    @$('.launch').one 'mouseup.hint touchend.hint', =>
-                        launch.animate
-                            opacity: 0
-                            duration: 250
-                            complete: => launch.css(top: -1000, left: -1000)
+            @$('.launch').one 'mouseup.hint touchend.hint', =>
+                launch.css(opacity: 0, top: -1000, left: -1000)
                 
         
         

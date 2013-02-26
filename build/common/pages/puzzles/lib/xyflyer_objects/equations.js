@@ -197,9 +197,13 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.initHints = function() {
-    var _this = this;
-    return this.el.find('.hint').bind('click', function() {
-      return _this.showHint();
+    var hint,
+      _this = this;
+    hint = this.el.find('.hint');
+    return hint.bind('mousedown.hint touchstart.hint', function() {
+      return hint.one('mouseup.hint touchend.hint', function() {
+        return _this.showHint();
+      });
     });
   };
 
@@ -244,60 +248,35 @@ equations.Equations = (function() {
       opacity: 1,
       duration: 250,
       complete: function() {
+        $(document.body).one('mousedown.hint touchstart.hint', function() {
+          return dragThis.css({
+            opacity: 0,
+            top: -1000,
+            left: -1000
+          });
+        });
         return dragElement.one('mousedown.hint touchstart.hint', function() {
-          $(document.body).one('mouseup.hint touchend.hint', function() {
-            $(document.body).unbind('mousemove.hint touchmove.hint');
-            return dragThis.animate({
+          var dropHere;
+          dropHere = _this.$('.drop_here');
+          if ((offset = dropAreaElement.offset()).top === 0) {
+            offset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
+          }
+          component.element.one('mouseup.hint touchend.hint', function() {
+            return dropHere.animate({
               opacity: 0,
               duration: 250,
               complete: function() {
-                return dragThis.css({
+                return dropHere.css({
                   top: -1000,
                   left: -1000
                 });
               }
             });
           });
-          return $(document.body).one('mousemove.hint touchmove.hint', function() {
-            var dropHere;
-            $(document.body).unbind('mouseup.hint touchend.hint');
-            dragThis.animate({
-              opacity: 0,
-              duration: 250,
-              complete: function() {
-                return dragThis.css({
-                  top: -1000,
-                  left: -1000
-                });
-              }
-            });
-            dropHere = _this.$('.drop_here');
-            if ((offset = dropAreaElement.offset()).top === 0) {
-              offset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
-            }
-            dropHere.css({
-              opacity: 0,
-              top: offset.top + offset.height - gameAreaOffset.top,
-              left: offset.left + (offset.width / 2) - gameAreaOffset.left
-            });
-            return dropHere.animate({
-              opacity: 1,
-              duration: 250,
-              complete: function() {
-                return component.element.one('mouseup.hint touchend.hint', function() {
-                  return dropHere.animate({
-                    opacity: 0,
-                    duration: 250,
-                    complete: function() {
-                      return dropHere.css({
-                        top: -1000,
-                        left: -1000
-                      });
-                    }
-                  });
-                });
-              }
-            });
+          return dropHere.css({
+            opacity: 1,
+            top: offset.top + offset.height - gameAreaOffset.top,
+            left: offset.left + Math.min(30, offset.width / 2) - gameAreaOffset.left
           });
         });
       }
@@ -430,27 +409,16 @@ equations.Equations = (function() {
       launch = this.$('.launch_hint');
       launchOffset = this.$('.launch').offset();
       launch.css({
-        opacity: 0,
+        opacity: 1,
         top: launchOffset.top + launchOffset.height - this.gameArea.offset().top,
         left: launchOffset.left + (launchOffset.width / 2) - this.gameArea.offset().left
       });
-      return launch.animate({
-        opacity: 1,
-        duration: 250,
-        complete: function() {
-          return _this.$('.launch').one('mouseup.hint touchend.hint', function() {
-            return launch.animate({
-              opacity: 0,
-              duration: 250,
-              complete: function() {
-                return launch.css({
-                  top: -1000,
-                  left: -1000
-                });
-              }
-            });
-          });
-        }
+      return this.$('.launch').one('mouseup.hint touchend.hint', function() {
+        return launch.css({
+          opacity: 0,
+          top: -1000,
+          left: -1000
+        });
       });
     }
   };
