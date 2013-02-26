@@ -7,7 +7,27 @@ code.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     this.el = _arg.el;
+    this.initEditors();
   }
+
+  ViewHelper.prototype.$ = function(selector) {
+    return this.el.find(selector);
+  };
+
+  ViewHelper.prototype.initEditors = function() {
+    var container, editor, editorContainer, type, _i, _len, _ref, _results;
+    _ref = this.$('.editors .editor_container');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      container = _ref[_i];
+      editorContainer = $(container);
+      editor = ace.edit(editorContainer.find('.editor')[0]);
+      type = editorContainer.find('.type').html();
+      console.log(type);
+      _results.push(editor.getSession().setMode("ace/mode/" + type));
+    }
+    return _results;
+  };
 
   return ViewHelper;
 

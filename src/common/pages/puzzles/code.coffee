@@ -21,6 +21,7 @@ soma.chunks
             
             @html = wings.renderTemplate(@template, 
                 challenge: @level.challenge
+                editors: @level.editors
             )
             
         
@@ -32,10 +33,6 @@ soma.views
         
             @helper = new code.ViewHelper
                 el: @el
-
-            editor = ace.edit("editor")
-            # editor.setTheme("ace/theme/monokai")
-            editor.getSession().setMode("ace/mode/javascript")
 
         nextLevel: ->
             console.log('NEXT LEVEL')
@@ -58,8 +55,20 @@ LEVELS = [
     {},
     {
         challenge: '''
-            Here is the challenge.
+            Replace the word "Hi" with the words "Let's get started!'".
         '''
-        
+        editors: [
+            {
+                title: 'Page HTML'
+                type: 'html'
+                code: '''
+                    <html>
+                        <body>
+                            <h2>Hi</h2>
+                        </body>
+                    </html>
+                '''
+            }
+        ]
     }
 ]

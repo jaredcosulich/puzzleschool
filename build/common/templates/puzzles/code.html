@@ -10,12 +10,13 @@
 
     <div class='editors'>
         <div class='editor_container'>
-            <div id="editor" class='editor'>
-function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-}
-            </div>    
+            {:editors}
+            <div class='editor_header'>
+                <div class='type'>{type}</div>
+                <div class='title'>{title}</div>
+            </div>
+            <div id="editor" class='editor'>{code}</div>    
+            {/editors}
         </div>
     </div>
 </div>

@@ -23,7 +23,8 @@ soma.chunks({
     build: function() {
       this.setTitle("Code Puzzles - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
-        challenge: this.level.challenge
+        challenge: this.level.challenge,
+        editors: this.level.editors
       });
     }
   }
@@ -33,13 +34,11 @@ soma.views({
   Code: {
     selector: '#content .code',
     create: function() {
-      var code, editor;
+      var code;
       code = require('./lib/code');
-      this.helper = new code.ViewHelper({
+      return this.helper = new code.ViewHelper({
         el: this.el
       });
-      editor = ace.edit("editor");
-      return editor.getSession().setMode("ace/mode/javascript");
     },
     nextLevel: function() {
       return console.log('NEXT LEVEL');
@@ -70,6 +69,13 @@ soma.routes({
 
 LEVELS = [
   {}, {
-    challenge: 'Here is the challenge.'
+    challenge: 'Replace the word "Hi" with the words "Let\'s get started!\'".',
+    editors: [
+      {
+        title: 'Page HTML',
+        type: 'html',
+        code: '<html>\n    <body>\n        <h2>Hi</h2>\n    </body>\n</html>'
+      }
+    ]
   }
 ];

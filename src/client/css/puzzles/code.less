@@ -1,3 +1,6 @@
+@import '../variables';
+@import '../methods';
+
 @height: 540px;
 
 .code {
@@ -26,9 +29,29 @@
             height: 100%;
             border: 1px solid #ccc;
         
+            .editor_header {
+                padding: 3px;
+                overflow: hidden;
+                background-color: #ccc;
+                .title {
+                    height: 15px;
+                    font-weight: bold;
+                }
+                
+                .type {
+                    float: right;
+                    font-size: @smallsize;
+                    color: @green;
+                    background-color: white;
+                    padding: 0 3px;
+                    .rounded(3px)
+                }
+            }
+        
             .editor {
+                border-top: 1px solid #ccc;
                 position: absolute;
-                top: 0;
+                top: 21px;
                 left: 0;
                 right: 0;
                 bottom: 0;
