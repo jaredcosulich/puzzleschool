@@ -8,6 +8,7 @@ code.ViewHelper = (function() {
   function ViewHelper(_arg) {
     this.el = _arg.el;
     this.initEditors();
+    this.setOutput();
   }
 
   ViewHelper.prototype.$ = function(selector) {
@@ -15,7 +16,9 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initEditors = function() {
-    var container, editor, editorContainer, type, _i, _len, _ref, _results;
+    var container, editor, editorContainer, type, _i, _len, _ref, _results,
+      _this = this;
+    this.editors = [];
     _ref = this.$('.editors .editor_container');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -23,8 +26,22 @@ code.ViewHelper = (function() {
       editorContainer = $(container);
       editor = ace.edit(editorContainer.find('.editor')[0]);
       type = editorContainer.find('.type').html();
-      console.log(type);
-      _results.push(editor.getSession().setMode("ace/mode/" + type));
+      editor.getSession().setMode("ace/mode/" + type);
+      editor.getSession().on('change', function(e) {
+        return _this.setOutput();
+      });
+      _results.push(this.editors.push(editor));
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.setOutput = function() {
+    var editor, _i, _len, _ref, _results;
+    _ref = this.editors;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      editor = _ref[_i];
+      _results.push(this.$('.output').attr('src', "data:text/html;charset=utf-8," + (escape(editor.getValue()))));
     }
     return _results;
   };

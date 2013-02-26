@@ -64,7 +64,7 @@ LEVELS = [
                 code: '''
                     <html>
                         <body>
-                            <h2>Hi</h2>
+                            <h1>Hi</h1>
                         </body>
                     </html>
                 '''

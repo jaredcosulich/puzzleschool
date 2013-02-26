@@ -74,7 +74,7 @@ LEVELS = [
       {
         title: 'Page HTML',
         type: 'html',
-        code: '<html>\n    <body>\n        <h2>Hi</h2>\n    </body>\n</html>'
+        code: '<html>\n    <body>\n        <h1>Hi</h1>\n    </body>\n</html>'
       }
     ]
   }
