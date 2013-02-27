@@ -39,7 +39,7 @@ soma.views({
       var code,
         _this = this;
       code = require('./lib/code');
-      this.originalHTML = this.el.html();
+      this.originalHTML = this.el.find('.dynamic_content').html();
       this.level = this.findLevel(this.el.data('level'));
       this.helper = new code.ViewHelper({
         el: this.el,
@@ -79,20 +79,25 @@ soma.views({
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         level = _ref[_i];
-        level = $(level);
-        _results.push(level.bind('click', function() {
-          _this.level = _this.findLevel(level.data('id'));
-          _this.el.html(_this.originalHTML);
-          _this.helper.initLevel(_this.level);
-          return _this.hideLevelSelector();
-        }));
+        _results.push((function(level) {
+          level = $(level);
+          return level.bind('click', function() {
+            _this.level = _this.findLevel(level.data('id'));
+            _this.el.find('.dynamic_content').html(_this.originalHTML);
+            _this.helper.initLevel(_this.level);
+            history.pushState(null, null, "/puzzles/code/" + _this.level.id);
+            return _this.hideLevelSelector();
+          });
+        })(level));
       }
       return _results;
     },
     completeLevel: function() {
       var levelIcon;
       levelIcon = this.$("#level_" + this.level.id).find('img');
-      levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'));
+      if (levelIcon.attr('src').indexOf('complete') === -1) {
+        levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'));
+      }
       return this.showLevelSelector();
     },
     showLevelSelector: function() {
@@ -246,7 +251,7 @@ STAGES = [
           {
             title: 'Page HTML',
             type: 'html',
-            code: '    <html>\n        <body>\n\n        </body>\n    </html>'
+            code: '<html>\n    <body>\n        \n    </body>\n</html>'
           }
         ],
         description: '<p>\n    Here we\'ve removed the tag from the body of the html.\n</p>\n<p>\n    You simply need to put it back and don\'t forget to close the tag.\n</p>',

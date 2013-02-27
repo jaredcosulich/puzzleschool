@@ -30,7 +30,7 @@ soma.views
         create: ->
             code = require('./lib/code')
             
-            @originalHTML = @el.html()
+            @originalHTML = @el.find('.dynamic_content').html()
         
             @level = @findLevel(@el.data('level'))
             
@@ -50,16 +50,19 @@ soma.views
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
             for level in @levelSelector.find('.level')
-                level = $(level)
-                level.bind 'click', => 
-                    @level = @findLevel(level.data('id'))
-                    @el.html(@originalHTML)
-                    @helper.initLevel(@level)
-                    @hideLevelSelector()
+                do (level) =>
+                    level = $(level)
+                    level.bind 'click', => 
+                        @level = @findLevel(level.data('id'))
+                        @el.find('.dynamic_content').html(@originalHTML)
+                        @helper.initLevel(@level)
+                        history.pushState(null, null, "/puzzles/code/#{@level.id}")
+                        @hideLevelSelector()
                 
         completeLevel: ->
             levelIcon = @$("#level_#{@level.id}").find('img')
-            levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'))
+            if levelIcon.attr('src').indexOf('complete') == -1
+                levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'))
             @showLevelSelector()
             
         showLevelSelector: ->
@@ -198,7 +201,7 @@ STAGES = [
                         code: '''
                             <html>
                                 <body>
-                        
+                                    
                                 </body>
                             </html>
                         '''
