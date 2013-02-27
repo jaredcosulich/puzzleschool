@@ -8,6 +8,8 @@ code.ViewHelper = (function() {
   function ViewHelper(_arg) {
     this.el = _arg.el;
     this.initEditors();
+    this.initDescription();
+    this.initHints();
     this.setOutput();
   }
 
@@ -31,6 +33,68 @@ code.ViewHelper = (function() {
         return _this.setOutput();
       });
       _results.push(this.editors.push(editor));
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.initSection = function(className) {
+    var content, height, link;
+    link = this.$(".links ." + className);
+    content = this.$("div." + className);
+    height = content.height();
+    content.css({
+      height: 0,
+      display: 'none'
+    });
+    return link.bind('click', function() {
+      if (content.css('display') === 'block') {
+        return;
+      }
+      content.css({
+        display: 'block'
+      });
+      return content.animate({
+        height: height,
+        duration: 250,
+        complete: function() {
+          $(document.body).one('click', function() {
+            return content.animate({
+              height: 0,
+              duration: 250,
+              complete: function() {
+                return content.css({
+                  display: 'none'
+                });
+              }
+            });
+          });
+          return content.bind('click', function(e) {
+            return e.stop();
+          });
+        }
+      });
+    });
+  };
+
+  ViewHelper.prototype.initDescription = function() {
+    return this.initSection('description');
+  };
+
+  ViewHelper.prototype.initHints = function() {
+    var hint, _i, _len, _ref, _results;
+    this.initSection('hints');
+    _ref = this.$('.hints .hint');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      hint = _ref[_i];
+      _results.push((function(hint) {
+        return $(hint).find('.reveal').bind('click', function() {
+          return $(hint).find('.hint_content').animate({
+            opacity: 1,
+            duration: 500
+          });
+        });
+      })(hint));
     }
     return _results;
   };

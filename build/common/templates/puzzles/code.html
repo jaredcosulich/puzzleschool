@@ -4,6 +4,21 @@
     <div class='challenge'>
         <b>The Challenge</b>:
         {challenge}
+        <div class='links'>
+            <a class='description'>What am I looking at?</a>
+            <a class='hints'>Please give me a hint.</a>
+        </div>
+        <div class='description'><div class='inside'>{&description}</div></div>
+        <div class='hints'>
+            <div class='inside'>
+                {:hints}
+                <div class='hint'>
+                    <a class='reveal'>Reveal Hint {index}</a>
+                    <p class='hint_content'>{content}</p>
+                </div>
+                {/hints}
+            </div>
+        </div>
     </div>
 
     <iframe class='output'></iframe>
@@ -19,4 +34,24 @@
             {/editors}
         </div>
     </div>
+</div>
+
+<div class='explanation'>
+    <h4>What Is This?</h4>
+    <p>
+        Code Puzzles is designed to simulate the process that I, 
+        as a professional programmer, go through on a daily basis.
+    </p>
+    <p>
+        When I am building my own projects, such as 
+        <a href='http://puzzleschool.com' target='_blank'>The Puzzle School</a>,
+        I'm constantly presenting myself with small challenges and then figuring out how to solve them.
+    </p>
+    <p>
+        I will usually Google around quite a bit, looking at other solutions to similar problems
+        that people have written about on blogs and coding websites, looking for inspiration
+        in how to solve my challenge. That's why so many of the hints in Code Puzzles ask you
+        to Google a specific term and try to figure out how to solve the challenge.
+    </p>
+    
 </div>

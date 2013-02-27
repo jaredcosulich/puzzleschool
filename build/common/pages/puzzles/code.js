@@ -24,7 +24,9 @@ soma.chunks({
       this.setTitle("Code Puzzles - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
         challenge: this.level.challenge,
-        editors: this.level.editors
+        editors: this.level.editors,
+        description: this.level.description,
+        hints: this.level.hints
       });
     }
   }
@@ -69,12 +71,22 @@ soma.routes({
 
 LEVELS = [
   {}, {
-    challenge: 'Replace the word "Hi" with the words "Let\'s get started!\'".',
+    challenge: 'Figure out how to change the word "Welcome" to the word "Hello World\'".',
     editors: [
       {
         title: 'Page HTML',
         type: 'html',
         code: '<html>\n    <body>\n        <h1>Hi</h1>\n    </body>\n</html>'
+      }
+    ],
+    description: '<p>\n    The code displayed in the \'editor\' (where it says \'Page HTML\') \n    is all the code you need to create the simplest website.\n</p>\n<p>\n    The &lt;h1> is used to designate important information and so is displayed in\n    bold large text.\n</p>\n<p>\n    You can learn more about the &lt;h1> tag by \n    <a href=\'https://www.google.com/search?q=h1+tag\' target=\'_blank\'>Googling \'h1 tag\'</a>.\n</p>',
+    hints: [
+      {
+        index: 1,
+        content: 'The \'editor\', where you see the words \'Page HTML\' is editable.'
+      }, {
+        index: 2,
+        content: 'In the editor, change the word \'Welcome\' to \'Hello World\''
       }
     ]
   }

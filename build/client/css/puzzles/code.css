@@ -12,7 +12,45 @@
   width: 50%;
   padding: 12px;
   margin: 0 auto 12px auto;
-  border: 1px solid #ccc;
+  border: 2px solid #24aac3;
+  position: relative;
+}
+.code .challenge a {
+  color: #0c8d28;
+  text-decoration: underline;
+}
+.code .challenge .links {
+  text-align: center;
+  padding-top: 6px;
+}
+.code .challenge .links a {
+  padding: 0 12px;
+}
+.code .challenge div.description,
+.code .challenge div.hints {
+  position: absolute;
+  border-left: 2px solid #24aac3;
+  border-bottom: 2px solid #24aac3;
+  border-right: 2px solid #24aac3;
+  z-index: 2;
+  width: 80%;
+  left: 10%;
+  top: 100%;
+  overflow: hidden;
+  background-color: #fafafa;
+}
+.code .challenge div.description .inside,
+.code .challenge div.hints .inside {
+  margin: 0 12px;
+}
+.code .challenge div.description .hint,
+.code .challenge div.hints .hint {
+  padding: 6px 0;
+  border-bottom: 1px solid #ccc;
+}
+.code .challenge div.description .hint p,
+.code .challenge div.hints .hint p {
+  opacity: 0;
 }
 .code .editors {
   height: 540px;

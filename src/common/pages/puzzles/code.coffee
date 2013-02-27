@@ -22,6 +22,8 @@ soma.chunks
             @html = wings.renderTemplate(@template, 
                 challenge: @level.challenge
                 editors: @level.editors
+                description: @level.description
+                hints: @level.hints
             )
             
         
@@ -55,7 +57,7 @@ LEVELS = [
     {},
     {
         challenge: '''
-            Replace the word "Hi" with the words "Let's get started!'".
+            Figure out how to change the word "Welcome" to the word "Hello World'".
         '''
         editors: [
             {
@@ -69,6 +71,24 @@ LEVELS = [
                     </html>
                 '''
             }
+        ]
+        description: '''
+            <p>
+                The code displayed in the 'editor' (where it says 'Page HTML') 
+                is all the code you need to create the simplest website.
+            </p>
+            <p>
+                The &lt;h1> is used to designate important information and so is displayed in
+                bold large text.
+            </p>
+            <p>
+                You can learn more about the &lt;h1> tag by 
+                <a href='https://www.google.com/search?q=h1+tag' target='_blank'>Googling 'h1 tag'</a>.
+            </p>
+        '''
+        hints: [
+            {index: 1, content: 'The \'editor\', where you see the words \'Page HTML\' is editable.'}
+            {index: 2, content: 'In the editor, change the word \'Welcome\' to \'Hello World\''}
         ]
     }
 ]
