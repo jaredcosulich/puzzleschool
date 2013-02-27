@@ -10,10 +10,13 @@
 }
 .code .challenge {
   width: 50%;
-  padding: 12px;
   margin: 0 auto 12px auto;
   border: 2px solid #24aac3;
+  border-bottom: none;
   position: relative;
+}
+.code .challenge .text {
+  padding: 12px;
 }
 .code .challenge a {
   color: #0c8d28;
@@ -21,36 +24,77 @@
 }
 .code .challenge .links {
   text-align: center;
-  padding-top: 6px;
+  background-color: #24aac3;
+  overflow: hidden;
 }
 .code .challenge .links a {
-  padding: 0 12px;
+  font-weight: bold;
+  display: block;
+  float: left;
+  width: 33%;
+  margin-top: 2px;
+  padding: 4px 0 6px 0;
+  text-align: center;
+  color: white;
+  border-right: 1px solid white;
+  text-decoration: none;
+  line-height: 15px;
+}
+.code .challenge .links a:last-child {
+  border: none;
+}
+.code .challenge .links a.selected {
+  background-color: #fafafa;
+  color: #24aac3;
 }
 .code .challenge div.description,
-.code .challenge div.hints {
+.code .challenge div.hints,
+.code .challenge div.tests {
   position: absolute;
   border-left: 2px solid #24aac3;
   border-bottom: 2px solid #24aac3;
   border-right: 2px solid #24aac3;
   z-index: 2;
-  width: 80%;
-  left: 10%;
+  width: 100%;
+  left: -2px;
   top: 100%;
   overflow: hidden;
   background-color: #fafafa;
 }
 .code .challenge div.description .inside,
-.code .challenge div.hints .inside {
+.code .challenge div.hints .inside,
+.code .challenge div.tests .inside {
   margin: 0 12px;
 }
 .code .challenge div.description .hint,
-.code .challenge div.hints .hint {
+.code .challenge div.hints .hint,
+.code .challenge div.tests .hint {
   padding: 6px 0;
-  border-bottom: 1px solid #ccc;
 }
 .code .challenge div.description .hint p,
-.code .challenge div.hints .hint p {
+.code .challenge div.hints .hint p,
+.code .challenge div.tests .hint p {
   opacity: 0;
+}
+.code .challenge div.description .test,
+.code .challenge div.hints .test,
+.code .challenge div.tests .test {
+  padding: 6px 0;
+}
+.code .challenge div.description .test.wrong,
+.code .challenge div.hints .test.wrong,
+.code .challenge div.tests .test.wrong {
+  color: red;
+}
+.code .challenge div.description .test.correct,
+.code .challenge div.hints .test.correct,
+.code .challenge div.tests .test.correct {
+  color: green;
+}
+.code .challenge div.description .explanation,
+.code .challenge div.hints .explanation,
+.code .challenge div.tests .explanation {
+  font-size: 11px;
 }
 .code .editors {
   height: 540px;

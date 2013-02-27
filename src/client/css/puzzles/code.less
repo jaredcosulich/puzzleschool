@@ -16,10 +16,14 @@
 
     .challenge {
         width: 50%;
-        padding: 12px;
         margin: 0 auto 12px auto;
         border: 2px solid @blue;
+        border-bottom: none;
         position: relative;
+        
+        .text {
+            padding: 12px;
+        }
         
         a {
             color: @darkgreen;
@@ -28,20 +32,38 @@
         
         .links {
             text-align: center;
-            padding-top: 6px;
+            background-color: @blue;
+            overflow: hidden;
             a {
-                padding: 0 12px;
+                font-weight: bold;
+                display: block;
+                float: left;
+                width: 33%;
+                margin-top: 2px;
+                padding: 4px 0 6px 0;
+                text-align: center;
+                color: white;
+                border-right: 1px solid white;
+                text-decoration: none;
+                line-height: 15px;
+            }
+            a:last-child {
+                border: none;
+            }
+            a.selected {
+                background-color: @white;
+                color: @blue;
             }
         }
         
-        div.description, div.hints {
+        div.description, div.hints, div.tests {
             position: absolute;
             border-left: 2px solid @blue;
             border-bottom: 2px solid @blue;
             border-right: 2px solid @blue;
             z-index: 2;
-            width: 80%;
-            left: 10%;
+            width: 100%;
+            left: -2px;
             top: 100%;
             overflow: hidden;
             background-color: @white;
@@ -50,10 +72,22 @@
             }
             .hint {
                 padding: 6px 0;
-                border-bottom: 1px solid #ccc;
                 p {
                     opacity: 0;
                 }
+            }
+            .test {
+                padding: 6px 0;
+                &.wrong {
+                    color: red;
+                }
+                
+                &.correct {
+                    color: green;
+                }
+            }
+            .explanation {
+                font-size: @smallsize;
             }
         }
     }

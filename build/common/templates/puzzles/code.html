@@ -2,11 +2,14 @@
     <h2>Code Puzzles</h2>
     
     <div class='challenge'>
-        <b>The Challenge</b>:
-        {challenge}
+        <div class='text'>
+            <b>The Challenge</b>:
+            {challenge}
+        </div>
         <div class='links'>
-            <a class='description'>What am I looking at?</a>
-            <a class='hints'>Please give me a hint.</a>
+            <a class='description'>Lesson</a>
+            <a class='hints'>Hints</a>
+            <a class='tests'>Tests</a>
         </div>
         <div class='description'><div class='inside'>{&description}</div></div>
         <div class='hints'>
@@ -17,6 +20,16 @@
                     <p class='hint_content'>{content}</p>
                 </div>
                 {/hints}
+            </div>
+        </div>
+        <div class='tests'>
+            <div class='inside'>
+                {:tests}
+                <div class='test wrong' data-test={test}>{description}</div>
+                {/tests}
+                <p class='explanation'>
+                    * Green tests have passed, red tests have not.
+                </p>
             </div>
         </div>
     </div>

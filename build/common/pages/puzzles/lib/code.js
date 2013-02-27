@@ -10,6 +10,7 @@ code.ViewHelper = (function() {
     this.initEditors();
     this.initDescription();
     this.initHints();
+    this.initTests();
     this.setOutput();
   }
 
@@ -53,11 +54,13 @@ code.ViewHelper = (function() {
       content.css({
         display: 'block'
       });
+      link.addClass('selected');
       return content.animate({
         height: height,
         duration: 250,
         complete: function() {
           $(document.body).one('click', function() {
+            link.removeClass('selected');
             return content.animate({
               height: 0,
               duration: 250,
@@ -82,6 +85,7 @@ code.ViewHelper = (function() {
 
   ViewHelper.prototype.initHints = function() {
     var hint, _i, _len, _ref, _results;
+    this.tests = {};
     this.initSection('hints');
     _ref = this.$('.hints .hint');
     _results = [];
@@ -99,13 +103,62 @@ code.ViewHelper = (function() {
     return _results;
   };
 
-  ViewHelper.prototype.setOutput = function() {
-    var editor, _i, _len, _ref, _results;
-    _ref = this.editors;
+  ViewHelper.prototype.initTests = function() {
+    var find, test, _i, _len, _ref, _results,
+      _this = this;
+    this.initSection('tests');
+    find = function(selector) {
+      var iframe, iframeDoc;
+      iframe = _this.$('.output')[0];
+      iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      return $(iframeDoc.body).find(selector);
+    };
+    _ref = this.$('.tests .test');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      test = _ref[_i];
+      _results.push((function(test) {
+        return _this.tests[$(test).html()] = function() {
+          try {
+            return eval(unescape($(test).data('test')));
+          } catch (e) {
+            return alert("A test failed to run: " + e.message);
+          }
+        };
+      })(test));
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.setOutput = function() {
+    var editor, html, test, testElement, _i, _len, _ref, _ref1, _results;
+    _ref = this.editors;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       editor = _ref[_i];
-      _results.push(this.$('.output').attr('src', "data:text/html;charset=utf-8," + (escape(editor.getValue()))));
+      $(this.$('.output')[0].contentDocument.documentElement).html(editor.getValue());
+    }
+    _ref1 = this.tests;
+    _results = [];
+    for (html in _ref1) {
+      test = _ref1[html];
+      _results.push((function() {
+        var _j, _len1, _ref2, _results1;
+        _ref2 = this.$('.tests .test');
+        _results1 = [];
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          testElement = _ref2[_j];
+          if ($(testElement).html() === html) {
+            if (test()) {
+              $(testElement).removeClass('wrong');
+              _results1.push($(testElement).addClass('correct'));
+            } else {
+              $(testElement).removeClass('correct');
+              _results1.push($(testElement).addClass('wrong'));
+            }
+          }
+        }
+        return _results1;
+      }).call(this));
     }
     return _results;
   };

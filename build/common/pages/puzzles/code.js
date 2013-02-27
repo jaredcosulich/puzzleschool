@@ -26,7 +26,8 @@ soma.chunks({
         challenge: this.level.challenge,
         editors: this.level.editors,
         description: this.level.description,
-        hints: this.level.hints
+        hints: this.level.hints,
+        tests: this.level.tests
       });
     }
   }
@@ -79,7 +80,7 @@ LEVELS = [
         code: '<html>\n    <body>\n        <h1>Hi</h1>\n    </body>\n</html>'
       }
     ],
-    description: '<p>\n    The code displayed in the \'editor\' (where it says \'Page HTML\') \n    is all the code you need to create the simplest website.\n</p>\n<p>\n    The &lt;h1> is used to designate important information and so is displayed in\n    bold large text.\n</p>\n<p>\n    You can learn more about the &lt;h1> tag by \n    <a href=\'https://www.google.com/search?q=h1+tag\' target=\'_blank\'>Googling \'h1 tag\'</a>.\n</p>',
+    description: '<p>\n    The code displayed in the \'editor\' (where it says \'Page HTML\') \n    is all the code you need to create the simplest website.\n</p>\n<p>\n    The &lt;h1&gt; is used to designate important information and so is displayed in\n    bold large text.\n</p>\n<p>\n    You can learn more about the &lt;h1&gt; tag by \n    <a href=\'https://www.google.com/search?q=h1+tag\' target=\'_blank\'>Googling \'h1 tag\'</a>.\n</p>',
     hints: [
       {
         index: 1,
@@ -87,6 +88,12 @@ LEVELS = [
       }, {
         index: 2,
         content: 'In the editor, change the word \'Welcome\' to \'Hello World\''
+      }
+    ],
+    tests: [
+      {
+        description: 'The content contains an &lt;h1&gt; element with html content \'Hello World\'.',
+        test: escape("find('h1').html() == 'Hello World'")
       }
     ]
   }

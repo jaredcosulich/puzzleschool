@@ -24,6 +24,7 @@ soma.chunks
                 editors: @level.editors
                 description: @level.description
                 hints: @level.hints
+                tests: @level.tests
             )
             
         
@@ -78,17 +79,23 @@ LEVELS = [
                 is all the code you need to create the simplest website.
             </p>
             <p>
-                The &lt;h1> is used to designate important information and so is displayed in
+                The &lt;h1&gt; is used to designate important information and so is displayed in
                 bold large text.
             </p>
             <p>
-                You can learn more about the &lt;h1> tag by 
+                You can learn more about the &lt;h1&gt; tag by 
                 <a href='https://www.google.com/search?q=h1+tag' target='_blank'>Googling 'h1 tag'</a>.
             </p>
         '''
         hints: [
             {index: 1, content: 'The \'editor\', where you see the words \'Page HTML\' is editable.'}
             {index: 2, content: 'In the editor, change the word \'Welcome\' to \'Hello World\''}
+        ]
+        tests: [
+            {
+                description: 'The content contains an &lt;h1&gt; element with html content \'Hello World\'.'
+                test: escape("find('h1').html() == 'Hello World'")
+            }
         ]
     }
 ]
