@@ -2,24 +2,41 @@ code = exports ? provide('./lib/code', {})
 
 class code.ViewHelper    
     constructor: ({@el, @completeLevel}) ->
-        @initEditors()
-        @initDescription()
-        @initHints()
-        @initTests()
-        @setOutput()
         
     $: (selector) -> @el.find(selector)    
         
+    initLevel: (@level) ->
+        @initChallenge()
+        @initDescription()
+        @initHints()
+        @initTests()
+        @initEditors()    
+        @setOutput()
+        
     initEditors: ->
         @editors = []
-        for container in @$('.editors .editor_container')
-            editorContainer = $(container)
-            editor = ace.edit(editorContainer.find('.editor')[0])
+        for editor in @level.editors
+            editorContainer = $(document.createElement('DIV'))
+            editorContainer.addClass('editor_container')
+            editorContainer.html """
+                <div class='editor_header'>
+                    <div class='type'>#{editor.type}</div>
+                    <div class='title'>#{editor.title}</div>
+                </div>
+                <div class='editor'></div>
+            """
+            @$('.editors').append(editorContainer)
+            
+            aceEditor = ace.edit(editorContainer.find('.editor')[0])
 
-            type = editorContainer.find('.type').html()
-            editor.getSession().setMode("ace/mode/#{type}")
-            editor.getSession().on 'change', (e) => @setOutput()
-            @editors.push(editor)
+            aceEditor.getSession().setMode("ace/mode/#{editor.type}")
+            aceEditor.setValue(editor.code)
+            aceEditor.clearSelection()
+            aceEditor.getSession().on 'change', (e) => @setOutput()
+            @editors.push(aceEditor)
+    
+    initChallenge: ->
+        @$('.challenge .text').html("<b>The Challenge</b>: #{@level.challenge}")
             
     initSection: (className) ->        
         link = @$(".links .#{className}")
@@ -44,45 +61,48 @@ class code.ViewHelper
                                 content.css(display: 'none')
                     content.bind 'click', (e) -> e.stop()
             
-    initDescription: -> @initSection('description')
+    initDescription: -> 
+        @$('div.description .inside').html(@level.description)
+        @initSection('description')
         
     initHints: ->
-        @tests = {}
-        @initSection('hints')
-        for hint in @$('.hints .hint')
+        for hint, index in @level.hints
             do (hint) ->
-                $(hint).find('.reveal').bind 'click', ->
-                    $(hint).find('.hint_content').animate
+                hintElement = $(document.createElement('DIV'))
+                hintElement.addClass('hint')
+                hintElement.html """
+                    <a class='reveal'>Reveal Hint #{index}</a>
+                    <p class='hint_content'>#{hint}</p>
+                """
+                @$('div.hints .inside').append(hintElement)
+                hintElement.find('.reveal').bind 'click', ->
+                    hintElement.find('.hint_content').animate
                         opacity: 1
                         duration: 500
+        
+        @initSection('hints')
             
     initTests: ->
+        for testInfo in @level.tests
+            do (testInfo) =>
+                @$('div.tests .inside').prepend """
+                    <div class='test wrong' data-test=#{testInfo.test}>#{testInfo.description}</div>
+                """
+        
         @initSection('tests')
-        
-        frameBody = =>
-            frame = @$('.output')[0]
-            frameDoc = frame.contentDocument || frame.contentWindow.document
-            $(frameDoc.body)
-            
-        frameFind = (selector) => 
-            frameBody().find(selector)
-
-        for test in @$('.tests .test')
-            do (test) =>
-                @tests[$(test).html()] = -> 
-                    try
-                        eval(unescape($(test).data('test')))
-                    catch e 
-                        alert("A test failed to run: #{e.message}")
-        
+    
     setOutput: ->
         for editor in @editors
             $(@$('.output')[0].contentDocument.documentElement).html(editor.getValue())
-            
+
+        frame = @$('.output')[0]
+        frameDoc = frame.contentDocument || frame.contentWindow.document
+        frameBody = $(frameDoc.body)
+
         allTestsPassed = true
-        for html, test of @tests
-            for testElement in @$('.tests .test') when $(testElement).html() == html
-                if test()
+        for testInfo in @level.tests
+            for testElement in @$('.tests .test') when $(testElement).html() == testInfo.description
+                if testInfo.test(frameBody)
                     $(testElement).removeClass('wrong')
                     $(testElement).addClass('correct')
                 else

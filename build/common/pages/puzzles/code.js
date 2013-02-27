@@ -13,48 +13,19 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var level, stage, _i, _len, _results;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/code.html");
       this.loadScript('http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js');
       this.loadScript('/build/common/pages/puzzles/lib/code.js');
       this.loadStylesheet('/build/client/css/puzzles/code.css');
-      if (this.levelId) {
-        _results = [];
-        for (_i = 0, _len = STAGES.length; _i < _len; _i++) {
-          stage = STAGES[_i];
-          this.level = ((function() {
-            var _j, _len1, _ref, _results1;
-            _ref = stage.levels;
-            _results1 = [];
-            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-              level = _ref[_j];
-              if (level.id === this.levelId) {
-                _results1.push(level);
-              }
-            }
-            return _results1;
-          }).call(this))[0];
-          if (this.level) {
-            break;
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
-      } else {
-        return this.level = STAGES[0].levels[0];
+      if (!this.levelId) {
+        return this.levelId = STAGES[0].levels[0].id;
       }
     },
     build: function() {
       this.setTitle("Code Puzzles - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
-        level: this.level.id,
-        challenge: this.level.challenge,
-        editors: this.level.editors,
-        description: this.level.description,
-        hints: this.level.hints,
-        tests: this.level.tests,
+        level: this.levelId,
         stages: STAGES
       });
     }
@@ -68,14 +39,37 @@ soma.views({
       var code,
         _this = this;
       code = require('./lib/code');
-      this.levelId = this.el.data('level');
+      this.originalHTML = this.el.html();
+      this.level = this.findLevel(this.el.data('level'));
       this.helper = new code.ViewHelper({
         el: this.el,
         completeLevel: function() {
           return _this.completeLevel();
         }
       });
+      this.helper.initLevel(this.level);
       return this.initLevelSelector();
+    },
+    findLevel: function(levelId) {
+      var level, stage, _i, _len;
+      for (_i = 0, _len = STAGES.length; _i < _len; _i++) {
+        stage = STAGES[_i];
+        level = ((function() {
+          var _j, _len1, _ref, _results;
+          _ref = stage.levels;
+          _results = [];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            level = _ref[_j];
+            if (level.id === levelId) {
+              _results.push(level);
+            }
+          }
+          return _results;
+        })())[0];
+        if (level) {
+          return level;
+        }
+      }
     },
     initLevelSelector: function() {
       var level, _i, _len, _ref, _results,
@@ -87,14 +81,17 @@ soma.views({
         level = _ref[_i];
         level = $(level);
         _results.push(level.bind('click', function() {
-          return window.location.href = '/puzzles/code/' + level.data('id');
+          _this.level = _this.findLevel(level.data('id'));
+          _this.el.html(_this.originalHTML);
+          _this.helper.initLevel(_this.level);
+          return _this.hideLevelSelector();
         }));
       }
       return _results;
     },
     completeLevel: function() {
       var levelIcon;
-      levelIcon = this.$("#level_" + this.levelId).find('img');
+      levelIcon = this.$("#level_" + this.level.id).find('img');
       levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'));
       return this.showLevelSelector();
     },
@@ -108,6 +105,91 @@ soma.views({
         opacity: 1,
         duration: 250
       });
+    },
+    hideLevelSelector: function() {
+      var _this = this;
+      return this.levelSelector.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return _this.levelSelector.css({
+            top: -1000,
+            left: -1000
+          });
+        }
+      });
+    },
+    saveProgress: function(puzzleProgress, callback) {
+      var languages, levelInfo, levelName, levelUpdates, levels, paddingTop, puzzleUpdates, registrationFlag, _ref,
+        _this = this;
+      if (this.cookies.get('user')) {
+        puzzleUpdates = this.getUpdates(puzzleProgress);
+        if (!puzzleUpdates) {
+          return;
+        }
+        levelUpdates = {};
+        _ref = puzzleUpdates.levels;
+        for (languages in _ref) {
+          levels = _ref[languages];
+          for (levelName in levels) {
+            levelInfo = levels[levelName];
+            levelUpdates["" + languages + "/" + levelName] = levelInfo;
+          }
+        }
+        delete puzzleUpdates.levels;
+        return $.ajaj({
+          url: "/api/puzzles/code/update",
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': this.cookies.get('_csrf', {
+              raw: true
+            })
+          },
+          data: {
+            puzzleUpdates: puzzleUpdates,
+            levelUpdates: levelUpdates
+          },
+          success: function() {
+            _this.puzzleData = JSON.parse(JSON.stringify(puzzleProgress));
+            if (callback) {
+              return callback();
+            }
+          }
+        });
+      } else if (puzzleProgress.levels) {
+        window.postRegistration.push(function(callback) {
+          return _this.saveProgress(puzzleProgress, callback);
+        });
+        if (!this.answerCount) {
+          this.answerCount = 0;
+        }
+        this.answerCount += 1;
+        if (this.answerCount > 7) {
+          if (this.answerCount % 8 === 0) {
+            registrationFlag = $('.register_flag');
+            paddingTop = registrationFlag.css('paddingTop');
+            $.timeout(1000, function() {
+              return registrationFlag.animate({
+                paddingTop: 45,
+                paddingBottom: 45,
+                duration: 1000,
+                complete: function() {
+                  return $.timeout(1000, function() {
+                    return registrationFlag.animate({
+                      paddingTop: paddingTop,
+                      paddingBottom: paddingTop,
+                      duration: 1000
+                    });
+                  });
+                }
+              });
+            });
+          }
+          return $(window).bind('beforeunload', function() {
+            return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.';
+          });
+        }
+      }
     }
   }
 });
@@ -138,7 +220,7 @@ STAGES = [
     name: 'Basic HTML',
     levels: [
       {
-        id: '1361991179382',
+        id: 1361991179382,
         challenge: 'Figure out how to change the word "Welcome" to the word "Hello World\'".',
         editors: [
           {
@@ -148,23 +230,17 @@ STAGES = [
           }
         ],
         description: '<p>\n    The code displayed in the \'editor\' (where it says \'Page HTML\') \n    is all the code you need to create the simplest website.\n</p>\n<p>\n    The &lt;h1&gt; is used to designate important information and so is displayed in\n    bold large text.\n</p>\n<p>\n    You can learn more about the &lt;h1&gt; tag by googling:\n    <a href=\'https://www.google.com/search?q=h1+tag\' target=\'_blank\'>\'h1 tag\'</a>.\n</p>',
-        hints: [
-          {
-            index: 1,
-            content: 'The \'editor\', where you see the words \'Page HTML\' is editable.'
-          }, {
-            index: 2,
-            content: 'In the editor, change the word \'Welcome\' to \'Hello World\''
-          }
-        ],
+        hints: ['The \'editor\', where you see the words \'Page HTML\' is editable.', 'In the editor, change the word \'Welcome\' to \'Hello World\''],
         tests: [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.',
-            test: escape("frameFind('h1').html() == 'Hello World'")
+            test: function(body) {
+              return body.find('h1').html() === 'Hello World';
+            }
           }
         ]
       }, {
-        id: '1361991210187',
+        id: 1361991210187,
         challenge: 'Figure out how to print the words \'html tags are easy\' in an &lt;h1&gt; tag.',
         editors: [
           {
@@ -174,29 +250,22 @@ STAGES = [
           }
         ],
         description: '<p>\n    Here we\'ve removed the tag from the body of the html.\n</p>\n<p>\n    You simply need to put it back and don\'t forget to close the tag.\n</p>',
-        hints: [
-          {
-            index: 1,
-            content: 'Create a new &lt;h1&gt; tag by typing "&lt;h1&gt;" between &lt;body&gt; and &lt;/body&gt;'
-          }, {
-            index: 2,
-            content: 'You need to close the &lt;h1&gt; tag with a closing tag.'
-          }, {
-            index: 3,
-            content: 'The closing tag looks like &lt;/h1&gt;'
-          }
-        ],
+        hints: ['Create a new &lt;h1&gt; tag by typing "&lt;h1&gt;" between &lt;body&gt; and &lt;/body&gt;', 'You need to close the &lt;h1&gt; tag with a closing tag.', 'The closing tag looks like &lt;/h1&gt;'],
         tests: [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.',
-            test: escape("frameFind('h1').html() == 'html tags are easy'")
+            test: function(body) {
+              return body.find('h1').html() === 'html tags are easy';
+            }
           }, {
             description: 'The &lt;h1&gt; tag is properly closed.',
-            test: escape("frameBody().html().indexOf('</h1>') > -1")
+            test: function(body) {
+              return body.html().indexOf('</h1>') > -1;
+            }
           }
         ]
       }, {
-        id: '1361997759104',
+        id: 1361997759104,
         challenge: 'Figure out how to change the smallest text to \'this is the smallest header\'.',
         editors: [
           {
@@ -206,19 +275,13 @@ STAGES = [
           }
         ],
         description: '<p>\n    Here is a simply demo of all of the available header tags.\n</p>\n<p>\n    As you can see they range in size, designating the intent to show important information.\n</p>',
-        hints: [
-          {
-            index: 1,
-            content: 'The &lt;h4&gt; is smaller than the &lt;h3&gt; tag.'
-          }, {
-            index: 2,
-            content: 'Change the text inside the &lt;h6&gt; tag.'
-          }
-        ],
+        hints: ['The &lt;h4&gt; is smaller than the &lt;h3&gt; tag.', 'Change the text inside the &lt;h6&gt; tag.'],
         tests: [
           {
             description: 'The header with the smallest text size contains the text \'this is the smallest header\'.',
-            test: escape("frameFind('h6').html() == 'this is the smallest header'")
+            test: function(body) {
+              return body.find('h6').html() === 'this is the smallest header';
+            }
           }
         ]
       }

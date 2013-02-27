@@ -7,35 +7,48 @@ code.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     this.el = _arg.el, this.completeLevel = _arg.completeLevel;
-    this.initEditors();
-    this.initDescription();
-    this.initHints();
-    this.initTests();
-    this.setOutput();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return this.el.find(selector);
   };
 
+  ViewHelper.prototype.initLevel = function(level) {
+    this.level = level;
+    this.initChallenge();
+    this.initDescription();
+    this.initHints();
+    this.initTests();
+    this.initEditors();
+    return this.setOutput();
+  };
+
   ViewHelper.prototype.initEditors = function() {
-    var container, editor, editorContainer, type, _i, _len, _ref, _results,
+    var aceEditor, editor, editorContainer, _i, _len, _ref, _results,
       _this = this;
     this.editors = [];
-    _ref = this.$('.editors .editor_container');
+    _ref = this.level.editors;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      container = _ref[_i];
-      editorContainer = $(container);
-      editor = ace.edit(editorContainer.find('.editor')[0]);
-      type = editorContainer.find('.type').html();
-      editor.getSession().setMode("ace/mode/" + type);
-      editor.getSession().on('change', function(e) {
+      editor = _ref[_i];
+      editorContainer = $(document.createElement('DIV'));
+      editorContainer.addClass('editor_container');
+      editorContainer.html("<div class='editor_header'>\n    <div class='type'>" + editor.type + "</div>\n    <div class='title'>" + editor.title + "</div>\n</div>\n<div class='editor'></div>");
+      this.$('.editors').append(editorContainer);
+      aceEditor = ace.edit(editorContainer.find('.editor')[0]);
+      aceEditor.getSession().setMode("ace/mode/" + editor.type);
+      aceEditor.setValue(editor.code);
+      aceEditor.clearSelection();
+      aceEditor.getSession().on('change', function(e) {
         return _this.setOutput();
       });
-      _results.push(this.editors.push(editor));
+      _results.push(this.editors.push(aceEditor));
     }
     return _results;
+  };
+
+  ViewHelper.prototype.initChallenge = function() {
+    return this.$('.challenge .text').html("<b>The Challenge</b>: " + this.level.challenge);
   };
 
   ViewHelper.prototype.initSection = function(className) {
@@ -80,75 +93,66 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initDescription = function() {
+    this.$('div.description .inside').html(this.level.description);
     return this.initSection('description');
   };
 
   ViewHelper.prototype.initHints = function() {
-    var hint, _i, _len, _ref, _results;
-    this.tests = {};
-    this.initSection('hints');
-    _ref = this.$('.hints .hint');
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      hint = _ref[_i];
-      _results.push((function(hint) {
-        return $(hint).find('.reveal').bind('click', function() {
-          return $(hint).find('.hint_content').animate({
-            opacity: 1,
-            duration: 500
-          });
+    var hint, index, _fn, _i, _len, _ref;
+    _ref = this.level.hints;
+    _fn = function(hint) {
+      var hintElement;
+      hintElement = $(document.createElement('DIV'));
+      hintElement.addClass('hint');
+      hintElement.html("<a class='reveal'>Reveal Hint " + index + "</a>\n<p class='hint_content'>" + hint + "</p>");
+      this.$('div.hints .inside').append(hintElement);
+      return hintElement.find('.reveal').bind('click', function() {
+        return hintElement.find('.hint_content').animate({
+          opacity: 1,
+          duration: 500
         });
-      })(hint));
+      });
+    };
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      hint = _ref[index];
+      _fn(hint);
     }
-    return _results;
+    return this.initSection('hints');
   };
 
   ViewHelper.prototype.initTests = function() {
-    var frameBody, frameFind, test, _i, _len, _ref, _results,
+    var testInfo, _fn, _i, _len, _ref,
       _this = this;
-    this.initSection('tests');
-    frameBody = function() {
-      var frame, frameDoc;
-      frame = _this.$('.output')[0];
-      frameDoc = frame.contentDocument || frame.contentWindow.document;
-      return $(frameDoc.body);
+    _ref = this.level.tests;
+    _fn = function(testInfo) {
+      return _this.$('div.tests .inside').prepend("<div class='test wrong' data-test=" + testInfo.test + ">" + testInfo.description + "</div>");
     };
-    frameFind = function(selector) {
-      return frameBody().find(selector);
-    };
-    _ref = this.$('.tests .test');
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      test = _ref[_i];
-      _results.push((function(test) {
-        return _this.tests[$(test).html()] = function() {
-          try {
-            return eval(unescape($(test).data('test')));
-          } catch (e) {
-            return alert("A test failed to run: " + e.message);
-          }
-        };
-      })(test));
+      testInfo = _ref[_i];
+      _fn(testInfo);
     }
-    return _results;
+    return this.initSection('tests');
   };
 
   ViewHelper.prototype.setOutput = function() {
-    var allTestsPassed, editor, html, test, testElement, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+    var allTestsPassed, editor, frame, frameBody, frameDoc, testElement, testInfo, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
     _ref = this.editors;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       editor = _ref[_i];
       $(this.$('.output')[0].contentDocument.documentElement).html(editor.getValue());
     }
+    frame = this.$('.output')[0];
+    frameDoc = frame.contentDocument || frame.contentWindow.document;
+    frameBody = $(frameDoc.body);
     allTestsPassed = true;
-    _ref1 = this.tests;
-    for (html in _ref1) {
-      test = _ref1[html];
+    _ref1 = this.level.tests;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      testInfo = _ref1[_j];
       _ref2 = this.$('.tests .test');
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        testElement = _ref2[_j];
-        if ($(testElement).html() === html) {
-          if (test()) {
+      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+        testElement = _ref2[_k];
+        if ($(testElement).html() === testInfo.description) {
+          if (testInfo.test(frameBody)) {
             $(testElement).removeClass('wrong');
             $(testElement).addClass('correct');
           } else {

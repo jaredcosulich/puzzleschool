@@ -13,23 +13,14 @@ soma.chunks
 
             @loadStylesheet '/build/client/css/puzzles/code.css'     
 
-            if @levelId
-                for stage in STAGES
-                    @level = (level for level in stage.levels when level.id == @levelId)[0]
-                    break if @level
-            else
-                @level = STAGES[0].levels[0]
+            if not @levelId
+                @levelId = STAGES[0].levels[0].id
             
         build: ->
             @setTitle("Code Puzzles - The Puzzle School")
             
             @html = wings.renderTemplate(@template,
-                level: @level.id
-                challenge: @level.challenge
-                editors: @level.editors
-                description: @level.description
-                hints: @level.hints
-                tests: @level.tests
+                level: @levelId
                 stages: STAGES
             )
         
@@ -38,24 +29,36 @@ soma.views
         selector: '#content .code'
         create: ->
             code = require('./lib/code')
+            
+            @originalHTML = @el.html()
         
-            @levelId = @el.data('level')
-        
+            @level = @findLevel(@el.data('level'))
+            
             @helper = new code.ViewHelper
                 el: @el
                 completeLevel: => @completeLevel()
 
+            @helper.initLevel(@level)
+
             @initLevelSelector()
+            
+        findLevel: (levelId) ->
+            for stage in STAGES
+                level = (level for level in stage.levels when level.id == levelId)[0]
+                return level if level
 
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
             for level in @levelSelector.find('.level')
                 level = $(level)
-                level.bind 'click', =>
-                    window.location.href = '/puzzles/code/' + level.data('id')
+                level.bind 'click', => 
+                    @level = @findLevel(level.data('id'))
+                    @el.html(@originalHTML)
+                    @helper.initLevel(@level)
+                    @hideLevelSelector()
                 
         completeLevel: ->
-            levelIcon = @$("#level_#{@levelId}").find('img')
+            levelIcon = @$("#level_#{@level.id}").find('img')
             levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'))
             @showLevelSelector()
             
@@ -67,7 +70,61 @@ soma.views
             @levelSelector.animate
                 opacity: 1
                 duration: 250
-                    
+                
+        hideLevelSelector: ->
+            @levelSelector.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    @levelSelector.css
+                        top: -1000
+                        left: -1000
+                            
+        saveProgress: (puzzleProgress, callback) ->
+            if @cookies.get('user')
+                puzzleUpdates = @getUpdates(puzzleProgress)
+                return unless puzzleUpdates
+
+                levelUpdates = {}
+                for languages, levels of puzzleUpdates.levels
+                    for levelName, levelInfo of levels
+                        levelUpdates["#{languages}/#{levelName}"] = levelInfo
+                delete puzzleUpdates.levels
+
+                $.ajaj
+                    url: "/api/puzzles/code/update"
+                    method: 'POST'
+                    headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                    data: 
+                        puzzleUpdates: puzzleUpdates
+                        levelUpdates: levelUpdates
+                    success: => 
+                        @puzzleData = JSON.parse(JSON.stringify(puzzleProgress))
+                        callback() if callback
+
+            else if puzzleProgress.levels 
+                window.postRegistration.push((callback) => @saveProgress(puzzleProgress, callback))
+
+                @answerCount = 0 if not @answerCount
+                @answerCount += 1
+                if @answerCount > 7
+                    if @answerCount % 8 == 0
+                        registrationFlag = $('.register_flag')
+                        paddingTop = registrationFlag.css('paddingTop')
+                        $.timeout 1000, =>
+                            registrationFlag.animate
+                                paddingTop: 45
+                                paddingBottom: 45
+                                duration: 1000
+                                complete: =>
+                                    $.timeout 1000, =>
+                                        registrationFlag.animate
+                                            paddingTop: paddingTop
+                                            paddingBottom: paddingTop
+                                            duration: 1000
+
+                    $(window).bind 'beforeunload', => return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.'
+            
             
 soma.routes
     '/puzzles/code/:classId/:levelId': ({classId, levelId}) -> 
@@ -87,7 +144,7 @@ STAGES = [
         name: 'Basic HTML'
         levels: [
             {
-                id: '1361991179382'
+                id: 1361991179382
                 challenge: '''
                     Figure out how to change the word "Welcome" to the word "Hello World'".
                 '''
@@ -119,18 +176,18 @@ STAGES = [
                     </p>
                 '''
                 hints: [
-                    {index: 1, content: 'The \'editor\', where you see the words \'Page HTML\' is editable.'}
-                    {index: 2, content: 'In the editor, change the word \'Welcome\' to \'Hello World\''}
+                    'The \'editor\', where you see the words \'Page HTML\' is editable.'
+                    'In the editor, change the word \'Welcome\' to \'Hello World\''
                 ]
                 tests: [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.'
-                        test: escape("frameFind('h1').html() == 'Hello World'")
+                        test: (body) -> body.find('h1').html() == 'Hello World'
                     }
                 ]
             },
             {
-                id: '1361991210187'
+                id: 1361991210187
                 challenge: '''
                     Figure out how to print the words 'html tags are easy' in an &lt;h1&gt; tag.
                 '''
@@ -156,23 +213,23 @@ STAGES = [
                     </p>
                 '''
                 hints: [
-                    {index: 1, content: 'Create a new &lt;h1&gt; tag by typing "&lt;h1&gt;" between &lt;body&gt; and &lt;/body&gt;'}
-                    {index: 2, content: 'You need to close the &lt;h1&gt; tag with a closing tag.'}
-                    {index: 3, content: 'The closing tag looks like &lt;/h1&gt;'}
+                    'Create a new &lt;h1&gt; tag by typing "&lt;h1&gt;" between &lt;body&gt; and &lt;/body&gt;'
+                    'You need to close the &lt;h1&gt; tag with a closing tag.'
+                    'The closing tag looks like &lt;/h1&gt;'
                 ]
                 tests: [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.'
-                        test: escape("frameFind('h1').html() == 'html tags are easy'")
+                        test: (body) -> body.find('h1').html() == 'html tags are easy'
                     }
                     {
                         description: 'The &lt;h1&gt; tag is properly closed.'
-                        test: escape("frameBody().html().indexOf('</h1>') > -1")
+                        test: (body) -> body.html().indexOf('</h1>') > -1
                     }
                 ]
             },
             {
-                id: '1361997759104'
+                id: 1361997759104
                 challenge: '''
                     Figure out how to change the smallest text to 'this is the smallest header'.
                 '''
@@ -203,13 +260,13 @@ STAGES = [
                     </p>
                 '''
                 hints: [
-                    {index: 1, content: 'The &lt;h4&gt; is smaller than the &lt;h3&gt; tag.'}
-                    {index: 2, content: 'Change the text inside the &lt;h6&gt; tag.'}
+                    'The &lt;h4&gt; is smaller than the &lt;h3&gt; tag.'
+                    'Change the text inside the &lt;h6&gt; tag.'
                 ]
                 tests: [
                     {
                         description: 'The header with the smallest text size contains the text \'this is the smallest header\'.'
-                        test: escape("frameFind('h6').html() == 'this is the smallest header'")
+                        test: (body) -> body.find('h6').html() == 'this is the smallest header'
                     }
                 ]
             }

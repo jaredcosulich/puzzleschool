@@ -2,31 +2,16 @@
     <h2>Code Puzzles</h2>
     
     <div class='challenge'>
-        <div class='text'>
-            <b>The Challenge</b>:
-            {challenge}
-        </div>
+        <h3 class='text'></h3>
         <div class='links'>
             <a class='description'>Lesson</a>
             <a class='hints'>Hints</a>
             <a class='tests'>Tests</a>
         </div>
-        <div class='description'><div class='inside'>{&description}</div></div>
-        <div class='hints'>
-            <div class='inside'>
-                {:hints}
-                <div class='hint'>
-                    <a class='reveal'>Reveal Hint {index}</a>
-                    <p class='hint_content'>{content}</p>
-                </div>
-                {/hints}
-            </div>
-        </div>
+        <div class='description'><div class='inside'></div></div>
+        <div class='hints'><div class='inside'></div></div>
         <div class='tests'>
             <div class='inside'>
-                {:tests}
-                <div class='test wrong' data-test={test}>{description}</div>
-                {/tests}
                 <p class='explanation'>
                     * Green tests have passed, red tests have not.
                 </p>
@@ -37,19 +22,10 @@
     <iframe class='output'></iframe>
 
     <div class='editors'>
-        <div class='editor_container'>
-            {:editors}
-            <div class='editor_header'>
-                <div class='type'>{type}</div>
-                <div class='title'>{title}</div>
-            </div>
-            <div id="editor" class='editor'>{code}</div>    
-            {/editors}
-        </div>
     </div>
     
     <div class='level_selector'>
-        <h2 class='success'>Nice Work. Level Complete!</h2>
+        <h2 class='success'>Nice Work. Puzzle Complete!</h2>
         {:stages}
         <h3>{name}</h3>
         <div class='levels'>
