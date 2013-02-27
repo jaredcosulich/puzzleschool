@@ -3,6 +3,7 @@
   width: 1050px;
   overflow: hidden;
   padding-bottom: 30px;
+  position: relative;
 }
 .code h2 {
   text-align: center;
@@ -11,8 +12,6 @@
 .code .challenge {
   width: 50%;
   margin: 0 auto 12px auto;
-  border: 2px solid #24aac3;
-  border-bottom: none;
   position: relative;
 }
 .code .challenge .text {
@@ -28,11 +27,10 @@
   overflow: hidden;
 }
 .code .challenge .links a {
-  font-weight: bold;
   display: block;
   float: left;
   width: 33%;
-  margin-top: 2px;
+  border-top: 1px solid #24aac3;
   padding: 4px 0 6px 0;
   text-align: center;
   color: white;
@@ -40,8 +38,12 @@
   text-decoration: none;
   line-height: 15px;
 }
+.code .challenge .links a:first-child {
+  border-left: 1px solid #24aac3;
+}
 .code .challenge .links a:last-child {
-  border: none;
+  width: 33%;
+  border-right: none;
 }
 .code .challenge .links a.selected {
   background-color: #fafafa;
@@ -51,12 +53,12 @@
 .code .challenge div.hints,
 .code .challenge div.tests {
   position: absolute;
-  border-left: 2px solid #24aac3;
-  border-bottom: 2px solid #24aac3;
-  border-right: 2px solid #24aac3;
+  border-left: 1px solid #24aac3;
+  border-bottom: 1px solid #24aac3;
+  border-right: 1px solid #24aac3;
   z-index: 2;
-  width: 100%;
-  left: -2px;
+  width: 99.85%;
+  left: 0;
   top: 100%;
   overflow: hidden;
   background-color: #fafafa;
@@ -137,4 +139,28 @@
   height: 540px;
   float: right;
   border: 1px solid #ccc;
+}
+.code .level_selector {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  opacity: 0;
+  background-color: #fafafa;
+  border: 2px solid #24d94c;
+  width: 540px;
+  padding: 12px;
+  z-index: 9;
+}
+.code .level_selector h2,
+.code .level_selector h3,
+.code .level_selector h4 {
+  text-align: center;
+}
+.code .level_selector .levels {
+  background-color: #eee;
+  padding: 12px;
+  height: 240px;
+}
+.code .level_selector .levels .level {
+  padding: 12px;
 }

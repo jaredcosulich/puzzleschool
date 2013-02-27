@@ -47,6 +47,22 @@
             {/editors}
         </div>
     </div>
+    
+    <div class='level_selector'>
+        <h2 class='success'>Nice Work. Level Complete!</h2>
+        {:stages}
+        <h3>{name}</h3>
+        <div class='levels'>
+            <h4>Select A Level</h4>
+            <br/>
+            {:levels}
+            <a class='level' id='level_{id}' data-id={id}>
+                <img src='/assets/images/puzzles/code/level.jpg' />
+            </a>
+            {/levels}
+        </div>
+        {/stages}
+    </div>
 </div>
 
 <div class='explanation'>

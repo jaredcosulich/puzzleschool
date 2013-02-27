@@ -6,7 +6,7 @@ code = typeof exports !== "undefined" && exports !== null ? exports : provide('.
 code.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    this.el = _arg.el;
+    this.el = _arg.el, this.completeLevel = _arg.completeLevel;
     this.initEditors();
     this.initDescription();
     this.initHints();
@@ -104,14 +104,17 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initTests = function() {
-    var find, test, _i, _len, _ref, _results,
+    var frameBody, frameFind, test, _i, _len, _ref, _results,
       _this = this;
     this.initSection('tests');
-    find = function(selector) {
-      var iframe, iframeDoc;
-      iframe = _this.$('.output')[0];
-      iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      return $(iframeDoc.body).find(selector);
+    frameBody = function() {
+      var frame, frameDoc;
+      frame = _this.$('.output')[0];
+      frameDoc = frame.contentDocument || frame.contentWindow.document;
+      return $(frameDoc.body);
+    };
+    frameFind = function(selector) {
+      return frameBody().find(selector);
     };
     _ref = this.$('.tests .test');
     _results = [];
@@ -131,36 +134,41 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.setOutput = function() {
-    var editor, html, test, testElement, _i, _len, _ref, _ref1, _results;
+    var allTestsPassed, editor, html, test, testElement, _i, _j, _len, _len1, _ref, _ref1, _ref2;
     _ref = this.editors;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       editor = _ref[_i];
       $(this.$('.output')[0].contentDocument.documentElement).html(editor.getValue());
     }
+    allTestsPassed = true;
     _ref1 = this.tests;
-    _results = [];
     for (html in _ref1) {
       test = _ref1[html];
-      _results.push((function() {
-        var _j, _len1, _ref2, _results1;
-        _ref2 = this.$('.tests .test');
-        _results1 = [];
-        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-          testElement = _ref2[_j];
-          if ($(testElement).html() === html) {
-            if (test()) {
-              $(testElement).removeClass('wrong');
-              _results1.push($(testElement).addClass('correct'));
-            } else {
-              $(testElement).removeClass('correct');
-              _results1.push($(testElement).addClass('wrong'));
-            }
+      _ref2 = this.$('.tests .test');
+      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+        testElement = _ref2[_j];
+        if ($(testElement).html() === html) {
+          if (test()) {
+            $(testElement).removeClass('wrong');
+            $(testElement).addClass('correct');
+          } else {
+            allTestsPassed = false;
+            $(testElement).removeClass('correct');
+            $(testElement).addClass('wrong');
           }
         }
-        return _results1;
-      }).call(this));
+      }
     }
-    return _results;
+    if (allTestsPassed) {
+      return this.success();
+    }
+  };
+
+  ViewHelper.prototype.success = function() {
+    var _this = this;
+    return setTimeout((function() {
+      return _this.completeLevel();
+    }), 50);
   };
 
   return ViewHelper;

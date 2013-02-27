@@ -1,13 +1,12 @@
 code = exports ? provide('./lib/code', {})
 
 class code.ViewHelper    
-    constructor: ({@el}) ->
+    constructor: ({@el, @completeLevel}) ->
         @initEditors()
         @initDescription()
         @initHints()
         @initTests()
         @setOutput()
-        
         
     $: (selector) -> @el.find(selector)    
         
@@ -60,11 +59,14 @@ class code.ViewHelper
     initTests: ->
         @initSection('tests')
         
-        find = (selector) => 
-            iframe = @$('.output')[0]
-            iframeDoc = iframe.contentDocument || iframe.contentWindow.document
-            $(iframeDoc.body).find(selector)
-        
+        frameBody = =>
+            frame = @$('.output')[0]
+            frameDoc = frame.contentDocument || frame.contentWindow.document
+            $(frameDoc.body)
+            
+        frameFind = (selector) => 
+            frameBody().find(selector)
+
         for test in @$('.tests .test')
             do (test) =>
                 @tests[$(test).html()] = -> 
@@ -77,13 +79,22 @@ class code.ViewHelper
         for editor in @editors
             $(@$('.output')[0].contentDocument.documentElement).html(editor.getValue())
             
+        allTestsPassed = true
         for html, test of @tests
             for testElement in @$('.tests .test') when $(testElement).html() == html
                 if test()
                     $(testElement).removeClass('wrong')
                     $(testElement).addClass('correct')
                 else
+                    allTestsPassed = false
                     $(testElement).removeClass('correct')
                     $(testElement).addClass('wrong')
                 
-            
+        @success() if allTestsPassed
+
+    success: ->
+        setTimeout((=>
+            @completeLevel()
+        ), 50)
+        
+        
