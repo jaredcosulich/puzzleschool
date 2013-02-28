@@ -13,12 +13,29 @@
   text-align: center;
   margin-bottom: 12px;
 }
-.code .challenge .text {
+.code .challenge .text,
+.code .challenge .success {
   padding: 12px;
+}
+.code .challenge .success {
+  color: #0c8d28;
+  font-weight: bold;
 }
 .code .challenge a {
   color: #0c8d28;
   text-decoration: underline;
+}
+.code .challenge .next_level {
+  background-color: #24aac3;
+  display: block;
+  border-top: 1px solid #24aac3;
+  padding: 4px 0 6px 0;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  line-height: 15px;
+  width: 12em;
+  margin: auto;
 }
 .code .challenge .links {
   width: 50%;

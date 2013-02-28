@@ -113,11 +113,6 @@ class code.ViewHelper
                     $(testElement).removeClass('correct')
                     $(testElement).addClass('wrong')
                 
-        @success() if allTestsPassed
+        @completeLevel() if allTestsPassed
 
-    success: ->
-        setTimeout((=>
-            @completeLevel()
-        ), 500)
-        
         

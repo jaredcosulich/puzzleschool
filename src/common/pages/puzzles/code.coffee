@@ -63,7 +63,17 @@ soma.views
             levelIcon = @$("#level_#{@level.id}").find('img')
             if levelIcon.attr('src').indexOf('complete') == -1
                 levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'))
-            @showLevelSelector()
+            challenge = @$('.challenge')
+            challenge.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    challenge.html '''
+                        <h3 class='success'>Success!</h3>
+                        <a class='next_level'>Select A New Level</a>
+                    '''
+                    challenge.find('.next_level').bind 'click', => @showLevelSelector()
+                    challenge.animate(opacity: 1, duration: 250)
             
         showLevelSelector: ->
             @levelSelector.css

@@ -93,12 +93,27 @@ soma.views({
       return _results;
     },
     completeLevel: function() {
-      var levelIcon;
+      var challenge, levelIcon,
+        _this = this;
       levelIcon = this.$("#level_" + this.level.id).find('img');
       if (levelIcon.attr('src').indexOf('complete') === -1) {
         levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'));
       }
-      return this.showLevelSelector();
+      challenge = this.$('.challenge');
+      return challenge.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          challenge.html('<h3 class=\'success\'>Success!</h3>\n<a class=\'next_level\'>Select A New Level</a>');
+          challenge.find('.next_level').bind('click', function() {
+            return _this.showLevelSelector();
+          });
+          return challenge.animate({
+            opacity: 1,
+            duration: 250
+          });
+        }
+      });
     },
     showLevelSelector: function() {
       this.levelSelector.css({

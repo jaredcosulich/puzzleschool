@@ -171,15 +171,8 @@ code.ViewHelper = (function() {
       }
     }
     if (allTestsPassed) {
-      return this.success();
+      return this.completeLevel();
     }
-  };
-
-  ViewHelper.prototype.success = function() {
-    var _this = this;
-    return setTimeout((function() {
-      return _this.completeLevel();
-    }), 500);
   };
 
   return ViewHelper;
