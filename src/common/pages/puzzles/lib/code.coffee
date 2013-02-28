@@ -87,7 +87,7 @@ class code.ViewHelper
         for testInfo in @level.tests
             do (testInfo) =>
                 @$('div.tests .inside').prepend """
-                    <div class='test wrong' data-test=#{testInfo.test}>#{testInfo.description}</div>
+                    <p class='test wrong'>#{testInfo.description}</p>
                 """
         
         @initSection('tests')

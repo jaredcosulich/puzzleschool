@@ -126,7 +126,7 @@ code.ViewHelper = (function() {
       _this = this;
     _ref = this.level.tests;
     _fn = function(testInfo) {
-      return _this.$('div.tests .inside').prepend("<div class='test wrong' data-test=" + testInfo.test + ">" + testInfo.description + "</div>");
+      return _this.$('div.tests .inside').prepend("<p class='test wrong'>" + testInfo.description + "</p>");
     };
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       testInfo = _ref[_i];
