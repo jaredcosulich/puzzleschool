@@ -39,14 +39,14 @@
   text-decoration: none;
   line-height: 15px;
 }
-.code .challenge .links a:first-child {
+.code .challenge .links a.link:first-child {
   border-left: 1px solid #24aac3;
 }
-.code .challenge .links a:last-child {
+.code .challenge .links a.link:last-child {
   width: 33%;
   border-right: none;
 }
-.code .challenge .links a.selected {
+.code .challenge .links a.link.selected {
   background-color: #fafafa;
   color: #24aac3;
 }
