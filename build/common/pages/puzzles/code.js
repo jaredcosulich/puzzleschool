@@ -240,7 +240,7 @@ STAGES = [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.',
             test: function(body) {
-              return body.find('h1').html() === 'Hello World';
+              return body.find('h1').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() === 'hello world';
             }
           }
         ]
@@ -260,7 +260,7 @@ STAGES = [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.',
             test: function(body) {
-              return body.find('h1').html() === 'html tags are easy';
+              return body.find('h1').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() === 'html tags are easy';
             }
           }, {
             description: 'The &lt;h1&gt; tag is properly closed.',
@@ -285,7 +285,7 @@ STAGES = [
           {
             description: 'The header with the smallest text size contains the text \'this is the smallest header\'.',
             test: function(body) {
-              return body.find('h6').html() === 'this is the smallest header';
+              return body.find('h6').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() === 'this is the smallest header';
             }
           }
         ]
