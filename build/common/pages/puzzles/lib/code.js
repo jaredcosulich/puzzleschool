@@ -14,13 +14,17 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initLevel = function(level) {
+    var _this = this;
     this.level = level;
     this.initChallenge();
     this.initDescription();
     this.initHints();
     this.initTests();
     this.initEditors();
-    return this.setOutput();
+    this.setOutput();
+    return window.retest = function() {
+      return _this.setOutput();
+    };
   };
 
   ViewHelper.prototype.initEditors = function() {

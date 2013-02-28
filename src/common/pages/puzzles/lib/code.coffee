@@ -13,6 +13,8 @@ class code.ViewHelper
         @initEditors()    
         @setOutput()
         
+        window.retest = => @setOutput()
+        
     initEditors: ->
         @editors = []
         for editor in @level.editors
@@ -114,5 +116,6 @@ class code.ViewHelper
                     $(testElement).addClass('wrong')
                 
         @completeLevel() if allTestsPassed
+        
 
         

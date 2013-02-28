@@ -357,6 +357,7 @@ STAGES = [
                                 </p>
                                 <p>
                                   The 'style' attribute with a value of 'color: green' is making the &lt;h1&gt; turn green.
+                                </p>
                               </body>
                             </html>
                         '''
@@ -375,6 +376,63 @@ STAGES = [
                     {
                         description: 'The &lt;h1&gt; tag has a color of red.'
                         test: ({body, cleanHtml}) -> body.find('h1').css('color') == 'red'
+                    }
+                ]
+            }, {
+                id: 1362074585433
+                challenge: '''
+                    Figure out how to change the link to display and direct to a new website.
+                '''
+                editors: [
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Linking Fun</h1>
+                                <p>
+                                  Anchor tags (&lt;a&gt;) can be used to place a link to another website on your page.
+                                </p>
+                                <p>
+                                  This link goes to <a href='http://puzzleschool.com' target='_new'>The Puzzle School</a>.
+                                </p>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        The anchor (&lt;a&gt;) tag allows you to jump to another anchor point.
+                    </p>
+                    <p>
+                        The anchor point can be on the same page or a new page.
+                    </p>
+                    <p>
+                        Anchor tags are usually used to link to another website using the 'href' attribute.
+                    </p>
+                '''
+                hints: [
+                    'The \'href\' attribute within a link (&lt;a&gt;) tag describes the destination of the link.'
+                    'Change the href attribute to point to a different website besides http://puzzleschool.com'
+                    'To change the title of the link, simply edit the html inside.'
+                    'Change the text \'The Puzzle School\' to a different website\'s name.'
+                ]
+                tests: [
+                    {
+                        description: 'The &lt;a&gt; tag has a link to a new website.'
+                        test: ({body, cleanHtml}) => 
+                            link = body.find('a')                            
+                            return false if link.attr('href') == 'http://puzzleschool.com'
+                            return true
+                    },
+                    {
+                        description: 'The &lt;a&gt; tag\'s html if for a different website.'
+                        test: ({body, cleanHtml}) => 
+                            link = body.find('a')                            
+                            return false if link.html() == 'The Puzzle School'
+                            return true
                     }
                 ]
             }
