@@ -37,6 +37,7 @@ code.ViewHelper = (function() {
       this.$('.editors').append(editorContainer);
       aceEditor = ace.edit(editorContainer.find('.editor')[0]);
       aceEditor.getSession().setMode("ace/mode/" + editor.type);
+      aceEditor.getSession().setUseWrapMode(true);
       aceEditor.setValue(editor.code);
       aceEditor.clearSelection();
       aceEditor.getSession().on('change', function(e) {
@@ -135,7 +136,7 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.setOutput = function() {
-    var allTestsPassed, editor, frame, frameBody, frameDoc, testElement, testInfo, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var allTestsPassed, cleanHtml, editor, frame, frameBody, frameDoc, testElement, testInfo, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
     _ref = this.editors;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       editor = _ref[_i];
@@ -144,6 +145,9 @@ code.ViewHelper = (function() {
     frame = this.$('.output')[0];
     frameDoc = frame.contentDocument || frame.contentWindow.document;
     frameBody = $(frameDoc.body);
+    cleanHtml = function(html) {
+      return html.replace(/^\s*/, '').replace(/\s*$/, '').replace(/\s*\n\s*/, ' ').toLowerCase();
+    };
     allTestsPassed = true;
     _ref1 = this.level.tests;
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -152,7 +156,10 @@ code.ViewHelper = (function() {
       for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
         testElement = _ref2[_k];
         if ($(testElement).html() === testInfo.description) {
-          if (testInfo.test(frameBody)) {
+          if (testInfo.test({
+            body: frameBody,
+            cleanHtml: cleanHtml
+          })) {
             $(testElement).removeClass('wrong');
             $(testElement).addClass('correct');
           } else {
@@ -172,7 +179,7 @@ code.ViewHelper = (function() {
     var _this = this;
     return setTimeout((function() {
       return _this.completeLevel();
-    }), 50);
+    }), 500);
   };
 
   return ViewHelper;

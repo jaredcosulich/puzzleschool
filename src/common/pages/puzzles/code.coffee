@@ -185,12 +185,11 @@ STAGES = [
                 tests: [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.'
-                        test: (body) -> 
-                            body.find('h1').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() == 'hello world'
+                        test: ({body, cleanHtml}) -> 
+                            cleanHtml(body.find('h1').html()) == 'hello world'
                     }
                 ]
-            },
-            {
+            }, {
                 id: 1361991210187
                 challenge: '''
                     Figure out how to print the words 'html tags are easy' in an &lt;h1&gt; tag.
@@ -224,16 +223,15 @@ STAGES = [
                 tests: [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.'
-                        test: (body) -> 
-                            body.find('h1').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() == 'html tags are easy'
+                        test: ({body, cleanHtml}) -> 
+                            cleanHtml(body.find('h1').html()) == 'html tags are easy'
                     }
                     {
                         description: 'The &lt;h1&gt; tag is properly closed.'
-                        test: (body) -> body.html().indexOf('</h1>') > -1
+                        test: ({body}) -> body.html().indexOf('</h1>') > -1
                     }
                 ]
-            },
-            {
+            }, {
                 id: 1361997759104
                 challenge: '''
                     Figure out how to change the smallest text to 'this is the smallest header'.
@@ -271,8 +269,54 @@ STAGES = [
                 tests: [
                     {
                         description: 'The header with the smallest text size contains the text \'this is the smallest header\'.'
-                        test: (body) -> 
-                            body.find('h6').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() == 'this is the smallest header'
+                        test: ({body, cleanHtml}) -> 
+                            cleanHtml(body.find('h6').html()) == 'this is the smallest header'
+                    }
+                ]
+            }, {
+                id: 1362028733004
+                challenge: '''
+                    Figure out how to make the text 'such as the &lt;b&gt; tag' bold using the &lt;b&gt; .
+                '''
+                editors: [
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Playing With Tags</h1>
+                                <p>
+                                  The &lt;p&gt; tag is for paragraph text.
+                                </p>
+                                <p>
+                                  If can contain other tags, such as the 
+                                  &lt;b&gt; tag, which makes text bold.
+                                </p>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        There are many html tags, each of which have different attributes.
+                    </p>
+                    <p>
+                        You can find a list of availablt html tags by googling 
+                        <a href='https://www.google.com/search?q=html+tags' target='_blank'>html tags</a>
+                    </p>
+                '''
+                hints: [
+                    'Wrap text in an html tag to apply the attributes of that tag.'
+                    'Simply put a &lt;b&gt; before the \'such as the &lt;b&gt; tag\' text and a &lt;b&gt; after.'
+                ]
+                tests: [
+                    {
+                        description: 'There is a &lt;b&gt; tag with the html \'such as the &lt;b&gt; tag\'.'
+                        test: ({body, cleanHtml}) -> 
+                            html = cleanHtml(body.find('b').html())
+                            html == 'such as the &lt;b&gt; tag'
                     }
                 ]
             }

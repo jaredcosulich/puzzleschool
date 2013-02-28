@@ -30,6 +30,7 @@ class code.ViewHelper
             aceEditor = ace.edit(editorContainer.find('.editor')[0])
 
             aceEditor.getSession().setMode("ace/mode/#{editor.type}")
+            aceEditor.getSession().setUseWrapMode(true);
             aceEditor.setValue(editor.code)
             aceEditor.clearSelection()
             aceEditor.getSession().on 'change', (e) => @setOutput()
@@ -98,11 +99,13 @@ class code.ViewHelper
         frame = @$('.output')[0]
         frameDoc = frame.contentDocument || frame.contentWindow.document
         frameBody = $(frameDoc.body)
+        cleanHtml = (html) ->
+            html.replace(/^\s*/, '').replace(/\s*$/, '').replace(/\s*\n\s*/, ' ').toLowerCase()
 
         allTestsPassed = true
         for testInfo in @level.tests
             for testElement in @$('.tests .test') when $(testElement).html() == testInfo.description
-                if testInfo.test(frameBody)
+                if testInfo.test(body: frameBody, cleanHtml: cleanHtml)
                     $(testElement).removeClass('wrong')
                     $(testElement).addClass('correct')
                 else
@@ -115,6 +118,6 @@ class code.ViewHelper
     success: ->
         setTimeout((=>
             @completeLevel()
-        ), 50)
+        ), 500)
         
         

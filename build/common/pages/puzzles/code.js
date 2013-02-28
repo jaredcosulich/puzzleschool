@@ -239,8 +239,10 @@ STAGES = [
         tests: [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.',
-            test: function(body) {
-              return body.find('h1').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() === 'hello world';
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              return cleanHtml(body.find('h1').html()) === 'hello world';
             }
           }
         ]
@@ -259,12 +261,16 @@ STAGES = [
         tests: [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.',
-            test: function(body) {
-              return body.find('h1').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() === 'html tags are easy';
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              return cleanHtml(body.find('h1').html()) === 'html tags are easy';
             }
           }, {
             description: 'The &lt;h1&gt; tag is properly closed.',
-            test: function(body) {
+            test: function(_arg) {
+              var body;
+              body = _arg.body;
               return body.html().indexOf('</h1>') > -1;
             }
           }
@@ -284,8 +290,33 @@ STAGES = [
         tests: [
           {
             description: 'The header with the smallest text size contains the text \'this is the smallest header\'.',
-            test: function(body) {
-              return body.find('h6').html().replace(/^\s*/, '').replace(/\s*$/, '').toLowerCase() === 'this is the smallest header';
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              return cleanHtml(body.find('h6').html()) === 'this is the smallest header';
+            }
+          }
+        ]
+      }, {
+        id: 1362028733004,
+        challenge: 'Figure out how to make the text \'such as the &lt;b&gt; tag\' bold using the &lt;b&gt; .',
+        editors: [
+          {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>Playing With Tags</h1>\n    <p>\n      The &lt;p&gt; tag is for paragraph text.\n    </p>\n    <p>\n      If can contain other tags, such as the \n      &lt;b&gt; tag, which makes text bold.\n    </p>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    There are many html tags, each of which have different attributes.\n</p>\n<p>\n    You can find a list of availablt html tags by googling \n    <a href=\'https://www.google.com/search?q=html+tags\' target=\'_blank\'>html tags</a>\n</p>',
+        hints: ['Wrap text in an html tag to apply the attributes of that tag.', 'Simply put a &lt;b&gt; before the \'such as the &lt;b&gt; tag\' text and a &lt;b&gt; after.'],
+        tests: [
+          {
+            description: 'There is a &lt;b&gt; tag with the html \'such as the &lt;b&gt; tag\'.',
+            test: function(_arg) {
+              var body, cleanHtml, html;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              html = cleanHtml(body.find('b').html());
+              return html === 'such as the &lt;b&gt; tag';
             }
           }
         ]
