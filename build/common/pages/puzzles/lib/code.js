@@ -105,7 +105,7 @@ code.ViewHelper = (function() {
       var hintElement;
       hintElement = $(document.createElement('DIV'));
       hintElement.addClass('hint');
-      hintElement.html("<a class='reveal'>Reveal Hint " + index + "</a>\n<p class='hint_content'>" + hint + "</p>");
+      hintElement.html("<a class='reveal'>Reveal Hint " + (index + 1) + "</a>\n<p class='hint_content'>" + hint + "</p>");
       this.$('div.hints .inside').append(hintElement);
       return hintElement.find('.reveal').bind('click', function() {
         return hintElement.find('.hint_content').animate({

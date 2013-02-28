@@ -314,7 +314,7 @@ STAGES = [
         ]
       }, {
         id: 1362028733004,
-        challenge: 'Figure out how to make the text \'such as the &lt;b&gt; tag\' bold using the &lt;b&gt; .',
+        challenge: 'Figure out how to make the text \'such as the &lt;b&gt; tag\' bold using the &lt;b&gt; tag.',
         editors: [
           {
             title: 'Page HTML',
@@ -322,8 +322,8 @@ STAGES = [
             code: '<html>\n  <body>\n    <h1>Playing With Tags</h1>\n    <p>\n      The &lt;p&gt; tag is for paragraph text.\n    </p>\n    <p>\n      If can contain other tags, such as the \n      &lt;b&gt; tag, which makes text bold.\n    </p>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    There are many html tags, each of which have different attributes.\n</p>\n<p>\n    You can find a list of availablt html tags by googling \n    <a href=\'https://www.google.com/search?q=html+tags\' target=\'_blank\'>html tags</a>\n</p>',
-        hints: ['Wrap text in an html tag to apply the attributes of that tag.', 'Simply put a &lt;b&gt; before the \'such as the &lt;b&gt; tag\' text and a &lt;b&gt; after.'],
+        description: '<p>\n    There are many html tags, each of which have different attributes.\n</p>\n<p>\n    You can find a list of availablt html tags by googling \n    <a href=\'https://www.google.com/search?q=html+tags\' target=\'_blank\'>html tags</a>\n</p>\n<p>\n    In order to make a tag display in plain text you need to use an html character entity.\n</p>\n<p>\n    You can find a full list of character entitities <a href=\'http://www.w3schools.com/html/html_entities.asp\' target=\'_blank\'>here</a>.\n</p>',
+        hints: ['Wrap text in an html tag to apply the attributes of that tag.', 'Simply put a &lt;b&gt; before the \'such as the &lt;b&gt; tag\' text and a &lt;b&gt; after.', 'In the end it should look like &lt;b&gt;such as the &amp;lt;b&amp;gt; tag&lt;/b&gt; with no comma inside the tag.'],
         tests: [
           {
             description: 'There is a &lt;b&gt; tag with the html \'such as the &lt;b&gt; tag\'.',
@@ -332,6 +332,28 @@ STAGES = [
               body = _arg.body, cleanHtml = _arg.cleanHtml;
               html = cleanHtml(body.find('b').html());
               return html === 'such as the &lt;b&gt; tag';
+            }
+          }
+        ]
+      }, {
+        id: 1362072970429,
+        challenge: 'Figure out how to make the header text red.',
+        editors: [
+          {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 style=\'color: green\'>Playing With Tags</h1>\n    <p>\n      Html tags can contain attributes that modify the behavior of the tag.\n    </p>\n    <p>\n      This is an example of an attribute modifying the tags style.\n    </p>\n    <p>\n      The \'style\' attribute with a value of \'color: green\' is making the &lt;h1&gt; turn green.\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    You can modify the attributes of a given tag by adding different attributes within the tag.\n</p>',
+        hints: ['Look for the word \'green\' in the html.', 'Change the word \'green\' to the word \'red\'.'],
+        tests: [
+          {
+            description: 'The &lt;h1&gt; tag has a color of red.',
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              return body.find('h1').css('color') === 'red';
             }
           }
         ]

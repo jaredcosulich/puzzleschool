@@ -72,7 +72,7 @@ class code.ViewHelper
                 hintElement = $(document.createElement('DIV'))
                 hintElement.addClass('hint')
                 hintElement.html """
-                    <a class='reveal'>Reveal Hint #{index}</a>
+                    <a class='reveal'>Reveal Hint #{index + 1}</a>
                     <p class='hint_content'>#{hint}</p>
                 """
                 @$('div.hints .inside').append(hintElement)

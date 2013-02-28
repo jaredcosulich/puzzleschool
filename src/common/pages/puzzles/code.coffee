@@ -286,7 +286,7 @@ STAGES = [
             }, {
                 id: 1362028733004
                 challenge: '''
-                    Figure out how to make the text 'such as the &lt;b&gt; tag' bold using the &lt;b&gt; .
+                    Figure out how to make the text 'such as the &lt;b&gt; tag' bold using the &lt;b&gt; tag.
                 '''
                 editors: [
                     {
@@ -316,10 +316,17 @@ STAGES = [
                         You can find a list of availablt html tags by googling 
                         <a href='https://www.google.com/search?q=html+tags' target='_blank'>html tags</a>
                     </p>
+                    <p>
+                        In order to make a tag display in plain text you need to use an html character entity.
+                    </p>
+                    <p>
+                        You can find a full list of character entitities <a href='http://www.w3schools.com/html/html_entities.asp' target='_blank'>here</a>.
+                    </p>
                 '''
                 hints: [
                     'Wrap text in an html tag to apply the attributes of that tag.'
                     'Simply put a &lt;b&gt; before the \'such as the &lt;b&gt; tag\' text and a &lt;b&gt; after.'
+                    'In the end it should look like &lt;b&gt;such as the &amp;lt;b&amp;gt; tag&lt;/b&gt; with no comma inside the tag.'                     
                 ]
                 tests: [
                     {
@@ -327,6 +334,47 @@ STAGES = [
                         test: ({body, cleanHtml}) -> 
                             html = cleanHtml(body.find('b').html())
                             html == 'such as the &lt;b&gt; tag'
+                    }
+                ]
+            }, {
+                id: 1362072970429
+                challenge: '''
+                    Figure out how to make the header text red.
+                '''
+                editors: [
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 style='color: green'>Playing With Tags</h1>
+                                <p>
+                                  Html tags can contain attributes that modify the behavior of the tag.
+                                </p>
+                                <p>
+                                  This is an example of an attribute modifying the tags style.
+                                </p>
+                                <p>
+                                  The 'style' attribute with a value of 'color: green' is making the &lt;h1&gt; turn green.
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        You can modify the attributes of a given tag by adding different attributes within the tag.
+                    </p>
+                '''
+                hints: [
+                    'Look for the word \'green\' in the html.'
+                    'Change the word \'green\' to the word \'red\'.'
+                ]
+                tests: [
+                    {
+                        description: 'The &lt;h1&gt; tag has a color of red.'
+                        test: ({body, cleanHtml}) -> body.find('h1').css('color') == 'red'
                     }
                 ]
             }
