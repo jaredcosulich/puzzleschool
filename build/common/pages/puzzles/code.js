@@ -94,8 +94,15 @@ soma.views({
       return _results;
     },
     completeLevel: function() {
-      var challenge, levelIcon,
+      var challenge, levelIcon, test, _i, _len, _ref,
         _this = this;
+      _ref = this.level.tests;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        test = _ref[_i];
+        if (test.clean) {
+          test.clean();
+        }
+      }
       levelIcon = this.$("#level_" + this.level.id).find('img');
       if (levelIcon.attr('src').indexOf('complete') === -1) {
         levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'));
@@ -431,6 +438,10 @@ STAGES = [
               }
               _this.testInterval = setInterval(window.retest, 100);
               return false;
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
             }
           }
         ]
@@ -465,6 +476,10 @@ STAGES = [
               }
               _this.testInterval = setInterval(window.retest, 100);
               return false;
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
             }
           }
         ]

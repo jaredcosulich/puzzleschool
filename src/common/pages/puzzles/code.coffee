@@ -60,6 +60,8 @@ soma.views
                         @hideLevelSelector()
                 
         completeLevel: ->
+            test.clean() for test in @level.tests when test.clean
+                
             levelIcon = @$("#level_#{@level.id}").find('img')
             if levelIcon.attr('src').indexOf('complete') == -1
                 levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'))
@@ -518,6 +520,10 @@ STAGES = [
                             return false if @testInterval
                             @testInterval = setInterval(window.retest, 100)
                             return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    
                     }
                 ]
             },
@@ -581,6 +587,9 @@ STAGES = [
                             return false if @testInterval
                             @testInterval = setInterval(window.retest, 100)
                             return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
                     }
                 ]
             }            
