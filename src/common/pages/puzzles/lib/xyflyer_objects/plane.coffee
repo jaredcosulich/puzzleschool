@@ -66,6 +66,7 @@ class plane.Plane extends xyflyerObject.Object
             @move(startX + portionX, startY + portionY, (if portion == 1 then next else null))
     
     fall: ->
+        @path = null
         @falling = true
         x = @xPos + @board.xAxis + 20
         y = 1000
@@ -78,7 +79,10 @@ class plane.Plane extends xyflyerObject.Object
         @latestTime = null
         if not @path or not Object.keys(@path).length
             @path = @board.calculatePath() 
-            @fall() unless @path.distance
+            if not @path?.distance
+                @fall
+                return
+                
             @duration = @path.distance * @timeFactor
                         
     reset: ->
