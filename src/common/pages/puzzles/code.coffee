@@ -78,7 +78,7 @@ soma.views
         showLevelSelector: ->
             @levelSelector.css
                 opacity: 0
-                top: 100
+                top: 60
                 left: (@el.width() - @levelSelector.width()) / 2
             @levelSelector.animate
                 opacity: 1
@@ -493,12 +493,19 @@ STAGES = [
                 ]
                 description: '''
                     <p>
-                        No description provided.
+                        Here we see a simple (even though it may look complicated) javascript function.
+                    </p>
+                    <p>
+                        There is a lot going on in this function. We're going to save a full explanation
+                        of everything until later, but you may want to google 'setInterval', which
+                        is the part of this function that enables the counting to happen.
                     </p>
                 '''
                 hints: [
                     'The function resets when the html in the &lt;h2&gt hits 5.'
                     'Change the reset value to 10.'
+                    'The reset value is set in this line: if (value > 5) {'
+                    'Change the 5 in that line to 10'
                 ]
                 tests: [
                     {
@@ -514,79 +521,69 @@ STAGES = [
                     }
                 ]
             },
-            # {
-            #     id: 1362362199623
-            #     challenge: '''
-            #         Figure out how to make the number on the page count up to 10.
-            #     '''
-            #     editors: [
-            #         {
-            #             title: 'Page Javascript'
-            #             type: 'javascript'
-            #             code: '''
-            #               if (window.counterInterval) {
-            #                   window.clearInterval(window.counterInterval);
-            #               }
-            #               
-            #               window.counterInterval = setInterval(function() {
-            #                 var counter = document.getElementById('counter');
-            #                 if (!counter) return;
-            #                     
-            #                 var value = parseInt(counter.innerHTML);
-            #                 value += 1;
-            #                 if (value > 5) {
-            #                   value = 1;
-            #                 }
-            #                 counter.innerHTML = value;
-            #                 
-            #               }, 1000);                        
-            #             '''
-            #         }
-            #         {
-            #             title: 'Page HTML'
-            #             type: 'html'
-            #             code: '''
-            #                 <html>
-            #                   <body>
-            #                     <h1>A Little Javascript</h1>
-            #                     <p>
-            #                       Javascript lets you create dynamic web pages, that can range in complexity.
-            #                     </p>
-            #                     <p>
-            #                       In fact this whole website is created using just javascript, html, and css.
-            #                     </p>
-            #                     <p>
-            #                       Try to make the number below count to 10 instead of 5:
-            #                     </p>
-            #                     <h2 id='counter'>1</h2>
-            #                   </body>
-            #                 </html>
-            #             '''
-            #         }
-            #     ]
-            #     description: '''
-            #         <p>
-            #             No description provided.
-            #         </p>
-            #     '''
-            #     hints: [
-            #         'The function resets when the html in the &lt;h2&gt hits 5.'
-            #         'Change the reset value to 10.'
-            #     ]
-            #     tests: [
-            #         {
-            #             description: 'The html inside the &lt;h2&gt; tag reads 10.'
-            #             test: ({body, cleanHtml}) => 
-            #                 return false
-            #                 return true if @done
-            #                 return false if @interval
-            #                 @interval = setInterval((=>
-            #                     @done = cleanHtml(body.find('h2').html()) == 10
-            #                     window.retest()
-            #                 ), 100)
-            #         }
-            #     ]
-            # }            
+            {
+                id: 1362424704636
+                challenge: '''
+                    Figure out how to make the button turn the header color green instead or red.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('color_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              header.style.color = 'red';
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Button Binding</h1>
+                                <p>
+                                  Javascript lets attach or bind actions to html elements on the page.
+                                </p>
+                                <p>
+                                  In this case clicking the button below will turn change the color of
+                                  the header from black to red.
+                                </p>
+                                <p>
+                                  Try to make the button change the color of the header to green instead:
+                                </p>
+                                <button id='color_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        No description provided.
+                    </p>
+                '''
+                hints: [
+                    'Javascript can access the color attribute using \'.style.color\''
+                    'Change the function to set .style.color to \'green\''
+                ]
+                tests: [
+                    {
+                        description: 'The color of the &lt;h2&gt; element is green.'
+                        test: ({body, cleanHtml}) =>
+                            if body.find('#header').css('color') == 'green'
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                    }
+                ]
+            }            
         ]
     }
 ]

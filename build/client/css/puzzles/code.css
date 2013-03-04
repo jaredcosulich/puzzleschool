@@ -123,7 +123,7 @@
   font-size: 11px;
 }
 .code .editors {
-  height: 540px;
+  height: 450px;
 }
 .code .editors .editor_container {
   position: relative;
@@ -168,7 +168,7 @@
 }
 .code .output {
   width: 59%;
-  height: 540px;
+  height: 450px;
   float: right;
   border: 1px solid #ccc;
 }
@@ -180,6 +180,8 @@
   background-color: #fafafa;
   border: 2px solid #24d94c;
   width: 540px;
+  height: 450px;
+  overflow: auto;
   padding: 12px;
   z-index: 9;
 }
@@ -191,7 +193,7 @@
 .code .level_selector .levels {
   background-color: #eee;
   padding: 12px;
-  height: 240px;
+  margin-bottom: 12px;
 }
 .code .level_selector .levels .level {
   padding: 12px;

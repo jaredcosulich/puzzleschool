@@ -36,7 +36,6 @@ class code.ViewHelper
                 aceEditor = ace.edit(editorContainer.find('.editor')[0])
 
                 aceEditor.getSession().setMode("ace/mode/#{editor.type}")
-                aceEditor.getSession().setUseWrapMode(true);
                 aceEditor.setValue(editor.code)
                 aceEditor.clearSelection()
                 aceEditor.getSession().on 'change', (e) => 
