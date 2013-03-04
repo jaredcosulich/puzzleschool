@@ -125,10 +125,11 @@
         .editor_container {
             position: relative;
             width: 40%;
-            height: 100%;
             border: 1px solid #ccc;
+            border-top: 1px solid @white;
         
             .editor_header {
+                cursor: pointer;
                 padding: 3px;
                 overflow: hidden;
                 background-color: #ccc;
@@ -148,13 +149,21 @@
             }
         
             .editor {
-                border-top: 1px solid #ccc;
-                position: absolute;
-                top: 21px;
-                left: 0;
-                right: 0;
-                bottom: 0;
-            } 
+                display: none;
+            }
+        
+            &.selected {
+                height: 95.5%;
+                .editor {
+                    display:  block;
+                    border-top: 1px solid #ccc;
+                    position: absolute;
+                    top: 21px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                } 
+            }
         }
     }
     

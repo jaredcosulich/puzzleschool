@@ -128,10 +128,11 @@
 .code .editors .editor_container {
   position: relative;
   width: 40%;
-  height: 100%;
   border: 1px solid #ccc;
+  border-top: 1px solid #fafafa;
 }
 .code .editors .editor_container .editor_header {
+  cursor: pointer;
   padding: 3px;
   overflow: hidden;
   background-color: #ccc;
@@ -151,6 +152,13 @@
   border-radius: 3px;
 }
 .code .editors .editor_container .editor {
+  display: none;
+}
+.code .editors .editor_container.selected {
+  height: 95.5%;
+}
+.code .editors .editor_container.selected .editor {
+  display: block;
   border-top: 1px solid #ccc;
   position: absolute;
   top: 21px;

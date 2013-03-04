@@ -13,30 +13,48 @@ class code.ViewHelper
         @initEditors()    
         @setOutput()
         
-        window.retest = => @setOutput()
+        window.retest = => @test()
         
     initEditors: ->
         @editors = []
         for editor in @level.editors
-            editorContainer = $(document.createElement('DIV'))
-            editorContainer.addClass('editor_container')
-            editorContainer.html """
-                <div class='editor_header'>
-                    <div class='type'>#{editor.type}</div>
-                    <div class='title'>#{editor.title}</div>
-                </div>
-                <div class='editor'></div>
-            """
-            @$('.editors').append(editorContainer)
+            do (editor) =>
+                editorContainer = $(document.createElement('DIV'))
+                editorContainer.addClass('editor_container')
+                editorContainer.html """
+                    <div class='editor_header'>
+                        <div class='type'>#{editor.type}</div>
+                        <div class='title'>#{editor.title}</div>
+                    </div>
+                    <div class='editor'></div>
+                """
+                @$('.editors').append(editorContainer)
+                editorContainer.find('.editor_header').bind 'click', => @selectEditor(editor)
+                
+                editor.container = editorContainer
             
-            aceEditor = ace.edit(editorContainer.find('.editor')[0])
+                aceEditor = ace.edit(editorContainer.find('.editor')[0])
 
-            aceEditor.getSession().setMode("ace/mode/#{editor.type}")
-            aceEditor.getSession().setUseWrapMode(true);
-            aceEditor.setValue(editor.code)
-            aceEditor.clearSelection()
-            aceEditor.getSession().on 'change', (e) => @setOutput()
-            @editors.push(aceEditor)
+                aceEditor.getSession().setMode("ace/mode/#{editor.type}")
+                aceEditor.getSession().setUseWrapMode(true);
+                aceEditor.setValue(editor.code)
+                aceEditor.clearSelection()
+                aceEditor.getSession().on 'change', (e) => 
+                    @setOutput()
+                    @test()
+                    
+                editor.aceEditor = aceEditor
+        
+        @selectEditor(@level.editors[0])
+            
+    selectEditor: (editor) ->
+        for editorContainer in @$('.editor_container')
+            editorContainer = $(editorContainer)
+            editorContainer.removeClass('selected')
+            if editorContainer.find('.title').html() == editor.container.find('.title').html()
+                editor.container.addClass('selected')
+            else
+                @$('.editors').prepend(editorContainer)                
     
     initChallenge: ->
         @$('.challenge .text').html("<b>The Challenge</b>: #{@level.challenge}")
@@ -95,9 +113,17 @@ class code.ViewHelper
         @initSection('tests')
     
     setOutput: ->
-        for editor in @editors
-            $(@$('.output')[0].contentDocument.documentElement).html(editor.getValue())
-
+        frameDocElement = $(@$('.output')[0].contentDocument.documentElement)
+        baseHTML = (editor for editor in @level.editors when editor.type == 'html')[0].aceEditor.getValue()
+        frameDocElement.html(baseHTML)
+        for editor in @level.editors
+            if editor.type == 'javascript'
+                script = $(document.createElement('SCRIPT'))
+                script.attr('type', 'text/javascript')
+                script.html(editor.aceEditor.getValue())
+                frameDocElement.find('head').append(script)
+                    
+    test: ->
         frame = @$('.output')[0]
         frameDoc = frame.contentDocument || frame.contentWindow.document
         frameBody = $(frameDoc.body)

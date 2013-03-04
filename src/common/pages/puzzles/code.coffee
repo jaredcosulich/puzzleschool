@@ -8,7 +8,7 @@ soma.chunks
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/code.html"
             
-            @loadScript 'http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js'
+            @loadScript '/assets/third_party/ace/ace.js'
             @loadScript '/build/common/pages/puzzles/lib/code.js'
 
             @loadStylesheet '/build/client/css/puzzles/code.css'     
@@ -436,6 +436,157 @@ STAGES = [
                     }
                 ]
             }
+        ]
+    }
+    {
+        name: 'Basic Javascript'
+        levels: [
+            {
+                id: 1362099940993
+                challenge: '''
+                    Figure out how to make the number on the page count up to 10.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                          if (window.counterInterval) {
+                              window.clearInterval(window.counterInterval);
+                          }
+                          
+                          window.counterInterval = setInterval(function() {
+                            var counter = document.getElementById('counter');
+                            if (!counter) return;
+                                
+                            var value = parseInt(counter.innerHTML);
+                            value += 1;
+                            if (value > 5) {
+                              value = 1;
+                            }
+                            counter.innerHTML = value;
+                            
+                          }, 1000);                        
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>A Little Javascript</h1>
+                                <p>
+                                  Javascript lets you create dynamic web pages, that can range in complexity.
+                                </p>
+                                <p>
+                                  In fact this whole website is created using just javascript, html, and css.
+                                </p>
+                                <p>
+                                  Try to make the number below count to 10 instead of 5:
+                                </p>
+                                <h2 id='counter'>1</h2>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        No description provided.
+                    </p>
+                '''
+                hints: [
+                    'The function resets when the html in the &lt;h2&gt hits 5.'
+                    'Change the reset value to 10.'
+                ]
+                tests: [
+                    {
+                        description: 'The html inside the &lt;h2&gt; tag reads 10.'
+                        test: ({body, cleanHtml}) => 
+                            if cleanHtml(body.find('h2').html()) == '10'
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                    }
+                ]
+            },
+            # {
+            #     id: 1362362199623
+            #     challenge: '''
+            #         Figure out how to make the number on the page count up to 10.
+            #     '''
+            #     editors: [
+            #         {
+            #             title: 'Page Javascript'
+            #             type: 'javascript'
+            #             code: '''
+            #               if (window.counterInterval) {
+            #                   window.clearInterval(window.counterInterval);
+            #               }
+            #               
+            #               window.counterInterval = setInterval(function() {
+            #                 var counter = document.getElementById('counter');
+            #                 if (!counter) return;
+            #                     
+            #                 var value = parseInt(counter.innerHTML);
+            #                 value += 1;
+            #                 if (value > 5) {
+            #                   value = 1;
+            #                 }
+            #                 counter.innerHTML = value;
+            #                 
+            #               }, 1000);                        
+            #             '''
+            #         }
+            #         {
+            #             title: 'Page HTML'
+            #             type: 'html'
+            #             code: '''
+            #                 <html>
+            #                   <body>
+            #                     <h1>A Little Javascript</h1>
+            #                     <p>
+            #                       Javascript lets you create dynamic web pages, that can range in complexity.
+            #                     </p>
+            #                     <p>
+            #                       In fact this whole website is created using just javascript, html, and css.
+            #                     </p>
+            #                     <p>
+            #                       Try to make the number below count to 10 instead of 5:
+            #                     </p>
+            #                     <h2 id='counter'>1</h2>
+            #                   </body>
+            #                 </html>
+            #             '''
+            #         }
+            #     ]
+            #     description: '''
+            #         <p>
+            #             No description provided.
+            #         </p>
+            #     '''
+            #     hints: [
+            #         'The function resets when the html in the &lt;h2&gt hits 5.'
+            #         'Change the reset value to 10.'
+            #     ]
+            #     tests: [
+            #         {
+            #             description: 'The html inside the &lt;h2&gt; tag reads 10.'
+            #             test: ({body, cleanHtml}) => 
+            #                 return false
+            #                 return true if @done
+            #                 return false if @interval
+            #                 @interval = setInterval((=>
+            #                     @done = cleanHtml(body.find('h2').html()) == 10
+            #                     window.retest()
+            #                 ), 100)
+            #         }
+            #     ]
+            # }            
         ]
     }
 ]

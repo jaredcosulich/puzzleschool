@@ -16,7 +16,7 @@ soma.chunks({
     prepare: function(_arg) {
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/code.html");
-      this.loadScript('http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js');
+      this.loadScript('/assets/third_party/ace/ace.js');
       this.loadScript('/build/common/pages/puzzles/lib/code.js');
       this.loadStylesheet('/build/client/css/puzzles/code.css');
       if (!this.levelId) {
@@ -392,6 +392,45 @@ STAGES = [
                 return false;
               }
               return true;
+            }
+          }
+        ]
+      }
+    ]
+  }, {
+    name: 'Basic Javascript',
+    levels: [
+      {
+        id: 1362099940993,
+        challenge: 'Figure out how to make the number on the page count up to 10.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'if (window.counterInterval) {\n    window.clearInterval(window.counterInterval);\n}\n\nwindow.counterInterval = setInterval(function() {\n  var counter = document.getElementById(\'counter\');\n  if (!counter) return;\n      \n  var value = parseInt(counter.innerHTML);\n  value += 1;\n  if (value > 5) {\n    value = 1;\n  }\n  counter.innerHTML = value;\n  \n}, 1000);                        '
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>A Little Javascript</h1>\n    <p>\n      Javascript lets you create dynamic web pages, that can range in complexity.\n    </p>\n    <p>\n      In fact this whole website is created using just javascript, html, and css.\n    </p>\n    <p>\n      Try to make the number below count to 10 instead of 5:\n    </p>\n    <h2 id=\'counter\'>1</h2>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    No description provided.\n</p>',
+        hints: ['The function resets when the html in the &lt;h2&gt hits 5.', 'Change the reset value to 10.'],
+        tests: [
+          {
+            description: 'The html inside the &lt;h2&gt; tag reads 10.',
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              if (cleanHtml(body.find('h2').html()) === '10') {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
             }
           }
         ]
