@@ -992,8 +992,8 @@ STAGES = [
                     function multiply() {<br/>
                     &nbsp;&nbsp;addToScreen('*')<br/>
                     }<br/>
-                    var subtractButton = document.getElementById('subtract_button');<br/>
-                    subtractButton.onclick = subtract;
+                    var multiplyButton = document.getElementById('multiply_button');<br/>
+                    multiplyButton.onclick = multiply;
                     </span>
                     '''
                 ]

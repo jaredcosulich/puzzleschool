@@ -117,7 +117,7 @@
 .code .challenge div.hints .hint .code,
 .code .challenge div.tests .hint .code {
   display: block;
-  padding-left: 90px;
+  padding-left: 60px;
 }
 .code .challenge div.description .test,
 .code .challenge div.hints .test,
