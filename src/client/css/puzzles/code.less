@@ -13,7 +13,17 @@
     h2 {
         text-align: center;
         margin-bottom: 12px;
-    }
+        
+        a.action {
+            font-size: @smallsize;
+            font-weight: normal;
+            background-color: @darkgreen;
+            color: white;
+            padding: 3px 6px;
+            margin: 0 72px;
+            .rounded(3px);
+        }
+    }    
 
     .challenge {
         text-align: center;
@@ -186,6 +196,15 @@
         overflow: auto;
         padding: 12px;
         z-index: 9;
+        
+        .success {
+            display: none;
+        }
+        
+        &.success .success {
+            display: block;
+        }
+        
         h2, h3, h4 {
             text-align: center;
         }

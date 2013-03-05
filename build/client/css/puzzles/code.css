@@ -9,6 +9,17 @@
   text-align: center;
   margin-bottom: 12px;
 }
+.code h2 a.action {
+  font-size: 11px;
+  font-weight: normal;
+  background-color: #0c8d28;
+  color: white;
+  padding: 3px 6px;
+  margin: 0 72px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 .code .challenge {
   text-align: center;
   margin-bottom: 12px;
@@ -184,6 +195,12 @@
   overflow: auto;
   padding: 12px;
   z-index: 9;
+}
+.code .level_selector .success {
+  display: none;
+}
+.code .level_selector.success .success {
+  display: block;
 }
 .code .level_selector h2,
 .code .level_selector h3,

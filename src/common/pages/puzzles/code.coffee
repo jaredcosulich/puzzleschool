@@ -41,21 +41,31 @@ soma.views
             @helper.initLevel(@level)
 
             @initLevelSelector()
+            @initActions()
+            
+        initActions: ->
+            @$('.select_level').bind 'click', => @showLevelSelector()
+            @$('.reset_level').bind 'click', => @initLevel()
             
         findLevel: (levelId) ->
             for stage in STAGES
                 level = (level for level in stage.levels when level.id == levelId)[0]
                 return level if level
 
+        initLevel: ->
+            @el.find('.dynamic_content').html(@originalHTML)
+            @helper.initLevel(@level)
+
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
             for level in @levelSelector.find('.level')
                 do (level) =>
                     level = $(level)
-                    level.bind 'click', => 
+                    level.bind 'click', (e) => 
+                        e.stop()
+                        $(document.body).unbind('click.level_selector')
                         @level = @findLevel(level.data('id'))
-                        @el.find('.dynamic_content').html(@originalHTML)
-                        @helper.initLevel(@level)
+                        @initLevel()
                         history.pushState(null, null, "/puzzles/code/#{@level.id}")
                         @hideLevelSelector()
                 
@@ -74,10 +84,15 @@ soma.views
                         <h3 class='success'>Success!</h3>
                         <a class='next_level'>Select A New Level</a>
                     '''
-                    challenge.find('.next_level').bind 'click', => @showLevelSelector()
+                    challenge.find('.next_level').bind 'click', => @showLevelSelector(true)
                     challenge.animate(opacity: 1, duration: 250)
             
-        showLevelSelector: ->
+        showLevelSelector: (success) ->
+            if success
+                @levelSelector.addClass('success') 
+            else
+                @levelSelector.removeClass('success') 
+            
             @levelSelector.css
                 opacity: 0
                 top: 60
@@ -85,6 +100,10 @@ soma.views
             @levelSelector.animate
                 opacity: 1
                 duration: 250
+            
+            setTimeout((=>    
+                $(document.body).one 'click.level_selector', => @hideLevelSelector()
+            ), 10)
                 
         hideLevelSelector: ->
             @levelSelector.animate
@@ -440,9 +459,158 @@ STAGES = [
             }
         ]
     }
+    # {
+    #     name: 'Javascript: IF Statements'
+    #     levels: [
+    #         {
+    #             id: 1362439206758
+    #             challenge: '''
+    #                 Figure out how to .
+    #             '''
+    #             editors: [
+    #                 {
+    #                     title: 'Page Javascript'
+    #                     type: 'javascript'
+    #                     code: '''
+    #                         var button = document.getElementById('color_button');
+    #                         button.onclick = function () {
+    #                           var header = document.getElementById('header');
+    #                           header.style.color = 'red';
+    #                         };
+    #                     '''
+    #                 }
+    #                 {
+    #                     title: 'Page HTML'
+    #                     type: 'html'
+    #                     code: '''
+    #                         <html>
+    #                           <body>
+    #                             <h1 id='header'>Button Binding</h1>
+    #                             <p>
+    #                               Javascript lets you attach or bind actions to html elements on the page.
+    #                             </p>
+    #                             <p>
+    #                               In this case clicking the button below will turn change the color of
+    #                               the header from black to red.
+    #                             </p>
+    #                             <p>
+    #                               Try to make the button change the color of the header to green instead:
+    #                             </p>
+    #                             <button id='color_button'>Click Me</button>
+    #                           </body>
+    #                         </html>
+    #                     '''
+    #                 }
+    #             ]
+    #             description: '''
+    #                 <p>
+    #                     Javascript makes it possible to bind an action to an html element.
+    #                 </p>
+    #                 <p>
+    #                     Binding means that a function will be executed when an action takes place.
+    #                 </p>
+    #                 <p>
+    #                     In this example the color of the header changes when the button is clicked.
+    #                 </p>
+    #             '''
+    #             hints: [
+    #                 'Javascript can access the color attribute using \'.style.color\''
+    #                 'Change the function to set .style.color to \'green\''
+    #             ]
+    #             tests: [
+    #                 {
+    #                     description: 'The color of the &lt;h2&gt; element is green.'
+    #                     test: ({body, cleanHtml}) =>
+    #                         if body.find('#header').css('color') == 'green'
+    #                             clearInterval(@testInterval)
+    #                             return true 
+    #                             
+    #                         return false if @testInterval
+    #                         @testInterval = setInterval(window.retest, 100)
+    #                         return false
+    #                     clean: =>
+    #                         clearInterval(@testInterval)
+    #                         @testInterval = null
+    #                 }
+    #             ]
+    #         }
+    #     ]
+    # }
     {
-        name: 'Basic Javascript'
+        name: 'Random Javascript'
         levels: [
+            {
+                id: 1362424704636
+                challenge: '''
+                    Figure out how to make the button turn the header color green instead or red.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('color_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              header.style.color = 'red';
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Button Binding</h1>
+                                <p>
+                                  Javascript lets you attach or bind actions to html elements on the page.
+                                </p>
+                                <p>
+                                  In this case clicking the button below will turn change the color of
+                                  the header from black to red.
+                                </p>
+                                <p>
+                                  Try to make the button change the color of the header to green instead:
+                                </p>
+                                <button id='color_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript makes it possible to bind an action to an html element.
+                    </p>
+                    <p>
+                        Binding means that a function will be executed when an action takes place.
+                    </p>
+                    <p>
+                        In this example the color of the header changes when the button is clicked.
+                    </p>
+                '''
+                hints: [
+                    'Javascript can access the color attribute using \'.style.color\''
+                    'Change the function to set .style.color to \'green\''
+                ]
+                tests: [
+                    {
+                        description: 'The color of the &lt;h2&gt; element is green.'
+                        test: ({body, cleanHtml}) =>
+                            if body.find('#header').css('color') == 'green'
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            },
             {
                 id: 1362099940993
                 challenge: '''
@@ -477,15 +645,15 @@ STAGES = [
                         code: '''
                             <html>
                               <body>
-                                <h1>A Little Javascript</h1>
+                                <h1>setInterval</h1>
                                 <p>
-                                  Javascript lets you create dynamic web pages, that can range in complexity.
+                                  The setInterval method allows you to call a method at a specified interval.
                                 </p>
                                 <p>
-                                  In fact this whole website is created using just javascript, html, and css.
+                                  In this case we're calling a method changes increments the counter below every second.
                                 </p>
                                 <p>
-                                  Try to make the number below count to 10 instead of 5:
+                                  Try to make the counter below count to 10 instead of 5:
                                 </p>
                                 <h2 id='counter'>1</h2>
                               </body>
@@ -495,12 +663,10 @@ STAGES = [
                 ]
                 description: '''
                     <p>
-                        Here we see a simple (even though it may look complicated) javascript function.
+                        There is a lot going on in this example, but we're focusing on the setInterval function.
                     </p>
                     <p>
-                        There is a lot going on in this function. We're going to save a full explanation
-                        of everything until later, but you may want to google 'setInterval', which
-                        is the part of this function that enables the counting to happen.
+                        To learn more about setInterval, try googling it :)
                     </p>
                 '''
                 hints: [
@@ -526,73 +692,7 @@ STAGES = [
                     
                     }
                 ]
-            },
-            {
-                id: 1362424704636
-                challenge: '''
-                    Figure out how to make the button turn the header color green instead or red.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var button = document.getElementById('color_button');
-                            button.onclick = function () {
-                              var header = document.getElementById('header');
-                              header.style.color = 'red';
-                            };
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1 id='header'>Button Binding</h1>
-                                <p>
-                                  Javascript lets attach or bind actions to html elements on the page.
-                                </p>
-                                <p>
-                                  In this case clicking the button below will turn change the color of
-                                  the header from black to red.
-                                </p>
-                                <p>
-                                  Try to make the button change the color of the header to green instead:
-                                </p>
-                                <button id='color_button'>Click Me</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        No description provided.
-                    </p>
-                '''
-                hints: [
-                    'Javascript can access the color attribute using \'.style.color\''
-                    'Change the function to set .style.color to \'green\''
-                ]
-                tests: [
-                    {
-                        description: 'The color of the &lt;h2&gt; element is green.'
-                        test: ({body, cleanHtml}) =>
-                            if body.find('#header').css('color') == 'green'
-                                clearInterval(@testInterval)
-                                return true 
-                                
-                            return false if @testInterval
-                            @testInterval = setInterval(window.retest, 100)
-                            return false
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null
-                    }
-                ]
-            }            
+            }
         ]
     }
 ]

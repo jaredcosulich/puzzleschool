@@ -49,7 +49,17 @@ soma.views({
         }
       });
       this.helper.initLevel(this.level);
-      return this.initLevelSelector();
+      this.initLevelSelector();
+      return this.initActions();
+    },
+    initActions: function() {
+      var _this = this;
+      this.$('.select_level').bind('click', function() {
+        return _this.showLevelSelector();
+      });
+      return this.$('.reset_level').bind('click', function() {
+        return _this.initLevel();
+      });
     },
     findLevel: function(levelId) {
       var level, stage, _i, _len;
@@ -72,6 +82,10 @@ soma.views({
         }
       }
     },
+    initLevel: function() {
+      this.el.find('.dynamic_content').html(this.originalHTML);
+      return this.helper.initLevel(this.level);
+    },
     initLevelSelector: function() {
       var level, _i, _len, _ref, _results,
         _this = this;
@@ -82,10 +96,11 @@ soma.views({
         level = _ref[_i];
         _results.push((function(level) {
           level = $(level);
-          return level.bind('click', function() {
+          return level.bind('click', function(e) {
+            e.stop();
+            $(document.body).unbind('click.level_selector');
             _this.level = _this.findLevel(level.data('id'));
-            _this.el.find('.dynamic_content').html(_this.originalHTML);
-            _this.helper.initLevel(_this.level);
+            _this.initLevel();
             history.pushState(null, null, "/puzzles/code/" + _this.level.id);
             return _this.hideLevelSelector();
           });
@@ -114,7 +129,7 @@ soma.views({
         complete: function() {
           challenge.html('<h3 class=\'success\'>Success!</h3>\n<a class=\'next_level\'>Select A New Level</a>');
           challenge.find('.next_level').bind('click', function() {
-            return _this.showLevelSelector();
+            return _this.showLevelSelector(true);
           });
           return challenge.animate({
             opacity: 1,
@@ -123,16 +138,27 @@ soma.views({
         }
       });
     },
-    showLevelSelector: function() {
+    showLevelSelector: function(success) {
+      var _this = this;
+      if (success) {
+        this.levelSelector.addClass('success');
+      } else {
+        this.levelSelector.removeClass('success');
+      }
       this.levelSelector.css({
         opacity: 0,
         top: 60,
         left: (this.el.width() - this.levelSelector.width()) / 2
       });
-      return this.levelSelector.animate({
+      this.levelSelector.animate({
         opacity: 1,
         duration: 250
       });
+      return setTimeout((function() {
+        return $(document.body).one('click.level_selector', function() {
+          return _this.hideLevelSelector();
+        });
+      }), 10);
     },
     hideLevelSelector: function() {
       var _this = this;
@@ -405,31 +431,31 @@ STAGES = [
       }
     ]
   }, {
-    name: 'Basic Javascript',
+    name: 'Random Javascript',
     levels: [
       {
-        id: 1362099940993,
-        challenge: 'Figure out how to make the number on the page count up to 10.',
+        id: 1362424704636,
+        challenge: 'Figure out how to make the button turn the header color green instead or red.',
         editors: [
           {
             title: 'Page Javascript',
             type: 'javascript',
-            code: 'if (window.counterInterval) {\n    window.clearInterval(window.counterInterval);\n}\n\nwindow.counterInterval = setInterval(function() {\n  var counter = document.getElementById(\'counter\');\n  if (!counter) return;\n      \n  var value = parseInt(counter.innerHTML);\n  value += 1;\n  if (value > 5) {\n    value = 1;\n  }\n  counter.innerHTML = value;\n  \n}, 1000);                        '
+            code: 'var button = document.getElementById(\'color_button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  header.style.color = \'red\';\n};'
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1>A Little Javascript</h1>\n    <p>\n      Javascript lets you create dynamic web pages, that can range in complexity.\n    </p>\n    <p>\n      In fact this whole website is created using just javascript, html, and css.\n    </p>\n    <p>\n      Try to make the number below count to 10 instead of 5:\n    </p>\n    <h2 id=\'counter\'>1</h2>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Button Binding</h1>\n    <p>\n      Javascript lets you attach or bind actions to html elements on the page.\n    </p>\n    <p>\n      In this case clicking the button below will turn change the color of\n      the header from black to red.\n    </p>\n    <p>\n      Try to make the button change the color of the header to green instead:\n    </p>\n    <button id=\'color_button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    Here we see a simple (even though it may look complicated) javascript function.\n</p>\n<p>\n    There is a lot going on in this function. We\'re going to save a full explanation\n    of everything until later, but you may want to google \'setInterval\', which\n    is the part of this function that enables the counting to happen.\n</p>',
-        hints: ['The function resets when the html in the &lt;h2&gt hits 5.', 'Change the reset value to 10.', 'The reset value is set in this line: if (value > 5) {', 'Change the 5 in that line to 10'],
+        description: '<p>\n    Javascript makes it possible to bind an action to an html element.\n</p>\n<p>\n    Binding means that a function will be executed when an action takes place.\n</p>\n<p>\n    In this example the color of the header changes when the button is clicked.\n</p>',
+        hints: ['Javascript can access the color attribute using \'.style.color\'', 'Change the function to set .style.color to \'green\''],
         tests: [
           {
-            description: 'The html inside the &lt;h2&gt; tag reads 10.',
+            description: 'The color of the &lt;h2&gt; element is green.',
             test: function(_arg) {
               var body, cleanHtml;
               body = _arg.body, cleanHtml = _arg.cleanHtml;
-              if (cleanHtml(body.find('h2').html()) === '10') {
+              if (body.find('#header').css('color') === 'green') {
                 clearInterval(_this.testInterval);
                 return true;
               }
@@ -446,28 +472,28 @@ STAGES = [
           }
         ]
       }, {
-        id: 1362424704636,
-        challenge: 'Figure out how to make the button turn the header color green instead or red.',
+        id: 1362099940993,
+        challenge: 'Figure out how to make the number on the page count up to 10.',
         editors: [
           {
             title: 'Page Javascript',
             type: 'javascript',
-            code: 'var button = document.getElementById(\'color_button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  header.style.color = \'red\';\n};'
+            code: 'if (window.counterInterval) {\n    window.clearInterval(window.counterInterval);\n}\n\nwindow.counterInterval = setInterval(function() {\n  var counter = document.getElementById(\'counter\');\n  if (!counter) return;\n      \n  var value = parseInt(counter.innerHTML);\n  value += 1;\n  if (value > 5) {\n    value = 1;\n  }\n  counter.innerHTML = value;\n  \n}, 1000);                        '
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1 id=\'header\'>Button Binding</h1>\n    <p>\n      Javascript lets attach or bind actions to html elements on the page.\n    </p>\n    <p>\n      In this case clicking the button below will turn change the color of\n      the header from black to red.\n    </p>\n    <p>\n      Try to make the button change the color of the header to green instead:\n    </p>\n    <button id=\'color_button\'>Click Me</button>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1>setInterval</h1>\n    <p>\n      The setInterval method allows you to call a method at a specified interval.\n    </p>\n    <p>\n      In this case we\'re calling a method changes increments the counter below every second.\n    </p>\n    <p>\n      Try to make the counter below count to 10 instead of 5:\n    </p>\n    <h2 id=\'counter\'>1</h2>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    No description provided.\n</p>',
-        hints: ['Javascript can access the color attribute using \'.style.color\'', 'Change the function to set .style.color to \'green\''],
+        description: '<p>\n    There is a lot going on in this example, but we\'re focusing on the setInterval function.\n</p>\n<p>\n    To learn more about setInterval, try googling it :)\n</p>',
+        hints: ['The function resets when the html in the &lt;h2&gt hits 5.', 'Change the reset value to 10.', 'The reset value is set in this line: if (value > 5) {', 'Change the 5 in that line to 10'],
         tests: [
           {
-            description: 'The color of the &lt;h2&gt; element is green.',
+            description: 'The html inside the &lt;h2&gt; tag reads 10.',
             test: function(_arg) {
               var body, cleanHtml;
               body = _arg.body, cleanHtml = _arg.cleanHtml;
-              if (body.find('#header').css('color') === 'green') {
+              if (cleanHtml(body.find('h2').html()) === '10') {
                 clearInterval(_this.testInterval);
                 return true;
               }
