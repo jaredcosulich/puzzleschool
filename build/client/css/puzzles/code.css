@@ -21,12 +21,12 @@
   border-radius: 3px;
 }
 .code .challenge {
-  text-align: center;
   margin-bottom: 12px;
 }
 .code .challenge .text,
 .code .challenge .success {
   padding: 12px;
+  text-align: center;
 }
 .code .challenge .success {
   color: #0c8d28;
@@ -51,10 +51,10 @@
 .code .challenge .links {
   width: 50%;
   margin: auto;
-  text-align: center;
   position: relative;
 }
 .code .challenge .links a.link {
+  text-align: center;
   background-color: #24aac3;
   display: block;
   float: left;
@@ -112,6 +112,12 @@
 .code .challenge div.hints .hint p,
 .code .challenge div.tests .hint p {
   opacity: 0;
+}
+.code .challenge div.description .hint .code,
+.code .challenge div.hints .hint .code,
+.code .challenge div.tests .hint .code {
+  display: block;
+  padding-left: 90px;
 }
 .code .challenge div.description .test,
 .code .challenge div.hints .test,
@@ -214,4 +220,7 @@
 }
 .code .level_selector .levels .level {
   padding: 12px;
+}
+.site_explanation {
+  padding: 60px 0;
 }

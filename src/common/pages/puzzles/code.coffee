@@ -459,83 +459,6 @@ STAGES = [
             }
         ]
     }
-    # {
-    #     name: 'Javascript: IF Statements'
-    #     levels: [
-    #         {
-    #             id: 1362439206758
-    #             challenge: '''
-    #                 Figure out how to .
-    #             '''
-    #             editors: [
-    #                 {
-    #                     title: 'Page Javascript'
-    #                     type: 'javascript'
-    #                     code: '''
-    #                         var button = document.getElementById('color_button');
-    #                         button.onclick = function () {
-    #                           var header = document.getElementById('header');
-    #                           header.style.color = 'red';
-    #                         };
-    #                     '''
-    #                 }
-    #                 {
-    #                     title: 'Page HTML'
-    #                     type: 'html'
-    #                     code: '''
-    #                         <html>
-    #                           <body>
-    #                             <h1 id='header'>Button Binding</h1>
-    #                             <p>
-    #                               Javascript lets you attach or bind actions to html elements on the page.
-    #                             </p>
-    #                             <p>
-    #                               In this case clicking the button below will turn change the color of
-    #                               the header from black to red.
-    #                             </p>
-    #                             <p>
-    #                               Try to make the button change the color of the header to green instead:
-    #                             </p>
-    #                             <button id='color_button'>Click Me</button>
-    #                           </body>
-    #                         </html>
-    #                     '''
-    #                 }
-    #             ]
-    #             description: '''
-    #                 <p>
-    #                     Javascript makes it possible to bind an action to an html element.
-    #                 </p>
-    #                 <p>
-    #                     Binding means that a function will be executed when an action takes place.
-    #                 </p>
-    #                 <p>
-    #                     In this example the color of the header changes when the button is clicked.
-    #                 </p>
-    #             '''
-    #             hints: [
-    #                 'Javascript can access the color attribute using \'.style.color\''
-    #                 'Change the function to set .style.color to \'green\''
-    #             ]
-    #             tests: [
-    #                 {
-    #                     description: 'The color of the &lt;h2&gt; element is green.'
-    #                     test: ({body, cleanHtml}) =>
-    #                         if body.find('#header').css('color') == 'green'
-    #                             clearInterval(@testInterval)
-    #                             return true 
-    #                             
-    #                         return false if @testInterval
-    #                         @testInterval = setInterval(window.retest, 100)
-    #                         return false
-    #                     clean: =>
-    #                         clearInterval(@testInterval)
-    #                         @testInterval = null
-    #                 }
-    #             ]
-    #         }
-    #     ]
-    # }
     {
         name: 'Random Javascript'
         levels: [
@@ -695,4 +618,203 @@ STAGES = [
             }
         ]
     }
+    {
+        name: 'Building A Calculator'
+        levels: [
+            {
+                id: 1362439206758
+                challenge: '''
+                    Figure out how to make the calculator perform the calculation 1 - 2.
+                '''
+                editors: [
+                    {
+                        title: 'Calculator Javascript'
+                        type: 'javascript'
+                        code: '''
+                            function getScreen() {
+                              return document.getElementById('screen'); 
+                            }
+                            function addToScreen(symbol) {
+                              getScreen().innerHTML += symbol;
+                            }
+                            
+                            function add() {
+                              addToScreen('+');
+                            }
+                            var addButton = document.getElementById('add_button');
+                            addButton.onclick = add;
+
+                            document.getElementById('number1').onclick = function() {
+                              addToScreen(1);
+                            };
+                            document.getElementById('number2').onclick = function() {
+                              addToScreen(2);
+                            };          
+                            
+                            function calculate() {
+                              equation = getScreen().innerHTML;
+                              getScreen().innerHTML = eval(equation);
+                            }
+                            document.getElementById('equals').onclick = function() {
+                              calculate();
+                            };          
+
+                            function clear() {
+                              getScreen().innerHTML = '';
+                            }
+                            document.getElementById('clear').onclick = function() {
+                              clear();
+                            };          
+                                   
+                        '''
+                    }
+                    {
+                        title: 'Calculator CSS'
+                        type: 'css'
+                        code: '''
+                            .explanation {
+                                float: right;
+                                background-color: white;
+                                border: 1px solid #ccc;
+                                width: 36%;
+                                margin-right: 12px;
+                                padding: 12px;
+                            }
+                            
+                            .calculator {
+                                height: 360px;
+                                width: 300px;
+                                border: 1px solid #ccc;
+                                background-color: white;
+                                margin: 0 12px;
+                            }
+                            
+                            .screen {
+                                margin: 12px;
+                                background-color: black;
+                                height: 45px;
+                                line-height: 45px;
+                                color: white;
+                                font-size: 42px;
+                                text-align: right;                            
+                            }
+                            
+                            .buttons .button {
+                                float: left;
+                                width: 36px;
+                                height: 36px;
+                                line-height: 36px;
+                                text-align: center;
+                                margin: 12px 0 0 12px;
+                                background-color: #ccc;
+                                color: black;
+                                cursor: pointer;
+                            }
+                            
+                            .buttons .numbers {
+                                float: left;
+                                border-right: 1px solid #ccc;
+                                width: 58%;
+                                height: 65%;
+                            }
+                            
+                            .buttons .clear {
+                                clear: both;
+                                float: right;
+                                margin-right: 12px;
+                            }
+                            
+                            .buttons .equals, .buttons .clear {
+                                width: 60px;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Calculator HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <div class='explanation'>
+                                  <b>A Working Calculator</b>
+                                  <p>We're going to build a working calculator.</p>
+                                  <p>All of the buttons are functional except for the subtraction button.</p>
+                                  <p>You've got to figure out how to make it work.</p>
+                                </div>
+                              
+                                <div class='calculator'>
+                                  <div class='screen' id='screen'></div>
+                                  <div class='buttons'>
+                                    <div class='numbers'>
+                                      <div class='number button' id='number1'>1</div>
+                                      <div class='number button' id='number2'>2</div>
+                                    </div>
+                                    <div class='functions'>
+                                      <div class='function button' id='add_button'>+</div>
+                                      <div class='function button' id='subtract_button'>-</div>
+                                    </div>
+                                    <div class='clear button' id='clear'>Clear</div>
+                                    <div class='equals button' id='equals'>=</div>
+                                  </div>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                      Here we are working with some of the basics of javascript.
+                    </p>
+                    <p>
+                      Some of the interesting javascript functions you might want to google
+                      are 'javascript eval', 'javascript getElementById', and
+                      'javascript innerHTML'.
+                    </p>
+                    <p>
+                      Most importantly we are trying to figure out how to bind a method to
+                      the onclick event of an html element. You may want to google 'javascript onclick'
+                      for some more information about that.
+                    </p>
+                '''
+                hints: [
+                    'The subtraction button is going to work roughly the same as the addition button.'
+                    'You can literally copy and paste the code for the addition button.'
+                    'Just change the symbol being sent to the screen to a \'-\' from a \'+\' and don\'t forget to include the code the binds the function to the html element.'
+                    '''
+                    This is one example of code that would work:<br/><br/>
+                    <span class='code'>
+                    function subtract() {<br/>
+                    &nbsp;&nbsp;addToScreen('-')<br/>
+                    }<br/>
+                    var subtractButton = document.getElementById('subtract_button');<br/>
+                    subtractButton.onclick = subtract;
+                    </span>
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'When the equals sign is hit with \'1-2\' showing, the result is -1.'
+                        test: ({body, cleanHtml}) =>
+                            if not @equation and cleanHtml(body.find('#screen').html()) == '1-2'
+                                @equation = true
+                                return false
+                            
+                            if @equation and cleanHtml(body.find('#screen').html()) == '-1'
+                                clearInterval(@testInterval)
+                                return true 
+
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            @equation = null
+                            clearInterval(@testInterval)
+                            @testInterval = null                            
+                    }
+                ]
+            }
+        ]
+    }
+    
 ]

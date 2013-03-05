@@ -511,5 +511,57 @@ STAGES = [
         ]
       }
     ]
+  }, {
+    name: 'Building A Calculator',
+    levels: [
+      {
+        id: 1362439206758,
+        challenge: 'Figure out how to make the calculator perform the calculation 1 - 2.',
+        editors: [
+          {
+            title: 'Calculator Javascript',
+            type: 'javascript',
+            code: 'function getScreen() {\n  return document.getElementById(\'screen\'); \n}\nfunction addToScreen(symbol) {\n  getScreen().innerHTML += symbol;\n}\n\nfunction add() {\n  addToScreen(\'+\');\n}\nvar addButton = document.getElementById(\'add_button\');\naddButton.onclick = add;\n\ndocument.getElementById(\'number1\').onclick = function() {\n  addToScreen(1);\n};\ndocument.getElementById(\'number2\').onclick = function() {\n  addToScreen(2);\n};          \n\nfunction calculate() {\n  equation = getScreen().innerHTML;\n  getScreen().innerHTML = eval(equation);\n}\ndocument.getElementById(\'equals\').onclick = function() {\n  calculate();\n};          \n\nfunction clear() {\n  getScreen().innerHTML = \'\';\n}\ndocument.getElementById(\'clear\').onclick = function() {\n  clear();\n};          \n       '
+          }, {
+            title: 'Calculator CSS',
+            type: 'css',
+            code: '.explanation {\n    float: right;\n    background-color: white;\n    border: 1px solid #ccc;\n    width: 36%;\n    margin-right: 12px;\n    padding: 12px;\n}\n\n.calculator {\n    height: 360px;\n    width: 300px;\n    border: 1px solid #ccc;\n    background-color: white;\n    margin: 0 12px;\n}\n\n.screen {\n    margin: 12px;\n    background-color: black;\n    height: 45px;\n    line-height: 45px;\n    color: white;\n    font-size: 42px;\n    text-align: right;                            \n}\n\n.buttons .button {\n    float: left;\n    width: 36px;\n    height: 36px;\n    line-height: 36px;\n    text-align: center;\n    margin: 12px 0 0 12px;\n    background-color: #ccc;\n    color: black;\n    cursor: pointer;\n}\n\n.buttons .numbers {\n    float: left;\n    border-right: 1px solid #ccc;\n    width: 58%;\n    height: 65%;\n}\n\n.buttons .clear {\n    clear: both;\n    float: right;\n    margin-right: 12px;\n}\n\n.buttons .equals, .buttons .clear {\n    width: 60px;\n}'
+          }, {
+            title: 'Calculator HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <div class=\'explanation\'>\n      <b>A Working Calculator</b>\n      <p>We\'re going to build a working calculator.</p>\n      <p>All of the buttons are functional except for the subtraction button.</p>\n      <p>You\'ve got to figure out how to make it work.</p>\n    </div>\n  \n    <div class=\'calculator\'>\n      <div class=\'screen\' id=\'screen\'></div>\n      <div class=\'buttons\'>\n        <div class=\'numbers\'>\n          <div class=\'number button\' id=\'number1\'>1</div>\n          <div class=\'number button\' id=\'number2\'>2</div>\n        </div>\n        <div class=\'functions\'>\n          <div class=\'function button\' id=\'add_button\'>+</div>\n          <div class=\'function button\' id=\'subtract_button\'>-</div>\n        </div>\n        <div class=\'clear button\' id=\'clear\'>Clear</div>\n        <div class=\'equals button\' id=\'equals\'>=</div>\n      </div>\n    </div>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n  Here we are working with some of the basics of javascript.\n</p>\n<p>\n  Some of the interesting javascript functions you might want to google\n  are \'javascript eval\', \'javascript getElementById\', and\n  \'javascript innerHTML\'.\n</p>\n<p>\n  Most importantly we are trying to figure out how to bind a method to\n  the onclick event of an html element. You may want to google \'javascript onclick\'\n  for some more information about that.\n</p>',
+        hints: ['The subtraction button is going to work roughly the same as the addition button.', 'You can literally copy and paste the code for the addition button.', 'Just change the symbol being sent to the screen to a \'-\' from a \'+\' and don\'t forget to include the code the binds the function to the html element.', 'This is one example of code that would work:<br/><br/>\n<span class=\'code\'>\nfunction subtract() {<br/>\n&nbsp;&nbsp;addToScreen(\'-\')<br/>\n}<br/>\nvar subtractButton = document.getElementById(\'subtract_button\');<br/>\nsubtractButton.onclick = subtract;\n</span>'],
+        tests: [
+          {
+            description: 'When the equals sign is hit with \'1-2\' showing, the result is -1.',
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              if (!_this.equation && cleanHtml(body.find('#screen').html()) === '1-2') {
+                _this.equation = true;
+                return false;
+              }
+              if (_this.equation && cleanHtml(body.find('#screen').html()) === '-1') {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
+            },
+            clean: function() {
+              _this.equation = null;
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
+            }
+          }
+        ]
+      }
+    ]
   }
 ];

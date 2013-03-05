@@ -26,11 +26,11 @@
     }    
 
     .challenge {
-        text-align: center;
         margin-bottom: 12px;
         
         .text, .success {
             padding: 12px;
+            text-align: center;
         }
         
         .success {
@@ -59,9 +59,9 @@
         .links {
             width: 50%;
             margin: auto;
-            text-align: center;
             position: relative;
             a.link {
+                text-align: center;
                 background-color: @blue;
                 display: block;
                 float: left;
@@ -112,6 +112,10 @@
                 padding-top: 6px;
                 p {
                     opacity: 0;
+                }
+                .code {
+                    display: block;
+                    padding-left: 90px;
                 }
             }
             .test {
@@ -216,5 +220,9 @@
                 padding: 12px;
             }
         }
-    }
+    }    
+}
+
+.site_explanation {
+    padding: 60px 0;
 }

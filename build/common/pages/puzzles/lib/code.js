@@ -164,7 +164,7 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.setOutput = function() {
-    var baseHTML, editor, frameDocElement, script, _i, _len, _ref, _results;
+    var baseHTML, editor, frameDocElement, script, style, _i, _len, _ref, _results;
     frameDocElement = $(this.$('.output')[0].contentDocument.documentElement);
     baseHTML = ((function() {
       var _i, _len, _ref, _results;
@@ -187,7 +187,14 @@ code.ViewHelper = (function() {
         script = $(document.createElement('SCRIPT'));
         script.attr('type', 'text/javascript');
         script.html(editor.aceEditor.getValue());
-        _results.push(frameDocElement.find('head').append(script));
+        frameDocElement.find('head').append(script);
+      }
+      if (editor.type === 'css') {
+        style = $(document.createElement('STYLE'));
+        style.attr('type', 'text/css');
+        style.attr('rel', 'stylesheet');
+        style.html(editor.aceEditor.getValue());
+        _results.push(frameDocElement.find('head').append(style));
       } else {
         _results.push(void 0);
       }

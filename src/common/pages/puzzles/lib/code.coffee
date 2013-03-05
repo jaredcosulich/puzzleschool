@@ -121,6 +121,12 @@ class code.ViewHelper
                 script.attr('type', 'text/javascript')
                 script.html(editor.aceEditor.getValue())
                 frameDocElement.find('head').append(script)
+            if editor.type == 'css'
+                style = $(document.createElement('STYLE'))
+                style.attr('type', 'text/css')
+                style.attr('rel', 'stylesheet')                
+                style.html(editor.aceEditor.getValue())
+                frameDocElement.find('head').append(style)
                     
     test: ->
         frame = @$('.output')[0]
