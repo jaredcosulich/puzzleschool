@@ -83,8 +83,11 @@ soma.views({
       }
     },
     initLevel: function() {
+      var _this = this;
       this.el.find('.dynamic_content').html(this.originalHTML);
-      return this.helper.initLevel(this.level);
+      return setTimeout((function() {
+        return _this.helper.initLevel(_this.level);
+      }), 100);
     },
     initLevelSelector: function() {
       var level, _i, _len, _ref, _results,

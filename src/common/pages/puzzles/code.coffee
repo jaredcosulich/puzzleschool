@@ -54,8 +54,10 @@ soma.views
 
         initLevel: ->
             @el.find('.dynamic_content').html(@originalHTML)
-            @helper.initLevel(@level)
-
+            setTimeout((=>
+                @helper.initLevel(@level)
+            ), 100)
+            
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
             for level in @levelSelector.find('.level')
