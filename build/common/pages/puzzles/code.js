@@ -630,7 +630,7 @@ STAGES = [
         hints: ['You will need to edit the html as well as the javascript.', 'Edit the html by copying the elements for 1,2,3,4 and adding ones for 5,6,7,8,9', 'In the javascript you only need to make a simple change to the for loop', 'Where you see \'for (var i=1; i<=4; ++i) {\', change the \'4\' to a \'9\''],
         tests: [
           {
-            description: 'When the equals sign is hit with \'3*4\' showing, the result is 12.',
+            description: 'The numbers 5 through 9 are displayed and show on the screen when clicked.',
             test: function(_arg) {
               var body, cleanHtml, i, number, _i;
               body = _arg.body, cleanHtml = _arg.cleanHtml;
@@ -644,6 +644,53 @@ STAGES = [
                 }
               }
               return true;
+            }
+          }
+        ]
+      }, {
+        id: 1362530371489,
+        challenge: 'Figure out how to add a function divide button so you can do the calculation \'9 / 2\'',
+        editors: [
+          {
+            title: 'Calculator Javascript',
+            type: 'javascript',
+            code: 'function getScreen() {\n  return document.getElementById(\'screen\'); \n}\nfunction addToScreen(symbol) {\n  getScreen().innerHTML += symbol;\n}\n\nfunction multiply() {\n  addToScreen(\'*\');\n}\nvar multiplyButton = document.getElementById(\'multiply_button\');\nmultiplyButton.onclick = multiply;\n\nfunction subtract() {\n  addToScreen(\'-\');\n}\nvar subtractButton = document.getElementById(\'subtract_button\');\nsubtractButton.onclick = subtract;\n\nfunction add() {\n  addToScreen(\'+\');\n}\nvar addButton = document.getElementById(\'add_button\');\naddButton.onclick = add;\n\nfunction initializeNumberButton(number) {\n  document.getElementById(\'number\' + number).onclick = function() {\n    addToScreen(number);\n  };                                \n}\nfor (var i=1; i<=9; ++i) {\n  initializeNumberButton(i);\n}\n\nfunction calculate() {\n  equation = getScreen().innerHTML;\n  getScreen().innerHTML = eval(equation);\n}\ndocument.getElementById(\'equals\').onclick = function() {\n  calculate();\n};          \n\nfunction clear() {\n  getScreen().innerHTML = \'\';\n}\ndocument.getElementById(\'clear\').onclick = function() {\n  clear();\n};          \n       '
+          }, {
+            title: 'Calculator CSS',
+            type: 'css',
+            code: '.explanation {\n    float: right;\n    background-color: white;\n    border: 1px solid #ccc;\n    width: 36%;\n    margin-right: 12px;\n    padding: 12px;\n}\n\n.calculator {\n    height: 360px;\n    width: 300px;\n    border: 1px solid #ccc;\n    background-color: white;\n    margin: 0 12px;\n}\n\n.screen {\n    margin: 12px;\n    background-color: black;\n    height: 45px;\n    line-height: 45px;\n    color: white;\n    font-size: 42px;\n    text-align: right;                            \n}\n\n.buttons .button {\n    float: left;\n    width: 36px;\n    height: 36px;\n    line-height: 36px;\n    text-align: center;\n    margin: 12px 0 0 12px;\n    background-color: #ccc;\n    color: black;\n    cursor: pointer;\n}\n\n.buttons .numbers {\n    float: left;\n    border-right: 1px solid #ccc;\n    width: 58%;\n    height: 65%;\n}\n\n.buttons .clear {\n    clear: both;\n    float: right;\n    margin-right: 12px;\n}\n\n.buttons .equals, .buttons .clear {\n    width: 60px;\n}'
+          }, {
+            title: 'Calculator HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <div class=\'explanation\'>\n      <b>A Working Calculator</b>\n      <p>Time to create the reset of the number buttons.</p>\n      <p>You\'re going to have to edit the html as well as the javascript.</p>\n    </div>\n  \n    <div class=\'calculator\'>\n      <div class=\'screen\' id=\'screen\'></div>\n      <div class=\'buttons\'>\n        <div class=\'numbers\'>\n          <div class=\'number button\' id=\'number1\'>1</div>\n          <div class=\'number button\' id=\'number2\'>2</div>\n          <div class=\'number button\' id=\'number3\'>3</div>\n          <div class=\'number button\' id=\'number4\'>4</div>\n          <div class=\'number button\' id=\'number5\'>5</div>\n          <div class=\'number button\' id=\'number6\'>6</div>\n          <div class=\'number button\' id=\'number7\'>7</div>\n          <div class=\'number button\' id=\'number8\'>8</div>\n          <div class=\'number button\' id=\'number9\'>9</div>\n        </div>\n        <div class=\'functions\'>\n          <div class=\'function button\' id=\'add_button\'>+</div>\n          <div class=\'function button\' id=\'subtract_button\'>-</div>\n          <div class=\'function button\' id=\'multiply_button\'>*</div>\n        </div>\n        <div class=\'clear button\' id=\'clear\'>Clear</div>\n        <div class=\'equals button\' id=\'equals\'>=</div>\n      </div>\n    </div>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n  Here we are working with some of the basics of javascript.\n</p>\n<p>\n  Some of the interesting javascript functions you might want to google\n  are \'javascript eval\', \'javascript getElementById\', and\n  \'javascript innerHTML\'.\n</p>\n<p>\n  Most importantly we are trying to figure out how to bind a method to\n  the onclick event of an html element. You may want to google \'javascript onclick\'\n  for some more information about that.\n</p>',
+        hints: ['First you\'ll need to add a new button like the multiply button in the html', 'Next you\'ll have to mimic the multiply function, attaching it to the new button', 'Be sure to match the \'id\' of the button in the html to the \'getElementById\' call in the javascript.', 'The button should look something like &lt;div&gt; class=\'function button\' id=\'divide_button\'&gt;/&lt;/div&gt;', 'This code should look something like:<br/><br/>\n<span class=\'code\'>\nfunction divide() {<br/>\n&nbsp;&nbsp;addToScreen(\'/\')<br/>\n}<br/>\nvar divideButton = document.getElementById(\'divide_button\');<br/>\ndivideButton.onclick = divide;\n</span>'],
+        tests: [
+          {
+            description: 'When the equals sign is hit with \'9/2\' showing, the result is 4.5.',
+            test: function(_arg) {
+              var body, cleanHtml;
+              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              if (!_this.equation && cleanHtml(body.find('#screen').html()) === '9/2') {
+                _this.equation = true;
+                return false;
+              }
+              if (_this.equation && cleanHtml(body.find('#screen').html()) === '4.5') {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
+            },
+            clean: function() {
+              _this.equation = null;
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
             }
           }
         ]

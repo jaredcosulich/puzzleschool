@@ -29,6 +29,7 @@ class code.ViewHelper
                     <div class='editor'></div>
                 """
                 @$('.editors').append(editorContainer)
+                # editorContainer.height(@$('.output').height() - (editorContainer.offset().top - @$('.editors').offset().top))
                 editorContainer.find('.editor_header').bind 'click', => @selectEditor(editor)
                 
                 editor.container = editorContainer

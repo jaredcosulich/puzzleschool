@@ -1199,7 +1199,7 @@ STAGES = [
                 ]
                 tests: [
                     {
-                        description: 'When the equals sign is hit with \'3*4\' showing, the result is 12.'
+                        description: 'The numbers 5 through 9 are displayed and show on the screen when clicked.'
                         test: ({body, cleanHtml}) =>
                             for i in [5..9]
                                 return false unless (number = body.find("#number#{i}")).length
@@ -1209,6 +1209,222 @@ STAGES = [
                     }
                 ]
             }
+            {
+                id: 1362530371489
+                challenge: '''
+                    Figure out how to add a function divide button so you can do the calculation '9 / 2'
+                '''
+                editors: [
+                    {
+                        title: 'Calculator Javascript'
+                        type: 'javascript'
+                        code: '''
+                            function getScreen() {
+                              return document.getElementById('screen'); 
+                            }
+                            function addToScreen(symbol) {
+                              getScreen().innerHTML += symbol;
+                            }
+
+                            function multiply() {
+                              addToScreen('*');
+                            }
+                            var multiplyButton = document.getElementById('multiply_button');
+                            multiplyButton.onclick = multiply;
+
+                            function subtract() {
+                              addToScreen('-');
+                            }
+                            var subtractButton = document.getElementById('subtract_button');
+                            subtractButton.onclick = subtract;
+                            
+                            function add() {
+                              addToScreen('+');
+                            }
+                            var addButton = document.getElementById('add_button');
+                            addButton.onclick = add;
+
+                            function initializeNumberButton(number) {
+                              document.getElementById('number' + number).onclick = function() {
+                                addToScreen(number);
+                              };                                
+                            }
+                            for (var i=1; i<=9; ++i) {
+                              initializeNumberButton(i);
+                            }
+                            
+                            function calculate() {
+                              equation = getScreen().innerHTML;
+                              getScreen().innerHTML = eval(equation);
+                            }
+                            document.getElementById('equals').onclick = function() {
+                              calculate();
+                            };          
+
+                            function clear() {
+                              getScreen().innerHTML = '';
+                            }
+                            document.getElementById('clear').onclick = function() {
+                              clear();
+                            };          
+                                   
+                        '''
+                    }
+                    {
+                        title: 'Calculator CSS'
+                        type: 'css'
+                        code: '''
+                            .explanation {
+                                float: right;
+                                background-color: white;
+                                border: 1px solid #ccc;
+                                width: 36%;
+                                margin-right: 12px;
+                                padding: 12px;
+                            }
+                            
+                            .calculator {
+                                height: 360px;
+                                width: 300px;
+                                border: 1px solid #ccc;
+                                background-color: white;
+                                margin: 0 12px;
+                            }
+                            
+                            .screen {
+                                margin: 12px;
+                                background-color: black;
+                                height: 45px;
+                                line-height: 45px;
+                                color: white;
+                                font-size: 42px;
+                                text-align: right;                            
+                            }
+                            
+                            .buttons .button {
+                                float: left;
+                                width: 36px;
+                                height: 36px;
+                                line-height: 36px;
+                                text-align: center;
+                                margin: 12px 0 0 12px;
+                                background-color: #ccc;
+                                color: black;
+                                cursor: pointer;
+                            }
+                            
+                            .buttons .numbers {
+                                float: left;
+                                border-right: 1px solid #ccc;
+                                width: 58%;
+                                height: 65%;
+                            }
+                            
+                            .buttons .clear {
+                                clear: both;
+                                float: right;
+                                margin-right: 12px;
+                            }
+                            
+                            .buttons .equals, .buttons .clear {
+                                width: 60px;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Calculator HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <div class='explanation'>
+                                  <b>A Working Calculator</b>
+                                  <p>Time to create the reset of the number buttons.</p>
+                                  <p>You're going to have to edit the html as well as the javascript.</p>
+                                </div>
+                              
+                                <div class='calculator'>
+                                  <div class='screen' id='screen'></div>
+                                  <div class='buttons'>
+                                    <div class='numbers'>
+                                      <div class='number button' id='number1'>1</div>
+                                      <div class='number button' id='number2'>2</div>
+                                      <div class='number button' id='number3'>3</div>
+                                      <div class='number button' id='number4'>4</div>
+                                      <div class='number button' id='number5'>5</div>
+                                      <div class='number button' id='number6'>6</div>
+                                      <div class='number button' id='number7'>7</div>
+                                      <div class='number button' id='number8'>8</div>
+                                      <div class='number button' id='number9'>9</div>
+                                    </div>
+                                    <div class='functions'>
+                                      <div class='function button' id='add_button'>+</div>
+                                      <div class='function button' id='subtract_button'>-</div>
+                                      <div class='function button' id='multiply_button'>*</div>
+                                    </div>
+                                    <div class='clear button' id='clear'>Clear</div>
+                                    <div class='equals button' id='equals'>=</div>
+                                  </div>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                      Here we are working with some of the basics of javascript.
+                    </p>
+                    <p>
+                      Some of the interesting javascript functions you might want to google
+                      are 'javascript eval', 'javascript getElementById', and
+                      'javascript innerHTML'.
+                    </p>
+                    <p>
+                      Most importantly we are trying to figure out how to bind a method to
+                      the onclick event of an html element. You may want to google 'javascript onclick'
+                      for some more information about that.
+                    </p>
+                '''
+                hints: [
+                    'First you\'ll need to add a new button like the multiply button in the html'
+                    'Next you\'ll have to mimic the multiply function, attaching it to the new button'
+                    'Be sure to match the \'id\' of the button in the html to the \'getElementById\' call in the javascript.'
+                    'The button should look something like &lt;div&gt; class=\'function button\' id=\'divide_button\'&gt;/&lt;/div&gt;'
+                    '''
+                    This code should look something like:<br/><br/>
+                    <span class='code'>
+                    function divide() {<br/>
+                    &nbsp;&nbsp;addToScreen('/')<br/>
+                    }<br/>
+                    var divideButton = document.getElementById('divide_button');<br/>
+                    divideButton.onclick = divide;
+                    </span>
+                    '''                
+                ]
+                tests: [
+                    {
+                        description: 'When the equals sign is hit with \'9/2\' showing, the result is 4.5.'
+                        test: ({body, cleanHtml}) =>
+                            if not @equation and cleanHtml(body.find('#screen').html()) == '9/2'
+                                @equation = true
+                                return false
+
+                            if @equation and cleanHtml(body.find('#screen').html()) == '4.5'
+                                clearInterval(@testInterval)
+                                return true 
+
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            @equation = null
+                            clearInterval(@testInterval)
+                            @testInterval = null                            
+                    }
+                ]
+            }
+            
         ]
     }
     
