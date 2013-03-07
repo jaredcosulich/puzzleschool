@@ -480,6 +480,45 @@ STAGES = [
           }
         ]
       }, {
+        id: 1362636644492,
+        challenge: 'Figure out how to change the text displayed by the prompt to green..',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var button = document.getElementById(\'prompt_button\');\nbutton.onclick = function () {\n  var text = prompt(\'What text should I display in green?\');\n  var textArea = document.getElementById(\'text_area\');\n  textArea.innerHTML = text;\n  textArea.style.color = \'red\';\n};'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Prompts</h1>\n    <p>\n      Javascript also let\'s you ask the user something using the \'prompt\' method.\n    </p>\n    <p>\n      A prompt will cause a box to pop up with a message and a text box.\n    </p>\n    <p>\n      Try to change the color of the text that is displayed when you click the button and\n      to show the prompt below:\n    </p>\n    <button id=\'prompt_button\'>Click Me</button>\n    <h2 id=\'text_area\'></h2>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    Javascript is all about interactions.\n</p>\n<p>\n    In this case the interaction is a prompt that asks the user to provide some input.\n</p>\n<p>\n    The input from the user is captured in a variable that can be displayed on the page\n    or used for another purpose.\n</p>',
+        hints: ['The input from the prompt is stored in the \'text\' variable.', 'The \'text\' variable is then displayed in the \'text_area\' element.', 'Change the color of the \'text_area\' element to red to complete the challenge.'],
+        tests: [
+          {
+            description: 'The input from the prompt is displayed in green.',
+            test: function(_arg) {
+              var cleanHtml, frameBody, textArea;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              textArea = frameBody.find('#text_area');
+              if (textArea.css('color') === 'green' && textArea.html().length) {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
+            }
+          }
+        ]
+      }, {
         id: 1362424704636,
         challenge: 'Figure out how to make the button turn the header color green instead or red.',
         editors: [

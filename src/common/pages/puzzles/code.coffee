@@ -536,6 +536,84 @@ STAGES = [
                 ]
             },
             {
+                id: 1362636644492
+                challenge: '''
+                    Figure out how to change the text displayed by the prompt to green..
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('prompt_button');
+                            button.onclick = function () {
+                              var text = prompt('What text should I display in green?');
+                              var textArea = document.getElementById('text_area');
+                              textArea.innerHTML = text;
+                              textArea.style.color = 'red';
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Prompts</h1>
+                                <p>
+                                  Javascript also let's you ask the user something using the 'prompt' method.
+                                </p>
+                                <p>
+                                  A prompt will cause a box to pop up with a message and a text box.
+                                </p>
+                                <p>
+                                  Try to change the color of the text that is displayed when you click the button and
+                                  to show the prompt below:
+                                </p>
+                                <button id='prompt_button'>Click Me</button>
+                                <h2 id='text_area'></h2>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript is all about interactions.
+                    </p>
+                    <p>
+                        In this case the interaction is a prompt that asks the user to provide some input.
+                    </p>
+                    <p>
+                        The input from the user is captured in a variable that can be displayed on the page
+                        or used for another purpose.
+                    </p>
+                '''
+                hints: [
+                    'The input from the prompt is stored in the \'text\' variable.'
+                    'The \'text\' variable is then displayed in the \'text_area\' element.'
+                    'Change the color of the \'text_area\' element to red to complete the challenge.'
+                ]
+                tests: [
+                    {
+                        description: 'The input from the prompt is displayed in green.'
+                        test: ({frameBody, cleanHtml}) =>
+                            textArea = frameBody.find('#text_area')
+                            if textArea.css('color') == 'green' and textArea.html().length
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            },
+            {
                 id: 1362424704636
                 challenge: '''
                     Figure out how to make the button turn the header color green instead or red.
