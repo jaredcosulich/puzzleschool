@@ -163,8 +163,45 @@ code.ViewHelper = (function() {
     return this.initSection('tests');
   };
 
+  ViewHelper.prototype.showError = function(msg) {
+    var elOffset, error, frameOffset, height;
+    elOffset = this.el.offset();
+    frameOffset = this.$('.output').offset();
+    error = this.$('.error');
+    error.html("<p>There is an error in your code:<br/><br/>" + msg + "</p>");
+    height = error.height();
+    error.css({
+      top: frameOffset.top - elOffset.top,
+      left: frameOffset.left,
+      height: 0
+    });
+    return error.animate({
+      height: height,
+      duration: 500
+    });
+  };
+
+  ViewHelper.prototype.hideError = function() {
+    var error,
+      _this = this;
+    error = this.$('.error');
+    return error.animate({
+      height: 0,
+      duration: 500,
+      complete: function() {
+        return error.css({
+          top: -1000,
+          left: -1000,
+          height: 'auto'
+        });
+      }
+    });
+  };
+
   ViewHelper.prototype.setOutput = function() {
-    var baseHTML, editor, frameDocElement, script, style, _i, _len, _ref, _results;
+    var baseHTML, editor, frameDocElement, script, style, _i, _len, _ref,
+      _this = this;
+    this.hideError();
     frameDocElement = $(this.$('.output')[0].contentDocument.documentElement);
     baseHTML = ((function() {
       var _i, _len, _ref, _results;
@@ -180,7 +217,6 @@ code.ViewHelper = (function() {
     }).call(this))[0].aceEditor.getValue();
     frameDocElement.html(baseHTML);
     _ref = this.level.editors;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       editor = _ref[_i];
       if (editor.type === 'javascript') {
@@ -194,12 +230,12 @@ code.ViewHelper = (function() {
         style.attr('type', 'text/css');
         style.attr('rel', 'stylesheet');
         style.html(editor.aceEditor.getValue());
-        _results.push(frameDocElement.find('head').append(style));
-      } else {
-        _results.push(void 0);
+        frameDocElement.find('head').append(style);
       }
     }
-    return _results;
+    return this.$('.output')[0].contentWindow.onerror = function(msg, url, line) {
+      return _this.showError(msg);
+    };
   };
 
   ViewHelper.prototype.test = function() {
