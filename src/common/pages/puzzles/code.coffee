@@ -219,7 +219,7 @@ STAGES = [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.'
                         test: ({frameBody, cleanHtml}) -> 
-                            cleanHtml(body.find('h1').html()) == 'hello world'
+                            cleanHtml(frameBody.find('h1').html()) == 'hello world'
                     }
                 ]
             }, {
@@ -257,11 +257,11 @@ STAGES = [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.'
                         test: ({frameBody, cleanHtml}) -> 
-                            cleanHtml(body.find('h1').html()) == 'html tags are easy'
+                            cleanHtml(frameBody.find('h1').html()) == 'html tags are easy'
                     }
                     {
                         description: 'The &lt;h1&gt; tag is properly closed.'
-                        test: ({frameBody}) -> body.html().indexOf('</h1>') > -1
+                        test: ({frameBody}) -> frameBody.html().indexOf('</h1>') > -1
                     }
                 ]
             }, {
@@ -303,7 +303,7 @@ STAGES = [
                     {
                         description: 'The header with the smallest text size contains the text \'this is the smallest header\'.'
                         test: ({frameBody, cleanHtml}) -> 
-                            cleanHtml(body.find('h6').html()) == 'this is the smallest header'
+                            cleanHtml(frameBody.find('h6').html()) == 'this is the smallest header'
                     }
                 ]
             }, {
@@ -355,7 +355,7 @@ STAGES = [
                     {
                         description: 'There is a &lt;b&gt; tag with the html \'such as the &lt;b&gt; tag\'.'
                         test: ({frameBody, cleanHtml}) -> 
-                            html = cleanHtml(body.find('b').html())
+                            html = cleanHtml(frameBody.find('b').html())
                             html == 'such as the &lt;b&gt; tag'
                     }
                 ]
@@ -398,7 +398,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The &lt;h1&gt; tag has a color of red.'
-                        test: ({frameBody, cleanHtml}) -> body.find('h1').css('color') == 'red'
+                        test: ({frameBody, cleanHtml}) -> frameBody.find('h1').css('color') == 'red'
                     }
                 ]
             }, {
@@ -446,14 +446,14 @@ STAGES = [
                     {
                         description: 'The &lt;a&gt; tag has a link to a new website.'
                         test: ({frameBody, cleanHtml}) => 
-                            link = body.find('a')                            
+                            link = frameBody.find('a')                            
                             return false if link.attr('href') == 'http://puzzleschool.com'
                             return true
                     },
                     {
                         description: 'The &lt;a&gt; tag\'s html if for a different website.'
                         test: ({frameBody, cleanHtml}) => 
-                            link = body.find('a')                            
+                            link = frameBody.find('a')                            
                             return false if link.html() == 'The Puzzle School'
                             return true
                     }
@@ -594,7 +594,7 @@ STAGES = [
                     {
                         description: 'The color of the &lt;h2&gt; element is green.'
                         test: ({frameBody, cleanHtml}) =>
-                            if body.find('#header').css('color') == 'green'
+                            if frameBody.find('#header').css('color') == 'green'
                                 clearInterval(@testInterval)
                                 return true 
                                 
@@ -675,7 +675,7 @@ STAGES = [
                     {
                         description: 'The html inside the &lt;h2&gt; tag reads 10.'
                         test: ({frameBody, cleanHtml}) => 
-                            if cleanHtml(body.find('h2').html()) == '10'
+                            if cleanHtml(frameBody.find('h2').html()) == '10'
                                 clearInterval(@testInterval)
                                 return true 
                                 
@@ -866,11 +866,11 @@ STAGES = [
                     {
                         description: 'When the equals sign is hit with \'1-2\' showing, the result is -1.'
                         test: ({frameBody, cleanHtml}) =>
-                            if not @equation and cleanHtml(body.find('#screen').html()) == '1-2'
+                            if not @equation and cleanHtml(frameBody.find('#screen').html()) == '1-2'
                                 @equation = true
                                 return false
                             
-                            if @equation and cleanHtml(body.find('#screen').html()) == '-1'
+                            if @equation and cleanHtml(frameBody.find('#screen').html()) == '-1'
                                 clearInterval(@testInterval)
                                 return true 
 
@@ -1074,11 +1074,11 @@ STAGES = [
                     {
                         description: 'When the equals sign is hit with \'3*4\' showing, the result is 12.'
                         test: ({frameBody, cleanHtml}) =>
-                            if not @equation and cleanHtml(body.find('#screen').html()) == '3*4'
+                            if not @equation and cleanHtml(frameBody.find('#screen').html()) == '3*4'
                                 @equation = true
                                 return false
                             
-                            if @equation and cleanHtml(body.find('#screen').html()) == '12'
+                            if @equation and cleanHtml(frameBody.find('#screen').html()) == '12'
                                 clearInterval(@testInterval)
                                 return true 
 
@@ -1275,9 +1275,9 @@ STAGES = [
                         description: 'The numbers 5 through 9 are displayed and show on the screen when clicked.'
                         test: ({frameBody, cleanHtml}) =>
                             for i in [5..9]
-                                return false unless (number = body.find("#number#{i}")).length
+                                return false unless (number = frameBody.find("#number#{i}")).length
                                 number.trigger('click')
-                                return false if cleanHtml(body.find('#screen').html()).indexOf(i) == -1
+                                return false if cleanHtml(frameBody.find('#screen').html()).indexOf(i) == -1
                             return true
                     }
                 ]
@@ -1479,11 +1479,11 @@ STAGES = [
                     {
                         description: 'When the equals sign is hit with \'9/2\' showing, the result is 4.5.'
                         test: ({frameBody, cleanHtml}) =>
-                            if not @equation and cleanHtml(body.find('#screen').html()) == '9/2'
+                            if not @equation and cleanHtml(frameBody.find('#screen').html()) == '9/2'
                                 @equation = true
                                 return false
 
-                            if @equation and cleanHtml(body.find('#screen').html()) == '4.5'
+                            if @equation and cleanHtml(frameBody.find('#screen').html()) == '4.5'
                                 clearInterval(@testInterval)
                                 return true 
 

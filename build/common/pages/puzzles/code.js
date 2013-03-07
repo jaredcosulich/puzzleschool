@@ -294,7 +294,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              return cleanHtml(body.find('h1').html()) === 'hello world';
+              return cleanHtml(frameBody.find('h1').html()) === 'hello world';
             }
           }
         ]
@@ -316,14 +316,14 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              return cleanHtml(body.find('h1').html()) === 'html tags are easy';
+              return cleanHtml(frameBody.find('h1').html()) === 'html tags are easy';
             }
           }, {
             description: 'The &lt;h1&gt; tag is properly closed.',
             test: function(_arg) {
               var frameBody;
               frameBody = _arg.frameBody;
-              return body.html().indexOf('</h1>') > -1;
+              return frameBody.html().indexOf('</h1>') > -1;
             }
           }
         ]
@@ -345,7 +345,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              return cleanHtml(body.find('h6').html()) === 'this is the smallest header';
+              return cleanHtml(frameBody.find('h6').html()) === 'this is the smallest header';
             }
           }
         ]
@@ -367,7 +367,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody, html;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              html = cleanHtml(body.find('b').html());
+              html = cleanHtml(frameBody.find('b').html());
               return html === 'such as the &lt;b&gt; tag';
             }
           }
@@ -390,7 +390,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              return body.find('h1').css('color') === 'red';
+              return frameBody.find('h1').css('color') === 'red';
             }
           }
         ]
@@ -412,7 +412,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody, link;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              link = body.find('a');
+              link = frameBody.find('a');
               if (link.attr('href') === 'http://puzzleschool.com') {
                 return false;
               }
@@ -423,7 +423,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody, link;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              link = body.find('a');
+              link = frameBody.find('a');
               if (link.html() === 'The Puzzle School') {
                 return false;
               }
@@ -501,7 +501,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              if (body.find('#header').css('color') === 'green') {
+              if (frameBody.find('#header').css('color') === 'green') {
                 clearInterval(_this.testInterval);
                 return true;
               }
@@ -539,7 +539,7 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              if (cleanHtml(body.find('h2').html()) === '10') {
+              if (cleanHtml(frameBody.find('h2').html()) === '10') {
                 clearInterval(_this.testInterval);
                 return true;
               }
@@ -586,11 +586,11 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              if (!_this.equation && cleanHtml(body.find('#screen').html()) === '1-2') {
+              if (!_this.equation && cleanHtml(frameBody.find('#screen').html()) === '1-2') {
                 _this.equation = true;
                 return false;
               }
-              if (_this.equation && cleanHtml(body.find('#screen').html()) === '-1') {
+              if (_this.equation && cleanHtml(frameBody.find('#screen').html()) === '-1') {
                 clearInterval(_this.testInterval);
                 return true;
               }
@@ -633,11 +633,11 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              if (!_this.equation && cleanHtml(body.find('#screen').html()) === '3*4') {
+              if (!_this.equation && cleanHtml(frameBody.find('#screen').html()) === '3*4') {
                 _this.equation = true;
                 return false;
               }
-              if (_this.equation && cleanHtml(body.find('#screen').html()) === '12') {
+              if (_this.equation && cleanHtml(frameBody.find('#screen').html()) === '12') {
                 clearInterval(_this.testInterval);
                 return true;
               }
@@ -681,11 +681,11 @@ STAGES = [
               var cleanHtml, frameBody, i, number, _i;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               for (i = _i = 5; _i <= 9; i = ++_i) {
-                if (!(number = body.find("#number" + i)).length) {
+                if (!(number = frameBody.find("#number" + i)).length) {
                   return false;
                 }
                 number.trigger('click');
-                if (cleanHtml(body.find('#screen').html()).indexOf(i) === -1) {
+                if (cleanHtml(frameBody.find('#screen').html()).indexOf(i) === -1) {
                   return false;
                 }
               }
@@ -719,11 +719,11 @@ STAGES = [
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
-              if (!_this.equation && cleanHtml(body.find('#screen').html()) === '9/2') {
+              if (!_this.equation && cleanHtml(frameBody.find('#screen').html()) === '9/2') {
                 _this.equation = true;
                 return false;
               }
-              if (_this.equation && cleanHtml(body.find('#screen').html()) === '4.5') {
+              if (_this.equation && cleanHtml(frameBody.find('#screen').html()) === '4.5') {
                 clearInterval(_this.testInterval);
                 return true;
               }
