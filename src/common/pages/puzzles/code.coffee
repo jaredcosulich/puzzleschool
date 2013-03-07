@@ -536,6 +536,78 @@ STAGES = [
                 ]
             },
             {
+                id: 1362424704636
+                challenge: '''
+                    Figure out how to make the button turn the header color green instead or red.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('color_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              header.style.color = 'red';
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Button Binding</h1>
+                                <p>
+                                  Javascript lets you attach or bind actions to html elements on the page.
+                                </p>
+                                <p>
+                                  In this case clicking the button below will turn change the color of
+                                  the header from black to red.
+                                </p>
+                                <p>
+                                  Try to make the button change the color of the header to green instead:
+                                </p>
+                                <button id='color_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript makes it possible to bind an action to an html element.
+                    </p>
+                    <p>
+                        Binding means that a function will be executed when an action takes place.
+                    </p>
+                    <p>
+                        In this example the color of the header changes when the button is clicked.
+                    </p>
+                '''
+                hints: [
+                    'Javascript can access the color attribute using \'.style.color\''
+                    'Change the function to set .style.color to \'green\''
+                ]
+                tests: [
+                    {
+                        description: 'The color of the &lt;h2&gt; element is green.'
+                        test: ({frameBody, cleanHtml}) =>
+                            if frameBody.find('#header').css('color') == 'green'
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            },
+            {
                 id: 1362636644492
                 challenge: '''
                     Figure out how to change the text displayed by the prompt to green..
@@ -603,7 +675,7 @@ STAGES = [
                             if textArea.css('color') == 'green' and textArea.html().length
                                 clearInterval(@testInterval)
                                 return true 
-                                
+
                             return false if @testInterval
                             @testInterval = setInterval(window.retest, 100)
                             return false
@@ -614,19 +686,23 @@ STAGES = [
                 ]
             },
             {
-                id: 1362424704636
+                id: 1362673042225
                 challenge: '''
-                    Figure out how to make the button turn the header color green instead or red.
+                    Figure out how to make clicking the button toggle the color of the header from red to green.
                 '''
                 editors: [
                     {
                         title: 'Page Javascript'
                         type: 'javascript'
                         code: '''
-                            var button = document.getElementById('color_button');
+                            var button = document.getElementById('toggle_button');
                             button.onclick = function () {
                               var header = document.getElementById('header');
-                              header.style.color = 'red';
+                              if (header.style.color == '') {
+                                  header.style.color = 'green';
+                              } else {
+                                  header.style.color = 'red';
+                              }
                             };
                         '''
                     }
@@ -636,18 +712,23 @@ STAGES = [
                         code: '''
                             <html>
                               <body>
-                                <h1 id='header'>Button Binding</h1>
+                                <h1 id='header' style='color: red;'>Prompts</h1>
                                 <p>
-                                  Javascript lets you attach or bind actions to html elements on the page.
+                                  One of the most important tools in programming is the if/else statement.
                                 </p>
                                 <p>
-                                  In this case clicking the button below will turn change the color of
-                                  the header from black to red.
+                                  An if/else statement, also known as a 'conditional statement' lets the program
+                                  decide which path to go down based on a certain condition.
                                 </p>
                                 <p>
-                                  Try to make the button change the color of the header to green instead:
+                                  In this example we want to make the button below change the color of the header to
+                                  green if the color is currently red or change it to red if it is currently green.
                                 </p>
-                                <button id='color_button'>Click Me</button>
+                                <p>
+                                  Figure out how to change the if/else statement so that clicking the button below
+                                  changes the color of the header to green:
+                                </p>
+                                <button id='toggle_button'>Click Me</button>
                               </body>
                             </html>
                         '''
@@ -655,27 +736,30 @@ STAGES = [
                 ]
                 description: '''
                     <p>
-                        Javascript makes it possible to bind an action to an html element.
+                        One of most useful and common tools in programming is the conditional statement.
                     </p>
                     <p>
-                        Binding means that a function will be executed when an action takes place.
+                        A conditional statement basically says "if something is true then do one action, if not do another action".
                     </p>
                     <p>
-                        In this example the color of the header changes when the button is clicked.
+                        For example: "If the oven is preheated then put the food in the oven, otherwise wait."
+                    <p>
+                        In this case we're using a conditional statement to toggle the color of the header.
                     </p>
                 '''
                 hints: [
-                    'Javascript can access the color attribute using \'.style.color\''
-                    'Change the function to set .style.color to \'green\''
+                    'You need to figure out what the proper conditional statement is to toggle the color of the header.'
+                    'We want to say \'if the header is red then change to green else change to red\'.'
+                    'Change this line: \'if (header.style.color == \'\') {\' to \'if (header.style.color == \'red\') {\''
                 ]
                 tests: [
                     {
-                        description: 'The color of the &lt;h2&gt; element is green.'
+                        description: 'The header color is green.'
                         test: ({frameBody, cleanHtml}) =>
                             if frameBody.find('#header').css('color') == 'green'
                                 clearInterval(@testInterval)
                                 return true 
-                                
+
                             return false if @testInterval
                             @testInterval = setInterval(window.retest, 100)
                             return false

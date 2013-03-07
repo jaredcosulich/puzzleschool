@@ -480,6 +480,44 @@ STAGES = [
           }
         ]
       }, {
+        id: 1362424704636,
+        challenge: 'Figure out how to make the button turn the header color green instead or red.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var button = document.getElementById(\'color_button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  header.style.color = \'red\';\n};'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Button Binding</h1>\n    <p>\n      Javascript lets you attach or bind actions to html elements on the page.\n    </p>\n    <p>\n      In this case clicking the button below will turn change the color of\n      the header from black to red.\n    </p>\n    <p>\n      Try to make the button change the color of the header to green instead:\n    </p>\n    <button id=\'color_button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    Javascript makes it possible to bind an action to an html element.\n</p>\n<p>\n    Binding means that a function will be executed when an action takes place.\n</p>\n<p>\n    In this example the color of the header changes when the button is clicked.\n</p>',
+        hints: ['Javascript can access the color attribute using \'.style.color\'', 'Change the function to set .style.color to \'green\''],
+        tests: [
+          {
+            description: 'The color of the &lt;h2&gt; element is green.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (frameBody.find('#header').css('color') === 'green') {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
+            }
+          }
+        ]
+      }, {
         id: 1362636644492,
         challenge: 'Figure out how to change the text displayed by the prompt to green..',
         editors: [
@@ -519,24 +557,24 @@ STAGES = [
           }
         ]
       }, {
-        id: 1362424704636,
-        challenge: 'Figure out how to make the button turn the header color green instead or red.',
+        id: 1362673042225,
+        challenge: 'Figure out how to make clicking the button toggle the color of the header from red to green.',
         editors: [
           {
             title: 'Page Javascript',
             type: 'javascript',
-            code: 'var button = document.getElementById(\'color_button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  header.style.color = \'red\';\n};'
+            code: 'var button = document.getElementById(\'toggle_button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  if (header.style.color == \'\') {\n      header.style.color = \'green\';\n  } else {\n      header.style.color = \'red\';\n  }\n};'
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1 id=\'header\'>Button Binding</h1>\n    <p>\n      Javascript lets you attach or bind actions to html elements on the page.\n    </p>\n    <p>\n      In this case clicking the button below will turn change the color of\n      the header from black to red.\n    </p>\n    <p>\n      Try to make the button change the color of the header to green instead:\n    </p>\n    <button id=\'color_button\'>Click Me</button>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1 id=\'header\' style=\'color: red;\'>Prompts</h1>\n    <p>\n      One of the most important tools in programming is the if/else statement.\n    </p>\n    <p>\n      An if/else statement, also known as a \'conditional statement\' lets the program\n      decide which path to go down based on a certain condition.\n    </p>\n    <p>\n      In this example we want to make the button below change the color of the header to\n      green if the color is currently red or change it to red if it is currently green.\n    </p>\n    <p>\n      Figure out how to change the if/else statement so that clicking the button below\n      changes the color of the header to green:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    Javascript makes it possible to bind an action to an html element.\n</p>\n<p>\n    Binding means that a function will be executed when an action takes place.\n</p>\n<p>\n    In this example the color of the header changes when the button is clicked.\n</p>',
-        hints: ['Javascript can access the color attribute using \'.style.color\'', 'Change the function to set .style.color to \'green\''],
+        description: '<p>\n    One of most useful and common tools in programming is the conditional statement.\n</p>\n<p>\n    A conditional statement basically says "if something is true then do one action, if not do another action".\n</p>\n<p>\n    For example: "If the oven is preheated then put the food in the oven, otherwise wait."\n<p>\n    In this case we\'re using a conditional statement to toggle the color of the header.\n</p>',
+        hints: ['You need to figure out what the proper conditional statement is to toggle the color of the header.', 'We want to say \'if the header is red then change to green else change to red\'.', 'Change this line: \'if (header.style.color == \'\') {\' to \'if (header.style.color == \'red\') {\''],
         tests: [
           {
-            description: 'The color of the &lt;h2&gt; element is green.',
+            description: 'The header color is green.',
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
