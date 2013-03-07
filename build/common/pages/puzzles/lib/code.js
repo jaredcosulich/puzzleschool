@@ -203,9 +203,10 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.test = function() {
-    var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1;
+    var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, frameWindow, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1;
     frame = this.$('.output')[0];
-    frameDoc = frame.contentDocument || frame.contentWindow.document;
+    frameWindow = frame.contentWindow;
+    frameDoc = frameWindow.document;
     frameBody = $(frameDoc.body);
     cleanHtml = function(html) {
       return html.replace(/^\s*/, '').replace(/\s*$/, '').replace(/\s*\n\s*/, ' ').toLowerCase();
@@ -219,7 +220,8 @@ code.ViewHelper = (function() {
         testElement = _ref1[_j];
         if ($(testElement).html() === testInfo.description) {
           if (testInfo.test({
-            body: frameBody,
+            frameWindow: frame.contentWindow,
+            frameBody: frameBody,
             cleanHtml: cleanHtml
           })) {
             $(testElement).removeClass('wrong');

@@ -218,7 +218,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.'
-                        test: ({body, cleanHtml}) -> 
+                        test: ({frameBody, cleanHtml}) -> 
                             cleanHtml(body.find('h1').html()) == 'hello world'
                     }
                 ]
@@ -256,12 +256,12 @@ STAGES = [
                 tests: [
                     {
                         description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.'
-                        test: ({body, cleanHtml}) -> 
+                        test: ({frameBody, cleanHtml}) -> 
                             cleanHtml(body.find('h1').html()) == 'html tags are easy'
                     }
                     {
                         description: 'The &lt;h1&gt; tag is properly closed.'
-                        test: ({body}) -> body.html().indexOf('</h1>') > -1
+                        test: ({frameBody}) -> body.html().indexOf('</h1>') > -1
                     }
                 ]
             }, {
@@ -302,7 +302,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The header with the smallest text size contains the text \'this is the smallest header\'.'
-                        test: ({body, cleanHtml}) -> 
+                        test: ({frameBody, cleanHtml}) -> 
                             cleanHtml(body.find('h6').html()) == 'this is the smallest header'
                     }
                 ]
@@ -354,7 +354,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'There is a &lt;b&gt; tag with the html \'such as the &lt;b&gt; tag\'.'
-                        test: ({body, cleanHtml}) -> 
+                        test: ({frameBody, cleanHtml}) -> 
                             html = cleanHtml(body.find('b').html())
                             html == 'such as the &lt;b&gt; tag'
                     }
@@ -398,7 +398,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The &lt;h1&gt; tag has a color of red.'
-                        test: ({body, cleanHtml}) -> body.find('h1').css('color') == 'red'
+                        test: ({frameBody, cleanHtml}) -> body.find('h1').css('color') == 'red'
                     }
                 ]
             }, {
@@ -445,14 +445,14 @@ STAGES = [
                 tests: [
                     {
                         description: 'The &lt;a&gt; tag has a link to a new website.'
-                        test: ({body, cleanHtml}) => 
+                        test: ({frameBody, cleanHtml}) => 
                             link = body.find('a')                            
                             return false if link.attr('href') == 'http://puzzleschool.com'
                             return true
                     },
                     {
                         description: 'The &lt;a&gt; tag\'s html if for a different website.'
-                        test: ({body, cleanHtml}) => 
+                        test: ({frameBody, cleanHtml}) => 
                             link = body.find('a')                            
                             return false if link.html() == 'The Puzzle School'
                             return true
@@ -462,8 +462,79 @@ STAGES = [
         ]
     }
     {
-        name: 'Random Javascript'
+        name: 'Javascript Basics'
         levels: [
+            {
+                id: 1362617406338
+                challenge: '''
+                    Figure out how to display an alert saying 'Hello World'.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('alert_button');
+                            button.onclick = function () {
+                              alert('What should I say?')
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Alerts</h1>
+                                <p>
+                                  Javascript lets you send messages to your user using the 'alert' method.
+                                </p>
+                                <p>
+                                  An alert will cause a message to pop up.
+                                </p>
+                                <p>
+                                  Try to change the message of the alert that you see when you click this button:
+                                </p>
+                                <button id='alert_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript is all about interactions.
+                    </p>
+                    <p>
+                        In this case the interaction is a button click causing an message to be displayed to the user.
+                    </p>
+                    <p>
+                        The message is displayed using the 'alert' function.
+                    </p>
+                '''
+                hints: [
+                    'The text that you pass in to the \'alert\' function will be displayed in the alert message.'
+                    'Change the text from \'What should I say?\' to \'Hello World\''
+                ]
+                tests: [
+                    {
+                        description: 'An alert with the words \'Hello World\' is displayed.'
+                        test: ({frameWindow, frameBody, cleanHtml}) =>
+                            return true if @done
+                            return if @alertFunction
+                            @alertFunction = frameWindow.alert
+                            frameWindow.alert = (message) => 
+                                if message.toLowerCase() == 'hello world'
+                                    @done = true
+                                    window.retest()
+                                @alertFunction(message) 
+                            return false
+                        clean: =>
+                            @done = null
+                    }
+                ]
+            },
             {
                 id: 1362424704636
                 challenge: '''
@@ -522,7 +593,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The color of the &lt;h2&gt; element is green.'
-                        test: ({body, cleanHtml}) =>
+                        test: ({frameBody, cleanHtml}) =>
                             if body.find('#header').css('color') == 'green'
                                 clearInterval(@testInterval)
                                 return true 
@@ -603,7 +674,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The html inside the &lt;h2&gt; tag reads 10.'
-                        test: ({body, cleanHtml}) => 
+                        test: ({frameBody, cleanHtml}) => 
                             if cleanHtml(body.find('h2').html()) == '10'
                                 clearInterval(@testInterval)
                                 return true 
@@ -794,7 +865,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'When the equals sign is hit with \'1-2\' showing, the result is -1.'
-                        test: ({body, cleanHtml}) =>
+                        test: ({frameBody, cleanHtml}) =>
                             if not @equation and cleanHtml(body.find('#screen').html()) == '1-2'
                                 @equation = true
                                 return false
@@ -1002,7 +1073,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'When the equals sign is hit with \'3*4\' showing, the result is 12.'
-                        test: ({body, cleanHtml}) =>
+                        test: ({frameBody, cleanHtml}) =>
                             if not @equation and cleanHtml(body.find('#screen').html()) == '3*4'
                                 @equation = true
                                 return false
@@ -1202,7 +1273,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'The numbers 5 through 9 are displayed and show on the screen when clicked.'
-                        test: ({body, cleanHtml}) =>
+                        test: ({frameBody, cleanHtml}) =>
                             for i in [5..9]
                                 return false unless (number = body.find("#number#{i}")).length
                                 number.trigger('click')
@@ -1407,7 +1478,7 @@ STAGES = [
                 tests: [
                     {
                         description: 'When the equals sign is hit with \'9/2\' showing, the result is 4.5.'
-                        test: ({body, cleanHtml}) =>
+                        test: ({frameBody, cleanHtml}) =>
                             if not @equation and cleanHtml(body.find('#screen').html()) == '9/2'
                                 @equation = true
                                 return false

@@ -131,7 +131,8 @@ class code.ViewHelper
                     
     test: ->
         frame = @$('.output')[0]
-        frameDoc = frame.contentDocument || frame.contentWindow.document
+        frameWindow = frame.contentWindow
+        frameDoc = frameWindow.document
         frameBody = $(frameDoc.body)
         cleanHtml = (html) ->
             html.replace(/^\s*/, '').replace(/\s*$/, '').replace(/\s*\n\s*/, ' ').toLowerCase()
@@ -139,7 +140,7 @@ class code.ViewHelper
         allTestsPassed = true
         for testInfo in @level.tests
             for testElement in @$('.tests .test') when $(testElement).html() == testInfo.description
-                if testInfo.test(body: frameBody, cleanHtml: cleanHtml)
+                if testInfo.test(frameWindow: frame.contentWindow, frameBody: frameBody, cleanHtml: cleanHtml)
                     $(testElement).removeClass('wrong')
                     $(testElement).addClass('correct')
                 else

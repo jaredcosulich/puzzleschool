@@ -292,8 +292,8 @@ STAGES = [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               return cleanHtml(body.find('h1').html()) === 'hello world';
             }
           }
@@ -314,15 +314,15 @@ STAGES = [
           {
             description: 'The content contains an &lt;h1&gt; tag with html content \'html tags are easy\'.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               return cleanHtml(body.find('h1').html()) === 'html tags are easy';
             }
           }, {
             description: 'The &lt;h1&gt; tag is properly closed.',
             test: function(_arg) {
-              var body;
-              body = _arg.body;
+              var frameBody;
+              frameBody = _arg.frameBody;
               return body.html().indexOf('</h1>') > -1;
             }
           }
@@ -343,8 +343,8 @@ STAGES = [
           {
             description: 'The header with the smallest text size contains the text \'this is the smallest header\'.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               return cleanHtml(body.find('h6').html()) === 'this is the smallest header';
             }
           }
@@ -365,8 +365,8 @@ STAGES = [
           {
             description: 'There is a &lt;b&gt; tag with the html \'such as the &lt;b&gt; tag\'.',
             test: function(_arg) {
-              var body, cleanHtml, html;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody, html;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               html = cleanHtml(body.find('b').html());
               return html === 'such as the &lt;b&gt; tag';
             }
@@ -388,8 +388,8 @@ STAGES = [
           {
             description: 'The &lt;h1&gt; tag has a color of red.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               return body.find('h1').css('color') === 'red';
             }
           }
@@ -410,8 +410,8 @@ STAGES = [
           {
             description: 'The &lt;a&gt; tag has a link to a new website.',
             test: function(_arg) {
-              var body, cleanHtml, link;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody, link;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               link = body.find('a');
               if (link.attr('href') === 'http://puzzleschool.com') {
                 return false;
@@ -421,8 +421,8 @@ STAGES = [
           }, {
             description: 'The &lt;a&gt; tag\'s html if for a different website.',
             test: function(_arg) {
-              var body, cleanHtml, link;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody, link;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               link = body.find('a');
               if (link.html() === 'The Puzzle School') {
                 return false;
@@ -434,9 +434,52 @@ STAGES = [
       }
     ]
   }, {
-    name: 'Random Javascript',
+    name: 'Javascript Basics',
     levels: [
       {
+        id: 1362617406338,
+        challenge: 'Figure out how to display an alert saying \'Hello World\'.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var button = document.getElementById(\'alert_button\');\nbutton.onclick = function () {\n  alert(\'What should I say?\')\n};'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Alerts</h1>\n    <p>\n      Javascript lets you send messages to your user using the \'alert\' method.\n    </p>\n    <p>\n      An alert will cause a message to pop up.\n    </p>\n    <p>\n      Try to change the message of the alert that you see when you click this button:\n    </p>\n    <button id=\'alert_button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    Javascript is all about interactions.\n</p>\n<p>\n    In this case the interaction is a button click causing an message to be displayed to the user.\n</p>\n<p>\n    The message is displayed using the \'alert\' function.\n</p>',
+        hints: ['The text that you pass in to the \'alert\' function will be displayed in the alert message.', 'Change the text from \'What should I say?\' to \'Hello World\''],
+        tests: [
+          {
+            description: 'An alert with the words \'Hello World\' is displayed.',
+            test: function(_arg) {
+              var cleanHtml, frameBody, frameWindow;
+              frameWindow = _arg.frameWindow, frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (_this.done) {
+                return true;
+              }
+              if (_this.alertFunction) {
+                return;
+              }
+              _this.alertFunction = frameWindow.alert;
+              frameWindow.alert = function(message) {
+                if (message.toLowerCase() === 'hello world') {
+                  _this.done = true;
+                  window.retest();
+                }
+                return _this.alertFunction(message);
+              };
+              return false;
+            },
+            clean: function() {
+              return _this.done = null;
+            }
+          }
+        ]
+      }, {
         id: 1362424704636,
         challenge: 'Figure out how to make the button turn the header color green instead or red.',
         editors: [
@@ -456,8 +499,8 @@ STAGES = [
           {
             description: 'The color of the &lt;h2&gt; element is green.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               if (body.find('#header').css('color') === 'green') {
                 clearInterval(_this.testInterval);
                 return true;
@@ -494,8 +537,8 @@ STAGES = [
           {
             description: 'The html inside the &lt;h2&gt; tag reads 10.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               if (cleanHtml(body.find('h2').html()) === '10') {
                 clearInterval(_this.testInterval);
                 return true;
@@ -541,8 +584,8 @@ STAGES = [
           {
             description: 'When the equals sign is hit with \'1-2\' showing, the result is -1.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               if (!_this.equation && cleanHtml(body.find('#screen').html()) === '1-2') {
                 _this.equation = true;
                 return false;
@@ -588,8 +631,8 @@ STAGES = [
           {
             description: 'When the equals sign is hit with \'3*4\' showing, the result is 12.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               if (!_this.equation && cleanHtml(body.find('#screen').html()) === '3*4') {
                 _this.equation = true;
                 return false;
@@ -635,8 +678,8 @@ STAGES = [
           {
             description: 'The numbers 5 through 9 are displayed and show on the screen when clicked.',
             test: function(_arg) {
-              var body, cleanHtml, i, number, _i;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody, i, number, _i;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               for (i = _i = 5; _i <= 9; i = ++_i) {
                 if (!(number = body.find("#number" + i)).length) {
                   return false;
@@ -674,8 +717,8 @@ STAGES = [
           {
             description: 'When the equals sign is hit with \'9/2\' showing, the result is 4.5.',
             test: function(_arg) {
-              var body, cleanHtml;
-              body = _arg.body, cleanHtml = _arg.cleanHtml;
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               if (!_this.equation && cleanHtml(body.find('#screen').html()) === '9/2') {
                 _this.equation = true;
                 return false;
