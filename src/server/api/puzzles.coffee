@@ -86,7 +86,7 @@ soma.routes
 
         if @data.levelUpdates
             for levelName, levelUpdate of @data.levelUpdates
-                levelUpdate.name = levelName                
+                levelUpdate.name = levelName       
                 l.add => db.update 'user_puzzle_progress', "#{userPuzzle}/#{levelName}", levelUpdate, l.wait()
 
         l.add => @send()    

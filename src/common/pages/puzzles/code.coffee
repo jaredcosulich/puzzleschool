@@ -13,13 +13,24 @@ soma.chunks
 
             @loadStylesheet '/build/client/css/puzzles/code.css'     
 
+            @puzzleData = {levels: {}}
+            if @cookies.get('user')
+                @loadData 
+                    url: '/api/puzzles/code'
+                    success: (data) => @puzzleData = data.puzzle
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load your account information. Please check your internet connection.')
+            
             if not @levelId
                 @levelId = STAGES[0].levels[0].id
+
             
         build: ->
             @setTitle("Code Puzzles - The Puzzle School")
             
             @html = wings.renderTemplate(@template,
+                puzzleData: JSON.stringify(@puzzleData)
                 level: @levelId
                 stages: STAGES
             )
@@ -30,6 +41,8 @@ soma.views
         create: ->
             code = require('./lib/code')
             
+            @puzzleData = JSON.parse(@el.data('puzzle_data'))
+            
             @originalHTML = @el.find('.dynamic_content').html()
         
             @level = @findLevel(@el.data('level'))
@@ -38,10 +51,15 @@ soma.views
                 el: @el
                 completeLevel: => @completeLevel()
 
-            @helper.initLevel(@level)
-
             @initLevelSelector()
             @initActions()
+            @initPuzzleProgress()
+            @initLevel()
+            
+            
+        initPuzzleProgress: ->  
+            @puzzleProgress = {}
+            @puzzleProgress[@level.id] = {}
             
         initActions: ->
             @$('.select_level').bind 'click', => @showLevelSelector()
@@ -55,7 +73,12 @@ soma.views
         initLevel: ->
             @el.find('.dynamic_content').html(@originalHTML)
             setTimeout((=>
+                @puzzleProgress[@level.id] or= {}
                 @helper.initLevel(@level)
+                @puzzleProgress[@level.id].started = new Date().getTime()
+                @saveProgress()
+                
+                @setLevelIcon(@level.id, true, @puzzleData.levels[@level.id]?.completed)
             ), 100)
             
         initLevelSelector: ->
@@ -70,13 +93,29 @@ soma.views
                         @initLevel()
                         history.pushState(null, null, "/puzzles/code/#{@level.id}")
                         @hideLevelSelector()
-                
-        completeLevel: ->
+                        
+            for levelId, levelInfo of @puzzleData.levels
+                @setLevelIcon(levelId, levelInfo.started, levelInfo.completed)
+          
+        setLevelIcon: (id, started, completed) ->
+            levelIcon = @$("#level_#{id}").find('img')
+            if started
+                replace = '_started'
+                if completed
+                    replace = '_complete'
+            else    
+                replace = ''            
+            levelIcon.attr('src', levelIcon.attr('src').replace(/level(_.+)*\./, "level#{replace}."))
+            
+          
+        completeLevel: ->            
+            @puzzleProgress[@level.id].completed = new Date().getTime()
+            @saveProgress()
+            
             test.clean() for test in @level.tests when test.clean
-                
-            levelIcon = @$("#level_#{@level.id}").find('img')
-            if levelIcon.attr('src').indexOf('complete') == -1
-                levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'))
+            
+            @setLevelIcon(@level.id, true, true)    
+
             challenge = @$('.challenge')
             challenge.animate
                 opacity: 0
@@ -116,52 +155,34 @@ soma.views
                         top: -1000
                         left: -1000
                             
-        saveProgress: (puzzleProgress, callback) ->
+        saveProgress: (callback) ->
+            progress = JSON.parse(JSON.stringify(@puzzleProgress))
+            @initPuzzleProgress()
             if @cookies.get('user')
-                puzzleUpdates = @getUpdates(puzzleProgress)
-                return unless puzzleUpdates
-
-                levelUpdates = {}
-                for languages, levels of puzzleUpdates.levels
-                    for levelName, levelInfo of levels
-                        levelUpdates["#{languages}/#{levelName}"] = levelInfo
-                delete puzzleUpdates.levels
-
                 $.ajaj
                     url: "/api/puzzles/code/update"
                     method: 'POST'
                     headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                     data: 
-                        puzzleUpdates: puzzleUpdates
-                        levelUpdates: levelUpdates
+                        puzzleUpdates: {}
+                        levelUpdates: progress
                     success: => 
-                        @puzzleData = JSON.parse(JSON.stringify(puzzleProgress))
+                        @mergeProgress(progress)
                         callback() if callback
-
-            else if puzzleProgress.levels 
-                window.postRegistration.push((callback) => @saveProgress(puzzleProgress, callback))
-
-                @answerCount = 0 if not @answerCount
-                @answerCount += 1
-                if @answerCount > 7
-                    if @answerCount % 8 == 0
-                        registrationFlag = $('.register_flag')
-                        paddingTop = registrationFlag.css('paddingTop')
-                        $.timeout 1000, =>
-                            registrationFlag.animate
-                                paddingTop: 45
-                                paddingBottom: 45
-                                duration: 1000
-                                complete: =>
-                                    $.timeout 1000, =>
-                                        registrationFlag.animate
-                                            paddingTop: paddingTop
-                                            paddingBottom: paddingTop
-                                            duration: 1000
-
-                    $(window).bind 'beforeunload', => return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.'
+                    error: => @mergeProgress(progress, @puzzleProgress)
+            else 
+                window.postRegistration.push((callback) => @saveProgress(callback))
+                if Object.keys(@puzzleProgress.levels).length >= 3
+                    @showRegistrationFlag()
             
             
+        mergeProgress: (progress, master=@puzzleData.levels) ->
+            for key, value of progress
+                if typeof value == 'object'
+                    @mergeProgress(value, master[key])
+                else
+                    master[key] = value
+        
 soma.routes
     '/puzzles/code/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Code

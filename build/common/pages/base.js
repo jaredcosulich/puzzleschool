@@ -23,6 +23,32 @@ soma.View = (function(_super) {
     return this.hashChanges[hash.replace(/#/, '')] = callback;
   };
 
+  View.prototype.showRegistrationFlag = function() {
+    var paddingTop, registrationFlag;
+    registrationFlag = $('.register_flag');
+    paddingTop = registrationFlag.css('paddingTop');
+    $.timeout(1000, function() {
+      return registrationFlag.animate({
+        paddingTop: 45,
+        paddingBottom: 45,
+        duration: 1000,
+        complete: function() {
+          var _this = this;
+          return $.timeout(1000, function() {
+            return registrationFlag.animate({
+              paddingTop: paddingTop,
+              paddingBottom: paddingTop,
+              duration: 1000
+            });
+          });
+        }
+      });
+    });
+    return window.onbeforeunload = function() {
+      return 'If you leave this page you\'ll lose your progress.\n\n\n\nYou can save your progress by creating an account.';
+    };
+  };
+
   return View;
 
 })(soma.View);
@@ -296,7 +322,8 @@ soma.views({
       if (this.el.hasClass('logged_out')) {
         this.go(location.pathname, true);
       }
-      return this.$('.user_name').html(this.user.name);
+      this.$('.user_name').html(this.user.name);
+      return window.onbeforeunload = null;
     },
     showModal: function(selector) {
       var modal,

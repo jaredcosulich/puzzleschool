@@ -178,7 +178,7 @@ class code.ViewHelper
                     $(testElement).removeClass('correct')
                     $(testElement).addClass('wrong')
                 
-        @completeLevel() if allTestsPassed
+        @completeLevel() if allTestsPassed        
         
 
         

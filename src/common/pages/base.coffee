@@ -4,6 +4,28 @@ wings = require('wings')
 class soma.View extends soma.View
     hashChanges: {}
     registerHashChange: (hash, callback) => @hashChanges[hash.replace(/#/, '')] = callback
+    showRegistrationFlag: ->
+        registrationFlag = $('.register_flag')
+        paddingTop = registrationFlag.css('paddingTop')
+        $.timeout 1000, ->
+            registrationFlag.animate
+                paddingTop: 45
+                paddingBottom: 45
+                duration: 1000
+                complete: ->
+                    $.timeout 1000, =>
+                        registrationFlag.animate
+                            paddingTop: paddingTop
+                            paddingBottom: paddingTop
+                            duration: 1000
+            
+        window.onbeforeunload = -> 
+            return '''
+                If you leave this page you\'ll lose your progress.
+                \n\n
+                You can save your progress by creating an account.
+            '''
+    
         
 soma.chunks
     Base:
@@ -72,7 +94,7 @@ soma.views
         complete: -> @onhashchange()
 
         onhashchange: () -> callback() if (callback = @hashChanges[location.hash.replace(/#/, '')])
-                  
+                 
         showRegistration: () ->
             @showModal('.registration_form')
             @$('.registration_form .cancel_button').bind 'click', () => @hideModal('.registration_form')
@@ -152,6 +174,7 @@ soma.views
                 @go(location.pathname, true)
             
             @$('.user_name').html(@user.name)
+            window.onbeforeunload = null
         
         
         showModal: (selector) ->

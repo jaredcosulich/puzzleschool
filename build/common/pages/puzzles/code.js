@@ -14,11 +14,28 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
+      var _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/code.html");
       this.loadScript('/assets/third_party/ace/ace.js');
       this.loadScript('/build/common/pages/puzzles/lib/code.js');
       this.loadStylesheet('/build/client/css/puzzles/code.css');
+      this.puzzleData = {
+        levels: {}
+      };
+      if (this.cookies.get('user')) {
+        this.loadData({
+          url: '/api/puzzles/code',
+          success: function(data) {
+            return _this.puzzleData = data.puzzle;
+          },
+          error: function() {
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load your account information. Please check your internet connection.');
+            }
+          }
+        });
+      }
       if (!this.levelId) {
         return this.levelId = STAGES[0].levels[0].id;
       }
@@ -26,6 +43,7 @@ soma.chunks({
     build: function() {
       this.setTitle("Code Puzzles - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
+        puzzleData: JSON.stringify(this.puzzleData),
         level: this.levelId,
         stages: STAGES
       });
@@ -40,6 +58,7 @@ soma.views({
       var code,
         _this = this;
       code = require('./lib/code');
+      this.puzzleData = JSON.parse(this.el.data('puzzle_data'));
       this.originalHTML = this.el.find('.dynamic_content').html();
       this.level = this.findLevel(this.el.data('level'));
       this.helper = new code.ViewHelper({
@@ -48,9 +67,14 @@ soma.views({
           return _this.completeLevel();
         }
       });
-      this.helper.initLevel(this.level);
       this.initLevelSelector();
-      return this.initActions();
+      this.initActions();
+      this.initPuzzleProgress();
+      return this.initLevel();
+    },
+    initPuzzleProgress: function() {
+      this.puzzleProgress = {};
+      return this.puzzleProgress[this.level.id] = {};
     },
     initActions: function() {
       var _this = this;
@@ -86,34 +110,60 @@ soma.views({
       var _this = this;
       this.el.find('.dynamic_content').html(this.originalHTML);
       return setTimeout((function() {
-        return _this.helper.initLevel(_this.level);
+        var _base, _name, _ref;
+        (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = {});
+        _this.helper.initLevel(_this.level);
+        _this.puzzleProgress[_this.level.id].started = new Date().getTime();
+        _this.saveProgress();
+        return _this.setLevelIcon(_this.level.id, true, (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0);
       }), 100);
     },
     initLevelSelector: function() {
-      var level, _i, _len, _ref, _results,
+      var level, levelId, levelInfo, _fn, _i, _len, _ref, _ref1, _results,
         _this = this;
       this.levelSelector = this.$('.level_selector');
       _ref = this.levelSelector.find('.level');
-      _results = [];
+      _fn = function(level) {
+        level = $(level);
+        return level.bind('click', function(e) {
+          e.stop();
+          $(document.body).unbind('click.level_selector');
+          _this.level = _this.findLevel(level.data('id'));
+          _this.initLevel();
+          history.pushState(null, null, "/puzzles/code/" + _this.level.id);
+          return _this.hideLevelSelector();
+        });
+      };
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         level = _ref[_i];
-        _results.push((function(level) {
-          level = $(level);
-          return level.bind('click', function(e) {
-            e.stop();
-            $(document.body).unbind('click.level_selector');
-            _this.level = _this.findLevel(level.data('id'));
-            _this.initLevel();
-            history.pushState(null, null, "/puzzles/code/" + _this.level.id);
-            return _this.hideLevelSelector();
-          });
-        })(level));
+        _fn(level);
+      }
+      _ref1 = this.puzzleData.levels;
+      _results = [];
+      for (levelId in _ref1) {
+        levelInfo = _ref1[levelId];
+        _results.push(this.setLevelIcon(levelId, levelInfo.started, levelInfo.completed));
       }
       return _results;
     },
+    setLevelIcon: function(id, started, completed) {
+      var levelIcon, replace;
+      levelIcon = this.$("#level_" + id).find('img');
+      if (started) {
+        replace = '_started';
+        if (completed) {
+          replace = '_complete';
+        }
+      } else {
+        replace = '';
+      }
+      return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_.+)*\./, "level" + replace + "."));
+    },
     completeLevel: function() {
-      var challenge, levelIcon, test, _i, _len, _ref,
+      var challenge, test, _i, _len, _ref,
         _this = this;
+      this.puzzleProgress[this.level.id].completed = new Date().getTime();
+      this.saveProgress();
       _ref = this.level.tests;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         test = _ref[_i];
@@ -121,10 +171,7 @@ soma.views({
           test.clean();
         }
       }
-      levelIcon = this.$("#level_" + this.level.id).find('img');
-      if (levelIcon.attr('src').indexOf('complete') === -1) {
-        levelIcon.attr('src', levelIcon.attr('src').replace('level', 'level_complete'));
-      }
+      this.setLevelIcon(this.level.id, true, true);
       challenge = this.$('.challenge');
       return challenge.animate({
         opacity: 0,
@@ -176,24 +223,12 @@ soma.views({
         }
       });
     },
-    saveProgress: function(puzzleProgress, callback) {
-      var languages, levelInfo, levelName, levelUpdates, levels, paddingTop, puzzleUpdates, registrationFlag, _ref,
+    saveProgress: function(callback) {
+      var progress,
         _this = this;
+      progress = JSON.parse(JSON.stringify(this.puzzleProgress));
+      this.initPuzzleProgress();
       if (this.cookies.get('user')) {
-        puzzleUpdates = this.getUpdates(puzzleProgress);
-        if (!puzzleUpdates) {
-          return;
-        }
-        levelUpdates = {};
-        _ref = puzzleUpdates.levels;
-        for (languages in _ref) {
-          levels = _ref[languages];
-          for (levelName in levels) {
-            levelInfo = levels[levelName];
-            levelUpdates["" + languages + "/" + levelName] = levelInfo;
-          }
-        }
-        delete puzzleUpdates.levels;
         return $.ajaj({
           url: "/api/puzzles/code/update",
           method: 'POST',
@@ -203,50 +238,43 @@ soma.views({
             })
           },
           data: {
-            puzzleUpdates: puzzleUpdates,
-            levelUpdates: levelUpdates
+            puzzleUpdates: {},
+            levelUpdates: progress
           },
           success: function() {
-            _this.puzzleData = JSON.parse(JSON.stringify(puzzleProgress));
+            _this.mergeProgress(progress);
             if (callback) {
               return callback();
             }
+          },
+          error: function() {
+            return _this.mergeProgress(progress, _this.puzzleProgress);
           }
         });
-      } else if (puzzleProgress.levels) {
+      } else {
         window.postRegistration.push(function(callback) {
-          return _this.saveProgress(puzzleProgress, callback);
+          return _this.saveProgress(callback);
         });
-        if (!this.answerCount) {
-          this.answerCount = 0;
-        }
-        this.answerCount += 1;
-        if (this.answerCount > 7) {
-          if (this.answerCount % 8 === 0) {
-            registrationFlag = $('.register_flag');
-            paddingTop = registrationFlag.css('paddingTop');
-            $.timeout(1000, function() {
-              return registrationFlag.animate({
-                paddingTop: 45,
-                paddingBottom: 45,
-                duration: 1000,
-                complete: function() {
-                  return $.timeout(1000, function() {
-                    return registrationFlag.animate({
-                      paddingTop: paddingTop,
-                      paddingBottom: paddingTop,
-                      duration: 1000
-                    });
-                  });
-                }
-              });
-            });
-          }
-          return $(window).bind('beforeunload', function() {
-            return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.';
-          });
+        if (Object.keys(this.puzzleProgress.levels).length >= 3) {
+          return this.showRegistrationFlag();
         }
       }
+    },
+    mergeProgress: function(progress, master) {
+      var key, value, _results;
+      if (master == null) {
+        master = this.puzzleData.levels;
+      }
+      _results = [];
+      for (key in progress) {
+        value = progress[key];
+        if (typeof value === 'object') {
+          _results.push(this.mergeProgress(value, master[key]));
+        } else {
+          _results.push(master[key] = value);
+        }
+      }
+      return _results;
     }
   }
 });

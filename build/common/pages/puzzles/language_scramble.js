@@ -104,7 +104,7 @@ soma.views({
       return this.viewHelper.newScramble();
     },
     saveProgress: function(puzzleProgress, callback) {
-      var languages, levelInfo, levelName, levelUpdates, levels, paddingTop, puzzleUpdates, registrationFlag, _ref,
+      var languages, levelInfo, levelName, levelUpdates, levels, puzzleUpdates, _ref,
         _this = this;
       if (this.cookies.get('user')) {
         puzzleUpdates = this.getUpdates(puzzleProgress);
@@ -150,28 +150,8 @@ soma.views({
         this.answerCount += 1;
         if (this.answerCount > 7) {
           if (this.answerCount % 8 === 0) {
-            registrationFlag = $('.register_flag');
-            paddingTop = registrationFlag.css('paddingTop');
-            $.timeout(1000, function() {
-              return registrationFlag.animate({
-                paddingTop: 45,
-                paddingBottom: 45,
-                duration: 1000,
-                complete: function() {
-                  return $.timeout(1000, function() {
-                    return registrationFlag.animate({
-                      paddingTop: paddingTop,
-                      paddingBottom: paddingTop,
-                      duration: 1000
-                    });
-                  });
-                }
-              });
-            });
+            return this.showRegistrationFlag();
           }
-          return $(window).bind('beforeunload', function() {
-            return 'If you leave this page you\'ll lose your progress on this level. You can save your progress above.';
-          });
         }
       }
     },
