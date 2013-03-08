@@ -736,7 +736,7 @@ STAGES = [
                         code: '''
                             <html>
                               <body>
-                                <h1 id='header' style='color: red;'>Prompts</h1>
+                                <h1 id='header' style='color: red;'>Conditional (if/else) Statements</h1>
                                 <p>
                                   One of the most important tools in programming is the if/else statement.
                                 </p>
