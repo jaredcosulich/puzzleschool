@@ -117,7 +117,7 @@ soma.views({
       this.el.find('.dynamic_content').html(this.originalHTML);
       return setTimeout((function() {
         var _base, _base1, _name, _ref;
-        (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = _this.puzzelData.levels[_this.level.id] || {});
+        (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = _this.puzzleData.levels[_this.level.id] || {});
         _this.helper.initLevel(_this.level);
         (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
         _this.saveProgress();

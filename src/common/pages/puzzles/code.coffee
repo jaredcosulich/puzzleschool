@@ -76,7 +76,7 @@ soma.views
         initLevel: ->
             @el.find('.dynamic_content').html(@originalHTML)
             setTimeout((=>
-                @puzzleProgress[@level.id] or= (@puzzelData.levels[@level.id] or {})
+                @puzzleProgress[@level.id] or= (@puzzleData.levels[@level.id] or {})
                 @helper.initLevel(@level)
                 @puzzleProgress[@level.id].started or= new Date().getTime()
                 @saveProgress()
