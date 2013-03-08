@@ -103,6 +103,7 @@ soma.views
             for level in @levelSelector.find('.level')
                 do (level) =>
                     level = $(level)
+                    level.unbind 'click'
                     level.bind 'click', (e) => 
                         e.stop()
                         $(document.body).unbind('click.level_selector')

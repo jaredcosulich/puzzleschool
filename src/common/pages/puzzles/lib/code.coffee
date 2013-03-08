@@ -13,6 +13,7 @@ class code.ViewHelper
         @initEditors()    
         @setOutput()
         
+        @allTestsPassed = false
         window.retest = => @test()
         
     initEditors: ->
@@ -167,6 +168,8 @@ class code.ViewHelper
             @showError(msg)
                     
     test: ->
+        return if @allTestsPassed
+        
         frame = @$('.output')[0]
         frameWindow = frame.contentWindow
         frameDoc = frameWindow.document
@@ -185,7 +188,8 @@ class code.ViewHelper
                     $(testElement).removeClass('correct')
                     $(testElement).addClass('wrong')
                 
-        @completeLevel() if allTestsPassed        
-        
+        if allTestsPassed        
+            @allTestsPassed = true
+            @completeLevel()
 
         

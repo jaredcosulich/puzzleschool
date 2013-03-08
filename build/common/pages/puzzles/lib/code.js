@@ -22,6 +22,7 @@ code.ViewHelper = (function() {
     this.initTests();
     this.initEditors();
     this.setOutput();
+    this.allTestsPassed = false;
     return window.retest = function() {
       return _this.test();
     };
@@ -251,6 +252,9 @@ code.ViewHelper = (function() {
 
   ViewHelper.prototype.test = function() {
     var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, frameWindow, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1;
+    if (this.allTestsPassed) {
+      return;
+    }
     frame = this.$('.output')[0];
     frameWindow = frame.contentWindow;
     frameDoc = frameWindow.document;
@@ -282,6 +286,7 @@ code.ViewHelper = (function() {
       }
     }
     if (allTestsPassed) {
+      this.allTestsPassed = true;
       return this.completeLevel();
     }
   };

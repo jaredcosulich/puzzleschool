@@ -159,6 +159,7 @@ soma.views({
         level = _ref3[_m];
         _results.push((function(level) {
           level = $(level);
+          level.unbind('click');
           return level.bind('click', function(e) {
             e.stop();
             $(document.body).unbind('click.level_selector');
