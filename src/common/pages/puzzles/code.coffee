@@ -86,39 +86,56 @@ soma.views
             
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
+
+            for levelIcon in @levelSelector.find('.level img')
+                levelIcon = $(levelIcon)
+                if levelIcon.attr('src').indexOf('level_') > -1
+                    levelIcon.attr('src', levelIcon.attr('src').replace(/_[a-z]+\./, '.'))
+                
+            for stage in STAGES
+                for levelInfo in stage.levels
+                    existingInfo = @puzzleData.levels["#{levelInfo.id}"]
+                    if levelInfo.locks and not existingInfo?.completed
+                        @setLevelIcon(id, false, false, true) for id in levelInfo.locks
+                    else if existingInfo
+                        @setLevelIcon(levelInfo.id, existingInfo.started, existingInfo.completed)
+
             for level in @levelSelector.find('.level')
                 do (level) =>
                     level = $(level)
                     level.bind 'click', (e) => 
                         e.stop()
                         $(document.body).unbind('click.level_selector')
-                        @level = @findLevel(level.data('id'))
-                        @initLevel()
-                        history.pushState(null, null, "/puzzles/code/#{@level.id}")
-                        @hideLevelSelector()
+                        if level.html().indexOf('locked') > -1
+                            alert('This level is locked.')
+                        else
+                            @level = @findLevel(level.data('id'))
+                            @initLevel()
+                            history.pushState(null, null, "/puzzles/code/#{@level.id}")
+                            @hideLevelSelector()
                         
-            for levelId, levelInfo of @puzzleData.levels
-                @setLevelIcon(levelId, levelInfo.started, levelInfo.completed)
+                    
           
-        setLevelIcon: (id, started, completed) ->
+        setLevelIcon: (id, started, completed, locked) ->
             levelIcon = @$("#level_#{id}").find('img')
-            if started
+            return if levelIcon.attr('src').indexOf('locked') > -1
+            if locked
+                replace = '_locked'
+            else if started
                 replace = '_started'
                 if completed
                     replace = '_complete'
             else    
                 replace = ''            
-            levelIcon.attr('src', levelIcon.attr('src').replace(/level(_.+)*\./, "level#{replace}."))
+            levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level#{replace}."))
             
           
         completeLevel: ->            
             @puzzleProgress[@level.id].completed = new Date().getTime()
-            @saveProgress()
+            @saveProgress => @initLevelSelector()
             
             test.clean() for test in @level.tests when test.clean
             
-            @setLevelIcon(@level.id, true, true)    
-
             challenge = @$('.challenge')
             challenge.animate
                 opacity: 0
@@ -882,6 +899,7 @@ STAGES = [
         levels: [
             {
                 id: 1362439206758
+                locks: [1362514980364, 1362522282364, 1362530371489]
                 challenge: '''
                     Figure out how to make the calculator perform the calculation 1 - 2.
                 '''
@@ -1072,6 +1090,7 @@ STAGES = [
             }
             {
                 id: 1362514980364
+                locks: [1362522282364, 1362530371489]
                 challenge: '''
                     Figure out how to bind the multiplication button to the multiply function and perform the calculation 3*4.
                 '''
@@ -1280,6 +1299,7 @@ STAGES = [
             }
             {
                 id: 1362522282364
+                locks: [1362530371489]
                 challenge: '''
                     Figure out how to add functioning buttons for the numbers 1 through 9.
                 '''

@@ -118,6 +118,7 @@ class code.ViewHelper
         error = @$('.error')
         error.html("<p>There is an error in your code:<br/><br/>#{msg}</p>")   
         height = error.height()
+        return if error.css('top') > -1000
         error.css
             top: frameOffset.top - elOffset.top
             left: frameOffset.left
@@ -140,7 +141,12 @@ class code.ViewHelper
         
     
     setOutput: ->
-        @hideError()
+        if @errorShown
+            setTimeout((=>
+                @hideError() unless @errorShown
+            ), 50)
+        
+        @errorShown = false
         frameDocElement = $(@$('.output')[0].contentDocument.documentElement)
         baseHTML = (editor for editor in @level.editors when editor.type == 'html')[0].aceEditor.getValue()
         frameDocElement.html(baseHTML)
@@ -157,6 +163,7 @@ class code.ViewHelper
                 style.html(editor.aceEditor.getValue())
                 frameDocElement.find('head').append(style)
         @$('.output')[0].contentWindow.onerror = (msg, url, line) =>
+            @errorShown = true
             @showError(msg)
                     
     test: ->

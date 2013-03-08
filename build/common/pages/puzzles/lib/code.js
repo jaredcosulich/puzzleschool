@@ -170,6 +170,9 @@ code.ViewHelper = (function() {
     error = this.$('.error');
     error.html("<p>There is an error in your code:<br/><br/>" + msg + "</p>");
     height = error.height();
+    if (error.css('top') > -1000) {
+      return;
+    }
     error.css({
       top: frameOffset.top - elOffset.top,
       left: frameOffset.left,
@@ -201,7 +204,14 @@ code.ViewHelper = (function() {
   ViewHelper.prototype.setOutput = function() {
     var baseHTML, editor, frameDocElement, script, style, _i, _len, _ref,
       _this = this;
-    this.hideError();
+    if (this.errorShown) {
+      setTimeout((function() {
+        if (!_this.errorShown) {
+          return _this.hideError();
+        }
+      }), 50);
+    }
+    this.errorShown = false;
     frameDocElement = $(this.$('.output')[0].contentDocument.documentElement);
     baseHTML = ((function() {
       var _i, _len, _ref, _results;
@@ -234,6 +244,7 @@ code.ViewHelper = (function() {
       }
     }
     return this.$('.output')[0].contentWindow.onerror = function(msg, url, line) {
+      _this.errorShown = true;
       return _this.showError(msg);
     };
   };

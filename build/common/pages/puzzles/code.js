@@ -125,37 +125,65 @@ soma.views({
       }), 100);
     },
     initLevelSelector: function() {
-      var level, levelId, levelInfo, _fn, _i, _len, _ref, _ref1, _results,
+      var existingInfo, id, level, levelIcon, levelInfo, stage, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _results,
         _this = this;
       this.levelSelector = this.$('.level_selector');
-      _ref = this.levelSelector.find('.level');
-      _fn = function(level) {
-        level = $(level);
-        return level.bind('click', function(e) {
-          e.stop();
-          $(document.body).unbind('click.level_selector');
-          _this.level = _this.findLevel(level.data('id'));
-          _this.initLevel();
-          history.pushState(null, null, "/puzzles/code/" + _this.level.id);
-          return _this.hideLevelSelector();
-        });
-      };
+      _ref = this.levelSelector.find('.level img');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        level = _ref[_i];
-        _fn(level);
+        levelIcon = _ref[_i];
+        levelIcon = $(levelIcon);
+        if (levelIcon.attr('src').indexOf('level_') > -1) {
+          levelIcon.attr('src', levelIcon.attr('src').replace(/_[a-z]+\./, '.'));
+        }
       }
-      _ref1 = this.puzzleData.levels;
+      for (_j = 0, _len1 = STAGES.length; _j < _len1; _j++) {
+        stage = STAGES[_j];
+        _ref1 = stage.levels;
+        for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+          levelInfo = _ref1[_k];
+          existingInfo = this.puzzleData.levels["" + levelInfo.id];
+          if (levelInfo.locks && !(existingInfo != null ? existingInfo.completed : void 0)) {
+            _ref2 = levelInfo.locks;
+            for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
+              id = _ref2[_l];
+              this.setLevelIcon(id, false, false, true);
+            }
+          } else if (existingInfo) {
+            this.setLevelIcon(levelInfo.id, existingInfo.started, existingInfo.completed);
+          }
+        }
+      }
+      _ref3 = this.levelSelector.find('.level');
       _results = [];
-      for (levelId in _ref1) {
-        levelInfo = _ref1[levelId];
-        _results.push(this.setLevelIcon(levelId, levelInfo.started, levelInfo.completed));
+      for (_m = 0, _len4 = _ref3.length; _m < _len4; _m++) {
+        level = _ref3[_m];
+        _results.push((function(level) {
+          level = $(level);
+          return level.bind('click', function(e) {
+            e.stop();
+            $(document.body).unbind('click.level_selector');
+            if (level.html().indexOf('locked') > -1) {
+              return alert('This level is locked.');
+            } else {
+              _this.level = _this.findLevel(level.data('id'));
+              _this.initLevel();
+              history.pushState(null, null, "/puzzles/code/" + _this.level.id);
+              return _this.hideLevelSelector();
+            }
+          });
+        })(level));
       }
       return _results;
     },
-    setLevelIcon: function(id, started, completed) {
+    setLevelIcon: function(id, started, completed, locked) {
       var levelIcon, replace;
       levelIcon = this.$("#level_" + id).find('img');
-      if (started) {
+      if (levelIcon.attr('src').indexOf('locked') > -1) {
+        return;
+      }
+      if (locked) {
+        replace = '_locked';
+      } else if (started) {
         replace = '_started';
         if (completed) {
           replace = '_complete';
@@ -163,13 +191,15 @@ soma.views({
       } else {
         replace = '';
       }
-      return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_.+)*\./, "level" + replace + "."));
+      return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level" + replace + "."));
     },
     completeLevel: function() {
       var challenge, test, _i, _len, _ref,
         _this = this;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
-      this.saveProgress();
+      this.saveProgress(function() {
+        return _this.initLevelSelector();
+      });
       _ref = this.level.tests;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         test = _ref[_i];
@@ -177,7 +207,6 @@ soma.views({
           test.clean();
         }
       }
-      this.setLevelIcon(this.level.id, true, true);
       challenge = this.$('.challenge');
       return challenge.animate({
         opacity: 0,
@@ -673,6 +702,7 @@ STAGES = [
     levels: [
       {
         id: 1362439206758,
+        locks: [1362514980364, 1362522282364, 1362530371489],
         challenge: 'Figure out how to make the calculator perform the calculation 1 - 2.',
         editors: [
           {
@@ -720,6 +750,7 @@ STAGES = [
         ]
       }, {
         id: 1362514980364,
+        locks: [1362522282364, 1362530371489],
         challenge: 'Figure out how to bind the multiplication button to the multiply function and perform the calculation 3*4.',
         editors: [
           {
@@ -767,6 +798,7 @@ STAGES = [
         ]
       }, {
         id: 1362522282364,
+        locks: [1362530371489],
         challenge: 'Figure out how to add functioning buttons for the numbers 1 through 9.',
         editors: [
           {
