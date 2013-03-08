@@ -60,6 +60,10 @@ soma.views({
       code = require('./lib/code');
       if ((puzzleData = this.el.data('puzzle_data')).length) {
         this.puzzleData = JSON.parse(puzzleData);
+      } else {
+        this.puzzleData = {
+          levels: {}
+        };
       }
       this.originalHTML = this.el.find('.dynamic_content').html();
       this.level = this.findLevel(this.el.data('level'));

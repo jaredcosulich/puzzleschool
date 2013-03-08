@@ -43,6 +43,8 @@ soma.views
             
             if (puzzleData = @el.data('puzzle_data')).length
                 @puzzleData = JSON.parse(puzzleData)
+            else
+                @puzzleData = {levels: {}}
             
             @originalHTML = @el.find('.dynamic_content').html()
         
