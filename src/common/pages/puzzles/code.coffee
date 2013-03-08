@@ -41,7 +41,8 @@ soma.views
         create: ->
             code = require('./lib/code')
             
-            @puzzleData = JSON.parse(@el.data('puzzle_data'))
+            if (puzzleData = @el.data('puzzle_data')).length
+                @puzzleData = JSON.parse(puzzleData)
             
             @originalHTML = @el.find('.dynamic_content').html()
         
@@ -73,9 +74,9 @@ soma.views
         initLevel: ->
             @el.find('.dynamic_content').html(@originalHTML)
             setTimeout((=>
-                @puzzleProgress[@level.id] or= {}
+                @puzzleProgress[@level.id] or= (@puzzelData.levels[@level.id] or {})
                 @helper.initLevel(@level)
-                @puzzleProgress[@level.id].started = new Date().getTime()
+                @puzzleProgress[@level.id].started or= new Date().getTime()
                 @saveProgress()
                 
                 @setLevelIcon(@level.id, true, @puzzleData.levels[@level.id]?.completed)

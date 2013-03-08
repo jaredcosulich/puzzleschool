@@ -55,10 +55,12 @@ soma.views({
   Code: {
     selector: '#content .code',
     create: function() {
-      var code,
+      var code, puzzleData,
         _this = this;
       code = require('./lib/code');
-      this.puzzleData = JSON.parse(this.el.data('puzzle_data'));
+      if ((puzzleData = this.el.data('puzzle_data')).length) {
+        this.puzzleData = JSON.parse(puzzleData);
+      }
       this.originalHTML = this.el.find('.dynamic_content').html();
       this.level = this.findLevel(this.el.data('level'));
       this.helper = new code.ViewHelper({
@@ -110,10 +112,10 @@ soma.views({
       var _this = this;
       this.el.find('.dynamic_content').html(this.originalHTML);
       return setTimeout((function() {
-        var _base, _name, _ref;
-        (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = {});
+        var _base, _base1, _name, _ref;
+        (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = _this.puzzelData.levels[_this.level.id] || {});
         _this.helper.initLevel(_this.level);
-        _this.puzzleProgress[_this.level.id].started = new Date().getTime();
+        (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
         _this.saveProgress();
         return _this.setLevelIcon(_this.level.id, true, (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0);
       }), 100);
