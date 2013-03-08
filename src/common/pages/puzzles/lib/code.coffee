@@ -16,6 +16,8 @@ class code.ViewHelper
         @allTestsPassed = false
         window.retest = => @test()
         
+        @errors = []
+        
     initEditors: ->
         @editors = []
         for editor in @level.editors
@@ -114,22 +116,30 @@ class code.ViewHelper
         @initSection('tests')
         
     showError: (msg) ->
-        elOffset = @el.offset()
-        frameOffset = @$('.output').offset()
-        error = @$('.error')
-        error.html("<p>There is an error in your code:<br/><br/>#{msg}</p>")   
-        height = error.height()
-        return if error.css('top') > -1000
-        error.css
-            top: frameOffset.top - elOffset.top
-            left: frameOffset.left
-            height: 0
-        error.animate
-            height: height
-            duration: 500
-
+        @errors.push(msg)
+        if not @showingError
+            @showingError = setTimeout((=>
+                elOffset = @el.offset()
+                frameOffset = @$('.output').offset()
+                error = @$('.error')
+                error.html("<p>There is an error in your code:<br/><br/>#{@errors.pop()}</p>")
+                @errors = []   
+                height = error.height()
+                return if error.css('top') > -1000
+                error.css
+                    top: frameOffset.top - elOffset.top
+                    left: frameOffset.left
+                    height: 0
+                error.animate
+                    height: height
+                    duration: 500
+            ), 500)
         
     hideError: ->
+        if @showingError
+            clearTimeout(@showingError)
+            @showingError = null
+            
         error = @$('.error')
         error.animate
             height: 0

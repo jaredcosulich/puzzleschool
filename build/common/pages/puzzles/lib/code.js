@@ -23,9 +23,10 @@ code.ViewHelper = (function() {
     this.initEditors();
     this.setOutput();
     this.allTestsPassed = false;
-    return window.retest = function() {
+    window.retest = function() {
       return _this.test();
     };
+    return this.errors = [];
   };
 
   ViewHelper.prototype.initEditors = function() {
@@ -165,29 +166,40 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.showError = function(msg) {
-    var elOffset, error, frameOffset, height;
-    elOffset = this.el.offset();
-    frameOffset = this.$('.output').offset();
-    error = this.$('.error');
-    error.html("<p>There is an error in your code:<br/><br/>" + msg + "</p>");
-    height = error.height();
-    if (error.css('top') > -1000) {
-      return;
+    var _this = this;
+    this.errors.push(msg);
+    if (!this.showingError) {
+      return this.showingError = setTimeout((function() {
+        var elOffset, error, frameOffset, height;
+        elOffset = _this.el.offset();
+        frameOffset = _this.$('.output').offset();
+        error = _this.$('.error');
+        error.html("<p>There is an error in your code:<br/><br/>" + (_this.errors.pop()) + "</p>");
+        _this.errors = [];
+        height = error.height();
+        if (error.css('top') > -1000) {
+          return;
+        }
+        error.css({
+          top: frameOffset.top - elOffset.top,
+          left: frameOffset.left,
+          height: 0
+        });
+        return error.animate({
+          height: height,
+          duration: 500
+        });
+      }), 500);
     }
-    error.css({
-      top: frameOffset.top - elOffset.top,
-      left: frameOffset.left,
-      height: 0
-    });
-    return error.animate({
-      height: height,
-      duration: 500
-    });
   };
 
   ViewHelper.prototype.hideError = function() {
     var error,
       _this = this;
+    if (this.showingError) {
+      clearTimeout(this.showingError);
+      this.showingError = null;
+    }
     error = this.$('.error');
     return error.animate({
       height: 0,
