@@ -133,7 +133,8 @@ soma.views
           
         completeLevel: ->            
             @puzzleProgress[@level.id].completed = new Date().getTime()
-            @saveProgress => @initLevelSelector()
+            @saveProgress()
+            @initLevelSelector()
             
             test.clean() for test in @level.tests when test.clean
             
@@ -177,8 +178,7 @@ soma.views
                         left: -1000
                             
         saveProgress: (callback) ->
-            progress = JSON.parse(JSON.stringify(@puzzleProgress))
-            @initPuzzleProgress()
+            @mergeProgress(@puzzleProgress)
             if @cookies.get('user')
                 $.ajaj
                     url: "/api/puzzles/code/update"
@@ -186,24 +186,22 @@ soma.views
                     headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                     data: 
                         puzzleUpdates: {}
-                        levelUpdates: progress
-                    success: => 
-                        @mergeProgress(progress)
-                        callback() if callback
-                    error: => @mergeProgress(progress, @puzzleProgress)
+                        levelUpdates: @puzzleProgress
+                    success: => callback() if callback
             else 
                 window.postRegistration.push((callback) => @saveProgress(callback))
-                if Object.keys(@puzzleProgress.levels).length >= 3
+                if Object.keys(@puzzleProgress).length >= 3
                     @showRegistrationFlag()
             
             
         mergeProgress: (progress, master=@puzzleData.levels) ->
             for key, value of progress
                 if typeof value == 'object'
+                    master[key] = {}
                     @mergeProgress(value, master[key])
                 else
                     master[key] = value
-        
+                    
 soma.routes
     '/puzzles/code/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Code

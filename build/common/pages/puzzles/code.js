@@ -198,9 +198,8 @@ soma.views({
       var challenge, test, _i, _len, _ref,
         _this = this;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
-      this.saveProgress(function() {
-        return _this.initLevelSelector();
-      });
+      this.saveProgress();
+      this.initLevelSelector();
       _ref = this.level.tests;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         test = _ref[_i];
@@ -260,10 +259,8 @@ soma.views({
       });
     },
     saveProgress: function(callback) {
-      var progress,
-        _this = this;
-      progress = JSON.parse(JSON.stringify(this.puzzleProgress));
-      this.initPuzzleProgress();
+      var _this = this;
+      this.mergeProgress(this.puzzleProgress);
       if (this.cookies.get('user')) {
         return $.ajaj({
           url: "/api/puzzles/code/update",
@@ -275,23 +272,19 @@ soma.views({
           },
           data: {
             puzzleUpdates: {},
-            levelUpdates: progress
+            levelUpdates: this.puzzleProgress
           },
           success: function() {
-            _this.mergeProgress(progress);
             if (callback) {
               return callback();
             }
-          },
-          error: function() {
-            return _this.mergeProgress(progress, _this.puzzleProgress);
           }
         });
       } else {
         window.postRegistration.push(function(callback) {
           return _this.saveProgress(callback);
         });
-        if (Object.keys(this.puzzleProgress.levels).length >= 3) {
+        if (Object.keys(this.puzzleProgress).length >= 3) {
           return this.showRegistrationFlag();
         }
       }
@@ -305,6 +298,7 @@ soma.views({
       for (key in progress) {
         value = progress[key];
         if (typeof value === 'object') {
+          master[key] = {};
           _results.push(this.mergeProgress(value, master[key]));
         } else {
           _results.push(master[key] = value);

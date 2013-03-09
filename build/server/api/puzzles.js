@@ -108,7 +108,7 @@ soma.routes({
     });
   },
   '/api/puzzles/:puzzleName/update': requireUser(function(data) {
-    var l, levelName, levelUpdate, levelsPlayedUpdates, updates, userPuzzle, _ref,
+    var l, levelName, levelUpdate, levelsPlayedUpdates, updates, userPuzzle, _fn, _ref,
       _this = this;
     userPuzzle = "" + this.user.id + "/" + data.puzzleName;
     l = new Line({
@@ -148,12 +148,15 @@ soma.routes({
     }
     if (this.data.levelUpdates) {
       _ref = this.data.levelUpdates;
-      for (levelName in _ref) {
-        levelUpdate = _ref[levelName];
+      _fn = function(levelName, levelUpdate) {
         levelUpdate.name = levelName;
-        l.add(function() {
+        return l.add(function() {
           return db.update('user_puzzle_progress', "" + userPuzzle + "/" + levelName, levelUpdate, l.wait());
         });
+      };
+      for (levelName in _ref) {
+        levelUpdate = _ref[levelName];
+        _fn(levelName, levelUpdate);
       }
     }
     return l.add(function() {
