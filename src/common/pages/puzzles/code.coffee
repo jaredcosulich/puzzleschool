@@ -81,45 +81,49 @@ soma.views
                 @puzzleProgress[@level.id].started or= new Date().getTime()
                 @saveProgress()
                 
-                @setLevelIcon(@level.id, true, @puzzleData.levels[@level.id]?.completed)
+                @setLevelIcon
+                    id: @level.id, 
+                    started: true, 
+                    completed: @puzzleData.levels[@level.id]?.completed
+                    
             ), 100)
             
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
 
-            for levelIcon in @levelSelector.find('.level img')
-                levelIcon = $(levelIcon)
-                if levelIcon.attr('src').indexOf('level_') > -1
-                    levelIcon.attr('src', levelIcon.attr('src').replace(/_[a-z]+\./, '.'))
-                
-            for stage in STAGES
-                for levelInfo in stage.levels
-                    existingInfo = @puzzleData.levels["#{levelInfo.id}"]
-                    if levelInfo.locks and not existingInfo?.completed
-                        @setLevelIcon(id, false, false, true) for id in levelInfo.locks
-                    else if existingInfo
-                        @setLevelIcon(levelInfo.id, existingInfo.started, existingInfo.completed)
-
-            for level in @levelSelector.find('.level')
-                do (level) =>
-                    level = $(level)
-                    level.unbind 'click'
-                    level.bind 'click', (e) => 
+            for levelElement in @levelSelector.find('.level')
+                do (levelElement) =>
+                    levelElement = $(levelElement)
+                    id = levelElement.data('id')
+                    levelInfo = @findLevel(id)
+                    
+                    locked = false
+                    for lockId in (levelInfo.lockedBy or [])
+                        unless @puzzleData.levels[lockId]?.completed
+                            locked = true
+                            break
+                            
+                    @setLevelIcon
+                        id: id
+                        started: @puzzleData.levels[id]?.started
+                        completed: @puzzleData.levels[id]?.completed
+                        locked: locked
+                        
+                    levelElement.unbind 'click'
+                    levelElement.bind 'click', (e) => 
                         e.stop()
                         $(document.body).unbind('click.level_selector')
-                        if level.html().indexOf('locked') > -1
+                        if locked
                             alert('This level is locked.')
                         else
-                            @level = @findLevel(level.data('id'))
+                            @level = levelInfo
                             @initLevel()
-                            history.pushState(null, null, "/puzzles/code/#{@level.id}")
-                            @hideLevelSelector()
-                        
+                            history.pushState(null, null, "/puzzles/code/#{id}")
+                            @hideLevelSelector()              
                     
           
-        setLevelIcon: (id, started, completed, locked) ->
+        setLevelIcon: ({id, started, completed, locked}) ->
             levelIcon = @$("#level_#{id}").find('img')
-            return if levelIcon.attr('src').indexOf('locked') > -1
             if locked
                 replace = '_locked'
             else if started
@@ -151,6 +155,11 @@ soma.views
                     challenge.animate(opacity: 1, duration: 250)
             
         showLevelSelector: (success) ->
+            $(document.body).unbind('click.level_selector')
+            if parseInt(@levelSelector.css('opacity')) == 1
+                @hideLevelSelector()
+                return
+                
             if success
                 @levelSelector.addClass('success') 
             else
@@ -169,6 +178,7 @@ soma.views
             ), 10)
                 
         hideLevelSelector: ->
+            $(document.body).unbind('click.level_selector')
             @levelSelector.animate
                 opacity: 0
                 duration: 250
@@ -898,7 +908,6 @@ STAGES = [
         levels: [
             {
                 id: 1362439206758
-                locks: [1362514980364, 1362522282364, 1362530371489]
                 challenge: '''
                     Figure out how to make the calculator perform the calculation 1 - 2.
                 '''
@@ -1089,7 +1098,7 @@ STAGES = [
             }
             {
                 id: 1362514980364
-                locks: [1362522282364, 1362530371489]
+                lockedBy: [1362439206758]
                 challenge: '''
                     Figure out how to bind the multiplication button to the multiply function and perform the calculation 3*4.
                 '''
@@ -1298,7 +1307,7 @@ STAGES = [
             }
             {
                 id: 1362522282364
-                locks: [1362530371489]
+                lockedBy: [1362439206758, 1362514980364]
                 challenge: '''
                     Figure out how to add functioning buttons for the numbers 1 through 9.
                 '''
@@ -1489,6 +1498,7 @@ STAGES = [
             }
             {
                 id: 1362530371489
+                lockedBy: [1362439206758, 1362514980364, 1362522282364]
                 challenge: '''
                     Figure out how to add a function divide button so you can do the calculation '9 / 2'
                 '''

@@ -121,67 +121,62 @@ soma.views({
         _this.helper.initLevel(_this.level);
         (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
         _this.saveProgress();
-        return _this.setLevelIcon(_this.level.id, true, (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0);
+        return _this.setLevelIcon({
+          id: _this.level.id,
+          started: true,
+          completed: (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0
+        });
       }), 100);
     },
     initLevelSelector: function() {
-      var existingInfo, id, level, levelIcon, levelInfo, stage, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _results,
+      var levelElement, _i, _len, _ref, _results,
         _this = this;
       this.levelSelector = this.$('.level_selector');
-      _ref = this.levelSelector.find('.level img');
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        levelIcon = _ref[_i];
-        levelIcon = $(levelIcon);
-        if (levelIcon.attr('src').indexOf('level_') > -1) {
-          levelIcon.attr('src', levelIcon.attr('src').replace(/_[a-z]+\./, '.'));
-        }
-      }
-      for (_j = 0, _len1 = STAGES.length; _j < _len1; _j++) {
-        stage = STAGES[_j];
-        _ref1 = stage.levels;
-        for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-          levelInfo = _ref1[_k];
-          existingInfo = this.puzzleData.levels["" + levelInfo.id];
-          if (levelInfo.locks && !(existingInfo != null ? existingInfo.completed : void 0)) {
-            _ref2 = levelInfo.locks;
-            for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
-              id = _ref2[_l];
-              this.setLevelIcon(id, false, false, true);
-            }
-          } else if (existingInfo) {
-            this.setLevelIcon(levelInfo.id, existingInfo.started, existingInfo.completed);
-          }
-        }
-      }
-      _ref3 = this.levelSelector.find('.level');
+      _ref = this.levelSelector.find('.level');
       _results = [];
-      for (_m = 0, _len4 = _ref3.length; _m < _len4; _m++) {
-        level = _ref3[_m];
-        _results.push((function(level) {
-          level = $(level);
-          level.unbind('click');
-          return level.bind('click', function(e) {
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        levelElement = _ref[_i];
+        _results.push((function(levelElement) {
+          var id, levelInfo, lockId, locked, _j, _len1, _ref1, _ref2, _ref3, _ref4;
+          levelElement = $(levelElement);
+          id = levelElement.data('id');
+          levelInfo = _this.findLevel(id);
+          locked = false;
+          _ref1 = levelInfo.lockedBy || [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            lockId = _ref1[_j];
+            if (!((_ref2 = _this.puzzleData.levels[lockId]) != null ? _ref2.completed : void 0)) {
+              locked = true;
+              break;
+            }
+          }
+          _this.setLevelIcon({
+            id: id,
+            started: (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.started : void 0,
+            completed: (_ref4 = _this.puzzleData.levels[id]) != null ? _ref4.completed : void 0,
+            locked: locked
+          });
+          levelElement.unbind('click');
+          return levelElement.bind('click', function(e) {
             e.stop();
             $(document.body).unbind('click.level_selector');
-            if (level.html().indexOf('locked') > -1) {
+            if (locked) {
               return alert('This level is locked.');
             } else {
-              _this.level = _this.findLevel(level.data('id'));
+              _this.level = levelInfo;
               _this.initLevel();
-              history.pushState(null, null, "/puzzles/code/" + _this.level.id);
+              history.pushState(null, null, "/puzzles/code/" + id);
               return _this.hideLevelSelector();
             }
           });
-        })(level));
+        })(levelElement));
       }
       return _results;
     },
-    setLevelIcon: function(id, started, completed, locked) {
-      var levelIcon, replace;
+    setLevelIcon: function(_arg) {
+      var completed, id, levelIcon, locked, replace, started;
+      id = _arg.id, started = _arg.started, completed = _arg.completed, locked = _arg.locked;
       levelIcon = this.$("#level_" + id).find('img');
-      if (levelIcon.attr('src').indexOf('locked') > -1) {
-        return;
-      }
       if (locked) {
         replace = '_locked';
       } else if (started) {
@@ -225,6 +220,11 @@ soma.views({
     },
     showLevelSelector: function(success) {
       var _this = this;
+      $(document.body).unbind('click.level_selector');
+      if (parseInt(this.levelSelector.css('opacity')) === 1) {
+        this.hideLevelSelector();
+        return;
+      }
       if (success) {
         this.levelSelector.addClass('success');
       } else {
@@ -247,6 +247,7 @@ soma.views({
     },
     hideLevelSelector: function() {
       var _this = this;
+      $(document.body).unbind('click.level_selector');
       return this.levelSelector.animate({
         opacity: 0,
         duration: 250,
@@ -697,7 +698,6 @@ STAGES = [
     levels: [
       {
         id: 1362439206758,
-        locks: [1362514980364, 1362522282364, 1362530371489],
         challenge: 'Figure out how to make the calculator perform the calculation 1 - 2.',
         editors: [
           {
@@ -745,7 +745,7 @@ STAGES = [
         ]
       }, {
         id: 1362514980364,
-        locks: [1362522282364, 1362530371489],
+        lockedBy: [1362439206758],
         challenge: 'Figure out how to bind the multiplication button to the multiply function and perform the calculation 3*4.',
         editors: [
           {
@@ -793,7 +793,7 @@ STAGES = [
         ]
       }, {
         id: 1362522282364,
-        locks: [1362530371489],
+        lockedBy: [1362439206758, 1362514980364],
         challenge: 'Figure out how to add functioning buttons for the numbers 1 through 9.',
         editors: [
           {
@@ -833,6 +833,7 @@ STAGES = [
         ]
       }, {
         id: 1362530371489,
+        lockedBy: [1362439206758, 1362514980364, 1362522282364],
         challenge: 'Figure out how to add a function divide button so you can do the calculation \'9 / 2\'',
         editors: [
           {

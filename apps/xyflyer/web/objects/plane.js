@@ -106,6 +106,7 @@ plane.Plane = (function(_super) {
   Plane.prototype.fall = function() {
     var x, y,
       _this = this;
+    this.path = null;
     this.falling = true;
     x = this.xPos + this.board.xAxis + 20;
     y = 1000;
@@ -115,6 +116,7 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
+    var _ref;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
@@ -123,8 +125,9 @@ plane.Plane = (function(_super) {
     this.latestTime = null;
     if (!this.path || !Object.keys(this.path).length) {
       this.path = this.board.calculatePath();
-      if (!this.path.distance) {
-        this.fall();
+      if (!((_ref = this.path) != null ? _ref.distance : void 0)) {
+        this.fall;
+        return;
       }
       return this.duration = this.path.distance * this.timeFactor;
     }
