@@ -115,15 +115,14 @@ class code.ViewHelper
         
         @initSection('tests')
         
-    showError: (msg) ->
-        @errors.push(msg)
+    showError: (msg, line) ->
+        error = @$('.error')
+        error.html("<p>There is an error in your code on line #{line}:<br/><br/>#{msg}</p>")       
+
         if not @showingError
             @showingError = setTimeout((=>
                 elOffset = @el.offset()
                 frameOffset = @$('.output').offset()
-                error = @$('.error')
-                error.html("<p>There is an error in your code:<br/><br/>#{@errors.pop()}</p>")
-                @errors = []   
                 height = error.height()
                 return if error.css('top') > -1000
                 error.css
@@ -158,24 +157,43 @@ class code.ViewHelper
             ), 50)
         
         @errorShown = false
-        frameDocElement = $(@$('.output')[0].contentDocument.documentElement)
+
+        frameDoc = @$('.output')[0].contentWindow.document
+        frameDoc.open()
+
         baseHTML = (editor for editor in @level.editors when editor.type == 'html')[0].aceEditor.getValue()
-        frameDocElement.html(baseHTML)
+        script = '''
+            <script type='text/javascript' charset='utf8'>
+                window.onerror = function(msg, url, line) {
+                    window.top.sendError(msg, url, line);
+                }
+            </script>        
+        '''
+        if baseHTML.indexOf('<head>') > -1
+            baseHTML = baseHTML.replace(/\<head\>/i, "<head>#{script}")
+        else
+            baseHTML = baseHTML.replace(/\<html\>/i, "<html><head>#{script}</head>")
+        
+        frameDoc.write(baseHTML)
+        
         for editor in @level.editors
             if editor.type == 'javascript'
                 script = $(document.createElement('SCRIPT'))
                 script.attr('type', 'text/javascript')
                 script.html(editor.aceEditor.getValue())
-                frameDocElement.find('head').append(script)
+                $(frameDoc.head).append(script)
             if editor.type == 'css'
                 style = $(document.createElement('STYLE'))
                 style.attr('type', 'text/css')
                 style.attr('rel', 'stylesheet')                
                 style.html(editor.aceEditor.getValue())
-                frameDocElement.find('head').append(style)
-        @$('.output')[0].contentWindow.onerror = (msg, url, line) =>
+                $(frameDoc.head).append(style)
+
+        frameDoc.close()
+        
+        window.sendError = (msg, url, line) =>
             @errorShown = true
-            @showError(msg)
+            @showError(msg, line)
                     
     test: ->
         return if @allTestsPassed

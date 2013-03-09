@@ -165,17 +165,16 @@ code.ViewHelper = (function() {
     return this.initSection('tests');
   };
 
-  ViewHelper.prototype.showError = function(msg) {
-    var _this = this;
-    this.errors.push(msg);
+  ViewHelper.prototype.showError = function(msg, line) {
+    var error,
+      _this = this;
+    error = this.$('.error');
+    error.html("<p>There is an error in your code on line " + line + ":<br/><br/>" + msg + "</p>");
     if (!this.showingError) {
       return this.showingError = setTimeout((function() {
-        var elOffset, error, frameOffset, height;
+        var elOffset, frameOffset, height;
         elOffset = _this.el.offset();
         frameOffset = _this.$('.output').offset();
-        error = _this.$('.error');
-        error.html("<p>There is an error in your code:<br/><br/>" + (_this.errors.pop()) + "</p>");
-        _this.errors = [];
         height = error.height();
         if (error.css('top') > -1000) {
           return;
@@ -215,7 +214,7 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.setOutput = function() {
-    var baseHTML, editor, frameDocElement, script, style, _i, _len, _ref,
+    var baseHTML, editor, frameDoc, script, style, _i, _len, _ref,
       _this = this;
     if (this.errorShown) {
       setTimeout((function() {
@@ -225,7 +224,8 @@ code.ViewHelper = (function() {
       }), 50);
     }
     this.errorShown = false;
-    frameDocElement = $(this.$('.output')[0].contentDocument.documentElement);
+    frameDoc = this.$('.output')[0].contentWindow.document;
+    frameDoc.open();
     baseHTML = ((function() {
       var _i, _len, _ref, _results;
       _ref = this.level.editors;
@@ -238,7 +238,13 @@ code.ViewHelper = (function() {
       }
       return _results;
     }).call(this))[0].aceEditor.getValue();
-    frameDocElement.html(baseHTML);
+    script = '<script type=\'text/javascript\' charset=\'utf8\'>\n    window.onerror = function(msg, url, line) {\n        window.top.sendError(msg, url, line);\n    }\n</script>        ';
+    if (baseHTML.indexOf('<head>') > -1) {
+      baseHTML = baseHTML.replace(/\<head\>/i, "<head>" + script);
+    } else {
+      baseHTML = baseHTML.replace(/\<html\>/i, "<html><head>" + script + "</head>");
+    }
+    frameDoc.write(baseHTML);
     _ref = this.level.editors;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       editor = _ref[_i];
@@ -246,19 +252,20 @@ code.ViewHelper = (function() {
         script = $(document.createElement('SCRIPT'));
         script.attr('type', 'text/javascript');
         script.html(editor.aceEditor.getValue());
-        frameDocElement.find('head').append(script);
+        $(frameDoc.head).append(script);
       }
       if (editor.type === 'css') {
         style = $(document.createElement('STYLE'));
         style.attr('type', 'text/css');
         style.attr('rel', 'stylesheet');
         style.html(editor.aceEditor.getValue());
-        frameDocElement.find('head').append(style);
+        $(frameDoc.head).append(style);
       }
     }
-    return this.$('.output')[0].contentWindow.onerror = function(msg, url, line) {
+    frameDoc.close();
+    return window.sendError = function(msg, url, line) {
       _this.errorShown = true;
-      return _this.showError(msg);
+      return _this.showError(msg, line);
     };
   };
 
