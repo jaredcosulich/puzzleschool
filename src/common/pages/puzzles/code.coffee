@@ -820,6 +820,92 @@ STAGES = [
                 ]
             },
             {
+                id: 1362851805236
+                lockedBy: [1362673042225]
+                challenge: '''
+                    Figure out how to turn the header green and then yellow and then red with the same button.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('toggle_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              if (header.style.color == 'green') {
+                                  header.style.color = 'yellow';
+                              }
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Complex Conditional Statements</h1>
+                                <p>
+                                  Conditional statements can be used to choose between more than two paths.
+                                </p>
+                                <p>
+                                  If a conditional statement is used to choose between a large number of code paths
+                                  it might be considered a "code small" (something that might lead to problems), but
+                                  for 2-4 paths or so, it is usually appropriate.
+                                </p>
+                                <p>
+                                  Figure out how to use if/else statements to make the header go from green to yellow
+                                  to red by clicking the button below:
+                                </p>
+                                <button id='toggle_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Conditional statements are frequently used when coding.
+                    </p>
+                    <p>
+                        They allow you to execute code only in certain situations.
+                    </p>
+                '''
+                hints: [
+                    'You need to create one or multiple conditions that lead to three different states.'
+                    'You\'ll need one conditional statement to go from black to green, one to go from green to yellow, and one to go from yellow to red.'
+                    'You can also accomplish this with a statement that uses if/else if/else.'
+                    '''
+                    Add this to the end of the existing conditional statement:<br/>
+                    } else if (header.style.color == 'yellow') {
+                        header.style.color = 'red';
+                    } else {
+                        header.style.color = 'green';
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The header color is green.'
+                        test: ({frameBody, cleanHtml}) =>
+                            @good or= {}
+                            @good[frameBody.find('#header').css('color')] = true
+                            
+                            if @good['green'] and @good['yellow'] and @good['red']                            
+                                clearInterval(@testInterval)
+                                return true 
+
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            },
+            {
                 id: 1362099940993
                 challenge: '''
                     Figure out how to make the number on the page count up to 10.

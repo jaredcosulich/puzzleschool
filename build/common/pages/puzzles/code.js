@@ -654,6 +654,47 @@ STAGES = [
           }
         ]
       }, {
+        id: 1362851805236,
+        lockedBy: [1362673042225],
+        challenge: 'Figure out how to turn the header green and then yellow and then red with the same button.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var button = document.getElementById(\'toggle_button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  if (header.style.color == \'green\') {\n      header.style.color = \'yellow\';\n  }\n};'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Complex Conditional Statements</h1>\n    <p>\n      Conditional statements can be used to choose between more than two paths.\n    </p>\n    <p>\n      If a conditional statement is used to choose between a large number of code paths\n      it might be considered a "code small" (something that might lead to problems), but\n      for 2-4 paths or so, it is usually appropriate.\n    </p>\n    <p>\n      Figure out how to use if/else statements to make the header go from green to yellow\n      to red by clicking the button below:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    Conditional statements are frequently used when coding.\n</p>\n<p>\n    They allow you to execute code only in certain situations.\n</p>',
+        hints: ['You need to create one or multiple conditions that lead to three different states.', 'You\'ll need one conditional statement to go from black to green, one to go from green to yellow, and one to go from yellow to red.', 'You can also accomplish this with a statement that uses if/else if/else.', 'Add this to the end of the existing conditional statement:<br/>\n} else if (header.style.color == \'yellow\') {\n    header.style.color = \'red\';\n} else {\n    header.style.color = \'green\';\n}'],
+        tests: [
+          {
+            description: 'The header color is green.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              _this.good || (_this.good = {});
+              _this.good[frameBody.find('#header').css('color')] = true;
+              if (_this.good['green'] && _this.good['yellow'] && _this.good['red']) {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
+            }
+          }
+        ]
+      }, {
         id: 1362099940993,
         challenge: 'Figure out how to make the number on the page count up to 10.',
         editors: [
