@@ -493,7 +493,7 @@ STAGES = [
       }
     ]
   }, {
-    name: 'Javascript Basics',
+    name: 'Basic Javascript',
     levels: [
       {
         id: 1362617406338,
@@ -626,7 +626,7 @@ STAGES = [
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1 id=\'header\' style=\'color: red;\'>Conditional (if/else) Statements</h1>\n    <p>\n      One of the most important tools in programming is the if/else statement.\n    </p>\n    <p>\n      An if/else statement, also known as a \'conditional statement\' lets the program\n      decide which path to go down based on a certain condition.\n    </p>\n    <p>\n      In this example we want to make the button below change the color of the header to\n      green if the color is currently red or change it to red if it is currently green.\n    </p>\n    <p>\n      Figure out how to change the if/else statement so that clicking the button below\n      changes the color of the header to green:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1 id=\'header\' style=\'color: red;\'>Conditional Statements</h1>\n    <p>\n      One of the most important tools in programming is the if/else statement.\n    </p>\n    <p>\n      An if/else statement, also known as a \'conditional statement\' lets the program\n      decide which path to go down based on a certain condition.\n    </p>\n    <p>\n      In this example we want to make the button below change the color of the header to\n      green if the color is currently red or change it to red if it is currently green.\n    </p>\n    <p>\n      Figure out how to change the if/else statement so that clicking the button below\n      changes the color of the header to green:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
         description: '<p>\n    One of most useful and common tools in programming is the conditional statement.\n</p>\n<p>\n    A conditional statement basically says "if something is true then do one action, if not do another action".\n</p>\n<p>\n    For example: "If the oven is preheated then put the food in the oven, otherwise wait."\n<p>\n    In this case we\'re using a conditional statement to toggle the color of the header.\n</p>',
@@ -665,7 +665,7 @@ STAGES = [
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1 id=\'header\'>Complex Conditional Statements</h1>\n    <p>\n      Conditional statements can be used to choose between more than two paths.\n    </p>\n    <p>\n      If a conditional statement is used to choose between a large number of code paths\n      it might be considered a "code small" (something that might lead to problems), but\n      for 2-4 paths or so, it is usually appropriate.\n    </p>\n    <p>\n      Figure out how to use if/else statements to make the header go from green to yellow\n      to red by clicking the button below:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Complex Conditionals</h1>\n    <p>\n      Conditional statements can be used to choose between more than two paths.\n    </p>\n    <p>\n      If a conditional statement is used to choose between a large number of code paths\n      it might be considered a "code small" (something that might lead to problems), but\n      for 2-4 paths or so, it is usually appropriate.\n    </p>\n    <p>\n      Figure out how to use if/else statements to make the header go from green to yellow\n      to red by clicking the button below:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
         description: '<p>\n    Conditional statements are frequently used when coding.\n</p>\n<p>\n    They allow you to execute code only in certain situations.\n</p>',
@@ -717,6 +717,61 @@ STAGES = [
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               if (cleanHtml(frameBody.find('h2').html()) === '10') {
+                clearInterval(_this.testInterval);
+                return true;
+              }
+              if (_this.testInterval) {
+                return false;
+              }
+              _this.testInterval = setInterval(window.retest, 100);
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
+            }
+          }
+        ]
+      }, {
+        id: 1363033903127,
+        challenge: 'Figure out how to fill in each box with a different color when the button is clicked.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var colors = [\'red\', \'green\', \'yellow\', \'purple\', \'orange\', \'pink\', \'blue\'];\nvar button = document.getElementById(\'color_button\');\nbutton.onclick = function() {\n  var box = document.getElementById(\'box0\');\n  box.style.backgroundColor = colors[0];\n}'
+          }, {
+            title: 'Page CSS',
+            type: 'css',
+            code: '.boxes {\n    overflow: hidden;\n    margin-bottom: 12px;\n}\n\n.box {\n    float: left;\n    width: 66px;\n    height: 60px;\n    border: 1px solid #ccc;\n    margin: 0 6px 6px 0;\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>Loops and Arrays</h1>\n    <p>\n        In this challenge we\'re working with an array of colors that we want to use\n        to assign to the backgroundColor of each box below.\n    </p>\n    <p>\n        To learn more about arrays, try <a href=\'https://www.google.com/search?q=javascript+array\' target=\'_new\'>googling arrays</a>.\n    </p>\n    <p>\n        You may also want to consider <a href=\'https://www.google.com/search?q=javascript+for+loop\' target=\'_new\'>googling for-loops</a> as\n        a for-loop would be useful in this challenge.\n    </p>\n    <div class=\'boxes\'>\n        <div class=\'box\' id=\'box0\'></div>\n        <div class=\'box\' id=\'box1\'></div>\n        <div class=\'box\' id=\'box2\'></div>\n        <div class=\'box\' id=\'box3\'></div>\n        <div class=\'box\' id=\'box4\'></div>\n        <div class=\'box\' id=\'box5\'></div>\n        <div class=\'box\' id=\'box6\'></div>\n    </div>\n    <button id=\'color_button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    This level introduces two newish concepts, arrays and for-loops.\n</p>\n<p>\n    The array is this line: var colors = [\'red\', \'green\', \'yellow\', \'purple\', \'orange\', \'pink\', \'blue\'].\n</p>\n<p>\n    It allows you store a bunch of different objects in one container that can be iterated over.\n</p>\n<p>\n    In order to iterate over an array you would use a for-loop.\n</p>\n<p>\n    With a for-loop you run a section of code multiple times, often with a different element\n    of the array each time.\n</p>\n<p>\n    It\'s all a little hard to explain. You\'ll understand it more as you try using arrays and for-loops in\n    future challenges. If you\'d like to learn more now try \n    <a href=\'https://www.google.com/search?q=javascript+array\' target=\'_new\'>googling arrays</a> and\n    <a href=\'https://www.google.com/search?q=javascript+for+loop\' target=\'_new\'>googling for-loops</a>.\n</p>',
+        hints: ['This challenge only requires a few lines of code if you use a for-loop.', 'A for loop allows you to iterate over the colors in the array, assigning each color to a box.', 'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }', 'This code will do the trick:<br/>\n<span class=\'code_sample\'>\nfor (var i=0; i&lt;colors.length; ++i) {<br/>\n&nbsp;&nbsp;var box = document.getElementById(\'box\' + i);<br/>\n&nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>\n}\n</span>'],
+        tests: [
+          {
+            description: 'Each box has a different background color.',
+            test: function(_arg) {
+              var allDifferent, box, cleanHtml, color, colors, frameBody, _i, _len, _ref;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              allDifferent = true;
+              colors = {};
+              _ref = frameBody.find('.box');
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                box = _ref[_i];
+                color = $(box).css('backgroundColor');
+                if (!(color != null ? color.length : void 0) || colors[color]) {
+                  allDifferent = false;
+                  break;
+                } else {
+                  colors[color] = true;
+                }
+              }
+              if (allDifferent) {
                 clearInterval(_this.testInterval);
                 return true;
               }
@@ -804,7 +859,7 @@ STAGES = [
           }
         ],
         description: '<p>\n  Here we are working with some of the basics of javascript.\n</p>\n<p>\n  Some of the interesting javascript functions you might want to google\n  are \'javascript eval\', \'javascript getElementById\', and\n  \'javascript innerHTML\'.\n</p>\n<p>\n  Most importantly we are trying to figure out how to bind a method to\n  the onclick event of an html element. You may want to google \'javascript onclick\'\n  for some more information about that.\n</p>',
-        hints: ['The multiplication button is going to work roughly the same as the subtraction button.', 'You can literally copy and paste the code for the subtraction button.', 'Just change the symbol being sent to the screen to a \'*\' from a \'-\', but don\'t forget to include the code the binds the function to the html element.', 'This is one example of code that would work:<br/><br/>\n<span class=\'code\'>\nfunction multiply() {<br/>\n&nbsp;&nbsp;addToScreen(\'*\')<br/>\n}<br/>\nvar multiplyButton = document.getElementById(\'multiply_button\');<br/>\nmultiplyButton.onclick = multiply;\n</span>'],
+        hints: ['The multiplication button is going to work roughly the same as the subtraction button.', 'You can literally copy and paste the code for the subtraction button.', 'Just change the symbol being sent to the screen to a \'*\' from a \'-\', but don\'t forget to include the code the binds the function to the html element.', 'This is one example of code that would work:<br/><br/>\n<span class=\'code_sample\'>\nfunction multiply() {<br/>\n&nbsp;&nbsp;addToScreen(\'*\')<br/>\n}<br/>\nvar multiplyButton = document.getElementById(\'multiply_button\');<br/>\nmultiplyButton.onclick = multiply;\n</span>'],
         tests: [
           {
             description: 'When the equals sign is hit with \'3*4\' showing, the result is 12.',
@@ -892,7 +947,7 @@ STAGES = [
           }
         ],
         description: '<p>\n  Here we are working with some of the basics of javascript.\n</p>\n<p>\n  Some of the interesting javascript functions you might want to google\n  are \'javascript eval\', \'javascript getElementById\', and\n  \'javascript innerHTML\'.\n</p>\n<p>\n  Most importantly we are trying to figure out how to bind a method to\n  the onclick event of an html element. You may want to google \'javascript onclick\'\n  for some more information about that.\n</p>',
-        hints: ['First you\'ll need to add a new button like the multiply button in the html', 'Next you\'ll have to mimic the multiply function, attaching it to the new button', 'Be sure to match the \'id\' of the button in the html to the \'getElementById\' call in the javascript.', 'The button should look something like &lt;div&gt; class=\'function button\' id=\'divide_button\'&gt;/&lt;/div&gt;', 'This code should look something like:<br/><br/>\n<span class=\'code\'>\nfunction divide() {<br/>\n&nbsp;&nbsp;addToScreen(\'/\')<br/>\n}<br/>\nvar divideButton = document.getElementById(\'divide_button\');<br/>\ndivideButton.onclick = divide;\n</span>'],
+        hints: ['First you\'ll need to add a new button like the multiply button in the html', 'Next you\'ll have to mimic the multiply function, attaching it to the new button', 'Be sure to match the \'id\' of the button in the html to the \'getElementById\' call in the javascript.', 'The button should look something like &lt;div&gt; class=\'function button\' id=\'divide_button\'&gt;/&lt;/div&gt;', 'This code should look something like:<br/><br/>\n<span class=\'code_sample\'>\nfunction divide() {<br/>\n&nbsp;&nbsp;addToScreen(\'/\')<br/>\n}<br/>\nvar divideButton = document.getElementById(\'divide_button\');<br/>\ndivideButton.onclick = divide;\n</span>'],
         tests: [
           {
             description: 'When the equals sign is hit with \'9/2\' showing, the result is 4.5.',

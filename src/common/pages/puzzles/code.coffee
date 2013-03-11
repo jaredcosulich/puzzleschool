@@ -512,7 +512,7 @@ STAGES = [
         ]
     }
     {
-        name: 'Javascript Basics'
+        name: 'Basic Javascript'
         levels: [
             {
                 id: 1362617406338
@@ -762,7 +762,7 @@ STAGES = [
                         code: '''
                             <html>
                               <body>
-                                <h1 id='header' style='color: red;'>Conditional (if/else) Statements</h1>
+                                <h1 id='header' style='color: red;'>Conditional Statements</h1>
                                 <p>
                                   One of the most important tools in programming is the if/else statement.
                                 </p>
@@ -845,7 +845,7 @@ STAGES = [
                         code: '''
                             <html>
                               <body>
-                                <h1 id='header'>Complex Conditional Statements</h1>
+                                <h1 id='header'>Complex Conditionals</h1>
                                 <p>
                                   Conditional statements can be used to choose between more than two paths.
                                 </p>
@@ -984,6 +984,140 @@ STAGES = [
                             clearInterval(@testInterval)
                             @testInterval = null
                     
+                    }
+                ]
+            },
+            {
+                id: 1363033903127
+                challenge: '''
+                    Figure out how to fill in each box with a different color when the button is clicked.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'];
+                            var button = document.getElementById('color_button');
+                            button.onclick = function() {
+                              var box = document.getElementById('box0');
+                              box.style.backgroundColor = colors[0];
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page CSS'
+                        type: 'css'
+                        code: '''
+                            .boxes {
+                                overflow: hidden;
+                                margin-bottom: 12px;
+                            }
+                            
+                            .box {
+                                float: left;
+                                width: 66px;
+                                height: 60px;
+                                border: 1px solid #ccc;
+                                margin: 0 6px 6px 0;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Loops and Arrays</h1>
+                                <p>
+                                    In this challenge we're working with an array of colors that we want to use
+                                    to assign to the backgroundColor of each box below.
+                                </p>
+                                <p>
+                                    To learn more about arrays, try <a href='https://www.google.com/search?q=javascript+array' target='_new'>googling arrays</a>.
+                                </p>
+                                <p>
+                                    You may also want to consider <a href='https://www.google.com/search?q=javascript+for+loop' target='_new'>googling for-loops</a> as
+                                    a for-loop would be useful in this challenge.
+                                </p>
+                                <div class='boxes'>
+                                    <div class='box' id='box0'></div>
+                                    <div class='box' id='box1'></div>
+                                    <div class='box' id='box2'></div>
+                                    <div class='box' id='box3'></div>
+                                    <div class='box' id='box4'></div>
+                                    <div class='box' id='box5'></div>
+                                    <div class='box' id='box6'></div>
+                                </div>
+                                <button id='color_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        This level introduces two newish concepts, arrays and for-loops.
+                    </p>
+                    <p>
+                        The array is this line: var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'].
+                    </p>
+                    <p>
+                        It allows you store a bunch of different objects in one container that can be iterated over.
+                    </p>
+                    <p>
+                        In order to iterate over an array you would use a for-loop.
+                    </p>
+                    <p>
+                        With a for-loop you run a section of code multiple times, often with a different element
+                        of the array each time.
+                    </p>
+                    <p>
+                        It's all a little hard to explain. You'll understand it more as you try using arrays and for-loops in
+                        future challenges. If you'd like to learn more now try 
+                        <a href='https://www.google.com/search?q=javascript+array' target='_new'>googling arrays</a> and
+                        <a href='https://www.google.com/search?q=javascript+for+loop' target='_new'>googling for-loops</a>.
+                    </p>
+                '''
+                hints: [
+                    'This challenge only requires a few lines of code if you use a for-loop.'
+                    'A for loop allows you to iterate over the colors in the array, assigning each color to a box.'
+                    'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }'
+                    '''
+                    This code will do the trick:<br/>
+                    <span class='code_sample'>
+                    for (var i=0; i&lt;colors.length; ++i) {<br/>
+                    &nbsp;&nbsp;var box = document.getElementById('box' + i);<br/>
+                    &nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>
+                    }
+                    </span>
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'Each box has a different background color.'
+                        test: ({frameBody, cleanHtml}) => 
+                            allDifferent = true
+                            colors = {}
+                            for box in frameBody.find('.box')
+                                color = $(box).css('backgroundColor')
+                                if not color?.length or colors[color]
+                                    allDifferent = false
+                                    break
+                                else
+                                    colors[color] = true
+                            
+                            if allDifferent
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null                    
                     }
                 ]
             }
@@ -1360,7 +1494,7 @@ STAGES = [
                     'Just change the symbol being sent to the screen to a \'*\' from a \'-\', but don\'t forget to include the code the binds the function to the html element.'
                     '''
                     This is one example of code that would work:<br/><br/>
-                    <span class='code'>
+                    <span class='code_sample'>
                     function multiply() {<br/>
                     &nbsp;&nbsp;addToScreen('*')<br/>
                     }<br/>
@@ -1767,7 +1901,7 @@ STAGES = [
                     'The button should look something like &lt;div&gt; class=\'function button\' id=\'divide_button\'&gt;/&lt;/div&gt;'
                     '''
                     This code should look something like:<br/><br/>
-                    <span class='code'>
+                    <span class='code_sample'>
                     function divide() {<br/>
                     &nbsp;&nbsp;addToScreen('/')<br/>
                     }<br/>

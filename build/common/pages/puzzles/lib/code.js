@@ -103,7 +103,7 @@ code.ViewHelper = (function() {
         height: height,
         duration: 250,
         complete: function() {
-          $(document.body).one('click', function() {
+          $(document.body).one('mouseup', function() {
             link.removeClass('selected');
             return content.animate({
               height: 0,
@@ -115,7 +115,7 @@ code.ViewHelper = (function() {
               }
             });
           });
-          return content.bind('click', function(e) {
+          return content.bind('mouseup', function(e) {
             return e.stop();
           });
         }

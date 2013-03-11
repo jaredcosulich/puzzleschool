@@ -76,14 +76,14 @@ class code.ViewHelper
                 height: height
                 duration: 250
                 complete: ->
-                    $(document.body).one 'click', ->
+                    $(document.body).one 'mouseup', ->
                         link.removeClass('selected')
                         content.animate
                             height: 0
                             duration: 250
                             complete: ->
                                 content.css(display: 'none')
-                    content.bind 'click', (e) -> e.stop()
+                    content.bind 'mouseup', (e) -> e.stop()
             
     initDescription: -> 
         @$('div.description .inside').html(@level.description)

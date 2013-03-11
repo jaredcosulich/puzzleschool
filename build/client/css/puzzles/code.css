@@ -116,10 +116,9 @@
 .code .challenge div.hints .hint p {
   opacity: 0;
 }
-.code .challenge div.description .hint .code,
-.code .challenge div.hints .hint .code {
+.code .challenge div.description .hint .code_sample,
+.code .challenge div.hints .hint .code_sample {
   display: block;
-  padding-left: 60px;
 }
 .code .challenge div.hints {
   padding-top: 12px;
@@ -202,15 +201,16 @@
   color: #262626;
   overflow: hidden;
   font-size: 11px;
+  text-align: left;
 }
 .code .test_area .tests .test {
-  padding-left: 15px;
+  padding: 6px 0 6px 18px;
 }
 .code .test_area .tests .wrong {
-  background: #fafafa url('/assets/images/puzzles/code/incorrect.png') 2px 3px no-repeat;
+  background: #fafafa url('/assets/images/puzzles/code/incorrect.png') 3px 6px no-repeat;
 }
 .code .test_area .tests .correct {
-  background: #fafafa url('/assets/images/puzzles/code/correct.png') 2px 3px no-repeat;
+  background: #fafafa url('/assets/images/puzzles/code/correct.png') 3px 6px no-repeat;
 }
 .code .test_area:before {
   content: " ";
