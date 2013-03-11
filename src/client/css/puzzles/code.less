@@ -80,21 +80,18 @@
                 background-color: @blue;
                 display: block;
                 float: left;
-                width: 33%;
+                width: 49%;
                 border-top: 1px solid @blue;
+                border-right: 1px solid @blue;
                 padding: 4px 0 6px 0;
                 text-align: center;
                 color: white;
-                border-right: 1px solid white;
                 text-decoration: none;
                 line-height: 15px;
             }
             a.link:first-child {
                 border-left: 1px solid @blue;
-            }
-            a.link:last-child {
-                width: 33%;
-                border-right: none;
+                border-right: 1px solid @white;
             }
             a.link.selected {
                 background-color: @white;
@@ -105,17 +102,13 @@
             }
         }
         
-        div.hints {
-            padding-top: 12px;
-        }
-        
-        div.description, div.hints, div.tests {
+        div.description, div.hints {
             position: absolute;
             border-left: 1px solid @blue;
-            border-bottom: 1px solid @blue;
             border-right: 1px solid @blue;
+            border-bottom: 1px solid @blue;
             z-index: 2;
-            width: 99%;
+            width: 98%;
             left: 0;
             top: 100%;
             overflow: hidden;
@@ -133,19 +126,15 @@
                     padding-left: 60px;
                 }
             }
-            .test {
-                padding: 6px 0;
-                &.wrong {
-                    color: red;
-                }
-                
-                &.correct {
-                    color: green;
-                }
-            }
-            .explanation {
-                font-size: @smallsize;
-            }
+        }
+        
+        div.hints {
+            padding-top: 12px;
+            border-left: 2px solid @blue;
+        }
+        
+        div.description {
+            border-right: 2px solid @blue;            
         }
     }
 
@@ -201,6 +190,54 @@
         height: @height;
         float: right;
         border: 1px solid #ccc;
+    }
+    
+    .test_area {
+        position: absolute;
+        text-align: center;
+        margin-top: -7px;
+        right: 6px;
+        width: 180px;
+        background-color: @darkgreen;
+        border: 2px solid @darkgreen;
+        z-index: 999;
+        color: white;
+        p {
+            margin: 0;
+            padding: 3px;
+        }
+        a {
+            color: white;
+            text-decoration: underline;
+        }
+        .tests {
+            background-color: white;
+            color: @black;
+            overflow: hidden;
+            font-size: @smallsize;
+            
+            .test {
+                padding-left: 15px;
+            }
+            
+            .wrong {
+                background: @white url('/assets/images/puzzles/code/incorrect.png') 2px 3px no-repeat; 
+            }
+
+            .correct {
+                background: @white url('/assets/images/puzzles/code/correct.png') 2px 3px no-repeat; 
+            }
+        }
+        
+        &:before {
+            content: " ";
+            border-top:10px solid @darkgreen;
+            left:-10px;
+            top: -3px;
+            border-top: 8px solid @white;
+            border-right: 8px solid darken(@darkgreen, 30%);
+            position: absolute;
+        }
     }
     
     .level_selector {

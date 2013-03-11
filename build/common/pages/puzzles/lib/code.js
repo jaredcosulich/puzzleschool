@@ -152,17 +152,68 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initTests = function() {
-    var testInfo, _fn, _i, _len, _ref,
+    var testArea, testInfo, tests, _fn, _i, _len, _ref,
       _this = this;
+    testArea = this.$('.test_area');
+    tests = testArea.find('.tests');
+    testArea.css({
+      top: this.$('.output').offset().top - this.el.offset().top
+    });
     _ref = this.level.tests;
     _fn = function(testInfo) {
-      return _this.$('div.tests .inside').prepend("<p class='test wrong'>" + testInfo.description + "</p>");
+      return tests.append("<p class='test wrong'>" + testInfo.description + "</p>");
     };
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       testInfo = _ref[_i];
       _fn(testInfo);
     }
-    return this.initSection('tests');
+    return setTimeout((function() {
+      _this.testHeight = tests.height();
+      testArea.find('a').bind('click', function() {
+        if (_this.$('.test_area .tests').height() > 0) {
+          return _this.hideTests();
+        } else {
+          return _this.showTests();
+        }
+      });
+      return _this.hideTests();
+    }), 1000);
+  };
+
+  ViewHelper.prototype.showTests = function(callback) {
+    var tests,
+      _this = this;
+    tests = this.$('.test_area .tests');
+    if (tests.height() === this.testHeight) {
+      if (callback) {
+        return callback();
+      }
+    } else {
+      return tests.animate({
+        height: this.testHeight,
+        duration: 500,
+        complete: function() {
+          if (callback) {
+            callback();
+          }
+          _this.test();
+          return tests.closest('.test_area').find('a').html('Hide Tests');
+        }
+      });
+    }
+  };
+
+  ViewHelper.prototype.hideTests = function() {
+    var testArea,
+      _this = this;
+    testArea = this.$('.test_area');
+    return testArea.find('.tests').animate({
+      height: 0,
+      duration: 500,
+      complete: function() {
+        return testArea.find('a').html('Run Tests');
+      }
+    });
   };
 
   ViewHelper.prototype.showError = function(msg, line) {
@@ -270,7 +321,8 @@ code.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.test = function() {
-    var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, frameWindow, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1;
+    var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, frameWindow, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1,
+      _this = this;
     if (this.allTestsPassed) {
       return;
     }
@@ -306,7 +358,9 @@ code.ViewHelper = (function() {
     }
     if (allTestsPassed) {
       this.allTestsPassed = true;
-      return this.completeLevel();
+      return this.showTests(function() {
+        return _this.completeLevel();
+      });
     }
   };
 

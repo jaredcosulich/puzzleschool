@@ -71,21 +71,18 @@
   background-color: #24aac3;
   display: block;
   float: left;
-  width: 33%;
+  width: 49%;
   border-top: 1px solid #24aac3;
+  border-right: 1px solid #24aac3;
   padding: 4px 0 6px 0;
   text-align: center;
   color: white;
-  border-right: 1px solid white;
   text-decoration: none;
   line-height: 15px;
 }
 .code .challenge .links a.link:first-child {
   border-left: 1px solid #24aac3;
-}
-.code .challenge .links a.link:last-child {
-  width: 33%;
-  border-right: none;
+  border-right: 1px solid #fafafa;
 }
 .code .challenge .links a.link.selected {
   background-color: #fafafa;
@@ -94,63 +91,42 @@
 .code .challenge .links .clear {
   clear: both;
 }
-.code .challenge div.hints {
-  padding-top: 12px;
-}
 .code .challenge div.description,
-.code .challenge div.hints,
-.code .challenge div.tests {
+.code .challenge div.hints {
   position: absolute;
   border-left: 1px solid #24aac3;
-  border-bottom: 1px solid #24aac3;
   border-right: 1px solid #24aac3;
+  border-bottom: 1px solid #24aac3;
   z-index: 2;
-  width: 99%;
+  width: 98%;
   left: 0;
   top: 100%;
   overflow: hidden;
   background-color: #fafafa;
 }
 .code .challenge div.description .inside,
-.code .challenge div.hints .inside,
-.code .challenge div.tests .inside {
+.code .challenge div.hints .inside {
   margin: 0 12px;
 }
 .code .challenge div.description .hint,
-.code .challenge div.hints .hint,
-.code .challenge div.tests .hint {
+.code .challenge div.hints .hint {
   padding-top: 6px;
 }
 .code .challenge div.description .hint p,
-.code .challenge div.hints .hint p,
-.code .challenge div.tests .hint p {
+.code .challenge div.hints .hint p {
   opacity: 0;
 }
 .code .challenge div.description .hint .code,
-.code .challenge div.hints .hint .code,
-.code .challenge div.tests .hint .code {
+.code .challenge div.hints .hint .code {
   display: block;
   padding-left: 60px;
 }
-.code .challenge div.description .test,
-.code .challenge div.hints .test,
-.code .challenge div.tests .test {
-  padding: 6px 0;
+.code .challenge div.hints {
+  padding-top: 12px;
+  border-left: 2px solid #24aac3;
 }
-.code .challenge div.description .test.wrong,
-.code .challenge div.hints .test.wrong,
-.code .challenge div.tests .test.wrong {
-  color: red;
-}
-.code .challenge div.description .test.correct,
-.code .challenge div.hints .test.correct,
-.code .challenge div.tests .test.correct {
-  color: green;
-}
-.code .challenge div.description .explanation,
-.code .challenge div.hints .explanation,
-.code .challenge div.tests .explanation {
-  font-size: 11px;
+.code .challenge div.description {
+  border-right: 2px solid #24aac3;
 }
 .code .editors {
   height: 480px;
@@ -201,6 +177,49 @@
   height: 480px;
   float: right;
   border: 1px solid #ccc;
+}
+.code .test_area {
+  position: absolute;
+  text-align: center;
+  margin-top: -7px;
+  right: 6px;
+  width: 180px;
+  background-color: #0c8d28;
+  border: 2px solid #0c8d28;
+  z-index: 999;
+  color: white;
+}
+.code .test_area p {
+  margin: 0;
+  padding: 3px;
+}
+.code .test_area a {
+  color: white;
+  text-decoration: underline;
+}
+.code .test_area .tests {
+  background-color: white;
+  color: #262626;
+  overflow: hidden;
+  font-size: 11px;
+}
+.code .test_area .tests .test {
+  padding-left: 15px;
+}
+.code .test_area .tests .wrong {
+  background: #fafafa url('/assets/images/puzzles/code/incorrect.png') 2px 3px no-repeat;
+}
+.code .test_area .tests .correct {
+  background: #fafafa url('/assets/images/puzzles/code/correct.png') 2px 3px no-repeat;
+}
+.code .test_area:before {
+  content: " ";
+  border-top: 10px solid #0c8d28;
+  left: -10px;
+  top: -3px;
+  border-top: 8px solid #fafafa;
+  border-right: 8px solid #000000;
+  position: absolute;
 }
 .code .level_selector {
   position: absolute;

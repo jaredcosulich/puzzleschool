@@ -107,14 +107,45 @@ class code.ViewHelper
         @initSection('hints')
             
     initTests: ->
+        testArea = @$('.test_area')
+        tests = testArea.find('.tests')
+        testArea.css(top: @$('.output').offset().top - @el.offset().top)
         for testInfo in @level.tests
             do (testInfo) =>
-                @$('div.tests .inside').prepend """
+                tests.append """
                     <p class='test wrong'>#{testInfo.description}</p>
                 """
-        
-        @initSection('tests')
-        
+        setTimeout((=>
+            @testHeight = tests.height()            
+            testArea.find('a').bind 'click', => 
+                if @$('.test_area .tests').height() > 0
+                    @hideTests()
+                else
+                    @showTests()
+
+            @hideTests()
+        ), 1000)
+                
+    showTests: (callback) ->
+        tests = @$('.test_area .tests')
+        if tests.height() == @testHeight
+            callback() if callback
+        else
+            tests.animate
+                height: @testHeight
+                duration: 500
+                complete: => 
+                    callback() if callback
+                    @test()
+                    tests.closest('.test_area').find('a').html('Hide Tests')
+                
+    hideTests: ->
+        testArea = @$('.test_area')
+        testArea.find('.tests').animate
+            height: 0
+            duration: 500
+            complete: => testArea.find('a').html('Run Tests')
+                
     showError: (msg, line) ->
         error = @$('.error')
         error.html("<p>There is an error in your code on line #{line}:<br/><br/>#{msg}</p>")       
@@ -218,6 +249,6 @@ class code.ViewHelper
                 
         if allTestsPassed        
             @allTestsPassed = true
-            @completeLevel()
+            @showTests => @completeLevel()
 
         
