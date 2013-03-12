@@ -8,15 +8,23 @@
   clear: both;
 }
 .code .error {
-  background-color: red;
+  background-color: #a61c0e;
   color: white;
   position: absolute;
   top: -1000px;
   left: -1000px;
-  overflow: hidden;
 }
 .code .error p {
   padding: 0 12px;
+}
+.code .error:before {
+  content: " ";
+  border-top: 10px solid #a61c0e;
+  left: -8px;
+  top: -1px;
+  border-top: 8px solid #fafafa;
+  border-right: 8px solid #190402;
+  position: absolute;
 }
 .code h2 {
   text-align: center;
@@ -211,6 +219,9 @@
 }
 .code .test_area .tests .correct {
   background: #fafafa url('/assets/images/puzzles/code/correct.png') 3px 6px no-repeat;
+}
+.code .test_area .rerun_tests {
+  margin-left: 12px;
 }
 .code .test_area:before {
   content: " ";

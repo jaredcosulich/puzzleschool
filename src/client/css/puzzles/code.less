@@ -14,15 +14,23 @@
     }
     
     .error {
-        background-color: red;
+        background-color: @darkred;
         color: white;
         position: absolute;
         top: -1000px;
         left: -1000px;
-        overflow: hidden;
         p {
             padding: 0 12px;
         }
+        &:before {
+            content: " ";
+            border-top:10px solid @darkred;
+            left:-8px;
+            top: -1px;
+            border-top: 8px solid @white;
+            border-right: 8px solid darken(@darkred, 30%);
+            position: absolute;
+        }        
     }
 
     h2 {
@@ -227,6 +235,11 @@
             .correct {
                 background: @white url('/assets/images/puzzles/code/correct.png') 3px 6px no-repeat; 
             }
+            
+        }
+
+        .rerun_tests {
+            margin-left: 12px;
         }
         
         &:before {

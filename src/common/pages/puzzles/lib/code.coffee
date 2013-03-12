@@ -117,17 +117,20 @@ class code.ViewHelper
                 """
         setTimeout((=>
             @testHeight = tests.height()            
-            testArea.find('a').bind 'click', => 
+            testArea.find('.run_tests').bind 'click', => 
                 if @$('.test_area .tests').height() > 0
                     @hideTests()
                 else
                     @showTests()
+                    
+            testArea.find('.rerun_tests').bind 'click', => @test(true)
 
             @hideTests()
         ), 1000)
                 
     showTests: (callback) ->
-        tests = @$('.test_area .tests')
+        testArea = @$('.test_area')
+        tests = testArea.find('.tests')
         if tests.height() == @testHeight
             callback() if callback
         else
@@ -136,15 +139,18 @@ class code.ViewHelper
                 duration: 500
                 complete: => 
                     callback() if callback
-                    @test()
-                    tests.closest('.test_area').find('a').html('Hide Tests')
+                    @test(true)
+                    testArea.find('.run_tests').html('Hide Tests')
+                    testArea.find('.rerun_tests').show()
                 
     hideTests: ->
         testArea = @$('.test_area')
         testArea.find('.tests').animate
             height: 0
             duration: 500
-            complete: => testArea.find('a').html('Run Tests')
+            complete: => 
+                testArea.find('.run_tests').html('Run Tests')
+                testArea.find('.rerun_tests').hide()
                 
     showError: (msg, line) ->
         error = @$('.error')
@@ -158,7 +164,7 @@ class code.ViewHelper
                 return if error.css('top') > -1000
                 error.css
                     top: frameOffset.top - elOffset.top
-                    left: frameOffset.left
+                    left: frameOffset.left - elOffset.left + 72
                     height: 0
                 error.animate
                     height: height
@@ -226,7 +232,7 @@ class code.ViewHelper
             @errorShown = true
             @showError(msg, line)
                     
-    test: ->
+    test: (userSubmitted=false) ->
         return if @allTestsPassed
         
         frame = @$('.output')[0]
@@ -239,7 +245,13 @@ class code.ViewHelper
         allTestsPassed = true
         for testInfo in @level.tests
             for testElement in @$('.tests .test') when $(testElement).html() == testInfo.description
-                if testInfo.test(frameWindow: frame.contentWindow, frameBody: frameBody, cleanHtml: cleanHtml)
+                success = testInfo.test
+                    frameWindow: frame.contentWindow
+                    frameBody: frameBody
+                    cleanHtml: cleanHtml
+                    userSubmitted: userSubmitted
+                
+                if success
                     $(testElement).removeClass('wrong')
                     $(testElement).addClass('correct')
                 else

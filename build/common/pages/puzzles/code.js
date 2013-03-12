@@ -787,6 +787,97 @@ STAGES = [
             }
           }
         ]
+      }, {
+        id: 1363042104392,
+        lockedBy: [1363033903127],
+        challenge: 'Figure out how to make the second button fill in the colors like the first button but in reverse order.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var colors = [\'red\', \'green\', \'yellow\', \'purple\', \'orange\', \'pink\', \'blue\'];\nvar button1 = document.getElementById(\'color_button1\');\nbutton1.onclick = function() {\n  for (var i=0; i<colors.length; ++i) {\n    var box = document.getElementById(\'box1\' + i);\n    box.style.backgroundColor = colors[i];                                  \n  }\n}'
+          }, {
+            title: 'Page CSS',
+            type: 'css',
+            code: '.boxes {\n    overflow: hidden;\n    margin-bottom: 12px;\n}\n\n.box {\n    float: left;\n    width: 66px;\n    height: 60px;\n    border: 1px solid #ccc;\n    margin: 0 6px 6px 0;\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>A Reverse Loop</h1>\n    <p>\n        Ok, now you\'ve got to figure out how to make the colors display in reverse \n        when the second button is clicked.\n    </p>\n    <p>\n        For this challenge, once you think you\'ve written the code properly, click\n        \'Run Tests\' above to have the system validate the results.\n    </p>\n    <div class=\'boxes boxes1\'>\n        <div class=\'box\' id=\'box10\'></div>\n        <div class=\'box\' id=\'box11\'></div>\n        <div class=\'box\' id=\'box12\'></div>\n        <div class=\'box\' id=\'box13\'></div>\n        <div class=\'box\' id=\'box14\'></div>\n        <div class=\'box\' id=\'box15\'></div>\n        <div class=\'box\' id=\'box16\'></div>\n    </div>\n    <div class=\'boxes boxes2\'>\n        <div class=\'box\' id=\'box20\'></div>\n        <div class=\'box\' id=\'box21\'></div>\n        <div class=\'box\' id=\'box22\'></div>\n        <div class=\'box\' id=\'box23\'></div>\n        <div class=\'box\' id=\'box24\'></div>\n        <div class=\'box\' id=\'box25\'></div>\n        <div class=\'box\' id=\'box26\'></div>\n    </div>\n    \n    <button id=\'color_button1\'>Button #1</button>\n    <button id=\'color_button2\'>Button #2</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '',
+        hints: ['This challenge only requires a few lines of code if you use a for-loop.', 'A for loop allows you to iterate over the colors in the array, assigning each color to a box.', 'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }', 'This code will do the trick:<br/>\n<span class=\'code_sample\'>\nfor (var i=0; i&lt;colors.length; ++i) {<br/>\n&nbsp;&nbsp;var box = document.getElementById(\'box\' + i);<br/>\n&nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>\n}\n</span>'],
+        tests: [
+          {
+            description: 'When button 1 is clicked each box gets a different color.',
+            test: function(_arg) {
+              var allDifferent, box, color, colors, frameBody, userSubmitted, _i, _len, _ref;
+              frameBody = _arg.frameBody, userSubmitted = _arg.userSubmitted;
+              if (!userSubmitted) {
+                return;
+              }
+              frameBody.find('.box').css('backgroundColor', '');
+              frameBody.find('#color_button1').trigger('click');
+              allDifferent = true;
+              _this.boxColors = [];
+              colors = {};
+              _ref = frameBody.find('.boxes1 .box');
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                box = _ref[_i];
+                color = $(box).css('backgroundColor');
+                _this.boxColors.push(color);
+                if (!(color != null ? color.length : void 0) || colors[color]) {
+                  allDifferent = false;
+                  break;
+                } else {
+                  colors[color] = true;
+                }
+              }
+              if (allDifferent) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            clean: function() {
+              return _this.boxColors = null;
+            }
+          }, {
+            description: 'When button 2 is clicked the boxes get the same colors in reverse order.',
+            test: function(_arg) {
+              var box, color, frameBody, index, reverse, reverseColors, userSubmitted, _i, _len, _ref, _ref1;
+              frameBody = _arg.frameBody, userSubmitted = _arg.userSubmitted;
+              if (!userSubmitted) {
+                return;
+              }
+              if (!((_ref = _this.boxColors) != null ? _ref.length : void 0)) {
+                return false;
+              }
+              frameBody.find('#color_button2').trigger('click');
+              reverseColors = _this.boxColors.reverse();
+              reverse = true;
+              _ref1 = frameBody.find('.boxes2 .box');
+              for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+                box = _ref1[index];
+                color = $(box).css('backgroundColor');
+                if (!(color != null ? color.length : void 0) || color !== reverseColors[index]) {
+                  reverse = false;
+                  break;
+                }
+              }
+              if (reverse) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            clean: function() {
+              clearInterval(_this.testInterval);
+              return _this.testInterval = null;
+            }
+          }
+        ]
       }
     ]
   }, {

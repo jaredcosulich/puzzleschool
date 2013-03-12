@@ -169,21 +169,25 @@ code.ViewHelper = (function() {
     }
     return setTimeout((function() {
       _this.testHeight = tests.height();
-      testArea.find('a').bind('click', function() {
+      testArea.find('.run_tests').bind('click', function() {
         if (_this.$('.test_area .tests').height() > 0) {
           return _this.hideTests();
         } else {
           return _this.showTests();
         }
       });
+      testArea.find('.rerun_tests').bind('click', function() {
+        return _this.test(true);
+      });
       return _this.hideTests();
     }), 1000);
   };
 
   ViewHelper.prototype.showTests = function(callback) {
-    var tests,
+    var testArea, tests,
       _this = this;
-    tests = this.$('.test_area .tests');
+    testArea = this.$('.test_area');
+    tests = testArea.find('.tests');
     if (tests.height() === this.testHeight) {
       if (callback) {
         return callback();
@@ -196,8 +200,9 @@ code.ViewHelper = (function() {
           if (callback) {
             callback();
           }
-          _this.test();
-          return tests.closest('.test_area').find('a').html('Hide Tests');
+          _this.test(true);
+          testArea.find('.run_tests').html('Hide Tests');
+          return testArea.find('.rerun_tests').show();
         }
       });
     }
@@ -211,7 +216,8 @@ code.ViewHelper = (function() {
       height: 0,
       duration: 500,
       complete: function() {
-        return testArea.find('a').html('Run Tests');
+        testArea.find('.run_tests').html('Run Tests');
+        return testArea.find('.rerun_tests').hide();
       }
     });
   };
@@ -232,7 +238,7 @@ code.ViewHelper = (function() {
         }
         error.css({
           top: frameOffset.top - elOffset.top,
-          left: frameOffset.left,
+          left: frameOffset.left - elOffset.left + 72,
           height: 0
         });
         return error.animate({
@@ -320,9 +326,12 @@ code.ViewHelper = (function() {
     };
   };
 
-  ViewHelper.prototype.test = function() {
-    var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, frameWindow, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1,
+  ViewHelper.prototype.test = function(userSubmitted) {
+    var allTestsPassed, cleanHtml, frame, frameBody, frameDoc, frameWindow, success, testElement, testInfo, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
+    if (userSubmitted == null) {
+      userSubmitted = false;
+    }
     if (this.allTestsPassed) {
       return;
     }
@@ -340,19 +349,22 @@ code.ViewHelper = (function() {
       _ref1 = this.$('.tests .test');
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         testElement = _ref1[_j];
-        if ($(testElement).html() === testInfo.description) {
-          if (testInfo.test({
-            frameWindow: frame.contentWindow,
-            frameBody: frameBody,
-            cleanHtml: cleanHtml
-          })) {
-            $(testElement).removeClass('wrong');
-            $(testElement).addClass('correct');
-          } else {
-            allTestsPassed = false;
-            $(testElement).removeClass('correct');
-            $(testElement).addClass('wrong');
-          }
+        if (!($(testElement).html() === testInfo.description)) {
+          continue;
+        }
+        success = testInfo.test({
+          frameWindow: frame.contentWindow,
+          frameBody: frameBody,
+          cleanHtml: cleanHtml,
+          userSubmitted: userSubmitted
+        });
+        if (success) {
+          $(testElement).removeClass('wrong');
+          $(testElement).addClass('correct');
+        } else {
+          allTestsPassed = false;
+          $(testElement).removeClass('correct');
+          $(testElement).addClass('wrong');
         }
       }
     }
