@@ -122,6 +122,19 @@ LABDATA = [
       explanation: "<p>There's still a lot more work to be done to make Language Scramble as accessible as it needs to be.</p>\n<p>\n    Although it works well on a computer or through a web browser on an iPad or even the iPhone, it's not yet\n    available through any app stores, and the web browser experience requires you to sign in, making it more\n    difficult to access the app through your phone or iPad.\n</p>\n<p>\n    The experience is also not yet optimized for small screens. So while it works well on an iPad, it leaves a little\n    to be desired on a smart phone. It works, but the experience isn't all that great yet.\n</p>\n<p>We're hoping to improve all of this as soon as we can.</p>"
     }
   }, {
+    id: 'code',
+    title: 'Code Puzzles',
+    website: '/puzzles/code',
+    thumbnail: '/assets/images/reviews/code.jpg',
+    company: 'The Puzzle School',
+    companyWebsite: 'http://puzzleschool.com',
+    material: 'Programming',
+    availability: 'Web',
+    cost: 'Free',
+    overall: {
+      explanation: "<p>\n    Code Puzzles is our attempt to make learning how to program (code) more interesting, engaging,\n    and really just more like what it feels like to be a professional programmer.\n</p>\n<p>\n    Code Puzzles presents numerous challenges that you solve by writing code.\n</p>\n<p>\n    You have access to a brief lesson and a few hints, but you're also encouraged to \"google\" for more\n    information or even the solution to the challenge. As professional programmers we spend much\n    of our day googling around, looking for elegant solutions to tricky problems and learning from\n    those that have already wrestled with similar challenges.\n</p>"
+    }
+  }, {
     id: 'light_it_up',
     title: 'Light It Up',
     website: '/puzzles/light_it_up',

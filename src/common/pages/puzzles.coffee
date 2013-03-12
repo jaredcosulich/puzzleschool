@@ -224,7 +224,35 @@ LABDATA = [{
             </p>
             <p>We're hoping to improve all of this as soon as we can.</p>
             """
+
 }, {
+    id: 'code'
+    title: 'Code Puzzles'
+    website: '/puzzles/code'
+    thumbnail: '/assets/images/reviews/code.jpg'
+    company: 'The Puzzle School'
+    companyWebsite: 'http://puzzleschool.com'
+    material: 'Programming'
+    availability: 'Web'
+    cost: 'Free'
+    overall:
+        explanation:
+            """
+            <p>
+                Code Puzzles is our attempt to make learning how to program (code) more interesting, engaging,
+                and really just more like what it feels like to be a professional programmer.
+            </p>
+            <p>
+                Code Puzzles presents numerous challenges that you solve by writing code.
+            </p>
+            <p>
+                You have access to a brief lesson and a few hints, but you're also encouraged to "google" for more
+                information or even the solution to the challenge. As professional programmers we spend much
+                of our day googling around, looking for elegant solutions to tricky problems and learning from
+                those that have already wrestled with similar challenges.
+            </p>
+            """
+},{
     id: 'light_it_up'
     title: 'Light It Up'
     website: '/puzzles/light_it_up'
