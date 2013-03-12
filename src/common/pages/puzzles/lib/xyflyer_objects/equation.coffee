@@ -363,40 +363,38 @@ class equation.Equation
         """
         @container.append(element)
 
-        setTimeout(
-            (=>
-                input = element.find('input')
-                track = element.find('.track')
-                knob = element.find('.knob') 
+        setTimeout((=>
+            input = element.find('input')
+            track = element.find('.track')
+            knob = element.find('.knob') 
 
-                info.knobTransformer = new Transformer(knob)           
-                info.set(info.start)
+            info.knobTransformer = new Transformer(knob)           
+            info.set(info.start)
 
-                trackWidth = element.find('.track').width()
-                input.bind 'keyup.variable', (e) => 
-                    return unless 47 < e.keyCode < 58 or 188 < e.keyCode < 191
-                    @variables[variable].set(input.val()) unless isNaN(input.val())       
-                           
-                element.bind 'mousedown.drag_knob touchstart.drag_knob', (e) =>
+            trackWidth = element.find('.track').width()
+            input.bind 'keyup.variable', (e) => 
+                return unless 47 < e.keyCode < 58 or 188 < e.keyCode < 191
+                @variables[variable].set(input.val()) unless isNaN(input.val())       
+                       
+            element.bind 'mousedown.drag_knob touchstart.drag_knob', (e) =>
+                e.preventDefault() if e.preventDefault
+                body = $(document.body)
+                x = @clientX(e)
+                offsetLeft = knob.offset().left - @gameArea.offset().left + (knob.width()/2)
+                return if x < offsetLeft
+                startingX = x - offsetLeft
+                body.bind 'mousemove.drag_knob touchmove.drag_knob', (e) =>
                     e.preventDefault() if e.preventDefault
-                    body = $(document.body)
-                    x = @clientX(e)
-                    offsetLeft = knob.offset().left - @gameArea.offset().left + (knob.width()/2)
-                    return if x < offsetLeft
-                    startingX = x - offsetLeft
-                    body.bind 'mousemove.drag_knob touchmove.drag_knob', (e) =>
-                        e.preventDefault() if e.preventDefault
-                        dx = @clientX(e) - offsetLeft
-                        dx = 0 if dx < 0
-                        dx = trackWidth if dx > trackWidth 
-                        info.knobTransformer.translate(dx, 0)
-                        percentage = dx/trackWidth
-                        info.set(info.min + (percentage * Math.abs(info.max - info.min)))
-                        
-                    body.one 'mouseup.drag_knob touchend.drag_knob', =>
-                        body.unbind 'mousemove.drag_knob touchmove.drag_knob'
-            ), 10   
-        )
+                    dx = @clientX(e) - offsetLeft
+                    dx = 0 if dx < 0
+                    dx = trackWidth if dx > trackWidth 
+                    info.knobTransformer.translate(dx, 0)
+                    percentage = dx/trackWidth
+                    info.set(info.min + (percentage * Math.abs(info.max - info.min)))
+                    
+                body.one 'mouseup.drag_knob touchend.drag_knob', =>
+                    body.unbind 'mousemove.drag_knob touchmove.drag_knob'
+        ), 10)
 
         info.get = => element.find('input').val()
         info.set = (val) =>

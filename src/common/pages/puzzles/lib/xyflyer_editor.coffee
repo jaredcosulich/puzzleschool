@@ -157,7 +157,19 @@ class xyflyerEditor.EditorHelper
                     
     addEquation: -> @equations.add()    
        
-    addEquationComponent: (fragment) -> @equations.addComponent(fragment) 
+    addEquationComponent: (fragment) -> 
+        if ///(^|[^a-w])([a-d])($|[^a-w])///.test(fragment)
+            @showDialog
+                text: 'What is the range of this variable?'
+                fields: [
+                    ['min', 'From (min)']
+                    ['max', 'To (max)']
+                    ['increment', 'By (increment)']
+                    []
+                    ['start', 'Starting At']
+                ]
+                callback: (data) => console.log(data)
+        @equations.addComponent(fragment) 
     
     addRing: (x, y) -> @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))
 

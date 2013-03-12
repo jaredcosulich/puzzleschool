@@ -490,6 +490,31 @@ STAGES = [
             }
           }
         ]
+      }, {
+        id: 1363103796080,
+        challenge: 'Figure out how to stretch the Puzzle School logo so that it is 200px tall.',
+        editors: [
+          {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>Images</h1>\n    <p>\n      Image tags (&lt;img&gt;) can be used to display an image on your website.\n    </p>\n    <p>\n      Try to figure out how to stretch the Puzzle School logo image so that it is 200px tall.\n    </p>\n    <img src=\'/assets/images/logo_icon.png\' width=117 />\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    Image tags (&lt;img&gt;) are commonly seen on websites. They allow you to display images.\n</p>\n<p>\n    Like all html elements there are a number of attributes that you can add to an image tag\n    that will change how it is displayed on your website.\n</p>\n<p>\n    In this example we\'re trying to change the height of the image by using the height attribute.\n</p>',
+        hints: ['The height attribute works exactly like the width attribute.', 'Add a height attribute to the image tag.', 'The height attribute should look like \'height=200\'.'],
+        tests: [
+          {
+            description: 'The &lt;img&gt; element is 200px tall.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (frameBody.find('img').height() === 200) {
+                return true;
+              }
+              return false;
+            }
+          }
+        ]
       }
     ]
   }, {

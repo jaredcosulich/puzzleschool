@@ -508,6 +508,56 @@ STAGES = [
                             return true
                     }
                 ]
+            }, {
+                id: 1363103796080
+                challenge: '''
+                    Figure out how to stretch the Puzzle School logo so that it is 200px tall.
+                '''
+                editors: [
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Images</h1>
+                                <p>
+                                  Image tags (&lt;img&gt;) can be used to display an image on your website.
+                                </p>
+                                <p>
+                                  Try to figure out how to stretch the Puzzle School logo image so that it is 200px tall.
+                                </p>
+                                <img src='/assets/images/logo_icon.png' width=117 />
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Image tags (&lt;img&gt;) are commonly seen on websites. They allow you to display images.
+                    </p>
+                    <p>
+                        Like all html elements there are a number of attributes that you can add to an image tag
+                        that will change how it is displayed on your website.
+                    </p>
+                    <p>
+                        In this example we're trying to change the height of the image by using the height attribute.
+                    </p>
+                '''
+                hints: [
+                    'The height attribute works exactly like the width attribute.'
+                    'Add a height attribute to the image tag.'
+                    'The height attribute should look like \'height=200\'.'
+                ]
+                tests: [
+                    {
+                        description: 'The &lt;img&gt; element is 200px tall.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if frameBody.find('img').height() == 200                            
+                            return false
+                    }
+                ]
             }
         ]
     }

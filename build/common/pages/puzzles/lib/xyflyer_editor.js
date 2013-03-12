@@ -238,6 +238,16 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
+    var _this = this;
+    if (/(^|[^a-w])([a-d])($|[^a-w])/.test(fragment)) {
+      this.showDialog({
+        text: 'What is the range of this variable?',
+        fields: [['min', 'From (min)'], ['max', 'To (max)'], ['increment', 'By (increment)'], [], ['start', 'Starting At']],
+        callback: function(data) {
+          return console.log(data);
+        }
+      });
+    }
     return this.equations.addComponent(fragment);
   };
 

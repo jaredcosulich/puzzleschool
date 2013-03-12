@@ -410,6 +410,38 @@ LEVELS = [
             '2x', '(1/2)x', '+2'
         ]
     }    
+    # {
+    #     equations:
+    #         'a*x-d': {start: 'x'}
+    #         '(1/b)x+c': {start: 'x'}
+    #     grid:
+    #         xMin: -30
+    #         xMax: 30
+    #         yMin: -30
+    #         yMax: 30
+    #     rings: [
+    #         {x: -16, y: 0}
+    #         {x: 0, y: -8}
+    #         {x: 20, y: -12}
+    #     ]
+    #     fragments: [
+    #         'a*', '(1/b)', '+c', '-d'
+    #     ]
+    #     islandCoordinates: {x: -20, y: 16}
+    #     variables:
+    #         a:
+    #             start: 1
+    #             min: -10
+    #             max: 10
+    #             increment: 1
+    #             solution: -4
+    #         b:
+    #             start: 1
+    #             min: -10
+    #             max: 10
+    #             increment: 1  
+    #             solution: -5      
+    # }        
     {
         equations:
             'a*x-64': {start: 'x'}
