@@ -109,7 +109,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var instructions, level, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3,
+      var instructions, level, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3, _ref4,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.user = this.cookies.get('user');
@@ -131,6 +131,7 @@ soma.views({
             objects: this.$('.objects'),
             grid: (_ref1 = this.data) != null ? _ref1.grid : void 0,
             islandCoordinates: (_ref2 = this.data) != null ? _ref2.islandCoordinates : void 0,
+            variables: (_ref3 = this.data) != null ? _ref3.variables : void 0,
             encode: function(instructions) {
               return _this.encode(instructions);
             }
@@ -146,8 +147,8 @@ soma.views({
       if (this.classId) {
         if (!this.user) {
           if (typeof window !== "undefined" && window !== null) {
-            if ((_ref3 = window.location) != null) {
-              _ref3.reload();
+            if ((_ref4 = window.location) != null) {
+              _ref4.reload();
             }
           }
           return;
@@ -294,6 +295,10 @@ soma.views({
         '7': '~z',
         '8': '~A',
         '9': '~B',
+        'min': '~C',
+        'max': '~D',
+        'increment': '~E',
+        'start': '~F',
         '"verified"': '~V'
       };
       return this.extraEncodeMap = {

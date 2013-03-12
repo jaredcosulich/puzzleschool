@@ -110,7 +110,8 @@ soma.views
                         equationArea: @$('.equation_area')
                         objects: @$('.objects')
                         grid: @data?.grid
-                        islandCoordinates: @data?.islandCoordinates                        
+                        islandCoordinates: @data?.islandCoordinates  
+                        variables: @data?.variables                      
                         encode: (instructions) => @encode(instructions)
                     @loadLevel()
                     
@@ -235,6 +236,10 @@ soma.views
                 '7': '~z'
                 '8': '~A'
                 '9': '~B' 
+                'min': '~C'
+                'max': '~D'
+                'increment': '~E'
+                'start': '~F'
                 '"verified"': '~V'
                 
             @extraEncodeMap = 

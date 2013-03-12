@@ -10,7 +10,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   function EditorHelper(_arg) {
-    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects, this.encode = _arg.encode, this.islandCoordinates = _arg.islandCoordinates, this.grid = _arg.grid;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects, this.encode = _arg.encode, this.islandCoordinates = _arg.islandCoordinates, this.grid = _arg.grid, this.variables = _arg.variables;
     this.rings = [];
     this.parser = require('./parser');
     this.init();
@@ -29,6 +29,7 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.launch();
       }
     });
+    this.variables || (this.variables = {});
     this.initButtons();
     return this.hideInstructions();
   };
@@ -234,19 +235,32 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addEquation = function() {
-    return this.equations.add();
+    return this.equations.add(null, null, null, this.variables);
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
-    var _this = this;
-    if (/(^|[^a-w])([a-d])($|[^a-w])/.test(fragment)) {
-      this.showDialog({
-        text: 'What is the range of this variable?',
-        fields: [['min', 'From (min)'], ['max', 'To (max)'], ['increment', 'By (increment)'], [], ['start', 'Starting At']],
-        callback: function(data) {
-          return console.log(data);
-        }
-      });
+    var result, variable,
+      _this = this;
+    if ((result = /(^|[^a-w])([a-d])($|[^a-w])/.exec(fragment))) {
+      variable = result[2];
+      if (!this.variables[variable]) {
+        this.showDialog({
+          text: 'What is the range of this variable?',
+          fields: [['min', 'From (min)'], ['max', 'To (max)'], [], ['increment', 'By (increment)'], ['start', 'Starting At']],
+          callback: function(data) {
+            var equation, _i, _len, _ref, _results;
+            _this.variables[variable] = data;
+            _ref = _this.equations.equations;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              equation = _ref[_i];
+              equation.variables || (equation.variables = {});
+              _results.push(equation.variables[variable] = data);
+            }
+            return _results;
+          }
+        });
+      }
     }
     return this.equations.addComponent(fragment);
   };
@@ -403,6 +417,7 @@ xyflyerEditor.EditorHelper = (function() {
       instructions.fragments || (instructions.fragments = []);
       instructions.fragments.push(component.equationFragment);
     }
+    instructions.variables = this.variables;
     return this.encode(JSON.stringify(instructions));
   };
 

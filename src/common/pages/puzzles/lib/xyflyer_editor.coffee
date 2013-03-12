@@ -3,7 +3,7 @@ xyflyerEditor = exports ? provide('./lib/xyflyer_editor', {})
 class xyflyerEditor.EditorHelper
     $: (selector) -> $(selector, @el)
 
-    constructor: ({@el, @equationArea, @boardElement, @objects, @encode, @islandCoordinates, @grid}) ->
+    constructor: ({@el, @equationArea, @boardElement, @objects, @encode, @islandCoordinates, @grid, @variables}) ->
         @rings = []
         @parser = require('./parser')
         @init()
@@ -16,6 +16,8 @@ class xyflyerEditor.EditorHelper
             gameArea: @el
             plot: (id, data) => @plot(id, data)
             submit: => @launch()
+            
+        @variables or= {}
 
         @initButtons()
         @hideInstructions()
@@ -155,20 +157,27 @@ class xyflyerEditor.EditorHelper
                     @initBoard({})
                     @boardElement.unbind('mousemove.dragisland')
                     
-    addEquation: -> @equations.add()    
+    addEquation: -> @equations.add(null, null, null, @variables)    
        
     addEquationComponent: (fragment) -> 
-        if ///(^|[^a-w])([a-d])($|[^a-w])///.test(fragment)
-            @showDialog
-                text: 'What is the range of this variable?'
-                fields: [
-                    ['min', 'From (min)']
-                    ['max', 'To (max)']
-                    ['increment', 'By (increment)']
-                    []
-                    ['start', 'Starting At']
-                ]
-                callback: (data) => console.log(data)
+        if (result = ///(^|[^a-w])([a-d])($|[^a-w])///.exec(fragment))
+            variable = result[2]
+            if not @variables[variable]
+                @showDialog
+                    text: 'What is the range of this variable?'
+                    fields: [
+                        ['min', 'From (min)']
+                        ['max', 'To (max)']
+                        []
+                        ['increment', 'By (increment)']
+                        ['start', 'Starting At']
+                    ]
+                    callback: (data) =>
+                        @variables[variable] = data
+                        for equation in @equations.equations
+                            equation.variables or= {}
+                            equation.variables[variable] = data
+                    
         @equations.addComponent(fragment) 
     
     addRing: (x, y) -> @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))
@@ -256,6 +265,8 @@ class xyflyerEditor.EditorHelper
         for component in @equations.equationComponents
             instructions.fragments or= []
             instructions.fragments.push(component.equationFragment)
+            
+        instructions.variables = @variables
             
         return @encode(JSON.stringify(instructions))
         
