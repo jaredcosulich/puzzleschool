@@ -86,8 +86,8 @@ class xyflyerEditor.EditorHelper
 
         @$('.editor .add_equation').bind 'click', =>
             if @equations.length < 3
-                @handleModification()
                 @addEquation()
+                @handleModification()
             else    
                 alert("You've already added the maximum number of equations.")
                     
@@ -95,8 +95,8 @@ class xyflyerEditor.EditorHelper
             if @equations.length <= 1
                 alert('You must have at least one equation.')
             else
-                @handleModification()
                 equation = @equations.remove()
+                @handleModification()
 
         @$('.editor .add_fragment').bind 'click', =>
             @showDialog
@@ -109,10 +109,13 @@ class xyflyerEditor.EditorHelper
         @$('.editor .remove_fragment').bind 'click', =>
             alert('Please click on the equation fragment you want to remove.')
             for component in @equations.equationComponents
-                component.element.bind 'click.remove', =>
-                    @handleModification()
-                    c.element.unbind('click.remove') for c in @equations.equationComponents
-                    @equations.removeComponent(component)
+                do (component) =>
+                    component.element.bind 'mousedown.remove', =>
+                        c.element.unbind('mousedown.remove') for c in @equations.equationComponents
+                        if component.variable
+                            delete @variables[component.variable]
+                        @equations.removeComponent(component)
+                        @handleModification()
 
         @$('.editor .add_ring').bind 'click', =>
             @showDialog
@@ -126,7 +129,6 @@ class xyflyerEditor.EditorHelper
         @$('.editor .remove_ring').bind 'click', =>
             alert('Please click on the ring you want to remove.')
             @boardElement.bind 'click.remove_ring', (e) =>
-                @handleModification()
                 @boardElement.unbind('click.remove_ring')
                 @board.initClicks(@boardElement)
                 for ring, index in @rings
@@ -136,6 +138,7 @@ class xyflyerEditor.EditorHelper
                         ring.label.remove()
                         return
                 alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.')
+                @handleModification()
             @boardElement.unbind('click.showxy')
         
         @boardElement.bind 'mousedown.dragisland', (e) =>
@@ -160,8 +163,10 @@ class xyflyerEditor.EditorHelper
     addEquation: -> @equations.add(null, null, null, @variables)    
        
     addEquationComponent: (fragment) -> 
+        component = @equations.addComponent(fragment) 
         if (result = ///(^|[^a-w])([a-d])($|[^a-w])///.exec(fragment))
             variable = result[2]
+            component.variable = variable
             if not @variables[variable]
                 @showDialog
                     text: 'What is the range of this variable?'
@@ -178,7 +183,6 @@ class xyflyerEditor.EditorHelper
                             equation.variables or= {}
                             equation.variables[variable] = data
                     
-        @equations.addComponent(fragment) 
     
     addRing: (x, y) -> @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))
 
@@ -267,7 +271,7 @@ class xyflyerEditor.EditorHelper
             instructions.fragments.push(component.equationFragment)
             
         instructions.variables = @variables
-            
+        
         return @encode(JSON.stringify(instructions))
         
     handleModification: ->

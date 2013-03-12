@@ -124,8 +124,8 @@ xyflyerEditor.EditorHelper = (function() {
     });
     this.$('.editor .add_equation').bind('click', function() {
       if (_this.equations.length < 3) {
-        _this.handleModification();
-        return _this.addEquation();
+        _this.addEquation();
+        return _this.handleModification();
       } else {
         return alert("You've already added the maximum number of equations.");
       }
@@ -135,8 +135,8 @@ xyflyerEditor.EditorHelper = (function() {
       if (_this.equations.length <= 1) {
         return alert('You must have at least one equation.');
       } else {
-        _this.handleModification();
-        return equation = _this.equations.remove();
+        equation = _this.equations.remove();
+        return _this.handleModification();
       }
     });
     this.$('.editor .add_fragment').bind('click', function() {
@@ -155,16 +155,21 @@ xyflyerEditor.EditorHelper = (function() {
       _results = [];
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         component = _ref1[_i];
-        _results.push(component.element.bind('click.remove', function() {
-          var c, _j, _len1, _ref2;
-          _this.handleModification();
-          _ref2 = _this.equations.equationComponents;
-          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-            c = _ref2[_j];
-            c.element.unbind('click.remove');
-          }
-          return _this.equations.removeComponent(component);
-        }));
+        _results.push((function(component) {
+          return component.element.bind('mousedown.remove', function() {
+            var c, _j, _len1, _ref2;
+            _ref2 = _this.equations.equationComponents;
+            for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+              c = _ref2[_j];
+              c.element.unbind('mousedown.remove');
+            }
+            if (component.variable) {
+              delete _this.variables[component.variable];
+            }
+            _this.equations.removeComponent(component);
+            return _this.handleModification();
+          });
+        })(component));
       }
       return _results;
     });
@@ -181,7 +186,6 @@ xyflyerEditor.EditorHelper = (function() {
       alert('Please click on the ring you want to remove.');
       _this.boardElement.bind('click.remove_ring', function(e) {
         var index, ring, _i, _len, _ref1;
-        _this.handleModification();
         _this.boardElement.unbind('click.remove_ring');
         _this.board.initClicks(_this.boardElement);
         _ref1 = _this.rings;
@@ -194,7 +198,8 @@ xyflyerEditor.EditorHelper = (function() {
             return;
           }
         }
-        return alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.');
+        alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.');
+        return _this.handleModification();
       });
       return _this.boardElement.unbind('click.showxy');
     });
@@ -239,12 +244,14 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
-    var result, variable,
+    var component, result, variable,
       _this = this;
+    component = this.equations.addComponent(fragment);
     if ((result = /(^|[^a-w])([a-d])($|[^a-w])/.exec(fragment))) {
       variable = result[2];
+      component.variable = variable;
       if (!this.variables[variable]) {
-        this.showDialog({
+        return this.showDialog({
           text: 'What is the range of this variable?',
           fields: [['min', 'From (min)'], ['max', 'To (max)'], [], ['increment', 'By (increment)'], ['start', 'Starting At']],
           callback: function(data) {
@@ -262,7 +269,6 @@ xyflyerEditor.EditorHelper = (function() {
         });
       }
     }
-    return this.equations.addComponent(fragment);
   };
 
   EditorHelper.prototype.addRing = function(x, y) {

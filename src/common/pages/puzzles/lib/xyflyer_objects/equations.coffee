@@ -48,10 +48,11 @@ class equations.Equations
 
         equationComponent.appendTo(@possibleFragments)
         @equationComponents.push(equationComponent)
+        return equationComponent
         
     removeComponent: (equationComponent) ->
-        index = (if equation then @equationComponents.indexOf(equation) else @equationComponents.length - 1)
-        equationComponent = @equationComponents.splice(index-1, 1)[0]
+        index = (if equationComponent then @equationComponents.indexOf(equationComponent) else @equationComponents.length - 1)
+        equationComponent = @equationComponents.splice(index, 1)[0]
         equationComponent.element.remove()
         
         
