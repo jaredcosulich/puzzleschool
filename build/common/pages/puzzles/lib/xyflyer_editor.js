@@ -240,6 +240,21 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addEquation = function(equationString, start, solutionComponents) {
+    var _this = this;
+    if (!start) {
+      return this.showDialog({
+        text: 'What should this equation start with?',
+        fields: [['start', 'Starting Equation', 'text']],
+        callback: function(data) {
+          return _this.actuallyAddEquation(equationString, data.start, solutionComponents);
+        }
+      });
+    } else {
+      return this.actuallyAddEquation(equationString, start, solutionComponents);
+    }
+  };
+
+  EditorHelper.prototype.actuallyAddEquation = function(equationString, start, solutionComponents) {
     var accept, c, component, equation, solutionComponent, _i, _len, _ref,
       _this = this;
     equation = this.equations.add(equationString, start, solutionComponents, this.variables);
@@ -483,7 +498,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.getInstructions = function() {
-    var component, equation, info, instructions, ring, variable, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+    var component, equation, equationInstructions, info, instructions, ring, solutionComponents, variable, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
     instructions = {
       equations: {},
       rings: []
@@ -491,9 +506,13 @@ xyflyerEditor.EditorHelper = (function() {
     _ref = this.equations.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
-      instructions.equations[equation.straightFormula()] = {
-        solutionComponents: this.constructSolutionComponents(equation)
-      };
+      equationInstructions = instructions.equations[equation.straightFormula()] = {};
+      if (equation.startingFragment) {
+        equationInstructions.start = equation.startingFragment;
+      }
+      if ((solutionComponents = this.constructSolutionComponents(equation)).length) {
+        equationInstructions.solutionComponents = solutionComponents;
+      }
     }
     instructions.grid = this.grid;
     instructions.islandCoordinates = this.islandCoordinates;

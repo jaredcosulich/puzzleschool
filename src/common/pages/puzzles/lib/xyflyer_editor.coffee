@@ -86,7 +86,7 @@ class xyflyerEditor.EditorHelper
 
         @$('.editor .add_equation').bind 'click', =>
             if @equations.length < 3
-                @addEquation()
+                @addEquation() 
                 @handleModification()
             else    
                 alert("You've already added the maximum number of equations.")
@@ -161,6 +161,17 @@ class xyflyerEditor.EditorHelper
                     @boardElement.unbind('mousemove.dragisland')
                     
     addEquation: (equationString, start, solutionComponents) -> 
+        if not start
+            @showDialog
+                text: 'What should this equation start with?'
+                fields: [
+                    ['start', 'Starting Equation', 'text']
+                ]
+                callback: (data) => @actuallyAddEquation(equationString, data.start, solutionComponents)
+        else
+            @actuallyAddEquation(equationString, start, solutionComponents)
+            
+    actuallyAddEquation: (equationString, start, solutionComponents) -> 
         equation = @equations.add(equationString, start, solutionComponents, @variables)  
         for solutionComponent in (solutionComponents or [])
             component = (c for c in @equations.equationComponents when c.equationFragment == solutionComponent.fragment)[0]
@@ -295,8 +306,13 @@ class xyflyerEditor.EditorHelper
         instructions = {equations: {}, rings: []}
         
         for equation in @equations.equations
-            instructions.equations[equation.straightFormula()] = 
-                solutionComponents: @constructSolutionComponents(equation)
+            equationInstructions = instructions.equations[equation.straightFormula()] = {}
+            if equation.startingFragment
+                equationInstructions.start = equation.startingFragment 
+            
+            if (solutionComponents = @constructSolutionComponents(equation)).length
+                equationInstructions.solutionComponents = solutionComponents
+            
             
         instructions.grid = @grid
         

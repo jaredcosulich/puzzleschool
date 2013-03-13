@@ -600,6 +600,86 @@ LEVELS = [
     fragments: ['2x', '(1/2)x', '+2']
   }, {
     equations: {
+      'a*x+c': {
+        start: 'x',
+        solutionComponents: [
+          {
+            fragment: 'a*',
+            after: ''
+          }, {
+            "fragment": "+c",
+            "after": "x"
+          }
+        ]
+      },
+      '(1/b)*x+d': {
+        start: 'x',
+        solutionComponents: [
+          {
+            fragment: '(1/b)*',
+            after: ''
+          }, {
+            fragment: '+d',
+            after: 'x'
+          }
+        ]
+      }
+    },
+    rings: [
+      {
+        x: -4,
+        y: 2
+      }, {
+        x: -2,
+        y: -4
+      }, {
+        x: 5,
+        y: -5
+      }
+    ],
+    grid: {
+      xMin: -10,
+      xMax: 10,
+      yMin: -10,
+      yMax: 10
+    },
+    islandCoordinates: {
+      x: -6,
+      y: 8
+    },
+    fragments: ["a*", "(1/b)*", "+c", "+d"],
+    variables: {
+      "a": {
+        "start": 1,
+        "min": -10,
+        "max": 10,
+        "increment": 1,
+        "solution": "-3"
+      },
+      "b": {
+        "start": 1,
+        "min": -10,
+        "max": 10,
+        "increment": 1,
+        "solution": "5"
+      },
+      "c": {
+        "start": 1,
+        "min": -10,
+        "max": 10,
+        "increment": 1,
+        "solution": "-10"
+      },
+      "d": {
+        "start": 1,
+        "min": -10,
+        "max": 10,
+        "increment": 1,
+        "solution": "-6"
+      }
+    }
+  }, {
+    equations: {
       'a*x-64': {
         start: 'x'
       },

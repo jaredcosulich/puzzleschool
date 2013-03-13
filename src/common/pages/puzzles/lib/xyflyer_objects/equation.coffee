@@ -4,7 +4,7 @@ Transformer = require('./transformer').Transformer
 class equation.Equation
     defaultText: 'Drag equations below and drop here'
 
-    constructor: ({@id, @gameArea, @solution, @solutionComponents, startingFragment, @variables, @plot}) ->
+    constructor: ({@id, @gameArea, @solution, @solutionComponents, @startingFragment, @variables, @plot}) ->
         @dropAreas = []
         @container = $(document.createElement('DIV'))
         @container.addClass('equation_container')
@@ -15,11 +15,11 @@ class equation.Equation
         @el.attr('id', @id)
         @el.bind "touchstart touchmove touchend", (e) -> e.preventDefault() if e.preventDefault
 
-        if startingFragment?.length
-            @startingFragment = @formatFragment(startingFragment)
+        if @startingFragment?.length
+            @startingElement = @formatFragment(@startingFragment)
             @el.addClass('starting_fragment')
         else
-            @startingFragment = @defaultText 
+            @startingElement = @defaultText 
         
         @container.append(@el)
 
@@ -120,8 +120,8 @@ class equation.Equation
         @el.append(dropAreaElement)
         @addDropArea(dropAreaElement)
         
-        dropAreaElement.html(@startingFragment)
-        if @startingFragment == @defaultText
+        dropAreaElement.html(@startingElement)
+        if @startingElement == @defaultText
             dropAreaElement.addClass('only_area')
         else
             dropAreaElement.addClass('fragment')
@@ -161,7 +161,7 @@ class equation.Equation
         dropArea = 
             id: @id
             index: @dropAreas.length
-            startingFragment: (if dropAreaElement == @el then @startingFragment else '')
+            startingFragment: (if dropAreaElement == @el then @startingElement else '')
             element: dropAreaElement
             childAreas: []
             dirtyCount: 0

@@ -11,8 +11,8 @@ equation.Equation = (function() {
   Equation.prototype.defaultText = 'Drag equations below and drop here';
 
   function Equation(_arg) {
-    var startingFragment;
-    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.solutionComponents = _arg.solutionComponents, startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
+    var _ref;
+    this.id = _arg.id, this.gameArea = _arg.gameArea, this.solution = _arg.solution, this.solutionComponents = _arg.solutionComponents, this.startingFragment = _arg.startingFragment, this.variables = _arg.variables, this.plot = _arg.plot;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -29,11 +29,11 @@ equation.Equation = (function() {
         return e.preventDefault();
       }
     });
-    if (startingFragment != null ? startingFragment.length : void 0) {
-      this.startingFragment = this.formatFragment(startingFragment);
+    if ((_ref = this.startingFragment) != null ? _ref.length : void 0) {
+      this.startingElement = this.formatFragment(this.startingFragment);
       this.el.addClass('starting_fragment');
     } else {
-      this.startingFragment = this.defaultText;
+      this.startingElement = this.defaultText;
     }
     this.container.append(this.el);
     this.initHover();
@@ -196,8 +196,8 @@ equation.Equation = (function() {
     dropAreaElement = this.newDropArea();
     this.el.append(dropAreaElement);
     this.addDropArea(dropAreaElement);
-    dropAreaElement.html(this.startingFragment);
-    if (this.startingFragment === this.defaultText) {
+    dropAreaElement.html(this.startingElement);
+    if (this.startingElement === this.defaultText) {
       dropAreaElement.addClass('only_area');
     } else {
       dropAreaElement.addClass('fragment');
@@ -248,7 +248,7 @@ equation.Equation = (function() {
     dropArea = {
       id: this.id,
       index: this.dropAreas.length,
-      startingFragment: (dropAreaElement === this.el ? this.startingFragment : ''),
+      startingFragment: (dropAreaElement === this.el ? this.startingElement : ''),
       element: dropAreaElement,
       childAreas: [],
       dirtyCount: 0,
