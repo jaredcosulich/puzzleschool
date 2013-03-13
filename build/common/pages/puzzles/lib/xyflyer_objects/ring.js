@@ -109,7 +109,8 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.reset = function() {
-    return this.passedThrough = false;
+    this.passedThrough = false;
+    return this.highlighting = false;
   };
 
   return Ring;

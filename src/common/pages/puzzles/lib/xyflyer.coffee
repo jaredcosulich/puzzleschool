@@ -70,7 +70,7 @@ class xyflyer.ViewHelper
         @equations.addComponent(equationFragment)
         
     resetLevel: ->
-        @plane.reset()
+        @plane.reset() if @plane
         ring.reset() for ring in @rings
     
     completeLevel: ->

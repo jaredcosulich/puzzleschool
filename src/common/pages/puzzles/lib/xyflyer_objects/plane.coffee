@@ -9,7 +9,7 @@ class plane.Plane extends xyflyerObject.Object
     constructor: ({@board, @track, @objects}) ->
         @animation = new Animation(true)
         @addToBoard()
-        @reset()
+        @board.resetLevel()
 
     setBoard: (@board) ->
         
@@ -70,7 +70,7 @@ class plane.Plane extends xyflyerObject.Object
         @falling = true
         x = @xPos + @board.xAxis + 20
         y = 1000
-        @animate(x, y, 3000, => @reset()) 
+        @animate(x, y, 3000, => @board.resetLevel()) 
     
     launch: (force) ->
         return if @falling or @cancelFlight and not force
@@ -100,5 +100,4 @@ class plane.Plane extends xyflyerObject.Object
         @size()
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)
         @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
-
         

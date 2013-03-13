@@ -80,3 +80,4 @@ class ring.Ring extends xyflyerObject.Object
     
     reset: ->
         @passedThrough = false
+        @highlighting = false
