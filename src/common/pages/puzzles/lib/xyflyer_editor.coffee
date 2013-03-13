@@ -170,9 +170,11 @@ class xyflyerEditor.EditorHelper
                 do (solutionComponent, component, accept) =>
                     dropArea = (da for da in equation.dropAreas when da.element[0] == accept[0])[0]
                     equation.accept(dropArea, component)
+                    component.initMeasurements()
+                    component.setDragging()
+                    component.element.css(visibility: 'hidden')                    
                     if component.variable
                         setTimeout((=>
-                            console.log(@variables[component.variable].solution)
                             equation.variables[component.variable].set(@variables[component.variable].solution)
                         ), 100)
 
@@ -202,6 +204,8 @@ class xyflyerEditor.EditorHelper
                             
         @handleModification()
                     
+    displayVariables: ->
+        
     
     addRing: (x, y) -> 
         @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))

@@ -278,9 +278,13 @@ xyflyerEditor.EditorHelper = (function() {
             return _results;
           })())[0];
           equation.accept(dropArea, component);
+          component.initMeasurements();
+          component.setDragging();
+          component.element.css({
+            visibility: 'hidden'
+          });
           if (component.variable) {
             return setTimeout((function() {
-              console.log(_this.variables[component.variable].solution);
               return equation.variables[component.variable].set(_this.variables[component.variable].solution);
             }), 100);
           }
@@ -317,6 +321,8 @@ xyflyerEditor.EditorHelper = (function() {
     }
     return this.handleModification();
   };
+
+  EditorHelper.prototype.displayVariables = function() {};
 
   EditorHelper.prototype.addRing = function(x, y) {
     this.rings.push(new xyflyer.Ring({

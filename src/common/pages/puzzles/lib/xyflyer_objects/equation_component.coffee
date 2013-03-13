@@ -51,11 +51,14 @@ class equationComponent.EquationComponent
         
         body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)
         body.one 'mouseup.drag touchend.drag', (e) => @endMove(e) 
-        @element.addClass('dragging')
         @element.css(visibility: 'visible')
-        @placeHolder.show()
-        @placeHolder.html(@element.html())   
+        @setDragging()
         @move(e)
+        
+    setDragging: ->
+        @element.addClass('dragging')
+        @placeHolder.show()
+        @placeHolder.html(@element.html())           
         
     move: (e) ->
         e.preventDefault() if e.preventDefault 
