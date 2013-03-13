@@ -160,7 +160,23 @@ class xyflyerEditor.EditorHelper
                     @initBoard({})
                     @boardElement.unbind('mousemove.dragisland')
                     
-    addEquation: -> @equations.add(null, null, null, @variables)    
+    addEquation: (equationString, start, solutionComponents) -> 
+        equation = @equations.add(equationString, start, solutionComponents, @variables)  
+        for solutionComponent in (solutionComponents or [])
+            component = (c for c in @equations.equationComponents when c.equationFragment == solutionComponent.fragment)[0]
+            continue if component.after == solutionComponent.after
+            accept = @equations.findComponentDropAreaElement(equation, solutionComponent)
+            if accept?.length
+                do (solutionComponent, component, accept) =>
+                    dropArea = (da for da in equation.dropAreas when da.element[0] == accept[0])[0]
+                    equation.accept(dropArea, component)
+                    if component.variable
+                        setTimeout((=>
+                            console.log(@variables[component.variable].solution)
+                            equation.variables[component.variable].set(@variables[component.variable].solution)
+                        ), 100)
+
+        @handleModification()
        
     addEquationComponent: (fragment) -> 
         component = @equations.addComponent(fragment) 
@@ -182,9 +198,14 @@ class xyflyerEditor.EditorHelper
                         for equation in @equations.equations
                             equation.variables or= {}
                             equation.variables[variable] = data
+                        @handleModification()
+                            
+        @handleModification()
                     
     
-    addRing: (x, y) -> @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))
+    addRing: (x, y) -> 
+        @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))
+        @handleModification()
 
     plot: (id, data) ->
         [formula, area] = @parser.parse(data)
@@ -258,10 +279,12 @@ class xyflyerEditor.EditorHelper
     
     constructSolutionComponents: (equation) ->
         solutionComponents = []
-        for da in equation.dropAreas when da.component
-            solutionComponents.push
-                fragment: da.component.equationFragment
-                after: da.component.after
+        for dae in equation.el.find('div')
+            dropArea = (da for da in equation.dropAreas when da.element?[0] == dae)[0] 
+            if dropArea?.component
+                solutionComponents.push
+                    fragment: dropArea.component.equationFragment
+                    after: dropArea.component.after
         return solutionComponents
                 
     getInstructions: ->

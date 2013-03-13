@@ -149,17 +149,17 @@ soma.views
             
             
         loadLevel: ->
-            for equation, info of @data?.equations or {'': {}}
-                @helper.addEquation(equation, info.start, info.solutionComponents, @data?.variables)    
-        
-            for ring in @data?.rings or []
-                @helper.addRing(ring.x, ring.y)
-            
             if @data?.fragments
                 for fragment in @data.fragments
                     @helper.addEquationComponent(fragment)
             else if @levelId != 'editor'
                 @$('.possible_fragments').hide()
+
+            for equation, info of @data?.equations or {'': {}}
+                @helper.addEquation(equation, info.start, info.solutionComponents, @data?.variables)    
+        
+            for ring in @data?.rings or []
+                @helper.addRing(ring.x, ring.y)
                             
                 
         centerAndShow: (element, board) ->
@@ -243,7 +243,7 @@ soma.views
                 'fragment': '~G'
                 'solutionComponents': '~H'
                 'after': '~I'
-                'solution': '~I'
+                'solution': '~J'
                 '"verified"': '~V'
                 
             @extraEncodeMap = 

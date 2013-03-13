@@ -239,8 +239,55 @@ xyflyerEditor.EditorHelper = (function() {
     });
   };
 
-  EditorHelper.prototype.addEquation = function() {
-    return this.equations.add(null, null, null, this.variables);
+  EditorHelper.prototype.addEquation = function(equationString, start, solutionComponents) {
+    var accept, c, component, equation, solutionComponent, _i, _len, _ref,
+      _this = this;
+    equation = this.equations.add(equationString, start, solutionComponents, this.variables);
+    _ref = solutionComponents || [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      solutionComponent = _ref[_i];
+      component = ((function() {
+        var _j, _len1, _ref1, _results;
+        _ref1 = this.equations.equationComponents;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          c = _ref1[_j];
+          if (c.equationFragment === solutionComponent.fragment) {
+            _results.push(c);
+          }
+        }
+        return _results;
+      }).call(this))[0];
+      if (component.after === solutionComponent.after) {
+        continue;
+      }
+      accept = this.equations.findComponentDropAreaElement(equation, solutionComponent);
+      if (accept != null ? accept.length : void 0) {
+        (function(solutionComponent, component, accept) {
+          var da, dropArea;
+          dropArea = ((function() {
+            var _j, _len1, _ref1, _results;
+            _ref1 = equation.dropAreas;
+            _results = [];
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              da = _ref1[_j];
+              if (da.element[0] === accept[0]) {
+                _results.push(da);
+              }
+            }
+            return _results;
+          })())[0];
+          equation.accept(dropArea, component);
+          if (component.variable) {
+            return setTimeout((function() {
+              console.log(_this.variables[component.variable].solution);
+              return equation.variables[component.variable].set(_this.variables[component.variable].solution);
+            }), 100);
+          }
+        })(solutionComponent, component, accept);
+      }
+    }
+    return this.handleModification();
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
@@ -251,32 +298,33 @@ xyflyerEditor.EditorHelper = (function() {
       variable = result[2];
       component.variable = variable;
       if (!this.variables[variable]) {
-        return this.showDialog({
+        this.showDialog({
           text: 'What is the range of this variable?',
           fields: [['min', 'From (min)'], ['max', 'To (max)'], [], ['increment', 'By (increment)'], ['start', 'Starting At']],
           callback: function(data) {
-            var equation, _i, _len, _ref, _results;
+            var equation, _i, _len, _ref;
             _this.variables[variable] = data;
             _ref = _this.equations.equations;
-            _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               equation = _ref[_i];
               equation.variables || (equation.variables = {});
-              _results.push(equation.variables[variable] = data);
+              equation.variables[variable] = data;
             }
-            return _results;
+            return _this.handleModification();
           }
         });
       }
     }
+    return this.handleModification();
   };
 
   EditorHelper.prototype.addRing = function(x, y) {
-    return this.rings.push(new xyflyer.Ring({
+    this.rings.push(new xyflyer.Ring({
       board: this.board,
       x: x,
       y: y
     }));
+    return this.handleModification();
   };
 
   EditorHelper.prototype.plot = function(id, data) {
@@ -401,15 +449,27 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.constructSolutionComponents = function(equation) {
-    var da, solutionComponents, _i, _len, _ref;
+    var da, dae, dropArea, solutionComponents, _i, _len, _ref;
     solutionComponents = [];
-    _ref = equation.dropAreas;
+    _ref = equation.el.find('div');
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      da = _ref[_i];
-      if (da.component) {
+      dae = _ref[_i];
+      dropArea = ((function() {
+        var _j, _len1, _ref1, _ref2, _results;
+        _ref1 = equation.dropAreas;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          da = _ref1[_j];
+          if (((_ref2 = da.element) != null ? _ref2[0] : void 0) === dae) {
+            _results.push(da);
+          }
+        }
+        return _results;
+      })())[0];
+      if (dropArea != null ? dropArea.component : void 0) {
         solutionComponents.push({
-          fragment: da.component.equationFragment,
-          after: da.component.after
+          fragment: dropArea.component.equationFragment,
+          after: dropArea.component.after
         });
       }
     }

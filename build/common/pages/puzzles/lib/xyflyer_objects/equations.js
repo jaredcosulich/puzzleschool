@@ -52,7 +52,8 @@ equations.Equations = (function() {
     });
     this.equations.push(equation);
     this.length = this.equations.length;
-    return equation.appendTo(this.equationsArea);
+    equation.appendTo(this.equationsArea);
+    return equation;
   };
 
   Equations.prototype.remove = function(equation) {

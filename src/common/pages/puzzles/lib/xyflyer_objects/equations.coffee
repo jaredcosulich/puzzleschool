@@ -32,6 +32,7 @@ class equations.Equations
         @equations.push(equation)
         @length = @equations.length
         equation.appendTo(@equationsArea)
+        return equation
     
     remove: (equation) ->
         index = (if equation then @equations.indexOf(equation) else @equations.length - 1)

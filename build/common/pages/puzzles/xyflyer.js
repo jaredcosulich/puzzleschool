@@ -183,29 +183,29 @@ soma.views({
     },
     loadLevel: function() {
       var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _results;
-      _ref1 = ((_ref = this.data) != null ? _ref.equations : void 0) || {
+      if ((_ref = this.data) != null ? _ref.fragments : void 0) {
+        _ref1 = this.data.fragments;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          fragment = _ref1[_i];
+          this.helper.addEquationComponent(fragment);
+        }
+      } else if (this.levelId !== 'editor') {
+        this.$('.possible_fragments').hide();
+      }
+      _ref3 = ((_ref2 = this.data) != null ? _ref2.equations : void 0) || {
         '': {}
       };
-      for (equation in _ref1) {
-        info = _ref1[equation];
-        this.helper.addEquation(equation, info.start, info.solutionComponents, (_ref2 = this.data) != null ? _ref2.variables : void 0);
+      for (equation in _ref3) {
+        info = _ref3[equation];
+        this.helper.addEquation(equation, info.start, info.solutionComponents, (_ref4 = this.data) != null ? _ref4.variables : void 0);
       }
-      _ref4 = ((_ref3 = this.data) != null ? _ref3.rings : void 0) || [];
-      for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
-        ring = _ref4[_i];
-        this.helper.addRing(ring.x, ring.y);
+      _ref6 = ((_ref5 = this.data) != null ? _ref5.rings : void 0) || [];
+      _results = [];
+      for (_j = 0, _len1 = _ref6.length; _j < _len1; _j++) {
+        ring = _ref6[_j];
+        _results.push(this.helper.addRing(ring.x, ring.y));
       }
-      if ((_ref5 = this.data) != null ? _ref5.fragments : void 0) {
-        _ref6 = this.data.fragments;
-        _results = [];
-        for (_j = 0, _len1 = _ref6.length; _j < _len1; _j++) {
-          fragment = _ref6[_j];
-          _results.push(this.helper.addEquationComponent(fragment));
-        }
-        return _results;
-      } else if (this.levelId !== 'editor') {
-        return this.$('.possible_fragments').hide();
-      }
+      return _results;
     },
     centerAndShow: function(element, board) {
       var areaOffset, boardOffset, offset;
@@ -302,7 +302,7 @@ soma.views({
         'fragment': '~G',
         'solutionComponents': '~H',
         'after': '~I',
-        'solution': '~I',
+        'solution': '~J',
         '"verified"': '~V'
       };
       return this.extraEncodeMap = {
