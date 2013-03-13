@@ -299,6 +299,10 @@ soma.views({
         'max': '~D',
         'increment': '~E',
         'start': '~F',
+        'fragment': '~G',
+        'solutionComponents': '~H',
+        'after': '~I',
+        'solution': '~I',
         '"verified"': '~V'
       };
       return this.extraEncodeMap = {

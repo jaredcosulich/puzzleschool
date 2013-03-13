@@ -285,14 +285,14 @@ equation.Equation = (function() {
     this.formatDropArea(dropArea, component);
     this.wrap(dropArea);
     this.initVariables();
-    this.plot(this);
     dropArea.width = dropArea.element.width();
     component.placeHolder.unbind('click.placeholder');
     component.placeHolder.one('click.placeholder', function(e) {
       _this.removeFragment(dropArea, e);
       return component.endMove(e);
     });
-    return this.recordComponentPositions();
+    this.recordComponentPositions();
+    return this.plot(this);
   };
 
   Equation.prototype.recordComponentPositions = function() {

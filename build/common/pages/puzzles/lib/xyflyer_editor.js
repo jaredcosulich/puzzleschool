@@ -282,12 +282,16 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.plot = function(id, data) {
     var area, formula, _ref;
     _ref = this.parser.parse(data), formula = _ref[0], area = _ref[1];
-    return this.board.plot(id, formula, area);
+    this.board.plot(id, formula, area);
+    return this.handleModification();
   };
 
   EditorHelper.prototype.launch = function() {
     var _ref;
-    return (_ref = this.plane) != null ? _ref.launch(true) : void 0;
+    if ((_ref = this.plane) != null) {
+      _ref.launch(true);
+    }
+    return this.handleModification();
   };
 
   EditorHelper.prototype.resetLevel = function() {
@@ -396,8 +400,24 @@ xyflyerEditor.EditorHelper = (function() {
     });
   };
 
+  EditorHelper.prototype.constructSolutionComponents = function(equation) {
+    var da, solutionComponents, _i, _len, _ref;
+    solutionComponents = [];
+    _ref = equation.dropAreas;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      da = _ref[_i];
+      if (da.component) {
+        solutionComponents.push({
+          fragment: da.component.equationFragment,
+          after: da.component.after
+        });
+      }
+    }
+    return solutionComponents;
+  };
+
   EditorHelper.prototype.getInstructions = function() {
-    var component, equation, instructions, ring, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var component, equation, info, instructions, ring, variable, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
     instructions = {
       equations: {},
       rings: []
@@ -405,7 +425,9 @@ xyflyerEditor.EditorHelper = (function() {
     _ref = this.equations.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
-      instructions.equations[equation.straightFormula()] = {};
+      instructions.equations[equation.straightFormula()] = {
+        solutionComponents: this.constructSolutionComponents(equation)
+      };
     }
     instructions.grid = this.grid;
     instructions.islandCoordinates = this.islandCoordinates;
@@ -423,7 +445,19 @@ xyflyerEditor.EditorHelper = (function() {
       instructions.fragments || (instructions.fragments = []);
       instructions.fragments.push(component.equationFragment);
     }
-    instructions.variables = this.variables;
+    _ref3 = this.variables;
+    for (variable in _ref3) {
+      info = _ref3[variable];
+      instructions.variables || (instructions.variables = {});
+      instructions.variables[variable] = {
+        start: info.start,
+        min: info.min,
+        max: info.max,
+        increment: info.increment,
+        solution: (info.get ? info.get() : null)
+      };
+    }
+    console.log(JSON.stringify(instructions));
     return this.encode(JSON.stringify(instructions));
   };
 

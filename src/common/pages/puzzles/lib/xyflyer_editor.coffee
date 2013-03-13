@@ -189,8 +189,11 @@ class xyflyerEditor.EditorHelper
     plot: (id, data) ->
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
+        @handleModification()
         
-    launch: -> @plane?.launch(true) 
+    launch: -> 
+        @plane?.launch(true) 
+        @handleModification()
         
     resetLevel: ->
         @plane.reset()
@@ -253,11 +256,20 @@ class xyflyerEditor.EditorHelper
             
         dialog.find('a').bind 'click', => closeDialog()
     
+    constructSolutionComponents: (equation) ->
+        solutionComponents = []
+        for da in equation.dropAreas when da.component
+            solutionComponents.push
+                fragment: da.component.equationFragment
+                after: da.component.after
+        return solutionComponents
+                
     getInstructions: ->
         instructions = {equations: {}, rings: []}
         
         for equation in @equations.equations
-            instructions.equations[equation.straightFormula()] = {}
+            instructions.equations[equation.straightFormula()] = 
+                solutionComponents: @constructSolutionComponents(equation)
             
         instructions.grid = @grid
         
@@ -270,8 +282,16 @@ class xyflyerEditor.EditorHelper
             instructions.fragments or= []
             instructions.fragments.push(component.equationFragment)
             
-        instructions.variables = @variables
+        for variable, info of @variables
+            instructions.variables or= {}
+            instructions.variables[variable] = 
+                start: info.start
+                min: info.min
+                max: info.max
+                increment: info.increment
+                solution: (if info.get then info.get() else null)
         
+        console.log(JSON.stringify(instructions))
         return @encode(JSON.stringify(instructions))
         
     handleModification: ->

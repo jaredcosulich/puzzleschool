@@ -187,13 +187,13 @@ class equation.Equation
         @formatDropArea(dropArea, component)
         @wrap(dropArea)
         @initVariables()
-        @plot(@)
         dropArea.width = dropArea.element.width()
         component.placeHolder.unbind('click.placeholder')
         component.placeHolder.one 'click.placeholder', (e) =>
             @removeFragment(dropArea, e)
             component.endMove(e)        
         @recordComponentPositions()
+        @plot(@)
             
     recordComponentPositions: ->
         for dropArea in @dropAreas when dropArea.component
