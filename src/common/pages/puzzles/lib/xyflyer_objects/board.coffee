@@ -36,15 +36,8 @@ class board.Board extends xyflyerObject.Object
         @initAnimation()
     
     initAnimation: ->
-        canvas = $(document.createElement('CANVAS'))
-        canvas.css
-            top: 0
-            left: 0
-            height: @el.height()
-            width: @el.width()
-        canvas.attr(height: @el.height(), width: @el.width())            
-        @el.append(canvas)            
-        @animationCtx = canvas[0].getContext('2d')
+        @animationCtx1 = @createCanvas(1)
+        @animationCtx2 = @createCanvas(3)
         @animation = new Animation()
         @animationObjects = []
         @animate()
@@ -57,20 +50,23 @@ class board.Board extends xyflyerObject.Object
     
     animate: ->
         @animation.frame() (t) => 
-            @animationCtx.clearRect(0,0,@width,@height)
-            for animationSet in @animationObjects
+            @animationCtx1.clearRect(0,0,@width,@height)
+            @animationCtx2.clearRect(0,0,@width,@height)
+            for animationSet, index in @animationObjects
                 continue unless animationSet
                 for object in animationSet
-                    object.draw(@animationCtx, t)
+                    ctx = if index <= 2 then @animationCtx1 else @animationCtx2
+                    object.draw(ctx, t)
             @animate()
         
-    createCanvas: ->
+    createCanvas: (zIndex) ->
         canvas = $(document.createElement('CANVAS'))
         canvas.css
             top: 0
             left: 0
             height: @el.height()
             width: @el.width()
+            zIndex: zIndex
         canvas.attr(height: @el.height(), width: @el.width())            
         @el.append(canvas)            
         return canvas[0].getContext('2d')
@@ -249,7 +245,7 @@ class board.Board extends xyflyerObject.Object
 
         return if not formula
         
-        plotArea = @createCanvas() if not plotArea
+        plotArea = @createCanvas(2) if not plotArea
         
         plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
         plotArea.lineWidth = 1
