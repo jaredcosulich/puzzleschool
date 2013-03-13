@@ -16,6 +16,7 @@ class plane.Plane extends xyflyerObject.Object
     addToBoard: -> @board.addToCanvas(@, 2)
         
     draw: (ctx, t) ->
+        return if not @image
         @latestTime = t
         @startTime = @latestTime if not @startTime
         

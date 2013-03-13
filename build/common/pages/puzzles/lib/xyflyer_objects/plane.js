@@ -34,6 +34,9 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.draw = function(ctx, t) {
     var position;
+    if (!this.image) {
+      return;
+    }
     this.latestTime = t;
     if (!this.startTime) {
       this.startTime = this.latestTime;
