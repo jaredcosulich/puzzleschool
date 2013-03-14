@@ -45,7 +45,7 @@ soma.View = (function(_super) {
       });
     });
     return window.onbeforeunload = function() {
-      return 'If you leave this page you\'ll lose your progress.\n\n\n\nYou can save your progress by creating an account.';
+      return 'If you leave this page you\'ll lose your progress.\n\nYou can save your progress by creating an account.';
     };
   };
 

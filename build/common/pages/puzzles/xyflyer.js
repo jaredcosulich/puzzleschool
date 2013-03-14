@@ -114,6 +114,7 @@ soma.views({
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.stages = require('./lib/xyflyer_objects/levels').STAGES;
+      this.dynamicContent = this.el.find('.dynamic_content');
       this.user = this.cookies.get('user');
       if ((_ref = (puzzleData = this.el.data('puzzle_data'))) != null ? _ref.length : void 0) {
         this.puzzleData = JSON.parse(puzzleData);
@@ -124,7 +125,7 @@ soma.views({
       }
       this.puzzleProgress = {};
       this.puzzleProgress[this.levelId] = {};
-      this.originalHTML = this.el.html();
+      this.originalHTML = this.dynamicContent.html();
       this.levelId = this.el.data('level');
       this.level = this.findLevel(this.levelId);
       this.initEncode();
@@ -137,7 +138,7 @@ soma.views({
         if (this.levelId === 'editor') {
           xyflyerEditor = require('./lib/xyflyer_editor');
           this.helper = new xyflyerEditor.EditorHelper({
-            el: $(this.selector),
+            el: this.dynamicContent,
             boardElement: this.$('.board'),
             equationArea: this.$('.equation_area'),
             objects: this.$('.objects'),
@@ -181,9 +182,11 @@ soma.views({
     },
     load: function() {
       var _this = this;
-      this.el.html(this.originalHTML);
+      this.dynamicContent.html(this.originalHTML);
+      console.log($('svg'));
+      $('svg').remove();
       this.helper = new xyflyer.ViewHelper({
-        el: $(this.selector),
+        el: this.dynamicContent,
         boardElement: this.$('.board'),
         objects: this.$('.objects'),
         equationArea: this.$('.equation_area'),
@@ -255,15 +258,6 @@ soma.views({
     isIos: function() {
       return navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
     },
-    nextLevel: function() {
-      this.registerEvent({
-        type: 'success',
-        info: {
-          time: new Date()
-        }
-      });
-      return this.showLevelSelector(true);
-    },
     findLevel: function(levelId) {
       var level, stage, _i, _len, _ref;
       _ref = this.stages;
@@ -288,7 +282,7 @@ soma.views({
     },
     initLevel: function() {
       var _this = this;
-      this.el.find('.dynamic_content').html(this.originalHTML);
+      this.dynamicContent.html(this.originalHTML);
       return setTimeout((function() {
         var _base, _base1, _name, _ref;
         (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = _this.puzzleData.levels[_this.level.id] || {});
@@ -363,34 +357,17 @@ soma.views({
       }
       return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level" + replace + "."));
     },
-    completeLevel: function() {
-      var challenge, test, _i, _len, _ref,
-        _this = this;
+    nextLevel: function() {
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
-      this.saveProgress();
-      this.initLevelSelector();
-      _ref = this.level.tests;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        test = _ref[_i];
-        if (test.clean) {
-          test.clean();
-        }
-      }
-      challenge = this.$('.challenge');
-      return challenge.animate({
-        opacity: 0,
-        duration: 250,
-        complete: function() {
-          challenge.html('<h3 class=\'success\'>Success!</h3>\n<a class=\'next_level\'>Select A New Level</a>');
-          challenge.find('.next_level').bind('click', function() {
-            return _this.showLevelSelector(true);
-          });
-          return challenge.animate({
-            opacity: 1,
-            duration: 250
-          });
+      this.registerEvent({
+        type: 'success',
+        info: {
+          time: this.puzzleProgress[this.level.id].completed
         }
       });
+      this.saveProgress();
+      this.initLevelSelector();
+      return this.showLevelSelector(true);
     },
     showLevelSelector: function(success) {
       var _this = this;

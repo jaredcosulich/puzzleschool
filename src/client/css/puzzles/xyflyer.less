@@ -15,336 +15,355 @@ body {
     background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
     position: relative;
     overflow: hidden;
-    
-    &.dragging {
-        .no_select();   
+
+    .dynamic_content {
+        &.dragging {
+            .no_select();   
         
-        .dragging {
-            .box-shadow(4px 5px 4px #b69c63);
-            .box-shadow(5px 5px 4px #b69c632);
-            .box-shadow(5px 6px 5px #b69c63);
-            cursor: move;
-            overflow: hidden;
-        }         
-    }
-    
-    .board {
-        width: @height;
-        height: @height;
-        float: right;
-        position: relative;   
-        
-        canvas {
-            position: absolute;
-        }     
-    }
-    
-    .equation_area {
-        background-color: white;
-        .rounded(6px);
-        opacity: 0.8;
-        width: ((@width / 3) - 3);
-        height: (@height - 6);
-        margin: 3px 0 0 3px;
-        font-size: @h4size;
-        
-        h2, h3 {
-            text-align: center;
-            padding-top: 12px;
-        }
-        
-        &.show_places {
-            .accept_fragment {
-                 border-bottom: 2px solid @yellow;
-                 width: 12px;
-                 
-                 &:last-child {
-                     width: 45px;
-                 }
-                 
-                 &.with_component {
-                    width: auto;
-                    border-bottom: none;
-                 }
-                 
-                 &.only_area {
-                     width: ((@width / 3) - 69);                                 
-                 }
-            }
-        }
-        
-        .equations {
-            margin-top: 12px;
-            
-            .equation_container {
+            .dragging {
+                .box-shadow(4px 5px 4px #b69c63);
+                .box-shadow(5px 5px 4px #b69c632);
+                .box-shadow(5px 6px 5px #b69c63);
+                cursor: move;
                 overflow: hidden;
-                margin-bottom: 12px;
-
-                .intro {
-                    float: left;
-                    margin: 0 6px;
-                    line-height: 30px;
-                    font-size: @h2size;
+            }         
+        }
+    
+        .board {
+            width: @height;
+            height: @height;
+            float: right;
+            position: relative;   
+        
+            canvas {
+                position: absolute;
+            }     
+        }
+    
+        .equation_area {
+            background-color: white;
+            .rounded(6px);
+            opacity: 0.8;
+            width: ((@width / 3) - 3);
+            height: (@height - 6);
+            margin: 3px 0 0 3px;
+            font-size: @h4size;
+        
+            h2, h3 {
+                text-align: center;
+                padding-top: 12px;
+            }
+        
+            &.show_places {
+                .accept_fragment {
+                     border-bottom: 2px solid @yellow;
+                     width: 12px;
+                 
+                     &:last-child {
+                         width: 45px;
+                     }
+                 
+                     &.with_component {
+                        width: auto;
+                        border-bottom: none;
+                     }
+                 
+                     &.only_area {
+                         width: ((@width / 3) - 69);                                 
+                     }
                 }
-
-                .only_area {
-                    width: ((@width / 3) - 69);
-                    padding: 0 3px;  
-                }
-
-                .equation {
-                    padding: 0 6px;
-                    margin-right: 6px;
-                    color: @lightgrey;
-                    border: 1px solid @lightgrey;
-                    position: relative;
+            }
+        
+            .equations {
+                margin-top: 12px;
+            
+                .equation_container {
                     overflow: hidden;
-                    line-height: 30px;
-                    
-                    &.starting_fragment, &.with_component, .with_component {
-                        color: @black;
+                    margin-bottom: 12px;
+
+                    .intro {
+                        float: left;
+                        margin: 0 6px;
+                        line-height: 30px;
                         font-size: @h2size;
                     }
-            
-                    &.with_component, .with_component {
-                        cursor: pointer;
-                        border: 1px solid @white;
+
+                    .only_area {
+                        width: ((@width / 3) - 69);
+                        padding: 0 3px;  
                     }
-            
-                    .accept_component {
-                        border: 1px solid @yellow;
-                    }
-            
-                    &.component_over, .component_over, &.over_dropped, .over_dropped {
-                        border: 1px solid @darkgreen;
-                        color: @darkgreen;
-                        font-weight: bold;
-                        width: 45px;
-                        &.with_component {
-                            width: auto;
-                        }
-                        &.only_area {
-                            width: ((@width / 3) - 69);                                 
-                        }
-                    }
-            
-                    .fragment, .accept_fragment {
-                        float: left;
-                        height: 30px;
-                    }
-                    
-                    .removing {
-                        display: none;
-                    }
-                
-                    &.bad_formula {
-                        border: 1px solid @red;
-                        color: red;
-                        .with_component {
-                            color: red;
-                        }
-                    }
-            
-                }
-                
-                .bad_formula_message, .range, .variable {
-                    font-size: @smallsize;
-                    border: 1px solid #ccc;
-                    border-top: none;
-                    width: 78%;
-                    margin-left: 14%;
-                    padding: 3px 6px;
-                    overflow: hidden;
-                    input {
-                        width: 24px;
-                    }
-                    .slider {
+
+                    .equation {
+                        padding: 0 6px;
+                        margin-right: 6px;
+                        color: @lightgrey;
+                        border: 1px solid @lightgrey;
                         position: relative;
-                        float: right;
-                        width: 75%;
-                        
-                        .track {
-                            margin: 9px 10px;
-                            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100) );
-                            background:-moz-linear-gradient( center top, #fe1a00 5%, #ce0100 100% );
-                            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-                            background-color:#fe1a00;
-                            height: 6px;
+                        overflow: hidden;
+                        line-height: 30px;
+                    
+                        &.starting_fragment, &.with_component, .with_component {
+                            color: @black;
+                            font-size: @h2size;
                         }
+            
+                        &.with_component, .with_component {
+                            cursor: pointer;
+                            border: 1px solid @white;
+                        }
+            
+                        .accept_component {
+                            border: 1px solid @yellow;
+                        }
+            
+                        &.component_over, .component_over, &.over_dropped, .over_dropped {
+                            border: 1px solid @darkgreen;
+                            color: @darkgreen;
+                            font-weight: bold;
+                            width: 45px;
+                            &.with_component {
+                                width: auto;
+                            }
+                            &.only_area {
+                                width: ((@width / 3) - 69);                                 
+                            }
+                        }
+            
+                        .fragment, .accept_fragment {
+                            float: left;
+                            height: 30px;
+                        }
+                    
+                        .removing {
+                            display: none;
+                        }
+                
+                        &.bad_formula {
+                            border: 1px solid @red;
+                            color: red;
+                            .with_component {
+                                color: red;
+                            }
+                        }
+            
+                    }
+                
+                    .bad_formula_message, .range, .variable {
+                        font-size: @smallsize;
+                        border: 1px solid #ccc;
+                        border-top: none;
+                        width: 78%;
+                        margin-left: 14%;
+                        padding: 3px 6px;
+                        overflow: hidden;
+                        input {
+                            width: 24px;
+                        }
+                        .slider {
+                            position: relative;
+                            float: right;
+                            width: 75%;
                         
-                        .knob {
-                            position: absolute;
-                            background: -webkit-radial-gradient(60% 70%, circle, @green, @darkgreen);
-                            background: -moz-radial-gradient(60% 70%, circle, @green, @darkgreen);
-                            background: -ms-radial-gradient(60% 70%, circle, @green, @darkgreen);
-                            background: -o-radial-gradient(60% 70%, circle, @green, @darkgreen);
-                            background: radial-gradient(circle at 60% 70%, @green, @darkgreen);
-                            width: 20px;
-                            height: 20px;
-                            top: 2px;
-                            left: 0;
-                            cursor: move;
-                            .rounded(10px)
+                            .track {
+                                margin: 9px 10px;
+                                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100) );
+                                background:-moz-linear-gradient( center top, #fe1a00 5%, #ce0100 100% );
+                                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
+                                background-color:#fe1a00;
+                                height: 6px;
+                            }
+                        
+                            .knob {
+                                position: absolute;
+                                background: -webkit-radial-gradient(60% 70%, circle, @green, @darkgreen);
+                                background: -moz-radial-gradient(60% 70%, circle, @green, @darkgreen);
+                                background: -ms-radial-gradient(60% 70%, circle, @green, @darkgreen);
+                                background: -o-radial-gradient(60% 70%, circle, @green, @darkgreen);
+                                background: radial-gradient(circle at 60% 70%, @green, @darkgreen);
+                                width: 20px;
+                                height: 20px;
+                                top: 2px;
+                                left: 0;
+                                cursor: move;
+                                .rounded(10px)
+                            }
                         }
                     }
-                }
                 
-                .bad_formula_message {
-                    border: none;
-                    color: red;
-                }
+                    .bad_formula_message {
+                        border: none;
+                        color: red;
+                    }
             
-            }    
-        }
+                }    
+            }
                     
-        .launch_button {
-            text-align: center;
+            .launch_button {
+                text-align: center;
+            }
+
+            .possible_fragments {
+                margin-top: 30px;
+                padding: 6px;
+    /*            overflow: hidden;*/
+                position: relative;
+            
+                p {
+                    font-size: @smallsize;
+                }
+            
+                .equation_component {
+                    float: left;
+                    margin: 6px 6px 0 0;
+                    cursor: move;
+                }
+            
+                .place_holder {
+                    padding: 6px 9px;
+                    color: @lightgrey;
+                    border: 1px solid @lightgrey;
+                    .rounded(3px);
+                    background: url('/assets/images/puzzles/xyflyer/fragment_down_arrow.png') no-repeat top center;
+                    cursor: pointer;
+                }
+            }
+        }
+    
+        .button {
+            font-size: @h4size;
+            -moz-box-shadow:inset 0px 1px 0px 0px #f29c93;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #f29c93;
+            box-shadow:inset 0px 1px 0px 0px #f29c93;
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100) );
+            background:-moz-linear-gradient( center top, #fe1a00 5%, #ce0100 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
+            background-color:#fe1a00;
+            -moz-border-radius:6px;
+            -webkit-border-radius:6px;
+            border-radius:6px;
+            border:1px solid #d83526;
+            display:inline-block;
+            color: @white;
+            font-family:arial;
+            font-size:15px;
+            font-weight:bold;
+            padding:6px 24px;
+            text-decoration:none;
+            text-shadow:1px 1px 0px #b23e35;
+            margin: auto;
+            &:hover {
+                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00) );
+                background:-moz-linear-gradient( center top, #ce0100 5%, #fe1a00 100% );
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
+                background-color:#ce0100;
+            }
+            &:active {
+                position:relative;
+                top:1px;
+            }
         }
 
-        .possible_fragments {
-            margin-top: 30px;
-            padding: 6px;
-/*            overflow: hidden;*/
-            position: relative;
-            
-            p {
-                font-size: @smallsize;
-            }
-            
-            .equation_component {
-                float: left;
-                margin: 6px 6px 0 0;
-                cursor: move;
-            }
-            
-            .place_holder {
-                padding: 6px 9px;
-                color: @lightgrey;
-                border: 1px solid @lightgrey;
-                .rounded(3px);
-                background: url('/assets/images/puzzles/xyflyer/fragment_down_arrow.png') no-repeat top center;
-                cursor: pointer;
-            }
+        .equation_component {
+            padding: 6px 9px;
+            border: 1px solid @grey;
+            .rounded(3px);
+            cursor: move;
+            background:-webkit-gradient(linear, right bottom, left top, color-stop(0.5, rgb(222,196,139)), color-stop(0.7, rgb(230,204,147)));
+            background:-moz-linear-gradient( center top,  rgb(222,196,139) 50%, rgb(230,204,147) 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='rgb(222,196,139)', endColorstr='rgb(230,204,147)');
+            .box-shadow(0 1px 0 #b69c63);
+            .box-shadow(1px 1px 0 #b69c632);
+            .box-shadow(1px 2px 1px #b69c63);
         }
-    }
     
-    .button {
-        font-size: @h4size;
-        -moz-box-shadow:inset 0px 1px 0px 0px #f29c93;
-        -webkit-box-shadow:inset 0px 1px 0px 0px #f29c93;
-        box-shadow:inset 0px 1px 0px 0px #f29c93;
-        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100) );
-        background:-moz-linear-gradient( center top, #fe1a00 5%, #ce0100 100% );
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-        background-color:#fe1a00;
-        -moz-border-radius:6px;
-        -webkit-border-radius:6px;
-        border-radius:6px;
-        border:1px solid #d83526;
-        display:inline-block;
-        color: @white;
-        font-family:arial;
-        font-size:15px;
-        font-weight:bold;
-        padding:6px 24px;
-        text-decoration:none;
-        text-shadow:1px 1px 0px #b23e35;
-        margin: auto;
-        &:hover {
-            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00) );
-            background:-moz-linear-gradient( center top, #ce0100 5%, #fe1a00 100% );
-            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
-            background-color:#ce0100;
+        .objects {
+            position: absolute;
+            top: -10000px;
+            left: -10000px;
         }
-        &:active {
-            position:relative;
-            top:1px;
-        }
-    }
-
-    .equation_component {
-        padding: 6px 9px;
-        border: 1px solid @grey;
-        .rounded(3px);
-        cursor: move;
-        background:-webkit-gradient(linear, right bottom, left top, color-stop(0.5, rgb(222,196,139)), color-stop(0.7, rgb(230,204,147)));
-        background:-moz-linear-gradient( center top,  rgb(222,196,139) 50%, rgb(230,204,147) 100% );
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='rgb(222,196,139)', endColorstr='rgb(230,204,147)');
-        .box-shadow(0 1px 0 #b69c63);
-        .box-shadow(1px 1px 0 #b69c632);
-        .box-shadow(1px 2px 1px #b69c63);
-    }
     
-    .objects {
-        position: absolute;
-        top: -10000px;
-        left: -10000px;
-    }
-    
-    .complete, .intro_message, .exit_message {
-        position: absolute;
-        top: -1000px;
-        left: -1000px;
-        background-color: white;
-        padding: 30px 60px;
-        text-align: center;
-        z-index: 98;
-        .rounded(6px);
-    }
-    
-    .hints {
-        padding: 60px 0 0 6px;
-                
-        .drag_this, .drop_here, .launch_hint {
+        .complete, .intro_message, .exit_message {
             position: absolute;
             top: -1000px;
             left: -1000px;
+            background-color: white;
+            padding: 30px 60px;
+            text-align: center;
+            z-index: 98;
+            .rounded(6px);
+        }
+    
+        .hints {
+            padding: 60px 0 0 6px;
+                
+            .drag_this, .drop_here, .launch_hint {
+                position: absolute;
+                top: -1000px;
+                left: -1000px;
+                z-index: 99;
+            }
+        }
+    
+        .blue_button, .red_button {
+            border: 1px solid #ccc;
+            padding: 3px 6px;
+            .rounded(6px);
+            color: white;
+            .box-shadow(2px)
+        }
+    
+        .blue_button {
+            background-color: @blue;
+        }
+    
+        .red_button {
+            background-color: @red;
+        }
+    
+        .dialog {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ccc;
+            position: absolute;
+            top: 200px;
+            .rounded(12px);
             z-index: 99;
+            cursor: move;
+            h3 {
+                margin-bottom: 12px;
+            }
+            .number {
+                width: 45px;            
+            }
+            input {
+                padding: 1px;       
+                margin-right: 12px;         
+            }
+            .button {
+                margin-top: 12px;
+                padding: 3px 12px;
+                font-size: @h4size;
+            }
+        }
+    
+        .editor, .instructions {
+            margin-top: 18px;
+            padding: 6px;
+            overflow: hidden;
+            p {
+                font-size: @smallsize;
+            }
+            input {
+                width: 240px;
+                height: 30px;
+            }
+        }
+
+        .editor {
+            margin-top: 60px;
         }
     }
-    
-    .blue_button, .red_button {
-        border: 1px solid #ccc;
-        padding: 3px 6px;
-        .rounded(6px);
-        color: white;
-        .box-shadow(2px)
-    }
-    
-    .blue_button {
-        background-color: @blue;
-    }
-    
-    .red_button {
-        background-color: @red;
-    }
-    
-    .dialog {
-        background-color: white;
-        padding: 30px;
-        border: 1px solid #ccc;
-        position: absolute;
-        top: 200px;
-        .rounded(12px);
-        z-index: 99;
-        cursor: move;
-        h3 {
-            margin-bottom: 12px;
-        }
-        .number {
-            width: 45px;            
-        }
-        input {
-            padding: 1px;       
-            margin-right: 12px;         
-        }
-        .button {
-            margin-top: 12px;
-            padding: 3px 12px;
-            font-size: @h4size;
-        }
-    }
-    
+
     .level_selector {
         position: absolute;
         top: -1000px;
@@ -357,16 +376,16 @@ body {
         overflow: auto;
         padding: 12px;
         z-index: 99;
-        
+    
         .success {
             display: none;
         }
-        
+    
         &.success .success {
             display: block;
             margin-bottom: 12px;
         }
-        
+    
         h2, h3, h4 {
             text-align: center;
         }
@@ -379,21 +398,4 @@ body {
             }
         }
     }    
-
-    .editor, .instructions {
-        margin-top: 18px;
-        padding: 6px;
-        overflow: hidden;
-        p {
-            font-size: @smallsize;
-        }
-        input {
-            width: 240px;
-            height: 30px;
-        }
-    }
-
-    .editor {
-        margin-top: 60px;
-    }
 }

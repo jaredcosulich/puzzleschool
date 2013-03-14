@@ -91,6 +91,7 @@ soma.views
             xyflyer = require('./lib/xyflyer')
             @stages = require('./lib/xyflyer_objects/levels').STAGES
             
+            @dynamicContent = @el.find('.dynamic_content')
             @user = @cookies.get('user')
             
 #            @classId = @el.data('class')
@@ -105,7 +106,7 @@ soma.views
             @puzzleProgress = {}
             @puzzleProgress[@levelId] = {}            
 
-            @originalHTML = @el.html()
+            @originalHTML = @dynamicContent.html()
 
             @levelId = @el.data('level')
             @level = @findLevel(@levelId)
@@ -121,7 +122,7 @@ soma.views
                 if @levelId == 'editor'
                     xyflyerEditor = require('./lib/xyflyer_editor')
                     @helper = new xyflyerEditor.EditorHelper
-                        el: $(@selector)
+                        el: @dynamicContent
                         boardElement: @$('.board')
                         equationArea: @$('.equation_area')
                         objects: @$('.objects')
@@ -155,10 +156,12 @@ soma.views
             @load()
             
         load: ->
-            @el.html(@originalHTML)
+            @dynamicContent.html(@originalHTML)
+            console.log($('svg'))
+            $('svg').remove()
             
             @helper = new xyflyer.ViewHelper
-                el: $(@selector)
+                el: @dynamicContent
                 boardElement: @$('.board')
                 objects: @$('.objects')
                 equationArea: @$('.equation_area')
@@ -206,21 +209,13 @@ soma.views
                 
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
             
-        nextLevel: ->
-            @registerEvent
-                type: 'success'
-                info: 
-                    time: new Date()
-
-            @showLevelSelector(true)
-                    
         findLevel: (levelId) ->
             for stage in @stages
                 level = (level for level in stage.levels when level.id == levelId)[0]
                 return level if level
                 
         initLevel: ->
-            @el.find('.dynamic_content').html(@originalHTML)
+            @dynamicContent.html(@originalHTML)
             setTimeout((=>
                 @puzzleProgress[@level.id] or= (@puzzleData.levels[@level.id] or {})
                 @load()
@@ -281,24 +276,16 @@ soma.views
             levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level#{replace}."))
 
 
-        completeLevel: ->            
+        nextLevel: ->            
             @puzzleProgress[@level.id].completed = new Date().getTime()
+            @registerEvent
+                type: 'success'
+                info: 
+                    time: @puzzleProgress[@level.id].completed
+
             @saveProgress()
             @initLevelSelector()
-
-            test.clean() for test in @level.tests when test.clean
-
-            challenge = @$('.challenge')
-            challenge.animate
-                opacity: 0
-                duration: 250
-                complete: =>
-                    challenge.html '''
-                        <h3 class='success'>Success!</h3>
-                        <a class='next_level'>Select A New Level</a>
-                    '''
-                    challenge.find('.next_level').bind 'click', => @showLevelSelector(true)
-                    challenge.animate(opacity: 1, duration: 250)
+            @showLevelSelector(true)
 
         showLevelSelector: (success) ->
             $(document.body).unbind('click.level_selector')

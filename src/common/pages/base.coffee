@@ -22,7 +22,7 @@ class soma.View extends soma.View
         window.onbeforeunload = -> 
             return '''
                 If you leave this page you\'ll lose your progress.
-                \n\n
+                
                 You can save your progress by creating an account.
             '''
     
