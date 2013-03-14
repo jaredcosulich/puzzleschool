@@ -119,7 +119,9 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.resetLevel = function() {
     var ring, _i, _len, _ref1, _results;
-    this.plane.reset();
+    if (this.plane) {
+      this.plane.reset();
+    }
     _ref1 = this.rings;
     _results = [];
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {

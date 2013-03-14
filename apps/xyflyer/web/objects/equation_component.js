@@ -96,13 +96,17 @@ equationComponent.EquationComponent = (function() {
     body.one('mouseup.drag touchend.drag', function(e) {
       return _this.endMove(e);
     });
-    this.element.addClass('dragging');
     this.element.css({
       visibility: 'visible'
     });
-    this.placeHolder.show();
-    this.placeHolder.html(this.element.html());
+    this.setDragging();
     return this.move(e);
+  };
+
+  EquationComponent.prototype.setDragging = function() {
+    this.element.addClass('dragging');
+    this.placeHolder.show();
+    return this.placeHolder.html(this.element.html());
   };
 
   EquationComponent.prototype.move = function(e) {

@@ -52,7 +52,8 @@ equations.Equations = (function() {
     });
     this.equations.push(equation);
     this.length = this.equations.length;
-    return equation.appendTo(this.equationsArea);
+    equation.appendTo(this.equationsArea);
+    return equation;
   };
 
   Equations.prototype.remove = function(equation) {
@@ -77,13 +78,14 @@ equations.Equations = (function() {
       }
     });
     equationComponent.appendTo(this.possibleFragments);
-    return this.equationComponents.push(equationComponent);
+    this.equationComponents.push(equationComponent);
+    return equationComponent;
   };
 
   Equations.prototype.removeComponent = function(equationComponent) {
     var index;
-    index = (equation ? this.equationComponents.indexOf(equation) : this.equationComponents.length - 1);
-    equationComponent = this.equationComponents.splice(index - 1, 1)[0];
+    index = (equationComponent ? this.equationComponents.indexOf(equationComponent) : this.equationComponents.length - 1);
+    equationComponent = this.equationComponents.splice(index, 1)[0];
     return equationComponent.element.remove();
   };
 

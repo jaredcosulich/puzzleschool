@@ -49,20 +49,8 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.initAnimation = function() {
-    var canvas;
-    canvas = $(document.createElement('CANVAS'));
-    canvas.css({
-      top: 0,
-      left: 0,
-      height: this.el.height(),
-      width: this.el.width()
-    });
-    canvas.attr({
-      height: this.el.height(),
-      width: this.el.width()
-    });
-    this.el.append(canvas);
-    this.animationCtx = canvas[0].getContext('2d');
+    this.animationCtx1 = this.createCanvas(1);
+    this.animationCtx2 = this.createCanvas(3);
     this.animation = new Animation();
     this.animationObjects = [];
     return this.animate();
@@ -81,31 +69,34 @@ board.Board = (function(_super) {
   Board.prototype.animate = function() {
     var _this = this;
     return this.animation.frame()(function(t) {
-      var animationSet, object, _i, _j, _len, _len1, _ref;
-      _this.animationCtx.clearRect(0, 0, _this.width, _this.height);
+      var animationSet, ctx, index, object, _i, _j, _len, _len1, _ref;
+      _this.animationCtx1.clearRect(0, 0, _this.width, _this.height);
+      _this.animationCtx2.clearRect(0, 0, _this.width, _this.height);
       _ref = _this.animationObjects;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        animationSet = _ref[_i];
+      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+        animationSet = _ref[index];
         if (!animationSet) {
           continue;
         }
         for (_j = 0, _len1 = animationSet.length; _j < _len1; _j++) {
           object = animationSet[_j];
-          object.draw(_this.animationCtx, t);
+          ctx = index <= 2 ? _this.animationCtx1 : _this.animationCtx2;
+          object.draw(ctx, t);
         }
       }
       return _this.animate();
     });
   };
 
-  Board.prototype.createCanvas = function() {
+  Board.prototype.createCanvas = function(zIndex) {
     var canvas;
     canvas = $(document.createElement('CANVAS'));
     canvas.css({
       top: 0,
       left: 0,
       height: this.el.height(),
-      width: this.el.width()
+      width: this.el.width(),
+      zIndex: zIndex
     });
     canvas.attr({
       height: this.el.height(),
@@ -394,7 +385,7 @@ board.Board = (function(_super) {
       return;
     }
     if (!plotArea) {
-      plotArea = this.createCanvas();
+      plotArea = this.createCanvas(2);
     }
     plotArea.strokeStyle = 'rgba(0,0,0,0.25)';
     plotArea.lineWidth = 1;

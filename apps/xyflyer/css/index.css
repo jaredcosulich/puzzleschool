@@ -371,7 +371,7 @@ body {
   width: 240px;
   height: 30px;
 }
-
+/*
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
     .xyflyer {
         height: 748px;
@@ -388,4 +388,6 @@ body {
         margin: 6px 6px 0 0;
         height: 736px;
     }
+
 }
+*/
