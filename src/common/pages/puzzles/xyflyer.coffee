@@ -32,6 +32,8 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
             
+            @puzzleData = {levels: {}}
+
             if @classId
                 @loadData 
                     url: "/api/classes/info/#{@classId}"
@@ -50,13 +52,14 @@ soma.chunks
                         if (@user = @cookies.get('user')) and window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
                             
-            # else
-            #     @loadData 
-            #         url: "/api/puzzles/levels/#{@levelId}"
-            #         success: (@levelInfo) => 
-            #         error: () =>
-            #             if window?.alert
-            #                 alert('We were unable to load the information for this level. Please check your internet connection.')
+            else
+                if @cookies.get('user')
+                    @loadData 
+                        url: '/api/puzzles/xyflyer'
+                        success: (data) => @puzzleData = data.puzzle
+                        error: () =>
+                            if window?.alert
+                                alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
             for object in ['island', 'plane']
@@ -73,7 +76,8 @@ soma.chunks
         build: ->
             @setTitle("XYFlyer - The Puzzle School")
             
-            @html = wings.renderTemplate(@template, 
+            @html = wings.renderTemplate(@template,     
+                puzzleData: JSON.stringify(@puzzleData)
                 objects: @objects
                 class: @classId or 0
                 level: @levelId
@@ -92,6 +96,8 @@ soma.views
             @stages = require('./lib/xyflyer_objects/levels').STAGES
             
             @dynamicContent = @el.find('.dynamic_content')
+            @$('.menu').bind 'click', => @showLevelSelector()
+            
             @user = @cookies.get('user')
             
 #            @classId = @el.data('class')
@@ -133,7 +139,10 @@ soma.views
                     @loadLevel()
                     
                 else if not @level
-                    @showMessage('intro')
+                    if Object.keys(@puzzleData.levels).length
+                        @showLevelSelector()
+                    else
+                        @showMessage('intro')
             
                 return unless @levelId == 'custom' and @level
                 
@@ -147,10 +156,6 @@ soma.views
                 catch e
             else if not @level
                 @showLevelSelector()
-                # @level = LEVELS[@levelId]
-                
-            if not @level
-                @showMessage('exit')
                 return
         
             @initLevel()

@@ -50,6 +50,9 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equations.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
+      this.puzzleData = {
+        levels: {}
+      };
       if (this.classId) {
         this.loadData({
           url: "/api/classes/info/" + this.classId,
@@ -75,6 +78,20 @@ soma.chunks({
             }
           }
         });
+      } else {
+        if (this.cookies.get('user')) {
+          this.loadData({
+            url: '/api/puzzles/xyflyer',
+            success: function(data) {
+              return _this.puzzleData = data.puzzle;
+            },
+            error: function() {
+              if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+                return alert('We were unable to load your account information. Please check your internet connection.');
+              }
+            }
+          });
+        }
       }
       this.objects = [];
       _ref = ['island', 'plane'];
@@ -94,6 +111,7 @@ soma.chunks({
       var _ref;
       this.setTitle("XYFlyer - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
+        puzzleData: JSON.stringify(this.puzzleData),
         objects: this.objects,
         "class": this.classId || 0,
         level: this.levelId,
@@ -115,6 +133,9 @@ soma.views({
       xyflyer = require('./lib/xyflyer');
       this.stages = require('./lib/xyflyer_objects/levels').STAGES;
       this.dynamicContent = this.el.find('.dynamic_content');
+      this.$('.menu').bind('click', function() {
+        return _this.showLevelSelector();
+      });
       this.user = this.cookies.get('user');
       if ((_ref = (puzzleData = this.el.data('puzzle_data'))) != null ? _ref.length : void 0) {
         this.puzzleData = JSON.parse(puzzleData);
@@ -151,7 +172,11 @@ soma.views({
           });
           this.loadLevel();
         } else if (!this.level) {
-          this.showMessage('intro');
+          if (Object.keys(this.puzzleData.levels).length) {
+            this.showLevelSelector();
+          } else {
+            this.showMessage('intro');
+          }
         }
         if (!(this.levelId === 'custom' && this.level)) {
           return;
@@ -173,9 +198,6 @@ soma.views({
         }
       } else if (!this.level) {
         this.showLevelSelector();
-      }
-      if (!this.level) {
-        this.showMessage('exit');
         return;
       }
       return this.initLevel();

@@ -40,7 +40,7 @@ soma.views
         selector: '#content .code'
         create: ->
             code = require('./lib/code')
-            
+
             if (puzzleData = @el.data('puzzle_data')).length
                 @puzzleData = JSON.parse(puzzleData)
             else
