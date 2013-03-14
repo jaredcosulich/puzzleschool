@@ -203,6 +203,7 @@ soma.views
                 duration: 500              
             
         showMessage: (type) ->
+            @$('.board').hide()
             equationArea = @$('.equation_area')
             equationArea.html(@$(".#{type}_message").html())
             equationArea.css(padding: '0 12px', textAlign: 'center')
@@ -233,17 +234,14 @@ soma.views
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
 
+            previousCompleted = true
             for levelElement in @levelSelector.find('.level')
                 do (levelElement) =>
                     levelElement = $(levelElement)
                     id = levelElement.data('id')
                     levelInfo = @findLevel(id)
             
-                    locked = false
-                    for lockId in (levelInfo.lockedBy or [])
-                        unless @puzzleData.levels[lockId]?.completed
-                            locked = true
-                            break
+                    locked = !previousCompleted
             
                     @setLevelIcon
                         id: id
@@ -261,7 +259,9 @@ soma.views
                             @level = levelInfo
                             @initLevel()
                             history.pushState(null, null, "/puzzles/xyflyer/#{id}")
-                            @hideLevelSelector()              
+                            @hideLevelSelector()        
+                            
+                    previousCompleted = @puzzleData.levels[id]?.completed      
             
 
         setLevelIcon: ({id, started, completed, locked}) ->

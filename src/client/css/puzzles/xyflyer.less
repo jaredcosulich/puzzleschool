@@ -287,24 +287,7 @@ body {
             .box-shadow(1px 1px 0 #b69c632);
             .box-shadow(1px 2px 1px #b69c63);
         }
-    
-        .objects {
-            position: absolute;
-            top: -10000px;
-            left: -10000px;
-        }
-    
-        .complete, .intro_message, .exit_message {
-            position: absolute;
-            top: -1000px;
-            left: -1000px;
-            background-color: white;
-            padding: 30px 60px;
-            text-align: center;
-            z-index: 98;
-            .rounded(6px);
-        }
-    
+        
         .hints {
             padding: 60px 0 0 6px;
                 
@@ -376,6 +359,17 @@ body {
         }
     }
 
+    .complete, .intro_message, .exit_message {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        background-color: white;
+        padding: 30px 60px;
+        text-align: center;
+        z-index: 98;
+        .rounded(6px);
+    }
+
     .level_selector {
         position: absolute;
         top: -1000px;
@@ -384,7 +378,7 @@ body {
         background-color: @white;
         border: 2px solid @darkred;
         width: 540px;
-        height: 450px;
+        height: 480px;
         overflow: auto;
         padding: 12px;
         z-index: 99;
@@ -409,5 +403,12 @@ body {
                 padding: 12px;
             }
         }
-    }    
+    } 
+    
+    .objects {
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+    }
+       
 }

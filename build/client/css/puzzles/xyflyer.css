@@ -294,25 +294,6 @@ body {
   -webkit-box-shadow: 1px 2px 1px #b69c63;
   -moz-box-shadow: 1px 2px 1px #b69c63;
 }
-.xyflyer .dynamic_content .objects {
-  position: absolute;
-  top: -10000px;
-  left: -10000px;
-}
-.xyflyer .dynamic_content .complete,
-.xyflyer .dynamic_content .intro_message,
-.xyflyer .dynamic_content .exit_message {
-  position: absolute;
-  top: -1000px;
-  left: -1000px;
-  background-color: white;
-  padding: 30px 60px;
-  text-align: center;
-  z-index: 98;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-}
 .xyflyer .dynamic_content .hints {
   padding: 60px 0 0 6px;
 }
@@ -387,6 +368,20 @@ body {
 .xyflyer .dynamic_content .editor {
   margin-top: 60px;
 }
+.xyflyer .complete,
+.xyflyer .intro_message,
+.xyflyer .exit_message {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  background-color: white;
+  padding: 30px 60px;
+  text-align: center;
+  z-index: 98;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
 .xyflyer .level_selector {
   position: absolute;
   top: -1000px;
@@ -395,7 +390,7 @@ body {
   background-color: #fafafa;
   border: 2px solid #a61c0e;
   width: 540px;
-  height: 450px;
+  height: 480px;
   overflow: auto;
   padding: 12px;
   z-index: 99;
@@ -419,4 +414,9 @@ body {
 }
 .xyflyer .level_selector .levels .level {
   padding: 12px;
+}
+.xyflyer .objects {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
 }

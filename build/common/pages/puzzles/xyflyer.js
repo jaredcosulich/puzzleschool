@@ -247,6 +247,7 @@ soma.views({
     showMessage: function(type) {
       var equationArea,
         _this = this;
+      this.$('.board').hide();
       equationArea = this.$('.equation_area');
       equationArea.html(this.$("." + type + "_message").html());
       equationArea.css({
@@ -299,35 +300,28 @@ soma.views({
       }), 100);
     },
     initLevelSelector: function() {
-      var levelElement, _i, _len, _ref, _results,
+      var levelElement, previousCompleted, _i, _len, _ref, _results,
         _this = this;
       this.levelSelector = this.$('.level_selector');
+      previousCompleted = true;
       _ref = this.levelSelector.find('.level');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         levelElement = _ref[_i];
         _results.push((function(levelElement) {
-          var id, levelInfo, lockId, locked, _j, _len1, _ref1, _ref2, _ref3, _ref4;
+          var id, levelInfo, locked, _ref1, _ref2, _ref3;
           levelElement = $(levelElement);
           id = levelElement.data('id');
           levelInfo = _this.findLevel(id);
-          locked = false;
-          _ref1 = levelInfo.lockedBy || [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            lockId = _ref1[_j];
-            if (!((_ref2 = _this.puzzleData.levels[lockId]) != null ? _ref2.completed : void 0)) {
-              locked = true;
-              break;
-            }
-          }
+          locked = !previousCompleted;
           _this.setLevelIcon({
             id: id,
-            started: (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.started : void 0,
-            completed: (_ref4 = _this.puzzleData.levels[id]) != null ? _ref4.completed : void 0,
+            started: (_ref1 = _this.puzzleData.levels[id]) != null ? _ref1.started : void 0,
+            completed: (_ref2 = _this.puzzleData.levels[id]) != null ? _ref2.completed : void 0,
             locked: locked
           });
           levelElement.unbind('click');
-          return levelElement.bind('click', function(e) {
+          levelElement.bind('click', function(e) {
             e.stop();
             $(document.body).unbind('click.level_selector');
             if (locked) {
@@ -339,6 +333,7 @@ soma.views({
               return _this.hideLevelSelector();
             }
           });
+          return previousCompleted = (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.completed : void 0;
         })(levelElement));
       }
       return _results;

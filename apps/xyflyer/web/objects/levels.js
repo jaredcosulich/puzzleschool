@@ -144,7 +144,12 @@ levels.STAGES = [
           }
         ],
         fragments: ['2*', '(1/2)*', '+3', '-3']
-      }, {
+      }
+    ]
+  }, {
+    name: 'Variable Lines',
+    levels: [
+      {
         id: 1363229719931,
         equations: {
           'x+a': {
@@ -535,7 +540,12 @@ levels.STAGES = [
             solution: 5
           }
         }
-      }, {
+      }
+    ]
+  }, {
+    name: 'Multiple Lines',
+    levels: [
+      {
         id: 1363229830265,
         equations: {
           '-x-c': {
