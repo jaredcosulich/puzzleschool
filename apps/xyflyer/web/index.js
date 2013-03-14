@@ -29,6 +29,7 @@ window.app = {
   },
   load: function() {
     var _this = this;
+    this.el.html(this.originalHtml);
     this.data = LEVELS[this.levelId];
     if (!this.data) {
       this.showMessage('exit');
@@ -114,7 +115,6 @@ window.app = {
     this.$('.launch').unbind('mousedown.launch touchstart.launch');
     this.$('.launch').html('Success! Go To The Next Level >');
     return this.$('.go').one('touchstart.go', function() {
-      _this.el.html(_this.originalHtml);
       _this.levelId += 1;
       return _this.load();
     });

@@ -99,7 +99,8 @@ soma.chunks({
         level: this.levelId,
         classLevel: this.classLevelId || 0,
         instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0,
-        editor: this.levelId === 'editor'
+        editor: this.levelId === 'editor',
+        stages: require('./lib/xyflyer_objects/levels').STAGES
       });
     }
   }
@@ -109,18 +110,29 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var instructions, level, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3, _ref4,
+      var instructions, level, puzzleData, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
         _this = this;
       xyflyer = require('./lib/xyflyer');
+      this.stages = require('./lib/xyflyer_objects/levels').STAGES;
       this.user = this.cookies.get('user');
-      this.classId = this.el.data('class');
+      if ((_ref = (puzzleData = this.el.data('puzzle_data'))) != null ? _ref.length : void 0) {
+        this.puzzleData = JSON.parse(puzzleData);
+      } else {
+        this.puzzleData = {
+          levels: {}
+        };
+      }
+      this.puzzleProgress = {};
+      this.puzzleProgress[this.levelId] = {};
+      this.originalHTML = this.el.html();
       this.levelId = this.el.data('level');
-      this.classLevelId = this.el.data('classlevel');
+      this.level = this.findLevel(this.levelId);
       this.initEncode();
+      this.initLevelSelector();
       if (isNaN(parseInt(this.levelId))) {
-        if ((_ref = (instructions = window.location.hash.replace(/\s/g, ''))) != null ? _ref.length : void 0) {
+        if ((_ref1 = (instructions = window.location.hash.replace(/\s/g, ''))) != null ? _ref1.length : void 0) {
           level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
-          this.data = JSON.parse(level);
+          this.level = JSON.parse(level);
         }
         if (this.levelId === 'editor') {
           xyflyerEditor = require('./lib/xyflyer_editor');
@@ -129,49 +141,54 @@ soma.views({
             boardElement: this.$('.board'),
             equationArea: this.$('.equation_area'),
             objects: this.$('.objects'),
-            grid: (_ref1 = this.data) != null ? _ref1.grid : void 0,
-            islandCoordinates: (_ref2 = this.data) != null ? _ref2.islandCoordinates : void 0,
-            variables: (_ref3 = this.data) != null ? _ref3.variables : void 0,
+            grid: (_ref2 = this.level) != null ? _ref2.grid : void 0,
+            islandCoordinates: (_ref3 = this.level) != null ? _ref3.islandCoordinates : void 0,
+            variables: (_ref4 = this.level) != null ? _ref4.variables : void 0,
             encode: function(instructions) {
               return _this.encode(instructions);
             }
           });
           this.loadLevel();
-        } else if (!this.data) {
+        } else if (!this.level) {
           this.showMessage('intro');
         }
-        if (!(this.levelId === 'custom' && this.data)) {
+        if (!(this.levelId === 'custom' && this.level)) {
           return;
         }
       }
       if (this.classId) {
         if (!this.user) {
           if (typeof window !== "undefined" && window !== null) {
-            if ((_ref4 = window.location) != null) {
-              _ref4.reload();
+            if ((_ref5 = window.location) != null) {
+              _ref5.reload();
             }
           }
           return;
         }
         try {
-          this.data = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
+          this.level = eval("a=" + this.$('.level_instructions').html().replace(/\s/g, ''));
         } catch (e) {
 
         }
-      } else if (!this.data) {
-        this.data = LEVELS[this.levelId];
+      } else if (!this.level) {
+        this.showLevelSelector();
       }
-      if (!this.data) {
+      if (!this.level) {
         this.showMessage('exit');
         return;
       }
+      return this.load();
+    },
+    load: function() {
+      var _this = this;
+      this.el.html(this.originalHTML);
       this.helper = new xyflyer.ViewHelper({
         el: $(this.selector),
         boardElement: this.$('.board'),
         objects: this.$('.objects'),
         equationArea: this.$('.equation_area'),
-        grid: this.data.grid,
-        islandCoordinates: this.data.islandCoordinates,
+        grid: this.level.grid,
+        islandCoordinates: this.level.islandCoordinates,
         nextLevel: function() {
           return _this.nextLevel();
         },
@@ -183,8 +200,8 @@ soma.views({
     },
     loadLevel: function() {
       var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _results;
-      if ((_ref = this.data) != null ? _ref.fragments : void 0) {
-        _ref1 = this.data.fragments;
+      if ((_ref = this.level) != null ? _ref.fragments : void 0) {
+        _ref1 = this.level.fragments;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           fragment = _ref1[_i];
           this.helper.addEquationComponent(fragment);
@@ -192,14 +209,14 @@ soma.views({
       } else if (this.levelId !== 'editor') {
         this.$('.possible_fragments').hide();
       }
-      _ref3 = ((_ref2 = this.data) != null ? _ref2.equations : void 0) || {
+      _ref3 = ((_ref2 = this.level) != null ? _ref2.equations : void 0) || {
         '': {}
       };
       for (equation in _ref3) {
         info = _ref3[equation];
-        this.helper.addEquation(equation, info.start, info.solutionComponents, (_ref4 = this.data) != null ? _ref4.variables : void 0);
+        this.helper.addEquation(equation, info.start, info.solutionComponents, (_ref4 = this.level) != null ? _ref4.variables : void 0);
       }
-      _ref6 = ((_ref5 = this.data) != null ? _ref5.rings : void 0) || [];
+      _ref6 = ((_ref5 = this.level) != null ? _ref5.rings : void 0) || [];
       _results = [];
       for (_j = 0, _len1 = _ref6.length; _j < _len1; _j++) {
         ring = _ref6[_j];
@@ -223,7 +240,7 @@ soma.views({
       });
     },
     showMessage: function(type) {
-      var equationArea, path,
+      var equationArea,
         _this = this;
       equationArea = this.$('.equation_area');
       equationArea.html(this.$("." + type + "_message").html());
@@ -231,39 +248,238 @@ soma.views({
         padding: '0 12px',
         textAlign: 'center'
       });
-      path = '/puzzles/xyflyer/1';
-      if (this.isIos()) {
-        return equationArea.find('.button').attr('href', path);
-      } else {
-        return equationArea.find('.button').bind('mousedown.go', function() {
-          return _this.go(path);
-        });
-      }
+      return equationArea.find('.button').bind('click', function() {
+        return _this.showLevelSelector();
+      });
     },
     isIos: function() {
       return navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
     },
     nextLevel: function() {
-      var complete, path,
-        _this = this;
       this.registerEvent({
         type: 'success',
         info: {
           time: new Date()
         }
       });
-      complete = this.$('.complete');
-      this.centerAndShow(complete);
-      this.$('.launch').html('Success! Go To The Next Level >');
-      path = "/puzzles/xyflyer/" + (this.classId ? "" + this.classId + "/" : '') + (this.levelId + 1);
-      if (this.isIos()) {
-        return this.$('.go').attr('href', path);
-      } else {
-        this.$('.launch').unbind('mousedown.launch touchstart.launch');
-        return this.$('.go').bind('mousedown.go', function() {
-          return _this.go(path);
-        });
+      return this.showLevelSelector(true);
+    },
+    findLevel: function(levelId) {
+      var level, stage, _i, _len, _ref;
+      _ref = this.stages;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        stage = _ref[_i];
+        level = ((function() {
+          var _j, _len1, _ref1, _results;
+          _ref1 = stage.levels;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            level = _ref1[_j];
+            if (level.id === levelId) {
+              _results.push(level);
+            }
+          }
+          return _results;
+        })())[0];
+        if (level) {
+          return level;
+        }
       }
+    },
+    initLevel: function() {
+      var _this = this;
+      this.el.find('.dynamic_content').html(this.originalHTML);
+      return setTimeout((function() {
+        var _base, _base1, _name, _ref;
+        (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = _this.puzzleData.levels[_this.level.id] || {});
+        _this.load();
+        (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
+        _this.saveProgress();
+        return _this.setLevelIcon({
+          id: _this.level.id,
+          started: true,
+          completed: (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0
+        });
+      }), 100);
+    },
+    initLevelSelector: function() {
+      var levelElement, _i, _len, _ref, _results,
+        _this = this;
+      this.levelSelector = this.$('.level_selector');
+      _ref = this.levelSelector.find('.level');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        levelElement = _ref[_i];
+        _results.push((function(levelElement) {
+          var id, levelInfo, lockId, locked, _j, _len1, _ref1, _ref2, _ref3, _ref4;
+          levelElement = $(levelElement);
+          id = levelElement.data('id');
+          levelInfo = _this.findLevel(id);
+          locked = false;
+          _ref1 = levelInfo.lockedBy || [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            lockId = _ref1[_j];
+            if (!((_ref2 = _this.puzzleData.levels[lockId]) != null ? _ref2.completed : void 0)) {
+              locked = true;
+              break;
+            }
+          }
+          _this.setLevelIcon({
+            id: id,
+            started: (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.started : void 0,
+            completed: (_ref4 = _this.puzzleData.levels[id]) != null ? _ref4.completed : void 0,
+            locked: locked
+          });
+          levelElement.unbind('click');
+          return levelElement.bind('click', function(e) {
+            e.stop();
+            $(document.body).unbind('click.level_selector');
+            if (locked) {
+              return alert('This level is locked.');
+            } else {
+              _this.level = levelInfo;
+              _this.initLevel();
+              history.pushState(null, null, "/puzzles/xyflyer/" + id);
+              return _this.hideLevelSelector();
+            }
+          });
+        })(levelElement));
+      }
+      return _results;
+    },
+    setLevelIcon: function(_arg) {
+      var completed, id, levelIcon, locked, replace, started;
+      id = _arg.id, started = _arg.started, completed = _arg.completed, locked = _arg.locked;
+      levelIcon = this.$("#level_" + id).find('img');
+      if (locked) {
+        replace = '_locked';
+      } else if (started) {
+        replace = '_started';
+        if (completed) {
+          replace = '_complete';
+        }
+      } else {
+        replace = '';
+      }
+      return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level" + replace + "."));
+    },
+    completeLevel: function() {
+      var challenge, test, _i, _len, _ref,
+        _this = this;
+      this.puzzleProgress[this.level.id].completed = new Date().getTime();
+      this.saveProgress();
+      this.initLevelSelector();
+      _ref = this.level.tests;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        test = _ref[_i];
+        if (test.clean) {
+          test.clean();
+        }
+      }
+      challenge = this.$('.challenge');
+      return challenge.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          challenge.html('<h3 class=\'success\'>Success!</h3>\n<a class=\'next_level\'>Select A New Level</a>');
+          challenge.find('.next_level').bind('click', function() {
+            return _this.showLevelSelector(true);
+          });
+          return challenge.animate({
+            opacity: 1,
+            duration: 250
+          });
+        }
+      });
+    },
+    showLevelSelector: function(success) {
+      var _this = this;
+      $(document.body).unbind('click.level_selector');
+      if (parseInt(this.levelSelector.css('opacity')) === 1) {
+        this.hideLevelSelector();
+        return;
+      }
+      if (success) {
+        this.levelSelector.addClass('success');
+      } else {
+        this.levelSelector.removeClass('success');
+      }
+      this.levelSelector.css({
+        opacity: 0,
+        top: 60,
+        left: (this.el.width() - this.levelSelector.width()) / 2
+      });
+      this.levelSelector.animate({
+        opacity: 1,
+        duration: 250
+      });
+      return setTimeout((function() {
+        return $(document.body).one('click.level_selector', function() {
+          return _this.hideLevelSelector();
+        });
+      }), 10);
+    },
+    hideLevelSelector: function() {
+      var _this = this;
+      $(document.body).unbind('click.level_selector');
+      return this.levelSelector.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return _this.levelSelector.css({
+            top: -1000,
+            left: -1000
+          });
+        }
+      });
+    },
+    saveProgress: function(callback) {
+      var _this = this;
+      this.mergeProgress(this.puzzleProgress);
+      if (this.cookies.get('user')) {
+        return $.ajaj({
+          url: "/api/puzzles/xyflyer/update",
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': this.cookies.get('_csrf', {
+              raw: true
+            })
+          },
+          data: {
+            puzzleUpdates: {},
+            levelUpdates: this.puzzleProgress
+          },
+          success: function() {
+            if (callback) {
+              return callback();
+            }
+          }
+        });
+      } else {
+        window.postRegistration.push(function(callback) {
+          return _this.saveProgress(callback);
+        });
+        if (Object.keys(this.puzzleProgress).length >= 3) {
+          return this.showRegistrationFlag();
+        }
+      }
+    },
+    mergeProgress: function(progress, master) {
+      var key, value, _results;
+      if (master == null) {
+        master = this.puzzleData.levels;
+      }
+      _results = [];
+      for (key in progress) {
+        value = progress[key];
+        if (typeof value === 'object') {
+          master[key] = {};
+          _results.push(this.mergeProgress(value, master[key]));
+        } else {
+          _results.push(master[key] = value);
+        }
+      }
+      return _results;
     },
     initEncode: function() {
       this.encodeMap = {

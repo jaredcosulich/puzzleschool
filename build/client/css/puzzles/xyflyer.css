@@ -356,6 +356,39 @@ body {
   padding: 3px 12px;
   font-size: 15px;
 }
+.xyflyer .level_selector {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  opacity: 0;
+  background-color: #fafafa;
+  border: 2px solid #a61c0e;
+  width: 540px;
+  height: 450px;
+  overflow: auto;
+  padding: 12px;
+  z-index: 99;
+}
+.xyflyer .level_selector .success {
+  display: none;
+}
+.xyflyer .level_selector.success .success {
+  display: block;
+  margin-bottom: 12px;
+}
+.xyflyer .level_selector h2,
+.xyflyer .level_selector h3,
+.xyflyer .level_selector h4 {
+  text-align: center;
+}
+.xyflyer .level_selector .levels {
+  background-color: #eee;
+  padding: 12px;
+  margin-top: 12px;
+}
+.xyflyer .level_selector .levels .level {
+  padding: 12px;
+}
 .xyflyer .editor,
 .xyflyer .instructions {
   margin-top: 18px;

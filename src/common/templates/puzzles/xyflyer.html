@@ -52,10 +52,6 @@
         </div>
         {/editor}
     </div>
-    <div class='complete'>
-        <h2>Nice Job!</h2>
-        <p><a class='button go'>Next Level ></a></p>
-    </div>
     <div class='intro_message'>
         <h2>Welcome To XYFlyer</h2>
         <br/>
@@ -67,17 +63,24 @@
         <br/>
         <a class='button go'>Start ></a>
     </div>
-    <div class='exit_message'>
-        <h2>That's all we've got!</h2>
-        <br/>
-        <p>XYFlyer is still very much in development and we are adding new levels frequently.</p>
-        <p>We love to hear feedback and encouragement. So let us know what you think about XYFlyer!</p>
-        <br/>
-        <h4>Contact Us</h4>
-        <p><a mailto='xyflyer@puzzleschool.com'>xyflyer@puzzleschool.com</a></p>
-    </div>
     <div class='level_instructions'>
         {instructions}
+    </div>
+    
+    <div class='level_selector'>
+        <h2 class='success'>Nice Work. Level Complete!</h2>
+        <h3>Select The Next Level</h3>
+        {:stages}
+        <div class='levels'>
+            <h4>{name}</h4>
+            <br/>
+            {:levels}
+            <a class='level' id='level_{id}' data-id={id}>
+                <img src='/assets/images/puzzles/code/level.jpg' />
+            </a>
+            {/levels}
+        </div>
+        {/stages}
     </div>
     
     <div class='objects'>

@@ -344,6 +344,41 @@ body {
             font-size: @h4size;
         }
     }
+    
+    .level_selector {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        opacity: 0;
+        background-color: @white;
+        border: 2px solid @darkred;
+        width: 540px;
+        height: 450px;
+        overflow: auto;
+        padding: 12px;
+        z-index: 99;
+        
+        .success {
+            display: none;
+        }
+        
+        &.success .success {
+            display: block;
+            margin-bottom: 12px;
+        }
+        
+        h2, h3, h4 {
+            text-align: center;
+        }
+        .levels {
+            background-color: #eee;
+            padding: 12px;
+            margin-top: 12px;
+            .level {
+                padding: 12px;
+            }
+        }
+    }    
 
     .editor, .instructions {
         margin-top: 18px;

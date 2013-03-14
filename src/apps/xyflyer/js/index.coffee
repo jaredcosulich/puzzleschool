@@ -17,6 +17,7 @@ window.app =
     $: (selector) -> $(selector, @el)
         
     load: ->
+        @el.html(@originalHtml)
         @data = LEVELS[@levelId]
 
         if not @data
@@ -80,7 +81,6 @@ window.app =
         @$('.launch').unbind('mousedown.launch touchstart.launch')
         @$('.launch').html('Success! Go To The Next Level >')
         @$('.go').one 'touchstart.go', =>
-            @el.html(@originalHtml)
             @levelId += 1
             @load()
         

@@ -80,6 +80,7 @@ soma.chunks
                 classLevel: @classLevelId or 0
                 instructions: @levelInfo?.instructions
                 editor: @levelId == 'editor'
+                stages: require('./lib/xyflyer_objects/levels').STAGES
             )
             
         
@@ -88,19 +89,34 @@ soma.views
         selector: '#content .xyflyer'
         create: ->
             xyflyer = require('./lib/xyflyer')
+            @stages = require('./lib/xyflyer_objects/levels').STAGES
             
             @user = @cookies.get('user')
             
-            @classId = @el.data('class')
-            @levelId = @el.data('level')
-            @classLevelId = @el.data('classlevel')
+#            @classId = @el.data('class')
+#            @levelId = @el.data('level')
+#            @classLevelId = @el.data('classlevel')
             
+            if (puzzleData = @el.data('puzzle_data'))?.length
+                @puzzleData = JSON.parse(puzzleData)
+            else
+                @puzzleData = {levels: {}}
+                
+            @puzzleProgress = {}
+            @puzzleProgress[@levelId] = {}            
+
+            @originalHTML = @el.html()
+
+            @levelId = @el.data('level')
+            @level = @findLevel(@levelId)
+        
             @initEncode()
+            @initLevelSelector()  
             
             if isNaN(parseInt(@levelId))
                 if (instructions = window.location.hash.replace(/\s/g, ''))?.length
                     level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
-                    @data = JSON.parse(level)
+                    @level = JSON.parse(level)
                     
                 if @levelId == 'editor'
                     xyflyerEditor = require('./lib/xyflyer_editor')
@@ -109,16 +125,16 @@ soma.views
                         boardElement: @$('.board')
                         equationArea: @$('.equation_area')
                         objects: @$('.objects')
-                        grid: @data?.grid
-                        islandCoordinates: @data?.islandCoordinates  
-                        variables: @data?.variables                      
+                        grid: @level?.grid
+                        islandCoordinates: @level?.islandCoordinates  
+                        variables: @level?.variables                      
                         encode: (instructions) => @encode(instructions)
                     @loadLevel()
                     
-                else if not @data
+                else if not @level
                     @showMessage('intro')
             
-                return unless @levelId == 'custom' and @data
+                return unless @levelId == 'custom' and @level
                 
             if @classId
                 if not @user
@@ -126,39 +142,45 @@ soma.views
                     return
                     
                 try
-                    @data = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
+                    @level = eval("a=" + @$('.level_instructions').html().replace(/\s/g, ''))
                 catch e
-            else if not @data
-                @data = LEVELS[@levelId]
+            else if not @level
+                @showLevelSelector()
+                # @level = LEVELS[@levelId]
                 
-            if not @data
+            if not @level
                 @showMessage('exit')
                 return
         
+            @load()
+            
+        load: ->
+            @el.html(@originalHTML)
+            
             @helper = new xyflyer.ViewHelper
                 el: $(@selector)
                 boardElement: @$('.board')
                 objects: @$('.objects')
                 equationArea: @$('.equation_area')
-                grid: @data.grid
-                islandCoordinates: @data.islandCoordinates
+                grid: @level.grid
+                islandCoordinates: @level.islandCoordinates
                 nextLevel: => @nextLevel()
                 registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 
-            @loadLevel()    
-            
+            @loadLevel()  
+                
             
         loadLevel: ->
-            if @data?.fragments
-                for fragment in @data.fragments
+            if @level?.fragments
+                for fragment in @level.fragments
                     @helper.addEquationComponent(fragment)
             else if @levelId != 'editor'
                 @$('.possible_fragments').hide()
 
-            for equation, info of @data?.equations or {'': {}}
-                @helper.addEquation(equation, info.start, info.solutionComponents, @data?.variables)    
+            for equation, info of @level?.equations or {'': {}}
+                @helper.addEquation(equation, info.start, info.solutionComponents, @level?.variables)    
         
-            for ring in @data?.rings or []
+            for ring in @level?.rings or []
                 @helper.addRing(ring.x, ring.y)
                             
                 
@@ -180,11 +202,7 @@ soma.views
             equationArea = @$('.equation_area')
             equationArea.html(@$(".#{type}_message").html())
             equationArea.css(padding: '0 12px', textAlign: 'center')
-            path = '/puzzles/xyflyer/1'
-            if @isIos()
-                equationArea.find('.button').attr('href', path) 
-            else
-                equationArea.find('.button').bind 'mousedown.go', => @go(path)
+            equationArea.find('.button').bind 'click', => @showLevelSelector() 
                 
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
             
@@ -193,18 +211,154 @@ soma.views
                 type: 'success'
                 info: 
                     time: new Date()
-            
-            complete = @$('.complete')
-            @centerAndShow(complete)
-            
-            @$('.launch').html('Success! Go To The Next Level >')
-            path = "/puzzles/xyflyer/#{if @classId then "#{@classId}/" else ''}#{@levelId + 1}"
-            if @isIos()
-                @$('.go').attr('href', path)
-            else
-                @$('.launch').unbind 'mousedown.launch touchstart.launch'
-                @$('.go').bind 'mousedown.go', => @go(path)
+
+            @showLevelSelector(true)
                     
+        findLevel: (levelId) ->
+            for stage in @stages
+                level = (level for level in stage.levels when level.id == levelId)[0]
+                return level if level
+                
+        initLevel: ->
+            @el.find('.dynamic_content').html(@originalHTML)
+            setTimeout((=>
+                @puzzleProgress[@level.id] or= (@puzzleData.levels[@level.id] or {})
+                @load()
+                @puzzleProgress[@level.id].started or= new Date().getTime()
+                @saveProgress()
+
+                @setLevelIcon
+                    id: @level.id, 
+                    started: true, 
+                    completed: @puzzleData.levels[@level.id]?.completed
+
+            ), 100)
+        
+        initLevelSelector: ->
+            @levelSelector = @$('.level_selector')
+
+            for levelElement in @levelSelector.find('.level')
+                do (levelElement) =>
+                    levelElement = $(levelElement)
+                    id = levelElement.data('id')
+                    levelInfo = @findLevel(id)
+            
+                    locked = false
+                    for lockId in (levelInfo.lockedBy or [])
+                        unless @puzzleData.levels[lockId]?.completed
+                            locked = true
+                            break
+            
+                    @setLevelIcon
+                        id: id
+                        started: @puzzleData.levels[id]?.started
+                        completed: @puzzleData.levels[id]?.completed
+                        locked: locked
+            
+                    levelElement.unbind 'click'
+                    levelElement.bind 'click', (e) => 
+                        e.stop()
+                        $(document.body).unbind('click.level_selector')
+                        if locked
+                            alert('This level is locked.')
+                        else
+                            @level = levelInfo
+                            @initLevel()
+                            history.pushState(null, null, "/puzzles/xyflyer/#{id}")
+                            @hideLevelSelector()              
+            
+
+        setLevelIcon: ({id, started, completed, locked}) ->
+            levelIcon = @$("#level_#{id}").find('img')
+            if locked
+                replace = '_locked'
+            else if started
+                replace = '_started'
+                if completed
+                    replace = '_complete'
+            else    
+                replace = ''            
+            levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level#{replace}."))
+
+
+        completeLevel: ->            
+            @puzzleProgress[@level.id].completed = new Date().getTime()
+            @saveProgress()
+            @initLevelSelector()
+
+            test.clean() for test in @level.tests when test.clean
+
+            challenge = @$('.challenge')
+            challenge.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    challenge.html '''
+                        <h3 class='success'>Success!</h3>
+                        <a class='next_level'>Select A New Level</a>
+                    '''
+                    challenge.find('.next_level').bind 'click', => @showLevelSelector(true)
+                    challenge.animate(opacity: 1, duration: 250)
+
+        showLevelSelector: (success) ->
+            $(document.body).unbind('click.level_selector')
+            if parseInt(@levelSelector.css('opacity')) == 1
+                @hideLevelSelector()
+                return
+
+            if success
+                @levelSelector.addClass('success') 
+            else
+                @levelSelector.removeClass('success') 
+
+            @levelSelector.css
+                opacity: 0
+                top: 60
+                left: (@el.width() - @levelSelector.width()) / 2
+            @levelSelector.animate
+                opacity: 1
+                duration: 250
+
+            setTimeout((=>    
+                $(document.body).one 'click.level_selector', => @hideLevelSelector()
+            ), 10)
+
+        hideLevelSelector: ->
+            $(document.body).unbind('click.level_selector')
+            @levelSelector.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    @levelSelector.css
+                        top: -1000
+                        left: -1000
+
+        saveProgress: (callback) ->
+            @mergeProgress(@puzzleProgress)
+            if @cookies.get('user')
+                $.ajaj
+                    url: "/api/puzzles/xyflyer/update"
+                    method: 'POST'
+                    headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                    data: 
+                        puzzleUpdates: {}
+                        levelUpdates: @puzzleProgress
+                    success: => callback() if callback
+            else 
+                window.postRegistration.push((callback) => @saveProgress(callback))
+                if Object.keys(@puzzleProgress).length >= 3
+                    @showRegistrationFlag()
+
+
+        mergeProgress: (progress, master=@puzzleData.levels) ->
+            for key, value of progress
+                if typeof value == 'object'
+                    master[key] = {}
+                    @mergeProgress(value, master[key])
+                else
+                    master[key] = value
+
+
                 
         initEncode: ->
             @encodeMap =
