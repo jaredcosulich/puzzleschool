@@ -24,7 +24,6 @@ xyflyer.ViewHelper = (function() {
       _this = this;
     this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent, this.islandCoordinates = _arg.islandCoordinates;
     this.rings = [];
-    this.flip(boardElement);
     this.board = new xyflyer.Board({
       el: boardElement,
       grid: grid,
@@ -51,10 +50,10 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.flip = function(boardElement) {
     boardElement.css({
-      float: 'left'
+      float: 'right'
     });
     return this.equationArea.css({
-      float: 'right'
+      float: 'left'
     });
   };
 

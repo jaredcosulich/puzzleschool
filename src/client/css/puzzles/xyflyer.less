@@ -32,7 +32,7 @@ body {
         .board {
             width: @height;
             height: @height;
-            float: right;
+            float: left;
             position: relative;   
         
             canvas {
@@ -48,6 +48,7 @@ body {
             height: (@height - 6);
             margin: 3px 0 0 3px;
             font-size: @h4size;
+            float: right;
         
             h2, h3 {
                 text-align: center;
@@ -72,6 +73,17 @@ body {
                          width: ((@width / 3) - 69);                                 
                      }
                 }
+            }
+            
+            .menu {
+                position: absolute;
+                right: 12px;
+                top: 12px;
+                background-color: #eee;
+                padding: 3px 6px;
+                font-size: @smallsize;
+                color: @black;
+                .rounded(3px);
             }
         
             .equations {

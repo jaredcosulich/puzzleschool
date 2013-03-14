@@ -153,11 +153,10 @@ soma.views
                 @showMessage('exit')
                 return
         
-            @load()
+            @initLevel()
             
         load: ->
             @dynamicContent.html(@originalHTML)
-            console.log($('svg'))
             $('svg').remove()
             
             @helper = new xyflyer.ViewHelper
@@ -169,6 +168,8 @@ soma.views
                 islandCoordinates: @level.islandCoordinates
                 nextLevel: => @nextLevel()
                 registerEvent: (eventInfo) => @registerEvent(eventInfo)
+                
+            @$('.menu').bind 'click', => @showLevelSelector()
                 
             @loadLevel()  
                 

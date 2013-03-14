@@ -178,12 +178,11 @@ soma.views({
         this.showMessage('exit');
         return;
       }
-      return this.load();
+      return this.initLevel();
     },
     load: function() {
       var _this = this;
       this.dynamicContent.html(this.originalHTML);
-      console.log($('svg'));
       $('svg').remove();
       this.helper = new xyflyer.ViewHelper({
         el: this.dynamicContent,
@@ -198,6 +197,9 @@ soma.views({
         registerEvent: function(eventInfo) {
           return _this.registerEvent(eventInfo);
         }
+      });
+      this.$('.menu').bind('click', function() {
+        return _this.showLevelSelector();
       });
       return this.loadLevel();
     },
