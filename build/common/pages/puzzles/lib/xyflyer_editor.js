@@ -131,12 +131,36 @@ xyflyerEditor.EditorHelper = (function() {
       }
     });
     this.$('.editor .remove_equation').bind('click', function() {
-      var equation;
+      var equation, _i, _len, _ref1, _results;
       if (_this.equations.length <= 1) {
         return alert('You must have at least one equation.');
       } else {
-        equation = _this.equations.remove();
-        return _this.handleModification();
+        alert('Please click on the equation you want to remove.');
+        _ref1 = _this.equations.equations;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          equation = _ref1[_i];
+          _results.push((function(equation) {
+            return equation.el.bind('mousedown.remove', function() {
+              var dropArea, e, _j, _k, _len1, _len2, _ref2, _ref3, _ref4;
+              _ref2 = _this.equations.equations;
+              for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+                e = _ref2[_j];
+                e.el.unbind('mousedown.remove');
+              }
+              _ref3 = equation.dropAreas;
+              for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+                dropArea = _ref3[_k];
+                if ((_ref4 = dropArea.component) != null) {
+                  _ref4.reset();
+                }
+              }
+              _this.equations.remove(equation);
+              return _this.handleModification();
+            });
+          })(equation));
+        }
+        return _results;
       }
     });
     this.$('.editor .add_fragment').bind('click', function() {

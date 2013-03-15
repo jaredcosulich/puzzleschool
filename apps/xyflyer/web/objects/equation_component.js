@@ -140,14 +140,18 @@ equationComponent.EquationComponent = (function() {
       this.placeHolder.show();
       this.inUse = true;
     } else {
-      this.element.css({
-        visibility: 'visible'
-      });
-      this.placeHolder.hide();
-      this.inUse = false;
+      this.reset();
     }
     this.transformer.translate(0, 0);
     return $(document.body).unbind('mousemove.drag touchmove.drag');
+  };
+
+  EquationComponent.prototype.reset = function() {
+    this.element.css({
+      visibility: 'visible'
+    });
+    this.placeHolder.hide();
+    return this.inUse = false;
   };
 
   return EquationComponent;

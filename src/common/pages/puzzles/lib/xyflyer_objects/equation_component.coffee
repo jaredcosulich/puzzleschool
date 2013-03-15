@@ -82,11 +82,15 @@ class equationComponent.EquationComponent
             @placeHolder.show()
             @inUse = true
         else
-            @element.css(visibility: 'visible')
-            @placeHolder.hide()
-            @inUse = false
+            @reset()
 
         @transformer.translate(0, 0)
         
         $(document.body).unbind('mousemove.drag touchmove.drag')
+    
+    reset: ->
+        @element.css(visibility: 'visible')
+        @placeHolder.hide()
+        @inUse = false
+        
         

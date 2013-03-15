@@ -95,8 +95,14 @@ class xyflyerEditor.EditorHelper
             if @equations.length <= 1
                 alert('You must have at least one equation.')
             else
-                equation = @equations.remove()
-                @handleModification()
+                alert('Please click on the equation you want to remove.')
+                for equation in @equations.equations
+                    do (equation) =>
+                        equation.el.bind 'mousedown.remove', =>
+                            e.el.unbind('mousedown.remove') for e in @equations.equations
+                            dropArea.component?.reset() for dropArea in equation.dropAreas                             
+                            @equations.remove(equation)
+                            @handleModification()
 
         @$('.editor .add_fragment').bind 'click', =>
             @showDialog
