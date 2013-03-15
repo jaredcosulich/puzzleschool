@@ -307,12 +307,11 @@ class xyflyerEditor.EditorHelper
             {
                 id: #{new Date().getTime()}
                 equations:
-                    
         """
         
         for equation in @equations.equations
             equationInstructions = instructions.equations[equation.straightFormula()] = {}
-            @coffeeInstructions += "'#{equation.straightFormula()}':"
+            @coffeeInstructions += "\n\t\t'#{equation.straightFormula()}':"
             if equation.startingFragment
                 equationInstructions.start = equation.startingFragment 
                 @coffeeInstructions += "\n\t\t\tstart: '#{equation.startingFragment}'"
@@ -363,7 +362,7 @@ class xyflyerEditor.EditorHelper
                 solution: (if info.get then info.get() else null)
             @coffeeInstructions += """
             
-                    '#{variable}':
+                    #{variable}:
                         start: #{info.start}
                         min: #{info.min}
                         max: #{info.max}

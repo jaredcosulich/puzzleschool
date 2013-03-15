@@ -504,12 +504,12 @@ xyflyerEditor.EditorHelper = (function() {
       equations: {},
       rings: []
     };
-    this.coffeeInstructions = "{\n    id: " + (new Date().getTime()) + "\n    equations:\n        ";
+    this.coffeeInstructions = "{\n    id: " + (new Date().getTime()) + "\n    equations:";
     _ref = this.equations.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
       equationInstructions = instructions.equations[equation.straightFormula()] = {};
-      this.coffeeInstructions += "'" + (equation.straightFormula()) + "':";
+      this.coffeeInstructions += "\n\t\t'" + (equation.straightFormula()) + "':";
       if (equation.startingFragment) {
         equationInstructions.start = equation.startingFragment;
         this.coffeeInstructions += "\n\t\t\tstart: '" + equation.startingFragment + "'";
@@ -570,7 +570,7 @@ xyflyerEditor.EditorHelper = (function() {
         increment: info.increment,
         solution: (info.get ? info.get() : null)
       };
-      this.coffeeInstructions += "\n        '" + variable + "':\n            start: " + info.start + "\n            min: " + info.min + "\n            max: " + info.max + "\n            increment: " + info.increment + "\n            solution: " + instructions.variables[variable].solution;
+      this.coffeeInstructions += "\n        " + variable + ":\n            start: " + info.start + "\n            min: " + info.min + "\n            max: " + info.max + "\n            increment: " + info.increment + "\n            solution: " + instructions.variables[variable].solution;
     }
     this.coffeeInstructions += '\n}';
     return this.encode(JSON.stringify(instructions));

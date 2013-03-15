@@ -710,6 +710,73 @@ levels.STAGES = [
         ],
         fragments: ['2x', '(1/2)x', '+2']
       }, {
+        id: 1363372189102,
+        equations: {
+          'a*x-5': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: 'a*',
+                after: ''
+              }, {
+                fragment: '-5',
+                after: 'x'
+              }
+            ]
+          },
+          '(1/b)*x+12': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/b)*',
+                after: ''
+              }, {
+                fragment: '+12',
+                after: 'x'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -1,
+            y: -10
+          }, {
+            x: 3,
+            y: 10
+          }, {
+            x: 24,
+            y: 15
+          }
+        ],
+        grid: {
+          xMin: -15,
+          xMax: 45,
+          yMin: -30,
+          yMax: 30
+        },
+        islandCoordinates: {
+          x: -3,
+          y: -20
+        },
+        fragments: ['a*', '(1/b)*', '-5', '+12'],
+        variables: {
+          a: {
+            start: 1,
+            min: 1,
+            max: 10,
+            increment: 1,
+            solution: 5
+          },
+          b: {
+            start: 1,
+            min: 1,
+            max: 10,
+            increment: 1,
+            solution: 8
+          }
+        }
+      }, {
         id: 1363229845866,
         equations: {
           'a*x+c': {
