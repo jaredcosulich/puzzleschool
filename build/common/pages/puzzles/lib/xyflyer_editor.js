@@ -193,8 +193,7 @@ xyflyerEditor.EditorHelper = (function() {
           ring = _ref1[index];
           if (ring.touches(e.offsetX, e.offsetY, 12, 12)) {
             _this.rings.splice(index, 1);
-            ring.image.remove();
-            ring.label.remove();
+            ring.remove();
             return;
           }
         }
@@ -364,12 +363,14 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.resetLevel = function() {
-    var ring, _i, _len, _ref, _results;
-    this.plane.reset();
-    _ref = this.rings;
+    var ring, _i, _len, _ref, _ref1, _results;
+    if ((_ref = this.plane) != null) {
+      _ref.reset();
+    }
+    _ref1 = this.rings;
     _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      ring = _ref[_i];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      ring = _ref1[_i];
       _results.push(ring.reset());
     }
     return _results;
@@ -498,42 +499,70 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.getInstructions = function() {
-    var component, equation, equationInstructions, info, instructions, ring, solutionComponents, variable, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+    var component, ec, equation, equationInstructions, info, instructions, ring, sc, solutionComponents, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
     instructions = {
       equations: {},
       rings: []
     };
+    this.coffeeInstructions = "{\n    id: " + (new Date().getTime()) + "\n    equations:\n        ";
     _ref = this.equations.equations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
       equationInstructions = instructions.equations[equation.straightFormula()] = {};
+      this.coffeeInstructions += "'" + (equation.straightFormula()) + "':";
       if (equation.startingFragment) {
         equationInstructions.start = equation.startingFragment;
+        this.coffeeInstructions += "\n\t\t\tstart: '" + equation.startingFragment + "'";
       }
       if ((solutionComponents = this.constructSolutionComponents(equation)).length) {
         equationInstructions.solutionComponents = solutionComponents;
+        this.coffeeInstructions += '\n\t\t\tsolutionComponents: [';
+        for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
+          sc = solutionComponents[_j];
+          this.coffeeInstructions += "\n\t\t\t\t{fragment: '" + sc.fragment + "', after: '" + sc.after + "'}";
+        }
+        this.coffeeInstructions += '\n\t\t\t]';
       }
     }
-    instructions.grid = this.grid;
-    instructions.islandCoordinates = this.islandCoordinates;
+    this.coffeeInstructions += '\n\trings: [';
     _ref1 = this.rings;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      ring = _ref1[_j];
+    for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+      ring = _ref1[_k];
       instructions.rings.push({
         x: ring.x,
         y: ring.y
       });
+      this.coffeeInstructions += "\n\t\t{x: " + ring.x + ", y: " + ring.y + "}";
     }
+    this.coffeeInstructions += '\n\t]';
+    instructions.grid = this.grid;
+    this.coffeeInstructions += "\n    grid:\n        xMin: " + this.grid.xMin + "\n        xMax: " + this.grid.xMax + "\n        yMin: " + this.grid.yMin + "\n        yMax: " + this.grid.yMax;
+    instructions.islandCoordinates = this.islandCoordinates;
+    this.coffeeInstructions += "\n\tislandCoordinates: {x: " + this.islandCoordinates.x + ", y: " + this.islandCoordinates.y + "}";
+    this.coffeeInstructions += '\n\tfragments: [';
+    instructions.fragments = [];
     _ref2 = this.equations.equationComponents;
-    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-      component = _ref2[_k];
-      instructions.fragments || (instructions.fragments = []);
+    for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
+      component = _ref2[_l];
       instructions.fragments.push(component.equationFragment);
     }
+    this.coffeeInstructions += "" + (((function() {
+      var _len4, _m, _ref3, _results;
+      _ref3 = this.equations.equationComponents;
+      _results = [];
+      for (_m = 0, _len4 = _ref3.length; _m < _len4; _m++) {
+        ec = _ref3[_m];
+        _results.push("'" + ec.equationFragment + "'");
+      }
+      return _results;
+    }).call(this)).join(', ')) + "]";
     _ref3 = this.variables;
     for (variable in _ref3) {
       info = _ref3[variable];
-      instructions.variables || (instructions.variables = {});
+      if (!instructions.variables) {
+        instructions.variables = {};
+        this.coffeeInstructions += '\n\tvariables: ';
+      }
       instructions.variables[variable] = {
         start: info.start,
         min: info.min,
@@ -541,8 +570,9 @@ xyflyerEditor.EditorHelper = (function() {
         increment: info.increment,
         solution: (info.get ? info.get() : null)
       };
+      this.coffeeInstructions += "\n        '" + variable + "':\n            start: " + info.start + "\n            min: " + info.min + "\n            max: " + info.max + "\n            increment: " + info.increment + "\n            solution: " + instructions.variables[variable].solution;
     }
-    console.log(JSON.stringify(instructions));
+    this.coffeeInstructions += '\n}';
     return this.encode(JSON.stringify(instructions));
   };
 
@@ -559,14 +589,20 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.showInstructions = function() {
     var href;
+    if (this.instructionsDisplayed) {
+      return;
+    }
+    this.instructionsDisplayed = true;
     this.$('.instructions .invalid').hide();
     this.$('.instructions .valid').show();
     href = location.protocol + '//' + location.host + location.pathname;
     this.$('.instructions .link').val("" + (href.replace(/editor/, 'custom')) + "#" + (this.getInstructions()));
-    return this.hashInstructions();
+    this.hashInstructions();
+    return console.log(this.coffeeInstructions.replace(/\t/g, '    '));
   };
 
   EditorHelper.prototype.hideInstructions = function() {
+    this.instructionsDisplayed = false;
     this.$('.instructions .valid').hide();
     return this.$('.instructions .invalid').show();
   };

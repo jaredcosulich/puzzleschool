@@ -21,7 +21,7 @@ plane.Plane = (function(_super) {
     this.board = _arg.board, this.track = _arg.track, this.objects = _arg.objects;
     this.animation = new Animation(true);
     this.addToBoard();
-    this.board.resetLevel();
+    this.reset();
   }
 
   Plane.prototype.setBoard = function(board) {

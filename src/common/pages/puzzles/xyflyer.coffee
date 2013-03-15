@@ -100,9 +100,10 @@ soma.views
             
             @user = @cookies.get('user')
             
-#            @classId = @el.data('class')
-#            @levelId = @el.data('level')
-#            @classLevelId = @el.data('classlevel')
+            @classId = @el.data('class')
+            @classLevelId = @el.data('classlevel')
+            @levelId = @el.data('level')
+            @level = @findLevel(@levelId)
             
             if (puzzleData = @el.data('puzzle_data'))?.length
                 @puzzleData = JSON.parse(puzzleData)
@@ -113,9 +114,6 @@ soma.views
             @puzzleProgress[@levelId] = {}            
 
             @originalHTML = @dynamicContent.html()
-
-            @levelId = @el.data('level')
-            @level = @findLevel(@levelId)
         
             @initEncode()
             @initLevelSelector()  

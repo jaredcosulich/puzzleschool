@@ -144,6 +144,87 @@ levels.STAGES = [
           }
         ],
         fragments: ['2*', '(1/2)*', '+3', '-3']
+      }, {
+        id: 1363367640281,
+        equations: {
+          '(-1/2)*x+13': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(-1/2)*',
+                after: ''
+              }, {
+                fragment: '+13',
+                after: 'x'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -6,
+            y: 16
+          }, {
+            x: 6,
+            y: 10
+          }, {
+            x: 18,
+            y: 4
+          }
+        ],
+        grid: {
+          xMin: -30,
+          xMax: 30,
+          yMin: -30,
+          yMax: 30
+        },
+        islandCoordinates: {
+          x: -18,
+          y: 22
+        },
+        fragments: ['-2*', '(-1/2)*', '+13', '-13']
+      }, {
+        id: 1363368153567,
+        equations: {
+          '-1*5*x+32': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '-1*',
+                after: ''
+              }, {
+                fragment: '5*',
+                after: '-1*'
+              }, {
+                fragment: '+32',
+                after: 'x'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: 4,
+            y: 12
+          }, {
+            x: 7,
+            y: -3
+          }, {
+            x: 10,
+            y: -18
+          }
+        ],
+        grid: {
+          xMin: -5,
+          xMax: 15,
+          yMin: -30,
+          yMax: 30
+        },
+        islandCoordinates: {
+          x: 1,
+          y: 27
+        },
+        fragments: ['5*', '(1/5)*', '+32', '-32', '-1*']
       }
     ]
   }, {
@@ -638,8 +719,8 @@ levels.STAGES = [
                 fragment: 'a*',
                 after: ''
               }, {
-                "fragment": "+c",
-                "after": "x"
+                fragment: '+c',
+                after: 'x'
               }
             ]
           },

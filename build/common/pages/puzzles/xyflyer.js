@@ -137,6 +137,10 @@ soma.views({
         return _this.showLevelSelector();
       });
       this.user = this.cookies.get('user');
+      this.classId = this.el.data('class');
+      this.classLevelId = this.el.data('classlevel');
+      this.levelId = this.el.data('level');
+      this.level = this.findLevel(this.levelId);
       if ((_ref = (puzzleData = this.el.data('puzzle_data'))) != null ? _ref.length : void 0) {
         this.puzzleData = JSON.parse(puzzleData);
       } else {
@@ -147,8 +151,6 @@ soma.views({
       this.puzzleProgress = {};
       this.puzzleProgress[this.levelId] = {};
       this.originalHTML = this.dynamicContent.html();
-      this.levelId = this.el.data('level');
-      this.level = this.findLevel(this.levelId);
       this.initEncode();
       this.initLevelSelector();
       if (isNaN(parseInt(this.levelId))) {

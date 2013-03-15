@@ -30,12 +30,16 @@ ring.Ring = (function(_super) {
     var _this = this;
     this.board.addToCanvas({
       draw: function(ctxFunction) {
-        return _this.drawHalfRing(ctxFunction, 1);
+        if (!_this.removed) {
+          return _this.drawHalfRing(ctxFunction, 1);
+        }
       }
     }, 3);
     this.board.addToCanvas({
       draw: function(ctxFunction) {
-        return _this.drawHalfRing(ctxFunction, -1);
+        if (!_this.removed) {
+          return _this.drawHalfRing(ctxFunction, -1);
+        }
       }
     }, 1);
     return this.board.addRing(this);
@@ -111,6 +115,11 @@ ring.Ring = (function(_super) {
   Ring.prototype.reset = function() {
     this.passedThrough = false;
     return this.highlighting = false;
+  };
+
+  Ring.prototype.remove = function() {
+    this.label.remove();
+    return this.removed = true;
   };
 
   return Ring;

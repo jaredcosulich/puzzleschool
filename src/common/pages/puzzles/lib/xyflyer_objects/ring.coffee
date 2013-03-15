@@ -17,12 +17,12 @@ class ring.Ring extends xyflyerObject.Object
         
     initCanvas: ->
         @board.addToCanvas(
-            {draw: (ctxFunction) => @drawHalfRing(ctxFunction, 1)}
+            {draw: (ctxFunction) => @drawHalfRing(ctxFunction, 1) unless @removed}
             3
         )
     
         @board.addToCanvas(
-            {draw: (ctxFunction) => @drawHalfRing(ctxFunction, -1)}
+            {draw: (ctxFunction) => @drawHalfRing(ctxFunction, -1) unless @removed}
             1
         )
         @board.addRing(@)
@@ -81,3 +81,7 @@ class ring.Ring extends xyflyerObject.Object
     reset: ->
         @passedThrough = false
         @highlighting = false
+        
+    remove: ->
+        @label.remove()
+        @removed = true

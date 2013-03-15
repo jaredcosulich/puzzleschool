@@ -134,8 +134,7 @@ class xyflyerEditor.EditorHelper
                 for ring, index in @rings
                     if ring.touches(e.offsetX,e.offsetY,12,12)
                         @rings.splice(index, 1)
-                        ring.image.remove()
-                        ring.label.remove()
+                        ring.remove()
                         return
                 alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.')
                 @handleModification()
@@ -232,7 +231,7 @@ class xyflyerEditor.EditorHelper
         @handleModification()
         
     resetLevel: ->
-        @plane.reset()
+        @plane?.reset()
         ring.reset() for ring in @rings
     
     trackPlane: (info) ->
@@ -304,37 +303,75 @@ class xyflyerEditor.EditorHelper
                 
     getInstructions: ->
         instructions = {equations: {}, rings: []}
+        @coffeeInstructions = """
+            {
+                id: #{new Date().getTime()}
+                equations:
+                    
+        """
         
         for equation in @equations.equations
             equationInstructions = instructions.equations[equation.straightFormula()] = {}
+            @coffeeInstructions += "'#{equation.straightFormula()}':"
             if equation.startingFragment
                 equationInstructions.start = equation.startingFragment 
-            
+                @coffeeInstructions += "\n\t\t\tstart: '#{equation.startingFragment}'"
+
             if (solutionComponents = @constructSolutionComponents(equation)).length
                 equationInstructions.solutionComponents = solutionComponents
-            
-            
-        instructions.grid = @grid
-        
-        instructions.islandCoordinates = @islandCoordinates
-        
+                @coffeeInstructions += '\n\t\t\tsolutionComponents: ['
+                for sc in solutionComponents
+                    @coffeeInstructions += "\n\t\t\t\t{fragment: '#{sc.fragment}', after: '#{sc.after}'}"
+                @coffeeInstructions += '\n\t\t\t]'
+
+        @coffeeInstructions += '\n\trings: ['
         for ring in @rings
             instructions.rings.push(x: ring.x, y: ring.y)
+            @coffeeInstructions += "\n\t\t{x: #{ring.x}, y: #{ring.y}}"
+        @coffeeInstructions += '\n\t]'
             
+        instructions.grid = @grid
+        @coffeeInstructions += """
+        
+            grid:
+                xMin: #{@grid.xMin}
+                xMax: #{@grid.xMax}
+                yMin: #{@grid.yMin}
+                yMax: #{@grid.yMax}
+        """
+        
+        instructions.islandCoordinates = @islandCoordinates
+        @coffeeInstructions += "\n\tislandCoordinates: {x: #{@islandCoordinates.x}, y: #{@islandCoordinates.y}}"
+            
+
+        @coffeeInstructions += '\n\tfragments: ['
+        instructions.fragments = []
         for component in @equations.equationComponents
-            instructions.fragments or= []
             instructions.fragments.push(component.equationFragment)
-            
+        @coffeeInstructions += "#{("'#{ec.equationFragment}'" for ec in @equations.equationComponents).join(', ')}]"
+
         for variable, info of @variables
-            instructions.variables or= {}
+            if not instructions.variables
+                instructions.variables = {}
+                @coffeeInstructions += '\n\tvariables: '          
+            
             instructions.variables[variable] = 
                 start: info.start
                 min: info.min
                 max: info.max
                 increment: info.increment
                 solution: (if info.get then info.get() else null)
+            @coffeeInstructions += """
+            
+                    '#{variable}':
+                        start: #{info.start}
+                        min: #{info.min}
+                        max: #{info.max}
+                        increment: #{info.increment}
+                        solution: #{instructions.variables[variable].solution}
+            """
         
-        console.log(JSON.stringify(instructions))
+        @coffeeInstructions += '\n}'
         return @encode(JSON.stringify(instructions))
         
     handleModification: ->
@@ -346,13 +383,18 @@ class xyflyerEditor.EditorHelper
         window.location.hash = levelString
         
     showInstructions: ->
+        return if @instructionsDisplayed
+        @instructionsDisplayed = true
         @$('.instructions .invalid').hide()
         @$('.instructions .valid').show()
         href = location.protocol+'//'+location.host+location.pathname
         @$('.instructions .link').val("#{href.replace(/editor/, 'custom')}##{@getInstructions()}")
         @hashInstructions()
+        console.log(@coffeeInstructions.replace(/\t/g, '    '))
+        
         
     hideInstructions: ->
+        @instructionsDisplayed = false
         @$('.instructions .valid').hide()
         @$('.instructions .invalid').show()
         
