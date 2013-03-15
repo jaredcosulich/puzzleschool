@@ -26,6 +26,7 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.setBoard = function(board) {
     this.board = board;
+    return this.addToBoard();
   };
 
   Plane.prototype.addToBoard = function() {

@@ -545,6 +545,11 @@ board.Board = (function(_super) {
     return path;
   };
 
+  Board.prototype.clear = function() {
+    this.paper.clear();
+    return this.el.find('canvas').remove();
+  };
+
   return Board;
 
 })(xyflyerObject.Object);

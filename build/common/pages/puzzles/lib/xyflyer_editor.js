@@ -57,7 +57,7 @@ xyflyerEditor.EditorHelper = (function() {
       };
     }
     if (this.board) {
-      this.board.paper.clear();
+      this.board.clear();
     }
     this.board = new xyflyer.Board({
       el: this.boardElement,

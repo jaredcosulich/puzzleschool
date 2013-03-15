@@ -11,7 +11,7 @@ class plane.Plane extends xyflyerObject.Object
         @addToBoard()
         @reset()
 
-    setBoard: (@board) ->
+    setBoard: (@board) -> @addToBoard()
         
     addToBoard: -> @board.addToCanvas(@, 2)
         

@@ -485,6 +485,58 @@ levels.STAGES = [
                 ]
             }    
             {
+                id: 1363382168264
+                equations:
+                    'a*x':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: 'a*', after: ''}
+                        ]
+                    'b*x':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: 'b*', after: ''}
+                        ]
+                rings: [
+                    {x: -10, y: -20}
+                    {x: -5, y: -10}
+                    {x: 5, y: -10}
+                    {x: 10, y: -20}
+                ]
+                grid:
+                    xMin: -50
+                    xMax: 50
+                    yMin: -50
+                    yMax: 50
+                islandCoordinates: {x: -16, y: -32}
+                fragments: ['a*', 'b*', '(1/c)*', '(1/d)*']
+                variables: 
+                    a:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: -2
+                    b:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: 2
+                    c:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: null
+                    d:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: null
+            }
+            {
                 id: 1363372189102
                 equations:
                     'a*x-5':
@@ -525,8 +577,7 @@ levels.STAGES = [
                         increment: 1
                         solution: 8
             }
-            #here
-            
+
             {
                 id: 1363229845866
                 equations:

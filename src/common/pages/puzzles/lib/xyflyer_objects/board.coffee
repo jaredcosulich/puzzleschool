@@ -372,4 +372,7 @@ class board.Board extends xyflyerObject.Object
             return path unless validPathFound
         
         return path
-
+    
+    clear: ->
+        @paper.clear()
+        @el.find('canvas').remove()

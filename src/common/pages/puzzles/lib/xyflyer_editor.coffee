@@ -37,7 +37,7 @@ class xyflyerEditor.EditorHelper
         else if not @islandCoordinates
             @islandCoordinates = {x: 0, y: 0} 
         
-        @board.paper.clear() if @board
+        @board.clear() if @board
 
         @board = new xyflyer.Board
             el: @boardElement 
