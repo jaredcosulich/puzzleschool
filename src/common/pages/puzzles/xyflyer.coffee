@@ -244,7 +244,7 @@ soma.views
                     id = levelElement.data('id')
                     levelInfo = @findLevel(id)
             
-                    locked = !previousCompleted
+                    locked = false#!previousCompleted
             
                     @setLevelIcon
                         id: id

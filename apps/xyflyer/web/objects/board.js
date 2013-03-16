@@ -442,7 +442,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function() {
-    var addToPath, id, intersection, intersectionY, lastFormula, lf, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
+    var addToPath, id, intersection, intersectionY, lastFormula, lf, otherPrevYPos, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
       _this = this;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {
@@ -496,7 +496,8 @@ board.Board = (function(_super) {
             }
             otherYPos = this.formulas[id].formula(xPos / this.xUnit) * this.yUnit;
             prevYPos = lastFormula.formula((xPos - 1) / this.xUnit) * this.yUnit;
-            if ((yPos - otherYPos <= 0 && prevYPos - otherYPos > 0) || (yPos - otherYPos >= 0 && prevYPos - otherYPos < 0)) {
+            otherPrevYPos = this.formulas[id].formula((xPos - 1) / this.xUnit) * this.yUnit;
+            if ((yPos - otherYPos <= 0 && prevYPos - otherPrevYPos > 0) || (yPos - otherYPos >= 0 && prevYPos - otherPrevYPos < 0)) {
               yPos = otherYPos;
               lastFormula = this.formulas[id];
               break;

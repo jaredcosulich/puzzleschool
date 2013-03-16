@@ -335,8 +335,9 @@ class board.Board extends xyflyerObject.Object
                         continue if not @formulas[id].area(xPos / @xUnit)
                         otherYPos = @formulas[id].formula(xPos / @xUnit) * @yUnit
                         prevYPos = lastFormula.formula((xPos - 1) / @xUnit) * @yUnit
-                        if (yPos - otherYPos <= 0 and prevYPos - otherYPos > 0) or
-                           (yPos - otherYPos >= 0 and prevYPos - otherYPos < 0)  
+                        otherPrevYPos = @formulas[id].formula((xPos - 1) / @xUnit) * @yUnit
+                        if (yPos - otherYPos <= 0 and prevYPos - otherPrevYPos > 0) or
+                           (yPos - otherYPos >= 0 and prevYPos - otherPrevYPos < 0)  
                             yPos = otherYPos
                             lastFormula = @formulas[id]
                             break
