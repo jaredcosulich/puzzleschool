@@ -337,7 +337,7 @@ soma.views({
           levelElement = $(levelElement);
           id = levelElement.data('id');
           levelInfo = _this.findLevel(id);
-          locked = false;
+          locked = !previousCompleted;
           _this.setLevelIcon({
             id: id,
             started: (_ref1 = _this.puzzleData.levels[id]) != null ? _ref1.started : void 0,
