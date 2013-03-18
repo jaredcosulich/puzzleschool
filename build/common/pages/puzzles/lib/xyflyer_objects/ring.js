@@ -16,15 +16,21 @@ ring.Ring = (function(_super) {
   Ring.prototype.height = 32;
 
   function Ring(_arg) {
-    this.board = _arg.board, this.x = _arg.x, this.y = _arg.y;
+    var board;
+    board = _arg.board, this.x = _arg.x, this.y = _arg.y;
+    this.highlightRadius = 0;
+    this.setBoard(board);
+    this.animation = new Animation(true);
+  }
+
+  Ring.prototype.setBoard = function(board) {
+    this.board = board;
     this.screenX = this.board.screenX(this.x);
     this.screenY = this.board.screenY(this.y);
     this.scale = this.board.scale;
-    this.highlightRadius = 0;
     this.initCanvas();
-    this.label = this.board.showXY(this.screenX, this.screenY, false, true);
-    this.animation = new Animation(true);
-  }
+    return this.label = this.board.showXY(this.screenX, this.screenY, false, true);
+  };
 
   Ring.prototype.initCanvas = function() {
     var _this = this;

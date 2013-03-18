@@ -54,6 +54,8 @@ class xyflyerEditor.EditorHelper
                 board: @board
                 objects: @objects
                 track: (info) => @trackPlane(info)
+                
+        ring.setBoard(@board) for ring in @rings
             
         if @equations
             @equations.plotFormula(equation) for equation in @equations?.equations

@@ -217,7 +217,7 @@ soma.views
         findLevel: (levelId) ->
             for stage in @stages
                 level = (level for level in stage.levels when level.id == levelId)[0]
-                return level if level
+                return JSON.parse(JSON.stringify(level)) if level
                 
         initLevel: ->
             @dynamicContent.html(@originalHTML)

@@ -303,7 +303,7 @@ soma.views({
           return _results;
         })())[0];
         if (level) {
-          return level;
+          return JSON.parse(JSON.stringify(level));
         }
       }
     },

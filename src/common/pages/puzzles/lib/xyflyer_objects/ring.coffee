@@ -5,15 +5,17 @@ class ring.Ring extends xyflyerObject.Object
     width: 8
     height: 32
     
-    constructor: ({@board, @x, @y}) ->
+    constructor: ({board, @x, @y}) ->
+        @highlightRadius = 0
+        @setBoard(board)        
+        @animation = new Animation(true)
+        
+    setBoard: (@board) ->
         @screenX = @board.screenX(@x)
         @screenY = @board.screenY(@y)
         @scale = @board.scale
-        @highlightRadius = 0
-        
         @initCanvas()
         @label = @board.showXY(@screenX, @screenY, false, true)
-        @animation = new Animation(true)
         
     initCanvas: ->
         @board.addToCanvas(

@@ -35,7 +35,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initBoard = function(_arg) {
-    var equation, grid, islandCoordinates, _i, _len, _ref, _ref1, _results,
+    var equation, grid, islandCoordinates, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
       _this = this;
     grid = _arg.grid, islandCoordinates = _arg.islandCoordinates;
     if (grid) {
@@ -80,11 +80,16 @@ xyflyerEditor.EditorHelper = (function() {
         }
       });
     }
+    _ref = this.rings;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      ring = _ref[_i];
+      ring.setBoard(this.board);
+    }
     if (this.equations) {
-      _ref1 = (_ref = this.equations) != null ? _ref.equations : void 0;
+      _ref2 = (_ref1 = this.equations) != null ? _ref1.equations : void 0;
       _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        equation = _ref1[_i];
+      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+        equation = _ref2[_j];
         _results.push(this.equations.plotFormula(equation));
       }
       return _results;

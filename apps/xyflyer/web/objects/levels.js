@@ -961,6 +961,73 @@ levels.STAGES = [
           }
         }
       }, {
+        id: 1363623610571,
+        equations: {
+          '(1/8)*x+b': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/8)*',
+                after: ''
+              }, {
+                fragment: '+b',
+                after: 'x'
+              }
+            ]
+          },
+          '(1/a)*x-5': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/a)*',
+                after: ''
+              }, {
+                fragment: '-5',
+                after: 'x'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: 2,
+            y: -4
+          }, {
+            x: 4,
+            y: -3
+          }, {
+            x: 6,
+            y: -2
+          }
+        ],
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -10,
+          yMax: 10
+        },
+        islandCoordinates: {
+          x: -4,
+          y: -6.5
+        },
+        fragments: ['(1/a)*', '(1/8)*', '+b', '-5'],
+        variables: {
+          a: {
+            start: 1,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: 2
+          },
+          b: {
+            start: 1,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: -6
+          }
+        }
+      }, {
         id: 1363229845866,
         equations: {
           'a*x+c': {
