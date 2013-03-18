@@ -894,6 +894,87 @@ levels.STAGES = [
           }
         }
       }, {
+        id: 1363625636226,
+        equations: {
+          '(1/a)*x+c': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/a)*',
+                after: ''
+              }, {
+                fragment: '+c',
+                after: 'x'
+              }
+            ]
+          },
+          '(1/b)*x+d': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/b)*',
+                after: ''
+              }, {
+                fragment: '+d',
+                after: 'x'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -1,
+            y: 2.25
+          }, {
+            x: 2,
+            y: 1.5
+          }, {
+            x: 5,
+            y: 0.75
+          }
+        ],
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -10,
+          yMax: 10
+        },
+        islandCoordinates: {
+          x: -6,
+          y: 2
+        },
+        fragments: ['(1/a)*', '(1/b)*', '+c', '+d'],
+        variables: {
+          a: {
+            start: 1,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: 6
+          },
+          b: {
+            start: 1,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: -4
+          },
+          c: {
+            start: 1,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: 3
+          },
+          d: {
+            start: 1,
+            min: -10,
+            max: 10,
+            increment: 1,
+            solution: 2
+          }
+        }
+      }, {
         id: 1363446018764,
         equations: {
           '(1/b)x-6': {
