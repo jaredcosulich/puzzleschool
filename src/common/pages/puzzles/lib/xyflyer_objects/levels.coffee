@@ -800,6 +800,38 @@ levels.STAGES = [
                 fragments: ['(1/4)*', '-6']
             }
             {
+                id: 1363642523297
+                equations:
+                    '(x+a)^2':
+                        start: '(x)^2'
+                        solutionComponents: [
+                            {fragment: '+a', after: 'x'}
+                        ]
+                    '0':
+                        solutionComponents: [
+                            {fragment: '0', after: ''}
+                        ]
+                rings: [
+                    {x: 5, y: 1}
+                    {x: 6, y: 4}
+                    {x: 7, y: 9}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: 0, y: 0}
+                fragments: ['+a', '0']
+                variables: 
+                    a:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: -4
+            }
+            {
                 id: 1363230030642
                 equations:
                     '((1/3)*x)^2-32': {start: '(x)^2'}
