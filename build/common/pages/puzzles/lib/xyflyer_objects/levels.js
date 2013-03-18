@@ -1352,6 +1352,54 @@ levels.STAGES = [
           }
         }
       }, {
+        id: 1363645001878,
+        equations: {
+          '(1/2)*x+6': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/2)*',
+                after: ''
+              }, {
+                fragment: '+6',
+                after: 'x'
+              }
+            ]
+          },
+          '((1/4)*x)^2': {
+            start: '(x)^2',
+            solutionComponents: [
+              {
+                fragment: '(1/4)*',
+                after: '('
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -4,
+            y: 1
+          }, {
+            x: 4,
+            y: 1
+          }, {
+            x: 12,
+            y: 9
+          }
+        ],
+        grid: {
+          xMin: -15,
+          xMax: 15,
+          yMin: -15,
+          yMax: 15
+        },
+        islandCoordinates: {
+          x: -12,
+          y: 0
+        },
+        fragments: ['(1/4)*', '(1/2)*', '+6']
+      }, {
         id: 1363230030642,
         equations: {
           '((1/3)*x)^2-32': {
@@ -1400,6 +1448,59 @@ levels.STAGES = [
             solution: -5
           }
         }
+      }
+    ]
+  }, {
+    name: 'Multiple Curves',
+    levels: [
+      {
+        id: 1363646545338,
+        equations: {
+          '(1/4)*(x)^2-3': {
+            start: '(x)^2',
+            solutionComponents: [
+              {
+                fragment: '(1/4)*',
+                after: ''
+              }, {
+                fragment: '-3',
+                after: '(x)^2'
+              }
+            ]
+          },
+          '((1/4)*x)^2': {
+            start: '(x)^2',
+            solutionComponents: [
+              {
+                fragment: '(1/4)*',
+                after: '('
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -6,
+            y: 6
+          }, {
+            x: 6,
+            y: 6
+          }, {
+            x: 0,
+            y: 0
+          }
+        ],
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -5,
+          yMax: 15
+        },
+        islandCoordinates: {
+          x: -8,
+          y: 13
+        },
+        fragments: ['(1/4)*', '(1/4)*', '-3']
       }
     ]
   }
