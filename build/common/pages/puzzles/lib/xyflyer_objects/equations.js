@@ -304,7 +304,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, allEquationsSet, c, completedSolution, component, components, dropArea, element, equation, existing, formula, fragment, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2,
+    var accept, allEquationsSet, c, completedSolution, component, components, dropArea, element, equation, existing, formula, fragment, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, v, valid, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2,
       _this = this;
     allEquationsSet = true;
     _ref = this.equations;
@@ -325,7 +325,7 @@ equations.Equations = (function() {
           if ((solutionComponents = equation.solutionComponents)) {
             for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
               solutionComponent = solutionComponents[_j];
-              component = ((function() {
+              valid = (function() {
                 var _k, _len2, _ref1, _results;
                 _ref1 = this.equationComponents;
                 _results = [];
@@ -336,7 +336,23 @@ equations.Equations = (function() {
                   }
                 }
                 return _results;
-              }).call(this))[0];
+              }).call(this);
+              if (valid.length > 1) {
+                component = ((function() {
+                  var _k, _len2, _results;
+                  _results = [];
+                  for (_k = 0, _len2 = valid.length; _k < _len2; _k++) {
+                    v = valid[_k];
+                    if (!v.inUse) {
+                      _results.push(v);
+                    }
+                  }
+                  return _results;
+                })())[0];
+              }
+              if (!component) {
+                component = valid[0];
+              }
               if (component.after === solutionComponent.after) {
                 continue;
               }

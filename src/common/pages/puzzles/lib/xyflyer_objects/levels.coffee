@@ -832,6 +832,39 @@ levels.STAGES = [
                         solution: -4
             }
             {
+                id: 1363643301742
+                equations:
+                    '(x+a)^2-2':
+                        start: '(x)^2'
+                        solutionComponents: [
+                            {fragment: '+a', after: 'x'}
+                            {fragment: '-2', after: '(x+a)^2'}
+                        ]
+                    '-2':
+                        solutionComponents: [
+                            {fragment: '-2', after: ''}
+                        ]
+                rings: [
+                    {x: 3, y: -1}
+                    {x: 4, y: 2}
+                    {x: 5, y: 7}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6, y: -2}
+                fragments: ['+a', '-2', '-2']
+                variables: 
+                    a:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: -2
+            }
+            {
                 id: 1363230030642
                 equations:
                     '((1/3)*x)^2-32': {start: '(x)^2'}
