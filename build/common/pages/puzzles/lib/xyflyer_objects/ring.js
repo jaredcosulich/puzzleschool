@@ -93,7 +93,7 @@ ring.Ring = (function(_super) {
     if (formula(this.x) !== this.y) {
       return false;
     }
-    if (x + (0.5 * this.scale) > this.x) {
+    if ((this.x - (0.5 * this.scale) < x && x < this.x + (0.5 * this.scale))) {
       return true;
     }
   };

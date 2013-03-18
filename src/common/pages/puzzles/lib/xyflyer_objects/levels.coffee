@@ -766,94 +766,72 @@ levels.STAGES = [
                     "b":{"start":1,"min":-10,"max":10,"increment":1,"solution":"5"}
                     "c":{"start":1,"min":-10,"max":10,"increment":1,"solution":"-10"}
                     "d":{"start":1,"min":-10,"max":10,"increment":1,"solution":"-6"}
-            }                    
-            
-            # {
-            #     id: 1363230016495
-            #     equations:
-            #         'a*x-64': {start: 'x'}
-            #         '(1/b)x-8': {start: 'x'}
-            #     grid:
-            #         xMin: -30
-            #         xMax: 30
-            #         yMin: -30
-            #         yMax: 30
-            #     rings: [
-            #         {x: -16, y: 0}
-            #         {x: 0, y: -8}
-            #         {x: 20, y: -12}
-            #     ]
-            #     fragments: [
-            #         'a*', '(1/b)', '+8', '-8', '+64', '-64'
-            #     ]
-            #     islandCoordinates: {x: -20, y: 16}
-            #     variables:
-            #         a:
-            #             start: 1
-            #             min: -10
-            #             max: 10
-            #             increment: 1
-            #             solution: -4
-            #         b:
-            #             start: 1
-            #             min: -10
-            #             max: 10
-            #             increment: 1  
-            #             solution: -5      
-            # }        
-            # {
-            #     id: 1363230025627
-            #     equations:
-            #         '4*(x)+12': {start: '(x)'}
-            #         '((1/5)x+6)': {start: '(x)'}
-            #     grid:
-            #         xMin: -20
-            #         xMax: 20
-            #         yMin: -20
-            #         yMax: 20
-            #     rings: [
-            #         {x: -4, y: -4}
-            #         {x: 5, y: 7}
-            #         {x: 15, y: 9}
-            #     ]
-            #     islandCoordinates: {x: -7, y: -16}
-            #     fragments: [
-            #         '4*', '2*', '(1/2)', '(1/5)', '+6', '+12', '-6', '-12'
-            #     ]
-            # }    
-            # {
-            #     id: 1363230030642
-            #     equations:
-            #         '((1/3)*x)^2-32': {start: '(x)^2'}
-            #         '(1/6)*x+20': {start: 'x'}
-            #     grid:
-            #         xMin: -50
-            #         xMax: 50
-            #         yMin: -50
-            #         yMax: 50
-            #     rings: [
-            #         {x: -9, y: -23}
-            #         {x: 12, y: -16}
-            #         {x: 36, y: 26}
-            #     ]
-            #     fragments: [
-            #         '(1/3)*', '(1/6)*', '-32', '+20'
-            #     ]
-            #     islandCoordinates: {x: -18, y: 4}
-            #     variables:
-            #         a:
-            #             start: 1
-            #             min: -10
-            #             max: 10
-            #             increment: 1
-            #             solution: -4
-            #         b:
-            #             start: 1
-            #             min: -10
-            #             max: 10
-            #             increment: 1  
-            #             solution: -5      
-            # }    
+            }                                
+        ]
+    }
+    {
+        name: 'Lines and Curves'
+        levels: [
+            {
+                id: 1363640447671
+                equations:
+                    '(x)^2-6':
+                        start: '(x)^2'
+                        solutionComponents: [
+                            {fragment: '-6', after: '(x)^2'}
+                        ]
+                    '(1/4)*x':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '(1/4)*', after: ''}
+                        ]
+                rings: [
+                    {x: 2, y: -2}
+                    {x: -2, y: -2}
+                    {x: -4, y: -1}
+                    {x: 4, y: 1}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6.552, y: -1.588}
+                fragments: ['(1/4)*', '-6']
+            }
+            {
+                id: 1363230030642
+                equations:
+                    '((1/3)*x)^2-32': {start: '(x)^2'}
+                    '(1/6)*x+20': {start: 'x'}
+                grid:
+                    xMin: -50
+                    xMax: 50
+                    yMin: -50
+                    yMax: 50
+                rings: [
+                    {x: -9, y: -23}
+                    {x: 12, y: -16}
+                    {x: 36, y: 26}
+                ]
+                fragments: [
+                    '(1/3)*', '(1/6)*', '-32', '+20'
+                ]
+                islandCoordinates: {x: -18, y: 4}
+                variables:
+                    a:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: -4
+                    b:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1  
+                        solution: -5      
+            }    
         ]
     }
 ]

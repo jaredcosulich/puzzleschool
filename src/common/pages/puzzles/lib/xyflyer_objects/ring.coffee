@@ -63,7 +63,7 @@ class ring.Ring extends xyflyerObject.Object
                 
     inPath: (x, formula) ->
         return false unless formula(@x) == @y
-        return true if x + (0.5*@scale) > @x
+        return true if @x - (0.5*@scale) < x < @x + (0.5*@scale)
 
     highlight: ->
         if not @passedThrough and not @highlighting
