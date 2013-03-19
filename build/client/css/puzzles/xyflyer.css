@@ -414,14 +414,13 @@ body {
 }
 .xyflyer .level_selector .levels {
   background-color: #eee;
-  padding: 12px;
-  margin-top: 12px;
+  padding-top: 12px;
+  margin: 12px auto 0 auto;
+  width: 498px;
 }
 .xyflyer .level_selector .levels .level {
-  padding: 12px;
-}
-.xyflyer .level_selector .levels .level:last-child {
-  padding-right: 0;
+  line-height: 36px;
+  padding-left: 15px;
 }
 .xyflyer .objects {
   position: absolute;
