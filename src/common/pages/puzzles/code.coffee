@@ -562,7 +562,7 @@ STAGES = [
         ]
     }
     {
-        name: 'Basic Javascript'
+        name: 'Javascript: Basic Functions'
         levels: [
             {
                 id: 1362617406338
@@ -622,88 +622,16 @@ STAGES = [
                         description: 'An alert with the words \'Hello World\' is displayed.'
                         test: ({frameWindow, frameBody, cleanHtml}) =>
                             return true if @done
-                            return if @alertFunction
-                            @alertFunction = frameWindow.alert
+                            return if frameWindow.alertFunction
+                            frameWindow.alertFunction = frameWindow.alert
                             frameWindow.alert = (message) => 
                                 if message.toLowerCase() == 'hello world'
                                     @done = true
                                     window.retest()
-                                @alertFunction(message) 
+                                frameWindow.alertFunction(message) 
                             return false
                         clean: =>
-                            @done = null
-                    }
-                ]
-            },
-            {
-                id: 1362424704636
-                challenge: '''
-                    Figure out how to make the button turn the header color green instead or red.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var button = document.getElementById('color_button');
-                            button.onclick = function () {
-                              var header = document.getElementById('header');
-                              header.style.color = 'red';
-                            };
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1 id='header'>Button Binding</h1>
-                                <p>
-                                  Javascript lets you attach or bind actions to html elements on the page.
-                                </p>
-                                <p>
-                                  In this case clicking the button below will turn change the color of
-                                  the header from black to red.
-                                </p>
-                                <p>
-                                  Try to make the button change the color of the header to green instead:
-                                </p>
-                                <button id='color_button'>Click Me</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        Javascript makes it possible to bind an action to an html element.
-                    </p>
-                    <p>
-                        Binding means that a function will be executed when an action takes place.
-                    </p>
-                    <p>
-                        In this example the color of the header changes when the button is clicked.
-                    </p>
-                '''
-                hints: [
-                    'Javascript can access the color attribute using \'.style.color\''
-                    'Change the function to set .style.color to \'green\''
-                ]
-                tests: [
-                    {
-                        description: 'The color of the &lt;h2&gt; element is green.'
-                        test: ({frameBody, cleanHtml}) =>
-                            if frameBody.find('#header').css('color') == 'green'
-                                clearInterval(@testInterval)
-                                return true 
-                                
-                            return false if @testInterval
-                            @testInterval = setInterval(window.retest, 100)
-                            return false
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null
+                            delete @done
                     }
                 ]
             },
@@ -785,6 +713,251 @@ STAGES = [
                     }
                 ]
             },
+            {
+                id: 1362099940993
+                challenge: '''
+                    Figure out how to make the number on the page count up to 10.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                          if (window.counterInterval) {
+                              window.clearInterval(window.counterInterval);
+                          }
+                          
+                          window.counterInterval = setInterval(function() {
+                            var counter = document.getElementById('counter');
+                            if (!counter) return;
+                                
+                            var value = parseInt(counter.innerHTML);
+                            value += 1;
+                            if (value > 5) {
+                              value = 1;
+                            }
+                            counter.innerHTML = value;
+                            
+                          }, 1000);                        
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>setInterval</h1>
+                                <p>
+                                  The setInterval method allows you to call a method at a specified interval.
+                                </p>
+                                <p>
+                                  In this case we're calling a method changes increments the counter below every second.
+                                </p>
+                                <p>
+                                  Try to make the counter below count to 10 instead of 5:
+                                </p>
+                                <h2 id='counter'>1</h2>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        There is a lot going on in this example, but we're focusing on the setInterval function.
+                    </p>
+                    <p>
+                        To learn more about setInterval, try googling it :)
+                    </p>
+                '''
+                hints: [
+                    'The function resets when the html in the &lt;h2&gt hits 5.'
+                    'Change the reset value to 10.'
+                    'The reset value is set in this line: if (value > 5) {'
+                    'Change the 5 in that line to 10'
+                ]
+                tests: [
+                    {
+                        description: 'The html inside the &lt;h2&gt; tag reads 10.'
+                        test: ({frameBody, cleanHtml}) => 
+                            if cleanHtml(frameBody.find('h2').html()) == '10'
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    
+                    }
+                ]
+            }
+        ]
+    }
+    {
+        name: 'Javascript: Binding (HTML Interactions)'
+        levels: [
+            {
+                id: 1362424704636
+                challenge: '''
+                    Figure out how to make the button turn the header color green instead or red.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('color_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              header.style.color = 'red';
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Button Binding</h1>
+                                <p>
+                                  Javascript lets you attach or bind actions to html elements on the page.
+                                </p>
+                                <p>
+                                  In this case clicking the button below will turn change the color of
+                                  the header from black to red.
+                                </p>
+                                <p>
+                                  Try to make the button change the color of the header to green instead:
+                                </p>
+                                <button id='color_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript makes it possible to bind an action to an html element.
+                    </p>
+                    <p>
+                        Binding means that a function will be executed when an action takes place.
+                    </p>
+                    <p>
+                        In this example the color of the header changes when the button is clicked.
+                    </p>
+                '''
+                hints: [
+                    'Javascript can access the color attribute using \'.style.color\''
+                    'Change the function to set .style.color to \'green\''
+                ]
+                tests: [
+                    {
+                        description: 'The color of the &lt;h2&gt; element is green.'
+                        test: ({frameBody, cleanHtml}) =>
+                            if frameBody.find('#header').css('color') == 'green'
+                                clearInterval(@testInterval)
+                                return true 
+                                
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            }
+            {
+                id: 1363712528879
+                challenge: '''
+                    Figure out how to make an alert display reading 'The Puzzle School' when you mouseover the logo.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var logo = document.getElementById('logo');
+                            logo.onclick = function () {
+                              alert('This is how you fire something on click.\\n\\nFigure out how to do it on mouseover.')
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Mouseover Effects</h1>
+                                <p>
+                                  Javascript lets you attach or bind actions to html elements on the page.
+                                </p>
+                                <p>
+                                  In this case we want to make it so an alert displays when you mouseover
+                                  the logo below.
+                                </p>
+                                <img id='logo' src='/assets/images/logo_icon.png' />
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                    </p>
+                '''
+                hints: [
+                    ''
+                ]
+                tests: [
+                    {
+                        description: 'When you move your mouse over the logo an alert appears.'
+                        test: ({frameBody, cleanHtml}) =>
+                            return true if @mouseoverCalled
+                            logo = frameBody.find('#logo')
+                            return false if logo.data('mouseoverset')
+                            onmouseover = logo[0].onmouseover
+                            logo[0].onmouseover = null
+                            logo.data('mouseoverset', true)
+                            logo.bind 'mouseover', =>
+                                onmouseover()
+                                @mouseoverCalled = true
+                                window.retest()
+                            return false
+                                
+                        clean: =>
+                            delete @mouseoverCalled
+                    }
+                    {
+                        description: 'The alert displays \'The Puzzle School\'.'
+                        test: ({frameWindow, frameBody, cleanHtml}) =>
+                            return true if @done
+                            return if frameWindow.alertFunction
+                            frameWindow.alertFunction = frameWindow.alert
+                            frameWindow.alert = (message) => 
+                                if message.toLowerCase() == 'the puzzle school'
+                                    @done = true
+                                    window.retest()
+                                frameWindow.alertFunction(message) 
+                            return false
+                        clean: =>
+                            delete @done
+                    }
+                    
+                ]
+            }
+            
+        ]
+    },
+    {
+        name: 'Javascript: Conditional Statements'
+        levels: [
             {
                 id: 1362673042225
                 challenge: '''
@@ -954,89 +1127,12 @@ STAGES = [
                             @testInterval = null
                     }
                 ]
-            },
-            {
-                id: 1362099940993
-                challenge: '''
-                    Figure out how to make the number on the page count up to 10.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                          if (window.counterInterval) {
-                              window.clearInterval(window.counterInterval);
-                          }
-                          
-                          window.counterInterval = setInterval(function() {
-                            var counter = document.getElementById('counter');
-                            if (!counter) return;
-                                
-                            var value = parseInt(counter.innerHTML);
-                            value += 1;
-                            if (value > 5) {
-                              value = 1;
-                            }
-                            counter.innerHTML = value;
-                            
-                          }, 1000);                        
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1>setInterval</h1>
-                                <p>
-                                  The setInterval method allows you to call a method at a specified interval.
-                                </p>
-                                <p>
-                                  In this case we're calling a method changes increments the counter below every second.
-                                </p>
-                                <p>
-                                  Try to make the counter below count to 10 instead of 5:
-                                </p>
-                                <h2 id='counter'>1</h2>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        There is a lot going on in this example, but we're focusing on the setInterval function.
-                    </p>
-                    <p>
-                        To learn more about setInterval, try googling it :)
-                    </p>
-                '''
-                hints: [
-                    'The function resets when the html in the &lt;h2&gt hits 5.'
-                    'Change the reset value to 10.'
-                    'The reset value is set in this line: if (value > 5) {'
-                    'Change the 5 in that line to 10'
-                ]
-                tests: [
-                    {
-                        description: 'The html inside the &lt;h2&gt; tag reads 10.'
-                        test: ({frameBody, cleanHtml}) => 
-                            if cleanHtml(frameBody.find('h2').html()) == '10'
-                                clearInterval(@testInterval)
-                                return true 
-                                
-                            return false if @testInterval
-                            @testInterval = setInterval(window.retest, 100)
-                            return false
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null
-                    
-                    }
-                ]
-            },
+            }
+        ]
+    }
+    {
+        name: 'Javascript: For-Loops'
+        levels: [
             {
                 id: 1363033903127
                 challenge: '''

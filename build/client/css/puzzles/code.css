@@ -17,15 +17,6 @@
 .code .error p {
   padding: 0 12px;
 }
-.code .error:before {
-  content: " ";
-  border-top: 10px solid #a61c0e;
-  left: -8px;
-  top: -1px;
-  border-top: 8px solid #fafafa;
-  border-right: 8px solid #190402;
-  position: absolute;
-}
 .code h2 {
   text-align: center;
   margin-bottom: 12px;
