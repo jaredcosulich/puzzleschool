@@ -33,7 +33,7 @@ board.Board = (function(_super) {
   Board.prototype.init = function() {
     var dimensions, maxDimension;
     dimensions = this.el.offset();
-    this.paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height);
+    this.paper = Raphael(this.el.attr('id'), dimensions.width, dimensions.height);
     this.width = dimensions.width;
     this.height = dimensions.height;
     this.xUnit = this.width / (this.grid.xMax - this.grid.xMin);

@@ -16,8 +16,9 @@ class board.Board extends xyflyerObject.Object
 
     init: -> 
         dimensions = @el.offset()
-        @paper = Raphael(dimensions.left, dimensions.top, dimensions.width, dimensions.height)
-
+        @paper = Raphael(@el.attr('id'), dimensions.width, dimensions.height)
+        
+        
         @width = dimensions.width
         @height = dimensions.height        
 
