@@ -202,6 +202,14 @@ class equations.Equations
                 allEquationsSet = false
                 if straightFormula != solution                     
                     if (solutionComponents = equation.solutionComponents)
+                        for dropArea in equation.dropAreas when dropArea.component
+                            dc = dropArea.component
+                            valid = (c for c in solutionComponents when c.fragment == dc.equationFragment)
+                            wrongSpot = (v for v in valid when v.after != dc.after)
+                            if not valid.length or wrongSpot.length
+                                @displayHint(dropArea.component, dropArea.component.placeHolder)
+                                return
+                            
                         for solutionComponent in solutionComponents
                             component = null
                             valid = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)
@@ -213,6 +221,7 @@ class equations.Equations
                             if accept?.length
                                 @displayHint(component, accept, equation, solutionComponent)
                                 return 
+                        
                     else
                         for dropArea in equation.dropAreas when dropArea.component
                             if solution.indexOf(dropArea.component.equationFragment) == -1
