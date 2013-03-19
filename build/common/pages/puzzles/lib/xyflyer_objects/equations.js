@@ -325,6 +325,7 @@ equations.Equations = (function() {
           if ((solutionComponents = equation.solutionComponents)) {
             for (_j = 0, _len1 = solutionComponents.length; _j < _len1; _j++) {
               solutionComponent = solutionComponents[_j];
+              component = null;
               valid = (function() {
                 var _k, _len2, _ref1, _results;
                 _ref1 = this.equationComponents;
@@ -343,7 +344,7 @@ equations.Equations = (function() {
                   _results = [];
                   for (_k = 0, _len2 = valid.length; _k < _len2; _k++) {
                     v = valid[_k];
-                    if (!v.inUse) {
+                    if (v.after !== solutionComponent.after) {
                       _results.push(v);
                     }
                   }

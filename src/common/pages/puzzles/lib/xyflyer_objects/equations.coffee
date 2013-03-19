@@ -203,9 +203,10 @@ class equations.Equations
                 if straightFormula != solution                     
                     if (solutionComponents = equation.solutionComponents)
                         for solutionComponent in solutionComponents
+                            component = null
                             valid = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)
                             if valid.length > 1
-                                component = (v for v in valid when not v.inUse)[0]
+                                component = (v for v in valid when v.after != solutionComponent.after)[0]
                             component = valid[0] if not component
                             continue if component.after == solutionComponent.after
                             accept = @findComponentDropAreaElement(equation, solutionComponent)
