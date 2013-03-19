@@ -415,6 +415,9 @@ body {
 .xyflyer .level_selector .levels .level {
   padding: 12px;
 }
+.xyflyer .level_selector .levels .level:last-child {
+  padding-right: 0;
+}
 .xyflyer .objects {
   position: absolute;
   top: -10000px;
