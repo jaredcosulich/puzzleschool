@@ -110,7 +110,7 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.move = function(e) {
-    var dx, dy, x, y;
+    var dx, dy, offset, x, y;
     if (e.preventDefault) {
       e.preventDefault();
     }
@@ -119,8 +119,9 @@ equationComponent.EquationComponent = (function() {
     if (e.type === 'touchmove') {
       y -= 30;
     }
-    dx = x - this.offset.left - (this.offset.width / 2) + this.gameAreaOffset.left;
-    dy = y - this.offset.top - (this.offset.height / 2) + this.gameAreaOffset.top;
+    offset = this.element.offset();
+    dx = x - offset.left - (offset.width / 2) + this.gameAreaOffset.left;
+    dy = y - offset.top - (offset.height / 2) + this.gameAreaOffset.top;
     this.transformer.translate(dx, dy);
     if (this.trackDrag) {
       return this.trackDrag(x, y, this);

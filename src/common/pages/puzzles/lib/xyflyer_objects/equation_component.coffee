@@ -65,8 +65,9 @@ class equationComponent.EquationComponent
         x = @clientX(e)
         y = @clientY(e)       
         y -= 30 if e.type == 'touchmove'
-        dx = x - @offset.left - (@offset.width/2) + @gameAreaOffset.left
-        dy = y - @offset.top - (@offset.height/2) + @gameAreaOffset.top
+        offset = @element.offset()
+        dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
+        dy = y - offset.top - (offset.height/2) + @gameAreaOffset.top
 
         @transformer.translate(dx, dy)
 
