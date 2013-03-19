@@ -435,7 +435,7 @@ equation.Equation = (function() {
     if (text === this.defaultText) {
       text = '';
     }
-    return text;
+    return text || '';
   };
 
   Equation.prototype.formula = function() {

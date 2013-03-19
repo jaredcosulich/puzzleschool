@@ -281,10 +281,10 @@ class equation.Equation
             tempEl = element.cloneNode(true)
             $(tempEl).find('.removing').remove()
             element = tempEl
-        
+            
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
-        return text
+        return text or ''
         
     formula: ->
         text = @straightFormula()

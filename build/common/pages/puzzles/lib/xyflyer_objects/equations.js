@@ -263,7 +263,7 @@ equations.Equations = (function() {
           if ((offset = dropAreaElement.offset()).top === 0) {
             offset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
           }
-          component.element.one('mouseup.hint touchend.hint', function() {
+          $(document.body).one('mouseup.hint touchend.hint', function() {
             return dropHere.animate({
               opacity: 0,
               duration: 250,

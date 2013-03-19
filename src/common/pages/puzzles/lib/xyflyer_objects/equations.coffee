@@ -165,7 +165,7 @@ class equations.Equations
                     if (offset = dropAreaElement.offset()).top == 0
                         offset = @findComponentDropAreaElement(equation, solutionComponent).offset()
 
-                    component.element.one 'mouseup.hint touchend.hint', =>
+                    $(document.body).one 'mouseup.hint touchend.hint', =>
                         dropHere.animate
                             opacity: 0, 
                             duration: 250
