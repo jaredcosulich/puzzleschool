@@ -697,8 +697,8 @@ STAGES = [
             code: '<html>\n  <body>\n    <h1 id=\'header\'>Mouseover Effects</h1>\n    <p>\n      Javascript lets you attach or bind actions to html elements on the page.\n    </p>\n    <p>\n      In this case we want to make it so an alert displays when you mouseover\n      the logo below.\n    </p>\n    <img id=\'logo\' src=\'/assets/images/logo_icon.png\' />\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n</p>',
-        hints: [''],
+        description: '<p>\n    There are a number of events that you can listen for on most html elements. Some examples include\n    \'onclick\', \'onmouseover\', \'onmouseout\', \'onmousedown\', and \'onmouseup\'.\n</p>\n<p>\n    In this case we are exploring the use of the onmouseover event that allows you to perform an\n    action when the user mouses over an element.                    \n</p>\n<p>\n    Try googling for <a href=\'https://www.google.com/search?q=javascript+events+for+html+elements\' target=\'_blank\'>javascript events for html elements</a> \n    to learn more.\n</p>',
+        hints: ['The onmouseover event works just like the onclick event.', 'Just add a new event listening function that fires \'onmouseover\'.', 'The code should look something like:<br/><br/>\n<span class=\'code_sample\'>\nlogo.onmouseover = function () {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;alert(\'The Puzzle School\');<br/>\n};\n</span>'],
         tests: [
           {
             description: 'When you move your mouse over the logo an alert appears.',

@@ -910,10 +910,29 @@ STAGES = [
                 ]
                 description: '''
                     <p>
+                        There are a number of events that you can listen for on most html elements. Some examples include
+                        'onclick', 'onmouseover', 'onmouseout', 'onmousedown', and 'onmouseup'.
+                    </p>
+                    <p>
+                        In this case we are exploring the use of the onmouseover event that allows you to perform an
+                        action when the user mouses over an element.                    
+                    </p>
+                    <p>
+                        Try googling for <a href='https://www.google.com/search?q=javascript+events+for+html+elements' target='_blank'>javascript events for html elements</a> 
+                        to learn more.
                     </p>
                 '''
                 hints: [
-                    ''
+                    'The onmouseover event works just like the onclick event.'
+                    'Just add a new event listening function that fires \'onmouseover\'.'
+                    '''
+                    The code should look something like:<br/><br/>
+                    <span class='code_sample'>
+                    logo.onmouseover = function () {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;alert('The Puzzle School');<br/>
+                    };
+                    </span>
+                    '''
                 ]
                 tests: [
                     {

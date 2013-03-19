@@ -331,6 +331,45 @@ levels.STAGES = [
         },
         fragments: ['-2*', '(-1/2)*', '+13', '-13']
       }, {
+        id: 1363729451096,
+        equations: {
+          '-4*x-32': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '-4*',
+                after: ''
+              }, {
+                fragment: '-32',
+                after: 'x'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -5,
+            y: -12
+          }, {
+            x: -6,
+            y: -8
+          }, {
+            x: -4,
+            y: -16
+          }
+        ],
+        grid: {
+          xMin: -17,
+          xMax: 3,
+          yMin: -17,
+          yMax: 3
+        },
+        islandCoordinates: {
+          x: -7,
+          y: -4
+        },
+        fragments: ['-4*', '(-1/4)*', '+32', '-32']
+      }, {
         id: 1363368153567,
         equations: {
           '-1*5*x+32': {
