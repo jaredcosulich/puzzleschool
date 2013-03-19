@@ -233,39 +233,59 @@ soma.views
                     completed: @puzzleData.levels[@level.id]?.completed
 
             ), 100)
+
+            @currentLevel = @level.id
+            setInterval((=>
+                return if location.href.indexOf(@currentLevel) > -1
+                components = location.href.split('/')
+                if (@level = @findLevel(parseInt(components[components.length - 1])))
+                    @initLevel()
+                    @hideLevelSelector()
+            ), 500)
         
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
 
             previousCompleted = true
-            for levelElement in @levelSelector.find('.level')
-                do (levelElement) =>
-                    levelElement = $(levelElement)
-                    id = levelElement.data('id')
-                    levelInfo = @findLevel(id)
+            previousStageProficient = true
+            for stageElement in @levelSelector.find('.levels')
+                do (stageElement) =>
+                    stageCompleted = 0
+                    for levelElement, index in $(stageElement).find('.level')
+                        do (levelElement, index) =>
+                            levelElement = $(levelElement)
+                            id = levelElement.data('id')
+                            levelInfo = @findLevel(id)
             
-                    locked = !previousCompleted
-            
-                    @setLevelIcon
-                        id: id
-                        started: @puzzleData.levels[id]?.started
-                        completed: @puzzleData.levels[id]?.completed
-                        locked: locked
-            
-                    levelElement.unbind 'click'
-                    levelElement.bind 'click', (e) => 
-                        e.stop()
-                        $(document.body).unbind('click.level_selector')
-                        if locked
-                            alert('This level is locked.')
-                        else
-                            @level = levelInfo
-                            @initLevel()
-                            history.pushState(null, null, "/puzzles/xyflyer/#{id}")
-                            @hideLevelSelector()        
+                            locked = !previousCompleted
+                            locked = false if index == 0 and previousStageProficient
                             
-                    previousCompleted = @puzzleData.levels[id]?.completed      
+                            @setLevelIcon
+                                id: id
+                                started: @puzzleData.levels[id]?.started
+                                completed: @puzzleData.levels[id]?.completed
+                                locked: locked
             
+                            levelElement.unbind 'click'
+                            levelElement.bind 'click', (e) => 
+                                e.stop()
+                                $(document.body).unbind('click.level_selector')
+                                if locked
+                                    alert('This level is locked.')
+                                else
+                                    @level = levelInfo
+                                    @initLevel()
+                                    history.pushState(null, null, "/puzzles/xyflyer/#{id}")
+                                    @hideLevelSelector()        
+                            
+                            if @puzzleData.levels[id]?.completed
+                                stageCompleted += 1 
+                                previousCompleted = true
+                            else
+                                previousCompleted = false
+                    
+                    previousStageProficient = (stageCompleted >= 3)
+                                
 
         setLevelIcon: ({id, started, completed, locked}) ->
             levelIcon = @$("#level_#{id}").find('img')

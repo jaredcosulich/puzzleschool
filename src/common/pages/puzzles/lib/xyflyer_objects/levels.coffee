@@ -2,7 +2,7 @@ levels = exports ? provide('./lib/xyflyer_objects/levels', {})
 
 levels.STAGES = [
     {
-        name: 'Simple Lines'
+        name: 'A Single Line'
         levels: [
             {
                 id: 1363227855683
