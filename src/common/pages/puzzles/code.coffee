@@ -757,7 +757,11 @@ STAGES = [
                 ]
                 description: '''
                     <p>
-                        
+                        SetTimeout allows you to delay the execution of a function by a specified amount of time.
+                    </p>
+                    <p>
+                        SetTimeout takes two parameters. The first is the function that will be executed, the second
+                        is the delay (in milliseconds) that should pass before the function is executed.
                     </p>
                 '''
                 hints: [
@@ -838,7 +842,11 @@ STAGES = [
                 ]
                 description: '''
                     <p>
-                        
+                        SetTimeout allows you to delay the execution of a function by a specified amount of time.
+                    </p>
+                    <p>
+                        SetTimeout takes two parameters. The first is the function that will be executed, the second
+                        is the delay (in milliseconds) that should pass before the function is executed.
                     </p>
                 '''
                 hints: [

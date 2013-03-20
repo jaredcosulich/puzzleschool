@@ -616,7 +616,7 @@ STAGES = [
             code: '<html>\n  <body>\n    <h1 id=\'header\'>setTimeout</h1>\n    <p>\n      The setTimeout method allows you to call a method at a specified time in the future.\n    </p>\n    <p>\n      In this case we\'re calling a method that changes the header to the color green.\n    </p>\n    <p>\n      Try to make the button change the color of the header to green in one second\n      instead of red in 100 milliseconds.\n    </p>\n    <button id=\'button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    \n</p>',
+        description: '<p>\n    SetTimeout allows you to delay the execution of a function by a specified amount of time.\n</p>\n<p>\n    SetTimeout takes two parameters. The first is the function that will be executed, the second\n    is the delay (in milliseconds) that should pass before the function is executed.\n</p>',
         hints: ['You\'ll need to edit the existing setTimeout to change the color to green instead of red.', 'You\'ll also need to set the time to one second (1000 milliseconds) instead of 100 milliseconds', 'The code should look something like:<br/><br/>\n<span class=\'code_sample\'>\nsetTimeout(function() {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'green\';<br/>\n}, 1000)\n</span>'],
         tests: [
           {
@@ -670,7 +670,7 @@ STAGES = [
             code: '<html>\n  <body>\n    <h1 id=\'header\'>Multiple setTimeouts</h1>\n    <p>\n      In this case you\'ll need to set up another setTimeout that changes the color\n      of the header from green to red two seconds after the button is clicked.\n    </p>\n    <button id=\'button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    \n</p>',
+        description: '<p>\n    SetTimeout allows you to delay the execution of a function by a specified amount of time.\n</p>\n<p>\n    SetTimeout takes two parameters. The first is the function that will be executed, the second\n    is the delay (in milliseconds) that should pass before the function is executed.\n</p>',
         hints: ['In this case you\'ll need to create a new setTimeout call.', 'You can pretty much copy and paste the existing setTimeout call, just change the color and the time.', 'The new setTimeout can come after the existing one and should look something like:<br/><br/>\n<span class=\'code_sample\'>\nsetTimeout(function() {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'red\';<br/>\n}, 2000)\n</span>'],
         tests: [
           {
