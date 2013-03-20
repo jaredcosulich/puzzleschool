@@ -603,7 +603,7 @@ STAGES = [
           }
         ]
       }, {
-        id: 1362099940993,
+        id: 1363805122021,
         challenge: 'Figure out how to make the header turn green in one second.',
         editors: [
           {
