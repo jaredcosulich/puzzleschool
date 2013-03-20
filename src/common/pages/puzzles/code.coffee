@@ -842,7 +842,16 @@ STAGES = [
                     </p>
                 '''
                 hints: [
-                    ''
+                    'In this case you\'ll need to create a new setTimeout call.'
+                    'You can pretty much copy and paste the existing setTimeout call, just change the color and the time.'
+                    '''
+                    The new setTimeout can come after the existing one and should look something like:<br/><br/>
+                    <span class='code_sample'>
+                    setTimeout(function() {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'red';<br/>
+                    }, 2000)
+                    </span>
+                    '''
                 ]
                 tests: [
                     {

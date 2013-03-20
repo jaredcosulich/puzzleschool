@@ -671,7 +671,7 @@ STAGES = [
           }
         ],
         description: '<p>\n    \n</p>',
-        hints: [''],
+        hints: ['In this case you\'ll need to create a new setTimeout call.', 'You can pretty much copy and paste the existing setTimeout call, just change the color and the time.', 'The new setTimeout can come after the existing one and should look something like:<br/><br/>\n<span class=\'code_sample\'>\nsetTimeout(function() {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'red\';<br/>\n}, 2000)\n</span>'],
         tests: [
           {
             description: 'The header changes to the color green after 1000 milliseconds.',
