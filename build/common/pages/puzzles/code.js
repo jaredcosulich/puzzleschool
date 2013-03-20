@@ -617,7 +617,7 @@ STAGES = [
           }
         ],
         description: '<p>\n    \n</p>',
-        hints: [''],
+        hints: ['You\'ll need to edit the existing setTimeout to change the color to green instead of red.', 'You\'ll also need to set the time to one second (1000 milliseconds) instead of 100 milliseconds', 'The code should look something like:<br/><br/>\n<span class=\'code_sample\'>\nsetTimeout(function() {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'green\';<br/>\n}, 1000)\n</span>'],
         tests: [
           {
             description: 'The header changes to the color green after 1000 milliseconds.',
@@ -652,6 +652,94 @@ STAGES = [
               clearInterval(_this.buttonTest);
               delete _this.buttonTest;
               return delete _this.testPassed;
+            }
+          }
+        ]
+      }, {
+        id: 1363805134953,
+        lockedBy: [1363805122021],
+        challenge: 'Figure out how to make the header turn green in one second and then red one second later.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var header = document.getElementById(\'header\');\nvar button = document.getElementById(\'button\');\nbutton.onclick = function() {\n  setTimeout(function() {\n    header.style.color = \'green\';\n  }, 1000)\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Multiple setTimeouts</h1>\n    <p>\n      In this case you\'ll need to set up another setTimeout that changes the color\n      of the header from green to red two seconds after the button is clicked.\n    </p>\n    <button id=\'button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    \n</p>',
+        hints: [''],
+        tests: [
+          {
+            description: 'The header changes to the color green after 1000 milliseconds.',
+            test: function(_arg) {
+              var button, cleanHtml, frameBody, header;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (_this.testPassed) {
+                return true;
+              }
+              header = frameBody.find('#header');
+              button = frameBody.find('#button');
+              button.bind('mouseup.test', function() {
+                var startTime;
+                if (_this.buttonTest) {
+                  clearInterval(_this.buttonTest);
+                }
+                startTime = new Date();
+                return _this.buttonTest = setInterval((function() {
+                  if (new Date() - startTime < 950) {
+                    if (header.css('color') === 'green') {
+                      return clearInterval(_this.buttonTest);
+                    }
+                  } else if (header.css('color') === 'green') {
+                    _this.testPassed = true;
+                    return window.retest();
+                  }
+                }), 100);
+              });
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.buttonTest);
+              delete _this.buttonTest;
+              return delete _this.testPassed;
+            }
+          }, {
+            description: 'The header changes to the color red after 2000 milliseconds.',
+            test: function(_arg) {
+              var button, cleanHtml, frameBody, header;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (_this.test2Passed) {
+                return true;
+              }
+              header = frameBody.find('#header');
+              button = frameBody.find('#button');
+              button.bind('mouseup.test2', function() {
+                var startTime;
+                if (_this.button2Test) {
+                  clearInterval(_this.button2Test);
+                }
+                startTime = new Date();
+                return _this.button2Test = setInterval((function() {
+                  if (new Date() - startTime < 1950) {
+                    if (header.css('color') === 'red') {
+                      return clearInterval(_this.buttonTest);
+                    }
+                  } else if (header.css('color') === 'red') {
+                    _this.test2Passed = true;
+                    return window.retest();
+                  }
+                }), 100);
+              });
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.button2Test);
+              delete _this.button2Test;
+              return delete _this.test2Passed;
             }
           }
         ]

@@ -761,7 +761,16 @@ STAGES = [
                     </p>
                 '''
                 hints: [
-                    ''
+                    'You\'ll need to edit the existing setTimeout to change the color to green instead of red.'
+                    'You\'ll also need to set the time to one second (1000 milliseconds) instead of 100 milliseconds'
+                    '''
+                    The code should look something like:<br/><br/>
+                    <span class='code_sample'>
+                    setTimeout(function() {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'green';<br/>
+                    }, 1000)
+                    </span>
+                    '''
                 ]
                 tests: [
                     {
@@ -790,81 +799,102 @@ STAGES = [
                     }
                 ]
             },
-            # {
-            #     id: 1363805134953
-            #     lockedBy: [1363805122021]
-            #     challenge: '''
-            #         Figure out how to make the header turn red in one second and then green one second later.
-            #     '''
-            #     editors: [
-            #         {
-            #             title: 'Page Javascript'
-            #             type: 'javascript'
-            #             code: '''
-            #               var header = document.getElementById('header');
-            #               var button = document.getElementById('button');
-            #               button.onclick = function() {
-            #                 setTimeout(function() {
-            #                   header.style.color = 'red';
-            #                 }, 1000)
-            #               }
-            #             '''
-            #         }
-            #         {
-            #             title: 'Page HTML'
-            #             type: 'html'
-            #             code: '''
-            #                 <html>
-            #                   <body>
-            #                     <h1 id='header'>Multiple setTimeouts</h1>
-            #                     <p>
-            #                       In this case we're calling a method that changes the header to the color green.
-            #                     </p>
-            #                     <p>
-            #                       Try to make the button change the color of the header to green in one second
-            #                       instead of red in 100 milliseconds.
-            #                     </p>
-            #                     <button id='button'>Click Me</button>
-            #                   </body>
-            #                 </html>
-            #             '''
-            #         }
-            #     ]
-            #     description: '''
-            #         <p>
-            #             
-            #         </p>
-            #     '''
-            #     hints: [
-            #         ''
-            #     ]
-            #     tests: [
-            #         {
-            #             description: 'The header changes to the color green after 1000 milliseconds.'
-            #             test: ({frameBody, cleanHtml}) => 
-            #                 return true if @testPassed
-            #                 header = frameBody.find('#header')
-            #                 button = frameBody.find('#button')
-            #                 button.bind 'mouseup', =>
-            #                     clearInterval(@buttonTest) if @buttonTest
-            #                     startTime = new Date()
-            #                     @buttonTest = setInterval((=>
-            #                         if new Date() - startTime < 950
-            #                             if header.css('color') == 'green'
-            #                                 clearInterval(@buttonTest)
-            #                         else if header.css('color') == 'green'
-            #                             @testPassed = true
-            #                             window.retest()
-            #                     ), 100)
-            # 
-            #                 return false
-            #             clean: =>
-            #                 clearInterval(@buttonTest)
-            #                 delete @buttonTest
-            #                 delete @testPassed
-            #         }
-            #     ]
-            # },
+            {
+                id: 1363805134953
+                lockedBy: [1363805122021]
+                challenge: '''
+                    Figure out how to make the header turn green in one second and then red one second later.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                          var header = document.getElementById('header');
+                          var button = document.getElementById('button');
+                          button.onclick = function() {
+                            setTimeout(function() {
+                              header.style.color = 'green';
+                            }, 1000)
+                          }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Multiple setTimeouts</h1>
+                                <p>
+                                  In this case you'll need to set up another setTimeout that changes the color
+                                  of the header from green to red two seconds after the button is clicked.
+                                </p>
+                                <button id='button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        
+                    </p>
+                '''
+                hints: [
+                    ''
+                ]
+                tests: [
+                    {
+                        description: 'The header changes to the color green after 1000 milliseconds.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if @testPassed
+                            header = frameBody.find('#header')
+                            button = frameBody.find('#button')
+                            button.bind 'mouseup.test', =>
+                                clearInterval(@buttonTest) if @buttonTest
+                                startTime = new Date()
+                                @buttonTest = setInterval((=>
+                                    if new Date() - startTime < 950
+                                        if header.css('color') == 'green'
+                                            clearInterval(@buttonTest)
+                                    else if header.css('color') == 'green'
+                                        @testPassed = true
+                                        window.retest()
+                                ), 100)
+            
+                            return false
+                        clean: =>
+                            clearInterval(@buttonTest)
+                            delete @buttonTest
+                            delete @testPassed
+                    }
+                    {
+                        description: 'The header changes to the color red after 2000 milliseconds.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if @test2Passed
+                            header = frameBody.find('#header')
+                            button = frameBody.find('#button')
+                            button.bind 'mouseup.test2', =>
+                                clearInterval(@button2Test) if @button2Test
+                                startTime = new Date()
+                                @button2Test = setInterval((=>
+                                    if new Date() - startTime < 1950
+                                        if header.css('color') == 'red'
+                                            clearInterval(@buttonTest)
+                                    else if header.css('color') == 'red'
+                                        @test2Passed = true
+                                        window.retest()
+                                ), 100)
+            
+                            return false
+                        clean: =>
+                            clearInterval(@button2Test)
+                            delete @button2Test
+                            delete @test2Passed
+                    }
+                ]
+            },
             {
                 id: 1362099940993
                 challenge: '''
