@@ -751,6 +751,57 @@ STAGES = [
             }
           }
         ]
+      }, {
+        id: 1363737356539,
+        challenge: 'Figure out how to make the text you type in to the textbox immediately display in the preview area.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var textarea = document.getElementById(\'text\');\nvar button = document.getElementById(\'button\');\nvar preview = document.getElementById(\'preview\');\n\nbutton.onclick = function() {\n  preview.innerHTML = textarea.value;\n}'
+          }, {
+            title: 'Page CSS',
+            type: 'css',
+            code: '#preview {\n    height: 60px;\n    padding: 12px;\n    background-color: white;\n    border: 1px solid #ccc;\n    margin-bottom: 12px;\n}\n\n#text {\n    display: block;\n    width: 420px;\n    height: 90px;\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>The Onkeyup Event</h1>\n    <p>\n      Javascript lets you listen to when text is typed in to an html input.\n    </p>\n    <p>\n      This allows you to show a preview of the text while it is being typed:\n    </p>\n    <b>Preview</b>\n    <div id=\'preview\'></div>\n    \n    <b>Type Text Here</b>\n    <textarea id=\'text\'></textarea>\n    <button id=\'button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    The onkeyup event is a powerful event that allows you to perform an action when a key\n    is pressed within a user input such as a &lt;textarea&gt;. \n</p>\n<p>\n    Some related events you may want to google are \'onchange\', \'onkeyup\', and \'onkeydown\'\n</p>\n<p>\n    Subtle nuance: We use the onkeyup event because the text in the input has already changed when it fires.\n    If we used onkeydown or onkeypress we would only get the the text that was in the textarea\n    before the last key was pressed.\n</p>',
+        hints: ['You can listen to the user\'s typing in the textarea using the \'onkeyup\' event.', 'The \'onkeyup\' event needs to be attached to the text area instead of the button', 'The code should look something like:<br/><br/>\n<span class=\'code_sample\'>\ntextarea.onkeyup = function () {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;preview.innerHTML = textarea.value;<br/>\n};\n</span>'],
+        tests: [
+          {
+            description: 'When you type in the textarea it shows the text in the preview area.',
+            test: function(_arg) {
+              var cleanHtml, frameBody, onkeyup, preview, textarea;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (_this.keyupCycleComplete) {
+                return true;
+              }
+              textarea = frameBody.find('#text');
+              if (textarea.data('keyupset')) {
+                return false;
+              }
+              preview = frameBody.find('#preview');
+              onkeyup = textarea[0].onkeyup;
+              textarea[0].onkeyup = null;
+              textarea.data('keyupset', true);
+              textarea.bind('keyup', function() {
+                onkeyup();
+                if (preview.html() === textarea.val()) {
+                  _this.keyupCycleComplete = true;
+                }
+                return window.retest();
+              });
+              return false;
+            },
+            clean: function() {
+              return delete _this.keyupCycleComplete;
+            }
+          }
+        ]
       }
     ]
   }, {

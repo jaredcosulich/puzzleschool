@@ -971,6 +971,116 @@ STAGES = [
                     
                 ]
             }
+            {
+                id: 1363737356539
+                challenge: '''
+                    Figure out how to make the text you type in to the textbox immediately display in the preview area.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var textarea = document.getElementById('text');
+                            var button = document.getElementById('button');
+                            var preview = document.getElementById('preview');
+                            
+                            button.onclick = function() {
+                              preview.innerHTML = textarea.value;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page CSS'
+                        type: 'css'
+                        code: '''
+                            #preview {
+                                height: 60px;
+                                padding: 12px;
+                                background-color: white;
+                                border: 1px solid #ccc;
+                                margin-bottom: 12px;
+                            }
+                            
+                            #text {
+                                display: block;
+                                width: 420px;
+                                height: 90px;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>The Onkeyup Event</h1>
+                                <p>
+                                  Javascript lets you listen to when text is typed in to an html input.
+                                </p>
+                                <p>
+                                  This allows you to show a preview of the text while it is being typed:
+                                </p>
+                                <b>Preview</b>
+                                <div id='preview'></div>
+                                
+                                <b>Type Text Here</b>
+                                <textarea id='text'></textarea>
+                                <button id='button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        The onkeyup event is a powerful event that allows you to perform an action when a key
+                        is pressed within a user input such as a &lt;textarea&gt;. 
+                    </p>
+                    <p>
+                        Some related events you may want to google are 'onchange', 'onkeyup', and 'onkeydown'
+                    </p>
+                    <p>
+                        Subtle nuance: We use the onkeyup event because the text in the input has already changed when it fires.
+                        If we used onkeydown or onkeypress we would only get the the text that was in the textarea
+                        before the last key was pressed.
+                    </p>
+                '''
+                hints: [
+                    'You can listen to the user\'s typing in the textarea using the \'onkeyup\' event.'
+                    'The \'onkeyup\' event needs to be attached to the text area instead of the button'
+                    '''
+                    The code should look something like:<br/><br/>
+                    <span class='code_sample'>
+                    textarea.onkeyup = function () {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;preview.innerHTML = textarea.value;<br/>
+                    };
+                    </span>
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'When you type in the textarea it shows the text in the preview area.'
+                        test: ({frameBody, cleanHtml}) =>
+                            return true if @keyupCycleComplete
+                            textarea = frameBody.find('#text')
+                            return false if textarea.data('keyupset')
+                            preview = frameBody.find('#preview')
+                            onkeyup = textarea[0].onkeyup
+                            textarea[0].onkeyup = null
+                            textarea.data('keyupset', true)
+                            textarea.bind 'keyup', =>
+                                onkeyup()
+                                @keyupCycleComplete = true if preview.html() == textarea.val()
+                                window.retest()
+                            return false
+
+                        clean: =>
+                            delete @keyupCycleComplete
+                    }                    
+                ]
+            }
             
         ]
     },
