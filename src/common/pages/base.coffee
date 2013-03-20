@@ -36,6 +36,8 @@ soma.chunks
             @setMeta('apple-mobile-web-app-capable', 'yes')
             @setMeta('apple-mobile-web-app-status-bar-style', 'black')
 
+            @loadScript '/assets/third_party/rollbar.js'
+
             @loadElement 'link', {href: '/assets/images/favicon.ico', rel: 'shortcut icon', type: 'image/x-icon'}
             @loadElement("link", {rel: 'apple-touch-icon', sizes: '57x57', href: '/assets/images/touch-icon-iphone.png'})
             @loadElement("link", {rel: 'apple-touch-icon', sizes: '72x72', href: '/assets/images/touch-icon-ipad.png'})

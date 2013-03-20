@@ -61,6 +61,7 @@ soma.chunks({
       this.setIcon('/assets/images/favicon.ico');
       this.setMeta('apple-mobile-web-app-capable', 'yes');
       this.setMeta('apple-mobile-web-app-status-bar-style', 'black');
+      this.loadScript('/assets/third_party/rollbar.js');
       this.loadElement('link', {
         href: '/assets/images/favicon.ico',
         rel: 'shortcut icon',
