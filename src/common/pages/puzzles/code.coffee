@@ -716,6 +716,83 @@ STAGES = [
             {
                 id: 1362099940993
                 challenge: '''
+                    Figure out how to make the header turn green in one second.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                          var header = document.getElementById('header');
+                          var button = document.getElementById('button');
+                          button.onclick = function() {
+                            setTimeout(function() {
+                              header.style.color = 'red';
+                            }, 100)
+                          }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>setTimeout</h1>
+                                <p>
+                                  The setTimeout method allows you to call a method at a specified time in the future.
+                                </p>
+                                <p>
+                                  In this case we're calling a method that changes the header to the color green.
+                                </p>
+                                <p>
+                                  Try to make the button change the color of the header to green in one second
+                                  instead of red in 100 milliseconds.
+                                </p>
+                                <button id='button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        
+                    </p>
+                '''
+                hints: [
+                    ''
+                ]
+                tests: [
+                    {
+                        description: 'The header changes to the color green after 1000 milliseconds.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if @testPassed
+                            header = frameBody.find('#header')
+                            button = frameBody.find('#button')
+                            button.bind 'mouseup', =>
+                                clearInterval(@buttonTest) if @buttonTest
+                                startTime = new Date()
+                                @buttonTest = setInterval((=>
+                                    if new Date() - startTime < 950
+                                        if header.css('color') == 'green'
+                                            clearInterval(@buttonTest)
+                                    else if header.css('color') == 'green'
+                                        @testPassed = true
+                                        window.retest()
+                                ), 100)
+
+                            return false
+                        clean: =>
+                            clearInterval(@buttonTest)
+                            delete @buttonTest
+                            delete @testPassed
+                    }
+                ]
+            },
+            {
+                id: 1362099940993
+                challenge: '''
                     Figure out how to make the number on the page count up to 10.
                 '''
                 editors: [

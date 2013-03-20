@@ -604,6 +604,59 @@ STAGES = [
         ]
       }, {
         id: 1362099940993,
+        challenge: 'Figure out how to make the header turn green in one second.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var header = document.getElementById(\'header\');\nvar button = document.getElementById(\'button\');\nbutton.onclick = function() {\n  setTimeout(function() {\n    header.style.color = \'red\';\n  }, 100)\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>setTimeout</h1>\n    <p>\n      The setTimeout method allows you to call a method at a specified time in the future.\n    </p>\n    <p>\n      In this case we\'re calling a method that changes the header to the color green.\n    </p>\n    <p>\n      Try to make the button change the color of the header to green in one second\n      instead of red in 100 milliseconds.\n    </p>\n    <button id=\'button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    \n</p>',
+        hints: [''],
+        tests: [
+          {
+            description: 'The header changes to the color green after 1000 milliseconds.',
+            test: function(_arg) {
+              var button, cleanHtml, frameBody, header;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (_this.testPassed) {
+                return true;
+              }
+              header = frameBody.find('#header');
+              button = frameBody.find('#button');
+              button.bind('mouseup', function() {
+                var startTime;
+                if (_this.buttonTest) {
+                  clearInterval(_this.buttonTest);
+                }
+                startTime = new Date();
+                return _this.buttonTest = setInterval((function() {
+                  if (new Date() - startTime < 950) {
+                    if (header.css('color') === 'green') {
+                      return clearInterval(_this.buttonTest);
+                    }
+                  } else if (header.css('color') === 'green') {
+                    _this.testPassed = true;
+                    return window.retest();
+                  }
+                }), 100);
+              });
+              return false;
+            },
+            clean: function() {
+              clearInterval(_this.buttonTest);
+              delete _this.buttonTest;
+              return delete _this.testPassed;
+            }
+          }
+        ]
+      }, {
+        id: 1362099940993,
         challenge: 'Figure out how to make the number on the page count up to 10.',
         editors: [
           {
