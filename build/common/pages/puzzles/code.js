@@ -518,7 +518,7 @@ STAGES = [
       }
     ]
   }, {
-    name: 'Javascript: Basic Functions',
+    name: 'Javascript: Global Functions',
     levels: [
       {
         id: 1362617406338,
@@ -950,7 +950,7 @@ STAGES = [
     levels: [
       {
         id: 1362673042225,
-        challenge: 'Figure out how to make clicking the button toggle the color of the header from red to green.',
+        challenge: 'Figure out how to make the header toggle from red to green by clicking the button.',
         editors: [
           {
             title: 'Page Javascript',
@@ -998,14 +998,14 @@ STAGES = [
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1 id=\'header\'>Complex Conditionals</h1>\n    <p>\n      Conditional statements can be used to choose between more than two paths.\n    </p>\n    <p>\n      If a conditional statement is used to choose between a large number of code paths\n      it might be considered a "code small" (something that might lead to problems), but\n      for 2-4 paths or so, it is usually appropriate.\n    </p>\n    <p>\n      Figure out how to use if/else statements to make the header go from green to yellow\n      to red by clicking the button below:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Complex Conditionals</h1>\n    <p>\n      Conditional statements can be used to choose between more than two paths.\n    </p>\n    <p>\n      If a conditional statement is used to choose between a large number of code paths\n      it might be considered a "code smell" (something that might lead to problems), but\n      for 2-4 paths or so, it is usually appropriate.\n    </p>\n    <p>\n      Figure out how to use if/else statements to make the header go from green to yellow\n      to red by clicking the button below:\n    </p>\n    <button id=\'toggle_button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
         description: '<p>\n    Conditional statements are frequently used when coding.\n</p>\n<p>\n    They allow you to execute code only in certain situations.\n</p>',
-        hints: ['You need to create one or multiple conditions that lead to three different states.', 'You\'ll need one conditional statement to go from black to green, one to go from green to yellow, and one to go from yellow to red.', 'You can also accomplish this with a statement that uses if/else if/else.', 'Add this to the end of the existing conditional statement:<br/>\n} else if (header.style.color == \'yellow\') {\n    header.style.color = \'red\';\n} else {\n    header.style.color = \'green\';\n}'],
+        hints: ['You need to create one or multiple conditions that lead to three different states.', 'You\'ll need one conditional statement to go from black to green, one to go from green to yellow, and one to go from yellow to red.', 'You can also accomplish this with a statement that uses if/else if/else.', 'Add this to the end of the existing conditional statement:<br/>\n} else if (header.style.color == \'yellow\') {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'red\';<br/>\n} else {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'green\';<br/>\n}'],
         tests: [
           {
-            description: 'The header color is green.',
+            description: 'The header toggles from green to yellow to red when you click the button 3 times.',
             test: function(_arg) {
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
@@ -1024,6 +1024,52 @@ STAGES = [
             clean: function() {
               clearInterval(_this.testInterval);
               return _this.testInterval = null;
+            }
+          }
+        ]
+      }, {
+        id: 1363825098036,
+        lockedBy: [1362851805236],
+        challenge: 'Figure out how to turn the header yellow when the button is clicked and the counter reads 1, \ngreen when it reads 2, red when it reads 3, and blue when it reads 4.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var counter = document.getElementById(\'counter\');\nvar button = document.getElementById(\'button\');\nbutton.onclick = function () {\n  var header = document.getElementById(\'header\');\n  if (counter.innerHTML == \'1\') {\n      header.style.color = \'red\';\n  }\n};\n\n\nif (window.counterInterval) {\n    window.clearInterval(window.counterInterval);\n}\nwindow.counterInterval = setInterval(function() {\n  if (!counter) return;\n\n  var value = parseInt(counter.innerHTML);\n  value += 1;\n  if (value > 4) {\n    value = 1;\n  }\n  counter.innerHTML = value;\n  \n}, 1000);                        '
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Complex Conditionals 2</h1>\n    <p>\n      Conditional statements are used frequently in programming.\n    </p>\n    <p>\n      Here we want to make the header change color depending on the innerHTML value\n      (the number displayed) in the counter below.\n    </p>\n    <p>\n        1 = yellow, 2 = green, 3 = red, 4 = blue\n    </p>\n    <h2 id=\'counter\'>1</h2>\n    <button id=\'button\'>Click Me</button>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    Conditional statements are frequently used when coding.\n</p>\n<p>\n    They allow you to execute code only in certain situations.\n</p>',
+        hints: ['You\'ll need to set up a conditional statement that handles all four possible scenarios.', 'The conditional should start with an \'if\' followed by two \'else if\' and a closing \'else\'.', 'Code such as this would do the trick:<br/>\nif (counter.innerHTML == \'1\') {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'yellow\';<br/>\n} else if (counter.innerHTML == \'2\') {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'green\';<br/>\n} else if (counter.innerHTML == \'3\') {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'red\';<br/>\n} else {<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;header.style.color = \'blue\';<br/>\n}'],
+        tests: [
+          {
+            description: 'The header color is either yellow, green, red, or blue depending on the number displayed in the counter.',
+            test: function(_arg) {
+              var button, cleanHtml, counter, frameBody, header, onclick;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (_this.passed) {
+                return true;
+              }
+              button = frameBody.find('#button');
+              header = frameBody.find('#header');
+              counter = frameBody.find('#counter');
+              onclick = button[0].onclick;
+              button[0].onclick = null;
+              button.bind('click', function() {
+                var colors, index;
+                onclick();
+                colors = ['', 'yellow', 'green', 'red', 'blue'];
+                index = parseInt(counter.html());
+                _this.passed = header.css('color') === colors[index];
+                return window.retest();
+              });
+              return false;
+            },
+            clean: function() {
+              return delete _this.passed;
             }
           }
         ]
