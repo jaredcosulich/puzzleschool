@@ -223,16 +223,18 @@ xyflyerEditor.EditorHelper = (function() {
           if (ring.touches(e.offsetX, e.offsetY, 12, 12)) {
             _this.rings.splice(index, 1);
             ring.remove();
+            _this.handleModification();
             return;
           }
         }
-        alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.');
-        return _this.handleModification();
+        return alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.');
       });
       return _this.boardElement.unbind('click.showxy');
     });
     return this.boardElement.bind('mousedown.dragisland', function(e) {
-      var element, elements, xStart, yStart, _i, _len, _ref1, _ref2, _results;
+      var currentX, currentY, element, elements, xStart, yStart, _i, _len, _ref1, _ref2, _results;
+      xStart = currentX = e.clientX;
+      yStart = currentY = e.clientY;
       elements = _this.board.paper.getElementsByPoint(e.offsetX, e.offsetY);
       _results = [];
       for (_i = 0, _len = elements.length; _i < _len; _i++) {
@@ -240,13 +242,11 @@ xyflyerEditor.EditorHelper = (function() {
         if (!((_ref1 = element[0].href) != null ? (_ref2 = _ref1.toString()) != null ? _ref2.indexOf('island') : void 0 : void 0)) {
           continue;
         }
-        xStart = e.clientX;
-        yStart = e.clientY;
         _this.boardElement.bind('mousemove.dragisland', function(e) {
           var x, y;
-          _this.board.island.transform("...t" + (e.clientX - xStart) + "," + (e.clientY - yStart));
-          x = _this.board.screenX(_this.islandCoordinates.x) + (e.clientX - xStart);
-          y = _this.board.screenY(_this.islandCoordinates.y) + (e.clientY - yStart);
+          _this.board.island.transform("...t" + (e.clientX - currentX) + "," + (e.clientY - currentY));
+          x = _this.board.screenX(_this.islandCoordinates.x) + (e.clientX - currentX);
+          y = _this.board.screenY(_this.islandCoordinates.y) + (e.clientY - currentY);
           _this.plane.move(x, y, 0);
           _this.board.islandCoordinates = _this.islandCoordinates = {
             x: _this.board.paperX(x),
@@ -255,12 +255,15 @@ xyflyerEditor.EditorHelper = (function() {
           _this.board.islandLabel.attr({
             text: _this.board.islandText()
           });
-          xStart = e.clientX;
-          return yStart = e.clientY;
+          currentX = e.clientX;
+          return currentY = e.clientY;
         });
-        _results.push(_this.boardElement.one('mouseup.dragisland', function() {
-          _this.initBoard({});
-          return _this.boardElement.unbind('mousemove.dragisland');
+        _results.push(_this.boardElement.one('mouseup.dragisland', function(e) {
+          if (e.clientX !== xStart && e.clientY !== yStart) {
+            _this.initBoard({});
+          }
+          _this.boardElement.unbind('mousemove.dragisland');
+          return _this.handleModification();
         }));
       }
       return _results;

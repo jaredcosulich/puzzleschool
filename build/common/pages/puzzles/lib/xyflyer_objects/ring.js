@@ -90,7 +90,7 @@ ring.Ring = (function(_super) {
   };
 
   Ring.prototype.inPath = function(x, formula) {
-    if (formula(this.x) !== this.y) {
+    if (Math.round(100 * formula(this.x)) / 100 !== this.y) {
       return false;
     }
     if ((this.x - (0.5 * this.scale) < x && x < this.x + (0.5 * this.scale))) {

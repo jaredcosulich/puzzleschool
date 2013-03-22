@@ -355,7 +355,7 @@ soma.views({
             id = levelElement.data('id');
             levelInfo = _this.findLevel(id);
             locked = !previousCompleted;
-            if (index === 0 && previousStageProficient) {
+            if (index === 0) {
               locked = false;
             }
             _this.setLevelIcon({

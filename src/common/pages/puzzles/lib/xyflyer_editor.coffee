@@ -143,29 +143,30 @@ class xyflyerEditor.EditorHelper
                     if ring.touches(e.offsetX,e.offsetY,12,12)
                         @rings.splice(index, 1)
                         ring.remove()
+                        @handleModification()
                         return
                 alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.')
-                @handleModification()
             @boardElement.unbind('click.showxy')
         
         @boardElement.bind 'mousedown.dragisland', (e) =>
+            xStart = currentX = e.clientX
+            yStart = currentY = e.clientY
             elements = @board.paper.getElementsByPoint(e.offsetX, e.offsetY)
             for element in elements when element[0].href?.toString()?.indexOf('island')
-                xStart = e.clientX
-                yStart = e.clientY
                 @boardElement.bind 'mousemove.dragisland', (e) =>
-                    @board.island.transform("...t#{e.clientX - xStart},#{e.clientY - yStart}")
-                    x = @board.screenX(@islandCoordinates.x)+(e.clientX - xStart)
-                    y = @board.screenY(@islandCoordinates.y)+(e.clientY - yStart)
+                    @board.island.transform("...t#{e.clientX - currentX},#{e.clientY - currentY}")
+                    x = @board.screenX(@islandCoordinates.x)+(e.clientX - currentX)
+                    y = @board.screenY(@islandCoordinates.y)+(e.clientY - currentY)
                     @plane.move(x, y, 0)
                     @board.islandCoordinates = @islandCoordinates = {x: @board.paperX(x), y: @board.paperY(y)}
                     @board.islandLabel.attr(text: @board.islandText())
-                    xStart = e.clientX
-                    yStart = e.clientY
+                    currentX = e.clientX
+                    currentY = e.clientY
                     
-                @boardElement.one 'mouseup.dragisland', => 
-                    @initBoard({})
+                @boardElement.one 'mouseup.dragisland', (e) => 
+                    @initBoard({}) if e.clientX != xStart and e.clientY != yStart
                     @boardElement.unbind('mousemove.dragisland')
+                    @handleModification()
                     
     addEquation: (equationString, start, solutionComponents) -> 
         if not start

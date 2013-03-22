@@ -85,7 +85,7 @@ LABDATA = [
     availability: 'Web, Mobile, Tablet',
     cost: 'Free',
     overall: {
-      explanation: "<p>\n    We had a simple goal with XYFlyer. We wanted to make it easy and fun for students to become \n    comfortable with equations and graphing.\n</p>\n<p>\n    So we created a puzzle-game where students work directly with equations and graphs to solve simple \n    challenges.\n</p>\n<p>\n    XYFlyer requires no previous math experience. A beginner can start out playing and, with the help\n    of immediate feedback loops, gain some basic understanding and familiarity with equations and graphing.\n<p>\n    Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.\n</p>"
+      explanation: "<p>\n    We had a simple goal with XYFlyer. We wanted to make it easy and fun for students to become \n    comfortable with equations and graphing.\n</p>\n<p>\n    So we created a puzzle-game where students work directly with equations and graphs to solve simple \n    challenges.\n</p>\n<p>\n    XYFlyer requires no previous math experience. A beginner can start out playing and, with the help\n    of immediate feedback loops, gain some basic understanding and familiarity with equations and graphing.\n<p>\n    Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.\n</p>\n<p>\n    If you want to play around with creating your own levels, try out the \n    <a href='/puzzles/xyflyer/editor'>Level Editor</a>.\n</p>"
     }
   }, {
     id: 'language_scramble',

@@ -2,7 +2,7 @@ levels = exports ? provide('./lib/xyflyer_objects/levels', {})
 
 levels.STAGES = [
     {
-        name: 'A Single Line'
+        name: 'Simple Lines'
         levels: [
             {
                 id: 1363227855683
@@ -118,6 +118,118 @@ levels.STAGES = [
                 islandCoordinates: {x: 0, y: 0}
                 fragments: ['2*', '(1/2)*', '4*', '(1/4)*']
             }
+            {
+                id: 1363889649942
+                equations:
+                    '-x-3':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '-3', after: '-x'}
+                        ]
+                rings: [
+                    {x: -4, y: 1}
+                    {x: -1, y: -2}
+                    {x: 2, y: -5}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -7, y: 4}
+                fragments: ['+3', '+5', '-3', '-5']
+            }
+            {
+                id: 1363898471122
+                equations:
+                    '-x+2':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '+2', after: '-x'}
+                        ]
+                rings: [
+                    {x: -2, y: 4}
+                    {x: 1, y: 1}
+                    {x: 4, y: -2}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6, y: 8}
+                fragments: ['+2', '-2', '+4', '-4']
+            }
+            {
+                id: 1363899214658
+                equations:
+                    '(1/5)*-x':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '(1/5)*', after: ''}
+                        ]
+                rings: [
+                    {x: -10, y: 2}
+                    {x: 5, y: -1}
+                    {x: 20, y: -4}
+                ]
+                grid:
+                    xMin: -25
+                    xMax: 25
+                    yMin: -25
+                    yMax: 25
+                islandCoordinates: {x: -20, y: 4}
+                fragments: ['3*', '5*', '(1/3)*', '(1/5)*']
+            }
+        ]
+    }
+    {
+        name: 'More Complex Lines'
+        levels: [
+            {
+                id: 1363899729966
+                equations:
+                    '(1/3)*x+3':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '(1/3)*', after: ''}
+                            {fragment: '+3', after: 'x'}
+                        ]
+                rings: [
+                    {x: -3, y: 2}
+                    {x: 3, y: 4}
+                    {x: 9, y: 6}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6, y: 1}
+                fragments: ['+3', '(1/3)*']
+            }
+            {
+                id: 1363899946541
+                equations:
+                    '-2*x+5':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '-2*', after: ''}
+                            {fragment: '+5', after: 'x'}
+                        ]
+                rings: [
+                    {x: 1, y: 3}
+                    {x: 3, y: -1}
+                    {x: 5, y: -5}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -2, y: 9}
+                fragments: ['2*', '-2*', '+5', '-5']
+            }    
             {
                 id: 1363229707272
                 equations: 
@@ -540,6 +652,53 @@ levels.STAGES = [
                         min: 0
                         max: 10
                         increment: 1
+                    d:
+                        start: 1
+                        min: 0
+                        max: 10
+                        increment: 1
+                        solution: 5
+            }
+            {
+                id: 1363902958905
+                equations:
+                    '(1/b)*x-d':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '(1/b)*', after: ''}
+                            {fragment: '-d', after: 'x'}
+                        ]
+                rings: [
+                    {x: -3, y: -4}
+                    {x: 3, y: -6}
+                    {x: 9, y: -8}
+                ]
+                grid:
+                    xMin: -15
+                    xMax: 15
+                    yMin: -20
+                    yMax: 5
+                islandCoordinates: {x: -9, y: -2}
+                fragments: ['a*', '(1/b)*', '+c', '-d']
+                variables: 
+                    a:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: null
+                    b:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: -3
+                    c:
+                        start: 1
+                        min: 0
+                        max: 10
+                        increment: 1
+                        solution: null
                     d:
                         start: 1
                         min: 0
@@ -1062,6 +1221,41 @@ levels.STAGES = [
                     yMax: 15
                 islandCoordinates: {x: -8, y: 13}
                 fragments: ['(1/4)*', '(1/4)*', '-3']
+            }
+        ]
+    }
+    {
+        name: 'Crazy Curves'
+        levels: [
+            {
+                id: 1363927709647
+                equations:
+                    'sin(a*x)+5':
+                        solutionComponents: [
+                            {fragment: 'sin(x)', after: ''}
+                            {fragment: 'a*', after: 'sin('}
+                            {fragment: '+5', after: 'sin(a*x)'}
+                        ]
+                rings: [
+                    {x: 0.52, y: 6}
+                    {x: 3.67, y: 4}
+                    {x: 4.71, y: 6}
+                    {x: 1.57, y: 4}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -2.62, y: 4}
+                fragments: ['sin(x)', 'a*', '+5']
+                variables: 
+                    a:
+                        start: 1
+                        min: -10
+                        max: 10
+                        increment: 1
+                        solution: 3
             }
         ]
     }

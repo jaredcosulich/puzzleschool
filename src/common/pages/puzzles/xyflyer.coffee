@@ -258,7 +258,7 @@ soma.views
                             levelInfo = @findLevel(id)
             
                             locked = !previousCompleted
-                            locked = false if index == 0 and previousStageProficient
+                            locked = false if index == 0# and previousStageProficient
                             
                             @setLevelIcon
                                 id: id

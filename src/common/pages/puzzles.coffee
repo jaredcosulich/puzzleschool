@@ -105,6 +105,10 @@ LABDATA = [{
             <p>
                 Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.
             </p>
+            <p>
+                If you want to play around with creating your own levels, try out the 
+                <a href='/puzzles/xyflyer/editor'>Level Editor</a>.
+            </p>
             """
 }, {
     id: 'language_scramble'
