@@ -2,7 +2,297 @@ levels = exports ? provide('./lib/xyflyer_objects/levels', {})
 
 levels.STAGES = [
     {
-        name: 'Simple Lines'
+        name: 'Shifting Lines'
+        levels: [
+            {
+                id: 1364229884455
+                equations:
+                    'x+4':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '+4', after: 'x'}
+                        ]
+                rings: [
+                    {x: -2, y: 2}
+                    {x: 1, y: 5}
+                    {x: 4, y: 8}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -5, y: -1}
+                fragments: ['+4']
+            }
+            {
+                id: 1364230317228
+                equations:
+                    'x-5':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '-5', after: 'x'}
+                        ]
+                rings: [
+                    {x: -1, y: -6}
+                    {x: 7, y: 2}
+                    {x: 15, y: 10}
+                ]
+                grid:
+                    xMin: -25
+                    xMax: 25
+                    yMin: -25
+                    yMax: 25
+                islandCoordinates: {x: -6, y: -11}
+                fragments: ['+5', '-5']
+            }
+            {
+                id: 1364225130330
+                equations:
+                    'x-4':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '-4', after: 'x'}
+                        ]
+                rings: [
+                    {x: 4, y: 0}
+                    {x: 6, y: 2}
+                    {x: 8, y: 4}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: 2, y: -2}
+                fragments: ['+4', '-4', '+6', '-6']
+            }
+            {
+                id: 1363889649942
+                equations:
+                    '-x-3':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '-3', after: '-x'}
+                        ]
+                rings: [
+                    {x: -4, y: 1}
+                    {x: -1, y: -2}
+                    {x: 2, y: -5}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -7, y: 4}
+                fragments: ['+3', '+5', '-3', '-5']
+            }
+            {
+                id: 1363898471122
+                equations:
+                    '-x+2':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '+2', after: '-x'}
+                        ]
+                rings: [
+                    {x: -2, y: 4}
+                    {x: 1, y: 1}
+                    {x: 4, y: -2}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6, y: 8}
+                fragments: ['+2', '-2', '+4', '-4']
+            }
+            {
+                id: 1364225219109
+                equations:
+                    'x+2':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '+2', after: 'x'}
+                        ]
+                rings: [
+                    {x: -1, y: 1}
+                    {x: 2, y: 4}
+                    {x: 5, y: 7}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -4, y: -2}
+                fragments: ['+2', '+5', '-2', '-5']
+            }
+            {
+                id: 1364231736746
+                equations:
+                    '-x+18':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '+18', after: '-x'}
+                        ]
+                rings: [
+                    {x: 2, y: 16}
+                    {x: 12, y: 6}
+                    {x: 22, y: -4}
+                ]
+                grid:
+                    xMin: -30
+                    xMax: 30
+                    yMin: -30
+                    yMax: 30
+                islandCoordinates: {x: -8, y: 26}
+                fragments: ['+8', '-8', '+18', '-18']
+            }
+            {
+                id: 1364232064737
+                equations:
+                    '-x-5':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '-5', after: '-x'}
+                        ]
+                rings: [
+                    {x: -6, y: 1}
+                    {x: -2, y: -3}
+                    {x: 2, y: -7}
+                ]
+                grid:
+                    xMin: -15
+                    xMax: 15
+                    yMin: -15
+                    yMax: 15
+                islandCoordinates: {x: -10, y: 5}
+                fragments: ['+3', '-3', '+5', '-5']
+            }
+            
+
+
+
+
+
+
+
+            {
+                id: 1364226664899
+                equations:
+                    'x+4':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '+4', after: 'x'}
+                        ]
+                rings: [
+                    {x: -3, y: 1}
+                    {x: 0, y: 4}
+                    {x: 3, y: 7}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6, y: -2}
+                fragments: ['+3', '-3', '+4', '-4']
+            }
+            {
+                id: 1364228465830
+                equations:
+                    'x+18':
+                        start: 'x'
+                        solutionComponents: [
+                            {fragment: '+18', after: 'x'}
+                        ]
+                rings: [
+                    {x: -16, y: 2}
+                    {x: -6, y: 12}
+                    {x: 4, y: 22}
+                ]
+                grid:
+                    xMin: -30
+                    xMax: 30
+                    yMin: -30
+                    yMax: 30
+                islandCoordinates: {x: -22, y: -4}
+                fragments: ['-12', '+12', '-18', '+18']
+            }
+            
+            {
+                id: 1364228356656
+                equations:
+                    '-x-4':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '-4', after: '-x'}
+                        ]
+                rings: [
+                    {x: -3, y: -1}
+                    {x: 0, y: -4}
+                    {x: 3, y: -7}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -6, y: 2}
+                fragments: ['+2', '+4', '-2', '-4']
+            }
+            {
+                id: 1364225730692
+                equations:
+                    '-x+5':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '+5', after: '-x'}
+                        ]
+                rings: [
+                    {x: -1, y: 6}
+                    {x: 3, y: 2}
+                    {x: 7, y: -2}
+                ]
+                grid:
+                    xMin: -10
+                    xMax: 10
+                    yMin: -10
+                    yMax: 10
+                islandCoordinates: {x: -4, y: 9}
+                fragments: ['+3', '+5', '-3', '-5']
+            }
+            
+            {
+                id: 1364231355522
+                equations:
+                    '-x+21-7':
+                        start: '-x'
+                        solutionComponents: [
+                            {fragment: '+21', after: '-x'}
+                            {fragment: '-7', after: '+21'}
+                        ]
+                rings: [
+                    {x: -12, y: 26}
+                    {x: 4, y: 10}
+                    {x: 20, y: -6}
+                ]
+                grid:
+                    xMin: -50
+                    xMax: 50
+                    yMin: -50
+                    yMax: 50
+                islandCoordinates: {x: -28, y: 42}
+                fragments: ['+7', '-7', '+21', '-21']
+            }
+            
+        ]
+    }
+    {
+        name: 'Changing Slope'
         levels: [
             {
                 id: 1363227855683
@@ -18,47 +308,10 @@ levels.STAGES = [
                     {x: 3, y: 6}
                 ]
                 fragments: [
-                    '2x'
+                    '2x', '(1/2)x'
                 ]
             }
-            {
-                id: 1363227862789
-                equations: 
-                    'x+4': {start: 'x'}
-                grid:
-                    xMin: -10
-                    xMax: 10
-                    yMin: -10
-                    yMax: 10
-                rings: [
-                    {x: -2, y: 2}
-                    {x: 0, y: 4}
-                    {x: 4, y: 8}
-                ]
-                islandCoordinates: {x: -6, y: -2}
-                fragments: [
-                    '+4', '-4'
-                ]
-            }
-            {
-                id: 1363227871084
-                equations: 
-                    'x-2': {start: 'x'}
-                grid:
-                    xMin: -10
-                    xMax: 10
-                    yMin: -10
-                    yMax: 10
-                rings: [
-                    {x: 0, y: -2}
-                    {x: 4, y: 2}
-                    {x: 8, y: 6}
-                ]
-                islandCoordinates: {x: -4, y: -6}
-                fragments: [
-                    '+2', '-2', '+4', '-4'
-                ]
-            }
+            
             {
                 id: 1363227878373
                 equations: 
@@ -119,48 +372,6 @@ levels.STAGES = [
                 fragments: ['2*', '(1/2)*', '4*', '(1/4)*']
             }
             {
-                id: 1363889649942
-                equations:
-                    '-x-3':
-                        start: '-x'
-                        solutionComponents: [
-                            {fragment: '-3', after: '-x'}
-                        ]
-                rings: [
-                    {x: -4, y: 1}
-                    {x: -1, y: -2}
-                    {x: 2, y: -5}
-                ]
-                grid:
-                    xMin: -10
-                    xMax: 10
-                    yMin: -10
-                    yMax: 10
-                islandCoordinates: {x: -7, y: 4}
-                fragments: ['+3', '+5', '-3', '-5']
-            }
-            {
-                id: 1363898471122
-                equations:
-                    '-x+2':
-                        start: '-x'
-                        solutionComponents: [
-                            {fragment: '+2', after: '-x'}
-                        ]
-                rings: [
-                    {x: -2, y: 4}
-                    {x: 1, y: 1}
-                    {x: 4, y: -2}
-                ]
-                grid:
-                    xMin: -10
-                    xMax: 10
-                    yMin: -10
-                    yMax: 10
-                islandCoordinates: {x: -6, y: 8}
-                fragments: ['+2', '-2', '+4', '-4']
-            }
-            {
                 id: 1363899214658
                 equations:
                     '(1/5)*-x':
@@ -184,7 +395,7 @@ levels.STAGES = [
         ]
     }
     {
-        name: 'More Complex Lines'
+        name: 'Shift And Slope'
         levels: [
             {
                 id: 1363899729966
