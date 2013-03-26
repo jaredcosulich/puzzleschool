@@ -148,6 +148,11 @@ class xyflyerEditor.EditorHelper
                 alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.')
             @boardElement.unbind('click.showxy')
         
+        @$('.editor .change_background').bind 'click', => alert('Background editing should be ready by May 1st.')
+        
+        @$('.editor .reset_editor').bind 'click', => 
+            location.href = location.pathname if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
+        
         @boardElement.bind 'mousedown.dragisland', (e) =>
             xStart = currentX = e.clientX
             yStart = currentY = e.clientY
@@ -227,6 +232,9 @@ class xyflyerEditor.EditorHelper
         
     
     addRing: (x, y) -> 
+        if not (parseInt(x) and parseInt(y))
+            alert('Those coordinates are not valid.')
+            return
         @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))
         @handleModification()
 

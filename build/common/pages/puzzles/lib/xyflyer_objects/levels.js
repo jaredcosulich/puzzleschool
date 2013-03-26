@@ -870,6 +870,42 @@ levels.STAGES = [
         },
         fragments: ['2*', '5*', '(1/3)*', '(1/5)*']
       }, {
+        id: 1364320352722,
+        equations: {
+          '2*-x': {
+            start: '-x',
+            solutionComponents: [
+              {
+                fragment: '2*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -2,
+            y: 4
+          }, {
+            x: 0,
+            y: 0
+          }, {
+            x: 2,
+            y: -4
+          }
+        ],
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -10,
+          yMax: 10
+        },
+        islandCoordinates: {
+          x: -4,
+          y: 8
+        },
+        fragments: ['2*', '(1/2)*', '4*', '(1/4)*']
+      }, {
         id: 1364318896882,
         equations: {
           '-5*x': {
@@ -905,6 +941,378 @@ levels.STAGES = [
           y: 15
         },
         fragments: ['3*', '-3*', '5*', '-5*']
+      }, {
+        id: 1364320805441,
+        equations: {
+          '6*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '6*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -1,
+            y: -6
+          }, {
+            x: 2,
+            y: 12
+          }, {
+            x: 5,
+            y: 30
+          }
+        ],
+        grid: {
+          xMin: -40,
+          xMax: 40,
+          yMin: -40,
+          yMax: 40
+        },
+        islandCoordinates: {
+          x: -4,
+          y: -24
+        },
+        fragments: ['3*', '6*', '-3*', '-6*']
+      }, {
+        id: 1364321710361,
+        equations: {
+          '-2*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '-2*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -1,
+            y: 2
+          }, {
+            x: 1,
+            y: -2
+          }, {
+            x: 3,
+            y: -6
+          }
+        ],
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -10,
+          yMax: 10
+        },
+        islandCoordinates: {
+          x: -3,
+          y: 6
+        },
+        fragments: ['2*', '5*', '-2*', '-5*']
+      }, {
+        id: 1364321553399,
+        equations: {
+          '(1/5)*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/5)*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -5,
+            y: -1
+          }, {
+            x: 5,
+            y: 1
+          }, {
+            x: 15,
+            y: 3
+          }
+        ],
+        grid: {
+          xMin: -25,
+          xMax: 25,
+          yMin: -25,
+          yMax: 25
+        },
+        islandCoordinates: {
+          x: -15,
+          y: -3
+        },
+        fragments: ['(1/2)*', '(1/5)*', '(-1/2)*', '(-1/5)*']
+      }, {
+        id: 1364321105883,
+        equations: {
+          '(-1/3)*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(-1/3)*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -6,
+            y: 2
+          }, {
+            x: 3,
+            y: -1
+          }, {
+            x: 12,
+            y: -4
+          }
+        ],
+        grid: {
+          xMin: -20,
+          xMax: 20,
+          yMin: -20,
+          yMax: 20
+        },
+        islandCoordinates: {
+          x: -15,
+          y: 5
+        },
+        fragments: ['3*', '(1/3)*', '-3*', '(-1/3)*']
+      }, {
+        id: 1364323332127,
+        equations: {
+          '(1/4)*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/4)*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -4,
+            y: -1
+          }, {
+            x: 4,
+            y: 1
+          }, {
+            x: 12,
+            y: 3
+          }
+        ],
+        grid: {
+          xMin: -20,
+          xMax: 20,
+          yMin: -20,
+          yMax: 20
+        },
+        islandCoordinates: {
+          x: -12,
+          y: -3
+        },
+        fragments: ['4*', '(1/4)*', '-4*', '(-1/4)*']
+      }, {
+        id: 1364324243426,
+        equations: {
+          '-1*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '-1*',
+                after: ''
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -2,
+            y: 2
+          }, {
+            x: 2,
+            y: -2
+          }, {
+            x: 6,
+            y: -6
+          }
+        ],
+        grid: {
+          xMin: -10,
+          xMax: 10,
+          yMin: -10,
+          yMax: 10
+        },
+        islandCoordinates: {
+          x: -6,
+          y: 6
+        },
+        fragments: ['3*', '-3*', '(1/3)*', '(-1/3)*', '-1*']
+      }, {
+        id: 1364324406984,
+        equations: {
+          '(1/2)*6*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '(1/2)*',
+                after: ''
+              }, {
+                fragment: '6*',
+                after: '(1/2)*'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -1,
+            y: -3
+          }, {
+            x: 3,
+            y: 9
+          }, {
+            x: 7,
+            y: 21
+          }
+        ],
+        grid: {
+          xMin: -30,
+          xMax: 30,
+          yMin: -30,
+          yMax: 30
+        },
+        islandCoordinates: {
+          x: -5,
+          y: -15
+        },
+        fragments: ['2*', '(1/2)*', '6*', '(1/6)*']
+      }, {
+        id: 1364324629711,
+        equations: {
+          '2*3*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '2*',
+                after: ''
+              }, {
+                fragment: '3*',
+                after: '2*'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -1,
+            y: -6
+          }, {
+            x: 1,
+            y: 6
+          }, {
+            x: 3,
+            y: 18
+          }
+        ],
+        grid: {
+          xMin: -36,
+          xMax: 36,
+          yMin: -36,
+          yMax: 36
+        },
+        islandCoordinates: {
+          x: -3,
+          y: -18
+        },
+        fragments: ['2*', '3*', '(1/2)*', '(1/3)*']
+      }, {
+        id: 1364324786570,
+        equations: {
+          '3*(-1/3)*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '3*',
+                after: ''
+              }, {
+                fragment: '(-1/3)*',
+                after: '3*'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -4,
+            y: 4
+          }, {
+            x: 2,
+            y: -2
+          }, {
+            x: 8,
+            y: -8
+          }
+        ],
+        grid: {
+          xMin: -15,
+          xMax: 15,
+          yMin: -15,
+          yMax: 15
+        },
+        islandCoordinates: {
+          x: -10,
+          y: 10
+        },
+        fragments: ['3*', '(1/3)*', '-3*', '(-1/3)*']
+      }, {
+        id: 1364325397661,
+        equations: {
+          '2*(-1/6)*x': {
+            start: 'x',
+            solutionComponents: [
+              {
+                fragment: '2*',
+                after: ''
+              }, {
+                fragment: '(-1/6)*',
+                after: '2*'
+              }
+            ]
+          }
+        },
+        rings: [
+          {
+            x: -3,
+            y: 1
+          }, {
+            x: 3,
+            y: -1
+          }, {
+            x: 9,
+            y: -3
+          }
+        ],
+        grid: {
+          xMin: -15,
+          xMax: 15,
+          yMin: -15,
+          yMax: 15
+        },
+        islandCoordinates: {
+          x: -9,
+          y: 3
+        },
+        fragments: ['2*', '-2*', '(1/6)*', '(-1/6)*']
       }
     ]
   }, {

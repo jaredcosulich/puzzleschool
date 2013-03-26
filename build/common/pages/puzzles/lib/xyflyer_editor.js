@@ -231,6 +231,14 @@ xyflyerEditor.EditorHelper = (function() {
       });
       return _this.boardElement.unbind('click.showxy');
     });
+    this.$('.editor .change_background').bind('click', function() {
+      return alert('Background editing should be ready by May 1st.');
+    });
+    this.$('.editor .reset_editor').bind('click', function() {
+      if (confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')) {
+        return location.href = location.pathname;
+      }
+    });
     return this.boardElement.bind('mousedown.dragisland', function(e) {
       var currentX, currentY, element, elements, xStart, yStart, _i, _len, _ref1, _ref2, _results;
       xStart = currentX = e.clientX;
@@ -371,6 +379,10 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.displayVariables = function() {};
 
   EditorHelper.prototype.addRing = function(x, y) {
+    if (!(parseInt(x) && parseInt(y))) {
+      alert('Those coordinates are not valid.');
+      return;
+    }
     this.rings.push(new xyflyer.Ring({
       board: this.board,
       x: x,
