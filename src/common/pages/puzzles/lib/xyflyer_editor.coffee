@@ -180,7 +180,7 @@ class xyflyerEditor.EditorHelper
                 fields: [
                     ['start', 'Starting Equation', 'text']
                 ]
-                callback: (data) => @actuallyAddEquation(equationString, data.start, solutionComponents)
+                callback: (data) => @actuallyAddEquation(equationString, (data.start or '').toLowerCase(), solutionComponents)
         else
             @actuallyAddEquation(equationString, start, solutionComponents)
             
@@ -232,7 +232,7 @@ class xyflyerEditor.EditorHelper
         
     
     addRing: (x, y) -> 
-        if not (parseInt(x) and parseInt(y))
+        if (isNaN(parseInt(x)) or isNaN(parseInt(y)))
             alert('Those coordinates are not valid.')
             return
         @rings.push(new xyflyer.Ring(board: @board, x: x, y: y))

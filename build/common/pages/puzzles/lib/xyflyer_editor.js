@@ -285,7 +285,7 @@ xyflyerEditor.EditorHelper = (function() {
         text: 'What should this equation start with?',
         fields: [['start', 'Starting Equation', 'text']],
         callback: function(data) {
-          return _this.actuallyAddEquation(equationString, data.start, solutionComponents);
+          return _this.actuallyAddEquation(equationString, (data.start || '').toLowerCase(), solutionComponents);
         }
       });
     } else {
@@ -379,7 +379,7 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.displayVariables = function() {};
 
   EditorHelper.prototype.addRing = function(x, y) {
-    if (!(parseInt(x) && parseInt(y))) {
+    if (isNaN(parseInt(x)) || isNaN(parseInt(y))) {
       alert('Those coordinates are not valid.');
       return;
     }
