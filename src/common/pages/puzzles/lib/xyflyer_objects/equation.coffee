@@ -71,7 +71,8 @@ class equation.Equation
         dropArea.component.move(e)
         
         dropArea.element.removeClass('with_component')
-            
+        
+        dropArea.component.after = null    
         dropArea.component = null
         
         @removeDropArea(childArea) for childArea in dropArea.childAreas
