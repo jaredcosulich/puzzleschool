@@ -62,10 +62,15 @@ soma.chunks
                                 alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
+            # for object in ['island', 'plane']
+            #     @objects.push(
+            #         name: object
+            #         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
+            #     )
             for object in ['island', 'plane']
                 @objects.push(
                     name: object
-                    image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
+                    image: @loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{object}.png")
                 )
             
             if @levelId == 'editor'
