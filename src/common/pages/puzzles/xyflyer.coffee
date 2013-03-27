@@ -176,10 +176,10 @@ soma.views
                 @selectWorld(parseInt(worldLink.data('world')) - 1)
                 
         currentWorld: ->
-            for world in @worlds
+            for world, index in @worlds
                 for stage in world.stages
                     for level in stage.levels
-                        return world.index if level.id == @level.id
+                        return index if level.id == @level.id
             
         load: ->
             @dynamicContent.html(@originalHTML)
@@ -240,10 +240,10 @@ soma.views
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
             
         selectWorld: (index) ->
-            @$('.world_link').css(backgroundColor: 'red')
-            @$('.world').hide()
-            $(@$('.world_link')[index]).css(backgroundColor: 'green')
-            $(@$('.world')[index]).show()
+            @$('.world_link').removeClass('selected')
+            @$('.world').removeClass('selected')
+            $(@$('.world_link')[index]).addClass('selected')
+            $(@$('.world')[index]).addClass('selected')
             
         findLevel: (levelId) ->
             for world in @worlds

@@ -423,8 +423,15 @@ body {
   margin: 15px 0 15px 30px;
   background-color: red;
 }
+.xyflyer .level_selector .world_link.selected {
+  background-color: green;
+}
 .xyflyer .level_selector .world {
   clear: left;
+  display: none;
+}
+.xyflyer .level_selector .world.selected {
+  display: block;
 }
 .xyflyer .level_selector .world .stage {
   background-color: #eee;

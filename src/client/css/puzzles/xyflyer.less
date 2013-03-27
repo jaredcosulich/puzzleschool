@@ -411,10 +411,17 @@ body {
             cursor: pointer;
             margin: 15px 0 15px 30px;
             background-color: red;
+            &.selected {
+                background-color: green;
+            }
         }
         
         .world {
             clear: left;
+            display: none;
+            &.selected {
+                display: block;
+            }
             .stage {
                 background-color: #eee;
                 padding-top: 12px;
