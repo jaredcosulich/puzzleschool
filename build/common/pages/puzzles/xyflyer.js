@@ -94,12 +94,12 @@ soma.chunks({
         }
       }
       this.objects = [];
-      _ref = ['island', 'plane'];
+      _ref = [['island', 'https://lh3.googleusercontent.com/28Ap_rgSR9EYYFbwUD0PnX0wOmAK3Zjbapla6MA3MisD1_uZx4TkCM9Lupq4qSlIN3iDcuIBgks'], ['plane', 'https://lh3.googleusercontent.com/u54KqbKsnGjvXiTmzLrqaiL2O_u9DmcOGlFYmfpBg-3-EJFw0N06KVmfDNLtz56BsMXWqhyNZUg']];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
         this.objects.push({
-          name: object,
-          image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + ".png")
+          name: object[0],
+          image: this.loadImage(object[1])
         });
       }
       if (this.levelId === 'editor') {
@@ -108,8 +108,13 @@ soma.chunks({
       return this.loadStylesheet('/build/client/css/puzzles/xyflyer.css');
     },
     build: function() {
-      var _ref;
+      var index, world, worlds, _i, _len, _ref;
       this.setTitle("XYFlyer - The Puzzle School");
+      worlds = require('./lib/xyflyer_objects/levels').WORLDS;
+      for (index = _i = 0, _len = worlds.length; _i < _len; index = ++_i) {
+        world = worlds[index];
+        world.index = index + 1;
+      }
       return this.html = wings.renderTemplate(this.template, {
         puzzleData: JSON.stringify(this.puzzleData),
         objects: this.objects,
@@ -118,7 +123,7 @@ soma.chunks({
         classLevel: this.classLevelId || 0,
         instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0,
         editor: this.levelId === 'editor',
-        stages: require('./lib/xyflyer_objects/levels').STAGES
+        worlds: worlds
       });
     }
   }
@@ -131,7 +136,7 @@ soma.views({
       var instructions, level, puzzleData, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
         _this = this;
       xyflyer = require('./lib/xyflyer');
-      this.stages = require('./lib/xyflyer_objects/levels').STAGES;
+      this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
       this.dynamicContent = this.el.find('.dynamic_content');
       this.$('.menu').bind('click', function() {
         return _this.showLevelSelector();
@@ -153,6 +158,8 @@ soma.views({
       this.originalHTML = this.dynamicContent.html();
       this.initEncode();
       this.initLevelSelector();
+      this.initWorlds();
+      this.selectWorld(0);
       if (isNaN(parseInt(this.levelId))) {
         if ((_ref1 = (instructions = window.location.hash.replace(/\s/g, ''))) != null ? _ref1.length : void 0) {
           level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
@@ -204,6 +211,33 @@ soma.views({
       }
       return this.initLevel();
     },
+    initWorlds: function() {
+      var _this = this;
+      return this.$('.world_link').bind('click', function(e) {
+        var worldLink;
+        e.stop();
+        worldLink = $(e.currentTarget);
+        return _this.selectWorld(parseInt(worldLink.data('world')) - 1);
+      });
+    },
+    currentWorld: function() {
+      var level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+      _ref = this.worlds;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        world = _ref[_i];
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          _ref2 = stage.levels;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            level = _ref2[_k];
+            if (level.id === this.level.id) {
+              return world.index;
+            }
+          }
+        }
+      }
+    },
     load: function() {
       var _this = this;
       this.dynamicContent.html(this.originalHTML);
@@ -228,7 +262,7 @@ soma.views({
       return this.loadLevel();
     },
     loadLevel: function() {
-      var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _results;
+      var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
       if ((_ref = this.level) != null ? _ref.fragments : void 0) {
         _ref1 = this.level.fragments;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -246,12 +280,11 @@ soma.views({
         this.helper.addEquation(equation, info.start, info.solutionComponents, (_ref4 = this.level) != null ? _ref4.variables : void 0);
       }
       _ref6 = ((_ref5 = this.level) != null ? _ref5.rings : void 0) || [];
-      _results = [];
       for (_j = 0, _len1 = _ref6.length; _j < _len1; _j++) {
         ring = _ref6[_j];
-        _results.push(this.helper.addRing(ring.x, ring.y));
+        this.helper.addRing(ring.x, ring.y);
       }
-      return _results;
+      return this.selectWorld(this.currentWorld());
     },
     centerAndShow: function(element, board) {
       var areaOffset, boardOffset, offset;
@@ -285,25 +318,39 @@ soma.views({
     isIos: function() {
       return navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
     },
+    selectWorld: function(index) {
+      this.$('.world_link').css({
+        backgroundColor: 'red'
+      });
+      this.$('.world').hide();
+      $(this.$('.world_link')[index]).css({
+        backgroundColor: 'green'
+      });
+      return $(this.$('.world')[index]).show();
+    },
     findLevel: function(levelId) {
-      var level, stage, _i, _len, _ref;
-      _ref = this.stages;
+      var level, stage, world, _i, _j, _len, _len1, _ref, _ref1;
+      _ref = this.worlds;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        stage = _ref[_i];
-        level = ((function() {
-          var _j, _len1, _ref1, _results;
-          _ref1 = stage.levels;
-          _results = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            level = _ref1[_j];
-            if (level.id === levelId) {
-              _results.push(level);
+        world = _ref[_i];
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          level = ((function() {
+            var _k, _len2, _ref2, _results;
+            _ref2 = stage.levels;
+            _results = [];
+            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+              level = _ref2[_k];
+              if (level.id === levelId) {
+                _results.push(level);
+              }
             }
+            return _results;
+          })())[0];
+          if (level) {
+            return JSON.parse(JSON.stringify(level));
           }
-          return _results;
-        })())[0];
-        if (level) {
-          return JSON.parse(JSON.stringify(level));
         }
       }
     },
@@ -339,9 +386,12 @@ soma.views({
       var previousCompleted, previousStageProficient, stageElement, _i, _len, _ref, _results,
         _this = this;
       this.levelSelector = this.$('.level_selector');
+      this.levelSelector.bind('click', function(e) {
+        return e.stop();
+      });
       previousCompleted = true;
       previousStageProficient = true;
-      _ref = this.levelSelector.find('.levels');
+      _ref = this.levelSelector.find('.stage');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         stageElement = _ref[_i];

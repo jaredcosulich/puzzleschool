@@ -130,7 +130,7 @@ board.Board = (function(_super) {
     this.island = this.paper.set();
     this.island.push(this.addImage(island, x, y));
     text = this.islandText();
-    this.islandLabel = this.paper.text(x + (width / 2) - (15 * this.scale), y + (height / 2) - (15 * this.scale), text).attr({
+    this.islandLabel = this.paper.text(x + (78 * this.scale), y + (153 * this.scale), text).attr({
       fill: '#ddd',
       stroke: 'none',
       'font-size': 9 + (2 * this.scale)

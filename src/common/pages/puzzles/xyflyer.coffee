@@ -62,10 +62,18 @@ soma.chunks
                                 alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
-            for object in ['island', 'plane']
+            # for object in ['island', 'plane']
+            #     @objects.push(
+            #         name: object
+            #         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
+            #     )
+            for object in [
+                ['island', 'https://lh3.googleusercontent.com/28Ap_rgSR9EYYFbwUD0PnX0wOmAK3Zjbapla6MA3MisD1_uZx4TkCM9Lupq4qSlIN3iDcuIBgks'], 
+                ['plane', 'https://lh3.googleusercontent.com/u54KqbKsnGjvXiTmzLrqaiL2O_u9DmcOGlFYmfpBg-3-EJFw0N06KVmfDNLtz56BsMXWqhyNZUg']
+            ]
                 @objects.push(
-                    name: object
-                    image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
+                    name: object[0]
+                    image: @loadImage(object[1])
                 )
             
             if @levelId == 'editor'
@@ -76,6 +84,9 @@ soma.chunks
         build: ->
             @setTitle("XYFlyer - The Puzzle School")
             
+            worlds = require('./lib/xyflyer_objects/levels').WORLDS
+            world.index = index + 1 for world, index in worlds
+            
             @html = wings.renderTemplate(@template,     
                 puzzleData: JSON.stringify(@puzzleData)
                 objects: @objects
@@ -84,7 +95,7 @@ soma.chunks
                 classLevel: @classLevelId or 0
                 instructions: @levelInfo?.instructions
                 editor: @levelId == 'editor'
-                stages: require('./lib/xyflyer_objects/levels').STAGES
+                worlds: worlds
             )
             
         
@@ -93,7 +104,7 @@ soma.views
         selector: '#content .xyflyer'
         create: ->
             xyflyer = require('./lib/xyflyer')
-            @stages = require('./lib/xyflyer_objects/levels').STAGES
+            @worlds = require('./lib/xyflyer_objects/levels').WORLDS
             
             @dynamicContent = @el.find('.dynamic_content')
             @$('.menu').bind 'click', => @showLevelSelector()
@@ -117,6 +128,8 @@ soma.views
         
             @initEncode()
             @initLevelSelector()  
+            @initWorlds()
+            @selectWorld(0)
             
             if isNaN(parseInt(@levelId))
                 if (instructions = window.location.hash.replace(/\s/g, ''))?.length
@@ -158,6 +171,19 @@ soma.views
         
             @initLevel()
             
+        
+        initWorlds: ->
+            @$('.world_link').bind 'click', (e) =>
+                e.stop()
+                worldLink = $(e.currentTarget)
+                @selectWorld(parseInt(worldLink.data('world')) - 1)
+                
+        currentWorld: ->
+            for world in @worlds
+                for stage in world.stages
+                    for level in stage.levels
+                        return world.index if level.id == @level.id
+            
         load: ->
             @dynamicContent.html(@originalHTML)
             $('svg').remove()
@@ -173,10 +199,10 @@ soma.views
                 registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 
             @$('.menu').bind 'click', => @showLevelSelector()
-                
+                            
             @loadLevel()  
                 
-            
+                
         loadLevel: ->
             if @level?.fragments
                 for fragment in @level.fragments
@@ -189,6 +215,8 @@ soma.views
         
             for ring in @level?.rings or []
                 @helper.addRing(ring.x, ring.y)
+            
+            @selectWorld(@currentWorld())
                             
                 
         centerAndShow: (element, board) ->
@@ -214,10 +242,17 @@ soma.views
                 
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
             
+        selectWorld: (index) ->
+            @$('.world_link').css(backgroundColor: 'red')
+            @$('.world').hide()
+            $(@$('.world_link')[index]).css(backgroundColor: 'green')
+            $(@$('.world')[index]).show()
+            
         findLevel: (levelId) ->
-            for stage in @stages
-                level = (level for level in stage.levels when level.id == levelId)[0]
-                return JSON.parse(JSON.stringify(level)) if level
+            for world in @worlds
+                for stage in world.stages
+                    level = (level for level in stage.levels when level.id == levelId)[0]
+                    return JSON.parse(JSON.stringify(level)) if level
                 
         initLevel: ->
             @dynamicContent.html(@originalHTML)
@@ -245,10 +280,11 @@ soma.views
         
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
+            @levelSelector.bind 'click', (e) => e.stop()
 
             previousCompleted = true
             previousStageProficient = true
-            for stageElement in @levelSelector.find('.levels')
+            for stageElement in @levelSelector.find('.stage')
                 do (stageElement) =>
                     stageCompleted = 0
                     for levelElement, index in $(stageElement).find('.level')

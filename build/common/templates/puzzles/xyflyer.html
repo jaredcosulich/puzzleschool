@@ -20,6 +20,7 @@
                     <p><a class='blue_button add_equation'>Add Equation</a> --- <a class='red_button remove_equation'>Remove</a></p>
                     <p><a class='blue_button add_fragment'>Add Equation Fragment</a> --- <a class='red_button remove_fragment red'>Remove</a></p>
                     <p><a class='blue_button add_ring'>Add Ring</a> --- <a class='red_button remove_ring'>Remove</a></p>
+                    <p><a class='blue_button change_background'>Change Background</a> --- <a class='red_button reset_editor'>Reset Editor</a></p>
                 </div>
                 <div class='instructions'>    
                     <h4>Editor Instructions</h4>
@@ -76,17 +77,22 @@
     <div class='level_selector'>
         <h2 class='success'>Nice Work. Level Complete!</h2>
         <h3>Select The Next Level</h3>
-        {:stages}
-        <div class='levels'>
-            <h4>{name}</h4>
-            <br/>
-            {:levels}
-            <a class='level' id='level_{id}' data-id={id}>
-                <img src='/assets/images/puzzles/xyflyer/level.jpg' />
-            </a>
-            {/levels}
+        {:worlds}<div class='world_link' data-world={index}>World #{index}</div>{/worlds}
+        {:worlds}
+        <div class='world'>
+            {:stages}
+            <div class='stage'>
+                <h4>{name}</h4>
+                <br/>
+                {:levels}
+                <a class='level' id='level_{id}' data-id={id}>
+                    <img src='/assets/images/puzzles/xyflyer/level.jpg' />
+                </a>
+                {/levels}
+            </div>
+            {/stages}
         </div>
-        {/stages}
+        {/worlds}
     </div>
     
     <div class='objects'>

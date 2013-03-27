@@ -93,8 +93,8 @@ class board.Board extends xyflyerObject.Object
         @island.push(@addImage(island, x, y))
         text = @islandText()
         @islandLabel = @paper.text(
-            x + (width/2) - (15*@scale)
-            y + (height/2) - (15*@scale)
+            x + (78*@scale)
+            y + (153*@scale)
             text
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
 

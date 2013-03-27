@@ -12,7 +12,7 @@ body {
     height: @height;
     width: @width;
     margin-left: -12px;
-    background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
+    background-image: url('/assets/images/puzzles/xyflyer/skygradient1.png');    
     position: relative;
     overflow: hidden;
 
@@ -400,14 +400,30 @@ body {
         h2, h3, h4 {
             text-align: center;
         }
-        .levels {
-            background-color: #eee;
-            padding-top: 12px;
-            margin: 12px auto 0 auto;
-            width: 498px;
-            .level {
-                line-height: 36px;
-                padding-left: 15px;
+        
+        .world_link {
+            float: left;
+            width: 72px;
+            height: 72px;
+            line-height: 72px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            margin: 15px 0 15px 30px;
+            background-color: red;
+        }
+        
+        .world {
+            clear: left;
+            .stage {
+                background-color: #eee;
+                padding-top: 12px;
+                margin: 12px auto 0 auto;
+                width: 498px;
+                .level {
+                    line-height: 36px;
+                    padding-left: 15px;
+                }
             }
         }
     } 

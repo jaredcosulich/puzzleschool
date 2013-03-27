@@ -5,7 +5,11 @@ body {
   height: 640px;
   width: 960px;
   margin-left: -12px;
-  background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');
+  /*    background-image: url('https://photos-1.dropbox.com/t/0/AADo7xdbJ5m60HnBujS81qMxYLvldTm0_D71_9mY7s6L0w/12/10329958/png/32x32/3/_/1/2/jared_edit_xyflyer_bgd_sketch.png/5IUp683FDXd3cMfj8RDQLgxtbBsy7YvfV1HAelWfvNA?size=1280x960');*/
+
+  background-image: url('https://lh4.googleusercontent.com/sk9In7KSmSYjqPsWyuxXM6mSRUWGR5Z6om-n-oKVWf-KN32BqRjdUGemZoWqhKCgU241bcqEjYI');
+  /*    background-image: url('/assets/images/puzzles/xyflyer/skygradient1.jpg');    */
+
   position: relative;
   overflow: hidden;
 }
@@ -412,13 +416,27 @@ body {
 .xyflyer .level_selector h4 {
   text-align: center;
 }
-.xyflyer .level_selector .levels {
+.xyflyer .level_selector .world_link {
+  float: left;
+  width: 72px;
+  height: 72px;
+  line-height: 72px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  margin: 15px 0 15px 30px;
+  background-color: red;
+}
+.xyflyer .level_selector .world {
+  clear: left;
+}
+.xyflyer .level_selector .world .stage {
   background-color: #eee;
   padding-top: 12px;
   margin: 12px auto 0 auto;
   width: 498px;
 }
-.xyflyer .level_selector .levels .level {
+.xyflyer .level_selector .world .stage .level {
   line-height: 36px;
   padding-left: 15px;
 }
