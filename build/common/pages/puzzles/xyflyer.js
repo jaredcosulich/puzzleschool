@@ -221,16 +221,19 @@ soma.views({
       });
     },
     currentWorld: function() {
-      var index, level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-      _ref = this.worlds;
-      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-        world = _ref[index];
-        _ref1 = world.stages;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          stage = _ref1[_j];
-          _ref2 = stage.levels;
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            level = _ref2[_k];
+      var index, level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+      if (!((_ref = this.level) != null ? _ref.id : void 0)) {
+        return 0;
+      }
+      _ref1 = this.worlds;
+      for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+        world = _ref1[index];
+        _ref2 = world.stages;
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          stage = _ref2[_j];
+          _ref3 = stage.levels;
+          for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+            level = _ref3[_k];
             if (level.id === this.level.id) {
               return index;
             }
@@ -473,11 +476,6 @@ soma.views({
       if (parseInt(this.levelSelector.css('opacity')) === 1) {
         this.hideLevelSelector();
         return;
-      }
-      if (success) {
-        this.levelSelector.addClass('success');
-      } else {
-        this.levelSelector.removeClass('success');
       }
       this.levelSelector.css({
         opacity: 0,

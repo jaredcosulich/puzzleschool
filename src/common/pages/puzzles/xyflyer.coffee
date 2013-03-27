@@ -176,6 +176,7 @@ soma.views
                 @selectWorld(parseInt(worldLink.data('world')) - 1)
                 
         currentWorld: ->
+            return 0 if not @level?.id
             for world, index in @worlds
                 for stage in world.stages
                     for level in stage.levels
@@ -350,11 +351,11 @@ soma.views
                 @hideLevelSelector()
                 return
 
-            if success
-                @levelSelector.addClass('success') 
-            else
-                @levelSelector.removeClass('success') 
-
+            # if success
+            #     @levelSelector.addClass('success') 
+            # else
+            #     @levelSelector.removeClass('success') 
+            # 
             @levelSelector.css
                 opacity: 0
                 top: 60

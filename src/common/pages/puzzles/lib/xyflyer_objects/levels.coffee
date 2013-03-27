@@ -1307,7 +1307,7 @@ levels.WORLDS = [
                             {x: 15, y: -20}
                             {x: 20, y: -25}
                         ]
-                        islandCoordinates: {x: 0, y: -5}
+                        islandCoordinates: {x: 5, y: -10}
                         fragments: [
                             '+a', '-b'
                         ]
@@ -1334,8 +1334,8 @@ levels.WORLDS = [
                             yMin: -60
                             yMax: 40
                         rings: [
-                            {x: 5, y: -13}
-                            {x: 10, y: -38}
+                            {x: 4, y: -8}
+                            {x: 8, y: -28}
                             {x: 12, y: -48}
                         ]
                         islandCoordinates: {x: 0, y: 12}
@@ -1346,7 +1346,76 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: -5
-                    }    
+                    }
+                    {
+                        id: 1364407089585
+                        equations:
+                            '(1/b)*x-5':
+                                start: 'x-5'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                ]
+                        rings: [
+                            {x: -6, y: -3}
+                            {x: 6, y: -7}
+                            {x: 18, y: -11}
+                        ]
+                        grid:
+                            xMin: -25
+                            xMax: 25
+                            yMin: -25
+                            yMax: 25
+                        islandCoordinates: {x: -18, y: 1}
+                        fragments: ['a*', '(1/b)*']
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -3
+                    }
+                    {
+                        id: 1364407581877
+                        equations:
+                            'a*x+3':
+                                start: 'x+3'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                ]
+                        rings: [
+                            {x: -2, y: -5}
+                            {x: 2, y: 11}
+                            {x: 6, y: 27}
+                        ]
+                        grid:
+                            xMin: -40
+                            xMax: 40
+                            yMin: -40
+                            yMax: 40
+                        islandCoordinates: {x: -6, y: -21}
+                        fragments: ['a*', '(1/b)*']
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                    }
+                        
                     {
                         id: 1363229806832
                         equations: 
@@ -1394,8 +1463,8 @@ levels.WORLDS = [
                         equations: 
                             'a*x+c': {start: 'x'}
                         grid:
-                            xMin: -20
-                            xMax: 20
+                            xMin: -50
+                            xMax: 50
                             yMin: -50
                             yMax: 50
                         rings: [
@@ -1436,16 +1505,16 @@ levels.WORLDS = [
                         equations: 
                             'x-d': {start: 'x'}
                         grid:
-                            xMin: -20
-                            xMax: 20
-                            yMin: -20
-                            yMax: 20
+                            xMin: -40
+                            xMax: 40
+                            yMin: -40
+                            yMax: 40
                         rings: [
                             {x: -5, y: -10}
                             {x: 5, y: 0}
-                            {x: 10, y: 5}
+                            {x: 15, y: 10}
                         ]
-                        islandCoordinates: {x: -10, y: -15}
+                        islandCoordinates: {x: -15, y: -20}
                         fragments: [
                             'a*', '(1/b)', '+c', '-d'
                         ]
@@ -1518,6 +1587,100 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: 5
+                    }
+                    {
+                        id: 1364411932551
+                        equations:
+                            '(1/b)*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                        rings: [
+                            {x: -4, y: 7}
+                            {x: 8, y: 10}
+                            {x: 20, y: 13}
+                        ]
+                        grid:
+                            xMin: -30
+                            xMax: 30
+                            yMin: -30
+                            yMax: 30
+                        islandCoordinates: {x: -16, y: 4}
+                        fragments: ['a*', '(1/b)*', '+c', '-d']
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            c:
+                                start: 1
+                                min: 0
+                                max: 10
+                                increment: 1
+                                solution: 8
+                            d:
+                                start: 1
+                                min: 0
+                                max: 10
+                                increment: 1
+                                solution: null
+                    }
+                    {
+                        id: 1364413059940
+                        equations:
+                            'a*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                        rings: [
+                            {x: 12, y: 18}
+                            {x: 16, y: -6}
+                            {x: 20, y: -30}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: 8, y: 42}
+                        fragments: ['a*', '(1/b)*', '+c', '-d']
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -6
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            c:
+                                start: 0
+                                min: 0
+                                max: 100
+                                increment: 10
+                                solution: 90
+                            d:
+                                start: 0
+                                min: 0
+                                max: 100
+                                increment: 10
+                                solution: null
                     }
                 ]
             }

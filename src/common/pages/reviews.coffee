@@ -15,6 +15,7 @@
 # Save Our Dumb Planet - http://www.mangahigh.com/en_us/games/saveourdumbplanet
 # Origami Game - http://t.co/9OnASCWt
 # DrawQuest - ipad game
+# Universe and More Graphing - http://www.theuniverseandmore.com/SUGC/
 
 soma = require('soma')
 wings = require('wings')
