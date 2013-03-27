@@ -62,18 +62,10 @@ soma.chunks
                                 alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
-            # for object in ['island', 'plane']
-            #     @objects.push(
-            #         name: object
-            #         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
-            #     )
-            for object in [
-                ['island', 'https://lh3.googleusercontent.com/28Ap_rgSR9EYYFbwUD0PnX0wOmAK3Zjbapla6MA3MisD1_uZx4TkCM9Lupq4qSlIN3iDcuIBgks'], 
-                ['plane', 'https://lh3.googleusercontent.com/u54KqbKsnGjvXiTmzLrqaiL2O_u9DmcOGlFYmfpBg-3-EJFw0N06KVmfDNLtz56BsMXWqhyNZUg']
-            ]
+            for object in ['island', 'plane']
                 @objects.push(
-                    name: object[0]
-                    image: @loadImage(object[1])
+                    name: object
+                    image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
                 )
             
             if @levelId == 'editor'

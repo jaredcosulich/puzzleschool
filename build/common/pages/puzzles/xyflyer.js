@@ -94,12 +94,12 @@ soma.chunks({
         }
       }
       this.objects = [];
-      _ref = [['island', 'https://lh3.googleusercontent.com/28Ap_rgSR9EYYFbwUD0PnX0wOmAK3Zjbapla6MA3MisD1_uZx4TkCM9Lupq4qSlIN3iDcuIBgks'], ['plane', 'https://lh3.googleusercontent.com/u54KqbKsnGjvXiTmzLrqaiL2O_u9DmcOGlFYmfpBg-3-EJFw0N06KVmfDNLtz56BsMXWqhyNZUg']];
+      _ref = ['island', 'plane'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
         this.objects.push({
-          name: object[0],
-          image: this.loadImage(object[1])
+          name: object,
+          image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + ".png")
         });
       }
       if (this.levelId === 'editor') {
