@@ -400,7 +400,7 @@ soma.views
                     success: => callback() if callback
             else 
                 window.postRegistration.push((callback) => @saveProgress(callback))
-                if Object.keys(@puzzleProgress).length >= 3
+                if Object.keys(@puzzleProgress).length % 5 == 4
                     @showRegistrationFlag()
 
 

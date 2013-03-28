@@ -547,7 +547,7 @@ soma.views({
         window.postRegistration.push(function(callback) {
           return _this.saveProgress(callback);
         });
-        if (Object.keys(this.puzzleProgress).length >= 3) {
+        if (Object.keys(this.puzzleProgress).length % 5 === 4) {
           return this.showRegistrationFlag();
         }
       }

@@ -1823,6 +1823,100 @@ levels.WORLDS = [
                                 increment: 10
                                 solution: null
                     }
+                    {
+                        id: 1364507658841
+                        equations:
+                            'a*x-d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '-d', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '-d']
+                        rings: [
+                            {x: 19, y: -5}
+                            {x: 22, y: 10}
+                            {x: 25, y: 25}
+                        ]
+                        grid:
+                            xMin: -40
+                            xMax: 40
+                            yMin: -40
+                            yMax: 40
+                        islandCoordinates: {x: 16, y: -20}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 5
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            c:
+                                start: 0
+                                min: 0
+                                max: 100
+                                increment: 10
+                                solution: null
+                            d:
+                                start: 0
+                                min: 0
+                                max: 100
+                                increment: 10
+                                solution: 100
+                    }
+                    {
+                        id: 1364509365255
+                        equations:
+                            'a*x-d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '-d', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '-d']
+                        rings: [
+                            {x: -35, y: 10}
+                            {x: -31, y: -14}
+                            {x: -27, y: -38}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: -39, y: 34}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -6
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            c:
+                                start: 0
+                                min: 0
+                                max: 1000
+                                increment: 100
+                                solution: null
+                            d:
+                                start: 0
+                                min: 0
+                                max: 1000
+                                increment: 100
+                                solution: 200
+                    }
                 ]
             }
         ]
