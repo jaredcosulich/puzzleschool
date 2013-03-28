@@ -9,14 +9,14 @@ body {
 @width: 960px;
 
 .xyflyer {
-    height: @height;
-    width: @width;
     margin-left: -12px;
-    background-image: url('https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/skygradient1.png');    
     position: relative;
     overflow: hidden;
 
     .dynamic_content {
+        background-image: url('https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/background1.png');    
+        height: @height;
+        width: @width;
         &.dragging {
             .no_select();   
         

@@ -2,12 +2,14 @@ body {
   background-color: #949494;
 }
 .xyflyer {
-  height: 640px;
-  width: 960px;
   margin-left: -12px;
-  background-image: url('https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/skygradient1.png');
   position: relative;
   overflow: hidden;
+}
+.xyflyer .dynamic_content {
+  background-image: url('https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/skygradient1.png');
+  height: 640px;
+  width: 960px;
 }
 .xyflyer .dynamic_content.dragging {
   -webkit-touch-callout: none;

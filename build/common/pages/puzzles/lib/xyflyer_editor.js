@@ -12,6 +12,7 @@ xyflyerEditor.EditorHelper = (function() {
   function EditorHelper(_arg) {
     this.el = _arg.el, this.equationArea = _arg.equationArea, this.boardElement = _arg.boardElement, this.objects = _arg.objects, this.encode = _arg.encode, this.islandCoordinates = _arg.islandCoordinates, this.grid = _arg.grid, this.variables = _arg.variables;
     this.rings = [];
+    this.assets = {};
     this.parser = require('./parser');
     this.init();
   }
@@ -250,7 +251,16 @@ xyflyerEditor.EditorHelper = (function() {
       return _this.boardElement.unbind('click.showxy');
     });
     this.$('.editor .change_background').bind('click', function() {
-      return _this.showImageDialog("Select The Background Image", 'skygradient', 3);
+      return _this.showImageDialog("Select The Background Image", 'skygradient', 3, function(index) {
+        _this.setAsset('background', index);
+        return _this.handleModification();
+      });
+    });
+    this.$('.editor .change_island').bind('click', function() {
+      return _this.showImageDialog("Select The Island Image", 'island', 2, function(index) {
+        _this.setAsset('island', index);
+        return _this.handleModification();
+      });
     });
     this.$('.editor .reset_editor').bind('click', function() {
       if (confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')) {
@@ -591,6 +601,18 @@ xyflyerEditor.EditorHelper = (function() {
     });
   };
 
+  EditorHelper.prototype.setAsset = function(type, index) {
+    var base;
+    this.assets[type] = index;
+    base = 'https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/NAMEINDEX.png';
+    switch (type) {
+      case 'background':
+        return this.el.css({
+          backgroundImage: "url(" + (base.replace(/NAME/, 'skygradient').replace(/INDEX/, index)) + ")"
+        });
+    }
+  };
+
   EditorHelper.prototype.constructSolutionComponents = function(equation) {
     var da, dae, dropArea, solutionComponents, _i, _len, _ref;
     solutionComponents = [];
@@ -620,7 +642,7 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.getInstructions = function() {
-    var component, ec, equation, equationInstructions, info, instructions, ring, sc, solutionComponents, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+    var asset, component, ec, equation, equationInstructions, index, info, instructions, ring, sc, solutionComponents, variable, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
     instructions = {
       equations: {},
       rings: []
@@ -692,6 +714,16 @@ xyflyerEditor.EditorHelper = (function() {
         solution: (info.get ? info.get() : null)
       };
       this.coffeeInstructions += "\n        " + variable + ":\n            start: " + info.start + "\n            min: " + info.min + "\n            max: " + info.max + "\n            increment: " + info.increment + "\n            solution: " + instructions.variables[variable].solution;
+    }
+    _ref4 = this.assets;
+    for (asset in _ref4) {
+      index = _ref4[asset];
+      if (!instructions.assets) {
+        instructions.assets = {};
+        this.coffeeInstructions += '\n\tassets: ';
+      }
+      instructions.assets[asset] = index;
+      this.coffeeInstructions += "\n\t\t" + asset + ": " + index;
     }
     this.coffeeInstructions += '\n}';
     return this.encode(JSON.stringify(instructions));

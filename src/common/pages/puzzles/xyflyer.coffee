@@ -443,6 +443,12 @@ soma.views
                 'solutionComponents': '~H'
                 'after': '~I'
                 'solution': '~J'
+                'assets': '~K'
+                'background': '~L'
+                'foreground': '~M'
+                'island': '~N'
+                'person': '~O'
+                'plane': '~P'
                 '"verified"': '~V'
                 
             @extraEncodeMap = 

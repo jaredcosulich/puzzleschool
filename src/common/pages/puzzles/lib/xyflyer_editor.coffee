@@ -5,6 +5,7 @@ class xyflyerEditor.EditorHelper
 
     constructor: ({@el, @equationArea, @boardElement, @objects, @encode, @islandCoordinates, @grid, @variables}) ->
         @rings = []
+        @assets = {}
         @parser = require('./parser')
         @init()
         
@@ -165,7 +166,15 @@ class xyflyerEditor.EditorHelper
             @boardElement.unbind('click.showxy')
         
         @$('.editor .change_background').bind 'click', => 
-            @showImageDialog("Select The Background Image", 'skygradient', 3)
+            @showImageDialog "Select The Background Image", 'background', 3, (index) =>
+                @setAsset('background', index)
+                @handleModification()
+
+        @$('.editor .change_island').bind 'click', => 
+            @showImageDialog "Select The Island Image", 'island', 2, (index) =>
+                @setAsset('island', index)
+                @handleModification()
+
         
         @$('.editor .reset_editor').bind 'click', => 
             location.href = location.pathname if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
@@ -372,7 +381,16 @@ class xyflyerEditor.EditorHelper
             @handleModification()
             
         dialog.find('a').bind 'click', => closeDialog()
-    
+        
+    setAsset: (type, index) ->
+        @assets[type] = index
+        src = 'https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{type}#{index}.png'
+        switch type
+            when 'background'
+                @el.css(backgroundImage: "url(#{src})")
+            when 'island'
+                @objects.find('.island img').src(src)
+            
     constructSolutionComponents: (equation) ->
         solutionComponents = []
         for dae in equation.el.find('div')
@@ -451,6 +469,14 @@ class xyflyerEditor.EditorHelper
                         increment: #{info.increment}
                         solution: #{instructions.variables[variable].solution}
             """
+            
+        for asset, index of @assets 
+            if not instructions.assets
+                instructions.assets = {}
+                @coffeeInstructions += '\n\tassets: '   
+            
+            instructions.assets[asset] = index
+            @coffeeInstructions += "\n\t\t#{asset}: #{index}"
         
         @coffeeInstructions += '\n}'
         return @encode(JSON.stringify(instructions))
