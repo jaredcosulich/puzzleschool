@@ -387,9 +387,9 @@ class xyflyerEditor.EditorHelper
         switch type
             when 'background'
                 @el.css(backgroundImage: "url(#{src})")
-            when 'island'
-                @objects.find('.island img').remove()
-                @objects.find('.island').html("<img src='#{src}'/>")
+            else
+                @objects.find(".#{type} img").remove()
+                @objects.find(".#{type}").html("<img src='#{src}'/>")
                 @initBoard({})
         @handleModification()
                 

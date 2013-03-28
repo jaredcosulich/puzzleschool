@@ -93,6 +93,8 @@ class plane.Plane extends xyflyerObject.Object
             ), 50)
             return 
         
+        console.log(@image.attr('src'))
+        
         @falling = false
         @cancelFlight = true
         @startTime = null

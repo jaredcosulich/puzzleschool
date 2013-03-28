@@ -619,9 +619,9 @@ xyflyerEditor.EditorHelper = (function() {
           backgroundImage: "url(" + src + ")"
         });
         break;
-      case 'island':
-        this.objects.find('.island img').remove();
-        this.objects.find('.island').html("<img src='" + src + "'/>");
+      default:
+        this.objects.find("." + type + " img").remove();
+        this.objects.find("." + type).html("<img src='" + src + "'/>");
         this.initBoard({});
     }
     return this.handleModification();

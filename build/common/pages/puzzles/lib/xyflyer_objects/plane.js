@@ -145,6 +145,7 @@ plane.Plane = (function(_super) {
       }), 50);
       return;
     }
+    console.log(this.image.attr('src'));
     this.falling = false;
     this.cancelFlight = true;
     this.startTime = null;
