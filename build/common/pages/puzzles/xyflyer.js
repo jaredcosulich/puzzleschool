@@ -99,7 +99,7 @@ soma.chunks({
         object = _ref[_i];
         this.objects.push({
           name: object,
-          image: this.loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + object + ".png")
+          image: this.loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + object + "1.png")
         });
       }
       if (this.levelId === 'editor') {

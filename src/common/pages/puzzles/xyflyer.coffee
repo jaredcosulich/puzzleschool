@@ -70,7 +70,7 @@ soma.chunks
             for object in ['island', 'plane']
                 @objects.push(
                     name: object
-                    image: @loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{object}.png")
+                    image: @loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{object}1.png")
                 )
             
             if @levelId == 'editor'

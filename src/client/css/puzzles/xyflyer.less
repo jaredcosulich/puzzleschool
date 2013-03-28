@@ -304,22 +304,6 @@ body {
             }
         }
     
-        .blue_button, .red_button {
-            border: 1px solid #ccc;
-            padding: 3px 6px;
-            .rounded(6px);
-            color: white;
-            .box-shadow(2px)
-        }
-    
-        .blue_button {
-            background-color: @blue;
-        }
-    
-        .red_button {
-            background-color: @red;
-        }
-    
         .dialog {
             background-color: white;
             padding: 30px;
@@ -345,11 +329,11 @@ body {
                 font-size: @h4size;
             }
         }
-    
-        .editor, .instructions {
-            margin-top: 18px;
+        
+        .instructions {
             padding: 6px;
             overflow: hidden;
+            margin-top: 60px;
             p {
                 font-size: @smallsize;
             }
@@ -359,9 +343,6 @@ body {
             }
         }
 
-        .editor {
-            margin-top: 60px;
-        }
     }
 
     .complete, .intro_message, .exit_message {
@@ -410,9 +391,9 @@ body {
             text-align: center;
             cursor: pointer;
             margin: 15px 0 15px 30px;
-            background-color: red;
+            background-color: @darkred;
             &.selected {
-                background-color: green;
+                background-color: @darkgreen;
             }
         }
         
@@ -435,10 +416,61 @@ body {
         }
     } 
     
+    .blue_button, .red_button {
+        border: 1px solid #ccc;
+        padding: 3px 6px;
+        .rounded(6px);
+        color: white;
+        .box-shadow(2px)
+    }
+
+    .blue_button {
+        background-color: @blue;
+    }
+
+    .red_button {
+        background-color: @red;
+    }
+
+    
+    
     .objects {
         position: absolute;
         top: -10000px;
         left: -10000px;
     }
        
+    .editor {
+        position: absolute;
+        top: 390px;
+        left: 600px;
+        background-color: white;
+        padding: 15px 30px;
+        .rounded(6px);
+        border: 1px solid #ccc;
+        z-index: 98;
+        cursor: move;
+        h3 {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        p {
+            font-size: @smallsize;
+        }
+    }
+    
+    .dialog {
+        .image {
+            width: 160px;
+            height: 120px;
+            overflow: hidden;
+            line-height: 120px;
+            text-align: center;
+            img {
+                cursor: pointer;
+                vertical-align: middle;
+            }
+        }
+    }
+  
 }

@@ -17,7 +17,8 @@ xyflyerEditor.EditorHelper = (function() {
   }
 
   EditorHelper.prototype.init = function() {
-    var _this = this;
+    var editor,
+      _this = this;
     this.initBoard({});
     this.equations = new xyflyer.Equations({
       el: this.equationArea,
@@ -31,7 +32,24 @@ xyflyerEditor.EditorHelper = (function() {
     });
     this.variables || (this.variables = {});
     this.initButtons();
-    return this.hideInstructions();
+    this.hideInstructions();
+    editor = this.$('.editor');
+    return this.$('.editor').bind('mousedown.move_editor', function(e) {
+      var startEditorX, startEditorY, startX, startY;
+      startX = e.clientX;
+      startY = e.clientY;
+      startEditorX = parseInt(editor.css('left'));
+      startEditorY = parseInt(editor.css('top'));
+      $(document.body).bind('mousemove.move_editor', function(e) {
+        return editor.css({
+          left: startEditorX - (startX - e.clientX),
+          top: startEditorY - (startY - e.clientY)
+        });
+      });
+      return $(document.body).one('mouseup.move_editor', function() {
+        return $(document.body).unbind('mousemove.move_editor');
+      });
+    });
   };
 
   EditorHelper.prototype.initBoard = function(_arg) {
@@ -232,7 +250,7 @@ xyflyerEditor.EditorHelper = (function() {
       return _this.boardElement.unbind('click.showxy');
     });
     this.$('.editor .change_background').bind('click', function() {
-      return alert('Background editing should be ready by May 1st.');
+      return _this.showImageDialog("Select The Background Image", 'skygradient', 3);
     });
     this.$('.editor .reset_editor').bind('click', function() {
       if (confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')) {
@@ -376,8 +394,6 @@ xyflyerEditor.EditorHelper = (function() {
     return this.handleModification();
   };
 
-  EditorHelper.prototype.displayVariables = function() {};
-
   EditorHelper.prototype.addRing = function(x, y) {
     if (isNaN(parseInt(x)) || isNaN(parseInt(y))) {
       alert('Those coordinates are not valid.');
@@ -436,22 +452,12 @@ xyflyerEditor.EditorHelper = (function() {
     }
   };
 
-  EditorHelper.prototype.showDialog = function(_arg) {
-    var callback, closeDialog, dialog, fieldInfo, fields, lastRow, text, _i, _len,
+  EditorHelper.prototype.createDialog = function(html, callback) {
+    var dialog,
       _this = this;
-    text = _arg.text, fields = _arg.fields, callback = _arg.callback;
     dialog = $(document.createElement('DIV'));
     dialog.addClass('dialog');
-    dialog.html("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<button class='button'>Save</button> &nbsp; <a class='blue_button'>Cancel</a>");
-    for (_i = 0, _len = fields.length; _i < _len; _i++) {
-      fieldInfo = fields[_i];
-      if (!fieldInfo.length) {
-        dialog.find('tbody').append('<tr></tr>');
-        continue;
-      }
-      lastRow = dialog.find('tr:last-child');
-      lastRow.append("<td>" + fieldInfo[1] + ":</td><td><input name='" + fieldInfo[0] + "' class='" + (fieldInfo[2] || 'number') + "'/></td>");
-    }
+    dialog.html(html);
     this.el.append(dialog);
     dialog.css({
       opacity: 0,
@@ -487,18 +493,89 @@ xyflyerEditor.EditorHelper = (function() {
         return body.unbind('mousemove.dialog');
       });
     });
-    closeDialog = function() {
-      return dialog.animate({
-        opacity: 0,
-        duration: 250,
-        complete: function() {
-          return dialog.remove();
+    dialog.find('.cancel_button').bind('click', function() {
+      return _this.closeDialog(dialog);
+    });
+    return dialog;
+  };
+
+  EditorHelper.prototype.closeDialog = function(dialog) {
+    return dialog.animate({
+      opacity: 0,
+      duration: 250,
+      complete: function() {
+        return dialog.remove();
+      }
+    });
+  };
+
+  EditorHelper.prototype.showImageDialog = function(text, name, count, callback) {
+    var dialog, html, image, index, resize, _i, _j, _len, _ref,
+      _this = this;
+    html = "<h3>" + text + "</h3><table><tbody><tr>";
+    for (index = _i = 1; 1 <= count ? _i <= count : _i >= count; index = 1 <= count ? ++_i : --_i) {
+      html += "<td><div class='image'><img src='https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + name + index + ".png' style='opacity: 0'/></div></td>";
+    }
+    html += "</tr></tbody></table>\n<a class='blue_button cancel_button'>Cancel</a>";
+    dialog = this.createDialog(html);
+    _ref = dialog.find('img');
+    for (_j = 0, _len = _ref.length; _j < _len; _j++) {
+      image = _ref[_j];
+      resize = function(image) {
+        var height, ratio, width;
+        height = image.height();
+        width = image.width();
+        if (!height || !width) {
+          setTimeout((function() {
+            return resize(image);
+          }), 100);
+          return;
         }
-      });
-    };
+        if (height > 120) {
+          ratio = 120 / height;
+          image.height(120);
+          width = width * ratio;
+          image.width(width);
+        }
+        if (width > 160) {
+          ratio = 160 / width;
+          image.width(160);
+          image.height(image.height() * ratio);
+        }
+        return image.animate({
+          opacity: 1,
+          duration: 250
+        });
+      };
+      resize($(image));
+    }
+    return dialog.find('img').bind('click', function(e) {
+      var srcComponents;
+      e.stop();
+      $(document.body).unbind('dialog.move');
+      _this.closeDialog(dialog);
+      srcComponents = e.currentTarget.src.split('/');
+      return callback(srcComponents[srcComponents.length - 1].replace(/[^1-9]/g, ''));
+    });
+  };
+
+  EditorHelper.prototype.showDialog = function(_arg) {
+    var callback, dialog, fieldInfo, fields, lastRow, text, _i, _len,
+      _this = this;
+    text = _arg.text, fields = _arg.fields, callback = _arg.callback;
+    dialog = this.createDialog("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<button class='button'>Save</button> &nbsp; <a class='blue_button cancel_button'>Cancel</a>");
+    for (_i = 0, _len = fields.length; _i < _len; _i++) {
+      fieldInfo = fields[_i];
+      if (!fieldInfo.length) {
+        dialog.find('tbody').append('<tr></tr>');
+        continue;
+      }
+      lastRow = dialog.find('tr:last-child');
+      lastRow.append("<td>" + fieldInfo[1] + ":</td><td><input name='" + fieldInfo[0] + "' class='" + (fieldInfo[2] || 'number') + "'/></td>");
+    }
     dialog.find('button').bind('click', function() {
       var data, i, input, _j, _len1, _ref;
-      closeDialog();
+      _this.closeDialog(dialog);
       data = {};
       _ref = dialog.find('input');
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {

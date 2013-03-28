@@ -15,13 +15,6 @@
             </div>
 
             {:editor}
-                <div class='editor'>
-                    <p><a class='blue_button edit_board'>Edit Board</a> --- <a class='blue_button edit_island'>Edit Island</a></p>
-                    <p><a class='blue_button add_equation'>Add Equation</a> --- <a class='red_button remove_equation'>Remove</a></p>
-                    <p><a class='blue_button add_fragment'>Add Equation Fragment</a> --- <a class='red_button remove_fragment red'>Remove</a></p>
-                    <p><a class='blue_button add_ring'>Add Ring</a> --- <a class='red_button remove_ring'>Remove</a></p>
-                    <p><a class='blue_button change_background'>Change Background</a> --- <a class='red_button reset_editor'>Reset Editor</a></p>
-                </div>
                 <div class='instructions'>    
                     <h4>Editor Instructions</h4>
                     <div class='invalid'>
@@ -59,6 +52,21 @@
         <div class='level_instructions'>
             {instructions}
         </div>
+
+        {:editor}
+        <div class='editor'>
+            <h3>Editor Controls</h3>
+            <div class='buttons'>
+                <p><a class='blue_button edit_board'>Edit Board Dimensions</a> --- <a class='blue_button edit_island'>Edit Island Position</a></p>
+                <p><a class='blue_button add_equation'>Add Equation</a> --- <a class='red_button remove_equation'>Remove</a></p>
+                <p><a class='blue_button add_fragment'>Add Equation Fragment</a> --- <a class='red_button remove_fragment red'>Remove</a></p>
+                <p><a class='blue_button add_ring'>Add Ring</a> --- <a class='red_button remove_ring'>Remove</a></p>
+                <p><a class='blue_button change_background'>Change Background</a> --- <a class='blue_button change_background'>Change Foreground</a></p>
+                <p><a class='blue_button change_background'>Change Island</a> --- <a class='blue_button change_background'>Change Person</a> --- <a class='blue_button change_background'>Change Plane</a></p>
+                <p><a class='red_button reset_editor'>Reset Editor</a></p>
+            </div>
+        </div>
+        {/editor}
     </div>
 
     <div class='intro_message'>
@@ -98,4 +106,5 @@
     <div class='objects'>
         {:objects}<div class='{name}'>{&image}</div>{/objects}
     </div>
+    
 </div>

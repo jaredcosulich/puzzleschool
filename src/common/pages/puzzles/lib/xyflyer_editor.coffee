@@ -21,7 +21,23 @@ class xyflyerEditor.EditorHelper
 
         @initButtons()
         @hideInstructions()
+        
+        editor = @$('.editor')
+        @$('.editor').bind 'mousedown.move_editor', (e) =>
+            startX = e.clientX
+            startY = e.clientY
+            startEditorX = parseInt(editor.css('left'))
+            startEditorY = parseInt(editor.css('top'))
             
+            $(document.body).bind 'mousemove.move_editor', (e) =>
+                editor.css
+                    left: startEditorX - (startX - e.clientX)
+                    top: startEditorY - (startY - e.clientY)
+                    
+            $(document.body).one 'mouseup.move_editor', =>
+                $(document.body).unbind('mousemove.move_editor')
+                
+                
     initBoard: ({grid, islandCoordinates}) ->
         if grid
             @grid = grid
@@ -64,7 +80,7 @@ class xyflyerEditor.EditorHelper
         if not @board?.island
             $.timeout 100, => @initButtons()
             return
-            
+
         @$('.editor .edit_board').bind 'click', =>
             @showDialog
                 text: 'What should the bounds of the board be?'
@@ -148,7 +164,8 @@ class xyflyerEditor.EditorHelper
                 alert('No ring detected. Please click \'Remove\' again if you want to remove a ring.')
             @boardElement.unbind('click.showxy')
         
-        @$('.editor .change_background').bind 'click', => alert('Background editing should be ready by May 1st.')
+        @$('.editor .change_background').bind 'click', => 
+            @showImageDialog("Select The Background Image", 'skygradient', 3)
         
         @$('.editor .reset_editor').bind 'click', => 
             location.href = location.pathname if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
@@ -227,10 +244,7 @@ class xyflyerEditor.EditorHelper
                         @handleModification()
                             
         @handleModification()
-                    
-    displayVariables: ->
-        
-    
+                        
     addRing: (x, y) -> 
         if (isNaN(parseInt(x)) or isNaN(parseInt(y)))
             alert('Those coordinates are not valid.')
@@ -259,21 +273,11 @@ class xyflyerEditor.EditorHelper
         
         @showInstructions() if allPassedThrough
 
-    showDialog: ({text, fields, callback}) ->
+    createDialog: (html, callback) ->
         dialog = $(document.createElement('DIV'))
         dialog.addClass('dialog')
-        dialog.html """
-            <h3>#{text}</h3>
-            <table><tbody><tr></tr></tbody></table>
-            <button class='button'>Save</button> &nbsp; <a class='blue_button'>Cancel</a>
-        """
-        for fieldInfo in fields
-            if not fieldInfo.length 
-                dialog.find('tbody').append('<tr></tr>')
-                continue
-
-            lastRow = dialog.find('tr:last-child')
-            lastRow.append("<td>#{fieldInfo[1]}:</td><td><input name='#{fieldInfo[0]}' class='#{fieldInfo[2] or 'number'}'/></td>")
+        dialog.html(html)
+        
         @el.append(dialog)
         dialog.css(opacity: 0, left: (@el.width()/2) - (dialog.width()/2))
         dialog.animate(opacity: 1, duration: 250, complete: -> dialog.find('input:first-child').focus())
@@ -290,15 +294,76 @@ class xyflyerEditor.EditorHelper
                 
             body.one 'mouseup', =>
                 body.unbind('mousemove.dialog')    
+                        
+        dialog.find('.cancel_button').bind 'click', => @closeDialog(dialog)
+                
+        return dialog
         
-        closeDialog = ->
-            dialog.animate
-                opacity: 0
-                duration: 250
-                complete: -> dialog.remove()
+    closeDialog: (dialog) ->
+        dialog.animate
+            opacity: 0
+            duration: 250
+            complete: -> dialog.remove()
+        
+    showImageDialog: (text, name, count, callback) ->
+        html = "<h3>#{text}</h3><table><tbody><tr>"
+        
+        for index in [1..count]
+            html += "<td><div class='image'><img src='https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{name}#{index}.png' style='opacity: 0'/></div></td>"
+        
+        html += """
+            </tr></tbody></table>
+            <a class='blue_button cancel_button'>Cancel</a>
+        """
+        dialog = @createDialog(html)
+        for image in dialog.find('img')
+            resize = (image) ->
+                height = image.height()
+                width = image.width()
+                if not height or not width
+                    setTimeout((-> resize(image)), 100)
+                    return
+                    
+                if height > 120
+                    ratio = 120/height
+                    image.height(120)
+                    width = width * ratio
+                    image.width(width)
+            
+                if width > 160
+                    ratio = 160/width
+                    image.width(160)
+                    image.height(image.height() * ratio)
+                
+                image.animate(opacity: 1, duration: 250)
+            resize($(image))
+                
+        
+        dialog.find('img').bind 'click', (e) =>
+            e.stop()
+            $(document.body).unbind('dialog.move')
+            @closeDialog(dialog)
+            srcComponents = e.currentTarget.src.split('/')
+            callback(srcComponents[srcComponents.length - 1].replace(/[^1-9]/g, ''))
+        
+
+    showDialog: ({text, fields, callback}) ->
+        dialog = @createDialog """
+            <h3>#{text}</h3>
+            <table><tbody><tr></tr></tbody></table>
+            <button class='button'>Save</button> &nbsp; <a class='blue_button cancel_button'>Cancel</a>
+        """
+        
+        for fieldInfo in fields
+            if not fieldInfo.length 
+                dialog.find('tbody').append('<tr></tr>')
+                continue
+
+            lastRow = dialog.find('tr:last-child')
+            lastRow.append("<td>#{fieldInfo[1]}:</td><td><input name='#{fieldInfo[0]}' class='#{fieldInfo[2] or 'number'}'/></td>")
         
         dialog.find('button').bind 'click', =>
-            closeDialog()
+            @closeDialog(dialog)
             data = {}
             for i in dialog.find('input')
                 input = $(i)
