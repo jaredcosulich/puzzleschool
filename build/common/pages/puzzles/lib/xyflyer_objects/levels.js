@@ -3112,6 +3112,189 @@ levels.WORLDS = [
         name: 'Multiple Lines',
         levels: [
           {
+            id: 1364510572027,
+            equations: {
+              'x-3': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-3',
+                    after: 'x'
+                  }
+                ]
+              },
+              '-x-3': {
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '-3',
+                    after: '-x'
+                  }
+                ]
+              }
+            },
+            fragments: ['-3', '-3'],
+            rings: [
+              {
+                x: -4,
+                y: 1
+              }, {
+                x: -1,
+                y: -2
+              }, {
+                x: 1,
+                y: -2
+              }, {
+                x: 4,
+                y: 1
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -6,
+              y: 3
+            }
+          }, {
+            id: 1364511419224,
+            equations: {
+              'x+4': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+4',
+                    after: 'x'
+                  }
+                ]
+              },
+              '-x+6': {
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '+6',
+                    after: '-x'
+                  }
+                ]
+              }
+            },
+            fragments: ['+4', '+6', '-4', '-6'],
+            rings: [
+              {
+                x: 1,
+                y: 5
+              }, {
+                x: -5,
+                y: -1
+              }, {
+                x: 7,
+                y: -1
+              }
+            ],
+            grid: {
+              xMin: -20,
+              xMax: 20,
+              yMin: -20,
+              yMax: 20
+            },
+            islandCoordinates: {
+              x: -10,
+              y: -6
+            }
+          }, {
+            id: 1364511618594,
+            equations: {
+              'x+9': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+9',
+                    after: 'x'
+                  }
+                ]
+              },
+              '-x-5': {
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '-5',
+                    after: '-x'
+                  }
+                ]
+              }
+            },
+            fragments: ['+5', '-5', '+9', '-9'],
+            rings: [
+              {
+                x: -18,
+                y: 13
+              }, {
+                x: 20,
+                y: 29
+              }, {
+                x: 4,
+                y: 13
+              }
+            ],
+            grid: {
+              xMin: -50,
+              xMax: 50,
+              yMin: -50,
+              yMax: 50
+            },
+            islandCoordinates: {
+              x: -37,
+              y: 32
+            }
+          }, {
+            id: 1364512372898,
+            equations: {
+              'x-8': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-8',
+                    after: 'x'
+                  }
+                ]
+              },
+              '-x+4': {
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '+4',
+                    after: '-x'
+                  }
+                ]
+              }
+            },
+            fragments: ['+4', '-4', '+8', '-8'],
+            rings: [
+              {
+                x: 5,
+                y: -3
+              }, {
+                x: 7,
+                y: -3
+              }, {
+                x: 10,
+                y: -6
+              }
+            ],
+            grid: {
+              xMin: -5,
+              xMax: 15,
+              yMin: -15,
+              yMax: 5
+            },
+            islandCoordinates: {
+              x: 2,
+              y: -6
+            }
+          }, {
             id: 1363229830265,
             equations: {
               '-x-c': {
@@ -3170,6 +3353,150 @@ levels.WORLDS = [
                 max: 10,
                 increment: 1,
                 solution: 10
+              }
+            }
+          }, {
+            id: 1364513384695,
+            equations: {
+              'x-c': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-c',
+                    after: 'x'
+                  }
+                ]
+              },
+              '-x+a': {
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '+a',
+                    after: '-x'
+                  }
+                ]
+              }
+            },
+            fragments: ['+a', '+b', '-c', '-d'],
+            rings: [
+              {
+                x: 4,
+                y: -2
+              }, {
+                x: 8,
+                y: -2
+              }, {
+                x: 6,
+                y: 0
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: 2,
+              y: -4
+            },
+            variables: {
+              a: {
+                start: 0,
+                min: 0,
+                max: 10,
+                increment: 1,
+                solution: 6
+              },
+              b: {
+                start: 0,
+                min: 0,
+                max: 10,
+                increment: 1,
+                solution: null
+              },
+              c: {
+                start: 0,
+                min: 0,
+                max: 10,
+                increment: 1,
+                solution: 6
+              },
+              d: {
+                start: 0,
+                min: 0,
+                max: 10,
+                increment: 1,
+                solution: null
+              }
+            }
+          }, {
+            id: 1364513866024,
+            equations: {
+              'x+a': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+a',
+                    after: 'x'
+                  }
+                ]
+              },
+              '-x': {
+                start: '-x'
+              }
+            },
+            fragments: ['+a', '+b', '-c', '-d'],
+            rings: [
+              {
+                x: -10,
+                y: 10
+              }, {
+                x: 5,
+                y: -5
+              }, {
+                x: 20,
+                y: -20
+              }
+            ],
+            grid: {
+              xMin: -50,
+              xMax: 50,
+              yMin: -50,
+              yMax: 50
+            },
+            islandCoordinates: {
+              x: -35,
+              y: -5
+            },
+            variables: {
+              a: {
+                start: 0,
+                min: 0,
+                max: 50,
+                increment: 5,
+                solution: 30
+              },
+              b: {
+                start: 0,
+                min: 0,
+                max: 50,
+                increment: 5,
+                solution: null
+              },
+              c: {
+                start: 0,
+                min: 0,
+                max: 50,
+                increment: 5,
+                solution: null
+              },
+              d: {
+                start: 0,
+                min: 0,
+                max: 50,
+                increment: 5,
+                solution: null
               }
             }
           }, {

@@ -605,7 +605,7 @@ xyflyerEditor.EditorHelper = (function() {
       return _this.handleModification();
     });
     return dialog.find('a').bind('click', function() {
-      return closeDialog();
+      return _this.closeDialog(dialog);
     });
   };
 

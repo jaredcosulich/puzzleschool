@@ -379,7 +379,7 @@ class xyflyerEditor.EditorHelper
             callback(data)
             @handleModification()
             
-        dialog.find('a').bind 'click', => closeDialog()
+        dialog.find('a').bind 'click', => @closeDialog(dialog)
         
     setAsset: (type, index) ->
         @assets[type] = index
