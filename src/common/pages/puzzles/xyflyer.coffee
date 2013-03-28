@@ -187,6 +187,13 @@ soma.views
             @dynamicContent.html(@originalHTML)
             $('svg').remove()
             
+            for asset, index of @level.assets or {}
+                if asset == 'background'
+                    @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.png"))
+                else
+                    image = @$(".objects .#{asset} img")
+                    @$(".objects .#{asset}").html("<img src='#{image.attr('src').replace(/\d+\.png/, "#{index}.png")}'/>")
+                    
             @helper = new xyflyer.ViewHelper
                 el: @dynamicContent
                 boardElement: @$('.board')
@@ -323,6 +330,7 @@ soma.views
                                 
 
         setLevelIcon: ({id, started, completed, locked}) ->
+            return if not id
             levelIcon = @$("#level_#{id}").find('img')
             if locked
                 replace = '_locked'

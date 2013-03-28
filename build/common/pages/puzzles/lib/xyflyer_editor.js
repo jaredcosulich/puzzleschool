@@ -265,6 +265,11 @@ xyflyerEditor.EditorHelper = (function() {
         return _this.setAsset('island', index);
       });
     });
+    this.$('.editor .change_plane').bind('click', function() {
+      return _this.showImageDialog("Select The Plane", 'plane', 2, function(index) {
+        return _this.setAsset('plane', index);
+      });
+    });
     this.$('.editor .reset_editor').bind('click', function() {
       if (confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')) {
         return location.href = location.pathname;

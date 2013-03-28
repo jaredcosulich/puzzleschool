@@ -172,6 +172,9 @@ class xyflyerEditor.EditorHelper
         @$('.editor .change_island').bind 'click', => 
             @showImageDialog "Select The Island Image", 'island', 2, (index) => @setAsset('island', index)
 
+        @$('.editor .change_plane').bind 'click', => 
+            @showImageDialog "Select The Plane", 'plane', 2, (index) => @setAsset('plane', index)
+
         @$('.editor .reset_editor').bind 'click', => 
             location.href = location.pathname if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
         

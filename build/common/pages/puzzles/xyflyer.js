@@ -243,9 +243,20 @@ soma.views({
       }
     },
     load: function() {
-      var _this = this;
+      var asset, image, index, _ref,
+        _this = this;
       this.dynamicContent.html(this.originalHTML);
       $('svg').remove();
+      _ref = this.level.assets || {};
+      for (asset in _ref) {
+        index = _ref[asset];
+        if (asset === 'background') {
+          this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".png"));
+        } else {
+          image = this.$(".objects ." + asset + " img");
+          this.$(".objects ." + asset).html("<img src='" + (image.attr('src').replace(/\d+\.png/, "" + index + ".png")) + "'/>");
+        }
+      }
       this.helper = new xyflyer.ViewHelper({
         el: this.dynamicContent,
         boardElement: this.$('.board'),
@@ -446,6 +457,9 @@ soma.views({
     setLevelIcon: function(_arg) {
       var completed, id, levelIcon, locked, replace, started;
       id = _arg.id, started = _arg.started, completed = _arg.completed, locked = _arg.locked;
+      if (!id) {
+        return;
+      }
       levelIcon = this.$("#level_" + id).find('img');
       if (locked) {
         replace = '_locked';
