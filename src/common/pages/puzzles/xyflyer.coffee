@@ -142,7 +142,8 @@ soma.views
                         objects: @$('.objects')
                         grid: @level?.grid
                         islandCoordinates: @level?.islandCoordinates  
-                        variables: @level?.variables                      
+                        variables: @level?.variables     
+                        assets: @level?.assets                 
                         encode: (instructions) => @encode(instructions)
                     @loadLevel()
                     

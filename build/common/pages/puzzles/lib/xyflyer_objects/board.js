@@ -125,13 +125,12 @@ board.Board = (function(_super) {
       });
       return;
     }
-    console.log(width, island.width());
     x = this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2);
     y = this.yAxis - (this.islandCoordinates.y * this.yUnit) - height + (210 * this.scale);
     this.island = this.paper.set();
     this.island.push(this.addImage(island, x, y));
     text = this.islandText();
-    this.islandLabel = this.paper.text(x + (78 * this.scale), y + (153 * this.scale), text).attr({
+    this.islandLabel = this.paper.text(x + (width / 2) - (42 * this.scale), y + height - (72 * this.scale), text).attr({
       fill: '#ddd',
       stroke: 'none',
       'font-size': 9 + (2 * this.scale)

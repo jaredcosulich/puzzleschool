@@ -3,13 +3,16 @@ xyflyerEditor = exports ? provide('./lib/xyflyer_editor', {})
 class xyflyerEditor.EditorHelper
     $: (selector) -> $(selector, @el)
 
-    constructor: ({@el, @equationArea, @boardElement, @objects, @encode, @islandCoordinates, @grid, @variables}) ->
-        @rings = []
-        @assets = {}
+    constructor: ({@el, @equationArea, @boardElement, @objects, @encode, @islandCoordinates, @grid, @variables, @assets}) ->
         @parser = require('./parser')
         @init()
         
     init: ->
+        @variables or= {}
+        @rings = []
+        @assets or= {}
+        @setAsset(asset, index) for asset, index of @assets
+
         @initBoard({})
                         
         @equations = new xyflyer.Equations
@@ -17,8 +20,6 @@ class xyflyerEditor.EditorHelper
             gameArea: @el
             plot: (id, data) => @plot(id, data)
             submit: => @launch()
-            
-        @variables or= {}
 
         @initButtons()
         @hideInstructions()
@@ -166,16 +167,11 @@ class xyflyerEditor.EditorHelper
             @boardElement.unbind('click.showxy')
         
         @$('.editor .change_background').bind 'click', => 
-            @showImageDialog "Select The Background Image", 'background', 3, (index) =>
-                @setAsset('background', index)
-                @handleModification()
+            @showImageDialog "Select The Background Image", 'background', 3, (index) => @setAsset('background', index)
 
         @$('.editor .change_island').bind 'click', => 
-            @showImageDialog "Select The Island Image", 'island', 2, (index) =>
-                @setAsset('island', index)
-                @handleModification()
+            @showImageDialog "Select The Island Image", 'island', 2, (index) => @setAsset('island', index)
 
-        
         @$('.editor .reset_editor').bind 'click', => 
             location.href = location.pathname if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
         
@@ -392,6 +388,7 @@ class xyflyerEditor.EditorHelper
                 @objects.find('.island img').remove()
                 @objects.find('.island').html("<img src='#{src}'/>")
                 @initBoard({})
+        @handleModification()
                 
     constructSolutionComponents: (equation) ->
         solutionComponents = []
@@ -408,22 +405,30 @@ class xyflyerEditor.EditorHelper
         @coffeeInstructions = """
             {
                 id: #{new Date().getTime()}
-                equations:
         """
         
-        for equation in @equations.equations
-            equationInstructions = instructions.equations[equation.straightFormula()] = {}
-            @coffeeInstructions += "\n\t\t'#{equation.straightFormula()}':"
-            if equation.startingFragment
-                equationInstructions.start = equation.startingFragment 
-                @coffeeInstructions += "\n\t\t\tstart: '#{equation.startingFragment}'"
+        if @equations
+            @coffeeInstructions += "\n\tequations:"
+            for equation in @equations.equations
+                equationInstructions = instructions.equations[equation.straightFormula()] = {}
+                @coffeeInstructions += "\n\t\t'#{equation.straightFormula()}':"
+                if equation.startingFragment
+                    equationInstructions.start = equation.startingFragment 
+                    @coffeeInstructions += "\n\t\t\tstart: '#{equation.startingFragment}'"
 
-            if (solutionComponents = @constructSolutionComponents(equation)).length
-                equationInstructions.solutionComponents = solutionComponents
-                @coffeeInstructions += '\n\t\t\tsolutionComponents: ['
-                for sc in solutionComponents
-                    @coffeeInstructions += "\n\t\t\t\t{fragment: '#{sc.fragment}', after: '#{sc.after}'}"
-                @coffeeInstructions += '\n\t\t\t]'
+                if (solutionComponents = @constructSolutionComponents(equation)).length
+                    equationInstructions.solutionComponents = solutionComponents
+                    @coffeeInstructions += '\n\t\t\tsolutionComponents: ['
+                    for sc in solutionComponents
+                        @coffeeInstructions += "\n\t\t\t\t{fragment: '#{sc.fragment}', after: '#{sc.after}'}"
+                    @coffeeInstructions += '\n\t\t\t]'
+            
+            @coffeeInstructions += '\n\tfragments: ['
+            instructions.fragments = []
+            for component in @equations.equationComponents
+                instructions.fragments.push(component.equationFragment)
+            @coffeeInstructions += "#{("'#{ec.equationFragment}'" for ec in @equations.equationComponents).join(', ')}]"
+            
 
         @coffeeInstructions += '\n\trings: ['
         for ring in @rings
@@ -444,13 +449,6 @@ class xyflyerEditor.EditorHelper
         instructions.islandCoordinates = @islandCoordinates
         @coffeeInstructions += "\n\tislandCoordinates: {x: #{@islandCoordinates.x}, y: #{@islandCoordinates.y}}"
             
-
-        @coffeeInstructions += '\n\tfragments: ['
-        instructions.fragments = []
-        for component in @equations.equationComponents
-            instructions.fragments.push(component.equationFragment)
-        @coffeeInstructions += "#{("'#{ec.equationFragment}'" for ec in @equations.equationComponents).join(', ')}]"
-
         for variable, info of @variables
             if not instructions.variables
                 instructions.variables = {}

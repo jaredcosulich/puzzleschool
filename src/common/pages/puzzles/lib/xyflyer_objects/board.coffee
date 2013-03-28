@@ -87,15 +87,14 @@ class board.Board extends xyflyerObject.Object
             $.timeout 100, => @addIsland()
             return
             
-        console.log(width, island.width())
         x = @xAxis + (@islandCoordinates.x * @xUnit) - (width/2)
         y = @yAxis - (@islandCoordinates.y * @yUnit) - height + (210*@scale)
         @island = @paper.set()
         @island.push(@addImage(island, x, y))
         text = @islandText()
         @islandLabel = @paper.text(
-            x + (78*@scale)
-            y + (153*@scale)
+            x + (width/2) - (42*@scale)
+            y + height - (72*@scale)
             text
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
 

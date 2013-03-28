@@ -133,7 +133,7 @@ soma.views({
   Xyflyer: {
     selector: '#content .xyflyer',
     create: function() {
-      var instructions, level, puzzleData, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
+      var instructions, level, puzzleData, xyflyer, xyflyerEditor, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6,
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
@@ -175,6 +175,7 @@ soma.views({
             grid: (_ref2 = this.level) != null ? _ref2.grid : void 0,
             islandCoordinates: (_ref3 = this.level) != null ? _ref3.islandCoordinates : void 0,
             variables: (_ref4 = this.level) != null ? _ref4.variables : void 0,
+            assets: (_ref5 = this.level) != null ? _ref5.assets : void 0,
             encode: function(instructions) {
               return _this.encode(instructions);
             }
@@ -194,8 +195,8 @@ soma.views({
       if (this.classId) {
         if (!this.user) {
           if (typeof window !== "undefined" && window !== null) {
-            if ((_ref5 = window.location) != null) {
-              _ref5.reload();
+            if ((_ref6 = window.location) != null) {
+              _ref6.reload();
             }
           }
           return;
