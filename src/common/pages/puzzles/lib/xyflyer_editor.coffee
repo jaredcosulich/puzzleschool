@@ -384,13 +384,15 @@ class xyflyerEditor.EditorHelper
         
     setAsset: (type, index) ->
         @assets[type] = index
-        src = 'https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{type}#{index}.png'
+        src = "https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{type}#{index}.png"
         switch type
             when 'background'
                 @el.css(backgroundImage: "url(#{src})")
             when 'island'
-                @objects.find('.island img').src(src)
-            
+                @objects.find('.island img').remove()
+                @objects.find('.island').html("<img src='#{src}'/>")
+                @initBoard({})
+                
     constructSolutionComponents: (equation) ->
         solutionComponents = []
         for dae in equation.el.find('div')

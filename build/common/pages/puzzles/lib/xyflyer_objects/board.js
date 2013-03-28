@@ -125,8 +125,9 @@ board.Board = (function(_super) {
       });
       return;
     }
+    console.log(width, island.width());
     x = this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2);
-    y = this.yAxis - (this.islandCoordinates.y * this.yUnit);
+    y = this.yAxis - (this.islandCoordinates.y * this.yUnit) - height + (210 * this.scale);
     this.island = this.paper.set();
     this.island.push(this.addImage(island, x, y));
     text = this.islandText();

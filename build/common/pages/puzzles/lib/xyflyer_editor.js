@@ -251,7 +251,7 @@ xyflyerEditor.EditorHelper = (function() {
       return _this.boardElement.unbind('click.showxy');
     });
     this.$('.editor .change_background').bind('click', function() {
-      return _this.showImageDialog("Select The Background Image", 'skygradient', 3, function(index) {
+      return _this.showImageDialog("Select The Background Image", 'background', 3, function(index) {
         _this.setAsset('background', index);
         return _this.handleModification();
       });
@@ -602,14 +602,18 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.setAsset = function(type, index) {
-    var base;
+    var src;
     this.assets[type] = index;
-    base = 'https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/NAMEINDEX.png';
+    src = "https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + type + index + ".png";
     switch (type) {
       case 'background':
         return this.el.css({
-          backgroundImage: "url(" + (base.replace(/NAME/, 'skygradient').replace(/INDEX/, index)) + ")"
+          backgroundImage: "url(" + src + ")"
         });
+      case 'island':
+        this.objects.find('.island img').remove();
+        this.objects.find('.island').html("<img src='" + src + "'/>");
+        return this.initBoard({});
     }
   };
 

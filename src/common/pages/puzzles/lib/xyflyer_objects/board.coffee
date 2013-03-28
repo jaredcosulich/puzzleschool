@@ -86,9 +86,10 @@ class board.Board extends xyflyerObject.Object
         if not width or not height
             $.timeout 100, => @addIsland()
             return
-
+            
+        console.log(width, island.width())
         x = @xAxis + (@islandCoordinates.x * @xUnit) - (width/2)
-        y = @yAxis - (@islandCoordinates.y * @yUnit)
+        y = @yAxis - (@islandCoordinates.y * @yUnit) - height + (210*@scale)
         @island = @paper.set()
         @island.push(@addImage(island, x, y))
         text = @islandText()
