@@ -37,6 +37,7 @@ class equations.Equations
     remove: (equation) ->
         index = (if equation then @equations.indexOf(equation) else @equations.length - 1)
         equation = @equations.splice(index, 1)[0]
+        @plot(equation.id)
         equation.container.remove()
         @length = @equations.length
         
