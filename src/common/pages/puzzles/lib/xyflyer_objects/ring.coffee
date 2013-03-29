@@ -62,7 +62,7 @@ class ring.Ring extends xyflyerObject.Object
                        @animating = false      
                 
     inPath: (x, formula) ->
-        return false unless Math.round(100 * formula(@x)) / 100 == @y
+        return false unless Math.round(100 * formula(@x)) / 100 == Math.round(100 * @y) / 100
         return true if @x - (0.5*@scale) < x < @x + (0.5*@scale)
 
     highlight: ->
