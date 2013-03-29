@@ -642,14 +642,14 @@ levels.WORLDS = [
             },
             rings: [
               {
-                x: -12,
-                y: 26
+                x: -14,
+                y: 28
               }, {
-                x: 4,
-                y: 10
+                x: 0,
+                y: 14
               }, {
-                x: 20,
-                y: -6
+                x: 14,
+                y: 0
               }
             ],
             grid: {
@@ -681,14 +681,14 @@ levels.WORLDS = [
             },
             rings: [
               {
-                x: 1,
-                y: -2
+                x: 0,
+                y: -3
               }, {
-                x: 5,
-                y: 2
+                x: 3,
+                y: 0
               }, {
-                x: 9,
-                y: 6
+                x: 6,
+                y: 3
               }
             ],
             grid: {
@@ -723,22 +723,22 @@ levels.WORLDS = [
                 x: -10,
                 y: 20
               }, {
-                x: 5,
-                y: 5
+                x: 0,
+                y: 10
               }, {
-                x: 20,
-                y: -10
+                x: 10,
+                y: 0
               }
             ],
             grid: {
-              xMin: -40,
-              xMax: 40,
-              yMin: -40,
-              yMax: 40
+              xMin: -35,
+              xMax: 35,
+              yMin: -35,
+              yMax: 35
             },
             islandCoordinates: {
-              x: -25,
-              y: 35
+              x: -20,
+              y: 30
             },
             fragments: ['+25', '-25', '+35', '-35']
           }
