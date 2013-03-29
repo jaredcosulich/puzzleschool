@@ -374,7 +374,7 @@ body {
   opacity: 0;
   background-color: #fafafa;
   border: 2px solid #a61c0e;
-  width: 540px;
+  width: 570px;
   height: 480px;
   overflow: auto;
   padding: 12px;
@@ -400,7 +400,7 @@ body {
   font-weight: bold;
   text-align: center;
   cursor: pointer;
-  margin: 15px 0 15px 30px;
+  margin: 15px 0 15px 34px;
   background-color: #a61c0e;
 }
 .xyflyer .level_selector .world_link.selected {
@@ -417,7 +417,7 @@ body {
   background-color: #eee;
   padding-top: 12px;
   margin: 12px auto 0 auto;
-  width: 498px;
+  width: 551px;
 }
 .xyflyer .level_selector .world .stage .level {
   line-height: 36px;

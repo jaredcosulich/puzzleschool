@@ -15,17 +15,59 @@ levels.WORLDS = [
                                     {fragment: '+4', after: 'x'}
                                 ]
                         rings: [
-                            {x: -2, y: 2}
-                            {x: 1, y: 5}
+                            {x: -4, y: 0}
+                            {x: 0, y: 4}
                             {x: 4, y: 8}
                         ]
                         grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -5, y: -1}
+                            xMin: -15
+                            xMax: 15
+                            yMin: -15
+                            yMax: 15
+                        islandCoordinates: {x: -8, y: -4}
                         fragments: ['+4']
+                    }
+                    {
+                        id: 1364577895069
+                        equations:
+                            'x+8':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+8', after: 'x'}
+                                ]
+                        fragments: ['+8', '-8']
+                        rings: [
+                            {x: -8, y: 0}
+                            {x: -4, y: 4}
+                            {x: 0, y: 8}
+                        ]
+                        grid:
+                            xMin: -20
+                            xMax: 20
+                            yMin: -20
+                            yMax: 20
+                        islandCoordinates: {x: -12, y: -4}
+                    }
+                    {
+                        id: 1364578077315
+                        equations:
+                            'x+3':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+3', after: 'x'}
+                                ]
+                        fragments: ['+3', '-3']
+                        rings: [
+                            {x: -3, y: 0}
+                            {x: 0, y: 3}
+                            {x: 3, y: 6}
+                        ]
+                        grid:
+                            xMin: -15
+                            xMax: 15
+                            yMin: -15
+                            yMax: 15
+                        islandCoordinates: {x: -6, y: -3}
                     }
                     {
                         id: 1364230317228
@@ -36,16 +78,16 @@ levels.WORLDS = [
                                     {fragment: '-5', after: 'x'}
                                 ]
                         rings: [
-                            {x: -1, y: -6}
-                            {x: 7, y: 2}
-                            {x: 15, y: 10}
+                            {x: 0, y: -5}
+                            {x: 5, y: 0}
+                            {x: 10, y: 5}
                         ]
                         grid:
                             xMin: -25
                             xMax: 25
                             yMin: -25
                             yMax: 25
-                        islandCoordinates: {x: -6, y: -11}
+                        islandCoordinates: {x: -5, y: -10}
                         fragments: ['+5', '-5']
                     }
                     {
@@ -67,7 +109,91 @@ levels.WORLDS = [
                             yMin: -10
                             yMax: 10
                         islandCoordinates: {x: 2, y: -2}
-                        fragments: ['+4', '-4', '+6', '-6']
+                        fragments: ['+4', '-4']
+                    }
+                    {
+                        id: 1364578660117
+                        equations:
+                            'x+20':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '-20', after: 'x'}
+                                ]
+                        fragments: ['+20', '-20']
+                        rings: [
+                            {x: -20, y: 0}
+                            {x: -10, y: 10}
+                            {x: 0, y: 20}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: -30, y: -10}
+                    }
+                    {
+                        id: 1364579016552
+                        equations:
+                            'x+6':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+6', after: 'x'}
+                                ]
+                        fragments: ['+3', '-3', '+6', '-6']
+                        rings: [
+                            {x: -6, y: 0}
+                            {x: 0, y: 6}
+                            {x: 6, y: 12}
+                        ]
+                        grid:
+                            xMin: -30
+                            xMax: 30
+                            yMin: -30
+                            yMax: 30
+                        islandCoordinates: {x: -12, y: -6}
+                    }
+                    {
+                        id: 1364580124694
+                        equations:
+                            'x-6':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '-6', after: 'x'}
+                                ]
+                        fragments: ['+6', '-6', '+9', '-9']
+                        rings: [
+                            {x: 0, y: -6}
+                            {x: 6, y: 0}
+                            {x: 12, y: 6}
+                        ]
+                        grid:
+                            xMin: -30
+                            xMax: 30
+                            yMin: -30
+                            yMax: 30
+                        islandCoordinates: {x: -6, y: -12}
+                    }
+                    {
+                        id: 1364580310767
+                        equations:
+                            'x-18':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '-18', after: 'x'}
+                                ]
+                        fragments: ['+9', '-9', '+18', '-18']
+                        rings: [
+                            {x: 0, y: -18}
+                            {x: 18, y: 0}
+                            {x: 30, y: 12}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: -12, y: -30}
                     }
                     {
                         id: 1363889649942
@@ -78,17 +204,59 @@ levels.WORLDS = [
                                     {fragment: '-3', after: '-x'}
                                 ]
                         rings: [
-                            {x: -4, y: 1}
-                            {x: -1, y: -2}
-                            {x: 2, y: -5}
+                            {x: -3, y: 0}
+                            {x: 0, y: -3}
+                            {x: 3, y: -6}
                         ]
                         grid:
                             xMin: -10
                             xMax: 10
                             yMin: -10
                             yMax: 10
-                        islandCoordinates: {x: -7, y: 4}
-                        fragments: ['+3', '+5', '-3', '-5']
+                        islandCoordinates: {x: -6, y: 3}
+                        fragments: ['+3', '-3']
+                    }
+                    {
+                        id: 1364580586738
+                        equations:
+                            '-x-20':
+                                start: '-x'
+                                solutionComponents: [
+                                    {fragment: '-20', after: '-x'}
+                                ]
+                        fragments: ['+20', '-20']
+                        rings: [
+                            {x: -20, y: 0}
+                            {x: 0, y: -20}
+                            {x: 20, y: -40}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: -40, y: 20}
+                    }
+                    {
+                        id: 1364581109101
+                        equations:
+                            '-x-1':
+                                start: '-x'
+                                solutionComponents: [
+                                    {fragment: '-3', after: '-x'}
+                                ]
+                        fragments: ['+1', '-1', '+4', '-4']
+                        rings: [
+                            {x: -1, y: 0}
+                            {x: 0, y: -1}
+                            {x: 3, y: -4}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -4, y: 3}
                     }
                     {
                         id: 1363898471122
@@ -99,9 +267,10 @@ levels.WORLDS = [
                                     {fragment: '+2', after: '-x'}
                                 ]
                         rings: [
-                            {x: -2, y: 4}
-                            {x: 1, y: 1}
-                            {x: 4, y: -2}
+                            {x: -3, y: 5}
+                            {x: 0, y: 2}
+                            {x: 2, y: 0}
+                            {x: 5, y: -3}
                         ]
                         grid:
                             xMin: -10
@@ -112,6 +281,27 @@ levels.WORLDS = [
                         fragments: ['+2', '-2', '+4', '-4']
                     }
                     {
+                        id: 1364581756908
+                        equations:
+                            '-x+7':
+                                start: '-x'
+                                solutionComponents: [
+                                    {fragment: '+7', after: '-x'}
+                                ]
+                        fragments: ['+7', '-7', '+14', '-14']
+                        rings: [
+                            {x: 0, y: 7}
+                            {x: 7, y: 0}
+                            {x: 14, y: -7}
+                        ]
+                        grid:
+                            xMin: -17
+                            xMax: 17
+                            yMin: -17
+                            yMax: 17
+                        islandCoordinates: {x: -7, y: 14}
+                    }                    
+                    {
                         id: 1364225219109
                         equations:
                             'x+2':
@@ -120,9 +310,9 @@ levels.WORLDS = [
                                     {fragment: '+2', after: 'x'}
                                 ]
                         rings: [
-                            {x: -1, y: 1}
+                            {x: -2, y: 0}
+                            {x: 0, y: 2}
                             {x: 2, y: 4}
-                            {x: 5, y: 7}
                         ]
                         grid:
                             xMin: -10
@@ -141,16 +331,16 @@ levels.WORLDS = [
                                     {fragment: '+18', after: '-x'}
                                 ]
                         rings: [
-                            {x: 2, y: 16}
-                            {x: 12, y: 6}
-                            {x: 22, y: -4}
+                            {x: 0, y: 18}
+                            {x: 9, y: 9}
+                            {x: 18, y: 0}
                         ]
                         grid:
                             xMin: -30
                             xMax: 30
                             yMin: -30
                             yMax: 30
-                        islandCoordinates: {x: -8, y: 26}
+                        islandCoordinates: {x: -9, y: 27}
                         fragments: ['+8', '-8', '+18', '-18']
                     }
                     {
@@ -162,9 +352,9 @@ levels.WORLDS = [
                                     {fragment: '-5', after: '-x'}
                                 ]
                         rings: [
-                            {x: -6, y: 1}
-                            {x: -2, y: -3}
-                            {x: 2, y: -7}
+                            {x: -5, y: 0}
+                            {x: 0, y: -5}
+                            {x: 5, y: -10}
                         ]
                         grid:
                             xMin: -15
@@ -173,99 +363,6 @@ levels.WORLDS = [
                             yMax: 15
                         islandCoordinates: {x: -10, y: 5}
                         fragments: ['+3', '-3', '+5', '-5']
-                    }
-            
-
-
-
-
-
-
-
-                    {
-                        id: 1364226664899
-                        equations:
-                            'x+4':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '+4', after: 'x'}
-                                ]
-                        rings: [
-                            {x: -3, y: 1}
-                            {x: 0, y: 4}
-                            {x: 3, y: 7}
-                        ]
-                        grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -6, y: -2}
-                        fragments: ['+3', '-3', '+4', '-4']
-                    }
-                    {
-                        id: 1364228465830
-                        equations:
-                            'x+18':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '+18', after: 'x'}
-                                ]
-                        rings: [
-                            {x: -16, y: 2}
-                            {x: -6, y: 12}
-                            {x: 4, y: 22}
-                        ]
-                        grid:
-                            xMin: -30
-                            xMax: 30
-                            yMin: -30
-                            yMax: 30
-                        islandCoordinates: {x: -22, y: -4}
-                        fragments: ['-12', '+12', '-18', '+18']
-                    }
-            
-                    {
-                        id: 1364228356656
-                        equations:
-                            '-x-4':
-                                start: '-x'
-                                solutionComponents: [
-                                    {fragment: '-4', after: '-x'}
-                                ]
-                        rings: [
-                            {x: -3, y: -1}
-                            {x: 0, y: -4}
-                            {x: 3, y: -7}
-                        ]
-                        grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -6, y: 2}
-                        fragments: ['+2', '+4', '-2', '-4']
-                    }
-                    {
-                        id: 1364225730692
-                        equations:
-                            '-x+5':
-                                start: '-x'
-                                solutionComponents: [
-                                    {fragment: '+5', after: '-x'}
-                                ]
-                        rings: [
-                            {x: -1, y: 6}
-                            {x: 3, y: 2}
-                            {x: 7, y: -2}
-                        ]
-                        grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -4, y: 9}
-                        fragments: ['+3', '+5', '-3', '-5']
                     }
                     {
                         id: 1364231355522
@@ -332,72 +429,6 @@ levels.WORLDS = [
                             yMax: 40
                         islandCoordinates: {x: -25, y: 35}
                         fragments: ['+25', '-25', '+35', '-35']
-                    }
-                    {
-                        id: 1364236648814
-                        equations:
-                            '-x-1-2':
-                                start: '-x'
-                                solutionComponents: [
-                                    {fragment: '-1', after: '-x'}
-                                    {fragment: '-2', after: '-1'}
-                                ]
-                        rings: [
-                            {x: -4, y: 1}
-                            {x: -1, y: -2}
-                            {x: 2, y: -5}
-                        ]
-                        grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -6, y: 3}
-                        fragments: ['+1', '-1', '+2', '-2']
-                    }
-                    {
-                        id: 1364236768251
-                        equations:
-                            'x+13+19':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '+13', after: 'x'}
-                                    {fragment: '+19', after: '+13'}
-                                ]
-                        rings: [
-                            {x: -25, y: 7}
-                            {x: -10, y: 22}
-                            {x: 5, y: 37}
-                        ]
-                        grid:
-                            xMin: -50
-                            xMax: 50
-                            yMin: -50
-                            yMax: 50
-                        islandCoordinates: {x: -36, y: -4}
-                        fragments: ['+13', '-13', '+19', '-19']
-                    }
-                    {
-                        id: 1364237033041
-                        equations:
-                            'x-3-7':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '-3', after: 'x'}
-                                    {fragment: '-7', after: '-3'}
-                                ]
-                        rings: [
-                            {x: 4, y: -6}
-                            {x: 12, y: 2}
-                            {x: 20, y: 10}
-                        ]
-                        grid:
-                            xMin: -30
-                            xMax: 30
-                            yMin: -30
-                            yMax: 30
-                        islandCoordinates: {x: -4, y: -14}
-                        fragments: ['+3', '-3', '+7', '-7']
                     }
             
                 ]
@@ -1941,10 +1972,10 @@ levels.WORLDS = [
                                 ]
                         fragments: ['-3', '-3']
                         rings: [
-                            {x: -4, y: 1}
+                            {x: -3, y: 0}
                             {x: -1, y: -2}
                             {x: 1, y: -2}
-                            {x: 4, y: 1}
+                            {x: 3, y: 0}
                         ]
                         grid:
                             xMin: -10
@@ -1969,6 +2000,7 @@ levels.WORLDS = [
                         fragments: ['+8', '+8']
                         rings: [
                             {x: -10, y: 18}
+                            {x: 0, y: 8}
                             {x: 10, y: 18}
                             {x: 30, y: 38}
                         ]
@@ -1994,9 +2026,9 @@ levels.WORLDS = [
                                 ]
                         fragments: ['+4', '+6', '-4', '-6']
                         rings: [
-                            {x: 1, y: 5}
-                            {x: -5, y: -1}
-                            {x: 7, y: -1}
+                            {x: -4, y: 0}
+                            {x: 0, y: 4}
+                            {x: 6, y: 0}
                         ]
                         grid:
                             xMin: -20
@@ -2021,8 +2053,8 @@ levels.WORLDS = [
                         fragments: ['+5', '-5', '+9', '-9']
                         rings: [
                             {x: -18, y: 13}
+                            {x: 0, y: 9}
                             {x: 20, y: 29}
-                            {x: 4, y: 13}
                         ]
                         grid:
                             xMin: -50
