@@ -1954,6 +1954,32 @@ levels.WORLDS = [
                         islandCoordinates: {x: -6, y: 3}
                     }
                     {
+                        id: 1364520496399
+                        equations:
+                            'x+8':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+8', after: 'x'}
+                                ]
+                            '-x+8':
+                                start: '-x'
+                                solutionComponents: [
+                                    {fragment: '+8', after: '-x'}
+                                ]
+                        fragments: ['+8', '+8']
+                        rings: [
+                            {x: -10, y: 18}
+                            {x: 10, y: 18}
+                            {x: 30, y: 38}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: -30, y: 38}
+                    }
+                    {
                         id: 1364511419224
                         equations:
                             'x+4':

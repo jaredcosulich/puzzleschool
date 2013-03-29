@@ -124,6 +124,7 @@ plane.Plane = (function(_super) {
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
+    this.board.resetLevel();
     this.cancelFlight = false;
     this.startTime = null;
     this.latestTime = null;

@@ -75,6 +75,7 @@ class plane.Plane extends xyflyerObject.Object
     
     launch: (force) ->
         return if @falling or @cancelFlight and not force
+        @board.resetLevel()
         @cancelFlight = false
         @startTime = null
         @latestTime = null
