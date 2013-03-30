@@ -382,7 +382,7 @@ class equation.Equation
                 body = $(document.body)
                 x = @clientX(e)
                 offsetLeft = knob.offset().left - @gameArea.offset().left + (knob.width()/2)
-                return if x < offsetLeft
+                x = offsetLeft if x < offsetLeft
                 startingX = x - offsetLeft
                 body.bind 'mousemove.drag_knob touchmove.drag_knob', (e) =>
                     e.preventDefault() if e.preventDefault

@@ -571,7 +571,7 @@ equation.Equation = (function() {
         x = _this.clientX(e);
         offsetLeft = knob.offset().left - _this.gameArea.offset().left + (knob.width() / 2);
         if (x < offsetLeft) {
-          return;
+          x = offsetLeft;
         }
         startingX = x - offsetLeft;
         body.bind('mousemove.drag_knob touchmove.drag_knob', function(e) {
