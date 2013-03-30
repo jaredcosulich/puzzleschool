@@ -254,6 +254,7 @@ class xyflyerEditor.EditorHelper
         @handleModification()
                         
     addRing: (x, y) -> 
+        return if (r for r in @rings when r.x == x)[0]?.y == y
         if (isNaN(parseInt(x)) or isNaN(parseInt(y)))
             alert('Those coordinates are not valid.')
             return

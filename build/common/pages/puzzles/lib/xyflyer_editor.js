@@ -413,6 +413,21 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addRing = function(x, y) {
+    var r, _ref;
+    if (((_ref = ((function() {
+      var _i, _len, _ref1, _results;
+      _ref1 = this.rings;
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        r = _ref1[_i];
+        if (r.x === x) {
+          _results.push(r);
+        }
+      }
+      return _results;
+    }).call(this))[0]) != null ? _ref.y : void 0) === y) {
+      return;
+    }
     if (isNaN(parseInt(x)) || isNaN(parseInt(y))) {
       alert('Those coordinates are not valid.');
       return;
