@@ -1499,45 +1499,6 @@ levels.WORLDS = [
             },
             fragments: ['+3', '(1/3)*']
           }, {
-            id: 1363899946541,
-            equations: {
-              '-2*x+5': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '-2*',
-                    after: ''
-                  }, {
-                    fragment: '+5',
-                    after: 'x'
-                  }
-                ]
-              }
-            },
-            rings: [
-              {
-                x: 1,
-                y: 3
-              }, {
-                x: 3,
-                y: -1
-              }, {
-                x: 5,
-                y: -5
-              }
-            ],
-            grid: {
-              xMin: -10,
-              xMax: 10,
-              yMin: -10,
-              yMax: 10
-            },
-            islandCoordinates: {
-              x: -2,
-              y: 9
-            },
-            fragments: ['2*', '-2*', '+5', '-5']
-          }, {
             id: 1363229707272,
             equations: {
               '2*x+3': {
@@ -1646,6 +1607,45 @@ levels.WORLDS = [
             },
             fragments: ['3*', '(1/3)*', '+12', '-12']
           }, {
+            id: 1363899946541,
+            equations: {
+              '-2*x+5': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-2*',
+                    after: ''
+                  }, {
+                    fragment: '+5',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            rings: [
+              {
+                x: 1,
+                y: 3
+              }, {
+                x: 3,
+                y: -1
+              }, {
+                x: 5,
+                y: -5
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -2,
+              y: 9
+            },
+            fragments: ['2*', '-2*', '+5', '-5']
+          }, {
             id: 1363367640281,
             equations: {
               '(-1/2)*x+13': {
@@ -1723,6 +1723,84 @@ levels.WORLDS = [
               y: -4
             },
             fragments: ['-4*', '(-1/4)*', '+32', '-32']
+          }, {
+            id: 1364605842905,
+            equations: {
+              '(-1/3)*x+8': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '(-1/3)*',
+                    after: ''
+                  }, {
+                    fragment: '+8',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['(1/3)*', '(-1/3)*', '+8', '-8'],
+            rings: [
+              {
+                x: 0,
+                y: 8
+              }, {
+                x: 24,
+                y: 0
+              }, {
+                x: 12,
+                y: 4
+              }
+            ],
+            grid: {
+              xMin: -30,
+              xMax: 30,
+              yMin: -30,
+              yMax: 30
+            },
+            islandCoordinates: {
+              x: -12,
+              y: 12
+            }
+          }, {
+            id: 1364606006532,
+            equations: {
+              '(1/4)*x+6': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '(1/4)*',
+                    after: ''
+                  }, {
+                    fragment: '+6',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['(1/4)*', '(-1/4)*', '+6', '-6'],
+            rings: [
+              {
+                x: -24,
+                y: 0
+              }, {
+                x: 0,
+                y: 6
+              }, {
+                x: 24,
+                y: 12
+              }
+            ],
+            grid: {
+              xMin: -60,
+              xMax: 60,
+              yMin: -60,
+              yMax: 60
+            },
+            islandCoordinates: {
+              x: -48,
+              y: -6
+            }
           }, {
             id: 1363368153567,
             equations: {
