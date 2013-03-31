@@ -4169,6 +4169,104 @@ levels.WORLDS = [
                                 increment: 1
                                 solution: 4
                     }
+                    {
+                        id: 1364756652103
+                        equations:
+                            '(1/b)*(x-d)^2+c':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '-d', after: 'x'}
+                                    {fragment: '+c', after: '(x-d)^2'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '-d']
+                        rings: [
+                            {x: 0, y: 0}
+                            {x: 2, y: 3}
+                            {x: 4, y: 4}
+                            {x: 6, y: 3}
+                            {x: 8, y: 0}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -12
+                            yMax: 8
+                        islandCoordinates: {x: -2, y: -5}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -4
+                            c:
+                                start: 0
+                                min: 0
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            d:
+                                start: 0
+                                min: 0
+                                max: 10
+                                increment: 1
+                                solution: 4
+                    }
+                    {
+                        id: 1364757076047
+                        equations:
+                            '(x+c)^2+d':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '+c', after: 'x'}
+                                    {fragment: '+d', after: '(x+c)^2'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '+d']
+                        rings: [
+                            {x: 3, y: 12}
+                            {x: 6, y: 3}
+                            {x: 9, y: 12}
+                            {x: 10, y: 19}
+                        ]
+                        grid:
+                            xMin: -20
+                            xMax: 20
+                            yMin: -20
+                            yMax: 20
+                        islandCoordinates: {x: 2, y: 19}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -6
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 3
+                    }
                 ]
             }
             {
