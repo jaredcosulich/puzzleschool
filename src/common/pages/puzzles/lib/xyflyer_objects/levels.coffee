@@ -3281,6 +3281,220 @@ levels.WORLDS = [
                                 solution: -6
                     }
                     {
+                        id: 1364688231845
+                        equations:
+                            '(1/b)*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                            'a*x+d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+d', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '+d']
+                        rings: [
+                            {x: -2, y: -3}
+                            {x: 2, y: -2}
+                            {x: 3, y: 2}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6, y: -1}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -2
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -4
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -10
+                    }
+                    {
+                        id: 1364689024728
+                        equations:
+                            '(1/b)*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                            'a*x+d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+d', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '+d']
+                        rings: [
+                            {x: 0, y: 6}
+                            {x: 2, y: 0}
+                            {x: 3, y: -5}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -5, y: 5}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -5
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 5
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 6
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 10
+                    }
+                    {
+                        id: 1364691092643
+                        equations:
+                            '(1/b)*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                            'a*x+d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+d', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '+d']
+                        rings: [
+                            {x: 0, y: 8}
+                            {x: -16, y: 4}
+                            {x: 15, y: 20}
+                            {x: 22, y: 34}
+                        ]
+                        grid:
+                            xMin: -50
+                            xMax: 50
+                            yMin: -50
+                            yMax: 50
+                        islandCoordinates: {x: -32, y: 0}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 2
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 8
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -10
+                    }
+                    {
+                        id: 1364691431977
+                        equations:
+                            'a*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                            '(1/b)*x+d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '+d', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '+d']
+                        rings: [
+                            {x: -3, y: 4}
+                            {x: -2, y: 0}
+                            {x: 0, y: -4}
+                            {x: 4, y: -5}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -4, y: 8}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -4
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -4
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -8
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -4
+                    }       
+                    {
                         id: 1363229845866
                         equations:
                             'a*x+c':
@@ -3313,10 +3527,6 @@ levels.WORLDS = [
                             "c":{"start":1,"min":-10,"max":10,"increment":1,"solution":"-10"}
                             "d":{"start":1,"min":-10,"max":10,"increment":1,"solution":"-6"}
                     }                        
-                    # {}
-                    # {}
-                    # {}
-                    # {}        
                 ]
             }
         ]
