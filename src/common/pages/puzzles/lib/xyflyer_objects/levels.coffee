@@ -4273,6 +4273,144 @@ levels.WORLDS = [
                 name: 'Lines and Curves'
                 levels: [
                     {
+                        id: 1364761788756
+                        equations:
+                            '(x-6)^2':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '-6', after: 'x'}
+                                ]
+                            'x':
+                                start: 'x'
+                        fragments: ['-6']
+                        rings: [
+                            {x: 4, y: 4}
+                            {x: 6, y: 0}
+                            {x: 9, y: 9}
+                            {x: 12, y: 12}
+                        ]
+                        grid:
+                            xMin: -15
+                            xMax: 15
+                            yMin: -15
+                            yMax: 15
+                        islandCoordinates: {x: 0, y: 0}
+                    }
+                    {
+                        id: 1364761182285
+                        equations:
+                            '(x-4)^2':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '-4', after: 'x'}
+                                ]
+                            'x-2':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '-2', after: 'x'}
+                                ]
+                        fragments: ['-4', '-2']
+                        rings: [
+                            {x: 0, y: -2}
+                            {x: 2, y: 0}
+                            {x: 6, y: 4}
+                            {x: 4, y: 0}
+                            {x: 8, y: 6}
+                        ]
+                        grid:
+                            xMin: -12
+                            xMax: 12
+                            yMin: -12
+                            yMax: 12
+                    }
+                    {
+                        id: 1364762757890
+                        equations:
+                            '(x-2)^2':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '-2', after: 'x'}
+                                ]
+                            'x+2':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+2', after: 'x'}
+                                ]
+                        fragments: ['+2', '-2']
+                        rings: [
+                            {x: -1, y: 1}
+                            {x: 1, y: 1}
+                            {x: 3, y: 1}
+                            {x: 4, y: 4}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -4, y: -2}
+                    }
+                    {
+                        id: 1364763864778
+                        equations:
+                            '(x)^2-3':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '-3', after: '(x)^2'}
+                                ]
+                            'x+3':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+3', after: 'x'}
+                                ]
+                        fragments: ['+3', '-3']
+                        rings: [
+                            {x: -2, y: 1}
+                            {x: 3, y: 6}
+                            {x: 0, y: -3}
+                            {x: 6, y: 9}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -5, y: -2}
+                    }
+                    
+                    
+                    
+                    {
+                        id: 1364763311626
+                        equations:
+                            '(-1/3)*(x)^2+3':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '(-1/3)*', after: ''}
+                                    {fragment: '+3', after: '(x)^2'}
+                                ]
+                            '(-1/3)*x-3':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(-1/3)*', after: ''}
+                                    {fragment: '-3', after: 'x'}
+                                ]
+                        fragments: ['(-1/3)*', '(-1/3)*', '+3', '-3']
+                        rings: [
+                            {x: -6, y: -1}
+                            {x: -3, y: 0}
+                            {x: 0, y: 3}
+                            {x: 3, y: 0}
+                            {x: 6, y: -5}
+                        ]
+                        grid:
+                            xMin: -12
+                            xMax: 12
+                            yMin: -12
+                            yMax: 12
+                        islandCoordinates: {x: -9, y: 0}
+                    }
+                    {
                         id: 1363640447671
                         equations:
                             '(x)^2-6':
