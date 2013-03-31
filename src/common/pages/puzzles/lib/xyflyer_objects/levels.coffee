@@ -3534,6 +3534,77 @@ levels.WORLDS = [
     {
         stages: [
             {
+                name: 'Curves'
+                levels: [
+                    {
+                        id: 1364744280392
+                        equations:
+                            '(x)^2+5':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '+5', after: '(x)^2'}
+                                ]
+                        fragments: ['+5']
+                        rings: [
+                            {x: -2, y: 9}
+                            {x: 0, y: 5}
+                            {x: 2, y: 9}
+                            {x: 3, y: 14}
+                        ]
+                        grid:
+                            xMin: -16
+                            xMax: 16
+                            yMin: -16
+                            yMax: 16
+                        islandCoordinates: {x: -3, y: 14}
+                    }
+                    {
+                        id: 1364744509304
+                        equations:
+                            '(x+5)^2':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '+5', after: 'x'}
+                                ]
+                        fragments: ['+5']
+                        rings: [
+                            {x: -7, y: 4}
+                            {x: -5, y: 0}
+                            {x: -3, y: 4}
+                            {x: -2, y: 9}
+                        ]
+                        grid:
+                            xMin: -13
+                            xMax: 13
+                            yMin: -13
+                            yMax: 13
+                        islandCoordinates: {x: -8, y: 9}
+                    }
+                    {
+                        id: 1364745447466
+                        equations:
+                            '(x+3)^2':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '+3', after: 'x'}
+                                ]
+                        fragments: ['+3', '-3']
+                        rings: [
+                            {x: -5, y: 4}
+                            {x: -3, y: 0}
+                            {x: 0, y: 9}
+                            {x: -1, y: 4}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6, y: 9}
+                    }
+                ]
+            }
+            {
                 name: 'Lines and Curves'
                 levels: [
                     {
@@ -3690,6 +3761,10 @@ levels.WORLDS = [
                     }    
                 ]
             }
+        ]
+    }
+    {
+        stages: [
             {
                 name: 'Multiple Curves'
                 levels: [
@@ -3722,10 +3797,6 @@ levels.WORLDS = [
                     }
                 ]
             }
-        ]
-    }
-    {
-        stages: [
             {
                 name: 'Crazy Curves'
                 levels: [

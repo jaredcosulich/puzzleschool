@@ -93,8 +93,13 @@ class xyflyerEditor.EditorHelper
                     ['yMin', 'Minimum Y']
                     ['yMax', 'Maximum Y']
                 ]
-                callback: (data) => @initBoard(grid: data)            
-
+                callback: (data) => 
+                    if parseInt(data.xMin) < parseInt(data.xMax) and
+                       parseInt(data.yMin) < parseInt(data.yMax)    
+                        @initBoard(grid: data)            
+                    else
+                        alert('Those board dimensions are not valid.')
+                        
         @$('.editor .edit_island').bind 'click', =>
             @showDialog
                 text: 'What should the coordinates of the island be?'

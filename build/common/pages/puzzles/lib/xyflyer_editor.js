@@ -134,9 +134,13 @@ xyflyerEditor.EditorHelper = (function() {
         text: 'What should the bounds of the board be?',
         fields: [['xMin', 'Minimum X'], ['xMax', 'Maximum X'], [], ['yMin', 'Minimum Y'], ['yMax', 'Maximum Y']],
         callback: function(data) {
-          return _this.initBoard({
-            grid: data
-          });
+          if (parseInt(data.xMin) < parseInt(data.xMax) && parseInt(data.yMin) < parseInt(data.yMax)) {
+            return _this.initBoard({
+              grid: data
+            });
+          } else {
+            return alert('Those board dimensions are not valid.');
+          }
         }
       });
     });
