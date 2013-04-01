@@ -401,8 +401,10 @@ xyflyerEditor.EditorHelper = (function() {
       alert("The variable, " + variable + ", is already in use");
       return;
     }
-    component.variable = variable;
     component = this.equations.addComponent(fragment);
+    if (variable) {
+      component.variable = variable;
+    }
     return this.handleModification();
   };
 
