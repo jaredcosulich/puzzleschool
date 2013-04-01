@@ -396,9 +396,13 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
-    var component;
+    var component, variable;
+    if (this.variables[variable = this.checkForVariable(fragment)]) {
+      alert("The variable, " + variable + ", is already in use");
+      return;
+    }
+    component.variable = variable;
     component = this.equations.addComponent(fragment);
-    component.variable = this.checkForVariable(fragment);
     return this.handleModification();
   };
 
@@ -421,7 +425,9 @@ xyflyerEditor.EditorHelper = (function() {
               equation.variables[variable] = data;
             }
             _this.handleModification();
-            return callback(variable, data);
+            if (callback) {
+              return callback(variable, data);
+            }
           }
         });
       }

@@ -242,8 +242,12 @@ class xyflyerEditor.EditorHelper
         return equation
        
     addEquationComponent: (fragment) -> 
+        if @variables[variable = @checkForVariable(fragment)]
+            alert("The variable, #{variable}, is already in use")
+            return
+                                  
+        component.variable = variable
         component = @equations.addComponent(fragment) 
-        component.variable = @checkForVariable(fragment)                            
         @handleModification()
         
     checkForVariable: (fragment, callback) ->    
@@ -265,7 +269,7 @@ class xyflyerEditor.EditorHelper
                             equation.variables or= {}
                             equation.variables[variable] = data
                         @handleModification()
-                        callback(variable, data)
+                        callback(variable, data) if callback
             return variable
                         
                         
