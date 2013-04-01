@@ -1240,6 +1240,30 @@ levels.WORLDS = [
                         fragments: ['*2', '*4', '+2', '+4']
                     }
                     {
+                        id: 1364337246109
+                        equations:
+                            'x*-1*2+8*(1/2)':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '*-1', after: 'x'}
+                                    {fragment: '*2', after: '*-1'}
+                                    {fragment: '+8', after: '*2'}
+                                    {fragment: '*(1/2)', after: '+8'}
+                                ]
+                        rings: [
+                            {x: 0, y: 4}
+                            {x: 2, y: 0}
+                            {x: 4, y: -4}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -2, y: 8}
+                        fragments: ['*-1', '*(1/2)', '*2', '+8']
+                    }
+                    {
                         id: 1364339817678
                         equations:
                             '6*(1/3)*x-2':
@@ -1251,8 +1275,9 @@ levels.WORLDS = [
                                 ]
                         rings: [
                             {x: -1, y: -4}
+                            {x: 0, y: -2}
+                            {x: 1, y: 0}
                             {x: 2, y: 2}
-                            {x: 5, y: 8}
                         ]
                         grid:
                             xMin: -20
@@ -1285,30 +1310,6 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: 4, y: 9}
                         fragments: ['-1*', '4*', '(1/2)*', '+10', '+15']
-                    }
-                    {
-                        id: 1364337246109
-                        equations:
-                            'x*-1*2+8*(1/2)':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '*-1', after: 'x'}
-                                    {fragment: '*2', after: '*-1'}
-                                    {fragment: '+8', after: '*2'}
-                                    {fragment: '*(1/2)', after: '+8'}
-                                ]
-                        rings: [
-                            {x: 0, y: 4}
-                            {x: 2, y: 0}
-                            {x: 4, y: -4}
-                        ]
-                        grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -2, y: 8}
-                        fragments: ['*-1', '*(1/2)', '*2', '+8']
                     }
                 ]
             }
