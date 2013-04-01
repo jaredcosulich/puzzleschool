@@ -353,7 +353,11 @@ soma.views
             @saveProgress()
             @initLevelSelector()
             @showLevelSelector(true)
-
+            
+            for level, index in @$('.stage .level:last-child') when index % 2 == 1
+                if parseInt(@level.id) == parseInt($(level).data('id'))
+                    @selectWorld(Math.floor(index / 2) + 1)         
+                
         showLevelSelector: (success) ->
             $(document.body).unbind('click.level_selector')
             if parseInt(@levelSelector.css('opacity')) == 1

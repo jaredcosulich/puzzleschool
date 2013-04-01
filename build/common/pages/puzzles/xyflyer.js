@@ -474,6 +474,7 @@ soma.views({
       return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level" + replace + "."));
     },
     nextLevel: function() {
+      var index, level, _i, _len, _ref, _results;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
       this.registerEvent({
         type: 'success',
@@ -483,7 +484,20 @@ soma.views({
       });
       this.saveProgress();
       this.initLevelSelector();
-      return this.showLevelSelector(true);
+      this.showLevelSelector(true);
+      _ref = this.$('.stage .level:last-child');
+      _results = [];
+      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+        level = _ref[index];
+        if (index % 2 === 1) {
+          if (parseInt(this.level.id) === parseInt($(level).data('id'))) {
+            _results.push(this.selectWorld(Math.floor(index / 2) + 1));
+          } else {
+            _results.push(void 0);
+          }
+        }
+      }
+      return _results;
     },
     showLevelSelector: function(success) {
       var _this = this;
