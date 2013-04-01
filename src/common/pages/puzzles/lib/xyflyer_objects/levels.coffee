@@ -4733,150 +4733,47 @@ levels.WORLDS = [
                         islandCoordinates: {x: -9, y: 0}
                     }
                     {
-                        id: 1364768841072
+                        id: 1364793906650
                         equations:
-                            '(1/a)*(x+d)^2+c':
+                            '(x+a)^2+b':
                                 start: '(x)^2'
                                 solutionComponents: [
-                                    {fragment: '(1/a)*', after: ''}
-                                    {fragment: '+d', after: 'x'}
-                                    {fragment: '+c', after: '(x+d)^2'}
+                                    {fragment: '+a', after: 'x'}
+                                    {fragment: '+b', after: '(x+a)^2'}
                                 ]
-                            'x':
+                            'x+c':
                                 start: 'x'
-                        fragments: ['(1/a)*', '(1/b)*', '+c', '+d']
-                        rings: [
-                            {x: 5, y: 5}
-                            {x: 11, y: -10}
-                            {x: 9, y: -3}
-                        ]
-                        grid:
-                            xMin: -20
-                            xMax: 20
-                            yMin: -20
-                            yMax: 20
-                        islandCoordinates: {x: 0, y: 0}
-                        variables: 
-                            a:
-                                start: 1
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: -4
-                            b:
-                                start: 1
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: null
-                            c:
-                                start: 0
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: 6
-                            d:
-                                start: 0
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: -3
-                    }
-                    {
-                        id: 1364767301234
-                        equations:
-                            '((1/a)*x+c)^2':
-                                start: '(x)^2'
                                 solutionComponents: [
-                                    {fragment: '(1/a)*', after: ''}
                                     {fragment: '+c', after: 'x'}
                                 ]
-                            '(1/b)*x+d':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '(1/b)*', after: ''}
-                                    {fragment: '+d', after: 'x'}
-                                ]
-                        fragments: ['(1/a)*', '(1/b)*', '+c', '+d']
+                        fragments: ['+a', '+b', '+c', '+d']
                         rings: [
-                            {x: 0, y: 4}
-                            {x: 6, y: 0}
-                            {x: 12, y: 4}
-                            {x: -6, y: 7}
-                            {x: 18, y: 3}
+                            {x: -4, y: 4}
+                            {x: -5, y: 5}
+                            {x: -3, y: 5}
+                            {x: -2, y: 8}
+                            {x: 0, y: 10}
+                            {x: -7, y: 3}
                         ]
                         grid:
-                            xMin: -24
-                            xMax: 24
-                            yMin: -24
-                            yMax: 24
-                        islandCoordinates: {x: -12, y: 8}
+                            xMin: -12
+                            xMax: 8
+                            yMin: -8
+                            yMax: 12
+                        islandCoordinates: {x: -9, y: 1}
                         variables: 
                             a:
-                                start: 1
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: 3
-                            b:
-                                start: 1
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: -6
-                            c:
                                 start: 0
                                 min: -10
                                 max: 10
                                 increment: 1
-                                solution: -2
-                            d:
-                                start: 1
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: 6
-                    }
-                    {
-                        id: 1364771029821
-                        equations:
-                            '(1/a)*(x)^2+c':
-                                start: '(x)^2'
-                                solutionComponents: [
-                                    {fragment: '(1/a)*', after: ''}
-                                    {fragment: '+c', after: '(x)^2'}
-                                ]
-                            '(1/b)*x+d':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '(1/b)*', after: ''}
-                                    {fragment: '+d', after: 'x'}
-                                ]
-                        fragments: ['(1/a)*', '(1/b)*', '+c', '+d']
-                        rings: [
-                            {x: -5, y: 1}
-                            {x: 0, y: 2}
-                            {x: 5, y: 3}
-                        ]
-                        grid:
-                            xMin: -20
-                            xMax: 20
-                            yMin: -25
-                            yMax: 15
-                        islandCoordinates: {x: -10, y: -10}
-                        variables: 
-                            a:
-                                start: 1
-                                min: -10
-                                max: 10
-                                increment: 1
-                                solution: -5
+                                solution: 4
                             b:
-                                start: 1
+                                start: 0
                                 min: -10
                                 max: 10
                                 increment: 1
-                                solution: 5
+                                solution: 4
                             c:
                                 start: 0
                                 min: -10
@@ -4888,9 +4785,232 @@ levels.WORLDS = [
                                 min: -10
                                 max: 10
                                 increment: 1
+                                solution: null
+                    }
+                    {
+                        id: 1364793362494
+                        equations:
+                            '(x+a)^2+b':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '+a', after: 'x'}
+                                    {fragment: '+b', after: '(x+a)^2'}
+                                ]
+                            '-x+c':
+                                start: '-x'
+                                solutionComponents: [
+                                    {fragment: '+c', after: '-x'}
+                                ]
+                        fragments: ['+a', '+b', '+c', '+d']
+                        rings: [
+                            {x: -4, y: -7}
+                            {x: -2, y: -3}
+                            {x: -6, y: -3}
+                            {x: 3, y: 6}
+                            {x: 6, y: 3}
+                            {x: 9, y: 0}
+                        ]
+                        grid:
+                            xMin: -15
+                            xMax: 15
+                            yMin: -15
+                            yMax: 15
+                        islandCoordinates: {x: -8, y: 9}
+                        variables: 
+                            a:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            b:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -7
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 9
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                    }
+                    {
+                        id: 1364792099522
+                        equations:
+                            '((1/b)*x)^2':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: '('}
+                                ]
+                            'a*x+c':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+c', after: 'x'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c', '+d']
+                        rings: [
+                            {x: -4, y: 1}
+                            {x: 0, y: 0}
+                            {x: -6, y: 2.25}
+                            {x: -2, y: 0.25}
+                            {x: 3, y: -3}
+                            {x: 4, y: -6}
+                            {x: 5, y: -9}
+                        ]
+                        grid:
+                            xMin: -12
+                            xMax: 12
+                            yMin: -12
+                            yMax: 12
+                        islandCoordinates: {x: -8, y: 4}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -3
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                            c:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 6
+                            d:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                    }
+                    {
+                        id: 1364792753776
+                        equations:
+                            'a*(x)^2+c':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '+c', after: '(x)^2'}
+                                ]
+                            'b*x+d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: 'b*', after: ''}
+                                    {fragment: '+d', after: 'x'}
+                                ]
+                        fragments: ['a*', 'b*', '+c', '+d']
+                        rings: [
+                            {x: -1, y: 8}
+                            {x: -2, y: 5}
+                            {x: 0, y: 9}
+                            {x: 1, y: 8}
+                            {x: 2, y: 5}
+                            {x: 7, y: -4}
+                            {x: 3, y: 0}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6, y: 9}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -1
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -1
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 9
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 3
+                    }
+                    {
+                        id: 1364794806870
+                        equations:
+                            '(1/a)*(x-3)^2+c':
+                                start: '(x)^2'
+                                solutionComponents: [
+                                    {fragment: '(1/a)*', after: ''}
+                                    {fragment: '-3', after: 'x'}
+                                    {fragment: '+c', after: '(x-3)^2'}
+                                ]
+                            '(1/b)*x+d':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: ''}
+                                    {fragment: '+d', after: 'x'}
+                                ]
+                        fragments: ['(1/a)*', '(1/b)*', '+c', '+d', '-3']
+                        rings: [
+                            {x: 3, y: 5}
+                            {x: 1, y: 3}
+                            {x: 5, y: 3}
+                            {x: -3, y: 3}
+                            {x: 9, y: -1}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6, y: 4}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -2
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -3
+                            c:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 5
+                            d:
+                                start: 0
+                                min: -10
+                                max: 10
+                                increment: 1
                                 solution: 2
                     }
-                       
                 ]
             }
         ]
