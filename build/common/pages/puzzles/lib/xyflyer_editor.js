@@ -325,7 +325,13 @@ xyflyerEditor.EditorHelper = (function() {
         text: 'What should this equation start with?',
         fields: [['start', 'Starting Equation', 'text']],
         callback: function(data) {
-          return _this.actuallyAddEquation(equationString, (data.start || '').toLowerCase(), solutionComponents);
+          var equation, fragment;
+          fragment = (data.start || '').toLowerCase();
+          equation = _this.actuallyAddEquation(equationString, fragment, solutionComponents);
+          return _this.checkForVariable(fragment, function(variable, data) {
+            equation.variables[variable] = data;
+            return equation.initVariables();
+          });
         }
       });
     } else {
@@ -385,16 +391,22 @@ xyflyerEditor.EditorHelper = (function() {
         })(solutionComponent, component, accept);
       }
     }
-    return this.handleModification();
+    this.handleModification();
+    return equation;
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
-    var component, result, variable,
-      _this = this;
+    var component;
     component = this.equations.addComponent(fragment);
+    component.variable = this.checkForVariable(fragment);
+    return this.handleModification();
+  };
+
+  EditorHelper.prototype.checkForVariable = function(fragment, callback) {
+    var result, variable,
+      _this = this;
     if ((result = /(^|[^a-w])([a-d])($|[^a-w])/.exec(fragment))) {
       variable = result[2];
-      component.variable = variable;
       if (!this.variables[variable]) {
         this.showDialog({
           text: 'What is the range of this variable?',
@@ -408,12 +420,13 @@ xyflyerEditor.EditorHelper = (function() {
               equation.variables || (equation.variables = {});
               equation.variables[variable] = data;
             }
-            return _this.handleModification();
+            _this.handleModification();
+            return callback(variable, data);
           }
         });
       }
+      return variable;
     }
-    return this.handleModification();
   };
 
   EditorHelper.prototype.addRing = function(x, y) {

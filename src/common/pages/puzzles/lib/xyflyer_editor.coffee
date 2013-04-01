@@ -210,7 +210,13 @@ class xyflyerEditor.EditorHelper
                 fields: [
                     ['start', 'Starting Equation', 'text']
                 ]
-                callback: (data) => @actuallyAddEquation(equationString, (data.start or '').toLowerCase(), solutionComponents)
+                callback: (data) => 
+                    fragment = (data.start or '').toLowerCase()
+                    equation = @actuallyAddEquation(equationString, fragment, solutionComponents)
+                    @checkForVariable fragment, (variable, data) =>
+                        equation.variables[variable] = data
+                        equation.initVariables()
+                        
         else
             @actuallyAddEquation(equationString, start, solutionComponents)
             
@@ -233,12 +239,16 @@ class xyflyerEditor.EditorHelper
                         ), 100)
 
         @handleModification()
+        return equation
        
     addEquationComponent: (fragment) -> 
         component = @equations.addComponent(fragment) 
+        component.variable = @checkForVariable(fragment)                            
+        @handleModification()
+        
+    checkForVariable: (fragment, callback) ->    
         if (result = ///(^|[^a-w])([a-d])($|[^a-w])///.exec(fragment))
             variable = result[2]
-            component.variable = variable
             if not @variables[variable]
                 @showDialog
                     text: 'What is the range of this variable?'
@@ -255,8 +265,9 @@ class xyflyerEditor.EditorHelper
                             equation.variables or= {}
                             equation.variables[variable] = data
                         @handleModification()
-                            
-        @handleModification()
+                        callback(variable, data)
+            return variable
+                        
                         
     addRing: (x, y) -> 
         return if (r for r in @rings when r.x == x)[0]?.y == y
