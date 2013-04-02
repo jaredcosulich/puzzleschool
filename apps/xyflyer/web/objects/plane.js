@@ -62,10 +62,10 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.size = function() {
-    this.scale = this.board.scale / 2;
+    this.scale = this.board.scale / 1.5;
     this.width = this.image.width() * this.scale;
     this.height = this.image.height() * this.scale;
-    return this.timeFactor = 1.9 / this.scale;
+    return this.timeFactor = 2.5 / this.scale;
   };
 
   Plane.prototype.move = function(x, y, next) {
@@ -124,6 +124,7 @@ plane.Plane = (function(_super) {
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
+    this.board.resetLevel();
     this.cancelFlight = false;
     this.startTime = null;
     this.latestTime = null;

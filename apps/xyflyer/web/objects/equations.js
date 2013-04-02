@@ -60,6 +60,7 @@ equations.Equations = (function() {
     var index;
     index = (equation ? this.equations.indexOf(equation) : this.equations.length - 1);
     equation = this.equations.splice(index, 1)[0];
+    this.plot(equation.id);
     equation.container.remove();
     return this.length = this.equations.length;
   };

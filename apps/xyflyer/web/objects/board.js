@@ -126,11 +126,11 @@ board.Board = (function(_super) {
       return;
     }
     x = this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2);
-    y = this.yAxis - (this.islandCoordinates.y * this.yUnit);
+    y = this.yAxis - (this.islandCoordinates.y * this.yUnit) - height + (210 * this.scale);
     this.island = this.paper.set();
     this.island.push(this.addImage(island, x, y));
     text = this.islandText();
-    this.islandLabel = this.paper.text(x + (width / 2) - (15 * this.scale), y + (height / 2) - (15 * this.scale), text).attr({
+    this.islandLabel = this.paper.text(x + (width / 2) - (42 * this.scale), y + height - (72 * this.scale), text).attr({
       fill: '#ddd',
       stroke: 'none',
       'font-size': 9 + (2 * this.scale)
@@ -331,7 +331,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawGrid = function() {
-    var color, grid, gridString, increment, mark, multiple, start, text, xUnits, yUnits, _i, _j, _ref;
+    var color, grid, gridString, increment, label, mark, multiple, start, text, xUnits, yUnits, _i, _j, _ref;
     gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
     color = 'rgba(255,255,255,0.4)';
     xUnits = this.width / this.xUnit;
@@ -352,6 +352,16 @@ board.Board = (function(_super) {
         });
       }
     }
+    label = this.paper.text(24, this.yAxis + 6, 'X Axis');
+    label.attr({
+      stroke: 'none',
+      fill: color
+    });
+    label = this.paper.text(this.width - 24, this.yAxis + 6, 'X Axis');
+    label.attr({
+      stroke: 'none',
+      fill: color
+    });
     yUnits = this.height / this.yUnit;
     if (yUnits < this.maxUnits) {
       yUnits = this.maxUnits;
@@ -368,8 +378,27 @@ board.Board = (function(_super) {
           stroke: 'none',
           fill: color
         });
+        if (mark === 0) {
+          label = this.paper.text(this.xAxis + 6, mark - 6, 'Y Axis');
+          label.attr({
+            stroke: 'none',
+            fill: color
+          });
+        }
       }
     }
+    label = this.paper.text(this.xAxis - 6, 24, 'Y Axis');
+    label.attr({
+      stroke: 'none',
+      fill: color,
+      transform: 'r270'
+    });
+    label = this.paper.text(this.xAxis - 6, this.height - 24, 'Y Axis');
+    label.attr({
+      stroke: 'none',
+      fill: color,
+      transform: 'r270'
+    });
     grid = this.paper.path(gridString);
     return grid.attr({
       stroke: color

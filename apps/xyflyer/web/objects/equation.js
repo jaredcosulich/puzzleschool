@@ -119,6 +119,7 @@ equation.Equation = (function() {
     dropArea.component.mousedown(e);
     dropArea.component.move(e);
     dropArea.element.removeClass('with_component');
+    dropArea.component.after = null;
     dropArea.component = null;
     _ref = dropArea.childAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -570,7 +571,7 @@ equation.Equation = (function() {
         x = _this.clientX(e);
         offsetLeft = knob.offset().left - _this.gameArea.offset().left + (knob.width() / 2);
         if (x < offsetLeft) {
-          return;
+          x = offsetLeft;
         }
         startingX = x - offsetLeft;
         body.bind('mousemove.drag_knob touchmove.drag_knob', function(e) {

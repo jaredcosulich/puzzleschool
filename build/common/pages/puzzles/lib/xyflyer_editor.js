@@ -396,10 +396,16 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.addEquationComponent = function(fragment) {
-    var component, variable;
-    if (this.variables[variable = this.checkForVariable(fragment)]) {
-      alert("The variable, " + variable + ", is already in use");
-      return;
+    var component, variable, _i, _len, _ref;
+    if ((variable = this.checkForVariable(fragment))) {
+      _ref = this.equations.equationComponents;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        component = _ref[_i];
+        if (component.variable === variable) {
+          alert("The variable, " + variable + ", is already in use");
+          return;
+        }
+      }
     }
     component = this.equations.addComponent(fragment);
     if (variable) {
