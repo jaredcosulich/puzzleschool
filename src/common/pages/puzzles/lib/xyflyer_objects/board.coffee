@@ -225,6 +225,11 @@ class board.Board extends xyflyerObject.Object
                 text = @paper.text(mark + 6, @yAxis - 6, Math.round(@grid.xMin + (mark / @xUnit)))
                 text.attr(stroke: 'none', fill: color)
 
+        label = @paper.text(24, @yAxis + 6, 'X Axis')
+        label.attr(stroke: 'none', fill: color)
+        label = @paper.text(@width - 24, @yAxis + 6, 'X Axis')
+        label.attr(stroke: 'none', fill: color)
+
         yUnits = @height / @yUnit
         yUnits = @maxUnits if yUnits < @maxUnits
         multiple = Math.floor(yUnits / @maxUnits)
@@ -236,6 +241,15 @@ class board.Board extends xyflyerObject.Object
             unless mark > @height
                 text = @paper.text(@xAxis + 6, mark - 6, Math.round(@grid.yMax - (mark / @yUnit)))
                 text.attr(stroke: 'none', fill: color)
+                if mark == 0       
+                    console.log('YAXIS', Math.round(@grid.yMax - (mark / @yUnit)))             
+                    label = @paper.text(@xAxis + 6, mark - 6, 'Y Axis')
+                    label.attr(stroke: 'none', fill: color)
+                
+        label = @paper.text(@xAxis - 6, 24, 'Y Axis')
+        label.attr(stroke: 'none', fill: color, transform: 'r270')
+        label = @paper.text(@xAxis - 6, @height - 24, 'Y Axis')
+        label.attr(stroke: 'none', fill: color, transform: 'r270')
 
         grid = @paper.path(gridString)
         grid.attr(stroke: color)
