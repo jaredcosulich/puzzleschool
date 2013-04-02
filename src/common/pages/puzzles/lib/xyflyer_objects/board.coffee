@@ -242,7 +242,6 @@ class board.Board extends xyflyerObject.Object
                 text = @paper.text(@xAxis + 6, mark - 6, Math.round(@grid.yMax - (mark / @yUnit)))
                 text.attr(stroke: 'none', fill: color)
                 if mark == 0       
-                    console.log('YAXIS', Math.round(@grid.yMax - (mark / @yUnit)))             
                     label = @paper.text(@xAxis + 6, mark - 6, 'Y Axis')
                     label.attr(stroke: 'none', fill: color)
                 

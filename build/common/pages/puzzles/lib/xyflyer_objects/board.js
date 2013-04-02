@@ -379,7 +379,6 @@ board.Board = (function(_super) {
           fill: color
         });
         if (mark === 0) {
-          console.log('YAXIS', Math.round(this.grid.yMax - (mark / this.yUnit)));
           label = this.paper.text(this.xAxis + 6, mark - 6, 'Y Axis');
           label.attr({
             stroke: 'none',
