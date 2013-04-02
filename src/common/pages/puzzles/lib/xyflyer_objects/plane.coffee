@@ -34,7 +34,7 @@ class plane.Plane extends xyflyerObject.Object
         ctx.drawImage(
             @image[0], 
             @currentXPos - (@width/2), 
-            @currentYPos - (@height/2) - 1, 
+            @currentYPos - (@height/2), 
             @width,
             @height
         )

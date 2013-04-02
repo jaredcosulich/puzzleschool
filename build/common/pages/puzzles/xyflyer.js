@@ -468,20 +468,18 @@ soma.views({
       return _results;
     },
     setLevelIcon: function(_arg) {
-      var completed, id, levelIcon, locked, replace, started;
+      var completed, id, level, locked, started;
       id = _arg.id, started = _arg.started, completed = _arg.completed, locked = _arg.locked;
       if (!id) {
         return;
       }
-      levelIcon = this.$("#level_" + id).find('img');
+      level = this.$("#level_" + id);
+      level.removeClass('locked').removeClass('completed');
       if (locked) {
-        replace = '_locked';
+        return level.addClass('locked');
       } else if (completed) {
-        replace = '_complete';
-      } else {
-        replace = '';
+        return level.addClass('completed');
       }
-      return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level" + replace + "."));
     },
     nextLevel: function() {
       var index, level, _i, _len, _ref, _results;

@@ -413,10 +413,21 @@ body {
   padding-top: 12px;
   margin: 12px auto 0 auto;
   width: 565px;
+  overflow: hidden;
 }
 .xyflyer .level_selector .world .stage .level {
-  line-height: 36px;
-  padding-left: 9px;
+  display: block;
+  float: left;
+  margin: 0 0 11px 11px;
+  width: 44px;
+  height: 44px;
+  background: url('/assets/images/puzzles/xyflyer/level.png') 0 0;
+}
+.xyflyer .level_selector .world .stage .level.locked {
+  background-position: -44px 0;
+}
+.xyflyer .level_selector .world .stage .level.completed {
+  background-position: -88px 0;
 }
 .xyflyer .blue_button,
 .xyflyer .red_button {

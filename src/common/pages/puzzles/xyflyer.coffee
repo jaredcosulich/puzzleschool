@@ -336,14 +336,12 @@ soma.views
 
         setLevelIcon: ({id, started, completed, locked}) ->
             return if not id
-            levelIcon = @$("#level_#{id}").find('img')
+            level = @$("#level_#{id}")
+            level.removeClass('locked').removeClass('completed')
             if locked
-                replace = '_locked'
+                level.addClass('locked')
             else if completed
-                replace = '_complete'
-            else    
-                replace = ''            
-            levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level#{replace}."))
+                level.addClass('completed')
 
 
         nextLevel: ->            

@@ -404,9 +404,21 @@ body {
                 padding-top: 12px;
                 margin: 12px auto 0 auto;
                 width: 565px;
+                overflow: hidden;
                 .level {
-                    line-height: 36px;
-                    padding-left: 9px;
+                    display: block;
+                    float: left;
+                    margin: 0 0 11px 11px;
+                    width: 44px;
+                    height: 44px;
+                    background:url('/assets/images/puzzles/xyflyer/level.png') 0 0;
+                    &.locked {
+                        background-position: -44px 0;
+                    }
+                
+                    &.completed {
+                        background-position: -88px 0;
+                    }
                 }
             }
         }
