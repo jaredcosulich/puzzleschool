@@ -249,9 +249,14 @@ soma.views
         isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
             
         selectWorld: (index) ->
-            @$('.world_link').removeClass('selected')
+            for worldLink, i in @$('.world_link')
+                worldLink = $(worldLink)
+                if index == i and worldLink.attr('src').indexOf('selected') == -1
+                    worldLink.attr(src: worldLink.attr('src').replace(/(world\d)\./, '$1_selected.'))
+                else if index != i and worldLink.attr('src').indexOf('selected') != -1
+                    worldLink.attr(src: worldLink.attr('src').replace(/_selected/, ''))
+                    
             @$('.world').removeClass('selected')
-            $(@$('.world_link')[index]).addClass('selected')
             $(@$('.world')[index]).addClass('selected')
             
         findLevel: (levelId) ->

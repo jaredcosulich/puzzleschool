@@ -392,19 +392,14 @@ body {
 .xyflyer .level_selector h4 {
   text-align: center;
 }
-.xyflyer .level_selector .world_link {
+.xyflyer .level_selector .world_links {
+  background: url('/assets/images/puzzles/xyflyer/level_selector_background.png') no-repeat center center;
+  overflow: hidden;
+}
+.xyflyer .level_selector .world_links .world_link {
   float: left;
-  width: 72px;
-  height: 72px;
-  line-height: 72px;
-  font-weight: bold;
-  text-align: center;
   cursor: pointer;
   margin: 15px 0 15px 34px;
-  background-color: #a61c0e;
-}
-.xyflyer .level_selector .world_link.selected {
-  background-color: #0c8d28;
 }
 .xyflyer .level_selector .world {
   clear: left;

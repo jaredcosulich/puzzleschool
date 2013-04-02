@@ -34,13 +34,13 @@ class plane.Plane extends xyflyerObject.Object
         ctx.drawImage(
             @image[0], 
             @currentXPos - (@width/2), 
-            @currentYPos - (@height/2), 
+            @currentYPos - (@height/2) - 1, 
             @width,
             @height
         )
         
     size: ->
-        @scale = @board.scale / 1.4
+        @scale = @board.scale / 1.5
         @width = @image.width() * @scale
         @height = @image.height() * @scale
         @timeFactor = 2.5/@scale

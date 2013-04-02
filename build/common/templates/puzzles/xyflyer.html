@@ -85,7 +85,11 @@
     <div class='level_selector'>
         <h2 class='success'>Nice Work. Level Complete!</h2>
         <h3>Select The Next Level</h3>
-        {:worlds}<div class='world_link' data-world={index}>World #{index}</div>{/worlds}
+        <div class='world_links'>
+            {:worlds}
+            <img class='world_link' data-world={index} src='/assets/images/puzzles/xyflyer/world{index}.png'/>
+            {/worlds}
+        </div>
         {:worlds}
         <div class='world'>
             {:stages}

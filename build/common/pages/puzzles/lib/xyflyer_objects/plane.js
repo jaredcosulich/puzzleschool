@@ -58,11 +58,11 @@ plane.Plane = (function(_super) {
         this.move(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos);
       }
     }
-    return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
+    return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2) - 1, this.width, this.height);
   };
 
   Plane.prototype.size = function() {
-    this.scale = this.board.scale / 1.4;
+    this.scale = this.board.scale / 1.5;
     this.width = this.image.width() * this.scale;
     this.height = this.image.height() * this.scale;
     return this.timeFactor = 2.5 / this.scale;
