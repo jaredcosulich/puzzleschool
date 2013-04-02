@@ -572,7 +572,7 @@ xyflyerEditor.EditorHelper = (function() {
       _this = this;
     html = "<h3>" + text + "</h3><table><tbody><tr>";
     for (index = _i = 1; 1 <= count ? _i <= count : _i >= count; index = 1 <= count ? ++_i : --_i) {
-      html += "<td><div class='image'><img src='https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + name + index + ".png' style='opacity: 0'/></div></td>";
+      html += "<td><div class='image'><img src='/assets/images/puzzles/xyflyer/" + name + index + ".png' style='opacity: 0'/></div></td>";
     }
     html += "</tr></tbody></table>\n<a class='blue_button cancel_button'>Cancel</a>";
     dialog = this.createDialog(html);

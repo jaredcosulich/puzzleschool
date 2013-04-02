@@ -99,7 +99,7 @@ soma.chunks({
         object = _ref[_i];
         this.objects.push({
           name: object,
-          image: this.loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + object + "1.png")
+          image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + "1.png")
         });
       }
       if (this.levelId === 'editor') {
@@ -463,11 +463,8 @@ soma.views({
       levelIcon = this.$("#level_" + id).find('img');
       if (locked) {
         replace = '_locked';
-      } else if (started) {
-        replace = '_started';
-        if (completed) {
-          replace = '_complete';
-        }
+      } else if (completed) {
+        replace = '_complete';
       } else {
         replace = '';
       }

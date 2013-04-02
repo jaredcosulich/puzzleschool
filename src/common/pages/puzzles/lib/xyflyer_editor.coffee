@@ -338,7 +338,7 @@ class xyflyerEditor.EditorHelper
         html = "<h3>#{text}</h3><table><tbody><tr>"
         
         for index in [1..count]
-            html += "<td><div class='image'><img src='https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{name}#{index}.png' style='opacity: 0'/></div></td>"
+            html += "<td><div class='image'><img src='/assets/images/puzzles/xyflyer/#{name}#{index}.png' style='opacity: 0'/></div></td>"
         
         html += """
             </tr></tbody></table>

@@ -40,10 +40,10 @@ class plane.Plane extends xyflyerObject.Object
         )
         
     size: ->
-        @scale = @board.scale / 2
+        @scale = @board.scale / 1.4
         @width = @image.width() * @scale
         @height = @image.height() * @scale
-        @timeFactor = 1.9/@scale
+        @timeFactor = 2.25/@scale
     
     move: (x, y, next) ->
         @currentXPos = x

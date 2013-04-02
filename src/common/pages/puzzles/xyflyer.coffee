@@ -70,7 +70,7 @@ soma.chunks
             for object in ['island', 'plane']
                 @objects.push(
                     name: object
-                    image: @loadImage("https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{object}1.png")
+                    image: @loadImage("/assets/images/puzzles/xyflyer/#{object}1.png")
                 )
             
             if @levelId == 'editor'
@@ -334,10 +334,8 @@ soma.views
             levelIcon = @$("#level_#{id}").find('img')
             if locked
                 replace = '_locked'
-            else if started
-                replace = '_started'
-                if completed
-                    replace = '_complete'
+            else if completed
+                replace = '_complete'
             else    
                 replace = ''            
             levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level#{replace}."))

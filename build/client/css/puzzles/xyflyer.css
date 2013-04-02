@@ -11,7 +11,7 @@ body {
 .xyflyer .dynamic_content {
   height: 640px;
   width: 960px;
-  background-image: url('https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/background1.png');
+  background-image: url('/assets/images/puzzles/xyflyer/background1.png');
 }
 .xyflyer .dynamic_content.dragging {
   -webkit-touch-callout: none;
@@ -417,11 +417,11 @@ body {
   background-color: #eee;
   padding-top: 12px;
   margin: 12px auto 0 auto;
-  width: 551px;
+  width: 565px;
 }
 .xyflyer .level_selector .world .stage .level {
   line-height: 36px;
-  padding-left: 15px;
+  padding-left: 9px;
 }
 .xyflyer .blue_button,
 .xyflyer .red_button {
