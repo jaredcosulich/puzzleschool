@@ -10044,6 +10044,159 @@ levels.WORLDS = [
               y: -4
             }
           }, {
+            id: 1365021382511,
+            equations: {
+              'ln(x+4)+2': {
+                start: 'ln(x)',
+                solutionComponents: [
+                  {
+                    fragment: '+4',
+                    after: 'x'
+                  }, {
+                    fragment: '+2',
+                    after: 'ln(x+4)'
+                  }
+                ]
+              }
+            },
+            fragments: ['+2', '+4', '-2', '-4'],
+            rings: [
+              {
+                x: -3,
+                y: 2
+              }, {
+                x: -1,
+                y: 3.1
+              }, {
+                x: 2,
+                y: 3.79
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -3.98,
+              y: -1.912
+            }
+          }, {
+            id: 1365027326338,
+            equations: {
+              'ln(3*x+3)': {
+                start: 'ln(x)',
+                solutionComponents: [
+                  {
+                    fragment: '3*',
+                    after: 'ln('
+                  }, {
+                    fragment: '+3',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['3*', '(1/3)*', '+3', '-3'],
+            rings: [
+              {
+                x: 0,
+                y: 1.1
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -0.87,
+              y: -0.942
+            }
+          }, {
+            id: 1365027412952,
+            equations: {
+              'ln(3*x+3)': {
+                start: 'ln(x)',
+                solutionComponents: [
+                  {
+                    fragment: '3*',
+                    after: 'ln('
+                  }, {
+                    fragment: '+3',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['3*', '(1/3)*', '+3', '-3'],
+            rings: [
+              {
+                x: 0,
+                y: 1.1
+              }, {
+                x: 1,
+                y: 1.79
+              }, {
+                x: 2,
+                y: 2.2
+              }
+            ],
+            grid: {
+              xMin: -6,
+              xMax: 6,
+              yMin: -6,
+              yMax: 6
+            },
+            islandCoordinates: {
+              x: -0.87,
+              y: -0.942
+            }
+          }, {
+            id: 1365029767203,
+            equations: {
+              '-3*ln(x+6)+6': {
+                start: 'ln(x)',
+                solutionComponents: [
+                  {
+                    fragment: '-3*',
+                    after: ''
+                  }, {
+                    fragment: '+6',
+                    after: 'x'
+                  }, {
+                    fragment: '+6',
+                    after: 'ln(x+6)'
+                  }
+                ]
+              }
+            },
+            fragments: ['3*', '-3*', '+6', '+6'],
+            rings: [
+              {
+                x: -3,
+                y: 2.7
+              }, {
+                x: 0,
+                y: 0.62
+              }, {
+                x: 4,
+                y: -0.91
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -5.482,
+              y: 7.973
+            }
+          }, {
             id: 1365014127083,
             equations: {
               'tan(x+2)': {

@@ -223,7 +223,7 @@ soma.views
                 @helper.addRing(ring.x, ring.y)
             
             @selectWorld(@currentWorld())
-            _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', @level.id]) if window._gaq
+            _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', @level.id]) if window._gaq and @level
                             
                 
         centerAndShow: (element, board) ->

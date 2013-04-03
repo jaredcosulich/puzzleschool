@@ -300,7 +300,7 @@ soma.views({
         this.helper.addRing(ring.x, ring.y);
       }
       this.selectWorld(this.currentWorld());
-      if (window._gaq) {
+      if (window._gaq && this.level) {
         return _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', this.level.id]);
       }
     },
