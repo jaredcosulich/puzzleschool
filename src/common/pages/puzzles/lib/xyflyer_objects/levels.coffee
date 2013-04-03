@@ -5751,34 +5751,221 @@ levels.WORLDS = [
                 name: 'Crazy Curves'
                 levels: [
                     {
-                        id: 1363927709647
+                        id: 1365008751620
                         equations:
-                            'sin(a*x)+5':
+                            'sin((1/3)*x)+6':
+                                start: 'sin(x)'
                                 solutionComponents: [
-                                    {fragment: 'sin(x)', after: ''}
-                                    {fragment: 'a*', after: 'sin('}
-                                    {fragment: '+5', after: 'sin(a*x)'}
+                                    {fragment: '(1/3)*', after: 'sin('}
+                                    {fragment: '+6', after: 'sin((1/3)*x)'}
                                 ]
+                        fragments: ['3*', '(1/3)*', '+3', '+6']
                         rings: [
-                            {x: 0.52, y: 6}
-                            {x: 3.67, y: 4}
-                            {x: 4.71, y: 6}
-                            {x: 1.57, y: 4}
+                            {x: 0, y: 6}
+                            {x: 4.713, y: 7}
                         ]
                         grid:
                             xMin: -10
                             xMax: 10
                             yMin: -10
                             yMax: 10
-                        islandCoordinates: {x: -2.62, y: 4}
-                        fragments: ['sin(x)', 'a*', '+5']
+                        islandCoordinates: {x: -4.712, y: 5}
+                    }
+                    {
+                        id: 1365008919218
+                        equations:
+                            'sin(2*x-4)':
+                                start: 'sin(x)'
+                                solutionComponents: [
+                                    {fragment: '2*', after: 'sin('}
+                                    {fragment: '-4', after: 'x'}
+                                ]
+                        fragments: ['2*', '(-1/2)*', '+4', '-4']
+                        rings: [
+                            {x: -1.927, y: -1}
+                            {x: 2.785, y: 1}
+                            {x: 7.498, y: -1}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6.639, y: 1}
+                    }
+                    {
+                        id: 1365010583352
+                        equations:
+                            '2*sin((1/2)*x)+2':
+                                start: 'sin(x)'
+                                solutionComponents: [
+                                    {fragment: '2*', after: ''}
+                                    {fragment: '(1/2)*', after: 'sin('}
+                                    {fragment: '+2', after: 'sin((1/2)*x)'}
+                                ]
+                        fragments: ['2*', '(1/2)*', '+2', '-2']
+                        rings: [
+                            {x: -3.14, y: 0}
+                            {x: 0, y: 2}
+                            {x: 3.14, y: 4}
+                            {x: 6.28, y: 2}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6.28, y: 2}
+                    }
+                    {
+                        id: 1365010801140
+                        equations:
+                            'a*sin((1/b)*x)+c':
+                                start: 'sin(x)'
+                                solutionComponents: [
+                                    {fragment: 'a*', after: ''}
+                                    {fragment: '(1/b)*', after: 'sin('}
+                                    {fragment: '+c', after: 'sin((1/b)*x)'}
+                                ]
+                        fragments: ['a*', '(1/b)*', '+c']
+                        rings: [
+                            {x: -1.571, y: 2}
+                            {x: 0, y: 4}
+                            {x: 1.571, y: 6}
+                            {x: 4.713, y: 8}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -4.712, y: 0}
                         variables: 
                             a:
                                 start: 1
                                 min: -10
                                 max: 10
                                 increment: 1
+                                solution: 4
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
                                 solution: 3
+                            c:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: 4
+                    }
+                    {
+                        id: 1365011732523
+                        equations:
+                            '(x-3)^3+3':
+                                start: '(x)^3'
+                                solutionComponents: [
+                                    {fragment: '-3', after: 'x'}
+                                    {fragment: '+3', after: '(x-3)^3'}
+                                ]
+                        fragments: ['+3', '-3']
+                        rings: [
+                            {x: 2, y: 2}
+                            {x: 3, y: 3}
+                            {x: 4, y: 4}
+                            {x: 5, y: 11}
+                        ]
+                        grid:
+                            xMin: -12
+                            xMax: 12
+                            yMin: -12
+                            yMax: 12
+                        islandCoordinates: {x: 1, y: -5}
+                    }
+                    {
+                        id: 1365011843441
+                        equations:
+                            '((1/b)*x)^3':
+                                start: '(x)^3'
+                                solutionComponents: [
+                                    {fragment: '(1/b)*', after: '('}
+                                ]
+                        fragments: ['a*', '(1/b)*']
+                        rings: [
+                            {x: -4, y: 1}
+                            {x: 0, y: 0}
+                            {x: 4, y: -1}
+                            {x: 8, y: -8}
+                        ]
+                        grid:
+                            xMin: -12
+                            xMax: 12
+                            yMin: -12
+                            yMax: 12
+                        islandCoordinates: {x: -8, y: 8}
+                        variables: 
+                            a:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: null
+                            b:
+                                start: 1
+                                min: -10
+                                max: 10
+                                increment: 1
+                                solution: -4
+                    }
+                    {
+                        id: 1365012432460
+                        equations:
+                            '((-1/3)*x+3)^3-3':
+                                start: '(x)^3'
+                                solutionComponents: [
+                                    {fragment: '(-1/3)*', after: '('}
+                                    {fragment: '+3', after: 'x'}
+                                    {fragment: '-3', after: '((-1/3)*x+3)^3'}
+                                ]
+                        fragments: ['(1/3)*', '(-1/3)*', '+3', '-3']
+                        rings: [
+                            {x: 6, y: -2}
+                            {x: 9, y: -3}
+                            {x: 12, y: -4}
+                            {x: 15, y: -11}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 20
+                            yMin: -20
+                            yMax: 10
+                        islandCoordinates: {x: 3, y: 5}
+                    }
+                    {
+                        id: 1365013431792
+                        equations:
+                            '3*((1/3)*x+1)^3+3':
+                                start: '(x)^3'
+                                solutionComponents: [
+                                    {fragment: '3*', after: ''}
+                                    {fragment: '(1/3)*', after: '('}
+                                    {fragment: '+1', after: 'x'}
+                                    {fragment: '+3', after: '((1/3)*x+1)^3'}
+                                ]
+                        fragments: ['3*', '(1/3)*', '+1', '+3']
+                        rings: [
+                            {x: -3, y: 3}
+                            {x: 0, y: 6}
+                            {x: -0.92, y: 4}
+                            {x: -5.08, y: 2}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -6, y: 0}
                     }
                 ]
             }
