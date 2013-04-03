@@ -20,16 +20,23 @@ class plane.Plane extends xyflyerObject.Object
         @latestTime = t
         @startTime = @latestTime if not @startTime
         
+        moveTo = (position) =>
+            @xPos = position.x
+            @yPos = position.y
+            position.ring.highlight() if position.ring
+            @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
+                    
         if @path
             position = @path[Math.round((@latestTime-@startTime)/@timeFactor*10)]
             if !position   
-                @path = null
-                @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
+                keys = Object.keys(@path)
+                lastPosition = @path[keys[keys.length - 2]]
+                if @xPos == lastPosition.x and @yPos == lastPosition.y
+                    @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
+                else
+                    moveTo(lastPosition)
             else
-                @xPos = position.x
-                @yPos = position.y
-                position.ring.highlight() if position.ring
-                @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
+                moveTo(position)
         
         ctx.drawImage(
             @image[0], 
@@ -67,6 +74,7 @@ class plane.Plane extends xyflyerObject.Object
             @move(startX + portionX, startY + portionY, (if portion == 1 then next else null))
     
     fall: ->
+        return if @falling
         @path = null
         @falling = true
         x = @xPos + @board.xAxis + 20

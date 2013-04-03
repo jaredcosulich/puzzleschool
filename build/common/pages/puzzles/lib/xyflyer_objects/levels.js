@@ -9833,6 +9833,207 @@ levels.WORLDS = [
               x: 3,
               y: 5
             }
+          }, {
+            id: 1365013431792,
+            equations: {
+              '3*((1/3)*x+1)^3+3': {
+                start: '(x)^3',
+                solutionComponents: [
+                  {
+                    fragment: '3*',
+                    after: ''
+                  }, {
+                    fragment: '(1/3)*',
+                    after: '('
+                  }, {
+                    fragment: '+1',
+                    after: 'x'
+                  }, {
+                    fragment: '+3',
+                    after: '((1/3)*x+1)^3'
+                  }
+                ]
+              }
+            },
+            fragments: ['3*', '(1/3)*', '+1', '+3'],
+            rings: [
+              {
+                x: -3,
+                y: 3
+              }, {
+                x: 0,
+                y: 6
+              }, {
+                x: -0.92,
+                y: 4
+              }, {
+                x: -5.08,
+                y: 2
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -6,
+              y: 0
+            }
+          }, {
+            id: 1365014359939,
+            equations: {
+              'sqrt(x+3)+3': {
+                start: 'sqrt(x)',
+                solutionComponents: [
+                  {
+                    fragment: '+3',
+                    after: 'x'
+                  }, {
+                    fragment: '+3',
+                    after: 'sqrt(x+3)'
+                  }
+                ]
+              }
+            },
+            fragments: ['+3', '+3'],
+            rings: [
+              {
+                x: -2,
+                y: 4
+              }, {
+                x: 1,
+                y: 5
+              }, {
+                x: 6,
+                y: 6
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -3,
+              y: 3
+            }
+          }, {
+            id: 1365014932286,
+            equations: {
+              'sqrt(4*x)': {
+                start: 'sqrt(x)',
+                solutionComponents: [
+                  {
+                    fragment: '4*',
+                    after: 'sqrt('
+                  }
+                ]
+              }
+            },
+            fragments: ['2*', '(1/2)*', '4*', '(1/4)*'],
+            rings: [
+              {
+                x: 1,
+                y: 2
+              }, {
+                x: 4,
+                y: 4
+              }, {
+                x: 9,
+                y: 6
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: 0,
+              y: 0
+            }
+          }, {
+            id: 1365017158875,
+            equations: {
+              'sqrt(-4*x-4)+4': {
+                start: 'sqrt(x)',
+                solutionComponents: [
+                  {
+                    fragment: '-4*',
+                    after: 'sqrt('
+                  }, {
+                    fragment: '-4',
+                    after: 'x'
+                  }, {
+                    fragment: '+4',
+                    after: 'sqrt(-4*x-4)'
+                  }
+                ]
+              }
+            },
+            fragments: ['4*', '-4*', '+4', '-4'],
+            rings: [
+              {
+                x: -2,
+                y: 6
+              }, {
+                x: -5,
+                y: 8
+              }, {
+                x: -1,
+                y: 4
+              }
+            ],
+            grid: {
+              xMin: -14,
+              xMax: 6,
+              yMin: -6,
+              yMax: 14
+            },
+            islandCoordinates: {
+              x: -10,
+              y: 10
+            }
+          }, {
+            id: 1365014127083,
+            equations: {
+              'tan(x+2)': {
+                start: 'tan(x)',
+                solutionComponents: [
+                  {
+                    fragment: '+2',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['+2'],
+            rings: [
+              {
+                x: 1,
+                y: -0.14
+              }, {
+                x: 0,
+                y: -2.19
+              }, {
+                x: 2,
+                y: 1.16
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -2,
+              y: 0
+            }
           }
         ]
       }
