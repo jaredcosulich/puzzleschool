@@ -268,7 +268,7 @@ class board.Board extends xyflyerObject.Object
 
         brokenLine = 0
         infiniteLine = 0
-        for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)]
+        for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)] by 0.1
             lastYPos = yPos
             yPos = formula(xPos / @xUnit) * @yUnit
             continue if isNaN(yPos)
@@ -341,7 +341,7 @@ class board.Board extends xyflyerObject.Object
             path.distance += distance
             
         for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
-            xPos = Math.round(xPos)
+            # xPos = Math.round(xPos)
             if lastFormula 
                 if lastFormula.area(xPos / @xUnit)
                     yPos = lastFormula.formula(xPos / @xUnit) * @yUnit

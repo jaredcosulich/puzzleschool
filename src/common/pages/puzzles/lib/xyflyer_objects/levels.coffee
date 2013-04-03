@@ -6033,7 +6033,30 @@ levels.WORLDS = [
                             yMax: 14
                         islandCoordinates: {x: -10, y: 10}
                     }
-                    
+                    {
+                        id: 1365018479510
+                        equations:
+                            '-4*sqrt(x+4)-4':
+                                start: 'sqrt(x)'
+                                solutionComponents: [
+                                    {fragment: '-4*', after: ''}
+                                    {fragment: '+4', after: 'x'}
+                                    {fragment: '-4', after: 'sqrt(x+4)'}
+                                ]
+                        fragments: ['4*', '-4*', '+4', '-4']
+                        rings: [
+                            {x: -3, y: -8}
+                            {x: 0, y: -12}
+                            {x: 5, y: -16}
+                            {x: 12, y: -20}
+                        ]
+                        grid:
+                            xMin: -15
+                            xMax: 15
+                            yMin: -25
+                            yMax: 5
+                        islandCoordinates: {x: -4, y: -4}
+                    }
                     
                     
                     

@@ -421,7 +421,7 @@ board.Board = (function(_super) {
     plotArea.beginPath();
     brokenLine = 0;
     infiniteLine = 0;
-    for (xPos = _i = _ref1 = this.grid.xMin * this.xUnit, _ref2 = this.grid.xMax * this.xUnit; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; xPos = _ref1 <= _ref2 ? ++_i : --_i) {
+    for (xPos = _i = _ref1 = this.grid.xMin * this.xUnit, _ref2 = this.grid.xMax * this.xUnit; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; xPos = _i += 0.1) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
       if (isNaN(yPos)) {
@@ -512,7 +512,6 @@ board.Board = (function(_super) {
       return path.distance += distance;
     };
     for (xPos = _i = _ref = this.islandCoordinates.x * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
-      xPos = Math.round(xPos);
       if (lastFormula) {
         if (lastFormula.area(xPos / this.xUnit)) {
           yPos = lastFormula.formula(xPos / this.xUnit) * this.yUnit;
