@@ -223,6 +223,7 @@ soma.views
                 @helper.addRing(ring.x, ring.y)
             
             @selectWorld(@currentWorld())
+            _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', @level.id]) if window._gaq
                             
                 
         centerAndShow: (element, board) ->
@@ -346,6 +347,8 @@ soma.views
 
         nextLevel: ->            
             @puzzleProgress[@level.id].completed = new Date().getTime()
+            _gaq.push(['_trackEvent', 'level', 'completed', 'xyflyer', @level.id]) if window._gaq
+            
             @registerEvent
                 type: 'success'
                 info: 

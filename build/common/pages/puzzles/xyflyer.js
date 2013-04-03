@@ -299,7 +299,10 @@ soma.views({
         ring = _ref6[_j];
         this.helper.addRing(ring.x, ring.y);
       }
-      return this.selectWorld(this.currentWorld());
+      this.selectWorld(this.currentWorld());
+      if (window._gaq) {
+        return _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', this.level.id]);
+      }
     },
     centerAndShow: function(element, board) {
       var areaOffset, boardOffset, offset;
@@ -484,6 +487,9 @@ soma.views({
     nextLevel: function() {
       var index, level, _i, _len, _ref, _results;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
+      if (window._gaq) {
+        _gaq.push(['_trackEvent', 'level', 'completed', 'xyflyer', this.level.id]);
+      }
       this.registerEvent({
         type: 'success',
         info: {
