@@ -8859,6 +8859,66 @@ levels.WORLDS = [
               y: 14
             }
           }, {
+            id: 1364950899989,
+            equations: {
+              '((1/4)*x+2)^2': {
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '(1/4)*',
+                    after: '('
+                  }, {
+                    fragment: '+2',
+                    after: 'x'
+                  }
+                ]
+              },
+              '((1/2)*x-4)^2': {
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '(1/2)*',
+                    after: ''
+                  }, {
+                    fragment: '-4',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['(1/2)*', '(1/4)*', '+2', '-4'],
+            rings: [
+              {
+                x: -8,
+                y: 0
+              }, {
+                x: 8,
+                y: 0
+              }, {
+                x: -12,
+                y: 1
+              }, {
+                x: -4,
+                y: 1
+              }, {
+                x: 6,
+                y: 1
+              }, {
+                x: 10,
+                y: 1
+              }
+            ],
+            grid: {
+              xMin: -22,
+              xMax: 22,
+              yMin: -22,
+              yMax: 22
+            },
+            islandCoordinates: {
+              x: -16,
+              y: 4
+            }
+          }, {
             id: 1364949817117,
             equations: {
               '(2*x-2)^2': {
@@ -8970,6 +9030,66 @@ levels.WORLDS = [
               y: -9
             }
           }, {
+            id: 1364956538708,
+            equations: {
+              '3*(x)^2-3': {
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '3*',
+                    after: ''
+                  }, {
+                    fragment: '-3',
+                    after: '(x)^2'
+                  }
+                ]
+              },
+              '(x+3)^2+3': {
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '+3',
+                    after: 'x'
+                  }, {
+                    fragment: '+3',
+                    after: '(x+3)^2'
+                  }
+                ]
+              }
+            },
+            fragments: ['(1/3)*', '3*', '+3', '+3', '-3'],
+            rings: [
+              {
+                x: -4,
+                y: 4
+              }, {
+                x: -3,
+                y: 3
+              }, {
+                x: -2,
+                y: 4
+              }, {
+                x: -1,
+                y: 0
+              }, {
+                x: 0,
+                y: -3
+              }, {
+                x: 1,
+                y: 0
+              }
+            ],
+            grid: {
+              xMin: -15,
+              xMax: 15,
+              yMin: -15,
+              yMax: 15
+            },
+            islandCoordinates: {
+              x: -6,
+              y: 12
+            }
+          }, {
             id: 1363646545338,
             equations: {
               '(1/4)*(x)^2-3': {
@@ -9017,6 +9137,96 @@ levels.WORLDS = [
               y: 13
             },
             fragments: ['(1/4)*', '(1/4)*', '-3']
+          }, {
+            id: 1364961568842,
+            equations: {
+              '(1/a)*(x)^2+c': {
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '(1/a)*',
+                    after: ''
+                  }, {
+                    fragment: '+c',
+                    after: '(x)^2'
+                  }
+                ]
+              },
+              '((1/b)*x+d)^2': {
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '(1/b)*',
+                    after: '('
+                  }, {
+                    fragment: '+d',
+                    after: 'x'
+                  }
+                ]
+              }
+            },
+            fragments: ['(1/a)*', '(1/b)*', '+c', '+d'],
+            rings: [
+              {
+                x: -2,
+                y: 8
+              }, {
+                x: 0,
+                y: 10
+              }, {
+                x: 2,
+                y: 8
+              }, {
+                x: 5,
+                y: 1
+              }, {
+                x: 10,
+                y: 0
+              }, {
+                x: 15,
+                y: 1
+              }
+            ],
+            grid: {
+              xMin: -18,
+              xMax: 18,
+              yMin: -18,
+              yMax: 18
+            },
+            islandCoordinates: {
+              x: -5,
+              y: 9
+            },
+            variables: {
+              a: {
+                start: 1,
+                min: -10,
+                max: 10,
+                increment: 1,
+                solution: -2
+              },
+              b: {
+                start: 1,
+                min: -10,
+                max: 10,
+                increment: 1,
+                solution: 5
+              },
+              c: {
+                start: 0,
+                min: -10,
+                max: 10,
+                increment: 1,
+                solution: 10
+              },
+              d: {
+                start: 0,
+                min: -10,
+                max: 10,
+                increment: 1,
+                solution: -2
+              }
+            }
           }
         ]
       }, {
