@@ -67,7 +67,7 @@ soma.chunks
             #         name: object
             #         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
             #     )
-            for object in ['island', 'plane']
+            for object in ['person', 'island', 'plane']
                 @objects.push(
                     name: object
                     image: @loadImage("/assets/images/puzzles/xyflyer/#{object}1.png")

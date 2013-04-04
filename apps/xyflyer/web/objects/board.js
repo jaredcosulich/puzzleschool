@@ -114,28 +114,29 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addIsland = function() {
-    var height, island, text, width, x, y,
+    var island, islandHeight, islandWidth, islandX, islandY, person, personHeight, personWidth, personX, personY, planeX, planeY,
       _this = this;
+    person = this.objects.find('.person img');
+    personWidth = person.width() * this.scale;
+    personHeight = person.height() * this.scale;
     island = this.objects.find('.island img');
-    width = island.width() * this.scale;
-    height = island.height() * this.scale;
-    if (!width || !height) {
+    islandWidth = island.width() * this.scale;
+    islandHeight = island.height() * this.scale;
+    if (!personWidth || !personHeight || !islandWidth || !islandHeight) {
       $.timeout(100, function() {
         return _this.addIsland();
       });
       return;
     }
-    x = this.xAxis + (this.islandCoordinates.x * this.xUnit) - (width / 2);
-    y = this.yAxis - (this.islandCoordinates.y * this.yUnit) - height + (210 * this.scale);
     this.island = this.paper.set();
-    this.island.push(this.addImage(island, x, y));
-    text = this.islandText();
-    this.islandLabel = this.paper.text(x + (width / 2) - (42 * this.scale), y + height - (72 * this.scale), text).attr({
-      fill: '#ddd',
-      stroke: 'none',
-      'font-size': 9 + (2 * this.scale)
-    }).toFront();
-    return this.island.push(this.islandLabel);
+    planeX = this.xAxis + (this.islandCoordinates.x * this.xUnit);
+    planeY = this.yAxis - (this.islandCoordinates.y * this.yUnit);
+    islandX = planeX - (islandWidth / 2) - (personWidth / 4);
+    islandY = planeY + islandHeight - (6 * this.scale);
+    this.island.push(this.addImage(island, islandX, islandY));
+    personX = planeX - personWidth + (15 * this.scale);
+    personY = planeY - (9 * this.scale);
+    return this.island.push(this.addImage(person, personX, personY));
   };
 
   Board.prototype.islandText = function() {
@@ -421,7 +422,7 @@ board.Board = (function(_super) {
     plotArea.beginPath();
     brokenLine = 0;
     infiniteLine = 0;
-    for (xPos = _i = _ref1 = this.grid.xMin * this.xUnit, _ref2 = this.grid.xMax * this.xUnit; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; xPos = _ref1 <= _ref2 ? ++_i : --_i) {
+    for (xPos = _i = _ref1 = this.grid.xMin * this.xUnit, _ref2 = this.grid.xMax * this.xUnit; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; xPos = _i += 0.1) {
       lastYPos = yPos;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
       if (isNaN(yPos)) {
@@ -512,7 +513,6 @@ board.Board = (function(_super) {
       return path.distance += distance;
     };
     for (xPos = _i = _ref = this.islandCoordinates.x * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
-      xPos = Math.round(xPos);
       if (lastFormula) {
         if (lastFormula.area(xPos / this.xUnit)) {
           yPos = lastFormula.formula(xPos / this.xUnit) * this.yUnit;

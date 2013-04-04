@@ -34,7 +34,8 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.draw = function(ctx, t) {
-    var position;
+    var keys, lastPosition, moveTo, position,
+      _this = this;
     if (!this.image) {
       return;
     }
@@ -42,20 +43,28 @@ plane.Plane = (function(_super) {
     if (!this.startTime) {
       this.startTime = this.latestTime;
     }
+    moveTo = function(position) {
+      _this.xPos = position.x;
+      _this.yPos = position.y;
+      if (position.ring) {
+        position.ring.highlight();
+      }
+      return _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
+    };
     if (this.path) {
       position = this.path[Math.round((this.latestTime - this.startTime) / this.timeFactor * 10)];
       if (!position) {
-        this.path = null;
-        if (!(this.board.paperY(this.currentYPos) > this.board.grid.yMax)) {
-          this.fall();
+        keys = Object.keys(this.path);
+        lastPosition = this.path[keys[keys.length - 2]];
+        if (this.xPos === lastPosition.x && this.yPos === lastPosition.y) {
+          if (!(this.board.paperY(this.currentYPos) > this.board.grid.yMax)) {
+            this.fall();
+          }
+        } else {
+          moveTo(lastPosition);
         }
       } else {
-        this.xPos = position.x;
-        this.yPos = position.y;
-        if (position.ring) {
-          position.ring.highlight();
-        }
-        this.move(this.xPos + this.board.xAxis, this.board.yAxis - this.yPos);
+        moveTo(position);
       }
     }
     return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
@@ -110,6 +119,9 @@ plane.Plane = (function(_super) {
   Plane.prototype.fall = function() {
     var x, y,
       _this = this;
+    if (this.falling) {
+      return;
+    }
     this.path = null;
     this.falling = true;
     x = this.xPos + this.board.xAxis + 20;

@@ -78,27 +78,42 @@ class board.Board extends xyflyerObject.Object
         @paper.image(image.attr('src'), x, y, width, height)
 
     addIsland: ->
+        person = @objects.find('.person img')
+        personWidth = person.width() * @scale
+        personHeight = person.height() * @scale
+        
         island = @objects.find('.island img')
+        islandWidth = island.width() * @scale
+        islandHeight = island.height() * @scale
 
-        width = island.width() * @scale
-        height = island.height() * @scale
-
-        if not width or not height
+        if not personWidth or not personHeight or not islandWidth or not islandHeight
             $.timeout 100, => @addIsland()
             return
+        
+        @island = @paper.set()    
             
-        x = @xAxis + (@islandCoordinates.x * @xUnit) - (width/2)
-        y = @yAxis - (@islandCoordinates.y * @yUnit) - height + (210*@scale)
-        @island = @paper.set()
-        @island.push(@addImage(island, x, y))
-        text = @islandText()
-        @islandLabel = @paper.text(
-            x + (width/2) - (42*@scale)
-            y + height - (72*@scale)
-            text
-        ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
+        planeX = @xAxis + (@islandCoordinates.x * @xUnit)
+        planeY = @yAxis - (@islandCoordinates.y * @yUnit)
 
-        @island.push(@islandLabel)
+        islandX = planeX - (islandWidth/2) - (personWidth/4)
+        islandY = planeY + islandHeight - (6*@scale)
+        @island.push(@addImage(island, islandX, islandY))
+
+        personX = planeX - personWidth + (15 * @scale)
+        personY = planeY - (9 * @scale)
+        @island.push(@addImage(person, personX, personY))
+        
+
+        # console.log(y)
+        # 
+        # text = @islandText()
+        # @islandLabel = @paper.text(
+        #     x + (width/2) - (42*@scale)
+        #     y + height - (72*@scale)
+        #     text
+        # ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
+        # 
+        # @island.push(@islandLabel)
         
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
