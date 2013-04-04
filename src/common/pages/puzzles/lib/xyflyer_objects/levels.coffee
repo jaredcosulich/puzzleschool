@@ -6188,6 +6188,52 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: -3, y: -1.56}
                     }
+                    {
+                        id: 1365110893389
+                        equations:
+                            'tan((-1/3)*x)':
+                                start: 'tan(x)'
+                                solutionComponents: [
+                                    {fragment: '(-1/3)*', after: 'tan('}
+                                ]
+                        fragments: ['(1/3)*', '(-1/3)*']
+                        rings: [
+                            {x: -2, y: 0.79}
+                            {x: 0, y: 0}
+                            {x: 2, y: -0.79}
+                            {x: 4, y: -4.13}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -4, y: 4.13}
+                    }
+                    {
+                        id: 1365111278650
+                        equations:
+                            'tan((-1/3)*x+3)-3':
+                                start: 'tan(x)'
+                                solutionComponents: [
+                                    {fragment: '(-1/3)*', after: 'tan('}
+                                    {fragment: '+3', after: 'x'}
+                                    {fragment: '-3', after: 'tan((-1/3)*x+3)'}
+                                ]
+                        fragments: ['(1/3)*', '(-1/3)*', '+3', '-3']
+                        rings: [
+                            {x: -3, y: -1.84}
+                            {x: -1, y: -2.81}
+                            {x: 1, y: -3.51}
+                            {x: 3, y: -5.19}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -15
+                            yMax: 5
+                        islandCoordinates: {x: -4, y: -0.49}
+                    }
                 ]
             }
         ]
