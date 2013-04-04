@@ -131,11 +131,11 @@ board.Board = (function(_super) {
     this.island = this.paper.set();
     planeX = this.xAxis + (this.islandCoordinates.x * this.xUnit);
     planeY = this.yAxis - (this.islandCoordinates.y * this.yUnit);
-    islandX = planeX - (islandWidth / 2) - (personWidth / 4);
-    islandY = planeY + islandHeight - (300 * this.scale);
-    this.island.push(this.addImage(island, islandX, islandY));
     personX = planeX - personWidth + (15 * this.scale);
-    personY = planeY - (9 * this.scale);
+    personY = planeY - (17 * this.scale);
+    islandX = planeX - (islandWidth / 2) - (personWidth / 4);
+    islandY = planeY + personHeight + islandHeight - (576 * this.scale);
+    this.island.push(this.addImage(island, islandX, islandY));
     return this.island.push(this.addImage(person, personX, personY));
   };
 
