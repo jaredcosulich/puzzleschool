@@ -114,7 +114,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addIsland = function() {
-    var island, islandHeight, islandWidth, islandX, islandY, person, personHeight, personWidth, personX, personY, planeX, planeY,
+    var island, islandHeight, islandWidth, islandX, islandY, person, personHeight, personWidth, personX, personY, planeX, planeY, text,
       _this = this;
     person = this.objects.find('.person img');
     personWidth = person.width() * this.scale;
@@ -136,7 +136,14 @@ board.Board = (function(_super) {
     islandX = planeX - (islandWidth / 2) - (personWidth / 4);
     islandY = planeY + personHeight + islandHeight - (576 * this.scale);
     this.island.push(this.addImage(island, islandX, islandY));
-    return this.island.push(this.addImage(person, personX, personY));
+    this.island.push(this.addImage(person, personX, personY));
+    text = this.islandText();
+    this.islandLabel = this.paper.text(islandX + (islandWidth / 2) - (12 * this.scale), islandY + islandHeight - (57 * this.scale), text).attr({
+      fill: '#ddd',
+      stroke: 'none',
+      'font-size': 9 + (2 * this.scale)
+    }).toFront();
+    return this.island.push(this.islandLabel);
   };
 
   Board.prototype.islandText = function() {

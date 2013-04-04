@@ -104,17 +104,14 @@ class board.Board extends xyflyerObject.Object
         @island.push(@addImage(island, islandX, islandY))
         @island.push(@addImage(person, personX, personY))
         
-
-        # console.log(y)
-        # 
-        # text = @islandText()
-        # @islandLabel = @paper.text(
-        #     x + (width/2) - (42*@scale)
-        #     y + height - (72*@scale)
-        #     text
-        # ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
-        # 
-        # @island.push(@islandLabel)
+        text = @islandText()
+        @islandLabel = @paper.text(
+            islandX + (islandWidth/2) - (12*@scale)
+            islandY + islandHeight - (57*@scale)
+            text
+        ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
+        
+        @island.push(@islandLabel)
         
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
