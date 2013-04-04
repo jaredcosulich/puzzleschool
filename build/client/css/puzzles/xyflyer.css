@@ -400,6 +400,12 @@ body {
   float: left;
   cursor: pointer;
   margin: 15px 0 15px 34px;
+  width: 72px;
+  height: 74px;
+  overflow: hidden;
+}
+.xyflyer .level_selector .world_links .world_link.selected img {
+  margin-left: -72px;
 }
 .xyflyer .level_selector .world {
   clear: left;

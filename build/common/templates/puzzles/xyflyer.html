@@ -87,7 +87,9 @@
         <h3>Select The Next Level</h3>
         <div class='world_links'>
             {:worlds}
-            <img class='world_link' data-world={index} src='/assets/images/puzzles/xyflyer/world{index}.png'/>
+            <div class='world_link' data-world={index}>
+                <img src='/assets/images/puzzles/xyflyer/world{index}.png'/>
+            </div>
             {/worlds}
         </div>
         {:worlds}

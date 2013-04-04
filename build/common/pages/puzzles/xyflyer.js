@@ -338,21 +338,8 @@ soma.views({
       return navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
     },
     selectWorld: function(index) {
-      var i, worldLink, _i, _len, _ref;
-      _ref = this.$('.world_link');
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        worldLink = _ref[i];
-        worldLink = $(worldLink);
-        if (index === i && worldLink.attr('src').indexOf('selected') === -1) {
-          worldLink.attr({
-            src: worldLink.attr('src').replace(/(world\d)\./, '$1_selected.')
-          });
-        } else if (index !== i && worldLink.attr('src').indexOf('selected') !== -1) {
-          worldLink.attr({
-            src: worldLink.attr('src').replace(/_selected/, '')
-          });
-        }
-      }
+      this.$('.world_link').removeClass('selected');
+      $(this.$('.world_link')[index]).addClass('selected');
       this.$('.world').removeClass('selected');
       return $(this.$('.world')[index]).addClass('selected');
     },
