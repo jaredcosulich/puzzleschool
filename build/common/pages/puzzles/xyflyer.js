@@ -301,7 +301,8 @@ soma.views({
       }
       this.selectWorld(this.currentWorld());
       if (window._gaq && this.level) {
-        return _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', this.level.id]);
+        this.level.startTime = new Date();
+        return _gaq.push(['_trackEvent', 'level', 'started', "xyflyer-" + this.level.id]);
       }
     },
     centerAndShow: function(element, board) {
@@ -485,10 +486,11 @@ soma.views({
       }
     },
     nextLevel: function() {
-      var index, level, _i, _len, _ref, _results;
+      var duration, index, level, _i, _len, _ref, _results;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
+      duration = this.level.startTime != null ? new Date() - this.level.startTime : null;
       if (window._gaq) {
-        _gaq.push(['_trackEvent', 'level', 'completed', 'xyflyer', this.level.id]);
+        _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-" + this.level.id, duration]);
       }
       this.registerEvent({
         type: 'success',

@@ -283,26 +283,29 @@ class board.Board extends xyflyerObject.Object
         infiniteLine = 0
         for xPos in [(@grid.xMin * @xUnit)..(@grid.xMax * @xUnit)] by 0.1
             lastYPos = yPos
+            lastSlope = slope
             yPos = formula(xPos / @xUnit) * @yUnit
             continue if isNaN(yPos)
 
             if yPos == Number.NEGATIVE_INFINITY
+                console.log("NEGATIVE INFINITY")
                 plotArea.lineTo(xPos + @xAxis, @height)
                 yPos = @grid.yMin * @yUnit
                 brokenLine += 1
             else if yPos == Number.POSITIVE_INFINITY
+                console.log("POSITIVE INFINITY")
                 plotArea.lineTo(xPos + @xAxis, 0)
                 yPos = @grid.yMax * @yUnit
                 brokenLine += 1            
 
             if lastYPos
-                lastSlope = slope
                 slope = yPos - lastYPos
-                if lastSlope and ((lastSlope > 0 and lastYPos > yPos) or (lastSlope < 0 and lastYPos < yPos))
+                if lastSlope and ((lastSlope > 0 and slope < 0) or (lastSlope < 0 and slope > 0))
                     for i in [-1..0] by 0.001
                         testYPos = formula((xPos+i) / @xUnit) * @yUnit
                         if (yPos > 0 and testYPos < 0) or (yPos < @height and testYPos > @height)
-                            plotArea.lineTo(xPos + @xAxis + i, @yAxis - testYPos)
+                            #This was removed to get tan(x) working if adding back please test tan(x)
+                            #plotArea.lineTo(xPos + @xAxis + i, @yAxis - testYPos)
                             newYPos = (if testYPos < 0 then 0 else @height)
                             plotArea.moveTo(xPos + @xAxis + i, newYPos)
                             slope = yPos - (@yAxis - newYPos)

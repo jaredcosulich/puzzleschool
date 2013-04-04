@@ -223,7 +223,9 @@ soma.views
                 @helper.addRing(ring.x, ring.y)
             
             @selectWorld(@currentWorld())
-            _gaq.push(['_trackEvent', 'level', 'started', 'xyflyer', @level.id]) if window._gaq and @level
+            if window._gaq and @level
+                @level.startTime = new Date()
+                _gaq.push(['_trackEvent', 'level', 'started', "xyflyer-#{@level.id}"]) 
                             
                 
         centerAndShow: (element, board) ->
@@ -347,7 +349,8 @@ soma.views
 
         nextLevel: ->            
             @puzzleProgress[@level.id].completed = new Date().getTime()
-            _gaq.push(['_trackEvent', 'level', 'completed', 'xyflyer', @level.id]) if window._gaq
+            duration = if @level.startTime? then new Date() - @level.startTime else null
+            _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-#{@level.id}", duration]) if window._gaq
             
             @registerEvent
                 type: 'success'

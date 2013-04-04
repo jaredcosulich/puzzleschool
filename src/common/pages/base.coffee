@@ -176,6 +176,13 @@ soma.views
                 @go(location.pathname, true)
             
             @$('.user_name').html(@user.name)
+            
+            try  
+                pageTracker = _gat._getTracker("UA-15570848-11"); 
+                pageTracker._trackPageview(); 
+                pageTracker._setVar(@user.email or @user.id); 
+            catch e
+            
             window.onbeforeunload = null
         
         

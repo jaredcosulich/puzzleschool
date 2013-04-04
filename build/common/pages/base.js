@@ -317,6 +317,7 @@ soma.views({
       });
     },
     checkLoggedIn: function() {
+      var pageTracker;
       if ((this.user = this.cookies.get('user')) == null) {
         return;
       }
@@ -324,6 +325,13 @@ soma.views({
         this.go(location.pathname, true);
       }
       this.$('.user_name').html(this.user.name);
+      try {
+        pageTracker = _gat._getTracker("UA-15570848-11");
+        pageTracker._trackPageview();
+        pageTracker._setVar(this.user.email || this.user.id);
+      } catch (e) {
+
+      }
       return window.onbeforeunload = null;
     },
     showModal: function(selector) {

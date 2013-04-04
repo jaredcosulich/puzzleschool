@@ -431,27 +431,28 @@ board.Board = (function(_super) {
     infiniteLine = 0;
     for (xPos = _i = _ref1 = this.grid.xMin * this.xUnit, _ref2 = this.grid.xMax * this.xUnit; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; xPos = _i += 0.1) {
       lastYPos = yPos;
+      lastSlope = slope;
       yPos = formula(xPos / this.xUnit) * this.yUnit;
       if (isNaN(yPos)) {
         continue;
       }
       if (yPos === Number.NEGATIVE_INFINITY) {
+        console.log("NEGATIVE INFINITY");
         plotArea.lineTo(xPos + this.xAxis, this.height);
         yPos = this.grid.yMin * this.yUnit;
         brokenLine += 1;
       } else if (yPos === Number.POSITIVE_INFINITY) {
+        console.log("POSITIVE INFINITY");
         plotArea.lineTo(xPos + this.xAxis, 0);
         yPos = this.grid.yMax * this.yUnit;
         brokenLine += 1;
       }
       if (lastYPos) {
-        lastSlope = slope;
         slope = yPos - lastYPos;
-        if (lastSlope && ((lastSlope > 0 && lastYPos > yPos) || (lastSlope < 0 && lastYPos < yPos))) {
+        if (lastSlope && ((lastSlope > 0 && slope < 0) || (lastSlope < 0 && slope > 0))) {
           for (i = _j = -1; _j <= 0; i = _j += 0.001) {
             testYPos = formula((xPos + i) / this.xUnit) * this.yUnit;
             if ((yPos > 0 && testYPos < 0) || (yPos < this.height && testYPos > this.height)) {
-              plotArea.lineTo(xPos + this.xAxis + i, this.yAxis - testYPos);
               newYPos = (testYPos < 0 ? 0 : this.height);
               plotArea.moveTo(xPos + this.xAxis + i, newYPos);
               slope = yPos - (this.yAxis - newYPos);
