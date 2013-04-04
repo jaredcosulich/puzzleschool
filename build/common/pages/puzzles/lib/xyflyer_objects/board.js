@@ -501,7 +501,11 @@ board.Board = (function(_super) {
       if (prevPos.x === x && prevPos.y === y) {
         return;
       }
-      distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2));
+      if (((y / _this.yUnit) < _this.grid.yMin) || ((y / _this.yUnit) > _this.grid.yMax)) {
+        distance = 1;
+      } else {
+        distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2));
+      }
       formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits));
       for (d = _i = 1; 1 <= formattedDistance ? _i <= formattedDistance : _i >= formattedDistance; d = 1 <= formattedDistance ? ++_i : --_i) {
         incrementalX = prevPos.x + (d * ((x - prevPos.x) / formattedDistance));

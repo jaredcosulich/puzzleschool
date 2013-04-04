@@ -342,7 +342,12 @@ class board.Board extends xyflyerObject.Object
             formattedFullDistance = Math.ceil(path.distance * Math.pow(10, significantDigits))
             prevPos = path[formattedFullDistance]
             return if prevPos.x == x and prevPos.y == y
-            distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2))
+            
+            if ((y/@yUnit) < @grid.yMin) or ((y/@yUnit) > @grid.yMax)
+                distance = 1
+            else
+                distance = Math.sqrt(Math.pow(prevPos.y - y, 2) + Math.pow(prevPos.x - x, 2))
+            
             formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits))
             for d in [1..formattedDistance]
                 incrementalX = prevPos.x + (d*((x - prevPos.x)/formattedDistance))

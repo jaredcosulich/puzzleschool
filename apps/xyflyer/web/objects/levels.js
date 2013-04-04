@@ -10232,6 +10232,48 @@ levels.WORLDS = [
               x: -2,
               y: 0
             }
+          }, {
+            id: 1365102058908,
+            equations: {
+              'tan((1/3)*x)': {
+                start: 'tan(x)',
+                solutionComponents: [
+                  {
+                    fragment: '(1/3)*',
+                    after: 'tan('
+                  }
+                ]
+              }
+            },
+            fragments: ['3*', '(1/3)*'],
+            rings: [
+              {
+                x: -2,
+                y: -0.79
+              }, {
+                x: 0,
+                y: 0
+              }, {
+                x: 2,
+                y: 0.79
+              }, {
+                x: 3,
+                y: 1.56
+              }, {
+                x: 4,
+                y: 4.13
+              }
+            ],
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            islandCoordinates: {
+              x: -3,
+              y: -1.56
+            }
           }
         ]
       }
