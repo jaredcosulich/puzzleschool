@@ -437,12 +437,10 @@ board.Board = (function(_super) {
         continue;
       }
       if (yPos === Number.NEGATIVE_INFINITY) {
-        console.log("NEGATIVE INFINITY");
         plotArea.lineTo(xPos + this.xAxis, this.height);
         yPos = this.grid.yMin * this.yUnit;
         brokenLine += 1;
       } else if (yPos === Number.POSITIVE_INFINITY) {
-        console.log("POSITIVE INFINITY");
         plotArea.lineTo(xPos + this.xAxis, 0);
         yPos = this.grid.yMax * this.yUnit;
         brokenLine += 1;

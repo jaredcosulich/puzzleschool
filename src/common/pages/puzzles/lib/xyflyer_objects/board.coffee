@@ -288,12 +288,10 @@ class board.Board extends xyflyerObject.Object
             continue if isNaN(yPos)
 
             if yPos == Number.NEGATIVE_INFINITY
-                console.log("NEGATIVE INFINITY")
                 plotArea.lineTo(xPos + @xAxis, @height)
                 yPos = @grid.yMin * @yUnit
                 brokenLine += 1
             else if yPos == Number.POSITIVE_INFINITY
-                console.log("POSITIVE INFINITY")
                 plotArea.lineTo(xPos + @xAxis, 0)
                 yPos = @grid.yMax * @yUnit
                 brokenLine += 1            
