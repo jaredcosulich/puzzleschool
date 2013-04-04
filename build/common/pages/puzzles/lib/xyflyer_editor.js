@@ -265,8 +265,13 @@ xyflyerEditor.EditorHelper = (function() {
       });
     });
     this.$('.editor .change_island').bind('click', function() {
-      return _this.showImageDialog("Select The Island Image", 'island', 2, function(index) {
+      return _this.showImageDialog("Select The Island Image", 'island', 4, function(index) {
         return _this.setAsset('island', index);
+      });
+    });
+    this.$('.editor .change_person').bind('click', function() {
+      return _this.showImageDialog("Select The Person", 'person', 3, function(index) {
+        return _this.setAsset('person', index);
       });
     });
     this.$('.editor .change_plane').bind('click', function() {
@@ -658,7 +663,7 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.setAsset = function(type, index) {
     var src;
     this.assets[type] = index;
-    src = "https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/" + type + index + ".png";
+    src = "/assets/images/puzzles/xyflyer/" + type + index + ".png";
     switch (type) {
       case 'background':
         this.el.css({

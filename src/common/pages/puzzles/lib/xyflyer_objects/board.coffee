@@ -96,7 +96,7 @@ class board.Board extends xyflyerObject.Object
         planeY = @yAxis - (@islandCoordinates.y * @yUnit)
 
         islandX = planeX - (islandWidth/2) - (personWidth/4)
-        islandY = planeY + islandHeight - (6*@scale)
+        islandY = planeY + islandHeight - (300*@scale)
         @island.push(@addImage(island, islandX, islandY))
 
         personX = planeX - personWidth + (15 * @scale)

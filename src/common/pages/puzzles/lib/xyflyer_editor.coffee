@@ -175,7 +175,10 @@ class xyflyerEditor.EditorHelper
             @showImageDialog "Select The Background Image", 'background', 3, (index) => @setAsset('background', index)
 
         @$('.editor .change_island').bind 'click', => 
-            @showImageDialog "Select The Island Image", 'island', 2, (index) => @setAsset('island', index)
+            @showImageDialog "Select The Island Image", 'island', 4, (index) => @setAsset('island', index)
+
+        @$('.editor .change_person').bind 'click', => 
+            @showImageDialog "Select The Person", 'person', 3, (index) => @setAsset('person', index)
 
         @$('.editor .change_plane').bind 'click', => 
             @showImageDialog "Select The Plane", 'plane', 2, (index) => @setAsset('plane', index)
@@ -406,7 +409,7 @@ class xyflyerEditor.EditorHelper
         
     setAsset: (type, index) ->
         @assets[type] = index
-        src = "https://raw.github.com/jaredcosulich/puzzleschool/redesign/assets/images/puzzles/xyflyer/#{type}#{index}.png"
+        src = "/assets/images/puzzles/xyflyer/#{type}#{index}.png"
         switch type
             when 'background'
                 @el.css(backgroundImage: "url(#{src})")

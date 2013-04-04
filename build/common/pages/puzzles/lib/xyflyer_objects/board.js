@@ -132,7 +132,7 @@ board.Board = (function(_super) {
     planeX = this.xAxis + (this.islandCoordinates.x * this.xUnit);
     planeY = this.yAxis - (this.islandCoordinates.y * this.yUnit);
     islandX = planeX - (islandWidth / 2) - (personWidth / 4);
-    islandY = planeY + islandHeight - (6 * this.scale);
+    islandY = planeY + islandHeight - (300 * this.scale);
     this.island.push(this.addImage(island, islandX, islandY));
     personX = planeX - personWidth + (15 * this.scale);
     personY = planeY - (9 * this.scale);
