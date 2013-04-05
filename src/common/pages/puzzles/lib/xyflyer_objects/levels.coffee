@@ -49,27 +49,6 @@ levels.WORLDS = [
                         islandCoordinates: {x: -12, y: -4}
                     }
                     {
-                        id: 1364578077315
-                        equations:
-                            'x+3':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '+3', after: 'x'}
-                                ]
-                        fragments: ['+3', '-3']
-                        rings: [
-                            {x: -3, y: 0}
-                            {x: 0, y: 3}
-                            {x: 3, y: 6}
-                        ]
-                        grid:
-                            xMin: -15
-                            xMax: 15
-                            yMin: -15
-                            yMax: 15
-                        islandCoordinates: {x: -6, y: -3}
-                    }
-                    {
                         id: 1364230317228
                         equations:
                             'x-5':
@@ -152,6 +131,27 @@ levels.WORLDS = [
                             yMin: -30
                             yMax: 30
                         islandCoordinates: {x: -12, y: -6}
+                    }
+                    {
+                        id: 1364578077315
+                        equations:
+                            'x+3':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '+3', after: 'x'}
+                                ]
+                        fragments: ['+3', '-3', '+6', '-6']
+                        rings: [
+                            {x: -3, y: 0}
+                            {x: 0, y: 3}
+                            {x: 3, y: 6}
+                        ]
+                        grid:
+                            xMin: -15
+                            xMax: 15
+                            yMin: -15
+                            yMax: 15
+                        islandCoordinates: {x: -6, y: -3}
                     }
                     {
                         id: 1364580124694
