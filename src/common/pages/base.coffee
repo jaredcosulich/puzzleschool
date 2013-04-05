@@ -33,31 +33,40 @@ soma.chunks
 
         prepare: ({@content}) ->
             @setIcon('/assets/images/favicon.ico')
-            @setMeta('apple-mobile-web-app-capable', 'yes')
-            @setMeta('apple-mobile-web-app-status-bar-style', 'black')
-
-            @loadScript '/assets/third_party/rollbar.js'
-
             @loadElement 'link', {href: '/assets/images/favicon.ico', rel: 'shortcut icon', type: 'image/x-icon'}
-            @loadElement("link", {rel: 'apple-touch-icon', sizes: '57x57', href: '/assets/images/touch-icon-iphone.png'})
-            @loadElement("link", {rel: 'apple-touch-icon', sizes: '72x72', href: '/assets/images/touch-icon-ipad.png'})
-            @loadElement("link", {rel: 'apple-touch-icon', sizes: '114x114', href: '/assets/images/touch-icon-iphone4.png'})
-            @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '1024x748', href: '/assets/images/startup1024x748.png'})
-            @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '768x1004', href: '/assets/images/startup768x1004.png'})
-            @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '320x460', href: '/assets/images/startup320x460.png'})
 
-            @loadStylesheet '/build/client/css/all.css'
+            if @badBrowser()
+                @template = @loadTemplate '/build/common/templates/bad_browser.html'
+            else
+                @setMeta('apple-mobile-web-app-capable', 'yes')
+                @setMeta('apple-mobile-web-app-status-bar-style', 'black')
+            
+                @loadScript '/assets/third_party/rollbar.js'
 
-            @loadScript '/build/client/pages/form.js'
+                @loadElement("link", {rel: 'apple-touch-icon', sizes: '57x57', href: '/assets/images/touch-icon-iphone.png'})
+                @loadElement("link", {rel: 'apple-touch-icon', sizes: '72x72', href: '/assets/images/touch-icon-ipad.png'})
+                @loadElement("link", {rel: 'apple-touch-icon', sizes: '114x114', href: '/assets/images/touch-icon-iphone4.png'})
+                @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '1024x748', href: '/assets/images/startup1024x748.png'})
+                @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '768x1004', href: '/assets/images/startup768x1004.png'})
+                @loadElement("link", {rel: 'apple-touch-startup-image', sizes: '320x460', href: '/assets/images/startup320x460.png'})
 
-            @loadScript '/build/common/pages/base.js'
+                @loadStylesheet '/build/client/css/all.css'
 
-            @loadScript '/assets/analytics.js'
+                @loadScript '/build/client/pages/form.js'
+
+                @loadScript '/build/common/pages/base.js'
+
+                @loadScript '/assets/analytics.js'
                         
-            @template = @loadTemplate '/build/common/templates/base.html'
+                @template = @loadTemplate '/build/common/templates/base.html'
+                
             @loadChunk @content
 
-
+        badBrowser: ->
+            userAgent = if @context then @context.request.headers['user-agent'] else navigator.userAgent
+            return true if userAgent.indexOf('MSIE') > -1
+            return false
+            
         build: () ->
             data = 
                 loggedIn: @cookies.get('user')?
