@@ -301,7 +301,7 @@ class board.Board extends xyflyerObject.Object
                 if lastSlope and ((lastSlope > 0 and slope < 0) or (lastSlope < 0 and slope > 0))
                     for i in [-1..0] by 0.001
                         testYPos = formula((xPos+i) / @xUnit) * @yUnit
-                        if (yPos > 0 and testYPos < 0) or (yPos < @height and testYPos > @height)
+                        if (yPos > @height and testYPos < 0) or (yPos < 0 and testYPos > @height)
                             #This was removed to get tan(x) working if adding back please test tan(x)
                             #plotArea.lineTo(xPos + @xAxis + i, @yAxis - testYPos)
                             newYPos = (if testYPos < 0 then 0 else @height)

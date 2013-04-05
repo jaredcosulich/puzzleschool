@@ -450,7 +450,7 @@ board.Board = (function(_super) {
         if (lastSlope && ((lastSlope > 0 && slope < 0) || (lastSlope < 0 && slope > 0))) {
           for (i = _j = -1; _j <= 0; i = _j += 0.001) {
             testYPos = formula((xPos + i) / this.xUnit) * this.yUnit;
-            if ((yPos > 0 && testYPos < 0) || (yPos < this.height && testYPos > this.height)) {
+            if ((yPos > this.height && testYPos < 0) || (yPos < 0 && testYPos > this.height)) {
               newYPos = (testYPos < 0 ? 0 : this.height);
               plotArea.moveTo(xPos + this.xAxis + i, newYPos);
               slope = yPos - (this.yAxis - newYPos);
