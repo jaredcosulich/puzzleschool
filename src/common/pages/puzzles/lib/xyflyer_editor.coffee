@@ -178,7 +178,7 @@ class xyflyerEditor.EditorHelper
             @showImageDialog "Select The Island Image", 'island', 4, (index) => @setAsset('island', index)
 
         @$('.editor .change_person').bind 'click', => 
-            @showImageDialog "Select The Person", 'person', 3, (index) => @setAsset('person', index)
+            @showImageDialog "Select The Person", 'person', 4, (index) => @setAsset('person', index)
 
         @$('.editor .change_plane').bind 'click', => 
             @showImageDialog "Select The Plane", 'plane', 2, (index) => @setAsset('plane', index)

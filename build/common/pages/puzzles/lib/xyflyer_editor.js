@@ -270,7 +270,7 @@ xyflyerEditor.EditorHelper = (function() {
       });
     });
     this.$('.editor .change_person').bind('click', function() {
-      return _this.showImageDialog("Select The Person", 'person', 3, function(index) {
+      return _this.showImageDialog("Select The Person", 'person', 4, function(index) {
         return _this.setAsset('person', index);
       });
     });
