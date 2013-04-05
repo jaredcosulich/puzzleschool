@@ -692,6 +692,9 @@ soma.views({
     registerEvent: function(_arg) {
       var info, type;
       type = _arg.type, info = _arg.info;
+      if (window._gaq && this.level) {
+        _gaq.push(['_trackEvent', 'level', 'hint', "xyflyer-" + this.level.id]);
+      }
       if (!(this.user && this.user.id && (this.classLevelId || this.levelId) && this.classId)) {
         return;
       }

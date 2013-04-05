@@ -495,6 +495,9 @@ soma.views
             
                 
         registerEvent: ({type, info}) ->
+            if window._gaq and @level
+                _gaq.push(['_trackEvent', 'level', 'hint', "xyflyer-#{@level.id}"]) 
+            
             return unless @user and @user.id and (@classLevelId or @levelId) and @classId
             @pendingEvents or= []
             @pendingEvents.push
