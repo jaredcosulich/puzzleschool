@@ -62,16 +62,12 @@ soma.chunks
                                 alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
-            # for object in ['island', 'plane']
-            #     @objects.push(
-            #         name: object
-            #         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}.png")
-            #     )
             for object in ['person', 'island', 'plane']
-                @objects.push(
-                    name: object
-                    image: @loadImage("/assets/images/puzzles/xyflyer/#{object}1.png")
-                )
+                for index in [1..3]
+                    @objects.push(
+                        name: "#{object}#{index} #{if index == 1 then object else ''}"
+                        image: @loadImage("/assets/images/puzzles/xyflyer/#{object}#{index}.png")
+                    )
             
             if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/xyflyer_editor.js' 
@@ -187,12 +183,13 @@ soma.views
             @dynamicContent.html(@originalHTML)
             $('svg').remove()
             
-            for asset, index of @level.assets or {}
+            for asset, index of @level.assets or @worlds[@currentWorld()].assets or {}
                 if asset == 'background'
                     @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.png"))
                 else
-                    image = @$(".objects .#{asset} img")
-                    @$(".objects .#{asset}").html("<img src='#{image.attr('src').replace(/\d+\.png/, "#{index}.png")}'/>")
+                    @$(".objects .#{asset}").removeClass(asset)
+                    @$(".objects .#{asset}#{index}").addClass(asset)
+                    
                     
             @helper = new xyflyer.ViewHelper
                 el: @dynamicContent

@@ -30,7 +30,7 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var object, _i, _len, _ref,
+      var index, object, _i, _j, _len, _ref,
         _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
@@ -97,10 +97,12 @@ soma.chunks({
       _ref = ['person', 'island', 'plane'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
-        this.objects.push({
-          name: object,
-          image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + "1.png")
-        });
+        for (index = _j = 1; _j <= 3; index = ++_j) {
+          this.objects.push({
+            name: "" + object + index + " " + (index === 1 ? object : ''),
+            image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + index + ".png")
+          });
+        }
       }
       if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/xyflyer_editor.js');
@@ -243,18 +245,18 @@ soma.views({
       }
     },
     load: function() {
-      var asset, image, index, _ref,
+      var asset, index, _ref,
         _this = this;
       this.dynamicContent.html(this.originalHTML);
       $('svg').remove();
-      _ref = this.level.assets || {};
+      _ref = this.level.assets || this.worlds[this.currentWorld()].assets || {};
       for (asset in _ref) {
         index = _ref[asset];
         if (asset === 'background') {
           this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".png"));
         } else {
-          image = this.$(".objects ." + asset + " img");
-          this.$(".objects ." + asset).html("<img src='" + (image.attr('src').replace(/\d+\.png/, "" + index + ".png")) + "'/>");
+          this.$(".objects ." + asset).removeClass(asset);
+          this.$(".objects ." + asset + index).addClass(asset);
         }
       }
       this.helper = new xyflyer.ViewHelper({

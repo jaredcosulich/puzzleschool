@@ -2083,6 +2083,10 @@ levels.WORLDS = [
         ]
     }
     {
+        assets: 
+            background: 2
+            island: 3
+            person: 2
         stages: [
             {
                 name: 'Multiple Lines (Shifting)'
