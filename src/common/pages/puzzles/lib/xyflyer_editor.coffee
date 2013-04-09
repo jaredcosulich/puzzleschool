@@ -24,6 +24,9 @@ class xyflyerEditor.EditorHelper
         @initButtons()
         @hideInstructions()
         
+        $('.instructions .demo').bind 'click', =>
+            $('#base').data('base').showModal('.demo_video')
+        
         editor = @$('.editor')
         @$('.editor').bind 'mousedown.move_editor', (e) =>
             startX = e.clientX
@@ -521,18 +524,18 @@ class xyflyerEditor.EditorHelper
     showInstructions: ->
         return if @instructionsDisplayed
         @instructionsDisplayed = true
-        @$('.instructions .invalid').hide()
-        @$('.instructions .valid').show()
+        @$('.editor_instructions .invalid').hide()
+        @$('.editor_instructions .valid').show()
         href = location.protocol+'//'+location.host+location.pathname
-        @$('.instructions .link').val("#{href.replace(/editor/, 'custom')}##{@getInstructions()}")
+        @$('.editor_instructions .link').val("#{href.replace(/editor/, 'custom')}##{@getInstructions()}")
         @hashInstructions()
         console.log(@coffeeInstructions.replace(/\t/g, '    '))
         
         
     hideInstructions: ->
         @instructionsDisplayed = false
-        @$('.instructions .valid').hide()
-        @$('.instructions .invalid').show()
+        @$('.editor_instructions .valid').hide()
+        @$('.editor_instructions .invalid').show()
         
         
         

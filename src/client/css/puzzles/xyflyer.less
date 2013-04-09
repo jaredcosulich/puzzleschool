@@ -16,7 +16,7 @@ body {
     margin-left: -12px;
     position: relative;
     overflow: hidden;
-
+    
     .dynamic_content {
         height: @height;
         width: @width;
@@ -53,6 +53,7 @@ body {
             margin: 3px 0 0 3px;
             font-size: @h4size;
             float: right;
+            position: relative;
         
             h2, h3 {
                 text-align: center;
@@ -334,7 +335,7 @@ body {
             }
         }
         
-        .instructions {
+        .editor_instructions {
             padding: 6px;
             overflow: hidden;
             margin-top: 60px;
@@ -488,5 +489,38 @@ body {
             }
         }
     }
-  
 }
+
+.instructions {
+    background-color: @white;
+    .rounded(6px);
+    margin-bottom: 12px;
+    padding: 12px;
+    overflow: hidden;
+
+    .centered {
+        text-align: center;
+    }
+    
+    .section {
+        float: right;
+        overflow: hidden;
+        margin-right: 30px;
+        width: 210px;
+    }
+    
+    ul {
+        float: left;
+    }    
+}
+
+.demo_video {
+    position: absolute;
+    padding: 6px;
+    background-color: @white;
+    .rounded(6px);
+    top: -1000px;
+    left: -1000px;
+    z-index: 99999;
+}
+

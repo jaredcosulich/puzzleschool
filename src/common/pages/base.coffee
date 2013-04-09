@@ -25,7 +25,41 @@ class soma.View extends soma.View
                 
                 You can save your progress by creating an account.
             '''
-    
+
+    showModal: (selector) ->
+        @opaqueScreen = $('.opaque_screen')
+        @opaqueScreen.css(opacity: 0, top:0, left: 0, width: window.innerWidth, height: window.innerHeight + $('#top_nav').height())
+        @opaqueScreen.animate
+            opacity: 0.75
+            duration: 300
+
+        modal = @$(selector)
+        modal.css
+            top: 120
+            left: ($(document.body).width() - modal.width()) / 2
+        modal.animate
+            opacity: 1
+            duration: 500
+
+        modal.bind 'click', (e) => e.stop()
+        $(@opaqueScreen).bind 'click', () => @hideModal(selector)
+
+    hideModal: (selector, callback) ->
+        return unless @opaqueScreen
+        $(@opaqueScreen).unbind 'click'
+        modal = if selector instanceof String then @$(selector) else $(selector)
+        modal = modal.closest('.modal') unless modal.hasClass('modal')
+        @opaqueScreen.animate(opacity:0, duration: 500, complete: () => @opaqueScreen.css(top: -1000, left: -100))
+        modal.animate
+            opacity: 0
+            duration: 500
+            complete: () =>
+                modal.css
+                    top: -1000
+                    left: -1000
+                location.hash = ''
+                callback() if callback
+
         
 soma.chunks
     Base:
@@ -195,38 +229,5 @@ soma.views
             window.onbeforeunload = null
         
         
-        showModal: (selector) ->
-            @opaqueScreen = $('.opaque_screen')
-            @opaqueScreen.css(opacity: 0, top:0, left: 0, width: window.innerWidth, height: window.innerHeight + $('#top_nav').height())
-            @opaqueScreen.animate
-                opacity: 0.75
-                duration: 300
-                
-            modal = @$(selector)
-            modal.css
-                top: 120
-                left: ($(document.body).width() - modal.width()) / 2
-            modal.animate
-                opacity: 1
-                duration: 500
-
-            modal.bind 'click', (e) => e.stop()
-            $(@opaqueScreen).bind 'click', () => @hideModal(selector)
-        
-        hideModal: (selector, callback) ->
-            return unless @opaqueScreen
-            $(@opaqueScreen).unbind 'click'
-            modal = if selector instanceof String then @$(selector) else $(selector)
-            modal = modal.closest('.modal') unless modal.hasClass('modal')
-            @opaqueScreen.animate(opacity:0, duration: 500, complete: () => @opaqueScreen.css(top: -1000, left: -100))
-            modal.animate
-                opacity: 0
-                duration: 500
-                complete: () =>
-                    modal.css
-                        top: -1000
-                        left: -1000
-                    location.hash = ''
-                    callback() if callback
                     
             

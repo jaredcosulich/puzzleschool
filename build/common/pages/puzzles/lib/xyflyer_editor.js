@@ -39,6 +39,9 @@ xyflyerEditor.EditorHelper = (function() {
     });
     this.initButtons();
     this.hideInstructions();
+    $('.instructions .demo').bind('click', function() {
+      return $('#base').data('base').showModal('.demo_video');
+    });
     editor = this.$('.editor');
     return this.$('.editor').bind('mousedown.move_editor', function(e) {
       var startEditorX, startEditorY, startX, startY;
@@ -814,18 +817,18 @@ xyflyerEditor.EditorHelper = (function() {
       return;
     }
     this.instructionsDisplayed = true;
-    this.$('.instructions .invalid').hide();
-    this.$('.instructions .valid').show();
+    this.$('.editor_instructions .invalid').hide();
+    this.$('.editor_instructions .valid').show();
     href = location.protocol + '//' + location.host + location.pathname;
-    this.$('.instructions .link').val("" + (href.replace(/editor/, 'custom')) + "#" + (this.getInstructions()));
+    this.$('.editor_instructions .link').val("" + (href.replace(/editor/, 'custom')) + "#" + (this.getInstructions()));
     this.hashInstructions();
     return console.log(this.coffeeInstructions.replace(/\t/g, '    '));
   };
 
   EditorHelper.prototype.hideInstructions = function() {
     this.instructionsDisplayed = false;
-    this.$('.instructions .valid').hide();
-    return this.$('.instructions .invalid').show();
+    this.$('.editor_instructions .valid').hide();
+    return this.$('.editor_instructions .invalid').show();
   };
 
   return EditorHelper;

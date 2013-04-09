@@ -49,6 +49,75 @@ soma.View = (function(_super) {
     };
   };
 
+  View.prototype.showModal = function(selector) {
+    var modal,
+      _this = this;
+    this.opaqueScreen = $('.opaque_screen');
+    this.opaqueScreen.css({
+      opacity: 0,
+      top: 0,
+      left: 0,
+      width: window.innerWidth,
+      height: window.innerHeight + $('#top_nav').height()
+    });
+    this.opaqueScreen.animate({
+      opacity: 0.75,
+      duration: 300
+    });
+    modal = this.$(selector);
+    modal.css({
+      top: 120,
+      left: ($(document.body).width() - modal.width()) / 2
+    });
+    modal.animate({
+      opacity: 1,
+      duration: 500
+    });
+    modal.bind('click', function(e) {
+      return e.stop();
+    });
+    return $(this.opaqueScreen).bind('click', function() {
+      return _this.hideModal(selector);
+    });
+  };
+
+  View.prototype.hideModal = function(selector, callback) {
+    var modal,
+      _this = this;
+    if (!this.opaqueScreen) {
+      return;
+    }
+    $(this.opaqueScreen).unbind('click');
+    modal = selector instanceof String ? this.$(selector) : $(selector);
+    if (!modal.hasClass('modal')) {
+      modal = modal.closest('.modal');
+    }
+    this.opaqueScreen.animate({
+      opacity: 0,
+      duration: 500,
+      complete: function() {
+        return _this.opaqueScreen.css({
+          top: -1000,
+          left: -100
+        });
+      }
+    });
+    return modal.animate({
+      opacity: 0,
+      duration: 500,
+      complete: function() {
+        modal.css({
+          top: -1000,
+          left: -1000
+        });
+        location.hash = '';
+        if (callback) {
+          return callback();
+        }
+      }
+    });
+  };
+
   return View;
 
 })(soma.View);
@@ -345,73 +414,6 @@ soma.views({
 
       }
       return window.onbeforeunload = null;
-    },
-    showModal: function(selector) {
-      var modal,
-        _this = this;
-      this.opaqueScreen = $('.opaque_screen');
-      this.opaqueScreen.css({
-        opacity: 0,
-        top: 0,
-        left: 0,
-        width: window.innerWidth,
-        height: window.innerHeight + $('#top_nav').height()
-      });
-      this.opaqueScreen.animate({
-        opacity: 0.75,
-        duration: 300
-      });
-      modal = this.$(selector);
-      modal.css({
-        top: 120,
-        left: ($(document.body).width() - modal.width()) / 2
-      });
-      modal.animate({
-        opacity: 1,
-        duration: 500
-      });
-      modal.bind('click', function(e) {
-        return e.stop();
-      });
-      return $(this.opaqueScreen).bind('click', function() {
-        return _this.hideModal(selector);
-      });
-    },
-    hideModal: function(selector, callback) {
-      var modal,
-        _this = this;
-      if (!this.opaqueScreen) {
-        return;
-      }
-      $(this.opaqueScreen).unbind('click');
-      modal = selector instanceof String ? this.$(selector) : $(selector);
-      if (!modal.hasClass('modal')) {
-        modal = modal.closest('.modal');
-      }
-      this.opaqueScreen.animate({
-        opacity: 0,
-        duration: 500,
-        complete: function() {
-          return _this.opaqueScreen.css({
-            top: -1000,
-            left: -100
-          });
-        }
-      });
-      return modal.animate({
-        opacity: 0,
-        duration: 500,
-        complete: function() {
-          modal.css({
-            top: -1000,
-            left: -1000
-          });
-          location.hash = '';
-          if (callback) {
-            return callback();
-          }
-        }
-      });
     }
   }
 });

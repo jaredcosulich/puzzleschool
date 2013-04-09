@@ -54,6 +54,7 @@ body {
   margin: 3px 0 0 3px;
   font-size: 15px;
   float: right;
+  position: relative;
 }
 .xyflyer .dynamic_content .equation_area h2,
 .xyflyer .dynamic_content .equation_area h3 {
@@ -341,15 +342,15 @@ body {
   padding: 3px 12px;
   font-size: 15px;
 }
-.xyflyer .dynamic_content .instructions {
+.xyflyer .dynamic_content .editor_instructions {
   padding: 6px;
   overflow: hidden;
   margin-top: 60px;
 }
-.xyflyer .dynamic_content .instructions p {
+.xyflyer .dynamic_content .editor_instructions p {
   font-size: 11px;
 }
-.xyflyer .dynamic_content .instructions input {
+.xyflyer .dynamic_content .editor_instructions input {
   width: 240px;
   height: 30px;
 }
@@ -488,4 +489,36 @@ body {
 .xyflyer .dialog .image img {
   cursor: pointer;
   vertical-align: middle;
+}
+.instructions {
+  background-color: #fafafa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  padding: 12px;
+  overflow: hidden;
+}
+.instructions .centered {
+  text-align: center;
+}
+.instructions .section {
+  float: right;
+  overflow: hidden;
+  margin-right: 30px;
+  width: 210px;
+}
+.instructions ul {
+  float: left;
+}
+.demo_video {
+  position: absolute;
+  padding: 6px;
+  background-color: #fafafa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  top: -1000px;
+  left: -1000px;
+  z-index: 99999;
 }
