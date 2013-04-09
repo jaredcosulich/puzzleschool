@@ -4,7 +4,7 @@ body {
 .xyflyer {
   height: 640px;
   width: 960px;
-  margin-left: -12px;
+  margin: 18px 0 0 -12px;
   position: relative;
   overflow: hidden;
 }
@@ -490,25 +490,44 @@ body {
   cursor: pointer;
   vertical-align: middle;
 }
+.toggle_instructions {
+  cursor: pointer;
+  position: absolute;
+  padding: 3px 6px;
+  background-color: #fafafa;
+  width: 90px;
+  text-align: center;
+  top: 34px;
+  left: 540px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  z-index: 2;
+  border: 1px solid #ccc;
+}
 .instructions {
   background-color: #fafafa;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
   margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.instructions .container {
   padding: 12px;
   overflow: hidden;
 }
-.instructions .centered {
+.instructions .container .centered {
   text-align: center;
 }
-.instructions .section {
+.instructions .container .section {
   float: right;
   overflow: hidden;
   margin-right: 30px;
   width: 210px;
 }
-.instructions ul {
+.instructions .container ul {
   float: left;
 }
 .demo_video {

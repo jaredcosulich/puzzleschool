@@ -13,7 +13,7 @@ body {
 .xyflyer {
     height: @height;
     width: @width;
-    margin-left: -12px;
+    margin: 18px 0 0 -12px;
     position: relative;
     overflow: hidden;
     
@@ -491,27 +491,46 @@ body {
     }
 }
 
+.toggle_instructions {
+    cursor: pointer;
+    position: absolute;
+    padding: 3px 6px;
+    background-color: @white;
+    width: 120px;
+    text-align: center;
+    top: 34px;
+    left: 522px;
+    .rounded(3px);
+    z-index: 2;
+    border: 1px solid #ccc;
+}
+
 .instructions {
     background-color: @white;
     .rounded(6px);
     margin-bottom: 12px;
-    padding: 12px;
+    position: relative;
     overflow: hidden;
 
-    .centered {
-        text-align: center;
-    }
-    
-    .section {
-        float: right;
+    .container {
+        padding: 12px;
         overflow: hidden;
-        margin-right: 30px;
-        width: 210px;
-    }
+
+        .centered {
+            text-align: center;
+        }
     
-    ul {
-        float: left;
-    }    
+        .section {
+            float: right;
+            overflow: hidden;
+            margin-right: 30px;
+            width: 210px;
+        }
+    
+        ul {
+            float: left;
+        }    
+    }
 }
 
 .demo_video {

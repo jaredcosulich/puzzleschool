@@ -38,10 +38,8 @@ xyflyerEditor.EditorHelper = (function() {
       }
     });
     this.initButtons();
-    this.hideInstructions();
-    $('.instructions .demo').bind('click', function() {
-      return $('#base').data('base').showModal('.demo_video');
-    });
+    this.hideEditorInstructions();
+    this.initInstructions();
     editor = this.$('.editor');
     return this.$('.editor').bind('mousedown.move_editor', function(e) {
       var startEditorX, startEditorY, startX, startY;
@@ -59,6 +57,40 @@ xyflyerEditor.EditorHelper = (function() {
         return $(document.body).unbind('mousemove.move_editor');
       });
     });
+  };
+
+  EditorHelper.prototype.initInstructions = function() {
+    var height, instructions, toggleInstructions,
+      _this = this;
+    instructions = $('.instructions');
+    instructions.find('.demo').bind('click', function() {
+      return $('#base').data('base').showModal('.demo_video');
+    });
+    height = instructions.height();
+    toggleInstructions = $('.toggle_instructions');
+    console.log(toggleInstructions);
+    toggleInstructions.bind('click', function() {
+      if (instructions.height() < 1) {
+        return instructions.animate({
+          height: height,
+          duration: 500,
+          complete: function() {
+            return toggleInstructions.html('Hide Instructions');
+          }
+        });
+      } else {
+        return instructions.animate({
+          height: 0,
+          duration: 500,
+          complete: function() {
+            return toggleInstructions.html('Show Instructions');
+          }
+        });
+      }
+    });
+    return setTimeout((function() {
+      return toggleInstructions.trigger('click');
+    }), 1000);
   };
 
   EditorHelper.prototype.initBoard = function(_arg) {
@@ -802,7 +834,7 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.handleModification = function() {
     this.hashInstructions();
-    return this.hideInstructions();
+    return this.hideEditorInstructions();
   };
 
   EditorHelper.prototype.hashInstructions = function() {
@@ -813,10 +845,10 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.showInstructions = function() {
     var href;
-    if (this.instructionsDisplayed) {
+    if (this.editorInstructionsDisplayed) {
       return;
     }
-    this.instructionsDisplayed = true;
+    this.editorInstructionsDisplayed = true;
     this.$('.editor_instructions .invalid').hide();
     this.$('.editor_instructions .valid').show();
     href = location.protocol + '//' + location.host + location.pathname;
@@ -825,8 +857,8 @@ xyflyerEditor.EditorHelper = (function() {
     return console.log(this.coffeeInstructions.replace(/\t/g, '    '));
   };
 
-  EditorHelper.prototype.hideInstructions = function() {
-    this.instructionsDisplayed = false;
+  EditorHelper.prototype.hideEditorInstructions = function() {
+    this.editorInstructionsDisplayed = false;
     this.$('.editor_instructions .valid').hide();
     return this.$('.editor_instructions .invalid').show();
   };

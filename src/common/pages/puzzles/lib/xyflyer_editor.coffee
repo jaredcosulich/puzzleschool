@@ -22,10 +22,9 @@ class xyflyerEditor.EditorHelper
             submit: => @launch()
 
         @initButtons()
-        @hideInstructions()
+        @hideEditorInstructions()
         
-        $('.instructions .demo').bind 'click', =>
-            $('#base').data('base').showModal('.demo_video')
+        @initInstructions()
         
         editor = @$('.editor')
         @$('.editor').bind 'mousedown.move_editor', (e) =>
@@ -42,6 +41,27 @@ class xyflyerEditor.EditorHelper
             $(document.body).one 'mouseup.move_editor', =>
                 $(document.body).unbind('mousemove.move_editor')
                 
+    initInstructions: ->
+        instructions = $('.instructions')
+        instructions.find('.demo').bind 'click', =>
+            $('#base').data('base').showModal('.demo_video')
+
+        height = instructions.height()
+        toggleInstructions = $('.toggle_instructions')
+        console.log(toggleInstructions)
+        toggleInstructions.bind 'click', =>
+            if instructions.height() < 1
+                instructions.animate
+                    height: height
+                    duration: 500
+                    complete: => toggleInstructions.html('Hide Instructions')
+            else
+                instructions.animate
+                    height: 0
+                    duration: 500
+                    complete: => toggleInstructions.html('Show Instructions')
+
+        setTimeout((=> toggleInstructions.trigger('click')), 1000)        
                 
     initBoard: ({grid, islandCoordinates}) ->
         if grid
@@ -515,15 +535,15 @@ class xyflyerEditor.EditorHelper
         
     handleModification: ->
         @hashInstructions()    
-        @hideInstructions()
+        @hideEditorInstructions()
         
     hashInstructions: ->    
         levelString = @getInstructions()
         window.location.hash = levelString
         
     showInstructions: ->
-        return if @instructionsDisplayed
-        @instructionsDisplayed = true
+        return if @editorInstructionsDisplayed
+        @editorInstructionsDisplayed = true
         @$('.editor_instructions .invalid').hide()
         @$('.editor_instructions .valid').show()
         href = location.protocol+'//'+location.host+location.pathname
@@ -532,8 +552,8 @@ class xyflyerEditor.EditorHelper
         console.log(@coffeeInstructions.replace(/\t/g, '    '))
         
         
-    hideInstructions: ->
-        @instructionsDisplayed = false
+    hideEditorInstructions: ->
+        @editorInstructionsDisplayed = false
         @$('.editor_instructions .valid').hide()
         @$('.editor_instructions .invalid').show()
         

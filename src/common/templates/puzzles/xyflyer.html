@@ -1,46 +1,50 @@
+<a class='toggle_instructions'>Hide Instructions</a>
 <div class='instructions'>
-    {:editor}
-    <div class='demo_video modal'>
-        <iframe width="640" height="360" src="http://www.youtube.com/embed/O48Ia71RYX0?rel=0" frameborder="0" allowfullscreen></iframe>
-    </div>
-
-    <h3>XYFlyer Editor Instructions</h3>
-    <div class='section'>
-        <h4 class='centered'>Valid Functions & Constants</h4>
-        <div style='padding-left: 21px'>
-            <ul>
-                <li>sin()</li>
-                <li>cos()</li>
-                <li>tan()</li>
-                <li>round()</li>
-                <li>sqrt()</li>
-                <li>abs()</li>
-            </ul>
-            <ul>
-                <li>ln()</li>
-                <li>atan()</li>
-                <li>acos()</li>
-                <li>asin()</li>
-                <li>pi</li>
-                <li>e</li>
-            </ul>
+    <div class='container'>
+        {:editor}
+        <div class='demo_video modal'>
+            <iframe width="640" height="360" src="http://www.youtube.com/embed/O48Ia71RYX0?rel=0" frameborder="0" allowfullscreen></iframe>
         </div>
-    </div>
-    <div class='section centered'>
-        <h4>Instructional Video</h4>
-        <a class='demo'><img src='/assets/images/puzzles/xyflyer/editor_demo_video.jpg'></a>
-    </div>
-    <div style='width: 390px;'>
-        <p>This editor allows you to create custom XYFlyer levels.</p>
-        <p>We recommend using no more than 2 equations and 6 equation fragments as your level will become very challenging very fast.</p>
-        <p>A link will be provided to share your level as soon as it is verified (you've launched the plane through all rings in the level, at least one).</p>
-        <p>Watch the <a class='demo'>demo video</a> to see a level being created.</p>
-    </div>
-    {/editor}
 
-    {!editor}
-    GAME
-    {/editor}
+        <h3>XYFlyer Editor Instructions</h3>
+        <div class='section'>
+            <h4 class='centered'>Valid Functions & Constants</h4>
+            <div style='padding-left: 21px'>
+                <ul>
+                    <li>sin()</li>
+                    <li>cos()</li>
+                    <li>tan()</li>
+                    <li>round()</li>
+                    <li>sqrt()</li>
+                    <li>abs()</li>
+                </ul>
+                <ul>
+                    <li>ln()</li>
+                    <li>atan()</li>
+                    <li>acos()</li>
+                    <li>asin()</li>
+                    <li>pi</li>
+                    <li>e</li>
+                </ul>
+            </div>
+            <div class='centered' style='clear: both;'><b>Valid Variables: </b>a, b, c, d</div>
+        </div>
+        <div class='section centered'>
+            <h4>Instructional Video</h4>
+            <a class='demo'><img src='/assets/images/puzzles/xyflyer/editor_demo_video.jpg'></a>
+        </div>
+        <div style='width: 390px;'>
+            <p>This editor allows you to create custom XYFlyer levels.</p>
+            <p>We recommend using no more than 2 equations and 6 equation fragments as your level will become very challenging very fast.</p>
+            <p>A link will be provided to share your level as soon as it is verified (you've launched the plane through all rings in the level, at least one).</p>
+            <p>Watch the <a class='demo'>demo video</a> to see a level being created.</p>
+        </div>
+        {/editor}
+
+        {!editor}
+        GAME
+        {/editor}
+    </div>
 </div>
 
 
