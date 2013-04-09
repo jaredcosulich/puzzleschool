@@ -94,7 +94,7 @@ soma.chunks({
         }
       }
       this.objects = [];
-      _ref = ['person', 'island', 'plane'];
+      _ref = ['person', 'island', 'plane', 'background'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
         for (index = _j = 1; _j <= 3; index = ++_j) {
@@ -104,6 +104,10 @@ soma.chunks({
           });
         }
       }
+      this.objects.push({
+        name: 'background4',
+        image: this.loadImage("/assets/images/puzzles/xyflyer/background4.jpg")
+      });
       if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/xyflyer_editor.js');
       }
@@ -245,7 +249,7 @@ soma.views({
       }
     },
     load: function() {
-      var asset, index, _ref,
+      var asset, bg, index, _ref,
         _this = this;
       this.dynamicContent.html(this.originalHTML);
       $('svg').remove();
@@ -253,7 +257,12 @@ soma.views({
       for (asset in _ref) {
         index = _ref[asset];
         if (asset === 'background') {
-          this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".png"));
+          if (index === 4) {
+            bg = this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".jpg");
+          } else {
+            bg = this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".png");
+          }
+          this.dynamicContent.css('backgroundImage', bg);
         } else {
           this.$(".objects ." + asset).removeClass(asset);
           this.$(".objects ." + asset + index).addClass(asset);

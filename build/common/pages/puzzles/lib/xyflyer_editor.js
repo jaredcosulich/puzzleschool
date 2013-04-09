@@ -68,7 +68,6 @@ xyflyerEditor.EditorHelper = (function() {
     });
     height = instructions.height();
     toggleInstructions = $('.toggle_instructions');
-    console.log(toggleInstructions);
     toggleInstructions.bind('click', function() {
       if (instructions.height() < 1) {
         return instructions.animate({
@@ -295,7 +294,7 @@ xyflyerEditor.EditorHelper = (function() {
       return _this.boardElement.unbind('click.showxy');
     });
     this.$('.editor .change_background').bind('click', function() {
-      return _this.showImageDialog("Select The Background Image", 'background', 3, function(index) {
+      return _this.showImageDialog("Select The Background Image", 'background', 4, function(index) {
         return _this.setAsset('background', index);
       });
     });
@@ -614,11 +613,12 @@ xyflyerEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.showImageDialog = function(text, name, count, callback) {
-    var dialog, html, image, index, resize, _i, _j, _len, _ref,
+    var dialog, html, image, img, index, resize, _i, _j, _len, _ref,
       _this = this;
     html = "<h3>" + text + "</h3><table><tbody><tr>";
     for (index = _i = 1; 1 <= count ? _i <= count : _i >= count; index = 1 <= count ? ++_i : --_i) {
-      html += "<td><div class='image'><img src='/assets/images/puzzles/xyflyer/" + name + index + ".png' style='opacity: 0'/></div></td>";
+      img = $(".objects ." + name + index + " img");
+      html += "<td><div class='image'><img src='" + (img.attr('src')) + "' style='opacity: 0'/></div></td>";
     }
     html += "</tr></tbody></table>\n<a class='blue_button cancel_button'>Cancel</a>";
     dialog = this.createDialog(html);
@@ -701,6 +701,10 @@ xyflyerEditor.EditorHelper = (function() {
     src = "/assets/images/puzzles/xyflyer/" + type + index + ".png";
     switch (type) {
       case 'background':
+        if (parseInt(index) === 4) {
+          src = src.replace(/png/, 'jpg');
+        }
+        console.log(index, src);
         this.el.css({
           backgroundImage: "url(" + src + ")"
         });

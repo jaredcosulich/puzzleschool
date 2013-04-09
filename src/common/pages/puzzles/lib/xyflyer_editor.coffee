@@ -48,7 +48,6 @@ class xyflyerEditor.EditorHelper
 
         height = instructions.height()
         toggleInstructions = $('.toggle_instructions')
-        console.log(toggleInstructions)
         toggleInstructions.bind 'click', =>
             if instructions.height() < 1
                 instructions.animate
@@ -195,7 +194,7 @@ class xyflyerEditor.EditorHelper
             @boardElement.unbind('click.showxy')
         
         @$('.editor .change_background').bind 'click', => 
-            @showImageDialog "Select The Background Image", 'background', 3, (index) => @setAsset('background', index)
+            @showImageDialog "Select The Background Image", 'background', 4, (index) => @setAsset('background', index)
 
         @$('.editor .change_island').bind 'click', => 
             @showImageDialog "Select The Island Image", 'island', 4, (index) => @setAsset('island', index)
@@ -366,7 +365,8 @@ class xyflyerEditor.EditorHelper
         html = "<h3>#{text}</h3><table><tbody><tr>"
         
         for index in [1..count]
-            html += "<td><div class='image'><img src='/assets/images/puzzles/xyflyer/#{name}#{index}.png' style='opacity: 0'/></div></td>"
+            img = $(".objects .#{name}#{index} img")
+            html += "<td><div class='image'><img src='#{img.attr('src')}' style='opacity: 0'/></div></td>"
         
         html += """
             </tr></tbody></table>
@@ -435,6 +435,7 @@ class xyflyerEditor.EditorHelper
         src = "/assets/images/puzzles/xyflyer/#{type}#{index}.png"
         switch type
             when 'background'
+                src = src.replace(/png/, 'jpg') if parseInt(index) == 4
                 @el.css(backgroundImage: "url(#{src})")
             else
                 @objects.find(".#{type} img").remove()

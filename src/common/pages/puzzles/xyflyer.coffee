@@ -62,12 +62,17 @@ soma.chunks
                                 alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
-            for object in ['person', 'island', 'plane']
+            for object in ['person', 'island', 'plane', 'background']
                 for index in [1..3]
                     @objects.push(
                         name: "#{object}#{index} #{if index == 1 then object else ''}"
                         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}#{index}.png")
                     )
+            
+            @objects.push(
+                name: 'background4'
+                image: @loadImage("/assets/images/puzzles/xyflyer/background4.jpg")
+            )
             
             if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/xyflyer_editor.js' 
@@ -185,7 +190,11 @@ soma.views
             
             for asset, index of @level.assets or @worlds[@currentWorld()].assets or {}
                 if asset == 'background'
-                    @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.png"))
+                    if index == 4
+                        bg = @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.jpg")
+                    else
+                        bg = @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.png")
+                    @dynamicContent.css('backgroundImage', bg)
                 else
                     @$(".objects .#{asset}").removeClass(asset)
                     @$(".objects .#{asset}#{index}").addClass(asset)
