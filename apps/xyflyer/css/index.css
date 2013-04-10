@@ -6,11 +6,15 @@ body {
 .xyflyer {
   height: 640px;
   width: 960px;
-  background-image: url('images/background1.jpg');
   position: relative;
   overflow: hidden;
 }
-.xyflyer.dragging {
+.xyflyer .dynamic_content {
+  height: 640px;
+  width: 960px;
+  background-image: url('images/background1.jpg');
+}
+.xyflyer .dynamic_content.dragging {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -18,7 +22,7 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
-.xyflyer.dragging .dragging {
+.xyflyer .dynamic_content.dragging .dragging {
   box-shadow: 4px 5px 4px #b69c63;
   -webkit-box-shadow: 4px 5px 4px #b69c63;
   -moz-box-shadow: 4px 5px 4px #b69c63;
@@ -29,19 +33,18 @@ body {
   -webkit-box-shadow: 5px 6px 5px #b69c63;
   -moz-box-shadow: 5px 6px 5px #b69c63;
   cursor: move;
+  overflow: hidden;
 }
-.xyflyer .board {
+.xyflyer .dynamic_content .board {
   width: 640px;
   height: 640px;
-  float: right;
+  float: left;
   position: relative;
 }
-
-.xyflyer .board canvas {
-    position: absolute;
+.xyflyer .dynamic_content .board canvas {
+  position: absolute;
 }
-
-.xyflyer .equation_area {
+.xyflyer .dynamic_content .equation_area {
   background-color: white;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -49,46 +52,60 @@ body {
   opacity: 0.8;
   width: 317px;
   height: 634px;
-  margin: -12px 0 0 3px;
+  margin: 3px 0 0 3px;
   font-size: 15px;
+  float: right;
+  position: relative;
 }
-.xyflyer .equation_area h2,
-.xyflyer .equation_area h3 {
+.xyflyer .dynamic_content .equation_area h2,
+.xyflyer .dynamic_content .equation_area h3 {
   text-align: center;
   padding-top: 12px;
 }
-.xyflyer .equation_area.show_places .accept_fragment {
+.xyflyer .dynamic_content .equation_area.show_places .accept_fragment {
   border-bottom: 2px solid #ffbd2a;
   width: 12px;
 }
-.xyflyer .equation_area.show_places .accept_fragment:last-child {
+.xyflyer .dynamic_content .equation_area.show_places .accept_fragment:last-child {
   width: 45px;
 }
-.xyflyer .equation_area.show_places .accept_fragment.with_component {
+.xyflyer .dynamic_content .equation_area.show_places .accept_fragment.with_component {
   width: auto;
   border-bottom: none;
 }
-.xyflyer .equation_area.show_places .accept_fragment.only_area {
+.xyflyer .dynamic_content .equation_area.show_places .accept_fragment.only_area {
   width: 251px;
 }
-.xyflyer .equation_area .equations {
+.xyflyer .dynamic_content .equation_area .menu {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background-color: #eee;
+  padding: 3px 6px;
+  font-size: 11px;
+  color: #262626;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.xyflyer .dynamic_content .equation_area .equations {
   margin-top: 12px;
 }
-.xyflyer .equation_area .equations .equation_container {
+.xyflyer .dynamic_content .equation_area .equations .equation_container {
   overflow: hidden;
   margin-bottom: 12px;
 }
-.xyflyer .equation_area .equations .equation_container .intro {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .intro {
   float: left;
   margin: 0 6px;
   line-height: 30px;
   font-size: 23px;
 }
-.xyflyer .equation_area .equations .equation_container .only_area {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .only_area {
   width: 251px;
   padding: 0 3px;
 }
-.xyflyer .equation_area .equations .equation_container .equation {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation {
   padding: 0 6px;
   margin-right: 6px;
   color: #c7c7c7;
@@ -97,59 +114,59 @@ body {
   overflow: hidden;
   line-height: 30px;
 }
-.xyflyer .equation_area .equations .equation_container .equation.starting_fragment,
-.xyflyer .equation_area .equations .equation_container .equation.with_component,
-.xyflyer .equation_area .equations .equation_container .equation .with_component {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.starting_fragment,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
   color: #262626;
   font-size: 23px;
 }
-.xyflyer .equation_area .equations .equation_container .equation.with_component,
-.xyflyer .equation_area .equations .equation_container .equation .with_component {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
   cursor: pointer;
   border: 1px solid #fafafa;
 }
-.xyflyer .equation_area .equations .equation_container .equation .accept_component {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_component {
   border: 1px solid #ffbd2a;
 }
-.xyflyer .equation_area .equations .equation_container .equation.component_over,
-.xyflyer .equation_area .equations .equation_container .equation .component_over,
-.xyflyer .equation_area .equations .equation_container .equation.over_dropped,
-.xyflyer .equation_area .equations .equation_container .equation .over_dropped {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.component_over,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .component_over,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.over_dropped,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .over_dropped {
   border: 1px solid #0c8d28;
   color: #0c8d28;
   font-weight: bold;
   width: 45px;
 }
-.xyflyer .equation_area .equations .equation_container .equation.component_over.with_component,
-.xyflyer .equation_area .equations .equation_container .equation .component_over.with_component,
-.xyflyer .equation_area .equations .equation_container .equation.over_dropped.with_component,
-.xyflyer .equation_area .equations .equation_container .equation .over_dropped.with_component {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.component_over.with_component,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .component_over.with_component,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.over_dropped.with_component,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .over_dropped.with_component {
   width: auto;
 }
-.xyflyer .equation_area .equations .equation_container .equation.component_over.only_area,
-.xyflyer .equation_area .equations .equation_container .equation .component_over.only_area,
-.xyflyer .equation_area .equations .equation_container .equation.over_dropped.only_area,
-.xyflyer .equation_area .equations .equation_container .equation .over_dropped.only_area {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.component_over.only_area,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .component_over.only_area,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.over_dropped.only_area,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .over_dropped.only_area {
   width: 251px;
 }
-.xyflyer .equation_area .equations .equation_container .equation .fragment,
-.xyflyer .equation_area .equations .equation_container .equation .accept_fragment {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_fragment {
   float: left;
   height: 30px;
 }
-.xyflyer .equation_area .equations .equation_container .equation .removing {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .removing {
   display: none;
 }
-.xyflyer .equation_area .equations .equation_container .equation.bad_formula {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.bad_formula {
   border: 1px solid #ff6e5f;
   color: red;
 }
-.xyflyer .equation_area .equations .equation_container .equation.bad_formula .with_component {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation.bad_formula .with_component {
   color: red;
 }
-.xyflyer .equation_area .equations .equation_container .bad_formula_message,
-.xyflyer .equation_area .equations .equation_container .range,
-.xyflyer .equation_area .equations .equation_container .variable {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .range,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .variable {
   font-size: 11px;
   border: 1px solid #ccc;
   border-top: none;
@@ -158,37 +175,37 @@ body {
   padding: 3px 6px;
   overflow: hidden;
 }
-.xyflyer .equation_area .equations .equation_container .bad_formula_message input,
-.xyflyer .equation_area .equations .equation_container .range input,
-.xyflyer .equation_area .equations .equation_container .variable input {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message input,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .range input,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .variable input {
   width: 24px;
 }
-.xyflyer .equation_area .equations .equation_container .bad_formula_message .slider,
-.xyflyer .equation_area .equations .equation_container .range .slider,
-.xyflyer .equation_area .equations .equation_container .variable .slider {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider {
   position: relative;
   float: right;
   width: 75%;
 }
-.xyflyer .equation_area .equations .equation_container .bad_formula_message .slider .track,
-.xyflyer .equation_area .equations .equation_container .range .slider .track,
-.xyflyer .equation_area .equations .equation_container .variable .slider .track {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider .track,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .track,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider .track {
   margin: 9px 10px;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100));
-  background: -moz-linear-gradient(center top, #fe1a00 5%, #ce0100 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #cb1500), color-stop(1, #9b0100));
+  background: -moz-linear-gradient(center top, #cb1500 5%, #9b0100 100%);
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-  background-color: #fe1a00;
+  background-color: #cb1500;
   height: 6px;
 }
-.xyflyer .equation_area .equations .equation_container .bad_formula_message .slider .knob,
-.xyflyer .equation_area .equations .equation_container .range .slider .knob,
-.xyflyer .equation_area .equations .equation_container .variable .slider .knob {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider .knob,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .knob,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider .knob {
   position: absolute;
-  background: -webkit-radial-gradient(60% 70%, circle, #24d94c, #0c8d28);
-  background: -moz-radial-gradient(60% 70%, circle, #24d94c, #0c8d28);
-  background: -ms-radial-gradient(60% 70%, circle, #24d94c, #0c8d28);
-  background: -o-radial-gradient(60% 70%, circle, #24d94c, #0c8d28);
-  background: radial-gradient(circle at 60% 70%, #24d94c, #0c8d28);
+  background: -webkit-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
+  background: -moz-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
+  background: -ms-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
+  background: -o-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
+  background: radial-gradient(circle at 60% 70%, #1dad3d, #085e1b);
   width: 20px;
   height: 20px;
   top: 2px;
@@ -198,27 +215,34 @@ body {
   -moz-border-radius: 10px;
   border-radius: 10px;
 }
-.xyflyer .equation_area .equations .equation_container .bad_formula_message {
+.xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message {
   border: none;
   color: red;
 }
-.xyflyer .equation_area .launch_button {
+.xyflyer .dynamic_content .equation_area .launch_button {
   text-align: center;
 }
-.xyflyer .equation_area .possible_fragments {
+.xyflyer .dynamic_content .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
+  /*            overflow: hidden;*/
+
   position: relative;
 }
-.xyflyer .equation_area .possible_fragments p {
+.xyflyer .dynamic_content .equation_area .possible_fragments p {
   font-size: 11px;
 }
-.xyflyer .equation_area .possible_fragments .equation_component {
-  cursor: move;
+.xyflyer .dynamic_content .equation_area .possible_fragments .equation_component {
   float: left;
   margin: 6px 6px 0 0;
+  cursor: move;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
-.xyflyer .equation_area .possible_fragments .place_holder {
+.xyflyer .dynamic_content .equation_area .possible_fragments .place_holder {
   padding: 6px 9px;
   color: #c7c7c7;
   border: 1px solid #c7c7c7;
@@ -228,19 +252,19 @@ body {
   background: url('images/fragment_down_arrow.png') no-repeat top center;
   cursor: pointer;
 }
-.xyflyer .button {
+.xyflyer .dynamic_content .button {
   font-size: 15px;
-  -moz-box-shadow: inset 0px 1px 0px 0px #f29c93;
-  -webkit-box-shadow: inset 0px 1px 0px 0px #f29c93;
-  box-shadow: inset 0px 1px 0px 0px #f29c93;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100));
-  background: -moz-linear-gradient(center top, #fe1a00 5%, #ce0100 100%);
+  -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
+  box-shadow: inset 0px 1px 0px 0px #ed7265;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #cb1500), color-stop(1, #9b0100));
+  background: -moz-linear-gradient(center top, #cb1500 5%, #9b0100 100%);
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-  background-color: #fe1a00;
+  background-color: #cb1500;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-  border: 1px solid #d83526;
+  border: 1px solid #ad2a1e;
   display: inline-block;
   color: #fafafa;
   font-family: arial;
@@ -248,20 +272,20 @@ body {
   font-weight: bold;
   padding: 6px 24px;
   text-decoration: none;
-  text-shadow: 1px 1px 0px #b23e35;
+  text-shadow: 1px 1px 0px #8b3029;
   margin: auto;
 }
-.xyflyer .button:hover {
+.xyflyer .dynamic_content .button:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00));
   background: -moz-linear-gradient(center top, #ce0100 5%, #fe1a00 100%);
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
   background-color: #ce0100;
 }
-.xyflyer .button:active {
+.xyflyer .dynamic_content .button:active {
   position: relative;
   top: 1px;
 }
-.xyflyer .equation_component {
+.xyflyer .dynamic_content .equation_component {
   padding: 6px 9px;
   border: 1px solid #949494;
   -webkit-border-radius: 3px;
@@ -281,10 +305,55 @@ body {
   -webkit-box-shadow: 1px 2px 1px #b69c63;
   -moz-box-shadow: 1px 2px 1px #b69c63;
 }
-.xyflyer .objects {
+.xyflyer .dynamic_content .hints {
+  padding: 60px 0 0 6px;
+}
+.xyflyer .dynamic_content .hints .drag_this,
+.xyflyer .dynamic_content .hints .drop_here,
+.xyflyer .dynamic_content .hints .launch_hint {
   position: absolute;
-  top: -10000px;
-  left: -10000px;
+  top: -1000px;
+  left: -1000px;
+  z-index: 99;
+}
+.xyflyer .dynamic_content .dialog {
+  background-color: white;
+  padding: 30px;
+  border: 1px solid #ccc;
+  position: absolute;
+  top: 200px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  z-index: 99;
+  cursor: move;
+}
+.xyflyer .dynamic_content .dialog h3 {
+  margin-bottom: 12px;
+}
+.xyflyer .dynamic_content .dialog .number {
+  width: 45px;
+}
+.xyflyer .dynamic_content .dialog input {
+  padding: 1px;
+  margin-right: 12px;
+}
+.xyflyer .dynamic_content .dialog .button {
+  margin-top: 12px;
+  padding: 3px 12px;
+  font-size: 15px;
+}
+.xyflyer .dynamic_content .editor_instructions {
+  padding: 6px;
+  overflow: hidden;
+  margin-top: 60px;
+}
+.xyflyer .dynamic_content .editor_instructions p {
+  font-size: 11px;
+}
+.xyflyer .dynamic_content .editor_instructions input {
+  width: 240px;
+  height: 30px;
 }
 .xyflyer .complete,
 .xyflyer .intro_message,
@@ -300,16 +369,76 @@ body {
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
-.xyflyer .hints {
-  padding: 45px 0 0 6px;
-}
-.xyflyer .hints .drag_this,
-.xyflyer .hints .drop_here,
-.xyflyer .hints .launch_hint {
+.xyflyer .level_selector {
   position: absolute;
   top: -1000px;
   left: -1000px;
+  opacity: 0;
+  background-color: #fafafa;
+  border: 2px solid #a61c0e;
+  width: 570px;
+  height: 462px;
+  overflow: auto;
+  padding: 12px;
   z-index: 99;
+}
+.xyflyer .level_selector .success {
+  display: none;
+}
+.xyflyer .level_selector.success .success {
+  display: block;
+  margin-bottom: 12px;
+}
+.xyflyer .level_selector h2,
+.xyflyer .level_selector h3,
+.xyflyer .level_selector h4 {
+  text-align: center;
+}
+.xyflyer .level_selector .world_links {
+  background: url('images/level_selector_background.png') no-repeat center center;
+  overflow: hidden;
+}
+.xyflyer .level_selector .world_links .world_link {
+  float: left;
+  cursor: pointer;
+  margin: 15px 0 15px 34px;
+  width: 72px;
+  height: 74px;
+  overflow: hidden;
+}
+.xyflyer .level_selector .world_links .world_link.selected img {
+  margin-left: -72px;
+}
+.xyflyer .level_selector .world {
+  clear: left;
+  display: none;
+}
+.xyflyer .level_selector .world.selected {
+  display: block;
+}
+.xyflyer .level_selector .world .stage {
+  background-color: #eee;
+  padding-top: 12px;
+  margin: 12px auto 0 auto;
+  width: 565px;
+  overflow: hidden;
+}
+.xyflyer .level_selector .world .stage h4 {
+  margin: 0;
+}
+.xyflyer .level_selector .world .stage .level {
+  display: block;
+  float: left;
+  margin: 0 0 11px 11px;
+  width: 44px;
+  height: 44px;
+  background: url('images/level.png') 0 0;
+}
+.xyflyer .level_selector .world .stage .level.locked {
+  background-position: -44px 0;
+}
+.xyflyer .level_selector .world .stage .level.completed {
+  background-position: -88px 0;
 }
 .xyflyer .blue_button,
 .xyflyer .red_button {
@@ -329,48 +458,44 @@ body {
 .xyflyer .red_button {
   background-color: #ff6e5f;
 }
-.xyflyer .dialog {
-  background-color: white;
-  padding: 30px;
-  border: 1px solid #ccc;
+.xyflyer .objects {
   position: absolute;
-  top: 200px;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  z-index: 99;
+  top: -10000px;
+  left: -10000px;
+}
+.xyflyer .editor {
+  position: absolute;
+  top: 390px;
+  left: 600px;
+  background-color: white;
+  padding: 15px 30px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  z-index: 98;
   cursor: move;
 }
-.xyflyer .dialog h3 {
+.xyflyer .editor h3 {
+  text-align: center;
   margin-bottom: 12px;
 }
-.xyflyer .dialog .number {
-  width: 45px;
-}
-.xyflyer .dialog input {
-  padding: 1px;
-  margin-right: 12px;
-}
-.xyflyer .dialog .button {
-  margin-top: 12px;
-  padding: 3px 12px;
-  font-size: 15px;
-}
-.xyflyer .editor,
-.xyflyer .instructions {
-  margin-top: 18px;
-  padding: 6px;
-  overflow: hidden;
-}
-.xyflyer .editor p,
-.xyflyer .instructions p {
+.xyflyer .editor p {
   font-size: 11px;
 }
-.xyflyer .editor input,
-.xyflyer .instructions input {
-  width: 240px;
-  height: 30px;
+.xyflyer .dialog .image {
+  width: 160px;
+  height: 120px;
+  overflow: hidden;
+  line-height: 120px;
+  text-align: center;
 }
+.xyflyer .dialog .image img {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+
 /*
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
     .xyflyer {

@@ -70,57 +70,171 @@
     </head>
     
     <body class='xyflyer'>
-        <div class='board'></div>
-        <div class='equation_area'>
-            <h2>XYFlyer</h2>
-            <div class='equations'></div>
-            <div class='launch_button'><a class='launch button go'>Launch!</a></div>
+            <div class='dynamic_content'>
+                <div class='board' id='board'></div>
+                <div class='equation_area'>
+                    <a class='menu'>Menu</a>
+                    <h2>XYFlyer</h2>
+                    <div class='equations'></div>
+                    <div class='launch_button'><a class='launch button go'>Launch!</a></div>
 
-            <div class='possible_fragments'>
-                <h4>Equation Fragments</h4>
-                <p>Mix and match these equation fragments by dragging and dropping them in the equation area above.</p>
+                    <div class='possible_fragments'>
+
+                        <h4>Equation Fragments</h4>
+                        <p>Mix and match these equation fragments by dragging and dropping them in the equation area above.</p>
+
+                    </div>
+
+
+
+
+                    <div class='hints'>
+                        <h4>Can't Figure It Out?</h4> 
+                        <p><a class='hint blue_button'>Show Me Part Of The Solution</a></p>
+                        <div class='drag_this'>
+                            <img src='css/images/drag_this.png'/>
+                        </div>
+                        <div class='drop_here'>
+                            <img src='css/images/drop_here.png'/>
+                        </div>
+                        <div class='launch_hint'>
+                            <img src='css/images/launch.png'/>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class='level_instructions'>
+
+                </div>
+
+
             </div>
-            <div class='hints'>
-                <h4>Can't Figure It Out?</h4> 
-                <p><a class='hint blue_button'>Show Me Part Of The Solution</a></p>
-                <div class='drag_this'>
-                    <img src='css/images/drag_this.png'/>
-                </div>
-                <div class='drop_here'>
-                    <img src='css/images/drop_here.png'/>
-                </div>
-                <div class='launch_hint'>
-                    <img src='css/images/launch.png'/>
-                </div>
+
+            <div class='intro_message'>
+                <h2>Welcome To XYFlyer</h2>
+                <br/>
+                <p>XYFlyer allows you to explore equations and graphing by solving various puzzles.</p>
+                <p>Fly a remote controlled airplane through hoops using equations to chart the airplane's path.</p>
+                <br/>
+                <h4>XYFlyer is currently in beta</h4>
+                <p>We only have a few levels so far, but we're adding more levels every day.</p>
+                <p>If you want to try creating your own levels, check out the <a href='/puzzles/xyflyer/editor'>Level Editor</a>.</p>
+                <br/>
+                <a class='button go'>Start</a>
             </div>
-        </div>
-        <div class='complete'>
-            <h2>Nice Job!</h2>
-            <p><a class='button go'>Next Level ></a></p>
-        </div>
-        <div class='intro_message'>
-            <h2>Welcome To XYFlyer</h2>
-            <br/>
-            <p>XYFlyer allows you to explore equations and graphing by solving various puzzles.</p>
-            <p>Fly a remote controlled airplane through hoops using equations to chart the airplane's path.</p>
-            <br/>
-            <h4>XYFlyer is currently in beta</h4>
-            <p>We only have a few levels so far, but we're adding more levels every day.</p>
-            <br/>
-            <a class='button go'>Start ></a>
-        </div>
-        <div class='exit_message'>
-            <h2>That's all we've got!</h2>
-            <br/>
-            <p>XYFlyer is still very much in development and we are adding new levels frequently.</p>
-            <p>We love to hear feedback and encouragement. So let us know what you think about XYFlyer!</p>
-            <br/>
-            <h4>Contact Us</h4>
-            <p><a mailto='xyflyer@puzzleschool.com'>xyflyer@puzzleschool.com</a></p>
-        </div>
-        <div class="objects">
-            <div class="island"><img src="css/images/island.png"/></div>
-            <div class="plane"><img src="css/images/plane.png"/></div>
+
+            <div class='level_selector'>
+                <div class='world_links'>
+
+                    <div class='world_link' data-world=1>
+                        <img src='css/images/world1.png'/>
+                    </div>
+
+                    <div class='world_link' data-world=2>
+                        <img src='css/images/world2.png'/>
+                    </div>
+
+                    <div class='world_link' data-world=3>
+                        <img src='css/images/world3.png'/>
+                    </div>
+
+                    <div class='world_link' data-world=4>
+                        <img src='css/images/world4.png'/>
+                    </div>
+
+                    <div class='world_link' data-world=5>
+                        <img src='css/images/world5.png'/>
+                    </div>
+
+                </div>
+
+                <div class='world'>
+
+                    <div class='stage'>
+                        <h4>Shifting Lines</h4>
+                        <br/>
+                        <a class='level' id='level_1364229884455' data-id=1364229884455></a><a class='level' id='level_1364577895069' data-id=1364577895069></a><a class='level' id='level_1364230317228' data-id=1364230317228></a><a class='level' id='level_1364225130330' data-id=1364225130330></a><a class='level' id='level_1364578660117' data-id=1364578660117></a><a class='level' id='level_1364579016552' data-id=1364579016552></a><a class='level' id='level_1364578077315' data-id=1364578077315></a><a class='level' id='level_1364580124694' data-id=1364580124694></a><a class='level' id='level_1364580310767' data-id=1364580310767></a><a class='level' id='level_1363889649942' data-id=1363889649942></a><a class='level' id='level_1364580586738' data-id=1364580586738></a><a class='level' id='level_1364581109101' data-id=1364581109101></a><a class='level' id='level_1363898471122' data-id=1363898471122></a><a class='level' id='level_1364581756908' data-id=1364581756908></a><a class='level' id='level_1364225219109' data-id=1364225219109></a><a class='level' id='level_1364231736746' data-id=1364231736746></a><a class='level' id='level_1364232064737' data-id=1364232064737></a><a class='level' id='level_1364231355522' data-id=1364231355522></a><a class='level' id='level_1364235830450' data-id=1364235830450></a><a class='level' id='level_1364236569983' data-id=1364236569983></a>
+                    </div>
+
+                    <div class='stage'>
+                        <h4>Changing Slope</h4>
+                        <br/>
+                        <a class='level' id='level_1363227855683' data-id=1363227855683></a><a class='level' id='level_1364599564266' data-id=1364599564266></a><a class='level' id='level_1364599999113' data-id=1364599999113></a><a class='level' id='level_1363227878373' data-id=1363227878373></a><a class='level' id='level_1363726126940' data-id=1363726126940></a><a class='level' id='level_1363726028635' data-id=1363726028635></a><a class='level' id='level_1363899214658' data-id=1363899214658></a><a class='level' id='level_1364317431321' data-id=1364317431321></a><a class='level' id='level_1364320352722' data-id=1364320352722></a><a class='level' id='level_1364603649394' data-id=1364603649394></a><a class='level' id='level_1364318896882' data-id=1364318896882></a><a class='level' id='level_1364320805441' data-id=1364320805441></a><a class='level' id='level_1364321553399' data-id=1364321553399></a><a class='level' id='level_1364321105883' data-id=1364321105883></a><a class='level' id='level_1364321710361' data-id=1364321710361></a><a class='level' id='level_1364323332127' data-id=1364323332127></a><a class='level' id='level_1364604226181' data-id=1364604226181></a><a class='level' id='level_1364324406984' data-id=1364324406984></a><a class='level' id='level_1364324629711' data-id=1364324629711></a><a class='level' id='level_1364324786570' data-id=1364324786570></a>
+                    </div>
+
+                </div>
+
+                <div class='world'>
+
+                    <div class='stage'>
+                        <h4>Shift And Slope</h4>
+                        <br/>
+                        <a class='level' id='level_1363899729966' data-id=1363899729966></a><a class='level' id='level_1363229707272' data-id=1363229707272></a><a class='level' id='level_1363727704223' data-id=1363727704223></a><a class='level' id='level_1363727990375' data-id=1363727990375></a><a class='level' id='level_1363899946541' data-id=1363899946541></a><a class='level' id='level_1363367640281' data-id=1363367640281></a><a class='level' id='level_1363729451096' data-id=1363729451096></a><a class='level' id='level_1364605842905' data-id=1364605842905></a><a class='level' id='level_1364606006532' data-id=1364606006532></a><a class='level' id='level_1363368153567' data-id=1363368153567></a><a class='level' id='level_1363392738634' data-id=1363392738634></a><a class='level' id='level_1364337931784' data-id=1364337931784></a><a class='level' id='level_1364338302356' data-id=1364338302356></a><a class='level' id='level_1364334055997' data-id=1364334055997></a><a class='level' id='level_1364335290588' data-id=1364335290588></a><a class='level' id='level_1364335789666' data-id=1364335789666></a><a class='level' id='level_1364336010759' data-id=1364336010759></a><a class='level' id='level_1364337246109' data-id=1364337246109></a><a class='level' id='level_1364339817678' data-id=1364339817678></a><a class='level' id='level_1364340176597' data-id=1364340176597></a>
+                    </div>
+
+                    <div class='stage'>
+                        <h4>Variable Lines</h4>
+                        <br/>
+                        <a class='level' id='level_1363229719931' data-id=1363229719931></a><a class='level' id='level_1363229739276' data-id=1363229739276></a><a class='level' id='level_1365114752424' data-id=1365114752424></a><a class='level' id='level_1363229750440' data-id=1363229750440></a><a class='level' id='level_1363229759840' data-id=1363229759840></a><a class='level' id='level_1363229798825' data-id=1363229798825></a><a class='level' id='level_1364407089585' data-id=1364407089585></a><a class='level' id='level_1364407581877' data-id=1364407581877></a><a class='level' id='level_1363229806832' data-id=1363229806832></a><a class='level' id='level_1363229814257' data-id=1363229814257></a><a class='level' id='level_1363229822498' data-id=1363229822498></a><a class='level' id='level_1363902958905' data-id=1363902958905></a><a class='level' id='level_1364411932551' data-id=1364411932551></a><a class='level' id='level_1364413059940' data-id=1364413059940></a><a class='level' id='level_1364417297857' data-id=1364417297857></a><a class='level' id='level_1365113728958' data-id=1365113728958></a><a class='level' id='level_1365114113043' data-id=1365114113043></a><a class='level' id='level_1365114637921' data-id=1365114637921></a><a class='level' id='level_1365115474895' data-id=1365115474895></a><a class='level' id='level_1365117127195' data-id=1365117127195></a>
+                    </div>
+
+                </div>
+
+                <div class='world'>
+
+                    <div class='stage'>
+                        <h4>Multiple Lines (Shifting)</h4>
+                        <br/>
+                        <a class='level' id='level_1364510572027' data-id=1364510572027></a><a class='level' id='level_1364520496399' data-id=1364520496399></a><a class='level' id='level_1364663305243' data-id=1364663305243></a><a class='level' id='level_1364663411940' data-id=1364663411940></a><a class='level' id='level_1364663552537' data-id=1364663552537></a><a class='level' id='level_1364664368228' data-id=1364664368228></a><a class='level' id='level_1364664483654' data-id=1364664483654></a><a class='level' id='level_1364664770523' data-id=1364664770523></a><a class='level' id='level_1364665016074' data-id=1364665016074></a><a class='level' id='level_1364665383114' data-id=1364665383114></a><a class='level' id='level_1364511419224' data-id=1364511419224></a><a class='level' id='level_1364511618594' data-id=1364511618594></a><a class='level' id='level_1364512372898' data-id=1364512372898></a><a class='level' id='level_1364676651132' data-id=1364676651132></a><a class='level' id='level_1364676990129' data-id=1364676990129></a><a class='level' id='level_1363229830265' data-id=1363229830265></a><a class='level' id='level_1364513384695' data-id=1364513384695></a><a class='level' id='level_1364513866024' data-id=1364513866024></a><a class='level' id='level_1364677454929' data-id=1364677454929></a><a class='level' id='level_1364680353131' data-id=1364680353131></a>
+                    </div>
+
+                    <div class='stage'>
+                        <h4>Multiple Lines (Shift And Slope)</h4>
+                        <br/>
+                        <a class='level' id='level_1363229838153' data-id=1363229838153></a><a class='level' id='level_1364680927728' data-id=1364680927728></a><a class='level' id='level_1364681731709' data-id=1364681731709></a><a class='level' id='level_1364682012844' data-id=1364682012844></a><a class='level' id='level_1364682615198' data-id=1364682615198></a><a class='level' id='level_1364683625383' data-id=1364683625383></a><a class='level' id='level_1364683987059' data-id=1364683987059></a><a class='level' id='level_1364684337839' data-id=1364684337839></a><a class='level' id='level_1364684503216' data-id=1364684503216></a><a class='level' id='level_1364684743255' data-id=1364684743255></a><a class='level' id='level_1363382168264' data-id=1363382168264></a><a class='level' id='level_1363372189102' data-id=1363372189102></a><a class='level' id='level_1363625636226' data-id=1363625636226></a><a class='level' id='level_1363446018764' data-id=1363446018764></a><a class='level' id='level_1363623610571' data-id=1363623610571></a><a class='level' id='level_1364688231845' data-id=1364688231845></a><a class='level' id='level_1364689024728' data-id=1364689024728></a><a class='level' id='level_1364691092643' data-id=1364691092643></a><a class='level' id='level_1364691431977' data-id=1364691431977></a><a class='level' id='level_1363229845866' data-id=1363229845866></a>
+                    </div>
+
+                </div>
+
+                <div class='world'>
+
+                    <div class='stage'>
+                        <h4>Curves</h4>
+                        <br/>
+                        <a class='level' id='level_1364744280392' data-id=1364744280392></a><a class='level' id='level_1364744509304' data-id=1364744509304></a><a class='level' id='level_1364747040078' data-id=1364747040078></a><a class='level' id='level_1364747096861' data-id=1364747096861></a><a class='level' id='level_1364747173461' data-id=1364747173461></a><a class='level' id='level_1364747296870' data-id=1364747296870></a><a class='level' id='level_1364747386370' data-id=1364747386370></a><a class='level' id='level_1364748866298' data-id=1364748866298></a><a class='level' id='level_1364749088810' data-id=1364749088810></a><a class='level' id='level_1364749328433' data-id=1364749328433></a><a class='level' id='level_1364750857551' data-id=1364750857551></a><a class='level' id='level_1364751046543' data-id=1364751046543></a><a class='level' id='level_1364751232601' data-id=1364751232601></a><a class='level' id='level_1364751644627' data-id=1364751644627></a><a class='level' id='level_1364752362148' data-id=1364752362148></a><a class='level' id='level_1364754136172' data-id=1364754136172></a><a class='level' id='level_1364754325573' data-id=1364754325573></a><a class='level' id='level_1364756059524' data-id=1364756059524></a><a class='level' id='level_1364756652103' data-id=1364756652103></a><a class='level' id='level_1364757076047' data-id=1364757076047></a>
+                    </div>
+
+                    <div class='stage'>
+                        <h4>Lines and Curves</h4>
+                        <br/>
+                        <a class='level' id='level_1364761788756' data-id=1364761788756></a><a class='level' id='level_1364761182285' data-id=1364761182285></a><a class='level' id='level_1364762757890' data-id=1364762757890></a><a class='level' id='level_1364772775933' data-id=1364772775933></a><a class='level' id='level_1364773131969' data-id=1364773131969></a><a class='level' id='level_1364763864778' data-id=1364763864778></a><a class='level' id='level_1364765607396' data-id=1364765607396></a><a class='level' id='level_1364771475164' data-id=1364771475164></a><a class='level' id='level_1363642523297' data-id=1363642523297></a><a class='level' id='level_1363643301742' data-id=1363643301742></a><a class='level' id='level_1364764682077' data-id=1364764682077></a><a class='level' id='level_1363645001878' data-id=1363645001878></a><a class='level' id='level_1363640447671' data-id=1363640447671></a><a class='level' id='level_1363230030642' data-id=1363230030642></a><a class='level' id='level_1364763311626' data-id=1364763311626></a><a class='level' id='level_1364793906650' data-id=1364793906650></a><a class='level' id='level_1364793362494' data-id=1364793362494></a><a class='level' id='level_1364792099522' data-id=1364792099522></a><a class='level' id='level_1364792753776' data-id=1364792753776></a><a class='level' id='level_1364794806870' data-id=1364794806870></a>
+                    </div>
+
+                </div>
+
+                <div class='world'>
+
+                    <div class='stage'>
+                        <h4>Multiple Curves</h4>
+                        <br/>
+                        <a class='level' id='level_1364930185865' data-id=1364930185865></a><a class='level' id='level_1364931680736' data-id=1364931680736></a><a class='level' id='level_1364932008813' data-id=1364932008813></a><a class='level' id='level_1364932354654' data-id=1364932354654></a><a class='level' id='level_1364932863834' data-id=1364932863834></a><a class='level' id='level_1364935156525' data-id=1364935156525></a><a class='level' id='level_1364935879735' data-id=1364935879735></a><a class='level' id='level_1364936482903' data-id=1364936482903></a><a class='level' id='level_1364937450142' data-id=1364937450142></a><a class='level' id='level_1364936799601' data-id=1364936799601></a><a class='level' id='level_1365006998811' data-id=1365006998811></a><a class='level' id='level_1364950899989' data-id=1364950899989></a><a class='level' id='level_1364949817117' data-id=1364949817117></a><a class='level' id='level_1364949168219' data-id=1364949168219></a><a class='level' id='level_1364956538708' data-id=1364956538708></a><a class='level' id='level_1365003976291' data-id=1365003976291></a><a class='level' id='level_1365003212945' data-id=1365003212945></a><a class='level' id='level_1364961568842' data-id=1364961568842></a><a class='level' id='level_1363646545338' data-id=1363646545338></a><a class='level' id='level_1365004652688' data-id=1365004652688></a>
+                    </div>
+
+                    <div class='stage'>
+                        <h4>Crazy Curves</h4>
+                        <br/>
+                        <a class='level' id='level_1365008751620' data-id=1365008751620></a><a class='level' id='level_1365008919218' data-id=1365008919218></a><a class='level' id='level_1365010583352' data-id=1365010583352></a><a class='level' id='level_1365010801140' data-id=1365010801140></a><a class='level' id='level_1365011732523' data-id=1365011732523></a><a class='level' id='level_1365011843441' data-id=1365011843441></a><a class='level' id='level_1365012432460' data-id=1365012432460></a><a class='level' id='level_1365013431792' data-id=1365013431792></a><a class='level' id='level_1365014359939' data-id=1365014359939></a><a class='level' id='level_1365014932286' data-id=1365014932286></a><a class='level' id='level_1365017158875' data-id=1365017158875></a><a class='level' id='level_1365018479510' data-id=1365018479510></a><a class='level' id='level_1365021382511' data-id=1365021382511></a><a class='level' id='level_1365027326338' data-id=1365027326338></a><a class='level' id='level_1365027412952' data-id=1365027412952></a><a class='level' id='level_1365029767203' data-id=1365029767203></a><a class='level' id='level_1365014127083' data-id=1365014127083></a><a class='level' id='level_1365102058908' data-id=1365102058908></a><a class='level' id='level_1365110893389' data-id=1365110893389></a><a class='level' id='level_1365111278650' data-id=1365111278650></a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class='objects'>
+                <div class='person1 person'><img src="css/images/person1.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='person2 '><img src="css/images/person2.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='person3 '><img src="css/images/person3.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='person4 '><img src="css/images/person4.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='island1 island'><img src="css/images/island1.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='island2 '><img src="css/images/island2.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='island3 '><img src="css/images/island3.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='island4 '><img src="css/images/island4.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='plane1 plane'><img src="css/images/plane1.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='plane2 '><img src="css/images/plane2.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='plane3 '><img src="css/images/plane3.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='plane4 '><img src="css/images/plane4.png" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='background1 background'><img src="css/images/background1.jpg" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='background2 '><img src="css/images/background2.jpg" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='background3 '><img src="css/images/background3.jpg" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div><div class='background4 '><img src="css/images/background4.jpg" data-loading="loading" onload="this.removeAttribute('data-loading');" /></div>
+            </div>
+
         </div>
     </body>
 </html>
