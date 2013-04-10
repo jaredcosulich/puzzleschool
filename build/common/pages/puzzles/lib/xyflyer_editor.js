@@ -704,7 +704,6 @@ xyflyerEditor.EditorHelper = (function() {
         if (parseInt(index) === 4) {
           src = src.replace(/png/, 'jpg');
         }
-        console.log(index, src);
         this.el.css({
           backgroundImage: "url(" + src + ")"
         });

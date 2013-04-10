@@ -1,7 +1,7 @@
 {:editor}<a class='toggle_instructions'>Hide Instructions</a>{/editor}
+{:editor}
 <div class='instructions'>
     <div class='container'>
-        {:editor}
         <div class='demo_video modal'>
             <iframe width="640" height="360" src="http://www.youtube.com/embed/O48Ia71RYX0?rel=0" frameborder="0" allowfullscreen></iframe>
         </div>
@@ -39,13 +39,9 @@
             <p>A link will be provided to share your level as soon as it is verified (you've launched the plane through all rings in the level, at least one).</p>
             <p>Watch the <a class='demo'>demo video</a> to see a level being created.</p>
         </div>
-        {/editor}
-
-        {!editor}
-        GAME
-        {/editor}
     </div>
 </div>
+{/editor}
 
 
 <div class='xyflyer' data-level={level} data-class={class} data-classlevel={classLevel} data-puzzle_data={puzzleData}>
