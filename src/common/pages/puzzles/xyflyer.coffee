@@ -63,7 +63,7 @@ soma.chunks
                         
             @objects = []
             for object in ['person', 'island', 'plane', 'background']
-                for index in [1..3]
+                for index in [1..4]
                     @objects.push(
                         name: "#{object}#{index} #{if index == 1 then object else ''}"
                         image: @loadImage("/assets/images/puzzles/xyflyer/#{object}#{index}.png")

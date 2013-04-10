@@ -97,7 +97,7 @@ soma.chunks({
       _ref = ['person', 'island', 'plane', 'background'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
-        for (index = _j = 1; _j <= 3; index = ++_j) {
+        for (index = _j = 1; _j <= 4; index = ++_j) {
           this.objects.push({
             name: "" + object + index + " " + (index === 1 ? object : ''),
             image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + index + ".png")
