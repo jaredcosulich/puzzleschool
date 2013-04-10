@@ -64,15 +64,11 @@ soma.chunks
             @objects = []
             for object in ['person', 'island', 'plane', 'background']
                 for index in [1..4]
+                    filetype = (if object == 'background' then 'jpg' else 'png')
                     @objects.push(
                         name: "#{object}#{index} #{if index == 1 then object else ''}"
-                        image: @loadImage("/assets/images/puzzles/xyflyer/#{object}#{index}.png")
+                        image: @loadImage("/assets/images/puzzles/xyflyer/#{object}#{index}.#{filetype}")
                     )
-            
-            @objects.push(
-                name: 'background4'
-                image: @loadImage("/assets/images/puzzles/xyflyer/background4.jpg")
-            )
             
             if @levelId == 'editor'
                 @loadScript '/build/common/pages/puzzles/lib/xyflyer_editor.js' 
@@ -190,11 +186,7 @@ soma.views
             
             for asset, index of @level.assets or @worlds[@currentWorld()].assets or {}
                 if asset == 'background'
-                    if index == 4
-                        bg = @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.jpg")
-                    else
-                        bg = @dynamicContent.css('backgroundImage').replace(/\d+\.png/, "#{index}.png")
-                    @dynamicContent.css('backgroundImage', bg)
+                    @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\./, "#{index}."))
                 else
                     @$(".objects .#{asset}").removeClass(asset)
                     @$(".objects .#{asset}#{index}").addClass(asset)

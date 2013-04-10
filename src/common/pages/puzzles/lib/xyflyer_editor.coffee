@@ -139,17 +139,14 @@ class xyflyerEditor.EditorHelper
                 alert("You've already added the maximum number of equations.")
                     
         @$('.editor .remove_equation').bind 'click', =>
-            if @equations.length <= 1
-                alert('You must have at least one equation.')
-            else
-                alert('Please click on the equation you want to remove.')
-                for equation in @equations.equations
-                    do (equation) =>
-                        equation.el.bind 'mousedown.remove', =>
-                            e.el.unbind('mousedown.remove') for e in @equations.equations
-                            dropArea.component?.reset() for dropArea in equation.dropAreas                             
-                            @equations.remove(equation)
-                            @handleModification()
+            alert('Please click on the equation you want to remove.')
+            for equation in @equations.equations
+                do (equation) =>
+                    equation.el.bind 'mousedown.remove', =>
+                        e.el.unbind('mousedown.remove') for e in @equations.equations
+                        dropArea.component?.reset() for dropArea in equation.dropAreas                             
+                        @equations.remove(equation)
+                        @handleModification()
 
         @$('.editor .add_fragment').bind 'click', =>
             @showDialog
@@ -432,14 +429,13 @@ class xyflyerEditor.EditorHelper
         
     setAsset: (type, index) ->
         @assets[type] = index
-        src = "/assets/images/puzzles/xyflyer/#{type}#{index}.png"
+        src = "/assets/images/puzzles/xyflyer/#{type}#{index}"
         switch type
             when 'background'
-                src = src.replace(/png/, 'jpg') if parseInt(index) == 4
-                @el.css(backgroundImage: "url(#{src})")
+                @el.css(backgroundImage: "url(#{src}.jpg)")
             else
                 @objects.find(".#{type} img").remove()
-                @objects.find(".#{type}").html("<img src='#{src}'/>")
+                @objects.find(".#{type}").html("<img src='#{src}.png'/>")
                 @initBoard({})
         @handleModification()
                 

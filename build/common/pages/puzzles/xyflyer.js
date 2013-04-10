@@ -30,7 +30,7 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var index, object, _i, _j, _len, _ref,
+      var filetype, index, object, _i, _j, _len, _ref,
         _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
@@ -98,16 +98,13 @@ soma.chunks({
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         object = _ref[_i];
         for (index = _j = 1; _j <= 4; index = ++_j) {
+          filetype = (object === 'background' ? 'jpg' : 'png');
           this.objects.push({
             name: "" + object + index + " " + (index === 1 ? object : ''),
-            image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + index + ".png")
+            image: this.loadImage("/assets/images/puzzles/xyflyer/" + object + index + "." + filetype)
           });
         }
       }
-      this.objects.push({
-        name: 'background4',
-        image: this.loadImage("/assets/images/puzzles/xyflyer/background4.jpg")
-      });
       if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/xyflyer_editor.js');
       }
@@ -249,7 +246,7 @@ soma.views({
       }
     },
     load: function() {
-      var asset, bg, index, _ref,
+      var asset, index, _ref,
         _this = this;
       this.dynamicContent.html(this.originalHTML);
       $('svg').remove();
@@ -257,12 +254,7 @@ soma.views({
       for (asset in _ref) {
         index = _ref[asset];
         if (asset === 'background') {
-          if (index === 4) {
-            bg = this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".jpg");
-          } else {
-            bg = this.dynamicContent.css('backgroundImage').replace(/\d+\.png/, "" + index + ".png");
-          }
-          this.dynamicContent.css('backgroundImage', bg);
+          this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\./, "" + index + "."));
         } else {
           this.$(".objects ." + asset).removeClass(asset);
           this.$(".objects ." + asset + index).addClass(asset);

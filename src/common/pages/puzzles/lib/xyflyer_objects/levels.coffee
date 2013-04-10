@@ -1573,8 +1573,8 @@ levels.WORLDS = [
                         grid:
                             xMin: -20
                             xMax: 20
-                            yMin: -10
-                            yMax: 10
+                            yMin: -20
+                            yMax: 20
                         rings: [
                             {x: -5, y: 2}
                             {x: 5, y: 4}

@@ -11,7 +11,7 @@ body {
 .xyflyer .dynamic_content {
   height: 640px;
   width: 960px;
-  background-image: url('/assets/images/puzzles/xyflyer/background1.png');
+  background-image: url('/assets/images/puzzles/xyflyer/background1.jpg');
 }
 .xyflyer .dynamic_content.dragging {
   -webkit-touch-callout: none;
@@ -498,7 +498,7 @@ body {
   width: 120px;
   text-align: center;
   top: 34px;
-  left: 522px;
+  left: 518px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
