@@ -156,10 +156,10 @@ window.app =
                             completed: @puzzleProgress[id]?.completed
                             locked: locked
         
-                        levelElement.unbind 'click'
-                        levelElement.bind 'click', (e) => 
+                        levelElement.unbind 'touchstart.select_level'
+                        levelElement.bind 'touchstart.select_level', (e) =>
                             e.stop()
-                            $(document.body).unbind('click.level_selector')
+                            $(document.body).unbind('touchstart.select_level.level_selector')
                             if locked
                                 alert('This level is locked.')
                             else
@@ -197,7 +197,7 @@ window.app =
                 @selectWorld(Math.floor(index / 2) + 1)         
             
     showLevelSelector: (success) ->
-        $(document.body).unbind('click.level_selector')
+        $(document.body).unbind('touchstart.level_selector')
         if parseInt(@levelSelector.css('opacity')) == 1
             @hideLevelSelector()
             return
@@ -218,7 +218,9 @@ window.app =
             complete: => 
 
         setTimeout((=>    
-            $(document.body).one 'click.level_selector', => @hideLevelSelector()
+            $(document.body).one 'touchstart.level_selector', => 
+                $(document.body).one 'touchend.level_selector', => 
+                    @hideLevelSelector()
         ), 10)
 
     hideLevelSelector: ->

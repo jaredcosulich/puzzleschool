@@ -233,10 +233,10 @@ window.app = {
             completed: (_ref3 = _this.puzzleProgress[id]) != null ? _ref3.completed : void 0,
             locked: locked
           });
-          levelElement.unbind('click');
-          levelElement.bind('click', function(e) {
+          levelElement.unbind('touchstart.select_level');
+          levelElement.bind('touchstart.select_level', function(e) {
             e.stop();
-            $(document.body).unbind('click.level_selector');
+            $(document.body).unbind('touchstart.select_level.level_selector');
             if (locked) {
               return alert('This level is locked.');
             } else {
@@ -296,7 +296,7 @@ window.app = {
   },
   showLevelSelector: function(success) {
     var _this = this;
-    $(document.body).unbind('click.level_selector');
+    $(document.body).unbind('touchstart.level_selector');
     if (parseInt(this.levelSelector.css('opacity')) === 1) {
       this.hideLevelSelector();
       return;
@@ -312,8 +312,10 @@ window.app = {
       complete: function() {}
     });
     return setTimeout((function() {
-      return $(document.body).one('click.level_selector', function() {
-        return _this.hideLevelSelector();
+      return $(document.body).one('touchstart.level_selector', function() {
+        return $(document.body).one('touchend.level_selector', function() {
+          return _this.hideLevelSelector();
+        });
       });
     }), 10);
   },
