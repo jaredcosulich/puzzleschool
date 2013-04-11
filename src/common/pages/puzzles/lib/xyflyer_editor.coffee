@@ -306,9 +306,9 @@ class xyflyerEditor.EditorHelper
         @handleModification()
 
     plot: (id, data) ->
+        @handleModification()
         [formula, area] = @parser.parse(data)
         @board.plot(id, formula, area)
-        @handleModification()
         
     launch: -> 
         @plane?.launch(true) 

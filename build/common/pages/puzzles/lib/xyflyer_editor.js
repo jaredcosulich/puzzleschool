@@ -508,9 +508,9 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.plot = function(id, data) {
     var area, formula, _ref;
+    this.handleModification();
     _ref = this.parser.parse(data), formula = _ref[0], area = _ref[1];
-    this.board.plot(id, formula, area);
-    return this.handleModification();
+    return this.board.plot(id, formula, area);
   };
 
   EditorHelper.prototype.launch = function() {
