@@ -14,7 +14,7 @@ window.app =
         @$('.menu').bind 'click', => @showLevelSelector()
         
         @el.bind('touchstart', (e) -> e.preventDefault() if e.preventDefault)
-        @originalHtml = @dynamicContent.html()
+        @originalHTML = @dynamicContent.html()
 
         @worlds = require('./lib/xyflyer_objects/levels').WORLDS
         @levelId = 1364229884455
@@ -120,7 +120,6 @@ window.app =
                 return JSON.parse(JSON.stringify(level)) if level
             
     initLevel: ->
-        @dynamicContent.html(@originalHTML)
         setTimeout((=>
             @puzzleProgress[@level.id] or= {}
             @load()
@@ -130,17 +129,8 @@ window.app =
                 id: @level.id, 
                 started: true, 
                 completed: @puzzleProgress[@level.id]?.completed
-
         ), 100)
 
-        @currentLevel = @level.id
-        setInterval((=>
-            return if location.href.indexOf(@currentLevel) > -1
-            components = location.href.split('/')
-            if (@level = @findLevel(parseInt(components[components.length - 1])))
-                @initLevel()
-                @hideLevelSelector()
-        ), 500)
     
     initLevelSelector: ->
         @levelSelector = @$('.level_selector')

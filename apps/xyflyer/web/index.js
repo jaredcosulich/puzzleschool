@@ -25,7 +25,7 @@ window.app = {
         return e.preventDefault();
       }
     });
-    this.originalHtml = this.dynamicContent.html();
+    this.originalHTML = this.dynamicContent.html();
     this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
     this.levelId = 1364229884455;
     this.level = this.worlds[0].stages[0].levels[0];
@@ -189,8 +189,7 @@ window.app = {
   },
   initLevel: function() {
     var _this = this;
-    this.dynamicContent.html(this.originalHTML);
-    setTimeout((function() {
+    return setTimeout((function() {
       var _base, _base1, _name, _ref;
       (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = {});
       _this.load();
@@ -201,18 +200,6 @@ window.app = {
         completed: (_ref = _this.puzzleProgress[_this.level.id]) != null ? _ref.completed : void 0
       });
     }), 100);
-    this.currentLevel = this.level.id;
-    return setInterval((function() {
-      var components;
-      if (location.href.indexOf(_this.currentLevel) > -1) {
-        return;
-      }
-      components = location.href.split('/');
-      if ((_this.level = _this.findLevel(parseInt(components[components.length - 1])))) {
-        _this.initLevel();
-        return _this.hideLevelSelector();
-      }
-    }), 500);
   },
   initLevelSelector: function() {
     var previousCompleted, previousStageProficient, stageElement, _i, _len, _ref, _results,
