@@ -53,7 +53,7 @@ body {
   width: 317px;
   height: 634px;
   margin: 3px 0 0 3px;
-  font-size: 15px;
+  font-size: 24px;
   float: right;
   position: relative;
 }
@@ -89,7 +89,7 @@ body {
   border-radius: 3px;
 }
 .xyflyer .dynamic_content .equation_area .equations {
-  margin-top: 12px;
+  margin-top: 30px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container {
   overflow: hidden;
@@ -98,8 +98,8 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .intro {
   float: left;
   margin: 0 6px;
-  line-height: 30px;
-  font-size: 23px;
+  line-height: 42px;
+  font-size: 36px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .only_area {
   width: 251px;
@@ -112,13 +112,14 @@ body {
   border: 1px solid #c7c7c7;
   position: relative;
   overflow: hidden;
-  line-height: 30px;
+  line-height: 42px;
+  height: 48px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.starting_fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
   color: #262626;
-  font-size: 23px;
+  font-size: 48px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
@@ -152,7 +153,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_fragment {
   float: left;
-  height: 30px;
+  height: 47px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .removing {
   display: none;
@@ -253,7 +254,7 @@ body {
   cursor: pointer;
 }
 .xyflyer .dynamic_content .button {
-  font-size: 15px;
+  font-size: 30px;
   -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
   -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
   box-shadow: inset 0px 1px 0px 0px #ed7265;
@@ -307,6 +308,7 @@ body {
 }
 .xyflyer .dynamic_content .hints {
   padding: 60px 0 0 6px;
+  text-align: center;
 }
 .xyflyer .dynamic_content .hints .drag_this,
 .xyflyer .dynamic_content .hints .drop_here,

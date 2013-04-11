@@ -64,7 +64,7 @@ class equationComponent.EquationComponent
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
         y = @clientY(e)       
-        y -= 30 if e.type == 'touchmove'
+        y -= 60 if e.type == 'touchmove'
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
         dy = y - offset.top - (offset.height/2) + @gameAreaOffset.top
