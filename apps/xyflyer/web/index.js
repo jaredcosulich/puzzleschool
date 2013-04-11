@@ -29,9 +29,8 @@ window.app = {
     this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
     this.levelId = 1364229884455;
     this.level = this.worlds[0].stages[0].levels[0];
-    this.puzzleData = {
-      levels: {}
-    };
+    this.puzzleProgress = {};
+    this.puzzleProgress[this.levelId] = {};
     return this.load();
   },
   $: function(selector) {
@@ -193,14 +192,13 @@ window.app = {
     this.dynamicContent.html(this.originalHTML);
     setTimeout((function() {
       var _base, _base1, _name, _ref;
-      (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = _this.puzzleData.levels[_this.level.id] || {});
+      (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = {});
       _this.load();
       (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
-      _this.saveProgress();
       return _this.setLevelIcon({
         id: _this.level.id,
         started: true,
-        completed: (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0
+        completed: (_ref = _this.puzzleProgress[_this.level.id]) != null ? _ref.completed : void 0
       });
     }), 100);
     this.currentLevel = this.level.id;
@@ -244,8 +242,8 @@ window.app = {
           }
           _this.setLevelIcon({
             id: id,
-            started: (_ref2 = _this.puzzleData.levels[id]) != null ? _ref2.started : void 0,
-            completed: (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.completed : void 0,
+            started: (_ref2 = _this.puzzleProgress[id]) != null ? _ref2.started : void 0,
+            completed: (_ref3 = _this.puzzleProgress[id]) != null ? _ref3.completed : void 0,
             locked: locked
           });
           levelElement.unbind('click');
@@ -257,11 +255,10 @@ window.app = {
             } else {
               _this.level = levelInfo;
               _this.initLevel();
-              history.pushState(null, null, "/puzzles/xyflyer/" + id);
               return _this.hideLevelSelector();
             }
           });
-          if ((_ref4 = _this.puzzleData.levels[id]) != null ? _ref4.completed : void 0) {
+          if ((_ref4 = _this.puzzleProgress[id]) != null ? _ref4.completed : void 0) {
             stageCompleted += 1;
             return previousCompleted = true;
           } else {
@@ -293,6 +290,7 @@ window.app = {
   },
   nextLevel: function() {
     var index, level, _i, _len, _ref, _results;
+    this.puzzleProgress[this.level.id].completed = new Date().getTime();
     this.initLevelSelector();
     this.showLevelSelector(true);
     _ref = this.$('.stage .level:last-child');
@@ -321,13 +319,10 @@ window.app = {
       top: 60,
       left: (this.el.width() - this.levelSelector.width()) / 2
     });
-    console.log('show level selector');
     this.levelSelector.animate({
       opacity: 1,
       duration: 250,
-      complete: function() {
-        return console.log('done');
-      }
+      complete: function() {}
     });
     return setTimeout((function() {
       return $(document.body).one('click.level_selector', function() {

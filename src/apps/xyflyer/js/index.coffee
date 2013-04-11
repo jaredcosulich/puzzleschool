@@ -20,7 +20,8 @@ window.app =
         @levelId = 1364229884455
         @level = @worlds[0].stages[0].levels[0]
         
-        @puzzleData = {levels: {}}
+        @puzzleProgress = {}
+        @puzzleProgress[@levelId] = {}
         
         @load()
 
@@ -121,15 +122,14 @@ window.app =
     initLevel: ->
         @dynamicContent.html(@originalHTML)
         setTimeout((=>
-            @puzzleProgress[@level.id] or= (@puzzleData.levels[@level.id] or {})
+            @puzzleProgress[@level.id] or= {}
             @load()
             @puzzleProgress[@level.id].started or= new Date().getTime()
-            @saveProgress()
-
+            
             @setLevelIcon
                 id: @level.id, 
                 started: true, 
-                completed: @puzzleData.levels[@level.id]?.completed
+                completed: @puzzleProgress[@level.id]?.completed
 
         ), 100)
 
@@ -162,8 +162,8 @@ window.app =
                         
                         @setLevelIcon
                             id: id
-                            started: @puzzleData.levels[id]?.started
-                            completed: @puzzleData.levels[id]?.completed
+                            started: @puzzleProgress[id]?.started
+                            completed: @puzzleProgress[id]?.completed
                             locked: locked
         
                         levelElement.unbind 'click'
@@ -175,10 +175,9 @@ window.app =
                             else
                                 @level = levelInfo
                                 @initLevel()
-                                history.pushState(null, null, "/puzzles/xyflyer/#{id}")
                                 @hideLevelSelector()        
                         
-                        if @puzzleData.levels[id]?.completed
+                        if @puzzleProgress[id]?.completed
                             stageCompleted += 1 
                             previousCompleted = true
                         else
@@ -198,6 +197,8 @@ window.app =
 
 
     nextLevel: ->   
+        @puzzleProgress[@level.id].completed = new Date().getTime()
+        
         @initLevelSelector()
         @showLevelSelector(true)
         
@@ -221,11 +222,10 @@ window.app =
             top: 60
             left: (@el.width() - @levelSelector.width()) / 2
 
-        console.log('show level selector')
         @levelSelector.animate
             opacity: 1
             duration: 250
-            complete: => console.log('done')
+            complete: => 
 
         setTimeout((=>    
             $(document.body).one 'click.level_selector', => @hideLevelSelector()
