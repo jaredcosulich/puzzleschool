@@ -11,8 +11,7 @@ window.app =
         @el = $('.xyflyer')
         
         @dynamicContent = @el.find('.dynamic_content')
-        @$('.menu').bind 'click', => @showLevelSelector()
-        
+
         @el.bind('touchstart', (e) -> e.preventDefault() if e.preventDefault)
         @originalHTML = @dynamicContent.html()
 
@@ -23,6 +22,7 @@ window.app =
         @puzzleProgress = {}
         @puzzleProgress[@levelId] = {}
         
+        @initLevelSelector()
         @load()
 
     $: (selector) -> $(selector, @el)
@@ -30,6 +30,10 @@ window.app =
     load: ->
         @dynamicContent.html(@originalHTML)
         $('svg').remove()
+
+        @$('.menu').bind 'touchstart.menu', =>
+            @$('.menu').one('touchend.menu', => @showLevelSelector())
+            $(document.body).one('touchend.menu', => @$('.menu').unbind('touchend.menu'))
         
         for asset, index of @level.assets or @worlds[@currentWorld()].assets or {}
             if asset == 'background'
@@ -49,13 +53,11 @@ window.app =
             nextLevel: => @nextLevel()
             registerEvent: (eventInfo) => 
             
-        @$('.menu').bind 'click', => @showLevelSelector()
-                        
         @loadLevel()  
 
 
     initWorlds: ->
-        @$('.world_link').bind 'click', (e) =>
+        @$('.world_link').bind 'touchstart', (e) =>
             e.stop()
             worldLink = $(e.currentTarget)
             @selectWorld(parseInt(worldLink.data('world')) - 1)
@@ -102,7 +104,7 @@ window.app =
         equationArea = @$('.equation_area')
         equationArea.html(@$(".#{type}_message").html())
         equationArea.css(padding: '0 12px', textAlign: 'center')
-        equationArea.find('.button').bind 'click', => @showLevelSelector() 
+        equationArea.find('.button').bind 'touchstart', => @showLevelSelector() 
             
     isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
         
@@ -133,8 +135,8 @@ window.app =
 
     
     initLevelSelector: ->
-        @levelSelector = @$('.level_selector')
-        @levelSelector.bind 'click', (e) => e.stop()
+        @levelSelector or= @$('.level_selector')
+        @levelSelector.bind 'touchstart', (e) => e.stop()
 
         previousCompleted = true
         previousStageProficient = true
@@ -209,7 +211,7 @@ window.app =
         # 
         @levelSelector.css
             opacity: 0
-            top: 60
+            top: 30
             left: (@el.width() - @levelSelector.width()) / 2
 
         @levelSelector.animate
@@ -224,7 +226,7 @@ window.app =
         ), 10)
 
     hideLevelSelector: ->
-        $(document.body).unbind('click.level_selector')
+        $(document.body).unbind('touchend.level_selector')
         @levelSelector.animate
             opacity: 0
             duration: 250

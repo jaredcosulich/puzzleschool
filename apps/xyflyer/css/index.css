@@ -82,14 +82,15 @@ body {
   top: 12px;
   background-color: #eee;
   padding: 3px 6px;
-  font-size: 11px;
+  font-size: 24px;
   color: #262626;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+  cursor: pointer;
 }
 .xyflyer .dynamic_content .equation_area .equations {
-  margin-top: 30px;
+  margin-top: 45px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container {
   overflow: hidden;
@@ -98,7 +99,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .intro {
   float: left;
   margin: 0 6px;
-  line-height: 42px;
+  line-height: 48px;
   font-size: 36px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .only_area {
@@ -378,8 +379,8 @@ body {
   opacity: 0;
   background-color: #fafafa;
   border: 2px solid #a61c0e;
-  width: 570px;
-  height: 462px;
+  width: 780px;
+  height: 520px;
   overflow: auto;
   padding: 12px;
   z-index: 99;
@@ -403,7 +404,7 @@ body {
 .xyflyer .level_selector .world_links .world_link {
   float: left;
   cursor: pointer;
-  margin: 15px 0 15px 34px;
+  margin: 15px 0 15px 66px;
   width: 72px;
   height: 74px;
   overflow: hidden;
@@ -422,7 +423,7 @@ body {
   background-color: #eee;
   padding-top: 12px;
   margin: 12px auto 0 auto;
-  width: 565px;
+  width: 762px;
   overflow: hidden;
 }
 .xyflyer .level_selector .world .stage h4 {
@@ -431,7 +432,7 @@ body {
 .xyflyer .level_selector .world .stage .level {
   display: block;
   float: left;
-  margin: 0 0 11px 11px;
+  margin: 0 0 30px 30px;
   width: 44px;
   height: 44px;
   background: url('images/level.png') 0 0;

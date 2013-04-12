@@ -17,9 +17,6 @@ window.app = {
     }), false);
     this.el = $('.xyflyer');
     this.dynamicContent = this.el.find('.dynamic_content');
-    this.$('.menu').bind('click', function() {
-      return _this.showLevelSelector();
-    });
     this.el.bind('touchstart', function(e) {
       if (e.preventDefault) {
         return e.preventDefault();
@@ -31,6 +28,7 @@ window.app = {
     this.level = this.worlds[0].stages[0].levels[0];
     this.puzzleProgress = {};
     this.puzzleProgress[this.levelId] = {};
+    this.initLevelSelector();
     return this.load();
   },
   $: function(selector) {
@@ -41,6 +39,14 @@ window.app = {
       _this = this;
     this.dynamicContent.html(this.originalHTML);
     $('svg').remove();
+    this.$('.menu').bind('touchstart.menu', function() {
+      _this.$('.menu').one('touchend.menu', function() {
+        return _this.showLevelSelector();
+      });
+      return $(document.body).one('touchend.menu', function() {
+        return _this.$('.menu').unbind('touchend.menu');
+      });
+    });
     _ref = this.level.assets || this.worlds[this.currentWorld()].assets || {};
     for (asset in _ref) {
       index = _ref[asset];
@@ -63,14 +69,11 @@ window.app = {
       },
       registerEvent: function(eventInfo) {}
     });
-    this.$('.menu').bind('click', function() {
-      return _this.showLevelSelector();
-    });
     return this.loadLevel();
   },
   initWorlds: function() {
     var _this = this;
-    return this.$('.world_link').bind('click', function(e) {
+    return this.$('.world_link').bind('touchstart', function(e) {
       var worldLink;
       e.stop();
       worldLink = $(e.currentTarget);
@@ -148,7 +151,7 @@ window.app = {
       padding: '0 12px',
       textAlign: 'center'
     });
-    return equationArea.find('.button').bind('click', function() {
+    return equationArea.find('.button').bind('touchstart', function() {
       return _this.showLevelSelector();
     });
   },
@@ -204,8 +207,8 @@ window.app = {
   initLevelSelector: function() {
     var previousCompleted, previousStageProficient, stageElement, _i, _len, _ref, _results,
       _this = this;
-    this.levelSelector = this.$('.level_selector');
-    this.levelSelector.bind('click', function(e) {
+    this.levelSelector || (this.levelSelector = this.$('.level_selector'));
+    this.levelSelector.bind('touchstart', function(e) {
       return e.stop();
     });
     previousCompleted = true;
@@ -303,7 +306,7 @@ window.app = {
     }
     this.levelSelector.css({
       opacity: 0,
-      top: 60,
+      top: 30,
       left: (this.el.width() - this.levelSelector.width()) / 2
     });
     this.levelSelector.animate({
@@ -321,7 +324,7 @@ window.app = {
   },
   hideLevelSelector: function() {
     var _this = this;
-    $(document.body).unbind('click.level_selector');
+    $(document.body).unbind('touchend.level_selector');
     return this.levelSelector.animate({
       opacity: 0,
       duration: 250,
