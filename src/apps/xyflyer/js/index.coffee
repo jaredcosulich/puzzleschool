@@ -42,7 +42,6 @@ window.app =
                 @$(".objects .#{asset}").removeClass(asset)
                 @$(".objects .#{asset}#{index}").addClass(asset)
                 
-                
         @helper = new xyflyer.ViewHelper
             el: @dynamicContent
             boardElement: @$('.board')

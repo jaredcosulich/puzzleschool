@@ -220,7 +220,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.displayHint = function(component, dropAreaElement, equation, solutionComponent) {
-    var dragElement, dragThis, gameAreaOffset, left, offset, top,
+    var areaOffset, dragElement, dragThis, gameAreaOffset, left, offset, top,
       _this = this;
     if (this.registerEvent) {
       this.registerEvent({
@@ -232,6 +232,7 @@ equations.Equations = (function() {
         }
       });
     }
+    areaOffset = this.equationsArea.offset();
     gameAreaOffset = this.gameArea.offset();
     if (component.inUse) {
       dragElement = component.dropArea.element;
@@ -240,7 +241,7 @@ equations.Equations = (function() {
     }
     offset = dragElement.offset();
     top = offset.top + offset.height - gameAreaOffset.top;
-    left = offset.left + (offset.width / 2) - gameAreaOffset.left;
+    left = offset.left + (offset.width / 2) - areaOffset.left;
     dragThis = this.$('.drag_this');
     dragThis.css({
       opacity: 0,
@@ -279,7 +280,7 @@ equations.Equations = (function() {
           return dropHere.css({
             opacity: 1,
             top: offset.top + offset.height - gameAreaOffset.top,
-            left: offset.left + Math.min(30, offset.width / 2) - gameAreaOffset.left
+            left: offset.left + Math.min(30, offset.width / 2) - areaOffset.left
           });
         });
       }

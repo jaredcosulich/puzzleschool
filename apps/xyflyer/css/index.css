@@ -154,7 +154,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_fragment {
   float: left;
-  height: 47px;
+  height: 42px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .removing {
   display: none;
@@ -255,7 +255,7 @@ body {
   cursor: pointer;
 }
 .xyflyer .dynamic_content .button {
-  font-size: 30px;
+  font-size: 42px;
   -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
   -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
   box-shadow: inset 0px 1px 0px 0px #ed7265;

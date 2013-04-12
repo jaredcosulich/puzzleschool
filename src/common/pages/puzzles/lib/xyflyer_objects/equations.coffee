@@ -138,6 +138,7 @@ class equations.Equations
                     fragment: component.equationFragment
                     time: new Date()
         
+        areaOffset = @equationsArea.offset()
         gameAreaOffset = @gameArea.offset()
         
         if component.inUse
@@ -147,7 +148,7 @@ class equations.Equations
             
         offset = dragElement.offset()
         top = offset.top + offset.height - gameAreaOffset.top
-        left = offset.left + (offset.width/2) - gameAreaOffset.left
+        left = offset.left + (offset.width/2) - areaOffset.left
     
         dragThis = @$('.drag_this')
         dragThis.css
@@ -175,7 +176,7 @@ class equations.Equations
                     dropHere.css
                         opacity: 1
                         top: offset.top + offset.height - gameAreaOffset.top
-                        left: offset.left + Math.min(30, (offset.width/2)) - gameAreaOffset.left
+                        left: offset.left + Math.min(30, (offset.width/2)) - areaOffset.left
                                    
     findComponentDropAreaElement: (equation, solutionComponent) ->
         possible = equation.el.find('div')
