@@ -116,17 +116,20 @@ class board.Board extends xyflyerObject.Object
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
         
+    clientX: (e) => e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX
+    clientY: (e) => e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY
+    
     initClicks: ->
         @el.css(zIndex: 97)
         @el.bind 'mousedown.showxy touchstart.showxy', (e) =>
-            result = @findNearestXOnPath(e.offsetX, e.offsetY)
+            result = @findNearestXOnPath(@clientX(e), @clientY(e))
             onPath = result.x
             if result.formulas.length
                 formula1 = result.formulas[0]
                 y = @screenY(formula1.formula(@paperX(result.x)))
                 @showXY(result.x, y, true)
             else
-                @showXY(e.offsetX, e.offsetY)
+                @showXY(@clientX(e), @clientY(e))
 
     findNearestXOnPath: (x, y, formulas=@formulas, precision=0) ->
         distances = {}
