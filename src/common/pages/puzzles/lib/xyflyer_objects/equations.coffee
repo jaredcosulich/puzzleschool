@@ -290,7 +290,7 @@ class equations.Equations
             launch.css
                 opacity: 1
                 top: launchOffset.top + launchOffset.height - @gameArea.offset().top
-                left: launchOffset.left + (launchOffset.width/2) - @gameArea.offset().left
+                left: launchOffset.left + (launchOffset.width/2) - @equationsArea.offset().left
             @$('.launch').one 'mouseup.hint touchend.hint', =>
                 launch.css(opacity: 0, top: -1000, left: -1000)
                 

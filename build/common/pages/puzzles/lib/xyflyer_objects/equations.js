@@ -466,7 +466,7 @@ equations.Equations = (function() {
       launch.css({
         opacity: 1,
         top: launchOffset.top + launchOffset.height - this.gameArea.offset().top,
-        left: launchOffset.left + (launchOffset.width / 2) - this.gameArea.offset().left
+        left: launchOffset.left + (launchOffset.width / 2) - this.equationsArea.offset().left
       });
       return this.$('.launch').one('mouseup.hint touchend.hint', function() {
         return launch.css({
