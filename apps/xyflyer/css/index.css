@@ -236,7 +236,8 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component {
   float: left;
-  margin: 6px 6px 0 0;
+  margin: 6px 24px 0 0;
+  font-size: 30px;
   cursor: move;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
@@ -255,7 +256,7 @@ body {
   cursor: pointer;
 }
 .xyflyer .dynamic_content .button {
-  font-size: 42px;
+  font-size: 24px;
   -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
   -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
   box-shadow: inset 0px 1px 0px 0px #ed7265;
@@ -270,7 +271,6 @@ body {
   display: inline-block;
   color: #fafafa;
   font-family: arial;
-  font-size: 15px;
   font-weight: bold;
   padding: 6px 24px;
   text-decoration: none;
