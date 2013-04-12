@@ -305,14 +305,9 @@ window.app = {
       return;
     }
     this.levelSelector.css({
-      opacity: 0,
+      opacity: 1,
       top: 30,
       left: (this.el.width() - this.levelSelector.width()) / 2
-    });
-    this.levelSelector.animate({
-      opacity: 1,
-      duration: 250,
-      complete: function() {}
     });
     return setTimeout((function() {
       return $(document.body).one('touchstart.level_selector', function() {
@@ -323,17 +318,11 @@ window.app = {
     }), 10);
   },
   hideLevelSelector: function() {
-    var _this = this;
     $(document.body).unbind('touchend.level_selector');
-    return this.levelSelector.animate({
+    return this.levelSelector.css({
       opacity: 0,
-      duration: 250,
-      complete: function() {
-        return _this.levelSelector.css({
-          top: -1000,
-          left: -1000
-        });
-      }
+      top: -1000,
+      left: -1000
     });
   }
 };

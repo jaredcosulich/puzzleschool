@@ -209,14 +209,9 @@ window.app =
         #     @levelSelector.removeClass('success') 
         # 
         @levelSelector.css
-            opacity: 0
+            opacity: 1
             top: 30
             left: (@el.width() - @levelSelector.width()) / 2
-
-        @levelSelector.animate
-            opacity: 1
-            duration: 250
-            complete: => 
 
         setTimeout((=>    
             $(document.body).one 'touchstart.level_selector', => 
@@ -226,10 +221,7 @@ window.app =
 
     hideLevelSelector: ->
         $(document.body).unbind('touchend.level_selector')
-        @levelSelector.animate
+        @levelSelector.css
             opacity: 0
-            duration: 250
-            complete: =>
-                @levelSelector.css
-                    top: -1000
-                    left: -1000
+            top: -1000
+            left: -1000
