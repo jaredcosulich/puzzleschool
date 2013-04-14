@@ -72,7 +72,7 @@ ring.Ring = (function(_super) {
       _this = this;
     this.animating = true;
     radius = 16;
-    time = 400;
+    time = 500;
     return this.animation.start(time, function(deltaTime, progress, totalTime) {
       var easedProgress;
       easedProgress = Math.pow(progress, 1 / 5);

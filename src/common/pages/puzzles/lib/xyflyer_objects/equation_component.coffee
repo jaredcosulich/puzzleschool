@@ -16,9 +16,13 @@ class equationComponent.EquationComponent
     height: -> @element.height()
         
     initElement: ->
+        @elementContainer = $(document.createElement('DIV'))
+        @elementContainer.addClass('equation_component_container')
+        
         @element = $(document.createElement('DIV'))
         @element.addClass('equation_component')
         @element.html(@equationFragment)
+        @elementContainer.append(@element)
         
         @placeHolder = $(document.createElement('DIV'))
         @placeHolder.addClass('place_holder')
@@ -27,11 +31,11 @@ class equationComponent.EquationComponent
         @transformer = new Transformer(@element)
         
     initMove: ->
-        @element.bind 'mousedown.drag touchstart.drag', (e) => @mousedown(e)
+        @elementContainer.bind 'mousedown.drag touchstart.drag', (e) => @mousedown(e)
         
     appendTo: (@container) ->
         @container.append(@placeHolder) 
-        @container.append(@element)
+        @container.append(@elementContainer)
 
     initMeasurements: ->
         return if @offset
@@ -64,7 +68,7 @@ class equationComponent.EquationComponent
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
         y = @clientY(e)       
-        y -= 60 if e.type == 'touchmove'
+        y -= 60 if e.type.match(/touch/)
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
         dy = y - offset.top - (offset.height/2) + @gameAreaOffset.top

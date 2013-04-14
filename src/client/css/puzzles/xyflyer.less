@@ -229,15 +229,17 @@ body {
                     font-size: @smallsize;
                 }
             
-                .equation_component {
+                .equation_component_container {
+                    padding: 6px;
                     float: left;
-                    margin: 6px 6px 0 0;
-                    cursor: move;
-                    -webkit-transform-style: preserve-3d;
-                    -moz-transform-style: preserve-3d;
-                    -o-transform-style: preserve-3d;
-                    -ms-transform-style: preserve-3d;
-                    transform-style: preserve-3d;
+                    .equation_component {
+                        cursor: move;
+                        -webkit-transform-style: preserve-3d;
+                        -moz-transform-style: preserve-3d;
+                        -o-transform-style: preserve-3d;
+                        -ms-transform-style: preserve-3d;
+                        transform-style: preserve-3d;
+                    }
                 }
             
                 .place_holder {

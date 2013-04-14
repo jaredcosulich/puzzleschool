@@ -231,9 +231,11 @@ body {
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
   font-size: 11px;
 }
-.xyflyer .dynamic_content .equation_area .possible_fragments .equation_component {
+.xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
+  padding: 6px;
   float: left;
-  margin: 6px 6px 0 0;
+}
+.xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container .equation_component {
   cursor: move;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;

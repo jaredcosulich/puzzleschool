@@ -20,13 +20,13 @@ xyflyer.ChunkHelper = (function() {
 xyflyer.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    var boardElement, grid, objects,
+    var boardElement, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent, this.islandCoordinates = _arg.islandCoordinates;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent, this.islandCoordinates = _arg.islandCoordinates;
     this.rings = [];
     this.board = new xyflyer.Board({
       el: boardElement,
-      grid: grid,
+      grid: this.grid,
       objects: objects,
       islandCoordinates: this.islandCoordinates,
       resetLevel: function() {
@@ -64,7 +64,7 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.trackPlane = function(_arg) {
-    var allPassedThrough, height, ring, width, x, y, _i, _len, _ref1;
+    var allPassedThrough, height, ring, width, x, y, _i, _len, _ref1, _ref2, _ref3;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
     allPassedThrough = this.rings.length > 0;
     _ref1 = this.rings;
@@ -81,7 +81,12 @@ xyflyer.ViewHelper = (function() {
       }
     }
     if (allPassedThrough) {
-      return this.completeLevel();
+      this.completeLevel();
+    }
+    if ((this.grid.xMin < (_ref2 = this.board.paperX(x)) && _ref2 < this.grid.xMax) && (this.grid.yMin < (_ref3 = this.board.paperY(y)) && _ref3 < this.grid.yMax)) {
+      return this.planeOffScreen = false;
+    } else {
+      return this.planeOffScreen = true;
     }
   };
 
@@ -131,14 +136,11 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.completeLevel = function() {
-    var _this = this;
     if (this.complete) {
       return;
     }
     this.complete = true;
-    return $.timeout(500, function() {
-      return _this.nextLevel();
-    });
+    return this.nextLevel();
   };
 
   return ViewHelper;

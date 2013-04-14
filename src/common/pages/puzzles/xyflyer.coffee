@@ -353,7 +353,7 @@ soma.views
 
             @saveProgress()
             @initLevelSelector()
-            @showLevelSelector(true)
+            $.timeout 500, => @showLevelSelector(true)
             
             for level, index in @$('.stage .level:last-child') when index % 2 == 1
                 if parseInt(@level.id) == parseInt($(level).data('id'))

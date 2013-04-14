@@ -279,23 +279,29 @@ window.app = {
     }
   },
   nextLevel: function() {
-    var index, level, _i, _len, _ref, _results;
     this.puzzleProgress[this.level.id].completed = new Date().getTime();
+    return this.showLevelSelectorWhenPlaneOffScreen();
+  },
+  showLevelSelectorWhenPlaneOffScreen: function() {
+    var index, level, _i, _len, _ref,
+      _this = this;
+    if (!this.helper.planeOffScreen) {
+      $.timeout(100, function() {
+        return _this.showLevelSelectorWhenPlaneOffScreen();
+      });
+      return;
+    }
     this.initLevelSelector();
-    this.showLevelSelector(true);
     _ref = this.$('.stage .level:last-child');
-    _results = [];
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
       level = _ref[index];
       if (index % 2 === 1) {
         if (parseInt(this.level.id) === parseInt($(level).data('id'))) {
-          _results.push(this.selectWorld(Math.floor(index / 2) + 1));
-        } else {
-          _results.push(void 0);
+          this.selectWorld(Math.floor(index / 2) + 1);
         }
       }
     }
-    return _results;
+    return this.showLevelSelector(true);
   },
   showLevelSelector: function(success) {
     var _this = this;

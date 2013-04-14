@@ -46,9 +46,12 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.initElement = function() {
+    this.elementContainer = $(document.createElement('DIV'));
+    this.elementContainer.addClass('equation_component_container');
     this.element = $(document.createElement('DIV'));
     this.element.addClass('equation_component');
     this.element.html(this.equationFragment);
+    this.elementContainer.append(this.element);
     this.placeHolder = $(document.createElement('DIV'));
     this.placeHolder.addClass('place_holder');
     this.placeHolder.hide();
@@ -57,7 +60,7 @@ equationComponent.EquationComponent = (function() {
 
   EquationComponent.prototype.initMove = function() {
     var _this = this;
-    return this.element.bind('mousedown.drag touchstart.drag', function(e) {
+    return this.elementContainer.bind('mousedown.drag touchstart.drag', function(e) {
       return _this.mousedown(e);
     });
   };
@@ -65,7 +68,7 @@ equationComponent.EquationComponent = (function() {
   EquationComponent.prototype.appendTo = function(container) {
     this.container = container;
     this.container.append(this.placeHolder);
-    return this.container.append(this.element);
+    return this.container.append(this.elementContainer);
   };
 
   EquationComponent.prototype.initMeasurements = function() {
@@ -116,7 +119,7 @@ equationComponent.EquationComponent = (function() {
     }
     x = this.clientX(e);
     y = this.clientY(e);
-    if (e.type === 'touchmove') {
+    if (e.type.match(/touch/)) {
       y -= 60;
     }
     offset = this.element.offset();

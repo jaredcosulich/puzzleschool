@@ -9,12 +9,12 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, @equationArea, boardElement, objects, grid, @nextLevel, @registerEvent, @islandCoordinates}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, @grid, @nextLevel, @registerEvent, @islandCoordinates}) ->
         @rings = []
         # @flip(boardElement)
         @board = new xyflyer.Board
             el: boardElement 
-            grid: grid 
+            grid: @grid 
             objects: objects
             islandCoordinates: @islandCoordinates
             resetLevel: => @resetLevel()
@@ -46,6 +46,11 @@ class xyflyer.ViewHelper
             ring.highlightIfPassingThrough(x: x, y: y, width: width, height: height) 
             allPassedThrough = false unless ring.passedThrough
         @completeLevel() if allPassedThrough
+        if @grid.xMin < @board.paperX(x) < @grid.xMax and
+           @grid.yMin < @board.paperY(y) < @grid.yMax
+            @planeOffScreen = false
+        else
+            @planeOffScreen = true
         
     addRing: (x,y) ->
         @rings.push(
@@ -76,4 +81,4 @@ class xyflyer.ViewHelper
     completeLevel: ->
         return if @complete
         @complete = true
-        $.timeout 500, => @nextLevel()
+        @nextLevel()

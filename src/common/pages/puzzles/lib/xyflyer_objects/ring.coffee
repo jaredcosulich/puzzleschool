@@ -50,7 +50,7 @@ class ring.Ring extends xyflyerObject.Object
     glow: ->
         @animating = true
         radius = 16
-        time = 400        
+        time = 500        
         @animation.start time, (deltaTime, progress, totalTime) =>
            easedProgress = Math.pow(progress, 1/5)
            @highlightRadius = radius * easedProgress

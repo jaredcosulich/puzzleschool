@@ -189,13 +189,21 @@ window.app =
 
     nextLevel: ->   
         @puzzleProgress[@level.id].completed = new Date().getTime()
+        @showLevelSelectorWhenPlaneOffScreen()
         
+        
+    showLevelSelectorWhenPlaneOffScreen: ->
+        unless @helper.planeOffScreen
+            $.timeout 100, => @showLevelSelectorWhenPlaneOffScreen()
+            return
+            
         @initLevelSelector()
-        @showLevelSelector(true)
-        
+    
         for level, index in @$('.stage .level:last-child') when index % 2 == 1
             if parseInt(@level.id) == parseInt($(level).data('id'))
                 @selectWorld(Math.floor(index / 2) + 1)         
+
+        @showLevelSelector(true)
             
     showLevelSelector: (success) ->
         $(document.body).unbind('touchstart.level_selector')

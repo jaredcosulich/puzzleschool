@@ -476,7 +476,8 @@ soma.views({
       }
     },
     nextLevel: function() {
-      var duration, index, level, _i, _len, _ref, _results;
+      var duration, index, level, _i, _len, _ref, _results,
+        _this = this;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
       duration = this.level.startTime != null ? new Date() - this.level.startTime : null;
       if (window._gaq) {
@@ -490,7 +491,9 @@ soma.views({
       });
       this.saveProgress();
       this.initLevelSelector();
-      this.showLevelSelector(true);
+      $.timeout(500, function() {
+        return _this.showLevelSelector(true);
+      });
       _ref = this.$('.stage .level:last-child');
       _results = [];
       for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
