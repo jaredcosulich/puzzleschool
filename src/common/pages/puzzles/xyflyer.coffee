@@ -344,9 +344,9 @@ soma.views
         nextLevel: ->            
             @puzzleProgress[@level.id].completed = new Date().getTime()
             duration = if @level.startTime? then new Date() - @level.startTime else null
-            _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-#{@level.id}", duration]) if window._gaq
             
             $.timeout 500, => 
+                _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-#{@level.id}", duration]) if window._gaq
                 @registerEvent
                     type: 'success'
                     info: 

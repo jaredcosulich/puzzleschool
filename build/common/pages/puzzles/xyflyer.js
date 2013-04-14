@@ -480,11 +480,11 @@ soma.views({
         _this = this;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
       duration = this.level.startTime != null ? new Date() - this.level.startTime : null;
-      if (window._gaq) {
-        _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-" + this.level.id, duration]);
-      }
       return $.timeout(500, function() {
         var index, level, _i, _len, _ref, _results;
+        if (window._gaq) {
+          _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-" + _this.level.id, duration]);
+        }
         _this.registerEvent({
           type: 'success',
           info: {
