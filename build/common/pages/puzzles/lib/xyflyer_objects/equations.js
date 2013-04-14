@@ -260,27 +260,29 @@ equations.Equations = (function() {
           });
         });
         return dragElement.one('mousedown.hint touchstart.hint', function() {
-          var dropHere;
-          dropHere = _this.$('.drop_here');
-          if ((offset = dropAreaElement.offset()).top === 0) {
-            offset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
-          }
-          $(document.body).one('mouseup.hint touchend.hint', function() {
-            return dropHere.animate({
-              opacity: 0,
-              duration: 250,
-              complete: function() {
-                return dropHere.css({
-                  top: -1000,
-                  left: -1000
-                });
-              }
+          return $.timeout(10, function() {
+            var dropAreaOffset, dropHere;
+            dropHere = _this.$('.drop_here');
+            if ((dropAreaOffset = dropAreaElement.offset()).top === 0) {
+              dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
+            }
+            $(document.body).one('mouseup.hint touchend.hint', function() {
+              return dropHere.animate({
+                opacity: 0,
+                duration: 250,
+                complete: function() {
+                  return dropHere.css({
+                    top: -1000,
+                    left: -1000
+                  });
+                }
+              });
             });
-          });
-          return dropHere.css({
-            opacity: 1,
-            top: offset.top + offset.height - gameAreaOffset.top,
-            left: offset.left + Math.min(30, offset.width / 2) - areaOffset.left
+            return dropHere.css({
+              opacity: 1,
+              top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
+              left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
+            });
           });
         });
       }

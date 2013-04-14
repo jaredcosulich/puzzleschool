@@ -476,37 +476,38 @@ soma.views({
       }
     },
     nextLevel: function() {
-      var duration, index, level, _i, _len, _ref, _results,
+      var duration,
         _this = this;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
       duration = this.level.startTime != null ? new Date() - this.level.startTime : null;
       if (window._gaq) {
         _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-" + this.level.id, duration]);
       }
-      this.registerEvent({
-        type: 'success',
-        info: {
-          time: this.puzzleProgress[this.level.id].completed
-        }
-      });
-      this.saveProgress();
-      this.initLevelSelector();
-      $.timeout(500, function() {
-        return _this.showLevelSelector(true);
-      });
-      _ref = this.$('.stage .level:last-child');
-      _results = [];
-      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-        level = _ref[index];
-        if (index % 2 === 1) {
-          if (parseInt(this.level.id) === parseInt($(level).data('id'))) {
-            _results.push(this.selectWorld(Math.floor(index / 2) + 1));
-          } else {
-            _results.push(void 0);
+      return $.timeout(500, function() {
+        var index, level, _i, _len, _ref, _results;
+        _this.registerEvent({
+          type: 'success',
+          info: {
+            time: _this.puzzleProgress[_this.level.id].completed
+          }
+        });
+        _this.saveProgress();
+        _this.initLevelSelector();
+        _this.showLevelSelector(true);
+        _ref = _this.$('.stage .level:last-child');
+        _results = [];
+        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+          level = _ref[index];
+          if (index % 2 === 1) {
+            if (parseInt(_this.level.id) === parseInt($(level).data('id'))) {
+              _results.push(_this.selectWorld(Math.floor(index / 2) + 1));
+            } else {
+              _results.push(void 0);
+            }
           }
         }
-      }
-      return _results;
+        return _results;
+      });
     },
     showLevelSelector: function(success) {
       var _this = this;

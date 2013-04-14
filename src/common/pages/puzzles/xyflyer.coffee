@@ -346,18 +346,19 @@ soma.views
             duration = if @level.startTime? then new Date() - @level.startTime else null
             _gaq.push(['_trackEvent', 'level', 'completed', "xyflyer-#{@level.id}", duration]) if window._gaq
             
-            @registerEvent
-                type: 'success'
-                info: 
-                    time: @puzzleProgress[@level.id].completed
+            $.timeout 500, => 
+                @registerEvent
+                    type: 'success'
+                    info: 
+                        time: @puzzleProgress[@level.id].completed
 
-            @saveProgress()
-            @initLevelSelector()
-            $.timeout 500, => @showLevelSelector(true)
+                @saveProgress()
+                @initLevelSelector()
+                @showLevelSelector(true)
             
-            for level, index in @$('.stage .level:last-child') when index % 2 == 1
-                if parseInt(@level.id) == parseInt($(level).data('id'))
-                    @selectWorld(Math.floor(index / 2) + 1)         
+                for level, index in @$('.stage .level:last-child') when index % 2 == 1
+                    if parseInt(@level.id) == parseInt($(level).data('id'))
+                        @selectWorld(Math.floor(index / 2) + 1)         
                 
         showLevelSelector: (success) ->
             $(document.body).unbind('click.level_selector')

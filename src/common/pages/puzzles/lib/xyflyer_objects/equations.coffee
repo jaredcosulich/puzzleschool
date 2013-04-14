@@ -163,20 +163,21 @@ class equations.Equations
                     dragThis.css(opacity: 0, top: -1000, left: -1000)
 
                 dragElement.one 'mousedown.hint touchstart.hint', =>
-                    dropHere = @$('.drop_here') 
-                    if (offset = dropAreaElement.offset()).top == 0
-                        offset = @findComponentDropAreaElement(equation, solutionComponent).offset()
+                    $.timeout 10, =>
+                        dropHere = @$('.drop_here') 
+                        if (dropAreaOffset = dropAreaElement.offset()).top == 0
+                            dropAreaOffset = @findComponentDropAreaElement(equation, solutionComponent).offset()
 
-                    $(document.body).one 'mouseup.hint touchend.hint', =>
-                        dropHere.animate
-                            opacity: 0, 
-                            duration: 250
-                            complete: => dropHere.css(top: -1000, left: -1000)
+                        $(document.body).one 'mouseup.hint touchend.hint', =>
+                            dropHere.animate
+                                opacity: 0, 
+                                duration: 250
+                                complete: => dropHere.css(top: -1000, left: -1000)
                     
-                    dropHere.css
-                        opacity: 1
-                        top: offset.top + offset.height - gameAreaOffset.top
-                        left: offset.left + Math.min(30, (offset.width/2)) - areaOffset.left
+                        dropHere.css
+                            opacity: 1
+                            top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
+                            left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
                                    
     findComponentDropAreaElement: (equation, solutionComponent) ->
         possible = equation.el.find('div')
