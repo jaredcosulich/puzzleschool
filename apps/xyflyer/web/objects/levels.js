@@ -3414,7 +3414,7 @@ levels.WORLDS = [
     ]
   }, {
     assets: {
-      background: 2,
+      background: 3,
       island: 3,
       person: 2
     },
