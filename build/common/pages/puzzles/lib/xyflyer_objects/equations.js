@@ -10,19 +10,24 @@ EquationComponent = require('./equation_component').EquationComponent;
 equations.Equations = (function() {
 
   function Equations(_arg) {
-    var submit,
+    var launch, submit,
       _this = this;
     this.el = _arg.el, this.gameArea = _arg.gameArea, this.plot = _arg.plot, submit = _arg.submit, this.registerEvent = _arg.registerEvent;
     this.equationsArea = this.$('.equations');
     this.possibleFragments = this.$('.possible_fragments');
     this.equations = [];
     this.equationComponents = [];
+    launch = this.$('.launch');
     if (window.AppMobi) {
-      this.$('.launch').bind('touchstart.launch', function() {
-        return submit();
+      launch.bind('touchstart.launch', function() {
+        launch.addClass('clicking');
+        return launch.one('touchend.launch', function() {
+          submit();
+          return launch.removeClass('clicking');
+        });
       });
     } else {
-      this.$('.launch').bind('mousedown.launch', function() {
+      launch.bind('mousedown.launch', function() {
         return submit();
       });
     }

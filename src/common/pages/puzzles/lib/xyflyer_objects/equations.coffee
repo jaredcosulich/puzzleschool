@@ -8,10 +8,16 @@ class equations.Equations
         @possibleFragments = @$('.possible_fragments')
         @equations = []
         @equationComponents = []
+        
+        launch = @$('.launch')
         if window.AppMobi
-            @$('.launch').bind 'touchstart.launch', => submit()
+            launch.bind 'touchstart.launch', => 
+                launch.addClass('clicking')
+                launch.one 'touchend.launch', => 
+                    submit()
+                    launch.removeClass('clicking')
         else
-            @$('.launch').bind 'mousedown.launch', => submit()
+            launch.bind 'mousedown.launch', => submit()
         @initHints()
         @initBackspace()
         @length = 0

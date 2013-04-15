@@ -246,14 +246,18 @@ window.app = {
               levelElement.unbind('touchstart.select_level');
               levelElement.bind('touchstart.select_level', function(e) {
                 e.stop();
-                $(document.body).unbind('touchstart.level_selector');
-                if (locked) {
-                  return alert('This level is locked.');
-                } else {
-                  _this.level = levelInfo;
-                  _this.initLevel();
-                  return _this.hideLevelSelector();
-                }
+                levelElement.addClass('clicking');
+                _this.level = levelInfo;
+                _this.initLevel();
+                return levelElement.one('touchend.select_level', function(e) {
+                  levelElement.removeClass('clicking');
+                  $(document.body).unbind('touchstart.level_selector');
+                  if (locked) {
+                    return alert('This level is locked.');
+                  } else {
+                    return _this.hideLevelSelector();
+                  }
+                });
               });
               if ((_ref4 = _this.puzzleProgress[id]) != null ? _ref4.completed : void 0) {
                 stageCompleted += 1;

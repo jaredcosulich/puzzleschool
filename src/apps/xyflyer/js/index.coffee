@@ -164,13 +164,17 @@ window.app =
                             levelElement.unbind 'touchstart.select_level'
                             levelElement.bind 'touchstart.select_level', (e) =>
                                 e.stop()
-                                $(document.body).unbind('touchstart.level_selector')
-                                if locked
-                                    alert('This level is locked.')
-                                else
-                                    @level = levelInfo
-                                    @initLevel()
-                                    @hideLevelSelector()        
+                                levelElement.addClass('clicking')
+                                @level = levelInfo
+                                @initLevel()
+                                
+                                levelElement.one 'touchend.select_level', (e) =>
+                                    levelElement.removeClass('clicking')
+                                    $(document.body).unbind('touchstart.level_selector')
+                                    if locked
+                                        alert('This level is locked.')
+                                    else
+                                        @hideLevelSelector()        
                         
                             if @puzzleProgress[id]?.completed
                                 stageCompleted += 1 

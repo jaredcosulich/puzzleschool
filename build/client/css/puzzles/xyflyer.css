@@ -438,6 +438,9 @@ body {
 .xyflyer .level_selector .world .stage .level.completed {
   background-position: -88px 0;
 }
+.xyflyer .level_selector .world .stage .level:active {
+  background-position: 0 -44px;
+}
 .xyflyer .blue_button,
 .xyflyer .red_button {
   border: 1px solid #ccc;

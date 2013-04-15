@@ -278,13 +278,11 @@ body {
   text-shadow: 1px 1px 0px #8b3029;
   margin: auto;
 }
-.xyflyer .dynamic_content .button:hover {
+.xyflyer .dynamic_content .button.clicking {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00));
   background: -moz-linear-gradient(center top, #ce0100 5%, #fe1a00 100%);
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
   background-color: #ce0100;
-}
-.xyflyer .dynamic_content .button:active {
   position: relative;
   top: 1px;
 }
@@ -443,6 +441,9 @@ body {
 }
 .xyflyer .level_selector .world .stage .level.completed {
   background-position: -88px 0;
+}
+.xyflyer .level_selector .world .stage .level.clicking {
+  background-position: 0 -44px;
 }
 .xyflyer .blue_button,
 .xyflyer .red_button {
