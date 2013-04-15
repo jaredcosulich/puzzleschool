@@ -290,7 +290,7 @@ xyflyerEditor.EditorHelper = (function() {
       return _this.boardElement.unbind('click.showxy');
     });
     this.$('.editor .change_background').bind('click', function() {
-      return _this.showImageDialog("Select The Background Image", 'background', 4, function(index) {
+      return _this.showImageDialog("Select The Background Image", 'background', 5, function(index) {
         return _this.setAsset('background', index);
       });
     });

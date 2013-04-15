@@ -23,14 +23,16 @@ window.app =
         @puzzleProgress[@levelId] = {}
         
         @initLevelSelector()
-        @load()
+        @selectWorld(0)
+        @showLevelSelector(true)
 
     $: (selector) -> $(selector, @el)
         
-    load: ->
+    clear: ->
+        $('svg').remove()        
         @dynamicContent.html(@originalHTML)
-        $('svg').remove()
-
+        
+    load: ->
         @$('.menu').bind 'touchstart.menu', =>
             @$('.menu').one('touchend.menu', => @showLevelSelector())
             $(document.body).one('touchend.menu', => @$('.menu').unbind('touchend.menu'))
@@ -53,7 +55,6 @@ window.app =
             registerEvent: (eventInfo) => 
             
         @loadLevel()  
-
 
     initWorlds: ->
         @$('.world_link').bind 'touchstart', (e) =>
@@ -133,7 +134,7 @@ window.app =
         ), 100)
 
     
-    initLevelSelector: ->
+    initLevelSelector: (changedLevelId) ->
         @levelSelector or= @$('.level_selector')
         @levelSelector.bind 'touchstart', (e) => e.stop()
 
@@ -143,36 +144,39 @@ window.app =
             do (stageElement) =>
                 stageCompleted = 0
                 for levelElement, index in $(stageElement).find('.level')
-                    do (levelElement, index) =>
-                        levelElement = $(levelElement)
-                        id = levelElement.data('id')
-                        levelInfo = @findLevel(id)
+                    levelElement = $(levelElement)
+                    lastLevelId = id
+                    id = levelElement.data('id')
+                    
+                    if not changedLevelId or changedLevelId == id or changedLevelId == lastLevelId
+                        do (levelElement, index) =>
+                            levelInfo = @findLevel(id)
         
-                        locked = !previousCompleted
-                        locked = false if index == 0# and previousStageProficient
+                            locked = !previousCompleted
+                            locked = false if index == 0# and previousStageProficient
                         
-                        @setLevelIcon
-                            id: id
-                            started: @puzzleProgress[id]?.started
-                            completed: @puzzleProgress[id]?.completed
-                            locked: locked
-        
-                        levelElement.unbind 'touchstart.select_level'
-                        levelElement.bind 'touchstart.select_level', (e) =>
-                            e.stop()
-                            $(document.body).unbind('touchstart.select_level.level_selector')
-                            if locked
-                                alert('This level is locked.')
+                            @setLevelIcon
+                                id: id
+                                started: @puzzleProgress[id]?.started
+                                completed: @puzzleProgress[id]?.completed
+                                locked: locked
+                        
+                            levelElement.unbind 'touchstart.select_level'
+                            levelElement.bind 'touchstart.select_level', (e) =>
+                                e.stop()
+                                $(document.body).unbind('touchstart.level_selector')
+                                if locked
+                                    alert('This level is locked.')
+                                else
+                                    @level = levelInfo
+                                    @initLevel()
+                                    @hideLevelSelector()        
+                        
+                            if @puzzleProgress[id]?.completed
+                                stageCompleted += 1 
+                                previousCompleted = true
                             else
-                                @level = levelInfo
-                                @initLevel()
-                                @hideLevelSelector()        
-                        
-                        if @puzzleProgress[id]?.completed
-                            stageCompleted += 1 
-                            previousCompleted = true
-                        else
-                            previousCompleted = false
+                                previousCompleted = false
                 
                 previousStageProficient = (stageCompleted >= 3)
                             
@@ -189,21 +193,15 @@ window.app =
 
     nextLevel: ->   
         @puzzleProgress[@level.id].completed = new Date().getTime()
-        @showLevelSelectorWhenPlaneOffScreen()
-        
-        
-    showLevelSelectorWhenPlaneOffScreen: ->
-        unless @helper.planeOffScreen
-            $.timeout 100, => @showLevelSelectorWhenPlaneOffScreen()
-            return
-            
-        @initLevelSelector()
-    
-        for level, index in @$('.stage .level:last-child') when index % 2 == 1
-            if parseInt(@level.id) == parseInt($(level).data('id'))
-                @selectWorld(Math.floor(index / 2) + 1)         
+        $.timeout 1000, =>
+            @initLevelSelector(@level.id)
 
-        @showLevelSelector(true)
+            for level, index in @$('.stage .level:last-child') when index % 2 == 1
+                if parseInt(@level.id) == parseInt($(level).data('id'))
+                    @selectWorld(Math.floor(index / 2) + 1)
+
+            @showLevelSelector(true)
+
             
     showLevelSelector: (success) ->
         $(document.body).unbind('touchstart.level_selector')
@@ -216,16 +214,18 @@ window.app =
         # else
         #     @levelSelector.removeClass('success') 
         # 
+                
         @levelSelector.css
             opacity: 1
             top: 30
             left: (@el.width() - @levelSelector.width()) / 2
 
-        setTimeout((=>    
+        @clear()
+
+        $.timeout 10, =>    
             $(document.body).one 'touchstart.level_selector', => 
                 $(document.body).one 'touchend.level_selector', => 
                     @hideLevelSelector()
-        ), 10)
 
     hideLevelSelector: ->
         $(document.body).unbind('touchend.level_selector')

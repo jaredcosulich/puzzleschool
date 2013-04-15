@@ -30,7 +30,7 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var filetype, index, object, _i, _j, _len, _ref,
+      var count, filetype, index, object, _i, _ref,
         _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
@@ -94,10 +94,15 @@ soma.chunks({
         }
       }
       this.objects = [];
-      _ref = ['person', 'island', 'plane', 'background'];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        object = _ref[_i];
-        for (index = _j = 1; _j <= 4; index = ++_j) {
+      _ref = {
+        person: 4,
+        island: 4,
+        plane: 2,
+        background: 5
+      };
+      for (object in _ref) {
+        count = _ref[object];
+        for (index = _i = 1; 1 <= count ? _i <= count : _i >= count; index = 1 <= count ? ++_i : --_i) {
           filetype = (object === 'background' ? 'jpg' : 'png');
           this.objects.push({
             name: "" + object + index + " " + (index === 1 ? object : ''),

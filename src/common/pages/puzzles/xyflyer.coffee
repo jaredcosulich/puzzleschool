@@ -62,8 +62,8 @@ soma.chunks
                                 alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
-            for object in ['person', 'island', 'plane', 'background']
-                for index in [1..4]
+            for object, count of {person: 4, island: 4, plane: 2, background: 5}
+                for index in [1..count]
                     filetype = (if object == 'background' then 'jpg' else 'png')
                     @objects.push(
                         name: "#{object}#{index} #{if index == 1 then object else ''}"

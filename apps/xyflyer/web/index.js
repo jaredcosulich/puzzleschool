@@ -29,16 +29,19 @@ window.app = {
     this.puzzleProgress = {};
     this.puzzleProgress[this.levelId] = {};
     this.initLevelSelector();
-    return this.load();
+    this.selectWorld(0);
+    return this.showLevelSelector(true);
   },
   $: function(selector) {
     return $(selector, this.el);
   },
+  clear: function() {
+    $('svg').remove();
+    return this.dynamicContent.html(this.originalHTML);
+  },
   load: function() {
     var asset, index, _ref,
       _this = this;
-    this.dynamicContent.html(this.originalHTML);
-    $('svg').remove();
     this.$('.menu').bind('touchstart.menu', function() {
       _this.$('.menu').one('touchend.menu', function() {
         return _this.showLevelSelector();
@@ -204,7 +207,7 @@ window.app = {
       });
     }), 100);
   },
-  initLevelSelector: function() {
+  initLevelSelector: function(changedLevelId) {
     var previousCompleted, previousStageProficient, stageElement, _i, _len, _ref, _results,
       _this = this;
     this.levelSelector || (this.levelSelector = this.$('.level_selector'));
@@ -218,46 +221,48 @@ window.app = {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       stageElement = _ref[_i];
       _results.push((function(stageElement) {
-        var index, levelElement, stageCompleted, _fn, _j, _len1, _ref1;
+        var id, index, lastLevelId, levelElement, stageCompleted, _j, _len1, _ref1;
         stageCompleted = 0;
         _ref1 = $(stageElement).find('.level');
-        _fn = function(levelElement, index) {
-          var id, levelInfo, locked, _ref2, _ref3, _ref4;
-          levelElement = $(levelElement);
-          id = levelElement.data('id');
-          levelInfo = _this.findLevel(id);
-          locked = !previousCompleted;
-          if (index === 0) {
-            locked = false;
-          }
-          _this.setLevelIcon({
-            id: id,
-            started: (_ref2 = _this.puzzleProgress[id]) != null ? _ref2.started : void 0,
-            completed: (_ref3 = _this.puzzleProgress[id]) != null ? _ref3.completed : void 0,
-            locked: locked
-          });
-          levelElement.unbind('touchstart.select_level');
-          levelElement.bind('touchstart.select_level', function(e) {
-            e.stop();
-            $(document.body).unbind('touchstart.select_level.level_selector');
-            if (locked) {
-              return alert('This level is locked.');
-            } else {
-              _this.level = levelInfo;
-              _this.initLevel();
-              return _this.hideLevelSelector();
-            }
-          });
-          if ((_ref4 = _this.puzzleProgress[id]) != null ? _ref4.completed : void 0) {
-            stageCompleted += 1;
-            return previousCompleted = true;
-          } else {
-            return previousCompleted = false;
-          }
-        };
         for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
           levelElement = _ref1[index];
-          _fn(levelElement, index);
+          levelElement = $(levelElement);
+          lastLevelId = id;
+          id = levelElement.data('id');
+          if (!changedLevelId || changedLevelId === id || changedLevelId === lastLevelId) {
+            (function(levelElement, index) {
+              var levelInfo, locked, _ref2, _ref3, _ref4;
+              levelInfo = _this.findLevel(id);
+              locked = !previousCompleted;
+              if (index === 0) {
+                locked = false;
+              }
+              _this.setLevelIcon({
+                id: id,
+                started: (_ref2 = _this.puzzleProgress[id]) != null ? _ref2.started : void 0,
+                completed: (_ref3 = _this.puzzleProgress[id]) != null ? _ref3.completed : void 0,
+                locked: locked
+              });
+              levelElement.unbind('touchstart.select_level');
+              levelElement.bind('touchstart.select_level', function(e) {
+                e.stop();
+                $(document.body).unbind('touchstart.level_selector');
+                if (locked) {
+                  return alert('This level is locked.');
+                } else {
+                  _this.level = levelInfo;
+                  _this.initLevel();
+                  return _this.hideLevelSelector();
+                }
+              });
+              if ((_ref4 = _this.puzzleProgress[id]) != null ? _ref4.completed : void 0) {
+                stageCompleted += 1;
+                return previousCompleted = true;
+              } else {
+                return previousCompleted = false;
+              }
+            })(levelElement, index);
+          }
         }
         return previousStageProficient = stageCompleted >= 3;
       })(stageElement));
@@ -279,29 +284,22 @@ window.app = {
     }
   },
   nextLevel: function() {
+    var _this = this;
     this.puzzleProgress[this.level.id].completed = new Date().getTime();
-    return this.showLevelSelectorWhenPlaneOffScreen();
-  },
-  showLevelSelectorWhenPlaneOffScreen: function() {
-    var index, level, _i, _len, _ref,
-      _this = this;
-    if (!this.helper.planeOffScreen) {
-      $.timeout(100, function() {
-        return _this.showLevelSelectorWhenPlaneOffScreen();
-      });
-      return;
-    }
-    this.initLevelSelector();
-    _ref = this.$('.stage .level:last-child');
-    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-      level = _ref[index];
-      if (index % 2 === 1) {
-        if (parseInt(this.level.id) === parseInt($(level).data('id'))) {
-          this.selectWorld(Math.floor(index / 2) + 1);
+    return $.timeout(1000, function() {
+      var index, level, _i, _len, _ref;
+      _this.initLevelSelector(_this.level.id);
+      _ref = _this.$('.stage .level:last-child');
+      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+        level = _ref[index];
+        if (index % 2 === 1) {
+          if (parseInt(_this.level.id) === parseInt($(level).data('id'))) {
+            _this.selectWorld(Math.floor(index / 2) + 1);
+          }
         }
       }
-    }
-    return this.showLevelSelector(true);
+      return _this.showLevelSelector(true);
+    });
   },
   showLevelSelector: function(success) {
     var _this = this;
@@ -315,13 +313,14 @@ window.app = {
       top: 30,
       left: (this.el.width() - this.levelSelector.width()) / 2
     });
-    return setTimeout((function() {
+    this.clear();
+    return $.timeout(10, function() {
       return $(document.body).one('touchstart.level_selector', function() {
         return $(document.body).one('touchend.level_selector', function() {
           return _this.hideLevelSelector();
         });
       });
-    }), 10);
+    });
   },
   hideLevelSelector: function() {
     $(document.body).unbind('touchend.level_selector');

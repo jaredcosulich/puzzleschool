@@ -64,7 +64,7 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.trackPlane = function(_arg) {
-    var allPassedThrough, height, ring, width, x, y, _i, _len, _ref1, _ref2, _ref3;
+    var allPassedThrough, height, ring, width, x, y, _i, _len, _ref1;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
     allPassedThrough = this.rings.length > 0;
     _ref1 = this.rings;
@@ -81,12 +81,7 @@ xyflyer.ViewHelper = (function() {
       }
     }
     if (allPassedThrough) {
-      this.completeLevel();
-    }
-    if ((this.grid.xMin < (_ref2 = this.board.paperX(x)) && _ref2 < this.grid.xMax) && (this.grid.yMin < (_ref3 = this.board.paperY(y)) && _ref3 < this.grid.yMax)) {
-      return this.planeOffScreen = false;
-    } else {
-      return this.planeOffScreen = true;
+      return this.completeLevel();
     }
   };
 

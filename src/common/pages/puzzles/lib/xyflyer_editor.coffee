@@ -191,7 +191,7 @@ class xyflyerEditor.EditorHelper
             @boardElement.unbind('click.showxy')
         
         @$('.editor .change_background').bind 'click', => 
-            @showImageDialog "Select The Background Image", 'background', 4, (index) => @setAsset('background', index)
+            @showImageDialog "Select The Background Image", 'background', 5, (index) => @setAsset('background', index)
 
         @$('.editor .change_island').bind 'click', => 
             @showImageDialog "Select The Island Image", 'island', 4, (index) => @setAsset('island', index)

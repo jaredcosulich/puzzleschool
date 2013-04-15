@@ -46,11 +46,6 @@ class xyflyer.ViewHelper
             ring.highlightIfPassingThrough(x: x, y: y, width: width, height: height) 
             allPassedThrough = false unless ring.passedThrough
         @completeLevel() if allPassedThrough
-        if @grid.xMin < @board.paperX(x) < @grid.xMax and
-           @grid.yMin < @board.paperY(y) < @grid.yMax
-            @planeOffScreen = false
-        else
-            @planeOffScreen = true
         
     addRing: (x,y) ->
         @rings.push(
