@@ -255,7 +255,12 @@ soma.views({
         _this = this;
       this.dynamicContent.html(this.originalHTML);
       $('svg').remove();
-      _ref = this.level.assets || this.worlds[this.currentWorld()].assets || {};
+      _ref = this.level.assets || this.worlds[this.currentWorld()].assets || {
+        person: 1,
+        island: 1,
+        plane: 1,
+        background: 1
+      };
       for (asset in _ref) {
         index = _ref[asset];
         if (asset === 'background') {

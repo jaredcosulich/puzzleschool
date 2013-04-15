@@ -184,7 +184,7 @@ soma.views
             @dynamicContent.html(@originalHTML)
             $('svg').remove()
             
-            for asset, index of @level.assets or @worlds[@currentWorld()].assets or {}
+            for asset, index of @level.assets or @worlds[@currentWorld()].assets or {person: 1, island: 1, plane: 1, background: 1}
                 if asset == 'background'
                     @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\./, "#{index}."))
                 else
