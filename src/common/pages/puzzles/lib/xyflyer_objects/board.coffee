@@ -99,6 +99,8 @@ class board.Board extends xyflyerObject.Object
             $.timeout 100, => @addIsland()
             return
         
+        @island.remove() if @island
+        
         @island = @paper.set()    
             
         planeX = @xAxis + (@islandCoordinates.x * @xUnit)

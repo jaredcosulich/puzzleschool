@@ -146,6 +146,9 @@ board.Board = (function(_super) {
       });
       return;
     }
+    if (this.island) {
+      this.island.remove();
+    }
     this.island = this.paper.set();
     planeX = this.xAxis + (this.islandCoordinates.x * this.xUnit);
     planeY = this.yAxis - (this.islandCoordinates.y * this.yUnit);
