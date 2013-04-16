@@ -23,6 +23,7 @@ window.app =
         @puzzleProgress[@levelId] = {}
         
         @initLevelSelector()
+        @initWorlds()
         @selectWorld(0)
         @showLevelSelector(true)
 
@@ -65,10 +66,12 @@ window.app =
         @loadLevel()  
 
     initWorlds: ->
-        @$('.world_link').bind 'touchstart', (e) =>
-            e.stop()
-            worldLink = $(e.currentTarget)
-            @selectWorld(parseInt(worldLink.data('world')) - 1)
+        worldLinks = @$('.world_link')
+        worldLinks.bind 'touchstart.select_world', (e) =>
+            worldLinks.one 'touchend.select_world', (e) =>
+                e.stop()
+                worldLink = $(e.currentTarget)
+                @selectWorld(parseInt(worldLink.data('world')) - 1)
             
     currentWorld: ->
         return 0 if not @level?.id

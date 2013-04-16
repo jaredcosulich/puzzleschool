@@ -66,6 +66,9 @@ body {
   border-bottom: 2px solid #ffbd2a;
   width: 12px;
 }
+.xyflyer .dynamic_content .equation_area.show_places .accept_fragment:first-child {
+  width: 24px;
+}
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment:last-child {
   width: 45px;
 }
@@ -99,8 +102,8 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .intro {
   float: left;
   margin: 0 6px;
-  line-height: 48px;
-  font-size: 36px;
+  line-height: 45px;
+  font-size: 30px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .only_area {
   width: 251px;
@@ -114,13 +117,13 @@ body {
   position: relative;
   overflow: hidden;
   line-height: 42px;
-  height: 48px;
+  height: 42px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.starting_fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
   color: #262626;
-  font-size: 48px;
+  font-size: 36px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
@@ -154,7 +157,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_fragment {
   float: left;
-  height: 44px;
+  height: 40px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .removing {
   display: none;
@@ -257,7 +260,7 @@ body {
   cursor: pointer;
 }
 .xyflyer .dynamic_content .button {
-  font-size: 24px;
+  font-size: 18px;
   -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
   -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
   box-shadow: inset 0px 1px 0px 0px #ed7265;

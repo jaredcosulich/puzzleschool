@@ -29,6 +29,7 @@ window.app = {
     this.puzzleProgress = {};
     this.puzzleProgress[this.levelId] = {};
     this.initLevelSelector();
+    this.initWorlds();
     this.selectWorld(0);
     return this.showLevelSelector(true);
   },
@@ -85,12 +86,16 @@ window.app = {
     return this.loadLevel();
   },
   initWorlds: function() {
-    var _this = this;
-    return this.$('.world_link').bind('touchstart', function(e) {
-      var worldLink;
-      e.stop();
-      worldLink = $(e.currentTarget);
-      return _this.selectWorld(parseInt(worldLink.data('world')) - 1);
+    var worldLinks,
+      _this = this;
+    worldLinks = this.$('.world_link');
+    return worldLinks.bind('touchstart.select_world', function(e) {
+      return worldLinks.one('touchend.select_world', function(e) {
+        var worldLink;
+        e.stop();
+        worldLink = $(e.currentTarget);
+        return _this.selectWorld(parseInt(worldLink.data('world')) - 1);
+      });
     });
   },
   currentWorld: function() {
