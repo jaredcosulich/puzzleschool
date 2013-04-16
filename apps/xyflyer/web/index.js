@@ -247,6 +247,7 @@ window.app = {
               levelElement.bind('touchstart.select_level', function(e) {
                 e.stop();
                 levelElement.addClass('clicking');
+                _this.clear();
                 _this.level = levelInfo;
                 _this.initLevel();
                 return levelElement.one('touchend.select_level', function(e) {
@@ -317,7 +318,6 @@ window.app = {
       top: 30,
       left: (this.el.width() - this.levelSelector.width()) / 2
     });
-    this.clear();
     return $.timeout(10, function() {
       return $(document.body).one('touchstart.level_selector', function() {
         return $(document.body).one('touchend.level_selector', function() {

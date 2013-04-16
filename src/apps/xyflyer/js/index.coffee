@@ -165,6 +165,8 @@ window.app =
                             levelElement.bind 'touchstart.select_level', (e) =>
                                 e.stop()
                                 levelElement.addClass('clicking')
+                                @clear()
+                                
                                 @level = levelInfo
                                 @initLevel()
                                 
@@ -223,8 +225,6 @@ window.app =
             opacity: 1
             top: 30
             left: (@el.width() - @levelSelector.width()) / 2
-
-        @clear()
 
         $.timeout 10, =>    
             $(document.body).one 'touchstart.level_selector', => 
