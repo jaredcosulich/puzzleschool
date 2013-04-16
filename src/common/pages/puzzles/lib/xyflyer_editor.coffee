@@ -214,6 +214,7 @@ class xyflyerEditor.EditorHelper
             elements = @board.paper.getElementsByPoint(@offsetX(e), @offsetY(e))
             for element in elements when element[0].href?.toString()?.indexOf('island')
                 @boardElement.bind 'mousemove.dragisland', (e) =>
+                    @boardElement.unbind('mouseup.showxy touchend.showxy')
                     @board.island.transform("...t#{e.clientX - currentX},#{e.clientY - currentY}")
                     x = @board.screenX(@islandCoordinates.x)+(e.clientX - currentX)
                     y = @board.screenY(@islandCoordinates.y)+(e.clientY - currentY)

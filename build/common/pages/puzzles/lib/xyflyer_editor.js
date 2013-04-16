@@ -335,6 +335,7 @@ xyflyerEditor.EditorHelper = (function() {
         }
         _this.boardElement.bind('mousemove.dragisland', function(e) {
           var x, y;
+          _this.boardElement.unbind('mouseup.showxy touchend.showxy');
           _this.board.island.transform("...t" + (e.clientX - currentX) + "," + (e.clientY - currentY));
           x = _this.board.screenX(_this.islandCoordinates.x) + (e.clientX - currentX);
           y = _this.board.screenY(_this.islandCoordinates.y) + (e.clientY - currentY);
