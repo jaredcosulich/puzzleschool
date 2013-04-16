@@ -125,8 +125,8 @@ class board.Board extends xyflyerObject.Object
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
         
-    offsetX: (e) => e.offsetX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX
-    offsetY: (e) => e.offsetY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY
+    offsetX: (e) => if e.pageX then (e.pageX - @el.offset().left) else (e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX)
+    offsetY: (e) => if e.pageY then (e.pageY - @el.offset().top) else (e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY)
     
     initClicks: ->
         @el.css(zIndex: 97)

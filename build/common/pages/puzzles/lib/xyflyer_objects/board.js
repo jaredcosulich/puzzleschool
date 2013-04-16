@@ -170,12 +170,20 @@ board.Board = (function(_super) {
 
   Board.prototype.offsetX = function(e) {
     var _ref, _ref1, _ref2, _ref3;
-    return e.offsetX || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0);
+    if (e.pageX) {
+      return e.pageX - this.el.offset().left;
+    } else {
+      return ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0);
+    }
   };
 
   Board.prototype.offsetY = function(e) {
     var _ref, _ref1, _ref2, _ref3;
-    return e.offsetY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0);
+    if (e.pageY) {
+      return e.pageY - this.el.offset().top;
+    } else {
+      return ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0);
+    }
   };
 
   Board.prototype.initClicks = function() {
