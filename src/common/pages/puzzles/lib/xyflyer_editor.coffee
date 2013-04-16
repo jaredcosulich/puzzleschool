@@ -100,6 +100,9 @@ class xyflyerEditor.EditorHelper
         if @equations
             @equations.plotFormula(equation) for equation in @equations?.equations
 
+    offsetX: (e) -> e.pageX - @boardElement.offset().left
+    offsetY: (e) -> e.pageY - @boardElement.offset().top
+        
     initButtons: ->
         if not @board?.island
             $.timeout 100, => @initButtons()
@@ -182,7 +185,7 @@ class xyflyerEditor.EditorHelper
                 @boardElement.unbind('click.remove_ring')
                 @board.initClicks(@boardElement)
                 for ring, index in @rings
-                    if ring.touches(e.offsetX,e.offsetY,12,12)
+                    if ring.touches(@offsetX(e),@offsetY(e),12,12)
                         @rings.splice(index, 1)
                         ring.remove()
                         @handleModification()
@@ -208,7 +211,7 @@ class xyflyerEditor.EditorHelper
         @boardElement.bind 'mousedown.dragisland', (e) =>
             xStart = currentX = e.clientX
             yStart = currentY = e.clientY
-            elements = @board.paper.getElementsByPoint(e.offsetX, e.offsetY)
+            elements = @board.paper.getElementsByPoint(@offsetX(e), @offsetY(e))
             for element in elements when element[0].href?.toString()?.indexOf('island')
                 @boardElement.bind 'mousemove.dragisland', (e) =>
                     @board.island.transform("...t#{e.clientX - currentX},#{e.clientY - currentY}")

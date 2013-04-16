@@ -154,6 +154,14 @@ xyflyerEditor.EditorHelper = (function() {
     }
   };
 
+  EditorHelper.prototype.offsetX = function(e) {
+    return e.pageX - this.boardElement.offset().left;
+  };
+
+  EditorHelper.prototype.offsetY = function(e) {
+    return e.pageY - this.boardElement.offset().top;
+  };
+
   EditorHelper.prototype.initButtons = function() {
     var _ref,
       _this = this;
@@ -278,7 +286,7 @@ xyflyerEditor.EditorHelper = (function() {
         _ref1 = _this.rings;
         for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
           ring = _ref1[index];
-          if (ring.touches(e.offsetX, e.offsetY, 12, 12)) {
+          if (ring.touches(_this.offsetX(e), _this.offsetY(e), 12, 12)) {
             _this.rings.splice(index, 1);
             ring.remove();
             _this.handleModification();
@@ -318,7 +326,7 @@ xyflyerEditor.EditorHelper = (function() {
       var currentX, currentY, element, elements, xStart, yStart, _i, _len, _ref1, _ref2, _results;
       xStart = currentX = e.clientX;
       yStart = currentY = e.clientY;
-      elements = _this.board.paper.getElementsByPoint(e.offsetX, e.offsetY);
+      elements = _this.board.paper.getElementsByPoint(_this.offsetX(e), _this.offsetY(e));
       _results = [];
       for (_i = 0, _len = elements.length; _i < _len; _i++) {
         element = elements[_i];

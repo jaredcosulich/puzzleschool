@@ -192,16 +192,18 @@ board.Board = (function(_super) {
       zIndex: 97
     });
     return this.el.bind('mousedown.showxy touchstart.showxy', function(e) {
-      var formula1, onPath, result, y;
-      result = _this.findNearestXOnPath(_this.offsetX(e), _this.offsetY(e));
-      onPath = result.x;
-      if (result.formulas.length) {
-        formula1 = result.formulas[0];
-        y = _this.screenY(formula1.formula(_this.paperX(result.x)));
-        return _this.showXY(result.x, y, true);
-      } else {
-        return _this.showXY(_this.offsetX(e), _this.offsetY(e));
-      }
+      return _this.el.one('mouseup.showxy touchend.showxy', function(e) {
+        var formula1, onPath, result, y;
+        result = _this.findNearestXOnPath(_this.offsetX(e), _this.offsetY(e));
+        onPath = result.x;
+        if (result.formulas.length) {
+          formula1 = result.formulas[0];
+          y = _this.screenY(formula1.formula(_this.paperX(result.x)));
+          return _this.showXY(result.x, y, true);
+        } else {
+          return _this.showXY(_this.offsetX(e), _this.offsetY(e));
+        }
+      });
     });
   };
 

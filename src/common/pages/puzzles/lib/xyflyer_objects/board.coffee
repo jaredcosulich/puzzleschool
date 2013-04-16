@@ -131,14 +131,15 @@ class board.Board extends xyflyerObject.Object
     initClicks: ->
         @el.css(zIndex: 97)
         @el.bind 'mousedown.showxy touchstart.showxy', (e) =>
-            result = @findNearestXOnPath(@offsetX(e), @offsetY(e))
-            onPath = result.x
-            if result.formulas.length
-                formula1 = result.formulas[0]
-                y = @screenY(formula1.formula(@paperX(result.x)))
-                @showXY(result.x, y, true)
-            else
-                @showXY(@offsetX(e), @offsetY(e))
+            @el.one 'mouseup.showxy touchend.showxy', (e) =>
+                result = @findNearestXOnPath(@offsetX(e), @offsetY(e))
+                onPath = result.x
+                if result.formulas.length
+                    formula1 = result.formulas[0]
+                    y = @screenY(formula1.formula(@paperX(result.x)))
+                    @showXY(result.x, y, true)
+                else
+                    @showXY(@offsetX(e), @offsetY(e))
 
     findNearestXOnPath: (x, y, formulas=@formulas, precision=0) ->
         distances = {}
