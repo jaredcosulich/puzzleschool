@@ -18,9 +18,9 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, this.resetLevel = _arg.resetLevel;
-    this.clientY = __bind(this.clientY, this);
+    this.offsetY = __bind(this.offsetY, this);
 
-    this.clientX = __bind(this.clientX, this);
+    this.offsetX = __bind(this.offsetX, this);
 
     this.init({
       el: this.el,
@@ -168,14 +168,14 @@ board.Board = (function(_super) {
     return "" + (this.scale > 0.6 ? 'Launching From:\n' : '') + this.islandCoordinates.x + ", " + this.islandCoordinates.y;
   };
 
-  Board.prototype.clientX = function(e) {
+  Board.prototype.offsetX = function(e) {
     var _ref, _ref1, _ref2, _ref3;
-    return e.clientX || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0);
+    return e.offsetX || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0);
   };
 
-  Board.prototype.clientY = function(e) {
+  Board.prototype.offsetY = function(e) {
     var _ref, _ref1, _ref2, _ref3;
-    return e.clientY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0);
+    return e.offsetY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0);
   };
 
   Board.prototype.initClicks = function() {
@@ -185,14 +185,14 @@ board.Board = (function(_super) {
     });
     return this.el.bind('mousedown.showxy touchstart.showxy', function(e) {
       var formula1, onPath, result, y;
-      result = _this.findNearestXOnPath(_this.clientX(e), _this.clientY(e));
+      result = _this.findNearestXOnPath(_this.offsetX(e), _this.offsetY(e));
       onPath = result.x;
       if (result.formulas.length) {
         formula1 = result.formulas[0];
         y = _this.screenY(formula1.formula(_this.paperX(result.x)));
         return _this.showXY(result.x, y, true);
       } else {
-        return _this.showXY(_this.clientX(e), _this.clientY(e));
+        return _this.showXY(_this.offsetX(e), _this.offsetY(e));
       }
     });
   };
