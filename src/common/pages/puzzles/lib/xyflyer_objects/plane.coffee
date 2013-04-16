@@ -10,7 +10,7 @@ class plane.Plane extends xyflyerObject.Object
         @animation = new Animation(true)
         @addToBoard()
         @reset()
-
+    
     setBoard: (@board) -> @addToBoard()
         
     addToBoard: -> @board.addToCanvas(@, 2)

@@ -22,6 +22,17 @@ board.Board = (function(_super) {
 
     this.clientX = __bind(this.clientX, this);
 
+    this.init({
+      el: this.el,
+      grid: this.grid,
+      objects: this.objects,
+      islandCoordinates: this.islandCoordinates
+    });
+    this.load();
+  }
+
+  Board.prototype.init = function(_arg) {
+    this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates;
     this.islandCoordinates || (this.islandCoordinates = {});
     if (!this.islandCoordinates.x) {
       this.islandCoordinates.x = 0;
@@ -32,10 +43,10 @@ board.Board = (function(_super) {
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
-    this.init();
-  }
+    return this.load();
+  };
 
-  Board.prototype.init = function() {
+  Board.prototype.load = function() {
     var dimensions, maxDimension;
     dimensions = this.el.offset();
     this.paper = Raphael(this.el.attr('id'), dimensions.width, dimensions.height);
@@ -56,9 +67,11 @@ board.Board = (function(_super) {
   Board.prototype.initAnimation = function() {
     this.animationCtx1 = this.createCanvas(1);
     this.animationCtx2 = this.createCanvas(3);
-    this.animation = new Animation();
     this.animationObjects = [];
-    return this.animate();
+    if (!this.animation) {
+      this.animation = new Animation();
+      return this.animate();
+    }
   };
 
   Board.prototype.addRing = function(ring) {

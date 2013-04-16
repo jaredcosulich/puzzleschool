@@ -270,20 +270,30 @@ soma.views({
           this.$(".objects ." + asset + index).addClass(asset);
         }
       }
-      this.helper = new xyflyer.ViewHelper({
-        el: this.dynamicContent,
-        boardElement: this.$('.board'),
-        objects: this.$('.objects'),
-        equationArea: this.$('.equation_area'),
-        grid: this.level.grid,
-        islandCoordinates: this.level.islandCoordinates,
-        nextLevel: function() {
-          return _this.nextLevel();
-        },
-        registerEvent: function(eventInfo) {
-          return _this.registerEvent(eventInfo);
-        }
-      });
+      if (this.helper) {
+        this.helper.reinitialize({
+          boardElement: this.$('.board'),
+          objects: this.$('.objects'),
+          equationArea: this.$('.equation_area'),
+          grid: this.level.grid,
+          islandCoordinates: this.level.islandCoordinates
+        });
+      } else {
+        this.helper = new xyflyer.ViewHelper({
+          el: this.dynamicContent,
+          boardElement: this.$('.board'),
+          objects: this.$('.objects'),
+          equationArea: this.$('.equation_area'),
+          grid: this.level.grid,
+          islandCoordinates: this.level.islandCoordinates,
+          nextLevel: function() {
+            return _this.nextLevel();
+          },
+          registerEvent: function(eventInfo) {
+            return _this.registerEvent(eventInfo);
+          }
+        });
+      }
       this.$('.menu').bind('click', function() {
         return _this.showLevelSelector();
       });

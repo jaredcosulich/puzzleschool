@@ -190,17 +190,24 @@ soma.views
                 else
                     @$(".objects .#{asset}").removeClass(asset)
                     @$(".objects .#{asset}#{index}").addClass(asset)
-                    
-                    
-            @helper = new xyflyer.ViewHelper
-                el: @dynamicContent
-                boardElement: @$('.board')
-                objects: @$('.objects')
-                equationArea: @$('.equation_area')
-                grid: @level.grid
-                islandCoordinates: @level.islandCoordinates
-                nextLevel: => @nextLevel()
-                registerEvent: (eventInfo) => @registerEvent(eventInfo)
+
+            if @helper
+                @helper.reinitialize
+                    boardElement: @$('.board')
+                    objects: @$('.objects')
+                    equationArea: @$('.equation_area')
+                    grid: @level.grid
+                    islandCoordinates: @level.islandCoordinates
+            else
+                @helper = new xyflyer.ViewHelper
+                    el: @dynamicContent
+                    boardElement: @$('.board')
+                    objects: @$('.objects')
+                    equationArea: @$('.equation_area')
+                    grid: @level.grid
+                    islandCoordinates: @level.islandCoordinates
+                    nextLevel: => @nextLevel()
+                    registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 
             @$('.menu').bind 'click', => @showLevelSelector()
                             

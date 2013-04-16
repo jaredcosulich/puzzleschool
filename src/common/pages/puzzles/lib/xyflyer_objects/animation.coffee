@@ -4,6 +4,7 @@ class animation.Animation
     constructor: (@calculation=false) ->
         @animations = []
         @animationIndex = 0
+        @id = new Date().getTime()
         
     frame: ->
         if @calculation

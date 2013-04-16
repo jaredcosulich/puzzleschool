@@ -9,24 +9,38 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, @equationArea, boardElement, objects, @grid, @nextLevel, @registerEvent, @islandCoordinates}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, @grid, @islandCoordinates, @nextLevel, @registerEvent}) ->
         @rings = []
         # @flip(boardElement)
+
         @board = new xyflyer.Board
             el: boardElement 
             grid: @grid 
             objects: objects
             islandCoordinates: @islandCoordinates
             resetLevel: => @resetLevel()
-    
+
         @plane = new xyflyer.Plane
             board: @board
             objects: objects
             track: (info) => @trackPlane(info)
-            
+       
         @parser = require('./parser')
         @initEquations()
         
+    reinitialize: ({@equationArea, boardElement, objects, @grid, @islandCoordinates}) ->
+        @rings = []
+        @board.init
+            el: boardElement 
+            grid: @grid 
+            objects: objects
+            islandCoordinates: @islandCoordinates
+
+        @complete = false
+        @plane.setBoard(@board)
+        @initEquations()
+        @resetLevel()
+            
     $: (selector) -> $(selector, @el)
 
     flip: (boardElement) ->
@@ -70,6 +84,7 @@ class xyflyer.ViewHelper
         @equations.addComponent(equationFragment)
         
     resetLevel: ->
+        @complete = false
         @plane.reset() if @plane
         ring.reset() for ring in @rings
     
@@ -77,3 +92,4 @@ class xyflyer.ViewHelper
         return if @complete
         @complete = true
         @nextLevel()
+        

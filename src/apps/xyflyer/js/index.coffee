@@ -44,16 +44,24 @@ window.app =
                 @$(".objects .#{asset}").removeClass(asset)
                 @$(".objects .#{asset}#{index}").addClass(asset)
                 
-        @helper = new xyflyer.ViewHelper
-            el: @dynamicContent
-            boardElement: @$('.board')
-            objects: @$('.objects')
-            equationArea: @$('.equation_area')
-            grid: @level.grid
-            islandCoordinates: @level.islandCoordinates
-            nextLevel: => @nextLevel()
-            registerEvent: (eventInfo) => 
-            
+        if @helper
+            @helper.reinitialize
+                boardElement: @$('.board')
+                objects: @$('.objects')
+                equationArea: @$('.equation_area')
+                grid: @level.grid
+                islandCoordinates: @level.islandCoordinates
+        else
+            @helper = new xyflyer.ViewHelper
+                el: @dynamicContent
+                boardElement: @$('.board')
+                objects: @$('.objects')
+                equationArea: @$('.equation_area')
+                grid: @level.grid
+                islandCoordinates: @level.islandCoordinates
+                nextLevel: => @nextLevel()
+                registerEvent: (eventInfo) => 
+                    
         @loadLevel()  
 
     initWorlds: ->

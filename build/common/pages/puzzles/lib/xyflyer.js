@@ -22,7 +22,7 @@ xyflyer.ViewHelper = (function() {
   function ViewHelper(_arg) {
     var boardElement, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent, this.islandCoordinates = _arg.islandCoordinates;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent;
     this.rings = [];
     this.board = new xyflyer.Board({
       el: boardElement,
@@ -43,6 +43,22 @@ xyflyer.ViewHelper = (function() {
     this.parser = require('./parser');
     this.initEquations();
   }
+
+  ViewHelper.prototype.reinitialize = function(_arg) {
+    var boardElement, objects;
+    this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates;
+    this.rings = [];
+    this.board.init({
+      el: boardElement,
+      grid: this.grid,
+      objects: objects,
+      islandCoordinates: this.islandCoordinates
+    });
+    this.complete = false;
+    this.plane.setBoard(this.board);
+    this.initEquations();
+    return this.resetLevel();
+  };
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
@@ -118,6 +134,7 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.resetLevel = function() {
     var ring, _i, _len, _ref1, _results;
+    this.complete = false;
     if (this.plane) {
       this.plane.reset();
     }

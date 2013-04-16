@@ -9,6 +9,7 @@ animation.Animation = (function() {
     this.calculation = calculation != null ? calculation : false;
     this.animations = [];
     this.animationIndex = 0;
+    this.id = new Date().getTime();
   }
 
   Animation.prototype.frame = function() {

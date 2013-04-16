@@ -6,18 +6,25 @@ class board.Board extends xyflyerObject.Object
     maxUnits: 10
 
     constructor: ({@el, @grid, @objects, @islandCoordinates, @resetLevel}) ->
+        @init
+            el: @el
+            grid: @grid
+            objects: @objects
+            islandCoordinates: @islandCoordinates
+        @load()
+
+    init: ({@el, @grid, @objects, @islandCoordinates}) ->
         @islandCoordinates or= {}
         @islandCoordinates.x = 0 if not @islandCoordinates.x
         @islandCoordinates.y = 0 if not @islandCoordinates.y
         @formulas = {}
         @rings = []
         @ringFronts = []
-        @init()
-
-    init: -> 
+        @load()
+        
+    load: -> 
         dimensions = @el.offset()
         @paper = Raphael(@el.attr('id'), dimensions.width, dimensions.height)
-        
         
         @width = dimensions.width
         @height = dimensions.height        
@@ -33,15 +40,17 @@ class board.Board extends xyflyerObject.Object
 
         @addIsland()
         @drawGrid() 
-        @initClicks()
+        @initClicks() 
         @initAnimation()
     
     initAnimation: ->
         @animationCtx1 = @createCanvas(1)
         @animationCtx2 = @createCanvas(3)
-        @animation = new Animation()
         @animationObjects = []
-        @animate()
+
+        unless @animation
+            @animation = new Animation()
+            @animate()
         
     addRing: (ring) -> @rings.push(ring)
         
