@@ -75,7 +75,6 @@ window.app = {
     for (asset in assets) {
       index = assets[asset];
       if (asset === 'background') {
-        console.log(this.dynamicContent.css('backgroundImage'));
         this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\.jpg/, "" + index + ".jpg"));
       } else {
         this.$(".objects ." + asset).removeClass(asset);
