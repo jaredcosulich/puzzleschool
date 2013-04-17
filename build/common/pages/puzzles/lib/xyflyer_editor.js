@@ -711,8 +711,8 @@ xyflyerEditor.EditorHelper = (function() {
         });
         break;
       default:
-        this.objects.find("." + type + " img").remove();
-        this.objects.find("." + type).html("<img src='" + src + ".png'/>");
+        this.objects.find("." + type).removeClass(type);
+        this.objects.find("." + type + index).addClass(type);
         this.initBoard({});
     }
     return this.handleModification();

@@ -438,8 +438,8 @@ class xyflyerEditor.EditorHelper
             when 'background'
                 @el.css(backgroundImage: "url(#{src}.jpg)")
             else
-                @objects.find(".#{type} img").remove()
-                @objects.find(".#{type}").html("<img src='#{src}.png'/>")
+                @objects.find(".#{type}").removeClass(type)
+                @objects.find(".#{type}#{index}").addClass(type)
                 @initBoard({})
         @handleModification()
                 
