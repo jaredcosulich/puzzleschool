@@ -254,7 +254,6 @@ soma.views({
       var asset, index, _ref,
         _this = this;
       this.dynamicContent.html(this.originalHTML);
-      $('svg').remove();
       _ref = this.level.assets || this.worlds[this.currentWorld()].assets || {
         person: 1,
         island: 1,

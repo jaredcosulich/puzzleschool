@@ -7,6 +7,7 @@ body {
 
 @height: 640px;
 @width: 960px;
+@equations_width: 360px;
 
 @darken: 10%;
 
@@ -34,9 +35,10 @@ body {
         }
     
         .board {
-            width: @height;
-            height: @height;
+            width: @width - @equations_width;
+            height: @width - @equations_width;
             float: left;
+            margin-top: (@height - (@width - @equations_width)) / 2;
             position: relative;   
         
             canvas {
@@ -48,8 +50,8 @@ body {
             background-color: white;
             .rounded(6px);
             opacity: 0.8;
-            width: ((@width / 3) - 3);
-            height: (@height - 6);
+            width: @equations_width - 3;
+            height: @height - 6;
             margin: 3px 0 0 3px;
             font-size: @h4size;
             float: right;
@@ -66,7 +68,7 @@ body {
                      width: 12px;
 
                      &:first-child {
-                         width: 30px;
+                         width: 21px;
                      }
                  
                      &:last-child {
@@ -74,8 +76,8 @@ body {
                      }
                  
                      &.with_component {
-                        width: auto;
-                        border-bottom: none;
+                         width: auto;
+                         border-bottom: none;
                      }
                  
                      &.only_area {
@@ -141,7 +143,7 @@ body {
                             border: 1px solid @darkgreen;
                             color: @darkgreen;
                             font-weight: bold;
-                            width: 45px;
+                            width: 30px;
                             &.with_component {
                                 width: auto;
                             }

@@ -15,9 +15,9 @@ levels.WORLDS = [
                                     {fragment: '+4', after: 'x'}
                                 ]
                         rings: [
-                            {x: -4, y: 0}
-                            {x: 0, y: 4}
-                            {x: 4, y: 8}
+                           {x: -4, y: 0}
+                           {x: 0, y: 4}
+                           {x: 4, y: 8}
                         ]
                         grid:
                             xMin: -15

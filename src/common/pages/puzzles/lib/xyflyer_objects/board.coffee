@@ -20,11 +20,12 @@ class board.Board extends xyflyerObject.Object
         @formulas = {}
         @rings = []
         @ringFronts = []
+        @clear()
         @load()
         
     load: -> 
         dimensions = @el.offset()
-        @paper = Raphael(@el.attr('id'), dimensions.width, dimensions.height)
+        @paper = Raphael(@el.attr('id'), dimensions.width, dimensions.height) unless @paper 
         
         @width = dimensions.width
         @height = dimensions.height        
@@ -423,5 +424,7 @@ class board.Board extends xyflyerObject.Object
         return path
     
     clear: ->
-        @paper.clear()
+        if @paper
+            @paper.remove()
+            delete @paper
         @el.find('canvas').remove()

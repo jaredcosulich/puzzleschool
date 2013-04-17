@@ -43,13 +43,16 @@ board.Board = (function(_super) {
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
+    this.clear();
     return this.load();
   };
 
   Board.prototype.load = function() {
     var dimensions, maxDimension;
     dimensions = this.el.offset();
-    this.paper = Raphael(this.el.attr('id'), dimensions.width, dimensions.height);
+    if (!this.paper) {
+      this.paper = Raphael(this.el.attr('id'), dimensions.width, dimensions.height);
+    }
     this.width = dimensions.width;
     this.height = dimensions.height;
     this.xUnit = this.width / (this.grid.xMax - this.grid.xMin);
@@ -627,7 +630,10 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.clear = function() {
-    this.paper.clear();
+    if (this.paper) {
+      this.paper.remove();
+      delete this.paper;
+    }
     return this.el.find('canvas').remove();
   };
 
