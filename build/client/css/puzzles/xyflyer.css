@@ -11,7 +11,6 @@ body {
 .xyflyer .dynamic_content {
   height: 640px;
   width: 960px;
-  background-image: url('/assets/images/puzzles/xyflyer/background1.jpg');
 }
 .xyflyer .dynamic_content.dragging {
   -webkit-touch-callout: none;
