@@ -90,6 +90,7 @@ soma.chunks
                 instructions: @levelInfo?.instructions
                 editor: @levelId == 'editor'
                 worlds: worlds
+                noBackground: @levelId == 'editor' or not @levelId
             )
             
         

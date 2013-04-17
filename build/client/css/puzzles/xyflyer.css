@@ -35,9 +35,8 @@ body {
 }
 .xyflyer .dynamic_content .board {
   width: 600px;
-  height: 600px;
+  height: 640px;
   float: left;
-  margin-top: 20px;
   position: relative;
 }
 .xyflyer .dynamic_content .board canvas {

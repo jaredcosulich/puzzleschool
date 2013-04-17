@@ -131,7 +131,8 @@ soma.chunks({
         classLevel: this.classLevelId || 0,
         instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0,
         editor: this.levelId === 'editor',
-        worlds: worlds
+        worlds: worlds,
+        noBackground: this.levelId === 'editor' || !this.levelId
       });
     }
   }
