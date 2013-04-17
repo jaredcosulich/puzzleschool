@@ -36,10 +36,11 @@ body {
   overflow: hidden;
 }
 .xyflyer .dynamic_content .board {
-  width: 640px;
-  height: 640px;
-  float: left;
-  position: relative;
+    width: 600px;
+    height: 600px;
+    float: left;
+    margin-top: 20px;
+    position: relative;
 }
 .xyflyer .dynamic_content .board canvas {
   position: absolute;
@@ -50,7 +51,7 @@ body {
   -moz-border-radius: 6px;
   border-radius: 6px;
   opacity: 0.8;
-  width: 317px;
+  width: 357px;
   height: 634px;
   margin: 3px 0 0 3px;
   font-size: 24px;
@@ -67,7 +68,7 @@ body {
   width: 12px;
 }
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment:first-child {
-  width: 24px;
+  width: 21px;
 }
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment:last-child {
   width: 45px;
