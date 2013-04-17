@@ -250,18 +250,50 @@ soma.views({
         }
       }
     },
+    currentStage: function() {
+      var level, stage, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+      if (!((_ref = this.level) != null ? _ref.id : void 0)) {
+        return 0;
+      }
+      _ref1 = this.worlds[this.currentWorld()].stages;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        stage = _ref1[_i];
+        _ref2 = stage.levels;
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          level = _ref2[_j];
+          if (level.id === this.level.id) {
+            return stage;
+          }
+        }
+      }
+    },
     load: function() {
-      var asset, index, _ref,
+      var asset, assets, index, _ref, _ref1, _ref2,
         _this = this;
       this.dynamicContent.html(this.originalHTML);
-      _ref = this.level.assets || this.worlds[this.currentWorld()].assets || {
+      assets = {
         person: 1,
         island: 1,
         plane: 1,
         background: 1
       };
+      _ref = this.worlds[this.currentWorld()].assets || {};
       for (asset in _ref) {
         index = _ref[asset];
+        assets[asset] = index;
+      }
+      _ref1 = this.currentStage().assets || {};
+      for (asset in _ref1) {
+        index = _ref1[asset];
+        assets[asset] = index;
+      }
+      _ref2 = this.level.assets || {};
+      for (asset in _ref2) {
+        index = _ref2[asset];
+        assets[asset] = index;
+      }
+      for (asset in assets) {
+        index = assets[asset];
         if (asset === 'background') {
           this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\./, "" + index + "."));
         } else {

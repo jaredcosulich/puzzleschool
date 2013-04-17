@@ -71,7 +71,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.addComponent = function(equationFragment) {
-    var equationComponent,
+    var equationComponent, firstFragmentOffset, fragmentsWidth, lastFragmentOffset, shift,
       _this = this;
     equationComponent = new EquationComponent({
       gameArea: this.gameArea,
@@ -85,6 +85,13 @@ equations.Equations = (function() {
     });
     equationComponent.appendTo(this.possibleFragments);
     this.equationComponents.push(equationComponent);
+    firstFragmentOffset = this.equationComponents[0].elementContainer.offset();
+    lastFragmentOffset = this.equationComponents[this.equationComponents.length - 1].elementContainer.offset();
+    fragmentsWidth = lastFragmentOffset.left + lastFragmentOffset.width - firstFragmentOffset.left;
+    shift = (this.possibleFragments.width() - fragmentsWidth) / 2;
+    this.equationComponents[0].elementContainer.css({
+      marginLeft: shift
+    });
     return equationComponent;
   };
 

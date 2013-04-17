@@ -228,8 +228,7 @@ body {
 .xyflyer .dynamic_content .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
-  /*            overflow: hidden;*/
-
+  text-align: center;
   position: relative;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
@@ -312,6 +311,9 @@ body {
 }
 .xyflyer .dynamic_content .hints {
   padding: 60px 0 0 6px;
+}
+.xyflyer .dynamic_content .hints h4 {
+  text-align: center;
 }
 .xyflyer .dynamic_content .hints .drag_this,
 .xyflyer .dynamic_content .hints .drop_here,
@@ -411,6 +413,7 @@ body {
   height: 74px;
   overflow: hidden;
 }
+.xyflyer .level_selector .world_links .world_link:hover img,
 .xyflyer .level_selector .world_links .world_link.selected img {
   margin-left: -72px;
 }

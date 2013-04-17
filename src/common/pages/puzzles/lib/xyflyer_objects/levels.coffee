@@ -857,6 +857,9 @@ levels.WORLDS = [
         ]
     }
     {
+        assets: 
+            background: 2
+            person: 2
         stages : [
             {
                 name: 'Shift And Slope'
@@ -2086,7 +2089,7 @@ levels.WORLDS = [
         assets: 
             background: 3
             island: 3
-            person: 2
+            person: 1
         stages: [
             {
                 name: 'Multiple Lines (Shifting)'
@@ -3487,6 +3490,10 @@ levels.WORLDS = [
         ]
     }
     {
+        assets: 
+            background: 4
+            island: 1
+            person: 2        
         stages: [
             {
                 name: 'Curves'
@@ -4971,6 +4978,10 @@ levels.WORLDS = [
         ]
     }
     {
+        assets: 
+            background: 5
+            island: 4
+            person: 3
         stages: [
             {
                 name: 'Multiple Curves'
@@ -5703,6 +5714,8 @@ levels.WORLDS = [
             }
             {
                 name: 'Crazy Curves'
+                assets:
+                    person: 4
                 levels: [
                     {
                         id: 1365008751620

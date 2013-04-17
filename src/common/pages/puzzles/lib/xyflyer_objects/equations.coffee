@@ -56,6 +56,13 @@ class equations.Equations
 
         equationComponent.appendTo(@possibleFragments)
         @equationComponents.push(equationComponent)
+
+        firstFragmentOffset = @equationComponents[0].elementContainer.offset()
+        lastFragmentOffset = @equationComponents[@equationComponents.length - 1].elementContainer.offset()
+        fragmentsWidth = lastFragmentOffset.left + lastFragmentOffset.width - firstFragmentOffset.left 
+        shift = ((@possibleFragments.width() - fragmentsWidth) / 2)
+        @equationComponents[0].elementContainer.css(marginLeft: shift)
+
         return equationComponent
         
     removeComponent: (equationComponent) ->

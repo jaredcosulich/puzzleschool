@@ -179,11 +179,22 @@ soma.views
                 for stage in world.stages
                     for level in stage.levels
                         return index if level.id == @level.id
+
+        currentStage: ->
+            return 0 if not @level?.id
+            for stage in @worlds[@currentWorld()].stages
+                for level in stage.levels
+                    return stage if level.id == @level.id
             
         load: ->
             @dynamicContent.html(@originalHTML)
             
-            for asset, index of @level.assets or @worlds[@currentWorld()].assets or {person: 1, island: 1, plane: 1, background: 1}
+            assets = {person: 1, island: 1, plane: 1, background: 1}
+            assets[asset] = index for asset, index of @worlds[@currentWorld()].assets or {}
+            assets[asset] = index for asset, index of @currentStage().assets or {}
+            assets[asset] = index for asset, index of @level.assets or {}
+            
+            for asset, index of assets 
                 if asset == 'background'
                     @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\./, "#{index}."))
                 else

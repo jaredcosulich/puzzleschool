@@ -228,7 +228,7 @@ body {
             .possible_fragments {
                 margin-top: 30px;
                 padding: 6px;
-    /*            overflow: hidden;*/
+                text-align: center;
                 position: relative;
             
                 p {
@@ -308,7 +308,10 @@ body {
         
         .hints {
             padding: 60px 0 0 6px;
-                
+            
+            h4 {
+                text-align: center;
+            }    
             .drag_this, .drop_here, .launch_hint {
                 position: absolute;
                 top: -1000px;
@@ -405,8 +408,10 @@ body {
                 width: 72px;
                 height: 74px;
                 overflow: hidden;
-                &.selected img {
-                    margin-left: -72px;
+                &:hover, &.selected {
+                    img {
+                        margin-left: -72px;
+                    }
                 }
             }
         }
