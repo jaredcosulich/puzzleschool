@@ -38,9 +38,14 @@ window.app =
             @$('.menu').one('touchend.menu', => @showLevelSelector())
             $(document.body).one('touchend.menu', => @$('.menu').unbind('touchend.menu'))
         
-        for asset, index of @level.assets or @worlds[@currentWorld()].assets or {}
+        assets = {person: 1, island: 1, plane: 1, background: 1}
+        assets[asset] = index for asset, index of @worlds[@currentWorld()].assets or {}
+        assets[asset] = index for asset, index of @currentStage().assets or {}
+        assets[asset] = index for asset, index of @level.assets or {}
+        
+        for asset, index of assets 
             if asset == 'background'
-                @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\./, "#{index}."))
+                @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\.jpg/, "#{index}.jpg"))
             else
                 @$(".objects .#{asset}").removeClass(asset)
                 @$(".objects .#{asset}#{index}").addClass(asset)
@@ -79,6 +84,12 @@ window.app =
             for stage in world.stages
                 for level in stage.levels
                     return index if level.id == @level.id
+    
+    currentStage: ->
+        return 0 if not @level?.id
+        for stage in @worlds[@currentWorld()].stages
+            for level in stage.levels
+                return stage if level.id == @level.id
         
     loadLevel: ->
         if @level?.fragments
