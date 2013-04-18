@@ -255,6 +255,25 @@ a {
 .home .section {
   width: 54em;
   margin: auto;
+  overflow: hidden;
+}
+.home .section .puzzle {
+  width: 50%;
+  border: 1px solid #ccc;
+  float: left;
+  overflow: hidden;
+}
+.home .section .puzzle h3 {
+  text-align: center;
+  padding: 3px;
+  background-color: #ccc;
+}
+.home .section .puzzle p {
+  padding: 6px;
+}
+.home .section .puzzle img {
+  float: left;
+  margin-right: 12px;
 }
 .home .section table {
   margin: auto;
@@ -266,19 +285,6 @@ a {
   width: 120px;
   height: 120px;
   text-align: center;
-}
-.home .section .example {
-  position: absolute;
-  background-color: white;
-  opacity: 0;
-  top: -1000px;
-  left: -1000px;
-  padding: 12px;
-  width: 330px;
-  border: 1px solid #24aac3;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
 }
 .puzzles #labs,
 .reviews #labs {

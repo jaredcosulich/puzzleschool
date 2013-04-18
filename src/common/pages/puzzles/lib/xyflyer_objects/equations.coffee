@@ -162,7 +162,7 @@ class equations.Equations
         offset = dragElement.offset()
         top = offset.top + offset.height - gameAreaOffset.top
         left = offset.left + (offset.width/2) - areaOffset.left
-    
+        
         dragThis = @$('.drag_this')
         dragThis.css
             opacity: 0

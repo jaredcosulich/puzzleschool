@@ -58,7 +58,7 @@ body {
 .xyflyer .dynamic_content .equation_area h2,
 .xyflyer .dynamic_content .equation_area h3 {
   text-align: center;
-  padding-top: 12px;
+  padding-top: 6px;
 }
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment {
   border-bottom: 2px solid #ffbd2a;
@@ -79,15 +79,9 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .menu {
   position: absolute;
-  right: 12px;
-  top: 12px;
-  background-color: #eee;
-  padding: 3px 6px;
-  font-size: 11px;
-  color: #262626;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  right: 0;
+  top: 3px;
+  padding: 6px;
 }
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 12px;
@@ -313,9 +307,9 @@ body {
 .xyflyer .dynamic_content .hints h4 {
   text-align: center;
 }
-.xyflyer .dynamic_content .hints .drag_this,
-.xyflyer .dynamic_content .hints .drop_here,
-.xyflyer .dynamic_content .hints .launch_hint {
+.xyflyer .dynamic_content .drag_this,
+.xyflyer .dynamic_content .drop_here,
+.xyflyer .dynamic_content .launch_hint {
   position: absolute;
   top: -1000px;
   left: -1000px;

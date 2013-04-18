@@ -60,7 +60,7 @@ body {
 .xyflyer .dynamic_content .equation_area h2,
 .xyflyer .dynamic_content .equation_area h3 {
   text-align: center;
-  padding-top: 12px;
+  padding-top: 6px;
 }
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment {
   border-bottom: 2px solid #ffbd2a;
@@ -79,18 +79,18 @@ body {
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment.only_area {
   width: 251px;
 }
+.xyflyer .dynamic_content .equation_area .header {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  padding: 6px;
+}
 .xyflyer .dynamic_content .equation_area .menu {
   position: absolute;
-  right: 12px;
-  top: 12px;
-  background-color: #eee;
-  padding: 3px 6px;
-  font-size: 24px;
-  color: #262626;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  cursor: pointer;
+  right: 0;
+  top: 0;
+  padding: 12px 6px 12px 12px;
+  font-size: 18px;
 }
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 45px;
@@ -311,13 +311,14 @@ body {
   -moz-box-shadow: 1px 2px 1px #b69c63;
 }
 .xyflyer .dynamic_content .hints {
+  font-size: 18px;
   position: absolute;
   bottom: 12px;
-  left: 40px;
+  left: 75px;
 }
-.xyflyer .dynamic_content .hints .drag_this,
-.xyflyer .dynamic_content .hints .drop_here,
-.xyflyer .dynamic_content .hints .launch_hint {
+.xyflyer .dynamic_content .drag_this,
+.xyflyer .dynamic_content .drop_here,
+.xyflyer .dynamic_content .launch_hint {
   position: absolute;
   top: -1000px;
   left: -1000px;
@@ -506,6 +507,7 @@ body {
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {
+/*
     .xyflyer {
         height: 768px;
         width: 1024px;
@@ -525,5 +527,27 @@ body {
         margin: 6px 0 0 0;
         height: 756px;
     }
-    
+*/    
+
+    .xyflyer {
+        margin-top: 64px;
+        height: 640px;
+        width: 1024px;
+    }
+
+    .xyflyer .dynamic_content {
+        height: 640px;
+        width: 1024px;
+    }
+
+    .xyflyer .dynamic_content .board { 
+        height: 640px;
+        width: 664px;
+    }
+
+    .xyflyer .dynamic_content .equation_area {
+        margin: 3px 3px 0 0;
+        height: 634px;
+    }
+
 }

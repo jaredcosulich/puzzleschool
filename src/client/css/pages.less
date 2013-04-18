@@ -51,6 +51,30 @@
     .section {
         width: @narrow_content_width;
         margin: auto;
+        overflow: hidden;
+        
+        .puzzle {
+            width: 50%;
+            border: 1px solid #ccc;
+            float: left;
+            overflow: hidden;
+            
+            h3 {
+                text-align: center;
+                padding: 3px;
+                background-color: #ccc;
+            }
+            
+            p {
+                padding: 6px;
+            }
+            
+            img {
+                float: left;
+                margin-right: 12px;
+            } 
+        }
+        
         table {
             margin: auto;
             td {
@@ -62,21 +86,7 @@
                 text-align: center;
             }
         }
-        
-        .example {
-            position: absolute;
-            background-color: white;
-            opacity: 0;
-            top: -1000px;
-            left: -1000px;
-            padding: 12px;
-            width: 330px;
-            border: 1px solid @blue;
-            .rounded(6px);
-        }
     }
-    
-    
 }
 
 .puzzles, .reviews {

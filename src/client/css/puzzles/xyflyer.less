@@ -57,7 +57,7 @@ body {
         
             h2, h3 {
                 text-align: center;
-                padding-top: 12px;
+                padding-top: 6px;
             }
         
             &.show_places {
@@ -86,13 +86,9 @@ body {
             
             .menu {
                 position: absolute;
-                right: 12px;
-                top: 12px;
-                background-color: #eee;
-                padding: 3px 6px;
-                font-size: @smallsize;
-                color: @black;
-                .rounded(3px);
+                right: 0;
+                top: 3px;
+                padding: 6px;
             }
         
             .equations {
@@ -310,12 +306,12 @@ body {
             h4 {
                 text-align: center;
             }    
-            .drag_this, .drop_here, .launch_hint {
-                position: absolute;
-                top: -1000px;
-                left: -1000px;
-                z-index: 99;
-            }
+        }
+        .drag_this, .drop_here, .launch_hint {
+            position: absolute;
+            top: -1000px;
+            left: -1000px;
+            z-index: 99;
         }
     
         .dialog {
