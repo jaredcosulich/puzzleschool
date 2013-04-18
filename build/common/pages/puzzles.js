@@ -58,6 +58,19 @@ soma.routes({
 
 PUZZLEDATA = [
   {
+    id: 'xyflyer',
+    title: 'XYFlyer',
+    website: '/puzzles/xyflyer',
+    thumbnail: '/assets/images/reviews/xyflyer.jpg',
+    company: 'The Puzzle School',
+    companyWebsite: 'http://puzzleschool.com',
+    material: 'Graphing Equations',
+    availability: 'Web, Mobile, Tablet',
+    cost: 'Free',
+    overall: {
+      explanation: "<p>\n    We had a simple goal with XYFlyer. We wanted to make it easy and fun for anyone to understand\n    the basics of equations and graphing.\n</p>\n<p>\n    Equations and graphing don't sound like fun? Give it a try and see.\n</p>\n<p>\n    We've created over 200 levels that get more and more challenging. \n    At the very least you'll gain a better visual intuition \n    about how equations graph out. You might actually find yourself enjoying it.\n</p>\n<p>\n    If you want to play around with creating your own levels, try out the \n    <a href='/puzzles/xyflyer/editor'>Level Editor</a>.\n</p>"
+    }
+  }, {
     id: 'architect',
     title: 'Architect',
     website: '/puzzles/architect',
@@ -75,19 +88,6 @@ PUZZLEDATA = [
 
 LABDATA = [
   {
-    id: 'xyflyer',
-    title: 'XYFlyer',
-    website: '/puzzles/xyflyer',
-    thumbnail: '/assets/images/reviews/xyflyer.jpg',
-    company: 'The Puzzle School',
-    companyWebsite: 'http://puzzleschool.com',
-    material: 'Graphing Equations',
-    availability: 'Web, Mobile, Tablet',
-    cost: 'Free',
-    overall: {
-      explanation: "<p>\n    We had a simple goal with XYFlyer. We wanted to make it easy and fun for students to become \n    comfortable with equations and graphing.\n</p>\n<p>\n    So we created a puzzle-game where students work directly with equations and graphs to solve simple \n    challenges.\n</p>\n<p>\n    XYFlyer requires no previous math experience. A beginner can start out playing and, with the help\n    of immediate feedback loops, gain some basic understanding and familiarity with equations and graphing.\n<p>\n    Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.\n</p>\n<p>\n    If you want to play around with creating your own levels, try out the \n    <a href='/puzzles/xyflyer/editor'>Level Editor</a>.\n</p>"
-    }
-  }, {
     id: 'language_scramble',
     title: 'Language Scramble',
     website: '/puzzles/language_scramble',

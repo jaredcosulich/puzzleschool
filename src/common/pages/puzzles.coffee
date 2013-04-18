@@ -40,6 +40,36 @@ soma.routes
     '/puzzles': -> new soma.chunks.Puzzles
 
 PUZZLEDATA = [{
+    id: 'xyflyer'
+    title: 'XYFlyer'
+    website: '/puzzles/xyflyer'
+    thumbnail: '/assets/images/reviews/xyflyer.jpg'
+    company: 'The Puzzle School'
+    companyWebsite: 'http://puzzleschool.com'
+    material: 'Graphing Equations'
+    availability: 'Web, Mobile, Tablet'
+    cost: 'Free'
+    overall:
+        explanation:
+            """
+            <p>
+                We had a simple goal with XYFlyer. We wanted to make it easy and fun for anyone to understand
+                the basics of equations and graphing.
+            </p>
+            <p>
+                Equations and graphing don't sound like fun? Give it a try and see.
+            </p>
+            <p>
+                We've created over 200 levels that get more and more challenging. 
+                At the very least you'll gain a better visual intuition 
+                about how equations graph out. You might actually find yourself enjoying it.
+            </p>
+            <p>
+                If you want to play around with creating your own levels, try out the 
+                <a href='/puzzles/xyflyer/editor'>Level Editor</a>.
+            </p>
+            """
+},{
     id: 'architect'
     title: 'Architect'
     website: '/puzzles/architect'
@@ -79,38 +109,6 @@ PUZZLEDATA = [{
 }]
 
 LABDATA = [{
-    id: 'xyflyer'
-    title: 'XYFlyer'
-    website: '/puzzles/xyflyer'
-    thumbnail: '/assets/images/reviews/xyflyer.jpg'
-    company: 'The Puzzle School'
-    companyWebsite: 'http://puzzleschool.com'
-    material: 'Graphing Equations'
-    availability: 'Web, Mobile, Tablet'
-    cost: 'Free'
-    overall:
-        explanation:
-            """
-            <p>
-                We had a simple goal with XYFlyer. We wanted to make it easy and fun for students to become 
-                comfortable with equations and graphing.
-            </p>
-            <p>
-                So we created a puzzle-game where students work directly with equations and graphs to solve simple 
-                challenges.
-            </p>
-            <p>
-                XYFlyer requires no previous math experience. A beginner can start out playing and, with the help
-                of immediate feedback loops, gain some basic understanding and familiarity with equations and graphing.
-            <p>
-                Right now XYFlyer is in an early beta, so there may be bugs and there are only a handful of levels.
-            </p>
-            <p>
-                If you want to play around with creating your own levels, try out the 
-                <a href='/puzzles/xyflyer/editor'>Level Editor</a>.
-            </p>
-            """
-}, {
     id: 'language_scramble'
     title: 'Language Scramble'
     website: '/puzzles/language_scramble'
