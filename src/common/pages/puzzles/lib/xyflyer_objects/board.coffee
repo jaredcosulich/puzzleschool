@@ -128,21 +128,23 @@ class board.Board extends xyflyerObject.Object
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
         
-    offsetX: (e) => if e.pageX then (e.pageX - @el.offset().left) else (e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX)
-    offsetY: (e) => if e.pageY then (e.pageY - @el.offset().top) else (e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY)
+    offsetX: (e) => (if e.pageX then e.pageX else (e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX)) - @el.offset().left
+    offsetY: (e) => (if e.pageY then e.pageY else (e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY)) - @el.offset().top
     
     initClicks: ->
         @el.css(zIndex: 97)
         @el.bind 'mousedown.showxy touchstart.showxy', (e) =>
-            @el.one 'mouseup.showxy touchend.showxy', (e) =>
-                result = @findNearestXOnPath(@offsetX(e), @offsetY(e))
-                onPath = result.x
-                if result.formulas.length
-                    formula1 = result.formulas[0]
-                    y = @screenY(formula1.formula(@paperX(result.x)))
-                    @showXY(result.x, y, true)
-                else
-                    @showXY(@offsetX(e), @offsetY(e))
+            return if @clickHandled
+            @clickHandled = true
+            $.timeout 500, => @clickHandled = false
+            result = @findNearestXOnPath(@offsetX(e), @offsetY(e))
+            onPath = result.x
+            if result.formulas.length
+                formula1 = result.formulas[0]
+                y = @screenY(formula1.formula(@paperX(result.x)))
+                @showXY(result.x, y, true)
+            else
+                @showXY(@offsetX(e), @offsetY(e))
 
     findNearestXOnPath: (x, y, formulas=@formulas, precision=0) ->
         distances = {}

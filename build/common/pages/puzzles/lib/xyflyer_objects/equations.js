@@ -88,7 +88,7 @@ equations.Equations = (function() {
     firstFragmentOffset = this.equationComponents[0].elementContainer.offset();
     lastFragmentOffset = this.equationComponents[this.equationComponents.length - 1].elementContainer.offset();
     fragmentsWidth = lastFragmentOffset.left + lastFragmentOffset.width - firstFragmentOffset.left;
-    shift = (this.possibleFragments.width() - fragmentsWidth) / 2;
+    shift = ((this.possibleFragments.width() - fragmentsWidth) / 2) - 6;
     this.equationComponents[0].elementContainer.css({
       marginLeft: shift
     });

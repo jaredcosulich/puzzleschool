@@ -233,17 +233,14 @@ body {
   position: relative;
   text-align: center;
 }
-.xyflyer .dynamic_content .equation_area .possible_fragments h4 {
-  margin: 0;
-  font-size: 18px;
-}
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
-  margin: 6px 0 18px;
-  font-size: 12px;
+  margin: 6px 0;
+  font-size: 15px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
-  padding: 6px;
+  padding: 12px;
   float: left;
+  font-size: 27px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container .equation_component {
   cursor: move;
@@ -315,7 +312,7 @@ body {
 }
 .xyflyer .dynamic_content .hints {
   position: absolute;
-  bottom: 30px;
+  bottom: 12px;
   left: 40px;
 }
 .xyflyer .dynamic_content .hints .drag_this,

@@ -176,20 +176,12 @@ board.Board = (function(_super) {
 
   Board.prototype.offsetX = function(e) {
     var _ref, _ref1, _ref2, _ref3;
-    if (e.pageX) {
-      return e.pageX - this.el.offset().left;
-    } else {
-      return ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0);
-    }
+    return (e.pageX ? e.pageX : ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0)) - this.el.offset().left;
   };
 
   Board.prototype.offsetY = function(e) {
     var _ref, _ref1, _ref2, _ref3;
-    if (e.pageY) {
-      return e.pageY - this.el.offset().top;
-    } else {
-      return ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0);
-    }
+    return (e.pageY ? e.pageY : ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0)) - this.el.offset().top;
   };
 
   Board.prototype.initClicks = function() {
@@ -198,18 +190,23 @@ board.Board = (function(_super) {
       zIndex: 97
     });
     return this.el.bind('mousedown.showxy touchstart.showxy', function(e) {
-      return _this.el.one('mouseup.showxy touchend.showxy', function(e) {
-        var formula1, onPath, result, y;
-        result = _this.findNearestXOnPath(_this.offsetX(e), _this.offsetY(e));
-        onPath = result.x;
-        if (result.formulas.length) {
-          formula1 = result.formulas[0];
-          y = _this.screenY(formula1.formula(_this.paperX(result.x)));
-          return _this.showXY(result.x, y, true);
-        } else {
-          return _this.showXY(_this.offsetX(e), _this.offsetY(e));
-        }
+      var formula1, onPath, result, y;
+      if (_this.clickHandled) {
+        return;
+      }
+      _this.clickHandled = true;
+      $.timeout(500, function() {
+        return _this.clickHandled = false;
       });
+      result = _this.findNearestXOnPath(_this.offsetX(e), _this.offsetY(e));
+      onPath = result.x;
+      if (result.formulas.length) {
+        formula1 = result.formulas[0];
+        y = _this.screenY(formula1.formula(_this.paperX(result.x)));
+        return _this.showXY(result.x, y, true);
+      } else {
+        return _this.showXY(_this.offsetX(e), _this.offsetY(e));
+      }
     });
   };
 
