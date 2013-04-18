@@ -508,24 +508,25 @@ body {
   vertical-align: middle;
 }
 
-
-/*
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+@media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {
     .xyflyer {
-        height: 748px;
+        height: 768px;
         width: 1024px;
     }
     
-    .xyflyer .board { 
-        height: 748px;
-        width: 702px;
-        margin-left: -6px;
+    .xyflyer .dynamic_content {
+        height: 768px;
+        width: 1024px;
     }
     
-    .xyflyer .equation_area {
-        margin: 6px 6px 0 0;
-        height: 736px;
+    .xyflyer .dynamic_content .board { 
+        height: 768px;
+        width: 667px;
     }
-
+    
+    .xyflyer .dynamic_content .equation_area {
+        margin: 6px 0 0 0;
+        height: 756px;
+    }
+    
 }
-*/

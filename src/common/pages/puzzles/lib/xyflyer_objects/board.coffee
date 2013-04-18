@@ -252,7 +252,7 @@ class board.Board extends xyflyerObject.Object
             gridString += "L#{mark},#{@yAxis - 10}"
             unless mark > @width
                 value = Math.round(@grid.xMin + (mark / @xUnit))
-                offset = if value < 0 then 6 else -6
+                offset = if value < 0 then 8 else -8
                 text = @paper.text(mark + offset, @yAxis - 6, value)
                 text.attr(stroke: 'none', fill: color)
 
@@ -272,7 +272,7 @@ class board.Board extends xyflyerObject.Object
             unless mark > @height
                 value = Math.round(@grid.yMax - (mark / @yUnit))
                 offset = if value > 0 then 6 else -6
-                text = @paper.text(@xAxis - 6, mark + offset, value)
+                text = @paper.text(@xAxis - 8, mark + offset, value)
                 text.attr(stroke: 'none', fill: color)
                 
         label = @paper.text(@xAxis + 7, 24, 'Y Axis')

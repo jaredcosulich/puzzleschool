@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name = "format-detection" content = "telephone=no"/>
-        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
         
         <!--<script src="http://debug-software.intel.com/target/target-script-min.js#xyflyer"></script>-->
 
@@ -44,6 +44,7 @@
             var onDeviceReady = function() {
                 //user AppMobi viewport
                 // AppMobi.display.useViewport(748,1024);
+                AppMobi.device.hideStatusBar();
                 AppMobi.display.useViewport(640,960);
 
                 //lock orientation

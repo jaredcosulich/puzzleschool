@@ -398,7 +398,7 @@ board.Board = (function(_super) {
       gridString += "L" + mark + "," + (this.yAxis - 10);
       if (!(mark > this.width)) {
         value = Math.round(this.grid.xMin + (mark / this.xUnit));
-        offset = value < 0 ? 6 : -6;
+        offset = value < 0 ? 8 : -8;
         text = this.paper.text(mark + offset, this.yAxis - 6, value);
         text.attr({
           stroke: 'none',
@@ -429,7 +429,7 @@ board.Board = (function(_super) {
       if (!(mark > this.height)) {
         value = Math.round(this.grid.yMax - (mark / this.yUnit));
         offset = value > 0 ? 6 : -6;
-        text = this.paper.text(this.xAxis - 6, mark + offset, value);
+        text = this.paper.text(this.xAxis - 8, mark + offset, value);
         text.attr({
           stroke: 'none',
           fill: color
