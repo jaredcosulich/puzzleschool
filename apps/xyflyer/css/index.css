@@ -230,12 +230,16 @@ body {
 .xyflyer .dynamic_content .equation_area .possible_fragments {
   margin-top: 30px;
   padding: 6px;
-  /*            overflow: hidden;*/
-
   position: relative;
+  text-align: center;
+}
+.xyflyer .dynamic_content .equation_area .possible_fragments h4 {
+  margin: 0;
+  font-size: 18px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
-  font-size: 11px;
+  margin: 6px 0 18px;
+  font-size: 12px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
   padding: 6px;
@@ -310,8 +314,9 @@ body {
   -moz-box-shadow: 1px 2px 1px #b69c63;
 }
 .xyflyer .dynamic_content .hints {
-  padding: 60px 0 0 6px;
-  text-align: center;
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
 }
 .xyflyer .dynamic_content .hints .drag_this,
 .xyflyer .dynamic_content .hints .drop_here,
