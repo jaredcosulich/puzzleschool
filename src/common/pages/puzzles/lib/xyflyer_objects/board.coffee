@@ -251,12 +251,14 @@ class board.Board extends xyflyerObject.Object
             gridString += "M#{mark},#{@yAxis + 10}"
             gridString += "L#{mark},#{@yAxis - 10}"
             unless mark > @width
-                text = @paper.text(mark + 6, @yAxis - 6, Math.round(@grid.xMin + (mark / @xUnit)))
+                value = Math.round(@grid.xMin + (mark / @xUnit))
+                offset = if value < 0 then 6 else -6
+                text = @paper.text(mark + offset, @yAxis - 6, value)
                 text.attr(stroke: 'none', fill: color)
 
-        label = @paper.text(24, @yAxis + 6, 'X Axis')
+        label = @paper.text(24, @yAxis + 7, 'X Axis')
         label.attr(stroke: 'none', fill: color)
-        label = @paper.text(@width - 24, @yAxis + 6, 'X Axis')
+        label = @paper.text(@width - 24, @yAxis + 7, 'X Axis')
         label.attr(stroke: 'none', fill: color)
 
         yUnits = @height / @yUnit
@@ -268,15 +270,14 @@ class board.Board extends xyflyerObject.Object
             gridString += "M#{@xAxis + 10},#{mark}"
             gridString += "L#{@xAxis - 10},#{mark}"
             unless mark > @height
-                text = @paper.text(@xAxis + 6, mark - 6, Math.round(@grid.yMax - (mark / @yUnit)))
+                value = Math.round(@grid.yMax - (mark / @yUnit))
+                offset = if value > 0 then 6 else -6
+                text = @paper.text(@xAxis - 6, mark + offset, value)
                 text.attr(stroke: 'none', fill: color)
-                if mark == 0       
-                    label = @paper.text(@xAxis + 6, mark - 6, 'Y Axis')
-                    label.attr(stroke: 'none', fill: color)
                 
-        label = @paper.text(@xAxis - 6, 24, 'Y Axis')
+        label = @paper.text(@xAxis + 7, 24, 'Y Axis')
         label.attr(stroke: 'none', fill: color, transform: 'r270')
-        label = @paper.text(@xAxis - 6, @height - 24, 'Y Axis')
+        label = @paper.text(@xAxis + 7, @height - 24, 'Y Axis')
         label.attr(stroke: 'none', fill: color, transform: 'r270')
 
         grid = @paper.path(gridString)

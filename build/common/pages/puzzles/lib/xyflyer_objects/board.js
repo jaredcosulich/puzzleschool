@@ -383,7 +383,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawGrid = function() {
-    var color, grid, gridString, increment, label, mark, multiple, start, text, xUnits, yUnits, _i, _j, _ref;
+    var color, grid, gridString, increment, label, mark, multiple, offset, start, text, value, xUnits, yUnits, _i, _j, _ref;
     gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
     color = 'rgba(255,255,255,0.4)';
     xUnits = this.width / this.xUnit;
@@ -397,19 +397,21 @@ board.Board = (function(_super) {
       gridString += "M" + mark + "," + (this.yAxis + 10);
       gridString += "L" + mark + "," + (this.yAxis - 10);
       if (!(mark > this.width)) {
-        text = this.paper.text(mark + 6, this.yAxis - 6, Math.round(this.grid.xMin + (mark / this.xUnit)));
+        value = Math.round(this.grid.xMin + (mark / this.xUnit));
+        offset = value < 0 ? 6 : -6;
+        text = this.paper.text(mark + offset, this.yAxis - 6, value);
         text.attr({
           stroke: 'none',
           fill: color
         });
       }
     }
-    label = this.paper.text(24, this.yAxis + 6, 'X Axis');
+    label = this.paper.text(24, this.yAxis + 7, 'X Axis');
     label.attr({
       stroke: 'none',
       fill: color
     });
-    label = this.paper.text(this.width - 24, this.yAxis + 6, 'X Axis');
+    label = this.paper.text(this.width - 24, this.yAxis + 7, 'X Axis');
     label.attr({
       stroke: 'none',
       fill: color
@@ -425,27 +427,22 @@ board.Board = (function(_super) {
       gridString += "M" + (this.xAxis + 10) + "," + mark;
       gridString += "L" + (this.xAxis - 10) + "," + mark;
       if (!(mark > this.height)) {
-        text = this.paper.text(this.xAxis + 6, mark - 6, Math.round(this.grid.yMax - (mark / this.yUnit)));
+        value = Math.round(this.grid.yMax - (mark / this.yUnit));
+        offset = value > 0 ? 6 : -6;
+        text = this.paper.text(this.xAxis - 6, mark + offset, value);
         text.attr({
           stroke: 'none',
           fill: color
         });
-        if (mark === 0) {
-          label = this.paper.text(this.xAxis + 6, mark - 6, 'Y Axis');
-          label.attr({
-            stroke: 'none',
-            fill: color
-          });
-        }
       }
     }
-    label = this.paper.text(this.xAxis - 6, 24, 'Y Axis');
+    label = this.paper.text(this.xAxis + 7, 24, 'Y Axis');
     label.attr({
       stroke: 'none',
       fill: color,
       transform: 'r270'
     });
-    label = this.paper.text(this.xAxis - 6, this.height - 24, 'Y Axis');
+    label = this.paper.text(this.xAxis + 7, this.height - 24, 'Y Axis');
     label.attr({
       stroke: 'none',
       fill: color,
