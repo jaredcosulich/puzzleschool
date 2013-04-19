@@ -67,8 +67,8 @@ class equationComponent.EquationComponent
     move: (e) ->
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
-        y = @clientY(e)       
-        y -= 30 if e.type.match(/touch/)
+        y = @clientY(e) 
+        y -= 30 / (window.appScale or 1) if e.type.match(/touch/)
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
         dy = y - offset.top - (offset.height/2) + @gameAreaOffset.top

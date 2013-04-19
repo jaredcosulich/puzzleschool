@@ -120,7 +120,7 @@ equationComponent.EquationComponent = (function() {
     x = this.clientX(e);
     y = this.clientY(e);
     if (e.type.match(/touch/)) {
-      y -= 30;
+      y -= 30 / (window.appScale || 1);
     }
     offset = this.element.offset();
     dx = x - offset.left - (offset.width / 2) + this.gameAreaOffset.left;

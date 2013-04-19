@@ -428,6 +428,10 @@ body {
                     width: 44px;
                     height: 44px;
                     background:url('/assets/images/puzzles/xyflyer/level.png') 0 0;
+                    &:active {
+                        background-position: 0 -44px;
+                    }                                        
+
                     &.locked {
                         background-position: -44px 0;
                     }
@@ -435,10 +439,6 @@ body {
                     &.completed {
                         background-position: -88px 0;
                     }
-
-                    &:active {
-                        background-position: 0 -44px;
-                    }                                        
                 }
             }
         }

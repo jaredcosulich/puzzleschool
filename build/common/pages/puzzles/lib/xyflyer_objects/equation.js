@@ -157,7 +157,8 @@ equation.Equation = (function() {
       dropArea.parentArea.dirtyCount -= 1;
     }
     this.initVariables();
-    return this.plot(this);
+    this.plot(this);
+    return dropArea.component.move(e);
   };
 
   Equation.prototype.removeDropArea = function(dropAreaToRemove) {

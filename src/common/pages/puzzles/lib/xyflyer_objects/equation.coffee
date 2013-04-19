@@ -95,6 +95,9 @@ class equation.Equation
         dropArea.parentArea.dirtyCount -= 1 if dropArea.parentArea
         @initVariables()
         @plot(@)
+        
+        dropArea.component.move(e)
+        
             
     removeDropArea: (dropAreaToRemove) ->
         removeIndex = -1

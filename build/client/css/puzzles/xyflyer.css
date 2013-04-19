@@ -431,14 +431,14 @@ body {
   height: 44px;
   background: url('/assets/images/puzzles/xyflyer/level.png') 0 0;
 }
+.xyflyer .level_selector .world .stage .level:active {
+  background-position: 0 -44px;
+}
 .xyflyer .level_selector .world .stage .level.locked {
   background-position: -44px 0;
 }
 .xyflyer .level_selector .world .stage .level.completed {
   background-position: -88px 0;
-}
-.xyflyer .level_selector .world .stage .level:active {
-  background-position: 0 -44px;
 }
 .xyflyer .blue_button,
 .xyflyer .red_button {
