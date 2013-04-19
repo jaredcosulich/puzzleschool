@@ -296,7 +296,9 @@ soma.views({
       for (asset in assets) {
         index = assets[asset];
         if (asset === 'background') {
-          this.dynamicContent.css('backgroundImage', "url('/assets/images/puzzles/xyflyer/background" + index + ".jpg')");
+          if ((this.dynamicContent.css('backgroundImage') || '').indexOf("background" + index + ".jpg") === -1) {
+            this.dynamicContent.css('backgroundImage', "url('/assets/images/puzzles/xyflyer/background" + index + ".jpg')");
+          }
         } else {
           this.$(".objects ." + asset).removeClass(asset);
           this.$(".objects ." + asset + index).addClass(asset);

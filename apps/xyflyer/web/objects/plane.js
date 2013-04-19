@@ -125,8 +125,8 @@ plane.Plane = (function(_super) {
     this.path = null;
     this.falling = true;
     x = this.xPos + this.board.xAxis + 20;
-    y = 1000;
-    return this.animate(x, y, 3000, function() {
+    y = this.board.height * 1.2;
+    return this.animate(x, y, 2000, function() {
       return _this.board.resetLevel();
     });
   };

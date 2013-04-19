@@ -197,7 +197,8 @@ soma.views
             
             for asset, index of assets 
                 if asset == 'background'
-                    @dynamicContent.css('backgroundImage', "url('/assets/images/puzzles/xyflyer/background#{index}.jpg')")
+                    if (@dynamicContent.css('backgroundImage') or '').indexOf("background#{index}.jpg") == -1
+                        @dynamicContent.css('backgroundImage', "url('/assets/images/puzzles/xyflyer/background#{index}.jpg')")
                 else
                     @$(".objects .#{asset}").removeClass(asset)
                     @$(".objects .#{asset}#{index}").addClass(asset)

@@ -78,8 +78,8 @@ class plane.Plane extends xyflyerObject.Object
         @path = null
         @falling = true
         x = @xPos + @board.xAxis + 20
-        y = 1000
-        @animate(x, y, 3000, => @board.resetLevel()) 
+        y = @board.height * 1.2
+        @animate(x, y, 2000, => @board.resetLevel()) 
     
     launch: (force) ->
         return if @falling or @cancelFlight and not force
