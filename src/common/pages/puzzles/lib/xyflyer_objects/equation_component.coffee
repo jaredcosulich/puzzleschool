@@ -42,14 +42,11 @@ class equationComponent.EquationComponent
         return if @offset
         @offset = @element.offset()
         @gameAreaOffset = @gameArea.offset()
-        @placeHolder.css
-            position: 'absolute'
-            top: @offset.top - @container.offset().top
-            left: @offset.left - @container.offset().left
 
     mousedown: (e) ->
         e.preventDefault() if e.preventDefault
         @initMeasurements()
+        @move(e)
         
         @gameArea.addClass('dragging')
         body = $(document.body)
@@ -58,7 +55,12 @@ class equationComponent.EquationComponent
         body.one 'mouseup.drag touchend.drag', (e) => @endMove(e) 
         @element.css(visibility: 'visible')
         @setDragging()
-        @move(e)
+
+        @placeHolder.css
+            position: 'absolute'
+            top: @offset.top - @container.offset().top
+            left: @offset.left - @container.offset().left
+
         
     setDragging: ->
         @element.addClass('dragging')

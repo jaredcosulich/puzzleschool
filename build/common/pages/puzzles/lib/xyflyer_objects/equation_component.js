@@ -77,12 +77,7 @@ equationComponent.EquationComponent = (function() {
       return;
     }
     this.offset = this.element.offset();
-    this.gameAreaOffset = this.gameArea.offset();
-    return this.placeHolder.css({
-      position: 'absolute',
-      top: this.offset.top - this.container.offset().top,
-      left: this.offset.left - this.container.offset().left
-    });
+    return this.gameAreaOffset = this.gameArea.offset();
   };
 
   EquationComponent.prototype.mousedown = function(e) {
@@ -92,6 +87,7 @@ equationComponent.EquationComponent = (function() {
       e.preventDefault();
     }
     this.initMeasurements();
+    this.move(e);
     this.gameArea.addClass('dragging');
     body = $(document.body);
     body.bind('mousemove.drag touchmove.drag', function(e) {
@@ -104,7 +100,11 @@ equationComponent.EquationComponent = (function() {
       visibility: 'visible'
     });
     this.setDragging();
-    return this.move(e);
+    return this.placeHolder.css({
+      position: 'absolute',
+      top: this.offset.top - this.container.offset().top,
+      left: this.offset.left - this.container.offset().left
+    });
   };
 
   EquationComponent.prototype.setDragging = function() {
