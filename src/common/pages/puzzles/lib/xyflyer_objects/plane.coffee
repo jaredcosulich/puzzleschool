@@ -26,12 +26,12 @@ class plane.Plane extends xyflyerObject.Object
             position.ring.highlight() if position.ring
             @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
                     
-        if @path
+        if @path 
             position = @path[Math.round((@latestTime-@startTime)/@timeFactor*10)]
-            if !position   
+            if !position or @path.distance == 0   
                 keys = Object.keys(@path)
                 lastPosition = @path[keys[keys.length - 2]]
-                if @xPos == lastPosition.x and @yPos == lastPosition.y
+                if @path.distance == 0 or @xPos == lastPosition.x and @yPos == lastPosition.y
                     @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
                 else
                     moveTo(lastPosition)
@@ -53,6 +53,7 @@ class plane.Plane extends xyflyerObject.Object
         @timeFactor = 2.5/@scale
     
     move: (x, y, next) ->
+        return if not x or not y
         @currentXPos = x
         @currentYPos = y
         setTimeout((=> @track(x: x, y: y, width: @width, height: @height)), 0)
@@ -75,8 +76,8 @@ class plane.Plane extends xyflyerObject.Object
     
     fall: ->
         return if @falling
-        @path = null
         @falling = true
+        @path = null
         x = @xPos + @board.xAxis + 20
         y = @board.height * 1.2
         @animate(x, y, 2000, => @board.resetLevel()) 
@@ -106,6 +107,8 @@ class plane.Plane extends xyflyerObject.Object
         @cancelFlight = true
         @startTime = null
         @latestTime = null
+        @endingX = null
+        @endingY = null
         @path = null
         @size()
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)

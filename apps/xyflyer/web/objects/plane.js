@@ -53,10 +53,10 @@ plane.Plane = (function(_super) {
     };
     if (this.path) {
       position = this.path[Math.round((this.latestTime - this.startTime) / this.timeFactor * 10)];
-      if (!position) {
+      if (!position || this.path.distance === 0) {
         keys = Object.keys(this.path);
         lastPosition = this.path[keys[keys.length - 2]];
-        if (this.xPos === lastPosition.x && this.yPos === lastPosition.y) {
+        if (this.path.distance === 0 || this.xPos === lastPosition.x && this.yPos === lastPosition.y) {
           if (!(this.board.paperY(this.currentYPos) > this.board.grid.yMax)) {
             this.fall();
           }
@@ -79,6 +79,9 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.move = function(x, y, next) {
     var _this = this;
+    if (!x || !y) {
+      return;
+    }
     this.currentXPos = x;
     this.currentYPos = y;
     setTimeout((function() {
@@ -122,8 +125,8 @@ plane.Plane = (function(_super) {
     if (this.falling) {
       return;
     }
-    this.path = null;
     this.falling = true;
+    this.path = null;
     x = this.xPos + this.board.xAxis + 20;
     y = this.board.height * 1.2;
     return this.animate(x, y, 2000, function() {
@@ -162,6 +165,8 @@ plane.Plane = (function(_super) {
     this.cancelFlight = true;
     this.startTime = null;
     this.latestTime = null;
+    this.endingX = null;
+    this.endingY = null;
     this.path = null;
     this.size();
     this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit);
