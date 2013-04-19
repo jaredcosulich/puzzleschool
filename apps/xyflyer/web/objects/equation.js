@@ -112,14 +112,15 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.removeFragment = function(dropArea, e) {
-    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
+    var childArea, component, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
       _this = this;
     this.el.find('.accept_component').removeClass('accept_component');
     this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
-    dropArea.component.mousedown(e);
-    dropArea.component.move(e);
+    component = dropArea.component;
+    component.mousedown(e);
+    component.move(e);
     dropArea.element.removeClass('with_component');
-    dropArea.component.after = null;
+    component.after = null;
     dropArea.component = null;
     _ref = dropArea.childAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -158,7 +159,7 @@ equation.Equation = (function() {
     }
     this.initVariables();
     this.plot(this);
-    return dropArea.component.move(e);
+    return component.move(e);
   };
 
   Equation.prototype.removeDropArea = function(dropAreaToRemove) {

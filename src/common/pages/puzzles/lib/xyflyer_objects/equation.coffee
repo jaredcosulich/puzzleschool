@@ -67,12 +67,13 @@ class equation.Equation
         @el.find('.accept_component').removeClass('accept_component')
         @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
         
-        dropArea.component.mousedown(e)
-        dropArea.component.move(e)
+        component = dropArea.component
+        component.mousedown(e)
+        component.move(e)
         
         dropArea.element.removeClass('with_component')
         
-        dropArea.component.after = null    
+        component.after = null    
         dropArea.component = null
         
         @removeDropArea(childArea) for childArea in dropArea.childAreas
@@ -96,7 +97,7 @@ class equation.Equation
         @initVariables()
         @plot(@)
         
-        dropArea.component.move(e)
+        component.move(e)
         
             
     removeDropArea: (dropAreaToRemove) ->
