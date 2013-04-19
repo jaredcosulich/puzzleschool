@@ -386,7 +386,7 @@ body {
   background-color: #fafafa;
   border: 2px solid #a61c0e;
   width: 780px;
-  height: 520px;
+  height: 534px;
   overflow: auto;
   padding: 12px;
   z-index: 99;
@@ -429,7 +429,7 @@ body {
   background-color: #eee;
   padding-top: 12px;
   margin: 12px auto 0 auto;
-  width: 762px;
+  width: 750px;
   overflow: hidden;
 }
 .xyflyer .level_selector .world .stage h4 {
@@ -438,19 +438,19 @@ body {
 .xyflyer .level_selector .world .stage .level {
   display: block;
   float: left;
-  margin: 0 0 30px 30px;
-  width: 44px;
-  height: 44px;
-  background: url('images/level.png') 0 0;
+  margin: 0 0 18px 18px;
+  width: 55px;
+  height: 55px;
+  background: url('images/level_large.png') 0 0;
 }
 .xyflyer .level_selector .world .stage .level.locked {
-  background-position: -44px 0;
+  background-position: -55px 0;
 }
 .xyflyer .level_selector .world .stage .level.completed {
-  background-position: -88px 0;
+  background-position: -110px 0;
 }
 .xyflyer .level_selector .world .stage .level.clicking {
-  background-position: 0 -44px;
+  background-position: 0 -55px;
 }
 .xyflyer .blue_button,
 .xyflyer .red_button {
