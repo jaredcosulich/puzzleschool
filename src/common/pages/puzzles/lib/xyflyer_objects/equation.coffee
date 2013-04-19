@@ -53,7 +53,7 @@ class equation.Equation
             
         @el.bind 'mouseout.fragment', => @clear()
         
-        @el.bind 'mousedown.fragment touchstart.fragment', (e) => 
+        @el.bind 'mousedown.fragment', (e) => 
             if not @selectedDropArea
                 @selectedDropArea = @overlappingDropAreas
                     x: @clientX(e)
@@ -64,12 +64,12 @@ class equation.Equation
             @removeFragment(@selectedDropArea, e)
 
     removeFragment: (dropArea, e) ->
-        @el.find('.accept_component').removeClass('accept_component')
-        @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
-        
         component = dropArea.component
         component.mousedown(e)
         component.move(e)
+
+        @el.find('.accept_component').removeClass('accept_component')
+        @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
         
         dropArea.element.removeClass('with_component')
         
@@ -193,11 +193,17 @@ class equation.Equation
         @wrap(dropArea)
         @initVariables()
         dropArea.width = dropArea.element.width()
+        
+        element.bind 'touchstart.remove', (e) =>
+            return if dropArea.dirtyCount or !dropArea.component
+            @removeFragment(dropArea, e)
+        
         component.placeHolder.unbind('mousedown.placeholder touchstart.placeholder')
         component.placeHolder.bind 'mousedown.placeholder touchstart.placeholder', (e) =>
             component.placeHolder.one 'mouseup.placeholder touchend.placeholder', (e) =>
                 @removeFragment(dropArea, e)
                 component.endMove(e)        
+        
         @recordComponentPositions()
         @plot(@)
             

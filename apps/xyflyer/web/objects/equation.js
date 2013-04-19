@@ -93,7 +93,7 @@ equation.Equation = (function() {
     this.el.bind('mouseout.fragment', function() {
       return _this.clear();
     });
-    return this.el.bind('mousedown.fragment touchstart.fragment', function(e) {
+    return this.el.bind('mousedown.fragment', function(e) {
       var _ref, _ref1;
       if (!_this.selectedDropArea) {
         _this.selectedDropArea = _this.overlappingDropAreas({
@@ -114,11 +114,11 @@ equation.Equation = (function() {
   Equation.prototype.removeFragment = function(dropArea, e) {
     var childArea, component, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
       _this = this;
-    this.el.find('.accept_component').removeClass('accept_component');
-    this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     component = dropArea.component;
     component.mousedown(e);
     component.move(e);
+    this.el.find('.accept_component').removeClass('accept_component');
+    this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.element.removeClass('with_component');
     component.after = null;
     dropArea.component = null;
@@ -289,6 +289,12 @@ equation.Equation = (function() {
     this.wrap(dropArea);
     this.initVariables();
     dropArea.width = dropArea.element.width();
+    element.bind('touchstart.remove', function(e) {
+      if (dropArea.dirtyCount || !dropArea.component) {
+        return;
+      }
+      return _this.removeFragment(dropArea, e);
+    });
     component.placeHolder.unbind('mousedown.placeholder touchstart.placeholder');
     component.placeHolder.bind('mousedown.placeholder touchstart.placeholder', function(e) {
       return component.placeHolder.one('mouseup.placeholder touchend.placeholder', function(e) {
