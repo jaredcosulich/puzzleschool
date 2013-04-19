@@ -260,29 +260,29 @@ window.app = {
     }), 100);
   },
   initLevelSelector: function(changedLevelId) {
-    var previousCompleted, previousStageProficient, stageElement, _i, _len, _ref, _results,
+    var previousCompleted, stageElement, _i, _len, _ref, _results,
       _this = this;
     this.levelSelector || (this.levelSelector = this.$('.level_selector'));
     this.levelSelector.bind('touchstart', function(e) {
       return e.stop();
     });
     previousCompleted = true;
-    previousStageProficient = true;
     _ref = this.levelSelector.find('.stage');
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       stageElement = _ref[_i];
       _results.push((function(stageElement) {
-        var id, index, lastLevelId, levelElement, stageCompleted, _j, _len1, _ref1;
+        var id, index, lastLevelId, levelElement, stageCompleted, _j, _len1, _ref1, _results1;
         stageCompleted = 0;
         _ref1 = $(stageElement).find('.level');
+        _results1 = [];
         for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
           levelElement = _ref1[index];
           levelElement = $(levelElement);
           lastLevelId = id;
           id = levelElement.data('id');
           if (!changedLevelId || changedLevelId === id || changedLevelId === lastLevelId) {
-            (function(levelElement, index) {
+            _results1.push((function(levelElement, index) {
               var levelInfo, locked, _ref2, _ref3, _ref4;
               levelInfo = _this.findLevel(id);
               locked = !previousCompleted;
@@ -298,10 +298,12 @@ window.app = {
               levelElement.unbind('touchstart.select_level');
               levelElement.bind('touchstart.select_level', function(e) {
                 e.stop();
-                levelElement.addClass('clicking');
-                _this.clear();
-                _this.level = levelInfo;
-                _this.initLevel();
+                if (!locked) {
+                  levelElement.addClass('clicking');
+                  _this.clear();
+                  _this.level = levelInfo;
+                  _this.initLevel();
+                }
                 return levelElement.one('touchend.select_level', function(e) {
                   levelElement.removeClass('clicking');
                   $(document.body).unbind('touchstart.level_selector');
@@ -318,10 +320,12 @@ window.app = {
               } else {
                 return previousCompleted = false;
               }
-            })(levelElement, index);
+            })(levelElement, index));
+          } else {
+            _results1.push(void 0);
           }
         }
-        return previousStageProficient = stageCompleted >= 3;
+        return _results1;
       })(stageElement));
     }
     return _results;
@@ -367,7 +371,7 @@ window.app = {
     }
     this.levelSelector.css({
       opacity: 1,
-      top: 30,
+      top: 45,
       left: (this.el.width() - this.levelSelector.width()) / 2
     });
     return $.timeout(10, function() {

@@ -234,11 +234,11 @@ body {
   text-align: center;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
-  margin: 6px 0;
+  margin: 6px 0 12px 0;
   font-size: 15px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
-  padding: 12px;
+  padding: 6px;
   float: left;
   font-size: 27px;
 }
@@ -409,7 +409,7 @@ body {
 .xyflyer .level_selector .world_links .world_link {
   float: left;
   cursor: pointer;
-  margin: 15px 0 15px 66px;
+  margin: 15px 0 15px 69px;
   width: 72px;
   height: 74px;
   overflow: hidden;
@@ -530,7 +530,7 @@ body {
 */    
 
     .xyflyer {
-        margin-top: 64px;
+        /*margin-top: 64px;*/
         height: 640px;
         width: 1024px;
     }

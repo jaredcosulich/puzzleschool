@@ -3,7 +3,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name = "format-detection" content = "telephone=no"/>
-        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
         
         <!--<script src="http://debug-software.intel.com/target/target-script-min.js#xyflyer"></script>-->
 
@@ -42,6 +41,16 @@
 
             /* This code is used to run as soon as appMobi activates */
             var onDeviceReady = function() {
+                
+                if (navigator.userAgent.toUpperCase().indexOf("IPHONE")!=-1 ||
+                	navigator.userAgent.toUpperCase().indexOf("IPOD")!=-1) {
+                	$('head').append( '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5" />' );
+                } else if (navigator.userAgent.toUpperCase().indexOf("IPAD")!=-1) {
+                	$('head').append( '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />' );
+                } else if (navigator.userAgent.toUpperCase().indexOf("ANDROID")!=-1) {
+                	//size for an Android handset device
+            	}
+                
                 //user AppMobi viewport
                 // AppMobi.display.useViewport(748,1024);
                 AppMobi.device.hideStatusBar();
@@ -83,9 +92,6 @@
                         <div>Equation Fragments</div>
                         <p>Drag and drop these in to the equations above.</p>
                     </div>
-
-
-
 
                     <div class='hints'>
                         <p>

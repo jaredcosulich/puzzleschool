@@ -161,7 +161,6 @@ window.app =
         @levelSelector.bind 'touchstart', (e) => e.stop()
 
         previousCompleted = true
-        previousStageProficient = true
         for stageElement in @levelSelector.find('.stage')
             do (stageElement) =>
                 stageCompleted = 0
@@ -175,7 +174,7 @@ window.app =
                             levelInfo = @findLevel(id)
         
                             locked = !previousCompleted
-                            locked = false if index == 0# and previousStageProficient
+                            locked = false if index == 0
                         
                             @setLevelIcon
                                 id: id
@@ -186,11 +185,11 @@ window.app =
                             levelElement.unbind 'touchstart.select_level'
                             levelElement.bind 'touchstart.select_level', (e) =>
                                 e.stop()
-                                levelElement.addClass('clicking')
-                                @clear()
-                                
-                                @level = levelInfo
-                                @initLevel()
+                                unless locked
+                                    levelElement.addClass('clicking')                                
+                                    @clear()
+                                    @level = levelInfo
+                                    @initLevel()
                                 
                                 levelElement.one 'touchend.select_level', (e) =>
                                     levelElement.removeClass('clicking')
@@ -206,7 +205,6 @@ window.app =
                             else
                                 previousCompleted = false
                 
-                previousStageProficient = (stageCompleted >= 3)
                             
 
     setLevelIcon: ({id, started, completed, locked}) ->
@@ -245,7 +243,7 @@ window.app =
                 
         @levelSelector.css
             opacity: 1
-            top: 30
+            top: 45
             left: (@el.width() - @levelSelector.width()) / 2
 
         $.timeout 10, =>    

@@ -453,62 +453,61 @@ soma.views({
       }), 500);
     },
     initLevelSelector: function() {
-      var previousCompleted, previousStageProficient, stageElement, _i, _len, _ref, _results,
+      var previousCompleted, stageElement, _i, _len, _ref, _results,
         _this = this;
       this.levelSelector = this.$('.level_selector');
       this.levelSelector.bind('click', function(e) {
         return e.stop();
       });
       previousCompleted = true;
-      previousStageProficient = true;
       _ref = this.levelSelector.find('.stage');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         stageElement = _ref[_i];
         _results.push((function(stageElement) {
-          var index, levelElement, stageCompleted, _fn, _j, _len1, _ref1;
+          var index, levelElement, stageCompleted, _j, _len1, _ref1, _results1;
           stageCompleted = 0;
           _ref1 = $(stageElement).find('.level');
-          _fn = function(levelElement, index) {
-            var id, levelInfo, locked, _ref2, _ref3, _ref4;
-            levelElement = $(levelElement);
-            id = levelElement.data('id');
-            levelInfo = _this.findLevel(id);
-            locked = !previousCompleted;
-            if (index === 0) {
-              locked = false;
-            }
-            _this.setLevelIcon({
-              id: id,
-              started: (_ref2 = _this.puzzleData.levels[id]) != null ? _ref2.started : void 0,
-              completed: (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.completed : void 0,
-              locked: locked
-            });
-            levelElement.unbind('click');
-            levelElement.bind('click', function(e) {
-              e.stop();
-              $(document.body).unbind('click.level_selector');
-              if (locked) {
-                return alert('This level is locked.');
-              } else {
-                _this.level = levelInfo;
-                _this.initLevel();
-                history.pushState(null, null, "/puzzles/xyflyer/" + id);
-                return _this.hideLevelSelector();
-              }
-            });
-            if ((_ref4 = _this.puzzleData.levels[id]) != null ? _ref4.completed : void 0) {
-              stageCompleted += 1;
-              return previousCompleted = true;
-            } else {
-              return previousCompleted = false;
-            }
-          };
+          _results1 = [];
           for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
             levelElement = _ref1[index];
-            _fn(levelElement, index);
+            _results1.push((function(levelElement, index) {
+              var id, levelInfo, locked, _ref2, _ref3, _ref4;
+              levelElement = $(levelElement);
+              id = levelElement.data('id');
+              levelInfo = _this.findLevel(id);
+              locked = !previousCompleted;
+              if (index === 0) {
+                locked = false;
+              }
+              _this.setLevelIcon({
+                id: id,
+                started: (_ref2 = _this.puzzleData.levels[id]) != null ? _ref2.started : void 0,
+                completed: (_ref3 = _this.puzzleData.levels[id]) != null ? _ref3.completed : void 0,
+                locked: locked
+              });
+              levelElement.unbind('click');
+              levelElement.bind('click', function(e) {
+                e.stop();
+                $(document.body).unbind('click.level_selector');
+                if (locked) {
+                  return alert('This level is locked.');
+                } else {
+                  _this.level = levelInfo;
+                  _this.initLevel();
+                  history.pushState(null, null, "/puzzles/xyflyer/" + id);
+                  return _this.hideLevelSelector();
+                }
+              });
+              if ((_ref4 = _this.puzzleData.levels[id]) != null ? _ref4.completed : void 0) {
+                stageCompleted += 1;
+                return previousCompleted = true;
+              } else {
+                return previousCompleted = false;
+              }
+            })(levelElement, index));
           }
-          return previousStageProficient = stageCompleted >= 3;
+          return _results1;
         })(stageElement));
       }
       return _results;

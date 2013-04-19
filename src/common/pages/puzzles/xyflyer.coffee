@@ -309,7 +309,6 @@ soma.views
             @levelSelector.bind 'click', (e) => e.stop()
 
             previousCompleted = true
-            previousStageProficient = true
             for stageElement in @levelSelector.find('.stage')
                 do (stageElement) =>
                     stageCompleted = 0
@@ -320,7 +319,7 @@ soma.views
                             levelInfo = @findLevel(id)
             
                             locked = !previousCompleted
-                            locked = false if index == 0# and previousStageProficient
+                            locked = false if index == 0
                             
                             @setLevelIcon
                                 id: id
@@ -346,7 +345,6 @@ soma.views
                             else
                                 previousCompleted = false
                     
-                    previousStageProficient = (stageCompleted >= 3)
                                 
 
         setLevelIcon: ({id, started, completed, locked}) ->

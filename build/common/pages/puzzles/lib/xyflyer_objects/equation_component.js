@@ -30,19 +30,19 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.top = function() {
-    return this.element.offset().top;
+    return this.elementContainer.offset().top;
   };
 
   EquationComponent.prototype.left = function() {
-    return this.element.offset().left;
+    return this.elementContainer.offset().left;
   };
 
   EquationComponent.prototype.width = function() {
-    return this.element.width();
+    return this.elementContainer.width();
   };
 
   EquationComponent.prototype.height = function() {
-    return this.element.height();
+    return this.elementContainer.height();
   };
 
   EquationComponent.prototype.initElement = function() {
@@ -120,7 +120,7 @@ equationComponent.EquationComponent = (function() {
     x = this.clientX(e);
     y = this.clientY(e);
     if (e.type.match(/touch/)) {
-      y -= 60;
+      y -= 30;
     }
     offset = this.element.offset();
     dx = x - offset.left - (offset.width / 2) + this.gameAreaOffset.left;

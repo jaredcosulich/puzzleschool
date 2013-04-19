@@ -57,11 +57,16 @@ class equations.Equations
         equationComponent.appendTo(@possibleFragments)
         @equationComponents.push(equationComponent)
 
-        firstFragmentOffset = @equationComponents[0].elementContainer.offset()
-        lastFragmentOffset = @equationComponents[@equationComponents.length - 1].elementContainer.offset()
-        fragmentsWidth = lastFragmentOffset.left + lastFragmentOffset.width - firstFragmentOffset.left 
-        shift = ((@possibleFragments.width() - fragmentsWidth) / 2) - 6
-        @equationComponents[0].elementContainer.css(marginLeft: shift)
+        top = 0
+        for equationComponent, index in @equationComponents
+            if equationComponent.top() != top
+                first = equationComponent
+                top = equationComponent.top()
+            
+            if index == @equationComponents.length - 1 or @equationComponents[index + 1].top() != top
+                fragmentsWidth = equationComponent.left() + equationComponent.width() - first.left()
+                shift = ((@possibleFragments.width() - fragmentsWidth) / 2) - 6
+                first.elementContainer.css(marginLeft: shift)
 
         return equationComponent
         

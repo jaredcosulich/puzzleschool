@@ -10,10 +10,10 @@ class equationComponent.EquationComponent
         
     clientX: (e) => (e.clientX or e.targetTouches?[0]?.pageX or e.touches?[0]?.pageX) - @gameArea.offset().left
     clientY: (e) => (e.clientY or e.targetTouches?[0]?.pageY or e.touches?[0]?.pageY) - @gameArea.offset().top
-    top: -> @element.offset().top
-    left: -> @element.offset().left
-    width: -> @element.width()
-    height: -> @element.height()
+    top: -> @elementContainer.offset().top
+    left: -> @elementContainer.offset().left
+    width: -> @elementContainer.width()
+    height: -> @elementContainer.height()
         
     initElement: ->
         @elementContainer = $(document.createElement('DIV'))
@@ -68,7 +68,7 @@ class equationComponent.EquationComponent
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
         y = @clientY(e)       
-        y -= 60 if e.type.match(/touch/)
+        y -= 30 if e.type.match(/touch/)
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
         dy = y - offset.top - (offset.height/2) + @gameAreaOffset.top
