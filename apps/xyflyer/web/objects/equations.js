@@ -221,11 +221,11 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.initHints = function() {
-    var hint,
+    var hints,
       _this = this;
-    hint = this.el.find('.hint');
-    return hint.bind('mousedown.hint touchstart.hint', function() {
-      return hint.one('mouseup.hint touchend.hint', function() {
+    hints = this.el.find('.hints');
+    return hints.bind('mousedown.hint touchstart.hint', function() {
+      return hints.one('mouseup.hint touchend.hint', function() {
         return _this.showHint();
       });
     });

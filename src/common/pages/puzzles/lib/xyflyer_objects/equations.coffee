@@ -138,9 +138,9 @@ class equations.Equations
             e.preventDefault() if e.preventDefault if e.keyCode == 8 and document.activeElement?.type != 'text'
             
     initHints: ->
-        hint = @el.find('.hint')
-        hint.bind 'mousedown.hint touchstart.hint', =>
-            hint.one 'mouseup.hint touchend.hint', => @showHint()
+        hints = @el.find('.hints')
+        hints.bind 'mousedown.hint touchstart.hint', =>
+            hints.one 'mouseup.hint touchend.hint', => @showHint()
         
     testFragment: (fragment, solution, formula, complete) ->
         solutionIndex = solution.indexOf(fragment)

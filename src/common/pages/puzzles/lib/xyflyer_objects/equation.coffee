@@ -193,10 +193,11 @@ class equation.Equation
         @wrap(dropArea)
         @initVariables()
         dropArea.width = dropArea.element.width()
-        component.placeHolder.unbind('click.placeholder')
-        component.placeHolder.one 'click.placeholder', (e) =>
-            @removeFragment(dropArea, e)
-            component.endMove(e)        
+        component.placeHolder.unbind('mousedown.placeholder touchstart.placeholder')
+        component.placeHolder.bind 'mousedown.placeholder touchstart.placeholder', (e) =>
+            component.placeHolder.one 'mouseup.placeholder touchend.placeholder', (e) =>
+                @removeFragment(dropArea, e)
+                component.endMove(e)        
         @recordComponentPositions()
         @plot(@)
             

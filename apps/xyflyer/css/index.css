@@ -240,7 +240,7 @@ body {
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
   padding: 6px;
   float: left;
-  font-size: 27px;
+  font-size: 24px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container .equation_component {
   cursor: move;
@@ -313,7 +313,8 @@ body {
 .xyflyer .dynamic_content .hints {
   font-size: 18px;
   position: absolute;
-  bottom: 12px;
+  padding: 12px 0;
+  bottom: 0;
   left: 75px;
 }
 .xyflyer .dynamic_content .drag_this,

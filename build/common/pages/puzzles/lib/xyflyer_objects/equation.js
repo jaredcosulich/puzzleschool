@@ -289,10 +289,12 @@ equation.Equation = (function() {
     this.wrap(dropArea);
     this.initVariables();
     dropArea.width = dropArea.element.width();
-    component.placeHolder.unbind('click.placeholder');
-    component.placeHolder.one('click.placeholder', function(e) {
-      _this.removeFragment(dropArea, e);
-      return component.endMove(e);
+    component.placeHolder.unbind('mousedown.placeholder touchstart.placeholder');
+    component.placeHolder.bind('mousedown.placeholder touchstart.placeholder', function(e) {
+      return component.placeHolder.one('mouseup.placeholder touchend.placeholder', function(e) {
+        _this.removeFragment(dropArea, e);
+        return component.endMove(e);
+      });
     });
     this.recordComponentPositions();
     return this.plot(this);

@@ -60,6 +60,7 @@ equationComponent.EquationComponent = (function() {
 
   EquationComponent.prototype.initMove = function() {
     var _this = this;
+    this.elementContainer.unbind('mousedown.drag touchstart.drag');
     return this.elementContainer.bind('mousedown.drag touchstart.drag', function(e) {
       return _this.mousedown(e);
     });
@@ -142,6 +143,7 @@ equationComponent.EquationComponent = (function() {
         visibility: 'hidden'
       });
       this.placeHolder.show();
+      this.elementContainer.unbind('mousedown.drag touchstart.drag');
       this.inUse = true;
     } else {
       this.reset();
@@ -155,7 +157,8 @@ equationComponent.EquationComponent = (function() {
       visibility: 'visible'
     });
     this.placeHolder.hide();
-    return this.inUse = false;
+    this.inUse = false;
+    return this.initMove();
   };
 
   return EquationComponent;

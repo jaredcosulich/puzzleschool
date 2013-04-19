@@ -31,6 +31,7 @@ class equationComponent.EquationComponent
         @transformer = new Transformer(@element)
         
     initMove: ->
+        @elementContainer.unbind('mousedown.drag touchstart.drag')
         @elementContainer.bind 'mousedown.drag touchstart.drag', (e) => @mousedown(e)
         
     appendTo: (@container) ->
@@ -85,6 +86,7 @@ class equationComponent.EquationComponent
         if @endDrag(@)
             @element.css(visibility: 'hidden')
             @placeHolder.show()
+            @elementContainer.unbind('mousedown.drag touchstart.drag')
             @inUse = true
         else
             @reset()
@@ -97,5 +99,6 @@ class equationComponent.EquationComponent
         @element.css(visibility: 'visible')
         @placeHolder.hide()
         @inUse = false
+        @initMove()
         
         
