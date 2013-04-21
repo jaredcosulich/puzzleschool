@@ -235,6 +235,16 @@ class board.Board extends xyflyerObject.Object
         return xy
 
     drawGrid: ->    
+        if (@grid.xMax - @grid.xMin) == (@grid.yMax - @grid.yMin)
+            if @width != @height
+                ratio = @width / @height
+                if ratio > 1
+                    @grid.xMax = @grid.xMax * ratio
+                    @grid.xMin = @grid.xMin * ratio
+                else
+                    @grid.yMax = @grid.yMax / ratio
+                    @grid.yMin = @grid.yMin / ratio
+        
         gridString = """
             M#{@xAxis},0
             L#{@xAxis},#{@height}
@@ -248,8 +258,7 @@ class board.Board extends xyflyerObject.Object
         xUnits = @maxUnits if xUnits < @maxUnits
         multiple = Math.floor(xUnits / @maxUnits)
         increment = (@xUnit * multiple) 
-        start = 0 - (if multiple > @grid.xMin then ((@grid.xMin * @xUnit) % increment) else (increment % (@grid.xMin * @xUnit))) 
-        for mark in [start..@width] by increment
+        for mark in [0..@width] by increment
             gridString += "M#{mark},#{@yAxis + 10}"
             gridString += "L#{mark},#{@yAxis - 10}"
             unless mark > @width
@@ -267,8 +276,7 @@ class board.Board extends xyflyerObject.Object
         yUnits = @maxUnits if yUnits < @maxUnits
         multiple = Math.floor(yUnits / @maxUnits)
         increment = (@yUnit * multiple) * -1
-        start = @height - (if multiple > @grid.yMin then (increment % (@grid.yMin * @yUnit)) else ((@grid.yMin * @yUnit) % increment))
-        for mark in [start..0] by increment
+        for mark in [@height..0] by increment
             gridString += "M#{@xAxis + 10},#{mark}"
             gridString += "L#{@xAxis - 10},#{mark}"
             unless mark > @height

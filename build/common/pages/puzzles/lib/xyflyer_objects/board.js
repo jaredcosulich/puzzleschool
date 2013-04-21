@@ -380,7 +380,19 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawGrid = function() {
-    var color, grid, gridString, increment, label, mark, multiple, offset, start, text, value, xUnits, yUnits, _i, _j, _ref;
+    var color, grid, gridString, increment, label, mark, multiple, offset, ratio, text, value, xUnits, yUnits, _i, _j, _ref, _ref1;
+    if ((this.grid.xMax - this.grid.xMin) === (this.grid.yMax - this.grid.yMin)) {
+      if (this.width !== this.height) {
+        ratio = this.width / this.height;
+        if (ratio > 1) {
+          this.grid.xMax = this.grid.xMax * ratio;
+          this.grid.xMin = this.grid.xMin * ratio;
+        } else {
+          this.grid.yMax = this.grid.yMax / ratio;
+          this.grid.yMin = this.grid.yMin / ratio;
+        }
+      }
+    }
     gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
     color = 'rgba(255,255,255,0.4)';
     xUnits = this.width / this.xUnit;
@@ -389,8 +401,7 @@ board.Board = (function(_super) {
     }
     multiple = Math.floor(xUnits / this.maxUnits);
     increment = this.xUnit * multiple;
-    start = 0 - (multiple > this.grid.xMin ? (this.grid.xMin * this.xUnit) % increment : increment % (this.grid.xMin * this.xUnit));
-    for (mark = _i = start, _ref = this.width; start <= _ref ? _i <= _ref : _i >= _ref; mark = _i += increment) {
+    for (mark = _i = 0, _ref = this.width; 0 <= _ref ? _i <= _ref : _i >= _ref; mark = _i += increment) {
       gridString += "M" + mark + "," + (this.yAxis + 10);
       gridString += "L" + mark + "," + (this.yAxis - 10);
       if (!(mark > this.width)) {
@@ -419,8 +430,7 @@ board.Board = (function(_super) {
     }
     multiple = Math.floor(yUnits / this.maxUnits);
     increment = (this.yUnit * multiple) * -1;
-    start = this.height - (multiple > this.grid.yMin ? increment % (this.grid.yMin * this.yUnit) : (this.grid.yMin * this.yUnit) % increment);
-    for (mark = _j = start; start <= 0 ? _j <= 0 : _j >= 0; mark = _j += increment) {
+    for (mark = _j = _ref1 = this.height; _ref1 <= 0 ? _j <= 0 : _j >= 0; mark = _j += increment) {
       gridString += "M" + (this.xAxis + 10) + "," + mark;
       gridString += "L" + (this.xAxis - 10) + "," + mark;
       if (!(mark > this.height)) {
