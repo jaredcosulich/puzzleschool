@@ -409,10 +409,10 @@ board.Board = (function(_super) {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       direction = _ref[_i];
       lastMark = this.xAxis;
-      for (mark = _j = _ref1 = this.xAxis, _ref2 = this.xAxis + (this.xAxis * direction), _ref3 = increment * direction; _ref1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; mark = _j += _ref3) {
+      for (mark = _j = _ref1 = this.xAxis, _ref2 = this.xAxis + (this.width * direction), _ref3 = increment * direction; _ref1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; mark = _j += _ref3) {
         gridString += "M" + mark + "," + (this.yAxis + 10);
         gridString += "L" + mark + "," + (this.yAxis - 10);
-        if (!(mark > this.width)) {
+        if ((0 <= mark && mark <= this.width)) {
           value = Math.round(this.grid.xMin + (mark / this.xUnit));
           offset = value < 0 ? 8 : -8;
           text = this.paper.text(mark + offset, this.yAxis - 6, value);
@@ -439,10 +439,10 @@ board.Board = (function(_super) {
     for (_k = 0, _len1 = _ref4.length; _k < _len1; _k++) {
       direction = _ref4[_k];
       lastMark = this.yAxis;
-      for (mark = _l = _ref5 = this.yAxis, _ref6 = this.yAxis + (this.yAxis * direction), _ref7 = increment * direction; _ref5 <= _ref6 ? _l <= _ref6 : _l >= _ref6; mark = _l += _ref7) {
+      for (mark = _l = _ref5 = this.yAxis, _ref6 = this.yAxis + (this.height * direction), _ref7 = increment * direction; _ref5 <= _ref6 ? _l <= _ref6 : _l >= _ref6; mark = _l += _ref7) {
         gridString += "M" + (this.xAxis + 10) + "," + mark;
         gridString += "L" + (this.xAxis - 10) + "," + mark;
-        if (!(mark > this.height)) {
+        if ((0 <= mark && mark <= this.height)) {
           value = Math.round(this.grid.yMax - (mark / this.yUnit));
           offset = value > 0 ? 6 : -6;
           text = this.paper.text(this.xAxis - 8, mark + offset, value);

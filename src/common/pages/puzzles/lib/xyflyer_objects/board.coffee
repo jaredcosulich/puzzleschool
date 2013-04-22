@@ -263,10 +263,10 @@ class board.Board extends xyflyerObject.Object
         increment = (@xUnit * multiple) 
         for direction in [-1,1]
             lastMark = @xAxis 
-            for mark in [@xAxis..(@xAxis + (@xAxis * direction))] by (increment * direction)
+            for mark in [@xAxis..(@xAxis + (@width * direction))] by (increment * direction)
                 gridString += "M#{mark},#{@yAxis + 10}"
                 gridString += "L#{mark},#{@yAxis - 10}"
-                unless mark > @width
+                if 0 <= mark <= @width
                     value = Math.round(@grid.xMin + (mark / @xUnit))
                     offset = if value < 0 then 8 else -8
                     text = @paper.text(mark + offset, @yAxis - 6, value)
@@ -282,10 +282,10 @@ class board.Board extends xyflyerObject.Object
         increment = (@yUnit * multiple)
         for direction in [-1,1]
             lastMark = @yAxis
-            for mark in [@yAxis..(@yAxis + (@yAxis * direction))] by (increment * direction)
+            for mark in [@yAxis..(@yAxis + (@height * direction))] by (increment * direction)
                 gridString += "M#{@xAxis + 10},#{mark}"
                 gridString += "L#{@xAxis - 10},#{mark}"
-                unless mark > @height
+                if 0 <= mark <= @height
                     value = Math.round(@grid.yMax - (mark / @yUnit))
                     offset = if value > 0 then 6 else -6
                     text = @paper.text(@xAxis - 8, mark + offset, value)
