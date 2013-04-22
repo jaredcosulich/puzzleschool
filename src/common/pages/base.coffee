@@ -97,8 +97,8 @@ soma.chunks
             @loadChunk @content
 
         badBrowser: ->
-            userAgent = if @context then @context.request.headers['user-agent'] else navigator.userAgent
-            return true if userAgent.indexOf('MSIE') > -1
+            userAgent = if @context?.request?.headers then @context.request.headers['user-agent'] else navigator?.userAgent
+            return true if (userAgent or '').indexOf('MSIE') > -1
             return false
             
         build: () ->

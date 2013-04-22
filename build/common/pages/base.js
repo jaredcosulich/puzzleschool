@@ -178,9 +178,9 @@ soma.chunks({
       return this.loadChunk(this.content);
     },
     badBrowser: function() {
-      var userAgent;
-      userAgent = this.context ? this.context.request.headers['user-agent'] : navigator.userAgent;
-      if (userAgent.indexOf('MSIE') > -1) {
+      var userAgent, _ref, _ref1;
+      userAgent = ((_ref = this.context) != null ? (_ref1 = _ref.request) != null ? _ref1.headers : void 0 : void 0) ? this.context.request.headers['user-agent'] : typeof navigator !== "undefined" && navigator !== null ? navigator.userAgent : void 0;
+      if ((userAgent || '').indexOf('MSIE') > -1) {
         return true;
       }
       return false;
