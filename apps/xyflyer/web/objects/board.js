@@ -48,13 +48,25 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.load = function() {
-    var dimensions, maxDimension;
+    var dimensions, maxDimension, ratio;
     dimensions = this.el.offset();
     if (!this.paper) {
       this.paper = Raphael(this.el.attr('id'), dimensions.width, dimensions.height);
     }
     this.width = dimensions.width;
     this.height = dimensions.height;
+    if ((this.grid.xMax - this.grid.xMin) === (this.grid.yMax - this.grid.yMin)) {
+      if (this.width !== this.height) {
+        ratio = this.width / this.height;
+        if (ratio > 1) {
+          this.grid.xMax = Math.floor(this.grid.xMax * ratio);
+          this.grid.xMin = Math.ceil(this.grid.xMin * ratio);
+        } else {
+          this.grid.yMax = Math.floor(this.grid.yMax / ratio);
+          this.grid.yMin = Math.ceil(this.grid.yMin / ratio);
+        }
+      }
+    }
     this.xUnit = this.width / (this.grid.xMax - this.grid.xMin);
     this.yUnit = this.height / (this.grid.yMax - this.grid.yMin);
     this.xAxis = this.width - (this.grid.xMax * this.xUnit);
@@ -380,19 +392,11 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawGrid = function() {
-    var color, grid, gridString, increment, label, mark, multiple, offset, ratio, text, value, xUnits, yUnits, _i, _j, _ref, _ref1;
-    if ((this.grid.xMax - this.grid.xMin) === (this.grid.yMax - this.grid.yMin)) {
-      if (this.width !== this.height) {
-        ratio = this.width / this.height;
-        if (ratio > 1) {
-          this.grid.xMax = this.grid.xMax * ratio;
-          this.grid.xMin = this.grid.xMin * ratio;
-        } else {
-          this.grid.yMax = this.grid.yMax / ratio;
-          this.grid.yMin = this.grid.yMin / ratio;
-        }
-      }
+    var color, direction, grid, gridString, increment, label, lastMark, mark, multiple, offset, text, value, xUnits, yUnits, _i, _j, _k, _l, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
+    if (this.gridSet) {
+      return;
     }
+    this.gridSet = true;
     gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
     color = 'rgba(255,255,255,0.4)';
     xUnits = this.width / this.xUnit;
@@ -401,60 +405,61 @@ board.Board = (function(_super) {
     }
     multiple = Math.floor(xUnits / this.maxUnits);
     increment = this.xUnit * multiple;
-    for (mark = _i = 0, _ref = this.width; 0 <= _ref ? _i <= _ref : _i >= _ref; mark = _i += increment) {
-      gridString += "M" + mark + "," + (this.yAxis + 10);
-      gridString += "L" + mark + "," + (this.yAxis - 10);
-      if (!(mark > this.width)) {
-        value = Math.round(this.grid.xMin + (mark / this.xUnit));
-        offset = value < 0 ? 8 : -8;
-        text = this.paper.text(mark + offset, this.yAxis - 6, value);
-        text.attr({
-          stroke: 'none',
-          fill: color
-        });
+    _ref = [-1, 1];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      direction = _ref[_i];
+      lastMark = this.xAxis;
+      for (mark = _j = _ref1 = this.xAxis, _ref2 = this.xAxis + (this.xAxis * direction), _ref3 = increment * direction; _ref1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; mark = _j += _ref3) {
+        gridString += "M" + mark + "," + (this.yAxis + 10);
+        gridString += "L" + mark + "," + (this.yAxis - 10);
+        if (!(mark > this.width)) {
+          value = Math.round(this.grid.xMin + (mark / this.xUnit));
+          offset = value < 0 ? 8 : -8;
+          text = this.paper.text(mark + offset, this.yAxis - 6, value);
+          text.attr({
+            stroke: 'none',
+            fill: color
+          });
+          lastMark = mark;
+        }
       }
+      label = this.paper.text(lastMark - (24 * direction), this.yAxis + 7, 'X Axis');
+      label.attr({
+        stroke: 'none',
+        fill: color
+      });
     }
-    label = this.paper.text(24, this.yAxis + 7, 'X Axis');
-    label.attr({
-      stroke: 'none',
-      fill: color
-    });
-    label = this.paper.text(this.width - 24, this.yAxis + 7, 'X Axis');
-    label.attr({
-      stroke: 'none',
-      fill: color
-    });
     yUnits = this.height / this.yUnit;
     if (yUnits < this.maxUnits) {
       yUnits = this.maxUnits;
     }
     multiple = Math.floor(yUnits / this.maxUnits);
-    increment = (this.yUnit * multiple) * -1;
-    for (mark = _j = _ref1 = this.height; _ref1 <= 0 ? _j <= 0 : _j >= 0; mark = _j += increment) {
-      gridString += "M" + (this.xAxis + 10) + "," + mark;
-      gridString += "L" + (this.xAxis - 10) + "," + mark;
-      if (!(mark > this.height)) {
-        value = Math.round(this.grid.yMax - (mark / this.yUnit));
-        offset = value > 0 ? 6 : -6;
-        text = this.paper.text(this.xAxis - 8, mark + offset, value);
-        text.attr({
-          stroke: 'none',
-          fill: color
-        });
+    increment = this.yUnit * multiple;
+    _ref4 = [-1, 1];
+    for (_k = 0, _len1 = _ref4.length; _k < _len1; _k++) {
+      direction = _ref4[_k];
+      lastMark = this.yAxis;
+      for (mark = _l = _ref5 = this.yAxis, _ref6 = this.yAxis + (this.yAxis * direction), _ref7 = increment * direction; _ref5 <= _ref6 ? _l <= _ref6 : _l >= _ref6; mark = _l += _ref7) {
+        gridString += "M" + (this.xAxis + 10) + "," + mark;
+        gridString += "L" + (this.xAxis - 10) + "," + mark;
+        if (!(mark > this.height)) {
+          value = Math.round(this.grid.yMax - (mark / this.yUnit));
+          offset = value > 0 ? 6 : -6;
+          text = this.paper.text(this.xAxis - 8, mark + offset, value);
+          text.attr({
+            stroke: 'none',
+            fill: color
+          });
+          lastMark = mark;
+        }
       }
+      label = this.paper.text(this.xAxis + 7, lastMark - (24 * direction), 'Y Axis');
+      label.attr({
+        stroke: 'none',
+        fill: color,
+        transform: 'r270'
+      });
     }
-    label = this.paper.text(this.xAxis + 7, 24, 'Y Axis');
-    label.attr({
-      stroke: 'none',
-      fill: color,
-      transform: 'r270'
-    });
-    label = this.paper.text(this.xAxis + 7, this.height - 24, 'Y Axis');
-    label.attr({
-      stroke: 'none',
-      fill: color,
-      transform: 'r270'
-    });
     grid = this.paper.path(gridString);
     return grid.attr({
       stroke: color
@@ -638,7 +643,8 @@ board.Board = (function(_super) {
       this.paper.remove();
       delete this.paper;
     }
-    return this.el.find('canvas').remove();
+    this.el.find('canvas').remove();
+    return delete this.gridSet;
   };
 
   return Board;

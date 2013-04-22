@@ -30,6 +30,16 @@ class board.Board extends xyflyerObject.Object
         @width = dimensions.width
         @height = dimensions.height        
 
+        if (@grid.xMax - @grid.xMin) == (@grid.yMax - @grid.yMin)
+            if @width != @height
+                ratio = @width / @height
+                if ratio > 1
+                    @grid.xMax = Math.floor(@grid.xMax * ratio)
+                    @grid.xMin = Math.ceil(@grid.xMin * ratio)
+                else
+                    @grid.yMax = Math.floor(@grid.yMax / ratio)
+                    @grid.yMin = Math.ceil(@grid.yMin / ratio)
+
         @xUnit = @width / (@grid.xMax - @grid.xMin)
         @yUnit = @height / (@grid.yMax - @grid.yMin)
 
@@ -235,15 +245,8 @@ class board.Board extends xyflyerObject.Object
         return xy
 
     drawGrid: ->    
-        if (@grid.xMax - @grid.xMin) == (@grid.yMax - @grid.yMin)
-            if @width != @height
-                ratio = @width / @height
-                if ratio > 1
-                    @grid.xMax = @grid.xMax * ratio
-                    @grid.xMin = @grid.xMin * ratio
-                else
-                    @grid.yMax = @grid.yMax / ratio
-                    @grid.yMin = @grid.yMin / ratio
+        return if @gridSet
+        @gridSet = true
         
         gridString = """
             M#{@xAxis},0
@@ -258,37 +261,39 @@ class board.Board extends xyflyerObject.Object
         xUnits = @maxUnits if xUnits < @maxUnits
         multiple = Math.floor(xUnits / @maxUnits)
         increment = (@xUnit * multiple) 
-        for mark in [0..@width] by increment
-            gridString += "M#{mark},#{@yAxis + 10}"
-            gridString += "L#{mark},#{@yAxis - 10}"
-            unless mark > @width
-                value = Math.round(@grid.xMin + (mark / @xUnit))
-                offset = if value < 0 then 8 else -8
-                text = @paper.text(mark + offset, @yAxis - 6, value)
-                text.attr(stroke: 'none', fill: color)
+        for direction in [-1,1]
+            lastMark = @xAxis 
+            for mark in [@xAxis..(@xAxis + (@xAxis * direction))] by (increment * direction)
+                gridString += "M#{mark},#{@yAxis + 10}"
+                gridString += "L#{mark},#{@yAxis - 10}"
+                unless mark > @width
+                    value = Math.round(@grid.xMin + (mark / @xUnit))
+                    offset = if value < 0 then 8 else -8
+                    text = @paper.text(mark + offset, @yAxis - 6, value)
+                    text.attr(stroke: 'none', fill: color)
+                    lastMark = mark
 
-        label = @paper.text(24, @yAxis + 7, 'X Axis')
-        label.attr(stroke: 'none', fill: color)
-        label = @paper.text(@width - 24, @yAxis + 7, 'X Axis')
-        label.attr(stroke: 'none', fill: color)
+            label = @paper.text(lastMark - (24 * direction), @yAxis + 7, 'X Axis')
+            label.attr(stroke: 'none', fill: color)
 
         yUnits = @height / @yUnit
         yUnits = @maxUnits if yUnits < @maxUnits
         multiple = Math.floor(yUnits / @maxUnits)
-        increment = (@yUnit * multiple) * -1
-        for mark in [@height..0] by increment
-            gridString += "M#{@xAxis + 10},#{mark}"
-            gridString += "L#{@xAxis - 10},#{mark}"
-            unless mark > @height
-                value = Math.round(@grid.yMax - (mark / @yUnit))
-                offset = if value > 0 then 6 else -6
-                text = @paper.text(@xAxis - 8, mark + offset, value)
-                text.attr(stroke: 'none', fill: color)
-                
-        label = @paper.text(@xAxis + 7, 24, 'Y Axis')
-        label.attr(stroke: 'none', fill: color, transform: 'r270')
-        label = @paper.text(@xAxis + 7, @height - 24, 'Y Axis')
-        label.attr(stroke: 'none', fill: color, transform: 'r270')
+        increment = (@yUnit * multiple)
+        for direction in [-1,1]
+            lastMark = @yAxis
+            for mark in [@yAxis..(@yAxis + (@yAxis * direction))] by (increment * direction)
+                gridString += "M#{@xAxis + 10},#{mark}"
+                gridString += "L#{@xAxis - 10},#{mark}"
+                unless mark > @height
+                    value = Math.round(@grid.yMax - (mark / @yUnit))
+                    offset = if value > 0 then 6 else -6
+                    text = @paper.text(@xAxis - 8, mark + offset, value)
+                    text.attr(stroke: 'none', fill: color)
+                    lastMark = mark
+
+            label = @paper.text(@xAxis + 7, lastMark - (24 * direction), 'Y Axis')
+            label.attr(stroke: 'none', fill: color, transform: 'r270')
 
         grid = @paper.path(gridString)
         grid.attr(stroke: color)
@@ -439,3 +444,4 @@ class board.Board extends xyflyerObject.Object
             @paper.remove()
             delete @paper
         @el.find('canvas').remove()
+        delete @gridSet
