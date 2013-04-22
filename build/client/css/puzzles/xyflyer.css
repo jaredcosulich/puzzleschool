@@ -86,6 +86,10 @@ body {
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 12px;
 }
+.xyflyer .dynamic_content .equation_area .equations h4 {
+  text-align: center;
+  margin-bottom: 6px;
+}
 .xyflyer .dynamic_content .equation_area .equations .equation_container {
   overflow: hidden;
   margin-bottom: 12px;

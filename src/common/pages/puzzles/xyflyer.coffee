@@ -235,7 +235,7 @@ soma.views
 
             for equation, info of @level?.equations or {'': {}}
                 @helper.addEquation(equation, info.start, info.solutionComponents, @level?.variables)    
-        
+                
             for ring in @level?.rings or []
                 @helper.addRing(ring.x, ring.y)
             
