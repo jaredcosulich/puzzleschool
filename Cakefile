@@ -60,6 +60,7 @@ task 'build:xyflyer', 'Build the xyflyer app', ->
         'cp build/common/pages/puzzles/lib/xyflyer.js apps/xyflyer/web/xyflyer.js'
         'cp build/common/pages/puzzles/lib/xyflyer_objects/* apps/xyflyer/web/objects/'
         'cp ender.js apps/xyflyer/web/ender.js'
+        'cp -r assets/third_party/font apps/xyflyer/css/font'
         'cp assets/third_party/equation_explorer/tokens.js apps/xyflyer/web/token.js'
         'cp assets/third_party/raphael-min.js apps/xyflyer/web/raphael-min.js'
         'cp assets/images/puzzles/xyflyer/* apps/xyflyer/css/images/'

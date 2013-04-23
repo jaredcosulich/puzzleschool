@@ -87,16 +87,19 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .level_selector_menu {
   position: absolute;
-  right: 36px;
+  right: 39px;
   top: 0;
-  padding: 13px 6px 12px 6px;
-  font-size: 18px;
+  padding: 6px 9px 12px 6px;
+  font-size: 30px;
+  color: #24aac3;
 }
 .xyflyer .dynamic_content .equation_area .settings_menu {
   position: absolute;
   right: 0px;
   top: 0;
-  padding: 12px 9px 12px 6px;
+  padding: 6px 9px 12px 6px;
+  font-size: 30px;
+  color: #24aac3;
 }
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 45px;
