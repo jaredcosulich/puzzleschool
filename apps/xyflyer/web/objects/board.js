@@ -83,7 +83,7 @@ board.Board = (function(_super) {
     if (this.animationCtx) {
       return;
     }
-    this.animationCtx = [[this.createCanvas(1), this.createCanvas(3)], [this.createCanvas(1), this.createCanvas(3)]];
+    this.animationCtx = [this.createCanvas(1), this.createCanvas(3)];
     this.animationObjects = [];
     if (!this.animation) {
       this.animation = new Animation();
@@ -101,32 +101,28 @@ board.Board = (function(_super) {
     return this.animationObjects[zIndex].push(object);
   };
 
-  Board.prototype.animate = function(index) {
+  Board.prototype.animate = function() {
     var _this = this;
-    if (index == null) {
-      index = 0;
-    }
     return this.animation.frame()(function(t) {
-      var animationSet, ctx, i, nextIndex, object, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
-      _ref = _this.animationObjects;
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        animationSet = _ref[i];
+      var animationSet, ctx, i, object, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
+      _ref = _this.animationCtx;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ctx = _ref[_i];
+        ctx.clearRect(0, 0, _this.width, _this.height);
+      }
+      _ref1 = _this.animationObjects;
+      for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
+        animationSet = _ref1[i];
         if (!animationSet) {
           continue;
         }
-        for (_j = 0, _len1 = animationSet.length; _j < _len1; _j++) {
-          object = animationSet[_j];
-          ctx = i <= 2 ? _this.animationCtx[index][0] : _this.animationCtx[index][1];
+        for (_k = 0, _len2 = animationSet.length; _k < _len2; _k++) {
+          object = animationSet[_k];
+          ctx = i <= 2 ? _this.animationCtx[0] : _this.animationCtx[1];
           object.draw(ctx, t);
         }
       }
-      nextIndex = (index + 1) % 2;
-      _ref1 = _this.animationCtx[nextIndex];
-      for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-        ctx = _ref1[_k];
-        ctx.clearRect(0, 0, _this.width, _this.height);
-      }
-      return _this.animate(nextIndex);
+      return _this.animate();
     });
   };
 

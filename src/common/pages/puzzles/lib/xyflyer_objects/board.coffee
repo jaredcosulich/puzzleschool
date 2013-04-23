@@ -56,7 +56,7 @@ class board.Board extends xyflyerObject.Object
     
     initAnimation: ->
         return if @animationCtx
-        @animationCtx = [[@createCanvas(1), @createCanvas(3)], [@createCanvas(1), @createCanvas(3)]]
+        @animationCtx = [@createCanvas(1), @createCanvas(3)]
         @animationObjects = []
 
         unless @animation
@@ -69,18 +69,17 @@ class board.Board extends xyflyerObject.Object
         @animationObjects[zIndex] or= []
         @animationObjects[zIndex].push(object)
     
-    animate: (index=0) ->
+    animate: ->
         @animation.frame() (t) => 
+            ctx.clearRect(0,0,@width,@height) for ctx in @animationCtx
+            
             for animationSet, i in @animationObjects
                 continue unless animationSet
                 for object in animationSet
-                    ctx = if i <= 2 then @animationCtx[index][0] else @animationCtx[index][1]
+                    ctx = if i <= 2 then @animationCtx[0] else @animationCtx[1]
                     object.draw(ctx, t)
 
-            nextIndex = (index + 1) % 2
-            ctx.clearRect(0,0,@width,@height) for ctx in @animationCtx[nextIndex]
-    
-            @animate(nextIndex)
+            @animate()
 
         
     createCanvas: (zIndex) ->
