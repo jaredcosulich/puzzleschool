@@ -23,9 +23,10 @@ window.app =
         @puzzleProgress[@levelId] = {}
         
         @initLevelSelector()
+        @initSettings()
         @initWorlds()
         @selectWorld(0)
-        @showLevelSelector(true)
+        @showMenu(@levelSelector)
 
     $: (selector) -> $(selector, @el)
         
@@ -34,9 +35,13 @@ window.app =
         @dynamicContent.html(@originalHTML)
         
     load: ->
-        @$('.menu').bind 'touchstart.menu', =>
-            @$('.menu').one('touchend.menu', => @showLevelSelector())
-            $(document.body).one('touchend.menu', => @$('.menu').unbind('touchend.menu'))
+        @$('.level_selector_menu').bind 'touchstart.menu', =>
+            @$('.level_selector_menu').one('touchend.menu', => @showMenu(@levelSelector))
+            $(document.body).one('touchend.menu', => @$('.level_selector_menu').unbind('touchend.menu'))
+
+        @$('.settings_menu').bind 'touchstart.settings_menu', =>
+            @$('.settings_menu').one('touchend.settings_menu', => @showMenu(@settings))
+            $(document.body).one('touchend.settings_menu', => @$('.settings_menu').unbind('touchend.settings_menu'))
         
         assets = {person: 1, island: 1, plane: 1, background: 1}
         assets[asset] = index for asset, index of @worlds[@currentWorld()].assets or {}
@@ -126,7 +131,7 @@ window.app =
         equationArea = @$('.equation_area')
         equationArea.html(@$(".#{type}_message").html())
         equationArea.css(padding: '0 12px', textAlign: 'center')
-        equationArea.find('.button').bind 'touchstart', => @showLevelSelector() 
+        equationArea.find('.button').bind 'touchstart', => @showMenu(@levelSelector) 
             
     isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
         
@@ -155,6 +160,20 @@ window.app =
                 completed: @puzzleProgress[@level.id]?.completed
         ), 100)
 
+    initSettings: ->
+        @settings or= @$('.settings')
+        @settings.bind 'touchstart', (e) => e.stop()
+        @settings.find('.add_player').bind 'touchstart.add_player', (e) => 
+            @settings.find('.add_player').one 'touchend.add_player', (e) =>
+                @addPlayer()
+
+        @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
+            @settings.find('.edit_player').one 'touchend.edit_player', (e) =>
+                @editPlayer()
+
+        @settings.find('.delete_player').bind 'touchstart.delete_player', (e) => 
+            @settings.find('.delete_player').one 'touchend.delete_player', (e) =>
+                @deletePlayer()
     
     initLevelSelector: (changedLevelId) ->
         @levelSelector or= @$('.level_selector')
@@ -197,7 +216,7 @@ window.app =
                                     if locked
                                         alert('This level is locked.')
                                     else
-                                        @hideLevelSelector()        
+                                        @hideMenu(@levelSelector)        
                         
                             if @puzzleProgress[id]?.completed
                                 stageCompleted += 1 
@@ -226,13 +245,13 @@ window.app =
                 if parseInt(@level.id) == parseInt($(level).data('id'))
                     @selectWorld(Math.floor(index / 2) + 1)
 
-            @showLevelSelector(true)
+            @showMenu(@levelSelector, true)
 
             
-    showLevelSelector: (success) ->
-        $(document.body).unbind('touchstart.level_selector')
-        if parseInt(@levelSelector.css('opacity')) == 1
-            @hideLevelSelector()
+    showMenu: (menu, success) ->
+        $(document.body).unbind('touchstart.hide_menu')
+        if parseInt(menu.css('opacity')) == 1
+            @hideMenu(menu)
             return
 
         # if success
@@ -241,19 +260,20 @@ window.app =
         #     @levelSelector.removeClass('success') 
         # 
                 
-        @levelSelector.css
+        menu.css
             opacity: 1
             top: 45
-            left: (@el.width() - @levelSelector.width()) / 2
+            left: (@el.width() - menu.width()) / 2
 
-        $.timeout 10, =>    
-            $(document.body).one 'touchstart.level_selector', => 
-                $(document.body).one 'touchend.level_selector', => 
-                    @hideLevelSelector()
+        $.timeout 50, =>    
+            $(document.body).one 'touchstart.hide_menu', => 
+                $(document.body).one 'touchend.hide_menu', => 
+                    @hideMenu(menu)
 
-    hideLevelSelector: ->
-        $(document.body).unbind('touchend.level_selector')
-        @levelSelector.css
+    hideMenu: (menu) ->
+        $(document.body).unbind('touchstart.hide_menu touchend.hide_menu')
+        menu.css
             opacity: 0
             top: -1000
             left: -1000
+            

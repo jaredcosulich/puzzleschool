@@ -29,9 +29,10 @@ window.app = {
     this.puzzleProgress = {};
     this.puzzleProgress[this.levelId] = {};
     this.initLevelSelector();
+    this.initSettings();
     this.initWorlds();
     this.selectWorld(0);
-    return this.showLevelSelector(true);
+    return this.showMenu(this.levelSelector);
   },
   $: function(selector) {
     return $(selector, this.el);
@@ -43,12 +44,20 @@ window.app = {
   load: function() {
     var asset, assets, index, _ref, _ref1, _ref2,
       _this = this;
-    this.$('.menu').bind('touchstart.menu', function() {
-      _this.$('.menu').one('touchend.menu', function() {
-        return _this.showLevelSelector();
+    this.$('.level_selector_menu').bind('touchstart.menu', function() {
+      _this.$('.level_selector_menu').one('touchend.menu', function() {
+        return _this.showMenu(_this.levelSelector);
       });
       return $(document.body).one('touchend.menu', function() {
-        return _this.$('.menu').unbind('touchend.menu');
+        return _this.$('.level_selector_menu').unbind('touchend.menu');
+      });
+    });
+    this.$('.settings_menu').bind('touchstart.settings_menu', function() {
+      _this.$('.settings_menu').one('touchend.settings_menu', function() {
+        return _this.showMenu(_this.settings);
+      });
+      return $(document.body).one('touchend.settings_menu', function() {
+        return _this.$('.settings_menu').unbind('touchend.settings_menu');
       });
     });
     assets = {
@@ -207,7 +216,7 @@ window.app = {
       textAlign: 'center'
     });
     return equationArea.find('.button').bind('touchstart', function() {
-      return _this.showLevelSelector();
+      return _this.showMenu(_this.levelSelector);
     });
   },
   isIos: function() {
@@ -258,6 +267,28 @@ window.app = {
         completed: (_ref = _this.puzzleProgress[_this.level.id]) != null ? _ref.completed : void 0
       });
     }), 100);
+  },
+  initSettings: function() {
+    var _this = this;
+    this.settings || (this.settings = this.$('.settings'));
+    this.settings.bind('touchstart', function(e) {
+      return e.stop();
+    });
+    this.settings.find('.add_player').bind('touchstart.add_player', function(e) {
+      return _this.settings.find('.add_player').one('touchend.add_player', function(e) {
+        return _this.addPlayer();
+      });
+    });
+    this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
+      return _this.settings.find('.edit_player').one('touchend.edit_player', function(e) {
+        return _this.editPlayer();
+      });
+    });
+    return this.settings.find('.delete_player').bind('touchstart.delete_player', function(e) {
+      return _this.settings.find('.delete_player').one('touchend.delete_player', function(e) {
+        return _this.deletePlayer();
+      });
+    });
   },
   initLevelSelector: function(changedLevelId) {
     var previousCompleted, stageElement, _i, _len, _ref, _results,
@@ -310,7 +341,7 @@ window.app = {
                   if (locked) {
                     return alert('This level is locked.');
                   } else {
-                    return _this.hideLevelSelector();
+                    return _this.hideMenu(_this.levelSelector);
                   }
                 });
               });
@@ -359,32 +390,32 @@ window.app = {
           }
         }
       }
-      return _this.showLevelSelector(true);
+      return _this.showMenu(_this.levelSelector, true);
     });
   },
-  showLevelSelector: function(success) {
+  showMenu: function(menu, success) {
     var _this = this;
-    $(document.body).unbind('touchstart.level_selector');
-    if (parseInt(this.levelSelector.css('opacity')) === 1) {
-      this.hideLevelSelector();
+    $(document.body).unbind('touchstart.hide_menu');
+    if (parseInt(menu.css('opacity')) === 1) {
+      this.hideMenu(menu);
       return;
     }
-    this.levelSelector.css({
+    menu.css({
       opacity: 1,
       top: 45,
-      left: (this.el.width() - this.levelSelector.width()) / 2
+      left: (this.el.width() - menu.width()) / 2
     });
-    return $.timeout(10, function() {
-      return $(document.body).one('touchstart.level_selector', function() {
-        return $(document.body).one('touchend.level_selector', function() {
-          return _this.hideLevelSelector();
+    return $.timeout(50, function() {
+      return $(document.body).one('touchstart.hide_menu', function() {
+        return $(document.body).one('touchend.hide_menu', function() {
+          return _this.hideMenu(menu);
         });
       });
     });
   },
-  hideLevelSelector: function() {
-    $(document.body).unbind('touchend.level_selector');
-    return this.levelSelector.css({
+  hideMenu: function(menu) {
+    $(document.body).unbind('touchstart.hide_menu touchend.hide_menu');
+    return menu.css({
       opacity: 0,
       top: -1000,
       left: -1000

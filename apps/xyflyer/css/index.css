@@ -85,12 +85,18 @@ body {
   top: 3px;
   padding: 6px;
 }
-.xyflyer .dynamic_content .equation_area .menu {
+.xyflyer .dynamic_content .equation_area .level_selector_menu {
   position: absolute;
-  right: 0;
+  right: 36px;
   top: 0;
-  padding: 12px 6px 12px 12px;
+  padding: 13px 6px 12px 6px;
   font-size: 18px;
+}
+.xyflyer .dynamic_content .equation_area .settings_menu {
+  position: absolute;
+  right: 0px;
+  top: 0;
+  padding: 12px 9px 12px 6px;
 }
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 45px;
@@ -378,7 +384,7 @@ body {
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
-.xyflyer .level_selector {
+.xyflyer .menu {
   position: absolute;
   top: -1000px;
   left: -1000px;
@@ -391,17 +397,51 @@ body {
   padding: 12px;
   z-index: 99;
 }
+.xyflyer .menu h2,
+.xyflyer .menu h3,
+.xyflyer .menu h4,
+.xyflyer .menu legend {
+  text-align: center;
+}
+.xyflyer .settings fieldset {
+    border-right: none;
+    border-left: none;
+}
+.xyflyer .settings legend {
+    font-size: 21px;
+}
+.xyflyer .settings .player_selection {
+    position: relative;
+}
+.xyflyer .settings .player_selection .add_player, .xyflyer .settings .player_selection .edit_player, .xyflyer .settings .player_selection .delete_player {
+    position: absolute;
+    top: 0;
+    padding: 30px 0;
+    width: 45px;
+    text-align: center;
+}
+.xyflyer .settings .player_selection .add_player {
+    right: 0;
+}
+.xyflyer .settings .player_selection .edit_player {
+    right: 45px;
+}
+.xyflyer .settings .player_selection .delete_player {
+    right: 90px;
+}
+.xyflyer .settings .player_selection table {
+    margin: auto;
+    text-align: center;
+}
+.xyflyer .settings .player_selection td {
+    width: 90px;
+}
 .xyflyer .level_selector .success {
   display: none;
 }
 .xyflyer .level_selector.success .success {
   display: block;
   margin-bottom: 12px;
-}
-.xyflyer .level_selector h2,
-.xyflyer .level_selector h3,
-.xyflyer .level_selector h4 {
-  text-align: center;
 }
 .xyflyer .level_selector .world_links {
   background: url('images/level_selector_background.png') no-repeat center center;
@@ -508,7 +548,6 @@ body {
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {
-/*
     .xyflyer {
         height: 768px;
         width: 1024px;
@@ -521,34 +560,35 @@ body {
     
     .xyflyer .dynamic_content .board { 
         height: 768px;
-        width: 667px;
-    }
-    
-    .xyflyer .dynamic_content .equation_area {
-        margin: 6px 0 0 0;
-        height: 756px;
-    }
-*/    
-
-    .xyflyer {
-        /*margin-top: 64px;*/
-        height: 640px;
-        width: 1024px;
-    }
-
-    .xyflyer .dynamic_content {
-        height: 640px;
-        width: 1024px;
-    }
-
-    .xyflyer .dynamic_content .board { 
-        height: 640px;
         width: 664px;
     }
-
+    
     .xyflyer .dynamic_content .equation_area {
         margin: 3px 3px 0 0;
-        height: 634px;
+        height: 762px;
     }
-
+     
+    .xyflyer .menu {
+        width: 840px;
+        height: 645px;
+    }
+    
+    .xyflyer .level_selector .world_links .world_link {
+        margin: 15px 0 15px 81px;
+    }
+    
+    .xyflyer .level_selector .world .stage {
+        width: 780px;
+        margin-top: 30px;
+    }
+    
+    .xyflyer .level_selector .world .stage h4 {
+        font-size: 21px;
+        margin: 0 0 12px 0;
+    }
+    
+    .xyflyer .level_selector .world .stage .level {
+        margin: 0 0 30px 21px;
+        
+    }
 }
