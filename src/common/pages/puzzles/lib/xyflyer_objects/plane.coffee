@@ -23,8 +23,8 @@ class plane.Plane extends xyflyerObject.Object
         moveTo = (position) =>
             @xPos = position.x
             @yPos = position.y
-            position.ring.highlight() if position.ring
             @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
+            position.ring.highlight() if position.ring
                     
         if @path 
             position = @path[Math.round((@latestTime-@startTime)/@timeFactor*10)]

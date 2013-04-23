@@ -412,22 +412,7 @@ body {
 }
 .xyflyer .settings .player_selection {
     position: relative;
-}
-.xyflyer .settings .player_selection .add_player, .xyflyer .settings .player_selection .edit_player, .xyflyer .settings .player_selection .delete_player {
-    position: absolute;
-    top: 0;
-    padding: 30px 0;
-    width: 45px;
-    text-align: center;
-}
-.xyflyer .settings .player_selection .add_player {
-    right: 0;
-}
-.xyflyer .settings .player_selection .edit_player {
-    right: 45px;
-}
-.xyflyer .settings .player_selection .delete_player {
-    right: 90px;
+    padding: 12px 0;
 }
 .xyflyer .settings .player_selection table {
     margin: auto;
@@ -435,6 +420,25 @@ body {
 }
 .xyflyer .settings .player_selection td {
     width: 90px;
+}
+
+.xyflyer .settings .player_actions {
+    margin: auto;
+    border-spacing: 24px;
+    margin-top: -27px;
+}
+
+.xyflyer .settings .player_actions td {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    border-spacing-right: 24px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    width: 60px;
+    padding: 12px 0 9px 0;
 }
 .xyflyer .level_selector .success {
   display: none;

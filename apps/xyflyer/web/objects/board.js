@@ -80,8 +80,10 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.initAnimation = function() {
-    this.animationCtx1 = this.createCanvas(1);
-    this.animationCtx2 = this.createCanvas(3);
+    if (this.animationCtx) {
+      return;
+    }
+    this.animationCtx = [[this.createCanvas(1), this.createCanvas(3)], [this.createCanvas(1), this.createCanvas(3)]];
     this.animationObjects = [];
     if (!this.animation) {
       this.animation = new Animation();
@@ -99,25 +101,32 @@ board.Board = (function(_super) {
     return this.animationObjects[zIndex].push(object);
   };
 
-  Board.prototype.animate = function() {
+  Board.prototype.animate = function(index) {
     var _this = this;
+    if (index == null) {
+      index = 0;
+    }
     return this.animation.frame()(function(t) {
-      var animationSet, ctx, index, object, _i, _j, _len, _len1, _ref;
-      _this.animationCtx1.clearRect(0, 0, _this.width, _this.height);
-      _this.animationCtx2.clearRect(0, 0, _this.width, _this.height);
+      var animationSet, ctx, i, nextIndex, object, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
       _ref = _this.animationObjects;
-      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-        animationSet = _ref[index];
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        animationSet = _ref[i];
         if (!animationSet) {
           continue;
         }
         for (_j = 0, _len1 = animationSet.length; _j < _len1; _j++) {
           object = animationSet[_j];
-          ctx = index <= 2 ? _this.animationCtx1 : _this.animationCtx2;
+          ctx = i <= 2 ? _this.animationCtx[index][0] : _this.animationCtx[index][1];
           object.draw(ctx, t);
         }
       }
-      return _this.animate();
+      nextIndex = (index + 1) % 2;
+      _ref1 = _this.animationCtx[nextIndex];
+      for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+        ctx = _ref1[_k];
+        ctx.clearRect(0, 0, _this.width, _this.height);
+      }
+      return _this.animate(nextIndex);
     });
   };
 
@@ -644,6 +653,7 @@ board.Board = (function(_super) {
       delete this.paper;
     }
     this.el.find('canvas').remove();
+    delete this.animationCtx;
     return delete this.gridSet;
   };
 

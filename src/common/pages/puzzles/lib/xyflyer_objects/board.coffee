@@ -55,8 +55,8 @@ class board.Board extends xyflyerObject.Object
         @initAnimation()
     
     initAnimation: ->
-        @animationCtx1 = @createCanvas(1)
-        @animationCtx2 = @createCanvas(3)
+        return if @animationCtx
+        @animationCtx = [[@createCanvas(1), @createCanvas(3)], [@createCanvas(1), @createCanvas(3)]]
         @animationObjects = []
 
         unless @animation
@@ -69,16 +69,19 @@ class board.Board extends xyflyerObject.Object
         @animationObjects[zIndex] or= []
         @animationObjects[zIndex].push(object)
     
-    animate: ->
+    animate: (index=0) ->
         @animation.frame() (t) => 
-            @animationCtx1.clearRect(0,0,@width,@height)
-            @animationCtx2.clearRect(0,0,@width,@height)
-            for animationSet, index in @animationObjects
+            for animationSet, i in @animationObjects
                 continue unless animationSet
                 for object in animationSet
-                    ctx = if index <= 2 then @animationCtx1 else @animationCtx2
+                    ctx = if i <= 2 then @animationCtx[index][0] else @animationCtx[index][1]
                     object.draw(ctx, t)
-            @animate()
+
+            nextIndex = (index + 1) % 2
+            ctx.clearRect(0,0,@width,@height) for ctx in @animationCtx[nextIndex]
+    
+            @animate(nextIndex)
+
         
     createCanvas: (zIndex) ->
         canvas = $(document.createElement('CANVAS'))
@@ -444,4 +447,5 @@ class board.Board extends xyflyerObject.Object
             @paper.remove()
             delete @paper
         @el.find('canvas').remove()
+        delete @animationCtx
         delete @gridSet

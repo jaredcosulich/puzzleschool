@@ -46,10 +46,10 @@ plane.Plane = (function(_super) {
     moveTo = function(position) {
       _this.xPos = position.x;
       _this.yPos = position.y;
+      _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
       if (position.ring) {
-        position.ring.highlight();
+        return position.ring.highlight();
       }
-      return _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
     };
     if (this.path) {
       position = this.path[Math.round((this.latestTime - this.startTime) / this.timeFactor * 10)];
