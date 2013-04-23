@@ -4479,8 +4479,7 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: null
-                    }
-                    
+                    }                    
                     {
                         id: 1363642523297
                         equations:
@@ -4546,9 +4545,6 @@ levels.WORLDS = [
                                 increment: 1
                                 solution: -2
                     }
-                    
-                    
-                    
                     {
                         id: 1364764682077
                         equations:
@@ -4982,6 +4978,7 @@ levels.WORLDS = [
             background: 5
             island: 4
             person: 3
+            font: 24
         stages: [
             {
                 name: 'Multiple Curves'

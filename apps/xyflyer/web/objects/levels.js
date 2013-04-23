@@ -8154,7 +8154,8 @@ levels.WORLDS = [
     assets: {
       background: 5,
       island: 4,
-      person: 3
+      person: 3,
+      font: 24
     },
     stages: [
       {

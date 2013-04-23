@@ -47,6 +47,7 @@ window.app =
         assets[asset] = index for asset, index of @worlds[@currentWorld()].assets or {}
         assets[asset] = index for asset, index of @currentStage().assets or {}
         assets[asset] = index for asset, index of @level.assets or {}
+        @level.assets = assets
         
         for asset, index of assets 
             if asset == 'background'
@@ -108,6 +109,8 @@ window.app =
     
         for ring in @level?.rings or []
             @helper.addRing(ring.x, ring.y)
+            
+        @$('.equation_container .intro, .equation div').css(fontSize: fontSize) if (fontSize = @level?.assets?.font)
         
         @selectWorld(@currentWorld())
                         

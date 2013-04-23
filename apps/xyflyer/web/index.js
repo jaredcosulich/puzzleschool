@@ -81,6 +81,7 @@ window.app = {
       index = _ref2[asset];
       assets[asset] = index;
     }
+    this.level.assets = assets;
     for (asset in assets) {
       index = assets[asset];
       if (asset === 'background') {
@@ -166,7 +167,7 @@ window.app = {
     }
   },
   loadLevel: function() {
-    var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+    var equation, fontSize, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
     if ((_ref = this.level) != null ? _ref.fragments : void 0) {
       _ref1 = this.level.fragments;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -187,6 +188,11 @@ window.app = {
     for (_j = 0, _len1 = _ref6.length; _j < _len1; _j++) {
       ring = _ref6[_j];
       this.helper.addRing(ring.x, ring.y);
+    }
+    if ((fontSize = (_ref7 = this.level) != null ? (_ref8 = _ref7.assets) != null ? _ref8.font : void 0 : void 0)) {
+      this.$('.equation_container .intro, .equation div').css({
+        fontSize: fontSize
+      });
     }
     return this.selectWorld(this.currentWorld());
   },
