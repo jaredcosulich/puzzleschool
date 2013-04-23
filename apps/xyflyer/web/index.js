@@ -32,7 +32,8 @@ window.app = {
     this.initSettings();
     this.initWorlds();
     this.selectWorld(0);
-    return this.showMenu(this.levelSelector);
+    this.showMenu(this.settings);
+    return this.load();
   },
   $: function(selector) {
     return $(selector, this.el);

@@ -428,20 +428,21 @@ body {
 .xyflyer .settings .player_actions {
     margin: auto;
     border-spacing: 24px;
-    margin-top: -27px;
+    margin-top: -12px;
+    margin-bottom: -27px;
 }
 
 .xyflyer .settings .player_actions td {
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
     text-align: center;
     border-spacing-right: 24px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
-    width: 60px;
-    padding: 12px 0 9px 0;
+    width: 72px;
+    padding: 6px 0;
+    background-color: #24aac3;
+    color: white;
 }
 .xyflyer .level_selector .success {
   display: none;

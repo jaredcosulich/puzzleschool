@@ -26,7 +26,9 @@ window.app =
         @initSettings()
         @initWorlds()
         @selectWorld(0)
-        @showMenu(@levelSelector)
+        @showMenu(@settings)
+
+        @load()
 
     $: (selector) -> $(selector, @el)
         
