@@ -198,7 +198,7 @@ class equations.Equations
                             top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
                             left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
                              
-                        $.timeout 250, =>
+                        $.timeout 300, =>
                             if (dropAreaOffset = dropAreaElement.offset()).top == 0
                                 dropAreaOffset = @findComponentDropAreaElement(equation, solutionComponent).offset()
 

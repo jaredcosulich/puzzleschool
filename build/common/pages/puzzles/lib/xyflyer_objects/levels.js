@@ -160,7 +160,7 @@ levels.WORLDS = [
                 start: 'x',
                 solutionComponents: [
                   {
-                    fragment: '-20',
+                    fragment: '+20',
                     after: 'x'
                   }
                 ]

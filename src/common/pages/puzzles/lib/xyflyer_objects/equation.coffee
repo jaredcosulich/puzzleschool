@@ -65,7 +65,7 @@ class equation.Equation
 
     removeFragment: (dropArea, e) ->
         component = dropArea.component
-        component.initDragging(e)
+        component.initDragging()
 
         @el.find('.accept_component').removeClass('accept_component')
         @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')

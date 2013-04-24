@@ -96,7 +96,7 @@ levels.WORLDS = [
                             'x+20':
                                 start: 'x'
                                 solutionComponents: [
-                                    {fragment: '-20', after: 'x'}
+                                    {fragment: '+20', after: 'x'}
                                 ]
                         fragments: ['+20', '-20']
                         rings: [

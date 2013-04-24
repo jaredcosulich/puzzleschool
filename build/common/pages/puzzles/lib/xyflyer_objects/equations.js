@@ -305,7 +305,7 @@ equations.Equations = (function() {
               top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
               left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
             });
-            return $.timeout(250, function() {
+            return $.timeout(300, function() {
               if ((dropAreaOffset = dropAreaElement.offset()).top === 0) {
                 dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
               }

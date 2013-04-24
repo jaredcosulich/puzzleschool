@@ -39,23 +39,24 @@ class equationComponent.EquationComponent
         @container.append(@elementContainer)
 
     initMeasurements: ->
-        return if @offset
         @offset = @element.offset()
         @gameAreaOffset = @gameArea.offset()
 
     mousedown: (e) ->
         e.preventDefault() if e.preventDefault
-        @initMeasurements()
+        @initDragging()
         @setDragging()
         @move(e)
-        @initDragging()
+        @positionPlaceHolder()
 
+    positionPlaceHolder: ->
         @placeHolder.css
             position: 'absolute'
             top: @offset.top - @container.offset().top
             left: @offset.left - @container.offset().left
 
     initDragging: ->
+        @initMeasurements()
         @gameArea.addClass('dragging')
         body = $(document.body)        
         body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)

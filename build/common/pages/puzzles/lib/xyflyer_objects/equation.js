@@ -115,7 +115,7 @@ equation.Equation = (function() {
     var childArea, component, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
       _this = this;
     component = dropArea.component;
-    component.initDragging(e);
+    component.initDragging();
     this.el.find('.accept_component').removeClass('accept_component');
     this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.element.removeClass('with_component');

@@ -424,9 +424,8 @@ xyflyerEditor.EditorHelper = (function() {
           equation.accept(dropArea, component);
           component.initMeasurements();
           component.setDragging();
-          component.element.css({
-            visibility: 'hidden'
-          });
+          component.transformer.translate(-10000, -10000);
+          component.positionPlaceHolder();
           if (component.variable) {
             return setTimeout((function() {
               return equation.variables[component.variable].set(_this.variables[component.variable].solution);

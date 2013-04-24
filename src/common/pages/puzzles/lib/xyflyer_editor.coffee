@@ -258,7 +258,8 @@ class xyflyerEditor.EditorHelper
                     equation.accept(dropArea, component)
                     component.initMeasurements()
                     component.setDragging()
-                    component.element.css(visibility: 'hidden')                    
+                    component.transformer.translate(-10000, -10000)
+                    component.positionPlaceHolder()                   
                     if component.variable
                         setTimeout((=>
                             equation.variables[component.variable].set(@variables[component.variable].solution)
