@@ -86,6 +86,7 @@ equations.Equations = (function() {
     equationComponent.appendTo(this.possibleFragments);
     this.equationComponents.push(equationComponent);
     top = 0;
+    first = this.equationComponents[0];
     _ref = this.equationComponents;
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
       equationComponent = _ref[index];

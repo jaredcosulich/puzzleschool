@@ -58,6 +58,7 @@ class equations.Equations
         @equationComponents.push(equationComponent)
 
         top = 0
+        first = @equationComponents[0]
         for equationComponent, index in @equationComponents
             if equationComponent.top() != top
                 first = equationComponent
