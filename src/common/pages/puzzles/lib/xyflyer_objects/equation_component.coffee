@@ -46,21 +46,20 @@ class equationComponent.EquationComponent
     mousedown: (e) ->
         e.preventDefault() if e.preventDefault
         @initMeasurements()
-        @move(e)
-        
-        @gameArea.addClass('dragging')
-        body = $(document.body)
-        
-        body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)
-        body.one 'mouseup.drag touchend.drag', (e) => @endMove(e) 
-        @element.css(visibility: 'visible')
         @setDragging()
+        @move(e)
+        @initDragging()
 
         @placeHolder.css
             position: 'absolute'
             top: @offset.top - @container.offset().top
             left: @offset.left - @container.offset().left
 
+    initDragging: ->
+        @gameArea.addClass('dragging')
+        body = $(document.body)        
+        body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)
+        body.one 'mouseup.drag touchend.drag', (e) => @endMove(e)         
         
     setDragging: ->
         @element.addClass('dragging')
@@ -81,26 +80,24 @@ class equationComponent.EquationComponent
         @trackDrag(x, y, @) if @trackDrag
         
     endMove: (e) ->
-        return unless @element.hasClass('dragging')
-        @element.removeClass('dragging')
+        return unless @gameArea.hasClass('dragging')
         @gameArea.removeClass('dragging')
         
         if @endDrag(@)
-            @element.css(visibility: 'hidden')
             @placeHolder.show()
             @elementContainer.unbind('mousedown.drag touchstart.drag')
             @inUse = true
+            @transformer.translate(-10000, -10000)
         else
             @reset()
-
-        @transformer.translate(0, 0)
         
         $(document.body).unbind('mousemove.drag touchmove.drag')
     
     reset: ->
-        @element.css(visibility: 'visible')
+        @element.removeClass('dragging')
         @placeHolder.hide()
         @inUse = false
+        @transformer.translate(0, 0)
         @initMove()
         
         

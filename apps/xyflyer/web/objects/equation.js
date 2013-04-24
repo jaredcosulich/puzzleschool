@@ -115,8 +115,7 @@ equation.Equation = (function() {
     var childArea, component, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
       _this = this;
     component = dropArea.component;
-    component.mousedown(e);
-    component.move(e);
+    component.initDragging(e);
     this.el.find('.accept_component').removeClass('accept_component');
     this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.element.removeClass('with_component');
@@ -158,8 +157,7 @@ equation.Equation = (function() {
       dropArea.parentArea.dirtyCount -= 1;
     }
     this.initVariables();
-    this.plot(this);
-    return component.move(e);
+    return this.plot(this);
   };
 
   Equation.prototype.removeDropArea = function(dropAreaToRemove) {
@@ -293,7 +291,12 @@ equation.Equation = (function() {
       if (dropArea.dirtyCount || !dropArea.component) {
         return;
       }
-      return _this.removeFragment(dropArea, e);
+      component.move(e);
+      element.hide();
+      component.initDragging();
+      return $.timeout(100, function() {
+        return _this.removeFragment(dropArea, e);
+      });
     });
     component.placeHolder.unbind('mousedown.placeholder touchstart.placeholder');
     component.placeHolder.bind('mousedown.placeholder touchstart.placeholder', function(e) {

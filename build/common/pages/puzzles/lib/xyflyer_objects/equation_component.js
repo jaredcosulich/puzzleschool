@@ -81,29 +81,30 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.mousedown = function(e) {
-    var body,
-      _this = this;
     if (e.preventDefault) {
       e.preventDefault();
     }
     this.initMeasurements();
+    this.setDragging();
     this.move(e);
+    this.initDragging();
+    return this.placeHolder.css({
+      position: 'absolute',
+      top: this.offset.top - this.container.offset().top,
+      left: this.offset.left - this.container.offset().left
+    });
+  };
+
+  EquationComponent.prototype.initDragging = function() {
+    var body,
+      _this = this;
     this.gameArea.addClass('dragging');
     body = $(document.body);
     body.bind('mousemove.drag touchmove.drag', function(e) {
       return _this.move(e);
     });
-    body.one('mouseup.drag touchend.drag', function(e) {
+    return body.one('mouseup.drag touchend.drag', function(e) {
       return _this.endMove(e);
-    });
-    this.element.css({
-      visibility: 'visible'
-    });
-    this.setDragging();
-    return this.placeHolder.css({
-      position: 'absolute',
-      top: this.offset.top - this.container.offset().top,
-      left: this.offset.left - this.container.offset().left
     });
   };
 
@@ -133,31 +134,26 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.endMove = function(e) {
-    if (!this.element.hasClass('dragging')) {
+    if (!this.gameArea.hasClass('dragging')) {
       return;
     }
-    this.element.removeClass('dragging');
     this.gameArea.removeClass('dragging');
     if (this.endDrag(this)) {
-      this.element.css({
-        visibility: 'hidden'
-      });
       this.placeHolder.show();
       this.elementContainer.unbind('mousedown.drag touchstart.drag');
       this.inUse = true;
+      this.transformer.translate(-10000, -10000);
     } else {
       this.reset();
     }
-    this.transformer.translate(0, 0);
     return $(document.body).unbind('mousemove.drag touchmove.drag');
   };
 
   EquationComponent.prototype.reset = function() {
-    this.element.css({
-      visibility: 'visible'
-    });
+    this.element.removeClass('dragging');
     this.placeHolder.hide();
     this.inUse = false;
+    this.transformer.translate(0, 0);
     return this.initMove();
   };
 

@@ -65,8 +65,7 @@ class equation.Equation
 
     removeFragment: (dropArea, e) ->
         component = dropArea.component
-        component.mousedown(e)
-        component.move(e)
+        component.initDragging(e)
 
         @el.find('.accept_component').removeClass('accept_component')
         @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
@@ -96,8 +95,6 @@ class equation.Equation
         dropArea.parentArea.dirtyCount -= 1 if dropArea.parentArea
         @initVariables()
         @plot(@)
-        
-        component.move(e)
         
             
     removeDropArea: (dropAreaToRemove) ->
@@ -196,7 +193,10 @@ class equation.Equation
         
         element.bind 'touchstart.remove', (e) =>
             return if dropArea.dirtyCount or !dropArea.component
-            @removeFragment(dropArea, e)
+            component.move(e)
+            element.hide()
+            component.initDragging()
+            $.timeout(100, => @removeFragment(dropArea, e))
         
         component.placeHolder.unbind('mousedown.placeholder touchstart.placeholder')
         component.placeHolder.bind 'mousedown.placeholder touchstart.placeholder', (e) =>
