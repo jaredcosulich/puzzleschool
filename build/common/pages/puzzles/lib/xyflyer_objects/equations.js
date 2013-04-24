@@ -339,7 +339,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, allEquationsSet, c, completedSolution, component, dc, dropArea, equation, existing, formula, info, launch, launchOffset, solution, solutionComponent, straightFormula, v, valid, variable, wrongSpot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1,
+    var accept, allEquationsSet, c, completedSolution, component, dc, dropArea, equation, existing, formula, info, launch, launchOffset, solution, solutionComponent, straightFormula, v, valid, variable, wrongSpot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
       _this = this;
     allEquationsSet = true;
     _ref = this.equations;
@@ -365,10 +365,11 @@ equations.Equations = (function() {
             }
             dc = dropArea.component;
             valid = (function() {
-              var _k, _len2, _results;
+              var _k, _len2, _ref2, _results;
+              _ref2 = equation.solutionComponents;
               _results = [];
-              for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
-                c = solutionComponents[_k];
+              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                c = _ref2[_k];
                 if (c.fragment === dc.equationFragment) {
                   _results.push(c);
                 }
@@ -391,15 +392,16 @@ equations.Equations = (function() {
               return;
             }
           }
-          for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
-            solutionComponent = solutionComponents[_k];
+          _ref2 = equation.solutionComponents;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            solutionComponent = _ref2[_k];
             component = null;
             valid = (function() {
-              var _l, _len3, _ref2, _results;
-              _ref2 = this.equationComponents;
+              var _l, _len3, _ref3, _results;
+              _ref3 = this.equationComponents;
               _results = [];
-              for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
-                c = _ref2[_l];
+              for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                c = _ref3[_l];
                 if (c.equationFragment === solutionComponent.fragment) {
                   _results.push(c);
                 }

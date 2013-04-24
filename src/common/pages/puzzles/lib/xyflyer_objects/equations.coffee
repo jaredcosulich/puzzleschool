@@ -234,13 +234,13 @@ class equations.Equations
                 if straightFormula != solution  
                     for dropArea in equation.dropAreas when dropArea.component
                         dc = dropArea.component
-                        valid = (c for c in solutionComponents when c.fragment == dc.equationFragment)
+                        valid = (c for c in equation.solutionComponents when c.fragment == dc.equationFragment)
                         wrongSpot = (v for v in valid when v.after != dc.after)
                         if not valid.length or wrongSpot.length
                             @displayHint(dropArea.component, dropArea.component.placeHolder, equation)
                             return
                         
-                    for solutionComponent in solutionComponents
+                    for solutionComponent in equation.solutionComponents
                         component = null
                         valid = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)
                         if valid.length > 1
