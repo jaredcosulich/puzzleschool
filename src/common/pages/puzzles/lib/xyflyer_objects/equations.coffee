@@ -197,9 +197,18 @@ class equations.Equations
                             opacity: 1
                             top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
                             left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
+                             
+                        $.timeout 250, =>
+                            if (dropAreaOffset = dropAreaElement.offset()).top == 0
+                                dropAreaOffset = @findComponentDropAreaElement(equation, solutionComponent).offset()
+
+                            dropHere.css
+                                top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
+                                left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
+                            
                                    
     findComponentDropAreaElement: (equation, solutionComponent) ->
-        possible = equation.el.find('div')
+        possible = equation.el.find('div:not(.removing)')
         if solutionComponent.after.length
             for p in possible
                 sf = equation.straightFormula($(p))
@@ -222,47 +231,26 @@ class equations.Equations
                 
             if formula != completedSolution
                 allEquationsSet = false
-                if straightFormula != solution                     
-                    if (solutionComponents = equation.solutionComponents)
-                        for dropArea in equation.dropAreas when dropArea.component
-                            dc = dropArea.component
-                            valid = (c for c in solutionComponents when c.fragment == dc.equationFragment)
-                            wrongSpot = (v for v in valid when v.after != dc.after)
-                            if not valid.length or wrongSpot.length
-                                @displayHint(dropArea.component, dropArea.component.placeHolder)
-                                return
-                            
-                        for solutionComponent in solutionComponents
-                            component = null
-                            valid = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)
-                            if valid.length > 1
-                                component = (v for v in valid when v.after != solutionComponent.after)[0]
-                            component = valid[0] if not component
-                            continue if component.after == solutionComponent.after
-                            accept = @findComponentDropAreaElement(equation, solutionComponent)
-                            if accept?.length
-                                @displayHint(component, accept, equation, solutionComponent)
-                                return 
+                if straightFormula != solution  
+                    for dropArea in equation.dropAreas when dropArea.component
+                        dc = dropArea.component
+                        valid = (c for c in solutionComponents when c.fragment == dc.equationFragment)
+                        wrongSpot = (v for v in valid when v.after != dc.after)
+                        if not valid.length or wrongSpot.length
+                            @displayHint(dropArea.component, dropArea.component.placeHolder, equation)
+                            return
                         
-                    else
-                        for dropArea in equation.dropAreas when dropArea.component
-                            if solution.indexOf(dropArea.component.equationFragment) == -1
-                                @displayHint(dropArea.component, dropArea.component.placeHolder)
-                                return
-                    
-                        components = @equationComponents.sort((a, b) -> b.equationFragment.length - a.equationFragment.length)
-                        for component in components
-                            fragment = component.equationFragment
-                            if @testFragment(fragment, solution, straightFormula)
-                                for dropArea in equation.dropAreas
-                                    continue if dropArea.component or dropArea.fixed
-                                    element = dropArea.element
-                                    element.html(fragment)
-                                    test = @testFragment(fragment, solution, equation.straightFormula(), true)
-                                    element.html('')
-                                    if test 
-                                        @displayHint(component, dropArea.element) 
-                                        return
+                    for solutionComponent in solutionComponents
+                        component = null
+                        valid = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)
+                        if valid.length > 1
+                            component = (v for v in valid when v.after != solutionComponent.after)[0]
+                        component = valid[0] if not component
+                        continue if component.after == solutionComponent.after
+                        accept = @findComponentDropAreaElement(equation, solutionComponent)
+                        if accept?.length
+                            @displayHint(component, accept, equation, solutionComponent)
+                            return 
                 else
                     for variable of equation.variables
                         info = equation.variables[variable]
@@ -281,29 +269,6 @@ class equations.Equations
                             """
                         return
 
-        # if @equations.length > 1
-        #     for equation, index in @equations
-        #         if not equation.rangeText.length
-        #             if (existing = @$(".hints .#{equation.id}_range_hint")).length
-        #                 existing.animate
-        #                     opacity: 0
-        #                     duration: 500
-        #                     complete: =>
-        #                         existing.animate
-        #                             opacity: 1
-        #                             duration: 500
-        #                 return
-        #             else
-        #                 @$('.hints').append """
-        #                     <p class='#{equation.id}_range_hint'>
-        #                         Set the start and end point for equation #{index + 1}.
-        #                         <br/>
-        #                         Click on the graph to get the exact coordinate.
-        #                     </p>
-        #                 """
-        #                 return
-                    
-                    
         if allEquationsSet
             launch = @$('.launch_hint')
             launchOffset = @$('.launch').offset()

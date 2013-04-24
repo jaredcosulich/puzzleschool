@@ -165,21 +165,6 @@ window.app =
                 completed: @puzzleProgress[@level.id]?.completed
         ), 100)
 
-    initSettings: ->
-        @settings or= @$('.settings')
-        @settings.bind 'touchstart', (e) => e.stop()
-        @settings.find('.add_player').bind 'touchstart.add_player', (e) => 
-            @settings.find('.add_player').one 'touchend.add_player', (e) =>
-                @addPlayer()
-
-        @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
-            @settings.find('.edit_player').one 'touchend.edit_player', (e) =>
-                @editPlayer()
-
-        @settings.find('.delete_player').bind 'touchstart.delete_player', (e) => 
-            @settings.find('.delete_player').one 'touchend.delete_player', (e) =>
-                @deletePlayer()
-    
     initLevelSelector: (changedLevelId) ->
         @levelSelector or= @$('.level_selector')
         @levelSelector.bind 'touchstart', (e) => e.stop()
@@ -281,4 +266,15 @@ window.app =
             opacity: 0
             top: -1000
             left: -1000
+    
+    
+    initSettings: ->
+        @settings or= @$('.settings')
+        @settings.bind 'touchstart', (e) => e.stop()
+        @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
+            @settings.find('.edit_player').one 'touchend.edit_player', (e) =>
+                @editPlayer()
+
+
+
             

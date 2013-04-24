@@ -558,7 +558,6 @@ class xyflyerEditor.EditorHelper
         @$('.editor_instructions .valid').hide()
         @$('.editor_instructions .invalid').show()
         
-        
-        
+    
         
         

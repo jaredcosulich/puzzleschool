@@ -402,29 +402,36 @@ body {
 }
 .xyflyer .menu h2,
 .xyflyer .menu h3,
-.xyflyer .menu h4,
-.xyflyer .menu legend {
+.xyflyer .menu h4 {
   text-align: center;
 }
-.xyflyer .settings fieldset {
-    border-right: none;
-    border-left: none;
-}
-.xyflyer .settings legend {
-    font-size: 21px;
+.xyflyer .settings h2 {
+    font-size: 24px;
+    font-weight: normal;
 }
 .xyflyer .settings .player_selection {
     position: relative;
-    padding: 12px 0;
 }
 .xyflyer .settings .player_selection table {
     margin: auto;
     text-align: center;
+    border-spacing: 24px;
 }
 .xyflyer .settings .player_selection td {
-    width: 90px;
+    width: 120px;
+    padding: 15px 0;
+    border: 1px solid #ccc;
+    border-spacing-right: 24px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
 }
-
+.xyflyer .settings .player_selection .selected {
+    background-image: url('images/background1.jpg');
+}
+.xyflyer .settings .player_details {
+    text-align: center;
+    margin-bottom: 24px;
+}
 .xyflyer .settings .player_actions {
     margin: auto;
     border-spacing: 24px;
@@ -443,6 +450,22 @@ body {
     padding: 6px 0;
     background-color: #24aac3;
     color: white;
+}
+.xyflyer .settings .play_button {
+    text-align: center;
+    margin-top: 36px;
+}
+.xyflyer .settings .play_button a {
+    background-color: #24aac3;
+    color: white;
+    padding: 3px 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 27px;
+}
+.xyflyer .settings .play_button i {
+    font-size: 21px;
 }
 .xyflyer .level_selector .success {
   display: none;

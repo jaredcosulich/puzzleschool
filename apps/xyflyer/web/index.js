@@ -275,28 +275,6 @@ window.app = {
       });
     }), 100);
   },
-  initSettings: function() {
-    var _this = this;
-    this.settings || (this.settings = this.$('.settings'));
-    this.settings.bind('touchstart', function(e) {
-      return e.stop();
-    });
-    this.settings.find('.add_player').bind('touchstart.add_player', function(e) {
-      return _this.settings.find('.add_player').one('touchend.add_player', function(e) {
-        return _this.addPlayer();
-      });
-    });
-    this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
-      return _this.settings.find('.edit_player').one('touchend.edit_player', function(e) {
-        return _this.editPlayer();
-      });
-    });
-    return this.settings.find('.delete_player').bind('touchstart.delete_player', function(e) {
-      return _this.settings.find('.delete_player').one('touchend.delete_player', function(e) {
-        return _this.deletePlayer();
-      });
-    });
-  },
   initLevelSelector: function(changedLevelId) {
     var previousCompleted, stageElement, _i, _len, _ref, _results,
       _this = this;
@@ -426,6 +404,18 @@ window.app = {
       opacity: 0,
       top: -1000,
       left: -1000
+    });
+  },
+  initSettings: function() {
+    var _this = this;
+    this.settings || (this.settings = this.$('.settings'));
+    this.settings.bind('touchstart', function(e) {
+      return e.stop();
+    });
+    return this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
+      return _this.settings.find('.edit_player').one('touchend.edit_player', function(e) {
+        return _this.editPlayer();
+      });
     });
   }
 };

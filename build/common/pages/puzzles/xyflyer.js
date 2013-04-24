@@ -174,6 +174,9 @@ soma.views({
           level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));
           this.level = JSON.parse(level);
         }
+        if ((instructions = this.loadCoffeeInstructions())) {
+          this.level = instructions;
+        }
         if (this.levelId === 'editor') {
           xyflyerEditor = require('./lib/xyflyer_editor');
           this.helper = new xyflyerEditor.EditorHelper({
@@ -918,7 +921,8 @@ soma.views({
           return completeEventRecording();
         }
       });
-    }
+    },
+    loadCoffeeInstructions: function() {}
   }
 });
 

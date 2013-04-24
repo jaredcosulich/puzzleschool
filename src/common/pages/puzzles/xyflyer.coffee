@@ -131,6 +131,8 @@ soma.views
                     level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
                     @level = JSON.parse(level)
                     
+                @level = instructions if (instructions = @loadCoffeeInstructions())
+                    
                 if @levelId == 'editor'
                     xyflyerEditor = require('./lib/xyflyer_editor')
                     @helper = new xyflyerEditor.EditorHelper
@@ -617,8 +619,8 @@ soma.views
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                 data: {updates: updates}
                 success: => completeEventRecording()
-            
-                
+       
+        loadCoffeeInstructions: ->
             
 soma.routes
     '/puzzles/xyflyer/:classId/:levelId': ({classId, levelId}) -> 

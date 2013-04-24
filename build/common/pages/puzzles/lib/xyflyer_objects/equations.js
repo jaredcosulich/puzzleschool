@@ -300,10 +300,19 @@ equations.Equations = (function() {
                 }
               });
             });
-            return dropHere.css({
+            dropHere.css({
               opacity: 1,
               top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
               left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
+            });
+            return $.timeout(250, function() {
+              if ((dropAreaOffset = dropAreaElement.offset()).top === 0) {
+                dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
+              }
+              return dropHere.css({
+                top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
+                left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
+              });
             });
           });
         });
@@ -313,7 +322,7 @@ equations.Equations = (function() {
 
   Equations.prototype.findComponentDropAreaElement = function(equation, solutionComponent) {
     var accept, p, possible, sf, _i, _len;
-    possible = equation.el.find('div');
+    possible = equation.el.find('div:not(.removing)');
     if (solutionComponent.after.length) {
       for (_i = 0, _len = possible.length; _i < _len; _i++) {
         p = possible[_i];
@@ -330,7 +339,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.showHint = function() {
-    var accept, allEquationsSet, c, completedSolution, component, components, dc, dropArea, element, equation, existing, formula, fragment, info, launch, launchOffset, solution, solutionComponent, solutionComponents, straightFormula, test, v, valid, variable, wrongSpot, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3,
+    var accept, allEquationsSet, c, completedSolution, component, dc, dropArea, equation, existing, formula, info, launch, launchOffset, solution, solutionComponent, straightFormula, v, valid, variable, wrongSpot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1,
       _this = this;
     allEquationsSet = true;
     _ref = this.equations;
@@ -348,115 +357,78 @@ equations.Equations = (function() {
       if (formula !== completedSolution) {
         allEquationsSet = false;
         if (straightFormula !== solution) {
-          if ((solutionComponents = equation.solutionComponents)) {
-            _ref1 = equation.dropAreas;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              dropArea = _ref1[_j];
-              if (!dropArea.component) {
-                continue;
-              }
-              dc = dropArea.component;
-              valid = (function() {
-                var _k, _len2, _results;
-                _results = [];
-                for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
-                  c = solutionComponents[_k];
-                  if (c.fragment === dc.equationFragment) {
-                    _results.push(c);
-                  }
+          _ref1 = equation.dropAreas;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            dropArea = _ref1[_j];
+            if (!dropArea.component) {
+              continue;
+            }
+            dc = dropArea.component;
+            valid = (function() {
+              var _k, _len2, _results;
+              _results = [];
+              for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
+                c = solutionComponents[_k];
+                if (c.fragment === dc.equationFragment) {
+                  _results.push(c);
                 }
-                return _results;
-              })();
-              wrongSpot = (function() {
-                var _k, _len2, _results;
+              }
+              return _results;
+            })();
+            wrongSpot = (function() {
+              var _k, _len2, _results;
+              _results = [];
+              for (_k = 0, _len2 = valid.length; _k < _len2; _k++) {
+                v = valid[_k];
+                if (v.after !== dc.after) {
+                  _results.push(v);
+                }
+              }
+              return _results;
+            })();
+            if (!valid.length || wrongSpot.length) {
+              this.displayHint(dropArea.component, dropArea.component.placeHolder, equation);
+              return;
+            }
+          }
+          for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
+            solutionComponent = solutionComponents[_k];
+            component = null;
+            valid = (function() {
+              var _l, _len3, _ref2, _results;
+              _ref2 = this.equationComponents;
+              _results = [];
+              for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
+                c = _ref2[_l];
+                if (c.equationFragment === solutionComponent.fragment) {
+                  _results.push(c);
+                }
+              }
+              return _results;
+            }).call(this);
+            if (valid.length > 1) {
+              component = ((function() {
+                var _l, _len3, _results;
                 _results = [];
-                for (_k = 0, _len2 = valid.length; _k < _len2; _k++) {
-                  v = valid[_k];
-                  if (v.after !== dc.after) {
+                for (_l = 0, _len3 = valid.length; _l < _len3; _l++) {
+                  v = valid[_l];
+                  if (v.after !== solutionComponent.after) {
                     _results.push(v);
                   }
                 }
                 return _results;
-              })();
-              if (!valid.length || wrongSpot.length) {
-                this.displayHint(dropArea.component, dropArea.component.placeHolder);
-                return;
-              }
+              })())[0];
             }
-            for (_k = 0, _len2 = solutionComponents.length; _k < _len2; _k++) {
-              solutionComponent = solutionComponents[_k];
-              component = null;
-              valid = (function() {
-                var _l, _len3, _ref2, _results;
-                _ref2 = this.equationComponents;
-                _results = [];
-                for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
-                  c = _ref2[_l];
-                  if (c.equationFragment === solutionComponent.fragment) {
-                    _results.push(c);
-                  }
-                }
-                return _results;
-              }).call(this);
-              if (valid.length > 1) {
-                component = ((function() {
-                  var _l, _len3, _results;
-                  _results = [];
-                  for (_l = 0, _len3 = valid.length; _l < _len3; _l++) {
-                    v = valid[_l];
-                    if (v.after !== solutionComponent.after) {
-                      _results.push(v);
-                    }
-                  }
-                  return _results;
-                })())[0];
-              }
-              if (!component) {
-                component = valid[0];
-              }
-              if (component.after === solutionComponent.after) {
-                continue;
-              }
-              accept = this.findComponentDropAreaElement(equation, solutionComponent);
-              if (accept != null ? accept.length : void 0) {
-                this.displayHint(component, accept, equation, solutionComponent);
-                return;
-              }
+            if (!component) {
+              component = valid[0];
             }
-          } else {
-            _ref2 = equation.dropAreas;
-            for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
-              dropArea = _ref2[_l];
-              if (dropArea.component) {
-                if (solution.indexOf(dropArea.component.equationFragment) === -1) {
-                  this.displayHint(dropArea.component, dropArea.component.placeHolder);
-                  return;
-                }
-              }
+            if (component.after === solutionComponent.after) {
+              continue;
             }
-            components = this.equationComponents.sort(function(a, b) {
-              return b.equationFragment.length - a.equationFragment.length;
-            });
-            for (_m = 0, _len4 = components.length; _m < _len4; _m++) {
-              component = components[_m];
-              fragment = component.equationFragment;
-              if (this.testFragment(fragment, solution, straightFormula)) {
-                _ref3 = equation.dropAreas;
-                for (_n = 0, _len5 = _ref3.length; _n < _len5; _n++) {
-                  dropArea = _ref3[_n];
-                  if (dropArea.component || dropArea.fixed) {
-                    continue;
-                  }
-                  element = dropArea.element;
-                  element.html(fragment);
-                  test = this.testFragment(fragment, solution, equation.straightFormula(), true);
-                  element.html('');
-                  if (test) {
-                    this.displayHint(component, dropArea.element);
-                    return;
-                  }
-                }
-              }
+            accept = this.findComponentDropAreaElement(equation, solutionComponent);
+            if (accept != null ? accept.length : void 0) {
+              this.displayHint(component, accept, equation, solutionComponent);
+              return;
             }
           }
         } else {

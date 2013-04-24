@@ -749,7 +749,14 @@ levels.WORLDS = [
           {
             id: 1363227855683,
             equations: {
-              '2x': {}
+              '2x': {
+                solutionComponents: [
+                  {
+                    fragment: '2x',
+                    after: ''
+                  }
+                ]
+              }
             },
             grid: {
               xMin: -10,
@@ -843,7 +850,13 @@ levels.WORLDS = [
             id: 1363227878373,
             equations: {
               '(1/4)*x': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '(1/4)*',
+                    after: ''
+                  }
+                ]
               }
             },
             grid: {
@@ -1506,7 +1519,16 @@ levels.WORLDS = [
             id: 1363229707272,
             equations: {
               '2*x+3': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '2*',
+                    after: ''
+                  }, {
+                    fragment: '+3',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2279,7 +2301,13 @@ levels.WORLDS = [
             id: 1363229719931,
             equations: {
               'x+a': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+a',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2324,7 +2352,13 @@ levels.WORLDS = [
             id: 1363229739276,
             equations: {
               'x-b': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-b',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2421,7 +2455,13 @@ levels.WORLDS = [
             id: 1363229750440,
             equations: {
               '-x-b': {
-                start: '-x'
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '-b',
+                    after: '-x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2466,7 +2506,13 @@ levels.WORLDS = [
             id: 1363229759840,
             equations: {
               '-x-b': {
-                start: '-x'
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '-b',
+                    after: '-x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2511,7 +2557,8 @@ levels.WORLDS = [
             id: 1363229798825,
             equations: {
               'ax+12': {
-                start: 'ax+12'
+                start: 'ax+12',
+                solutionComponents: []
               }
             },
             grid: {
@@ -2653,7 +2700,16 @@ levels.WORLDS = [
             id: 1363229806832,
             equations: {
               '(1/b)x+c': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '(1/b)',
+                    after: ''
+                  }, {
+                    fragment: '+c',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2711,7 +2767,16 @@ levels.WORLDS = [
             id: 1363229814257,
             equations: {
               'a*x+c': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: 'a*',
+                    after: ''
+                  }, {
+                    fragment: '+c',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -2769,7 +2834,13 @@ levels.WORLDS = [
             id: 1363229822498,
             equations: {
               'x-d': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-d',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -4120,10 +4191,22 @@ levels.WORLDS = [
             id: 1363229830265,
             equations: {
               '-x-c': {
-                start: '-x'
+                start: '-x',
+                solutionComponents: [
+                  {
+                    fragment: '-c',
+                    after: '-x'
+                  }
+                ]
               },
               'x-d': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-d',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
@@ -4265,7 +4348,8 @@ levels.WORLDS = [
                 ]
               },
               '-x': {
-                start: '-x'
+                start: '-x',
+                solutionComponents: []
               }
             },
             fragments: ['+a', '+b', '-c', '-d'],
@@ -4488,8 +4572,25 @@ levels.WORLDS = [
           {
             id: 1363229838153,
             equations: {
-              '2x': {},
-              '(1/2)x+2': {}
+              '2x': {
+                solutionComponents: [
+                  {
+                    fragment: '2x',
+                    after: ''
+                  }
+                ]
+              },
+              '(1/2)x+2': {
+                solutionComponents: [
+                  {
+                    fragment: '(1/2)x',
+                    after: ''
+                  }, {
+                    fragment: '+2',
+                    after: '(1/2)x'
+                  }
+                ]
+              }
             },
             grid: {
               xMin: -10,
@@ -6918,7 +7019,8 @@ levels.WORLDS = [
                 ]
               },
               'x': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: []
               }
             },
             fragments: ['-6'],
@@ -7597,10 +7699,28 @@ levels.WORLDS = [
             id: 1363230030642,
             equations: {
               '((1/3)*x)^2-32': {
-                start: '(x)^2'
+                start: '(x)^2',
+                solutionComponents: [
+                  {
+                    fragment: '(1/3)*',
+                    after: '('
+                  }, {
+                    fragment: '-32',
+                    after: '((1/3)*x)^2'
+                  }
+                ]
               },
               '(1/6)*x+20': {
-                start: 'x'
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '(1/6)*',
+                    after: ''
+                  }, {
+                    fragment: '+20',
+                    after: 'x'
+                  }
+                ]
               }
             },
             grid: {
