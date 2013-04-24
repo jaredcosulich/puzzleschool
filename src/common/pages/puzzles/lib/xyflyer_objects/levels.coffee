@@ -243,7 +243,7 @@ levels.WORLDS = [
                             '-x-1':
                                 start: '-x'
                                 solutionComponents: [
-                                    {fragment: '-3', after: '-x'}
+                                    {fragment: '-1', after: '-x'}
                                 ]
                         fragments: ['+1', '-1', '+4', '-4']
                         rings: [
@@ -1285,8 +1285,8 @@ levels.WORLDS = [
                                 start: 'x'
                                 solutionComponents: [
                                     {fragment: '6*', after: ''}
-                                    {fragment: '(1/3)*', after: ''}
-                                    {fragment: '-2', after: ''}
+                                    {fragment: '(1/3)*', after: '6*'}
+                                    {fragment: '-2', after: 'x'}
                                 ]
                         rings: [
                             {x: -1, y: -4}

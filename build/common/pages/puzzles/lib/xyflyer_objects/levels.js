@@ -412,7 +412,7 @@ levels.WORLDS = [
                 start: '-x',
                 solutionComponents: [
                   {
-                    fragment: '-3',
+                    fragment: '-1',
                     after: '-x'
                   }
                 ]
@@ -2213,10 +2213,10 @@ levels.WORLDS = [
                     after: ''
                   }, {
                     fragment: '(1/3)*',
-                    after: ''
+                    after: '6*'
                   }, {
                     fragment: '-2',
-                    after: ''
+                    after: 'x'
                   }
                 ]
               }
