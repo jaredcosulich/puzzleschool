@@ -17,7 +17,7 @@ class equations.Equations
                     submit()
                     launch.removeClass('clicking')
         else
-            launch.bind 'mousedown.launch', => submit()
+            launch.bind 'click.launch', => submit()
         @initHints()
         @initBackspace()
         @length = 0
@@ -206,6 +206,10 @@ class equations.Equations
                                 top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
                                 left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
                             
+    displayVariable: (variable, value) ->
+        @$('.hints').append """
+            <p class='#{variable}_hint'>Set #{variable} = #{value}</p>
+        """
                                    
     findComponentDropAreaElement: (equation, solutionComponent) ->
         possible = equation.el.find('div:not(.removing)')
@@ -235,18 +239,22 @@ class equations.Equations
                     for dropArea in equation.dropAreas when dropArea.component
                         dc = dropArea.component
                         valid = (c for c in equation.solutionComponents when c.fragment == dc.equationFragment)
+                        continue if (v for v in valid when v.after == dc.after).length
                         wrongSpot = (v for v in valid when v.after != dc.after)
                         if not valid.length or wrongSpot.length
                             @displayHint(dropArea.component, dropArea.component.placeHolder, equation)
                             return
                         
                     for solutionComponent in equation.solutionComponents
+                        continue if formula.indexOf(solutionComponent.after + solutionComponent.fragment) > -1
                         component = null
                         valid = (c for c in @equationComponents when c.equationFragment == solutionComponent.fragment)
                         if valid.length > 1
+                            valid = (v for v in valid when not v.inUse)
+                        if valid.length > 1
                             component = (v for v in valid when v.after != solutionComponent.after)[0]
                         component = valid[0] if not component
-                        continue if component.after == solutionComponent.after
+                        continue if not component or component.after == solutionComponent.after
                         accept = @findComponentDropAreaElement(equation, solutionComponent)
                         if accept?.length
                             @displayHint(component, accept, equation, solutionComponent)
@@ -264,9 +272,7 @@ class equations.Equations
                                         opacity: 1
                                         duration: 500
                         else
-                            @$('.hints').append """
-                                <p class='#{variable}_hint'>Set #{variable} = #{info.solution}</p>
-                            """
+                            @displayVariable(variable, info.solution)
                         return
 
         if allEquationsSet

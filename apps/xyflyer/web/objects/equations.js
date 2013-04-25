@@ -27,7 +27,7 @@ equations.Equations = (function() {
         });
       });
     } else {
-      launch.bind('mousedown.launch', function() {
+      launch.bind('click.launch', function() {
         return submit();
       });
     }
@@ -305,7 +305,7 @@ equations.Equations = (function() {
               top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
               left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
             });
-            return $.timeout(250, function() {
+            return $.timeout(300, function() {
               if ((dropAreaOffset = dropAreaElement.offset()).top === 0) {
                 dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
               }
@@ -318,6 +318,10 @@ equations.Equations = (function() {
         });
       }
     });
+  };
+
+  Equations.prototype.displayVariable = function(variable, value) {
+    return this.$('.hints').append("<p class='" + variable + "_hint'>Set " + variable + " = " + value + "</p>");
   };
 
   Equations.prototype.findComponentDropAreaElement = function(equation, solutionComponent) {
@@ -376,6 +380,19 @@ equations.Equations = (function() {
               }
               return _results;
             })();
+            if (((function() {
+              var _k, _len2, _results;
+              _results = [];
+              for (_k = 0, _len2 = valid.length; _k < _len2; _k++) {
+                v = valid[_k];
+                if (v.after === dc.after) {
+                  _results.push(v);
+                }
+              }
+              return _results;
+            })()).length) {
+              continue;
+            }
             wrongSpot = (function() {
               var _k, _len2, _results;
               _results = [];
@@ -395,6 +412,9 @@ equations.Equations = (function() {
           _ref2 = equation.solutionComponents;
           for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
             solutionComponent = _ref2[_k];
+            if (formula.indexOf(solutionComponent.after + solutionComponent.fragment) > -1) {
+              continue;
+            }
             component = null;
             valid = (function() {
               var _l, _len3, _ref3, _results;
@@ -408,6 +428,19 @@ equations.Equations = (function() {
               }
               return _results;
             }).call(this);
+            if (valid.length > 1) {
+              valid = (function() {
+                var _l, _len3, _results;
+                _results = [];
+                for (_l = 0, _len3 = valid.length; _l < _len3; _l++) {
+                  v = valid[_l];
+                  if (!v.inUse) {
+                    _results.push(v);
+                  }
+                }
+                return _results;
+              })();
+            }
             if (valid.length > 1) {
               component = ((function() {
                 var _l, _len3, _results;
@@ -424,7 +457,7 @@ equations.Equations = (function() {
             if (!component) {
               component = valid[0];
             }
-            if (component.after === solutionComponent.after) {
+            if (!component || component.after === solutionComponent.after) {
               continue;
             }
             accept = this.findComponentDropAreaElement(equation, solutionComponent);
@@ -451,7 +484,7 @@ equations.Equations = (function() {
                 }
               });
             } else {
-              this.$('.hints').append("<p class='" + variable + "_hint'>Set " + variable + " = " + info.solution + "</p>");
+              this.displayVariable(variable, info.solution);
             }
             return;
           }

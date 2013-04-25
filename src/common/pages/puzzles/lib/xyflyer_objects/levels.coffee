@@ -4685,7 +4685,7 @@ levels.WORLDS = [
                             xMax: 10
                             yMin: -10
                             yMax: 10
-                        islandCoordinates: {x: -6.552, y: -1.588}
+                        islandCoordinates: {x: -6, y: -1.5}
                         fragments: ['(1/4)*', '-6']
                     }
                     {
@@ -5475,7 +5475,7 @@ levels.WORLDS = [
                             '((1/2)*x-4)^2':
                                 start: '(x)^2'
                                 solutionComponents: [
-                                    {fragment: '(1/2)*', after: ''}
+                                    {fragment: '(1/2)*', after: '('}
                                     {fragment: '-4', after: 'x'}
                                 ]
                         fragments: ['(1/2)*', '(1/4)*', '+2', '-4']
@@ -6126,6 +6126,8 @@ levels.WORLDS = [
                         fragments: ['3*', '(1/3)*', '+3', '-3']
                         rings: [
                             {x: 0, y: 1.1}
+                            {x: 3, y: 2.48}
+                            {x: 6, y: 3.04}
                         ]
                         grid:
                             xMin: -10

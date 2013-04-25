@@ -126,6 +126,9 @@ soma.views
             @initWorlds()
             @selectWorld(0)
             
+#            @testHints()
+#            return
+            
             if isNaN(parseInt(@levelId))
                 if (instructions = window.location.hash.replace(/\s/g, ''))?.length
                     level = @decode(decodeURIComponent(instructions.replace(/^#/, '')))
@@ -168,7 +171,6 @@ soma.views
                 return
         
             @initLevel()
-            
         
         initWorlds: ->
             @$('.world_link').bind 'click', (e) =>
@@ -619,8 +621,87 @@ soma.views
                 headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
                 data: {updates: updates}
                 success: => completeEventRecording()
-       
+        
+        testHints: (levelIndex=0) ->
+            @hideLevelSelector()
+            @nextLevel = =>
+                @testHints(levelIndex+1)
+                
+            index = 0
+            for world in @worlds
+                for stage in world.stages
+                    for level in stage.levels
+                        if index == levelIndex
+                            if level != @level
+                                console.log("TESTING LEVEL #{level.id}, INDEX: #{levelIndex}")
+                                @level = level
+                                @load()
+                            
+                            $.timeout 10, =>
+                                testHints = (i) => @testHints(i)
+                                helper = @helper
+                                unless helper.equations.reallyDisplayHint
+                                    helper.equations.reallyDisplayHint = @helper.equations.displayHint
+                                    helper.equations.reallyDisplayVariable = @helper.equations.displayVariable
+                                    
+                                    helper.equations.displayHint = (component, dropAreaElement, equation, solutionComponent) ->
+                                        helper.equations.reallyDisplayHint(component, dropAreaElement, equation, solutionComponent)
+                                        $.timeout 1000, =>
+                                            component.mousedown
+                                                preventDefault: =>
+                                                type: 'mousedown'
+                                        
+                                            $(document.body).trigger('mousedown.hint')
+                                            component.element.trigger('mousedown.hint')
+                                        
+                                            $.timeout 1000, =>        
+                                                $(document.body).trigger('mouseup.hint')
+                                                component.move
+                                                    preventDefault: =>
+                                                    type: 'mousemove'
+                                                    clientX: dropAreaElement.offset().left
+                                                    clientY: dropAreaElement.offset().top
+                                        
+                                                component.endMove
+                                                    preventDefault: =>
+                                                    type: 'mouseup'
+                                                    clientX: dropAreaElement.offset().left
+                                                    clientY: dropAreaElement.offset().top
+                                            
+                                                testHints(levelIndex)
+                                                
+                                    helper.equations.displayVariable = (variable, value) ->
+                                        helper.equations.reallyDisplayVariable(variable, value)
+                                        for equation in helper.equations.equations
+                                            if equation.variables[variable]
+                                                equation.variables[variable].set(value)
+                                                testHints(levelIndex)
+                                                return
+
+                                @$('.hints').trigger('mousedown.hint')
+                                @$('.hints').trigger('mouseup.hint')
+
+                                $.timeout 1000, =>
+                                    ready = true
+                                    for equation in helper.equations.equations
+                                        formula = equation.formula()
+                                        completedSolution = equation.solution
+                                        for variable of equation.variables
+                                            info = equation.variables[variable]
+                                            completedSolution = completedSolution.replace(variable, info.solution) if info.solution
+                                        
+                                        ready = false unless completedSolution == formula
+                                    
+                                    if ready
+                                        launch = @$('.launch')
+                                        launch.trigger('mouseup.hint')
+                                        launch.trigger('click.launch')
+                            return
+                        index += 1
+            
         loadCoffeeInstructions: ->
+        
+        
             
 soma.routes
     '/puzzles/xyflyer/:classId/:levelId': ({classId, levelId}) -> 

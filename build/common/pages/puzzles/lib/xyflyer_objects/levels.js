@@ -7691,8 +7691,8 @@ levels.WORLDS = [
               yMax: 10
             },
             islandCoordinates: {
-              x: -6.552,
-              y: -1.588
+              x: -6,
+              y: -1.5
             },
             fragments: ['(1/4)*', '-6']
           }, {
@@ -9030,7 +9030,7 @@ levels.WORLDS = [
                 solutionComponents: [
                   {
                     fragment: '(1/2)*',
-                    after: ''
+                    after: '('
                   }, {
                     fragment: '-4',
                     after: 'x'
@@ -10195,6 +10195,12 @@ levels.WORLDS = [
               {
                 x: 0,
                 y: 1.1
+              }, {
+                x: 3,
+                y: 2.48
+              }, {
+                x: 6,
+                y: 3.04
               }
             ],
             grid: {

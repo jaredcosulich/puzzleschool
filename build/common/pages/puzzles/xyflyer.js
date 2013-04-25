@@ -922,6 +922,117 @@ soma.views({
         }
       });
     },
+    testHints: function(levelIndex) {
+      var index, level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+        _this = this;
+      if (levelIndex == null) {
+        levelIndex = 0;
+      }
+      this.hideLevelSelector();
+      this.nextLevel = function() {
+        return _this.testHints(levelIndex + 1);
+      };
+      index = 0;
+      _ref = this.worlds;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        world = _ref[_i];
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          _ref2 = stage.levels;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            level = _ref2[_k];
+            if (index === levelIndex) {
+              if (level !== this.level) {
+                console.log("TESTING LEVEL " + level.id + ", INDEX: " + levelIndex);
+                this.level = level;
+                this.load();
+              }
+              $.timeout(10, function() {
+                var helper, testHints;
+                testHints = function(i) {
+                  return _this.testHints(i);
+                };
+                helper = _this.helper;
+                if (!helper.equations.reallyDisplayHint) {
+                  helper.equations.reallyDisplayHint = _this.helper.equations.displayHint;
+                  helper.equations.reallyDisplayVariable = _this.helper.equations.displayVariable;
+                  helper.equations.displayHint = function(component, dropAreaElement, equation, solutionComponent) {
+                    var _this = this;
+                    helper.equations.reallyDisplayHint(component, dropAreaElement, equation, solutionComponent);
+                    return $.timeout(1000, function() {
+                      component.mousedown({
+                        preventDefault: function() {},
+                        type: 'mousedown'
+                      });
+                      $(document.body).trigger('mousedown.hint');
+                      component.element.trigger('mousedown.hint');
+                      return $.timeout(1000, function() {
+                        $(document.body).trigger('mouseup.hint');
+                        component.move({
+                          preventDefault: function() {},
+                          type: 'mousemove',
+                          clientX: dropAreaElement.offset().left,
+                          clientY: dropAreaElement.offset().top
+                        });
+                        component.endMove({
+                          preventDefault: function() {},
+                          type: 'mouseup',
+                          clientX: dropAreaElement.offset().left,
+                          clientY: dropAreaElement.offset().top
+                        });
+                        return testHints(levelIndex);
+                      });
+                    });
+                  };
+                  helper.equations.displayVariable = function(variable, value) {
+                    var equation, _l, _len3, _ref3;
+                    helper.equations.reallyDisplayVariable(variable, value);
+                    _ref3 = helper.equations.equations;
+                    for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                      equation = _ref3[_l];
+                      if (equation.variables[variable]) {
+                        equation.variables[variable].set(value);
+                        testHints(levelIndex);
+                        return;
+                      }
+                    }
+                  };
+                }
+                _this.$('.hints').trigger('mousedown.hint');
+                _this.$('.hints').trigger('mouseup.hint');
+                return $.timeout(1000, function() {
+                  var completedSolution, equation, formula, info, launch, ready, variable, _l, _len3, _ref3;
+                  ready = true;
+                  _ref3 = helper.equations.equations;
+                  for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                    equation = _ref3[_l];
+                    formula = equation.formula();
+                    completedSolution = equation.solution;
+                    for (variable in equation.variables) {
+                      info = equation.variables[variable];
+                      if (info.solution) {
+                        completedSolution = completedSolution.replace(variable, info.solution);
+                      }
+                    }
+                    if (completedSolution !== formula) {
+                      ready = false;
+                    }
+                  }
+                  if (ready) {
+                    launch = _this.$('.launch');
+                    launch.trigger('mouseup.hint');
+                    return launch.trigger('click.launch');
+                  }
+                });
+              });
+              return;
+            }
+            index += 1;
+          }
+        }
+      }
+    },
     loadCoffeeInstructions: function() {}
   }
 });
