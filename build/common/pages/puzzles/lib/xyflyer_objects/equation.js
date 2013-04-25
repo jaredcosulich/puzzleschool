@@ -115,23 +115,25 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.removeFragment = function(dropArea, e) {
-    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
+    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3,
       _this = this;
     this.el.find('.accept_component').removeClass('accept_component');
     this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.element.removeClass('with_component');
-    dropArea.component.after = null;
+    if ((_ref = dropArea.component) != null) {
+      _ref.after = null;
+    }
     dropArea.component = null;
-    _ref = dropArea.childAreas;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      childArea = _ref[_i];
+    _ref1 = dropArea.childAreas;
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      childArea = _ref1[_i];
       this.removeDropArea(childArea);
     }
     dropArea.childAreas = [];
     removeDropAreas = [];
-    _ref1 = this.dropAreas;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      da = _ref1[_j];
+    _ref2 = this.dropAreas;
+    for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+      da = _ref2[_j];
       if (!(!da.component && !da.fixed)) {
         continue;
       }
@@ -145,9 +147,9 @@ equation.Equation = (function() {
       da = removeDropAreas[_k];
       this.removeDropArea(da);
     }
-    _ref2 = this.dropAreas;
-    for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
-      da = _ref2[_l];
+    _ref3 = this.dropAreas;
+    for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+      da = _ref3[_l];
       this.wrap(da);
     }
     if (!this.dropAreas.length) {
