@@ -367,7 +367,8 @@ class board.Board extends xyflyerObject.Object
         path[0] = 
             x: @islandCoordinates.x * @xUnit
             y: @islandCoordinates.y * @yUnit
-            
+        rings = @rings.sort((a,b) -> a.x - b.x)    
+        
         addToPath = (x, y, formula) =>
             return unless @grid.yMin - 50 <= (y / @yUnit) <= @grid.yMax + 50
             significantDigits = 1
@@ -388,13 +389,12 @@ class board.Board extends xyflyerObject.Object
                     x: incrementalX
                     y: formula.formula(incrementalX / @xUnit) * @yUnit
             
-                for ring in @rings when ring.inPath(incrementalX/@xUnit, formula.formula)
+                for ring in rings when ring.inPath(incrementalX/@xUnit, formula.formula)
                     path[formattedFullDistance + d].ring = ring
                     
             path.distance += distance
             
         for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
-            # xPos = Math.round(xPos)
             if lastFormula 
                 if lastFormula.area(xPos / @xUnit)
                     yPos = lastFormula.formula(xPos / @xUnit) * @yUnit

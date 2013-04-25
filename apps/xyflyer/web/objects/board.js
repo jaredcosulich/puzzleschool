@@ -536,7 +536,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function() {
-    var addToPath, id, intersection, intersectionY, lastFormula, lf, otherPrevYPos, otherYPos, path, prevYPos, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
+    var addToPath, id, intersection, intersectionY, lastFormula, lf, otherPrevYPos, otherYPos, path, prevYPos, rings, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
       _this = this;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {
@@ -546,8 +546,11 @@ board.Board = (function(_super) {
       x: this.islandCoordinates.x * this.xUnit,
       y: this.islandCoordinates.y * this.yUnit
     };
+    rings = this.rings.sort(function(a, b) {
+      return a.x - b.x;
+    });
     addToPath = function(x, y, formula) {
-      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, ring, significantDigits, _i, _j, _len, _ref, _ref1;
+      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, ring, significantDigits, _i, _j, _len, _ref;
       if (!((_this.grid.yMin - 50 <= (_ref = y / _this.yUnit) && _ref <= _this.grid.yMax + 50))) {
         return;
       }
@@ -570,9 +573,8 @@ board.Board = (function(_super) {
           x: incrementalX,
           y: formula.formula(incrementalX / _this.xUnit) * _this.yUnit
         };
-        _ref1 = _this.rings;
-        for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
-          ring = _ref1[_j];
+        for (_j = 0, _len = rings.length; _j < _len; _j++) {
+          ring = rings[_j];
           if (ring.inPath(incrementalX / _this.xUnit, formula.formula)) {
             path[formattedFullDistance + d].ring = ring;
           }
