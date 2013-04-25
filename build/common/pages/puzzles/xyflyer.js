@@ -169,8 +169,6 @@ soma.views({
       this.initLevelSelector();
       this.initWorlds();
       this.selectWorld(0);
-      this.testHints();
-      return;
       if (isNaN(parseInt(this.levelId))) {
         if ((_ref1 = (instructions = window.location.hash.replace(/\s/g, ''))) != null ? _ref1.length : void 0) {
           level = this.decode(decodeURIComponent(instructions.replace(/^#/, '')));

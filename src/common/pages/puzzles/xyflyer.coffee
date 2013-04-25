@@ -126,8 +126,8 @@ soma.views
             @initWorlds()
             @selectWorld(0)
             
-            @testHints()
-            return
+            # @testHints()
+            # return
             
             if isNaN(parseInt(@levelId))
                 if (instructions = window.location.hash.replace(/\s/g, ''))?.length
