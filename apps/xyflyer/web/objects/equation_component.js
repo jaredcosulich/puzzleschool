@@ -82,17 +82,8 @@ equationComponent.EquationComponent = (function() {
       e.preventDefault();
     }
     this.initDragging();
-    this.setDragging();
     this.move(e);
-    return this.positionPlaceHolder();
-  };
-
-  EquationComponent.prototype.positionPlaceHolder = function() {
-    return this.placeHolder.css({
-      position: 'absolute',
-      top: this.offset.top - this.container.offset().top,
-      left: this.offset.left - this.container.offset().left
-    });
+    return this.showPlaceHolder();
   };
 
   EquationComponent.prototype.initDragging = function() {
@@ -100,6 +91,7 @@ equationComponent.EquationComponent = (function() {
       _this = this;
     this.initMeasurements();
     this.gameArea.addClass('dragging');
+    this.element.addClass('dragging');
     body = $(document.body);
     body.bind('mousemove.drag touchmove.drag', function(e) {
       return _this.move(e);
@@ -109,10 +101,14 @@ equationComponent.EquationComponent = (function() {
     });
   };
 
-  EquationComponent.prototype.setDragging = function() {
-    this.element.addClass('dragging');
+  EquationComponent.prototype.showPlaceHolder = function() {
     this.placeHolder.show();
-    return this.placeHolder.html(this.element.html());
+    this.placeHolder.html(this.element.html());
+    return this.placeHolder.css({
+      position: 'absolute',
+      top: this.offset.top - this.container.offset().top,
+      left: this.offset.left - this.container.offset().left
+    });
   };
 
   EquationComponent.prototype.move = function(e) {

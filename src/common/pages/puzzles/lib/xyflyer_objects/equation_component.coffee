@@ -45,27 +45,24 @@ class equationComponent.EquationComponent
     mousedown: (e) ->
         e.preventDefault() if e.preventDefault
         @initDragging()
-        @setDragging()
         @move(e)
-        @positionPlaceHolder()
-
-    positionPlaceHolder: ->
-        @placeHolder.css
-            position: 'absolute'
-            top: @offset.top - @container.offset().top
-            left: @offset.left - @container.offset().left
+        @showPlaceHolder()
 
     initDragging: ->
         @initMeasurements()
         @gameArea.addClass('dragging')
+        @element.addClass('dragging')
         body = $(document.body)        
         body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)
         body.one 'mouseup.drag touchend.drag', (e) => @endMove(e)         
         
-    setDragging: ->
-        @element.addClass('dragging')
+    showPlaceHolder: ->
         @placeHolder.show()
         @placeHolder.html(@element.html())           
+        @placeHolder.css
+            position: 'absolute'
+            top: @offset.top - @container.offset().top
+            left: @offset.left - @container.offset().left
         
     move: (e) ->
         e.preventDefault() if e.preventDefault 

@@ -257,7 +257,7 @@ class xyflyerEditor.EditorHelper
                     dropArea = (da for da in equation.dropAreas when da.element[0] == accept[0])[0]
                     equation.accept(dropArea, component)
                     component.initMeasurements()
-                    component.setDragging()
+                    component.showPlaceHolder()
                     component.transformer.translate(-10000, -10000)
                     component.positionPlaceHolder()                   
                     if component.variable

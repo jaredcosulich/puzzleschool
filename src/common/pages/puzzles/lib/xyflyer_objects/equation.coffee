@@ -61,18 +61,18 @@ class equation.Equation
                     test: (dropArea, over) => testDropArea(dropArea, over)
                     
             return if @selectedDropArea?.dirtyCount or !@selectedDropArea?.component
+            component = @selectedDropArea.component
+            component.initDragging()
+            component.move(e)
             @removeFragment(@selectedDropArea, e)
 
     removeFragment: (dropArea, e) ->
-        component = dropArea.component
-        component.initDragging()
-
         @el.find('.accept_component').removeClass('accept_component')
         @el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment')
         
         dropArea.element.removeClass('with_component')
         
-        component.after = null    
+        dropArea.component.after = null    
         dropArea.component = null
         
         @removeDropArea(childArea) for childArea in dropArea.childAreas

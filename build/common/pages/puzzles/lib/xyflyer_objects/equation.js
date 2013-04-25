@@ -94,7 +94,7 @@ equation.Equation = (function() {
       return _this.clear();
     });
     return this.el.bind('mousedown.fragment', function(e) {
-      var _ref, _ref1;
+      var component, _ref, _ref1;
       if (!_this.selectedDropArea) {
         _this.selectedDropArea = _this.overlappingDropAreas({
           x: _this.clientX(e),
@@ -107,19 +107,20 @@ equation.Equation = (function() {
       if (((_ref = _this.selectedDropArea) != null ? _ref.dirtyCount : void 0) || !((_ref1 = _this.selectedDropArea) != null ? _ref1.component : void 0)) {
         return;
       }
+      component = _this.selectedDropArea.component;
+      component.initDragging();
+      component.move(e);
       return _this.removeFragment(_this.selectedDropArea, e);
     });
   };
 
   Equation.prototype.removeFragment = function(dropArea, e) {
-    var childArea, component, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
+    var childArea, da, removeDropAreas, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2,
       _this = this;
-    component = dropArea.component;
-    component.initDragging();
     this.el.find('.accept_component').removeClass('accept_component');
     this.el.find('.accept_fragment:not(.with_component)').removeClass('accept_fragment');
     dropArea.element.removeClass('with_component');
-    component.after = null;
+    dropArea.component.after = null;
     dropArea.component = null;
     _ref = dropArea.childAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
