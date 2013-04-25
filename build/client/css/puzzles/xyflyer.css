@@ -54,6 +54,12 @@ body {
   font-size: 15px;
   float: right;
   position: relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .xyflyer .dynamic_content .equation_area h2,
 .xyflyer .dynamic_content .equation_area h3 {
