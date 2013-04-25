@@ -24,7 +24,6 @@ window.app = {
     });
     this.originalHTML = this.dynamicContent.html();
     this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
-    this.levelId = 1364229884455;
     this.level = this.worlds[0].stages[0].levels[0];
     this.puzzleProgress = {};
     this.puzzleProgress[this.levelId] = {};
@@ -417,5 +416,118 @@ window.app = {
         return _this.editPlayer();
       });
     });
+  },
+  testHints: function(levelIndex) {
+    var index, level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+      _this = this;
+    if (levelIndex == null) {
+      levelIndex = 0;
+    }
+    this.hideMenu(this.levelSelector);
+    this.hideMenu(this.settings);
+    this.nextLevel = function() {
+      return _this.testHints(levelIndex + 1);
+    };
+    index = 0;
+    _ref = this.worlds;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      world = _ref[_i];
+      _ref1 = world.stages;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        stage = _ref1[_j];
+        _ref2 = stage.levels;
+        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+          level = _ref2[_k];
+          if (index === levelIndex) {
+            if (level !== this.level) {
+              this.clear();
+              this.level = level;
+              this.load();
+            }
+            $.timeout(10, function() {
+              var helper, testHints;
+              testHints = function(i) {
+                return _this.testHints(i);
+              };
+              helper = _this.helper;
+              if (!helper.equations.reallyDisplayHint) {
+                helper.equations.reallyDisplayHint = _this.helper.equations.displayHint;
+                helper.equations.reallyDisplayVariable = _this.helper.equations.displayVariable;
+                helper.equations.displayHint = function(component, dropAreaElement, equation, solutionComponent) {
+                  var _this = this;
+                  helper.equations.reallyDisplayHint(component, dropAreaElement, equation, solutionComponent);
+                  return $.timeout(1000, function() {
+                    component.mousedown({
+                      preventDefault: function() {},
+                      type: 'touchstart'
+                    });
+                    $(document.body).trigger('touchstart.hint');
+                    component.element.trigger('touchstart.hint');
+                    return $.timeout(1000, function() {
+                      $(document.body).trigger('touchend.hint');
+                      component.move({
+                        preventDefault: function() {},
+                        type: 'touchmove',
+                        clientX: dropAreaElement.offset().left,
+                        clientY: dropAreaElement.offset().top + (30 / (window.appScale || 1))
+                      });
+                      component.endMove({
+                        preventDefault: function() {},
+                        type: 'touchend',
+                        clientX: dropAreaElement.offset().left,
+                        clientY: dropAreaElement.offset().top
+                      });
+                      return testHints(levelIndex);
+                    });
+                  });
+                };
+                helper.equations.displayVariable = function(variable, value) {
+                  var equation, _l, _len3, _ref3;
+                  helper.equations.reallyDisplayVariable(variable, value);
+                  _ref3 = helper.equations.equations;
+                  for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                    equation = _ref3[_l];
+                    if (equation.variables[variable]) {
+                      equation.variables[variable].set(value);
+                      testHints(levelIndex);
+                      return;
+                    }
+                  }
+                };
+              }
+              _this.$('.hints').trigger('touchstart.hint');
+              _this.$('.hints').trigger('touchend.hint');
+              return $.timeout(1000, function() {
+                var completedSolution, equation, formula, info, launch, ready, variable, _l, _len3, _ref3;
+                ready = true;
+                _ref3 = helper.equations.equations;
+                for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                  equation = _ref3[_l];
+                  formula = equation.formula();
+                  completedSolution = equation.solution;
+                  for (variable in equation.variables) {
+                    info = equation.variables[variable];
+                    if (info.solution) {
+                      completedSolution = completedSolution.replace(variable, info.solution);
+                    }
+                  }
+                  if (completedSolution !== formula) {
+                    ready = false;
+                  }
+                }
+                if (ready) {
+                  launch = _this.$('.launch');
+                  launch.trigger('touchend.hint');
+                  launch.trigger('touchstart.launch');
+                  return launch.trigger('touchend.launch');
+                }
+              });
+            });
+            return;
+          }
+          index += 1;
+        }
+      }
+    }
   }
 };

@@ -225,10 +225,22 @@ equations.Equations = (function() {
     var hints,
       _this = this;
     hints = this.el.find('.hints');
-    return hints.bind('mousedown.hint touchstart.hint', function() {
+    hints.bind('mousedown.hint touchstart.hint', function() {
       return hints.one('mouseup.hint touchend.hint', function() {
         return _this.showHint();
       });
+    });
+    this.$('.drag_this').bind('dragstart', function(e) {
+      e.stop();
+      return false;
+    });
+    this.$('.drop_here').bind('dragstart', function(e) {
+      e.stop();
+      return false;
+    });
+    return this.$('.launch').bind('dragstart', function(e) {
+      e.stop();
+      return false;
     });
   };
 
@@ -285,7 +297,7 @@ equations.Equations = (function() {
           return $.timeout(10, function() {
             var dropAreaOffset, dropHere;
             dropHere = _this.$('.drop_here');
-            if ((dropAreaOffset = dropAreaElement.offset()).top === 0) {
+            if ((dropAreaOffset = dropAreaElement.offset()).top === 0 && solutionComponent) {
               dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
             }
             $(document.body).one('mouseup.hint touchend.hint', function() {
@@ -306,7 +318,7 @@ equations.Equations = (function() {
               left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
             });
             return $.timeout(300, function() {
-              if ((dropAreaOffset = dropAreaElement.offset()).top === 0) {
+              if ((dropAreaOffset = dropAreaElement.offset()).top === 0 && solutionComponent) {
                 dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
               }
               return dropHere.css({

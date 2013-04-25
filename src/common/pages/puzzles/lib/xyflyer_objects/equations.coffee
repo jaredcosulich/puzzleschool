@@ -142,6 +142,9 @@ class equations.Equations
         hints = @el.find('.hints')
         hints.bind 'mousedown.hint touchstart.hint', =>
             hints.one 'mouseup.hint touchend.hint', => @showHint()
+        @$('.drag_this').bind('dragstart', (e) -> e.stop(); return false)
+        @$('.drop_here').bind('dragstart', (e) -> e.stop(); return false)
+        @$('.launch').bind('dragstart', (e) -> e.stop(); return false)
         
     testFragment: (fragment, solution, formula, complete) ->
         solutionIndex = solution.indexOf(fragment)
@@ -184,7 +187,7 @@ class equations.Equations
                 dragElement.one 'mousedown.hint touchstart.hint', =>
                     $.timeout 10, =>
                         dropHere = @$('.drop_here') 
-                        if (dropAreaOffset = dropAreaElement.offset()).top == 0
+                        if (dropAreaOffset = dropAreaElement.offset()).top == 0 and solutionComponent
                             dropAreaOffset = @findComponentDropAreaElement(equation, solutionComponent).offset()
 
                         $(document.body).one 'mouseup.hint touchend.hint', =>
@@ -199,7 +202,7 @@ class equations.Equations
                             left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
                              
                         $.timeout 300, =>
-                            if (dropAreaOffset = dropAreaElement.offset()).top == 0
+                            if (dropAreaOffset = dropAreaElement.offset()).top == 0 and solutionComponent
                                 dropAreaOffset = @findComponentDropAreaElement(equation, solutionComponent).offset()
 
                             dropHere.css

@@ -16,7 +16,7 @@ window.app =
         @originalHTML = @dynamicContent.html()
 
         @worlds = require('./lib/xyflyer_objects/levels').WORLDS
-        @levelId = 1364229884455
+        # @levelId = 1364229884455
         @level = @worlds[0].stages[0].levels[0]
         
         @puzzleProgress = {}
@@ -26,6 +26,10 @@ window.app =
         @initSettings()
         @initWorlds()
         @selectWorld(0)
+        
+        # @testHints()
+        # return
+        
         @showMenu(@settings)
 
         @load()
@@ -275,6 +279,85 @@ window.app =
             @settings.find('.edit_player').one 'touchend.edit_player', (e) =>
                 @editPlayer()
 
+    testHints: (levelIndex=0) ->
+        @hideMenu(@levelSelector)
+        @hideMenu(@settings)
+        @nextLevel = =>
+            @testHints(levelIndex+1)
+
+        index = 0
+        for world in @worlds
+            for stage in world.stages
+                for level in stage.levels
+                    if index == levelIndex
+                        if level != @level
+                            # console.log("TESTING LEVEL #{level.id}, INDEX: #{levelIndex}")
+                            @clear()
+                            @level = level
+                            @load()
+
+                        $.timeout 10, =>
+                            testHints = (i) => @testHints(i)
+                            helper = @helper
+                            unless helper.equations.reallyDisplayHint
+                                helper.equations.reallyDisplayHint = @helper.equations.displayHint
+                                helper.equations.reallyDisplayVariable = @helper.equations.displayVariable
+
+                                helper.equations.displayHint = (component, dropAreaElement, equation, solutionComponent) ->
+                                    helper.equations.reallyDisplayHint(component, dropAreaElement, equation, solutionComponent)
+                                    $.timeout 1000, =>
+                                        component.mousedown
+                                            preventDefault: =>
+                                            type: 'touchstart'
+
+                                        $(document.body).trigger('touchstart.hint')
+                                        component.element.trigger('touchstart.hint')
+
+                                        $.timeout 1000, =>        
+                                            $(document.body).trigger('touchend.hint')
+                                            component.move
+                                                preventDefault: =>
+                                                type: 'touchmove'
+                                                clientX: dropAreaElement.offset().left
+                                                clientY: dropAreaElement.offset().top + (30 / (window.appScale or 1))
+
+                                            component.endMove
+                                                preventDefault: =>
+                                                type: 'touchend'
+                                                clientX: dropAreaElement.offset().left
+                                                clientY: dropAreaElement.offset().top
+
+                                            testHints(levelIndex)
+
+                                helper.equations.displayVariable = (variable, value) ->
+                                    helper.equations.reallyDisplayVariable(variable, value)
+                                    for equation in helper.equations.equations
+                                        if equation.variables[variable]
+                                            equation.variables[variable].set(value)
+                                            testHints(levelIndex)
+                                            return
+
+                            @$('.hints').trigger('touchstart.hint')
+                            @$('.hints').trigger('touchend.hint')
+
+                            $.timeout 1000, =>
+                                ready = true
+                                for equation in helper.equations.equations
+                                    formula = equation.formula()
+                                    completedSolution = equation.solution
+                                    for variable of equation.variables
+                                        info = equation.variables[variable]
+                                        completedSolution = completedSolution.replace(variable, info.solution) if info.solution
+
+                                    ready = false unless completedSolution == formula
+
+                                if ready
+                                    launch = @$('.launch')
+                                    launch.trigger('touchend.hint')
+                                    launch.trigger('touchstart.launch')
+                                    launch.trigger('touchend.launch')
+                        return
+                    index += 1
 
 
-            
+        
