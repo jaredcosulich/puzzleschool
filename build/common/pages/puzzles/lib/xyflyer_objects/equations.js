@@ -238,6 +238,10 @@ equations.Equations = (function() {
       e.stop();
       return false;
     });
+    this.$('.drop_here_right').bind('dragstart', function(e) {
+      e.stop();
+      return false;
+    });
     return this.$('.launch').bind('dragstart', function(e) {
       e.stop();
       return false;
@@ -276,7 +280,12 @@ equations.Equations = (function() {
     offset = dragElement.offset();
     top = offset.top + offset.height - gameAreaOffset.top;
     left = offset.left + (offset.width / 2) - areaOffset.left;
-    dragThis = this.$('.drag_this');
+    if (left > (this.equationsArea.width() / 2)) {
+      dragThis = this.$('.drag_this_right');
+      left -= dragThis.width();
+    } else {
+      dragThis = this.$('.drag_this');
+    }
     dragThis.css({
       opacity: 0,
       top: top,
@@ -296,9 +305,16 @@ equations.Equations = (function() {
         return dragElement.one('mousedown.hint touchstart.hint', function() {
           return $.timeout(10, function() {
             var dropAreaOffset, dropHere;
-            dropHere = _this.$('.drop_here');
             if ((dropAreaOffset = dropAreaElement.offset()).top === 0 && solutionComponent) {
               dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
+            }
+            top = dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top;
+            left = dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left;
+            if (left > (_this.equationsArea.width() / 2)) {
+              dropHere = _this.$('.drop_here_right');
+              left -= dropHere.width();
+            } else {
+              dropHere = _this.$('.drop_here');
             }
             $(document.body).one('mouseup.hint touchend.hint', function() {
               return dropHere.animate({
@@ -314,16 +330,15 @@ equations.Equations = (function() {
             });
             dropHere.css({
               opacity: 1,
-              top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
-              left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
+              top: top,
+              left: left
             });
             return $.timeout(300, function() {
               if ((dropAreaOffset = dropAreaElement.offset()).top === 0 && solutionComponent) {
                 dropAreaOffset = _this.findComponentDropAreaElement(equation, solutionComponent).offset();
               }
               return dropHere.css({
-                top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top,
-                left: dropAreaOffset.left + Math.min(30, dropAreaOffset.width / 2) - areaOffset.left
+                top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
               });
             });
           });

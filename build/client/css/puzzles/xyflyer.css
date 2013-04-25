@@ -319,6 +319,8 @@ body {
 }
 .xyflyer .dynamic_content .drag_this,
 .xyflyer .dynamic_content .drop_here,
+.xyflyer .dynamic_content .drag_this_right,
+.xyflyer .dynamic_content .drop_here_right,
 .xyflyer .dynamic_content .launch_hint {
   position: absolute;
   top: -1000px;

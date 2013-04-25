@@ -144,6 +144,7 @@ class equations.Equations
             hints.one 'mouseup.hint touchend.hint', => @showHint()
         @$('.drag_this').bind('dragstart', (e) -> e.stop(); return false)
         @$('.drop_here').bind('dragstart', (e) -> e.stop(); return false)
+        @$('.drop_here_right').bind('dragstart', (e) -> e.stop(); return false)
         @$('.launch').bind('dragstart', (e) -> e.stop(); return false)
         
     testFragment: (fragment, solution, formula, complete) ->
@@ -172,7 +173,12 @@ class equations.Equations
         top = offset.top + offset.height - gameAreaOffset.top
         left = offset.left + (offset.width/2) - areaOffset.left
         
-        dragThis = @$('.drag_this')
+        if left > (@equationsArea.width() / 2)
+            dragThis = @$('.drag_this_right')
+            left -= dragThis.width()
+        else
+            dragThis = @$('.drag_this')
+            
         dragThis.css
             opacity: 0
             top: top
@@ -186,10 +192,18 @@ class equations.Equations
 
                 dragElement.one 'mousedown.hint touchstart.hint', =>
                     $.timeout 10, =>
-                        dropHere = @$('.drop_here') 
                         if (dropAreaOffset = dropAreaElement.offset()).top == 0 and solutionComponent
                             dropAreaOffset = @findComponentDropAreaElement(equation, solutionComponent).offset()
 
+                        top = dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
+                        left = dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
+                        
+                        if left > (@equationsArea.width()/2)
+                            dropHere = @$('.drop_here_right')
+                            left -= dropHere.width() 
+                        else 
+                            dropHere = @$('.drop_here')
+                            
                         $(document.body).one 'mouseup.hint touchend.hint', =>
                             dropHere.animate
                                 opacity: 0, 
@@ -198,8 +212,8 @@ class equations.Equations
                     
                         dropHere.css
                             opacity: 1
-                            top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
-                            left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
+                            top: top
+                            left: left
                              
                         $.timeout 300, =>
                             if (dropAreaOffset = dropAreaElement.offset()).top == 0 and solutionComponent
@@ -207,7 +221,6 @@ class equations.Equations
 
                             dropHere.css
                                 top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
-                                left: dropAreaOffset.left + Math.min(30, (dropAreaOffset.width/2)) - areaOffset.left
                             
     displayVariable: (variable, value) ->
         @$('.hints').append """
