@@ -145,25 +145,21 @@
                 <div class='player_selection'>
                     <table>
                         <tr>
-                            <td class='select_player selected' data-id=0>
+                            <td class='select_player selected' data-id=1>
                                 <img src='css/images/player.png'/>
-                                <br/><br/>
-                                Player1
-                            </td>
-                            <td class='select_player' data-id=1>
-                                <img src='css/images/player.png'/>
-                                <br/><br/>
-                                Player2
+                                <p class='player1'>Player1</p>
                             </td>
                             <td class='select_player' data-id=2>
                                 <img src='css/images/player.png'/>
-                                <br/><br/>
-                                Player3
+                                <p class='player2'>Player2</p>
                             </td>
                             <td class='select_player' data-id=3>
                                 <img src='css/images/player.png'/>
-                                <br/><br/>
-                                Player4
+                                <p class='player3'>Player3</p>
+                            </td>
+                            <td class='select_player' data-id=4>
+                                <img src='css/images/player.png'/>
+                                <p class='player4'>Player4</p>
                             </td>
                         </tr>
                     </table>
@@ -180,6 +176,18 @@
                     <div class='form'>
                         <div class='name'></div> 
                         <div class='keyboard'></div>                       
+                        <div class='hand'>
+                            <input type='radio' class='left' name='left' value='Left'/>
+                            <label name='left' class='left'>Left Handed</label>
+                            &nbsp; &nbsp; &nbsp;
+                            <input type='radio' class='right' name='right' value='Right'/>
+                            <label name='right' class='right'>Right Handed</label>
+                        </div>
+                        <div class='actions'>
+                            <a class='blue_button icon-check save'> Save</a>
+                            &nbsp; &nbsp; &nbsp;
+                            <a class='red_button icon-remove cancel'> Cancel</a>
+                        </div>
                     </div>
                 </div>
 

@@ -28,7 +28,8 @@ window.app = {
     if (!this.players) {
       this.players = {};
       for (i = _i = 0; _i <= 3; i = ++_i) {
-        this.players[i] = {
+        this.players[i + 1] = {
+          id: i + 1,
           name: "Player" + (i + 1),
           attempted: 0,
           completed: 0,
@@ -448,8 +449,49 @@ window.app = {
       });
     });
     this.initKeyboard();
+    this.initRadios();
+    this.initActions();
     this.selectPlayer($(this.$('.select_player')[0]));
     return this.showPlayer();
+  },
+  initActions: function() {
+    var _this = this;
+    this.settings.find('.form .actions .save').bind('touchstart.save', function() {
+      return _this.settings.find('.form .actions .save').one('touchend.save', function() {
+        _this.selectedPlayer.name = _this.settings.find('.form .name').html();
+        _this.selectedPlayer.hand = _this.settings.find('.form .hand input:checked').val();
+        _this.savePlayer();
+        _this.populatePlayer();
+        return _this.showPlayer();
+      });
+    });
+    return this.settings.find('.form .actions .cancel').bind('touchstart.cancel', function() {
+      return _this.settings.find('.form .actions .cancel').one('touchend.cancel', function() {
+        return _this.showPlayer();
+      });
+    });
+  },
+  initRadios: function() {
+    var direction, _i, _len, _ref, _results,
+      _this = this;
+    _ref = ['left', 'right'];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      direction = _ref[_i];
+      _results.push((function(direction) {
+        var hand;
+        hand = _this.settings.find(".hand ." + direction);
+        return hand.bind('touchstart.hand', function() {
+          _this.settings.find('.hand input').attr({
+            checked: ''
+          });
+          return hand.attr({
+            checked: 'checked'
+          });
+        });
+      })(direction));
+    }
+    return _results;
   },
   initKeyboard: function() {
     var addBreak, addLetter, keyboard, l, letter, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _results,
@@ -552,22 +594,36 @@ window.app = {
     return letter.removeClass('active');
   },
   selectPlayer: function(player) {
-    var key, value, _ref, _results;
     this.settings.find('.select_player').removeClass('selected');
     player.addClass('selected');
     this.selectedPlayer = this.players[player.data('id')];
+    console.log(this.selectedPlayer, player.data('id'), this.players);
+    return this.populatePlayer();
+  },
+  populatePlayer: function() {
+    var key, value, _ref;
+    if (!this.selectedPlayer) {
+      return;
+    }
     _ref = this.selectedPlayer;
-    _results = [];
     for (key in _ref) {
       value = _ref[key];
-      _results.push(this.settings.find(".player_details ." + key).html("" + value));
+      this.settings.find(".player_details .info ." + key).html("" + value);
     }
-    return _results;
+    this.settings.find('.form .name').html(this.selectedPlayer.name);
+    this.settings.find(".form .hand input." + (this.selectedPlayer.hand.toLowerCase())).attr({
+      checked: 'checked'
+    });
+    return this.settings.find(".player_selection .player" + this.selectedPlayer.id).html(this.selectedPlayer.name);
+  },
+  savePlayer: function() {
+    if (AppMobi) {
+      return AppMobi.cache.setCookie('player_data', JSON.stringify(this.players));
+    }
   },
   editPlayer: function() {
     var details;
     details = this.settings.find('.player_details');
-    details.find('.name').html(this.selectedPlayer.name);
     details.find('.info').hide();
     return details.find('.form').show();
   },

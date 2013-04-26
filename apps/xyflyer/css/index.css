@@ -415,7 +415,7 @@ body {
     position: relative;
 }
 .xyflyer .settings .player_selection table {
-    margin: auto;
+    margin: -24px auto -12px auto;
     text-align: center;
     border-spacing: 24px;
 }
@@ -432,7 +432,8 @@ body {
 }
 .xyflyer .settings .player_details {
     text-align: center;
-    height: 204px;
+    height: 240px;
+    margin-top: 12px;
 }
 .xyflyer .settings .player_details h3 {
     padding-top: 24px;
@@ -453,6 +454,10 @@ body {
 .xyflyer .settings .player_details .form .keyboard .letter {
     margin-right: 12px;
     padding: 3px 12px;
+}
+.xyflyer .settings .player_details .form .hand, .xyflyer .settings .player_details .form .actions {
+    margin-top: 12px;
+    font-size: 18px ;
 }
 .xyflyer .settings .play_button {
     text-align: center;

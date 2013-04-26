@@ -18,7 +18,8 @@ window.app =
         if not @players
             @players = {}
             for i in [0..3]
-                @players[i] = 
+                @players[i + 1] = 
+                    id: i + 1
                     name: "Player#{i + 1}"
                     attempted: 0
                     completed: 0
@@ -304,8 +305,32 @@ window.app =
                 @hideMenu(@settings)            
                 
         @initKeyboard()
+        @initRadios()
+        @initActions()        
         @selectPlayer($(@$('.select_player')[0]))
         @showPlayer()
+        
+    initActions: ->
+        @settings.find('.form .actions .save').bind 'touchstart.save', =>
+            @settings.find('.form .actions .save').one 'touchend.save', =>
+                @selectedPlayer.name = @settings.find('.form .name').html()
+                @selectedPlayer.hand = @settings.find('.form .hand input:checked').val()
+                @savePlayer()
+                @populatePlayer()
+                @showPlayer()
+
+        @settings.find('.form .actions .cancel').bind 'touchstart.cancel', =>
+            @settings.find('.form .actions .cancel').one 'touchend.cancel', =>
+                @showPlayer()
+
+        
+    initRadios: ->
+        for direction in ['left', 'right']
+            do (direction) =>
+                hand = @settings.find(".hand .#{direction}")
+                hand.bind 'touchstart.hand', =>
+                    @settings.find('.hand input').attr(checked: '')
+                    hand.attr(checked: 'checked')
         
     initKeyboard: ->
         keyboard = @settings.find('.keyboard')
@@ -360,12 +385,27 @@ window.app =
         @settings.find('.select_player').removeClass('selected')
         player.addClass('selected')
         @selectedPlayer = @players[player.data('id')]
+        console.log(@selectedPlayer, player.data('id'), @players)
+        @populatePlayer()
+    
+    populatePlayer: ->
+        return unless @selectedPlayer
         for key, value of @selectedPlayer
-            @settings.find(".player_details .#{key}").html("#{value}")       
+            @settings.find(".player_details .info .#{key}").html("#{value}")    
+
+        @settings.find('.form .name').html(@selectedPlayer.name)
+        @settings.find(".form .hand input.#{@selectedPlayer.hand.toLowerCase()}").attr(checked: 'checked')
+        @settings.find(".player_selection .player#{@selectedPlayer.id}").html(@selectedPlayer.name)
+            
+    savePlayer: ->
+        if AppMobi
+            AppMobi.cache.setCookie('player_data', JSON.stringify(@players))
+        # else
+            # if data = window.localStorage.getItem('player_data')
+            #     @players = JSON.parse(data)
             
     editPlayer: ->
         details = @settings.find('.player_details')
-        details.find('.name').html(@selectedPlayer.name)
         details.find('.info').hide()
         details.find('.form').show()
         
