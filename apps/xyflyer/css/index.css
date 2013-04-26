@@ -327,7 +327,9 @@ body {
   left: 75px;
 }
 .xyflyer .dynamic_content .drag_this,
+.xyflyer .dynamic_content .drag_this_right,
 .xyflyer .dynamic_content .drop_here,
+.xyflyer .dynamic_content .drop_here_right,
 .xyflyer .dynamic_content .launch_hint {
   position: absolute;
   top: -1000px;
@@ -430,26 +432,27 @@ body {
 }
 .xyflyer .settings .player_details {
     text-align: center;
-    margin-bottom: 24px;
+    height: 204px;
 }
-.xyflyer .settings .player_actions {
-    margin: auto;
-    border-spacing: 24px;
-    margin-top: -12px;
-    margin-bottom: -27px;
+.xyflyer .settings .player_details h3 {
+    padding-top: 24px;
 }
-
-.xyflyer .settings .player_actions td {
+.xyflyer .settings .player_details .form {
+    font-size: 24px;
+}
+.xyflyer .settings .player_details .form .name {
+    margin: 0 auto 12px auto;
+    width: 300px;
     border: 1px solid #ccc;
-    text-align: center;
-    border-spacing-right: 24px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    width: 72px;
-    padding: 6px 0;
-    background-color: #24aac3;
-    color: white;
+    padding: 3px;
+}
+.xyflyer .settings .player_details .form .keyboard  {
+    padding-left: 15px;
+    line-height: 45px;
+}
+.xyflyer .settings .player_details .form .keyboard .letter {
+    margin-right: 12px;
+    padding: 3px 12px;
 }
 .xyflyer .settings .play_button {
     text-align: center;
@@ -538,8 +541,14 @@ body {
 .xyflyer .blue_button {
   background-color: #24aac3;
 }
+.xyflyer .blue_button.active {
+  background-color: #145f6d;
+}
 .xyflyer .red_button {
   background-color: #ff6e5f;
+}
+.xyflyer .red_button.active {
+  background-color: #f81700;
 }
 .xyflyer .objects {
   position: absolute;
@@ -619,7 +628,16 @@ body {
     }
     
     .xyflyer .level_selector .world .stage .level {
-        margin: 0 0 30px 21px;
-        
+        margin: 0 0 30px 21px;        
     }
+    
+    .xyflyer .settings .player_details {
+        text-align: center;
+        height: 300px;
+    }
+    
+    .xyflyer .settings .player_details h3 {
+        padding-top: 60px;
+    }
+    
 }

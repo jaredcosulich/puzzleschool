@@ -361,7 +361,8 @@ soma.views({
             }
           },
           error: function() {
-            return _this.$('.login_form .login_button').data('form-button').error();
+            var _ref;
+            return (_ref = loginButton.data('form-button')) != null ? _ref.error() : void 0;
           }
         });
       });

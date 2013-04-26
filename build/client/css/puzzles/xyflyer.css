@@ -467,8 +467,14 @@ body {
 .xyflyer .blue_button {
   background-color: #24aac3;
 }
+.xyflyer .blue_button:active {
+  background-color: #145f6d;
+}
 .xyflyer .red_button {
   background-color: #ff6e5f;
+}
+.xyflyer .red_button:active {
+  background-color: #f81700;
 }
 .xyflyer .objects {
   position: absolute;

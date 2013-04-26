@@ -105,8 +105,14 @@
                     <div class='drag_this'>
                         <img src='css/images/drag_this.png'/>
                     </div>
+                    <div class='drag_this_right'>
+                        <img src='css/images/drag_this_right.png'/>
+                    </div>
                     <div class='drop_here'>
                         <img src='css/images/drop_here.png'/>
+                    </div>
+                    <div class='drop_here_right'>
+                        <img src='css/images/drop_here_right.png'/>
                     </div>
                     <div class='launch_hint'>
                         <img src='css/images/launch.png'/>
@@ -139,22 +145,22 @@
                 <div class='player_selection'>
                     <table>
                         <tr>
-                            <td class='selected'>
+                            <td class='select_player selected' data-id=0>
                                 <img src='css/images/player.png'/>
                                 <br/><br/>
                                 Player1
                             </td>
-                            <td>
+                            <td class='select_player' data-id=1>
                                 <img src='css/images/player.png'/>
                                 <br/><br/>
                                 Player2
                             </td>
-                            <td>
+                            <td class='select_player' data-id=2>
                                 <img src='css/images/player.png'/>
                                 <br/><br/>
                                 Player3
                             </td>
-                            <td>
+                            <td class='select_player' data-id=3>
                                 <img src='css/images/player.png'/>
                                 <br/><br/>
                                 Player4
@@ -164,21 +170,19 @@
                 </div>
                 
                 <div class='player_details'>
-                    <h3>Player1</h3>
-                    <p>23 Levels Attempted</p>
-                    <p>22 Levels Completed</p>
-                    <p>Right Handed</p>
+                    <div class='info'>
+                        <h3 class='name'>Player1</h3>
+                        <p><span class='attempted'>23</span> Levels Attempted</p>
+                        <p><span class='completed'>22</span> Levels Completed</p>
+                        <p><span class='hand'>Right</span> Handed</p>
+                        <p><a class='blue_button edit_player'><i class='icon-pencil'></i> Edit</a></p>
+                    </div>
+                    <div class='form'>
+                        <div class='name'></div> 
+                        <div class='keyboard'></div>                       
+                    </div>
                 </div>
 
-                <table class='player_actions'>
-                    <tr>
-                        <td>
-                            <i class='icon-pencil'></i>
-                            Edit
-                        </td>
-                    </tr>
-                </table>
-                
                 <div class='play_button'>
                     <a>Play <i class='icon-play'></i></a>
                 </div>

@@ -8,6 +8,22 @@ window.app =
             
         document.addEventListener('touchmove', ((e) => e.preventDefault()), false)
         
+        if AppMobi
+            if data = AppMobi.cache.getCookie('player_data')
+                @players = JSON.parse(data)
+        else
+            if data = window.localStorage.getItem('player_data')
+                @players = JSON.parse(data)
+        
+        if not @players
+            @players = {}
+            for i in [0..3]
+                @players[i] = 
+                    name: "Player#{i + 1}"
+                    attempted: 0
+                    completed: 0
+                    hand: 'Right'
+                
         @el = $('.xyflyer')
         
         @dynamicContent = @el.find('.dynamic_content')
@@ -275,9 +291,87 @@ window.app =
     initSettings: ->
         @settings or= @$('.settings')
         @settings.bind 'touchstart', (e) => e.stop()
+        @settings.find('.select_player').bind 'touchstart.select_player', (e) => 
+            @settings.find('.select_player').one 'touchend.select_player', (e) =>
+                @selectPlayer($(e.currentTarget))
+
         @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
             @settings.find('.edit_player').one 'touchend.edit_player', (e) =>
                 @editPlayer()
+
+        @settings.find('.play_button').bind 'touchstart.play', (e) => 
+            @settings.find('.play_button').one 'touchend.play', (e) =>
+                @hideMenu(@settings)            
+                
+        @initKeyboard()
+        @selectPlayer($(@$('.select_player')[0]))
+        @showPlayer()
+        
+    initKeyboard: ->
+        keyboard = @settings.find('.keyboard')
+        addLetter = (letter) -> 
+            color = if letter.match(/&.*;/) then 'red' else 'blue'
+            keyboard.append("<a class='letter #{color}_button'>#{letter}</a>")
+        addBreak = -> keyboard.append('<br/>')
+        addLetter(letter) for letter in ['q','w','e','r','t','y','u','i','o','p','&lsaquo;']
+        addBreak()
+        addLetter(letter) for letter in ['a','s','d','f','g','h','j','k','l']
+        addBreak()
+        addLetter(letter) for letter in ['&and;','z','x','c','v','b','n','m','&#95;']
+        keyboard.find('.letter').bind 'touchstart.letter', (e) =>
+            letter = $(e.currentTarget)
+            letter.addClass('active')
+            letter.one 'touchend.letter', => @clickLetter(letter)
+        @clickLetter($(l)) for l in keyboard.find('.letter') when $(l).html() == '∧'
+                        
+    clickLetter: (letter) ->
+        letters = @settings.find('.keyboard .letter')
+        htmlLetter = letter.html()
+        
+        name = @settings.find('.player_details .form .name') 
+        unless htmlLetter == '∨' and htmlLetter == '∧'
+            name.html('') if name.html().match(/Player\d/) or name.html() == '&nbsp;'
+
+        switch htmlLetter
+            when '_' then name.append(' ')
+            when '∧' 
+                $(l).html($(l).html().toUpperCase())  for l in letters
+                letter.html('&or;')    
+            when '∨'
+                $(l).html($(l).html().toLowerCase())  for l in letters
+                letter.html('&and;')    
+            when '‹'    
+                name.html(name.html()[0...name.html().length - 1])
+            else 
+                name.append(htmlLetter)
+
+        if name.html().length <= 0
+            name.html('&nbsp;')
+        else if htmlLetter != '∨' and htmlLetter != '∧'
+            @clickLetter($(l)) for l in letters when $(l).html() == '∨'
+
+        if (name.html() == '&nbsp;' or name.html().match(/\s$/)) and htmlLetter != '∨' and htmlLetter != '∧'
+            @clickLetter($(l)) for l in letters when $(l).html() == '∧'
+
+        letter.removeClass('active')
+        
+        
+    selectPlayer: (player) ->            
+        @settings.find('.select_player').removeClass('selected')
+        player.addClass('selected')
+        @selectedPlayer = @players[player.data('id')]
+        for key, value of @selectedPlayer
+            @settings.find(".player_details .#{key}").html("#{value}")       
+            
+    editPlayer: ->
+        details = @settings.find('.player_details')
+        details.find('.name').html(@selectedPlayer.name)
+        details.find('.info').hide()
+        details.find('.form').show()
+        
+    showPlayer: ->
+        @settings.find('.player_details .form').hide()        
+        @settings.find('.player_details .info').show()
 
     testHints: (levelIndex=0) ->
         @hideMenu(@levelSelector)

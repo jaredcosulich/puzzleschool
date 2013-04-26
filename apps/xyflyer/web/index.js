@@ -5,7 +5,8 @@ xyflyer = require('./lib/xyflyer');
 
 window.app = {
   initialize: function() {
-    var _this = this;
+    var data, i, _i,
+      _this = this;
     if (!(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight) || this.width < this.height) {
       $.timeout(100, function() {
         return window.app.initialize();
@@ -15,6 +16,26 @@ window.app = {
     document.addEventListener('touchmove', (function(e) {
       return e.preventDefault();
     }), false);
+    if (AppMobi) {
+      if (data = AppMobi.cache.getCookie('player_data')) {
+        this.players = JSON.parse(data);
+      }
+    } else {
+      if (data = window.localStorage.getItem('player_data')) {
+        this.players = JSON.parse(data);
+      }
+    }
+    if (!this.players) {
+      this.players = {};
+      for (i = _i = 0; _i <= 3; i = ++_i) {
+        this.players[i] = {
+          name: "Player" + (i + 1),
+          attempted: 0,
+          completed: 0,
+          hand: 'Right'
+        };
+      }
+    }
     this.el = $('.xyflyer');
     this.dynamicContent = this.el.find('.dynamic_content');
     this.el.bind('touchstart', function(e) {
@@ -411,11 +432,148 @@ window.app = {
     this.settings.bind('touchstart', function(e) {
       return e.stop();
     });
-    return this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
+    this.settings.find('.select_player').bind('touchstart.select_player', function(e) {
+      return _this.settings.find('.select_player').one('touchend.select_player', function(e) {
+        return _this.selectPlayer($(e.currentTarget));
+      });
+    });
+    this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
       return _this.settings.find('.edit_player').one('touchend.edit_player', function(e) {
         return _this.editPlayer();
       });
     });
+    this.settings.find('.play_button').bind('touchstart.play', function(e) {
+      return _this.settings.find('.play_button').one('touchend.play', function(e) {
+        return _this.hideMenu(_this.settings);
+      });
+    });
+    this.initKeyboard();
+    this.selectPlayer($(this.$('.select_player')[0]));
+    return this.showPlayer();
+  },
+  initKeyboard: function() {
+    var addBreak, addLetter, keyboard, l, letter, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _results,
+      _this = this;
+    keyboard = this.settings.find('.keyboard');
+    addLetter = function(letter) {
+      var color;
+      color = letter.match(/&.*;/) ? 'red' : 'blue';
+      return keyboard.append("<a class='letter " + color + "_button'>" + letter + "</a>");
+    };
+    addBreak = function() {
+      return keyboard.append('<br/>');
+    };
+    _ref = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&lsaquo;'];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      letter = _ref[_i];
+      addLetter(letter);
+    }
+    addBreak();
+    _ref1 = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      letter = _ref1[_j];
+      addLetter(letter);
+    }
+    addBreak();
+    _ref2 = ['&and;', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '&#95;'];
+    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+      letter = _ref2[_k];
+      addLetter(letter);
+    }
+    keyboard.find('.letter').bind('touchstart.letter', function(e) {
+      letter = $(e.currentTarget);
+      letter.addClass('active');
+      return letter.one('touchend.letter', function() {
+        return _this.clickLetter(letter);
+      });
+    });
+    _ref3 = keyboard.find('.letter');
+    _results = [];
+    for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+      l = _ref3[_l];
+      if ($(l).html() === '∧') {
+        _results.push(this.clickLetter($(l)));
+      }
+    }
+    return _results;
+  },
+  clickLetter: function(letter) {
+    var htmlLetter, l, letters, name, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+    letters = this.settings.find('.keyboard .letter');
+    htmlLetter = letter.html();
+    name = this.settings.find('.player_details .form .name');
+    if (!(htmlLetter === '∨' && htmlLetter === '∧')) {
+      if (name.html().match(/Player\d/) || name.html() === '&nbsp;') {
+        name.html('');
+      }
+    }
+    switch (htmlLetter) {
+      case '_':
+        name.append(' ');
+        break;
+      case '∧':
+        for (_i = 0, _len = letters.length; _i < _len; _i++) {
+          l = letters[_i];
+          $(l).html($(l).html().toUpperCase());
+        }
+        letter.html('&or;');
+        break;
+      case '∨':
+        for (_j = 0, _len1 = letters.length; _j < _len1; _j++) {
+          l = letters[_j];
+          $(l).html($(l).html().toLowerCase());
+        }
+        letter.html('&and;');
+        break;
+      case '‹':
+        name.html(name.html().slice(0, name.html().length - 1));
+        break;
+      default:
+        name.append(htmlLetter);
+    }
+    if (name.html().length <= 0) {
+      name.html('&nbsp;');
+    } else if (htmlLetter !== '∨' && htmlLetter !== '∧') {
+      for (_k = 0, _len2 = letters.length; _k < _len2; _k++) {
+        l = letters[_k];
+        if ($(l).html() === '∨') {
+          this.clickLetter($(l));
+        }
+      }
+    }
+    if ((name.html() === '&nbsp;' || name.html().match(/\s$/)) && htmlLetter !== '∨' && htmlLetter !== '∧') {
+      for (_l = 0, _len3 = letters.length; _l < _len3; _l++) {
+        l = letters[_l];
+        if ($(l).html() === '∧') {
+          this.clickLetter($(l));
+        }
+      }
+    }
+    return letter.removeClass('active');
+  },
+  selectPlayer: function(player) {
+    var key, value, _ref, _results;
+    this.settings.find('.select_player').removeClass('selected');
+    player.addClass('selected');
+    this.selectedPlayer = this.players[player.data('id')];
+    _ref = this.selectedPlayer;
+    _results = [];
+    for (key in _ref) {
+      value = _ref[key];
+      _results.push(this.settings.find(".player_details ." + key).html("" + value));
+    }
+    return _results;
+  },
+  editPlayer: function() {
+    var details;
+    details = this.settings.find('.player_details');
+    details.find('.name').html(this.selectedPlayer.name);
+    details.find('.info').hide();
+    return details.find('.form').show();
+  },
+  showPlayer: function() {
+    this.settings.find('.player_details .form').hide();
+    return this.settings.find('.player_details .info').show();
   },
   testHints: function(levelIndex) {
     var index, level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,

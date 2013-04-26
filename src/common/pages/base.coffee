@@ -191,7 +191,7 @@ soma.views
                             window.location = go
                             
                     error: () => 
-                        @$('.login_form .login_button').data('form-button').error()
+                        loginButton.data('form-button')?.error()
 
             @$('.login_form input').bind 'keypress', (e) => loginButton.trigger('click') if e.keyCode == 13
                 

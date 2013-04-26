@@ -1,3 +1,5 @@
+# Kodable - https://itunes.apple.com/us/app/kodable/id577673067?mt=8
+
 # BigSeed: https://itunes.apple.com/us/app/bigseed/id482245645?mt=8
 # GoGoGames: http://hackeducation.com/2012/10/31/app-of-the-month-october-2012/
 # Stack the States: https://itunes.apple.com/us/app/stack-the-states/id381342267?mt=8
@@ -16,6 +18,7 @@
 # Origami Game - http://t.co/9OnASCWt
 # DrawQuest - ipad game
 # Universe and More Graphing - http://www.theuniverseandmore.com/SUGC/
+# Letterschool - http://letterschool.com/
 
 soma = require('soma')
 wings = require('wings')

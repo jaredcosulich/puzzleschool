@@ -465,10 +465,16 @@ body {
 
     .blue_button {
         background-color: @blue;
+        &:active {
+            background-color: darken(@blue, 20%);            
+        }
     }
 
     .red_button {
         background-color: @red;
+        &:active {
+            background-color: darken(@red, 20%);            
+        }
     }
 
     
