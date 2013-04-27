@@ -16,14 +16,8 @@ window.app = {
     document.addEventListener('touchmove', (function(e) {
       return e.preventDefault();
     }), false);
-    if (AppMobi) {
-      if (data = AppMobi.cache.getCookie('player_data')) {
-        this.players = JSON.parse(data);
-      }
-    } else {
-      if (data = window.localStorage.getItem('player_data')) {
-        this.players = JSON.parse(data);
-      }
+    if (data = window.localStorage.getItem('player_data')) {
+      this.players = JSON.parse(data);
     }
     if (!this.players) {
       this.players = {};
@@ -48,7 +42,7 @@ window.app = {
     this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
     this.level = this.worlds[0].stages[0].levels[0];
     this.puzzleProgress = {};
-    this.puzzleProgress[this.levelId] = {};
+    this.puzzleProgress[this.level.id] = {};
     this.initLevelSelector();
     this.initSettings();
     this.initWorlds();
@@ -196,7 +190,7 @@ window.app = {
         fragment = _ref1[_i];
         this.helper.addEquationComponent(fragment);
       }
-    } else if (this.levelId !== 'editor') {
+    } else if (this.level.id !== 'editor') {
       this.$('.possible_fragments').hide();
     }
     _ref3 = ((_ref2 = this.level) != null ? _ref2.equations : void 0) || {
@@ -289,6 +283,7 @@ window.app = {
       (_base = _this.puzzleProgress)[_name = _this.level.id] || (_base[_name] = {});
       _this.load();
       (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
+      _this.savePlayer();
       return _this.setLevelIcon({
         id: _this.level.id,
         started: true,
@@ -384,6 +379,7 @@ window.app = {
   nextLevel: function() {
     var _this = this;
     this.puzzleProgress[this.level.id].completed = new Date().getTime();
+    this.savePlayer();
     return $.timeout(1000, function() {
       var index, level, _i, _len, _ref;
       _this.initLevelSelector(_this.level.id);
@@ -594,10 +590,37 @@ window.app = {
     return letter.removeClass('active');
   },
   selectPlayer: function(player) {
+    var info, lastLevel, lastLevelId, level, startedLevels,
+      _this = this;
     this.settings.find('.select_player').removeClass('selected');
     player.addClass('selected');
     this.selectedPlayer = this.players[player.data('id')];
-    console.log(this.selectedPlayer, player.data('id'), this.players);
+    if (this.selectedPlayer.progress) {
+      this.puzzleProgress = this.selectedPlayer.progress;
+    }
+    this.initLevelSelector();
+    startedLevels = (function() {
+      var _ref, _results;
+      _ref = this.puzzleProgress;
+      _results = [];
+      for (level in _ref) {
+        info = _ref[level];
+        if (info.started) {
+          _results.push({
+            id: level,
+            started: info.started
+          });
+        }
+      }
+      return _results;
+    }).call(this);
+    lastLevelId = startedLevels.sort(function(a, b) {
+      return b.started - a.started;
+    })[0].id;
+    lastLevel = this.findLevel(parseInt(lastLevelId));
+    if (lastLevel) {
+      this.level = lastLevel;
+    }
     return this.populatePlayer();
   },
   populatePlayer: function() {
@@ -617,9 +640,8 @@ window.app = {
     return this.settings.find(".player_selection .player" + this.selectedPlayer.id).html(this.selectedPlayer.name);
   },
   savePlayer: function() {
-    if (AppMobi) {
-      return AppMobi.cache.setCookie('player_data', JSON.stringify(this.players));
-    }
+    this.selectedPlayer.progress = this.puzzleProgress;
+    return window.localStorage.setItem('player_data', JSON.stringify(this.players));
   },
   editPlayer: function() {
     var details;

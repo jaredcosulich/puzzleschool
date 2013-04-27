@@ -8,12 +8,8 @@ window.app =
             
         document.addEventListener('touchmove', ((e) => e.preventDefault()), false)
         
-        if AppMobi
-            if data = AppMobi.cache.getCookie('player_data')
-                @players = JSON.parse(data)
-        else
-            if data = window.localStorage.getItem('player_data')
-                @players = JSON.parse(data)
+        if data = window.localStorage.getItem('player_data')
+            @players = JSON.parse(data)
         
         if not @players
             @players = {}
@@ -33,11 +29,10 @@ window.app =
         @originalHTML = @dynamicContent.html()
 
         @worlds = require('./lib/xyflyer_objects/levels').WORLDS
-        # @levelId = 1364229884455
         @level = @worlds[0].stages[0].levels[0]
         
         @puzzleProgress = {}
-        @puzzleProgress[@levelId] = {}
+        @puzzleProgress[@level.id] = {}
         
         @initLevelSelector()
         @initSettings()
@@ -124,7 +119,7 @@ window.app =
         if @level?.fragments
             for fragment in @level.fragments
                 @helper.addEquationComponent(fragment)
-        else if @levelId != 'editor'
+        else if @level.id != 'editor'
             @$('.possible_fragments').hide()
 
         for equation, info of @level?.equations or {'': {}}
@@ -179,6 +174,7 @@ window.app =
             @puzzleProgress[@level.id] or= {}
             @load()
             @puzzleProgress[@level.id].started or= new Date().getTime()
+            @savePlayer()
             
             @setLevelIcon
                 id: @level.id, 
@@ -247,8 +243,9 @@ window.app =
             level.addClass('completed')
 
 
-    nextLevel: ->   
+    nextLevel: ->
         @puzzleProgress[@level.id].completed = new Date().getTime()
+        @savePlayer()
         $.timeout 1000, =>
             @initLevelSelector(@level.id)
 
@@ -385,7 +382,15 @@ window.app =
         @settings.find('.select_player').removeClass('selected')
         player.addClass('selected')
         @selectedPlayer = @players[player.data('id')]
-        console.log(@selectedPlayer, player.data('id'), @players)
+        @puzzleProgress = @selectedPlayer.progress if @selectedPlayer.progress
+        @initLevelSelector()
+
+        startedLevels = ({id: level, started: info.started} for level, info of @puzzleProgress when info.started)
+        lastLevelId = startedLevels.sort((a,b) => b.started - a.started)[0].id
+        lastLevel = @findLevel(parseInt(lastLevelId))
+        if lastLevel
+            @level = lastLevel
+        
         @populatePlayer()
     
     populatePlayer: ->
@@ -398,11 +403,8 @@ window.app =
         @settings.find(".player_selection .player#{@selectedPlayer.id}").html(@selectedPlayer.name)
             
     savePlayer: ->
-        if AppMobi
-            AppMobi.cache.setCookie('player_data', JSON.stringify(@players))
-        # else
-            # if data = window.localStorage.getItem('player_data')
-            #     @players = JSON.parse(data)
+        @selectedPlayer.progress = @puzzleProgress
+        window.localStorage.setItem('player_data', JSON.stringify(@players))
             
     editPlayer: ->
         details = @settings.find('.player_details')
