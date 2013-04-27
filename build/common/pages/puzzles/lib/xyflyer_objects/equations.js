@@ -20,10 +20,10 @@ equations.Equations = (function() {
     launch = this.$('.launch');
     if (window.AppMobi) {
       launch.bind('touchstart.launch', function() {
-        launch.addClass('clicking');
+        launch.addClass('active');
+        submit();
         return launch.one('touchend.launch', function() {
-          submit();
-          return launch.removeClass('clicking');
+          return launch.removeClass('active');
         });
       });
     } else {

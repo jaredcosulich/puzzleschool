@@ -44,7 +44,6 @@ window.app =
         
         @showMenu(@settings)
 
-        @load()
 
     $: (selector) -> $(selector, @el)
         
@@ -54,11 +53,15 @@ window.app =
         
     load: ->
         @$('.level_selector_menu').bind 'touchstart.menu', =>
-            @$('.level_selector_menu').one('touchend.menu', => @showMenu(@levelSelector))
+            @$('.level_selector_menu').addClass('active')
+            @$('.level_selector_menu').one('touchend.menu', => @$('.level_selector_menu').removeClass('active')
+            @showMenu(@levelSelector))
             $(document.body).one('touchend.menu', => @$('.level_selector_menu').unbind('touchend.menu'))
 
         @$('.settings_menu').bind 'touchstart.settings_menu', =>
-            @$('.settings_menu').one('touchend.settings_menu', => @showMenu(@settings))
+            @$('.settings_menu').addClass('active')
+            @$('.settings_menu').one('touchend.settings_menu', => @$('.settings_menu').removeClass('active')
+            @showMenu(@settings))
             $(document.body).one('touchend.settings_menu', => @$('.settings_menu').unbind('touchend.settings_menu'))
         
         assets = {person: 1, island: 1, plane: 1, background: 1}
@@ -214,13 +217,13 @@ window.app =
                             levelElement.bind 'touchstart.select_level', (e) =>
                                 e.stop()
                                 unless locked
-                                    levelElement.addClass('clicking')                                
+                                    levelElement.addClass('active')                                
                                     @clear()
                                     @level = levelInfo
                                     @initLevel()
                                 
                                 levelElement.one 'touchend.select_level', (e) =>
-                                    levelElement.removeClass('clicking')
+                                    levelElement.removeClass('active')
                                     $(document.body).unbind('touchstart.level_selector')
                                     if locked
                                         alert('This level is locked.')
@@ -292,35 +295,47 @@ window.app =
     initSettings: ->
         @settings or= @$('.settings')
         @settings.bind 'touchstart', (e) => e.stop()
+        for info in (info for id, info of @players when info.lastPlayed).sort((a,b) -> b.lastPlayed - a.lastPlayed)
+            playerName = @settings.find(".player_selection .player#{info.id}")
+            playerName.html(info.name)
+            @selectPlayer(playerName.closest('.select_player')) unless @selectedPlayer
+            
         @settings.find('.select_player').bind 'touchstart.select_player', (e) => 
             @selectPlayer($(e.currentTarget))
 
         @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
+            $(e.currentTarget).addClass('active')
             $(e.currentTarget).one 'touchend.edit_player', (e) =>
-                @editPlayer()
+                $(e.currentTarget).removeClass('active')
+            @editPlayer()
 
         @settings.find('.play_button').bind 'touchstart.play', (e) => 
+            $(e.currentTarget).addClass('active')
             $(e.currentTarget).one 'touchend.play', (e) =>
-                @hideMenu(@settings)            
+                $(e.currentTarget).removeClass('active')
+            @hideMenu(@settings)            
                 
         @initKeyboard()
         @initRadios()
         @initActions()        
-        @selectPlayer($(@$('.select_player')[0]))
         @showPlayer()
         
     initActions: ->
-        @settings.find('.form .actions .save').bind 'touchstart.save', =>
-            @settings.find('.form .actions .save').one 'touchend.save', =>
-                @selectedPlayer.name = @settings.find('.form .name').html()
-                @selectedPlayer.hand = @settings.find('.form .hand input:checked').val()
-                @savePlayer()
-                @populatePlayer()
-                @showPlayer()
+        @settings.find('.form .actions .save').bind 'touchstart.save', (e) =>
+            button = $(e.currentTarget)
+            button.addClass('active')
+            button.one 'touchend.save', => button.removeClass('active')
+            @selectedPlayer.name = @settings.find('.form .name').html()
+            @selectedPlayer.hand = @settings.find('.form .hand input:checked').val()
+            @savePlayer()
+            @populatePlayer()
+            @showPlayer()
 
-        @settings.find('.form .actions .cancel').bind 'touchstart.cancel', =>
-            @settings.find('.form .actions .cancel').one 'touchend.cancel', =>
-                @showPlayer()
+        @settings.find('.form .actions .cancel').bind 'touchstart.cancel', (e) =>
+            button = $(e.currentTarget)
+            button.addClass('active')
+            button.one 'touchend.cancel', => button.removeClass('active')
+            @showPlayer()    
 
         
     initRadios: ->
@@ -384,9 +399,10 @@ window.app =
         @settings.find('.select_player').removeClass('selected')
         player.addClass('selected')
         @selectedPlayer = @players[player.data('id')]
-        @puzzleProgress = @selectedPlayer.progress if @selectedPlayer.progress
+        existingProgressIds = (parseInt(id) for id in Object.keys(@puzzleProgress))
+        @puzzleProgress = @selectedPlayer.progress or {}
 
-        @initLevelSelector(parseInt(id) for id in Object.keys(@puzzleProgress))
+        @initLevelSelector([existingProgressIds..., (parseInt(id) for id in Object.keys(@puzzleProgress))...])
 
         startedLevels = ({id: level, started: info.started} for level, info of @puzzleProgress when info.started)
         if startedLevels.length
@@ -394,7 +410,12 @@ window.app =
             lastLevel = @findLevel(parseInt(lastLevelId))
             if lastLevel
                 @level = lastLevel
+        else
+            @level = @worlds[0].stages[0].levels[0]
         
+        @clear()
+        @initLevel()
+        @puzzleProgress[@level.id] or= {}
         @populatePlayer()
     
     populatePlayer: ->
@@ -402,7 +423,7 @@ window.app =
         for key, value of @selectedPlayer
             @settings.find(".player_details .info .#{key}").html("#{value}")    
 
-        started = (id for id, info of @selectedPlayer.progress when info.started)
+        started = (id for id, info of @selectedPlayer.progress when info.started or info.completed)
         @settings.find('.player_details .info .attempted').html("#{started.length}")
         
         completed = (id for id, info of @selectedPlayer.progress when info.completed)
@@ -413,6 +434,7 @@ window.app =
         @settings.find(".player_selection .player#{@selectedPlayer.id}").html(@selectedPlayer.name)
             
     savePlayer: ->
+        @selectedPlayer.lastPlayed = new Date().getTime()
         @selectedPlayer.progress = @puzzleProgress
         window.localStorage.setItem('player_data', JSON.stringify(@players))
             

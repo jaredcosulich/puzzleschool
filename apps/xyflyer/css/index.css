@@ -87,9 +87,9 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .level_selector_menu {
   position: absolute;
-  right: 45px;
+  right: 60px;
   top: 0;
-  padding: 6px 12px 12px 12px;
+  padding: 6px 6px 12px 12px;
   font-size: 30px;
   color: #24aac3;
 }
@@ -97,7 +97,7 @@ body {
   position: absolute;
   right: 0px;
   top: 0;
-  padding: 6px 12px 12px 12px;
+  padding: 6px 24px 12px 12px;
   font-size: 30px;
   color: #24aac3;
 }
@@ -291,7 +291,7 @@ body {
   text-shadow: 1px 1px 0px #8b3029;
   margin: auto;
 }
-.xyflyer .dynamic_content .button.clicking {
+.xyflyer .dynamic_content .button.active {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00));
   background: -moz-linear-gradient(center top, #ce0100 5%, #fe1a00 100%);
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
@@ -325,6 +325,39 @@ body {
   padding: 12px 0;
   bottom: 0;
   left: 75px;
+}
+.xyflyer .dynamic_content .hint_popup {
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+    background-color: white;
+    width: 120px;
+    height: 60px;
+    text-align: center;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    box-shadow: 0 0 6px #B2B2B2;
+    -webkit-box-shadow: 0 0 6px #B2B2B2;
+    -moz-box-shadow: 0 0 6px #B2B2B2;
+}
+.xyflyer .dynamic_content .hint_popup::before {
+    background-color: white;
+    height: 18px;
+    width: 18px;
+    content: "\00a0";
+    display: block;
+    margin-left: 52px;
+    margin-top: 51px;
+    box-shadow: 1px 1px rgb(211, 211, 211);
+    -webkit-box-shadow: 1px 1px rgb(211, 211, 211);
+    -moz-box-shadow: 1px 1px rgb(211, 211, 211);
+    transform:               rotate( 45deg );  
+        -moz-transform:      rotate( 45deg );  
+        -ms-transform:       rotate( 45deg );  
+        -o-transform:        rotate( 45deg );  
+        -webkit-transform:   rotate( 45deg );  
 }
 .xyflyer .dynamic_content .drag_this,
 .xyflyer .dynamic_content .drag_this_right,
@@ -433,11 +466,13 @@ body {
 }
 .xyflyer .settings .player_details {
     text-align: center;
-    height: 240px;
+    height: 262px;
     margin-top: 12px;
+    font-size: 18px;    
 }
 .xyflyer .settings .player_details h3 {
-    padding-top: 24px;
+    padding-top: 36px;
+    margin: 0;
 }
 .xyflyer .settings .player_details .form {
     font-size: 24px;
@@ -458,8 +493,14 @@ body {
     padding: 3px 12px;
 }
 .xyflyer .settings .player_details .form .hand, .xyflyer .settings .player_details .form .actions {
-    margin-top: 12px;
+    margin-top: 6px;
     font-size: 18px ;
+}
+.xyflyer .settings .player_details .form .actions {
+    margin-top: 18px;
+}
+.xyflyer .settings .player_details .form .actions a {
+    padding: 6px 12px;
 }
 .xyflyer .settings .play_button {
     text-align: center;
@@ -530,7 +571,7 @@ body {
 .xyflyer .level_selector .world .stage .level.completed {
   background-position: -110px 0;
 }
-.xyflyer .level_selector .world .stage .level.clicking {
+.xyflyer .level_selector .world .stage .level.active {
   background-position: 0 -55px;
 }
 .xyflyer .blue_button,
@@ -594,7 +635,7 @@ body {
   vertical-align: middle;
 }
 
-/*@media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {*/
+@media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {
     .xyflyer {
         height: 768px;
         width: 1024px;
@@ -645,12 +686,6 @@ body {
     .xyflyer .settings .player_details {
         text-align: center;
         height: 270px;
-        font-size: 18px;
     }
     
-    .xyflyer .settings .player_details h3 {
-        padding-top: 36px;
-        margin: 0;
-    }
-    
-/*}*/
+}

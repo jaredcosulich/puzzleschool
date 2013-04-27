@@ -12,10 +12,9 @@ class equations.Equations
         launch = @$('.launch')
         if window.AppMobi
             launch.bind 'touchstart.launch', => 
-                launch.addClass('clicking')
-                launch.one 'touchend.launch', => 
-                    submit()
-                    launch.removeClass('clicking')
+                launch.addClass('active')
+                submit()
+                launch.one 'touchend.launch', => launch.removeClass('active')
         else
             launch.bind 'click.launch', => submit()
         @initHints()
