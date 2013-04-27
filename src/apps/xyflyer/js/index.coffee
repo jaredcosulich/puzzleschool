@@ -175,6 +175,7 @@ window.app =
             @load()
             @puzzleProgress[@level.id].started or= new Date().getTime()
             @savePlayer()
+            @populatePlayer()
             
             @setLevelIcon
                 id: @level.id, 
@@ -182,7 +183,7 @@ window.app =
                 completed: @puzzleProgress[@level.id]?.completed
         ), 100)
 
-    initLevelSelector: (changedLevelId) ->
+    initLevelSelector: (changedLevelIds) ->
         @levelSelector or= @$('.level_selector')
         @levelSelector.bind 'touchstart', (e) => e.stop()
 
@@ -195,7 +196,8 @@ window.app =
                     lastLevelId = id
                     id = levelElement.data('id')
                     
-                    if not changedLevelId or changedLevelId == id or changedLevelId == lastLevelId
+                    if not changedLevelIds or not changedLevelIds.length or 
+                       changedLevelIds.indexOf(id) > -1 or changedLevelIds.indexOf(lastLevelId) > -1
                         do (levelElement, index) =>
                             levelInfo = @findLevel(id)
         
@@ -246,8 +248,9 @@ window.app =
     nextLevel: ->
         @puzzleProgress[@level.id].completed = new Date().getTime()
         @savePlayer()
+        @populatePlayer()
         $.timeout 1000, =>
-            @initLevelSelector(@level.id)
+            @initLevelSelector([@level.id])
 
             for level, index in @$('.stage .level:last-child') when index % 2 == 1
                 if parseInt(@level.id) == parseInt($(level).data('id'))
@@ -270,7 +273,7 @@ window.app =
                 
         menu.css
             opacity: 1
-            top: 45
+            top: (@el.height() - menu.height()) / 2
             left: (@el.width() - menu.width()) / 2
 
         $.timeout 50, =>    
@@ -290,15 +293,14 @@ window.app =
         @settings or= @$('.settings')
         @settings.bind 'touchstart', (e) => e.stop()
         @settings.find('.select_player').bind 'touchstart.select_player', (e) => 
-            @settings.find('.select_player').one 'touchend.select_player', (e) =>
-                @selectPlayer($(e.currentTarget))
+            @selectPlayer($(e.currentTarget))
 
         @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
-            @settings.find('.edit_player').one 'touchend.edit_player', (e) =>
+            $(e.currentTarget).one 'touchend.edit_player', (e) =>
                 @editPlayer()
 
         @settings.find('.play_button').bind 'touchstart.play', (e) => 
-            @settings.find('.play_button').one 'touchend.play', (e) =>
+            $(e.currentTarget).one 'touchend.play', (e) =>
                 @hideMenu(@settings)            
                 
         @initKeyboard()
@@ -378,18 +380,20 @@ window.app =
         letter.removeClass('active')
         
         
-    selectPlayer: (player) ->            
+    selectPlayer: (player) ->          
         @settings.find('.select_player').removeClass('selected')
         player.addClass('selected')
         @selectedPlayer = @players[player.data('id')]
         @puzzleProgress = @selectedPlayer.progress if @selectedPlayer.progress
-        @initLevelSelector()
+
+        @initLevelSelector(parseInt(id) for id in Object.keys(@puzzleProgress))
 
         startedLevels = ({id: level, started: info.started} for level, info of @puzzleProgress when info.started)
-        lastLevelId = startedLevels.sort((a,b) => b.started - a.started)[0].id
-        lastLevel = @findLevel(parseInt(lastLevelId))
-        if lastLevel
-            @level = lastLevel
+        if startedLevels.length
+            lastLevelId = startedLevels.sort((a,b) => b.started - a.started)[0].id
+            lastLevel = @findLevel(parseInt(lastLevelId))
+            if lastLevel
+                @level = lastLevel
         
         @populatePlayer()
     
@@ -398,6 +402,12 @@ window.app =
         for key, value of @selectedPlayer
             @settings.find(".player_details .info .#{key}").html("#{value}")    
 
+        started = (id for id, info of @selectedPlayer.progress when info.started)
+        @settings.find('.player_details .info .attempted').html("#{started.length}")
+        
+        completed = (id for id, info of @selectedPlayer.progress when info.completed)
+        @settings.find('.player_details .info .completed').html("#{completed.length}")
+        
         @settings.find('.form .name').html(@selectedPlayer.name)
         @settings.find(".form .hand input.#{@selectedPlayer.hand.toLowerCase()}").attr(checked: 'checked')
         @settings.find(".player_selection .player#{@selectedPlayer.id}").html(@selectedPlayer.name)

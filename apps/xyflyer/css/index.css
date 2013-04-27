@@ -87,9 +87,9 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .level_selector_menu {
   position: absolute;
-  right: 39px;
+  right: 45px;
   top: 0;
-  padding: 6px 9px 12px 6px;
+  padding: 6px 12px 12px 12px;
   font-size: 30px;
   color: #24aac3;
 }
@@ -97,7 +97,7 @@ body {
   position: absolute;
   right: 0px;
   top: 0;
-  padding: 6px 9px 12px 6px;
+  padding: 6px 12px 12px 12px;
   font-size: 30px;
   color: #24aac3;
 }
@@ -413,17 +413,18 @@ body {
 }
 .xyflyer .settings .player_selection {
     position: relative;
+    background: url('images/level_selector_background.png') no-repeat center center;
 }
 .xyflyer .settings .player_selection table {
-    margin: -24px auto -12px auto;
+    margin: -60px auto;
     text-align: center;
-    border-spacing: 24px;
+    border-spacing: 60px;
 }
 .xyflyer .settings .player_selection td {
+    background-color: white;
     width: 120px;
     padding: 15px 0;
     border: 1px solid #ccc;
-    border-spacing-right: 24px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
 }
@@ -442,6 +443,7 @@ body {
     font-size: 24px;
 }
 .xyflyer .settings .player_details .form .name {
+    background-color: white;
     margin: 0 auto 12px auto;
     width: 300px;
     border: 1px solid #ccc;
@@ -461,7 +463,7 @@ body {
 }
 .xyflyer .settings .play_button {
     text-align: center;
-    margin-top: 36px;
+    margin-top: 24px;
 }
 .xyflyer .settings .play_button a {
     background-color: #24aac3;
@@ -592,7 +594,7 @@ body {
   vertical-align: middle;
 }
 
-@media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {
+/*@media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {*/
     .xyflyer {
         height: 768px;
         width: 1024px;
@@ -636,13 +638,19 @@ body {
         margin: 0 0 30px 21px;        
     }
     
+    .xyflyer .settings {
+        height: 540px;
+    }
+    
     .xyflyer .settings .player_details {
         text-align: center;
-        height: 300px;
+        height: 270px;
+        font-size: 18px;
     }
     
     .xyflyer .settings .player_details h3 {
-        padding-top: 60px;
+        padding-top: 36px;
+        margin: 0;
     }
     
-}
+/*}*/

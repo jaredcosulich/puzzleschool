@@ -284,6 +284,7 @@ window.app = {
       _this.load();
       (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
       _this.savePlayer();
+      _this.populatePlayer();
       return _this.setLevelIcon({
         id: _this.level.id,
         started: true,
@@ -291,7 +292,7 @@ window.app = {
       });
     }), 100);
   },
-  initLevelSelector: function(changedLevelId) {
+  initLevelSelector: function(changedLevelIds) {
     var previousCompleted, stageElement, _i, _len, _ref, _results,
       _this = this;
     this.levelSelector || (this.levelSelector = this.$('.level_selector'));
@@ -313,7 +314,7 @@ window.app = {
           levelElement = $(levelElement);
           lastLevelId = id;
           id = levelElement.data('id');
-          if (!changedLevelId || changedLevelId === id || changedLevelId === lastLevelId) {
+          if (!changedLevelIds || !changedLevelIds.length || changedLevelIds.indexOf(id) > -1 || changedLevelIds.indexOf(lastLevelId) > -1) {
             _results1.push((function(levelElement, index) {
               var levelInfo, locked, _ref2, _ref3, _ref4;
               levelInfo = _this.findLevel(id);
@@ -380,9 +381,10 @@ window.app = {
     var _this = this;
     this.puzzleProgress[this.level.id].completed = new Date().getTime();
     this.savePlayer();
+    this.populatePlayer();
     return $.timeout(1000, function() {
       var index, level, _i, _len, _ref;
-      _this.initLevelSelector(_this.level.id);
+      _this.initLevelSelector([_this.level.id]);
       _ref = _this.$('.stage .level:last-child');
       for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
         level = _ref[index];
@@ -404,7 +406,7 @@ window.app = {
     }
     menu.css({
       opacity: 1,
-      top: 45,
+      top: (this.el.height() - menu.height()) / 2,
       left: (this.el.width() - menu.width()) / 2
     });
     return $.timeout(50, function() {
@@ -430,17 +432,15 @@ window.app = {
       return e.stop();
     });
     this.settings.find('.select_player').bind('touchstart.select_player', function(e) {
-      return _this.settings.find('.select_player').one('touchend.select_player', function(e) {
-        return _this.selectPlayer($(e.currentTarget));
-      });
+      return _this.selectPlayer($(e.currentTarget));
     });
     this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
-      return _this.settings.find('.edit_player').one('touchend.edit_player', function(e) {
+      return $(e.currentTarget).one('touchend.edit_player', function(e) {
         return _this.editPlayer();
       });
     });
     this.settings.find('.play_button').bind('touchstart.play', function(e) {
-      return _this.settings.find('.play_button').one('touchend.play', function(e) {
+      return $(e.currentTarget).one('touchend.play', function(e) {
         return _this.hideMenu(_this.settings);
       });
     });
@@ -590,7 +590,7 @@ window.app = {
     return letter.removeClass('active');
   },
   selectPlayer: function(player) {
-    var info, lastLevel, lastLevelId, level, startedLevels,
+    var id, info, lastLevel, lastLevelId, level, startedLevels,
       _this = this;
     this.settings.find('.select_player').removeClass('selected');
     player.addClass('selected');
@@ -598,7 +598,16 @@ window.app = {
     if (this.selectedPlayer.progress) {
       this.puzzleProgress = this.selectedPlayer.progress;
     }
-    this.initLevelSelector();
+    this.initLevelSelector((function() {
+      var _i, _len, _ref, _results;
+      _ref = Object.keys(this.puzzleProgress);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        id = _ref[_i];
+        _results.push(parseInt(id));
+      }
+      return _results;
+    }).call(this));
     startedLevels = (function() {
       var _ref, _results;
       _ref = this.puzzleProgress;
@@ -614,17 +623,19 @@ window.app = {
       }
       return _results;
     }).call(this);
-    lastLevelId = startedLevels.sort(function(a, b) {
-      return b.started - a.started;
-    })[0].id;
-    lastLevel = this.findLevel(parseInt(lastLevelId));
-    if (lastLevel) {
-      this.level = lastLevel;
+    if (startedLevels.length) {
+      lastLevelId = startedLevels.sort(function(a, b) {
+        return b.started - a.started;
+      })[0].id;
+      lastLevel = this.findLevel(parseInt(lastLevelId));
+      if (lastLevel) {
+        this.level = lastLevel;
+      }
     }
     return this.populatePlayer();
   },
   populatePlayer: function() {
-    var key, value, _ref;
+    var completed, id, info, key, started, value, _ref;
     if (!this.selectedPlayer) {
       return;
     }
@@ -633,6 +644,32 @@ window.app = {
       value = _ref[key];
       this.settings.find(".player_details .info ." + key).html("" + value);
     }
+    started = (function() {
+      var _ref1, _results;
+      _ref1 = this.selectedPlayer.progress;
+      _results = [];
+      for (id in _ref1) {
+        info = _ref1[id];
+        if (info.started) {
+          _results.push(id);
+        }
+      }
+      return _results;
+    }).call(this);
+    this.settings.find('.player_details .info .attempted').html("" + started.length);
+    completed = (function() {
+      var _ref1, _results;
+      _ref1 = this.selectedPlayer.progress;
+      _results = [];
+      for (id in _ref1) {
+        info = _ref1[id];
+        if (info.completed) {
+          _results.push(id);
+        }
+      }
+      return _results;
+    }).call(this);
+    this.settings.find('.player_details .info .completed').html("" + completed.length);
     this.settings.find('.form .name').html(this.selectedPlayer.name);
     this.settings.find(".form .hand input." + (this.selectedPlayer.hand.toLowerCase())).attr({
       checked: 'checked'
