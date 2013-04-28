@@ -77,7 +77,8 @@ body {
   border-bottom: none;
 }
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment.only_area {
-  width: 251px;
+  width: 300px;
+  font-size: 18px;
 }
 .xyflyer .dynamic_content .equation_area .header {
   position: absolute;
@@ -115,7 +116,8 @@ body {
   font-size: 30px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .only_area {
-  width: 251px;
+  width: 300px;
+  font-size: 18px;
   padding: 0 3px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation {
@@ -161,7 +163,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .component_over.only_area,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.over_dropped.only_area,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .over_dropped.only_area {
-  width: 251px;
+  width: 300px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_fragment {

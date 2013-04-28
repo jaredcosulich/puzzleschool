@@ -41,13 +41,10 @@ window.app = {
     });
     this.originalHTML = this.dynamicContent.html();
     this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
-    this.level = this.worlds[0].stages[0].levels[0];
     this.puzzleProgress = {};
-    this.puzzleProgress[this.level.id] = {};
     this.initLevelSelector();
     this.initSettings();
     this.initWorlds();
-    this.selectWorld(0);
     return this.showMenu(this.settings);
   },
   $: function(selector) {
@@ -103,7 +100,9 @@ window.app = {
     for (asset in assets) {
       index = assets[asset];
       if (asset === 'background') {
-        this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\.jpg/, "" + index + ".jpg"));
+        if ((this.dynamicContent.css('backgroundImage') || '').indexOf("background" + index + ".jpg") === -1) {
+          this.dynamicContent.css('backgroundImage', this.dynamicContent.css('backgroundImage').replace(/\d+\.jpg/, "" + index + ".jpg"));
+        }
       } else {
         this.$(".objects ." + asset).removeClass(asset);
         this.$(".objects ." + asset + index).addClass(asset);
@@ -636,7 +635,7 @@ window.app = {
     this.selectedPlayer = this.players[player.data('id')];
     existingProgressIds = (function() {
       var _i, _len, _ref, _results;
-      _ref = Object.keys(this.puzzleProgress);
+      _ref = Object.keys(this.puzzleProgress || {});
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         id = _ref[_i];

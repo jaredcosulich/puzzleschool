@@ -29,15 +29,11 @@ window.app =
         @originalHTML = @dynamicContent.html()
 
         @worlds = require('./lib/xyflyer_objects/levels').WORLDS
-        @level = @worlds[0].stages[0].levels[0]
         
         @puzzleProgress = {}
-        @puzzleProgress[@level.id] = {}
-        
         @initLevelSelector()
         @initSettings()
         @initWorlds()
-        @selectWorld(0)
         
         # @testHints()
         # return
@@ -72,7 +68,8 @@ window.app =
         
         for asset, index of assets 
             if asset == 'background'
-                @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\.jpg/, "#{index}.jpg"))
+                if (@dynamicContent.css('backgroundImage') or '').indexOf("background#{index}.jpg") == -1
+                    @dynamicContent.css('backgroundImage', @dynamicContent.css('backgroundImage').replace(/\d+\.jpg/, "#{index}.jpg"))
             else
                 @$(".objects .#{asset}").removeClass(asset)
                 @$(".objects .#{asset}#{index}").addClass(asset)
@@ -400,7 +397,7 @@ window.app =
         @settings.find('.select_player').removeClass('selected')
         player.addClass('selected')
         @selectedPlayer = @players[player.data('id')]
-        existingProgressIds = (parseInt(id) for id in Object.keys(@puzzleProgress))
+        existingProgressIds = (parseInt(id) for id in Object.keys(@puzzleProgress or {}))
         @puzzleProgress = @selectedPlayer.progress or {}
 
         @initLevelSelector([existingProgressIds..., (parseInt(id) for id in Object.keys(@puzzleProgress))...])
