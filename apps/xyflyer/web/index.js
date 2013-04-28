@@ -59,21 +59,15 @@ window.app = {
       _this = this;
     this.$('.level_selector_menu').bind('touchstart.menu', function() {
       _this.$('.level_selector_menu').addClass('active');
-      _this.$('.level_selector_menu').one('touchend.menu', function() {
+      return $(document.body).one('touchend.menu', function() {
         return _this.$('.level_selector_menu').removeClass('active');
       }, _this.showMenu(_this.levelSelector));
-      return $(document.body).one('touchend.menu', function() {
-        return _this.$('.level_selector_menu').unbind('touchend.menu');
-      });
     });
     this.$('.settings_menu').bind('touchstart.settings_menu', function() {
       _this.$('.settings_menu').addClass('active');
-      _this.$('.settings_menu').one('touchend.settings_menu', function() {
+      return $(document.body).one('touchend.settings_menu', function() {
         return _this.$('.settings_menu').removeClass('active');
       }, _this.showMenu(_this.settings));
-      return $(document.body).one('touchend.settings_menu', function() {
-        return _this.$('.settings_menu').unbind('touchend.settings_menu');
-      });
     });
     assets = {
       person: 1,
@@ -137,12 +131,10 @@ window.app = {
       _this = this;
     worldLinks = this.$('.world_link');
     return worldLinks.bind('touchstart.select_world', function(e) {
-      return worldLinks.one('touchend.select_world', function(e) {
-        var worldLink;
-        e.stop();
-        worldLink = $(e.currentTarget);
-        return _this.selectWorld(parseInt(worldLink.data('world')) - 1);
-      });
+      var worldLink;
+      e.stop();
+      worldLink = $(e.currentTarget);
+      return _this.selectWorld(parseInt(worldLink.data('world')) - 1);
     });
   },
   currentWorld: function() {
@@ -300,8 +292,12 @@ window.app = {
     this.levelSelector.bind('touchstart', function(e) {
       return e.stop();
     });
-    this.levelSelector.find('.close').bind('touchstart', function() {
-      return _this.hideMenu(_this.levelSelector);
+    this.levelSelector.find('.close').bind('touchstart.close', function() {
+      _this.levelSelector.find('.close').addClass('active');
+      _this.hideMenu(_this.levelSelector);
+      return $(document.body).one('touchend.close', function() {
+        return _this.levelSelector.find('.close').removeClass('active');
+      });
     });
     previousCompleted = true;
     _ref = this.levelSelector.find('.stage');
@@ -341,7 +337,7 @@ window.app = {
                   _this.level = levelInfo;
                   _this.initLevel();
                 }
-                return levelElement.one('touchend.select_level', function(e) {
+                return $(document.body).one('touchend.select_level', function(e) {
                   levelElement.removeClass('active');
                   $(document.body).unbind('touchstart.level_selector');
                   if (locked) {
@@ -437,8 +433,12 @@ window.app = {
     this.settings.bind('touchstart', function(e) {
       return e.stop();
     });
-    this.settings.find('.close').bind('touchstart', function() {
-      return _this.hideMenu(_this.settings);
+    this.settings.find('.close').bind('touchstart.close', function() {
+      _this.settings.find('.close').addClass('active');
+      _this.hideMenu(_this.settings);
+      return $(document.body).one('touchend.close', function() {
+        return _this.settings.find('.close').removeClass('active');
+      });
     });
     _ref = ((function() {
       var _ref, _results;
@@ -470,14 +470,14 @@ window.app = {
     });
     this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
       $(e.currentTarget).addClass('active');
-      $(e.currentTarget).one('touchend.edit_player', function(e) {
+      $(document.body).one('touchend.edit_player', function(e) {
         return $(e.currentTarget).removeClass('active');
       });
       return _this.editPlayer();
     });
     this.settings.find('.play_button').bind('touchstart.play', function(e) {
       $(e.currentTarget).addClass('active');
-      $(e.currentTarget).one('touchend.play', function(e) {
+      $(document.body).one('touchend.play', function(e) {
         return $(e.currentTarget).removeClass('active');
       });
       return _this.hideMenu(_this.settings);
@@ -493,7 +493,7 @@ window.app = {
       var button;
       button = $(e.currentTarget);
       button.addClass('active');
-      button.one('touchend.save', function() {
+      $(document.body).one('touchend.save', function() {
         return button.removeClass('active');
       });
       _this.selectedPlayer.name = _this.settings.find('.form .name').html();
@@ -506,7 +506,7 @@ window.app = {
       var button;
       button = $(e.currentTarget);
       button.addClass('active');
-      button.one('touchend.cancel', function() {
+      $(document.body).one('touchend.cancel', function() {
         return button.removeClass('active');
       });
       return _this.showPlayer();
@@ -566,9 +566,10 @@ window.app = {
     keyboard.find('.letter').bind('touchstart.letter', function(e) {
       letter = $(e.currentTarget);
       letter.addClass('active');
-      return letter.one('touchend.letter', function() {
-        return _this.clickLetter(letter);
+      $(document.body).one('touchend.letter', function() {
+        return letter.removeClass('active');
       });
+      return _this.clickLetter(letter);
     });
     _ref3 = keyboard.find('.letter');
     _results = [];
@@ -581,7 +582,7 @@ window.app = {
     return _results;
   },
   clickLetter: function(letter) {
-    var htmlLetter, l, letters, name, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+    var htmlLetter, l, letters, name, _i, _j, _k, _l, _len, _len1, _len2, _len3, _results;
     letters = this.settings.find('.keyboard .letter');
     htmlLetter = letter.html();
     name = this.settings.find('.player_details .form .name');
@@ -625,14 +626,15 @@ window.app = {
       }
     }
     if ((name.html() === '&nbsp;' || name.html().match(/\s$/)) && htmlLetter !== '∨' && htmlLetter !== '∧') {
+      _results = [];
       for (_l = 0, _len3 = letters.length; _l < _len3; _l++) {
         l = letters[_l];
         if ($(l).html() === '∧') {
-          this.clickLetter($(l));
+          _results.push(this.clickLetter($(l)));
         }
       }
+      return _results;
     }
-    return letter.removeClass('active');
   },
   selectPlayer: function(player) {
     var existingProgressIds, id, info, lastLevel, lastLevelId, level, startedLevels, _base, _name,

@@ -50,16 +50,14 @@ window.app =
     load: ->
         @$('.level_selector_menu').bind 'touchstart.menu', =>
             @$('.level_selector_menu').addClass('active')
-            @$('.level_selector_menu').one('touchend.menu', => @$('.level_selector_menu').removeClass('active')
+            $(document.body).one('touchend.menu', => @$('.level_selector_menu').removeClass('active')
             @showMenu(@levelSelector))
-            $(document.body).one('touchend.menu', => @$('.level_selector_menu').unbind('touchend.menu'))
-
+    
         @$('.settings_menu').bind 'touchstart.settings_menu', =>
             @$('.settings_menu').addClass('active')
-            @$('.settings_menu').one('touchend.settings_menu', => @$('.settings_menu').removeClass('active')
+            $(document.body).one('touchend.settings_menu', => @$('.settings_menu').removeClass('active')
             @showMenu(@settings))
-            $(document.body).one('touchend.settings_menu', => @$('.settings_menu').unbind('touchend.settings_menu'))
-        
+            
         assets = {person: 1, island: 1, plane: 1, background: 1}
         assets[asset] = index for asset, index of @worlds[@currentWorld()].assets or {}
         assets[asset] = index for asset, index of @currentStage().assets or {}
@@ -97,10 +95,9 @@ window.app =
     initWorlds: ->
         worldLinks = @$('.world_link')
         worldLinks.bind 'touchstart.select_world', (e) =>
-            worldLinks.one 'touchend.select_world', (e) =>
-                e.stop()
-                worldLink = $(e.currentTarget)
-                @selectWorld(parseInt(worldLink.data('world')) - 1)
+            e.stop()
+            worldLink = $(e.currentTarget)
+            @selectWorld(parseInt(worldLink.data('world')) - 1)
             
     currentWorld: ->
         return 0 if not @level?.id
@@ -186,7 +183,10 @@ window.app =
     initLevelSelector: (changedLevelIds) ->
         @levelSelector or= @$('.level_selector')
         @levelSelector.bind 'touchstart', (e) => e.stop()
-        @levelSelector.find('.close').bind 'touchstart', => @hideMenu(@levelSelector)
+        @levelSelector.find('.close').bind 'touchstart.close', => 
+            @levelSelector.find('.close').addClass('active')
+            @hideMenu(@levelSelector)
+            $(document.body).one('touchend.close', => @levelSelector.find('.close').removeClass('active'))
 
         previousCompleted = true
         for stageElement in @levelSelector.find('.stage')
@@ -220,7 +220,7 @@ window.app =
                                     @level = levelInfo
                                     @initLevel()
                                 
-                                levelElement.one 'touchend.select_level', (e) =>
+                                $(document.body).one 'touchend.select_level', (e) =>
                                     levelElement.removeClass('active')
                                     $(document.body).unbind('touchstart.level_selector')
                                     if locked
@@ -294,7 +294,10 @@ window.app =
     initSettings: ->
         @settings or= @$('.settings')
         @settings.bind 'touchstart', (e) => e.stop()
-        @settings.find('.close').bind 'touchstart', => @hideMenu(@settings)
+        @settings.find('.close').bind 'touchstart.close', =>  
+            @settings.find('.close').addClass('active')
+            @hideMenu(@settings)
+            $(document.body).one('touchend.close', => @settings.find('.close').removeClass('active'))
         
         for info in (info for id, info of @players when info.lastPlayed).sort((a,b) -> b.lastPlayed - a.lastPlayed)
             playerName = @settings.find(".player_selection .player#{info.id}")
@@ -307,13 +310,13 @@ window.app =
 
         @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
             $(e.currentTarget).addClass('active')
-            $(e.currentTarget).one 'touchend.edit_player', (e) =>
+            $(document.body).one 'touchend.edit_player', (e) =>
                 $(e.currentTarget).removeClass('active')
             @editPlayer()
 
         @settings.find('.play_button').bind 'touchstart.play', (e) => 
             $(e.currentTarget).addClass('active')
-            $(e.currentTarget).one 'touchend.play', (e) =>
+            $(document.body).one 'touchend.play', (e) =>
                 $(e.currentTarget).removeClass('active')
             @hideMenu(@settings)            
                 
@@ -326,7 +329,7 @@ window.app =
         @settings.find('.form .actions .save').bind 'touchstart.save', (e) =>
             button = $(e.currentTarget)
             button.addClass('active')
-            button.one 'touchend.save', => button.removeClass('active')
+            $(document.body).one 'touchend.save', => button.removeClass('active')
             @selectedPlayer.name = @settings.find('.form .name').html()
             @selectedPlayer.hand = @settings.find('.form .hand input:checked').val()
             @savePlayer()
@@ -336,7 +339,7 @@ window.app =
         @settings.find('.form .actions .cancel').bind 'touchstart.cancel', (e) =>
             button = $(e.currentTarget)
             button.addClass('active')
-            button.one 'touchend.cancel', => button.removeClass('active')
+            $(document.body).one 'touchend.cancel', => button.removeClass('active')
             @showPlayer()    
 
         
@@ -362,7 +365,8 @@ window.app =
         keyboard.find('.letter').bind 'touchstart.letter', (e) =>
             letter = $(e.currentTarget)
             letter.addClass('active')
-            letter.one 'touchend.letter', => @clickLetter(letter)
+            $(document.body).one 'touchend.letter', => letter.removeClass('active')
+            @clickLetter(letter)
         @clickLetter($(l)) for l in keyboard.find('.letter') when $(l).html() == '∧'
                         
     clickLetter: (letter) ->
@@ -394,7 +398,6 @@ window.app =
         if (name.html() == '&nbsp;' or name.html().match(/\s$/)) and htmlLetter != '∨' and htmlLetter != '∧'
             @clickLetter($(l)) for l in letters when $(l).html() == '∧'
 
-        letter.removeClass('active')
         
         
     selectPlayer: (player) ->          

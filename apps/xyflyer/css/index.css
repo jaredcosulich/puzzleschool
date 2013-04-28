@@ -718,12 +718,12 @@ body {
     
     .xyflyer .dynamic_content .board { 
         height: 640px;
-        width: 640px;
+        width: 678px;
     }
     
     .xyflyer .dynamic_content .equation_area {
         margin: 3px 3px 0 0;
         height: 762px;
-        width: 488px;
+        width: 450px;
     }    
 }
