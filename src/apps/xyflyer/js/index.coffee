@@ -131,7 +131,7 @@ window.app =
         for ring in @level?.rings or []
             @helper.addRing(ring.x, ring.y)
             
-        @$('.equation_container .intro, .equation div').css(fontSize: fontSize) if (fontSize = @level?.assets?.font)
+        @$('.equation_container .intro, .equation').css(fontSize: fontSize) if (fontSize = @level?.assets?.font)
         
         @selectWorld(@currentWorld())
                         

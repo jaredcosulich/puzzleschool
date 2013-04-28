@@ -208,7 +208,7 @@ window.app = {
       this.helper.addRing(ring.x, ring.y);
     }
     if ((fontSize = (_ref7 = this.level) != null ? (_ref8 = _ref7.assets) != null ? _ref8.font : void 0 : void 0)) {
-      this.$('.equation_container .intro, .equation div').css({
+      this.$('.equation_container .intro, .equation').css({
         fontSize: fontSize
       });
     }

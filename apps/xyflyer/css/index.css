@@ -127,12 +127,12 @@ body {
   overflow: hidden;
   line-height: 42px;
   height: 42px;
+  font-size: 36px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.starting_fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
   color: #262626;
-  font-size: 36px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component {
