@@ -181,7 +181,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .variable {
-  font-size: 11px;
+  font-size: 18px;
   border: 1px solid #ccc;
   border-top: none;
   width: 78%;
