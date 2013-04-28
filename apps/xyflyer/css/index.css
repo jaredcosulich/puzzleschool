@@ -88,9 +88,9 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .level_selector_menu {
   position: absolute;
-  right: 60px;
+  right: 45px;
   top: 0;
-  padding: 6px 6px 12px 12px;
+  padding: 6px 12px 12px 12px;
   font-size: 30px;
   color: #24aac3;
 }
@@ -98,7 +98,7 @@ body {
   position: absolute;
   right: 0px;
   top: 0;
-  padding: 6px 24px 12px 12px;
+  padding: 6px 12px 12px 12px;
   font-size: 30px;
   color: #24aac3;
 }
@@ -439,6 +439,15 @@ body {
   padding: 12px;
   z-index: 99;
 }
+.xyflyer .menu .close {
+  float: right;
+  margin: -6px -6px 0 0;
+  color: #24aac3;
+  font-size: 30px;
+}
+.xyflyer .menu .close:active {
+  background-color: #145f6d;
+}
 .xyflyer .menu h2,
 .xyflyer .menu h3,
 .xyflyer .menu h4 {
@@ -447,10 +456,12 @@ body {
 .xyflyer .settings h2 {
     font-size: 24px;
     font-weight: normal;
+    margin: 12px 24px;
 }
 .xyflyer .settings .player_selection {
     position: relative;
     background: url('images/level_selector_background.png') no-repeat center center;
+    margin: 0 24px;
 }
 .xyflyer .settings .player_selection table {
     margin: -60px auto;
@@ -639,7 +650,7 @@ body {
   vertical-align: middle;
 }
 
-@media only screen and (min-device-width: 481px) and (max-device-width: 1030px) and (orientation:landscape) {
+@media screen and (device-aspect-ratio: 3/4) and (orientation:landscape) {
     .xyflyer {
         height: 768px;
         width: 1024px;
@@ -692,4 +703,27 @@ body {
         height: 270px;
     }
     
+}
+
+@media screen and (device-aspect-ratio: 40/71) and (orientation:landscape) {
+    .xyflyer {
+        height: 640px;
+        width: 1136px;
+    }
+    
+    .xyflyer .dynamic_content {
+        height: 640px;
+        width: 1136px;
+    }
+    
+    .xyflyer .dynamic_content .board { 
+        height: 640px;
+        width: 640px;
+    }
+    
+    .xyflyer .dynamic_content .equation_area {
+        margin: 3px 3px 0 0;
+        height: 762px;
+        width: 488px;
+    }    
 }

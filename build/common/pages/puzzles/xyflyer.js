@@ -464,6 +464,9 @@ soma.views({
       this.levelSelector.bind('click', function(e) {
         return e.stop();
       });
+      this.levelSelector.find('.close').bind('click', function() {
+        return _this.hideLevelSelector();
+      });
       previousCompleted = true;
       _ref = this.levelSelector.find('.stage');
       _results = [];

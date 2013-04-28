@@ -433,6 +433,15 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+.xyflyer .level_selector .close {
+  float: right;
+  margin: -6px -6px 0 0;
+  color: #24aac3;
+  font-size: 30px;
+}
+.xyflyer .level_selector .close:active {
+  background-color: #145f6d;
+}
 .xyflyer .level_selector .success {
   display: none;
 }

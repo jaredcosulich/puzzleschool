@@ -186,6 +186,7 @@ window.app =
     initLevelSelector: (changedLevelIds) ->
         @levelSelector or= @$('.level_selector')
         @levelSelector.bind 'touchstart', (e) => e.stop()
+        @levelSelector.find('.close').bind 'touchstart', => @hideMenu(@levelSelector)
 
         previousCompleted = true
         for stageElement in @levelSelector.find('.stage')
@@ -260,6 +261,7 @@ window.app =
 
             
     showMenu: (menu, success) ->
+        @hideMenu(@$('.menu'))
         $(document.body).unbind('touchstart.hide_menu')
         if parseInt(menu.css('opacity')) == 1
             @hideMenu(menu)
@@ -292,6 +294,8 @@ window.app =
     initSettings: ->
         @settings or= @$('.settings')
         @settings.bind 'touchstart', (e) => e.stop()
+        @settings.find('.close').bind 'touchstart', => @hideMenu(@settings)
+        
         for info in (info for id, info of @players when info.lastPlayed).sort((a,b) -> b.lastPlayed - a.lastPlayed)
             playerName = @settings.find(".player_selection .player#{info.id}")
             playerName.html(info.name)

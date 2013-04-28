@@ -414,6 +414,16 @@ body {
         z-index: 99;
         .no_select();
     
+        .close {
+            float: right;
+            margin: -6px -6px 0 0;
+            color: @blue;
+            font-size: 30px;
+            &:active {
+                background-color: darken(@blue, 20%);            
+            }            
+        }
+        
         .success {
             display: none;
         }

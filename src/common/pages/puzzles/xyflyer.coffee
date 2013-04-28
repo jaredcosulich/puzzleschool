@@ -312,6 +312,7 @@ soma.views
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
             @levelSelector.bind 'click', (e) => e.stop()
+            @levelSelector.find('.close').bind 'click', => @hideLevelSelector()
 
             previousCompleted = true
             for stageElement in @levelSelector.find('.stage')

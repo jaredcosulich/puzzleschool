@@ -300,6 +300,9 @@ window.app = {
     this.levelSelector.bind('touchstart', function(e) {
       return e.stop();
     });
+    this.levelSelector.find('.close').bind('touchstart', function() {
+      return _this.hideMenu(_this.levelSelector);
+    });
     previousCompleted = true;
     _ref = this.levelSelector.find('.stage');
     _results = [];
@@ -400,6 +403,7 @@ window.app = {
   },
   showMenu: function(menu, success) {
     var _this = this;
+    this.hideMenu(this.$('.menu'));
     $(document.body).unbind('touchstart.hide_menu');
     if (parseInt(menu.css('opacity')) === 1) {
       this.hideMenu(menu);
@@ -432,6 +436,9 @@ window.app = {
     this.settings || (this.settings = this.$('.settings'));
     this.settings.bind('touchstart', function(e) {
       return e.stop();
+    });
+    this.settings.find('.close').bind('touchstart', function() {
+      return _this.hideMenu(_this.settings);
     });
     _ref = ((function() {
       var _ref, _results;
