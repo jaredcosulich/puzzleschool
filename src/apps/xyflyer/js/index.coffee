@@ -299,6 +299,7 @@ window.app =
             playerName = @settings.find(".player_selection .player#{info.id}")
             playerName.html(info.name)
             @selectPlayer(playerName.closest('.select_player')) unless @selectedPlayer
+        @selectPlayer($(@settings.find('.select_player')[0])) unless @selectedPlayer
             
         @settings.find('.select_player').bind 'touchstart.select_player', (e) => 
             @selectPlayer($(e.currentTarget))
@@ -422,9 +423,6 @@ window.app =
         return unless @selectedPlayer
         for key, value of @selectedPlayer
             @settings.find(".player_details .info .#{key}").html("#{value}")    
-
-        started = (id for id, info of @selectedPlayer.progress when info.started or info.completed)
-        @settings.find('.player_details .info .attempted').html("#{started.length}")
         
         completed = (id for id, info of @selectedPlayer.progress when info.completed)
         @settings.find('.player_details .info .completed').html("#{completed.length}")

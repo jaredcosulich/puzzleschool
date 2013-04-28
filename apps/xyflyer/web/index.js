@@ -456,6 +456,9 @@ window.app = {
         this.selectPlayer(playerName.closest('.select_player'));
       }
     }
+    if (!this.selectedPlayer) {
+      this.selectPlayer($(this.settings.find('.select_player')[0]));
+    }
     this.settings.find('.select_player').bind('touchstart.select_player', function(e) {
       return _this.selectPlayer($(e.currentTarget));
     });
@@ -684,7 +687,7 @@ window.app = {
     return this.populatePlayer();
   },
   populatePlayer: function() {
-    var completed, id, info, key, started, value, _ref;
+    var completed, id, info, key, value, _ref;
     if (!this.selectedPlayer) {
       return;
     }
@@ -693,19 +696,6 @@ window.app = {
       value = _ref[key];
       this.settings.find(".player_details .info ." + key).html("" + value);
     }
-    started = (function() {
-      var _ref1, _results;
-      _ref1 = this.selectedPlayer.progress;
-      _results = [];
-      for (id in _ref1) {
-        info = _ref1[id];
-        if (info.started || info.completed) {
-          _results.push(id);
-        }
-      }
-      return _results;
-    }).call(this);
-    this.settings.find('.player_details .info .attempted').html("" + started.length);
     completed = (function() {
       var _ref1, _results;
       _ref1 = this.selectedPlayer.progress;
