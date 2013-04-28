@@ -222,9 +222,27 @@ class equations.Equations
                                 top: dropAreaOffset.top + dropAreaOffset.height - gameAreaOffset.top
                             
     displayVariable: (variable, value) ->
-        @$('.hints').append """
-            <p class='#{variable}_hint'>Set #{variable} = #{value}</p>
-        """
+        areaOffset = @equationsArea.offset()
+        gameAreaOffset = @gameArea.offset()       
+        hintsOffset = @el.find('.hints a').offset()
+        
+        hintPopup = @$('.hint_popup')
+        hintPopup.css
+            opacity: 0
+            top: hintsOffset.top - hintPopup.height() - gameAreaOffset.top - 18
+            left: hintsOffset.left + (hintsOffset.width/2) - (hintPopup.width()/2) - areaOffset.left
+        hintPopup.html("Set #{variable} = #{value}")
+        hintPopup.animate
+            opacity: 1
+            duration: 250
+        $(document.body).one 'mousedown.variable touchstart.variable', ->
+            hintPopup.animate
+                opacity: 0
+                duration: 250
+                complete: ->
+                    hintPopup.css
+                        top: -1000
+                        left: -1000
                                    
     findComponentDropAreaElement: (equation, solutionComponent) ->
         possible = equation.el.find('div:not(.removing)')

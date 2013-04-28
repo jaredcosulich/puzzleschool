@@ -327,37 +327,39 @@ body {
   left: 75px;
 }
 .xyflyer .dynamic_content .hint_popup {
-    position: absolute;
-    top: -1000px;
-    left: -1000px;
-    opacity: 0;
-    background-color: white;
-    width: 120px;
-    height: 60px;
-    text-align: center;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    box-shadow: 0 0 6px #B2B2B2;
-    -webkit-box-shadow: 0 0 6px #B2B2B2;
-    -moz-box-shadow: 0 0 6px #B2B2B2;
+  font-size: 18px;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  opacity: 0;
+  background-color: white;
+  width: 120px;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  box-shadow: 0 0 6px #b2b2b2;
+  -webkit-box-shadow: 0 0 6px #b2b2b2;
+  -moz-box-shadow: 0 0 6px #b2b2b2;
 }
-.xyflyer .dynamic_content .hint_popup::before {
-    background-color: white;
-    height: 18px;
-    width: 18px;
-    content: "\00a0";
-    display: block;
-    margin-left: 52px;
-    margin-top: 51px;
-    box-shadow: 1px 1px rgb(211, 211, 211);
-    -webkit-box-shadow: 1px 1px rgb(211, 211, 211);
-    -moz-box-shadow: 1px 1px rgb(211, 211, 211);
-    transform:               rotate( 45deg );  
-        -moz-transform:      rotate( 45deg );  
-        -ms-transform:       rotate( 45deg );  
-        -o-transform:        rotate( 45deg );  
-        -webkit-transform:   rotate( 45deg );  
+.xyflyer .dynamic_content .hint_popup::after {
+  background-color: white;
+  height: 18px;
+  width: 18px;
+  content: "\00a0";
+  display: block;
+  margin-left: 52px;
+  margin-top: -9px;
+  box-shadow: 1px 1px #d3d3d3;
+  -webkit-box-shadow: 1px 1px #d3d3d3;
+  -moz-box-shadow: 1px 1px #d3d3d3;
+  transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
 }
 .xyflyer .dynamic_content .drag_this,
 .xyflyer .dynamic_content .drag_this_right,

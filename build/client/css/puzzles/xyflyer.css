@@ -312,10 +312,44 @@ body {
   -moz-box-shadow: 1px 2px 1px #b69c63;
 }
 .xyflyer .dynamic_content .hints {
-  padding: 120px 0 0 6px;
+  position: absolute;
+  padding: 12px 0;
+  bottom: 0;
+  left: 75px;
 }
-.xyflyer .dynamic_content .hints h4 {
+.xyflyer .dynamic_content .hint_popup {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  opacity: 0;
+  background-color: white;
+  width: 120px;
+  height: 45px;
+  line-height: 45px;
   text-align: center;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  box-shadow: 0 0 6px #b2b2b2;
+  -webkit-box-shadow: 0 0 6px #b2b2b2;
+  -moz-box-shadow: 0 0 6px #b2b2b2;
+}
+.xyflyer .dynamic_content .hint_popup::after {
+  background-color: white;
+  height: 18px;
+  width: 18px;
+  content: "\00a0";
+  display: block;
+  margin-left: 52px;
+  margin-top: -9px;
+  box-shadow: 1px 1px #d3d3d3;
+  -webkit-box-shadow: 1px 1px #d3d3d3;
+  -moz-box-shadow: 1px 1px #d3d3d3;
+  transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
 }
 .xyflyer .dynamic_content .drag_this,
 .xyflyer .dynamic_content .drop_here,

@@ -348,7 +348,33 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.displayVariable = function(variable, value) {
-    return this.$('.hints').append("<p class='" + variable + "_hint'>Set " + variable + " = " + value + "</p>");
+    var areaOffset, gameAreaOffset, hintPopup, hintsOffset;
+    areaOffset = this.equationsArea.offset();
+    gameAreaOffset = this.gameArea.offset();
+    hintsOffset = this.el.find('.hints a').offset();
+    hintPopup = this.$('.hint_popup');
+    hintPopup.css({
+      opacity: 0,
+      top: hintsOffset.top - hintPopup.height() - gameAreaOffset.top - 18,
+      left: hintsOffset.left + (hintsOffset.width / 2) - (hintPopup.width() / 2) - areaOffset.left
+    });
+    hintPopup.html("Set " + variable + " = " + value);
+    hintPopup.animate({
+      opacity: 1,
+      duration: 250
+    });
+    return $(document.body).one('mousedown.variable touchstart.variable', function() {
+      return hintPopup.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return hintPopup.css({
+            top: -1000,
+            left: -1000
+          });
+        }
+      });
+    });
   };
 
   Equations.prototype.findComponentDropAreaElement = function(equation, solutionComponent) {
