@@ -64,12 +64,12 @@ xyflyer.ViewHelper = (function() {
     return $(selector, this.el);
   };
 
-  ViewHelper.prototype.flip = function(boardElement) {
-    boardElement.css({
-      float: 'right'
+  ViewHelper.prototype.setFlip = function(direction) {
+    this.equationArea.css({
+      float: direction
     });
-    return this.equationArea.css({
-      float: 'left'
+    return this.board.el.css({
+      float: direction === 'left' ? 'right' : 'left'
     });
   };
 

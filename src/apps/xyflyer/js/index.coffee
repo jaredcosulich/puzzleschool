@@ -90,6 +90,8 @@ window.app =
                 nextLevel: => @nextLevel()
                 registerEvent: (eventInfo) => 
                     
+        @helper.setFlip(@selectedPlayer.hand.toLowerCase()) if @selectedPlayer?.hand
+        
         @loadLevel()  
 
     initWorlds: ->
@@ -309,15 +311,15 @@ window.app =
             @selectPlayer($(e.currentTarget))
 
         @settings.find('.edit_player').bind 'touchstart.edit_player', (e) => 
-            $(e.currentTarget).addClass('active')
-            $(document.body).one 'touchend.edit_player', (e) =>
-                $(e.currentTarget).removeClass('active')
+            button = $(e.currentTarget)
+            button.addClass('active')
+            $(document.body).one 'touchend.edit_player', => button.removeClass('active')
             @editPlayer()
 
         @settings.find('.play_button').bind 'touchstart.play', (e) => 
-            $(e.currentTarget).addClass('active')
-            $(document.body).one 'touchend.play', (e) =>
-                $(e.currentTarget).removeClass('active')
+            button = $(e.currentTarget)
+            button.addClass('active')
+            $(document.body).one 'touchend.play', => button.removeClass('active')
             @hideMenu(@settings)            
                 
         @initKeyboard()
@@ -332,6 +334,7 @@ window.app =
             $(document.body).one 'touchend.save', => button.removeClass('active')
             @selectedPlayer.name = @settings.find('.form .name').html()
             @selectedPlayer.hand = @settings.find('.form .hand input:checked').val()
+            @helper.setFlip(@selectedPlayer.hand.toLowerCase())
             @savePlayer()
             @populatePlayer()
             @showPlayer()
@@ -397,13 +400,13 @@ window.app =
 
         if (name.html() == '&nbsp;' or name.html().match(/\s$/)) and htmlLetter != '∨' and htmlLetter != '∧'
             @clickLetter($(l)) for l in letters when $(l).html() == '∧'
-
         
         
     selectPlayer: (player) ->          
         @settings.find('.select_player').removeClass('selected')
         player.addClass('selected')
         @selectedPlayer = @players[player.data('id')]
+                
         existingProgressIds = (parseInt(id) for id in Object.keys(@puzzleProgress or {}))
         @puzzleProgress = @selectedPlayer.progress or {}
 

@@ -456,7 +456,7 @@ body {
 .xyflyer .settings h2 {
     font-size: 24px;
     font-weight: normal;
-    margin: 12px 24px;
+    margin: 30px;
 }
 .xyflyer .settings .player_selection {
     position: relative;
@@ -464,7 +464,7 @@ body {
     margin: 0 24px;
 }
 .xyflyer .settings .player_selection table {
-    margin: -60px auto;
+    margin: -45px auto;
     text-align: center;
     border-spacing: 60px;
 }
@@ -481,12 +481,11 @@ body {
 }
 .xyflyer .settings .player_details {
     text-align: center;
-    height: 262px;
     margin-top: 12px;
     font-size: 18px;    
 }
 .xyflyer .settings .player_details h3 {
-    padding-top: 36px;
+    padding-top: 15px;
     margin: 0;
 }
 .xyflyer .settings .player_details .form {
@@ -519,7 +518,7 @@ body {
 }
 .xyflyer .settings .play_button {
     text-align: center;
-    margin-top: 24px;
+    margin-top: 60px;
 }
 .xyflyer .settings .play_button a {
     background-color: #24aac3;
@@ -697,12 +696,6 @@ body {
     .xyflyer .settings {
         height: 540px;
     }
-    
-    .xyflyer .settings .player_details {
-        text-align: center;
-        height: 270px;
-    }
-    
 }
 
 @media screen and (device-aspect-ratio: 40/71) and (orientation:landscape) {

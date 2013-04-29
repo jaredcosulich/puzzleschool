@@ -55,7 +55,7 @@ window.app = {
     return this.dynamicContent.html(this.originalHTML);
   },
   load: function() {
-    var asset, assets, index, _ref, _ref1, _ref2,
+    var asset, assets, index, _ref, _ref1, _ref2, _ref3,
       _this = this;
     this.$('.level_selector_menu').bind('touchstart.menu', function() {
       _this.$('.level_selector_menu').addClass('active');
@@ -123,6 +123,9 @@ window.app = {
         },
         registerEvent: function(eventInfo) {}
       });
+    }
+    if ((_ref3 = this.selectedPlayer) != null ? _ref3.hand : void 0) {
+      this.helper.setFlip(this.selectedPlayer.hand.toLowerCase());
     }
     return this.loadLevel();
   },
@@ -469,16 +472,20 @@ window.app = {
       return _this.selectPlayer($(e.currentTarget));
     });
     this.settings.find('.edit_player').bind('touchstart.edit_player', function(e) {
-      $(e.currentTarget).addClass('active');
-      $(document.body).one('touchend.edit_player', function(e) {
-        return $(e.currentTarget).removeClass('active');
+      var button;
+      button = $(e.currentTarget);
+      button.addClass('active');
+      $(document.body).one('touchend.edit_player', function() {
+        return button.removeClass('active');
       });
       return _this.editPlayer();
     });
     this.settings.find('.play_button').bind('touchstart.play', function(e) {
-      $(e.currentTarget).addClass('active');
-      $(document.body).one('touchend.play', function(e) {
-        return $(e.currentTarget).removeClass('active');
+      var button;
+      button = $(e.currentTarget);
+      button.addClass('active');
+      $(document.body).one('touchend.play', function() {
+        return button.removeClass('active');
       });
       return _this.hideMenu(_this.settings);
     });
@@ -498,6 +505,7 @@ window.app = {
       });
       _this.selectedPlayer.name = _this.settings.find('.form .name').html();
       _this.selectedPlayer.hand = _this.settings.find('.form .hand input:checked').val();
+      _this.helper.setFlip(_this.selectedPlayer.hand.toLowerCase());
       _this.savePlayer();
       _this.populatePlayer();
       return _this.showPlayer();

@@ -43,12 +43,12 @@ class xyflyer.ViewHelper
             
     $: (selector) -> $(selector, @el)
 
-    flip: (boardElement) ->
-        boardElement.css
-            float: 'right'
-        
+    setFlip: (direction) ->
         @equationArea.css
-            float: 'left'
+            float: direction
+            
+        @board.el.css
+            float: if direction == 'left' then 'right' else 'left'
             
     plot: (id, data) ->
         [formula, area] = @parser.parse(data)
