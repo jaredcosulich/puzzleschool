@@ -117,12 +117,15 @@ class equation.Equation
         area.append(@container)
         @addFirstDropArea()
         
+    display: (html) -> html.replace(/\*/ig, '&times;')
+    read: (html) -> html.replace(/×/ig, '*')
+     
     addFirstDropArea: ->
         dropAreaElement = @newDropArea()
         @el.append(dropAreaElement)
         @addDropArea(dropAreaElement)
         
-        dropAreaElement.html(@startingElement)
+        dropAreaElement.html(@display(@startingElement))
         if @startingElement == @defaultText
             dropAreaElement.addClass('only_area')
         else
@@ -264,7 +267,7 @@ class equation.Equation
     formatDropArea: (dropArea, component) ->
         fragment = component.equationFragment
         element = dropArea.element
-        element.html(@formatFragment(fragment))
+        element.html(@formatFragment(@display(fragment)))
         
     formatFragment: (fragment) ->
         constant = '<div class=\'fragment\'>'
@@ -296,7 +299,7 @@ class equation.Equation
             
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
-        return text or ''
+        return @read(text) or ''
         
     formula: ->
         text = @straightFormula()

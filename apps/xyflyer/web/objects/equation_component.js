@@ -50,12 +50,16 @@ equationComponent.EquationComponent = (function() {
     this.elementContainer.addClass('equation_component_container');
     this.element = $(document.createElement('DIV'));
     this.element.addClass('equation_component');
-    this.element.html(this.equationFragment);
+    this.element.html(this.display(this.equationFragment));
     this.elementContainer.append(this.element);
     this.placeHolder = $(document.createElement('DIV'));
     this.placeHolder.addClass('place_holder');
     this.placeHolder.hide();
     return this.transformer = new Transformer(this.element);
+  };
+
+  EquationComponent.prototype.display = function(html) {
+    return html.replace('*', '&times;');
   };
 
   EquationComponent.prototype.initMove = function() {
@@ -103,7 +107,7 @@ equationComponent.EquationComponent = (function() {
 
   EquationComponent.prototype.showPlaceHolder = function() {
     this.placeHolder.show();
-    this.placeHolder.html(this.element.html());
+    this.placeHolder.html(this.display(this.element.html()));
     return this.placeHolder.css({
       position: 'absolute',
       top: this.offset.top - this.container.offset().top,

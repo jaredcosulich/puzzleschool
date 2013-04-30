@@ -21,7 +21,7 @@ class equationComponent.EquationComponent
         
         @element = $(document.createElement('DIV'))
         @element.addClass('equation_component')
-        @element.html(@equationFragment)
+        @element.html(@display(@equationFragment))
         @elementContainer.append(@element)
         
         @placeHolder = $(document.createElement('DIV'))
@@ -29,6 +29,8 @@ class equationComponent.EquationComponent
         @placeHolder.hide()
 
         @transformer = new Transformer(@element)
+        
+    display: (html) -> html.replace('*', '&times;')    
         
     initMove: ->
         @elementContainer.unbind('mousedown.drag touchstart.drag')
@@ -58,7 +60,7 @@ class equationComponent.EquationComponent
         
     showPlaceHolder: ->
         @placeHolder.show()
-        @placeHolder.html(@element.html())           
+        @placeHolder.html(@display(@element.html()))           
         @placeHolder.css
             position: 'absolute'
             top: @offset.top - @container.offset().top

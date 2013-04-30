@@ -74,7 +74,7 @@ plane.Plane = (function(_super) {
     this.scale = this.board.scale / 1.5;
     this.width = this.image.width() * this.scale;
     this.height = this.image.height() * this.scale;
-    return this.timeFactor = 2.5 / this.scale;
+    return this.timeFactor = 1.65 / this.scale;
   };
 
   Plane.prototype.move = function(x, y, next) {

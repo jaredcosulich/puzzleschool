@@ -403,7 +403,7 @@ board.Board = (function(_super) {
     }
     this.gridSet = true;
     gridString = "M" + this.xAxis + ",0\nL" + this.xAxis + "," + this.height + "\nM0," + this.yAxis + "\nL" + this.width + "," + this.yAxis;
-    color = 'rgba(255,255,255,0.4)';
+    color = 'rgba(255,255,255,0.5)';
     xUnits = this.width / this.xUnit;
     if (xUnits < this.maxUnits) {
       xUnits = this.maxUnits;

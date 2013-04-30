@@ -726,6 +726,9 @@ window.app = {
     }).call(this);
     this.settings.find('.player_details .info .completed').html("" + completed.length);
     this.settings.find('.form .name').html(this.selectedPlayer.name);
+    this.settings.find('.form .hand input').attr({
+      checked: ''
+    });
     this.settings.find(".form .hand input." + (this.selectedPlayer.hand.toLowerCase())).attr({
       checked: 'checked'
     });

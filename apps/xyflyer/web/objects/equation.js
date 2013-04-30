@@ -195,12 +195,20 @@ equation.Equation = (function() {
     return this.addFirstDropArea();
   };
 
+  Equation.prototype.display = function(html) {
+    return html.replace(/\*/ig, '&times;');
+  };
+
+  Equation.prototype.read = function(html) {
+    return html.replace(/×/ig, '*');
+  };
+
   Equation.prototype.addFirstDropArea = function() {
     var dropArea, dropAreaElement;
     dropAreaElement = this.newDropArea();
     this.el.append(dropAreaElement);
     this.addDropArea(dropAreaElement);
-    dropAreaElement.html(this.startingElement);
+    dropAreaElement.html(this.display(this.startingElement));
     if (this.startingElement === this.defaultText) {
       dropAreaElement.addClass('only_area');
     } else {
@@ -408,7 +416,7 @@ equation.Equation = (function() {
     var element, fragment;
     fragment = component.equationFragment;
     element = dropArea.element;
-    return element.html(this.formatFragment(fragment));
+    return element.html(this.formatFragment(this.display(fragment)));
   };
 
   Equation.prototype.formatFragment = function(fragment) {
@@ -452,7 +460,7 @@ equation.Equation = (function() {
     if (text === this.defaultText) {
       text = '';
     }
-    return text || '';
+    return this.read(text) || '';
   };
 
   Equation.prototype.formula = function() {

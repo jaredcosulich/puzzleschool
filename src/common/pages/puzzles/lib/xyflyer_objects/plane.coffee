@@ -50,7 +50,7 @@ class plane.Plane extends xyflyerObject.Object
         @scale = @board.scale / 1.5
         @width = @image.width() * @scale
         @height = @image.height() * @scale
-        @timeFactor = 2.5/@scale
+        @timeFactor = 1.65/@scale
     
     move: (x, y, next) ->
         return if not x or not y

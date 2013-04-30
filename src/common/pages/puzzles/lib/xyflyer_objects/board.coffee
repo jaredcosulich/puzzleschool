@@ -257,7 +257,7 @@ class board.Board extends xyflyerObject.Object
             L#{@width},#{@yAxis}
         """
 
-        color = 'rgba(255,255,255,0.4)'
+        color = 'rgba(255,255,255,0.5)'
 
         xUnits = @width / @xUnit
         xUnits = @maxUnits if xUnits < @maxUnits

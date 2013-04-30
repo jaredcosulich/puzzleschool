@@ -453,6 +453,9 @@ body {
 .xyflyer .menu h4 {
   text-align: center;
 }
+.xyflyer .settings {
+    height: 540px;
+}
 .xyflyer .settings h2 {
     font-size: 24px;
     font-weight: normal;
@@ -691,11 +694,7 @@ body {
     
     .xyflyer .level_selector .world .stage .level {
         margin: 0 0 30px 21px;        
-    }
-    
-    .xyflyer .settings {
-        height: 540px;
-    }
+    }    
 }
 
 @media screen and (device-aspect-ratio: 40/71) and (orientation:landscape) {

@@ -54,7 +54,6 @@
                 
                 //user AppMobi viewport
                 // AppMobi.display.useViewport(748,1024);
-                AppMobi.device.hideStatusBar();
                 AppMobi.display.useViewport(640,960);
 
                 //lock orientation
@@ -67,6 +66,8 @@
             	//any app-specific initialization
     	        window.app.initialize();
     	         
+                AppMobi.device.hideStatusBar();
+
     	        //hide splash screen
     			AppMobi.device.hideSplashScreen();
             };

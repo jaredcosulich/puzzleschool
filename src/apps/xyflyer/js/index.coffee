@@ -435,6 +435,7 @@ window.app =
         @settings.find('.player_details .info .completed').html("#{completed.length}")
         
         @settings.find('.form .name').html(@selectedPlayer.name)
+        @settings.find('.form .hand input').attr(checked: '')
         @settings.find(".form .hand input.#{@selectedPlayer.hand.toLowerCase()}").attr(checked: 'checked')
         @settings.find(".player_selection .player#{@selectedPlayer.id}").html(@selectedPlayer.name)
             
