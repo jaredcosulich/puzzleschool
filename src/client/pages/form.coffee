@@ -30,7 +30,8 @@ soma.views
                 @message.css(display: 'none')
                 @message.insertAfter(@el)
                 
-            @el.bind 'click', =>
+            @el.unbind 'click.submit_feedback'
+            @el.bind 'click.submit_feedback', =>
                 @el.animate
                     opacity: 0
                     duration: 300
@@ -67,6 +68,8 @@ soma.views
                 opacity: 0
                 duration: 300
                 complete: =>
+                    @message.removeClass('submitting')
+                    @message.removeClass('submitted')
                     @message.css(display: 'none')
                     @el.css(display: 'inline', opacity: 0)
                     @el.animate

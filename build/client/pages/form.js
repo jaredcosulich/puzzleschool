@@ -40,7 +40,8 @@ soma.views({
         });
         this.message.insertAfter(this.el);
       }
-      return this.el.bind('click', function() {
+      this.el.unbind('click.submit_feedback');
+      return this.el.bind('click.submit_feedback', function() {
         return _this.el.animate({
           opacity: 0,
           duration: 300,
@@ -95,6 +96,8 @@ soma.views({
         opacity: 0,
         duration: 300,
         complete: function() {
+          _this.message.removeClass('submitting');
+          _this.message.removeClass('submitted');
           _this.message.css({
             display: 'none'
           });
