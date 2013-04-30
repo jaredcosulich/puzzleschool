@@ -20,10 +20,11 @@ xyflyer.ChunkHelper = (function() {
 xyflyer.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    var boardElement, objects,
+    var boardElement, flip, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, flip = _arg.flip, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent;
     this.rings = [];
+    this.setFlip(flip);
     this.board = new xyflyer.Board({
       el: boardElement,
       grid: this.grid,
@@ -45,9 +46,10 @@ xyflyer.ViewHelper = (function() {
   }
 
   ViewHelper.prototype.reinitialize = function(_arg) {
-    var boardElement, objects;
-    this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates;
+    var boardElement, flip, objects;
+    this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, flip = _arg.flip;
     this.rings = [];
+    this.setFlip(flip);
     this.board.init({
       el: boardElement,
       grid: this.grid,
@@ -65,12 +67,12 @@ xyflyer.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.setFlip = function(direction) {
-    this.equationArea.css({
-      float: direction
-    });
-    return this.board.el.css({
-      float: direction === 'left' ? 'right' : 'left'
-    });
+    if (!direction) {
+      return;
+    }
+    this.el.removeClass('left');
+    this.el.removeClass('right');
+    return this.el.addClass(direction);
   };
 
   ViewHelper.prototype.plot = function(id, data) {

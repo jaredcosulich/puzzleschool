@@ -9,10 +9,11 @@ class xyflyer.ChunkHelper
 
 class xyflyer.ViewHelper
     
-    constructor: ({@el, @equationArea, boardElement, objects, @grid, @islandCoordinates, @nextLevel, @registerEvent}) ->
+    constructor: ({@el, @equationArea, boardElement, objects, @grid, @islandCoordinates, flip, @nextLevel, @registerEvent}) ->
         @rings = []
-        # @flip(boardElement)
 
+        @setFlip(flip)
+        
         @board = new xyflyer.Board
             el: boardElement 
             grid: @grid 
@@ -28,8 +29,9 @@ class xyflyer.ViewHelper
         @parser = require('./parser')
         @initEquations()
         
-    reinitialize: ({@equationArea, boardElement, objects, @grid, @islandCoordinates}) ->
+    reinitialize: ({@equationArea, boardElement, objects, @grid, @islandCoordinates, flip}) ->
         @rings = []
+        @setFlip(flip)
         @board.init
             el: boardElement 
             grid: @grid 
@@ -44,11 +46,10 @@ class xyflyer.ViewHelper
     $: (selector) -> $(selector, @el)
 
     setFlip: (direction) ->
-        @equationArea.css
-            float: direction
-            
-        @board.el.css
-            float: if direction == 'left' then 'right' else 'left'
+        return if not direction
+        @el.removeClass('left')
+        @el.removeClass('right')
+        @el.addClass(direction)
             
     plot: (id, data) ->
         [formula, area] = @parser.parse(data)

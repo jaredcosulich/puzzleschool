@@ -55,7 +55,7 @@ window.app = {
     return this.dynamicContent.html(this.originalHTML);
   },
   load: function() {
-    var asset, assets, index, _ref, _ref1, _ref2, _ref3,
+    var asset, assets, index, _ref, _ref1, _ref2,
       _this = this;
     this.$('.level_selector_menu').bind('touchstart.menu', function() {
       _this.$('.level_selector_menu').addClass('active');
@@ -108,7 +108,8 @@ window.app = {
         objects: this.$('.objects'),
         equationArea: this.$('.equation_area'),
         grid: this.level.grid,
-        islandCoordinates: this.level.islandCoordinates
+        islandCoordinates: this.level.islandCoordinates,
+        flip: this.selectedPlayer.hand.toLowerCase()
       });
     } else {
       this.helper = new xyflyer.ViewHelper({
@@ -118,14 +119,12 @@ window.app = {
         equationArea: this.$('.equation_area'),
         grid: this.level.grid,
         islandCoordinates: this.level.islandCoordinates,
+        flip: this.selectedPlayer.hand.toLowerCase(),
         nextLevel: function() {
           return _this.nextLevel();
         },
         registerEvent: function(eventInfo) {}
       });
-    }
-    if ((_ref3 = this.selectedPlayer) != null ? _ref3.hand : void 0) {
-      this.helper.setFlip(this.selectedPlayer.hand.toLowerCase());
     }
     return this.loadLevel();
   },

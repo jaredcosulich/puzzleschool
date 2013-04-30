@@ -46,7 +46,7 @@ window.app =
     clear: ->
         $('svg').remove()        
         @dynamicContent.html(@originalHTML)
-        
+            
     load: ->
         @$('.level_selector_menu').bind 'touchstart.menu', =>
             @$('.level_selector_menu').addClass('active')
@@ -79,6 +79,7 @@ window.app =
                 equationArea: @$('.equation_area')
                 grid: @level.grid
                 islandCoordinates: @level.islandCoordinates
+                flip: @selectedPlayer.hand.toLowerCase()
         else
             @helper = new xyflyer.ViewHelper
                 el: @dynamicContent
@@ -87,10 +88,9 @@ window.app =
                 equationArea: @$('.equation_area')
                 grid: @level.grid
                 islandCoordinates: @level.islandCoordinates
+                flip: @selectedPlayer.hand.toLowerCase()
                 nextLevel: => @nextLevel()
                 registerEvent: (eventInfo) => 
-                    
-        @helper.setFlip(@selectedPlayer.hand.toLowerCase()) if @selectedPlayer?.hand
         
         @loadLevel()  
 
