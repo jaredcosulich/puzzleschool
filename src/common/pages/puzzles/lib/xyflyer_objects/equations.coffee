@@ -10,11 +10,11 @@ class equations.Equations
         @equationComponents = []
         
         launch = @$('.launch')
-        if window.AppMobi
+        if window.appScale
             launch.bind 'touchstart.launch', => 
                 launch.addClass('active')
-                submit()
                 launch.one 'touchend.launch', => launch.removeClass('active')
+                submit()
         else
             launch.bind 'click.launch', => submit()
         @initHints()

@@ -38,7 +38,10 @@ class equationComponent.EquationComponent
         
     initMove: ->
         @elementContainer.unbind('mousedown.drag touchstart.drag')
-        @elementContainer.bind 'mousedown.drag touchstart.drag', (e) => @mousedown(e)
+        if window.appScale
+            @elementContainer.bind 'touchstart.drag', (e) => @mousedown(e)
+        else
+            @elementContainer.bind 'mousedown.drag', (e) => @mousedown(e)
         
     appendTo: (@container) ->
         @container.append(@placeHolder) 
@@ -58,9 +61,13 @@ class equationComponent.EquationComponent
         @initMeasurements()
         @gameArea.addClass('dragging')
         @element.addClass('dragging')
-        body = $(document.body)        
-        body.bind 'mousemove.drag touchmove.drag', (e) => @move(e)
-        body.one 'mouseup.drag touchend.drag', (e) => @endMove(e)         
+        body = $(document.body)
+        if window.appScale        
+            body.bind 'touchmove.drag', (e) => @move(e)
+            body.one 'touchend.drag', (e) => @endMove(e)         
+        else
+            body.bind 'mousemove.drag', (e) => @move(e)
+            body.one 'mouseup.drag', (e) => @endMove(e)         
         
     showPlaceHolder: ->
         @placeHolder.show()

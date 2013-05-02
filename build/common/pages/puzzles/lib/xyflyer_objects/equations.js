@@ -18,13 +18,13 @@ equations.Equations = (function() {
     this.equations = [];
     this.equationComponents = [];
     launch = this.$('.launch');
-    if (window.AppMobi) {
+    if (window.appScale) {
       launch.bind('touchstart.launch', function() {
         launch.addClass('active');
-        submit();
-        return launch.one('touchend.launch', function() {
+        launch.one('touchend.launch', function() {
           return launch.removeClass('active');
         });
+        return submit();
       });
     } else {
       launch.bind('click.launch', function() {
