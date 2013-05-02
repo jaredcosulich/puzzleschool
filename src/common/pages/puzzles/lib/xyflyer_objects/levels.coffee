@@ -1602,10 +1602,10 @@ levels.WORLDS = [
                     {
                         id: 1363229806832
                         equations: 
-                            '(1/b)x+c': 
+                            '(1/b)*x+c': 
                                 start: 'x'
                                 solutionComponents: [
-                                    {fragment: '(1/b)', after: ''}
+                                    {fragment: '(1/b)*', after: ''}
                                     {fragment: '+c', after: 'x'}
                                 ]
                         grid:
@@ -1620,7 +1620,7 @@ levels.WORLDS = [
                         ]
                         islandCoordinates: {x: -15, y: 0}
                         fragments: [
-                            'a*', '(1/b)', '+c', '-d'
+                            'a*', '(1/b)*', '+c', '-d'
                         ]
                         variables:
                             a:
@@ -1667,7 +1667,7 @@ levels.WORLDS = [
                         ]
                         islandCoordinates: {x: -12, y: -30}
                         fragments: [
-                            'a*', '(1/b)', '+c', '-d'
+                            'a*', '(1/b)*', '+c', '-d'
                         ]
                         variables:
                             a:
@@ -1713,7 +1713,7 @@ levels.WORLDS = [
                         ]
                         islandCoordinates: {x: -15, y: -20}
                         fragments: [
-                            'a*', '(1/b)', '+c', '-d'
+                            'a*', '(1/b)*', '+c', '-d'
                         ]
                         variables:
                             a:
@@ -4544,14 +4544,14 @@ levels.WORLDS = [
                     {
                         id: 1363642523297
                         equations:
+                            '0':
+                                solutionComponents: [
+                                    {fragment: '0', after: ''}
+                                ]
                             '(x+a)^2':
                                 start: '(x)^2'
                                 solutionComponents: [
                                     {fragment: '+a', after: 'x'}
-                                ]
-                            '0':
-                                solutionComponents: [
-                                    {fragment: '0', after: ''}
                                 ]
                         rings: [
                             {x: 5, y: 1}
@@ -4690,6 +4690,8 @@ levels.WORLDS = [
                     }
                     {
                         id: 1363230030642
+                        assets:
+                            font: 24
                         equations:
                             '((1/3)*x)^2-32':
                                 start: '(x)^2'
@@ -4733,6 +4735,8 @@ levels.WORLDS = [
                     } 
                     {
                         id: 1364763311626
+                        assets:
+                            font: 24
                         equations:
                             '(-1/3)*(x)^2+3':
                                 start: '(x)^2'
@@ -4986,6 +4990,8 @@ levels.WORLDS = [
                     }
                     {
                         id: 1364794806870
+                        assets:
+                            font: 24
                         equations:
                             '(1/a)*(x-3)^2+c':
                                 start: '(x)^2'
@@ -5784,6 +5790,7 @@ levels.WORLDS = [
                 name: 'Crazy Curves'
                 assets:
                     person: 4
+                    font: 24
                 levels: [
                     {
                         id: 1365008751620

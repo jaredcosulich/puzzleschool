@@ -536,8 +536,9 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.calculatePath = function() {
-    var addToPath, id, intersection, intersectionY, lastFormula, lf, otherPrevYPos, otherYPos, path, prevYPos, rings, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
+    var addToPath, delta, findIntersection, id, intersection, intersectionY, lastFormula, lf, nextYPos, otherNextYPos, otherPrevYPos, otherYPos, path, prevYPos, rings, significantDigits, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
       _this = this;
+    significantDigits = 1;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {
       distance: 0
@@ -550,11 +551,10 @@ board.Board = (function(_super) {
       return a.x - b.x;
     });
     addToPath = function(x, y, formula) {
-      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, ring, significantDigits, _i, _j, _len, _ref;
+      var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, ring, _i, _j, _len, _ref;
       if (!((_this.grid.yMin - 50 <= (_ref = y / _this.yUnit) && _ref <= _this.grid.yMax + 50))) {
         return;
       }
-      significantDigits = 1;
       formattedFullDistance = Math.ceil(path.distance * Math.pow(10, significantDigits));
       prevPos = path[formattedFullDistance];
       if (prevPos.x === x && prevPos.y === y) {
@@ -601,10 +601,36 @@ board.Board = (function(_super) {
               lastFormula = this.formulas[id];
               break;
             }
+            findIntersection = function(y1, y2, y3, f1, f2) {
+              var directionChange, formula1Y, formula2Y, i, multiplier, nextSlope, slope, unit, _j;
+              nextSlope = y1 - y2;
+              slope = y2 - y3;
+              directionChange = (nextSlope * slope < 0) || (nextSlope * slope === 0 && (nextSlope || slope));
+              if (!directionChange) {
+                return false;
+              }
+              multiplier = Math.pow(10, significantDigits);
+              unit = 1 / multiplier / _this.xUnit;
+              for (i = _j = 1; _j <= 2; i = _j += unit) {
+                formula1Y = Math.round(f1.formula((xPos + i) / _this.xUnit) * multiplier);
+                formula2Y = Math.round(f2.formula((xPos + i) / _this.xUnit) * multiplier);
+                if (formula1Y === formula2Y) {
+                  return i;
+                }
+              }
+            };
+            nextYPos = lastFormula.formula((xPos + 1) / this.xUnit) * this.yUnit;
+            otherNextYPos = this.formulas[id].formula((xPos + 1) / this.xUnit) * this.yUnit;
+            if ((delta = findIntersection(nextYPos, yPos, prevYPos, lastFormula, this.formulas[id])) || (delta = findIntersection(otherNextYPos, otherYPos, otherPrevYPos, lastFormula, this.formulas[id]))) {
+              yPos = lastFormula.formula(xPos + delta);
+              lastFormula = this.formulas[id];
+              break;
+            }
           }
           addToPath(xPos, yPos, lastFormula);
           continue;
         } else {
+          alert(xPos);
           intersection = xPos - 1;
           lf = lastFormula;
           lastFormula = null;

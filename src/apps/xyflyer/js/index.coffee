@@ -226,7 +226,7 @@ window.app =
                                     levelElement.removeClass('active')
                                     $(document.body).unbind('touchstart.level_selector')
                                     if locked
-                                        alert('This level is locked.')
+                                        @alert('This level is locked.')
                                     else
                                         @hideMenu(@levelSelector)        
                         
@@ -236,7 +236,32 @@ window.app =
                             else
                                 previousCompleted = false
                 
-                            
+    alert: (messageText) ->
+        message = @$('.message')
+        
+        hidden = false
+        hide = ->
+            return if hidden
+            hidden = true
+            message.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    message.css
+                        top: -1000
+                        left: -1000
+                        
+        message.one('touchstart.hide', (e) -> hide(); e.stop())                
+            
+        message.html(messageText)
+        message.css
+            opacity: 0
+            top: (@el.height()/2) - (message.height()/2)
+            left: (@el.width()/2) - (message.width()/2)
+        message.animate
+            opacity: 1
+            duration: 250
+            complete: -> $.timeout(1500, hide)
 
     setLevelIcon: ({id, started, completed, locked}) ->
         return if not id
@@ -263,7 +288,7 @@ window.app =
 
             
     showMenu: (menu, success) ->
-        @hideMenu(@$('.menu'))
+        @hideMenu(@$('.menu'), true)
         $(document.body).unbind('touchstart.hide_menu')
         if parseInt(menu.css('opacity')) == 1
             @hideMenu(menu)
@@ -276,22 +301,35 @@ window.app =
         # 
                 
         menu.css
-            opacity: 1
+            opacity: 0
             top: (@el.height() - menu.height()) / 2
             left: (@el.width() - menu.width()) / 2
+        
+        menu.animate
+            opacity: 1
+            duration: 500
 
-        $.timeout 50, =>    
+        $.timeout 600, =>    
             $(document.body).one 'touchstart.hide_menu', => 
                 $(document.body).one 'touchend.hide_menu', => 
                     @hideMenu(menu)
 
-    hideMenu: (menu) ->
+    hideMenu: (menu, immediate) ->
         $(document.body).unbind('touchstart.hide_menu touchend.hide_menu')
-        menu.css
-            opacity: 0
-            top: -1000
-            left: -1000
-    
+
+        if immediate
+            menu.css
+                opacity: 0
+                top: -1000
+                left: -1000
+        else
+            menu.animate
+                opacity: 0
+                duration: 500
+                complete: =>
+                    menu.css
+                        top: -1000
+                        left: -1000
     
     initSettings: ->
         @settings or= @$('.settings')
@@ -420,7 +458,7 @@ window.app =
                 @level = lastLevel
         else
             @level = @worlds[0].stages[0].levels[0]
-        
+
         @clear()
         @initLevel()
         @puzzleProgress[@level.id] or= {}
@@ -470,7 +508,7 @@ window.app =
                             @level = level
                             @load()
 
-                        $.timeout 10, =>
+                        $.timeout 100, =>
                             testHints = (i) => @testHints(i)
                             helper = @helper
                             unless helper.equations.reallyDisplayHint

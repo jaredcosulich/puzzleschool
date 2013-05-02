@@ -18,6 +18,8 @@ class equationComponent.EquationComponent
     initElement: ->
         @elementContainer = $(document.createElement('DIV'))
         @elementContainer.addClass('equation_component_container')
+        if @equationFragment.length > 3
+            @elementContainer.addClass('long')
         
         @element = $(document.createElement('DIV'))
         @element.addClass('equation_component')

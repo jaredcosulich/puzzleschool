@@ -638,7 +638,7 @@ soma.views
                                 @level = level
                                 @load()
                             
-                            $.timeout 10, =>
+                            $.timeout 100, =>
                                 testHints = (i) => @testHints(i)
                                 helper = @helper
                                 unless helper.equations.reallyDisplayHint

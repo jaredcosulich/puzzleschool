@@ -343,7 +343,7 @@ window.app = {
                   levelElement.removeClass('active');
                   $(document.body).unbind('touchstart.level_selector');
                   if (locked) {
-                    return alert('This level is locked.');
+                    return _this.alert('This level is locked.');
                   } else {
                     return _this.hideMenu(_this.levelSelector);
                   }
@@ -364,6 +364,45 @@ window.app = {
       })(stageElement));
     }
     return _results;
+  },
+  alert: function(messageText) {
+    var hidden, hide, message;
+    message = this.$('.message');
+    hidden = false;
+    hide = function() {
+      var _this = this;
+      if (hidden) {
+        return;
+      }
+      hidden = true;
+      return message.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return message.css({
+            top: -1000,
+            left: -1000
+          });
+        }
+      });
+    };
+    message.one('touchstart.hide', function(e) {
+      hide();
+      return e.stop();
+    });
+    message.html(messageText);
+    message.css({
+      opacity: 0,
+      top: (this.el.height() / 2) - (message.height() / 2),
+      left: (this.el.width() / 2) - (message.width() / 2)
+    });
+    return message.animate({
+      opacity: 1,
+      duration: 250,
+      complete: function() {
+        return $.timeout(1500, hide);
+      }
+    });
   },
   setLevelIcon: function(_arg) {
     var completed, id, level, locked, started;
@@ -401,18 +440,22 @@ window.app = {
   },
   showMenu: function(menu, success) {
     var _this = this;
-    this.hideMenu(this.$('.menu'));
+    this.hideMenu(this.$('.menu'), true);
     $(document.body).unbind('touchstart.hide_menu');
     if (parseInt(menu.css('opacity')) === 1) {
       this.hideMenu(menu);
       return;
     }
     menu.css({
-      opacity: 1,
+      opacity: 0,
       top: (this.el.height() - menu.height()) / 2,
       left: (this.el.width() - menu.width()) / 2
     });
-    return $.timeout(50, function() {
+    menu.animate({
+      opacity: 1,
+      duration: 500
+    });
+    return $.timeout(600, function() {
       return $(document.body).one('touchstart.hide_menu', function() {
         return $(document.body).one('touchend.hide_menu', function() {
           return _this.hideMenu(menu);
@@ -420,13 +463,27 @@ window.app = {
       });
     });
   },
-  hideMenu: function(menu) {
+  hideMenu: function(menu, immediate) {
+    var _this = this;
     $(document.body).unbind('touchstart.hide_menu touchend.hide_menu');
-    return menu.css({
-      opacity: 0,
-      top: -1000,
-      left: -1000
-    });
+    if (immediate) {
+      return menu.css({
+        opacity: 0,
+        top: -1000,
+        left: -1000
+      });
+    } else {
+      return menu.animate({
+        opacity: 0,
+        duration: 500,
+        complete: function() {
+          return menu.css({
+            top: -1000,
+            left: -1000
+          });
+        }
+      });
+    }
   },
   initSettings: function() {
     var id, info, playerName, _i, _len, _ref,
@@ -775,7 +832,7 @@ window.app = {
               this.level = level;
               this.load();
             }
-            $.timeout(10, function() {
+            $.timeout(100, function() {
               var helper, testHints;
               testHints = function(i) {
                 return _this.testHints(i);

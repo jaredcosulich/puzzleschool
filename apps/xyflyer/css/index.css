@@ -193,7 +193,7 @@ body {
   border: 1px solid #ccc;
   border-top: none;
   width: 78%;
-  margin-left: 14%;
+  margin-left: 18%;
   padding: 3px 6px;
   overflow: hidden;
 }
@@ -258,6 +258,9 @@ body {
   padding: 6px;
   float: left;
   font-size: 24px;
+}
+.xyflyer .dynamic_content .equation_area .possible_fragments .long .equation_component, .xyflyer .dynamic_content .equation_area .possible_fragments .long .place_holder {
+  padding: 6px 1px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container .equation_component {
   cursor: move;
@@ -419,7 +422,7 @@ body {
   height: 30px;
 }
 .xyflyer .complete,
-.xyflyer .intro_message,
+.xyflyer .message,
 .xyflyer .exit_message {
   position: absolute;
   top: -1000px;
@@ -443,7 +446,7 @@ body {
   height: 534px;
   overflow: auto;
   padding: 12px;
-  z-index: 99;
+  z-index: 97;
 }
 .xyflyer .menu .close {
   float: right;
@@ -679,7 +682,7 @@ body {
         height: 762px;
     }
      
-    .xyflyer .menu {
+    .xyflyer .level_selector {
         width: 840px;
         height: 645px;
     }

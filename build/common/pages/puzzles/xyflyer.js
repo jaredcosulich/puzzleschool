@@ -951,7 +951,7 @@ soma.views({
                 this.level = level;
                 this.load();
               }
-              $.timeout(10, function() {
+              $.timeout(100, function() {
                 var helper, testHints;
                 testHints = function(i) {
                   return _this.testHints(i);
