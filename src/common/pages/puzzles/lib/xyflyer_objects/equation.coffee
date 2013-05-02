@@ -117,8 +117,8 @@ class equation.Equation
         area.append(@container)
         @addFirstDropArea()
         
-    display: (html) -> html.replace(/\*/ig, '&times;')
-    read: (html) -> html.replace(/×/ig, '*')
+    display: (html) -> (html or '').replace(/\*/ig, '&times;')
+    read: (html) -> (html or '').replace(/×/ig, '*')
      
     addFirstDropArea: ->
         dropAreaElement = @newDropArea()
@@ -299,7 +299,7 @@ class equation.Equation
             
         text = if element.textContent then element.textContent else element.innerText      
         text = '' if text == @defaultText
-        return @read(text) or ''
+        return @read(text or '') 
         
     formula: ->
         text = @straightFormula()

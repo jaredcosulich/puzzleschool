@@ -460,7 +460,7 @@ class board.Board extends xyflyerObject.Object
                 break
             
             return path unless validPathFound
-
+            
         return path
     
     clear: ->

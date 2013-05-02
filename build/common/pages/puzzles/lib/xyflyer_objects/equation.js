@@ -196,11 +196,11 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.display = function(html) {
-    return html.replace(/\*/ig, '&times;');
+    return (html || '').replace(/\*/ig, '&times;');
   };
 
   Equation.prototype.read = function(html) {
-    return html.replace(/×/ig, '*');
+    return (html || '').replace(/×/ig, '*');
   };
 
   Equation.prototype.addFirstDropArea = function() {
@@ -460,7 +460,7 @@ equation.Equation = (function() {
     if (text === this.defaultText) {
       text = '';
     }
-    return this.read(text) || '';
+    return this.read(text || '');
   };
 
   Equation.prototype.formula = function() {

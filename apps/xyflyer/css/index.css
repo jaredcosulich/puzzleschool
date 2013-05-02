@@ -193,7 +193,7 @@ body {
   border: 1px solid #ccc;
   border-top: none;
   width: 78%;
-  margin-left: 18%;
+  margin-left: 16%;
   padding: 3px 6px;
   overflow: hidden;
 }
@@ -259,7 +259,7 @@ body {
   float: left;
   font-size: 24px;
 }
-.xyflyer .dynamic_content .equation_area .possible_fragments .long .equation_component, .xyflyer .dynamic_content .equation_area .possible_fragments .long .place_holder {
+.xyflyer .dynamic_content .equation_area .possible_fragments .long .equation_component, .xyflyer .dynamic_content .equation_area .possible_fragments .place_holder.long {
   padding: 6px 1px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container .equation_component {

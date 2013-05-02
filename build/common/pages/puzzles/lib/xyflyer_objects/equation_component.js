@@ -48,9 +48,6 @@ equationComponent.EquationComponent = (function() {
   EquationComponent.prototype.initElement = function() {
     this.elementContainer = $(document.createElement('DIV'));
     this.elementContainer.addClass('equation_component_container');
-    if (this.equationFragment.length > 3) {
-      this.elementContainer.addClass('long');
-    }
     this.element = $(document.createElement('DIV'));
     this.element.addClass('equation_component');
     this.element.html(this.display(this.equationFragment));
@@ -58,6 +55,10 @@ equationComponent.EquationComponent = (function() {
     this.placeHolder = $(document.createElement('DIV'));
     this.placeHolder.addClass('place_holder');
     this.placeHolder.hide();
+    if (this.equationFragment.length > 3) {
+      this.elementContainer.addClass('long');
+      this.placeHolder.addClass('long');
+    }
     return this.transformer = new Transformer(this.element);
   };
 

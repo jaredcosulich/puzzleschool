@@ -93,7 +93,7 @@ ring.Ring = (function(_super) {
     if (Math.round(100 * formula(this.x)) / 100 !== Math.round(100 * this.y) / 100) {
       return false;
     }
-    if (x >= this.x - 0.01) {
+    if (x >= this.x - (1 / this.board.xUnit)) {
       return true;
     }
   };
