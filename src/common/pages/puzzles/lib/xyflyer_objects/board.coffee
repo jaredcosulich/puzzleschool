@@ -359,6 +359,7 @@ class board.Board extends xyflyerObject.Object
             plotArea: plotArea
 
         @resetLevel()
+        $.timeout(100, => @calculatedPath = @calculatePath())
             
         
     calculatePath: ->

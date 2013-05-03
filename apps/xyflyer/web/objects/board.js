@@ -472,7 +472,8 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.plot = function(id, formula, area) {
-    var brokenLine, i, infiniteLine, lastSlope, lastYPos, newYPos, plotArea, slope, testYPos, xPos, yPos, _i, _j, _ref, _ref1, _ref2;
+    var brokenLine, i, infiniteLine, lastSlope, lastYPos, newYPos, plotArea, slope, testYPos, xPos, yPos, _i, _j, _ref, _ref1, _ref2,
+      _this = this;
     if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
       plotArea.clearRect(0, 0, this.width, this.height);
     }
@@ -532,7 +533,10 @@ board.Board = (function(_super) {
       formula: formula,
       plotArea: plotArea
     };
-    return this.resetLevel();
+    this.resetLevel();
+    return $.timeout(100, function() {
+      return _this.calculatedPath = _this.calculatePath();
+    });
   };
 
   Board.prototype.calculatePath = function() {

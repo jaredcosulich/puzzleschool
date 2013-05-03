@@ -144,12 +144,10 @@ plane.Plane = (function(_super) {
     this.startTime = null;
     this.latestTime = null;
     if (!this.path || !Object.keys(this.path).length) {
-      this.path = this.board.calculatePath();
+      this.path = this.board.calculatedPath || this.board.calculatePath();
       if (!((_ref = this.path) != null ? _ref.distance : void 0)) {
         this.fall;
-        return;
       }
-      return this.duration = this.path.distance * this.timeFactor;
     }
   };
 

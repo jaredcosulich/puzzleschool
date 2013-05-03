@@ -89,12 +89,10 @@ class plane.Plane extends xyflyerObject.Object
         @startTime = null
         @latestTime = null
         if not @path or not Object.keys(@path).length
-            @path = @board.calculatePath() 
+            @path = @board.calculatedPath or @board.calculatePath() 
             if not @path?.distance
                 @fall
-                return
-                
-            @duration = @path.distance * @timeFactor
+                return        
                         
     reset: ->
         if not (@image = @objects.find('.plane img')).height()
