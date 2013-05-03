@@ -145,8 +145,10 @@ class equation.Equation
         dropArea.addClass('accept_fragment')
         return dropArea
         
-    overlappingDropAreas: ({x, y, test}) ->
-        overlapping = []
+    overlappingDropAreas: ({x, y, width, height, test}) ->
+        width or= 0
+        height or= 0
+        dropAreas = []
         gameAreaOffset = @gameArea.offset()
         for dropArea in @dropAreas
             continue unless dropArea.element.hasClass('accept_fragment')
@@ -154,13 +156,29 @@ class equation.Equation
             offset = dropArea.element.offset()
             offset.left -= gameAreaOffset.left
             offset.top -= gameAreaOffset.top
-            over = (
-                x >= offset.left and
-                x <= offset.left + offset.width and
-                y >= offset.top and
-                y <= offset.top + offset.height   
-            )  
-            return dropArea if test(dropArea, over)
+            
+            xOverlap1 = (x + width/2) - offset.left
+            xOverlap1 = 0 if xOverlap1 > offset.width
+            xOverlap2 = (offset.left + offset.width) - (x - width/2)
+            xOverlap2 = 0 if xOverlap2 > offset.width
+            xOverlap3 = x - offset.left
+            xOverlap3 = 0 if xOverlap3 > offset.width
+            
+            yOverlap1 = (y + height/2) - offset.top
+            yOverlap1 = 0 if yOverlap1 > offset.height
+            yOverlap2 = (offset.top + offset.height) - (y - height/2)
+            yOverlap2 = 0 if yOverlap2 > offset.height
+            yOverlap3 = y - offset.top
+            yOverlap3 = 0 if yOverlap3 > offset.height
+            
+            xOverlap = Math.max(xOverlap1, xOverlap2, xOverlap3)
+            yOverlap = Math.max(yOverlap1, yOverlap2, yOverlap3)
+            
+            dropAreas.push(overlap: xOverlap * yOverlap, area: dropArea)
+            
+        for info, index in dropAreas.sort((a,b) -> a.overlap - b.overlap)
+            if test(info.area, (index == dropAreas.length - 1 and info.overlap > 0))
+                return info.area
             
     addDropArea: (dropAreaElement, parentArea=null) ->
         dropArea = 

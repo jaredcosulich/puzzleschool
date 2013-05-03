@@ -231,9 +231,11 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.overlappingDropAreas = function(_arg) {
-    var dropArea, gameAreaOffset, offset, over, overlapping, test, x, y, _i, _len, _ref;
-    x = _arg.x, y = _arg.y, test = _arg.test;
-    overlapping = [];
+    var dropArea, dropAreas, gameAreaOffset, height, index, info, offset, test, width, x, xOverlap, xOverlap1, xOverlap2, xOverlap3, y, yOverlap, yOverlap1, yOverlap2, yOverlap3, _i, _j, _len, _len1, _ref, _ref1;
+    x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, test = _arg.test;
+    width || (width = 0);
+    height || (height = 0);
+    dropAreas = [];
     gameAreaOffset = this.gameArea.offset();
     _ref = this.dropAreas;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -244,9 +246,44 @@ equation.Equation = (function() {
       offset = dropArea.element.offset();
       offset.left -= gameAreaOffset.left;
       offset.top -= gameAreaOffset.top;
-      over = x >= offset.left && x <= offset.left + offset.width && y >= offset.top && y <= offset.top + offset.height;
-      if (test(dropArea, over)) {
-        return dropArea;
+      xOverlap1 = (x + width / 2) - offset.left;
+      if (xOverlap1 > offset.width) {
+        xOverlap1 = 0;
+      }
+      xOverlap2 = (offset.left + offset.width) - (x - width / 2);
+      if (xOverlap2 > offset.width) {
+        xOverlap2 = 0;
+      }
+      xOverlap3 = x - offset.left;
+      if (xOverlap3 > offset.width) {
+        xOverlap3 = 0;
+      }
+      yOverlap1 = (y + height / 2) - offset.top;
+      if (yOverlap1 > offset.height) {
+        yOverlap1 = 0;
+      }
+      yOverlap2 = (offset.top + offset.height) - (y - height / 2);
+      if (yOverlap2 > offset.height) {
+        yOverlap2 = 0;
+      }
+      yOverlap3 = y - offset.top;
+      if (yOverlap3 > offset.height) {
+        yOverlap3 = 0;
+      }
+      xOverlap = Math.max(xOverlap1, xOverlap2, xOverlap3);
+      yOverlap = Math.max(yOverlap1, yOverlap2, yOverlap3);
+      dropAreas.push({
+        overlap: xOverlap * yOverlap,
+        area: dropArea
+      });
+    }
+    _ref1 = dropAreas.sort(function(a, b) {
+      return a.overlap - b.overlap;
+    });
+    for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
+      info = _ref1[index];
+      if (test(info.area, index === dropAreas.length - 1 && info.overlap > 0)) {
+        return info.area;
       }
     }
   };

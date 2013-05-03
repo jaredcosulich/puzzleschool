@@ -88,7 +88,7 @@ class equationComponent.EquationComponent
 
         @transformer.translate(dx, dy)
 
-        @trackDrag(x, y, @) if @trackDrag
+        @trackDrag(x, y, offset.width, offset.height, @) if @trackDrag
         
     endMove: (e) ->
         return unless @gameArea.hasClass('dragging')

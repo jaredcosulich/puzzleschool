@@ -50,7 +50,7 @@ class equations.Equations
         equationComponent = new EquationComponent
             gameArea: @gameArea
             equationFragment: equationFragment
-            trackDrag: (left, top, component) => @trackComponentDragging(left, top, component)
+            trackDrag: (left, top, width, height, component) => @trackComponentDragging(left, top, width, height, component)
             endDrag: (component) => @endComponentDragging(component)
 
         equationComponent.appendTo(@possibleFragments)
@@ -76,7 +76,7 @@ class equations.Equations
         equationComponent.element.remove()
         
         
-    trackComponentDragging: (left, top, component) ->
+    trackComponentDragging: (left, top, width, height, component) ->
         @el.addClass('show_places') unless @el.hasClass('show_places')
         @selectedDropArea = null
         for equation in @equations
@@ -85,6 +85,8 @@ class equations.Equations
             @selectedDropArea = equation.overlappingDropAreas
                 x: left
                 y: top
+                width: width
+                height: height
                 test: (dropArea, over) => 
                     result = dropArea?.highlight(over)
                     equation.expandLastAccept()

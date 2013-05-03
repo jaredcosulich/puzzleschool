@@ -76,8 +76,8 @@ equations.Equations = (function() {
     equationComponent = new EquationComponent({
       gameArea: this.gameArea,
       equationFragment: equationFragment,
-      trackDrag: function(left, top, component) {
-        return _this.trackComponentDragging(left, top, component);
+      trackDrag: function(left, top, width, height, component) {
+        return _this.trackComponentDragging(left, top, width, height, component);
       },
       endDrag: function(component) {
         return _this.endComponentDragging(component);
@@ -112,7 +112,7 @@ equations.Equations = (function() {
     return equationComponent.element.remove();
   };
 
-  Equations.prototype.trackComponentDragging = function(left, top, component) {
+  Equations.prototype.trackComponentDragging = function(left, top, width, height, component) {
     var equation, _i, _len, _ref,
       _this = this;
     if (!this.el.hasClass('show_places')) {
@@ -126,6 +126,8 @@ equations.Equations = (function() {
       this.selectedDropArea = equation.overlappingDropAreas({
         x: left,
         y: top,
+        width: width,
+        height: height,
         test: function(dropArea, over) {
           var result;
           result = dropArea != null ? dropArea.highlight(over) : void 0;

@@ -149,7 +149,7 @@ equationComponent.EquationComponent = (function() {
     dy = y - offset.top - (offset.height / 2) + this.gameAreaOffset.top;
     this.transformer.translate(dx, dy);
     if (this.trackDrag) {
-      return this.trackDrag(x, y, this);
+      return this.trackDrag(x, y, offset.width, offset.height, this);
     }
   };
 
