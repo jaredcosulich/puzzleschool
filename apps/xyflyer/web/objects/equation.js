@@ -231,7 +231,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.overlappingDropAreas = function(_arg) {
-    var dropArea, dropAreas, gameAreaOffset, height, index, info, offset, test, width, x, xOverlap, xOverlap1, xOverlap2, xOverlap3, y, yOverlap, yOverlap1, yOverlap2, yOverlap3, _i, _j, _len, _len1, _ref, _ref1;
+    var dropArea, dropAreas, gameAreaOffset, height, index, info, near, offset, over, test, width, x, xNearness, xOverlap, xOverlap1, xOverlap2, xOverlap3, y, yNearness, yOverlap, yOverlap1, yOverlap2, yOverlap3, _i, _j, _len, _len1, _ref, _ref1;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, test = _arg.test;
     width || (width = 0);
     height || (height = 0);
@@ -272,13 +272,21 @@ equation.Equation = (function() {
       }
       xOverlap = Math.max(xOverlap1, xOverlap2, xOverlap3);
       yOverlap = Math.max(yOverlap1, yOverlap2, yOverlap3);
+      xNearness = Math.abs(x - (offset.left + offset.width / 2));
+      yNearness = Math.abs(y - (offset.top + offset.top / 2));
+      over = xOverlap * yOverlap;
+      near = xNearness + yNearness;
+      if (!over) {
+        near = 1000;
+      }
       dropAreas.push({
-        overlap: xOverlap * yOverlap,
+        overlap: over,
+        near: near,
         area: dropArea
       });
     }
     _ref1 = dropAreas.sort(function(a, b) {
-      return a.overlap - b.overlap;
+      return b.near - a.near;
     });
     for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
       info = _ref1[index];

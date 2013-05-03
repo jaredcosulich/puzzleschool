@@ -156,27 +156,33 @@ class equation.Equation
             offset = dropArea.element.offset()
             offset.left -= gameAreaOffset.left
             offset.top -= gameAreaOffset.top
-            
+
             xOverlap1 = (x + width/2) - offset.left
             xOverlap1 = 0 if xOverlap1 > offset.width
             xOverlap2 = (offset.left + offset.width) - (x - width/2)
             xOverlap2 = 0 if xOverlap2 > offset.width
-            xOverlap3 = x - offset.left
+            xOverlap3 = (x - offset.left)
             xOverlap3 = 0 if xOverlap3 > offset.width
             
             yOverlap1 = (y + height/2) - offset.top
             yOverlap1 = 0 if yOverlap1 > offset.height
             yOverlap2 = (offset.top + offset.height) - (y - height/2)
             yOverlap2 = 0 if yOverlap2 > offset.height
-            yOverlap3 = y - offset.top
+            yOverlap3 = (y - offset.top)
             yOverlap3 = 0 if yOverlap3 > offset.height
-            
+
             xOverlap = Math.max(xOverlap1, xOverlap2, xOverlap3)
             yOverlap = Math.max(yOverlap1, yOverlap2, yOverlap3)
             
-            dropAreas.push(overlap: xOverlap * yOverlap, area: dropArea)
+            xNearness = Math.abs(x - (offset.left + offset.width/2))
+            yNearness = Math.abs(y - (offset.top + offset.top/2))
             
-        for info, index in dropAreas.sort((a,b) -> a.overlap - b.overlap)
+            over = xOverlap * yOverlap
+            near = xNearness + yNearness
+            near = 1000 if not over
+            dropAreas.push(overlap: over, near: near, area: dropArea)
+            
+        for info, index in dropAreas.sort((a,b) -> b.near - a.near)
             if test(info.area, (index == dropAreas.length - 1 and info.overlap > 0))
                 return info.area
             
