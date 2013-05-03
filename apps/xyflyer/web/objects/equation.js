@@ -231,7 +231,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.overlappingDropAreas = function(_arg) {
-    var dropArea, dropAreas, gameAreaOffset, height, index, info, near, offset, over, test, width, x, xNearness, xOverlap, xOverlap1, xOverlap2, xOverlap3, y, yNearness, yOverlap, yOverlap1, yOverlap2, yOverlap3, _i, _j, _len, _len1, _ref, _ref1;
+    var dropArea, dropAreas, gameAreaOffset, height, index, info, maxHeight, maxWidth, near, offset, over, test, width, x, xNearness, xOverlap, xOverlap1, xOverlap2, xOverlap3, y, yNearness, yOverlap, yOverlap1, yOverlap2, yOverlap3, _i, _j, _len, _len1, _ref, _ref1;
     x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, test = _arg.test;
     width || (width = 0);
     height || (height = 0);
@@ -246,37 +246,39 @@ equation.Equation = (function() {
       offset = dropArea.element.offset();
       offset.left -= gameAreaOffset.left;
       offset.top -= gameAreaOffset.top;
+      maxWidth = Math.max(offset.width, width);
       xOverlap1 = (x + width / 2) - offset.left;
-      if (xOverlap1 > offset.width) {
+      if (xOverlap1 > maxWidth) {
         xOverlap1 = 0;
       }
       xOverlap2 = (offset.left + offset.width) - (x - width / 2);
-      if (xOverlap2 > offset.width) {
+      if (xOverlap2 > maxWidth) {
         xOverlap2 = 0;
       }
       xOverlap3 = x - offset.left;
-      if (xOverlap3 > offset.width) {
+      if (xOverlap3 > maxWidth) {
         xOverlap3 = 0;
       }
+      maxHeight = Math.max(offset.height, height);
       yOverlap1 = (y + height / 2) - offset.top;
-      if (yOverlap1 > offset.height) {
+      if (yOverlap1 > maxHeight) {
         yOverlap1 = 0;
       }
       yOverlap2 = (offset.top + offset.height) - (y - height / 2);
-      if (yOverlap2 > offset.height) {
+      if (yOverlap2 > maxHeight) {
         yOverlap2 = 0;
       }
       yOverlap3 = y - offset.top;
-      if (yOverlap3 > offset.height) {
+      if (yOverlap3 > maxHeight) {
         yOverlap3 = 0;
       }
       xOverlap = Math.max(xOverlap1, xOverlap2, xOverlap3);
       yOverlap = Math.max(yOverlap1, yOverlap2, yOverlap3);
-      xNearness = Math.abs(x - (offset.left + offset.width / 2));
-      yNearness = Math.abs(y - (offset.top + offset.top / 2));
+      xNearness = Math.min(Math.abs(x - offset.left), Math.abs(x - (offset.left + offset.width / 2)), Math.abs(x - (offset.left + offset.width)));
+      yNearness = Math.min(Math.abs(y - offset.top), Math.abs(y - (offset.top + offset.top / 2)), Math.abs(y - (offset.top + offset.top)));
       over = xOverlap * yOverlap;
       near = xNearness + yNearness;
-      if (!over) {
+      if (!(over > 0)) {
         near = 1000;
       }
       dropAreas.push({

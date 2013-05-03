@@ -157,31 +157,41 @@ class equation.Equation
             offset.left -= gameAreaOffset.left
             offset.top -= gameAreaOffset.top
 
+            maxWidth = Math.max(offset.width, width)
             xOverlap1 = (x + width/2) - offset.left
-            xOverlap1 = 0 if xOverlap1 > offset.width
+            xOverlap1 = 0 if xOverlap1 > maxWidth
             xOverlap2 = (offset.left + offset.width) - (x - width/2)
-            xOverlap2 = 0 if xOverlap2 > offset.width
+            xOverlap2 = 0 if xOverlap2 > maxWidth
             xOverlap3 = (x - offset.left)
-            xOverlap3 = 0 if xOverlap3 > offset.width
+            xOverlap3 = 0 if xOverlap3 > maxWidth
             
+            maxHeight = Math.max(offset.height, height)
             yOverlap1 = (y + height/2) - offset.top
-            yOverlap1 = 0 if yOverlap1 > offset.height
+            yOverlap1 = 0 if yOverlap1 > maxHeight
             yOverlap2 = (offset.top + offset.height) - (y - height/2)
-            yOverlap2 = 0 if yOverlap2 > offset.height
+            yOverlap2 = 0 if yOverlap2 > maxHeight
             yOverlap3 = (y - offset.top)
-            yOverlap3 = 0 if yOverlap3 > offset.height
+            yOverlap3 = 0 if yOverlap3 > maxHeight
 
             xOverlap = Math.max(xOverlap1, xOverlap2, xOverlap3)
             yOverlap = Math.max(yOverlap1, yOverlap2, yOverlap3)
             
-            xNearness = Math.abs(x - (offset.left + offset.width/2))
-            yNearness = Math.abs(y - (offset.top + offset.top/2))
+            xNearness = Math.min(
+                Math.abs(x - offset.left)
+                Math.abs(x - (offset.left + offset.width/2))
+                Math.abs(x - (offset.left + offset.width))
+            )
+            yNearness = Math.min(
+                Math.abs(y - offset.top)
+                Math.abs(y - (offset.top + offset.top/2))
+                Math.abs(y - (offset.top + offset.top))
+            )
             
             over = xOverlap * yOverlap
             near = xNearness + yNearness
-            near = 1000 if not over
+            near = 1000 unless over > 0
             dropAreas.push(overlap: over, near: near, area: dropArea)
-            
+
         for info, index in dropAreas.sort((a,b) -> b.near - a.near)
             if test(info.area, (index == dropAreas.length - 1 and info.overlap > 0))
                 return info.area
