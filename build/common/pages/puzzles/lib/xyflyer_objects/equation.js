@@ -360,7 +360,7 @@ equation.Equation = (function() {
     component.placeHolder.bind('mousedown.placeholder touchstart.placeholder', function(e) {
       return component.placeHolder.one('mouseup.placeholder touchend.placeholder', function(e) {
         _this.removeFragment(dropArea, e);
-        return component.endMove(e);
+        return component.reset();
       });
     });
     this.recordComponentPositions();

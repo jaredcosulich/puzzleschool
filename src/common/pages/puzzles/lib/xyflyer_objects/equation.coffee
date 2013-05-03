@@ -239,7 +239,7 @@ class equation.Equation
         component.placeHolder.bind 'mousedown.placeholder touchstart.placeholder', (e) =>
             component.placeHolder.one 'mouseup.placeholder touchend.placeholder', (e) =>
                 @removeFragment(dropArea, e)
-                component.endMove(e)        
+                component.reset()        
         
         @recordComponentPositions()
         @plot(@)
