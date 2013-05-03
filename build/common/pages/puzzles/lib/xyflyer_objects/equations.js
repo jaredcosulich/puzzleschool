@@ -113,32 +113,35 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, width, height, component) {
-    var equation, _i, _len, _ref,
+    var equation, selected, _i, _len, _ref, _results,
       _this = this;
     if (!this.el.hasClass('show_places')) {
       this.el.addClass('show_places');
     }
     this.selectedDropArea = null;
     _ref = this.equations;
+    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       equation = _ref[_i];
       equation.expandLastAccept();
-      this.selectedDropArea = equation.overlappingDropAreas({
+      selected = equation.overlappingDropAreas({
         x: left,
         y: top,
         width: width,
         height: height,
         test: function(dropArea, over) {
           var result;
+          if (_this.selectedDropArea) {
+            over = false;
+          }
           result = dropArea != null ? dropArea.highlight(over) : void 0;
           equation.expandLastAccept();
           return result;
         }
       });
-      if (this.selectedDropArea) {
-        return;
-      }
+      _results.push(this.selectedDropArea || (this.selectedDropArea = selected));
     }
+    return _results;
   };
 
   Equations.prototype.clearDrag = function() {

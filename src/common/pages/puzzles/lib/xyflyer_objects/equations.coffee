@@ -82,17 +82,17 @@ class equations.Equations
         for equation in @equations
             equation.expandLastAccept()
             
-            @selectedDropArea = equation.overlappingDropAreas
+            selected = equation.overlappingDropAreas
                 x: left
                 y: top
                 width: width
                 height: height
-                test: (dropArea, over) => 
+                test: (dropArea, over) =>
+                    over = false if @selectedDropArea
                     result = dropArea?.highlight(over)
                     equation.expandLastAccept()
                     return result
-                
-            return if @selectedDropArea
+            @selectedDropArea or= selected    
 
     clearDrag: ->
         @el.removeClass('show_places')
