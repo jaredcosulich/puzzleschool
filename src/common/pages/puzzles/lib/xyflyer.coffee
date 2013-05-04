@@ -58,7 +58,6 @@ class xyflyer.ViewHelper
     trackPlane: ({x, y, width, height}) ->
         allPassedThrough = @rings.length > 0
         for ring in @rings
-            ring.highlightIfPassingThrough(x: x, y: y, width: width, height: height) 
             allPassedThrough = false unless ring.passedThrough
         @completeLevel() if allPassedThrough
         

@@ -115,17 +115,23 @@ xyflyerEditor.EditorHelper = (function() {
       };
     }
     if (this.board) {
-      this.board.clear();
+      this.board.init({
+        el: this.boardElement,
+        grid: this.grid,
+        objects: this.objects,
+        islandCoordinates: this.islandCoordinates
+      });
+    } else {
+      this.board = new xyflyer.Board({
+        el: this.boardElement,
+        objects: this.objects,
+        grid: this.grid,
+        islandCoordinates: this.islandCoordinates,
+        resetLevel: function() {
+          return _this.resetLevel();
+        }
+      });
     }
-    this.board = new xyflyer.Board({
-      el: this.boardElement,
-      objects: this.objects,
-      grid: this.grid,
-      islandCoordinates: this.islandCoordinates,
-      resetLevel: function() {
-        return _this.resetLevel();
-      }
-    });
     if (this.plane) {
       this.plane.setBoard(this.board);
       this.plane.reset();
@@ -425,7 +431,6 @@ xyflyerEditor.EditorHelper = (function() {
           component.initMeasurements();
           component.showPlaceHolder();
           component.transformer.translate(-10000, -10000);
-          component.positionPlaceHolder();
           if (component.variable) {
             return setTimeout((function() {
               return equation.variables[component.variable].set(_this.variables[component.variable].solution);
@@ -523,6 +528,7 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.launch = function() {
     var _ref;
+    this.board.calculatedPath = null;
     if ((_ref = this.plane) != null) {
       _ref.launch(true);
     }
@@ -543,13 +549,13 @@ xyflyerEditor.EditorHelper = (function() {
     return _results;
   };
 
-  EditorHelper.prototype.trackPlane = function(info) {
-    var allPassedThrough, ring, _i, _len, _ref;
+  EditorHelper.prototype.trackPlane = function(_arg) {
+    var allPassedThrough, height, ring, width, x, y, _i, _len, _ref;
+    x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height;
     allPassedThrough = this.rings.length > 0;
     _ref = this.rings;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       ring = _ref[_i];
-      ring.highlightIfPassingThrough(info);
       if (!ring.passedThrough) {
         allPassedThrough = false;
       }

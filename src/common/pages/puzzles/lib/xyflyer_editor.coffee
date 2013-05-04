@@ -77,14 +77,19 @@ class xyflyerEditor.EditorHelper
         else if not @islandCoordinates
             @islandCoordinates = {x: 0, y: 0} 
         
-        @board.clear() if @board
-
-        @board = new xyflyer.Board
-            el: @boardElement 
-            objects: @objects
-            grid: @grid 
-            islandCoordinates: @islandCoordinates
-            resetLevel: => @resetLevel()
+        if @board
+            @board.init
+                el: @boardElement 
+                grid: @grid 
+                objects: @objects
+                islandCoordinates: @islandCoordinates
+        else    
+            @board = new xyflyer.Board
+                el: @boardElement 
+                objects: @objects
+                grid: @grid 
+                islandCoordinates: @islandCoordinates
+                resetLevel: => @resetLevel()
     
         if @plane
             @plane.setBoard(@board)
@@ -259,7 +264,6 @@ class xyflyerEditor.EditorHelper
                     component.initMeasurements()
                     component.showPlaceHolder()
                     component.transformer.translate(-10000, -10000)
-                    component.positionPlaceHolder()                   
                     if component.variable
                         setTimeout((=>
                             equation.variables[component.variable].set(@variables[component.variable].solution)
@@ -316,6 +320,7 @@ class xyflyerEditor.EditorHelper
         @board.plot(id, formula, area)
         
     launch: -> 
+        @board.calculatedPath = null
         @plane?.launch(true) 
         @handleModification()
         
@@ -323,10 +328,9 @@ class xyflyerEditor.EditorHelper
         @plane?.reset()
         ring.reset() for ring in @rings
     
-    trackPlane: (info) ->
+    trackPlane: ({x, y, width, height}) ->     
         allPassedThrough = @rings.length > 0
         for ring in @rings
-            ring.highlightIfPassingThrough(info) 
             allPassedThrough = false unless ring.passedThrough
         
         @showInstructions() if allPassedThrough

@@ -88,12 +88,6 @@ xyflyer.ViewHelper = (function() {
     _ref1 = this.rings;
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       ring = _ref1[_i];
-      ring.highlightIfPassingThrough({
-        x: x,
-        y: y,
-        width: width,
-        height: height
-      });
       if (!ring.passedThrough) {
         allPassedThrough = false;
       }
