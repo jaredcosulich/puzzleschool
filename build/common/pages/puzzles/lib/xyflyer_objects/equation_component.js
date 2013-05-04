@@ -135,14 +135,22 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.move = function(e) {
-    var dx, dy, offset, x, y;
+    var base, diff, dx, dy, offset, x, y;
     if (e.preventDefault) {
       e.preventDefault();
     }
     x = this.clientX(e);
     y = this.clientY(e);
     if (this.side) {
-      x += 30 * (this.side === 'right' ? -1 : 1) / (window.appScale || 1);
+      base = 30 * (this.side === 'right' ? -1 : 1) / (window.appScale || 1);
+      if (this.side === 'right') {
+        diff = Math.max(base, x - this.gameAreaOffset.width);
+      } else {
+        diff = Math.min(base, x);
+      }
+      if (this.side) {
+        x += diff;
+      }
     }
     if (e.type.match(/touch/)) {
       y -= 30 / (window.appScale || 1);

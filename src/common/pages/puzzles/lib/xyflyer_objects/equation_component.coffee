@@ -81,7 +81,13 @@ class equationComponent.EquationComponent
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
         y = @clientY(e) 
-        x += 30 * (if @side == 'right' then -1 else 1) / (window.appScale or 1) if @side
+        if @side
+            base = 30 * (if @side == 'right' then -1 else 1) / (window.appScale or 1)
+            if @side == 'right'
+                diff = Math.max(base, x - @gameAreaOffset.width) 
+            else
+                diff = Math.min(base, x)
+            x += diff if @side
         y -= 30 / (window.appScale or 1) if e.type.match(/touch/)
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
