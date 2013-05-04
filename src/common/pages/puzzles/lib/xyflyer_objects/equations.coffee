@@ -46,10 +46,11 @@ class equations.Equations
         equation.container.remove()
         @length = @equations.length
         
-    addComponent: (equationFragment) ->
+    addComponent: (equationFragment, side) ->
         equationComponent = new EquationComponent
             gameArea: @gameArea
             equationFragment: equationFragment
+            side: side
             trackDrag: (left, top, width, height, component) => @trackComponentDragging(left, top, width, height, component)
             endDrag: (component) => @endComponentDragging(component)
 

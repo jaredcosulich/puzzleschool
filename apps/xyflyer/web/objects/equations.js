@@ -70,12 +70,13 @@ equations.Equations = (function() {
     return this.length = this.equations.length;
   };
 
-  Equations.prototype.addComponent = function(equationFragment) {
+  Equations.prototype.addComponent = function(equationFragment, side) {
     var equationComponent, first, fragmentsWidth, index, shift, top, _i, _len, _ref,
       _this = this;
     equationComponent = new EquationComponent({
       gameArea: this.gameArea,
       equationFragment: equationFragment,
+      side: side,
       trackDrag: function(left, top, width, height, component) {
         return _this.trackComponentDragging(left, top, width, height, component);
       },

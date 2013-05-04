@@ -183,7 +183,7 @@ window.app = {
       _ref1 = this.level.fragments;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         fragment = _ref1[_i];
-        this.helper.addEquationComponent(fragment);
+        this.helper.addEquationComponent(fragment, this.selectedPlayer.hand.toLowerCase());
       }
     } else if (this.level.id !== 'editor') {
       this.$('.possible_fragments').hide();
@@ -605,7 +605,7 @@ window.app = {
     addLetter = function(letter) {
       var color;
       color = letter.match(/&.*;/) ? 'red' : 'blue';
-      return keyboard.append("<a class='letter " + color + "_button'>" + letter + "</a>");
+      return keyboard.append("<a class='letter'><span class='" + color + "_button'>" + letter + "</span></a>");
     };
     addBreak = function() {
       return keyboard.append('<br/>');
@@ -635,20 +635,20 @@ window.app = {
       });
       return _this.clickLetter(letter);
     });
-    _ref3 = keyboard.find('.letter');
+    _ref3 = keyboard.find('.letter span');
     _results = [];
     for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
       l = _ref3[_l];
       if ($(l).html() === '∧') {
-        _results.push(this.clickLetter($(l)));
+        _results.push(this.clickLetter($(l).closest('.letter')));
       }
     }
     return _results;
   },
   clickLetter: function(letter) {
     var htmlLetter, l, letters, name, _i, _j, _k, _l, _len, _len1, _len2, _len3, _results;
-    letters = this.settings.find('.keyboard .letter');
-    htmlLetter = letter.html();
+    letters = this.settings.find('.keyboard .letter span');
+    htmlLetter = letter.find('span').html();
     name = this.settings.find('.player_details .form .name');
     if (!(htmlLetter === '∨' && htmlLetter === '∧')) {
       if (name.html().match(/Player\d/) || name.html() === '&nbsp;') {
@@ -664,14 +664,14 @@ window.app = {
           l = letters[_i];
           $(l).html($(l).html().toUpperCase());
         }
-        letter.html('&or;');
+        letter.find('span').html('&or;');
         break;
       case '∨':
         for (_j = 0, _len1 = letters.length; _j < _len1; _j++) {
           l = letters[_j];
           $(l).html($(l).html().toLowerCase());
         }
-        letter.html('&and;');
+        letter.find('span').html('&and;');
         break;
       case '‹':
         name.html(name.html().slice(0, name.html().length - 1));
@@ -685,7 +685,7 @@ window.app = {
       for (_k = 0, _len2 = letters.length; _k < _len2; _k++) {
         l = letters[_k];
         if ($(l).html() === '∨') {
-          this.clickLetter($(l));
+          this.clickLetter($(l).closest('.letter'));
         }
       }
     }
@@ -694,7 +694,7 @@ window.app = {
       for (_l = 0, _len3 = letters.length; _l < _len3; _l++) {
         l = letters[_l];
         if ($(l).html() === '∧') {
-          _results.push(this.clickLetter($(l)));
+          _results.push(this.clickLetter($(l).closest('.letter')));
         }
       }
       return _results;

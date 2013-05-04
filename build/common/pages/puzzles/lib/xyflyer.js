@@ -130,8 +130,8 @@ xyflyer.ViewHelper = (function() {
     return this.equations.add(solution, startingFragment, solutionComponents, variables);
   };
 
-  ViewHelper.prototype.addEquationComponent = function(equationFragment) {
-    return this.equations.addComponent(equationFragment);
+  ViewHelper.prototype.addEquationComponent = function(equationFragment, side) {
+    return this.equations.addComponent(equationFragment, side);
   };
 
   ViewHelper.prototype.resetLevel = function() {

@@ -117,7 +117,7 @@ window.app =
     loadLevel: ->
         if @level?.fragments
             for fragment in @level.fragments
-                @helper.addEquationComponent(fragment)
+                @helper.addEquationComponent(fragment, @selectedPlayer.hand.toLowerCase())
         else if @level.id != 'editor'
             @$('.possible_fragments').hide()
 
@@ -396,7 +396,7 @@ window.app =
         keyboard = @settings.find('.keyboard')
         addLetter = (letter) -> 
             color = if letter.match(/&.*;/) then 'red' else 'blue'
-            keyboard.append("<a class='letter #{color}_button'>#{letter}</a>")
+            keyboard.append("<a class='letter'><span class='#{color}_button'>#{letter}</span></a>")
         addBreak = -> keyboard.append('<br/>')
         addLetter(letter) for letter in ['q','w','e','r','t','y','u','i','o','p','&lsaquo;']
         addBreak()
@@ -408,11 +408,11 @@ window.app =
             letter.addClass('active')
             $(document.body).one 'touchend.letter', => letter.removeClass('active')
             @clickLetter(letter)
-        @clickLetter($(l)) for l in keyboard.find('.letter') when $(l).html() == '∧'
+        @clickLetter($(l).closest('.letter')) for l in keyboard.find('.letter span') when $(l).html() == '∧'
                         
     clickLetter: (letter) ->
-        letters = @settings.find('.keyboard .letter')
-        htmlLetter = letter.html()
+        letters = @settings.find('.keyboard .letter span')
+        htmlLetter = letter.find('span').html()
         
         name = @settings.find('.player_details .form .name') 
         unless htmlLetter == '∨' and htmlLetter == '∧'
@@ -422,10 +422,10 @@ window.app =
             when '_' then name.append(' ')
             when '∧' 
                 $(l).html($(l).html().toUpperCase())  for l in letters
-                letter.html('&or;')    
+                letter.find('span').html('&or;')    
             when '∨'
                 $(l).html($(l).html().toLowerCase())  for l in letters
-                letter.html('&and;')    
+                letter.find('span').html('&and;')    
             when '‹'    
                 name.html(name.html()[0...name.html().length - 1])
             else 
@@ -434,10 +434,10 @@ window.app =
         if name.html().length <= 0
             name.html('&nbsp;')
         else if htmlLetter != '∨' and htmlLetter != '∧'
-            @clickLetter($(l)) for l in letters when $(l).html() == '∨'
+            @clickLetter($(l).closest('.letter')) for l in letters when $(l).html() == '∨'
 
         if (name.html() == '&nbsp;' or name.html().match(/\s$/)) and htmlLetter != '∨' and htmlLetter != '∧'
-            @clickLetter($(l)) for l in letters when $(l).html() == '∧'
+            @clickLetter($(l).closest('.letter')) for l in letters when $(l).html() == '∧'
         
         
     selectPlayer: (player) ->          

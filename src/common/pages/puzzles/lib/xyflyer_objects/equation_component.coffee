@@ -3,7 +3,7 @@ Transformer = require('./transformer').Transformer
 
 class equationComponent.EquationComponent
     
-    constructor: ({@gameArea, @equationFragment, @trackDrag, @endDrag}) ->
+    constructor: ({@gameArea, @equationFragment, @trackDrag, @endDrag, @side}) ->
         @initElement()
         @initMove()
         @inUse = false
@@ -81,6 +81,7 @@ class equationComponent.EquationComponent
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
         y = @clientY(e) 
+        x += 30 * (if @side == 'right' then -1 else 1) / (window.appScale or 1) if @side
         y -= 30 / (window.appScale or 1) if e.type.match(/touch/)
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left

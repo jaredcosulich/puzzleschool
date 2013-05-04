@@ -81,8 +81,8 @@ class xyflyer.ViewHelper
     addEquation: (solution, startingFragment, solutionComponents, variables) ->
         @equations.add(solution, startingFragment, solutionComponents, variables)
 
-    addEquationComponent: (equationFragment) ->
-        @equations.addComponent(equationFragment)
+    addEquationComponent: (equationFragment, side) ->
+        @equations.addComponent(equationFragment, side)
         
     resetLevel: ->
         @complete = false

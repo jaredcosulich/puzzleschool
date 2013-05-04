@@ -474,6 +474,7 @@ board.Board = (function(_super) {
   Board.prototype.plot = function(id, formula, area) {
     var brokenLine, i, infiniteLine, lastSlope, lastYPos, newYPos, plotArea, slope, testYPos, xPos, yPos, _i, _j, _ref, _ref1, _ref2,
       _this = this;
+    this.cancelCalculation();
     if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
       plotArea.clearRect(0, 0, this.width, this.height);
     }
@@ -534,14 +535,32 @@ board.Board = (function(_super) {
       plotArea: plotArea
     };
     this.resetLevel();
-    return $.timeout(100, function() {
+    this.cancelCalculation();
+    return this.calculatedPathTimeout = $.timeout(100, function() {
       return _this.calculatedPath = _this.calculatePath();
     });
+  };
+
+  Board.prototype.cancelCalculation = function() {
+    if (this.calculatedPathTimeout) {
+      clearTimeout(this.calculatedPathTimeout);
+    }
+    return this.stopCalculation = true;
+  };
+
+  Board.prototype.calculationCancelled = function() {
+    if (this.stopCalculation) {
+      this.path = null;
+      this.calculatedPath = null;
+      return true;
+    }
+    return false;
   };
 
   Board.prototype.calculatePath = function() {
     var addToPath, delta, findIntersection, id, intersection, intersectionY, lastFormula, lf, nextYPos, otherNextYPos, otherPrevYPos, otherYPos, path, prevYPos, rings, significantDigits, validPathFound, xPos, y, yPos, _i, _ref, _ref1,
       _this = this;
+    this.stopCalculation = false;
     significantDigits = 1;
     intersection = (this.islandCoordinates.x * this.xUnit) + (this.xUnit * 0.001);
     path = {
@@ -556,6 +575,9 @@ board.Board = (function(_super) {
     });
     addToPath = function(x, y, formula) {
       var d, distance, formattedDistance, formattedFullDistance, incrementalX, prevPos, ring, _i, _j, _len, _ref;
+      if (_this.calculationCancelled()) {
+        return;
+      }
       if (!((_this.grid.yMin - 50 <= (_ref = y / _this.yUnit) && _ref <= _this.grid.yMax + 50))) {
         return;
       }
@@ -571,6 +593,9 @@ board.Board = (function(_super) {
       }
       formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits));
       for (d = _i = 1; 1 <= formattedDistance ? _i <= formattedDistance : _i >= formattedDistance; d = 1 <= formattedDistance ? ++_i : --_i) {
+        if (_this.calculationCancelled()) {
+          return;
+        }
         incrementalX = prevPos.x + (d * ((x - prevPos.x) / formattedDistance));
         path[formattedFullDistance + d] = {
           formula: formula.id,
@@ -579,20 +604,30 @@ board.Board = (function(_super) {
         };
         for (_j = 0, _len = rings.length; _j < _len; _j++) {
           ring = rings[_j];
-          if (ring.inPath(incrementalX / _this.xUnit, formula.formula)) {
-            path[formattedFullDistance + d].ring = ring;
+          if (!(ring.inPath(incrementalX / _this.xUnit, formula.formula))) {
+            continue;
           }
+          if (_this.calculationCancelled()) {
+            return;
+          }
+          path[formattedFullDistance + d].ring = ring;
         }
       }
       return path.distance += distance;
     };
     for (xPos = _i = _ref = this.islandCoordinates.x * this.xUnit, _ref1 = (this.grid.xMax * 1.1) * this.xUnit; _i <= _ref1; xPos = _i += 1) {
+      if (this.calculationCancelled()) {
+        return;
+      }
       if (lastFormula) {
         if (lastFormula.area(xPos / this.xUnit)) {
           yPos = lastFormula.formula(xPos / this.xUnit) * this.yUnit;
           for (id in this.formulas) {
             if (!(id !== lastFormula.id)) {
               continue;
+            }
+            if (this.calculationCancelled()) {
+              return;
             }
             if (!this.formulas[id].area(xPos / this.xUnit)) {
               continue;
@@ -607,6 +642,9 @@ board.Board = (function(_super) {
             }
             findIntersection = function(y1, y2, y3, f1, f2) {
               var directionChange, formula1Y, formula2Y, i, multiplier, nextSlope, slope, unit, _j;
+              if (_this.calculationCancelled()) {
+                return;
+              }
               nextSlope = y1 - y2;
               slope = y2 - y3;
               directionChange = (nextSlope * slope < 0) || (nextSlope * slope === 0 && (nextSlope || slope));
@@ -616,6 +654,9 @@ board.Board = (function(_super) {
               multiplier = Math.pow(10, significantDigits);
               unit = 1 / multiplier / _this.xUnit;
               for (i = _j = 1; _j <= 2; i = _j += unit) {
+                if (_this.calculationCancelled()) {
+                  return;
+                }
                 formula1Y = Math.round(f1.formula((xPos + i) / _this.xUnit) * multiplier);
                 formula2Y = Math.round(f2.formula((xPos + i) / _this.xUnit) * multiplier);
                 if (formula1Y === formula2Y) {
@@ -634,11 +675,13 @@ board.Board = (function(_super) {
           addToPath(xPos, yPos, lastFormula);
           continue;
         } else {
-          alert(xPos);
           intersection = xPos - 1;
           lf = lastFormula;
           lastFormula = null;
           while (lf.area(intersection / this.xUnit)) {
+            if (this.calculationCancelled()) {
+              return;
+            }
             intersectionY = lf.formula(intersection / this.xUnit) * this.yUnit;
             addToPath(intersection, intersectionY, lf);
             intersection += this.xUnit * 0.001;
@@ -650,6 +693,9 @@ board.Board = (function(_super) {
       }
       validPathFound = false;
       for (id in this.formulas) {
+        if (this.calculationCancelled()) {
+          return;
+        }
         if (!this.formulas[id].area(xPos / this.xUnit)) {
           continue;
         }
@@ -668,9 +714,15 @@ board.Board = (function(_super) {
         addToPath(xPos, y, lastFormula);
         break;
       }
+      if (this.calculationCancelled()) {
+        return;
+      }
       if (!validPathFound) {
         return path;
       }
+    }
+    if (this.calculationCancelled()) {
+      return;
     }
     return path;
   };

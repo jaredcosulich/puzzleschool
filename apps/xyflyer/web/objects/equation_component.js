@@ -9,7 +9,7 @@ Transformer = require('./transformer').Transformer;
 equationComponent.EquationComponent = (function() {
 
   function EquationComponent(_arg) {
-    this.gameArea = _arg.gameArea, this.equationFragment = _arg.equationFragment, this.trackDrag = _arg.trackDrag, this.endDrag = _arg.endDrag;
+    this.gameArea = _arg.gameArea, this.equationFragment = _arg.equationFragment, this.trackDrag = _arg.trackDrag, this.endDrag = _arg.endDrag, this.side = _arg.side;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -141,6 +141,9 @@ equationComponent.EquationComponent = (function() {
     }
     x = this.clientX(e);
     y = this.clientY(e);
+    if (this.side) {
+      x += 30 * (this.side === 'right' ? -1 : 1) / (window.appScale || 1);
+    }
     if (e.type.match(/touch/)) {
       y -= 30 / (window.appScale || 1);
     }

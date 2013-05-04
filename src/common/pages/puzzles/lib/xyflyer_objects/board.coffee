@@ -301,6 +301,7 @@ class board.Board extends xyflyerObject.Object
         grid.attr(stroke: color)
         
     plot: (id, formula, area) ->
+        @cancelCalculation()
         if (plotArea = @formulas[id]?.plotArea)
             plotArea.clearRect(0,0,@width,@height)
 
@@ -359,10 +360,22 @@ class board.Board extends xyflyerObject.Object
             plotArea: plotArea
 
         @resetLevel()
-        $.timeout(100, => @calculatedPath = @calculatePath())
+        @cancelCalculation()
+        @calculatedPathTimeout = $.timeout(100, => @calculatedPath = @calculatePath())
             
+    cancelCalculation: ->
+        clearTimeout(@calculatedPathTimeout) if @calculatedPathTimeout
+        @stopCalculation =  true
+        
+    calculationCancelled: ->
+        if @stopCalculation
+            @path = null
+            @calculatedPath = null
+            return true
+        return false
         
     calculatePath: ->
+        @stopCalculation = false
         significantDigits = 1
         intersection = (@islandCoordinates.x * @xUnit) + (@xUnit * 0.001)
         path = {distance: 0}
@@ -372,6 +385,7 @@ class board.Board extends xyflyerObject.Object
         rings = @rings.sort((a,b) -> a.x - b.x)    
         
         addToPath = (x, y, formula) =>
+            return if @calculationCancelled()
             return unless @grid.yMin - 50 <= (y / @yUnit) <= @grid.yMax + 50
             formattedFullDistance = Math.ceil(path.distance * Math.pow(10, significantDigits))
             prevPos = path[formattedFullDistance]
@@ -384,6 +398,7 @@ class board.Board extends xyflyerObject.Object
             
             formattedDistance = Math.ceil(distance * Math.pow(10, significantDigits))
             for d in [1..formattedDistance]
+                return if @calculationCancelled()
                 incrementalX = prevPos.x + (d*((x - prevPos.x)/formattedDistance))
                 path[formattedFullDistance + d] = 
                     formula: formula.id
@@ -391,15 +406,20 @@ class board.Board extends xyflyerObject.Object
                     y: formula.formula(incrementalX / @xUnit) * @yUnit
             
                 for ring in rings when ring.inPath(incrementalX/@xUnit, formula.formula)
+                    return if @calculationCancelled()
                     path[formattedFullDistance + d].ring = ring
                     
             path.distance += distance
             
         for xPos in [(@islandCoordinates.x * @xUnit)..((@grid.xMax * 1.1) * @xUnit)] by 1
+            return if @calculationCancelled()
+                
             if lastFormula 
                 if lastFormula.area(xPos / @xUnit)
                     yPos = lastFormula.formula(xPos / @xUnit) * @yUnit
                     for id of @formulas when id != lastFormula.id
+                        return if @calculationCancelled()
+                        
                         continue if not @formulas[id].area(xPos / @xUnit)
                         otherYPos = @formulas[id].formula(xPos / @xUnit) * @yUnit
                         prevYPos = lastFormula.formula((xPos - 1) / @xUnit) * @yUnit
@@ -412,6 +432,7 @@ class board.Board extends xyflyerObject.Object
                             break
 
                         findIntersection = (y1, y2, y3, f1, f2) =>
+                            return if @calculationCancelled()
                             nextSlope = (y1 - y2)
                             slope = (y2 - y3)                    
                             directionChange = (nextSlope * slope < 0) or (nextSlope * slope == 0 and (nextSlope or slope))
@@ -419,6 +440,7 @@ class board.Board extends xyflyerObject.Object
                             multiplier = Math.pow(10, significantDigits)
                             unit = 1/multiplier/@xUnit
                             for i in [1..2] by unit
+                                return if @calculationCancelled()
                                 formula1Y = Math.round(f1.formula((xPos + i) / @xUnit) * multiplier) 
                                 formula2Y = Math.round(f2.formula((xPos + i) / @xUnit) * multiplier)
                                 return i if formula1Y == formula2Y
@@ -434,11 +456,11 @@ class board.Board extends xyflyerObject.Object
                     addToPath(xPos, yPos, lastFormula)
                     continue
                 else
-                    alert(xPos)
                     intersection = xPos - 1
                     lf = lastFormula
                     lastFormula = null
                     while lf.area(intersection / @xUnit)
+                        return if @calculationCancelled()
                         intersectionY = lf.formula(intersection / @xUnit) * @yUnit
                         addToPath(intersection, intersectionY, lf)
                         intersection += (@xUnit * 0.001)
@@ -447,6 +469,7 @@ class board.Board extends xyflyerObject.Object
             
             validPathFound = false
             for id of @formulas
+                return if @calculationCancelled()
                 continue if not @formulas[id].area(xPos / @xUnit)
                 if intersection?
                     intersectionY = @formulas[id].formula(intersection / @xUnit) * @yUnit
@@ -460,8 +483,10 @@ class board.Board extends xyflyerObject.Object
                 addToPath(xPos, y, lastFormula)                    
                 break
             
+            return if @calculationCancelled()
             return path unless validPathFound
             
+        return if @calculationCancelled()
         return path
     
     clear: ->
