@@ -199,10 +199,8 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .variable {
   font-size: 21px;
-  border: 1px solid #ccc;
-  border-top: none;
   width: 83%;
-  margin-left: 12%;
+  margin-left: 14%;
   padding: 3px 6px;
   overflow: hidden;
 }
@@ -735,6 +733,24 @@ body {
     .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment .fragment,
     .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component .fragment {
       letter-spacing: 1px;
+    }
+    
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider .knob,
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .knob,
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider .knob {
+      width: 24px;
+      height: 24px;
+      -webkit-border-radius: 12px;
+      -moz-border-radius: 12px;
+      border-radius: 12px;
+      top: 6px;
+    }
+    
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider .track,
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .track,
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider .track {
+      margin: 15px 10px;
+      height: 6px;
     }
 }
 
