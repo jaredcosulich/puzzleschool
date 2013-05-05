@@ -240,6 +240,27 @@ window.app = {
     return navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
   },
   selectWorld: function(index) {
+    var completed, id, info;
+    if (index >= 5) {
+      this.$('.world .game_completed .game_completed').hide();
+      completed = (function() {
+        var _ref, _results;
+        _ref = this.selectedPlayer.progress;
+        _results = [];
+        for (id in _ref) {
+          info = _ref[id];
+          if (info.completed) {
+            _results.push(id);
+          }
+        }
+        return _results;
+      }).call(this);
+      if (completed.length >= 200) {
+        this.$('.world .game_completed .game_completed_message').show();
+      } else {
+        this.$('.world .game_completed .stage_completed_message').show();
+      }
+    }
     this.$('.world_link').removeClass('selected');
     $(this.$('.world_link')[index]).addClass('selected');
     this.$('.world').removeClass('selected');

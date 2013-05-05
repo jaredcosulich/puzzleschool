@@ -349,7 +349,7 @@ equation.Equation = (function() {
       if (dropArea.dirtyCount || !dropArea.component) {
         return;
       }
-      component.move(e);
+      component.move(e, true);
       element.hide();
       component.initDragging();
       return $.timeout(100, function() {

@@ -77,18 +77,23 @@ class equationComponent.EquationComponent
             top: @offset.top - @container.offset().top
             left: @offset.left - @container.offset().left
         
-    move: (e) ->
+    move: (e, inPlace) ->
         e.preventDefault() if e.preventDefault 
         x = @clientX(e)
         y = @clientY(e) 
-        if @side
-            base = 30 * (if @side == 'right' then -1 else 1) / (window.appScale or 1)
-            if @side == 'right'
-                diff = Math.max(base, x - @gameAreaOffset.width) 
-            else
-                diff = Math.min(base, x)
-            x += diff if @side
-        y -= 30 / (window.appScale or 1) if e.type.match(/touch/)
+        if e.type.match(/touch/) and not inPlace
+            if @side
+                base = 30 * (if @side == 'right' then -1 else 1) / (window.appScale or 1)
+                if @side == 'right'
+                    xDiff = Math.max(base, x - @gameAreaOffset.width) 
+                else
+                    xDiff = Math.min(base, x)
+                x += xDiff if @side
+                
+            yDiff = Math.min(30 / (window.appScale or 1), y - 60)
+            yDiff = 0 if yDiff < 0 
+            y -= yDiff
+            
         offset = @element.offset()
         dx = x - offset.left - (offset.width/2) + @gameAreaOffset.left
         dy = y - offset.top - (offset.height/2) + @gameAreaOffset.top

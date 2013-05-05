@@ -156,6 +156,14 @@ window.app =
     isIos: -> navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
         
     selectWorld: (index) ->
+        if index >= 5
+            @$('.world .game_completed .game_completed').hide()
+            completed = (id for id, info of @selectedPlayer.progress when info.completed)
+            if completed.length >= 200
+                @$('.world .game_completed .game_completed_message').show()
+            else
+                @$('.world .game_completed .stage_completed_message').show()
+        
         @$('.world_link').removeClass('selected')
         $(@$('.world_link')[index]).addClass('selected')
                 

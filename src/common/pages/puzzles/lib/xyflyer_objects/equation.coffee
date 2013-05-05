@@ -230,7 +230,7 @@ class equation.Equation
         
         element.bind 'touchstart.remove', (e) =>
             return if dropArea.dirtyCount or !dropArea.component
-            component.move(e)
+            component.move(e, true)
             element.hide()
             component.initDragging()
             $.timeout(100, => @removeFragment(dropArea, e))

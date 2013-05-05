@@ -134,26 +134,30 @@ equationComponent.EquationComponent = (function() {
     });
   };
 
-  EquationComponent.prototype.move = function(e) {
-    var base, diff, dx, dy, offset, x, y;
+  EquationComponent.prototype.move = function(e, inPlace) {
+    var base, dx, dy, offset, x, xDiff, y, yDiff;
     if (e.preventDefault) {
       e.preventDefault();
     }
     x = this.clientX(e);
     y = this.clientY(e);
-    if (this.side) {
-      base = 30 * (this.side === 'right' ? -1 : 1) / (window.appScale || 1);
-      if (this.side === 'right') {
-        diff = Math.max(base, x - this.gameAreaOffset.width);
-      } else {
-        diff = Math.min(base, x);
-      }
+    if (e.type.match(/touch/) && !inPlace) {
       if (this.side) {
-        x += diff;
+        base = 30 * (this.side === 'right' ? -1 : 1) / (window.appScale || 1);
+        if (this.side === 'right') {
+          xDiff = Math.max(base, x - this.gameAreaOffset.width);
+        } else {
+          xDiff = Math.min(base, x);
+        }
+        if (this.side) {
+          x += xDiff;
+        }
       }
-    }
-    if (e.type.match(/touch/)) {
-      y -= 30 / (window.appScale || 1);
+      yDiff = Math.min(30 / (window.appScale || 1), y - 60);
+      if (yDiff < 0) {
+        yDiff = 0;
+      }
+      y -= yDiff;
     }
     offset = this.element.offset();
     dx = x - offset.left - (offset.width / 2) + this.gameAreaOffset.left;

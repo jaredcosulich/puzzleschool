@@ -71,6 +71,7 @@ body {
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment {
   border-bottom: 2px solid #ffbd2a;
   width: 12px;
+  padding: 0;
 }
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment:first-child {
   width: 21px;
@@ -175,6 +176,14 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .accept_fragment {
   float: left;
   height: 40px;
+}
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment .fragment,
+.xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component .fragment {
+  letter-spacing: 3px;
+}
+.xyflyer .dynamic_content .equation_area.show_places .equations .equation_container .equation .fragment .fragment,
+.xyflyer .dynamic_content .equation_area.show_places .equations .equation_container .equation .with_component .fragment {
+  letter-spacing: 0;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .removing {
   display: none;
@@ -614,6 +623,10 @@ body {
 .xyflyer .level_selector .world .stage .level.active {
   background-position: 0 -55px;
 }
+.xyflyer .level_selector .world .game_completed {
+    text-align: center;
+    margin-top: 60px;
+}
 .xyflyer .blue_button,
 .xyflyer .red_button {
   border: 1px solid #ccc;
@@ -718,6 +731,11 @@ body {
     .xyflyer .level_selector .world .stage .level {
         margin: 0 0 30px 21px;        
     }    
+    
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .fragment .fragment,
+    .xyflyer .dynamic_content .equation_area .equations .equation_container .equation .with_component .fragment {
+      letter-spacing: 1px;
+    }
 }
 
 @media screen and (device-aspect-ratio: 40/71) and (orientation:landscape) {
