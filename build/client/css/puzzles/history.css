@@ -1,0 +1,42 @@
+.history {
+  overflow: hidden;
+  margin-bottom: 30px;
+  font-size: 14px;
+  width: 960px;
+  height: 640px;
+  border: 1px solid #ccc;
+}
+.history .navigation {
+  height: 640px;
+  width: 300px;
+  overflow: hidden;
+  float: left;
+  border-right: 1px solid #ccc;
+}
+.history .navigation h2,
+.history .navigation h3 {
+  text-align: center;
+  padding: 12px;
+  cursor: pointer;
+}
+.history .navigation .link {
+  font-size: 11px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  margin: 0;
+  padding-bottom: 12px;
+}
+.history .navigation .question {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+.history .answer {
+  text-align: center;
+  overflow: hidden;
+}
+.history .answer h3,
+.history .answer div {
+  overflow: hidden;
+  padding: 30px;
+}
