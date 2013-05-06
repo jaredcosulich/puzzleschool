@@ -537,6 +537,12 @@ soma.views({
     nextLevel: function() {
       var duration,
         _this = this;
+      if (this.levelId === 'custom') {
+        $.timeout(500, function() {
+          return alert("Nice work. Custom level completed.");
+        });
+        return;
+      }
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
       duration = this.level.startTime != null ? new Date() - this.level.startTime : null;
       return $.timeout(500, function() {

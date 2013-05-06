@@ -363,7 +363,11 @@ soma.views
                 level.addClass('completed')
 
 
-        nextLevel: ->            
+        nextLevel: ->     
+            if @levelId == 'custom'
+                $.timeout 500, -> alert("Nice work. Custom level completed.")
+                return
+
             @puzzleProgress[@level.id].completed = new Date().getTime()
             duration = if @level.startTime? then new Date() - @level.startTime else null
             
