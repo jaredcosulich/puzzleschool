@@ -41,6 +41,9 @@ class xyflyerEditor.EditorHelper
             $(document.body).one 'mouseup.move_editor', =>
                 $(document.body).unbind('mousemove.move_editor')
                 
+    reinitialize: ->
+        location.href = location.pathname
+                
     initInstructions: ->
         instructions = $('.instructions')
         instructions.find('.demo').bind 'click', =>
@@ -211,7 +214,7 @@ class xyflyerEditor.EditorHelper
             @showImageDialog "Select The Plane", 'plane', 2, (index) => @setAsset('plane', index)
 
         @$('.editor .reset_editor').bind 'click', => 
-            location.href = location.pathname if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
+            @reinitialize() if confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')
         
         @boardElement.bind 'mousedown.dragisland', (e) =>
             xStart = currentX = e.clientX

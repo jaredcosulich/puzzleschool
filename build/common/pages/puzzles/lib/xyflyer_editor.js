@@ -59,6 +59,10 @@ xyflyerEditor.EditorHelper = (function() {
     });
   };
 
+  EditorHelper.prototype.reinitialize = function() {
+    return location.href = location.pathname;
+  };
+
   EditorHelper.prototype.initInstructions = function() {
     var height, instructions, toggleInstructions,
       _this = this;
@@ -325,7 +329,7 @@ xyflyerEditor.EditorHelper = (function() {
     });
     this.$('.editor .reset_editor').bind('click', function() {
       if (confirm('Are you sure you want to reset the editor?\n\nAll of your changes will be lost.')) {
-        return location.href = location.pathname;
+        return _this.reinitialize();
       }
     });
     return this.boardElement.bind('mousedown.dragisland', function(e) {
