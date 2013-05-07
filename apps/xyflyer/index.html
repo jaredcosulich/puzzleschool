@@ -45,18 +45,27 @@
                 	navigator.userAgent.toUpperCase().indexOf("IPOD")!=-1) {
                 	$('head').append( '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5" />' );
                     window.appScale = 0.5
+                    AppMobi.display.useViewport(640,960);
+                    window.appSized = true;
                 } else if (navigator.userAgent.toUpperCase().indexOf("IPAD")!=-1) {
                 	$('head').append( '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />' );
                     window.appScale = 1
+                    AppMobi.display.useViewport(640,960);
+                    window.appSized = true;
                 } else if (navigator.userAgent.toUpperCase().indexOf("ANDROID")!=-1) {
                 	window.appScale = 0.4
+                	$.timeout(500, function() {
+                        AppMobi.display.useViewport(640*(640/(window.innerHeight*1.6)),960*(960/(window.innerWidth*1.65)));
+                        window.appSized = true;
+                	})
             	} else {
             	    window.appScale = 1
+                    AppMobi.display.useViewport(640,960);
+                    window.appSized = true;
             	}
                 
                 //user AppMobi viewport
                 // AppMobi.display.useViewport(748,1024);
-                AppMobi.display.useViewport(640,960);
 
                 //lock orientation
                 AppMobi.device.setRotateOrientation("landscape");

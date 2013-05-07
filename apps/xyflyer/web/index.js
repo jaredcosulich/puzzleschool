@@ -8,7 +8,7 @@ window.app = {
   initialize: function() {
     var data, i, _i,
       _this = this;
-    if (!(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight) || this.width < this.height) {
+    if (!window.appSized || !(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight) || this.width < this.height) {
       $.timeout(100, function() {
         return window.app.initialize();
       });

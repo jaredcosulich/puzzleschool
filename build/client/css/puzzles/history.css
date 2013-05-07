@@ -11,13 +11,14 @@
   width: 300px;
   overflow: hidden;
   float: left;
-  border-right: 1px solid #ccc;
+  background-color: #ccc;
 }
 .history .navigation h2,
 .history .navigation h3 {
   text-align: center;
   padding: 12px;
   cursor: pointer;
+  background-color: #fafafa;
 }
 .history .navigation .link {
   font-size: 11px;
@@ -25,11 +26,16 @@
   text-align: center;
   margin: 0;
   padding-bottom: 12px;
+  background-color: #fafafa;
 }
 .history .navigation .question {
   padding: 12px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid white;
   cursor: pointer;
+  background-color: #a61c0e;
+}
+.history .navigation .question.selected {
+  background-color: #fafafa;
 }
 .history .answer {
   text-align: center;

@@ -2,7 +2,7 @@
 @import '../methods';
 
 @height: 640px;
-@width: 960px;
+@width: 960px;  
 
 .history {
     overflow: hidden;
@@ -17,12 +17,13 @@
         width: 300px;
         overflow: hidden;
         float: left;
-        border-right: 1px solid #ccc;
+        background-color: #ccc;
         
         h2, h3 {
             text-align: center;
             padding: 12px;
             cursor: pointer;
+            background-color: @white;
         }
         
         .link {
@@ -31,12 +32,18 @@
             text-align: center;
             margin: 0;
             padding-bottom: 12px;
+            background-color: @white;
         }
         
         .question {
             padding: 12px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid white;
             cursor: pointer;
+            background-color: @darkred;
+            
+            &.selected {
+                background-color: @white;
+            }
         }
     }
     
