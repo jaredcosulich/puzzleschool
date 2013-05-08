@@ -55,6 +55,7 @@ soma.views
             range = $(document.createElement('DIV'))
             range.addClass('range')
             range.addClass("range_#{magnitude}")
+            range.data('magnitude', magnitude)
             for i in [1..10]
                 do (i) =>
                     index = $(document.createElement('DIV'))
@@ -66,7 +67,10 @@ soma.views
                     range.append(index)
                     index.bind 'click', => 
                         digits = @getDigits(@getNumber(container))
-                        digits[digits.length - magnitude - 1] = i
+                        changingDigit = digits.length - magnitude - 1
+                        digits[changingDigit] = if parseInt(digits[changingDigit]) == i then i - 1 else i
+                        if digits[changingDigit] == 0 and parseInt(digits[changingDigit + 1]) == 0 
+                            digits[changingDigit + 1] = 9
                         @setNumber(container, digits.join(''))
                         
             container.find('.ranges').prepend(range)
@@ -78,6 +82,9 @@ soma.views
         setNumber: (container, value) ->             
             value = parseInt(value)
             digits = @getDigits(value)
+            for range in container.find('.range')
+                $(range).remove() if parseInt($(range).data('magnitude')) >= digits.length
+            
             for digit, m in digits
                 magnitude = digits.length - m - 1
                 unless (range = container.find(".range_#{magnitude}")).length

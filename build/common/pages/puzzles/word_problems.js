@@ -66,6 +66,7 @@ soma.views({
       range = $(document.createElement('DIV'));
       range.addClass('range');
       range.addClass("range_" + magnitude);
+      range.data('magnitude', magnitude);
       _fn = function(i) {
         var index, label;
         index = $(document.createElement('DIV'));
@@ -76,9 +77,13 @@ soma.views({
         index.append(label);
         range.append(index);
         return index.bind('click', function() {
-          var digits;
+          var changingDigit, digits;
           digits = _this.getDigits(_this.getNumber(container));
-          digits[digits.length - magnitude - 1] = i;
+          changingDigit = digits.length - magnitude - 1;
+          digits[changingDigit] = parseInt(digits[changingDigit]) === i ? i - 1 : i;
+          if (digits[changingDigit] === 0 && parseInt(digits[changingDigit + 1]) === 0) {
+            digits[changingDigit + 1] = 9;
+          }
           return _this.setNumber(container, digits.join(''));
         });
       };
@@ -95,10 +100,17 @@ soma.views({
       return number.toString().match(/\d/g);
     },
     setNumber: function(container, value) {
-      var digit, digits, i, index, m, magnitude, range, _i, _j, _len, _len1, _ref;
+      var digit, digits, i, index, m, magnitude, range, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
       value = parseInt(value);
       digits = this.getDigits(value);
-      for (m = _i = 0, _len = digits.length; _i < _len; m = ++_i) {
+      _ref = container.find('.range');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        range = _ref[_i];
+        if (parseInt($(range).data('magnitude')) >= digits.length) {
+          $(range).remove();
+        }
+      }
+      for (m = _j = 0, _len1 = digits.length; _j < _len1; m = ++_j) {
         digit = digits[m];
         magnitude = digits.length - m - 1;
         if (!(range = container.find(".range_" + magnitude)).length) {
@@ -107,9 +119,9 @@ soma.views({
         range.css({
           fontSize: 50 - (10 * m)
         });
-        _ref = range.find('.index');
-        for (i = _j = 0, _len1 = _ref.length; _j < _len1; i = ++_j) {
-          index = _ref[i];
+        _ref1 = range.find('.index');
+        for (i = _k = 0, _len2 = _ref1.length; _k < _len2; i = ++_k) {
+          index = _ref1[i];
           index = $(index);
           if ((i + 1) > parseInt(digit)) {
             index.removeClass('icon-circle');
