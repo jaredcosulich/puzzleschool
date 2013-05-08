@@ -40,26 +40,28 @@ soma.views({
       return problem.replace(/(\d+)/g, '<span class=\'number\'>$1</span>');
     },
     initNumbers: function() {
-      var id, index, number, _i, _len, _ref, _results;
+      var colorIndex, id, index, number, settings, _i, _len, _ref, _ref1, _results;
       _ref = this.$('.problem .number');
       _results = [];
       for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
         number = _ref[index];
         number = $(number);
         id = new Date().getTime();
-        number.addClass("color_" + (index + 1));
+        settings = (_ref1 = this.level.numbers) != null ? _ref1[index] : void 0;
+        colorIndex = (settings != null ? settings.colorIndex : void 0) || index + 1;
+        number.addClass("color_" + colorIndex);
         number.addClass("number_" + id);
-        _results.push(this.createNumber(number.html(), id, index + 1));
+        _results.push(this.createNumber(number.html(), id, colorIndex, settings != null ? settings.label : void 0));
       }
       return _results;
     },
-    createNumber: function(value, id, colorIndex) {
+    createNumber: function(value, id, colorIndex, label) {
       var number;
       number = $(document.createElement('DIV'));
       number.data('id', id);
       number.addClass('number');
       number.addClass("color_" + colorIndex);
-      number.html("<div class='settings'>\n    <i class='icon-cog'></i>\n</div>\n<h3 class='value'>" + value + "</h3>\n<div class='ranges'></div>");
+      number.html("<div class='settings'>\n    <i class='icon-cog'></i>\n</div>\n<h3><span class='value'>" + value + "</span>" + (label ? " " + label : void 0) + "</h3>\n<div class='ranges'></div>");
       this.$('.numbers').append(number);
       return this.setNumber(number, value);
     },
@@ -171,6 +173,14 @@ LEVELS = [
   {
     id: 1367965328479,
     difficulty: 1,
-    problem: 'Jane has 9 balloons. 6 are green and the rest are blue. How many balloons are blue?'
+    problem: 'Jane has 9 balloons. 6 are green and the rest are blue. How many balloons are blue?',
+    numbers: [
+      {
+        label: 'Balloons'
+      }, {
+        label: 'Green Balloons',
+        colorIndex: 3
+      }
+    ]
   }
 ];

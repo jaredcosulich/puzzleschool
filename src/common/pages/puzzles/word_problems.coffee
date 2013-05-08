@@ -35,11 +35,13 @@ soma.views
             for number, index in @$('.problem .number')
                 number = $(number)
                 id = new Date().getTime()
-                number.addClass("color_#{index + 1}")
+                settings = @level.numbers?[index]
+                colorIndex = settings?.colorIndex or index + 1
+                number.addClass("color_#{colorIndex}")
                 number.addClass("number_#{id}")
-                @createNumber(number.html(), id, index + 1)
+                @createNumber(number.html(), id, colorIndex, settings?.label)
                 
-        createNumber: (value, id, colorIndex) ->
+        createNumber: (value, id, colorIndex, label) ->
             number = $(document.createElement('DIV'))
             number.data('id', id)
             number.addClass('number')
@@ -48,7 +50,7 @@ soma.views
                 <div class='settings'>
                     <i class='icon-cog'></i>
                 </div>
-                <h3 class='value'>#{value}</h3>
+                <h3><span class='value'>#{value}</span>#{" #{label}" if label}</h3>
                 <div class='ranges'></div>
             """
             @$('.numbers').append(number)
@@ -123,5 +125,9 @@ LEVELS = [
     id: 1367965328479
     difficulty: 1
     problem: 'Jane has 9 balloons. 6 are green and the rest are blue. How many balloons are blue?'
+    numbers: [
+        {label: 'Balloons'}
+        {label: 'Green Balloons', colorIndex: 3}
+    ]
 ]
     
