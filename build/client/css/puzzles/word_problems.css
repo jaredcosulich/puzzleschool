@@ -39,6 +39,7 @@
 }
 .word_problems .numbers .number .settings i {
   cursor: pointer;
+  padding-left: 6px;
 }
 .word_problems .numbers .number .range {
   padding: 6px 0;
@@ -61,12 +62,16 @@
 }
 .word_problems .numbers .number.small h3 {
   padding: 6px;
-  margin-right: 24px;
+  margin-right: 30px;
 }
 .word_problems .numbers .number.small .settings {
   padding: 6px;
 }
-.word_problems .numbers .number.small .settings .icon-cog {
+.word_problems .numbers .number.small .settings i {
+  padding: none;
+}
+.word_problems .numbers .number.small .settings .icon-cog,
+.word_problems .numbers .number.small .settings .icon-caret-up {
   display: none;
 }
 .word_problems .numbers .number.small .ranges {
@@ -88,6 +93,18 @@
   height: 300px;
   border: 1px dashed #ccc;
   margin: auto;
+  font-size: 24px;
+  background-color: white;
+}
+.word_problems .interactions .interaction .label {
+  text-align: center;
+  padding: 30px 12px;
+}
+.word_problems .interactions .interaction .visual {
+  text-align: center;
+}
+.word_problems .interactions .interaction .visual i {
+  padding: 6px;
 }
 .word_problems.dragging .interactions .interaction {
   border: 1px solid orange;

@@ -51,7 +51,7 @@ task 'build:site', 'Build the site files', ->
 task 'build:file', 'Build a file', ->
     execCmds [
         #'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/word_problems.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib/word_problem_objects src/common/pages/puzzles/lib/word_problem_objects/interaction.coffee'
         #'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/*.coffee'
         'lessc src/client/css/puzzles/word_problems.less build/client/css/puzzles/word_problems.css'
         #'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'

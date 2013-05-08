@@ -7,13 +7,19 @@ interaction.Interaction = (function() {
 
   function Interaction(_arg) {
     this.container = _arg.container;
+    this.numbers = [];
     this.init();
   }
 
   Interaction.prototype.init = function() {
     this.el = $(document.createElement('DIV'));
     this.el.addClass('interaction');
-    this.el.html('<div class=\'label\'>\n    9 - 6 = 4\n</div>\n<div class=\'visual\'></div>');
+    this.label = $(document.createElement('DIV'));
+    this.label.addClass('label');
+    this.el.append(this.label);
+    this.visual = $(document.createElement('DIV'));
+    this.visual.addClass('visual');
+    this.el.append(this.visual);
     return this.container.append(this.el);
   };
 
@@ -29,7 +35,42 @@ interaction.Interaction = (function() {
     return over;
   };
 
-  Interaction.prototype.accept = function(number) {};
+  Interaction.prototype.accept = function(number) {
+    this.numbers.push(number);
+    return this.display();
+  };
+
+  Interaction.prototype.display = function() {
+    this.label.html('');
+    this.visual.html('');
+    if (this.numbers.length === 1) {
+      this.showNumber();
+      return;
+    }
+    return this.showAddition();
+  };
+
+  Interaction.prototype.showNumber = function() {
+    var i, number, _i, _ref, _results;
+    number = this.numbers[0];
+    this.label.html("" + number.value + (number.label ? ' ' + number.label : void 0));
+    _results = [];
+    for (i = _i = 1, _ref = number.value; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+      _results.push(this.visual.append("<i class='icon-circle color_" + number.colorIndex + "'></i>"));
+    }
+    return _results;
+  };
+
+  Interaction.prototype.showAddition = function() {
+    var addedNumber, i, _i, _ref;
+    this.showNumber();
+    addedNumber = this.numbers[1];
+    this.visual.append('<div>+</div>');
+    for (i = _i = 1, _ref = addedNumber.value; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+      this.visual.append("<i class='icon-circle color_" + addedNumber.colorIndex + "'></i>");
+    }
+    return this.label.html("" + this.numbers[0].value + " + " + addedNumber.value + " = " + (this.numbers[0].value + addedNumber.value));
+  };
 
   return Interaction;
 

@@ -43,6 +43,7 @@
                 
                 i {
                     cursor: pointer;
+                    padding-left: 6px;
                 }
             }
             .range {
@@ -67,12 +68,15 @@
                 
                 h3 {
                     padding: 6px;
-                    margin-right: 24px;
+                    margin-right: 30px;
                 }
                 
                 .settings {
                     padding: 6px;
-                    .icon-cog {
+                    i {
+                        padding: none;
+                    }
+                    .icon-cog, .icon-caret-up {
                         display: none;
                     }                    
                 }
@@ -95,6 +99,20 @@
             height: 300px;
             border: 1px dashed #ccc;
             margin: auto;
+            font-size: 24px;
+            background-color: white;
+            
+            .label {
+                text-align: center;
+                padding: 30px 12px;
+            }
+            
+            .visual {
+                text-align: center;
+                i {
+                    padding: 6px;
+                }
+            }
         }
     }
     

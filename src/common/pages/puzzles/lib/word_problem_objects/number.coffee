@@ -16,6 +16,7 @@ class number.Number
         @el.addClass('small')
         @el.html """
             <div class='settings'>
+                <i class='icon-caret-up'></i>
                 <i class='icon-cog'></i>
                 <i class='icon-move'></i>
             </div>
@@ -37,13 +38,13 @@ class number.Number
             $(document.body).one 'mouseup.drag touchend.drag',(e) =>
                 $(document.body).unbind 'mousemove.drag touchstart.drag'
                 if not @transformer.dx and not @transformer.dy
-                    if @el.hasClass('small')
-                        @el.removeClass('small')
-                    else
-                        @el.addClass('small')
+                    @el.removeClass('small') if @el.hasClass('small')
+                        
                 else
                     @drag(@, Client.x(e), Client.y(e), true)
                     @transformer.translate(0, 0)
+                    
+        @el.find('.icon-caret-up').bind 'click', => @el.addClass('small')
 
         @container.append(@el)
         @set(@value)
@@ -78,6 +79,10 @@ class number.Number
     set: (value) ->             
         @value = parseInt(value)
         digits = @asDigits()
+        
+        if digits.length > 4
+            digits = [digits[0...digits.length-4].join(''), digits[digits.length-4..digits.length]...]
+
         for range in @$('.range')
             $(range).remove() if parseInt($(range).data('magnitude')) >= digits.length
 
@@ -86,7 +91,7 @@ class number.Number
             unless (range = @$(".range_#{magnitude}")).length
                 range = @createRange(magnitude, digit)
 
-            range.css(fontSize: 50 - (10 * m))
+            range.css(fontSize: (10 * (magnitude + 2)))
 
             for index, i in range.find('.index')
                 index = $(index)
