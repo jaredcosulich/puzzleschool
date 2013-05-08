@@ -6,11 +6,11 @@ client = typeof exports !== "undefined" && exports !== null ? exports : provide(
 
 client.Client = {
   x: function(e, container) {
-    var _ref, _ref1, _ref2, _ref3;
-    return (e.clientX || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0)) - container.offset().left;
+    var _ref, _ref1, _ref2, _ref3, _ref4;
+    return (e.clientX || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageX : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageX : void 0 : void 0)) - ((container != null ? (_ref4 = container.offset()) != null ? _ref4.left : void 0 : void 0) || 0);
   },
   y: function(e, container) {
-    var _ref, _ref1, _ref2, _ref3;
-    return (e.clientY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0)) - container.offset().top;
+    var _ref, _ref1, _ref2, _ref3, _ref4;
+    return (e.clientY || ((_ref = e.targetTouches) != null ? (_ref1 = _ref[0]) != null ? _ref1.pageY : void 0 : void 0) || ((_ref2 = e.touches) != null ? (_ref3 = _ref2[0]) != null ? _ref3.pageY : void 0 : void 0)) - ((container != null ? (_ref4 = container.offset()) != null ? _ref4.top : void 0 : void 0) || 0);
   }
 };

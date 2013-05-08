@@ -15,6 +15,7 @@ wordProblems.ViewHelper = (function() {
     this.el = _arg.el, this.level = _arg.level;
     this.numbers = [];
     this.interactions = [];
+    this.addInteraction();
     this.initLevel(this.level);
   }
 
@@ -51,27 +52,41 @@ wordProblems.ViewHelper = (function() {
         value: number.html(),
         colorIndex: colorIndex,
         label: settings != null ? settings.label : void 0,
-        track: function(n, x, y) {
-          return _this.trackDrag(n, x, y);
+        drag: function(n, x, y, final) {
+          return _this.dragNumber(n, x, y, final);
         }
       })));
     }
     return _results;
   };
 
-  ViewHelper.prototype.trackDrag = function(number, x, y) {
+  ViewHelper.prototype.dragNumber = function(number, x, y, final) {
     var interaction, _i, _len, _ref1, _results;
+    if (!this.el.hasClass('dragging')) {
+      this.el.addClass('dragging');
+    }
+    if (final) {
+      this.el.removeClass('dragging');
+    }
     _ref1 = this.interactions;
     _results = [];
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       interaction = _ref1[_i];
-      if (interaction.over(x, y)) {
-        _results.push(interaction.add(number));
-      } else {
-        _results.push(void 0);
+      if (interaction.over(x, y, true)) {
+        if (final) {
+          _results.push(interaction.accept(number));
+        } else {
+          _results.push(void 0);
+        }
       }
     }
     return _results;
+  };
+
+  ViewHelper.prototype.addInteraction = function() {
+    return this.interactions.push(new wordProblems.Interaction({
+      container: this.$('.interactions')
+    }));
   };
 
   return ViewHelper;

@@ -3,7 +3,7 @@ Transformer = require('../common_objects/transformer').Transformer
 Client = require('../common_objects/client').Client
 
 class number.Number
-    constructor: ({@container, @problemNumber, @id, @value, @colorIndex, @label, @drop}) ->
+    constructor: ({@container, @problemNumber, @id, @value, @colorIndex, @label, @drag}) ->
         @init()
         
     $: (selector) -> @el.find(selector)    
@@ -25,13 +25,14 @@ class number.Number
 
         @transformer = new Transformer(@el)
         @el.bind 'mousedown.drag touchstart.drag', (e) =>
-            startX = Client.x(e, @container)
-            startY = Client.y(e, @container)
+            startX = Client.x(e)
+            startY = Client.y(e)
 
             $(document.body).bind 'mousemove.drag touchstart.drag', (e) =>
-                currentX = Client.x(e, @container)
-                currentY = Client.y(e, @container)
+                currentX = Client.x(e)
+                currentY = Client.y(e)
                 @transformer.translate(currentX - startX, currentY - startY)
+                @drag(@, currentX, currentY)
 
             $(document.body).one 'mouseup.drag touchend.drag',(e) =>
                 $(document.body).unbind 'mousemove.drag touchstart.drag'
@@ -41,7 +42,7 @@ class number.Number
                     else
                         @el.addClass('small')
                 else
-                    @drop(@, Client.x(e, @container), Client.y(e, @container))
+                    @drag(@, Client.x(e), Client.y(e), true)
                     @transformer.translate(0, 0)
 
         @container.append(@el)

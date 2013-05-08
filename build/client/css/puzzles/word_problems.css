@@ -72,7 +72,7 @@
 .word_problems .numbers .number.small .ranges {
   display: none;
 }
-.word_problems .relations {
+.word_problems .interactions {
   width: 44%;
   float: right;
   height: 640px;
@@ -83,11 +83,17 @@
   -ms-user-select: none;
   user-select: none;
 }
-.word_problems .relations .relation {
+.word_problems .interactions .interaction {
   width: 390px;
   height: 300px;
   border: 1px dashed #ccc;
   margin: auto;
+}
+.word_problems.dragging .interactions .interaction {
+  border: 1px solid orange;
+}
+.word_problems.dragging .interactions .interaction.highlight {
+  border: 1px solid green;
 }
 .word_problems .color_1 {
   color: red;

@@ -7,6 +7,7 @@ class wordProblems.ViewHelper
     constructor: ({@el, @level}) ->
         @numbers = []
         @interactions = []
+        @addInteraction()
         @initLevel(@level)
         
     $: (selector) -> @el.find(selector)    
@@ -33,9 +34,17 @@ class wordProblems.ViewHelper
                 value: number.html()
                 colorIndex: colorIndex
                 label: settings?.label
-                drop: (n, x, y) => @dropNumber(n, x, y)
+                drag: (n, x, y, final) => @dragNumber(n, x, y, final)
             )
         
-    dropNumber: (number, x, y)->
-        for interaction in @interactions
-            interaction.add(number) if interaction.over(x, y)
+    dragNumber: (number, x, y, final) ->
+        @el.addClass('dragging') unless @el.hasClass('dragging')
+        @el.removeClass('dragging') if final
+        
+        for interaction in @interactions when interaction.over(x, y, true)
+            interaction.accept(number) if final
+            
+    addInteraction: ->
+        @interactions.push(new wordProblems.Interaction
+            container: @$('.interactions')
+        )

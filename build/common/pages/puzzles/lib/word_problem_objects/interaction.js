@@ -6,11 +6,30 @@ interaction = typeof exports !== "undefined" && exports !== null ? exports : pro
 interaction.Interaction = (function() {
 
   function Interaction(_arg) {
-    _arg;
+    this.container = _arg.container;
     this.init();
   }
 
-  Interaction.prototype.init = function() {};
+  Interaction.prototype.init = function() {
+    this.el = $(document.createElement('DIV'));
+    this.el.addClass('interaction');
+    this.el.html('<div class=\'label\'>\n    9 - 6 = 4\n</div>\n<div class=\'visual\'></div>');
+    return this.container.append(this.el);
+  };
+
+  Interaction.prototype.over = function(x, y, highlight) {
+    var offset, over;
+    offset = this.el.offset();
+    over = x > offset.left && x < offset.left + offset.width && y > offset.top && y < offset.top + offset.height;
+    if (highlight && over) {
+      this.el.addClass('highlight');
+    } else {
+      this.el.removeClass('highlight');
+    }
+    return over;
+  };
+
+  Interaction.prototype.accept = function(number) {};
 
   return Interaction;
 

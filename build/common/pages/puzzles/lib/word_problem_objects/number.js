@@ -10,7 +10,7 @@ Client = require('../common_objects/client').Client;
 number.Number = (function() {
 
   function Number(_arg) {
-    this.container = _arg.container, this.problemNumber = _arg.problemNumber, this.id = _arg.id, this.value = _arg.value, this.colorIndex = _arg.colorIndex, this.label = _arg.label, this.track = _arg.track;
+    this.container = _arg.container, this.problemNumber = _arg.problemNumber, this.id = _arg.id, this.value = _arg.value, this.colorIndex = _arg.colorIndex, this.label = _arg.label, this.drag = _arg.drag;
     this.init();
   }
 
@@ -29,15 +29,16 @@ number.Number = (function() {
     this.transformer = new Transformer(this.el);
     this.el.bind('mousedown.drag touchstart.drag', function(e) {
       var startX, startY;
-      startX = Client.x(e, _this.container);
-      startY = Client.y(e, _this.container);
+      startX = Client.x(e);
+      startY = Client.y(e);
       $(document.body).bind('mousemove.drag touchstart.drag', function(e) {
         var currentX, currentY;
-        currentX = Client.x(e, _this.container);
-        currentY = Client.y(e, _this.container);
-        return _this.transformer.translate(currentX - startX, currentY - startY);
+        currentX = Client.x(e);
+        currentY = Client.y(e);
+        _this.transformer.translate(currentX - startX, currentY - startY);
+        return _this.drag(_this, currentX, currentY);
       });
-      return $(document.body).one('mouseup.drag touchend.drag', function() {
+      return $(document.body).one('mouseup.drag touchend.drag', function(e) {
         $(document.body).unbind('mousemove.drag touchstart.drag');
         if (!_this.transformer.dx && !_this.transformer.dy) {
           if (_this.el.hasClass('small')) {
@@ -46,6 +47,7 @@ number.Number = (function() {
             return _this.el.addClass('small');
           }
         } else {
+          _this.drag(_this, Client.x(e), Client.y(e), true);
           return _this.transformer.translate(0, 0);
         }
       });
