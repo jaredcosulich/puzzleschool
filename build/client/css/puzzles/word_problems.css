@@ -7,24 +7,33 @@
   border: 1px solid #ccc;
 }
 .word_problems .problem {
-  padding: 12px;
+  padding: 24px 12px;
+  text-align: center;
   font-size: 18px;
 }
+.word_problems .numbers {
+  width: 56%;
+  float: left;
+  overflow: hidden;
+}
 .word_problems .numbers .number {
+  width: 510px;
   border: 1px solid #262626;
-  width: 60%;
-  margin: 12px 0 0 12px;
+  margin: 0 auto 12px auto;
 }
 .word_problems .numbers .number h3 {
-  padding: 6px 30px;
+  padding: 6px 15px;
 }
 .word_problems .numbers .number .settings {
   float: right;
-  padding: 6px 12px;
+  padding: 6px 15px;
   font-size: 18px;
 }
+.word_problems .numbers .number .settings i {
+  cursor: pointer;
+}
 .word_problems .numbers .number .range {
-  padding: 6px 12px;
+  padding: 6px 0;
   overflow: hidden;
 }
 .word_problems .numbers .number .range .index {
@@ -35,13 +44,18 @@
   text-align: center;
 }
 .word_problems .numbers .number .range .index .label {
-  font-size: 15px;
+  font-size: 13px;
 }
 .word_problems .relations {
-  width: 40%;
+  width: 44%;
   float: right;
   height: 640px;
-  border-left: 1px solid #ccc;
+}
+.word_problems .relations .relation {
+  width: 390px;
+  height: 300px;
+  border: 1px dashed #ccc;
+  margin: auto;
 }
 .word_problems .color_1 {
   color: red;

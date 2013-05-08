@@ -13,28 +13,36 @@
     border: 1px solid #ccc;
     
     .problem {
-        padding: 12px;
+        padding: 24px 12px;
+        text-align: center;
         font-size: 18px;
         .number {
         }
     }
     
     .numbers {
+        width: 56%;
+        float: left;
+        overflow: hidden;
         .number {
-            border: 1px solid @black;
-            width: 60%;
-            margin: 12px 0 0 12px;
+            width: 510px;
+            border: 1px solid @black;            
+            margin: 0 auto 12px auto;
             
             h3 {
-                padding: 6px 30px;
+                padding: 6px 15px;
             }
             .settings {
                 float: right;
-                padding: 6px 12px;
+                padding: 6px 15px;
                 font-size: @h3size;
+                
+                i {
+                    cursor: pointer;
+                }
             }
             .range {
-                padding: 6px 12px;
+                padding: 6px 0;
                 overflow: hidden;
                 .index {
                     cursor: pointer;
@@ -43,7 +51,7 @@
                     width: 10%;
                     text-align: center;
                     .label {
-                        font-size: @h4size;
+                        font-size: @bodysize;
                     }
                 }
             }
@@ -51,10 +59,16 @@
     }
     
     .relations {
-        width: 40%;
+        width: 44%;
         float: right;
         height: @height;
-        border-left: 1px solid #ccc;
+        
+        .relation {
+            width: 390px;
+            height: 300px;
+            border: 1px dashed #ccc;
+            margin: auto;
+        }
     }
     
     .color_1 {
