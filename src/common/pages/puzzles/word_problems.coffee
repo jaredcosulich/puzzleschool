@@ -8,7 +8,12 @@ soma.chunks
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/word_problems.html"
             
-            @loadScript '/build/common/pages/puzzles/lib/transformer.js'
+            @loadScript '/build/common/pages/puzzles/lib/common_objects/transformer.js'
+            @loadScript '/build/common/pages/puzzles/lib/common_objects/client.js'
+
+            @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/number.js'
+            @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/index.js'
+            
             @loadScript '/build/common/pages/puzzles/lib/word_problems.js'
             
             @loadStylesheet '/build/client/css/puzzles/word_problems.css'     

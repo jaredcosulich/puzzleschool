@@ -1,4 +1,4 @@
-transformer = exports ? provide('./transformer', {})
+transformer = exports ? provide('../common_objects/transformer', {})
 
 class transformer.Transformer
     constructor: (element) ->
