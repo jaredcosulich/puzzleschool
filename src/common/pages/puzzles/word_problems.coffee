@@ -34,13 +34,16 @@ soma.views
         initNumbers: ->
             for number, index in @$('.problem .number')
                 number = $(number)
+                id = new Date().getTime()
                 number.addClass("color_#{index + 1}")
-                @createNumber(number.html(), index + 1)
+                number.addClass("number_#{id}")
+                @createNumber(number.html(), id, index + 1)
                 
-        createNumber: (value, index) ->
+        createNumber: (value, id, colorIndex) ->
             number = $(document.createElement('DIV'))
+            number.data('id', id)
             number.addClass('number')
-            number.addClass("color_#{index}")
+            number.addClass("color_#{colorIndex}")
             number.html """
                 <div class='settings'>
                     <i class='icon-cog'></i>
@@ -102,6 +105,7 @@ soma.views
                         index.addClass('icon-circle') unless index.hasClass('icon-circle')
             container.find('.value').html("#{value}")
             container.data('value', value)
+            @$(".problem .number_#{container.data('id')}").html("#{value}")
                 
 soma.routes
     '/puzzles/word_problems/:classId/:levelId': ({classId, levelId}) -> 

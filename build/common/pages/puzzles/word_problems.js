@@ -40,22 +40,25 @@ soma.views({
       return problem.replace(/(\d+)/g, '<span class=\'number\'>$1</span>');
     },
     initNumbers: function() {
-      var index, number, _i, _len, _ref, _results;
+      var id, index, number, _i, _len, _ref, _results;
       _ref = this.$('.problem .number');
       _results = [];
       for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
         number = _ref[index];
         number = $(number);
+        id = new Date().getTime();
         number.addClass("color_" + (index + 1));
-        _results.push(this.createNumber(number.html(), index + 1));
+        number.addClass("number_" + id);
+        _results.push(this.createNumber(number.html(), id, index + 1));
       }
       return _results;
     },
-    createNumber: function(value, index) {
+    createNumber: function(value, id, colorIndex) {
       var number;
       number = $(document.createElement('DIV'));
+      number.data('id', id);
       number.addClass('number');
-      number.addClass("color_" + index);
+      number.addClass("color_" + colorIndex);
       number.html("<div class='settings'>\n    <i class='icon-cog'></i>\n</div>\n<h3 class='value'>" + value + "</h3>\n<div class='ranges'></div>");
       this.$('.numbers').append(number);
       return this.setNumber(number, value);
@@ -137,7 +140,8 @@ soma.views({
         }
       }
       container.find('.value').html("" + value);
-      return container.data('value', value);
+      container.data('value', value);
+      return this.$(".problem .number_" + (container.data('id'))).html("" + value);
     }
   }
 });
