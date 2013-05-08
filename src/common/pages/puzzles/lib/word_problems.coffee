@@ -5,6 +5,8 @@ for name, fn of require('./word_problem_objects/index')
 
 class wordProblems.ViewHelper    
     constructor: ({@el, @level}) ->
+        @numbers = []
+        @interactions = []
         @initLevel(@level)
         
     $: (selector) -> @el.find(selector)    
@@ -24,12 +26,16 @@ class wordProblems.ViewHelper
             colorIndex = settings?.colorIndex or index + 1
             number.addClass("color_#{colorIndex}")
             number.addClass("number_#{id}")
-            new wordProblems.Number
+            @numbers.push(new wordProblems.Number
                 container: @$('.numbers')
                 problemNumber: @$(".problem .number_#{id}")
                 id: id
                 value: number.html()
                 colorIndex: colorIndex
                 label: settings?.label
+                drop: (n, x, y) => @dropNumber(n, x, y)
+            )
         
-   
+    dropNumber: (number, x, y)->
+        for interaction in @interactions
+            interaction.add(number) if interaction.over(x, y)

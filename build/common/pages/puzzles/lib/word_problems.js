@@ -13,6 +13,8 @@ wordProblems.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     this.el = _arg.el, this.level = _arg.level;
+    this.numbers = [];
+    this.interactions = [];
     this.initLevel(this.level);
   }
 
@@ -30,7 +32,8 @@ wordProblems.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initNumbers = function() {
-    var colorIndex, id, index, number, settings, _i, _len, _ref1, _ref2, _results;
+    var colorIndex, id, index, number, settings, _i, _len, _ref1, _ref2, _results,
+      _this = this;
     _ref1 = this.$('.problem .number');
     _results = [];
     for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
@@ -41,14 +44,32 @@ wordProblems.ViewHelper = (function() {
       colorIndex = (settings != null ? settings.colorIndex : void 0) || index + 1;
       number.addClass("color_" + colorIndex);
       number.addClass("number_" + id);
-      _results.push(new wordProblems.Number({
+      _results.push(this.numbers.push(new wordProblems.Number({
         container: this.$('.numbers'),
         problemNumber: this.$(".problem .number_" + id),
         id: id,
         value: number.html(),
         colorIndex: colorIndex,
-        label: settings != null ? settings.label : void 0
-      }));
+        label: settings != null ? settings.label : void 0,
+        track: function(n, x, y) {
+          return _this.trackDrag(n, x, y);
+        }
+      })));
+    }
+    return _results;
+  };
+
+  ViewHelper.prototype.trackDrag = function(number, x, y) {
+    var interaction, _i, _len, _ref1, _results;
+    _ref1 = this.interactions;
+    _results = [];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      interaction = _ref1[_i];
+      if (interaction.over(x, y)) {
+        _results.push(interaction.add(number));
+      } else {
+        _results.push(void 0);
+      }
     }
     return _results;
   };

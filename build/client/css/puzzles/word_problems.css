@@ -59,7 +59,14 @@
   margin-left: 12px;
   cursor: move;
 }
+.word_problems .numbers .number.small h3 {
+  padding: 6px;
+  margin-right: 24px;
+}
 .word_problems .numbers .number.small .settings {
+  padding: 6px;
+}
+.word_problems .numbers .number.small .settings .icon-cog {
   display: none;
 }
 .word_problems .numbers .number.small .ranges {
