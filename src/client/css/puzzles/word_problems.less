@@ -1,0 +1,79 @@
+@import '../variables';
+@import '../methods';
+
+@height: 640px;
+@width: 960px;  
+
+.word_problems {
+    overflow: hidden;
+    margin-bottom: 30px;
+    font-size: 14px;
+    width: @width;
+    height: @height;
+    border: 1px solid #ccc;
+    
+    .problem {
+        padding: 12px;
+        font-size: 18px;
+        .number {
+        }
+    }
+    
+    .numbers {
+        .number {
+            border: 1px solid @black;
+            width: 60%;
+            margin: 12px 0 0 12px;
+            
+            h3 {
+                padding: 6px 30px;
+            }
+            .settings {
+                float: right;
+                padding: 6px 12px;
+                font-size: @h3size;
+            }
+            .range {
+                padding: 6px 12px;
+                overflow: hidden;
+                .index {
+                    cursor: pointer;
+                    float: left;
+                    font-size: 50px;
+                    width: 10%;
+                    text-align: center;
+                    .label {
+                        font-size: @h4size;
+                    }
+                }
+            }
+        }
+    }
+    
+    .relations {
+        width: 40%;
+        float: right;
+        height: @height;
+        border-left: 1px solid #ccc;
+    }
+    
+    .color_1 {
+        color: red;
+    }
+
+    .color_2 {
+        color: blue;
+    }
+
+    .color_3 {
+        color: green;
+    }
+
+    .color_4 {
+        color: purple;
+    }
+    
+    .color_5 {
+        color: orange;
+    }
+}

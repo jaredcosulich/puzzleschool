@@ -28,6 +28,7 @@ task 'build:site', 'Build the site files', ->
         'lessc src/client/css/puzzles/xyflyer.less build/client/css/puzzles/xyflyer.css'
         'lessc src/client/css/puzzles/code.less build/client/css/puzzles/code.css'
         'lessc src/client/css/puzzles/history.less build/client/css/puzzles/history.css'
+        'lessc src/client/css/puzzles/word_problems.less build/client/css/puzzles/word_problems.css'
 
         'coffee --compile --bare --output build/server/lib src/server/lib/*.coffee'
         'coffee --compile --bare --output build/server/lib/db src/server/lib/db/*.coffee'
