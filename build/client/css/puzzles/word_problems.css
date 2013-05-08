@@ -5,6 +5,7 @@
   width: 960px;
   height: 640px;
   border: 1px solid #ccc;
+  position: relative;
 }
 .word_problems .problem {
   padding: 24px 12px;
@@ -14,12 +15,19 @@
 .word_problems .numbers {
   width: 56%;
   float: left;
-  overflow: hidden;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .word_problems .numbers .number {
   width: 510px;
   border: 1px solid #262626;
   margin: 0 auto 12px auto;
+  clear: left;
+  background-color: #fafafa;
 }
 .word_problems .numbers .number h3 {
   padding: 6px 15px;
@@ -45,10 +53,28 @@
 .word_problems .numbers .number .range .index .label {
   font-size: 13px;
 }
+.word_problems .numbers .number.small {
+  width: auto;
+  float: left;
+  margin-left: 12px;
+  cursor: move;
+}
+.word_problems .numbers .number.small .settings {
+  display: none;
+}
+.word_problems .numbers .number.small .ranges {
+  display: none;
+}
 .word_problems .relations {
   width: 44%;
   float: right;
   height: 640px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .word_problems .relations .relation {
   width: 390px;

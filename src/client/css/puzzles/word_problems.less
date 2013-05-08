@@ -11,6 +11,7 @@
     width: @width;
     height: @height;
     border: 1px solid #ccc;
+    position: relative;
     
     .problem {
         padding: 24px 12px;
@@ -23,11 +24,14 @@
     .numbers {
         width: 56%;
         float: left;
-        overflow: hidden;
+        .no_select();
+        
         .number {
             width: 510px;
             border: 1px solid @black;            
             margin: 0 auto 12px auto;
+            clear: left;
+            background-color: @white;
             
             h3 {
                 padding: 6px 15px;
@@ -54,6 +58,20 @@
                     }
                 }
             }
+            
+            &.small {
+                width: auto;
+                float: left;
+                margin-left: 12px;
+                cursor: move;
+                
+                .settings {
+                    display: none;
+                }
+                .ranges {
+                    display: none;
+                }
+            }
         }
     }
     
@@ -61,6 +79,7 @@
         width: 44%;
         float: right;
         height: @height;
+        .no_select();
         
         .relation {
             width: 390px;
