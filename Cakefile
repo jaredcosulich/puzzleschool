@@ -45,6 +45,16 @@ task 'build:site', 'Build the site files', ->
         'coffee --compile --bare --output build/common/pages/puzzles/lib/xyflyer_objects src/common/pages/puzzles/lib/xyflyer_objects/*.coffee'
         'cp -r src/common/templates build/common'
     ]
+    
+task 'build:file', 'Build a file', ->
+    execCmds [
+        #'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/word_problems.coffee'
+        #'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/*.coffee'
+        #'lessc src/client/css/puzzles/word_problems.less build/client/css/puzzles/word_problems.css'
+        #'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
+        #'cp -r src/common/templates build/common'
+    ]
 
 task 'build:language_scramble', 'Build the language scramble app', ->
     execCmds [

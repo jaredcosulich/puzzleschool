@@ -45,36 +45,56 @@ soma.views
                 <div class='settings'>
                     <i class='icon-cog'></i>
                 </div>
-                <h3>#{value}</h3>
+                <h3 class='value'>#{value}</h3>
+                <div class='ranges'></div>
             """
             @$('.numbers').append(number)
             @setNumber(number, value)
            
-        createRange: (container, magnitude, value) ->
+        createRange: (container, magnitude) ->
             range = $(document.createElement('DIV'))
             range.addClass('range')
+            range.addClass("range_#{magnitude}")
             for i in [1..10]
                 do (i) =>
                     index = $(document.createElement('DIV'))
                     index.addClass('index')
-                    if i > value
-                        index.addClass('icon-circle-blank')
-                    else
-                        index.addClass('icon-circle')
                     label = $(document.createElement('DIV'))
                     label.addClass('label')
                     label.html("#{i * Math.pow(10, magnitude)}")
                     index.append(label)
                     range.append(index)
-                    index.bind 'click', =>
-                        alert(i)
-            container.append(range)
+                    index.bind 'click', => 
+                        digits = @getDigits(@getNumber(container))
+                        digits[digits.length - magnitude - 1] = i
+                        @setNumber(container, digits.join(''))
+                        
+            container.find('.ranges').prepend(range)
+            return range
+            
+        getNumber: (container) -> container.data('value')    
+        getDigits: (number) -> number.toString().match(/\d/g)
             
         setNumber: (container, value) ->             
             value = parseInt(value)
-            for digit, magnitude in value.toString().match(/\d/g)
-                @createRange(container, magnitude, digit)
+            digits = @getDigits(value)
+            for digit, m in digits
+                magnitude = digits.length - m - 1
+                unless (range = container.find(".range_#{magnitude}")).length
+                    range = @createRange(container, magnitude, digit)
 
+                range.css(fontSize: 50 - (10 * m))
+
+                for index, i in range.find('.index')
+                    index = $(index)
+                    if (i + 1) > parseInt(digit)
+                        index.removeClass('icon-circle')
+                        index.addClass('icon-circle-blank') unless index.hasClass('icon-circle-blank')
+                    else
+                        index.removeClass('icon-circle-blank')
+                        index.addClass('icon-circle') unless index.hasClass('icon-circle')
+            container.find('.value').html("#{value}")
+            container.data('value', value)
                 
 soma.routes
     '/puzzles/word_problems/:classId/:levelId': ({classId, levelId}) -> 

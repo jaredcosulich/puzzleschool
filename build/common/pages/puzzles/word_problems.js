@@ -56,48 +56,76 @@ soma.views({
       number = $(document.createElement('DIV'));
       number.addClass('number');
       number.addClass("color_" + index);
-      number.html("<div class='settings'>\n    <i class='icon-cog'></i>\n</div>\n<h3>" + value + "</h3>");
+      number.html("<div class='settings'>\n    <i class='icon-cog'></i>\n</div>\n<h3 class='value'>" + value + "</h3>\n<div class='ranges'></div>");
       this.$('.numbers').append(number);
       return this.setNumber(number, value);
     },
-    createRange: function(container, magnitude, value) {
+    createRange: function(container, magnitude) {
       var i, range, _fn, _i,
         _this = this;
       range = $(document.createElement('DIV'));
       range.addClass('range');
+      range.addClass("range_" + magnitude);
       _fn = function(i) {
         var index, label;
         index = $(document.createElement('DIV'));
         index.addClass('index');
-        if (i > value) {
-          index.addClass('icon-circle-blank');
-        } else {
-          index.addClass('icon-circle');
-        }
         label = $(document.createElement('DIV'));
         label.addClass('label');
         label.html("" + (i * Math.pow(10, magnitude)));
         index.append(label);
         range.append(index);
         return index.bind('click', function() {
-          return alert(i);
+          var digits;
+          digits = _this.getDigits(_this.getNumber(container));
+          digits[digits.length - magnitude - 1] = i;
+          return _this.setNumber(container, digits.join(''));
         });
       };
       for (i = _i = 1; _i <= 10; i = ++_i) {
         _fn(i);
       }
-      return container.append(range);
+      container.find('.ranges').prepend(range);
+      return range;
+    },
+    getNumber: function(container) {
+      return container.data('value');
+    },
+    getDigits: function(number) {
+      return number.toString().match(/\d/g);
     },
     setNumber: function(container, value) {
-      var digit, magnitude, _i, _len, _ref, _results;
+      var digit, digits, i, index, m, magnitude, range, _i, _j, _len, _len1, _ref;
       value = parseInt(value);
-      _ref = value.toString().match(/\d/g);
-      _results = [];
-      for (magnitude = _i = 0, _len = _ref.length; _i < _len; magnitude = ++_i) {
-        digit = _ref[magnitude];
-        _results.push(this.createRange(container, magnitude, digit));
+      digits = this.getDigits(value);
+      for (m = _i = 0, _len = digits.length; _i < _len; m = ++_i) {
+        digit = digits[m];
+        magnitude = digits.length - m - 1;
+        if (!(range = container.find(".range_" + magnitude)).length) {
+          range = this.createRange(container, magnitude, digit);
+        }
+        range.css({
+          fontSize: 50 - (10 * m)
+        });
+        _ref = range.find('.index');
+        for (i = _j = 0, _len1 = _ref.length; _j < _len1; i = ++_j) {
+          index = _ref[i];
+          index = $(index);
+          if ((i + 1) > parseInt(digit)) {
+            index.removeClass('icon-circle');
+            if (!index.hasClass('icon-circle-blank')) {
+              index.addClass('icon-circle-blank');
+            }
+          } else {
+            index.removeClass('icon-circle-blank');
+            if (!index.hasClass('icon-circle')) {
+              index.addClass('icon-circle');
+            }
+          }
+        }
       }
-      return _results;
+      container.find('.value').html("" + value);
+      return container.data('value', value);
     }
   }
 });
