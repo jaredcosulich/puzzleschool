@@ -96,12 +96,27 @@
   font-size: 24px;
   background-color: white;
 }
-.word_problems .interactions .interaction .label {
-  text-align: center;
-  padding: 30px 12px;
-}
+.word_problems .interactions .interaction .label,
 .word_problems .interactions .interaction .visual {
+  clear: left;
   text-align: center;
+  padding-top: 30px;
+}
+.word_problems .interactions .interaction .label {
+  float: left;
+  overflow: hidden;
+}
+.word_problems .interactions .interaction .label .container {
+  float: left;
+  padding: 3px;
+}
+.word_problems .interactions .interaction .label .container .reference,
+.word_problems .interactions .interaction .label .container .operator {
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 .word_problems .interactions .interaction .visual i {
   padding: 6px;

@@ -45,31 +45,62 @@ interaction.Interaction = (function() {
     this.visual.html('');
     if (this.numbers.length === 1) {
       this.showNumber();
-      return;
+    } else {
+      this.showAddition();
     }
-    return this.showAddition();
+    return this.centerLabel();
+  };
+
+  Interaction.prototype.centerLabel = function() {
+    return this.label.css({
+      marginLeft: (this.el.width() - this.label.width()) / 2
+    });
   };
 
   Interaction.prototype.showNumber = function() {
     var i, number, _i, _ref, _results;
     number = this.numbers[0];
-    this.label.html("" + number.value + (number.label ? ' ' + number.label : void 0));
+    this.label.append(this.createReference(number, true));
     _results = [];
     for (i = _i = 1, _ref = number.value; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-      _results.push(this.visual.append("<i class='icon-circle color_" + number.colorIndex + "'></i>"));
+      _results.push(this.addIcon(number.colorIndex));
     }
     return _results;
   };
 
+  Interaction.prototype.createReference = function(number, showLabel) {
+    var container;
+    container = $(document.createElement('DIV'));
+    container.addClass('container');
+    container.addClass("color_" + number.colorIndex);
+    container.html("<div class='reference'>\n    " + number.value + "\n    " + (showLabel && number.label ? ' ' + number.label : '') + "\n</div>");
+    return container;
+  };
+
+  Interaction.prototype.createOperator = function(type) {
+    var container;
+    container = $(document.createElement('DIV'));
+    container.addClass('container');
+    container.html("<div class='operator'>" + type + "</div>");
+    return container;
+  };
+
+  Interaction.prototype.addIcon = function(colorIndex) {
+    return this.visual.append("<i class='icon-circle color_" + colorIndex + "'></i>");
+  };
+
   Interaction.prototype.showAddition = function() {
-    var addedNumber, i, _i, _ref;
-    this.showNumber();
-    addedNumber = this.numbers[1];
-    this.visual.append('<div>+</div>');
-    for (i = _i = 1, _ref = addedNumber.value; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-      this.visual.append("<i class='icon-circle color_" + addedNumber.colorIndex + "'></i>");
+    var i, _i, _j, _ref, _ref1;
+    for (i = _i = 1, _ref = this.numbers[0].value; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+      this.addIcon(this.numbers[0].colorIndex);
     }
-    return this.label.html("" + this.numbers[0].value + " + " + addedNumber.value + " = " + (this.numbers[0].value + addedNumber.value));
+    this.visual.append('<div>+</div>');
+    for (i = _j = 1, _ref1 = this.numbers[1].value; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = 1 <= _ref1 ? ++_j : --_j) {
+      this.addIcon(this.numbers[1].colorIndex);
+    }
+    this.label.append(this.createReference(this.numbers[0]));
+    this.label.append(this.createOperator('+'));
+    return this.label.append(this.createReference(this.numbers[1]));
   };
 
   return Interaction;

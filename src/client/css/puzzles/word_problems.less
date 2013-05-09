@@ -101,14 +101,30 @@
             margin: auto;
             font-size: 24px;
             background-color: white;
+
+            .label, .visual {
+                clear: left;
+                text-align: center;
+                padding-top: 30px;                
+            }
             
             .label {
-                text-align: center;
-                padding: 30px 12px;
+                float: left;
+                overflow: hidden;
+                
+                .container {
+                    float: left;
+                    padding: 3px;
+                    
+                    .reference, .operator {
+                        padding: 3px 6px;
+                        border: 1px solid #ccc;
+                        .rounded(3px);
+                    }
+                }
             }
             
             .visual {
-                text-align: center;
                 i {
                     padding: 6px;
                 }

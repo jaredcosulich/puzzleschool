@@ -44,23 +44,51 @@ class interaction.Interaction
         @visual.html('')
         if @numbers.length == 1
             @showNumber() 
-            return
-            
-        @showAddition()
+        else
+            @showAddition()
+        
+        @centerLabel()
+        
+    centerLabel: ->
+        @label.css(marginLeft: (@el.width() - @label.width()) / 2)
         
     showNumber: ->
         number = @numbers[0]
-        @label.html("#{number.value}#{' ' + number.label if number.label}")
-        for i in [1..number.value]
-            @visual.append("<i class='icon-circle color_#{number.colorIndex}'></i>")
+        @label.append(@createReference(number, true))
+        @addIcon(number.colorIndex) for i in [1..number.value]
+            
+    
+    createReference: (number, showLabel) ->
+        container = $(document.createElement('DIV'))
+        container.addClass('container')
+        container.addClass("color_#{number.colorIndex}")
+        container.html """
+            <div class='reference'>
+                #{number.value}
+                #{if showLabel and number.label then (' ' + number.label) else ''}
+            </div>
+        """
+        return container
+
+    createOperator: (type) ->
+        container = $(document.createElement('DIV'))
+        container.addClass('container')
+        container.html """
+            <div class='operator'>#{type}</div>
+        """
+        return container
                 
+    addIcon: (colorIndex) ->
+        @visual.append("<i class='icon-circle color_#{colorIndex}'></i>")
+    
     showAddition: ->
-        @showNumber()
-        addedNumber = @numbers[1]
+        @addIcon(@numbers[0].colorIndex) for i in [1..@numbers[0].value]
         @visual.append('<div>+</div>')
-        for i in [1..addedNumber.value]
-            @visual.append("<i class='icon-circle color_#{addedNumber.colorIndex}'></i>")
-        @label.html("#{@numbers[0].value} + #{addedNumber.value} = #{@numbers[0].value + addedNumber.value}")
+        @addIcon(@numbers[1].colorIndex) for i in [1..@numbers[1].value]
+        @label.append(@createReference(@numbers[0]))
+        @label.append(@createOperator('+'))
+        @label.append(@createReference(@numbers[1]))
+        
         
         
         
