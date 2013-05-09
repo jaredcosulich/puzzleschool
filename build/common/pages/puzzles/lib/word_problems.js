@@ -94,7 +94,7 @@ wordProblems.ViewHelper = (function() {
   ViewHelper.prototype.initOperators = function() {
     var operator, _i, _len, _ref1, _results,
       _this = this;
-    _ref1 = ['+', '-', '/', '*'];
+    _ref1 = ['+', '-', '/', '*', '?'];
     _results = [];
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       operator = _ref1[_i];

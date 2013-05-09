@@ -52,7 +52,7 @@ class wordProblems.ViewHelper
         )
         
     initOperators: ->
-        for operator in ['+', '-', '/', '*']
+        for operator in ['+', '-', '/', '*', '?']
             @operators.push(new wordProblems.Operator
                 value: operator
                 container: @$('.numbers')
