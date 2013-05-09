@@ -1,15 +1,16 @@
 number = exports ? provide('./number', {})
-Transformer = require('../common_objects/transformer').Transformer
-Client = require('../common_objects/client').Client
+Component = require('./component').Component
 
-class number.Number
-    constructor: ({@container, @problemNumber, @id, @value, @colorIndex, @label, @drag}) ->
+class number.Number extends Component
+    constructor: ({@id, @value, @colorIndex, @label, @problemNumber, container, drag}) ->
+        super(container: container, drag: drag)
         @init()
+        @initClick()
         
-    $: (selector) -> @el.find(selector)    
-    
+        @draggable = @el
+        @initDrag()
+        
     init: ->    
-        @el = $(document.createElement('DIV'))
         @el.data('id', @id)
         @el.addClass('number')
         @el.addClass("color_#{@colorIndex}")
@@ -24,30 +25,15 @@ class number.Number
             <div class='ranges'></div>
         """
 
-        @transformer = new Transformer(@el)
-        @el.bind 'mousedown.drag touchstart.drag', (e) =>
-            startX = Client.x(e)
-            startY = Client.y(e)
-
-            $(document.body).bind 'mousemove.drag touchstart.drag', (e) =>
-                currentX = Client.x(e)
-                currentY = Client.y(e)
-                @transformer.translate(currentX - startX, currentY - startY)
-                @drag(@, currentX, currentY)
-
-            $(document.body).one 'mouseup.drag touchend.drag',(e) =>
-                $(document.body).unbind 'mousemove.drag touchstart.drag'
-                if not @transformer.dx and not @transformer.dy
-                    @el.removeClass('small') if @el.hasClass('small')
-                        
-                else
-                    @drag(@, Client.x(e), Client.y(e), true)
-                    @transformer.translate(0, 0)
-                    
         @el.find('.icon-caret-up').bind 'click', => @el.addClass('small')
 
-        @container.append(@el)
         @set(@value)
+        
+    initClick: ->
+        @el.bind 'mousedown.enlarge touchstart.enlarge', (e) =>
+            $(document.body).one 'mouseup.enlarge touchend.enlarge',(e) =>
+                unless @transformer.dx or @transformer.dy
+                    @el.removeClass('small') if @el.hasClass('small')
 
     createRange: (magnitude) ->
         range = $(document.createElement('DIV'))

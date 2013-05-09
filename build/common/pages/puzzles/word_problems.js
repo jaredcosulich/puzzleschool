@@ -17,8 +17,10 @@ soma.chunks({
       this.template = this.loadTemplate("/build/common/templates/puzzles/word_problems.html");
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/transformer.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/client.js');
-      this.loadScript('/build/common/pages/puzzles/lib/word_problem_objects/interaction.js');
+      this.loadScript('/build/common/pages/puzzles/lib/word_problem_objects/component.js');
+      this.loadScript('/build/common/pages/puzzles/lib/word_problem_objects/operator.js');
       this.loadScript('/build/common/pages/puzzles/lib/word_problem_objects/number.js');
+      this.loadScript('/build/common/pages/puzzles/lib/word_problem_objects/interaction.js');
       this.loadScript('/build/common/pages/puzzles/lib/word_problem_objects/index.js');
       this.loadScript('/build/common/pages/puzzles/lib/word_problems.js');
       return this.loadStylesheet('/build/client/css/puzzles/word_problems.css');

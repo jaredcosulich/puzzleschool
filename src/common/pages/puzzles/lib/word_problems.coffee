@@ -5,10 +5,12 @@ for name, fn of require('./word_problem_objects/index')
 
 class wordProblems.ViewHelper    
     constructor: ({@el, @level}) ->
+        @operators = []
         @numbers = []
         @interactions = []
         @addInteraction()
         @initLevel(@level)
+        @initOperators()
         
     $: (selector) -> @el.find(selector)    
     
@@ -28,16 +30,16 @@ class wordProblems.ViewHelper
             number.addClass("color_#{colorIndex}")
             number.addClass("number_#{id}")
             @numbers.push(new wordProblems.Number
-                container: @$('.numbers')
-                problemNumber: @$(".problem .number_#{id}")
                 id: id
                 value: number.html()
                 colorIndex: colorIndex
                 label: settings?.label
-                drag: (n, x, y, final) => @dragNumber(n, x, y, final)
+                problemNumber: @$(".problem .number_#{id}")
+                container: @$('.numbers')
+                drag: (component, x, y, final) => @dragComponent(component, x, y, final)
             )
         
-    dragNumber: (number, x, y, final) ->
+    dragComponent: (number, x, y, final) ->
         @el.addClass('dragging') unless @el.hasClass('dragging')
         @el.removeClass('dragging') if final
         
@@ -48,3 +50,11 @@ class wordProblems.ViewHelper
         @interactions.push(new wordProblems.Interaction
             container: @$('.interactions')
         )
+        
+    initOperators: ->
+        for operator in ['+', '-', '/', '*']
+            @operators.push(new wordProblems.Operator
+                value: operator
+                container: @$('.numbers')
+                drag: (component, x, y, final) => @dragComponent(component, x, y, final)
+            )

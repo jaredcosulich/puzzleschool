@@ -13,10 +13,12 @@ wordProblems.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     this.el = _arg.el, this.level = _arg.level;
+    this.operators = [];
     this.numbers = [];
     this.interactions = [];
     this.addInteraction();
     this.initLevel(this.level);
+    this.initOperators();
   }
 
   ViewHelper.prototype.$ = function(selector) {
@@ -46,21 +48,21 @@ wordProblems.ViewHelper = (function() {
       number.addClass("color_" + colorIndex);
       number.addClass("number_" + id);
       _results.push(this.numbers.push(new wordProblems.Number({
-        container: this.$('.numbers'),
-        problemNumber: this.$(".problem .number_" + id),
         id: id,
         value: number.html(),
         colorIndex: colorIndex,
         label: settings != null ? settings.label : void 0,
-        drag: function(n, x, y, final) {
-          return _this.dragNumber(n, x, y, final);
+        problemNumber: this.$(".problem .number_" + id),
+        container: this.$('.numbers'),
+        drag: function(component, x, y, final) {
+          return _this.dragComponent(component, x, y, final);
         }
       })));
     }
     return _results;
   };
 
-  ViewHelper.prototype.dragNumber = function(number, x, y, final) {
+  ViewHelper.prototype.dragComponent = function(number, x, y, final) {
     var interaction, _i, _len, _ref1, _results;
     if (!this.el.hasClass('dragging')) {
       this.el.addClass('dragging');
@@ -87,6 +89,24 @@ wordProblems.ViewHelper = (function() {
     return this.interactions.push(new wordProblems.Interaction({
       container: this.$('.interactions')
     }));
+  };
+
+  ViewHelper.prototype.initOperators = function() {
+    var operator, _i, _len, _ref1, _results,
+      _this = this;
+    _ref1 = ['+', '-', '/', '*'];
+    _results = [];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      operator = _ref1[_i];
+      _results.push(this.operators.push(new wordProblems.Operator({
+        value: operator,
+        container: this.$('.numbers'),
+        drag: function(component, x, y, final) {
+          return _this.dragComponent(component, x, y, final);
+        }
+      })));
+    }
+    return _results;
   };
 
   return ViewHelper;

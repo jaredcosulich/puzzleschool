@@ -22,12 +22,27 @@
   -ms-user-select: none;
   user-select: none;
 }
+.word_problems .numbers .operator {
+  float: left;
+  margin-left: 12px;
+  cursor: move;
+  border: 1px solid #262626;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding: 6px 12px;
+  clear: left;
+  margin-bottom: 12px;
+}
 .word_problems .numbers .number {
   width: 510px;
   border: 1px solid #262626;
   margin: 0 auto 12px auto;
   clear: left;
   background-color: #fafafa;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 .word_problems .numbers .number h3 {
   padding: 6px 15px;
@@ -40,6 +55,9 @@
 .word_problems .numbers .number .settings i {
   cursor: pointer;
   padding-left: 6px;
+}
+.word_problems .numbers .number .settings .icon-move {
+  cursor: move;
 }
 .word_problems .numbers .number .range {
   padding: 6px 0;

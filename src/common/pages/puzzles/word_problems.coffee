@@ -11,8 +11,10 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/common_objects/transformer.js'
             @loadScript '/build/common/pages/puzzles/lib/common_objects/client.js'
 
-            @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/interaction.js'
+            @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/component.js'
+            @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/operator.js'
             @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/number.js'
+            @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/interaction.js'
             @loadScript '/build/common/pages/puzzles/lib/word_problem_objects/index.js'
             
             @loadScript '/build/common/pages/puzzles/lib/word_problems.js'

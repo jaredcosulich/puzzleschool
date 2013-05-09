@@ -26,12 +26,24 @@
         float: left;
         .no_select();
         
+        .operator {
+            float: left;
+            margin-left: 12px;
+            cursor: move;
+            border: 1px solid @black;            
+            .rounded(3px);
+            padding: 6px 12px;
+            clear: left;
+            margin-bottom: 12px;
+        }
+        
         .number {
             width: 510px;
             border: 1px solid @black;            
             margin: 0 auto 12px auto;
             clear: left;
             background-color: @white;
+            .rounded(3px);
             
             h3 {
                 padding: 6px 15px;
@@ -44,6 +56,10 @@
                 i {
                     cursor: pointer;
                     padding-left: 6px;
+                }
+                
+                .icon-move {
+                    cursor: move;
                 }
             }
             .range {
