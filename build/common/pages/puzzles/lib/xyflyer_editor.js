@@ -18,6 +18,8 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.init = function() {
     var asset, editor, index, _ref,
       _this = this;
+    this.$('.explanation, .launch_button').hide();
+    this.$('.editor_explanation').show();
     this.variables || (this.variables = {});
     this.rings = [];
     this.assets || (this.assets = {});
@@ -238,6 +240,10 @@ xyflyerEditor.EditorHelper = (function() {
               }
             }
             _this.equations.remove(equation);
+            if (!_this.equations.equations.length) {
+              _this.$('.explanation, .launch_button').hide();
+              _this.$('.editor_explanation').show();
+            }
             return _this.handleModification();
           });
         })(equation));
@@ -396,6 +402,8 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.actuallyAddEquation = function(equationString, start, solutionComponents) {
     var accept, c, component, equation, solutionComponent, _i, _len, _ref,
       _this = this;
+    this.$('.explanation, .launch_button').show();
+    this.$('.editor_explanation').hide();
     equation = this.equations.add(equationString, start, solutionComponents, this.variables);
     _ref = solutionComponents || [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {

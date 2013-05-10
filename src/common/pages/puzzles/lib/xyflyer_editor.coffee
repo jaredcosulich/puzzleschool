@@ -8,6 +8,9 @@ class xyflyerEditor.EditorHelper
         @init()
         
     init: ->
+        @$('.explanation, .launch_button').hide()
+        @$('.editor_explanation').show()
+        
         @variables or= {}
         @rings = []
         @assets or= {}
@@ -157,6 +160,10 @@ class xyflyerEditor.EditorHelper
                         e.el.unbind('mousedown.remove') for e in @equations.equations
                         dropArea.component?.reset() for dropArea in equation.dropAreas                             
                         @equations.remove(equation)
+                        if not @equations.equations.length 
+                            @$('.explanation, .launch_button').hide()
+                            @$('.editor_explanation').show()
+                            
                         @handleModification()
 
         @$('.editor .add_fragment').bind 'click', =>
@@ -255,6 +262,8 @@ class xyflyerEditor.EditorHelper
             @actuallyAddEquation(equationString, start, solutionComponents)
             
     actuallyAddEquation: (equationString, start, solutionComponents) -> 
+        @$('.explanation, .launch_button').show()
+        @$('.editor_explanation').hide()
         equation = @equations.add(equationString, start, solutionComponents, @variables)  
         for solutionComponent in (solutionComponents or [])
             component = (c for c in @equations.equationComponents when c.equationFragment == solutionComponent.fragment)[0]

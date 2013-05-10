@@ -680,6 +680,9 @@ body {
 .xyflyer .dialog a {
   margin-top: 12px;
 }
+.xyflyer .editor_explanation {
+  text-align: center;
+}
 .toggle_instructions {
   cursor: pointer;
   position: absolute;
