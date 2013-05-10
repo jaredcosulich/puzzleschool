@@ -129,7 +129,7 @@ body {
                 }
             }
             
-            .menu {
+            .menu, .editor_link {
                 position: absolute;
                 right: 6px;
                 top: 6px;
@@ -137,6 +137,10 @@ body {
                 a {
                     color: white;
                 }
+            }
+            
+            .menu {
+                right: 42px;
             }
         
             .equations {
@@ -546,6 +550,10 @@ body {
     .grey_button {
         .button-color(@grey)
     }
+    
+    .red_button {
+        .button-color(@red)
+    }
         
     .objects {
         position: absolute;
@@ -555,8 +563,8 @@ body {
        
     .editor {
         position: absolute;
-        top: 390px;
-        left: 600px;
+        top: 342px;
+        left: 248px;
         background-color: white;
         padding: 15px 30px;
         .rounded(6px);
@@ -568,7 +576,12 @@ body {
             margin-bottom: 12px;
         }
         p {
+            margin: 0;
+            padding: 3px 0;
+        }
+        a {
             font-size: @smallsize;
+            padding: 6px;
         }
     }
     
@@ -583,6 +596,9 @@ body {
                 cursor: pointer;
                 vertical-align: middle;
             }
+        }
+        a {
+            margin-top: 12px;
         }
     }
 }

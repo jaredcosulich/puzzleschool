@@ -379,7 +379,7 @@ class xyflyerEditor.EditorHelper
         
         html += """
             </tr></tbody></table>
-            <a class='blue_button cancel_button'>Cancel</a>
+            <a class='red_button cancel_button'>Cancel</a>
         """
         dialog = @createDialog(html)
         for image in dialog.find('img')
@@ -417,7 +417,7 @@ class xyflyerEditor.EditorHelper
         dialog = @createDialog """
             <h3>#{text}</h3>
             <table><tbody><tr></tr></tbody></table>
-            <button class='button'>Save</button> &nbsp; <a class='blue_button cancel_button'>Cancel</a>
+            <a class='blue_button'>Save</a> &nbsp; <a class='red_button cancel_button'>Cancel</a>
         """
         
         for fieldInfo in fields

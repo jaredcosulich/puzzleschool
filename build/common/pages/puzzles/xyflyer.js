@@ -359,8 +359,10 @@ soma.views({
         ring = _ref6[_j];
         this.helper.addRing(ring.x, ring.y);
       }
-      this.$('.world_index').html("" + (this.currentWorld() + 1));
-      this.$('.level_index').html("" + (this.worldLevelIndex()));
+      if (this.level) {
+        this.$('.world_index').html("" + (this.currentWorld() + 1));
+        this.$('.level_index').html("" + (this.worldLevelIndex()));
+      }
       this.selectWorld(this.currentWorld());
       if (window._gaq && this.level) {
         this.level.startTime = new Date();

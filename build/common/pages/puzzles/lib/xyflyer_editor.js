@@ -634,7 +634,7 @@ xyflyerEditor.EditorHelper = (function() {
       img = $(".objects ." + name + index + " img");
       html += "<td><div class='image'><img src='" + (img.attr('src')) + "' style='opacity: 0'/></div></td>";
     }
-    html += "</tr></tbody></table>\n<a class='blue_button cancel_button'>Cancel</a>";
+    html += "</tr></tbody></table>\n<a class='red_button cancel_button'>Cancel</a>";
     dialog = this.createDialog(html);
     _ref = dialog.find('img');
     for (_j = 0, _len = _ref.length; _j < _len; _j++) {
@@ -681,7 +681,7 @@ xyflyerEditor.EditorHelper = (function() {
     var callback, dialog, fieldInfo, fields, lastRow, text, _i, _len,
       _this = this;
     text = _arg.text, fields = _arg.fields, callback = _arg.callback;
-    dialog = this.createDialog("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<button class='button'>Save</button> &nbsp; <a class='blue_button cancel_button'>Cancel</a>");
+    dialog = this.createDialog("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<a class='blue_button'>Save</a> &nbsp; <a class='red_button cancel_button'>Cancel</a>");
     for (_i = 0, _len = fields.length; _i < _len; _i++) {
       fieldInfo = fields[_i];
       if (!fieldInfo.length) {

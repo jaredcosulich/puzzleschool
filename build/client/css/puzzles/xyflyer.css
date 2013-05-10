@@ -93,14 +93,19 @@ body {
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment.only_area {
   width: 251px;
 }
-.xyflyer .dynamic_content .equation_area .menu {
+.xyflyer .dynamic_content .equation_area .menu,
+.xyflyer .dynamic_content .equation_area .editor_link {
   position: absolute;
   right: 6px;
   top: 6px;
   padding: 3px 6px;
 }
-.xyflyer .dynamic_content .equation_area .menu a {
+.xyflyer .dynamic_content .equation_area .menu a,
+.xyflyer .dynamic_content .equation_area .editor_link a {
   color: white;
+}
+.xyflyer .dynamic_content .equation_area .menu {
+  right: 42px;
 }
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 60px;
@@ -602,6 +607,35 @@ body {
   position: relative;
   top: 1px;
 }
+.xyflyer .red_button {
+  -moz-box-shadow: inset 0px 1px 0px 0px #ff9c92;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #ff9c92;
+  box-shadow: inset 0px 1px 0px 0px #ff9c92;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff6e5f), color-stop(1, #ff402c));
+  background: -moz-linear-gradient(center top, #ff6e5f 5%, #ff402c 100%);
+  background-color: #ff6e5f;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #ff6e5f;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #ff6e5f;
+  margin: auto;
+}
+.xyflyer .red_button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff9c92), color-stop(1, #ff6e5f));
+  background: -moz-linear-gradient(center top, #ff9c92 5%, #ff6e5f 100%);
+  background-color: #ff6e5f;
+}
+.xyflyer .red_button:active {
+  position: relative;
+  top: 1px;
+}
 .xyflyer .objects {
   position: absolute;
   top: -10000px;
@@ -609,8 +643,8 @@ body {
 }
 .xyflyer .editor {
   position: absolute;
-  top: 390px;
-  left: 600px;
+  top: 342px;
+  left: 248px;
   background-color: white;
   padding: 15px 30px;
   -webkit-border-radius: 6px;
@@ -625,7 +659,12 @@ body {
   margin-bottom: 12px;
 }
 .xyflyer .editor p {
+  margin: 0;
+  padding: 3px 0;
+}
+.xyflyer .editor a {
   font-size: 11px;
+  padding: 6px;
 }
 .xyflyer .dialog .image {
   width: 160px;
@@ -637,6 +676,9 @@ body {
 .xyflyer .dialog .image img {
   cursor: pointer;
   vertical-align: middle;
+}
+.xyflyer .dialog a {
+  margin-top: 12px;
 }
 .toggle_instructions {
   cursor: pointer;

@@ -51,11 +51,21 @@
     <div class='dynamic_content' {:noBackground}style="background-image: url('/assets/images/puzzles/xyflyer/background1.jpg')"{!noBackground}>
         <div class='board' id='board'></div>
         <div class='equation_area'>
-            <h4 class='menu grey_button' style='right: 42px;'><a>Menu</a></h4>
-            <h4 class='menu grey_button'><a class='icon-pencil'></a></h4>
+            {!editor}
+            <h4 class='menu grey_button'><a>Menu</a></h4>
+            <h4 class='editor_link grey_button'><a class='icon-pencil' href='/puzzles/xyflyer/editor' target='_blank'></a></h4>
+            {/editor}
+            {:editor}
+            <h4 class='editor_link grey_button'><a>Menu</a></h4>
+            {/editor}
             
             <div class='equations'>
+                {!editor}
                 <h3>World <span class='world_index'></span>, Level <span class='level_index'></span></h3>
+                {/editor}
+                {:editor}
+                <h3>Custom Level</h3>
+                {/editor}
                 <div class='explanation'>Complete the equation to launch the plane!</div>
             </div>
             <div class='launch_button'><a class='launch button go'>Launch!</a></div>
@@ -64,6 +74,9 @@
                 <div class='fragments'></div>
                 {!editor}
                 <p>Drag and drop these to complete the equations above.</p>
+                {/editor}
+                {:editor}
+                <p>Create equation fragments to add to your equation.</p>
                 {/editor}
             </div>
 

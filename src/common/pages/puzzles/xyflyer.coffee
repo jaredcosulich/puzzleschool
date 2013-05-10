@@ -243,8 +243,9 @@ soma.views
             for ring in @level?.rings or []
                 @helper.addRing(ring.x, ring.y)
             
-            @$('.world_index').html("#{@currentWorld() + 1}")
-            @$('.level_index').html("#{@worldLevelIndex()}")
+            if @level
+                @$('.world_index').html("#{@currentWorld() + 1}")
+                @$('.level_index').html("#{@worldLevelIndex()}")
             
             @selectWorld(@currentWorld())
             if window._gaq and @level
