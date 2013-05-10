@@ -385,7 +385,8 @@ soma.views({
         _this = this;
       this.$('.board').hide();
       equationArea = this.$('.equation_area');
-      equationArea.html(this.$("." + type + "_message").html());
+      equationArea.html('');
+      equationArea.append(this.$("." + type + "_message"));
       equationArea.css({
         padding: '0 12px',
         textAlign: 'center'

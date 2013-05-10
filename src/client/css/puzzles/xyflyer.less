@@ -11,6 +11,37 @@ body {
 
 @darken: 10%;
 
+
+.button-color(@color) {
+    -moz-box-shadow:inset 0px 1px 0px 0px lighten(@color, @darken);
+    -webkit-box-shadow:inset 0px 1px 0px 0px lighten(@color, @darken);
+    box-shadow:inset 0px 1px 0px 0px lighten(@color, @darken);
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @color), color-stop(1, darken(@color, @darken)) );
+    background:-moz-linear-gradient( center top, @color 5%, darken(@color, @darken) 100% );
+    background-color:@color;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid @color;
+    display:inline-block;
+    color: @white;
+    font-family:arial;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px @color;
+    margin: auto;
+    &:hover {
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, lighten(@color, @darken)), color-stop(1, @color) );
+        background:-moz-linear-gradient( center top, lighten(@color, @darken) 5%, @color 100% );
+        background-color:@color;
+    }
+    &:active {
+        position:relative;
+        top:1px;
+    }
+}
+
 .xyflyer {
     height: @height;
     width: @width;
@@ -60,7 +91,20 @@ body {
                 text-align: center;
                 padding-top: 6px;
             }
-        
+            
+            .intro_message {
+                h2 {
+                    padding-top: 60px;
+                }
+                p {
+                    padding: 15px 30px;
+                    font-size: @h3size;
+                }
+                .button {
+                    font-size: @h3size;
+                }
+            }
+            
             &.show_places {
                 .accept_fragment {
                      border-bottom: 2px solid @yellow;
@@ -87,9 +131,12 @@ body {
             
             .menu {
                 position: absolute;
-                right: 0;
-                top: 3px;
-                padding: 6px;
+                right: 6px;
+                top: 6px;
+                padding: 3px 6px;
+                a {
+                    color: white;
+                }
             }
         
             .equations {
@@ -260,37 +307,8 @@ body {
         }
     
         .button {
-            font-size: @h4size;
-            -moz-box-shadow:inset 0px 1px 0px 0px darken(#f29c93, @darken);
-            -webkit-box-shadow:inset 0px 1px 0px 0px darken(#f29c93, @darken);
-            box-shadow:inset 0px 1px 0px 0px darken(#f29c93, @darken);
-            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, darken(#fe1a00, @darken)), color-stop(1, darken(#ce0100, @darken)) );
-            background:-moz-linear-gradient( center top, darken(#fe1a00, @darken) 5%, darken(#ce0100, @darken) 100% );
-            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-            background-color:darken(#fe1a00, @darken);
-            -moz-border-radius:6px;
-            -webkit-border-radius:6px;
-            border-radius:6px;
-            border:1px solid darken(#d83526, @darken);
-            display:inline-block;
-            color: @white;
-            font-family:arial;
-            font-size:15px;
-            font-weight:bold;
-            padding:6px 24px;
-            text-decoration:none;
-            text-shadow:1px 1px 0px darken(#b23e35, @darken);
-            margin: auto;
-            &:hover {
-                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00) );
-                background:-moz-linear-gradient( center top, #ce0100 5%, #fe1a00 100% );
-                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
-                background-color:#ce0100;
-            }
-            &:active {
-                position:relative;
-                top:1px;
-            }
+            font-size: @h3size;
+            .button-color(@blue);
         }
 
         .equation_component {
@@ -311,6 +329,7 @@ body {
             padding: 12px 0;
             bottom: 0;
             left: 75px;
+            text-align: center;
         }
         .hint_popup {
             position: absolute;
@@ -388,32 +407,48 @@ body {
         }
 
     }
-
-    .complete, .intro_message, .exit_message {
-        position: absolute;
-        top: -1000px;
-        left: -1000px;
-        background-color: white;
-        padding: 30px 60px;
-        text-align: center;
-        z-index: 98;
-        .rounded(6px);
-    }
-
+    
     .level_selector {
         position: absolute;
         top: -1000px;
         left: -1000px;
         opacity: 0;
         background-color: @white;
-        border: 2px solid @darkred;
+        .rounded(12px);
         width: 570px;
         height: 480px;
-        overflow: auto;
         padding: 12px;
         z-index: 99;
         .no_select();
-    
+        .box-shadow(3px 3px 12px lighten(@black, 25%));
+        
+        &:after {
+            background-color: @white;
+            width: 570px;
+            height: 480px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            content: "\00a0";
+            display: block;
+            .rounded(12px);
+            padding: 12px;
+        }
+        
+        &:before {
+            background-color: lighten(@black, 25%);
+            opacity: 0.5;
+            height: @height;
+            width: @width;
+            content: "\00a0";
+            display: block;
+            position: absolute;
+            top: -60px;
+            left: -183px;
+            z-index: -2;
+        }
+        
         .close {
             float: right;
             margin: -6px -6px 0 0;
@@ -494,7 +529,7 @@ body {
         padding: 3px 6px;
         .rounded(6px);
         color: white;
-        .box-shadow(2px)
+        .box-shadow(2px);
     }
 
     .blue_button {
@@ -511,8 +546,10 @@ body {
         }
     }
 
-    
-    
+    .grey_button {
+        .button-color(@grey)
+    }
+        
     .objects {
         position: absolute;
         top: -10000px;

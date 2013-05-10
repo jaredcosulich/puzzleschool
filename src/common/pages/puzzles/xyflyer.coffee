@@ -266,7 +266,8 @@ soma.views
         showMessage: (type) ->
             @$('.board').hide()
             equationArea = @$('.equation_area')
-            equationArea.html(@$(".#{type}_message").html())
+            equationArea.html('')
+            equationArea.append(@$(".#{type}_message"))
             equationArea.css(padding: '0 12px', textAlign: 'center')
             equationArea.find('.button').bind 'click', => @showLevelSelector() 
                 

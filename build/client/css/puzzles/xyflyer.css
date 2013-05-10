@@ -66,6 +66,16 @@ body {
   text-align: center;
   padding-top: 6px;
 }
+.xyflyer .dynamic_content .equation_area .intro_message h2 {
+  padding-top: 60px;
+}
+.xyflyer .dynamic_content .equation_area .intro_message p {
+  padding: 15px 30px;
+  font-size: 18px;
+}
+.xyflyer .dynamic_content .equation_area .intro_message .button {
+  font-size: 18px;
+}
 .xyflyer .dynamic_content .equation_area.show_places .accept_fragment {
   border-bottom: 2px solid #ffbd2a;
   width: 12px;
@@ -85,9 +95,12 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .menu {
   position: absolute;
-  right: 0;
-  top: 3px;
-  padding: 6px;
+  right: 6px;
+  top: 6px;
+  padding: 3px 6px;
+}
+.xyflyer .dynamic_content .equation_area .menu a {
+  color: white;
 }
 .xyflyer .dynamic_content .equation_area .equations {
   margin-top: 12px;
@@ -259,33 +272,30 @@ body {
   cursor: pointer;
 }
 .xyflyer .dynamic_content .button {
-  font-size: 15px;
-  -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
-  -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
-  box-shadow: inset 0px 1px 0px 0px #ed7265;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #cb1500), color-stop(1, #9b0100));
-  background: -moz-linear-gradient(center top, #cb1500 5%, #9b0100 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-  background-color: #cb1500;
+  font-size: 18px;
+  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
+  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
+  background-color: #24aac3;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-  border: 1px solid #ad2a1e;
+  border: 1px solid #24aac3;
   display: inline-block;
   color: #fafafa;
   font-family: arial;
-  font-size: 15px;
   font-weight: bold;
   padding: 6px 24px;
   text-decoration: none;
-  text-shadow: 1px 1px 0px #8b3029;
+  text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
 }
 .xyflyer .dynamic_content .button:hover {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00));
-  background: -moz-linear-gradient(center top, #ce0100 5%, #fe1a00 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
-  background-color: #ce0100;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
+  background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
+  background-color: #24aac3;
 }
 .xyflyer .dynamic_content .button:active {
   position: relative;
@@ -316,6 +326,7 @@ body {
   padding: 12px 0;
   bottom: 0;
   left: 75px;
+  text-align: center;
 }
 .xyflyer .dynamic_content .hint_popup {
   position: absolute;
@@ -400,30 +411,17 @@ body {
   width: 240px;
   height: 30px;
 }
-.xyflyer .complete,
-.xyflyer .intro_message,
-.xyflyer .exit_message {
-  position: absolute;
-  top: -1000px;
-  left: -1000px;
-  background-color: white;
-  padding: 30px 60px;
-  text-align: center;
-  z-index: 98;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-}
 .xyflyer .level_selector {
   position: absolute;
   top: -1000px;
   left: -1000px;
   opacity: 0;
   background-color: #fafafa;
-  border: 2px solid #a61c0e;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
   width: 570px;
   height: 480px;
-  overflow: auto;
   padding: 12px;
   z-index: 99;
   -webkit-touch-callout: none;
@@ -432,6 +430,36 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  box-shadow: 3px 3px 12px #666666;
+  -webkit-box-shadow: 3px 3px 12px #666666;
+  -moz-box-shadow: 3px 3px 12px #666666;
+}
+.xyflyer .level_selector:after {
+  background-color: #fafafa;
+  width: 570px;
+  height: 480px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  content: "\00a0";
+  display: block;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  padding: 12px;
+}
+.xyflyer .level_selector:before {
+  background-color: #666666;
+  opacity: 0.5;
+  height: 640px;
+  width: 960px;
+  content: "\00a0";
+  display: block;
+  position: absolute;
+  top: -60px;
+  left: -183px;
+  z-index: -2;
 }
 .xyflyer .level_selector .close {
   float: right;
@@ -524,6 +552,35 @@ body {
 }
 .xyflyer .red_button:active {
   background-color: #f81700;
+}
+.xyflyer .grey_button {
+  -moz-box-shadow: inset 0px 1px 0px 0px #adadad;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #adadad;
+  box-shadow: inset 0px 1px 0px 0px #adadad;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #949494), color-stop(1, #7a7a7a));
+  background: -moz-linear-gradient(center top, #949494 5%, #7a7a7a 100%);
+  background-color: #949494;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #949494;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #949494;
+  margin: auto;
+}
+.xyflyer .grey_button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #adadad), color-stop(1, #949494));
+  background: -moz-linear-gradient(center top, #adadad 5%, #949494 100%);
+  background-color: #949494;
+}
+.xyflyer .grey_button:active {
+  position: relative;
+  top: 1px;
 }
 .xyflyer .objects {
   position: absolute;
