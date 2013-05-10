@@ -55,14 +55,15 @@
             <h4 class='menu grey_button'><a class='icon-pencil'></a></h4>
             
             <div class='equations'>
-                <h4>Equations</h4>
+                <h3>World 1, Level 10</h3>
+                <div class='explanation'>Complete the equation to launch the plane!</div>
             </div>
             <div class='launch_button'><a class='launch button go'>Launch!</a></div>
         
             <div class='possible_fragments'>
+                <div class='fragments'></div>
                 {!editor}
-                <h4>Equation Fragments</h4>
-                <p>Drag these equation fragments and drop them in the equation above.</p>
+                <p>Drag and drop these to complete the equations above.</p>
                 {/editor}
             </div>
 
@@ -88,7 +89,7 @@
             <div class='hints'>
                 Can't Figure It Out?
                 <h4>
-                    <a class='hint grey_button'>Reveal A Step</a>
+                    <a class='hint blue_button'>Reveal A Step</a>
                 </h4> 
             </div>
             <div class='hint_popup'>
@@ -134,18 +135,17 @@
     <div class='intro_message'>
         <h2>Welcome To XYFlyer</h2>
         <p>Plot a course for your airplane through the hoops.</p>
-        <a class='button go'>Go Fly</a>
+        <a class='button go'><h1>Go Fly</h1></a>
         <br/><br/><br/><br/>
         <hr/>
         <br/>
-        <p>Make and share your own levels using our custom level editor.</p>
-        <p><a class='grey_button icon-pencil' href='/puzzles/xyflyer/editor'> Level Editor</a></p>
+        <p>Make and share your own levels using our custom level creator.</p>
+        <a class='grey_button' href='/puzzles/xyflyer/editor'><i class='icon-pencil'></i> Level Maker</a>
     </div>
         
     <div class='level_selector'>
         <a class='close icon-remove-sign'></a>
-        <h3 class='success'>Nice Work. Level Complete!</h3>
-        <h3>Select The Next Level</h3>
+        <h2>Select The Next Level</h2>
         <div class='world_links'>
             {:worlds}
             <div class='world_link' data-world={index}>
@@ -157,7 +157,7 @@
         <div class='world'>
             {:stages}
             <div class='stage'>
-                <h4>{name}</h4>
+                <h3>{name}</h3>
                 <br/>
                 {:levels}<a class='level' id='level_{id}' data-id={id}></a>{/levels}
             </div>

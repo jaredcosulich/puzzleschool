@@ -71,7 +71,7 @@ class equationComponent.EquationComponent
         
     showPlaceHolder: ->
         @placeHolder.show()
-        @placeHolder.html(@display(@element.html()))           
+        @placeHolder.html(@display(@element.html()))     
         @placeHolder.css
             position: 'absolute'
             top: @offset.top - @container.offset().top

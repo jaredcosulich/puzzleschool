@@ -84,7 +84,7 @@ equations.Equations = (function() {
         return _this.endComponentDragging(component);
       }
     });
-    equationComponent.appendTo(this.possibleFragments);
+    equationComponent.appendTo(this.possibleFragments.find('.fragments'));
     this.equationComponents.push(equationComponent);
     top = 0;
     first = this.equationComponents[0];

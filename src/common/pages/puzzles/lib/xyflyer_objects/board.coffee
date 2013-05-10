@@ -361,7 +361,7 @@ class board.Board extends xyflyerObject.Object
 
         @resetLevel()
         @cancelCalculation()
-        @calculatedPathTimeout = $.timeout(100, => @calculatedPath = @calculatePath())
+        @calculatedPathTimeout = $.timeout(250, => @calculatedPath = @calculatePath())
             
     cancelCalculation: ->
         clearTimeout(@calculatedPathTimeout) if @calculatedPathTimeout

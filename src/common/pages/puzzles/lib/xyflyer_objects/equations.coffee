@@ -54,7 +54,7 @@ class equations.Equations
             trackDrag: (left, top, width, height, component) => @trackComponentDragging(left, top, width, height, component)
             endDrag: (component) => @endComponentDragging(component)
 
-        equationComponent.appendTo(@possibleFragments)
+        equationComponent.appendTo(@possibleFragments.find('.fragments'))
         @equationComponents.push(equationComponent)
 
         top = 0

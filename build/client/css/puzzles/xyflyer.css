@@ -21,15 +21,15 @@ body {
   user-select: none;
 }
 .xyflyer .dynamic_content.dragging .dragging {
-  box-shadow: 4px 5px 4px #b69c63;
-  -webkit-box-shadow: 4px 5px 4px #b69c63;
-  -moz-box-shadow: 4px 5px 4px #b69c63;
-  box-shadow: 5px 5px 4px #b69c63 2;
-  -webkit-box-shadow: 5px 5px 4px #b69c63 2;
-  -moz-box-shadow: 5px 5px 4px #b69c63 2;
-  box-shadow: 5px 6px 5px #b69c63;
-  -webkit-box-shadow: 5px 6px 5px #b69c63;
-  -moz-box-shadow: 5px 6px 5px #b69c63;
+  box-shadow: 4px 5px 4px #262626;
+  -webkit-box-shadow: 4px 5px 4px #262626;
+  -moz-box-shadow: 4px 5px 4px #262626;
+  box-shadow: 5px 5px 4px #262626;
+  -webkit-box-shadow: 5px 5px 4px #262626;
+  -moz-box-shadow: 5px 5px 4px #262626;
+  box-shadow: 5px 6px 5px #262626;
+  -webkit-box-shadow: 5px 6px 5px #262626;
+  -moz-box-shadow: 5px 6px 5px #262626;
   cursor: move;
   overflow: hidden;
 }
@@ -43,11 +43,11 @@ body {
   position: absolute;
 }
 .xyflyer .dynamic_content .equation_area {
-  background-color: white;
+  background-color: #fafafa;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
-  opacity: 0.8;
+  opacity: 0.95;
   width: 357px;
   height: 634px;
   margin: 3px 3px 0 0;
@@ -103,15 +103,19 @@ body {
   color: white;
 }
 .xyflyer .dynamic_content .equation_area .equations {
-  margin-top: 12px;
+  margin-top: 60px;
 }
-.xyflyer .dynamic_content .equation_area .equations h4 {
+.xyflyer .dynamic_content .equation_area .equations h3 {
   text-align: center;
   margin-bottom: 6px;
 }
+.xyflyer .dynamic_content .equation_area .equations .explanation {
+  font-size: 11px;
+  text-align: center;
+}
 .xyflyer .dynamic_content .equation_area .equations .equation_container {
   overflow: hidden;
-  margin-bottom: 12px;
+  padding: 12px 0;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .intro {
   float: left;
@@ -124,6 +128,7 @@ body {
   padding: 0 3px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation {
+  background-color: white;
   padding: 0 6px;
   margin-right: 6px;
   color: #c7c7c7;
@@ -131,6 +136,7 @@ body {
   position: relative;
   overflow: hidden;
   line-height: 30px;
+  height: 32px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.starting_fragment,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation.with_component,
@@ -241,13 +247,21 @@ body {
   text-align: center;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments {
-  margin-top: 30px;
+  background-color: #c7c7c7;
+  margin: 30px 12px 0 12px;
   padding: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
   text-align: center;
+}
+.xyflyer .dynamic_content .equation_area .possible_fragments .fragments {
   position: relative;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
   font-size: 11px;
+  clear: left;
+  padding-top: 12px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
   padding: 6px;
@@ -262,14 +276,15 @@ body {
   transform-style: preserve-3d;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .place_holder {
-  padding: 6px 9px;
-  color: #c7c7c7;
-  border: 1px solid #c7c7c7;
+  padding: 12px 9px 0 9px;
+  color: white;
+  border: 1px solid white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   background: url('/assets/images/puzzles/xyflyer/fragment_down_arrow.png') no-repeat top center;
   cursor: pointer;
+  font-size: 18px;
 }
 .xyflyer .dynamic_content .button {
   font-size: 18px;
@@ -302,30 +317,30 @@ body {
   top: 1px;
 }
 .xyflyer .dynamic_content .equation_component {
+  font-weight: bold;
+  font-size: 18px;
   padding: 6px 9px;
   border: 1px solid #949494;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   cursor: move;
-  background: -webkit-gradient(linear, right bottom, left top, color-stop(0.5, #dec48b), color-stop(0.7, #e6cc93));
-  background: -moz-linear-gradient(center top, #dec48b 50%, #e6cc93 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='rgb(222,196,139)', endColorstr='rgb(230,204,147)');
-  box-shadow: 0 1px 0 #b69c63;
-  -webkit-box-shadow: 0 1px 0 #b69c63;
-  -moz-box-shadow: 0 1px 0 #b69c63;
-  box-shadow: 1px 1px 0 #b69c63 2;
-  -webkit-box-shadow: 1px 1px 0 #b69c63 2;
-  -moz-box-shadow: 1px 1px 0 #b69c63 2;
-  box-shadow: 1px 2px 1px #b69c63;
-  -webkit-box-shadow: 1px 2px 1px #b69c63;
-  -moz-box-shadow: 1px 2px 1px #b69c63;
+  background-color: white;
+  box-shadow: 0 1px 0 #262626;
+  -webkit-box-shadow: 0 1px 0 #262626;
+  -moz-box-shadow: 0 1px 0 #262626;
+  box-shadow: 1px 1px 0 #262626;
+  -webkit-box-shadow: 1px 1px 0 #262626;
+  -moz-box-shadow: 1px 1px 0 #262626;
+  box-shadow: 1px 2px 1px #262626;
+  -webkit-box-shadow: 1px 2px 1px #262626;
+  -moz-box-shadow: 1px 2px 1px #262626;
 }
 .xyflyer .dynamic_content .hints {
   position: absolute;
   padding: 12px 0;
   bottom: 0;
-  left: 75px;
+  left: 102px;
   text-align: center;
 }
 .xyflyer .dynamic_content .hint_popup {
@@ -420,9 +435,8 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
-  width: 570px;
-  height: 480px;
-  padding: 12px;
+  width: 588px;
+  height: 510px;
   z-index: 99;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -436,8 +450,8 @@ body {
 }
 .xyflyer .level_selector:after {
   background-color: #fafafa;
-  width: 570px;
-  height: 480px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -447,23 +461,22 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
-  padding: 12px;
 }
 .xyflyer .level_selector:before {
   background-color: #666666;
   opacity: 0.5;
-  height: 640px;
-  width: 960px;
+  height: 1280px;
+  width: 1920px;
   content: "\00a0";
   display: block;
   position: absolute;
-  top: -60px;
-  left: -183px;
+  top: -320px;
+  left: -480px;
   z-index: -2;
 }
 .xyflyer .level_selector .close {
   float: right;
-  margin: -6px -6px 0 0;
+  margin: 6px 6px 0 -33px;
   color: #24aac3;
   font-size: 30px;
 }
@@ -481,15 +494,16 @@ body {
 .xyflyer .level_selector h3,
 .xyflyer .level_selector h4 {
   text-align: center;
+  margin-top: 12px;
 }
 .xyflyer .level_selector .world_links {
-  background: url('/assets/images/puzzles/xyflyer/level_selector_background.png') no-repeat center center;
+  background: url('/assets/images/puzzles/xyflyer/level_selector_background.png') repeat-x left center;
   overflow: hidden;
 }
 .xyflyer .level_selector .world_links .world_link {
   float: left;
   cursor: pointer;
-  margin: 15px 0 15px 34px;
+  margin: 15px 0 15px 38px;
   width: 72px;
   height: 74px;
   overflow: hidden;
@@ -501,13 +515,13 @@ body {
 .xyflyer .level_selector .world {
   clear: left;
   display: none;
+  padding: 0 12px;
 }
 .xyflyer .level_selector .world.selected {
   display: block;
 }
 .xyflyer .level_selector .world .stage {
   background-color: #eee;
-  padding-top: 12px;
   margin: 12px auto 0 auto;
   width: 565px;
   overflow: hidden;
@@ -529,29 +543,34 @@ body {
 .xyflyer .level_selector .world .stage .level.completed {
   background-position: -88px 0;
 }
-.xyflyer .blue_button,
-.xyflyer .red_button {
-  border: 1px solid #ccc;
-  padding: 3px 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-  color: white;
-  box-shadow: 2px;
-  -webkit-box-shadow: 2px;
-  -moz-box-shadow: 2px;
-}
 .xyflyer .blue_button {
+  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
+  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
+  background-color: #24aac3;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #24aac3;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #24aac3;
+  margin: auto;
+}
+.xyflyer .blue_button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
+  background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
   background-color: #24aac3;
 }
 .xyflyer .blue_button:active {
-  background-color: #145f6d;
-}
-.xyflyer .red_button {
-  background-color: #ff6e5f;
-}
-.xyflyer .red_button:active {
-  background-color: #f81700;
+  position: relative;
+  top: 1px;
 }
 .xyflyer .grey_button {
   -moz-box-shadow: inset 0px 1px 0px 0px #adadad;
