@@ -243,6 +243,9 @@ soma.views
             for ring in @level?.rings or []
                 @helper.addRing(ring.x, ring.y)
             
+            @$('.world_index').html("#{@currentWorld() + 1}")
+            @$('.level_index').html("#{@worldLevelIndex()}")
+            
             @selectWorld(@currentWorld())
             if window._gaq and @level
                 @level.startTime = new Date()
@@ -285,7 +288,16 @@ soma.views
                 for stage in world.stages
                     level = (level for level in stage.levels when level.id == levelId)[0]
                     return JSON.parse(JSON.stringify(level)) if level
-                
+        
+        worldLevelIndex: ->
+            for world in @worlds
+                index = 1
+                for stage in world.stages
+                    for level in stage.levels
+                        return index if level.id == @level.id
+                        index += 1
+            
+           
         initLevel: ->
             @dynamicContent.html(@originalHTML)
             setTimeout((=>

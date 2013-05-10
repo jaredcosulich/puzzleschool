@@ -94,7 +94,7 @@ body {
             
             .intro_message {
                 h2 {
-                    padding-top: 60px;
+                    padding-top: 30px;
                 }
                 p {
                     padding: 15px 30px;
@@ -226,7 +226,6 @@ body {
                     }
                 
                     .bad_formula_message, .range, .variable {
-                        font-size: @smallsize;
                         border: 1px solid #ccc;
                         border-top: none;
                         width: 78%;
@@ -234,7 +233,9 @@ body {
                         padding: 3px 6px;
                         overflow: hidden;
                         input {
-                            width: 24px;
+                            width: 30px;
+                            text-align: center;
+                            padding: 1px 0 2px 0;
                         }
                         .slider {
                             position: relative;
@@ -243,8 +244,8 @@ body {
                         
                             .track {
                                 margin: 9px 10px;
-                                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, darken(#fe1a00, @darken)), color-stop(1, darken(#ce0100, @darken)) );
-                                background:-moz-linear-gradient( center top, darken(#fe1a00, @darken) 5%, darken(#ce0100, @darken) 100% );
+                                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @grey), color-stop(1, darken(@grey, @darken)) );
+                                background:-moz-linear-gradient( center top, @grey 5%, darken(@grey, @darken) 100% );
                                 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
                                 background-color:darken(#fe1a00, @darken);
                                 height: 6px;
@@ -252,11 +253,11 @@ body {
                         
                             .knob {
                                 position: absolute;
-                                background: -webkit-radial-gradient(60% 70%, circle, darken(@green, @darken), darken(@darkgreen, @darken));
-                                background: -moz-radial-gradient(60% 70%, circle, darken(@green, @darken), darken(@darkgreen, @darken));
-                                background: -ms-radial-gradient(60% 70%, circle, darken(@green, @darken), darken(@darkgreen, @darken));
-                                background: -o-radial-gradient(60% 70%, circle, darken(@green, @darken), darken(@darkgreen, @darken));
-                                background: radial-gradient(circle at 60% 70%, darken(@green, @darken), darken(@darkgreen, @darken));
+                                background: -webkit-radial-gradient(60% 70%, circle, @blue, darken(@blue, @darken));
+                                background: -moz-radial-gradient(60% 70%, circle, @blue, darken(@blue, @darken));
+                                background: -ms-radial-gradient(60% 70%, circle, @blue, darken(@blue, @darken));
+                                background: -o-radial-gradient(60% 70%, circle, @blue, darken(@blue, @darken));
+                                background: radial-gradient(circle at 60% 70%, @blue, darken(@blue, @darken));
                                 width: 20px;
                                 height: 20px;
                                 top: 2px;

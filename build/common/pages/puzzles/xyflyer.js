@@ -359,6 +359,8 @@ soma.views({
         ring = _ref6[_j];
         this.helper.addRing(ring.x, ring.y);
       }
+      this.$('.world_index').html("" + (this.currentWorld() + 1));
+      this.$('.level_index').html("" + (this.worldLevelIndex()));
       this.selectWorld(this.currentWorld());
       if (window._gaq && this.level) {
         this.level.startTime = new Date();
@@ -426,6 +428,26 @@ soma.views({
           })())[0];
           if (level) {
             return JSON.parse(JSON.stringify(level));
+          }
+        }
+      }
+    },
+    worldLevelIndex: function() {
+      var index, level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+      _ref = this.worlds;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        world = _ref[_i];
+        index = 1;
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          _ref2 = stage.levels;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            level = _ref2[_k];
+            if (level.id === this.level.id) {
+              return index;
+            }
+            index += 1;
           }
         }
       }
