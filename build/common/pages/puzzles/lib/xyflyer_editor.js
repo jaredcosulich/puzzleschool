@@ -681,7 +681,7 @@ xyflyerEditor.EditorHelper = (function() {
     var callback, dialog, fieldInfo, fields, lastRow, text, _i, _len,
       _this = this;
     text = _arg.text, fields = _arg.fields, callback = _arg.callback;
-    dialog = this.createDialog("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<a class='blue_button'>Save</a> &nbsp; <a class='red_button cancel_button'>Cancel</a>");
+    dialog = this.createDialog("<h3>" + text + "</h3>\n<table><tbody><tr></tr></tbody></table>\n<a class='blue_button save_button'>Save</a> &nbsp; <a class='red_button cancel_button'>Cancel</a>");
     for (_i = 0, _len = fields.length; _i < _len; _i++) {
       fieldInfo = fields[_i];
       if (!fieldInfo.length) {
@@ -691,7 +691,7 @@ xyflyerEditor.EditorHelper = (function() {
       lastRow = dialog.find('tr:last-child');
       lastRow.append("<td>" + fieldInfo[1] + ":</td><td><input name='" + fieldInfo[0] + "' class='" + (fieldInfo[2] || 'number') + "'/></td>");
     }
-    dialog.find('button').bind('click', function() {
+    dialog.find('.save_button').bind('click', function() {
       var data, i, input, _j, _len1, _ref;
       _this.closeDialog(dialog);
       data = {};

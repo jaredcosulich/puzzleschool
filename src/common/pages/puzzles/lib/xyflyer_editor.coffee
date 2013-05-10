@@ -417,7 +417,7 @@ class xyflyerEditor.EditorHelper
         dialog = @createDialog """
             <h3>#{text}</h3>
             <table><tbody><tr></tr></tbody></table>
-            <a class='blue_button'>Save</a> &nbsp; <a class='red_button cancel_button'>Cancel</a>
+            <a class='blue_button save_button'>Save</a> &nbsp; <a class='red_button cancel_button'>Cancel</a>
         """
         
         for fieldInfo in fields
@@ -428,7 +428,7 @@ class xyflyerEditor.EditorHelper
             lastRow = dialog.find('tr:last-child')
             lastRow.append("<td>#{fieldInfo[1]}:</td><td><input name='#{fieldInfo[0]}' class='#{fieldInfo[2] or 'number'}'/></td>")
         
-        dialog.find('button').bind 'click', =>
+        dialog.find('.save_button').bind 'click', =>
             @closeDialog(dialog)
             data = {}
             for i in dialog.find('input')
