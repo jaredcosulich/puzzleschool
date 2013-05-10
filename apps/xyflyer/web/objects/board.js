@@ -536,7 +536,7 @@ board.Board = (function(_super) {
     };
     this.resetLevel();
     this.cancelCalculation();
-    return this.calculatedPathTimeout = $.timeout(100, function() {
+    return this.calculatedPathTimeout = $.timeout(250, function() {
       return _this.calculatedPath = _this.calculatePath();
     });
   };

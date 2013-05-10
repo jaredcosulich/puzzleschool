@@ -57,6 +57,7 @@ class equations.Equations
         equationComponent.appendTo(@possibleFragments.find('.fragments'))
         @equationComponents.push(equationComponent)
 
+        rows = []
         top = 0
         first = @equationComponents[0]
         for equationComponent, index in @equationComponents
@@ -66,9 +67,19 @@ class equations.Equations
             
             if index == @equationComponents.length - 1 or @equationComponents[index + 1].top() != top
                 fragmentsWidth = equationComponent.left() + equationComponent.width() - first.left()
+                lastRow = rows[rows.length - 1]
+                
+                if lastRow and lastRow.width - lastRow.last.width() > fragmentsWidth
+                    lastRowShift = parseInt(lastRow.first.elementContainer.css('marginLeft')) + (lastRow.last.width() / 2)
+                    lastRow.first.elementContainer.css(marginLeft: lastRowShift)
+                    fragmentsWidth = equationComponent.left() + equationComponent.width() - first.left() + (lastRow.last.width() / 2) + 24
+                    first = lastRow.last
+                    
+                rows.push({first: first, width: fragmentsWidth, last: equationComponent})
                 shift = ((@possibleFragments.width() - fragmentsWidth) / 2) - 6
+                
                 first.elementContainer.css(marginLeft: shift)
-
+                
         return equationComponent
         
     removeComponent: (equationComponent) ->

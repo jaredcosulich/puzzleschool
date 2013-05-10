@@ -71,7 +71,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.addComponent = function(equationFragment, side) {
-    var equationComponent, first, fragmentsWidth, index, shift, top, _i, _len, _ref,
+    var equationComponent, first, fragmentsWidth, index, lastRow, lastRowShift, rows, shift, top, _i, _len, _ref,
       _this = this;
     equationComponent = new EquationComponent({
       gameArea: this.gameArea,
@@ -86,6 +86,7 @@ equations.Equations = (function() {
     });
     equationComponent.appendTo(this.possibleFragments.find('.fragments'));
     this.equationComponents.push(equationComponent);
+    rows = [];
     top = 0;
     first = this.equationComponents[0];
     _ref = this.equationComponents;
@@ -97,6 +98,20 @@ equations.Equations = (function() {
       }
       if (index === this.equationComponents.length - 1 || this.equationComponents[index + 1].top() !== top) {
         fragmentsWidth = equationComponent.left() + equationComponent.width() - first.left();
+        lastRow = rows[rows.length - 1];
+        if (lastRow && lastRow.width - lastRow.last.width() > fragmentsWidth) {
+          lastRowShift = parseInt(lastRow.first.elementContainer.css('marginLeft')) + (lastRow.last.width() / 2);
+          lastRow.first.elementContainer.css({
+            marginLeft: lastRowShift
+          });
+          fragmentsWidth = equationComponent.left() + equationComponent.width() - first.left() + (lastRow.last.width() / 2) + 24;
+          first = lastRow.last;
+        }
+        rows.push({
+          first: first,
+          width: fragmentsWidth,
+          last: equationComponent
+        });
         shift = ((this.possibleFragments.width() - fragmentsWidth) / 2) - 6;
         first.elementContainer.css({
           marginLeft: shift
