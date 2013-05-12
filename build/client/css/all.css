@@ -258,22 +258,19 @@ a {
   overflow: hidden;
 }
 .home .section .puzzle {
-  width: 50%;
-  border: 1px solid #ccc;
-  float: left;
+  background-color: #e0e0e0;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
   overflow: hidden;
-}
-.home .section .puzzle h3 {
-  text-align: center;
-  padding: 3px;
-  background-color: #ccc;
-}
-.home .section .puzzle p {
-  padding: 6px;
+  padding: 12px;
 }
 .home .section .puzzle img {
   float: left;
-  margin-right: 12px;
+  margin-right: 30px;
+}
+.home .section .puzzle h2 {
+  margin-top: 15px;
 }
 .home .section table {
   margin: auto;

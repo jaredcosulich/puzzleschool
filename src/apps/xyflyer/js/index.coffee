@@ -129,6 +129,14 @@ window.app =
             
         @$('.equation_container .intro, .equation').css(fontSize: fontSize) if (fontSize = @level?.assets?.font)
         
+        if @level
+            @$('.world_index').html("#{@currentWorld() + 1}")
+            @$('.level_index').html("#{@worldLevelIndex()}")
+        
+        if @currentWorld() >= 2
+            @$('.explanation').hide()
+            @$('.possible_fragments p').hide()
+        
         @selectWorld(@currentWorld())
                         
             
@@ -175,6 +183,14 @@ window.app =
             for stage in world.stages
                 level = (level for level in stage.levels when level.id == levelId)[0]
                 return JSON.parse(JSON.stringify(level)) if level
+                
+    worldLevelIndex: ->
+        for world in @worlds
+            index = 1
+            for stage in world.stages
+                for level in stage.levels
+                    return index if level.id == @level.id
+                    index += 1
             
     initLevel: ->
         setTimeout((=>

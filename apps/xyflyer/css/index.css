@@ -29,15 +29,15 @@ body {
   user-select: none;
 }
 .xyflyer .dynamic_content.dragging .dragging {
-  box-shadow: 4px 5px 4px #b69c63;
-  -webkit-box-shadow: 4px 5px 4px #b69c63;
-  -moz-box-shadow: 4px 5px 4px #b69c63;
-  box-shadow: 5px 5px 4px #b69c63 2;
-  -webkit-box-shadow: 5px 5px 4px #b69c63 2;
-  -moz-box-shadow: 5px 5px 4px #b69c63 2;
-  box-shadow: 5px 6px 5px #b69c63;
-  -webkit-box-shadow: 5px 6px 5px #b69c63;
-  -moz-box-shadow: 5px 6px 5px #b69c63;
+  box-shadow: 4px 5px 4px #262626;
+  -webkit-box-shadow: 4px 5px 4px #262626;
+  -moz-box-shadow: 4px 5px 4px #262626;
+  box-shadow: 5px 5px 4px #262626 2;
+  -webkit-box-shadow: 5px 5px 4px #262626 2;
+  -moz-box-shadow: 5px 5px 4px #262626 2;
+  box-shadow: 5px 6px 5px #262626;
+  -webkit-box-shadow: 5px 6px 5px #262626;
+  -moz-box-shadow: 5px 6px 5px #262626;
   cursor: move;
   overflow: hidden;
 }
@@ -51,11 +51,11 @@ body {
   position: absolute;
 }
 .xyflyer .dynamic_content .equation_area {
-  background-color: white;
+  background-color: #fafafa;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
-  opacity: 0.8;
+  opacity: 0.95;
   width: 357px;
   height: 634px;
   margin: 3px 0 0 3px;
@@ -95,11 +95,15 @@ body {
 }
 .xyflyer .dynamic_content .equation_area .level_selector_menu {
   position: absolute;
-  right: 45px;
+  left: 0px;
   top: 0;
   padding: 6px 12px 12px 12px;
   font-size: 30px;
-  color: #24aac3;
+  color: #949494;
+}
+.xyflyer .dynamic_content .equation_area .level_selector_menu.active,
+.xyflyer .dynamic_content .equation_area .settings_menu.active {
+    color: #7a7a7a;
 }
 .xyflyer .dynamic_content .equation_area .settings_menu {
   position: absolute;
@@ -107,14 +111,25 @@ body {
   top: 0;
   padding: 6px 12px 12px 12px;
   font-size: 30px;
-  color: #24aac3;
+  color: #949494;
 }
 .xyflyer .dynamic_content .equation_area .equations {
-  margin-top: 45px;
+    margin-top: -21px;
+}
+.xyflyer .dynamic_content .equation_area .equations h3 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: normal;
+  margin-bottom: 12px;
+}
+.xyflyer .dynamic_content .equation_area .equations .explanation {
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 6px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container {
   overflow: hidden;
-  margin-bottom: 12px;
+  padding: 12px 0;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .intro {
   float: left;
@@ -128,6 +143,7 @@ body {
   padding: 0 3px;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .equation {
+  background-color: white;
   padding: 0 6px;
   margin-right: 6px;
   color: #c7c7c7;
@@ -207,9 +223,10 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message input,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range input,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .variable input {
-  width: 24px;
+  width: 42px;
   font-size: 18px;
   text-align: center;
+  padding: 3px 0;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider,
@@ -222,8 +239,8 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .track,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider .track {
   margin: 12px 10px;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #cb1500), color-stop(1, #9b0100));
-  background: -moz-linear-gradient(center top, #cb1500 5%, #9b0100 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #949494), color-stop(1, #7a7a7a));
+  background: -moz-linear-gradient(center top, #949494 5%, #7a7a7a 100%);
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
   background-color: #cb1500;
   height: 9px;
@@ -232,11 +249,11 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .knob,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider .knob {
   position: absolute;
-  background: -webkit-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
-  background: -moz-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
-  background: -ms-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
-  background: -o-radial-gradient(60% 70%, circle, #1dad3d, #085e1b);
-  background: radial-gradient(circle at 60% 70%, #1dad3d, #085e1b);
+  background: -webkit-radial-gradient(60% 70%, circle, #24aac3, #1c8498);
+  background: -moz-radial-gradient(60% 70%, circle, #24aac3, #1c8498);
+  background: -ms-radial-gradient(60% 70%, circle, #24aac3, #1c8498);
+  background: -o-radial-gradient(60% 70%, circle, #24aac3, #1c8498);
+  background: radial-gradient(circle at 60% 70%, #24aac3, #1c8498);
   width: 30px;
   height: 30px;
   top: 2px;
@@ -246,6 +263,7 @@ body {
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
+
 .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message {
   border: none;
   color: red;
@@ -254,14 +272,21 @@ body {
   text-align: center;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments {
-  margin-top: 30px;
+  background-color: #c7c7c7;
+  margin: 30px 12px 0 12px;
   padding: 6px;
-  position: relative;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
   text-align: center;
 }
+.xyflyer .dynamic_content .equation_area .possible_fragments .fragments {
+  position: relative;
+}
 .xyflyer .dynamic_content .equation_area .possible_fragments p {
-  margin: 6px 0 12px 0;
-  font-size: 15px;
+  font-size: 13px;
+  clear: left;
+  padding-top: 12px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container {
   padding: 6px;
@@ -269,7 +294,7 @@ body {
   font-size: 24px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .long .equation_component, .xyflyer .dynamic_content .equation_area .possible_fragments .place_holder.long {
-  padding: 6px 1px;
+  padding: 6px 3px;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .equation_component_container .equation_component {
   cursor: move;
@@ -280,64 +305,60 @@ body {
   transform-style: preserve-3d;
 }
 .xyflyer .dynamic_content .equation_area .possible_fragments .place_holder {
-  padding: 6px 9px;
-  color: #c7c7c7;
-  border: 1px solid #c7c7c7;
+  padding: 12px 9px 0 9px;
+  color: white;
+  border: 1px solid white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   background: url('images/fragment_down_arrow.png') no-repeat top center;
   cursor: pointer;
 }
+
 .xyflyer .dynamic_content .button {
-  font-size: 18px;
-  -moz-box-shadow: inset 0px 1px 0px 0px #ed7265;
-  -webkit-box-shadow: inset 0px 1px 0px 0px #ed7265;
-  box-shadow: inset 0px 1px 0px 0px #ed7265;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #cb1500), color-stop(1, #9b0100));
-  background: -moz-linear-gradient(center top, #cb1500 5%, #9b0100 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-  background-color: #cb1500;
+  font-size: 21px;
+  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
+  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
+  background-color: #24aac3;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-  border: 1px solid #ad2a1e;
+  border: 1px solid #24aac3;
   display: inline-block;
   color: #fafafa;
   font-family: arial;
   font-weight: bold;
   padding: 6px 24px;
   text-decoration: none;
-  text-shadow: 1px 1px 0px #8b3029;
+  text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
 }
 .xyflyer .dynamic_content .button.active {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ce0100), color-stop(1, #fe1a00));
-  background: -moz-linear-gradient(center top, #ce0100 5%, #fe1a00 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ce0100', endColorstr='#fe1a00');
-  background-color: #ce0100;
   position: relative;
   top: 1px;
 }
+
 .xyflyer .dynamic_content .equation_component {
+  font-size: 24px;
   padding: 6px 9px;
   border: 1px solid #949494;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   cursor: move;
-  background: -webkit-gradient(linear, right bottom, left top, color-stop(0.5, #dec48b), color-stop(0.7, #e6cc93));
-  background: -moz-linear-gradient(center top, #dec48b 50%, #e6cc93 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='rgb(222,196,139)', endColorstr='rgb(230,204,147)');
-  box-shadow: 0 1px 0 #b69c63;
-  -webkit-box-shadow: 0 1px 0 #b69c63;
-  -moz-box-shadow: 0 1px 0 #b69c63;
-  box-shadow: 1px 1px 0 #b69c63 2;
-  -webkit-box-shadow: 1px 1px 0 #b69c63 2;
-  -moz-box-shadow: 1px 1px 0 #b69c63 2;
-  box-shadow: 1px 2px 1px #b69c63;
-  -webkit-box-shadow: 1px 2px 1px #b69c63;
-  -moz-box-shadow: 1px 2px 1px #b69c63;
+  background-color: white;
+  box-shadow: 0 1px 0 #262626;
+  -webkit-box-shadow: 0 1px 0 #262626;
+  -moz-box-shadow: 0 1px 0 #262626;
+  box-shadow: 1px 1px 0 #262626;
+  -webkit-box-shadow: 1px 1px 0 #262626;
+  -moz-box-shadow: 1px 1px 0 #262626;
+  box-shadow: 1px 2px 1px #262626;
+  -webkit-box-shadow: 1px 2px 1px #262626;
+  -moz-box-shadow: 1px 2px 1px #262626;
 }
 .xyflyer .dynamic_content .hints {
   font-size: 18px;
@@ -450,16 +471,51 @@ body {
   left: -1000px;
   opacity: 0;
   background-color: #fafafa;
-  border: 2px solid #a61c0e;
   width: 780px;
   height: 534px;
-  overflow: auto;
-  padding: 12px;
   z-index: 97;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  box-shadow: 3px 3px 12px #666666;
+  -webkit-box-shadow: 3px 3px 12px #666666;
+  -moz-box-shadow: 3px 3px 12px #666666; 
+}
+.xyflyer .menu::before {
+  background-color: #fafafa;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  content: "\00a0";
+  display: block;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+}
+.xyflyer .menu::after {
+  height: 1200px;
+  width: 1200px;
+  top: -300px;
+  left: -300px;
+  background-color: #666666;
+  opacity: 0.5;
+  content: "\00a0";
+  display: block;
+  position: absolute;
+  z-index: -2;
 }
 .xyflyer .menu .close {
   float: right;
-  margin: -6px -6px 0 0;
+  margin: 6px 6px 0 -33px;
   color: #24aac3;
   font-size: 30px;
 }
@@ -481,8 +537,7 @@ body {
 }
 .xyflyer .settings .player_selection {
     position: relative;
-    background: url('images/level_selector_background.png') no-repeat center center;
-    margin: 0 24px;
+    background: url('images/level_selector_background.png') repeat-x left center;
 }
 .xyflyer .settings .player_selection table {
     margin: -45px auto;
@@ -497,6 +552,9 @@ body {
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
 }
+.xyflyer .settings .player_selection td p {
+    margin-bottom: 0;
+}
 .xyflyer .settings .player_selection .selected {
     background-image: url('images/background1.jpg');
 }
@@ -510,7 +568,7 @@ body {
     margin: 0;
 }
 .xyflyer .settings .player_details .edit_player {
-    padding: 12px;
+    padding: 12px 30px;
 }
 .xyflyer .settings .player_details .edit_player i {
     padding: 6px 12px;
@@ -573,7 +631,7 @@ body {
   margin-bottom: 12px;
 }
 .xyflyer .level_selector .world_links {
-  background: url('images/level_selector_background.png') no-repeat center center;
+  background: url('images/level_selector_background.png') repeat-x left center;
   overflow: hidden;
 }
 .xyflyer .level_selector .world_links .world_link {
@@ -712,13 +770,18 @@ body {
         height: 645px;
     }
     
+    .xyflyer .menu::after {
+      display: none;
+    }
+    
     .xyflyer .level_selector .world_links .world_link {
         margin: 15px 0 15px 81px;
     }
     
     .xyflyer .level_selector .world .stage {
         width: 780px;
-        margin-top: 30px;
+        margin-top: 0;
+        margin-bottom: 30px;
     }
     
     .xyflyer .level_selector .world .stage h4 {
@@ -767,12 +830,23 @@ body {
     
     .xyflyer .dynamic_content .board { 
         height: 640px;
-        width: 678px;
+        width: 678px;       
     }
     
     .xyflyer .dynamic_content .equation_area {
         margin: 3px 3px 0 0;
-        height: 762px;
         width: 450px;
     }    
+    
+    .xyflyer .menu::after {
+      height: 1000px;
+      width: 1500px;
+      top: -300px;
+      left: -300px;
+    }
+    
+    .xyflyer .dynamic_content .hints {
+      left: 126px;
+    }
+    
 }

@@ -1,191 +1,205 @@
-{:editor}
-    <a class='toggle_instructions'>Hide Instructions</a>
-    <div class='demo_video modal'>
-        <iframe width="640" height="360" src="http://www.youtube.com/embed/O48Ia71RYX0?rel=0" frameborder="0" allowfullscreen></iframe>
-    </div>    
-{/editor}
+<div class='page'>
     
-{:editor}
-<div class='instructions'>
-    <div class='container'>
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
+        XYFlyer
+    </h1>
+    <p style='text-align: center; margin-bottom: 30px;'>
+        <a href='https://itunes.apple.com/us/app/xyflyer/id643079974?mt=8&ign-mpt=uo%3D2' target='_blank'><img src='/assets/images/puzzles/ios_app_in_store_150.png'/></a> 
+        <!-- <a href='https://play.google.com/store/apps/details?id=com.servicespuzzleschoolcom.servicespuzzleschoolcom.architect' target='_blank'><img src='/assets/images/puzzles/android_app_on_play_150.png'/></a>  -->
+        <!-- <a href=''><img src='/assets/images/puzzles/amazon_app_in_store_150.png'/></a>  -->
+    </p>
+    
+    
+    {:editor}
+        <a class='toggle_instructions'>Hide Instructions</a>
+        <div class='demo_video modal'>
+            <iframe width="640" height="360" src="http://www.youtube.com/embed/O48Ia71RYX0?rel=0" frameborder="0" allowfullscreen></iframe>
+        </div>    
+    {/editor}
+    
+    {:editor}
+    <div class='instructions'>
+        <div class='container'>
 
-        <h3>XYFlyer Editor Instructions</h3>
-        <div class='section'>
-            <h4 class='centered'>Valid Functions & Constants</h4>
-            <div style='padding-left: 21px'>
-                <ul>
-                    <li>sin()</li>
-                    <li>cos()</li>
-                    <li>tan()</li>
-                    <li>round()</li>
-                    <li>sqrt()</li>
-                    <li>abs()</li>
-                </ul>
-                <ul>
-                    <li>ln()</li>
-                    <li>atan()</li>
-                    <li>acos()</li>
-                    <li>asin()</li>
-                    <li>pi</li>
-                    <li>e</li>
-                </ul>
-            </div>
-            <div class='centered' style='clear: both;'><b>Valid Variables: </b>a, b, c, d</div>
-        </div>
-        <div class='section centered'>
-            <h4>Instructional Video</h4>
-            <a class='demo'><img src='/assets/images/puzzles/xyflyer/editor_demo_video.jpg'></a>
-        </div>
-        <div style='width: 390px;'>
-            <p>This editor allows you to create custom XYFlyer levels.</p>
-            <p>We recommend using no more than 2 equations and 6 equation fragments as your level will become very challenging very fast.</p>
-            <p>A link will be provided to share your level as soon as it is verified (you've launched the plane through all rings in the level, at least one).</p>
-            <p>Watch the <a class='demo'>demo video</a> to see a level being created.</p>
-        </div>
-    </div>
-</div>
-{/editor}
-
-
-<div class='xyflyer' data-level={level} data-class={class} data-classlevel={classLevel} data-puzzle_data={puzzleData}>
-    <div class='dynamic_content' {:noBackground}style="background-image: url('/assets/images/puzzles/xyflyer/background1.jpg')"{!noBackground}>
-        <div class='board' id='board'></div>
-        <div class='equation_area'>
-            {!editor}
-            <h4 class='menu grey_button'><a>Menu</a></h4>
-            <h4 class='editor_link grey_button'><a class='icon-pencil' href='/puzzles/xyflyer/editor' target='_blank'></a></h4>
-            {/editor}
-            {:editor}
-            <h4 class='editor_link grey_button'><a>Menu</a></h4>
-            {/editor}
-            
-            <div class='equations'>
-                {!editor}
-                <h3>World <span class='world_index'></span>, Level <span class='level_index'></span></h3>
-                {/editor}
-                {:editor}
-                <h3>Custom Level</h3>
-                {/editor}
-                <div class='explanation'>Complete the equation to launch the plane!</div>
-                {:editor}
-                <p class='editor_explanation'>Create a new equation to start your level.</p>
-                {/editor}
-            </div>
-            <div class='launch_button'><a class='launch button go'>Launch!</a></div>
-        
-            <div class='possible_fragments'>
-                <div class='fragments'></div>
-                {!editor}
-                <p>Drag and drop these to complete the equations above.</p>
-                {/editor}
-                {:editor}
-                <p>Create equation fragments to add to your equation.</p>
-                {/editor}
-            </div>
-
-            {:editor}
-                <div class='editor_instructions'>    
-                    <h4>Editor Instructions</h4>
-                    <div class='invalid'>
-                        <p>
-                            Create your level and launch the plane to verify your level.
-                        </p>
-                        <p>
-                            Once verified, instructions to share your level will appear here.
-                        </p>
-                    </div>
-                    <div class='valid'>
-                        <p>Share this link to have other people try to solve your level.</p>
-                        <input class='link'/>
-                    </div>
+            <h3>XYFlyer Editor Instructions</h3>
+            <div class='section'>
+                <h4 class='centered'>Valid Functions & Constants</h4>
+                <div style='padding-left: 21px'>
+                    <ul>
+                        <li>sin()</li>
+                        <li>cos()</li>
+                        <li>tan()</li>
+                        <li>round()</li>
+                        <li>sqrt()</li>
+                        <li>abs()</li>
+                    </ul>
+                    <ul>
+                        <li>ln()</li>
+                        <li>atan()</li>
+                        <li>acos()</li>
+                        <li>asin()</li>
+                        <li>pi</li>
+                        <li>e</li>
+                    </ul>
                 </div>
-            {/editor}
+                <div class='centered' style='clear: both;'><b>Valid Variables: </b>a, b, c, d</div>
+            </div>
+            <div class='section centered'>
+                <h4>Instructional Video</h4>
+                <a class='demo'><img src='/assets/images/puzzles/xyflyer/editor_demo_video.jpg'></a>
+            </div>
+            <div style='width: 390px;'>
+                <p>This editor allows you to create custom XYFlyer levels.</p>
+                <p>We recommend using no more than 2 equations and 6 equation fragments as your level will become very challenging very fast.</p>
+                <p>A link will be provided to share your level as soon as it is verified (you've launched the plane through all rings in the level, at least one).</p>
+                <p>Watch the <a class='demo'>demo video</a> to see a level being created.</p>
+            </div>
+        </div>
+    </div>
+    {/editor}
 
-            {!editor}
-            <div class='hints'>
-                Can't Figure It Out?
-                <h4>
-                    <a class='hint blue_button'>Reveal A Step</a>
-                </h4> 
-            </div>
-            <div class='hint_popup'>
-            </div>
-            <div class='drag_this'>
-                <img src='/assets/images/puzzles/xyflyer/drag_this.png'/>
-            </div>
-            <div class='drag_this_right'>
-                <img src='/assets/images/puzzles/xyflyer/drag_this_right.png'/>
-            </div>
-            <div class='drop_here'>
-                <img src='/assets/images/puzzles/xyflyer/drop_here.png'/>
-            </div>
-            <div class='drop_here_right'>
-                <img src='/assets/images/puzzles/xyflyer/drop_here_right.png'/>
-            </div>
-            <div class='launch_hint'>
-                <img src='/assets/images/puzzles/xyflyer/launch.png'/>
-            </div>
-            {/editor}
+
+    <div class='xyflyer' data-level={level} data-class={class} data-classlevel={classLevel} data-puzzle_data={puzzleData}>
+        <div class='dynamic_content' {:noBackground}style="background-image: url('/assets/images/puzzles/xyflyer/background1.jpg')"{!noBackground}>
+            <div class='board' id='board'></div>
+            <div class='equation_area'>
+                {!editor}
+                <h4 class='menu grey_button'><a>Menu</a></h4>
+                <h4 class='editor_link grey_button'><a class='icon-pencil' href='/puzzles/xyflyer/editor' target='_blank'></a></h4>
+                {/editor}
+                {:editor}
+                <h4 class='editor_link grey_button'><a>Menu</a></h4>
+                {/editor}
             
-        </div>
-        <div class='level_instructions'>
-            {instructions}
-        </div>
-
-        {:editor}
-        <div class='editor'>
-            <h3>Editor Controls</h3>
-            <div class='buttons'>
-                <p><a class='blue_button add_equation'>Add Equation</a> --- <a class='red_button remove_equation'>Remove</a></p>
-                <p><a class='blue_button add_fragment'>Add Equation Fragment</a> --- <a class='red_button remove_fragment red'>Remove</a></p>
-                <p><a class='blue_button add_ring'>Add Ring</a> --- <a class='red_button remove_ring'>Remove</a></p>
-                <p><a class='blue_button change_background'>Change Background</a> --- <a class='blue_button edit_board'>Edit Board Dimensions</a></p>
-                <p><a class='blue_button change_island'>Change Island</a> --- <a class='blue_button edit_island'>Edit Island Position</a></p>
-                <p><a class='blue_button change_person'>Change Person</a>
-                <p><a class='red_button reset_editor'>Reset Editor</a></p>
-            </div>
-        </div>
-        {/editor}
-    </div>
-
-    <div class='intro_message'>
-        <p><img src='/assets/images/puzzles/xyflyer/xyflyer_watermark.png' /></p>
-        <hr/>
-        <h2>Welcome to xyflyer</h2>
-        <p>Plot a course for your airplane through the hoops.</p>
-        <a class='button go'><h1>Go Fly</h1></a>
-        <br/><br/><br/>
-        <hr/>
-        <br/>
-        <p>Make and share your own levels using our custom level creator.</p>
-        <a class='grey_button' href='/puzzles/xyflyer/editor'><i class='icon-pencil'></i> Level Maker</a>
-    </div>
+                <div class='equations'>
+                    {!editor}
+                    <h3>World <span class='world_index'></span>, Level <span class='level_index'></span></h3>
+                    {/editor}
+                    {:editor}
+                    <h3>Custom Level</h3>
+                    {/editor}
+                    <div class='explanation'>Complete the equation to launch the plane!</div>
+                    {:editor}
+                    <p class='editor_explanation'>Create a new equation to start your level.</p>
+                    {/editor}
+                </div>
+                <div class='launch_button'><a class='launch button go'>Launch!</a></div>
         
-    <div class='level_selector'>
-        <a class='close icon-remove-sign'></a>
-        <h2>Select The Next Level</h2>
-        <div class='world_links'>
+                <div class='possible_fragments'>
+                    <div class='fragments'></div>
+                    {!editor}
+                    <p>Drag and drop these to complete the equations above.</p>
+                    {/editor}
+                    {:editor}
+                    <p>Create equation fragments to add to your equation.</p>
+                    {/editor}
+                </div>
+
+                {:editor}
+                    <div class='editor_instructions'>    
+                        <h4>Editor Instructions</h4>
+                        <div class='invalid'>
+                            <p>
+                                Create your level and launch the plane to verify your level.
+                            </p>
+                            <p>
+                                Once verified, instructions to share your level will appear here.
+                            </p>
+                        </div>
+                        <div class='valid'>
+                            <p>Share this link to have other people try to solve your level.</p>
+                            <input class='link'/>
+                        </div>
+                    </div>
+                {/editor}
+
+                {!editor}
+                <div class='hints'>
+                    Can't Figure It Out?
+                    <h4>
+                        <a class='hint blue_button'>Reveal A Step</a>
+                    </h4> 
+                </div>
+                <div class='hint_popup'>
+                </div>
+                <div class='drag_this'>
+                    <img src='/assets/images/puzzles/xyflyer/drag_this.png'/>
+                </div>
+                <div class='drag_this_right'>
+                    <img src='/assets/images/puzzles/xyflyer/drag_this_right.png'/>
+                </div>
+                <div class='drop_here'>
+                    <img src='/assets/images/puzzles/xyflyer/drop_here.png'/>
+                </div>
+                <div class='drop_here_right'>
+                    <img src='/assets/images/puzzles/xyflyer/drop_here_right.png'/>
+                </div>
+                <div class='launch_hint'>
+                    <img src='/assets/images/puzzles/xyflyer/launch.png'/>
+                </div>
+                {/editor}
+            
+            </div>
+            <div class='level_instructions'>
+                {instructions}
+            </div>
+
+            {:editor}
+            <div class='editor'>
+                <h3>Editor Controls</h3>
+                <div class='buttons'>
+                    <p><a class='blue_button add_equation'>Add Equation</a> --- <a class='red_button remove_equation'>Remove</a></p>
+                    <p><a class='blue_button add_fragment'>Add Equation Fragment</a> --- <a class='red_button remove_fragment red'>Remove</a></p>
+                    <p><a class='blue_button add_ring'>Add Ring</a> --- <a class='red_button remove_ring'>Remove</a></p>
+                    <p><a class='blue_button change_background'>Change Background</a> --- <a class='blue_button edit_board'>Edit Board Dimensions</a></p>
+                    <p><a class='blue_button change_island'>Change Island</a> --- <a class='blue_button edit_island'>Edit Island Position</a></p>
+                    <p><a class='blue_button change_person'>Change Person</a>
+                    <p><a class='red_button reset_editor'>Reset Editor</a></p>
+                </div>
+            </div>
+            {/editor}
+        </div>
+
+        <div class='intro_message'>
+            <p><img src='/assets/images/puzzles/xyflyer/xyflyer_watermark.png' /></p>
+            <hr/>
+            <h2>Welcome to xyflyer</h2>
+            <p>Plot a course for your airplane through the hoops.</p>
+            <a class='button go'><h1>Go Fly</h1></a>
+            <br/><br/><br/>
+            <hr/>
+            <br/>
+            <p>Make and share your own levels using our custom level creator.</p>
+            <a class='grey_button' href='/puzzles/xyflyer/editor'><i class='icon-pencil'></i> Level Maker</a>
+        </div>
+        
+        <div class='level_selector'>
+            <a class='close icon-remove-sign'></a>
+            <h2>Select The Next Level</h2>
+            <div class='world_links'>
+                {:worlds}
+                <div class='world_link' data-world={index}>
+                    <img src='/assets/images/puzzles/xyflyer/world{index}.png'/>
+                </div>
+                {/worlds}
+            </div>
             {:worlds}
-            <div class='world_link' data-world={index}>
-                <img src='/assets/images/puzzles/xyflyer/world{index}.png'/>
+            <div class='world'>
+                {:stages}
+                <div class='stage'>
+                    <h3>{name}</h3>
+                    <br/>
+                    {:levels}<a class='level' id='level_{id}' data-id={id}></a>{/levels}
+                </div>
+                {/stages}
             </div>
             {/worlds}
         </div>
-        {:worlds}
-        <div class='world'>
-            {:stages}
-            <div class='stage'>
-                <h3>{name}</h3>
-                <br/>
-                {:levels}<a class='level' id='level_{id}' data-id={id}></a>{/levels}
-            </div>
-            {/stages}
+    
+        <div class='objects'>
+            {:objects}<div class='{name}'>{&image}</div>{/objects}
         </div>
-        {/worlds}
-    </div>
     
-    <div class='objects'>
-        {:objects}<div class='{name}'>{&image}</div>{/objects}
     </div>
-    
 </div>
