@@ -731,3 +731,14 @@
   left: -1000px;
   z-index: 99999;
 }
+.teachers {
+  width: 420px;
+  background-color: #262626;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  margin: 30px auto;
+  color: white;
+  text-align: center;
+  padding: 12px;
+}
