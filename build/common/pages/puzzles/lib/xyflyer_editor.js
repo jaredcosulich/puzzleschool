@@ -18,6 +18,10 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.init = function() {
     var asset, editor, index, _ref,
       _this = this;
+    this.initing = true;
+    $.timeout(500, function() {
+      return _this.initing = false;
+    });
     this.$('.explanation, .launch_button').hide();
     this.$('.editor_explanation').show();
     this.variables || (this.variables = {});
@@ -380,6 +384,9 @@ xyflyerEditor.EditorHelper = (function() {
 
   EditorHelper.prototype.addEquation = function(equationString, start, solutionComponents) {
     var _this = this;
+    if (this.initing) {
+      return;
+    }
     if (!start) {
       return this.showDialog({
         text: 'What should this equation start with?',

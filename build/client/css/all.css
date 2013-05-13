@@ -112,7 +112,7 @@ a {
   opacity: 0;
 }
 #top_nav {
-  z-index: 99;
+  z-index: 100;
   position: fixed;
   top: 0;
   width: 100%;

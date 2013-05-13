@@ -101,6 +101,9 @@ soma.views
             xyflyer = require('./lib/xyflyer')
             @worlds = require('./lib/xyflyer_objects/levels').WORLDS
             
+            $('.teacher_demo').bind 'click', =>
+                $('#base').data('base').showModal('.teacher_demo_video')
+            
             @dynamicContent = @el.find('.dynamic_content')
             @$('.menu').bind 'click', => @showLevelSelector()
             
@@ -120,6 +123,7 @@ soma.views
             @puzzleProgress[@levelId] = {}            
 
             @originalHTML = @dynamicContent.html()
+
         
             @initEncode()
             @initLevelSelector()  
@@ -148,6 +152,7 @@ soma.views
                         variables: @level?.variables     
                         assets: @level?.assets                 
                         encode: (instructions) => @encode(instructions)
+
                     @loadLevel()
                     
                 else if not @level
@@ -170,8 +175,9 @@ soma.views
                 @showLevelSelector()
                 return
         
-            @initLevel()
-        
+            @initLevel()        
+                
+                
         initWorlds: ->
             @$('.world_link').bind 'click', (e) =>
                 e.stop()

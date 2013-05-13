@@ -28,14 +28,14 @@ class soma.View extends soma.View
 
     showModal: (selector) ->
         @opaqueScreen = $('.opaque_screen')
-        @opaqueScreen.css(opacity: 0, top:0, left: 0, width: window.innerWidth, height: window.innerHeight + $('#top_nav').height())
+        @opaqueScreen.css(opacity: 0, top:0, left: 0, width: $(document.body).width(), height: $(document.body).height() + 300 + $('#top_nav').height())
         @opaqueScreen.animate
             opacity: 0.75
             duration: 300
 
         modal = @$(selector)
         modal.css
-            top: 120
+            top: 120 + $(document.body).scrollTop()
             left: ($(document.body).width() - modal.width()) / 2
         modal.animate
             opacity: 1
@@ -57,7 +57,7 @@ class soma.View extends soma.View
                 modal.css
                     top: -1000
                     left: -1000
-                location.hash = ''
+                location.hash = '' if location.hash.length
                 callback() if callback
 
         

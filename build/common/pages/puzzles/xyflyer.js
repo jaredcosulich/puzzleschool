@@ -146,6 +146,9 @@ soma.views({
         _this = this;
       xyflyer = require('./lib/xyflyer');
       this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
+      $('.teacher_demo').bind('click', function() {
+        return $('#base').data('base').showModal('.teacher_demo_video');
+      });
       this.dynamicContent = this.el.find('.dynamic_content');
       this.$('.menu').bind('click', function() {
         return _this.showLevelSelector();

@@ -8,6 +8,9 @@ class xyflyerEditor.EditorHelper
         @init()
         
     init: ->
+        @initing = true
+        $.timeout(500, => @initing = false)
+        
         @$('.explanation, .launch_button').hide()
         @$('.editor_explanation').show()
         
@@ -245,6 +248,7 @@ class xyflyerEditor.EditorHelper
                     @handleModification()
                     
     addEquation: (equationString, start, solutionComponents) -> 
+        return if @initing
         if not start
             @showDialog
                 text: 'What should this equation start with?'
@@ -433,7 +437,7 @@ class xyflyerEditor.EditorHelper
             if not fieldInfo.length 
                 dialog.find('tbody').append('<tr></tr>')
                 continue
-
+ 
             lastRow = dialog.find('tr:last-child')
             lastRow.append("<td>#{fieldInfo[1]}:</td><td><input name='#{fieldInfo[0]}' class='#{fieldInfo[2] or 'number'}'/></td>")
         

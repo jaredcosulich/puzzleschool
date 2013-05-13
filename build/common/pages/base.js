@@ -57,8 +57,8 @@ soma.View = (function(_super) {
       opacity: 0,
       top: 0,
       left: 0,
-      width: window.innerWidth,
-      height: window.innerHeight + $('#top_nav').height()
+      width: $(document.body).width(),
+      height: $(document.body).height() + 300 + $('#top_nav').height()
     });
     this.opaqueScreen.animate({
       opacity: 0.75,
@@ -66,7 +66,7 @@ soma.View = (function(_super) {
     });
     modal = this.$(selector);
     modal.css({
-      top: 120,
+      top: 120 + $(document.body).scrollTop(),
       left: ($(document.body).width() - modal.width()) / 2
     });
     modal.animate({
@@ -110,7 +110,9 @@ soma.View = (function(_super) {
           top: -1000,
           left: -1000
         });
-        location.hash = '';
+        if (location.hash.length) {
+          location.hash = '';
+        }
         if (callback) {
           return callback();
         }
