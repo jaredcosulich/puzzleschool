@@ -35,8 +35,14 @@ interaction.Interaction = (function() {
     return over;
   };
 
-  Interaction.prototype.accept = function(number) {
-    this.numbers.push(number);
+  Interaction.prototype.accept = function(_arg) {
+    var number, operator;
+    number = _arg.number, operator = _arg.operator;
+    if (number) {
+      this.numbers.push(number);
+    } else if (operator) {
+      this.operators.push(operator);
+    }
     return this.display();
   };
 

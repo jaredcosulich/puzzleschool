@@ -22,6 +22,8 @@ class wordProblems.ViewHelper
         problem.replace(/(\d+)/g, '<span class=\'number\'>$1</span>')
         
     initNumbers: ->
+        drag = (component, x, y, final) => @dragComponent(component, x, y, final)
+        
         for number, index in @$('.problem .number')
             number = $(number)
             id = new Date().getTime()
@@ -36,8 +38,14 @@ class wordProblems.ViewHelper
                 label: settings?.label
                 problemNumber: @$(".problem .number_#{id}")
                 container: @$('.numbers')
-                drag: (component, x, y, final) => @dragComponent(component, x, y, final)
+                drag: drag
             )
+            
+        @numbers.push(new wordProblems.Number
+            value: '?'
+            container: @$('.numbers')
+            drag: drag
+        )
         
     dragComponent: (number, x, y, final) ->
         @el.addClass('dragging') unless @el.hasClass('dragging')
@@ -52,7 +60,7 @@ class wordProblems.ViewHelper
         )
         
     initOperators: ->
-        for operator in ['+', '-', '/', '*', '?']
+        for operator in ['+', '-', '/', '*', '=']
             @operators.push(new wordProblems.Operator
                 value: operator
                 container: @$('.numbers')

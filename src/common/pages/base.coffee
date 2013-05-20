@@ -49,14 +49,14 @@ class soma.View extends soma.View
         $(@opaqueScreen).unbind 'click'
         modal = if selector instanceof String then @$(selector) else $(selector)
         modal = modal.closest('.modal') unless modal.hasClass('modal')
-        @opaqueScreen.animate(opacity:0, duration: 500, complete: () => @opaqueScreen.css(top: -1000, left: -100))
+        @opaqueScreen.animate(opacity:0, duration: 500, complete: () => @opaqueScreen.css(top: -10000, left: -10000))
         modal.animate
             opacity: 0
             duration: 500
             complete: () =>
                 modal.css
-                    top: -1000
-                    left: -1000
+                    top: -10000
+                    left: -10000
                 location.hash = '' if location.hash.length
                 callback() if callback
 

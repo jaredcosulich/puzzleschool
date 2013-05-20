@@ -35,8 +35,11 @@ class interaction.Interaction
         return over
         
         
-    accept: (number) ->
-        @numbers.push(number)
+    accept: ({number, operator}) ->
+        if number
+            @numbers.push(number)
+        else if operator
+            @operators.push(operator)
         @display()
         
     display: ->

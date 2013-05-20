@@ -5,6 +5,8 @@ levels.WORLDS = [
         stages: [
             {
                 name: 'Shifting Lines'
+                assets: 
+                    person: 1
                 levels: [
                     {
                         id: 1364229884455
@@ -435,6 +437,8 @@ levels.WORLDS = [
             }
             {
                 name: 'Changing Slope'
+                assets: 
+                    person: 2
                 levels: [
                     {
                         id: 1363227855683
@@ -866,10 +870,11 @@ levels.WORLDS = [
     {
         assets: 
             background: 2
-            person: 2
         stages : [
             {
                 name: 'Shift And Slope'
+                assets: 
+                    person: 2
                 levels: [
                     {
                         id: 1363899729966
@@ -1330,6 +1335,8 @@ levels.WORLDS = [
             }
             {
                 name: 'Variable Lines'
+                assets: 
+                    person: 1
                 levels: [
                     {
                         id: 1363229719931
@@ -2137,6 +2144,8 @@ levels.WORLDS = [
         stages: [
             {
                 name: 'Multiple Lines (Shifting)'
+                assets: 
+                    person: 1
                 levels: [
                     {
                         id: 1364510572027
@@ -2793,6 +2802,8 @@ levels.WORLDS = [
             }
             {
                 name: 'Multiple Lines (Shift And Slope)'
+                assets: 
+                    person: 2
                 levels: [
                     {
                         id: 1363229838153
@@ -3553,10 +3564,11 @@ levels.WORLDS = [
         assets: 
             background: 4
             island: 3
-            person: 2        
         stages: [
             {
                 name: 'Curves'
+                assets: 
+                    person: 2
                 levels: [
                     {
                         id: 1364744280392
@@ -4293,6 +4305,8 @@ levels.WORLDS = [
             }
             {
                 name: 'Lines and Curves'
+                assets: 
+                    person: 1
                 levels: [
                     {
                         id: 1364761788756

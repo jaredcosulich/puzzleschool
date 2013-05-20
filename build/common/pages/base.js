@@ -97,8 +97,8 @@ soma.View = (function(_super) {
       duration: 500,
       complete: function() {
         return _this.opaqueScreen.css({
-          top: -1000,
-          left: -100
+          top: -10000,
+          left: -10000
         });
       }
     });
@@ -107,8 +107,8 @@ soma.View = (function(_super) {
       duration: 500,
       complete: function() {
         modal.css({
-          top: -1000,
-          left: -1000
+          top: -10000,
+          left: -10000
         });
         if (location.hash.length) {
           location.hash = '';
