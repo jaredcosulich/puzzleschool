@@ -31,6 +31,7 @@ window.app =
         @worlds = require('./lib/xyflyer_objects/levels').WORLDS
         
         @puzzleProgress = {}
+        @initIntro()
         @initLevelSelector()
         @initSettings()
         @initWorlds()
@@ -38,7 +39,7 @@ window.app =
         # @testHints()
         # return
         
-        @showMenu(@settings)
+        @showMenu(@intro)
 
 
     $: (selector) -> $(selector, @el)
@@ -205,7 +206,23 @@ window.app =
                 started: true, 
                 completed: @puzzleProgress[@level.id]?.completed
         ), 100)
+        
+    initIntro: ->
+        @intro or= @$('.intro_message')
+        @intro.bind 'touchstart', (e) => e.stop()
 
+        @intro.find('.select').bind 'touchstart.select_player', (e) => 
+            button = $(e.currentTarget)
+            button.addClass('active')
+            $(document.body).one 'touchend.edit_player', => button.removeClass('active')
+            @showMenu(@settings)
+
+        @intro.find('.go').bind 'touchstart.play', (e) => 
+            button = $(e.currentTarget)
+            button.addClass('active')
+            $(document.body).one 'touchend.play', => button.removeClass('active')
+            @hideMenu(@intro)            
+            
     initLevelSelector: (changedLevelIds) ->
         @levelSelector or= @$('.level_selector')
         @levelSelector.bind 'touchstart', (e) => e.stop()

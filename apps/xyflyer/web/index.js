@@ -42,10 +42,11 @@ window.app = {
     this.originalHTML = this.dynamicContent.html();
     this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
     this.puzzleProgress = {};
+    this.initIntro();
     this.initLevelSelector();
     this.initSettings();
     this.initWorlds();
-    return this.showMenu(this.settings);
+    return this.showMenu(this.intro);
   },
   $: function(selector) {
     return $(selector, this.el);
@@ -335,6 +336,31 @@ window.app = {
         completed: (_ref = _this.puzzleProgress[_this.level.id]) != null ? _ref.completed : void 0
       });
     }), 100);
+  },
+  initIntro: function() {
+    var _this = this;
+    this.intro || (this.intro = this.$('.intro_message'));
+    this.intro.bind('touchstart', function(e) {
+      return e.stop();
+    });
+    this.intro.find('.select').bind('touchstart.select_player', function(e) {
+      var button;
+      button = $(e.currentTarget);
+      button.addClass('active');
+      $(document.body).one('touchend.edit_player', function() {
+        return button.removeClass('active');
+      });
+      return _this.showMenu(_this.settings);
+    });
+    return this.intro.find('.go').bind('touchstart.play', function(e) {
+      var button;
+      button = $(e.currentTarget);
+      button.addClass('active');
+      $(document.body).one('touchend.play', function() {
+        return button.removeClass('active');
+      });
+      return _this.hideMenu(_this.intro);
+    });
   },
   initLevelSelector: function(changedLevelIds) {
     var previousCompleted, stageElement, _i, _len, _ref, _results,

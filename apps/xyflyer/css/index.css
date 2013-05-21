@@ -1,4 +1,5 @@
 body {
+  font-family: 'PT Sans', sans-serif;
   background-color: transparent;
   padding: 0;
   margin: 0;
@@ -233,7 +234,7 @@ body {
 .xyflyer .dynamic_content .equation_area .equations .equation_container .variable .slider {
   position: relative;
   float: right;
-  width: 72%;
+  width: 71%;
 }
 .xyflyer .dynamic_content .equation_area .equations .equation_container .bad_formula_message .slider .track,
 .xyflyer .dynamic_content .equation_area .equations .equation_container .range .slider .track,
@@ -315,7 +316,7 @@ body {
   cursor: pointer;
 }
 
-.xyflyer .dynamic_content .button {
+.xyflyer .button {
   font-size: 21px;
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
@@ -336,7 +337,7 @@ body {
   text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
 }
-.xyflyer .dynamic_content .button.active {
+.xyflyer .button.active {
   position: relative;
   top: 1px;
 }
@@ -526,6 +527,22 @@ body {
 .xyflyer .menu h3,
 .xyflyer .menu h4 {
   text-align: center;
+}
+.xyflyer .intro_message {
+    text-align: center;
+    padding: 60px 0;
+    height: auto;
+}
+.xyflyer .intro_message .text {
+    font-size: 27px;
+    padding: 60px;
+}
+.xyflyer .intro_message .blue_button {
+    font-size: 30px;
+    padding: 12px 0;
+    margin: 0 30px;
+    width: 228px;
+    display: inline-block;
 }
 .xyflyer .settings {
     height: 540px;
