@@ -99,3 +99,37 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+
+// Button
+
+.button-color(@color, @colorDiff: 10%) {
+    -moz-box-shadow:inset 0px 1px 0px 0px lighten(@color, @colorDiff);
+    -webkit-box-shadow:inset 0px 1px 0px 0px lighten(@color, @colorDiff);
+    box-shadow:inset 0px 1px 0px 0px lighten(@color, @colorDiff);
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @color), color-stop(1, darken(@color, @colorDiff)) );
+    background:-moz-linear-gradient( center top, @color 5%, darken(@color, @colorDiff) 100% );
+    background-color:@color;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid @color;
+    display:inline-block;
+    color: @white;
+    font-family:arial;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px @color;
+    margin: auto;
+    &:hover {
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, lighten(@color, @colorDiff)), color-stop(1, @color) );
+        background:-moz-linear-gradient( center top, lighten(@color, @colorDiff) 5%, @color 100% );
+        background-color:@color;
+    }
+    &:active {
+        position:relative;
+        top:1px;
+    }
+}
+

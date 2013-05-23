@@ -133,7 +133,7 @@ class languageScramble.ViewHelper
             return if @clickAreaHasFocus or $('.opaque_screen').css('opacity') > 0
             return unless clickArea = $('#clickarea')
             clickArea[0].focus()
-            clickArea.trigger('keypress', e)
+            clickArea.trigger('keypress.type', e)
         
         window.focus()
 
@@ -143,7 +143,7 @@ class languageScramble.ViewHelper
         $('#clickarea').bind 'focus', () => @clickAreaHasFocus = true    
         $('#clickarea').bind 'blur', () => @clickAreaHasFocus = false    
 
-        $('#clickarea').bind 'keydown', (e) =>
+        $('#clickarea').bind 'keydown.type', (e) =>
             return if @initializingScramble
             if e.keyCode == 8
                 lastLetterAdded = @lettersAdded.pop()
@@ -156,7 +156,7 @@ class languageScramble.ViewHelper
                 return
             
         lastPress = null
-        $('#clickarea').bind 'keypress', (e) =>
+        $('#clickarea').bind 'keypress.type', (e) =>
             return if @initializingScramble
             return if lastPress && new Date() - lastPress < 10
             lastPress = new Date()
@@ -464,7 +464,7 @@ class languageScramble.ViewHelper
         for container in containers
             container = $(container)
             containerWidth = container.width() 
-            container.width(containerWidth)
+            container.width(containerWidth + 2)
             container.css(float: 'none', margin: 'auto')
             
             wordGroups = container.find('.word_group')
@@ -711,11 +711,9 @@ class languageScramble.ViewHelper
     modifyScramble: (word) ->
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
         add = switch word.length
-            when 1 then 3
-            when 2,3,4,5 then 4
-            when 6 then 3
-            when 7 then 2
-            when 8,9 then 1
+            when 1,2,3,4,5 then 3
+            when 6 then 2
+            when 7 then 1
             else  0
 
         for i in [0...add]
@@ -786,7 +784,7 @@ class languageScramble.ViewHelper
         for boundary in [' ', '?', ',']
             correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        correctSentence += '<br/><br/><br/><p class=\'small\'>Tap the screen to continue ></p>'
+        correctSentence += '<div class=\'tap\'>Next Scramble</div>'
 
         correct.html(correctSentence)
         correct.addClass('correct')
@@ -808,9 +806,11 @@ class languageScramble.ViewHelper
         showNext = () =>
             return if nextShown
             nextShown = true
-            $(document.body).unbind 'click'
-            $(document.body).unbind 'touchstart'
-            $('#clickarea').unbind 'keyup'
+            $(document.body).unbind 'mousemove.drag touchmove.drag'
+            $(document.body).unbind 'mouseup.drag touchend.drag'
+            $(document.body).unbind 'click.shownext'
+            $(document.body).unbind 'touchstart.shownext'
+            $('#clickarea').unbind 'keyup.shownext'
             @setProgress()
             @saveLevel()
             @$('.display_words, .scrambled, .guesses').animate
@@ -835,16 +835,18 @@ class languageScramble.ViewHelper
             duration: 500
             complete: -> guessAnimationOngoing = false
 
-        unless window.AppMobi
-            $(document.body).bind 'click', () => showNext() 
-        $(document.body).bind 'touchstart', () => showNext()
-        $('#clickarea').bind 'keydown', (e) => showNext()
+        if window.AppMobi
+            $(document.body).bind 'touchstart.shownext', => 
+                $(document.body).one 'touchend.shownext', => showNext()
+        else
+            $(document.body).bind 'click.shownext', () => showNext() 
+        $('#clickarea').bind 'keydown.shownext', (e) => showNext()
 
         correct.animate
             opacity: 1
             duration: 500
             complete: () =>
-                $.timeout 500 + (100 * correctSentence.length), () => showNext()
+                $.timeout 1000 + (100 * correctSentence.length), () => showNext()
 
     nextLevel: () ->        
         message = @$('#next_level')
@@ -854,13 +856,13 @@ class languageScramble.ViewHelper
 
         resetLevel = () =>
             if confirm('Are you sure you want to reset this level?')
-                @$('.reset_level_link').unbind 'click'
+                @$('.reset_level_link').unbind 'click.reset'
                 @puzzleData.levels[@languages][@levelName] = {}
                 @saveProgress(@puzzleData)
                 showLevel(@levelName)
 
         showLevel = (levelName) =>
-            @$('#next_level .next_level_link').unbind 'click'
+            @$('#next_level .next_level_link').unbind 'click.showlevel'
             @setLevel(levelName)
             @$('#next_level').animate
                 opacity: 0
@@ -882,10 +884,10 @@ class languageScramble.ViewHelper
             top: ($('.scramble_content').height() - @$('#next_level').height()) / 2
             left: ($('.scramble_content').width() - @$('#next_level').width()) / 2
             
-        @$('#next_level .reset_level_link').bind 'click', () => resetLevel()
+        @$('#next_level .reset_level_link').bind 'click.reset', () => resetLevel()
         for level, index in @level.nextLevels
             do (level, index) =>
-                $(@$('#next_level .next_level_link')[index]).bind 'click', () => showLevel(level)
+                $(@$('#next_level .next_level_link')[index]).bind 'click.showlevel', () => showLevel(level)
         @$('#next_level').animate
             opacity: 1
             duration: 1000
@@ -897,6 +899,326 @@ languageScramble.data =
     english_italian: 
         displayName: "English - Italian"
         levels:
+            top10nouns:
+                title: 'Top 10 Nouns'
+                subtitle: 'The 10 most commonly used nouns.'
+                nextLevels: ['top20nouns']
+                data: [
+                    {native: 'what', foreign: 'cosa'}
+                    {native: 'year', foreign: 'anno'}
+                    {native: 'man', foreign: 'uomo'}
+                    {native: 'day', foreign: 'giorno'}
+                    {native: 'time', foreign: 'volta'}
+                    {native: 'home', foreign: 'casa'}
+                    {native: 'part', foreign: 'parte'}
+                    {native: 'life', foreign: 'vita'}
+                    {native: 'time', foreign: 'tempo'}
+                    {native: 'woman', foreign: 'donna'}
+                ]
+            top20nouns:
+                title: 'Top 20 Nouns'
+                subtitle: 'The 20 most commonly used nouns.'
+                nextLevels: ['top30nouns']
+                data: [
+                    {native: 'hand', foreign: 'mano'}
+                    {native: 'eye', foreign: 'occhio'}
+                    {native: 'now', foreign: 'ora'}
+                    {native: 'ladies', foreign: 'signore'}
+                    {native: 'country', foreign: 'paese'}
+                    {native: 'time', foreign: 'momento'}
+                    {native: 'means', foreign: 'modo'}
+                    {native: 'world', foreign: 'mondo'}
+                    {native: 'word', foreign: 'parola'}
+                    {native: 'father', foreign: 'padre'}
+                ]
+            top30nouns:
+                title: 'Top 30 Nouns'
+                subtitle: 'The 30 most commonly used nouns.'
+                nextLevels: ['top40nouns']
+                data: [
+                    {native: 'point', foreign: 'punto'}
+                    {native: 'working', foreign: 'lavoro'}
+                    {native: 'condition', foreign: 'stato'}
+                    {native: 'case', foreign: 'caso'}
+                    {native: 'town', foreign: 'città'}
+                    {native: 'war', foreign: 'guerra'}
+                    {native: 'road', foreign: 'strada'}
+                    {native: 'child', foreign: 'figlio'}
+                    {native: 'night', foreign: 'notte'}
+                    {native: 'item', foreign: 'voce'}
+                ]
+            top40nouns:
+                title: 'Top 40 Nouns'
+                subtitle: 'The 40 most commonly used nouns.'
+                nextLevels: ['top50nouns']
+                data: [
+                    {native: 'name', foreign: 'nome'}
+                    {native: 'evening', foreign: 'sera'}
+                    {native: 'water', foreign: 'acqua'}
+                    {native: 'friend', foreign: 'amico'}
+                    {native: 'made', foreign: 'fatto'}
+                    {native: 'people', foreign: 'gente'}
+                    {native: 'love', foreign: 'amore'}
+                    {native: 'history', foreign: 'storia'}
+                    {native: 'air', foreign: 'aria'}
+                    {native: 'force', foreign: 'forza'}
+                ]
+            top50nouns:
+                title: 'Top 50 Nouns'
+                subtitle: 'The 50 most commonly used nouns.'
+                nextLevels: ['top60nouns']
+                data: [
+                    {native: 'head', foreign: 'testa'}
+                    {native: 'reason', foreign: 'ragione'}
+                    {native: 'sea', foreign: 'mare'}
+                    {native: 'month', foreign: 'mese'}
+                    {native: 'chief', foreign: 'capo'}
+                    {native: 'light', foreign: 'luce'}
+                    {native: 'sun', foreign: 'sole'}
+                    {native: 'family', foreign: 'famiglia'}
+                    {native: 'foot', foreign: 'piede'}
+                    {native: 'person', foreign: 'persona'}
+                ]
+            top60nouns:
+                title: 'Top 60 Nouns'
+                subtitle: 'The 60 most commonly used nouns.'
+                nextLevels: ['top70nouns']
+                data: [
+                    {native: 'government', foreign: 'governo'}
+                    {native: 'sense', foreign: 'senso'}
+                    {native: 'work', foreign: 'opera'}
+                    {native: 'product', foreign: 'prodotto'}
+                    {native: 'party', foreign: 'festa'}
+                    {native: 'play', foreign: 'gioco'}
+                    {native: 'test', foreign: 'prova'}
+                    {native: 'campaign', foreign: 'campagna'}
+                    {native: 'flower', foreign: 'fiore'}
+                    {native: 'room', foreign: 'sala'}
+                ]
+            top70nouns:
+                title: 'Top 70 Nouns'
+                subtitle: 'The 70 most commonly used nouns.'
+                nextLevels: ['top80nouns']
+                data: [
+                    {native: 'measure', foreign: 'misura'}
+                    {native: 'location', foreign: 'posizione'}
+                    {native: 'nature', foreign: 'natura'}
+                    {native: 'office', foreign: 'ufficio'}
+                    {native: 'species', foreign: 'specie'}
+                    {native: 'achievement', foreign: 'successo'}
+                    {native: 'area', foreign: 'zona'}
+                    {native: 'fire', foreign: 'fuoco'}
+                    {native: 'soldier', foreign: 'soldato'}
+                    {native: 'view', foreign: 'vista'}
+                ]
+            top80nouns:
+                title: 'Top 80 Nouns'
+                subtitle: 'The 80 most commonly used nouns.'
+                nextLevels: ['top90nouns']
+                data: [
+                    {native: 'freedom', foreign: 'libertà'}
+                    {native: 'outcome', foreign: 'risultato'}
+                    {native: 'importance', foreign: 'importanza'}
+                    {native: 'doubt', foreign: 'dubbio'}
+                    {native: 'search', foreign: 'ricerca'}
+                    {native: 'god', foreign: 'dio'}
+                    {native: 'figure', foreign: 'figura'}
+                    {native: 'square', foreign: 'piazza'}
+                    {native: 'issue', foreign: 'questione'}
+                    {native: 'hostile', foreign: 'nemico'}
+                ]
+            top90nouns:
+                title: 'Top 90 Nouns'
+                subtitle: 'The 90 most commonly used nouns.'
+                nextLevels: ['top100nouns']
+                data: [
+                    {native: 'worth', foreign: 'pena'}
+                    {native: 'reason', foreign: 'motivo'}
+                    {native: 'experience', foreign: 'esperienza'}
+                    {native: 'memory', foreign: 'ricordo'}
+                    {native: 'tree', foreign: 'albero'}
+                    {native: 'policy', foreign: 'politica'}
+                    {native: 'process', foreign: 'processo'}
+                    {native: 'wine', foreign: 'vino'}
+                    {native: 'door', foreign: 'porta'}
+                    {native: 'south', foreign: 'sud'}
+                ]
+            top100nouns:
+                title: 'Top 100 Nouns'
+                subtitle: 'The 100 most commonly used nouns.'
+                nextLevels: ['top110nouns']
+                data: [
+                    {native: 'dream', foreign: 'sogno'}
+                    {native: 'dog', foreign: 'cane'}
+                    {native: 'island', foreign: 'isola'}
+                    {native: 'movement', foreign: 'movimento'}
+                    {native: 'mind', foreign: 'mente'}
+                    {native: 'opportunity', foreign: 'occasione'}
+                    {native: 'price', foreign: 'prezzo'}
+                    {native: 'because', foreign: 'causa'}
+                    {native: 'time', foreign: 'periodo'}
+                    {native: 'development', foreign: 'sviluppo'}
+                ]
+            top110nouns:
+                title: 'Top 110 Nouns'
+                subtitle: 'The 110 most commonly used nouns.'
+                nextLevels: ['top120nouns']
+                data: [
+                    {native: 'sister', foreign: 'sorella'}
+                    {native: 'effect', foreign: 'effetto'}
+                    {native: 'garden', foreign: 'giardino'}
+                    {native: 'activity', foreign: 'attività'}
+                    {native: 'will', foreign: 'volontà'}
+                    {native: 'face', foreign: 'volto'}
+                    {native: 'base', foreign: 'base'}
+                    {native: 'character', foreign: 'carattere'}
+                    {native: 'consciousness', foreign: 'coscienza'}
+                    {native: 'watch', foreign: 'guardia'}
+                ]
+            top120nouns:
+                title: 'Top 120 Nouns'
+                subtitle: 'The 120 most commonly used nouns.'
+                nextLevels: ['top130nouns']
+                data: [
+                    {native: 'Memory', foreign: 'memoria'}
+                    {native: 'ground', foreign: 'terreno'}
+                    {native: 'animal', foreign: 'animale'}
+                    {native: 'leadership', foreign: 'direzione'}
+                    {native: 'excellence', foreign: 'eccellenza'}
+                    {native: 'disease', foreign: 'malattia'}
+                    {native: 'knowledge', foreign: 'scienza'}
+                    {native: 'function', foreign: 'funzione'}
+                    {native: 'result', foreign: 'conseguenza'}
+                    {native: 'wall', foreign: 'parete'}
+                ]
+            top130nouns:
+                title: 'Top 130 Nouns'
+                subtitle: 'The 130 most commonly used nouns.'
+                nextLevels: ['top140nouns']
+                data: [
+                    {native: 'tooth', foreign: 'dente'}
+                    {native: 'reach', foreign: 'distanza'}
+                    {native: 'taste', foreign: 'gusto'}
+                    {native: 'feeling', foreign: 'impressione'}
+                    {native: 'institution', foreign: 'istituto'}
+                    {native: 'framework', foreign: 'quadro'}
+                    {native: 'attention', foreign: 'attenzione'}
+                    {native: 'author', foreign: 'autore'}
+                    {native: 'difficulty', foreign: 'difficoltà'}
+                    {native: 'fondness', foreign: 'passione'}
+                ]
+            top140nouns:
+                title: 'Top 140 Nouns'
+                subtitle: 'The 140 most commonly used nouns.'
+                nextLevels: ['top150nouns']
+                data: [
+                    {native: 'committee', foreign: 'commissione'}
+                    {native: 'finger', foreign: 'dito'}
+                    {native: 'starting', foreign: 'inizio'}
+                    {native: 'program', foreign: 'programma'}
+                    {native: 'show', foreign: 'spettacolo'}
+                    {native: 'headline', foreign: 'titolo'}
+                    {native: 'communication', foreign: 'comunicazione'}
+                    {native: 'phenomenon', foreign: 'fenomeno'}
+                    {native: 'may', foreign: 'maggio'}
+                    {native: 'print', foreign: 'stampa'}
+                ]
+            top150nouns:
+                title: 'Top 150 Nouns'
+                subtitle: 'The 150 most commonly used nouns.'
+                nextLevels: ['top160nouns']
+                data: [
+                    {native: 'money', foreign: 'denaro'}
+                    {native: 'fate', foreign: 'destino'}
+                    {native: 'have to', foreign: 'dovere'}
+                    {native: 'iron', foreign: 'ferro'}
+                    {native: 'tip', foreign: 'punta'}
+                    {native: 'kingdom', foreign: 'regno'}
+                    {native: 'era', foreign: 'epoca'}
+                    {native: 'moon', foreign: 'luna'}
+                    {native: 'province', foreign: 'provincia'}
+                    {native: 'will', foreign: 'voglia'}
+                ]
+            top160nouns:
+                title: 'Top 160 Nouns'
+                subtitle: 'The 160 most commonly used nouns.'
+                nextLevels: ['top170nouns']
+                data: [
+                    {native: 'difference', foreign: 'differenza'}
+                    {native: 'check', foreign: 'controllo'}
+                    {native: 'grace', foreign: 'grazia'}
+                    {native: 'past', foreign: 'passato'}
+                    {native: 'space', foreign: 'spazio'}
+                    {native: 'Star', foreign: 'stella'}
+                    {native: 'race', foreign: 'corsa'}
+                    {native: 'grass', foreign: 'erba'}
+                    {native: 'mass', foreign: 'massa'}
+                    {native: 'origin', foreign: 'origine'}
+                ]
+            top170nouns:
+                title: 'Top 170 Nouns'
+                subtitle: 'The 170 most commonly used nouns.'
+                nextLevels: ['top180nouns']
+                data: [
+                    {native: 'police force', foreign: 'polizia'}
+                    {native: 'solution', foreign: 'soluzione'}
+                    {native: 'kilometer', foreign: 'chilometro'}
+                    {native: 'mother', foreign: 'madre'}
+                    {native: 'fear', foreign: 'paura'}
+                    {native: 'heart', foreign: 'cuore'}
+                    {native: 'idea', foreign: 'idea'}
+                    {native: 'bottom', foreign: 'fondo'}
+                    {native: 'example', foreign: 'esempio'}
+                    {native: 'order', foreign: 'ordine'}
+                ]
+            top180nouns:
+                title: 'Top 180 Nouns'
+                subtitle: 'The 180 most commonly used nouns.'
+                nextLevels: ['top190nouns']
+                data: [
+                    {native: 'place', foreign: 'posto'}
+                    {native: 'field', foreign: 'campo'}
+                    {native: 'face', foreign: 'faccia'}
+                    {native: 'wife', foreign: 'moglie'}
+                    {native: 'boyfriend', foreign: 'ragazzo'}
+                    {native: 'need', foreign: 'bisogno'}
+                    {native: 'sky', foreign: 'cielo'}
+                    {native: 'bed', foreign: 'letto'}
+                    {native: 'front', foreign: 'fronte'}
+                    {native: 'account', foreign: 'conto'}
+                ]
+            top190nouns:
+                title: 'Top 190 Nouns'
+                subtitle: 'The 190 most commonly used nouns.'
+                nextLevels: ['top200nouns']
+                data: [
+                    {native: 'body', foreign: 'corpo'}
+                    {native: 'number', foreign: 'numero'}
+                    {native: 'Minister', foreign: 'ministro'}
+                    {native: 'problem', foreign: 'problema'}
+                    {native: 'church', foreign: 'chiesa'}
+                    {native: 'arm', foreign: 'braccio'}
+                    {native: 'child', foreign: 'bambino'}
+                    {native: 'thought', foreign: 'pensiero'}
+                    {native: 'peace', foreign: 'pace'}
+                    {native: 'death', foreign: 'morte'}
+                ]
+            top200nouns:
+                title: 'Top 200 Nouns'
+                subtitle: 'The 200 most commonly used nouns.'
+                nextLevels: ['top20nouns']
+                data: [
+                    {native: 'end', foreign: 'fine'}
+                    {native: 'form', foreign: 'forma'}
+                    {native: 'rest', foreign: 'resto'}
+                    {native: 'people', foreign: 'popolo'}
+                    {native: 'company', foreign: 'società'}
+                    {native: 'study', foreign: 'studio'}
+                    {native: 'law', foreign: 'legge'}
+                    {native: 'Book', foreign: 'libro'}
+                    {native: 'daughter', foreign: 'figlia'}
+                    {native: 'rest', foreign: 'resto'}
+                ]            
             greetings:
                 title: 'Greetings'
                 subtitle: 'Common conversational greetings.'
@@ -1619,6 +1941,9 @@ languageScramble.data =
                     {native: 'she kissed me on the cheek', foreign: 'lei mi ha baciato sulla guancia'},
                     {native: 'i need some advice', foreign: 'ho bisogno di qualche consiglio'},
                 ]
+                
+                
+                
 ###                
             top225words:
                 title: 'Top 200 - 225 Words'

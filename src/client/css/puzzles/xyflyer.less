@@ -8,37 +8,6 @@
 
 @darken: 10%;
 
-
-.button-color(@color) {
-    -moz-box-shadow:inset 0px 1px 0px 0px lighten(@color, @darken);
-    -webkit-box-shadow:inset 0px 1px 0px 0px lighten(@color, @darken);
-    box-shadow:inset 0px 1px 0px 0px lighten(@color, @darken);
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @color), color-stop(1, darken(@color, @darken)) );
-    background:-moz-linear-gradient( center top, @color 5%, darken(@color, @darken) 100% );
-    background-color:@color;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
-    border-radius:6px;
-    border:1px solid @color;
-    display:inline-block;
-    color: @white;
-    font-family:arial;
-    font-weight:bold;
-    padding:6px 24px;
-    text-decoration:none;
-    text-shadow:1px 1px 0px @color;
-    margin: auto;
-    &:hover {
-        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, lighten(@color, @darken)), color-stop(1, @color) );
-        background:-moz-linear-gradient( center top, lighten(@color, @darken) 5%, @color 100% );
-        background-color:@color;
-    }
-    &:active {
-        position:relative;
-        top:1px;
-    }
-}
-
 .xyflyer {
     height: @height;
     width: @width;

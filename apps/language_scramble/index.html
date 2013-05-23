@@ -6,42 +6,45 @@
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1;" />
         
         <!-- <script src="http://debug.appmobi.com/target/target-script-min.js#af6ef072-5a70-4b53-82ef-f5d0af8793b0"></script> -->
-        <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script> 
+        <!-- the line below is required for access to the appMobi JS library -->
+        <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script>
         <script type="text/javascript" charset="utf-8" charset="utf-8" src="web/ender.js"></script>
         <script type="text/javascript" charset="utf-8" src="web/language_scramble.js"></script>
         <script type="text/javascript" charset="utf-8" src="web/index.js"></script>
-        <script type="text/javascript">
-            /* This code prevents users from dragging the page */
-            var preventDefaultScroll = function(event) {
-            	event.preventDefault();
-            	window.scroll(0, 0);
-            	return false;
-            };
-            document.addEventListener('touchmove', preventDefaultScroll, false);
 
-            /* This code is used to run as soon as appMobi activates */
-            var onDeviceReady = function() {
-                //user AppMobi viewport
-                AppMobi.display.useViewport(300,480);
+        <script type="text/javascript" language="javascript">
+                // This event handler is fired once the AppMobi libraries are ready
+                function onDeviceReady() {
+                    //user AppMobi viewport
+                    AppMobi.display.useViewport(300,480);
 
-                //lock orientation
-                AppMobi.device.setRotateOrientation("landscape");
-                AppMobi.device.setAutoRotate(false);
+                    //lock orientation
+                    AppMobi.device.setRotateOrientation("landscape");
+                    AppMobi.device.setAutoRotate(false);
 
-                //manage power
-                AppMobi.device.managePower(true,false);
+                    // //manage power
+                    // AppMobi.device.managePower(true,false);
 
-            	//any app-specific initialization
-    	        window.app.initialize();
-    	         
-    	        //hide splash screen
-    			AppMobi.device.hideSplashScreen();
-    			
-            };
-    		document.addEventListener("appMobi.device.ready",onDeviceReady,false);
+                	//any app-specific initialization
+        	        window.app.initialize();
 
-        </script>		
-        
+        	        //hide splash screen
+        			AppMobi.device.hideSplashScreen();
+                }
+
+                //initial event handler to detect when appMobi is ready to roll
+                document.addEventListener("appMobi.device.ready",onDeviceReady,false);
+
+
+                /* This code prevents users from dragging the page */
+                var preventDefaultScroll = function(event) {
+                	event.preventDefault();
+                	window.scroll(0, 0);
+                	return false;
+                };
+                document.addEventListener('touchmove', preventDefaultScroll, false);
+        </script> 
+
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>Language Scramble</title>
     </head>
