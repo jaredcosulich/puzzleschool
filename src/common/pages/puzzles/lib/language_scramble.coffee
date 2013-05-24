@@ -836,11 +836,15 @@ class languageScramble.ViewHelper
             complete: -> guessAnimationOngoing = false
 
         if window.AppMobi
-            $(document.body).bind 'touchstart.shownext', => 
-                $(document.body).one 'touchend.shownext', => showNext()
+            $(document.body).bind 'touchstart.shownext', (e) =>
+                e.stop() 
+                $(document.body).unbind 'touchstart.shownext'
+                $(document.body).one 'touchend.shownext', (e) => 
+                    e.stop()
+                    showNext()
         else
             $(document.body).bind 'click.shownext', () => showNext() 
-        $('#clickarea').bind 'keydown.shownext', (e) => showNext()
+            $('#clickarea').bind 'keydown.shownext', (e) => showNext()
 
         correct.animate
             opacity: 1
@@ -893,27 +897,78 @@ class languageScramble.ViewHelper
             duration: 1000
 
 
-
-
 languageScramble.data =
     english_italian: 
         displayName: "English - Italian"
         levels:
-            top10nouns:
-                title: 'Top 10 Nouns'
-                subtitle: 'The 10 most commonly used nouns.'
-                nextLevels: ['top20nouns']
+            animals:
+                title: 'Animals'
+                subtitle: 'Types of animals'
+                nextLevels: ['apples']
                 data: [
-                    {native: 'what', foreign: 'cosa'}
-                    {native: 'year', foreign: 'anno'}
-                    {native: 'man', foreign: 'uomo'}
-                    {native: 'day', foreign: 'giorno'}
-                    {native: 'time', foreign: 'volta'}
-                    {native: 'home', foreign: 'casa'}
-                    {native: 'part', foreign: 'parte'}
-                    {native: 'life', foreign: 'vita'}
-                    {native: 'time', foreign: 'tempo'}
-                    {native: 'woman', foreign: 'donna'}
+                    {native: 'bear', foreign: 'l\'orso'}
+                    {native: 'bird', foreign: 'l\'uccello'}
+                    {native: 'cat', foreign: 'il gatto'}
+                    {native: 'deer', foreign: 'il cervo'}
+                    {native: 'dog', foreign: 'il cane'}
+                    {native: 'duck', foreign: 'l\'anatra'}
+                    {native: 'elephant', foreign: 'l\'elefante'}
+                    {native: 'falcon', foreign: 'il falcone'}
+                    {native: 'fish', foreign: 'il pesce'}
+                    {native: 'fox', foreign: 'la volpe'}
+                    {native: 'goat', foreign: 'la capra'}
+                    {native: 'horse', foreign: 'il cavallo'}
+                    {native: 'lion', foreign: 'il leone'}
+                    {native: 'mole', foreign: 'la talpa'}
+                    {native: 'monkey', foreign: 'la scimmia'}
+                    {native: 'mouse', foreign: 'il topo'}
+                    {native: 'rabbit', foreign: 'il coniglio'}
+                    {native: 'rat', foreign: 'il ratto'}
+                    {native: 'shark', foreign: 'lo squalo'}
+                    {native: 'snake', foreign: 'il serpente'}
+                    {native: 'squirrel', foreign: 'lo scoiattolo'}
+                    {native: 'swan', foreign: 'il cigno'}
+                    {native: 'tiger', foreign: 'la tigre'}
+                    {native: 'wild boar', foreign: 'il cinghiale'}
+                    {native: 'worm', foreign: 'il verme'}
+                ]
+            apples:
+                title: 'Apples'
+                subtitle: 'Phrases about apples.'
+                nextLevels: ['fathers']
+                data: [
+                    {native: 'the apple is red', foreign: 'la mela è rossa'}
+                    {native: 'it is John\'s apple', foreign: 'è mela Giovanni'}
+                    {native: 'i give John the apple', foreign: 'rendo Giovanni la mela'}
+                    {native: 'we give him the apple', foreign: 'noi gli diamo la mela'}
+                    {native: 'he gives it to John', foreign: 'egli dà a John'}
+                    {native: 'she gives it to him', foreign: 'lei dà a lui'}
+                    {native: 'is the apple red?', foreign: 'è la mela rossa?'}
+                    {native: 'the apples are red', foreign: 'le mele sono rosse'}
+                    {native: 'i have eaten the apple.', foreign: 'ho mangiato la mela.'}
+                    {native: 'i must give it to him.', foreign: 'devo dare a lui.'}
+                    {native: 'i want to give it to her.', foreign: 'voglio dare a lei.'}
+                    {native: 'i\'m going to know tomorrow', foreign: 'ho intenzione di conoscere domani'}
+                    {native: 'i can\'t eat the apple.', foreign: 'non riesco a mangiare la mela.'}
+                ]
+            fathers:
+                title: 'Fathers'
+                subtitle: 'Phrases about fathers.'
+                nextLevels: ['top10nouns']
+                data: [
+                    {native: 'my father is old', foreign: 'mio padre è vecchio'}
+                    {native: 'it is father\'s office', foreign: 'e l\'ufficio del padre'}
+                    {native: 'i loan father the money', foreign: 'mi padre prestito il denaro'}
+                    {native: 'i know father is happy', foreign: 'so che il padre è felice'}
+                    {native: 'we need father to know', foreign: 'abbiamo bisogno di conoscere il padre'}
+                    {native: 'she loves father', foreign: 'lei ama il padre'}
+                    {native: 'is father old?', foreign: 'è il padre vecchio?'}
+                    {native: 'fathers are essential', foreign: 'padri sono essenziali'}
+                    {native: 'i have seen father', foreign: 'ho visto il padre'}
+                    {native: 'i must talk to father', foreign: 'devo parlare con il padre'}
+                    {native: 'i want to hug father', foreign: 'voglio abbracciare il padre'}
+                    {native: 'i\'m going to dance with father', foreign: 'io vado a ballare con il padre'}
+                    {native: 'i can\'t wait for father', foreign: 'non vedo l\'ora per il padre'}
                 ]
             top20nouns:
                 title: 'Top 20 Nouns'

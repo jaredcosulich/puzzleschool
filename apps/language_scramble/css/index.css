@@ -133,8 +133,7 @@ body {
 .language_scramble .scrambled .correct {
   text-align: center;
 }
-.language_scramble .guesses .correct .tap,
-.language_scramble .scrambled .correct .tap {
+.language_scramble .correct .tap {
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   box-shadow: inset 0px 1px 0px 0px #3fc3db;
@@ -159,6 +158,12 @@ body {
   width: 102px;
   cursor: pointer;
   font-weight: normal;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble .guesses .hidden_message,
 .language_scramble .scrambled .hidden_message {

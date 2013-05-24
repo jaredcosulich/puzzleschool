@@ -214,6 +214,12 @@ body {
   width: 102px;
   cursor: pointer;
   font-weight: normal;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble .guesses .correct .tap:hover,
 .language_scramble .scrambled .correct .tap:hover {
