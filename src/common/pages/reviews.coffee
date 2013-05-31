@@ -1,5 +1,9 @@
 # http://io9.com/these-cool-games-let-you-do-real-life-science-486173006
 
+# Monster Physics - http://dan-russell-pinson.com/category/games/monster-physics/
+
+# 32 Builder - https://www.appolearning.com/app_reviews/596-cyberchase-3d-builder
+
 # Scratch 2.0 - http://scratch.mit.edu
 
 # Escape the room games
@@ -28,6 +32,8 @@
 # DrawQuest - ipad game
 # Universe and More Graphing - http://www.theuniverseandmore.com/SUGC/
 # Letterschool - http://letterschool.com/
+# Circuit Coder - https://itunes.apple.com/us/app/id492180472?mt=8
+
 
 soma = require('soma')
 wings = require('wings')

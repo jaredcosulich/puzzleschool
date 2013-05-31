@@ -27,7 +27,9 @@
 
                 	//any app-specific initialization
         	        window.app.initialize();
-
+        	        
+        	        AppMobi.device.hideStatusBar();
+                    
         	        //hide splash screen
         			AppMobi.device.hideSplashScreen();
                 }
@@ -53,8 +55,11 @@
         <div class='scramble_content'>
             <div class="section display_words text-center"></div>
             <div class="section guesses text-center">
-                <div class='hidden_message'>
+                <div class='hidden_message medium_message'>
                     The blank spaces are hidden, but you can still drag to them.
+                </div>
+                <div class='hidden_message hard_message'>
+                    The scrambled letters are hidden. You'll have to type the answer.
                 </div>
             </div>
             <div class="section scrambled text-center"></div>
@@ -71,6 +76,7 @@
                     {/data}
                 </div>
             </div>            
+            <div class='keyboard_container'><div class='keyboard'></div></div>
         </div>
         <div id='next_level' class='floating_message'>
             <h2>Nice Work!</h2>

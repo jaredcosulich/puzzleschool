@@ -160,38 +160,40 @@ class languageScramble.ViewHelper
             return if @initializingScramble
             return if lastPress && new Date() - lastPress < 10
             lastPress = new Date()
-            openGuess = @$(".guesses .guess")[0]
-            return unless openGuess?
-            
-            try 
-                char = String.fromCharCode(e.keyCode).toLowerCase()
-                foreignChar = openGuess.className.match(/actual_letter_(.)/)[1]
-                if foreignChar in ['é', 'è', 'ì', 'ò', 'ù', 'à']  
-                    nativeChar = switch foreignChar
-                        when 'à' then 'a'
-                        when 'é' then 'e'
-                        when 'è' then 'e'
-                        when 'ì' then 'i'
-                        when 'ò' then 'o'
-                        when 'ù' then 'u'
-                
-                    char = foreignChar if char == nativeChar
+            typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), @activeLevel.match(/Hard/))
+            $.timeout 10, () =>
+                $('#clickarea').val('')        
+                $('#clickarea').html('')        
+    
+    typeLetter: (char, force) ->
+        openGuess = @$(".guesses .guess")[0]
+        return unless openGuess?
+
+        try 
+            foreignChar = openGuess.className.match(/actual_letter_(.)/)[1]
+            if foreignChar in ['é', 'è', 'ì', 'ò', 'ù', 'à']  
+                nativeChar = switch foreignChar
+                    when 'à' then 'a'
+                    when 'é' then 'e'
+                    when 'è' then 'e'
+                    when 'ì' then 'i'
+                    when 'ò' then 'o'
+                    when 'ù' then 'u'
         
-                letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
-                if !letter and @activeLevel.match(/Hard/)?
-                    if char.match(/\w|[^\x00-\x80]+/)
-                        letter = @createLetter(char) 
-                        $(".scrambled .#{@containerClassName(openGuess)}").append(letter)
+                char = foreignChar if char == nativeChar
+
+            letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
+            if !letter and force
+                if char.match(/\w|[^\x00-\x80]+/)
+                    letter = @createLetter(char) 
+                    $(".scrambled .#{@containerClassName(openGuess)}").append(letter)        
+        catch e
+            return
             
-                $.timeout 10, () =>
-                    $('#clickarea').val('')        
-                    $('#clickarea').html('')        
-            catch e
-                return
-                
-            return unless letter?
+        if letter?
             $(letter).trigger 'keypress.start'
             $(letter).trigger 'keypress.end'
+                
             
     actualLetter: (letter) ->
         return letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)
@@ -548,7 +550,7 @@ class languageScramble.ViewHelper
         @$('.display_words').css(fontSize: "#{@letterFontSize + 2}px")
             
         @letterDim = letter.height()
-        @letterLineHeight = "#{@letterDim - (@letterDim / 10)}px"
+        @letterLineHeight = "#{@letterDim}px"
         @$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css
             width: @letterDim
         @$('.guesses, .scrambled').find('.guess, .blank_letter').css
@@ -728,18 +730,22 @@ class languageScramble.ViewHelper
     setStage: () ->
         @$('.guesses').removeClass('hidden')
         @$('.scrambled').removeClass('hidden') 
-        @$('.scramble_content').removeClass('show_keyboard')      
+        @$('.scramble_content').addClass('hide_keyboard')  
+        @$('.guesses .hidden_message').hide()  
+
         if @activeLevel.match(/Medium/)? or @activeLevel.match(/Hard/)?
             @$('.guesses').addClass('hidden')
-            message = @$('.guesses .hidden_message')
-            message.show()
-            message.width(message.width())
-            message.css('left', (@$('.scramble_content').width() - message.width()) / 2)
+            message = @$('.guesses .medium_message')
 
         if @activeLevel.match(/Hard/)?
             @$('.scrambled').addClass('hidden')       
-            @$('.scrambled .hidden_message').show()
-            @$('.scramble_content').addClass('show_keyboard')
+            @$('.scramble_content').removeClass('hide_keyboard')  
+            message = @$('.guesses .hard_message')
+
+        if message
+            message.show()
+            message.width(message.width())
+            message.css('left', (@$('.scramble_content').width() - message.width()) / 2)
     
     setProgress: ->
         if not @$(".progress_meter .bar .#{@level.data[0].id}").length
@@ -969,6 +975,54 @@ languageScramble.data =
                     {native: 'i want to hug father', foreign: 'voglio abbracciare il padre'}
                     {native: 'i\'m going to dance with father', foreign: 'io vado a ballare con il padre'}
                     {native: 'i can\'t wait for father', foreign: 'non vedo l\'ora per il padre'}
+                ]
+            top10nouns:
+                title: 'Top 10 Nouns'
+                subtitle: 'The 10 most commonly used nouns.'
+                nextLevels: ['top10verbs']
+                data: [
+                    {native: 'what', foreign: 'cosa'}
+                    {native: 'year', foreign: 'anno'}
+                    {native: 'man', foreign: 'uomo'}
+                    {native: 'daytime', foreign: 'giorno'}
+                    {native: 'time', foreign: 'volta'}
+                    {native: 'home', foreign: 'casa'}
+                    {native: 'part', foreign: 'parte'}
+                    {native: 'life', foreign: 'vita'}
+                    {native: 'time', foreign: 'tempo'}
+                    {native: 'woman', foreign: 'donna'}
+                ]
+            top10verbs:
+                title: 'Top 10 Verbs'
+                subtitle: 'The 10 most commonly used verbs.'
+                nextLevels: ['top10sentences']
+                data: [
+                    {native: 'to be', foreign: 'essere'}
+                    {native: 'to have', foreign: 'avere'}
+                    {native: 'to say', foreign: 'dire'}
+                    {native: 'to be able to', foreign: 'potere'}
+                    {native: 'to want', foreign: 'volere'}
+                    {native: 'to know', foreign: 'sapere'}
+                    {native: 'to stay', foreign: 'stare'}
+                    {native: 'to have to', foreign: 'dovere'}
+                    {native: 'to see', foreign: 'vedere'}
+                    {native: 'to go', foreign: 'andare'}
+                ]
+            top10sentences:
+                title: 'Top 10 Sentences'
+                subtitle: 'Commonly used words in sentences.'
+                nextLevels: ['top10sentences']
+                data: [
+                    {native: 'a woman is president', foreign: 'una donna è presidente'}
+                    {native: 'we have two dogs', foreign: 'abbiamo due cani'}
+                    {native: 'what is it?', foreign: 'che cosa ha detto?'}
+                    {native: 'i can not stay', foreign: 'non posso restare'}
+                    {native: 'we want to go home', foreign: 'vogliamo andare a casa'}
+                    {native: 'he knows a lot', foreign: 'sa un sacco'}
+                    {native: 'i have to stay', foreign: 'devo stare'}
+                    {native: 'i want to know', foreign: 'voglio sapere'}
+                    {native: 'we saw part of the movie', foreign: 'abbiamo visto parte del film'}
+                    {native: 'let\'s go!', foreign: 'andiamo!'}
                 ]
             top20nouns:
                 title: 'Top 20 Nouns'

@@ -86,7 +86,6 @@ soma.views({
       var languageScramble,
         _this = this;
       languageScramble = require('./lib/language_scramble');
-      this.$('.scramble_content').height(window.innerHeight * 0.6);
       this.puzzleData = JSON.parse(this.el.data('puzzle_data'));
       this.languages = this.el.data('languages');
       this.levelName = this.el.data('level_name');

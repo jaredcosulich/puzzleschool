@@ -249,7 +249,6 @@ languageScramble.ViewHelper = (function() {
     });
     lastPress = null;
     return $('#clickarea').bind('keypress.type', function(e) {
-      var char, foreignChar, letter, nativeChar, openGuess;
       if (_this.initializingScramble) {
         return;
       }
@@ -257,54 +256,57 @@ languageScramble.ViewHelper = (function() {
         return;
       }
       lastPress = new Date();
-      openGuess = _this.$(".guesses .guess")[0];
-      if (openGuess == null) {
-        return;
-      }
-      try {
-        char = String.fromCharCode(e.keyCode).toLowerCase();
-        foreignChar = openGuess.className.match(/actual_letter_(.)/)[1];
-        if (foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'ò' || foreignChar === 'ù' || foreignChar === 'à') {
-          nativeChar = (function() {
-            switch (foreignChar) {
-              case 'à':
-                return 'a';
-              case 'é':
-                return 'e';
-              case 'è':
-                return 'e';
-              case 'ì':
-                return 'i';
-              case 'ò':
-                return 'o';
-              case 'ù':
-                return 'u';
-            }
-          })();
-          if (char === nativeChar) {
-            char = foreignChar;
+      typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), _this.activeLevel.match(/Hard/));
+      return $.timeout(10, function() {
+        $('#clickarea').val('');
+        return $('#clickarea').html('');
+      });
+    });
+  };
+
+  ViewHelper.prototype.typeLetter = function(char, force) {
+    var foreignChar, letter, nativeChar, openGuess;
+    openGuess = this.$(".guesses .guess")[0];
+    if (openGuess == null) {
+      return;
+    }
+    try {
+      foreignChar = openGuess.className.match(/actual_letter_(.)/)[1];
+      if (foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'ò' || foreignChar === 'ù' || foreignChar === 'à') {
+        nativeChar = (function() {
+          switch (foreignChar) {
+            case 'à':
+              return 'a';
+            case 'é':
+              return 'e';
+            case 'è':
+              return 'e';
+            case 'ì':
+              return 'i';
+            case 'ò':
+              return 'o';
+            case 'ù':
+              return 'u';
           }
+        })();
+        if (char === nativeChar) {
+          char = foreignChar;
         }
-        letter = $(".scrambled ." + (_this.containerClassName(openGuess)) + " .letter_" + char)[0];
-        if (!letter && (_this.activeLevel.match(/Hard/) != null)) {
-          if (char.match(/\w|[^\x00-\x80]+/)) {
-            letter = _this.createLetter(char);
-            $(".scrambled ." + (_this.containerClassName(openGuess))).append(letter);
-          }
+      }
+      letter = $(".scrambled ." + (this.containerClassName(openGuess)) + " .letter_" + char)[0];
+      if (!letter && force) {
+        if (char.match(/\w|[^\x00-\x80]+/)) {
+          letter = this.createLetter(char);
+          $(".scrambled ." + (this.containerClassName(openGuess))).append(letter);
         }
-        $.timeout(10, function() {
-          $('#clickarea').val('');
-          return $('#clickarea').html('');
-        });
-      } catch (e) {
-        return;
       }
-      if (letter == null) {
-        return;
-      }
+    } catch (e) {
+      return;
+    }
+    if (letter != null) {
       $(letter).trigger('keypress.start');
       return $(letter).trigger('keypress.end');
-    });
+    }
   };
 
   ViewHelper.prototype.actualLetter = function(letter) {
@@ -830,7 +832,7 @@ languageScramble.ViewHelper = (function() {
       fontSize: "" + (this.letterFontSize + 2) + "px"
     });
     this.letterDim = letter.height();
-    this.letterLineHeight = "" + (this.letterDim - (this.letterDim / 10)) + "px";
+    this.letterLineHeight = "" + this.letterDim + "px";
     this.$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css({
       width: this.letterDim
     });
@@ -1102,18 +1104,21 @@ languageScramble.ViewHelper = (function() {
     var message;
     this.$('.guesses').removeClass('hidden');
     this.$('.scrambled').removeClass('hidden');
-    this.$('.scramble_content').removeClass('show_keyboard');
+    this.$('.scramble_content').addClass('hide_keyboard');
+    this.$('.guesses .hidden_message').hide();
     if ((this.activeLevel.match(/Medium/) != null) || (this.activeLevel.match(/Hard/) != null)) {
       this.$('.guesses').addClass('hidden');
-      message = this.$('.guesses .hidden_message');
-      message.show();
-      message.width(message.width());
-      message.css('left', (this.$('.scramble_content').width() - message.width()) / 2);
+      message = this.$('.guesses .medium_message');
     }
     if (this.activeLevel.match(/Hard/) != null) {
       this.$('.scrambled').addClass('hidden');
-      this.$('.scrambled .hidden_message').show();
-      return this.$('.scramble_content').addClass('show_keyboard');
+      this.$('.scramble_content').removeClass('hide_keyboard');
+      message = this.$('.guesses .hard_message');
+    }
+    if (message) {
+      message.show();
+      message.width(message.width());
+      return message.css('left', (this.$('.scramble_content').width() - message.width()) / 2);
     }
   };
 
@@ -1528,6 +1533,120 @@ languageScramble.data = {
           }, {
             "native": 'i can\'t wait for father',
             foreign: 'non vedo l\'ora per il padre'
+          }
+        ]
+      },
+      top10nouns: {
+        title: 'Top 10 Nouns',
+        subtitle: 'The 10 most commonly used nouns.',
+        nextLevels: ['top10verbs'],
+        data: [
+          {
+            "native": 'what',
+            foreign: 'cosa'
+          }, {
+            "native": 'year',
+            foreign: 'anno'
+          }, {
+            "native": 'man',
+            foreign: 'uomo'
+          }, {
+            "native": 'daytime',
+            foreign: 'giorno'
+          }, {
+            "native": 'time',
+            foreign: 'volta'
+          }, {
+            "native": 'home',
+            foreign: 'casa'
+          }, {
+            "native": 'part',
+            foreign: 'parte'
+          }, {
+            "native": 'life',
+            foreign: 'vita'
+          }, {
+            "native": 'time',
+            foreign: 'tempo'
+          }, {
+            "native": 'woman',
+            foreign: 'donna'
+          }
+        ]
+      },
+      top10verbs: {
+        title: 'Top 10 Verbs',
+        subtitle: 'The 10 most commonly used verbs.',
+        nextLevels: ['top10sentences'],
+        data: [
+          {
+            "native": 'to be',
+            foreign: 'essere'
+          }, {
+            "native": 'to have',
+            foreign: 'avere'
+          }, {
+            "native": 'to say',
+            foreign: 'dire'
+          }, {
+            "native": 'to be able to',
+            foreign: 'potere'
+          }, {
+            "native": 'to want',
+            foreign: 'volere'
+          }, {
+            "native": 'to know',
+            foreign: 'sapere'
+          }, {
+            "native": 'to stay',
+            foreign: 'stare'
+          }, {
+            "native": 'to have to',
+            foreign: 'dovere'
+          }, {
+            "native": 'to see',
+            foreign: 'vedere'
+          }, {
+            "native": 'to go',
+            foreign: 'andare'
+          }
+        ]
+      },
+      top10sentences: {
+        title: 'Top 10 Sentences',
+        subtitle: 'Commonly used words in sentences.',
+        nextLevels: ['top10sentences'],
+        data: [
+          {
+            "native": 'a woman is president',
+            foreign: 'una donna è presidente'
+          }, {
+            "native": 'we have two dogs',
+            foreign: 'abbiamo due cani'
+          }, {
+            "native": 'what is it?',
+            foreign: 'che cosa ha detto?'
+          }, {
+            "native": 'i can not stay',
+            foreign: 'non posso restare'
+          }, {
+            "native": 'we want to go home',
+            foreign: 'vogliamo andare a casa'
+          }, {
+            "native": 'he knows a lot',
+            foreign: 'sa un sacco'
+          }, {
+            "native": 'i have to stay',
+            foreign: 'devo stare'
+          }, {
+            "native": 'i want to know',
+            foreign: 'voglio sapere'
+          }, {
+            "native": 'we saw part of the movie',
+            foreign: 'abbiamo visto parte del film'
+          }, {
+            "native": 'let\'s go!',
+            foreign: 'andiamo!'
           }
         ]
       },

@@ -1,10 +1,11 @@
 body {
-  background-color: #24aac3;
+  background-color: #484848;
 }
 .language_scramble {
+  width: 960px;
+  margin-left: -12px;
   margin-bottom: 60px;
   position: relative;
-  background-color: #fafafa;
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
@@ -24,7 +25,6 @@ body {
   border-top-right-radius: 12px;
   -webkit-border-top-right-radius: 12px;
   -moz-border-radius-topright: 12px;
-  margin-bottom: 30px;
 }
 .language_scramble .header h1 {
   margin: 12px 0 0 24px;
@@ -62,6 +62,11 @@ body {
 .language_scramble .header .level small {
   display: block;
   font-size: 10px;
+}
+.language_scramble .scramble_content {
+  height: 640px;
+  width: 960px;
+  background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
@@ -150,19 +155,23 @@ body {
 }
 .language_scramble .guesses .letter,
 .language_scramble .scrambled .letter {
-  border: 1px solid #ccc;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .language_scramble .guesses .color1 .letter,
 .language_scramble .scrambled .color1 .letter {
-  background-color: #24aac3;
+  background-image: url('/assets/images/puzzles/language_scramble/tile-blue.png');
 }
 .language_scramble .guesses .color2 .letter,
 .language_scramble .scrambled .color2 .letter {
-  background-color: #ff6e5f;
+  background-image: url('/assets/images/puzzles/language_scramble/tile-red.png');
 }
 .language_scramble .guesses .color3 .letter,
 .language_scramble .scrambled .color3 .letter {
-  background-color: #ff922a;
+  background-image: url('/assets/images/puzzles/language_scramble/tile-yellow.png');
 }
 .language_scramble .guesses .color4 .letter,
 .language_scramble .scrambled .color4 .letter {
@@ -234,7 +243,6 @@ body {
 }
 .language_scramble .guesses .hidden_message,
 .language_scramble .scrambled .hidden_message {
-  display: none;
   position: absolute;
   font-size: 12pt;
   background-color: #fafafa;
@@ -253,7 +261,6 @@ body {
 }
 .language_scramble .guesses.hidden .hidden_message,
 .language_scramble .scrambled.hidden .hidden_message {
-  display: block;
   left: 236px;
   top: 30px;
 }
@@ -297,8 +304,6 @@ body {
 }
 .language_scramble #clickarea {
   position: absolute;
-  top: -1000px;
-  left: -1000px;
   background-image: url('/assets/images/puzzles/language_scramble/keyboard.gif');
   width: 50px;
   height: 17px;
@@ -306,14 +311,18 @@ body {
   color: gray;
   z-index: 2;
 }
+.language_scramble .hide_keyboard #clickarea {
+  top: -1000px;
+  left: -1000px;
+}
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-  .language_scramble .show_keyboard #clickarea {
+  .language_scramble #clickarea {
     top: 284px;
     left: 444px;
   }
 }
 @media only screen and (max-device-width: 480px) {
-  .language_scramble .show_keyboard #clickarea {
+  .language_scramble #clickarea {
     top: 284px;
     left: 444px;
   }
@@ -328,7 +337,6 @@ body {
   border-bottom-right-radius: 12px;
   -webkit-border-bottom-right-radius: 12px;
   -moz-border-radius-bottomright: 12px;
-  margin-top: 30px;
 }
 .language_scramble .footer .levels {
   padding: 0 88px;

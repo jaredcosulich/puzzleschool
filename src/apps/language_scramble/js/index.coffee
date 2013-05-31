@@ -30,10 +30,10 @@ window.app =
             puzzleData: @puzzleData
             languages: @languages
             saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
-            maxLevel: 5
 
         @initProgressMeter()
         @initMenuButton()
+        @initKeyboard()
 
         @checkSize(50)
         @sizeElements()
@@ -43,7 +43,9 @@ window.app =
         @viewHelper.bindWindow()
         @viewHelper.bindKeyPress()
         @viewHelper.newScramble() 
-
+        
+    $: (selector) -> @selector.find(selector)    
+    
     checkSize: (interval) ->
         if @width != (window.innerWidth or window.landwidth)
             @width = window.innerWidth or window.landwidth
@@ -54,7 +56,7 @@ window.app =
 
     sizeElements: ->
         @progressMeter.css(top: @height - @percentComplete.height())
-        levelSelect = @selector.find('#level_select_menu')
+        levelSelect = @$('#level_select_menu')
         levelSelect.width(@width)
         levelSelect.height(@height)
     
@@ -80,7 +82,7 @@ window.app =
         
         
     initMenuButton: ->
-        levelSelect = @selector.find('#level_select_menu')
+        levelSelect = @$('#level_select_menu')
         startPosition = {}
         levelSelect.bind 'touchstart', (e) =>
             startPosition = 
@@ -127,7 +129,7 @@ window.app =
                 $(levelProgress).bind 'click', () => showLevel(key)
                 $(levelLinkDiv).append(levelProgress)
     
-        @selector.find('.menu_button').bind 'click', =>
+        @$('.menu_button').bind 'click', =>
             levelSelect.css
                 opacity: 0
                 top: (@height - levelSelect.height()) / 2
@@ -137,7 +139,7 @@ window.app =
                 duration: 500
                 
         
-        @selector.find('#close_menu_button').bind 'click', ->
+        @$('#close_menu_button').bind 'click', ->
             levelSelect.animate
                 opacity: 0
                 duration: 500
@@ -145,5 +147,36 @@ window.app =
                     levelSelect.css
                         top: -1000
                         left: -1000
+                        
+    initKeyboard: ->
+        keyboard = @$('.keyboard')
+        addLetter = (letter) -> 
+            color = if letter.match(/&.*;/) then 'red' else 'blue'
+            keyboard.append("<a class='letter'><span class='#{color}_button'>#{letter}</span></a>")
+        addBreak = -> keyboard.append('<br/>')
+        addLetter(letter) for letter in ['q','w','e','r','t','y','u','i','o','p','&lsaquo;']
+        addBreak()
+        addLetter(letter) for letter in ['a','s','d','f','g','h','j','k','l']
+        addBreak()
+        addLetter(letter) for letter in ['z','x','c','v','b','n','m']
+        keyboard.find('.letter').bind 'touchstart.letter', (e) =>
+            letter = $(e.currentTarget)
+            letter.addClass('active')
+            $(document.body).one 'touchend.letter', => letter.removeClass('active')
+            @clickLetter(letter)
+
+    clickLetter: (letter) ->
+        htmlLetter = letter.find('span').html()
+        switch htmlLetter
+            when '‹'    
+                lastLetterAdded = @viewHelper.lettersAdded.pop()
+                guessedLetters = $(".guesses .letter_#{lastLetterAdded}")
+                if guessedLetters.length
+                    guessedLetter = $(guessedLetters[guessedLetters.length - 1])
+                    guessedLetter.trigger('keypress.start')
+                    guessedLetter.trigger('keypress.end')
+            else    
+                @viewHelper.typeLetter(htmlLetter, true)
+
             
             

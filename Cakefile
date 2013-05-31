@@ -65,6 +65,7 @@ task 'build:language_scramble', 'Build the language scramble app', ->
         'coffee --compile --bare --output apps/language_scramble/web src/apps/language_scramble/js/*.coffee'
         'cp build/common/pages/puzzles/lib/language_scramble.js apps/language_scramble/web/language_scramble.js'
         'cp ender.js apps/language_scramble/web/ender.js'
+        'cp assets/images/puzzles/language_scramble/* apps/language_scramble/css/images/'
         'cp -r apps/language_scramble/* ~/workspace/puzzleschoolapps/languagescramble/'
     ]
 

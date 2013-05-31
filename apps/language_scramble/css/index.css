@@ -2,6 +2,7 @@ body {
   background-color: #24aac3;
   padding: 0;
   margin: 0;
+  background: #fafafa url('images/wood.jpg');
 }
 .text-center {
     text-align: center;
@@ -95,19 +96,23 @@ body {
 }
 .language_scramble .guesses .letter,
 .language_scramble .scrambled .letter {
-  border: 1px solid #ccc;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .language_scramble .guesses .color1 .letter,
 .language_scramble .scrambled .color1 .letter {
-  background-color: #24aac3;
+  background-image: url('images/tile-blue.png');
 }
 .language_scramble .guesses .color2 .letter,
 .language_scramble .scrambled .color2 .letter {
-  background-color: #ff6e5f;
+  background-image: url('images/tile-red.png');
 }
 .language_scramble .guesses .color3 .letter,
 .language_scramble .scrambled .color3 .letter {
-  background-color: #ff922a;
+  background-image: url('images/tile-yellow.png');
 }
 .language_scramble .guesses .color4 .letter,
 .language_scramble .scrambled .color4 .letter {
@@ -172,9 +177,13 @@ body {
   font-size: 12pt;
   background-color: #fafafa;
 }
-.language_scramble .guesses.hidden,
-.language_scramble .scrambled.hidden {
+.language_scramble .guesses.hidden {
   position: relative;
+}
+.language_scramble .scrambled.hidden {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
 }
 .language_scramble .guesses.hidden .letter,
 .language_scramble .scrambled.hidden .letter,
@@ -220,8 +229,8 @@ body {
 
 .language_scramble .floating_message {
   position: absolute;
-  top: -1000px;
-  left: -1000px;
+  top: -10000px;
+  left: -10000px;
   opacity: 0;
   text-align: center;
 }
@@ -272,8 +281,8 @@ body {
 
 .language_scramble .progress_meter {
     position: absolute;
-    top: -1000px;
-    left: -1000px;
+    top: -10000px;
+    left: -10000px;
 }
 
 .language_scramble .scramble_content .menu_button, .language_scramble #close_menu_button {
@@ -319,5 +328,54 @@ body {
 
 .language_scramble #level_select_menu .level_link small {
     color: #333;
+}
+.language_scramble .keyboard_container {
+    position: absolute;
+    top: 150px;
+    left: 0px; 
+}
+.language_scramble .hide_keyboard .keyboard_container {
+    top: -10000px;
+    left: -10000px;
+}
+.language_scramble .keyboard  {
+    padding-left: 15px;
+    line-height: 30px;
+    font-size: 15px;
+    text-align: center;
+}
+.language_scramble .keyboard .letter {
+    display: inline-block;
+    padding: 3px;
+}
+.language_scramble .keyboard .letter span {
+    display: inline-block;
+    height: 21px;
+    line-height: 21px;
+    width: 21px;
+}
+.language_scramble .blue_button,
+.language_scramble .red_button {
+  border: 1px solid #ccc;
+  padding: 3px 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  color: white;
+  box-shadow: 2px;
+  -webkit-box-shadow: 2px;
+  -moz-box-shadow: 2px;
+}
+.language_scramble .blue_button {
+  background-color: #24aac3;
+}
+.language_scramble .blue_button.active {
+  background-color: #145f6d;
+}
+.language_scramble .red_button {
+  background-color: #ff6e5f;
+}
+.language_scramble .red_button.active {
+  background-color: #f81700;
 }
 

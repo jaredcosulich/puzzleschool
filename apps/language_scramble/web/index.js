@@ -41,17 +41,20 @@ window.app = {
       languages: this.languages,
       saveProgress: function(puzzleProgress) {
         return _this.saveProgress(puzzleProgress);
-      },
-      maxLevel: 5
+      }
     });
     this.initProgressMeter();
     this.initMenuButton();
+    this.initKeyboard();
     this.checkSize(50);
     this.sizeElements();
     this.viewHelper.setLevel(this.levelName);
     this.viewHelper.bindWindow();
     this.viewHelper.bindKeyPress();
     return this.viewHelper.newScramble();
+  },
+  $: function(selector) {
+    return this.selector.find(selector);
   },
   checkSize: function(interval) {
     var _this = this;
@@ -70,7 +73,7 @@ window.app = {
     this.progressMeter.css({
       top: this.height - this.percentComplete.height()
     });
-    levelSelect = this.selector.find('#level_select_menu');
+    levelSelect = this.$('#level_select_menu');
     levelSelect.width(this.width);
     return levelSelect.height(this.height);
   },
@@ -90,7 +93,7 @@ window.app = {
   initMenuButton: function() {
     var key, levelSelect, showLevel, startPosition, _fn,
       _this = this;
-    levelSelect = this.selector.find('#level_select_menu');
+    levelSelect = this.$('#level_select_menu');
     startPosition = {};
     levelSelect.bind('touchstart', function(e) {
       return startPosition = {
@@ -148,7 +151,7 @@ window.app = {
     for (key in languageScramble.data[this.languages].levels) {
       _fn(key);
     }
-    this.selector.find('.menu_button').bind('click', function() {
+    this.$('.menu_button').bind('click', function() {
       levelSelect.css({
         opacity: 0,
         top: (_this.height - levelSelect.height()) / 2,
@@ -159,7 +162,7 @@ window.app = {
         duration: 500
       });
     });
-    return this.selector.find('#close_menu_button').bind('click', function() {
+    return this.$('#close_menu_button').bind('click', function() {
       return levelSelect.animate({
         opacity: 0,
         duration: 500,
@@ -171,5 +174,60 @@ window.app = {
         }
       });
     });
+  },
+  initKeyboard: function() {
+    var addBreak, addLetter, keyboard, letter, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+      _this = this;
+    keyboard = this.$('.keyboard');
+    addLetter = function(letter) {
+      var color;
+      color = letter.match(/&.*;/) ? 'red' : 'blue';
+      return keyboard.append("<a class='letter'><span class='" + color + "_button'>" + letter + "</span></a>");
+    };
+    addBreak = function() {
+      return keyboard.append('<br/>');
+    };
+    _ref = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&lsaquo;'];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      letter = _ref[_i];
+      addLetter(letter);
+    }
+    addBreak();
+    _ref1 = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      letter = _ref1[_j];
+      addLetter(letter);
+    }
+    addBreak();
+    _ref2 = ['z', 'x', 'c', 'v', 'b', 'n', 'm'];
+    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+      letter = _ref2[_k];
+      addLetter(letter);
+    }
+    return keyboard.find('.letter').bind('touchstart.letter', function(e) {
+      letter = $(e.currentTarget);
+      letter.addClass('active');
+      $(document.body).one('touchend.letter', function() {
+        return letter.removeClass('active');
+      });
+      return _this.clickLetter(letter);
+    });
+  },
+  clickLetter: function(letter) {
+    var guessedLetter, guessedLetters, htmlLetter, lastLetterAdded;
+    htmlLetter = letter.find('span').html();
+    switch (htmlLetter) {
+      case '‹':
+        lastLetterAdded = this.viewHelper.lettersAdded.pop();
+        guessedLetters = $(".guesses .letter_" + lastLetterAdded);
+        if (guessedLetters.length) {
+          guessedLetter = $(guessedLetters[guessedLetters.length - 1]);
+          guessedLetter.trigger('keypress.start');
+          return guessedLetter.trigger('keypress.end');
+        }
+        break;
+      default:
+        return this.viewHelper.typeLetter(htmlLetter, true);
+    }
   }
 };
