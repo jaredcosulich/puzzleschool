@@ -91,28 +91,25 @@ body {
         .guess, .letter, .blank_letter, .space {
             float: left;
             margin: 3px;
-            // width: 45px;
-            // height: 45px;
-            // line-height: 39px;
         }
         .space {
             width: 24px;
             margin: 6px 0;
         }
-        .letter {
-            cursor: pointer;
+        .guess {
+            .rounded(12px);
         }
         .color1 .guess {
             border: 1px dashed @blue;    
             .bg-alpha(@blue, 0.3)
         }
         .color2 .guess {
-            border: 1px dashed @red;    
-            .bg-alpha(@red, 0.3)
-        }
-        .color3 .guess {
             border: 1px dashed @orange;   
             .bg-alpha(@orange, 0.3) 
+        }
+        .color3 .guess {
+            border: 1px dashed @red;    
+            .bg-alpha(@red, 0.3)
         }
         .color4 .guess {
             border: 1px dashed @darkblue;
@@ -140,15 +137,16 @@ body {
             -o-background-size: cover;
             background-size: cover;
             background-repeat:no-repeat;
+            cursor: pointer;
         }
         .color1 .letter {
             background-image: url('/assets/images/puzzles/language_scramble/tile-blue.png'); 
         }
         .color2 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
+            background-image: url('/assets/images/puzzles/language_scramble/tile-yellow.png'); 
         }
         .color3 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-yellow.png'); 
+            background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
         }
         .color4 .letter {
             background-color: @darkblue;    
@@ -200,11 +198,13 @@ body {
     .guesses { 
         .color1, .color2, .color3, .color4, .color5, .color6, .color7, .color8 {
             .correct_letter {
-                .bg-alpha(@green, 0.5)
+                background-image: url('/assets/images/puzzles/language_scramble/tile-green.png'); 
+                border: 1px solid transparent;
             }
 
             .wrong_letter {
-                .bg-alpha(@red, 0.5)
+                background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
+                border: 1px solid transparent;
             }
         }
         

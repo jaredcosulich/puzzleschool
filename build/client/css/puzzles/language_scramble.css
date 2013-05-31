@@ -109,9 +109,11 @@ body {
   width: 24px;
   margin: 6px 0;
 }
-.language_scramble .guesses .letter,
-.language_scramble .scrambled .letter {
-  cursor: pointer;
+.language_scramble .guesses .guess,
+.language_scramble .scrambled .guess {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
 }
 .language_scramble .guesses .color1 .guess,
 .language_scramble .scrambled .color1 .guess {
@@ -120,13 +122,13 @@ body {
 }
 .language_scramble .guesses .color2 .guess,
 .language_scramble .scrambled .color2 .guess {
-  border: 1px dashed #ff6e5f;
-  background-color: rgba(255, 113, 97, 0.3);
+  border: 1px dashed #ff922a;
+  background-color: rgba(255, 144, 41, 0.3);
 }
 .language_scramble .guesses .color3 .guess,
 .language_scramble .scrambled .color3 .guess {
-  border: 1px dashed #ff922a;
-  background-color: rgba(255, 144, 41, 0.3);
+  border: 1px dashed #ff6e5f;
+  background-color: rgba(255, 113, 97, 0.3);
 }
 .language_scramble .guesses .color4 .guess,
 .language_scramble .scrambled .color4 .guess {
@@ -160,6 +162,7 @@ body {
   -o-background-size: cover;
   background-size: cover;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .language_scramble .guesses .color1 .letter,
 .language_scramble .scrambled .color1 .letter {
@@ -167,11 +170,11 @@ body {
 }
 .language_scramble .guesses .color2 .letter,
 .language_scramble .scrambled .color2 .letter {
-  background-image: url('/assets/images/puzzles/language_scramble/tile-red.png');
+  background-image: url('/assets/images/puzzles/language_scramble/tile-yellow.png');
 }
 .language_scramble .guesses .color3 .letter,
 .language_scramble .scrambled .color3 .letter {
-  background-image: url('/assets/images/puzzles/language_scramble/tile-yellow.png');
+  background-image: url('/assets/images/puzzles/language_scramble/tile-red.png');
 }
 .language_scramble .guesses .color4 .letter,
 .language_scramble .scrambled .color4 .letter {
@@ -272,7 +275,8 @@ body {
 .language_scramble .guesses .color6 .correct_letter,
 .language_scramble .guesses .color7 .correct_letter,
 .language_scramble .guesses .color8 .correct_letter {
-  background-color: rgba(36, 219, 75, 0.5);
+  background-image: url('/assets/images/puzzles/language_scramble/tile-green.png');
+  border: 1px solid transparent;
 }
 .language_scramble .guesses .color1 .wrong_letter,
 .language_scramble .guesses .color2 .wrong_letter,
@@ -282,7 +286,8 @@ body {
 .language_scramble .guesses .color6 .wrong_letter,
 .language_scramble .guesses .color7 .wrong_letter,
 .language_scramble .guesses .color8 .wrong_letter {
-  background-color: rgba(255, 113, 97, 0.5);
+  background-image: url('/assets/images/puzzles/language_scramble/tile-red.png');
+  border: 1px solid transparent;
 }
 .language_scramble .guesses.hidden .letter {
   visibility: visible;
