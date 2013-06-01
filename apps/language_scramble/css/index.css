@@ -3,6 +3,7 @@ body {
   padding: 0;
   margin: 0;
   background: #fafafa url('images/wood.jpg');
+  font-size: 24px;
 }
 .text-center {
     text-align: center;
@@ -13,9 +14,45 @@ body {
 .language_scramble {
   background-color: #fafafa;
 }
+.language_scramble .display_words .words,
+.language_scramble .scrambled .words {
+  background-image: url('images/paper-middle.png');
+  background-position: center 12px;
+  background-repeat: repeat-x;
+  display: inline-block;
+  position: relative;
+  font-size: 51px;
+  line-height: 75px;
+}
+.language_scramble .display_words .words::before,
+.language_scramble .scrambled .words::before {
+  background-image: url('images/paper-left.png');
+  background-position: left 12px;
+  background-repeat: no-repeat;
+  content: "\00a0";
+  display: inline-block;
+  width: 76px;
+  position: absolute;
+  top: 0;
+  left: -74px;
+}
+.language_scramble .display_words .words::after,
+.language_scramble .scrambled .words::after {
+  background-image: url('images/paper-right.png');
+  background-position: right 12px;
+  background-repeat: no-repeat;
+  content: "\00a0";
+  display: inline-block;
+  width: 76px;
+  position: absolute;
+  top: 0;
+  right: -74px;
+}
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
-  background-color: rgba(36, 219, 75, 0.5);
+  text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff, 0 0 40px #24d94c, 0 0 70px #24d94c, 0 0 80px #24d94c, 0 0 100px #24d94c, 0 0 150px #24d94c;
+  /*            .bg-alpha(@green, 0.5);*/
+
   padding: 0 3px;
 }
 .language_scramble .section {
@@ -50,6 +87,43 @@ body {
   margin: 3px;
   vertical-align: top;
 }
+.language_scramble .guesses .guess,
+.language_scramble .scrambled .guess {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  position: relative;
+  -webkit-box-shadow: inset -9px 9px 9px rgba(0,0,0,0.5);
+  -moz-box-shadow: inset -9px 9px 9px rgba(0,0,0,0.5);
+
+  /*
+    .sunkenPanel:after{
+        position: absolute;
+        left: 0px;
+        top: 10px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        content: " ";
+    }
+
+    .sunkenPanel:before{
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+        -webkit-box-shadow: inset 0px -1px 1px rgba(255,255,255,0.5);
+        -webkit-border-radius: 5px;
+        -moz-box-shadow: inset 0px -1px 1px rgba(255,255,255,0.5);
+        -moz-border-radius: 5px;
+        height: 100%;   
+        content: " ";
+    }
+  */
+  
+  
+}
 .language_scramble .guesses .letter,
 .language_scramble .scrambled .letter {
   cursor: pointer;
@@ -61,13 +135,13 @@ body {
 }
 .language_scramble .guesses .color2 .guess,
 .language_scramble .scrambled .color2 .guess {
-  border: 1px dashed #ff6e5f;
-  background-color: rgba(255, 113, 97, 0.3);
+  border: 1px dashed #ff922a;
+  background-color: rgba(255, 144, 41, 0.3);
 }
 .language_scramble .guesses .color3 .guess,
 .language_scramble .scrambled .color3 .guess {
-  border: 1px dashed #ff922a;
-  background-color: rgba(255, 144, 41, 0.3);
+  border: 1px dashed #ff6e5f;
+  background-color: rgba(255, 113, 97, 0.3);
 }
 .language_scramble .guesses .color4 .guess,
 .language_scramble .scrambled .color4 .guess {
@@ -170,12 +244,52 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
-.language_scramble .guesses .hidden_message,
-.language_scramble .scrambled .hidden_message {
+.language_scramble .guesses .hidden_message {
   display: none;
   position: absolute;
-  font-size: 12pt;
-  background-color: #fafafa;
+  font-size: 21px;
+  line-height: 72px;
+}
+.language_scramble .guesses .hidden_message span {
+  background-image: url('images/paper-middle.png');
+  background-position: center 12px;
+  background-repeat: repeat-x;
+  display: inline-block;
+  position: relative;
+  -webkit-background-size: 123px;
+  -moz-background-size: 123px;
+  -o-background-size: 123px;
+  background-size: 123px;
+}
+.language_scramble .guesses .hidden_message span::before {
+  background-image: url('images/paper-left.png');
+  background-position: left 12px;
+  background-repeat: no-repeat;
+  content: "\00a0";
+  display: inline-block;
+  width: 60px;
+  position: absolute;
+  top: 0;
+  left: -60px;
+  -webkit-background-size: 60px;
+  -moz-background-size: 60px;
+  -o-background-size: 60px;
+  background-size: 60px;
+}
+.language_scramble .guesses .hidden_message span::after {
+  background-image: url('images/paper-right.png');
+  background-position: right 12px;
+  background-repeat: no-repeat;
+  content: "\00a0";
+  display: inline-block;
+  width: 60px;
+  position: absolute;
+  top: 0;
+  right: -60px;
+  -webkit-background-size: 60px;
+  -moz-background-size: 60px;
+  -o-background-size: 60px;
+  background-size: px;
 }
 .language_scramble .guesses.hidden {
   position: relative;
@@ -207,7 +321,8 @@ body {
 .language_scramble .guesses .color6 .correct_letter,
 .language_scramble .guesses .color7 .correct_letter,
 .language_scramble .guesses .color8 .correct_letter {
-  background-color: rgba(36, 219, 75, 0.5);
+  background-image: url('images/tile-green.png');
+  border: 1px solid transparent;
 }
 .language_scramble .guesses .color1 .wrong_letter,
 .language_scramble .guesses .color2 .wrong_letter,
@@ -217,7 +332,8 @@ body {
 .language_scramble .guesses .color6 .wrong_letter,
 .language_scramble .guesses .color7 .wrong_letter,
 .language_scramble .guesses .color8 .wrong_letter {
-  background-color: rgba(255, 113, 97, 0.5);
+  background-image: url('images/tile-red.png');
+  border: 1px solid transparent;
 }
 .language_scramble .guesses.hidden .letter {
   visibility: visible;

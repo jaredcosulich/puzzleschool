@@ -319,10 +319,12 @@ class languageScramble.ViewHelper
             sentence = @scrambleInfo[@displayLevel]
         sentence = " #{sentence} "
         highlighted = @scrambleInfo[@displayLevel]
-        for boundary in [' ', '?', ',']
-            sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+        
+        unless sentence.match(highlighted)
+            for boundary in [' ', '?', ',']
+                sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        displayWords.html(sentence)
+        displayWords.html("<span class='words'>#{sentence}</span>")
         @displayScramble()
 
     displayScramble: ->
@@ -477,7 +479,9 @@ class languageScramble.ViewHelper
                     right = rg.offset().left + rg.offset().width
                     if (space = rg.children()[0])
                         right += $(space).width() if space.className.indexOf('space') > -1
-                    lg.css(marginLeft: (containerRight - right)/2)
+                    
+                    unless right > containerRight
+                        lg.css(marginLeft: (containerRight - right)/2)
                     
                 for wordGroup, index in wordGroups
                     if currentOffsetTop and (currentOffsetTop != wordGroup.offsetTop)
@@ -550,7 +554,7 @@ class languageScramble.ViewHelper
         @$('.display_words').css(fontSize: "#{@letterFontSize + 2}px")
             
         @letterDim = letter.height()
-        @letterLineHeight = "#{@letterDim}px"
+        @letterLineHeight = "#{@letterDim - (@letterDim/10)}px"
         @$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css
             width: @letterDim
         @$('.guesses, .scrambled').find('.guess, .blank_letter').css
@@ -744,7 +748,7 @@ class languageScramble.ViewHelper
 
         if message
             message.show()
-            message.width(message.width())
+            message.width(message.width() + 30)
             message.css('left', (@$('.scramble_content').width() - message.width()) / 2)
     
     setProgress: ->
@@ -787,8 +791,10 @@ class languageScramble.ViewHelper
 
         correctSentence = " #{correctSentence} "
         highlighted = @scrambleInfo[@activeType]
-        for boundary in [' ', '?', ',']
-            correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+        
+        unless correctSentence.match(highlighted)
+            for boundary in [' ', '?', ',']
+                correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
         correctSentence += '<div class=\'tap\'>Next Scramble</div>'
 

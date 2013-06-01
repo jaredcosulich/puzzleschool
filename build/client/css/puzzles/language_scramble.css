@@ -68,9 +68,44 @@ body {
   width: 960px;
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
 }
+.language_scramble .display_words .words,
+.language_scramble .scrambled .words {
+  background-image: url('/assets/images/puzzles/language_scramble/paper-middle.png');
+  background-position: center 6px;
+  background-repeat: repeat-x;
+  display: inline-block;
+  position: relative;
+  font-size: 51px;
+}
+.language_scramble .display_words .words::before,
+.language_scramble .scrambled .words::before {
+  background-image: url('/assets/images/puzzles/language_scramble/paper-left.png');
+  background-position: left 6px;
+  background-repeat: no-repeat;
+  content: "\00a0";
+  display: inline-block;
+  width: 76px;
+  position: absolute;
+  top: 0;
+  left: -74px;
+}
+.language_scramble .display_words .words::after,
+.language_scramble .scrambled .words::after {
+  background-image: url('/assets/images/puzzles/language_scramble/paper-right.png');
+  background-position: right 6px;
+  background-repeat: no-repeat;
+  content: "\00a0";
+  display: inline-block;
+  width: 76px;
+  position: absolute;
+  top: 0;
+  right: -74px;
+}
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
-  background-color: rgba(36, 219, 75, 0.5);
+  text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff, 0 0 40px #24d94c, 0 0 70px #24d94c, 0 0 80px #24d94c, 0 0 100px #24d94c, 0 0 150px #24d94c;
+  /*            .bg-alpha(@green, 0.5);*/
+
   padding: 0 3px;
 }
 .language_scramble .section {

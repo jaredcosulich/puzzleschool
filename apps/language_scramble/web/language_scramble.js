@@ -493,12 +493,14 @@ languageScramble.ViewHelper = (function() {
     }
     sentence = " " + sentence + " ";
     highlighted = this.scrambleInfo[this.displayLevel];
-    _ref = [' ', '?', ','];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      boundary = _ref[_i];
-      sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+    if (!sentence.match(highlighted)) {
+      _ref = [' ', '?', ','];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        boundary = _ref[_i];
+        sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+      }
     }
-    displayWords.html(sentence);
+    displayWords.html("<span class='words'>" + sentence + "</span>");
     return this.displayScramble();
   };
 
@@ -737,9 +739,11 @@ languageScramble.ViewHelper = (function() {
               right += $(space).width();
             }
           }
-          return lg.css({
-            marginLeft: (containerRight - right) / 2
-          });
+          if (!(right > containerRight)) {
+            return lg.css({
+              marginLeft: (containerRight - right) / 2
+            });
+          }
         };
         for (index = _j = 0, _len1 = wordGroups.length; _j < _len1; index = ++_j) {
           wordGroup = wordGroups[index];
@@ -832,7 +836,7 @@ languageScramble.ViewHelper = (function() {
       fontSize: "" + (this.letterFontSize + 2) + "px"
     });
     this.letterDim = letter.height();
-    this.letterLineHeight = "" + this.letterDim + "px";
+    this.letterLineHeight = "" + (this.letterDim - (this.letterDim / 10)) + "px";
     this.$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css({
       width: this.letterDim
     });
@@ -1117,7 +1121,7 @@ languageScramble.ViewHelper = (function() {
     }
     if (message) {
       message.show();
-      message.width(message.width());
+      message.width(message.width() + 30);
       return message.css('left', (this.$('.scramble_content').width() - message.width()) / 2);
     }
   };
@@ -1194,10 +1198,12 @@ languageScramble.ViewHelper = (function() {
     }
     correctSentence = " " + correctSentence + " ";
     highlighted = this.scrambleInfo[this.activeType];
-    _ref = [' ', '?', ','];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      boundary = _ref[_i];
-      correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+    if (!correctSentence.match(highlighted)) {
+      _ref = [' ', '?', ','];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        boundary = _ref[_i];
+        correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+      }
     }
     correctSentence += '<div class=\'tap\'>Next Scramble</div>';
     correct.html(correctSentence);

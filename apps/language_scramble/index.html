@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name = "format-detection" content = "telephone=no"/>
-        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1;" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5;" />
         
         <!-- <script src="http://debug.appmobi.com/target/target-script-min.js#af6ef072-5a70-4b53-82ef-f5d0af8793b0"></script> -->
         <!-- the line below is required for access to the appMobi JS library -->
@@ -16,7 +16,7 @@
                 // This event handler is fired once the AppMobi libraries are ready
                 function onDeviceReady() {
                     //user AppMobi viewport
-                    AppMobi.display.useViewport(300,480);
+                    AppMobi.display.useViewport(600,960);
 
                     //lock orientation
                     AppMobi.device.setRotateOrientation("landscape");
@@ -56,10 +56,10 @@
             <div class="section display_words text-center"></div>
             <div class="section guesses text-center">
                 <div class='hidden_message medium_message'>
-                    The blank spaces are hidden, but you can still drag to them.
+                    <span>The blank spaces are hidden, but you can still drag to them.</span>
                 </div>
                 <div class='hidden_message hard_message'>
-                    The scrambled letters are hidden. You'll have to type the answer.
+                    <soan>The scrambled letters are hidden. You'll have to type the answer.</span>
                 </div>
             </div>
             <div class="section scrambled text-center"></div>
