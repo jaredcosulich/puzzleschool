@@ -326,11 +326,11 @@ class languageScramble.ViewHelper
         sentence = " #{sentence} "
         highlighted = @scrambleInfo[@displayLevel]
         
-        unless sentence.match(highlighted)
+        unless highlighted.match(sentence.replace(/\s/, ''))
             for boundary in [' ', '?', ',']
                 sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        displayWords.html("<span class='words'>#{sentence}</span>")
+        displayWords.html("<span class='words papered'>#{sentence}</span>")
         @displayScramble()
 
     displayScramble: ->
@@ -391,7 +391,6 @@ class languageScramble.ViewHelper
         shuffledOptions = shuffle(optionsToAdd[level])
         @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
 
-        level = 6
         switch level  
             when 6
                 @activeLevel = 'foreignHard'
@@ -530,7 +529,7 @@ class languageScramble.ViewHelper
         targetHeight = Math.min(targetHeight, window.landheight) if window.landheight 
 
         windowWidth = if window.AppMobi then window.innerWidth or window.landwidth else @$('.scramble_content').width()
-        maxFontSize = windowWidth / 15
+        maxFontSize = Math.min(windowWidth / 15, 60)
         increment = Math.min(maxFontSize, @letterFontSize) - 1
         
         while increment >= 1
@@ -809,13 +808,13 @@ class languageScramble.ViewHelper
         correctSentence = " #{correctSentence} "
         highlighted = @scrambleInfo[@activeType]
         
-        unless correctSentence.match(highlighted)
+        unless highlighted.match(correctSentence.replace(/\s/, ''))
             for boundary in [' ', '?', ',']
                 correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        correctSentence += '<div class=\'tap\'>Next Scramble</div>'
+        correctSentence += '<div class=\'tap\'><div>Next<br/>Scramble<div></div>'
 
-        correct.html(correctSentence)
+        correct.html("<div class='papered'>#{correctSentence}</div>")
         correct.addClass('correct')
         correct.css(opacity: 0)
         scrambled = @$('.scrambled')
@@ -861,6 +860,8 @@ class languageScramble.ViewHelper
         @$('.guesses').animate
             opacity: 0
             height: 0
+            paddingTop: 0
+            paddingBottom: 0
             duration: 500
             complete: -> guessAnimationOngoing = false
 
@@ -879,7 +880,7 @@ class languageScramble.ViewHelper
             opacity: 1
             duration: 500
             complete: () =>
-                $.timeout 1000 + (100 * correctSentence.length), () => showNext()
+                $.timeout 100000 + (100 * correctSentence.length), () => showNext()
 
     nextLevel: () ->        
         message = @$('#next_level')
@@ -910,8 +911,9 @@ class languageScramble.ViewHelper
                                 top: -1000
                                 left: -1000
 
-        @$('.scramble_content').css
-            opacity: 0
+        @$('.scramble_content').animate
+            opacity: 0.25
+            duration: 250
 
         message.css
             top: ($('.scramble_content').height() - @$('#next_level').height()) / 2

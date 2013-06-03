@@ -65,50 +65,46 @@ body {
     }
 
     .display_words, .scrambled {
-        .words {
-            background-image:url('/assets/images/puzzles/language_scramble/paper-middle.png');
-            background-position: center 6px;
-            background-repeat: repeat-x;      
-            display: inline-block;
-            position: relative;
+        .papered {
             font-size: 51px;
-            
-            &::before {
-                background-image:url('/assets/images/puzzles/language_scramble/paper-left.png');
-                background-position: left 6px;
-                background-repeat: no-repeat;            
-                content: "\00a0";
-                display: inline-block;
-                width: 76px;
-                position: absolute;
-                top: 0;
-                left: -74px;
-            }
-
-            &::after {
-                background-image:url('/assets/images/puzzles/language_scramble/paper-right.png');
-                background-position: right 6px;
-                background-repeat: no-repeat;            
-                content: "\00a0";
-                display: inline-block;
-                width: 76px;
-                position: absolute;
-                top: 0;
-                right: -74px;
-            }
         }
         
         .highlighted {
-            text-shadow: 0 0 10px #fff,
-                               0 0 20px #fff,
-                               0 0 30px #fff,
-                               0 0 40px @green,
-                               0 0 70px @green,
-                               0 0 80px @green,
-                               0 0 100px @green,
-                               0 0 150px @green;
-/*            .bg-alpha(@green, 0.5);*/
-            padding: 0 3px;
+            .bg-alpha(@green, 0.8);
+            padding: 0 6px;
+            display: inline-block;
+            line-height: 42px;
+            height: 45px;
+        }
+    }
+    
+    .papered {
+        background-image:url('/assets/images/puzzles/language_scramble/paper-middle.png');
+        background-position: center 6px;
+        background-repeat: repeat-x;      
+        display: inline-block;
+        position: relative;
+        
+        &::before, &::after {
+            background-repeat: no-repeat;            
+            content: "\00a0";
+            display: inline-block;
+            width: 75px;
+            position: absolute;
+            top: 1px;
+            .background_size(73px);
+        }
+        
+        &::before {
+            background-image:url('/assets/images/puzzles/language_scramble/paper-left.png');
+            background-position: left 6px;
+            left: -72px;
+        }
+
+        &::after {
+            background-image:url('/assets/images/puzzles/language_scramble/paper-right.png');
+            background-position: right 6px;
+            right: -72px;
         }
     }
     
@@ -174,10 +170,7 @@ body {
             .bg-alpha(@white, 0.3)    
         }
         .letter {
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
+            .background_size(cover);
             background-repeat:no-repeat;
             cursor: pointer;
             background-color: transparent;
@@ -192,38 +185,63 @@ body {
             background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
         }
         .color4 .letter {
-            background-color: @darkblue;    
+            background-image: url('/assets/images/puzzles/language_scramble/tile-purple.png'); 
         }
         .color5 .letter {
-            background-color: @darkred;    
+            background-image: url('/assets/images/puzzles/language_scramble/tile-pink.png'); 
         }
         .color6 .letter {
-            background-color: @darkorange;    
+            background-image: url('/assets/images/puzzles/language_scramble/tile-green.png'); 
         }
         .color7 .letter {
-            background-color: @darkyellow;    
+            background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
         }
         .color8 .letter {
-            background-color: @white;    
+            background-image: url('/assets/images/puzzles/language_scramble/tile-lightblue.png'); 
         }
         .correct {
             text-align: center;
             .tap {
-                .button-color(@blue);
+                margin: auto;
+                background-image: url('/assets/images/puzzles/language_scramble/tile-blue.png'); 
+                .background_size(cover);
                 display: block;
                 margin-top: 45px;
-                font-size: 15px;
-                width: 102px;
+                font-size: 21px;
+                font-weight: bold;
+                width: 120px;
+                height: 120px;
+                line-height: 24px;
+                text-align: center;
                 cursor: pointer;
-                font-weight: normal;
                 .no_select();
+                
+                div {
+                    padding: 30px 0 0 6px;
+                }
             }
         }
         
         .hidden_message {
             position: absolute;
-            font-size: 12pt;
-            background-color: @white;
+            font-size: 15px;
+            line-height: 45px;
+            .papered {
+                .background_size(90px);  
+                
+                &::before, &::after {
+                    .background_size(45px);
+                    width: 45px;
+                }              
+                
+                &::before {
+                    left: -45px;
+                }
+                
+                &::after {
+                    right: -45px;
+                }
+            }
         }
         
         &.hidden {
@@ -257,7 +275,7 @@ body {
             }
             .hidden_message {
                 left: 250px;    
-                top: 24px;            
+                top: 60px;            
             }
         }
     }
@@ -268,6 +286,9 @@ body {
         left: -1000px;
         opacity: 0;
         text-align: center;
+        .rounded(12px);
+        background-color: @white;
+        padding: 60px;
     }
     
     .last_answer {
@@ -285,6 +306,8 @@ body {
         display: block;
         color: gray;
         z-index: 2; 
+        margin-top: -10000px;
+        margin-left: -10000px;
     }
     
     .hide_keyboard #clickarea {

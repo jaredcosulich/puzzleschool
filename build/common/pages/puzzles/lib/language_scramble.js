@@ -495,14 +495,14 @@ languageScramble.ViewHelper = (function() {
     }
     sentence = " " + sentence + " ";
     highlighted = this.scrambleInfo[this.displayLevel];
-    if (!sentence.match(highlighted)) {
+    if (!highlighted.match(sentence.replace(/\s/, ''))) {
       _ref = [' ', '?', ','];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         boundary = _ref[_i];
         sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
       }
     }
-    displayWords.html("<span class='words'>" + sentence + "</span>");
+    displayWords.html("<span class='words papered'>" + sentence + "</span>");
     return this.displayScramble();
   };
 
@@ -610,7 +610,6 @@ languageScramble.ViewHelper = (function() {
       option = _ref1[_m];
       this.orderedOptions.push(option);
     }
-    level = 6;
     switch (level) {
       case 6:
         this.activeLevel = 'foreignHard';
@@ -800,7 +799,7 @@ languageScramble.ViewHelper = (function() {
       targetHeight = Math.min(targetHeight, window.landheight);
     }
     windowWidth = window.AppMobi ? window.innerWidth || window.landwidth : this.$('.scramble_content').width();
-    maxFontSize = windowWidth / 15;
+    maxFontSize = Math.min(windowWidth / 15, 60);
     increment = Math.min(maxFontSize, this.letterFontSize) - 1;
     while (increment >= 1) {
       if (increase && this.letterFontSize >= maxFontSize) {
@@ -1223,15 +1222,15 @@ languageScramble.ViewHelper = (function() {
     }
     correctSentence = " " + correctSentence + " ";
     highlighted = this.scrambleInfo[this.activeType];
-    if (!correctSentence.match(highlighted)) {
+    if (!highlighted.match(correctSentence.replace(/\s/, ''))) {
       _ref = [' ', '?', ','];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         boundary = _ref[_i];
         correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
       }
     }
-    correctSentence += '<div class=\'tap\'>Next Scramble</div>';
-    correct.html(correctSentence);
+    correctSentence += '<div class=\'tap\'><div>Next<br/>Scramble<div></div>';
+    correct.html("<div class='papered'>" + correctSentence + "</div>");
     correct.addClass('correct');
     correct.css({
       opacity: 0
@@ -1284,6 +1283,8 @@ languageScramble.ViewHelper = (function() {
     this.$('.guesses').animate({
       opacity: 0,
       height: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
       duration: 500,
       complete: function() {
         return guessAnimationOngoing = false;
@@ -1310,7 +1311,7 @@ languageScramble.ViewHelper = (function() {
       opacity: 1,
       duration: 500,
       complete: function() {
-        return $.timeout(1000 + (100 * correctSentence.length), function() {
+        return $.timeout(100000 + (100 * correctSentence.length), function() {
           return showNext();
         });
       }
@@ -1356,8 +1357,9 @@ languageScramble.ViewHelper = (function() {
         }
       });
     };
-    this.$('.scramble_content').css({
-      opacity: 0
+    this.$('.scramble_content').animate({
+      opacity: 0.25,
+      duration: 250
     });
     message.css({
       top: ($('.scramble_content').height() - this.$('#next_level').height()) / 2,
