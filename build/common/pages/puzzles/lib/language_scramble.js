@@ -256,7 +256,7 @@ languageScramble.ViewHelper = (function() {
         return;
       }
       lastPress = new Date();
-      typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), _this.activeLevel.match(/Hard/));
+      _this.typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), _this.activeLevel.match(/Hard/));
       return $.timeout(10, function() {
         $('#clickarea').val('');
         return $('#clickarea').html('');
@@ -383,14 +383,16 @@ languageScramble.ViewHelper = (function() {
       if (_this.dragPathY[_this.dragPathY.length - 1] !== _this.clientY(e)) {
         _this.dragPathY.push(_this.clientY(e));
       }
-      return letter.css({
+      letter.css({
         position: 'absolute',
         top: _this.clientY(e) - _this.dragAdjustmentY,
         left: _this.clientX(e) - _this.dragAdjustmentX
       });
+      return letter.addClass('dragging');
     };
     endDrag = function(e) {
       var alreadyDragged, containerClass, currentX, currentY, guess, lastX, lastY, x, y;
+      letter.removeClass('dragging');
       if (_this.initializingScramble) {
         return;
       }
@@ -608,6 +610,7 @@ languageScramble.ViewHelper = (function() {
       option = _ref1[_m];
       this.orderedOptions.push(option);
     }
+    level = 6;
     switch (level) {
       case 6:
         this.activeLevel = 'foreignHard';
@@ -825,7 +828,8 @@ languageScramble.ViewHelper = (function() {
       this.letterFontSize = maxFontSize;
       this.sizeLetter(letter);
     }
-    return this.centerContainers();
+    this.centerContainers();
+    return this.setSectionPadding();
   };
 
   ViewHelper.prototype.sizeLetter = function(letter) {
@@ -845,6 +849,27 @@ languageScramble.ViewHelper = (function() {
     });
     return this.$('.guesses, .scrambled').find('.space').css({
       width: this.letterDim / 2
+    });
+  };
+
+  ViewHelper.prototype.setSectionPadding = function() {
+    var buffer, padding, section, totalHeight, _i, _len, _ref;
+    this.$('.section').css({
+      padding: 0
+    });
+    buffer = this.activeLevel.match('Hard') ? 180 : 60;
+    totalHeight = 0;
+    _ref = this.$('.section');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      section = _ref[_i];
+      totalHeight += $(section).height();
+    }
+    padding = (this.$('.scramble_content').height() - buffer - totalHeight) / 6;
+    if (padding > 45) {
+      padding = 45;
+    }
+    return this.$('.section').css({
+      padding: "" + padding + "px 0"
     });
   };
 
@@ -1630,7 +1655,7 @@ languageScramble.data = {
             "native": 'we have two dogs',
             foreign: 'abbiamo due cani'
           }, {
-            "native": 'what is it?',
+            "native": 'what did he say?',
             foreign: 'che cosa ha detto?'
           }, {
             "native": 'i can not stay',

@@ -160,7 +160,7 @@ class languageScramble.ViewHelper
             return if @initializingScramble
             return if lastPress && new Date() - lastPress < 10
             lastPress = new Date()
-            typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), @activeLevel.match(/Hard/))
+            @typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), @activeLevel.match(/Hard/))
             $.timeout 10, () =>
                 $('#clickarea').val('')        
                 $('#clickarea').html('')        
@@ -179,7 +179,7 @@ class languageScramble.ViewHelper
                     when 'ì' then 'i'
                     when 'ò' then 'o'
                     when 'ù' then 'u'
-        
+    
                 char = foreignChar if char == nativeChar
 
             letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
@@ -211,7 +211,8 @@ class languageScramble.ViewHelper
             return if @initializingScramble
             return if @dragging 
             e.preventDefault() if e?.preventDefault?
-            @dragging = letter
+
+            @dragging = letter            
             
             if e and @clientX(e)
                 @dragPathX = []
@@ -235,6 +236,7 @@ class languageScramble.ViewHelper
             return if @initializingScramble
             return unless @dragging == letter
             e.preventDefault() if e.preventDefault
+
             unless letter.css('position') == 'absolute'
                 if @actualLetter(letter)?
                     @replaceLetterWithGuess(letter)  
@@ -250,8 +252,11 @@ class languageScramble.ViewHelper
             @dragPathX.push(@clientX(e)) unless @dragPathX[@dragPathX.length - 1] == @clientX(e)
             @dragPathY.push(@clientY(e)) unless @dragPathY[@dragPathY.length - 1] == @clientY(e)
             letter.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)  
+            letter.addClass('dragging')
         
         endDrag = (e) =>
+            letter.removeClass('dragging')
+            
             return if @initializingScramble
 
             return unless @dragging == letter
@@ -285,6 +290,7 @@ class languageScramble.ViewHelper
                     @replaceGuessWithLetter(guess, letter)
                 else    
                     @replaceBlankWithLetter(letter)
+                    
             @dragging = null
 
         $(document.body).bind 'mousedown.drag touchstart.drag', (e) =>
@@ -385,6 +391,7 @@ class languageScramble.ViewHelper
         shuffledOptions = shuffle(optionsToAdd[level])
         @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
 
+        level = 6
         switch level  
             when 6
                 @activeLevel = 'foreignHard'
@@ -548,6 +555,7 @@ class languageScramble.ViewHelper
             @sizeLetter(letter)
 
         @centerContainers()
+        @setSectionPadding()
 
     sizeLetter: (letter) ->
         @$('.guesses, .scrambled').css(fontSize: "#{@letterFontSize}px")
@@ -561,7 +569,16 @@ class languageScramble.ViewHelper
             height: @letterDim
         @$('.guesses, .scrambled').find('.space').css(width: @letterDim / 2)
 
-    createWordGroup: () ->
+    setSectionPadding: ->
+        @$('.section').css(padding: 0)
+        buffer = if @activeLevel.match('Hard') then 180 else 60
+        totalHeight = 0
+        totalHeight += $(section).height() for section in @$('.section')
+        padding = (@$('.scramble_content').height() - buffer - totalHeight)/6
+        padding = 45 if padding > 45
+        @$('.section').css(padding: "#{padding}px 0")
+
+    createWordGroup: ->
         wordGroup = $(document.createElement("DIV"))
         wordGroup.addClass('word_group')
         wordGroup.addClass('color1')
@@ -1021,7 +1038,7 @@ languageScramble.data =
                 data: [
                     {native: 'a woman is president', foreign: 'una donna è presidente'}
                     {native: 'we have two dogs', foreign: 'abbiamo due cani'}
-                    {native: 'what is it?', foreign: 'che cosa ha detto?'}
+                    {native: 'what did he say?', foreign: 'che cosa ha detto?'}
                     {native: 'i can not stay', foreign: 'non posso restare'}
                     {native: 'we want to go home', foreign: 'vogliamo andare a casa'}
                     {native: 'he knows a lot', foreign: 'sa un sacco'}

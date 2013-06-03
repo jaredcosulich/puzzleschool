@@ -115,7 +115,7 @@ body {
     .section {
         font-size: 30pt;
         margin: 0;
-        padding: 10px 0;
+        padding: 24px 0;
     }
 
     .guesses, .scrambled {
@@ -139,6 +139,7 @@ body {
         }
         .guess {
             .rounded(12px);
+            .box-shadow(inset -9px 9px 9px rgba(0,0,0,0.5));            
         }
         .color1 .guess {
             border: 1px dashed @blue;    
@@ -179,6 +180,7 @@ body {
             background-size: cover;
             background-repeat:no-repeat;
             cursor: pointer;
+            background-color: transparent;
         }
         .color1 .letter {
             background-image: url('/assets/images/puzzles/language_scramble/tile-blue.png'); 

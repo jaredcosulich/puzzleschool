@@ -111,7 +111,7 @@ body {
 .language_scramble .section {
   font-size: 30pt;
   margin: 0;
-  padding: 10px 0;
+  padding: 24px 0;
 }
 .language_scramble .guesses,
 .language_scramble .scrambled {
@@ -149,6 +149,9 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
+  box-shadow: inset -9px 9px 9px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset -9px 9px 9px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset -9px 9px 9px rgba(0, 0, 0, 0.5);
 }
 .language_scramble .guesses .color1 .guess,
 .language_scramble .scrambled .color1 .guess {
@@ -198,6 +201,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
+  background-color: transparent;
 }
 .language_scramble .guesses .color1 .letter,
 .language_scramble .scrambled .color1 .letter {
