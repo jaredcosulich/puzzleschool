@@ -880,7 +880,7 @@ class languageScramble.ViewHelper
             opacity: 1
             duration: 500
             complete: () =>
-                $.timeout 100000 + (100 * correctSentence.length), () => showNext()
+                $.timeout 1000 + (100 * correctSentence.length), () => showNext()
 
     nextLevel: () ->        
         message = @$('#next_level')

@@ -1311,7 +1311,7 @@ languageScramble.ViewHelper = (function() {
       opacity: 1,
       duration: 500,
       complete: function() {
-        return $.timeout(100000 + (100 * correctSentence.length), function() {
+        return $.timeout(1000 + (100 * correctSentence.length), function() {
           return showNext();
         });
       }
