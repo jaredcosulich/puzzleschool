@@ -438,11 +438,11 @@ class languageScramble.ViewHelper
 
     assignColors: (areaClass) ->
         colorIndex = 0
-        for wordGroup in @$(".#{areaClass} .word_group")
-            if wordGroup.offsetTop != offsetTop
-                offsetTop = wordGroup.offsetTop
+        for baseWordGroup, index in @$('.guesses .word_group')
+            if baseWordGroup.offsetTop != offsetTop
+                offsetTop = baseWordGroup.offsetTop
                 colorIndex += 1
-            wordGroup.className = "word_group color#{colorIndex}"
+            @$(".#{areaClass} .word_group")[index].className = "word_group color#{colorIndex}"
             
     scrambleScrambleArea: ->
         scrambled = @$('.scrambled')

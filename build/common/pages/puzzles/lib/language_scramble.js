@@ -660,17 +660,17 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.assignColors = function(areaClass) {
-    var colorIndex, offsetTop, wordGroup, _i, _len, _ref, _results;
+    var baseWordGroup, colorIndex, index, offsetTop, _i, _len, _ref, _results;
     colorIndex = 0;
-    _ref = this.$("." + areaClass + " .word_group");
+    _ref = this.$('.guesses .word_group');
     _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      wordGroup = _ref[_i];
-      if (wordGroup.offsetTop !== offsetTop) {
-        offsetTop = wordGroup.offsetTop;
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      baseWordGroup = _ref[index];
+      if (baseWordGroup.offsetTop !== offsetTop) {
+        offsetTop = baseWordGroup.offsetTop;
         colorIndex += 1;
       }
-      _results.push(wordGroup.className = "word_group color" + colorIndex);
+      _results.push(this.$("." + areaClass + " .word_group")[index].className = "word_group color" + colorIndex);
     }
     return _results;
   };
