@@ -15,7 +15,8 @@ body {
   background-color: #fafafa;
 }
 .language_scramble .display_words .words,
-.language_scramble .scrambled .words {
+.language_scramble .scrambled .words,
+.language_scramble .correct .papered {
   background-image: url('images/paper-middle.png');
   background-position: center 12px;
   background-repeat: repeat-x;
@@ -25,7 +26,8 @@ body {
   line-height: 75px;
 }
 .language_scramble .display_words .words::before,
-.language_scramble .scrambled .words::before {
+.language_scramble .scrambled .words::before,
+.language_scramble .correct .papered::before {
   background-image: url('images/paper-left.png');
   background-position: left 12px;
   background-repeat: no-repeat;
@@ -37,7 +39,8 @@ body {
   left: -74px;
 }
 .language_scramble .display_words .words::after,
-.language_scramble .scrambled .words::after {
+.language_scramble .scrambled .words::after,
+.language_scramble .correct .papered::after {
   background-image: url('images/paper-right.png');
   background-position: right 12px;
   background-repeat: no-repeat;
@@ -50,10 +53,11 @@ body {
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
-  text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff, 0 0 40px #24d94c, 0 0 70px #24d94c, 0 0 80px #24d94c, 0 0 100px #24d94c, 0 0 150px #24d94c;
-  /*            .bg-alpha(@green, 0.5);*/
-
-  padding: 0 3px;
+    background-color: rgba(36, 219, 75, 0.8);
+    padding: 0 6px;
+    display: inline-block;
+    line-height: 42px;
+    height: 45px;
 }
 .language_scramble .section {
   font-size: 30pt;
@@ -184,36 +188,30 @@ body {
   text-align: center;
 }
 .language_scramble .correct .tap {
-  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
-  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
-  box-shadow: inset 0px 1px 0px 0px #3fc3db;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
-  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
-  background-color: #24aac3;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
-  border: 1px solid #24aac3;
-  display: inline-block;
-  color: #fafafa;
-  font-family: arial;
-  font-weight: bold;
-  padding: 6px 24px;
-  text-decoration: none;
-  text-shadow: 1px 1px 0px #24aac3;
-  margin: auto;
-  display: block;
-  margin-top: 45px;
-  font-size: 15px;
-  width: 102px;
-  cursor: pointer;
-  font-weight: normal;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    margin: auto;
+    background-image: url('images/tile-blue.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    display: block;
+    margin-top: 45px;
+    font-size: 21px;
+    font-weight: bold;
+    width: 120px;
+    height: 120px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.language_scramble .correct .tap div {
+  padding: 30px 0 0 6px;
 }
 .language_scramble .guesses .hidden_message {
   display: none;
