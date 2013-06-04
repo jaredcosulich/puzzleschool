@@ -29,6 +29,12 @@ soma.chunks
 
         build: ->
             @setTitle("Language Scramble - The Puzzle School")
+            @setMeta('og:title', 'Language Scramble - The Puzzle School')            
+            @setMeta('og:url', 'http://www.puzzleschool.com/puzzles/language_scramble')
+            @setMeta('og:image', 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg')
+            @setMeta('og:site_name', 'The Puzzle School')
+            @setMeta('og:description', 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.')
+            
 
             languageScramble = require('./lib/language_scramble')
             

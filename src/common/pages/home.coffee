@@ -10,6 +10,12 @@ soma.chunks
 
         build: () ->
             @setTitle('The Puzzle School')
+            @setMeta('og:title', 'The Puzzle School')            
+            @setMeta('og:url', 'http://www.puzzleschool.com')
+            @setMeta('og:image', 'http://www.puzzleschool.com/assets/images/logo_med.png')
+            @setMeta('og:site_name', 'The Puzzle School')
+            @setMeta('og:description', 'Learning That Is Fun Because It\'s Challenging')
+            
             @html = wings.renderTemplate(@template)
         
 soma.views

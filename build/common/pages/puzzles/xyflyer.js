@@ -118,6 +118,11 @@ soma.chunks({
     build: function() {
       var index, world, worlds, _i, _len, _ref;
       this.setTitle("XYFlyer - The Puzzle School");
+      this.setMeta('og:title', 'XYFlyer - The Puzzle School');
+      this.setMeta('og:url', 'http://www.puzzleschool.com/puzzles/xyflyer');
+      this.setMeta('og:image', 'http://www.puzzleschool.com/assets/images/reviews/xyflyer.jpg');
+      this.setMeta('og:site_name', 'The Puzzle School');
+      this.setMeta('og:description', 'Explore equations and graphing. Develop a better visual sense of how simple equations graph out.');
       worlds = require('./lib/xyflyer_objects/levels').WORLDS;
       for (index = _i = 0, _len = worlds.length; _i < _len; index = ++_i) {
         world = worlds[index];

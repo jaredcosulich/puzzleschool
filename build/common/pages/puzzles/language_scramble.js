@@ -54,6 +54,11 @@ soma.chunks({
     build: function() {
       var languageScramble;
       this.setTitle("Language Scramble - The Puzzle School");
+      this.setMeta('og:title', 'Language Scramble - The Puzzle School');
+      this.setMeta('og:url', 'http://www.puzzleschool.com/puzzles/language_scramble');
+      this.setMeta('og:image', 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg');
+      this.setMeta('og:site_name', 'The Puzzle School');
+      this.setMeta('og:description', 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.');
       languageScramble = require('./lib/language_scramble');
       if (!(this.languages && this.languages.length)) {
         this.languages = this.puzzleData.lastLanguages || 'english_italian';

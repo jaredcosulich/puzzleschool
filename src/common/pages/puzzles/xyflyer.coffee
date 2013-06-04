@@ -77,6 +77,11 @@ soma.chunks
                       
         build: ->
             @setTitle("XYFlyer - The Puzzle School")
+            @setMeta('og:title', 'XYFlyer - The Puzzle School')            
+            @setMeta('og:url', 'http://www.puzzleschool.com/puzzles/xyflyer')
+            @setMeta('og:image', 'http://www.puzzleschool.com/assets/images/reviews/xyflyer.jpg')
+            @setMeta('og:site_name', 'The Puzzle School')
+            @setMeta('og:description', 'Explore equations and graphing. Develop a better visual sense of how simple equations graph out.')
             
             worlds = require('./lib/xyflyer_objects/levels').WORLDS
             world.index = index + 1 for world, index in worlds

@@ -17,6 +17,11 @@ soma.chunks({
     },
     build: function() {
       this.setTitle('The Puzzle School');
+      this.setMeta('og:title', 'The Puzzle School');
+      this.setMeta('og:url', 'http://www.puzzleschool.com');
+      this.setMeta('og:image', 'http://www.puzzleschool.com/assets/images/logo_med.png');
+      this.setMeta('og:site_name', 'The Puzzle School');
+      this.setMeta('og:description', 'Learning That Is Fun Because It\'s Challenging');
       return this.html = wings.renderTemplate(this.template);
     }
   }
