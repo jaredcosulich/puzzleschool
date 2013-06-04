@@ -34,7 +34,6 @@ soma.chunks
             @setMeta(name: 'og:title', property: 'og:title', content: 'Language Scramble - The Puzzle School')            
             @setMeta(name: 'og:url', property: 'og:url', content: 'http://www.puzzleschool.com/puzzles/language_scramble')
             @setMeta(name: 'og:image', property: 'og:image', content: 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg')
-            @setMeta(name: 'og:site_name', property: 'og:site_name', content: 'The Puzzle School')
             @setMeta(name: 'og:description', property: 'og:description', content: 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.')
             @setMeta('description', 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.')
             

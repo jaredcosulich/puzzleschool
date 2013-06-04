@@ -74,6 +74,8 @@ soma.chunks
             else
                 @setMeta('apple-mobile-web-app-capable', 'yes')
                 @setMeta('apple-mobile-web-app-status-bar-style', 'black')
+                @setMeta(name: 'og:type', property: 'og:type', content: 'website')            
+                @setMeta(name: 'og:site_name', property: 'og:site_name', content: 'The Puzzle School')
             
                 @loadScript '/assets/third_party/rollbar.js'
 

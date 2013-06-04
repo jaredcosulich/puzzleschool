@@ -140,6 +140,16 @@ soma.chunks({
       } else {
         this.setMeta('apple-mobile-web-app-capable', 'yes');
         this.setMeta('apple-mobile-web-app-status-bar-style', 'black');
+        this.setMeta({
+          name: 'og:type',
+          property: 'og:type',
+          content: 'website'
+        });
+        this.setMeta({
+          name: 'og:site_name',
+          property: 'og:site_name',
+          content: 'The Puzzle School'
+        });
         this.loadScript('/assets/third_party/rollbar.js');
         this.loadElement("link", {
           rel: 'apple-touch-icon',

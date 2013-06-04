@@ -74,11 +74,6 @@ soma.chunks({
         content: 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg'
       });
       this.setMeta({
-        name: 'og:site_name',
-        property: 'og:site_name',
-        content: 'The Puzzle School'
-      });
-      this.setMeta({
         name: 'og:description',
         property: 'og:description',
         content: 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.'
