@@ -94,7 +94,7 @@ languageScramble.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     var puzzleData;
-    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.saveProgress = _arg.saveProgress, this.maxLevel = _arg.maxLevel;
+    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.saveProgress = _arg.saveProgress, this.maxLevel = _arg.maxLevel, this.dragOffset = _arg.dragOffset;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -353,6 +353,7 @@ languageScramble.ViewHelper = (function() {
       return $(document.body).one('mouseup.drag touchend.drag', endDrag);
     };
     handleMove = function(e) {
+      var x, y;
       if (_this.initializingScramble) {
         return;
       }
@@ -377,22 +378,22 @@ languageScramble.ViewHelper = (function() {
           }
         }
       }
-      if (_this.dragPathX[_this.dragPathX.length - 1] !== _this.clientX(e)) {
-        _this.dragPathX.push(_this.clientX(e));
+      x = _this.clientX(e);
+      y = _this.clientY(e) - (_this.dragOffset || 0);
+      if (_this.dragPathX[_this.dragPathX.length - 1] !== x) {
+        _this.dragPathX.push(x);
       }
-      if (_this.dragPathY[_this.dragPathY.length - 1] !== _this.clientY(e)) {
-        _this.dragPathY.push(_this.clientY(e));
+      if (_this.dragPathY[_this.dragPathY.length - 1] !== y) {
+        _this.dragPathY.push(y);
       }
-      letter.css({
+      return letter.css({
         position: 'absolute',
-        top: _this.clientY(e) - _this.dragAdjustmentY,
-        left: _this.clientX(e) - _this.dragAdjustmentX
+        top: y - _this.dragAdjustmentY,
+        left: x - _this.dragAdjustmentX
       });
-      return letter.addClass('dragging');
     };
     endDrag = function(e) {
       var alreadyDragged, containerClass, currentX, currentY, guess, lastX, lastY, x, y;
-      letter.removeClass('dragging');
       if (_this.initializingScramble) {
         return;
       }

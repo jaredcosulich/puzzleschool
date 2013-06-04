@@ -53,7 +53,7 @@ class languageScramble.ChunkHelper
 
 class languageScramble.ViewHelper
 
-    constructor: ({@el, puzzleData, @languages, @saveProgress, @maxLevel}) ->
+    constructor: ({@el, puzzleData, @languages, @saveProgress, @maxLevel, @dragOffset}) ->
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
         @maxLevel or= 7
         @formatLevelLinks()
@@ -248,14 +248,14 @@ class languageScramble.ViewHelper
                     if Math.abs(@dragPathX[0] - @clientX(e)) > 20 or Math.abs(@dragPathY[0] - @clientY(e)) > 20
                         letter.removeClass('recently_static_guess')
                         letter.removeClass('recently_static_letter')
+            x = @clientX(e)
+            y = @clientY(e) - (@dragOffset or 0)
             
-            @dragPathX.push(@clientX(e)) unless @dragPathX[@dragPathX.length - 1] == @clientX(e)
-            @dragPathY.push(@clientY(e)) unless @dragPathY[@dragPathY.length - 1] == @clientY(e)
-            letter.css(position: 'absolute', top: @clientY(e) - @dragAdjustmentY, left: @clientX(e) - @dragAdjustmentX)  
-            letter.addClass('dragging')
+            @dragPathX.push(x) unless @dragPathX[@dragPathX.length - 1] == x
+            @dragPathY.push(y) unless @dragPathY[@dragPathY.length - 1] == y
+            letter.css(position: 'absolute', top: y - @dragAdjustmentY, left: x - @dragAdjustmentX)  
         
         endDrag = (e) =>
-            letter.removeClass('dragging')
             
             return if @initializingScramble
 

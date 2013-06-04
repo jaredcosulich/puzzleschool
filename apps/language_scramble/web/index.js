@@ -39,6 +39,7 @@ window.app = {
       el: $(this.selector),
       puzzleData: this.puzzleData,
       languages: this.languages,
+      dragOffset: 60,
       saveProgress: function(puzzleProgress) {
         return _this.saveProgress(puzzleProgress);
       }

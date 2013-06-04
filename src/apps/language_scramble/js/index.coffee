@@ -29,6 +29,7 @@ window.app =
             el: $(@selector)
             puzzleData: @puzzleData
             languages: @languages
+            dragOffset: 60
             saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
 
         @initProgressMeter()

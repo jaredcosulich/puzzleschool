@@ -147,14 +147,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
-.language_scramble .guesses .letter.dragging,
-.language_scramble .scrambled .letter.dragging {
-  transform:               translate( -30px, -30px );  
-    -moz-transform:        translate( -30px, -30px );  
-    -ms-transform:         translate( -30px, -30px );  
-    -o-transform:          translate( -30px, -30px );  
-    -webkit-transform:     translate( -30px, -30px );  
-}
 .language_scramble .guesses .color1 .letter,
 .language_scramble .scrambled .color1 .letter {
   background-image: url('images/tile-blue.png');
