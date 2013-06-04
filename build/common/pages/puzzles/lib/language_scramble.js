@@ -714,7 +714,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.centerContainers = function(containers) {
-    var centerWordGroups, container, containerWidth, currentOffsetTop, index, leftGroup, rightGroup, wordGroup, wordGroups, _i, _j, _len, _len1;
+    var centerWordGroups, container, containerWidth, currentOffsetTop, index, leftGroup, rightGroup, wordGroup, wordGroupOffsetTop, wordGroups, _i, _j, _len, _len1;
     if (containers == null) {
       containers = this.$('.container');
     }
@@ -749,7 +749,8 @@ languageScramble.ViewHelper = (function() {
         };
         for (index = _j = 0, _len1 = wordGroups.length; _j < _len1; index = ++_j) {
           wordGroup = wordGroups[index];
-          if (currentOffsetTop && (currentOffsetTop !== wordGroup.offsetTop)) {
+          wordGroupOffsetTop = wordGroup.offsetTop || 1;
+          if (currentOffsetTop && (currentOffsetTop !== wordGroupOffsetTop)) {
             centerWordGroups(leftGroup, rightGroup);
             leftGroup = null;
             rightGroup = null;
@@ -757,7 +758,7 @@ languageScramble.ViewHelper = (function() {
           }
           if (!currentOffsetTop) {
             leftGroup = $(wordGroup);
-            currentOffsetTop = wordGroup.offsetTop;
+            currentOffsetTop = wordGroupOffsetTop;
           } else {
             rightGroup = $(wordGroup);
           }

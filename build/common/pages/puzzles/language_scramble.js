@@ -58,11 +58,31 @@ soma.chunks({
         rel: 'img_src',
         href: 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg'
       });
-      this.setMeta('og:title', 'Language Scramble - The Puzzle School');
-      this.setMeta('og:url', 'http://www.puzzleschool.com/puzzles/language_scramble');
-      this.setMeta('og:image', 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg');
-      this.setMeta('og:site_name', 'The Puzzle School');
-      this.setMeta('og:description', 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.');
+      this.setMeta({
+        name: 'og:title',
+        property: 'og:title',
+        content: 'Language Scramble - The Puzzle School'
+      });
+      this.setMeta({
+        name: 'og:url',
+        property: 'og:url',
+        content: 'http://www.puzzleschool.com/puzzles/language_scramble'
+      });
+      this.setMeta({
+        name: 'og:image',
+        property: 'og:image',
+        content: 'http://www.puzzleschool.com/assets/images/reviews/language_scramble.jpg'
+      });
+      this.setMeta({
+        name: 'og:site_name',
+        property: 'og:site_name',
+        content: 'The Puzzle School'
+      });
+      this.setMeta({
+        name: 'og:description',
+        property: 'og:description',
+        content: 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.'
+      });
       this.setMeta('description', 'Practice vocabulary and common sentences in your favorite foreign language. Much more fun than flash cards.');
       languageScramble = require('./lib/language_scramble');
       if (!(this.languages && this.languages.length)) {

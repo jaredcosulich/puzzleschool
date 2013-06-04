@@ -490,7 +490,8 @@ class languageScramble.ViewHelper
                         lg.css(marginLeft: (containerRight - right)/2)
                     
                 for wordGroup, index in wordGroups
-                    if currentOffsetTop and (currentOffsetTop != wordGroup.offsetTop)
+                    wordGroupOffsetTop = wordGroup.offsetTop or 1
+                    if currentOffsetTop and (currentOffsetTop != wordGroupOffsetTop)
                         centerWordGroups(leftGroup, rightGroup)
                         leftGroup = null
                         rightGroup = null
@@ -498,7 +499,7 @@ class languageScramble.ViewHelper
 
                     if not currentOffsetTop
                         leftGroup = $(wordGroup)
-                        currentOffsetTop = wordGroup.offsetTop
+                        currentOffsetTop = wordGroupOffsetTop
                     else
                         rightGroup = $(wordGroup)
                         
