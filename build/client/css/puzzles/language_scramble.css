@@ -99,26 +99,21 @@ body {
   display: inline-block;
   position: absolute;
   top: 0;
-}
-.language_scramble .papered::before {
-  background-image: url('/assets/images/puzzles/language_scramble/paper-left.png');
-  background-position: left 7px;
   -webkit-background-size: 34px;
   -moz-background-size: 34px;
   -o-background-size: 34px;
   background-size: 34px;
   width: 34px;
+}
+.language_scramble .papered::before {
+  background-image: url('/assets/images/puzzles/language_scramble/paper-left.png');
+  background-position: left 6px;
   left: -34px;
 }
 .language_scramble .papered::after {
   background-image: url('/assets/images/puzzles/language_scramble/paper-right.png');
-  background-position: right 5px;
-  -webkit-background-size: 35px;
-  -moz-background-size: 35px;
-  -o-background-size: 35px;
-  background-size: 35px;
-  width: 35px;
-  right: -35px;
+  background-position: right 6px;
+  right: -34px;
 }
 .language_scramble .section {
   font-size: 30pt;
@@ -285,19 +280,19 @@ body {
 .language_scramble .scrambled .hidden_message .papered::before,
 .language_scramble .guesses .hidden_message .papered::after,
 .language_scramble .scrambled .hidden_message .papered::after {
-  -webkit-background-size: 45px;
-  -moz-background-size: 45px;
-  -o-background-size: 45px;
-  background-size: 45px;
-  width: 45px;
+  -webkit-background-size: 21px;
+  -moz-background-size: 21px;
+  -o-background-size: 21px;
+  background-size: 21px;
+  width: 23px;
 }
 .language_scramble .guesses .hidden_message .papered::before,
 .language_scramble .scrambled .hidden_message .papered::before {
-  left: -45px;
+  left: -20px;
 }
 .language_scramble .guesses .hidden_message .papered::after,
 .language_scramble .scrambled .hidden_message .papered::after {
-  right: -45px;
+  right: -20px;
 }
 .language_scramble .guesses.hidden,
 .language_scramble .scrambled.hidden {

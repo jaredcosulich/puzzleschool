@@ -96,22 +96,20 @@ body {
             display: inline-block;
             position: absolute;
             top: 0;
+            .background_size(34px);
+            width: 34px;
         }
         
         &::before {
             background-image:url('/assets/images/puzzles/language_scramble/paper-left.png');
-            background-position: left 7px;
-            .background_size(34px);
-            width: 34px;
+            background-position: left 6px;
             left: -34px;
         }
 
         &::after {
             background-image:url('/assets/images/puzzles/language_scramble/paper-right.png');
-            background-position: right 5px;
-            .background_size(35px);
-            width: 35px;
-            right: -35px;
+            background-position: right 6px;
+            right: -34px;
         }
     }
     
@@ -229,16 +227,16 @@ body {
                 .background_size(90px);  
                 
                 &::before, &::after {
-                    .background_size(45px);
-                    width: 45px;
+                    .background_size(21px);
+                    width: 23px;
                 }              
                 
                 &::before {
-                    left: -45px;
+                    left: -20px;
                 }
                 
                 &::after {
-                    right: -45px;
+                    right: -20px;
                 }
             }
         }
