@@ -496,7 +496,7 @@ languageScramble.ViewHelper = (function() {
     }
     sentence = " " + sentence + " ";
     highlighted = this.scrambleInfo[this.displayLevel];
-    if (!highlighted.match(sentence.replace(/\s/, ''))) {
+    if (!highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))) {
       _ref = [' ', '?', ','];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         boundary = _ref[_i];
@@ -1224,14 +1224,14 @@ languageScramble.ViewHelper = (function() {
     }
     correctSentence = " " + correctSentence + " ";
     highlighted = this.scrambleInfo[this.activeType];
-    if (!highlighted.match(correctSentence.replace(/\s/, ''))) {
+    if (!highlighted.replace(/\s/g, '').match(correctSentence.replace(/\s/g, ''))) {
       _ref = [' ', '?', ','];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         boundary = _ref[_i];
         correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
       }
     }
-    correctSentence += '<div class=\'tap\'><div>Next<br/>Scramble<div></div>';
+    correctSentence += '<div class=\'tap\'></div>';
     correct.html("<div class='papered'>" + correctSentence + "</div>");
     correct.addClass('correct');
     correct.css({

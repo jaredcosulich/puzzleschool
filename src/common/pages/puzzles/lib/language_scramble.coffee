@@ -326,7 +326,7 @@ class languageScramble.ViewHelper
         sentence = " #{sentence} "
         highlighted = @scrambleInfo[@displayLevel]
         
-        unless highlighted.match(sentence.replace(/\s/, ''))
+        unless highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))
             for boundary in [' ', '?', ',']
                 sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
@@ -808,12 +808,12 @@ class languageScramble.ViewHelper
 
         correctSentence = " #{correctSentence} "
         highlighted = @scrambleInfo[@activeType]
-        
-        unless highlighted.match(correctSentence.replace(/\s/, ''))
+
+        unless highlighted.replace(/\s/g, '').match(correctSentence.replace(/\s/g, ''))
             for boundary in [' ', '?', ',']
                 correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        correctSentence += '<div class=\'tap\'><div>Next<br/>Scramble<div></div>'
+        correctSentence += '<div class=\'tap\'></div>'
 
         correct.html("<div class='papered'>#{correctSentence}</div>")
         correct.addClass('correct')

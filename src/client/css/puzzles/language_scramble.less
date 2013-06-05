@@ -80,7 +80,7 @@ body {
     
     .papered {
         background-image:url('/assets/images/puzzles/language_scramble/paper-middle.png');
-        background-position: center 6px;
+        background-position: left 6px;
         background-repeat: repeat-x;      
         display: inline-block;
         position: relative;
@@ -89,22 +89,24 @@ body {
             background-repeat: no-repeat;            
             content: "\00a0";
             display: inline-block;
-            width: 75px;
             position: absolute;
-            top: 1px;
-            .background_size(73px);
+            top: 0;
         }
         
         &::before {
             background-image:url('/assets/images/puzzles/language_scramble/paper-left.png');
-            background-position: left 6px;
-            left: -72px;
+            background-position: left 7px;
+            .background_size(34px);
+            width: 34px;
+            left: -34px;
         }
 
         &::after {
             background-image:url('/assets/images/puzzles/language_scramble/paper-right.png');
-            background-position: right 6px;
-            right: -72px;
+            background-position: right 5px;
+            .background_size(35px);
+            width: 35px;
+            right: -35px;
         }
     }
     
@@ -204,22 +206,13 @@ body {
             text-align: center;
             .tap {
                 margin: auto;
-                background-image: url('/assets/images/puzzles/language_scramble/tile-blue.png'); 
-                .background_size(cover);
+                background-image: url('/assets/images/puzzles/language_scramble/next-scramble.png'); 
                 display: block;
                 margin-top: 45px;
-                font-size: 21px;
-                font-weight: bold;
-                width: 120px;
-                height: 120px;
-                line-height: 24px;
-                text-align: center;
+                width: 182px;
+                height: 92px;
                 cursor: pointer;
                 .no_select();
-                
-                div {
-                    padding: 30px 0 0 6px;
-                }
             }
         }
         
