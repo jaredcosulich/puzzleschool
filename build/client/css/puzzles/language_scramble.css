@@ -63,6 +63,11 @@ body {
   display: block;
   font-size: 10px;
 }
+.language_scramble .header .explanation {
+  margin: 0;
+  padding: 6px;
+  clear: both;
+}
 .language_scramble .scramble_content {
   height: 640px;
   width: 960px;
