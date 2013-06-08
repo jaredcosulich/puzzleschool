@@ -191,7 +191,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -30,
               y: -10
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364579016552,
             equations: {
@@ -335,7 +336,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -12,
               y: -30
-            }
+            },
+            hidePlots: true
           }, {
             id: 1363889649942,
             equations: {
@@ -518,7 +520,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -7,
               y: 14
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364225219109,
             equations: {

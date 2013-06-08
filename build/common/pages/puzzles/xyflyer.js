@@ -36,6 +36,7 @@ soma.chunks({
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
       this.loadScript('/assets/third_party/equation_explorer/tokens.js');
       this.loadScript('/assets/third_party/raphael-min.js');
+      this.loadScript('/assets/third_party/cloudgen-min.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/levels.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/animation.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/transformer.js');
@@ -326,7 +327,8 @@ soma.views({
           objects: this.$('.objects'),
           equationArea: this.$('.equation_area'),
           grid: this.level.grid,
-          islandCoordinates: this.level.islandCoordinates
+          islandCoordinates: this.level.islandCoordinates,
+          hidePlots: this.level.hidePlots
         });
       } else {
         this.helper = new xyflyer.ViewHelper({
@@ -336,6 +338,7 @@ soma.views({
           equationArea: this.$('.equation_area'),
           grid: this.level.grid,
           islandCoordinates: this.level.islandCoordinates,
+          hidePlots: this.level.hidePlots,
           nextLevel: function() {
             return _this.nextLevel();
           },

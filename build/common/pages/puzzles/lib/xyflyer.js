@@ -20,9 +20,9 @@ xyflyer.ChunkHelper = (function() {
 xyflyer.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    var boardElement, flip, objects,
+    var boardElement, flip, hidePlots, objects,
       _this = this;
-    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, flip = _arg.flip, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent;
+    this.el = _arg.el, this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, hidePlots = _arg.hidePlots, flip = _arg.flip, this.nextLevel = _arg.nextLevel, this.registerEvent = _arg.registerEvent;
     this.rings = [];
     this.setFlip(flip);
     this.board = new xyflyer.Board({
@@ -30,6 +30,7 @@ xyflyer.ViewHelper = (function() {
       grid: this.grid,
       objects: objects,
       islandCoordinates: this.islandCoordinates,
+      hidePlots: hidePlots,
       resetLevel: function() {
         return _this.resetLevel();
       }
@@ -41,20 +42,22 @@ xyflyer.ViewHelper = (function() {
         return _this.trackPlane(info);
       }
     });
+    this.initGuidelines(hidePlots);
     this.parser = require('./parser');
     this.initEquations();
   }
 
   ViewHelper.prototype.reinitialize = function(_arg) {
-    var boardElement, flip, objects;
-    this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, flip = _arg.flip;
+    var boardElement, flip, hidePlots, objects;
+    this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, hidePlots = _arg.hidePlots, flip = _arg.flip;
     this.rings = [];
     this.setFlip(flip);
     this.board.init({
       el: boardElement,
       grid: this.grid,
       objects: objects,
-      islandCoordinates: this.islandCoordinates
+      islandCoordinates: this.islandCoordinates,
+      hidePlots: hidePlots
     });
     this.complete = false;
     this.plane.setBoard(this.board);
@@ -77,8 +80,30 @@ xyflyer.ViewHelper = (function() {
 
   ViewHelper.prototype.plot = function(id, data) {
     var area, formula, _ref1;
+    this.plane.fadeClouds();
     _ref1 = this.parser.parse(data), formula = _ref1[0], area = _ref1[1];
-    return this.board.plot(id, formula, area);
+    if (!this.board.plot(id, formula, area)) {
+      return false;
+    }
+    this.moveLaunch();
+    return true;
+  };
+
+  ViewHelper.prototype.moveLaunch = function() {
+    var f, id, islandX, islandY;
+    islandX = this.board.screenX(this.board.islandCoordinates.x);
+    islandY = this.board.screenY(((function() {
+      var _ref1, _results;
+      _ref1 = this.board.formulas;
+      _results = [];
+      for (id in _ref1) {
+        f = _ref1[id];
+        _results.push(f.formula(this.board.islandCoordinates.x));
+      }
+      return _results;
+    }).call(this))[0]);
+    this.board.moveIsland(islandX, islandY);
+    return this.plane.move(islandX, islandY);
   };
 
   ViewHelper.prototype.trackPlane = function(_arg) {
@@ -103,6 +128,47 @@ xyflyer.ViewHelper = (function() {
       x: x,
       y: y
     }));
+  };
+
+  ViewHelper.prototype.initGuidelines = function(hidePlots) {
+    var areaOffset, gameAreaOffset, message, messageOffset, showGuidelines,
+      _this = this;
+    showGuidelines = this.el.find('.show_guidelines');
+    showGuidelines.bind('click', function() {
+      hidePlots = showGuidelines.hasClass('on');
+      showGuidelines.removeClass(hidePlots ? 'on' : 'off');
+      showGuidelines.addClass(hidePlots ? 'off' : 'on');
+      return _this.board.setHidePlots(hidePlots);
+    });
+    if (hidePlots) {
+      showGuidelines.trigger('click');
+      areaOffset = this.$('.equations').offset();
+      gameAreaOffset = this.el.offset();
+      messageOffset = this.equationArea.find('.guidelines').offset();
+      message = this.$('.guidelines_popup');
+      message.css({
+        opacity: 0,
+        top: messageOffset.top - message.height() - gameAreaOffset.top - 6,
+        left: messageOffset.left + (messageOffset.width / 2) - (message.width() / 2) - areaOffset.left
+      });
+      message.html("The graph lines are hidden for this level.<br/>Try solving the level without them.<br/>You can turn them back on if you need them.");
+      message.animate({
+        opacity: 1,
+        duration: 250
+      });
+      return $(document.body).one('mousedown.variable touchstart.variable', function() {
+        return message.animate({
+          opacity: 0,
+          duration: 250,
+          complete: function() {
+            return message.css({
+              top: -1000,
+              left: -1000
+            });
+          }
+        });
+      });
+    }
   };
 
   ViewHelper.prototype.initEquations = function() {

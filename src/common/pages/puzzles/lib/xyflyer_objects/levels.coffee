@@ -112,6 +112,7 @@ levels.WORLDS = [
                             yMin: -50
                             yMax: 50
                         islandCoordinates: {x: -30, y: -10}
+                        hidePlots: true
                     }
                     {
                         id: 1364579016552
@@ -196,6 +197,7 @@ levels.WORLDS = [
                             yMin: -50
                             yMax: 50
                         islandCoordinates: {x: -12, y: -30}
+                        hidePlots: true
                     }
                     {
                         id: 1363889649942
@@ -302,6 +304,7 @@ levels.WORLDS = [
                             yMin: -17
                             yMax: 17
                         islandCoordinates: {x: -7, y: 14}
+                        hidePlots: true
                     }                    
                     {
                         id: 1364225219109

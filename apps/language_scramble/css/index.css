@@ -33,10 +33,10 @@ body {
   background-repeat: no-repeat;
   content: "\00a0";
   display: inline-block;
-  width: 76px;
+  width: 35px;
   position: absolute;
   top: 0;
-  left: -74px;
+  left: -35px;
 }
 .language_scramble .display_words .words::after,
 .language_scramble .scrambled .words::after,
@@ -46,10 +46,10 @@ body {
   background-repeat: no-repeat;
   content: "\00a0";
   display: inline-block;
-  width: 76px;
+  width: 35px;
   position: absolute;
   top: 0;
-  right: -74px;
+  right: -35px;
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
@@ -189,19 +189,11 @@ body {
 }
 .language_scramble .correct .tap {
     margin: auto;
-    background-image: url('images/tile-blue.png');
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background-image: url('images/next-scramble.png');
     display: block;
     margin-top: 45px;
-    font-size: 21px;
-    font-weight: bold;
-    width: 120px;
-    height: 120px;
-    line-height: 24px;
-    text-align: center;
+    width: 182px;
+    height: 92px;
     cursor: pointer;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -236,14 +228,14 @@ body {
   background-repeat: no-repeat;
   content: "\00a0";
   display: inline-block;
-  width: 60px;
+  width: 28px;
   position: absolute;
   top: 0;
-  left: -60px;
-  -webkit-background-size: 60px;
-  -moz-background-size: 60px;
-  -o-background-size: 60px;
-  background-size: 60px;
+  left: -28px;
+  -webkit-background-size: 28px;
+  -moz-background-size: 28px;
+  -o-background-size: 28px;
+  background-size: 28px;
 }
 .language_scramble .guesses .hidden_message span::after {
   background-image: url('images/paper-right.png');
@@ -251,14 +243,14 @@ body {
   background-repeat: no-repeat;
   content: "\00a0";
   display: inline-block;
-  width: 60px;
+  width: 28px;
   position: absolute;
   top: 0;
-  right: -60px;
-  -webkit-background-size: 60px;
-  -moz-background-size: 60px;
-  -o-background-size: 60px;
-  background-size: px;
+  right: -28px;
+  -webkit-background-size: 28px;
+  -moz-background-size: 28px;
+  -o-background-size: 28px;
+  background-size: 28px;
 }
 .language_scramble .guesses.hidden {
   position: relative;
@@ -311,11 +303,16 @@ body {
 }
 
 .language_scramble .floating_message {
-  position: absolute;
-  top: -10000px;
-  left: -10000px;
-  opacity: 0;
-  text-align: center;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+    text-align: center;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    background-color: #fafafa;
+    padding: 60px;
 }
 .language_scramble .floating_message a {
     color: blue;

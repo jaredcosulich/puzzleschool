@@ -310,14 +310,14 @@
             .box-shadow(1px 2px 1px @black);
         }
         
-        .hints {
+        .hints, .guidelines {
             position: absolute;
             padding: 12px 0;
             bottom: 0;
-            left: 102px;
+            left: 192px;
             text-align: center;
         }
-        .hint_popup {
+        .hint_popup, .guidelines_popup {
             position: absolute;
             top: -10000px;
             left: -10000px;
@@ -344,7 +344,52 @@
                     -o-transform:        rotate( 45deg );  
                     -webkit-transform:   rotate( 45deg );  
             }
-        }    
+        }
+        .guidelines {
+            left: 18px;
+            .show_guidelines {
+                margin-top: 6px;
+                display: block;
+                width: 150px;
+                height: 26px;
+                
+                &::before, &::after {
+                    width: 48%;
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    display: inline-block;                    
+                    content: "\00a0";
+                    border: 1px solid #ccc;
+                    .box-shadow(1px 1px 2px rgba(0,0,0,0.5));
+                    background-color: @white;
+                }
+                &.on::before, &.off::after {
+                    .box-shadow(inset -3px 3px 9px rgba(0,0,0,0.5));  
+                    padding: 2px 0;                  
+                }
+                &.on::before {
+                    content: 'ON';
+                    background-color: @blue;
+                }
+                &.off::after {
+                    content: 'OFF';
+                    background-color: @grey;
+                }
+            }
+        }
+        
+        .guidelines_popup {
+            width: 300px;
+            height: 75px;
+            padding: 6px;
+            line-height: 24px;
+            font-size: 15px;
+            &::after {
+                margin-left: 144px;
+                margin-top: 0;
+            }
+        }
             
         .drag_this, .drop_here, .drag_this_right, .drop_here_right, .launch_hint {
             position: absolute;

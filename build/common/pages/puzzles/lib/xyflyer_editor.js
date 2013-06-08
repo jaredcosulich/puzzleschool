@@ -356,17 +356,10 @@ xyflyerEditor.EditorHelper = (function() {
         _this.boardElement.bind('mousemove.dragisland', function(e) {
           var x, y;
           _this.boardElement.unbind('mouseup.showxy touchend.showxy');
-          _this.board.island.transform("...t" + (e.clientX - currentX) + "," + (e.clientY - currentY));
           x = _this.board.screenX(_this.islandCoordinates.x) + (e.clientX - currentX);
           y = _this.board.screenY(_this.islandCoordinates.y) + (e.clientY - currentY);
+          _this.islandCoordinates = _this.board.moveIsland(x, y);
           _this.plane.move(x, y, 0);
-          _this.board.islandCoordinates = _this.islandCoordinates = {
-            x: _this.board.paperX(x),
-            y: _this.board.paperY(y)
-          };
-          _this.board.islandLabel.attr({
-            text: _this.board.islandText()
-          });
           currentX = e.clientX;
           return currentY = e.clientY;
         });

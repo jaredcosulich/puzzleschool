@@ -5,23 +5,30 @@ Animation = require('./animation').Animation
 class board.Board extends xyflyerObject.Object
     maxUnits: 10
 
-    constructor: ({@el, @grid, @objects, @islandCoordinates, @resetLevel}) ->
+    constructor: ({@el, @grid, @objects, @islandCoordinates, @resetLevel, hidePlots}) ->
         @init
             el: @el
             grid: @grid
             objects: @objects
             islandCoordinates: @islandCoordinates
+            hidePlots: hidePlots
         @load()
 
-    init: ({@el, @grid, @objects, @islandCoordinates}) ->
+    init: ({@el, @grid, @objects, @islandCoordinates, hidePlots}) ->
         @islandCoordinates or= {}
         @islandCoordinates.x = 0 if not @islandCoordinates.x
         @islandCoordinates.y = 0 if not @islandCoordinates.y
         @formulas = {}
         @rings = []
         @ringFronts = []
+        @setHidePlots(hidePlots)
         @clear()
         @load()
+        
+    setHidePlots: (hidePlots) ->
+        if @hidePlots != hidePlots
+            @hidePlots = hidePlots
+            if @hidePlots then @fadePlots() else @showPlots()
         
     load: -> 
         dimensions = @el.offset()
@@ -136,6 +143,23 @@ class board.Board extends xyflyerObject.Object
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
         
         @island.push(@islandLabel)
+        
+    moveIsland: (x, y) ->
+        if not @island
+            $.timeout 100, => @moveIsland(x, y)
+            return
+            
+        relativeX = x - @screenX(@islandCoordinates.x)
+        relativeY = y - @screenY(@islandCoordinates.y)
+
+        @islandCoordinates = 
+            x: @paperX(x)
+            y: @paperY(y)   
+
+        @island.transform("...t#{relativeX},#{relativeY}")       
+        
+        @islandLabel.attr(text: @islandText())
+        return @islandCoordinates
         
     islandText: ->
         "#{if @scale > 0.6 then 'Launching From:\n' else ''}#{@islandCoordinates.x}, #{@islandCoordinates.y}"
@@ -300,7 +324,36 @@ class board.Board extends xyflyerObject.Object
         grid = @paper.path(gridString)
         grid.attr(stroke: color)
         
+    fadePlots: ->
+        clearTimeout(@fadePlotsTimeout) if @fadePlotsTimeout
+        clearTimeout(@showPlotsTimeout) if @showPlotsTimeout
+        alpha = 1
+        fade = =>
+            alpha -= 0.25
+            for id, formula of @formulas 
+                formula.plotArea.canvas.style.opacity = alpha if formula.plotArea
+                    
+            @fadePlotsTimeout = $.timeout 100, => fade() if alpha > 0
+            
+        fade()
+        
+    showPlots: ->
+        return false if @hidePlots
+        clearTimeout(@fadePlotsTimeout) if @fadePlotsTimeout
+        clearTimeout(@showPlotsTimeout) if @showPlotsTimeout
+
+        alpha = 0
+        fadeIn = =>
+            alpha += 0.25
+            for id, formula of @formulas 
+                formula.plotArea.canvas.style.opacity = alpha if formula.plotArea
+                    
+            @showPlotsTimeout = $.timeout 100, => fadeIn() if alpha < 1
+            
+        fadeIn()
+        
     plot: (id, formula, area) ->
+        @showPlots()
         @cancelCalculation()
         if (plotArea = @formulas[id]?.plotArea)
             plotArea.clearRect(0,0,@width,@height)
@@ -308,10 +361,9 @@ class board.Board extends xyflyerObject.Object
         return if not formula
         
         plotArea = @createCanvas(2) if not plotArea
-        
+                
         plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
         plotArea.lineWidth = 1
-
         plotArea.beginPath()
 
         brokenLine = 0
@@ -323,11 +375,11 @@ class board.Board extends xyflyerObject.Object
             continue if isNaN(yPos)
 
             if yPos == Number.NEGATIVE_INFINITY
-                plotArea.lineTo(xPos + @xAxis, @height)
+                plotArea.lineTo(xPos + @xAxis, @height) 
                 yPos = @grid.yMin * @yUnit
                 brokenLine += 1
             else if yPos == Number.POSITIVE_INFINITY
-                plotArea.lineTo(xPos + @xAxis, 0)
+                plotArea.lineTo(xPos + @xAxis, 0) 
                 yPos = @grid.yMax * @yUnit
                 brokenLine += 1            
 

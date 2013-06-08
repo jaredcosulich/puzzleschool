@@ -10,10 +10,34 @@ class plane.Plane extends xyflyerObject.Object
         @animation = new Animation(true)
         @addToBoard()
         @reset()
-    
+
     setBoard: (@board) -> @addToBoard()
         
-    addToBoard: -> @board.addToCanvas(@, 2)
+    addToBoard: -> 
+        @board.addToCanvas(@, 2)
+        @cloudCanvas = @board.createCanvas()
+        
+    drawCloud: (x, y) ->
+        @clouds = true
+        return if (@lastCloudTime and @latestTime - @lastCloudTime < 50)
+        $cloudgen.drawCloud(@cloudCanvas, x, y, 3 + (Math.random() * 3)) if @lastCloudTime    
+        @lastCloudTime = @latestTime
+        
+    fadeClouds: ->
+        return unless @clouds
+        alpha = 1
+        fade = =>
+            alpha -= 0.25
+            @cloudCanvas.canvas.style.opacity = alpha
+        
+            if alpha <= 0
+                @clouds = false
+                @cloudCanvas.clearRect(0,0,@board.width,@board.height)
+                @cloudCanvas.canvas.style.opacity = 1
+                    
+            $.timeout 100, => fade() if alpha > 0
+            
+        fade()
         
     draw: (ctx, t) ->
         return if not @image
@@ -24,7 +48,8 @@ class plane.Plane extends xyflyerObject.Object
             @xPos = position.x
             @yPos = position.y
             @move(@xPos + @board.xAxis, @board.yAxis - @yPos)
-            position.ring.highlight() if position.ring
+            position.ring.highlight() if position.ring            
+            @drawCloud(@xPos + @board.xAxis, @board.yAxis - @yPos)
                     
         if @path 
             position = @path[Math.round((@latestTime-@startTime)/@timeFactor*10)]
@@ -32,7 +57,10 @@ class plane.Plane extends xyflyerObject.Object
                 keys = Object.keys(@path)
                 lastPosition = @path[keys[keys.length - 2]]
                 if @path.distance == 0 or @xPos == lastPosition.x and @yPos == lastPosition.y
-                    @fall() unless @board.paperY(@currentYPos) > @board.grid.yMax
+                    if @board.paperY(@currentYPos) > @board.grid.yMax * 1.5
+                        @reset()
+                    else
+                        @fall()
                 else
                     moveTo(lastPosition)
             else
@@ -85,15 +113,24 @@ class plane.Plane extends xyflyerObject.Object
     launch: (force) ->
         return if @falling or @cancelFlight and not force
         @board.resetLevel()
+        @board.fadePlots()
+        if not @path or not Object.keys(@path).length
+            path = @board.calculatedPath or @board.calculatePath() 
+            if not path?.distance
+                @moveLaunch
+                    toX: @board.islandCoordinates.x 
+                    toY: (f.formula(@board.islandCoordinates.x) for id, f of @board.formulas)[0]  
+                    callback: => @setPath(@board.calculatePath())
+
+            else
+                @setPath(path)
+
+    setPath: (path) ->
         @cancelFlight = false
         @startTime = null
         @latestTime = null
-        if not @path or not Object.keys(@path).length
-            @path = @board.calculatedPath or @board.calculatePath() 
-            if not @path?.distance
-                @fall
-                return        
-                        
+        @path = path
+        
     reset: ->
         if not (@image = @objects.find('.plane img')).height()
             setTimeout((=>
@@ -111,4 +148,7 @@ class plane.Plane extends xyflyerObject.Object
         @size()
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)
         @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
+        @fadeClouds() if @board.showPlots()
+            
+        
         

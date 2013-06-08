@@ -16,6 +16,7 @@ soma.chunks
             
             @loadScript '/assets/third_party/equation_explorer/tokens.js'
             @loadScript '/assets/third_party/raphael-min.js'
+            @loadScript '/assets/third_party/cloudgen-min.js'
             
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/levels.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/animation.js'
@@ -228,6 +229,7 @@ soma.views
                     equationArea: @$('.equation_area')
                     grid: @level.grid
                     islandCoordinates: @level.islandCoordinates
+                    hidePlots: @level.hidePlots
             else
                 @helper = new xyflyer.ViewHelper
                     el: @dynamicContent
@@ -236,6 +238,7 @@ soma.views
                     equationArea: @$('.equation_area')
                     grid: @level.grid
                     islandCoordinates: @level.islandCoordinates
+                    hidePlots: @level.hidePlots
                     nextLevel: => @nextLevel()
                     registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 

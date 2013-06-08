@@ -17,7 +17,8 @@ board.Board = (function(_super) {
   Board.prototype.maxUnits = 10;
 
   function Board(_arg) {
-    this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, this.resetLevel = _arg.resetLevel;
+    var hidePlots;
+    this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, this.resetLevel = _arg.resetLevel, hidePlots = _arg.hidePlots;
     this.offsetY = __bind(this.offsetY, this);
 
     this.offsetX = __bind(this.offsetX, this);
@@ -26,13 +27,15 @@ board.Board = (function(_super) {
       el: this.el,
       grid: this.grid,
       objects: this.objects,
-      islandCoordinates: this.islandCoordinates
+      islandCoordinates: this.islandCoordinates,
+      hidePlots: hidePlots
     });
     this.load();
   }
 
   Board.prototype.init = function(_arg) {
-    this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates;
+    var hidePlots;
+    this.el = _arg.el, this.grid = _arg.grid, this.objects = _arg.objects, this.islandCoordinates = _arg.islandCoordinates, hidePlots = _arg.hidePlots;
     this.islandCoordinates || (this.islandCoordinates = {});
     if (!this.islandCoordinates.x) {
       this.islandCoordinates.x = 0;
@@ -43,8 +46,20 @@ board.Board = (function(_super) {
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
+    this.setHidePlots(hidePlots);
     this.clear();
     return this.load();
+  };
+
+  Board.prototype.setHidePlots = function(hidePlots) {
+    if (this.hidePlots !== hidePlots) {
+      this.hidePlots = hidePlots;
+      if (this.hidePlots) {
+        return this.fadePlots();
+      } else {
+        return this.showPlots();
+      }
+    }
   };
 
   Board.prototype.load = function() {
@@ -185,6 +200,28 @@ board.Board = (function(_super) {
       'font-size': 9 + (2 * this.scale)
     }).toFront();
     return this.island.push(this.islandLabel);
+  };
+
+  Board.prototype.moveIsland = function(x, y) {
+    var relativeX, relativeY,
+      _this = this;
+    if (!this.island) {
+      $.timeout(100, function() {
+        return _this.moveIsland(x, y);
+      });
+      return;
+    }
+    relativeX = x - this.screenX(this.islandCoordinates.x);
+    relativeY = y - this.screenY(this.islandCoordinates.y);
+    this.islandCoordinates = {
+      x: this.paperX(x),
+      y: this.paperY(y)
+    };
+    this.island.transform("...t" + relativeX + "," + relativeY);
+    this.islandLabel.attr({
+      text: this.islandText()
+    });
+    return this.islandCoordinates;
   };
 
   Board.prototype.islandText = function() {
@@ -471,9 +508,71 @@ board.Board = (function(_super) {
     });
   };
 
+  Board.prototype.fadePlots = function() {
+    var alpha, fade,
+      _this = this;
+    if (this.fadePlotsTimeout) {
+      clearTimeout(this.fadePlotsTimeout);
+    }
+    if (this.showPlotsTimeout) {
+      clearTimeout(this.showPlotsTimeout);
+    }
+    alpha = 1;
+    fade = function() {
+      var formula, id, _ref;
+      alpha -= 0.25;
+      _ref = _this.formulas;
+      for (id in _ref) {
+        formula = _ref[id];
+        if (formula.plotArea) {
+          formula.plotArea.canvas.style.opacity = alpha;
+        }
+      }
+      return _this.fadePlotsTimeout = $.timeout(100, function() {
+        if (alpha > 0) {
+          return fade();
+        }
+      });
+    };
+    return fade();
+  };
+
+  Board.prototype.showPlots = function() {
+    var alpha, fadeIn,
+      _this = this;
+    if (this.hidePlots) {
+      return false;
+    }
+    if (this.fadePlotsTimeout) {
+      clearTimeout(this.fadePlotsTimeout);
+    }
+    if (this.showPlotsTimeout) {
+      clearTimeout(this.showPlotsTimeout);
+    }
+    alpha = 0;
+    fadeIn = function() {
+      var formula, id, _ref;
+      alpha += 0.25;
+      _ref = _this.formulas;
+      for (id in _ref) {
+        formula = _ref[id];
+        if (formula.plotArea) {
+          formula.plotArea.canvas.style.opacity = alpha;
+        }
+      }
+      return _this.showPlotsTimeout = $.timeout(100, function() {
+        if (alpha < 1) {
+          return fadeIn();
+        }
+      });
+    };
+    return fadeIn();
+  };
+
   Board.prototype.plot = function(id, formula, area) {
     var brokenLine, i, infiniteLine, lastSlope, lastYPos, newYPos, plotArea, slope, testYPos, xPos, yPos, _i, _j, _ref, _ref1, _ref2,
       _this = this;
+    this.showPlots();
     this.cancelCalculation();
     if ((plotArea = (_ref = this.formulas[id]) != null ? _ref.plotArea : void 0)) {
       plotArea.clearRect(0, 0, this.width, this.height);

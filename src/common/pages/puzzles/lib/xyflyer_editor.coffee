@@ -233,14 +233,24 @@ class xyflyerEditor.EditorHelper
             for element in elements when element[0].href?.toString()?.indexOf('island')
                 @boardElement.bind 'mousemove.dragisland', (e) =>
                     @boardElement.unbind('mouseup.showxy touchend.showxy')
-                    @board.island.transform("...t#{e.clientX - currentX},#{e.clientY - currentY}")
                     x = @board.screenX(@islandCoordinates.x)+(e.clientX - currentX)
                     y = @board.screenY(@islandCoordinates.y)+(e.clientY - currentY)
+                    @islandCoordinates = @board.moveIsland(x, y)
                     @plane.move(x, y, 0)
-                    @board.islandCoordinates = @islandCoordinates = {x: @board.paperX(x), y: @board.paperY(y)}
-                    @board.islandLabel.attr(text: @board.islandText())
+
                     currentX = e.clientX
                     currentY = e.clientY
+                    
+                    # 
+                    # @boardElement.unbind('mouseup.showxy touchend.showxy')
+                    # @board.island.transform("...t#{e.clientX - currentX},#{e.clientY - currentY}")
+                    # x = @board.screenX(@islandCoordinates.x)+(e.clientX - currentX)
+                    # y = @board.screenY(@islandCoordinates.y)+(e.clientY - currentY)
+                    # @plane.move(x, y, 0)
+                    # @board.islandCoordinates = @islandCoordinates = {x: @board.paperX(x), y: @board.paperY(y)}
+                    # @board.islandLabel.attr(text: @board.islandText())
+                    # currentX = e.clientX
+                    # currentY = e.clientY
                     
                 @boardElement.one 'mouseup.dragisland', (e) => 
                     @initBoard({}) if e.clientX != xStart and e.clientY != yStart

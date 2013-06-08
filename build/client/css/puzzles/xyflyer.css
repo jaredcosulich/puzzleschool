@@ -339,14 +339,16 @@
   -webkit-box-shadow: 1px 2px 1px #262626;
   -moz-box-shadow: 1px 2px 1px #262626;
 }
-.xyflyer .dynamic_content .hints {
+.xyflyer .dynamic_content .hints,
+.xyflyer .dynamic_content .guidelines {
   position: absolute;
   padding: 12px 0;
   bottom: 0;
-  left: 102px;
+  left: 192px;
   text-align: center;
 }
-.xyflyer .dynamic_content .hint_popup {
+.xyflyer .dynamic_content .hint_popup,
+.xyflyer .dynamic_content .guidelines_popup {
   position: absolute;
   top: -10000px;
   left: -10000px;
@@ -363,7 +365,8 @@
   -webkit-box-shadow: 0 0 6px #b2b2b2;
   -moz-box-shadow: 0 0 6px #b2b2b2;
 }
-.xyflyer .dynamic_content .hint_popup::after {
+.xyflyer .dynamic_content .hint_popup::after,
+.xyflyer .dynamic_content .guidelines_popup::after {
   background-color: white;
   height: 18px;
   width: 18px;
@@ -379,6 +382,55 @@
   -ms-transform: rotate(45deg);
   -o-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+.xyflyer .dynamic_content .guidelines {
+  left: 18px;
+}
+.xyflyer .dynamic_content .guidelines .show_guidelines {
+  margin-top: 6px;
+  display: block;
+  width: 150px;
+  height: 26px;
+}
+.xyflyer .dynamic_content .guidelines .show_guidelines::before,
+.xyflyer .dynamic_content .guidelines .show_guidelines::after {
+  width: 48%;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+  content: "\00a0";
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  background-color: #fafafa;
+}
+.xyflyer .dynamic_content .guidelines .show_guidelines.on::before,
+.xyflyer .dynamic_content .guidelines .show_guidelines.off::after {
+  box-shadow: inset -3px 3px 9px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset -3px 3px 9px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset -3px 3px 9px rgba(0, 0, 0, 0.5);
+  padding: 2px 0;
+}
+.xyflyer .dynamic_content .guidelines .show_guidelines.on::before {
+  content: 'ON';
+  background-color: #24aac3;
+}
+.xyflyer .dynamic_content .guidelines .show_guidelines.off::after {
+  content: 'OFF';
+  background-color: #949494;
+}
+.xyflyer .dynamic_content .guidelines_popup {
+  width: 300px;
+  height: 75px;
+  padding: 6px;
+  line-height: 24px;
+  font-size: 15px;
+}
+.xyflyer .dynamic_content .guidelines_popup::after {
+  margin-left: 144px;
+  margin-top: 0;
 }
 .xyflyer .dynamic_content .drag_this,
 .xyflyer .dynamic_content .drop_here,

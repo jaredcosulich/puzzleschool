@@ -30,7 +30,43 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.addToBoard = function() {
-    return this.board.addToCanvas(this, 2);
+    this.board.addToCanvas(this, 2);
+    return this.cloudCanvas = this.board.createCanvas();
+  };
+
+  Plane.prototype.drawCloud = function(x, y) {
+    this.clouds = true;
+    if (this.lastCloudTime && this.latestTime - this.lastCloudTime < 50) {
+      return;
+    }
+    if (this.lastCloudTime) {
+      $cloudgen.drawCloud(this.cloudCanvas, x, y, 3 + (Math.random() * 3));
+    }
+    return this.lastCloudTime = this.latestTime;
+  };
+
+  Plane.prototype.fadeClouds = function() {
+    var alpha, fade,
+      _this = this;
+    if (!this.clouds) {
+      return;
+    }
+    alpha = 1;
+    fade = function() {
+      alpha -= 0.25;
+      _this.cloudCanvas.canvas.style.opacity = alpha;
+      if (alpha <= 0) {
+        _this.clouds = false;
+        _this.cloudCanvas.clearRect(0, 0, _this.board.width, _this.board.height);
+        _this.cloudCanvas.canvas.style.opacity = 1;
+      }
+      return $.timeout(100, function() {
+        if (alpha > 0) {
+          return fade();
+        }
+      });
+    };
+    return fade();
   };
 
   Plane.prototype.draw = function(ctx, t) {
@@ -48,8 +84,9 @@ plane.Plane = (function(_super) {
       _this.yPos = position.y;
       _this.move(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
       if (position.ring) {
-        return position.ring.highlight();
+        position.ring.highlight();
       }
+      return _this.drawCloud(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
     };
     if (this.path) {
       position = this.path[Math.round((this.latestTime - this.startTime) / this.timeFactor * 10)];
@@ -57,7 +94,9 @@ plane.Plane = (function(_super) {
         keys = Object.keys(this.path);
         lastPosition = this.path[keys[keys.length - 2]];
         if (this.path.distance === 0 || this.xPos === lastPosition.x && this.yPos === lastPosition.y) {
-          if (!(this.board.paperY(this.currentYPos) > this.board.grid.yMax)) {
+          if (this.board.paperY(this.currentYPos) > this.board.grid.yMax * 1.5) {
+            this.reset();
+          } else {
             this.fall();
           }
         } else {
@@ -135,20 +174,43 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var _ref;
+    var f, id, path,
+      _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
     this.board.resetLevel();
+    this.board.fadePlots();
+    if (!this.path || !Object.keys(this.path).length) {
+      path = this.board.calculatedPath || this.board.calculatePath();
+      if (!(path != null ? path.distance : void 0)) {
+        return this.moveLaunch({
+          toX: this.board.islandCoordinates.x,
+          toY: ((function() {
+            var _ref, _results;
+            _ref = this.board.formulas;
+            _results = [];
+            for (id in _ref) {
+              f = _ref[id];
+              _results.push(f.formula(this.board.islandCoordinates.x));
+            }
+            return _results;
+          }).call(this))[0],
+          callback: function() {
+            return _this.setPath(_this.board.calculatePath());
+          }
+        });
+      } else {
+        return this.setPath(path);
+      }
+    }
+  };
+
+  Plane.prototype.setPath = function(path) {
     this.cancelFlight = false;
     this.startTime = null;
     this.latestTime = null;
-    if (!this.path || !Object.keys(this.path).length) {
-      this.path = this.board.calculatedPath || this.board.calculatePath();
-      if (!((_ref = this.path) != null ? _ref.distance : void 0)) {
-        this.fall;
-      }
-    }
+    return this.path = path;
   };
 
   Plane.prototype.reset = function() {
@@ -168,7 +230,10 @@ plane.Plane = (function(_super) {
     this.path = null;
     this.size();
     this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit);
-    return this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
+    this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
+    if (this.board.showPlots()) {
+      return this.fadeClouds();
+    }
   };
 
   return Plane;
