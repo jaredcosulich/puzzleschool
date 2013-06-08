@@ -331,7 +331,9 @@ class board.Board extends xyflyerObject.Object
         fade = =>
             alpha -= 0.25
             for id, formula of @formulas 
-                formula.plotArea.canvas.style.opacity = alpha if formula.plotArea
+                continue unless formula.plotArea
+                opacity = parseFloat(formula.plotArea.canvas.style.opacity or 1)
+                formula.plotArea.canvas.style.opacity = alpha if opacity > alpha
                     
             @fadePlotsTimeout = $.timeout 100, => fade() if alpha > 0
             
@@ -346,7 +348,9 @@ class board.Board extends xyflyerObject.Object
         fadeIn = =>
             alpha += 0.25
             for id, formula of @formulas 
-                formula.plotArea.canvas.style.opacity = alpha if formula.plotArea
+                continue unless formula.plotArea
+                opacity = parseFloat(formula.plotArea.canvas.style.opacity or 0)
+                formula.plotArea.canvas.style.opacity = alpha if opacity < alpha
                     
             @showPlotsTimeout = $.timeout 100, => fadeIn() if alpha < 1
             

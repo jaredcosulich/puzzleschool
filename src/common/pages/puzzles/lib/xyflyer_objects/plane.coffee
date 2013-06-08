@@ -115,15 +115,7 @@ class plane.Plane extends xyflyerObject.Object
         @board.resetLevel()
         @board.fadePlots()
         if not @path or not Object.keys(@path).length
-            path = @board.calculatedPath or @board.calculatePath() 
-            if not path?.distance
-                @moveLaunch
-                    toX: @board.islandCoordinates.x 
-                    toY: (f.formula(@board.islandCoordinates.x) for id, f of @board.formulas)[0]  
-                    callback: => @setPath(@board.calculatePath())
-
-            else
-                @setPath(path)
+            @setPath(@board.calculatedPath or @board.calculatePath())
 
     setPath: (path) ->
         @cancelFlight = false

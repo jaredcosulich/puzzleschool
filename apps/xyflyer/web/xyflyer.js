@@ -61,6 +61,7 @@ xyflyer.ViewHelper = (function() {
     });
     this.complete = false;
     this.plane.setBoard(this.board);
+    this.initGuidelines(hidePlots);
     this.initEquations();
     return this.resetLevel();
   };
@@ -134,6 +135,7 @@ xyflyer.ViewHelper = (function() {
     var areaOffset, gameAreaOffset, message, messageOffset, showGuidelines,
       _this = this;
     showGuidelines = this.el.find('.show_guidelines');
+    showGuidelines.unbind('click');
     showGuidelines.bind('click', function() {
       hidePlots = showGuidelines.hasClass('on');
       showGuidelines.removeClass(hidePlots ? 'on' : 'off');
@@ -151,7 +153,7 @@ xyflyer.ViewHelper = (function() {
         top: messageOffset.top - message.height() - gameAreaOffset.top - 6,
         left: messageOffset.left + (messageOffset.width / 2) - (message.width() / 2) - areaOffset.left
       });
-      message.html("The graph lines are hidden for this level.<br/>Try solving the level without them.<br/>You can turn them back on if you need them.");
+      message.html('The graph lines are hidden for this level.<br/>\nTry solving the level without them.<br/>\nYou can turn them back on if you need them.');
       message.animate({
         opacity: 1,
         duration: 250

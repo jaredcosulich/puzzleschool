@@ -174,35 +174,13 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.launch = function(force) {
-    var f, id, path,
-      _this = this;
     if (this.falling || this.cancelFlight && !force) {
       return;
     }
     this.board.resetLevel();
     this.board.fadePlots();
     if (!this.path || !Object.keys(this.path).length) {
-      path = this.board.calculatedPath || this.board.calculatePath();
-      if (!(path != null ? path.distance : void 0)) {
-        return this.moveLaunch({
-          toX: this.board.islandCoordinates.x,
-          toY: ((function() {
-            var _ref, _results;
-            _ref = this.board.formulas;
-            _results = [];
-            for (id in _ref) {
-              f = _ref[id];
-              _results.push(f.formula(this.board.islandCoordinates.x));
-            }
-            return _results;
-          }).call(this))[0],
-          callback: function() {
-            return _this.setPath(_this.board.calculatePath());
-          }
-        });
-      } else {
-        return this.setPath(path);
-      }
+      return this.setPath(this.board.calculatedPath || this.board.calculatePath());
     }
   };
 

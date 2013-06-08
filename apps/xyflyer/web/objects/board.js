@@ -519,12 +519,16 @@ board.Board = (function(_super) {
     }
     alpha = 1;
     fade = function() {
-      var formula, id, _ref;
+      var formula, id, opacity, _ref;
       alpha -= 0.25;
       _ref = _this.formulas;
       for (id in _ref) {
         formula = _ref[id];
-        if (formula.plotArea) {
+        if (!formula.plotArea) {
+          continue;
+        }
+        opacity = parseFloat(formula.plotArea.canvas.style.opacity || 1);
+        if (opacity > alpha) {
           formula.plotArea.canvas.style.opacity = alpha;
         }
       }
@@ -551,12 +555,16 @@ board.Board = (function(_super) {
     }
     alpha = 0;
     fadeIn = function() {
-      var formula, id, _ref;
+      var formula, id, opacity, _ref;
       alpha += 0.25;
       _ref = _this.formulas;
       for (id in _ref) {
         formula = _ref[id];
-        if (formula.plotArea) {
+        if (!formula.plotArea) {
+          continue;
+        }
+        opacity = parseFloat(formula.plotArea.canvas.style.opacity || 0);
+        if (opacity < alpha) {
           formula.plotArea.canvas.style.opacity = alpha;
         }
       }

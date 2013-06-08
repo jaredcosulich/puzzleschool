@@ -44,6 +44,8 @@ class xyflyer.ViewHelper
 
         @complete = false
         @plane.setBoard(@board)
+        
+        @initGuidelines(hidePlots)        
         @initEquations()
         @resetLevel()
             
@@ -84,6 +86,7 @@ class xyflyer.ViewHelper
         
     initGuidelines: (hidePlots) ->
         showGuidelines = @el.find('.show_guidelines')
+        showGuidelines.unbind('click')
         showGuidelines.bind 'click', => 
             hidePlots = showGuidelines.hasClass('on')
             showGuidelines.removeClass(if hidePlots then 'on' else 'off')
@@ -102,7 +105,12 @@ class xyflyer.ViewHelper
                 opacity: 0
                 top: messageOffset.top - message.height() - gameAreaOffset.top - 6
                 left: messageOffset.left + (messageOffset.width/2) - (message.width()/2) - areaOffset.left
-            message.html("The graph lines are hidden for this level.<br/>Try solving the level without them.<br/>You can turn them back on if you need them.")
+            message.html '''
+                The graph lines are hidden for this level.<br/>
+                Try solving the level without them.<br/>
+                You can turn them back on if you need them.
+            '''
+            
             message.animate
                 opacity: 1
                 duration: 250

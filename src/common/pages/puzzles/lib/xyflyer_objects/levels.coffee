@@ -91,6 +91,7 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: 2, y: -2}
                         fragments: ['+4', '-4']
+                        hidePlots: true
                     }
                     {
                         id: 1364578660117
