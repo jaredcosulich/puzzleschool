@@ -129,7 +129,10 @@ class plane.Plane extends xyflyerObject.Object
         @path = path
         
     showStatic: (show) ->
-        return if not @board.island
+        if not @board.island
+            $.timeout 100, => @showStatic(show)
+            return
+            
         if show
             if not @staticImage
                 plane = @objects.find('.plane img')

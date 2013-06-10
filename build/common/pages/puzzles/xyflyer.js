@@ -353,7 +353,7 @@ soma.views({
       return this.loadLevel();
     },
     loadLevel: function() {
-      var equation, fragment, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+      var equation, fragment, index, info, ring, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
       if ((_ref = this.level) != null ? _ref.fragments : void 0) {
         _ref1 = this.level.fragments;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -376,8 +376,12 @@ soma.views({
         this.helper.addRing(ring.x, ring.y);
       }
       if (this.level) {
-        this.$('.world_index').html("" + (this.currentWorld() + 1));
-        this.$('.level_index').html("" + (this.worldLevelIndex()));
+        if ((index = this.worldLevelIndex())) {
+          this.$('.world_index').html("" + (this.currentWorld() + 1));
+          this.$('.level_index').html("" + index);
+        } else {
+          this.$('.world_level').html('Custom Level');
+        }
       }
       this.selectWorld(this.currentWorld());
       if (window._gaq && this.level) {

@@ -261,9 +261,12 @@ soma.views
                 @helper.addRing(ring.x, ring.y)
             
             if @level
-                @$('.world_index').html("#{@currentWorld() + 1}")
-                @$('.level_index').html("#{@worldLevelIndex()}")
-            
+                if (index = @worldLevelIndex())
+                    @$('.world_index').html("#{@currentWorld() + 1}")
+                    @$('.level_index').html("#{index}")
+                else
+                    @$('.world_level').html('Custom Level')
+                
             @selectWorld(@currentWorld())
             if window._gaq and @level
                 @level.startTime = new Date()

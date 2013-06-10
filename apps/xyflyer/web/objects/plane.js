@@ -199,8 +199,12 @@ plane.Plane = (function(_super) {
   };
 
   Plane.prototype.showStatic = function(show) {
-    var height, planeX, planeY, scale, width;
+    var height, planeX, planeY, scale, width,
+      _this = this;
     if (!this.board.island) {
+      $.timeout(100, function() {
+        return _this.showStatic(show);
+      });
       return;
     }
     if (show) {
