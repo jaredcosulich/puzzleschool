@@ -1045,12 +1045,13 @@ levels.WORLDS = [
                             {x: -4, y: -16}
                         ]
                         grid:
-                            xMin: -17
-                            xMax: 3
-                            yMin: -17
-                            yMax: 3
+                            xMin: -30
+                            xMax: 30
+                            yMin: -30
+                            yMax: 30
                         islandCoordinates: {x: -7, y: -4}
                         fragments: ['-4*', '(-1/4)*', '+32', '-32']
+                        hidePlots: true
                     }
                     {
                         id: 1364605842905
@@ -1095,6 +1096,7 @@ levels.WORLDS = [
                             yMin: -60
                             yMax: 60
                         islandCoordinates: {x: -48, y: -6}
+                        hidePlots: true
                     }
                     {
                         id: 1363368153567
@@ -1141,6 +1143,7 @@ levels.WORLDS = [
                             yMax: 15
                         islandCoordinates: {x: -6, y: -4.5}
                         fragments: ['4*', '(1/4)*', '+3', '-3', '*-1']
+                        hidePlots: true
                     }
                     {
                         id: 1364337931784
@@ -1163,6 +1166,7 @@ levels.WORLDS = [
                             yMax: 30
                         islandCoordinates: {x: -16, y: 11}
                         fragments: ['4*', '(1/4)*', '+15', '-15']
+                        hidePlots: true
                     }
                     {
                         id: 1364338302356
@@ -1232,6 +1236,7 @@ levels.WORLDS = [
                             yMax: 7
                         islandCoordinates: {x: -12, y: -4}
                         fragments: ['4*', '(1/4)*', '+7', '-7', '-1*']
+                        hidePlots: true
                     }
                     {
                         id: 1364335789666
@@ -1278,6 +1283,7 @@ levels.WORLDS = [
                             yMax: 24
                         islandCoordinates: {x: -8, y: -8}
                         fragments: ['*2', '*4', '+2', '+4']
+                        hidePlots: true
                     }
                     {
                         id: 1364337246109
@@ -1344,10 +1350,10 @@ levels.WORLDS = [
                             {x: 7, y: -3}
                         ]
                         grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
+                            xMin: -18
+                            xMax: 18
+                            yMin: -18
+                            yMax: 18
                         islandCoordinates: {x: 4, y: 9}
                         fragments: ['-1*', '4*', '(1/2)*', '+10', '+15']
                     }

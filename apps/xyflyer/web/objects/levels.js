@@ -1661,7 +1661,8 @@ levels.WORLDS = [
               x: 2,
               y: -6
             },
-            fragments: ['3*', '(1/3)*', '+12', '-12']
+            fragments: ['3*', '(1/3)*', '+12', '-12'],
+            hidePlots: true
           }, {
             id: 1363899946541,
             equations: {
@@ -1778,7 +1779,8 @@ levels.WORLDS = [
               x: -7,
               y: -4
             },
-            fragments: ['-4*', '(-1/4)*', '+32', '-32']
+            fragments: ['-4*', '(-1/4)*', '+32', '-32'],
+            hidePlots: true
           }, {
             id: 1364605842905,
             equations: {
@@ -1856,7 +1858,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -48,
               y: -6
-            }
+            },
+            hidePlots: true
           }, {
             id: 1363368153567,
             equations: {
@@ -1937,7 +1940,8 @@ levels.WORLDS = [
               x: -6,
               y: -4.5
             },
-            fragments: ['4*', '(1/4)*', '+3', '-3', '*-1']
+            fragments: ['4*', '(1/4)*', '+3', '-3', '*-1'],
+            hidePlots: true
           }, {
             id: 1364337931784,
             equations: {
@@ -1976,7 +1980,8 @@ levels.WORLDS = [
               x: -16,
               y: 11
             },
-            fragments: ['4*', '(1/4)*', '+15', '-15']
+            fragments: ['4*', '(1/4)*', '+15', '-15'],
+            hidePlots: true
           }, {
             id: 1364338302356,
             equations: {
@@ -2102,7 +2107,8 @@ levels.WORLDS = [
               x: -12,
               y: -4
             },
-            fragments: ['4*', '(1/4)*', '+7', '-7', '-1*']
+            fragments: ['4*', '(1/4)*', '+7', '-7', '-1*'],
+            hidePlots: true
           }, {
             id: 1364335789666,
             equations: {
@@ -2186,7 +2192,8 @@ levels.WORLDS = [
               x: -8,
               y: -8
             },
-            fragments: ['*2', '*4', '+2', '+4']
+            fragments: ['*2', '*4', '+2', '+4'],
+            hidePlots: true
           }, {
             id: 1364337246109,
             equations: {
@@ -2276,7 +2283,8 @@ levels.WORLDS = [
               x: -4,
               y: -10
             },
-            fragments: ['-1*', '6*', '(1/3)*', '+5', '-2']
+            fragments: ['-1*', '6*', '(1/3)*', '+5', '-2'],
+            hidePlots: true
           }, {
             id: 1364340176597,
             equations: {
@@ -2321,7 +2329,8 @@ levels.WORLDS = [
               x: 4,
               y: 9
             },
-            fragments: ['-1*', '4*', '(1/2)*', '+10', '+15']
+            fragments: ['-1*', '4*', '(1/2)*', '+10', '+15'],
+            hidePlots: true
           }
         ]
       }, {
