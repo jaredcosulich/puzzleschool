@@ -135,15 +135,15 @@ xyflyer.ViewHelper = (function() {
     var areaOffset, gameAreaOffset, message, messageOffset, showGuidelines,
       _this = this;
     showGuidelines = this.el.find('.show_guidelines');
-    showGuidelines.unbind('click');
-    showGuidelines.bind('click', function() {
+    showGuidelines.unbind('click.guidelines touchstart.guidelines');
+    showGuidelines.bind('click.guidelines touchstart.guidelines', function() {
       hidePlots = showGuidelines.hasClass('on');
       showGuidelines.removeClass(hidePlots ? 'on' : 'off');
       showGuidelines.addClass(hidePlots ? 'off' : 'on');
       return _this.board.setHidePlots(hidePlots);
     });
     if (hidePlots) {
-      showGuidelines.trigger('click');
+      showGuidelines.trigger('click.guidelines');
       areaOffset = this.$('.equations').offset();
       gameAreaOffset = this.el.offset();
       messageOffset = this.equationArea.find('.guidelines').offset();
@@ -158,7 +158,7 @@ xyflyer.ViewHelper = (function() {
         opacity: 1,
         duration: 250
       });
-      return $(document.body).one('mousedown.variable touchstart.variable', function() {
+      return $(document.body).one('mousedown.guidelines touchstart.guidelines', function() {
         return message.animate({
           opacity: 0,
           duration: 250,

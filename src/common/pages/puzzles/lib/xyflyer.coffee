@@ -64,7 +64,7 @@ class xyflyer.ViewHelper
         @moveLaunch()
         return true
 
-    moveLaunch: ->    
+    moveLaunch: ->   
         islandX = @board.screenX(@board.islandCoordinates.x)
         islandY = @board.screenY((f.formula(@board.islandCoordinates.x) for id, f of @board.formulas)[0])
         @board.moveIsland(islandX, islandY)
@@ -86,15 +86,15 @@ class xyflyer.ViewHelper
         
     initGuidelines: (hidePlots) ->
         showGuidelines = @el.find('.show_guidelines')
-        showGuidelines.unbind('click')
-        showGuidelines.bind 'click', => 
+        showGuidelines.unbind('click.guidelines touchstart.guidelines')
+        showGuidelines.bind 'click.guidelines touchstart.guidelines', => 
             hidePlots = showGuidelines.hasClass('on')
             showGuidelines.removeClass(if hidePlots then 'on' else 'off')
             showGuidelines.addClass(if hidePlots then 'off' else 'on')
             @board.setHidePlots(hidePlots)
             
         if hidePlots
-            showGuidelines.trigger('click')
+            showGuidelines.trigger('click.guidelines')
             
             areaOffset = @$('.equations').offset()
             gameAreaOffset = @el.offset()       
@@ -114,7 +114,7 @@ class xyflyer.ViewHelper
             message.animate
                 opacity: 1
                 duration: 250
-            $(document.body).one 'mousedown.variable touchstart.variable', ->
+            $(document.body).one 'mousedown.guidelines touchstart.guidelines', ->
                 message.animate
                     opacity: 0
                     duration: 250

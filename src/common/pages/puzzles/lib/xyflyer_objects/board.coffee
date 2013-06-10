@@ -143,7 +143,7 @@ class board.Board extends xyflyerObject.Object
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
         
         @island.push(@islandLabel)
-        
+                
     moveIsland: (x, y) ->
         if not @island
             $.timeout 100, => @moveIsland(x, y)

@@ -80,6 +80,7 @@ window.app =
                 equationArea: @$('.equation_area')
                 grid: @level.grid
                 islandCoordinates: @level.islandCoordinates
+                hidePlots: @level.hidePlots
                 flip: @selectedPlayer.hand.toLowerCase()
         else
             @helper = new xyflyer.ViewHelper
@@ -89,6 +90,7 @@ window.app =
                 equationArea: @$('.equation_area')
                 grid: @level.grid
                 islandCoordinates: @level.islandCoordinates
+                hidePlots: @level.hidePlots
                 flip: @selectedPlayer.hand.toLowerCase()
                 nextLevel: => @nextLevel()
                 registerEvent: (eventInfo) => 

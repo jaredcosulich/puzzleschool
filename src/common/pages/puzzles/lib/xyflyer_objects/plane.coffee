@@ -5,13 +5,17 @@ Animation = require('./animation').Animation
 class plane.Plane extends xyflyerObject.Object
     increment: 5
     incrementTime: 6
+    scaleFactor: 1.5
     
     constructor: ({@board, @track, @objects}) ->
         @animation = new Animation(true)
         @addToBoard()
         @reset()
 
-    setBoard: (@board) -> @addToBoard()
+    setBoard: (@board) -> 
+        @staticImage.remove() if @staticImage
+        @staticImage = null        
+        @addToBoard()
         
     addToBoard: -> 
         @board.addToCanvas(@, 2)
@@ -52,6 +56,7 @@ class plane.Plane extends xyflyerObject.Object
             @drawCloud(@xPos + @board.xAxis, @board.yAxis - @yPos)
                     
         if @path 
+            @showStatic(false)
             position = @path[Math.round((@latestTime-@startTime)/@timeFactor*10)]
             if !position or @path.distance == 0   
                 keys = Object.keys(@path)
@@ -66,16 +71,16 @@ class plane.Plane extends xyflyerObject.Object
             else
                 moveTo(position)
         
-        ctx.drawImage(
-            @image[0], 
-            @currentXPos - (@width/2), 
-            @currentYPos - (@height/2), 
-            @width,
-            @height
-        )
+            ctx.drawImage(
+                @image[0], 
+                @currentXPos - (@width/2), 
+                @currentYPos - (@height/2), 
+                @width,
+                @height
+            )
         
     size: ->
-        @scale = @board.scale / 1.5
+        @scale = @board.scale / @scaleFactor
         @width = @image.width() * @scale
         @height = @image.height() * @scale
         @timeFactor = 1.65/@scale
@@ -123,6 +128,22 @@ class plane.Plane extends xyflyerObject.Object
         @latestTime = null
         @path = path
         
+    showStatic: (show) ->
+        return if not @board.island
+        if show
+            if not @staticImage
+                plane = @objects.find('.plane img')
+                scale = (@board.scale / @scaleFactor)
+                width = plane.width() * scale
+                height = plane.height() * scale
+                planeX = @board.xAxis + (@board.islandCoordinates.x * @board.xUnit) - (width/2)
+                planeY = @board.yAxis - (@board.islandCoordinates.y * @board.yUnit) - (height/2)
+                @staticImage = @board.paper.image(plane.attr('src'), planeX, planeY, width, height)
+                @board.island.push(@staticImage)
+        else if @staticImage
+            @staticImage.remove()
+            delete @staticImage
+        
     reset: ->
         if not (@image = @objects.find('.plane img')).height()
             setTimeout((=>
@@ -141,6 +162,10 @@ class plane.Plane extends xyflyerObject.Object
         @xPos = Math.round(@board.islandCoordinates.x * @board.xUnit)
         @move(@board.xAxis + (@board.islandCoordinates.x * @board.xUnit), @board.yAxis - (@board.islandCoordinates.y * @board.yUnit))
         @fadeClouds() if @board.showPlots()
-            
+        @showStatic(true)
+
+
+        
+        
         
         

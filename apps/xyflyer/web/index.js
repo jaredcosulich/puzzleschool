@@ -110,6 +110,7 @@ window.app = {
         equationArea: this.$('.equation_area'),
         grid: this.level.grid,
         islandCoordinates: this.level.islandCoordinates,
+        hidePlots: this.level.hidePlots,
         flip: this.selectedPlayer.hand.toLowerCase()
       });
     } else {
@@ -120,6 +121,7 @@ window.app = {
         equationArea: this.$('.equation_area'),
         grid: this.level.grid,
         islandCoordinates: this.level.islandCoordinates,
+        hidePlots: this.level.hidePlots,
         flip: this.selectedPlayer.hand.toLowerCase(),
         nextLevel: function() {
           return _this.nextLevel();

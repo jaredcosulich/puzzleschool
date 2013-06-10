@@ -17,6 +17,8 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.incrementTime = 6;
 
+  Plane.prototype.scaleFactor = 1.5;
+
   function Plane(_arg) {
     this.board = _arg.board, this.track = _arg.track, this.objects = _arg.objects;
     this.animation = new Animation(true);
@@ -26,6 +28,10 @@ plane.Plane = (function(_super) {
 
   Plane.prototype.setBoard = function(board) {
     this.board = board;
+    if (this.staticImage) {
+      this.staticImage.remove();
+    }
+    this.staticImage = null;
     return this.addToBoard();
   };
 
@@ -89,6 +95,7 @@ plane.Plane = (function(_super) {
       return _this.drawCloud(_this.xPos + _this.board.xAxis, _this.board.yAxis - _this.yPos);
     };
     if (this.path) {
+      this.showStatic(false);
       position = this.path[Math.round((this.latestTime - this.startTime) / this.timeFactor * 10)];
       if (!position || this.path.distance === 0) {
         keys = Object.keys(this.path);
@@ -105,12 +112,12 @@ plane.Plane = (function(_super) {
       } else {
         moveTo(position);
       }
+      return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
     }
-    return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
   };
 
   Plane.prototype.size = function() {
-    this.scale = this.board.scale / 1.5;
+    this.scale = this.board.scale / this.scaleFactor;
     this.width = this.image.width() * this.scale;
     this.height = this.image.height() * this.scale;
     return this.timeFactor = 1.65 / this.scale;
@@ -191,6 +198,28 @@ plane.Plane = (function(_super) {
     return this.path = path;
   };
 
+  Plane.prototype.showStatic = function(show) {
+    var height, planeX, planeY, scale, width;
+    if (!this.board.island) {
+      return;
+    }
+    if (show) {
+      if (!this.staticImage) {
+        plane = this.objects.find('.plane img');
+        scale = this.board.scale / this.scaleFactor;
+        width = plane.width() * scale;
+        height = plane.height() * scale;
+        planeX = this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit) - (width / 2);
+        planeY = this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit) - (height / 2);
+        this.staticImage = this.board.paper.image(plane.attr('src'), planeX, planeY, width, height);
+        return this.board.island.push(this.staticImage);
+      }
+    } else if (this.staticImage) {
+      this.staticImage.remove();
+      return delete this.staticImage;
+    }
+  };
+
   Plane.prototype.reset = function() {
     var _this = this;
     if (!(this.image = this.objects.find('.plane img')).height()) {
@@ -210,8 +239,9 @@ plane.Plane = (function(_super) {
     this.xPos = Math.round(this.board.islandCoordinates.x * this.board.xUnit);
     this.move(this.board.xAxis + (this.board.islandCoordinates.x * this.board.xUnit), this.board.yAxis - (this.board.islandCoordinates.y * this.board.yUnit));
     if (this.board.showPlots()) {
-      return this.fadeClouds();
+      this.fadeClouds();
     }
+    return this.showStatic(true);
   };
 
   return Plane;

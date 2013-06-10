@@ -3518,21 +3518,21 @@ levels.WORLDS = [
           {
             id: 1364510572027,
             equations: {
-              'x-3': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '-3',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x-3': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '-3',
                     after: '-x'
+                  }
+                ]
+              },
+              'x-3': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-3',
+                    after: 'x'
                   }
                 ]
               }
@@ -3566,21 +3566,21 @@ levels.WORLDS = [
           }, {
             id: 1364520496399,
             equations: {
-              'x+8': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '+8',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x+8': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '+8',
                     after: '-x'
+                  }
+                ]
+              },
+              'x+8': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+8',
+                    after: 'x'
                   }
                 ]
               }
@@ -3614,21 +3614,21 @@ levels.WORLDS = [
           }, {
             id: 1364663305243,
             equations: {
-              'x+4': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '+4',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x+4': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '+4',
                     after: '-x'
+                  }
+                ]
+              },
+              'x+4': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+4',
+                    after: 'x'
                   }
                 ]
               }
@@ -3656,21 +3656,21 @@ levels.WORLDS = [
           }, {
             id: 1364663411940,
             equations: {
-              'x+7': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '+7',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x+7': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '+7',
                     after: '-x'
+                  }
+                ]
+              },
+              'x+7': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+7',
+                    after: 'x'
                   }
                 ]
               }
@@ -3698,21 +3698,21 @@ levels.WORLDS = [
           }, {
             id: 1364663552537,
             equations: {
-              'x-5': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '-5',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x-5': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '-5',
                     after: '-x'
+                  }
+                ]
+              },
+              'x-5': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-5',
+                    after: 'x'
                   }
                 ]
               }
@@ -3765,6 +3765,9 @@ levels.WORLDS = [
             fragments: ['+10', '+10', '-10', '-10'],
             rings: [
               {
+                x: 5,
+                y: -5
+              }, {
                 x: 10,
                 y: 0
               }, {
@@ -3782,8 +3785,8 @@ levels.WORLDS = [
               yMax: 30
             },
             islandCoordinates: {
-              x: 5,
-              y: -5
+              x: 0,
+              y: -10
             }
           }, {
             id: 1364664483654,
@@ -3833,21 +3836,21 @@ levels.WORLDS = [
           }, {
             id: 1364664770523,
             equations: {
-              'x-15': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '-15',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x+15': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '+15',
                     after: '-x'
+                  }
+                ]
+              },
+              'x-15': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-15',
+                    after: 'x'
                   }
                 ]
               }
@@ -3878,21 +3881,21 @@ levels.WORLDS = [
           }, {
             id: 1364665016074,
             equations: {
-              'x+3': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '+3',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x-3': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '-3',
                     after: '-x'
+                  }
+                ]
+              },
+              'x+3': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+3',
+                    after: 'x'
                   }
                 ]
               }
@@ -4019,21 +4022,21 @@ levels.WORLDS = [
           }, {
             id: 1364511618594,
             equations: {
-              'x+9': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '+9',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x-5': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '-5',
                     after: '-x'
+                  }
+                ]
+              },
+              'x+9': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '+9',
+                    after: 'x'
                   }
                 ]
               }
@@ -4157,21 +4160,21 @@ levels.WORLDS = [
           }, {
             id: 1364676990129,
             equations: {
-              'x-12': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '-12',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x+5': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '+5',
                     after: '-x'
+                  }
+                ]
+              },
+              'x-12': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-12',
+                    after: 'x'
                   }
                 ]
               }
@@ -4507,21 +4510,21 @@ levels.WORLDS = [
           }, {
             id: 1364680353131,
             equations: {
-              'x-c': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '-c',
-                    after: 'x'
-                  }
-                ]
-              },
               '-x-d': {
                 start: '-x',
                 solutionComponents: [
                   {
                     fragment: '-d',
                     after: '-x'
+                  }
+                ]
+              },
+              'x-c': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '-c',
+                    after: 'x'
                   }
                 ]
               }
