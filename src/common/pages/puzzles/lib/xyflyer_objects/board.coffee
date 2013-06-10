@@ -148,14 +148,14 @@ class board.Board extends xyflyerObject.Object
         if not @island
             $.timeout 100, => @moveIsland(x, y)
             return
-            
+
         relativeX = x - @screenX(@islandCoordinates.x)
         relativeY = y - @screenY(@islandCoordinates.y)
-
+            
         @islandCoordinates = 
             x: @paperX(x)
             y: @paperY(y)   
-
+        
         @island.transform("...t#{relativeX},#{relativeY}")       
         
         @islandLabel.attr(text: @islandText())

@@ -718,15 +718,15 @@ levels.WORLDS = [
           }, {
             id: 1364236569983,
             equations: {
-              '-x-25+35': {
+              '-x-15+25': {
                 start: '-x',
                 solutionComponents: [
                   {
-                    fragment: '-25',
+                    fragment: '-15',
                     after: '-x'
                   }, {
-                    fragment: '+35',
-                    after: '-25'
+                    fragment: '+25',
+                    after: '-15'
                   }
                 ]
               }
@@ -753,7 +753,7 @@ levels.WORLDS = [
               x: -20,
               y: 30
             },
-            fragments: ['+25', '-25', '+35', '-35'],
+            fragments: ['+15', '-15', '+25', '-25'],
             hidePlots: true
           }
         ]
@@ -766,15 +766,17 @@ levels.WORLDS = [
           {
             id: 1363227855683,
             equations: {
-              '2x': {
+              '2*x': {
+                start: 'x',
                 solutionComponents: [
                   {
-                    fragment: '2x',
+                    fragment: '2*',
                     after: ''
                   }
                 ]
               }
             },
+            fragments: ['2*', '(1/2)*'],
             grid: {
               xMin: -10,
               xMax: 10,
@@ -789,8 +791,7 @@ levels.WORLDS = [
                 x: 3,
                 y: 6
               }
-            ],
-            fragments: ['2x', '(1/2)x']
+            ]
           }, {
             id: 1364599564266,
             equations: {
@@ -828,6 +829,38 @@ levels.WORLDS = [
               y: -15
             }
           }, {
+            id: 1363227878373,
+            equations: {
+              '(1/4)*x': {
+                start: 'x',
+                solutionComponents: [
+                  {
+                    fragment: '(1/4)*',
+                    after: ''
+                  }
+                ]
+              }
+            },
+            grid: {
+              xMin: -10,
+              xMax: 10,
+              yMin: -10,
+              yMax: 10
+            },
+            rings: [
+              {
+                x: 2,
+                y: 0.5
+              }, {
+                x: 4,
+                y: 1
+              }, {
+                x: 6,
+                y: 1.5
+              }
+            ],
+            fragments: ['4*', '(1/4)*']
+          }, {
             id: 1364599999113,
             equations: {
               '3*x': {
@@ -862,39 +895,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -1,
               y: -3
-            }
-          }, {
-            id: 1363227878373,
-            equations: {
-              '(1/4)*x': {
-                start: 'x',
-                solutionComponents: [
-                  {
-                    fragment: '(1/4)*',
-                    after: ''
-                  }
-                ]
-              }
             },
-            grid: {
-              xMin: -10,
-              xMax: 10,
-              yMin: -10,
-              yMax: 10
-            },
-            rings: [
-              {
-                x: 2,
-                y: 0.5
-              }, {
-                x: 4,
-                y: 1
-              }, {
-                x: 6,
-                y: 1.5
-              }
-            ],
-            fragments: ['4*', '(1/4)*']
+            hidePlots: true
           }, {
             id: 1363726126940,
             equations: {
@@ -930,7 +932,8 @@ levels.WORLDS = [
               x: 0,
               y: 0
             },
-            fragments: ['5*', '(1/5)*']
+            fragments: ['5*', '(1/5)*'],
+            hidePlots: true
           }, {
             id: 1363726028635,
             equations: {
@@ -963,7 +966,8 @@ levels.WORLDS = [
               x: 0,
               y: 0
             },
-            fragments: ['4*', '(1/4)*']
+            fragments: ['4*', '(1/4)*'],
+            hidePlots: true
           }, {
             id: 1363899214658,
             equations: {
@@ -1074,7 +1078,8 @@ levels.WORLDS = [
               x: -4,
               y: 8
             },
-            fragments: ['2*', '(1/2)*']
+            fragments: ['2*', '(1/2)*'],
+            hidePlots: true
           }, {
             id: 1364603649394,
             equations: {
@@ -1110,7 +1115,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -2,
               y: 8
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364318896882,
             equations: {
@@ -1182,7 +1188,8 @@ levels.WORLDS = [
               x: -4,
               y: -24
             },
-            fragments: ['6*', '-6*']
+            fragments: ['6*', '-6*'],
+            hidePlots: true
           }, {
             id: 1364321553399,
             equations: {
@@ -1254,7 +1261,8 @@ levels.WORLDS = [
               x: -15,
               y: 5
             },
-            fragments: ['(1/3)*', '(-1/3)*']
+            fragments: ['(1/3)*', '(-1/3)*'],
+            hidePlots: true
           }, {
             id: 1364321710361,
             equations: {
@@ -1362,7 +1370,8 @@ levels.WORLDS = [
             islandCoordinates: {
               x: -10,
               y: 2
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364324406984,
             equations: {
@@ -1440,7 +1449,8 @@ levels.WORLDS = [
               x: -3,
               y: -18
             },
-            fragments: ['2*', '3*', '(1/2)*', '(1/3)*']
+            fragments: ['2*', '3*', '(1/2)*', '(1/3)*'],
+            hidePlots: true
           }, {
             id: 1364324786570,
             equations: {
@@ -1479,7 +1489,8 @@ levels.WORLDS = [
               x: -10,
               y: 10
             },
-            fragments: ['3*', '(1/3)*', '-3*', '(-1/3)*']
+            fragments: ['3*', '(1/3)*', '-3*', '(-1/3)*'],
+            hidePlots: true
           }
         ]
       }

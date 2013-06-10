@@ -423,11 +423,11 @@ levels.WORLDS = [
                     {
                         id: 1364236569983
                         equations:
-                            '-x-25+35':
+                            '-x-15+25':
                                 start: '-x'
                                 solutionComponents: [
-                                    {fragment: '-25', after: '-x'}
-                                    {fragment: '+35', after: '-25'}
+                                    {fragment: '-15', after: '-x'}
+                                    {fragment: '+25', after: '-15'}
                                 ]
                         rings: [
                             {x: -10, y: 20}
@@ -440,7 +440,7 @@ levels.WORLDS = [
                             yMin: -35
                             yMax: 35
                         islandCoordinates: {x: -20, y: 30}
-                        fragments: ['+25', '-25', '+35', '-35']
+                        fragments: ['+15', '-15', '+25', '-25']
                         hidePlots: true
                     }
             
@@ -454,10 +454,12 @@ levels.WORLDS = [
                     {
                         id: 1363227855683
                         equations:
-                            '2x':
+                            '2*x':
+                                start: 'x'
                                 solutionComponents: [
-                                    {fragment: '2x', after: ''}
+                                    {fragment: '2*', after: ''}
                                 ]
+                        fragments: ['2*', '(1/2)*']
                         grid:
                             xMin: -10
                             xMax: 10
@@ -466,9 +468,6 @@ levels.WORLDS = [
                         rings: [
                             {x: 1, y: 2}
                             {x: 3, y: 6}
-                        ]
-                        fragments: [
-                            '2x', '(1/2)x'
                         ]
                     }
                     {
@@ -493,27 +492,6 @@ levels.WORLDS = [
                         islandCoordinates: {x: -3, y: -15}
                     }
                     {
-                        id: 1364599999113
-                        equations:
-                            '3*x':
-                                start: 'x'
-                                solutionComponents: [
-                                    {fragment: '3*', after: ''}
-                                ]
-                        fragments: ['3*', '(1/3)*']
-                        rings: [
-                            {x: 1, y: 3}
-                            {x: 0, y: 0}
-                            {x: 2, y: 6}
-                        ]
-                        grid:
-                            xMin: -10
-                            xMax: 10
-                            yMin: -10
-                            yMax: 10
-                        islandCoordinates: {x: -1, y: -3}
-                    }
-                    {
                         id: 1363227878373
                         equations:
                             '(1/4)*x':
@@ -536,6 +514,28 @@ levels.WORLDS = [
                         ]
                     }
                     {
+                        id: 1364599999113
+                        equations:
+                            '3*x':
+                                start: 'x'
+                                solutionComponents: [
+                                    {fragment: '3*', after: ''}
+                                ]
+                        fragments: ['3*', '(1/3)*']
+                        rings: [
+                            {x: 1, y: 3}
+                            {x: 0, y: 0}
+                            {x: 2, y: 6}
+                        ]
+                        grid:
+                            xMin: -10
+                            xMax: 10
+                            yMin: -10
+                            yMax: 10
+                        islandCoordinates: {x: -1, y: -3}
+                        hidePlots: true
+                    }
+                    {
                         id: 1363726126940
                         equations:
                             '(1/5)*x':
@@ -555,6 +555,7 @@ levels.WORLDS = [
                             yMax: 20
                         islandCoordinates: {x: 0, y: 0}
                         fragments: ['5*', '(1/5)*']
+                        hidePlots: true
                     }
                     {
                         id: 1363726028635
@@ -575,6 +576,7 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: 0, y: 0}
                         fragments: ['4*', '(1/4)*']
+                        hidePlots: true
                     }
                     {
                         id: 1363899214658
@@ -639,6 +641,7 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: -4, y: 8}
                         fragments: ['2*', '(1/2)*']
+                        hidePlots: true
                     }
                     {
                         id: 1364603649394
@@ -660,6 +663,7 @@ levels.WORLDS = [
                             yMin: -10
                             yMax: 10
                         islandCoordinates: {x: -2, y: 8}
+                        hidePlots: true
                     }
                     {
                         id: 1364318896882
@@ -702,6 +706,7 @@ levels.WORLDS = [
                             yMax: 40
                         islandCoordinates: {x: -4, y: -24}
                         fragments: ['6*', '-6*']
+                        hidePlots: true
                     }
                     {
                         id: 1364321553399
@@ -744,6 +749,7 @@ levels.WORLDS = [
                             yMax: 20
                         islandCoordinates: {x: -15, y: 5}
                         fragments: ['(1/3)*', '(-1/3)*']
+                        hidePlots: true
                     }
                     {
                         id: 1364321710361
@@ -807,6 +813,7 @@ levels.WORLDS = [
                             yMin: -15
                             yMax: 15
                         islandCoordinates: {x: -10, y: 2}
+                        hidePlots: true
                     }
                     {
                         id: 1364324406984
@@ -851,6 +858,7 @@ levels.WORLDS = [
                             yMax: 36
                         islandCoordinates: {x: -3, y: -18}
                         fragments: ['2*', '3*', '(1/2)*', '(1/3)*']
+                        hidePlots: true
                     }
                     {
                         id: 1364324786570
@@ -873,6 +881,7 @@ levels.WORLDS = [
                             yMax: 15
                         islandCoordinates: {x: -10, y: 10}
                         fragments: ['3*', '(1/3)*', '-3*', '(-1/3)*']
+                        hidePlots: true
                     }
                 ]
             }
