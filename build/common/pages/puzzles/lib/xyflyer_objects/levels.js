@@ -713,7 +713,8 @@ levels.WORLDS = [
               x: -3,
               y: -6
             },
-            fragments: ['+2', '-2', '+5', '-5']
+            fragments: ['+2', '-2', '+5', '-5'],
+            hidePlots: true
           }, {
             id: 1364236569983,
             equations: {

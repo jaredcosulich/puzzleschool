@@ -378,6 +378,9 @@ xyflyerEditor.EditorHelper = (function() {
   EditorHelper.prototype.addEquation = function(equationString, start, solutionComponents) {
     var _this = this;
     if (this.initing) {
+      $.timeout(100, function() {
+        return _this.addEquation(equationString, start, solutionComponents);
+      });
       return;
     }
     if (!start) {

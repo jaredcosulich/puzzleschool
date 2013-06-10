@@ -258,7 +258,10 @@ class xyflyerEditor.EditorHelper
                     @handleModification()
                     
     addEquation: (equationString, start, solutionComponents) -> 
-        return if @initing
+        if @initing
+            $.timeout 100, => @addEquation(equationString, start, solutionComponents)
+            return
+            
         if not start
             @showDialog
                 text: 'What should this equation start with?'
