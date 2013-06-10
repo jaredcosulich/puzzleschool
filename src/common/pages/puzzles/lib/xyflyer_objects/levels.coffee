@@ -177,6 +177,7 @@ levels.WORLDS = [
                             yMin: -30
                             yMax: 30
                         islandCoordinates: {x: -6, y: -12}
+                        hidePlots: true
                     }
                     {
                         id: 1364580310767
@@ -284,6 +285,7 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: -6, y: 8}
                         fragments: ['+2', '-2', '+4', '-4']
+                        hidePlots: true
                     }
                     {
                         id: 1364581756908
@@ -327,6 +329,7 @@ levels.WORLDS = [
                             yMax: 10
                         islandCoordinates: {x: -4, y: -2}
                         fragments: ['+2', '+5', '-2', '-5']
+                        hidePlots: true
                     }
                     {
                         id: 1364231736746
@@ -348,6 +351,7 @@ levels.WORLDS = [
                             yMax: 30
                         islandCoordinates: {x: -9, y: 27}
                         fragments: ['+8', '-8', '+18', '-18']
+                        hidePlots: true
                     }
                     {
                         id: 1364232064737
@@ -369,6 +373,7 @@ levels.WORLDS = [
                             yMax: 15
                         islandCoordinates: {x: -10, y: 5}
                         fragments: ['+3', '-3', '+5', '-5']
+                        hidePlots: true
                     }
                     {
                         id: 1364231355522
@@ -413,6 +418,7 @@ levels.WORLDS = [
                             yMax: 15
                         islandCoordinates: {x: -3, y: -6}
                         fragments: ['+2', '-2', '+5', '-5']
+                        hidePlots: true
                     }
                     {
                         id: 1364236569983
@@ -435,6 +441,7 @@ levels.WORLDS = [
                             yMax: 35
                         islandCoordinates: {x: -20, y: 30}
                         fragments: ['+25', '-25', '+35', '-35']
+                        hidePlots: true
                     }
             
                 ]

@@ -42,16 +42,17 @@ xyflyer.ViewHelper = (function() {
         return _this.trackPlane(info);
       }
     });
-    this.initGuidelines(hidePlots);
+    this.initGuidelines(hidePlots, true);
     this.parser = require('./parser');
     this.initEquations();
   }
 
   ViewHelper.prototype.reinitialize = function(_arg) {
-    var boardElement, flip, hidePlots, objects;
+    var boardElement, flip, hidePlots, objects, showHidePlotsMessage;
     this.equationArea = _arg.equationArea, boardElement = _arg.boardElement, objects = _arg.objects, this.grid = _arg.grid, this.islandCoordinates = _arg.islandCoordinates, hidePlots = _arg.hidePlots, flip = _arg.flip;
     this.rings = [];
     this.setFlip(flip);
+    showHidePlotsMessage = hidePlots && !this.board.hidePlots;
     this.board.init({
       el: boardElement,
       grid: this.grid,
@@ -61,7 +62,7 @@ xyflyer.ViewHelper = (function() {
     });
     this.complete = false;
     this.plane.setBoard(this.board);
-    this.initGuidelines(hidePlots);
+    this.initGuidelines(hidePlots, showHidePlotsMessage);
     this.initEquations();
     return this.resetLevel();
   };
@@ -131,7 +132,7 @@ xyflyer.ViewHelper = (function() {
     }));
   };
 
-  ViewHelper.prototype.initGuidelines = function(hidePlots) {
+  ViewHelper.prototype.initGuidelines = function(hidePlots, showHidePlotsMessage) {
     var areaOffset, gameAreaOffset, message, messageOffset, showGuidelines,
       _this = this;
     showGuidelines = this.el.find('.show_guidelines');
@@ -144,32 +145,34 @@ xyflyer.ViewHelper = (function() {
     });
     if (hidePlots) {
       showGuidelines.trigger('click.guidelines');
-      areaOffset = this.$('.equations').offset();
-      gameAreaOffset = this.el.offset();
-      messageOffset = this.equationArea.find('.guidelines').offset();
-      message = this.$('.guidelines_popup');
-      message.css({
-        opacity: 0,
-        top: messageOffset.top - message.height() - gameAreaOffset.top - 6,
-        left: messageOffset.left + (messageOffset.width / 2) - (message.width() / 2) - areaOffset.left
-      });
-      message.html('The graph lines are hidden for this level.<br/>\nTry solving the level without them.<br/>\nYou can turn them back on if you need them.');
-      message.animate({
-        opacity: 1,
-        duration: 250
-      });
-      return $(document.body).one('mousedown.guidelines touchstart.guidelines', function() {
-        return message.animate({
+      if (showHidePlotsMessage) {
+        areaOffset = this.$('.equations').offset();
+        gameAreaOffset = this.el.offset();
+        messageOffset = this.equationArea.find('.guidelines').offset();
+        message = this.$('.guidelines_popup');
+        message.css({
           opacity: 0,
-          duration: 250,
-          complete: function() {
-            return message.css({
-              top: -1000,
-              left: -1000
-            });
-          }
+          top: messageOffset.top - message.height() - gameAreaOffset.top - 6,
+          left: messageOffset.left + (messageOffset.width / 2) - (message.width() / 2) - areaOffset.left
         });
-      });
+        message.html('The graph lines are hidden for this level.<br/>\nTry solving the level without them.<br/>\nYou can turn them back on if you need them.');
+        message.animate({
+          opacity: 1,
+          duration: 250
+        });
+        return $(document.body).one('mousedown.guidelines touchstart.guidelines', function() {
+          return message.animate({
+            opacity: 0,
+            duration: 250,
+            complete: function() {
+              return message.css({
+                top: -1000,
+                left: -1000
+              });
+            }
+          });
+        });
+      }
     }
   };
 

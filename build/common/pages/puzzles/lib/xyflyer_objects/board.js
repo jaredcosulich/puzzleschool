@@ -46,13 +46,13 @@ board.Board = (function(_super) {
     this.formulas = {};
     this.rings = [];
     this.ringFronts = [];
-    this.setHidePlots(hidePlots);
+    this.setHidePlots(hidePlots, true);
     this.clear();
     return this.load();
   };
 
-  Board.prototype.setHidePlots = function(hidePlots) {
-    if (this.hidePlots !== hidePlots) {
+  Board.prototype.setHidePlots = function(hidePlots, force) {
+    if (force || this.hidePlots !== hidePlots) {
       this.hidePlots = hidePlots;
       if (this.hidePlots) {
         return this.fadePlots();
@@ -591,6 +591,7 @@ board.Board = (function(_super) {
     if (!plotArea) {
       plotArea = this.createCanvas(2);
     }
+    plotArea.canvas.style.opacity = this.hidePlots ? 0 : 1;
     plotArea.strokeStyle = 'rgba(0,0,0,0.25)';
     plotArea.lineWidth = 1;
     plotArea.beginPath();

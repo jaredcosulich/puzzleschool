@@ -27,7 +27,7 @@ class xyflyer.ViewHelper
             objects: objects
             track: (info) => @trackPlane(info)
 
-        @initGuidelines(hidePlots)
+        @initGuidelines(hidePlots, true)
        
         @parser = require('./parser')
         @initEquations()
@@ -35,6 +35,9 @@ class xyflyer.ViewHelper
     reinitialize: ({@equationArea, boardElement, objects, @grid, @islandCoordinates, hidePlots, flip}) ->
         @rings = []
         @setFlip(flip)
+        
+        showHidePlotsMessage = hidePlots and not @board.hidePlots
+        
         @board.init
             el: boardElement 
             grid: @grid 
@@ -45,7 +48,7 @@ class xyflyer.ViewHelper
         @complete = false
         @plane.setBoard(@board)
         
-        @initGuidelines(hidePlots)        
+        @initGuidelines(hidePlots, showHidePlotsMessage)
         @initEquations()
         @resetLevel()
             
@@ -84,7 +87,7 @@ class xyflyer.ViewHelper
                 y: y
         )
         
-    initGuidelines: (hidePlots) ->
+    initGuidelines: (hidePlots, showHidePlotsMessage) ->
         showGuidelines = @el.find('.show_guidelines')
         showGuidelines.unbind('click.guidelines touchstart.guidelines')
         showGuidelines.bind 'click.guidelines touchstart.guidelines', => 
@@ -96,32 +99,33 @@ class xyflyer.ViewHelper
         if hidePlots
             showGuidelines.trigger('click.guidelines')
             
-            areaOffset = @$('.equations').offset()
-            gameAreaOffset = @el.offset()       
-            messageOffset = @equationArea.find('.guidelines').offset()
+            if showHidePlotsMessage
+                areaOffset = @$('.equations').offset()
+                gameAreaOffset = @el.offset()       
+                messageOffset = @equationArea.find('.guidelines').offset()
             
-            message = @$('.guidelines_popup')
-            message.css
-                opacity: 0
-                top: messageOffset.top - message.height() - gameAreaOffset.top - 6
-                left: messageOffset.left + (messageOffset.width/2) - (message.width()/2) - areaOffset.left
-            message.html '''
-                The graph lines are hidden for this level.<br/>
-                Try solving the level without them.<br/>
-                You can turn them back on if you need them.
-            '''
-            
-            message.animate
-                opacity: 1
-                duration: 250
-            $(document.body).one 'mousedown.guidelines touchstart.guidelines', ->
-                message.animate
+                message = @$('.guidelines_popup')
+                message.css
                     opacity: 0
+                    top: messageOffset.top - message.height() - gameAreaOffset.top - 6
+                    left: messageOffset.left + (messageOffset.width/2) - (message.width()/2) - areaOffset.left
+                message.html '''
+                    The graph lines are hidden for this level.<br/>
+                    Try solving the level without them.<br/>
+                    You can turn them back on if you need them.
+                '''
+            
+                message.animate
+                    opacity: 1
                     duration: 250
-                    complete: ->
-                        message.css
-                            top: -1000
-                            left: -1000
+                $(document.body).one 'mousedown.guidelines touchstart.guidelines', ->
+                    message.animate
+                        opacity: 0
+                        duration: 250
+                        complete: ->
+                            message.css
+                                top: -1000
+                                left: -1000
         
     
     initEquations: ->

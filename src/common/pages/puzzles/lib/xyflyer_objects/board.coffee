@@ -21,12 +21,12 @@ class board.Board extends xyflyerObject.Object
         @formulas = {}
         @rings = []
         @ringFronts = []
-        @setHidePlots(hidePlots)
+        @setHidePlots(hidePlots, true)
         @clear()
         @load()
         
-    setHidePlots: (hidePlots) ->
-        if @hidePlots != hidePlots
+    setHidePlots: (hidePlots, force) ->
+        if force or @hidePlots != hidePlots
             @hidePlots = hidePlots
             if @hidePlots then @fadePlots() else @showPlots()
         
@@ -330,8 +330,7 @@ class board.Board extends xyflyerObject.Object
         alpha = 1
         fade = =>
             alpha -= 0.25
-            for id, formula of @formulas 
-                continue unless formula.plotArea
+            for id, formula of @formulas when formula.plotArea
                 opacity = parseFloat(formula.plotArea.canvas.style.opacity or 1)
                 formula.plotArea.canvas.style.opacity = alpha if opacity > alpha
                     
@@ -347,8 +346,7 @@ class board.Board extends xyflyerObject.Object
         alpha = 0
         fadeIn = =>
             alpha += 0.25
-            for id, formula of @formulas 
-                continue unless formula.plotArea
+            for id, formula of @formulas when formula.plotArea
                 opacity = parseFloat(formula.plotArea.canvas.style.opacity or 0)
                 formula.plotArea.canvas.style.opacity = alpha if opacity < alpha
                     
@@ -364,8 +362,9 @@ class board.Board extends xyflyerObject.Object
 
         return if not formula
         
-        plotArea = @createCanvas(2) if not plotArea
-                
+        plotArea = @createCanvas(2) if not plotArea        
+        plotArea.canvas.style.opacity = if @hidePlots then 0 else 1
+            
         plotArea.strokeStyle = 'rgba(0,0,0,0.25)'
         plotArea.lineWidth = 1
         plotArea.beginPath()
