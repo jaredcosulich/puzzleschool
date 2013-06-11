@@ -87,7 +87,6 @@ xyflyer.ViewHelper = (function() {
     if (!this.board.plot(id, formula, area)) {
       return false;
     }
-    this.moveLaunch();
     return true;
   };
 

@@ -5660,7 +5660,8 @@ levels.WORLDS = [
                 increment: 1,
                 solution: 10
               }
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364691092643,
             equations: {
@@ -5744,7 +5745,8 @@ levels.WORLDS = [
                 increment: 1,
                 solution: -10
               }
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364691431977,
             equations: {

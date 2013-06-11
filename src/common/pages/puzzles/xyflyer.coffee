@@ -229,7 +229,7 @@ soma.views
                     equationArea: @$('.equation_area')
                     grid: @level.grid
                     islandCoordinates: @level.islandCoordinates
-                    hidePlots: @level.hidePlots
+                    hidePlots: false#@level.hidePlots
             else
                 @helper = new xyflyer.ViewHelper
                     el: @dynamicContent
@@ -238,7 +238,7 @@ soma.views
                     equationArea: @$('.equation_area')
                     grid: @level.grid
                     islandCoordinates: @level.islandCoordinates
-                    hidePlots: @level.hidePlots
+                    hidePlots: false#@level.hidePlots
                     nextLevel: => @nextLevel()
                     registerEvent: (eventInfo) => @registerEvent(eventInfo)
                 

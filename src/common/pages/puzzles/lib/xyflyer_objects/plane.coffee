@@ -71,13 +71,13 @@ class plane.Plane extends xyflyerObject.Object
             else
                 moveTo(position)
         
-            ctx.drawImage(
-                @image[0], 
-                @currentXPos - (@width/2), 
-                @currentYPos - (@height/2), 
-                @width,
-                @height
-            )
+        ctx.drawImage(
+            @image[0], 
+            @currentXPos - (@width/2), 
+            @currentYPos - (@height/2), 
+            @width,
+            @height
+        )
         
     size: ->
         @scale = @board.scale / @scaleFactor
@@ -129,6 +129,7 @@ class plane.Plane extends xyflyerObject.Object
         @path = path
         
     showStatic: (show) ->
+        return
         if not @board.island
             $.timeout 100, => @showStatic(show)
             return

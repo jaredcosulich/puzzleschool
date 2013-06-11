@@ -68,7 +68,7 @@ class xyflyer.ViewHelper
         @plane.fadeClouds()
         [formula, area] = @parser.parse(data)
         return false unless @board.plot(id, formula, area)
-        @moveLaunch()
+        # @moveLaunch()
         return true
 
     # calculateIslandDistance: ->

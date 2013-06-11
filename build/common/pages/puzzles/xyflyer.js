@@ -328,7 +328,7 @@ soma.views({
           equationArea: this.$('.equation_area'),
           grid: this.level.grid,
           islandCoordinates: this.level.islandCoordinates,
-          hidePlots: this.level.hidePlots
+          hidePlots: false
         });
       } else {
         this.helper = new xyflyer.ViewHelper({
@@ -338,7 +338,7 @@ soma.views({
           equationArea: this.$('.equation_area'),
           grid: this.level.grid,
           islandCoordinates: this.level.islandCoordinates,
-          hidePlots: this.level.hidePlots,
+          hidePlots: false,
           nextLevel: function() {
             return _this.nextLevel();
           },

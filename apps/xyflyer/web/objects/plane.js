@@ -112,8 +112,8 @@ plane.Plane = (function(_super) {
       } else {
         moveTo(position);
       }
-      return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
     }
+    return ctx.drawImage(this.image[0], this.currentXPos - (this.width / 2), this.currentYPos - (this.height / 2), this.width, this.height);
   };
 
   Plane.prototype.size = function() {
@@ -201,6 +201,7 @@ plane.Plane = (function(_super) {
   Plane.prototype.showStatic = function(show) {
     var height, planeX, planeY, scale, width,
       _this = this;
+    return;
     if (!this.board.island) {
       $.timeout(100, function() {
         return _this.showStatic(show);
