@@ -148,10 +148,16 @@ class board.Board extends xyflyerObject.Object
         if not @island
             $.timeout 100, => @moveIsland(x, y)
             return
+            
+        if x == Infinity or y == Infinity or x == -Infinity or y == -Infinity
+            @island.hide()
+            return
+        else
+            @island.show()
 
         relativeX = x - @screenX(@islandCoordinates.x)
         relativeY = y - @screenY(@islandCoordinates.y)
-            
+        
         @islandCoordinates = 
             x: @paperX(x)
             y: @paperY(y)   

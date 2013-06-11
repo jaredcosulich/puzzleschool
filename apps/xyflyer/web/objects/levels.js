@@ -1661,8 +1661,7 @@ levels.WORLDS = [
               x: 2,
               y: -6
             },
-            fragments: ['3*', '(1/3)*', '+12', '-12'],
-            hidePlots: true
+            fragments: ['3*', '(1/3)*', '+12', '-12']
           }, {
             id: 1363899946541,
             equations: {
@@ -1770,10 +1769,10 @@ levels.WORLDS = [
               }
             ],
             grid: {
-              xMin: -17,
-              xMax: 3,
-              yMin: -17,
-              yMax: 3
+              xMin: -30,
+              xMax: 30,
+              yMin: -30,
+              yMax: 30
             },
             islandCoordinates: {
               x: -7,
@@ -2283,8 +2282,7 @@ levels.WORLDS = [
               x: -4,
               y: -10
             },
-            fragments: ['-1*', '6*', '(1/3)*', '+5', '-2'],
-            hidePlots: true
+            fragments: ['-1*', '6*', '(1/3)*', '+5', '-2']
           }, {
             id: 1364340176597,
             equations: {
@@ -2320,17 +2318,16 @@ levels.WORLDS = [
               }
             ],
             grid: {
-              xMin: -10,
-              xMax: 10,
-              yMin: -10,
-              yMax: 10
+              xMin: -18,
+              xMax: 18,
+              yMin: -18,
+              yMax: 18
             },
             islandCoordinates: {
               x: 4,
               y: 9
             },
-            fragments: ['-1*', '4*', '(1/2)*', '+10', '+15'],
-            hidePlots: true
+            fragments: ['-1*', '4*', '(1/2)*', '+10', '+15']
           }
         ]
       }, {
@@ -2594,7 +2591,8 @@ levels.WORLDS = [
                 increment: 1,
                 solution: 5
               }
-            }
+            },
+            hidePlots: true
           }, {
             id: 1363229798825,
             equations: {
@@ -2934,7 +2932,8 @@ levels.WORLDS = [
                 increment: 1,
                 solution: 5
               }
-            }
+            },
+            hidePlots: true
           }, {
             id: 1363902958905,
             equations: {
@@ -3002,7 +3001,8 @@ levels.WORLDS = [
                 max: 10,
                 increment: 1,
                 solution: 5
-              }
+              },
+              hidePlots: true
             }
           }, {
             id: 1364411932551,
@@ -3072,7 +3072,8 @@ levels.WORLDS = [
                 increment: 1,
                 solution: null
               }
-            }
+            },
+            hidePlots: true
           }, {
             id: 1364413059940,
             equations: {

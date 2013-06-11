@@ -21,6 +21,8 @@ class xyflyer.ViewHelper
             islandCoordinates: @islandCoordinates
             hidePlots: hidePlots
             resetLevel: => @resetLevel()
+        
+        # @calculateIslandDistance()
 
         @plane = new xyflyer.Plane
             board: @board
@@ -45,6 +47,8 @@ class xyflyer.ViewHelper
             islandCoordinates: @islandCoordinates
             hidePlots: hidePlots
 
+        # @calculateIslandDistance()
+
         @complete = false
         @plane.setBoard(@board)
         
@@ -67,7 +71,39 @@ class xyflyer.ViewHelper
         @moveLaunch()
         return true
 
-    moveLaunch: ->   
+    # calculateIslandDistance: ->
+    #     if not Object.keys(@board.formulas).length
+    #         $.timeout 100, => @calculateIslandDistance() 
+    #         return
+    #         
+    #     @islandDistance = @calculateDistance
+    #         from: {x: 0, y: 0}
+    #         to: @board.islandCoordinates
+    #         formula: (f.formula for id, f of @board.formulas)[0]
+    #     
+    # calculateDistance: ({from, to, formula}) ->
+    #     distance = 0
+    #     delta = if from.x > to.x then -1 else 1
+    #     for i in [from.x..to.x] by delta
+    #         distance += Math.sqrt(Math.pow(formula(i + delta) - formula(i), 2) + Math.pow(delta, 2))
+    #     return distance
+
+    moveLaunch: ->  
+        # if not @islandDistance
+        #     $.timeout 100, => @moveLaunch()
+        #     return
+        #     
+        # distance = 0
+        # delta = if @board.islandCoordinates.x < 0 then -1 else 1
+        # toX = 0
+        # formula = (f.formula for id, f of @board.formulas)[0]
+        # while distance < @islandDistance
+        #     toX += delta
+        #     distance += Math.sqrt(Math.pow(formula(toX) - formula(toX - delta), 2) + Math.pow(delta, 2))
+        # 
+        # islandX = @board.screenX(toX)
+        # islandY = @board.screenY(formula(toX))
+
         islandX = @board.screenX(@board.islandCoordinates.x)
         islandY = @board.screenY((f.formula(@board.islandCoordinates.x) for id, f of @board.formulas)[0])
         @board.moveIsland(islandX, islandY)

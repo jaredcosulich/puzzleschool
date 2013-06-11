@@ -1537,6 +1537,7 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: 5
+                        hidePlots: true
                     }
                     {
                         id: 1363229798825
@@ -1770,6 +1771,7 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: 5
+                        hidePlots: true
                     }
                     {
                         id: 1363902958905
@@ -1817,6 +1819,7 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: 5
+                            hidePlots: true
                     }
                     {
                         id: 1364411932551
@@ -1864,6 +1867,7 @@ levels.WORLDS = [
                                 max: 10
                                 increment: 1
                                 solution: null
+                        hidePlots: true
                     }
                     {
                         id: 1364413059940

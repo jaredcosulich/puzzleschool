@@ -211,6 +211,12 @@ board.Board = (function(_super) {
       });
       return;
     }
+    if (x === Infinity || y === Infinity || x === -Infinity || y === -Infinity) {
+      this.island.hide();
+      return;
+    } else {
+      this.island.show();
+    }
     relativeX = x - this.screenX(this.islandCoordinates.x);
     relativeY = y - this.screenY(this.islandCoordinates.y);
     this.islandCoordinates = {
