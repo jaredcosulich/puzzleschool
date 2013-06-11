@@ -3234,7 +3234,6 @@ levels.WORLDS = [
                                     {fragment: '+d', after: 'x'}
                                 ]
                         rings: [
-                            {x: -4, y: 2}
                             {x: -1, y: 2.25}
                             {x: 2, y: 1.5}
                             {x: 5, y: 0.75}
@@ -3244,7 +3243,7 @@ levels.WORLDS = [
                             xMax: 10
                             yMin: -10
                             yMax: 10
-                        islandCoordinates: {x: -6, y: 0}
+                        islandCoordinates: {x: -6, y: 2}
                         fragments: ['(1/a)*', '(1/b)*', '+c', '+d']
                         variables: 
                             a:
@@ -3329,7 +3328,6 @@ levels.WORLDS = [
                                     {fragment: '-5', after: 'x'}
                                 ]
                         rings: [
-                            {x: -2, y: -5.25}
                             {x: 2, y: -4}
                             {x: 4, y: -3}
                             {x: 6, y: -2}
@@ -3339,7 +3337,7 @@ levels.WORLDS = [
                             xMax: 10
                             yMin: -15
                             yMax: 5
-                        islandCoordinates: {x: -6, y: -5.5}
+                        islandCoordinates: {x: -6, y: -6.75}
                         fragments: ['(1/a)*', '(1/8)*', '+b', '-5']
                         variables: 
                             a:

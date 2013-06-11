@@ -5308,9 +5308,6 @@ levels.WORLDS = [
             },
             rings: [
               {
-                x: -4,
-                y: 2
-              }, {
                 x: -1,
                 y: 2.25
               }, {
@@ -5329,7 +5326,7 @@ levels.WORLDS = [
             },
             islandCoordinates: {
               x: -6,
-              y: 0
+              y: 2
             },
             fragments: ['(1/a)*', '(1/b)*', '+c', '+d'],
             variables: {
@@ -5459,9 +5456,6 @@ levels.WORLDS = [
             },
             rings: [
               {
-                x: -2,
-                y: -5.25
-              }, {
                 x: 2,
                 y: -4
               }, {
@@ -5480,7 +5474,7 @@ levels.WORLDS = [
             },
             islandCoordinates: {
               x: -6,
-              y: -5.5
+              y: -6.75
             },
             fragments: ['(1/a)*', '(1/8)*', '+b', '-5'],
             variables: {
