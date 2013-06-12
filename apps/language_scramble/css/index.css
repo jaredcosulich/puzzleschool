@@ -438,14 +438,34 @@ body {
   width: 100%;
   position: absolute;
   left: 0;
+  bottom:6px;
+}
+.language_scramble .level_progress_meter::after {
+  display: block;
+  content: "\00a0";
+  width: 100%;
+  height: 30px;
+  background: transparent url('images/progress.png') no-repeat;
+  bottom: 0;
+  z-index: 3;
+  position: absolute;
 }
 .language_scramble .level_progress_meter .percent_complete {
-  opacity: 0.3;
+  display: block;
   overflow: hidden;
-  height: 18px;
   float: left;
-  background-color: #0c8d28;
-  position: relative;
+  -moz-box-shadow: inset 0px 1px 0px 0px #64e581;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #64e581;
+  box-shadow: inset 0px 1px 0px 0px #64e581;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #38de5d), color-stop(1, #20c344));
+  background: -moz-linear-gradient(center top, #38de5d 5%, #20c344 100%);
+  background-color: #38de5d;
+  height: 15px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: -6px 0 0 21px;
+  width: 300px;
 }
 
 .language_scramble .progress_meter {

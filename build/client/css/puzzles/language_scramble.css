@@ -115,34 +115,11 @@ body {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #38de5d), color-stop(1, #20c344));
   background: -moz-linear-gradient(center top, #38de5d 5%, #20c344 100%);
   background-color: #38de5d;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
-  border: 1px solid #38de5d;
-  display: inline-block;
-  color: #fafafa;
-  font-family: arial;
-  font-weight: bold;
-  padding: 6px 24px;
-  text-decoration: none;
-  text-shadow: 1px 1px 0px #38de5d;
-  margin: auto;
   height: 15px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  padding: 0;
-  border: none;
   margin-left: 21px;
-}
-.language_scramble .level_progress_meter .percent_complete:hover {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #64e581), color-stop(1, #38de5d));
-  background: -moz-linear-gradient(center top, #64e581 5%, #38de5d 100%);
-  background-color: #38de5d;
-}
-.language_scramble .level_progress_meter .percent_complete:active {
-  position: relative;
-  top: 1px;
 }
 .language_scramble .papered {
   background-image: url('/assets/images/puzzles/language_scramble/paper-middle.png');

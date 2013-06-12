@@ -108,18 +108,19 @@
 }
 
 
-// Button
-
-.button-color(@color, @colorDiff: 10%) {
+.pill(@color, @colorDiff: 10%) {
     -moz-box-shadow:inset 0px 1px 0px 0px lighten(@color, @colorDiff);
     -webkit-box-shadow:inset 0px 1px 0px 0px lighten(@color, @colorDiff);
     box-shadow:inset 0px 1px 0px 0px lighten(@color, @colorDiff);
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @color), color-stop(1, darken(@color, @colorDiff)) );
     background:-moz-linear-gradient( center top, @color 5%, darken(@color, @colorDiff) 100% );
     background-color:@color;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
-    border-radius:6px;
+}
+
+// Button
+.button-color(@color, @colorDiff: 10%) {
+    .pill(@color, @colorDiff);
+    .rounded(6px);
     border:1px solid @color;
     display:inline-block;
     color: @white;

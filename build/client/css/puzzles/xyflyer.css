@@ -297,8 +297,8 @@
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
   background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
   background-color: #24aac3;
-  -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   border-radius: 6px;
   border: 1px solid #24aac3;
   display: inline-block;
@@ -605,8 +605,8 @@
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
   background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
   background-color: #24aac3;
-  -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   border-radius: 6px;
   border: 1px solid #24aac3;
   display: inline-block;
@@ -634,8 +634,8 @@
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #949494), color-stop(1, #7a7a7a));
   background: -moz-linear-gradient(center top, #949494 5%, #7a7a7a 100%);
   background-color: #949494;
-  -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   border-radius: 6px;
   border: 1px solid #949494;
   display: inline-block;
@@ -663,8 +663,8 @@
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff6e5f), color-stop(1, #ff402c));
   background: -moz-linear-gradient(center top, #ff6e5f 5%, #ff402c 100%);
   background-color: #ff6e5f;
-  -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   border-radius: 6px;
   border: 1px solid #ff6e5f;
   display: inline-block;
