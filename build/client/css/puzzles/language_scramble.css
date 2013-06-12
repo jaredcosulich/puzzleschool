@@ -73,7 +73,7 @@ body {
   width: 960px;
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
 }
-.language_scramble .scramble_content.foreign {
+.language_scramble.foreign .scramble_content {
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood_foreign.jpg');
 }
 .language_scramble .display_words .papered,
@@ -277,6 +277,22 @@ body {
   border-width: 2px;
   border-style: solid;
 }
+.language_scramble .guesses .letter.dragging,
+.language_scramble .scrambled .letter.dragging {
+  background: transparent url('/assets/images/puzzles/language_scramble/tile-dragging.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 1% 1% 1.5% 1.5%;
+}
+.language_scramble .guesses .letter.dragging.sized::after,
+.language_scramble .scrambled .letter.dragging.sized::after {
+  margin-top: -84%;
+  margin-left: 12%;
+  width: 76%;
+  height: 76%;
+}
 .language_scramble .guesses .color1 .letter::after,
 .language_scramble .scrambled .color1 .letter::after {
   border-color: #1663EB;
@@ -407,7 +423,7 @@ body {
   left: 250px;
   top: 60px;
 }
-.language_scramble .scramble_content.foreign .guesses .guess {
+.language_scramble.foreign .scramble_content .guesses .guess {
   background: transparent url('/assets/images/puzzles/language_scramble/sunken_foreign.png') no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;

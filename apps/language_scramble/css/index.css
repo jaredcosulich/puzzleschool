@@ -5,6 +5,10 @@ body {
   background: #fafafa url('images/wood.jpg');
   font-size: 24px;
 }
+.foreign {
+  background: #fafafa url('images/wood_foreign.jpg');
+}
+
 .text-center {
     text-align: center;
 }
@@ -210,7 +214,23 @@ body {
   height: 71%;
   content: "\00a0";
   border-width: 2px;
-  border-style: dashed;
+  border-style: solid;
+}
+.language_scramble .guesses .letter.dragging,
+.language_scramble .scrambled .letter.dragging {
+  background: transparent url('images/tile-dragging.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 1% 1% 1.5% 1.5%;
+}
+.language_scramble .guesses .letter.dragging.sized::after,
+.language_scramble .scrambled .letter.dragging.sized::after {
+  margin-top: -84%;
+  margin-left: 12%;
+  width: 76%;
+  height: 76%;
 }
 .language_scramble .guesses .color1 .letter::after,
 .language_scramble .scrambled .color1 .letter::after {
@@ -364,7 +384,13 @@ body {
   left: 250px;
   top: 72px;
 }
-
+.language_scramble.foreign .scramble_content .guesses .guess {
+  background: transparent url('images/sunken_foreign.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 .language_scramble .floating_message {
     position: absolute;
     top: -1000px;

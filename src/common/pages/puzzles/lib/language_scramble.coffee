@@ -252,6 +252,7 @@ class languageScramble.ViewHelper
             x = @clientX(e)
             y = @clientY(e) - (@dragOffset or 0)
             
+            letter.addClass('dragging')
             @dragPathX.push(x) unless @dragPathX[@dragPathX.length - 1] == x
             @dragPathY.push(y) unless @dragPathY[@dragPathY.length - 1] == y
             letter.css(position: 'absolute', top: y - @dragAdjustmentY, left: x - @dragAdjustmentX)  
@@ -263,6 +264,8 @@ class languageScramble.ViewHelper
             return unless @dragging == letter
 
             e.preventDefault() if e?.preventDefault?
+
+            letter.removeClass('dragging')
             
             $(document.body).unbind('mousemove.drag touchmove.drag')
 
@@ -319,11 +322,10 @@ class languageScramble.ViewHelper
         return unless @scrambleInfo     
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
 
-        sc = @$('.scramble_content')
-        if @activeLevel.match(/foreign/) and not sc.hasClass('foreign')
-            sc.addClass('foreign')
-        else if not @activeLevel.match(/foreign/) and sc.hasClass('foreign')
-            sc.removeClass('foreign')
+        if @activeLevel.match(/foreign/) and not @el.hasClass('foreign')
+            @el.addClass('foreign')
+        else if not @activeLevel.match(/foreign/) and @el.hasClass('foreign')
+            @el.removeClass('foreign')
 
         displayWords = @$('.display_words')
         if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 

@@ -381,6 +381,7 @@ languageScramble.ViewHelper = (function() {
       }
       x = _this.clientX(e);
       y = _this.clientY(e) - (_this.dragOffset || 0);
+      letter.addClass('dragging');
       if (_this.dragPathX[_this.dragPathX.length - 1] !== x) {
         _this.dragPathX.push(x);
       }
@@ -404,6 +405,7 @@ languageScramble.ViewHelper = (function() {
       if ((e != null ? e.preventDefault : void 0) != null) {
         e.preventDefault();
       }
+      letter.removeClass('dragging');
       $(document.body).unbind('mousemove.drag touchmove.drag');
       if (_this.dragging.css('position') === 'absolute') {
         alreadyDragged = true;
@@ -479,7 +481,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.newScramble = function() {
-    var boundary, displayWords, highlighted, sc, sentence, _base, _i, _len, _name, _ref;
+    var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
     this.initializingScramble = true;
     this.answerTimes || (this.answerTimes = []);
     this.answerTimes.push(new Date());
@@ -489,11 +491,10 @@ languageScramble.ViewHelper = (function() {
       return;
     }
     (_base = this.puzzleData.levels[this.languages][this.levelName])[_name = this.scrambleInfo.id] || (_base[_name] = 1);
-    sc = this.$('.scramble_content');
-    if (this.activeLevel.match(/foreign/) && !sc.hasClass('foreign')) {
-      sc.addClass('foreign');
-    } else if (!this.activeLevel.match(/foreign/) && sc.hasClass('foreign')) {
-      sc.removeClass('foreign');
+    if (this.activeLevel.match(/foreign/) && !this.el.hasClass('foreign')) {
+      this.el.addClass('foreign');
+    } else if (!this.activeLevel.match(/foreign/) && this.el.hasClass('foreign')) {
+      this.el.removeClass('foreign');
     }
     displayWords = this.$('.display_words');
     if ((this.scrambleInfo["" + this.displayLevel + "Sentence"] != null) && this.scrambleInfo["" + this.displayLevel + "Sentence"].length) {
