@@ -90,6 +90,8 @@ class languageScramble.ViewHelper
         leftToGo = 0
         leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
         percentComplete = 100 - leftToGo
+        @$('.level_progress_meter .percent_complete').width("#{percentComplete}%")
+        
 
         if percentComplete > 95
             allComplete = true

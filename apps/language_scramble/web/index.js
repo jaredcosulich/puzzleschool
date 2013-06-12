@@ -83,12 +83,6 @@ window.app = {
     return this.percentComplete = this.progressMeter.find('.percent_complete');
   },
   saveProgress: function(puzzleProgress) {
-    var percentComplete, _ref;
-    percentComplete = 0;
-    if ((_ref = puzzleProgress.levels[this.languages][puzzleProgress.lastLevelPlayed]) != null ? _ref.percentComplete : void 0) {
-      percentComplete = puzzleProgress.levels[this.languages][puzzleProgress.lastLevelPlayed].percentComplete;
-    }
-    this.percentComplete.width("" + percentComplete + "%");
     return AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1);
   },
   initMenuButton: function() {

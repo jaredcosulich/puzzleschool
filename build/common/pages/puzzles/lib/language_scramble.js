@@ -153,6 +153,7 @@ languageScramble.ViewHelper = (function() {
       leftToGo += $(progressSection).css('opacity') * progressIncrement;
     }
     percentComplete = 100 - leftToGo;
+    this.$('.level_progress_meter .percent_complete').width("" + percentComplete + "%");
     if (percentComplete > 95) {
       allComplete = true;
       for (id in this.puzzleData.levels[this.languages][this.levelName]) {

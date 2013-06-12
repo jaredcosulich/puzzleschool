@@ -66,7 +66,8 @@ body {
     .scramble_content {
         height: 640px;
         width: 960px;
-        background: @white url('/assets/images/puzzles/language_scramble/wood.jpg');      
+        background: @white url('/assets/images/puzzles/language_scramble/wood.jpg');   
+        position: relative;   
     }
     
     &.foreign .scramble_content {
@@ -86,6 +87,35 @@ body {
             height: 45px;
         }
     }
+    
+    .level_progress_meter {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: 12px;
+      &::after {
+          display: block;
+          content: "\00a0";
+          width: 100%;
+          height: 30px;
+          background: transparent url('/assets/images/puzzles/language_scramble/progress.png') no-repeat;
+          margin-top: -12px;
+          z-index: 3;
+          position: absolute;
+      }
+      .percent_complete {
+        display: block;
+        overflow: hidden;
+        float: left;
+        .button-color(lighten(@green, 5%));
+        height: 15px;
+        .rounded(3px);  
+        padding: 0;
+        border: none;
+        margin-left: 21px;
+      }
+    }        
+    
     
     .papered {
         background-image:url('/assets/images/puzzles/language_scramble/paper-middle.png');

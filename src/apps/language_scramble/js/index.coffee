@@ -66,10 +66,10 @@ window.app =
         @percentComplete = @progressMeter.find('.percent_complete')
 
     saveProgress: (puzzleProgress) ->
-        percentComplete = 0
-        if puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed]?.percentComplete
-            percentComplete = puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed].percentComplete
-        @percentComplete.width("#{percentComplete}%")
+        # percentComplete = 0
+        # if puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed]?.percentComplete
+        #     percentComplete = puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed].percentComplete
+        # @percentComplete.width("#{percentComplete}%")
         AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1)
         # AppMobi.device.getRemoteData(
         #     "http://puzzleschool.com/api/puzzles/language_scramble/update", 
