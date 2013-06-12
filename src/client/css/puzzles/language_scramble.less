@@ -140,80 +140,148 @@ body {
             height: 0;
         }
         .guess {
-            .rounded(12px);
-            .box-shadow(inset -9px 9px 9px rgba(0,0,0,0.5));            
+            background: transparent url('/assets/images/puzzles/language_scramble/sunken.png') no-repeat; 
+            .background_size(cover);
+            &::before {
+                display: block;
+                .rounded(12px);
+                margin-top: 8%;
+                margin-left: 16%;
+                width: 69%;
+                height: 69%;
+                content: "\00a0"; 
+                border-width: 2px;
+                border-style: dashed;
+            }            
+            &:after {
+                display: block;
+                .rounded(3px);
+                margin-top: -84%;
+                margin-left: 9%;
+                width: 90%;
+                height: 90%;
+                content: "\00a0";                 
+            }
         }
+                
         .color1 .guess {
-            border: 1px dashed @blue;    
-            .bg-alpha(@blue, 0.3)
+            &::before {
+                border-color: #1663EB;
+            }
+            &::after {
+                .bg-alpha(darken(#1663EB, 20%), 0.2);                
+            }
         }
         .color2 .guess {
-            border: 1px dashed @orange;   
-            .bg-alpha(@orange, 0.3) 
+            &::before {
+                border-color: @yellow;
+            }
+            &::after {
+                .bg-alpha(darken(@yellow, 20%), 0.2);                
+            }
         }
         .color3 .guess {
-            border: 1px dashed @red;    
-            .bg-alpha(@red, 0.3)
+            &::before {
+                border-color: purple;
+            }
+            &::after {
+                .bg-alpha(purple, 0.2);                                
+            }
         }
         .color4 .guess {
-            border: 1px dashed @darkblue;
-            .bg-alpha(@darkblue, 0.3)    
+            &::before {
+                border-color: white;
+            }
+            &::after {
+                .bg-alpha(white, 0.2);                                
+            }
         }
         .color5 .guess {
-            border: 1px dashed @darkred;
-            .bg-alpha(@darkred, 0.3)    
+            &::before {
+                border-color: @darkblue;
+            }
+            &::after {
+                .bg-alpha(@darkblue, 0.2);                                
+            }
         }
         .color6 .guess {
-            border: 1px dashed @darkorange;
-            .bg-alpha(@darkorange, 0.3)    
+            &::before {
+                border-color: @orange;
+            }
+            &::after {
+                .bg-alpha(@orange, 0.2);                                
+            }
         }
         .color7 .guess {
-            border: 1px dashed @darkyellow;
-            .bg-alpha(@darkyellow, 0.3)    
+            &::before {
+                border-color: black;
+            }
+            &::after {
+                .bg-alpha(black, 0.2);                                
+            }
         }
         .color8 .guess {
-            border: 1px dashed @white;
-            .bg-alpha(@white, 0.3)    
+            &::before {
+                border-color: pink;
+            }
+            &::after {
+                .bg-alpha(pink, 0.2);                                
+            }
         }
         .letter {
+            background: transparent url('/assets/images/puzzles/language_scramble/tile.png') no-repeat;
             .background_size(cover);
-            background-repeat:no-repeat;
             cursor: pointer;
-            background-color: transparent;
+            text-indent: 5px;
+            text-shadow: 0 0 3px #FFFFFF;
+            &.sized::after {
+                display: block;
+                .rounded(12px);
+                margin-top: -81%;
+                margin-left: 15%;
+                width: 71%;
+                height: 71%;
+                content: "\00a0"; 
+                border-width: 2px;
+                border-style: dashed;
+            }            
         }
-        .color1 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-blue.png'); 
+        .color1 .letter::after {
+            border-color: #1663EB;
         }
-        .color2 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-yellow.png'); 
+        .color2 .letter::after {
+            border-color: @yellow;
         }
-        .color3 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
+        .color3 .letter::after {
+            border-color: purple;
         }
-        .color4 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-purple.png'); 
+        .color4 .letter::after {
+            border-color: white;
         }
-        .color5 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-pink.png'); 
+        .color5 .letter::after {
+            border-color: @darkblue;
         }
-        .color6 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-green.png'); 
+        .color6 .letter::after {
+            border-color: @orange;
         }
-        .color7 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
+        .color7 .letter::after {
+            border-color: black;
         }
-        .color8 .letter {
-            background-image: url('/assets/images/puzzles/language_scramble/tile-lightblue.png'); 
+        .color8 .letter::after {
+            border-color: pink;
         }
         .correct {
             text-align: center;
             .tap {
                 margin: auto;
-                background-image: url('/assets/images/puzzles/language_scramble/next-scramble.png'); 
+                background-image: url('/assets/images/puzzles/language_scramble/wide_button.png'); 
                 display: block;
-                margin-top: 45px;
-                width: 182px;
+                margin-top: 60px;
                 height: 92px;
+                width: 372px;
+                line-height: 81px;
+                text-indent: 20px;
+                font-size: 45px;
                 cursor: pointer;
                 .no_select();
             }
@@ -255,14 +323,12 @@ body {
 
     .guesses { 
         .color1, .color2, .color3, .color4, .color5, .color6, .color7, .color8 {
-            .correct_letter {
-                background-image: url('/assets/images/puzzles/language_scramble/tile-green.png'); 
-                border: 1px solid transparent;
+            .correct_letter::after {
+                border-color: @green;
             }
 
-            .wrong_letter {
-                background-image: url('/assets/images/puzzles/language_scramble/tile-red.png'); 
-                border: 1px solid transparent;
+            .wrong_letter::after {
+                border-color: red;
             }
         }
         

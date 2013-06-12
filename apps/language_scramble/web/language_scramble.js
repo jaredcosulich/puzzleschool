@@ -515,6 +515,7 @@ languageScramble.ViewHelper = (function() {
     this.assignColors('scrambled');
     this.assignColors('guesses');
     this.scrambleScrambleArea();
+    this.$('.scrambled .letter').addClass('sized');
     return this.initializingScramble = false;
   };
 
@@ -1231,7 +1232,7 @@ languageScramble.ViewHelper = (function() {
         correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
       }
     }
-    correctSentence += '<div class=\'tap\'></div>';
+    correctSentence += '<div class=\'tap\'>Next Scramble</div>';
     correct.html("<div class='papered'>" + correctSentence + "</div>");
     correct.addClass('correct');
     correct.css({

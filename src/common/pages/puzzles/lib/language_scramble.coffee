@@ -341,6 +341,9 @@ class languageScramble.ViewHelper
         @assignColors('scrambled')
         @assignColors('guesses')
         @scrambleScrambleArea()
+
+        @$('.scrambled .letter').addClass('sized')
+        
         @initializingScramble = false
     
     selectOption: () ->
@@ -487,7 +490,7 @@ class languageScramble.ViewHelper
                         right += $(space).width() if space.className.indexOf('space') > -1
                     
                     unless right > containerRight
-                        lg.css(marginLeft: (containerRight - right)/2)
+                        lg.css(marginLeft: ((containerRight - right)/2))
                     
                 for wordGroup, index in wordGroups
                     wordGroupOffsetTop = wordGroup.offsetTop or 1
@@ -813,7 +816,7 @@ class languageScramble.ViewHelper
             for boundary in [' ', '?', ',']
                 correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        correctSentence += '<div class=\'tap\'></div>'
+        correctSentence += '<div class=\'tap\'>Next Scramble</div>'
 
         correct.html("<div class='papered'>#{correctSentence}</div>")
         correct.addClass('correct')
