@@ -149,7 +149,6 @@ body {
 .language_scramble .guesses .space,
 .language_scramble .scrambled .space {
   width: 24px;
-  margin-top: 12px;
   height: 0;
 }
 .language_scramble .guesses .guess,
