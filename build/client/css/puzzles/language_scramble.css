@@ -275,7 +275,7 @@ body {
   height: 71%;
   content: "\00a0";
   border-width: 2px;
-  border-style: dashed;
+  border-style: solid;
 }
 .language_scramble .guesses .color1 .letter::after,
 .language_scramble .scrambled .color1 .letter::after {

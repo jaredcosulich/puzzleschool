@@ -245,7 +245,13 @@ body {
                 height: 71%;
                 content: "\00a0"; 
                 border-width: 2px;
-                border-style: dashed;
+                border-style: solid;
+            }
+            
+            &.dragging {
+                background: transparent url('/assets/images/puzzles/language_scramble/tile.png') no-repeat;
+                .background_size(cover);
+                
             }            
         }
         .color1 .letter::after {
