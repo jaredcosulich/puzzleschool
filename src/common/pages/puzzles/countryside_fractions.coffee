@@ -9,15 +9,15 @@ sortLevels = (levels) ->
         return if a == b then 0 else (if a < b then -1 else 1)
 
 soma.chunks
-    SpaceFractions:
+    CountrysideFractions:
         meta: -> new soma.chunks.Base({ content: @ })
 
         prepare: ({@classId, @levelId}) ->
-            @template = @loadTemplate "/build/common/templates/puzzles/space_fractions.html"
-            @loadScript '/build/common/pages/puzzles/lib/space_fractions.js'
+            @template = @loadTemplate "/build/common/templates/puzzles/countryside_fractions.html"
+            @loadScript '/build/common/pages/puzzles/lib/countryside_fractions.js'
             if @levelId == 'editor'
-                @loadScript '/build/common/pages/puzzles/lib/space_fractions_editor.js' 
-            @loadStylesheet '/build/client/css/puzzles/space_fractions.css'     
+                @loadScript '/build/common/pages/puzzles/lib/countryside_fractions_editor.js' 
+            @loadStylesheet '/build/client/css/puzzles/countryside_fractions.css'     
             
             if @levelId and not isNaN(@levelId)
                 @loadData 
@@ -40,7 +40,7 @@ soma.chunks
 
                       
         build: ->
-            @setTitle("Light It Up - The Puzzle School")
+            @setTitle("Countryside Fractions - The Puzzle School")
             
             rows = ({columns: [0...10]} for row in [0...10])
             @html = wings.renderTemplate(@template,
@@ -56,11 +56,11 @@ soma.chunks
             
         
 soma.views
-    SpaceFractions:
-        selector: '#content .space_fractions'
+    CountrsideFractions:
+        selector: '#content .countryside_fractions'
         create: ->
-            spaceFractions = require('./lib/space_fractions')
-            @viewHelper = new spaceFractions.ViewHelper
+            countrySideFractions = require('./lib/countryside_fractions')
+            @viewHelper = new countrysideFractions.ViewHelper
                 el: $(@selector)
                 rows: 10
                 columns: 10
@@ -91,8 +91,8 @@ soma.views
                     duration: 500
                 
             else if @levelId == 'editor'
-                spaceFractionsEditor = require('./lib/space_fractions_editor')
-                @editor = new spaceFractionsEditor.EditorHelper
+                countrysideFractionsEditor = require('./lib/countryside_fractions_editor')
+                @editor = new countrysideFractionsEditor.EditorHelper
                     el: $(@selector)
                     viewHelper: @viewHelper
                     encodeMethod: (json) => @encode(json)
@@ -362,24 +362,35 @@ soma.views
 
 soma.routes
     '/puzzles/space_fractions/:classId/:levelId': ({classId, levelId}) -> 
-        new soma.chunks.SpaceFractions
+        new soma.chunks.CountrysideFractions
             classId: classId
             levelId: levelId
 
     '/puzzles/space_fractions/:levelId': ({levelId}) -> 
-        new soma.chunks.SpaceFractions
+        new soma.chunks.CountrysideFractions
             levelId: levelId
     
-    '/puzzles/space_fractions': -> new soma.chunks.SpaceFractions
+    '/puzzles/space_fractions': -> new soma.chunks.CountrysideFractions
 
     '/puzzles/light_it_up/:classId/:levelId': ({classId, levelId}) -> 
-        new soma.chunks.SpaceFractions
+        new soma.chunks.CountrysideFractions
             classId: classId
             levelId: levelId
 
     '/puzzles/light_it_up/:levelId': ({levelId}) -> 
-        new soma.chunks.SpaceFractions
+        new soma.chunks.CountrysideFractions
             levelId: levelId
     
-    '/puzzles/light_it_up': -> new soma.chunks.SpaceFractions
+    '/puzzles/light_it_up': -> new soma.chunks.CountrysideFractions
             
+    '/puzzles/countryside_fractions/:classId/:levelId': ({classId, levelId}) -> 
+        new soma.chunks.CountrysideFractions
+            classId: classId
+            levelId: levelId
+
+    '/puzzles/countryside_fractions/:levelId': ({levelId}) -> 
+        new soma.chunks.CountrysideFractions
+            levelId: levelId
+    
+    '/puzzles/countryside_fractions': -> new soma.chunks.CountrysideFractions
+

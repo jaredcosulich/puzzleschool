@@ -1,6 +1,6 @@
-spaceFractionsEditor = exports ? provide('./lib/space_fractions_editor', {})
+countrysideFractionsEditor = exports ? provide('./lib/countryside_fractions_editor', {})
 
-class spaceFractionsEditor.EditorHelper
+class countrysideFractionsEditor.EditorHelper
     constructor: ({@el, @viewHelper, encodeMethod}) ->
         @encode = encodeMethod
         @initElementSelector()

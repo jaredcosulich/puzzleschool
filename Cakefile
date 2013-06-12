@@ -23,7 +23,7 @@ task 'build:site', 'Build the site files', ->
         'mkdir -p build/client/css/puzzles'
         'lessc src/client/css/all.less build/client/css/all.css'
         'lessc src/client/css/puzzles/language_scramble.less build/client/css/puzzles/language_scramble.css'
-        'lessc src/client/css/puzzles/space_fractions.less build/client/css/puzzles/space_fractions.css'
+        'lessc src/client/css/puzzles/countryside_fractions.less build/client/css/puzzles/countryside_fractions.css'
         'lessc src/client/css/puzzles/neurobehav.less build/client/css/puzzles/neurobehav.css'
         'lessc src/client/css/puzzles/xyflyer.less build/client/css/puzzles/xyflyer.css'
         'lessc src/client/css/puzzles/code.less build/client/css/puzzles/code.css'

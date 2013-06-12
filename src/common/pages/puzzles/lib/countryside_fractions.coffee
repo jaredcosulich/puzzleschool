@@ -9,7 +9,7 @@ shuffle = (array) ->
         array[top] = tmp
     return array
 
-spaceFractions = exports ? provide('./lib/space_fractions', {})
+countrysideFractions = exports ? provide('./lib/countryside_fractions', {})
 
 LASER_HEIGHT = 20
 
@@ -146,13 +146,13 @@ for direction, index in directions
             movable: true
         
         
-class spaceFractions.ChunkHelper
+class countrysideFractions.ChunkHelper
     objects: OBJECTS
     constructor: () ->
     
 
-class spaceFractions.ViewHelper
-    baseFolder: '/assets/images/puzzles/space_fractions/'
+class countrysideFractions.ViewHelper
+    baseFolder: '/assets/images/puzzles/countryside_fractions/'
     objects: OBJECTS
 
     constructor: ({@el, @rows, @columns, @registerEvent}) ->

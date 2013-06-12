@@ -23,7 +23,7 @@ sortLevels = function(levels) {
 };
 
 soma.chunks({
-  SpaceFractions: {
+  CountrysideFractions: {
     meta: function() {
       return new soma.chunks.Base({
         content: this
@@ -32,12 +32,12 @@ soma.chunks({
     prepare: function(_arg) {
       var _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId;
-      this.template = this.loadTemplate("/build/common/templates/puzzles/space_fractions.html");
-      this.loadScript('/build/common/pages/puzzles/lib/space_fractions.js');
+      this.template = this.loadTemplate("/build/common/templates/puzzles/countryside_fractions.html");
+      this.loadScript('/build/common/pages/puzzles/lib/countryside_fractions.js');
       if (this.levelId === 'editor') {
-        this.loadScript('/build/common/pages/puzzles/lib/space_fractions_editor.js');
+        this.loadScript('/build/common/pages/puzzles/lib/countryside_fractions_editor.js');
       }
-      this.loadStylesheet('/build/client/css/puzzles/space_fractions.css');
+      this.loadStylesheet('/build/client/css/puzzles/countryside_fractions.css');
       if (this.levelId && !isNaN(this.levelId)) {
         this.loadData({
           url: "/api/puzzles/levels/" + this.levelId,
@@ -74,7 +74,7 @@ soma.chunks({
     },
     build: function() {
       var row, rows, _ref, _ref1;
-      this.setTitle("Light It Up - The Puzzle School");
+      this.setTitle("Countryside Fractions - The Puzzle School");
       rows = (function() {
         var _i, _results;
         _results = [];
@@ -100,13 +100,13 @@ soma.chunks({
 });
 
 soma.views({
-  SpaceFractions: {
-    selector: '#content .space_fractions',
+  CountrsideFractions: {
+    selector: '#content .countryside_fractions',
     create: function() {
-      var existingHashChange, introMessage, spaceFractions, spaceFractionsEditor,
+      var countrySideFractions, countrysideFractionsEditor, existingHashChange, introMessage,
         _this = this;
-      spaceFractions = require('./lib/space_fractions');
-      this.viewHelper = new spaceFractions.ViewHelper({
+      countrySideFractions = require('./lib/countryside_fractions');
+      this.viewHelper = new countrysideFractions.ViewHelper({
         el: $(this.selector),
         rows: 10,
         columns: 10,
@@ -140,8 +140,8 @@ soma.views({
           duration: 500
         });
       } else if (this.levelId === 'editor') {
-        spaceFractionsEditor = require('./lib/space_fractions_editor');
-        this.editor = new spaceFractionsEditor.EditorHelper({
+        countrysideFractionsEditor = require('./lib/countryside_fractions_editor');
+        this.editor = new countrysideFractionsEditor.EditorHelper({
           el: $(this.selector),
           viewHelper: this.viewHelper,
           encodeMethod: function(json) {
@@ -554,7 +554,7 @@ soma.routes({
   '/puzzles/space_fractions/:classId/:levelId': function(_arg) {
     var classId, levelId;
     classId = _arg.classId, levelId = _arg.levelId;
-    return new soma.chunks.SpaceFractions({
+    return new soma.chunks.CountrysideFractions({
       classId: classId,
       levelId: levelId
     });
@@ -562,17 +562,17 @@ soma.routes({
   '/puzzles/space_fractions/:levelId': function(_arg) {
     var levelId;
     levelId = _arg.levelId;
-    return new soma.chunks.SpaceFractions({
+    return new soma.chunks.CountrysideFractions({
       levelId: levelId
     });
   },
   '/puzzles/space_fractions': function() {
-    return new soma.chunks.SpaceFractions;
+    return new soma.chunks.CountrysideFractions;
   },
   '/puzzles/light_it_up/:classId/:levelId': function(_arg) {
     var classId, levelId;
     classId = _arg.classId, levelId = _arg.levelId;
-    return new soma.chunks.SpaceFractions({
+    return new soma.chunks.CountrysideFractions({
       classId: classId,
       levelId: levelId
     });
@@ -580,11 +580,29 @@ soma.routes({
   '/puzzles/light_it_up/:levelId': function(_arg) {
     var levelId;
     levelId = _arg.levelId;
-    return new soma.chunks.SpaceFractions({
+    return new soma.chunks.CountrysideFractions({
       levelId: levelId
     });
   },
   '/puzzles/light_it_up': function() {
-    return new soma.chunks.SpaceFractions;
+    return new soma.chunks.CountrysideFractions;
+  },
+  '/puzzles/countryside_fractions/:classId/:levelId': function(_arg) {
+    var classId, levelId;
+    classId = _arg.classId, levelId = _arg.levelId;
+    return new soma.chunks.CountrysideFractions({
+      classId: classId,
+      levelId: levelId
+    });
+  },
+  '/puzzles/countryside_fractions/:levelId': function(_arg) {
+    var levelId;
+    levelId = _arg.levelId;
+    return new soma.chunks.CountrysideFractions({
+      levelId: levelId
+    });
+  },
+  '/puzzles/countryside_fractions': function() {
+    return new soma.chunks.CountrysideFractions;
   }
 });
