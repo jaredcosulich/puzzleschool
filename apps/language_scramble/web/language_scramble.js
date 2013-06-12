@@ -297,6 +297,7 @@ languageScramble.ViewHelper = (function() {
       if (!letter && force) {
         if (char.match(/\w|[^\x00-\x80]+/)) {
           letter = this.createLetter(char);
+          letter.addClass('sized');
           $(".scrambled ." + (this.containerClassName(openGuess))).append(letter);
         }
       }
@@ -478,7 +479,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.newScramble = function() {
-    var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
+    var boundary, displayWords, highlighted, sc, sentence, _base, _i, _len, _name, _ref;
     this.initializingScramble = true;
     this.answerTimes || (this.answerTimes = []);
     this.answerTimes.push(new Date());
@@ -488,6 +489,12 @@ languageScramble.ViewHelper = (function() {
       return;
     }
     (_base = this.puzzleData.levels[this.languages][this.levelName])[_name = this.scrambleInfo.id] || (_base[_name] = 1);
+    sc = this.$('.scramble_content');
+    if (this.activeLevel.match(/foreign/) && !sc.hasClass('foreign')) {
+      sc.addClass('foreign');
+    } else if (!this.activeLevel.match(/foreign/) && sc.hasClass('foreign')) {
+      sc.removeClass('foreign');
+    }
     displayWords = this.$('.display_words');
     if ((this.scrambleInfo["" + this.displayLevel + "Sentence"] != null) && this.scrambleInfo["" + this.displayLevel + "Sentence"].length) {
       sentence = this.scrambleInfo["" + this.displayLevel + "Sentence"];

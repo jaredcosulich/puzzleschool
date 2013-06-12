@@ -92,115 +92,180 @@ body {
 }
 .language_scramble .guesses .guess,
 .language_scramble .scrambled .guess {
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  -webkit-box-shadow: inset -9px 9px 9px rgba(0,0,0,0.5);
-  -moz-box-shadow: inset -9px 9px 9px rgba(0,0,0,0.5);
-  box-shadow: inset -9px 9px 9px rgba(0,0,0,0.5);
-}
-.language_scramble .guesses .letter,
-.language_scramble .scrambled .letter {
-  cursor: pointer;
-}
-.language_scramble .guesses .color1 .guess,
-.language_scramble .scrambled .color1 .guess {
-  border: 1px dashed #24aac3;
-  background-color: rgba(36, 170, 194, 0.3);
-}
-.language_scramble .guesses .color2 .guess,
-.language_scramble .scrambled .color2 .guess {
-  border: 1px dashed #ff922a;
-  background-color: rgba(255, 144, 41, 0.3);
-}
-.language_scramble .guesses .color3 .guess,
-.language_scramble .scrambled .color3 .guess {
-  border: 1px dashed #ff6e5f;
-  background-color: rgba(255, 113, 97, 0.3);
-}
-.language_scramble .guesses .color4 .guess,
-.language_scramble .scrambled .color4 .guess {
-  border: 1px dashed #0c6d7f;
-  background-color: rgba(12, 109, 126, 0.3);
-}
-.language_scramble .guesses .color5 .guess,
-.language_scramble .scrambled .color5 .guess {
-  border: 1px dashed #a61c0e;
-  background-color: rgba(164, 29, 14, 0.3);
-}
-.language_scramble .guesses .color6 .guess,
-.language_scramble .scrambled .color6 .guess {
-  border: 1px dashed #a6580e;
-  background-color: rgba(164, 87, 14, 0.3);
-}
-.language_scramble .guesses .color7 .guess,
-.language_scramble .scrambled .color7 .guess {
-  border: 1px dashed #a6770e;
-  background-color: rgba(164, 117, 14, 0.3);
-}
-.language_scramble .guesses .color8 .guess,
-.language_scramble .scrambled .color8 .guess {
-  border: 1px dashed #fafafa;
-  background-color: rgba(250, 250, 250, 0.3);
-}
-.language_scramble .guesses .letter,
-.language_scramble .scrambled .letter {
+  background: transparent url('images/sunken.png') no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  background-repeat: no-repeat;
 }
-.language_scramble .guesses .color1 .letter,
-.language_scramble .scrambled .color1 .letter {
-  background-image: url('images/tile-blue.png');
+.language_scramble .guesses .guess::before,
+.language_scramble .scrambled .guess::before {
+  display: block;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  margin-top: 9%;
+  margin-left: 12%;
+  width: 72%;
+  height: 72%;
+  content: "\00a0";
+  border-width: 2px;
+  border-style: dashed;
 }
-.language_scramble .guesses .color2 .letter,
-.language_scramble .scrambled .color2 .letter {
-  background-image: url('images/tile-red.png');
+.language_scramble .guesses .guess:after,
+.language_scramble .scrambled .guess:after {
+  display: block;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin-top: -84%;
+  margin-left: 9%;
+  width: 90%;
+  height: 90%;
+  content: "\00a0";
 }
-.language_scramble .guesses .color3 .letter,
-.language_scramble .scrambled .color3 .letter {
-  background-image: url('images/tile-yellow.png');
+.language_scramble .guesses .color1 .guess::before,
+.language_scramble .scrambled .color1 .guess::before {
+  border-color: #1663EB;
 }
-.language_scramble .guesses .color4 .letter,
-.language_scramble .scrambled .color4 .letter {
-  background-color: #0c6d7f;
+.language_scramble .guesses .color1 .guess::after,
+.language_scramble .scrambled .color1 .guess::after {
+  background-color: rgba(12, 59, 141, 0.2);
 }
-.language_scramble .guesses .color5 .letter,
-.language_scramble .scrambled .color5 .letter {
-  background-color: #a61c0e;
+.language_scramble .guesses .color2 .guess::before,
+.language_scramble .scrambled .color2 .guess::before {
+  border-color: #ffbd2a;
 }
-.language_scramble .guesses .color6 .letter,
-.language_scramble .scrambled .color6 .letter {
-  background-color: #a6580e;
+.language_scramble .guesses .color2 .guess::after,
+.language_scramble .scrambled .color2 .guess::after {
+  background-color: rgba(194, 132, 0, 0.2);
 }
-.language_scramble .guesses .color7 .letter,
-.language_scramble .scrambled .color7 .letter {
-  background-color: #a6770e;
+.language_scramble .guesses .color3 .guess::before,
+.language_scramble .scrambled .color3 .guess::before {
+  border-color: purple;
 }
-.language_scramble .guesses .color8 .letter,
-.language_scramble .scrambled .color8 .letter {
-  background-color: #fafafa;
+.language_scramble .guesses .color3 .guess::after,
+.language_scramble .scrambled .color3 .guess::after {
+  background-color: rgba(128, 0, 127, 0.2);
+}
+.language_scramble .guesses .color4 .guess::before,
+.language_scramble .scrambled .color4 .guess::before {
+  border-color: white;
+}
+.language_scramble .guesses .color4 .guess::after,
+.language_scramble .scrambled .color4 .guess::after {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.language_scramble .guesses .color5 .guess::before,
+.language_scramble .scrambled .color5 .guess::before {
+  border-color: #0c6d7f;
+}
+.language_scramble .guesses .color5 .guess::after,
+.language_scramble .scrambled .color5 .guess::after {
+  background-color: rgba(12, 109, 126, 0.2);
+}
+.language_scramble .guesses .color6 .guess::before,
+.language_scramble .scrambled .color6 .guess::before {
+  border-color: #ff922a;
+}
+.language_scramble .guesses .color6 .guess::after,
+.language_scramble .scrambled .color6 .guess::after {
+  background-color: rgba(255, 144, 41, 0.2);
+}
+.language_scramble .guesses .color7 .guess::before,
+.language_scramble .scrambled .color7 .guess::before {
+  border-color: black;
+}
+.language_scramble .guesses .color7 .guess::after,
+.language_scramble .scrambled .color7 .guess::after {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.language_scramble .guesses .color8 .guess::before,
+.language_scramble .scrambled .color8 .guess::before {
+  border-color: pink;
+}
+.language_scramble .guesses .color8 .guess::after,
+.language_scramble .scrambled .color8 .guess::after {
+  background-color: rgba(255, 194, 204, 0.2);
+}
+.language_scramble .guesses .letter,
+.language_scramble .scrambled .letter {
+  background: transparent url('images/tile.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  cursor: pointer;
+  text-indent: 5px;
+}
+.language_scramble .guesses .letter.sized::after,
+.language_scramble .scrambled .letter.sized::after {
+  display: block;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  margin-top: -81%;
+  margin-left: 15%;
+  width: 71%;
+  height: 71%;
+  content: "\00a0";
+  border-width: 2px;
+  border-style: dashed;
+}
+.language_scramble .guesses .color1 .letter::after,
+.language_scramble .scrambled .color1 .letter::after {
+  border-color: #1663EB;
+}
+.language_scramble .guesses .color2 .letter::after,
+.language_scramble .scrambled .color2 .letter::after {
+  border-color: #ffbd2a;
+}
+.language_scramble .guesses .color3 .letter::after,
+.language_scramble .scrambled .color3 .letter::after {
+  border-color: purple;
+}
+.language_scramble .guesses .color4 .letter::after,
+.language_scramble .scrambled .color4 .letter::after {
+  border-color: white;
+}
+.language_scramble .guesses .color5 .letter::after,
+.language_scramble .scrambled .color5 .letter::after {
+  border-color: #0c6d7f;
+}
+.language_scramble .guesses .color6 .letter::after,
+.language_scramble .scrambled .color6 .letter::after {
+  border-color: #ff922a;
+}
+.language_scramble .guesses .color7 .letter::after,
+.language_scramble .scrambled .color7 .letter::after {
+  border-color: black;
+}
+.language_scramble .guesses .color8 .letter::after,
+.language_scramble .scrambled .color8 .letter::after {
+  border-color: pink;
 }
 .language_scramble .guesses .correct,
 .language_scramble .scrambled .correct {
   text-align: center;
 }
-.language_scramble .correct .tap {
-    margin: auto;
-    background-image: url('images/next-scramble.png');
-    display: block;
-    margin-top: 45px;
-    width: 182px;
-    height: 92px;
-    cursor: pointer;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.language_scramble .guesses .correct .tap,
+.language_scramble .scrambled .correct .tap {
+  margin: auto;
+  background-image: url('images/wide_button.png');
+  display: block;
+  margin-top: 60px;
+  height: 92px;
+  width: 372px;
+  line-height: 81px;
+  text-indent: 20px;
+  font-size: 45px;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble .correct .tap div {
   padding: 30px 0 0 6px;
@@ -272,27 +337,25 @@ body {
   left: 236px;
   top: 72px;
 }
-.language_scramble .guesses .color1 .correct_letter,
-.language_scramble .guesses .color2 .correct_letter,
-.language_scramble .guesses .color3 .correct_letter,
-.language_scramble .guesses .color4 .correct_letter,
-.language_scramble .guesses .color5 .correct_letter,
-.language_scramble .guesses .color6 .correct_letter,
-.language_scramble .guesses .color7 .correct_letter,
-.language_scramble .guesses .color8 .correct_letter {
-  background-image: url('images/tile-green.png');
-  border: 1px solid transparent;
+.language_scramble .guesses .color1 .correct_letter::after,
+.language_scramble .guesses .color2 .correct_letter::after,
+.language_scramble .guesses .color3 .correct_letter::after,
+.language_scramble .guesses .color4 .correct_letter::after,
+.language_scramble .guesses .color5 .correct_letter::after,
+.language_scramble .guesses .color6 .correct_letter::after,
+.language_scramble .guesses .color7 .correct_letter::after,
+.language_scramble .guesses .color8 .correct_letter::after {
+  border-color: #24d94c;
 }
-.language_scramble .guesses .color1 .wrong_letter,
-.language_scramble .guesses .color2 .wrong_letter,
-.language_scramble .guesses .color3 .wrong_letter,
-.language_scramble .guesses .color4 .wrong_letter,
-.language_scramble .guesses .color5 .wrong_letter,
-.language_scramble .guesses .color6 .wrong_letter,
-.language_scramble .guesses .color7 .wrong_letter,
-.language_scramble .guesses .color8 .wrong_letter {
-  background-image: url('images/tile-red.png');
-  border: 1px solid transparent;
+.language_scramble .guesses .color1 .wrong_letter::after,
+.language_scramble .guesses .color2 .wrong_letter::after,
+.language_scramble .guesses .color3 .wrong_letter::after,
+.language_scramble .guesses .color4 .wrong_letter::after,
+.language_scramble .guesses .color5 .wrong_letter::after,
+.language_scramble .guesses .color6 .wrong_letter::after,
+.language_scramble .guesses .color7 .wrong_letter::after,
+.language_scramble .guesses .color8 .wrong_letter::after {
+  border-color: red;
 }
 .language_scramble .guesses.hidden .letter {
   visibility: visible;
@@ -430,7 +493,8 @@ body {
 .language_scramble .keyboard .letter span {
     display: inline-block;
     height: 72px;
-    line-height: 69px;
+    line-height: 66px;
+    text-indent: 3px;
     width: 72px;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -439,13 +503,13 @@ body {
     background-repeat: no-repeat;
 }
 .language_scramble .blue_button {
-  background-image: url('images/tile-blue.png');
+  background-image: url('images/tile.png');
 }
 .language_scramble .blue_button.active {
   background-color: #145f6d;
 }
 .language_scramble .red_button {
-  background-image: url('images/tile-red.png');
+  background-image: url('images/tile.png');
 }
 .language_scramble .red_button.active {
   background-color: #f81700;

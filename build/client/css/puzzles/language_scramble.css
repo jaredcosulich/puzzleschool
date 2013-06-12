@@ -73,6 +73,9 @@ body {
   width: 960px;
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
 }
+.language_scramble .scramble_content.foreign {
+  background: #fafafa url('/assets/images/puzzles/language_scramble/wood_foreign.jpg');
+}
 .language_scramble .display_words .papered,
 .language_scramble .scrambled .papered {
   line-height: 66px;
@@ -403,6 +406,13 @@ body {
 .language_scramble .guesses.hidden .hidden_message {
   left: 250px;
   top: 60px;
+}
+.language_scramble .scramble_content.foreign .guesses .guess {
+  background: transparent url('/assets/images/puzzles/language_scramble/sunken_foreign.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .language_scramble .floating_message {
   position: absolute;

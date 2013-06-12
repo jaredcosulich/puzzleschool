@@ -185,7 +185,8 @@ class languageScramble.ViewHelper
             letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]
             if !letter and force
                 if char.match(/\w|[^\x00-\x80]+/)
-                    letter = @createLetter(char) 
+                    letter = @createLetter(char)
+                    letter.addClass('sized') 
                     $(".scrambled .#{@containerClassName(openGuess)}").append(letter)        
         catch e
             return
@@ -317,6 +318,12 @@ class languageScramble.ViewHelper
         @scrambleInfo = @selectOption()
         return unless @scrambleInfo     
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
+
+        sc = @$('.scramble_content')
+        if @activeLevel.match(/foreign/) and not sc.hasClass('foreign')
+            sc.addClass('foreign')
+        else if not @activeLevel.match(/foreign/) and sc.hasClass('foreign')
+            sc.removeClass('foreign')
 
         displayWords = @$('.display_words')
         if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
