@@ -802,7 +802,7 @@ languageScramble.ViewHelper = (function() {
       targetHeight = Math.min(targetHeight, window.landheight);
     }
     windowWidth = window.AppMobi ? window.innerWidth || window.landwidth : this.$('.scramble_content').width();
-    maxFontSize = Math.min(windowWidth / 15, 60);
+    maxFontSize = Math.min(windowWidth / 15, 54);
     increment = Math.min(maxFontSize, this.letterFontSize) - 1;
     while (increment >= 1) {
       if (increase && this.letterFontSize >= maxFontSize) {
