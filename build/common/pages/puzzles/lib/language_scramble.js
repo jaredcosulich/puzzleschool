@@ -492,11 +492,6 @@ languageScramble.ViewHelper = (function() {
       return;
     }
     (_base = this.puzzleData.levels[this.languages][this.levelName])[_name = this.scrambleInfo.id] || (_base[_name] = 1);
-    if (this.activeLevel.match(/foreign/) && !this.el.hasClass('foreign')) {
-      this.el.addClass('foreign');
-    } else if (!this.activeLevel.match(/foreign/) && this.el.hasClass('foreign')) {
-      this.el.removeClass('foreign');
-    }
     displayWords = this.$('.display_words');
     if ((this.scrambleInfo["" + this.displayLevel + "Sentence"] != null) && this.scrambleInfo["" + this.displayLevel + "Sentence"].length) {
       sentence = this.scrambleInfo["" + this.displayLevel + "Sentence"];

@@ -324,11 +324,11 @@ class languageScramble.ViewHelper
         return unless @scrambleInfo     
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
 
-        if @activeLevel.match(/foreign/) and not @el.hasClass('foreign')
-            @el.addClass('foreign')
-        else if not @activeLevel.match(/foreign/) and @el.hasClass('foreign')
-            @el.removeClass('foreign')
-
+        # if @activeLevel.match(/foreign/) and not @el.hasClass('foreign')
+        #     @el.addClass('foreign')
+        # else if not @activeLevel.match(/foreign/) and @el.hasClass('foreign')
+        #     @el.removeClass('foreign')
+        # 
         displayWords = @$('.display_words')
         if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
             sentence = @scrambleInfo["#{@displayLevel}Sentence"]
