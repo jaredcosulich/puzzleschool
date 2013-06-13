@@ -117,8 +117,8 @@ class equation.Equation
         area.append(@container)
         @addFirstDropArea()
         
-    display: (html) -> (html or '').replace(/\*/ig, '&times;')
-    read: (html) -> (html or '').replace(/×/ig, '*')
+    display: (html) -> (html or '').replace(/\*/ig, '&middot;')
+    read: (html) -> (html or '').replace(/·/ig, '*')
      
     addFirstDropArea: ->
         dropAreaElement = @newDropArea()

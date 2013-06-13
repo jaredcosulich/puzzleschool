@@ -34,7 +34,7 @@ class equationComponent.EquationComponent
 
         @transformer = new Transformer(@element)
         
-    display: (html) -> html.replace('*', '&times;')    
+    display: (html) -> html.replace('*', '&middot;')    
         
     initMove: ->
         @elementContainer.unbind('mousedown.drag touchstart.drag')

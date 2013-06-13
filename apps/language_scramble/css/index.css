@@ -101,6 +101,7 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  padding: 0 3px 3px 0;
 }
 .language_scramble .guesses .guess::before,
 .language_scramble .scrambled .guess::before {
@@ -109,9 +110,9 @@ body {
   -moz-border-radius: 12px;
   border-radius: 12px;
   margin-top: 9%;
-  margin-left: 12%;
-  width: 72%;
-  height: 72%;
+  margin-left: 13%;
+  width: 74%;
+  height: 75%;
   content: "\00a0";
   border-width: 2px;
   border-style: dashed;
@@ -468,7 +469,6 @@ body {
   -moz-border-radius: 3px;
   border-radius: 3px;
   margin: -12px 0 0 21px;
-  width: 300px;
 }
 
 .language_scramble .progress_meter {

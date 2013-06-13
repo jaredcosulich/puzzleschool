@@ -63,7 +63,7 @@ equationComponent.EquationComponent = (function() {
   };
 
   EquationComponent.prototype.display = function(html) {
-    return html.replace('*', '&times;');
+    return html.replace('*', '&middot;');
   };
 
   EquationComponent.prototype.initMove = function() {

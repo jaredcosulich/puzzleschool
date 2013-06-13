@@ -196,11 +196,11 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.display = function(html) {
-    return (html || '').replace(/\*/ig, '&times;');
+    return (html || '').replace(/\*/ig, '&middot;');
   };
 
   Equation.prototype.read = function(html) {
-    return (html || '').replace(/×/ig, '*');
+    return (html || '').replace(/·/ig, '*');
   };
 
   Equation.prototype.addFirstDropArea = function() {
