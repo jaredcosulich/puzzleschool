@@ -544,7 +544,7 @@ class languageScramble.ViewHelper
         targetHeight = Math.min(targetHeight, window.landheight) if window.landheight 
 
         windowWidth = if window.AppMobi then window.innerWidth or window.landwidth else @$('.scramble_content').width()
-        maxFontSize = Math.min(windowWidth / 15, 54)
+        maxFontSize = Math.min(windowWidth / 15, 66)
         increment = Math.min(maxFontSize, @letterFontSize) - 1
         
         while increment >= 1

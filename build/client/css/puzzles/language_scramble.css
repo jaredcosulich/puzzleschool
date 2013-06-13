@@ -9,6 +9,16 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
+  /*    &.foreign .scramble_content {
+        background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
+    }  
+*/
+
+  /*    &.foreign .scramble_content .guesses .guess {
+        background: transparent url('/assets/images/puzzles/language_scramble/sunken_foreign.png') no-repeat; 
+        .background_size(cover);
+    }       
+*/
   /* iPad [portrait + landscape] */
 
   /* iPhone [portrait + landscape] */
@@ -74,20 +84,17 @@ body {
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
   position: relative;
 }
-.language_scramble.foreign .scramble_content {
-  background: #fafafa url('/assets/images/puzzles/language_scramble/wood_foreign.jpg');
-}
 .language_scramble .display_words .papered,
 .language_scramble .scrambled .papered {
-  line-height: 66px;
+  line-height: 84px;
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
   background-color: rgba(36, 219, 75, 0.8);
   padding: 0 6px;
   display: inline-block;
-  line-height: 42px;
-  height: 45px;
+  line-height: 57px;
+  height: 54px;
 }
 .language_scramble .level_progress_meter {
   width: 100%;
@@ -135,21 +142,21 @@ body {
   display: inline-block;
   position: absolute;
   top: 0;
-  -webkit-background-size: 35px;
-  -moz-background-size: 35px;
-  -o-background-size: 35px;
-  background-size: 35px;
-  width: 35px;
+  -webkit-background-size: 42px;
+  -moz-background-size: 42px;
+  -o-background-size: 42px;
+  background-size: 42px;
+  width: 42px;
 }
 .language_scramble .papered::before {
   background-image: url('/assets/images/puzzles/language_scramble/paper-left.png');
   background-position: left 6px;
-  left: -35px;
+  left: -42px;
 }
 .language_scramble .papered::after {
   background-image: url('/assets/images/puzzles/language_scramble/paper-right.png');
   background-position: right 6px;
-  right: -35px;
+  right: -42px;
 }
 .language_scramble .section {
   font-size: 30pt;
@@ -455,13 +462,6 @@ body {
 .language_scramble .guesses.hidden .hidden_message {
   left: 250px;
   top: 60px;
-}
-.language_scramble.foreign .scramble_content .guesses .guess {
-  background: transparent url('/assets/images/puzzles/language_scramble/sunken_foreign.png') no-repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 .language_scramble .floating_message {
   position: absolute;

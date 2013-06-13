@@ -70,21 +70,21 @@ body {
         position: relative;   
     }
     
-    &.foreign .scramble_content {
+/*    &.foreign .scramble_content {
         background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
     }  
-
+*/
     .display_words, .scrambled {
         .papered {
-            line-height: 66px;
+            line-height: 84px;
         }
         
         .highlighted {
             .bg-alpha(@green, 0.8);
             padding: 0 6px;
             display: inline-block;
-            line-height: 42px;
-            height: 45px;
+            line-height: 57px;
+            height: 54px;
         }
     }
     
@@ -128,20 +128,20 @@ body {
             display: inline-block;
             position: absolute;
             top: 0;
-            .background_size(35px);
-            width: 35px;
+            .background_size(42px);
+            width: 42px;
         }
         
         &::before {
             background-image:url('/assets/images/puzzles/language_scramble/paper-left.png');
             background-position: left 6px;
-            left: -35px;
+            left: -42px;
         }
 
         &::after {
             background-image:url('/assets/images/puzzles/language_scramble/paper-right.png');
             background-position: right 6px;
-            right: -35px;
+            right: -42px;
         }
     }
     
@@ -386,11 +386,11 @@ body {
         }
     }
     
-    &.foreign .scramble_content .guesses .guess {
+/*    &.foreign .scramble_content .guesses .guess {
         background: transparent url('/assets/images/puzzles/language_scramble/sunken_foreign.png') no-repeat; 
         .background_size(cover);
     }       
-    
+*/    
     .floating_message {
         position: absolute;
         top: -1000px;

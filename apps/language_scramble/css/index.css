@@ -26,8 +26,7 @@ body {
   background-repeat: repeat-x;
   display: inline-block;
   position: relative;
-  font-size: 51px;
-  line-height: 75px;
+  line-height: 90px;
 }
 .language_scramble .display_words .words::before,
 .language_scramble .scrambled .words::before,
@@ -37,10 +36,10 @@ body {
   background-repeat: no-repeat;
   content: "\00a0";
   display: inline-block;
-  width: 35px;
+  width: 42px;
   position: absolute;
   top: 0;
-  left: -35px;
+  left: -42px;
 }
 .language_scramble .display_words .words::after,
 .language_scramble .scrambled .words::after,
@@ -50,10 +49,10 @@ body {
   background-repeat: no-repeat;
   content: "\00a0";
   display: inline-block;
-  width: 35px;
+  width: 42px;
   position: absolute;
   top: 0;
-  right: -35px;
+  right: -42px;
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
