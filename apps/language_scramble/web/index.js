@@ -71,6 +71,7 @@ window.app = {
   },
   sizeElements: function() {
     var levelSelect;
+    return;
     this.progressMeter.css({
       top: this.height - this.percentComplete.height()
     });
@@ -79,6 +80,7 @@ window.app = {
     return levelSelect.height(this.height);
   },
   initProgressMeter: function() {
+    return;
     this.progressMeter = this.viewHelper.$('.level_progress_meter');
     return this.percentComplete = this.progressMeter.find('.percent_complete');
   },

@@ -19,9 +19,7 @@ body {
 .language_scramble {
   background-color: #fafafa;
 }
-.language_scramble .display_words .words,
-.language_scramble .scrambled .words,
-.language_scramble .correct .papered {
+.papered {
   background-image: url('images/paper-middle.png');
   background-position: center 12px;
   background-repeat: repeat-x;
@@ -29,9 +27,7 @@ body {
   position: relative;
   line-height: 90px;
 }
-.language_scramble .display_words .words::before,
-.language_scramble .scrambled .words::before,
-.language_scramble .correct .papered::before {
+.papered::before {
   background-image: url('images/paper-left.png');
   background-position: left 12px;
   background-repeat: no-repeat;
@@ -42,9 +38,7 @@ body {
   top: 0;
   left: -42px;
 }
-.language_scramble .display_words .words::after,
-.language_scramble .scrambled .words::after,
-.language_scramble .correct .papered::after {
+.papered::after {
   background-image: url('images/paper-right.png');
   background-position: right 12px;
   background-repeat: no-repeat;
@@ -405,11 +399,6 @@ body {
     -moz-border-radius: 12px;
     border-radius: 12px;
     background-color: #fafafa;
-    padding: 60px;
-}
-.language_scramble .floating_message a {
-    color: blue;
-    text-decoration: underline;
 }
 .language_scramble .last_answer .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
@@ -418,25 +407,6 @@ body {
 .language_scramble .levels {
   padding: 0 88px;
   text-align: center;
-}
-.language_scramble .levels .level {
-  background-color: #fdfdfd;
-  border: 1px solid #ccc;
-  float: left;
-  margin: 12px 0 12px 30px;
-  width: 330px;
-}
-.language_scramble .levels .level .level_link {
-  display: block;
-  height: 48px;
-}
-.language_scramble .levels .level .percent_complete {
-  opacity: 0.3;
-  margin-top: -48px;
-  overflow: hidden;
-  height: 48px;
-  float: left;
-  background-color: #0c8d28;
 }
 .language_scramble .level_progress_meter {
   width: 100%;
@@ -499,37 +469,63 @@ body {
 }
 
 .language_scramble #close_menu_button {
-    float: right;
-    margin-right: 6px;
-    text-decoration: none;
-    color: white;
-    padding: 3px 6px;
+    background: transparent url('images/menu_close.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 60px;
+    height: 60px;
+    content: "\00a0";
 }   
 
 .language_scramble #level_select_menu {
-    background-color: white;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    background: transparent url('images/menu_wood.jpg');
+    border: 3px solid #110E0C;
+    overflow: hidden;
+    z-index: 99;
+    width: 600px;
+    height: 600px;
 }
 
 .language_scramble #level_select_menu h2 {
-    width: 14em;
-    margin: 12px auto;
+    width: 9em;
+    margin: 12px auto 24px auto;
+    font-weight: normal;
+    line-height: 102px;
 }
 
 .language_scramble #level_select_menu .level {
-    margin: 0 auto 12px auto;
+    margin: 0 auto 24px auto;
     padding: 3px;
     float: none;
+    background: transparent url('images/wide_button.png');
+    height: 87px;
+    width: 372px;
+    overflow: hidden;
 }
 
 .language_scramble #level_select_menu .level_link {
+    padding-top: 12px;
+    display: block;
     text-decoration: none;
 }
 
 .language_scramble #level_select_menu .level_link small {
     color: #333;
 }
+.language_scramble #level_select_menu .percent_complete {
+  opacity: 0.3;
+  margin-top: -48px;
+  overflow: hidden;
+  height: 48px;
+  float: left;
+  background-color: #0c8d28;
+}
+
 .language_scramble .keyboard_container {
     position: absolute;
     top: 360px;

@@ -56,12 +56,14 @@ window.app =
         $.timeout interval, () => @checkSize(interval * 2)
 
     sizeElements: ->
+        return
         @progressMeter.css(top: @height - @percentComplete.height())
         levelSelect = @$('#level_select_menu')
         levelSelect.width(@width)
         levelSelect.height(@height)
     
     initProgressMeter: ->
+        return
         @progressMeter = @viewHelper.$('.level_progress_meter')
         @percentComplete = @progressMeter.find('.percent_complete')
 
