@@ -460,11 +460,11 @@ body {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #38de5d), color-stop(1, #20c344));
   background: -moz-linear-gradient(center top, #38de5d 5%, #20c344 100%);
   background-color: #38de5d;
-  height: 15px;
+  height: 12px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  margin: -6px 0 0 21px;
+  margin: -12px 0 0 21px;
   width: 300px;
 }
 
@@ -477,21 +477,30 @@ body {
 .language_scramble .scramble_content .menu_button, .language_scramble #close_menu_button {
     display: block;
     background-color: black;
-    color: white;
-    padding: 3px 6px;
     cursor: pointer;
 }
 
 .language_scramble .scramble_content .menu_button {
     position: absolute;
-    top: 0;
+    top: 6px;
     right: 6px;
+    font-size: 30px;
+    text-align: center;
+    padding: 9px 18px 12px 18px;
+    text-indent: 9px;
+    background: transparent url('images/medium_button.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .language_scramble #close_menu_button {
     float: right;
     margin-right: 6px;
     text-decoration: none;
+    color: white;
+    padding: 3px 6px;
 }   
 
 .language_scramble #level_select_menu {
