@@ -129,7 +129,7 @@ window.app =
                 levelLink = document.createElement("A")
                 levelLink.className = 'level_link'
                 levelLink.innerHTML = "#{info.title}<br/><small>#{info.subtitle}</small>"
-                $(levelLink).bind 'click', () => showLevel(key)
+                $(levelLink).bind 'touchstart.select_level', () => showLevel(key)
                 $(levelLinkDiv).append(levelLink)
                 levelsGroup.append(levelLinkDiv)
                 

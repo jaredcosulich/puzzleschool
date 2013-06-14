@@ -133,7 +133,7 @@ window.app = {
       levelLink = document.createElement("A");
       levelLink.className = 'level_link';
       levelLink.innerHTML = "" + info.title + "<br/><small>" + info.subtitle + "</small>";
-      $(levelLink).bind('click', function() {
+      $(levelLink).bind('touchstart.select_level', function() {
         return showLevel(key);
       });
       $(levelLinkDiv).append(levelLink);
