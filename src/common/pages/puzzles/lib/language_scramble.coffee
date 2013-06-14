@@ -909,7 +909,7 @@ class languageScramble.ViewHelper
                 opacity: 0
                 duration: 250
                 complete: =>
-                    @$('.menu_button').trigger('click')
+                    @$('.menu_button').trigger('click.menu touchstart.menu')
 
         message.css
             top: ($('.scramble_content').height() - @$('#next_level').height()) / 2

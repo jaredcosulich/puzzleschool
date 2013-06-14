@@ -144,17 +144,32 @@ window.app =
             levelsAdded += 1
 
             
-        levelSelect.find('.next').bind 'click', =>
+        next = levelSelect.find('.next')
+        showNext = =>
+            next.unbind 'touchstart.next'
+            @$('document.body').one 'touchend.next', => next.removeClass('active')
+            next.addClass('active')    
             levelsContainer.animate
                 marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width()
                 duration: 500
+                complete: => next.bind 'touchstart.next', => showNext()            
+        next.bind 'touchstart.next', => showNext()
 
-        levelSelect.find('.previous').bind 'click', => 
+        previous = levelSelect.find('.previous')
+        showPrevious = =>
+            previous.unbind 'touchstart.previous'
+            @$('document.body').one 'touchend.previous', => previous.removeClass('active')
+            previous.addClass('active')
             levelsContainer.animate
                 marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width()
                 duration: 500
+                complete: => previous.bind 'touchstart.previous', => showPrevious()
+        previous.bind 'touchstart.previous', => showPrevious()
     
-        @$('.menu_button').bind 'click', =>
+        menu = @$('.menu_button')
+        menu.bind 'touchstart.menu', =>
+            @$('document.body').one 'touchend.next', => menu.removeClass('active')
+            menu.addClass('active')
             @$('.scramble_content').animate
                 opacity: 0.25
                 duration: 250
@@ -168,7 +183,10 @@ window.app =
                 duration: 500
                 
         
-        @$('#close_menu_button').bind 'click', =>
+        closeMenu = @$('#close_menu_button')
+        closeMenu.bind 'touchstart.close_menu', =>
+            @$('document.body').one 'touchend.next', => closeMenu.removeClass('active')
+            closeMenu.addClass('active')
             @$('.scramble_content').animate
                 opacity: 1
                 duration: 250

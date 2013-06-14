@@ -1338,7 +1338,7 @@ languageScramble.ViewHelper = (function() {
         opacity: 0,
         duration: 250,
         complete: function() {
-          return _this.$('.menu_button').trigger('click');
+          return _this.$('.menu_button').trigger('click.menu touchstart.menu');
         }
       });
     });

@@ -88,7 +88,7 @@ window.app = {
     return AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1);
   },
   initMenuButton: function() {
-    var key, levelSelect, levelsAdded, levelsContainer, levelsGroup, showLevel, startPosition, _fn,
+    var closeMenu, key, levelSelect, levelsAdded, levelsContainer, levelsGroup, menu, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
       _this = this;
     levelSelect = this.$('#level_select_menu');
     startPosition = {};
@@ -156,19 +156,52 @@ window.app = {
       _fn(key, levelsGroup, levelsAdded);
       levelsAdded += 1;
     }
-    levelSelect.find('.next').bind('click', function() {
+    next = levelSelect.find('.next');
+    showNext = function() {
+      next.unbind('touchstart.next');
+      _this.$('document.body').one('touchend.next', function() {
+        return next.removeClass('active');
+      });
+      next.addClass('active');
       return levelsContainer.animate({
         marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width(),
-        duration: 500
+        duration: 500,
+        complete: function() {
+          return next.bind('touchstart.next', function() {
+            return showNext();
+          });
+        }
       });
+    };
+    next.bind('touchstart.next', function() {
+      return showNext();
     });
-    levelSelect.find('.previous').bind('click', function() {
+    previous = levelSelect.find('.previous');
+    showPrevious = function() {
+      previous.unbind('touchstart.previous');
+      _this.$('document.body').one('touchend.previous', function() {
+        return previous.removeClass('active');
+      });
+      previous.addClass('active');
       return levelsContainer.animate({
         marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width(),
-        duration: 500
+        duration: 500,
+        complete: function() {
+          return previous.bind('touchstart.previous', function() {
+            return showPrevious();
+          });
+        }
       });
+    };
+    previous.bind('touchstart.previous', function() {
+      return showPrevious();
     });
-    this.$('.menu_button').bind('click', function() {
+    menu = this.$('.menu_button');
+    menu.bind('touchstart.menu', function() {
+      _this.$('document.body').one('touchend.next', function() {
+        return menu.removeClass('active');
+      });
+      menu.addClass('active');
       _this.$('.scramble_content').animate({
         opacity: 0.25,
         duration: 250
@@ -183,7 +216,12 @@ window.app = {
         duration: 500
       });
     });
-    return this.$('#close_menu_button').bind('click', function() {
+    closeMenu = this.$('#close_menu_button');
+    return closeMenu.bind('touchstart.close_menu', function() {
+      _this.$('document.body').one('touchend.next', function() {
+        return closeMenu.removeClass('active');
+      });
+      closeMenu.addClass('active');
       _this.$('.scramble_content').animate({
         opacity: 1,
         duration: 250
