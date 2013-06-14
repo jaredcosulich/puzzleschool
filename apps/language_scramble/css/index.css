@@ -36,7 +36,7 @@ body {
   width: 42px;
   position: absolute;
   top: 0;
-  left: -42px;
+  left: -41px;
 }
 .papered::after {
   background-image: url('images/paper-right.png');
@@ -47,7 +47,7 @@ body {
   width: 42px;
   position: absolute;
   top: 0;
-  right: -42px;
+  right: -41px;
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
@@ -398,15 +398,37 @@ body {
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
     border-radius: 12px;
-    background-color: #fafafa;
+    background: transparent url('images/menu_wood.jpg');
+    border: 3px solid #110E0C;
+    overflow: hidden;
+    z-index: 99;
+    width: 600px;
+    height: 600px;
+}
+#next_level .success {
+    width: 240px;
+    margin: 120px auto 24px auto;
+    line-height: 102px;
+}
+#next_level h2 {
+    font-weight: normal;
+}
+#next_level p {
+    width: 420px;
+    line-height: 102px;
+    margin: auto;
+}
+#next_level .next_level_link {
+    display: block;
+    line-height: 86px;
+    margin: 30px auto;
+    background: transparent url('images/wide_button.png');
+    width: 372px;
+    height: 92px;
 }
 .language_scramble .last_answer .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
   padding: 0 3px;
-}
-.language_scramble .levels {
-  padding: 0 88px;
-  text-align: center;
 }
 .language_scramble .level_progress_meter {
   width: 100%;
@@ -482,28 +504,33 @@ body {
     content: "\00a0";
 }   
 
-.language_scramble #level_select_menu {
-    background: transparent url('images/menu_wood.jpg');
-    border: 3px solid #110E0C;
-    overflow: hidden;
-    z-index: 99;
-    width: 600px;
-    height: 600px;
-}
-
 .language_scramble #level_select_menu h2 {
     width: 9em;
-    margin: 12px auto 24px auto;
+    margin: 12px auto;
     font-weight: normal;
     line-height: 102px;
 }
 
+.language_scramble #level_select_menu .levels_container, .language_scramble #level_select_menu .levels_group {
+    height: 420px;
+    overflow: hidden;
+}
+
+.language_scramble #level_select_menu .levels_container {
+    margin-left: -4px;
+}
+
+.language_scramble #level_select_menu .levels_group {
+    width: 600px;
+    float: left;
+    margin-left: 4px;
+}
+
 .language_scramble #level_select_menu .level {
-    margin: 0 auto 24px auto;
-    padding: 3px;
+    margin: 0 auto 12px auto;
     float: none;
     background: transparent url('images/wide_button.png');
-    height: 87px;
+    height: 92px;
     width: 372px;
     overflow: hidden;
 }
@@ -512,18 +539,55 @@ body {
     padding-top: 12px;
     display: block;
     text-decoration: none;
+    line-height: 21px;
+    font-size: 30px;
 }
 
 .language_scramble #level_select_menu .level_link small {
-    color: #333;
+    font-size: 18px;
 }
-.language_scramble #level_select_menu .percent_complete {
-  opacity: 0.3;
-  margin-top: -48px;
+.language_scramble #level_select_menu .mini_progress_meter {
+  margin: -9px 0 0 9px;
+  position: relative;
   overflow: hidden;
-  height: 48px;
+  height: 16px;
+  width: 355px;
+  content: "\00a0";
   float: left;
+  background: transparent url('images/mini-progress.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.language_scramble #level_select_menu .percent_complete {
   background-color: #0c8d28;
+  height: 6px;
+  margin: 9px 0 0 18px;
+  content: "\00a0";
+  max-width: 344px;
+}
+
+.language_scramble #level_select_menu .navigation {
+    display: block;
+    content: "\00a0";
+    width: 91px;
+    height: 90px;
+    position: absolute;    
+}
+
+.language_scramble #level_select_menu .next {
+    bottom: 6px;
+    right: 6px;
+    background: transparent url('images/button_next.png');
+}
+
+.language_scramble #level_select_menu .previous {
+    bottom: 6px;
+    left: 6px;
+    background: transparent url('images/button_previous.png');
 }
 
 .language_scramble .keyboard_container {

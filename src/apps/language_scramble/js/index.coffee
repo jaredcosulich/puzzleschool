@@ -112,8 +112,16 @@ window.app =
                         top: -1000
                         left: -1000
     
+        levelsContainer = levelSelect.find('.levels_container')
+        levelsGroup = null
+        levelsAdded = 0
         for key of languageScramble.data[@languages].levels
-            do (key) =>
+            if levelsAdded % 4 == 0
+                levelsGroup = $(document.createElement("DIV"))
+                levelsGroup.addClass('levels_group')
+                levelsContainer.append(levelsGroup)
+                levelsContainer.width(levelsGroup.width() * (1 + (levelsAdded / 4)))
+            do (key, levelsGroup, levelsAdded) =>        
                 info = languageScramble.data[@languages].levels[key]
                 levelLinkDiv = document.createElement("DIV")
                 levelLinkDiv.className = 'level'
@@ -123,16 +131,34 @@ window.app =
                 levelLink.innerHTML = "#{info.title}<br/><small>#{info.subtitle}</small>"
                 $(levelLink).bind 'click', () => showLevel(key)
                 $(levelLinkDiv).append(levelLink)
-                levelSelect.append(levelLinkDiv)
-                levelProgress = document.createElement("A")
-                levelProgress.className = 'percent_complete'
-                levelProgress.innerHTML = '&nbsp;'
-                percentComplete = @puzzleData.levels[@languages][key]?.percentComplete or 0
-                $(levelProgress).width("#{percentComplete}%")
-                $(levelProgress).bind 'click', () => showLevel(key)
+                levelsGroup.append(levelLinkDiv)
+                
+                percentComplete = document.createElement("DIV")
+                percentComplete.className = 'percent_complete'
+                $(percentComplete).width("#{@puzzleData.levels[@languages][key]?.percentComplete or 0}%")
+                $(levelLinkDiv).append(percentComplete)
+
+                levelProgress = document.createElement("DIV")
+                levelProgress.className = 'mini_progress_meter'
                 $(levelLinkDiv).append(levelProgress)
+            levelsAdded += 1
+
+            
+        levelSelect.find('.next').bind 'click', =>
+            levelsContainer.animate
+                marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width()
+                duration: 500
+
+        levelSelect.find('.previous').bind 'click', => 
+            levelsContainer.animate
+                marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width()
+                duration: 500
     
         @$('.menu_button').bind 'click', =>
+            @$('.scramble_content').animate
+                opacity: 0.25
+                duration: 250
+            
             levelSelect.css
                 opacity: 0
                 top: (@height - levelSelect.height()) / 2
@@ -142,7 +168,11 @@ window.app =
                 duration: 500
                 
         
-        @$('#close_menu_button').bind 'click', ->
+        @$('#close_menu_button').bind 'click', =>
+            @$('.scramble_content').animate
+                opacity: 1
+                duration: 250
+            
             levelSelect.animate
                 opacity: 0
                 duration: 500

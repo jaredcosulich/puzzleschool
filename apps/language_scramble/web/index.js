@@ -88,7 +88,7 @@ window.app = {
     return AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1);
   },
   initMenuButton: function() {
-    var key, levelSelect, showLevel, startPosition, _fn,
+    var key, levelSelect, levelsAdded, levelsContainer, levelsGroup, showLevel, startPosition, _fn,
       _this = this;
     levelSelect = this.$('#level_select_menu');
     startPosition = {};
@@ -121,7 +121,10 @@ window.app = {
         }
       });
     };
-    _fn = function(key) {
+    levelsContainer = levelSelect.find('.levels_container');
+    levelsGroup = null;
+    levelsAdded = 0;
+    _fn = function(key, levelsGroup, levelsAdded) {
       var info, levelLink, levelLinkDiv, levelProgress, percentComplete, _ref;
       info = languageScramble.data[_this.languages].levels[key];
       levelLinkDiv = document.createElement("DIV");
@@ -134,21 +137,42 @@ window.app = {
         return showLevel(key);
       });
       $(levelLinkDiv).append(levelLink);
-      levelSelect.append(levelLinkDiv);
-      levelProgress = document.createElement("A");
-      levelProgress.className = 'percent_complete';
-      levelProgress.innerHTML = '&nbsp;';
-      percentComplete = ((_ref = _this.puzzleData.levels[_this.languages][key]) != null ? _ref.percentComplete : void 0) || 0;
-      $(levelProgress).width("" + percentComplete + "%");
-      $(levelProgress).bind('click', function() {
-        return showLevel(key);
-      });
+      levelsGroup.append(levelLinkDiv);
+      percentComplete = document.createElement("DIV");
+      percentComplete.className = 'percent_complete';
+      $(percentComplete).width("" + (((_ref = _this.puzzleData.levels[_this.languages][key]) != null ? _ref.percentComplete : void 0) || 0) + "%");
+      $(levelLinkDiv).append(percentComplete);
+      levelProgress = document.createElement("DIV");
+      levelProgress.className = 'mini_progress_meter';
       return $(levelLinkDiv).append(levelProgress);
     };
     for (key in languageScramble.data[this.languages].levels) {
-      _fn(key);
+      if (levelsAdded % 4 === 0) {
+        levelsGroup = $(document.createElement("DIV"));
+        levelsGroup.addClass('levels_group');
+        levelsContainer.append(levelsGroup);
+        levelsContainer.width(levelsGroup.width() * (1 + (levelsAdded / 4)));
+      }
+      _fn(key, levelsGroup, levelsAdded);
+      levelsAdded += 1;
     }
+    levelSelect.find('.next').bind('click', function() {
+      return levelsContainer.animate({
+        marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width(),
+        duration: 500
+      });
+    });
+    levelSelect.find('.previous').bind('click', function() {
+      return levelsContainer.animate({
+        marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width(),
+        duration: 500
+      });
+    });
     this.$('.menu_button').bind('click', function() {
+      _this.$('.scramble_content').animate({
+        opacity: 0.25,
+        duration: 250
+      });
       levelSelect.css({
         opacity: 0,
         top: (_this.height - levelSelect.height()) / 2,
@@ -160,6 +184,10 @@ window.app = {
       });
     });
     return this.$('#close_menu_button').bind('click', function() {
+      _this.$('.scramble_content').animate({
+        opacity: 1,
+        duration: 250
+      });
       return levelSelect.animate({
         opacity: 0,
         duration: 500,

@@ -1326,66 +1326,27 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.nextLevel = function() {
-    var index, level, message, nextLevel, nextLevelName, resetLevel, showLevel, _fn, _i, _j, _len, _len1, _ref, _ref1,
+    var message,
       _this = this;
     message = this.$('#next_level');
-    _ref = this.level.nextLevels || [];
-    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-      nextLevelName = _ref[index];
-      nextLevel = this.languageData.levels[nextLevelName];
-      $(this.$('#next_level .next_level_link')[index]).html(nextLevel.title);
-    }
-    resetLevel = function() {
-      if (confirm('Are you sure you want to reset this level?')) {
-        _this.$('.reset_level_link').unbind('click.reset');
-        _this.puzzleData.levels[_this.languages][_this.levelName] = {};
-        _this.saveProgress(_this.puzzleData);
-        return showLevel(_this.levelName);
-      }
-    };
-    showLevel = function(levelName) {
-      _this.$('#next_level .next_level_link').unbind('click.showlevel');
-      _this.setLevel(levelName);
-      return _this.$('#next_level').animate({
-        opacity: 0,
-        duration: 500,
-        complete: function() {
-          _this.newScramble();
-          return _this.$('.scramble_content').animate({
-            opacity: 1,
-            duration: 500,
-            complete: function() {
-              return message.css({
-                top: -1000,
-                left: -1000
-              });
-            }
-          });
-        }
-      });
-    };
     this.$('.scramble_content').animate({
       opacity: 0.25,
       duration: 250
+    });
+    message.find('.next_level_link').bind('click', function() {
+      return message.animate({
+        opacity: 0,
+        duration: 250,
+        complete: function() {
+          return _this.$('.menu_button').trigger('click');
+        }
+      });
     });
     message.css({
       top: ($('.scramble_content').height() - this.$('#next_level').height()) / 2,
       left: ($('.scramble_content').width() - this.$('#next_level').width()) / 2
     });
-    this.$('#next_level .reset_level_link').bind('click.reset', function() {
-      return resetLevel();
-    });
-    _ref1 = this.level.nextLevels;
-    _fn = function(level, index) {
-      return $(_this.$('#next_level .next_level_link')[index]).bind('click.showlevel', function() {
-        return showLevel(level);
-      });
-    };
-    for (index = _j = 0, _len1 = _ref1.length; _j < _len1; index = ++_j) {
-      level = _ref1[index];
-      _fn(level, index);
-    }
-    return this.$('#next_level').animate({
+    return message.animate({
       opacity: 1,
       duration: 1000
     });

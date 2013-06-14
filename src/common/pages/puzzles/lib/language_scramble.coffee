@@ -899,48 +899,26 @@ class languageScramble.ViewHelper
 
     nextLevel: () ->        
         message = @$('#next_level')
-        for nextLevelName, index in @level.nextLevels or []
-            nextLevel = @languageData.levels[nextLevelName]
-            $(@$('#next_level .next_level_link')[index]).html(nextLevel.title)
-
-        resetLevel = () =>
-            if confirm('Are you sure you want to reset this level?')
-                @$('.reset_level_link').unbind 'click.reset'
-                @puzzleData.levels[@languages][@levelName] = {}
-                @saveProgress(@puzzleData)
-                showLevel(@levelName)
-
-        showLevel = (levelName) =>
-            @$('#next_level .next_level_link').unbind 'click.showlevel'
-            @setLevel(levelName)
-            @$('#next_level').animate
-                opacity: 0
-                duration: 500
-                complete: () =>
-                    @newScramble()
-                    @$('.scramble_content').animate
-                        opacity: 1
-                        duration: 500
-                        complete: () =>
-                            message.css
-                                top: -1000
-                                left: -1000
 
         @$('.scramble_content').animate
             opacity: 0.25
             duration: 250
 
+        message.find('.next_level_link').bind 'click', =>
+            message.animate
+                opacity: 0
+                duration: 250
+                complete: =>
+                    @$('.menu_button').trigger('click')
+
         message.css
             top: ($('.scramble_content').height() - @$('#next_level').height()) / 2
             left: ($('.scramble_content').width() - @$('#next_level').width()) / 2
             
-        @$('#next_level .reset_level_link').bind 'click.reset', () => resetLevel()
-        for level, index in @level.nextLevels
-            do (level, index) =>
-                $(@$('#next_level .next_level_link')[index]).bind 'click.showlevel', () => showLevel(level)
-        @$('#next_level').animate
+        message.animate
             opacity: 1
             duration: 1000
+    
 
 
 languageScramble.data =
