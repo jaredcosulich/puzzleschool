@@ -794,19 +794,16 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.resize = function() {
-    var increase, increment, letter, maxFontSize, targetHeight, windowWidth;
-    letter = $(this.$('.scrambled').find('.letter')[0]);
+    var height, increase, increment, letter, letters, maxFontSize, targetHeight, windowWidth;
+    letters = this.$('.scrambled').find('.letter');
+    letter = $(letters[0]);
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
     targetHeight = this.$('.scramble_content').height();
-    if (window.innerHeight) {
-      targetHeight = Math.min(targetHeight, window.innerHeight);
-    }
-    if (window.landheight) {
-      targetHeight = Math.min(targetHeight, window.landheight);
-    }
+    height = window.innerHeight ? window.innerHeight : window.landheight;
+    targetHeight = Math.min(targetHeight, height);
     windowWidth = window.AppMobi ? window.innerWidth || window.landwidth : this.$('.scramble_content').width();
-    maxFontSize = Math.min(windowWidth / 15, 66);
+    maxFontSize = Math.min(windowWidth / letters.length, 66);
     increment = Math.min(maxFontSize, this.letterFontSize) - 1;
     while (increment >= 1) {
       if (increase && this.letterFontSize >= maxFontSize) {

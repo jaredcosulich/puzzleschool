@@ -402,8 +402,8 @@ body {
     border: 3px solid #110E0C;
     overflow: hidden;
     z-index: 99;
-    width: 600px;
-    height: 600px;
+    width: 588px;
+    height: 588px;
 }
 #next_level .success {
     width: 240px;
@@ -521,7 +521,7 @@ body {
 }
 
 .language_scramble #level_select_menu .levels_group {
-    width: 600px;
+    width: 588px;
     float: left;
     margin-left: 4px;
 }

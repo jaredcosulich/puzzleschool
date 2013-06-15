@@ -1,6 +1,6 @@
 window.app = 
     initialize: ->
-        if not (@width = window.innerWidth or window.landwidth) or not (@height = window.innerHeight or window.landheight) or @width < @height
+        if not (@width = window.innerWidth or window.landwidth) or not (@height = window.innerHeight or window.landheight)# or @width < @height
             $.timeout 100, -> window.app.initialize()
             return
             

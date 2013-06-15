@@ -22,7 +22,7 @@
                     AppMobi.device.setRotateOrientation("landscape");
                     AppMobi.device.setAutoRotate(false);
 
-                    // //manage power
+                    // manage power
                     // AppMobi.device.managePower(true,false);
 
                 	//any app-specific initialization
@@ -45,6 +45,13 @@
                 	return false;
                 };
                 document.addEventListener('touchmove', preventDefaultScroll, false);
+                
+                
+                //function onDeviceOrientationChange() {
+                //    AppMobi.display.useViewport(600,960);
+                //    AppMobi.device.setRotateOrientation("landscape");
+                //}
+                //document.addEventListener('appMobi.device.orientation.change', onDeviceOrientationChange, false);
         </script> 
 
         <link rel="stylesheet" type="text/css" href="css/index.css" />

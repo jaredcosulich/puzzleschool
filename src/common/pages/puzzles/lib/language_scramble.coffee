@@ -535,16 +535,17 @@ class languageScramble.ViewHelper
         return total
 
     resize: ->
-        letter = $(@$('.scrambled').find('.letter')[0])
+        letters = @$('.scrambled').find('.letter')
+        letter = $(letters[0])
         @letterFontSize = parseInt(letter.css('fontSize'))
         @sizeLetter(letter)
         
         targetHeight = @$('.scramble_content').height()
-        targetHeight = Math.min(targetHeight, window.innerHeight) if window.innerHeight 
-        targetHeight = Math.min(targetHeight, window.landheight) if window.landheight 
+        height = if window.innerHeight then window.innerHeight else window.landheight
+        targetHeight = Math.min(targetHeight, height)
 
         windowWidth = if window.AppMobi then window.innerWidth or window.landwidth else @$('.scramble_content').width()
-        maxFontSize = Math.min(windowWidth / 15, 66)
+        maxFontSize = Math.min(windowWidth / letters.length, 66)
         increment = Math.min(maxFontSize, @letterFontSize) - 1
         
         while increment >= 1
