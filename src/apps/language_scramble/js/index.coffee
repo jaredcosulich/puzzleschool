@@ -17,8 +17,6 @@ window.app =
                 @puzzleData = JSON.parse(data)
                 
         @puzzleData = {levels: {}} unless @puzzleData
-        # @puzzleData = {"levels":{"english_italian":{"top10words":{"of-di":5,"percentComplete":92,"and-e":5,"what-che":4,"the-il":5,"are-sono":5,"is-_":5,"not-non":4,"for-per":5,"a-un":5,"the-la":4}}},"lastLevelPlayed":"top10words"}
-        # @puzzleData = {levels: {}}
         
         @languages = "english_italian"
         @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]        
@@ -33,7 +31,7 @@ window.app =
             saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
 
         @initProgressMeter()
-        @initMenuButton()
+        @initMenus()
         @initKeyboard()
 
         @checkSize(50)
@@ -84,7 +82,7 @@ window.app =
         # )
         
         
-    initMenuButton: ->
+    initLevelSelectMenu: ->
         levelSelect = @$('#level_select_menu')
         startPosition = {}
         levelSelect.bind 'touchstart', (e) =>
@@ -166,6 +164,35 @@ window.app =
                 complete: => previous.bind 'touchstart.previous', => showPrevious()
         previous.bind 'touchstart.previous', => showPrevious()
     
+                
+        
+    
+    initMenus: ->
+        @activeMenu = 'level'
+        @menus = 
+            native: @$('#native_select_menu')
+            foreign: @$('#foreign_select_menu')
+            level: @$('#level_select_menu')
+        
+        for menu of @menus
+            menu = $(menu)
+            do (menu) =>
+                closeMenu = menu.find('.close_menu_button')
+                closeMenu.bind 'touchstart.close_menu', =>
+                    @$('document.body').one 'touchend.next', => closeMenu.removeClass('active')
+                    closeMenu.addClass('active')
+                    @$('.scramble_content').animate
+                        opacity: 1
+                        duration: 250
+
+                    menu.animate
+                        opacity: 0
+                        duration: 500
+                        complete: ->
+                            menu.css
+                                top: -1000
+                                left: -1000
+
         menu = @$('.menu_button')
         menu.bind 'touchstart.menu', =>
             @$('document.body').one 'touchend.next', => menu.removeClass('active')
@@ -173,31 +200,19 @@ window.app =
             @$('.scramble_content').animate
                 opacity: 0.25
                 duration: 250
-            
-            levelSelect.css
+
+            @menus[@activeMenu].css
                 opacity: 0
-                top: (@height - levelSelect.height()) / 2
-                left: (@width - levelSelect.width()) / 2
-            levelSelect.animate
+                top: (@height - @menus[@activeMenu].height()) / 2
+                left: (@width - @menus[@activeMenu].width()) / 2
+            @menus[@activeMenu].animate
                 opacity: 1
                 duration: 500
                 
+        # @initNativeMenu()
+        # @initForeignMenu()
+        @initLevelSelectMenu()
         
-        closeMenu = @$('#close_menu_button')
-        closeMenu.bind 'touchstart.close_menu', =>
-            @$('document.body').one 'touchend.next', => closeMenu.removeClass('active')
-            closeMenu.addClass('active')
-            @$('.scramble_content').animate
-                opacity: 1
-                duration: 250
-            
-            levelSelect.animate
-                opacity: 0
-                duration: 500
-                complete: ->
-                    levelSelect.css
-                        top: -1000
-                        left: -1000
                         
     initKeyboard: ->
         keyboard = @$('.keyboard')

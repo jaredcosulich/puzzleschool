@@ -196,7 +196,7 @@ equation.Equation = (function() {
   };
 
   Equation.prototype.display = function(html) {
-    return (html || '').replace(/\*/ig, '&middot;');
+    return (html || '').replace(/\*/ig, '<b>&middot;</b>');
   };
 
   Equation.prototype.read = function(html) {

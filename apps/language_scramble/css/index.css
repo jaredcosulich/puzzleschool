@@ -389,22 +389,6 @@ body {
   background-size: cover;
 }
 */
-.language_scramble .floating_message {
-    position: absolute;
-    top: -1000px;
-    left: -1000px;
-    opacity: 0;
-    text-align: center;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-    background: transparent url('images/menu_wood.jpg');
-    border: 3px solid #110E0C;
-    overflow: hidden;
-    z-index: 99;
-    width: 588px;
-    height: 588px;
-}
 #next_level .success {
     width: 240px;
     margin: 120px auto 24px auto;
@@ -469,9 +453,8 @@ body {
     left: -10000px;
 }
 
-.language_scramble .scramble_content .menu_button, .language_scramble #close_menu_button {
+.language_scramble .scramble_content .menu_button, .language_scramble .close_menu_button {
     display: block;
-    background-color: black;
     cursor: pointer;
 }
 
@@ -490,7 +473,7 @@ body {
     background-size: cover;
 }
 
-.language_scramble #close_menu_button {
+.language_scramble .close_menu_button {
     background: transparent url('images/menu_close.png');
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -503,8 +486,23 @@ body {
     height: 60px;
     content: "\00a0";
 }   
-
-.language_scramble #level_select_menu h2 {
+.language_scramble .floating_message {
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+    text-align: center;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    background: transparent url('images/menu_wood.jpg');
+    border: 3px solid #110E0C;
+    overflow: hidden;
+    z-index: 99;
+    width: 588px;
+    height: 588px;
+}
+.language_scramble .floating_message h2 {
     width: 9em;
     margin: 12px auto;
     font-weight: normal;

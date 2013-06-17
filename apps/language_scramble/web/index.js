@@ -45,7 +45,7 @@ window.app = {
       }
     });
     this.initProgressMeter();
-    this.initMenuButton();
+    this.initMenus();
     this.initKeyboard();
     this.checkSize(50);
     this.sizeElements();
@@ -87,8 +87,8 @@ window.app = {
   saveProgress: function(puzzleProgress) {
     return AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1);
   },
-  initMenuButton: function() {
-    var closeMenu, key, levelSelect, levelsAdded, levelsContainer, levelsGroup, menu, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
+  initLevelSelectMenu: function() {
+    var key, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
       _this = this;
     levelSelect = this.$('#level_select_menu');
     startPosition = {};
@@ -193,9 +193,47 @@ window.app = {
         }
       });
     };
-    previous.bind('touchstart.previous', function() {
+    return previous.bind('touchstart.previous', function() {
       return showPrevious();
     });
+  },
+  initMenus: function() {
+    var menu, _fn,
+      _this = this;
+    this.activeMenu = 'level';
+    this.menus = {
+      "native": this.$('#native_select_menu'),
+      foreign: this.$('#foreign_select_menu'),
+      level: this.$('#level_select_menu')
+    };
+    _fn = function(menu) {
+      var closeMenu;
+      closeMenu = menu.find('.close_menu_button');
+      return closeMenu.bind('touchstart.close_menu', function() {
+        _this.$('document.body').one('touchend.next', function() {
+          return closeMenu.removeClass('active');
+        });
+        closeMenu.addClass('active');
+        _this.$('.scramble_content').animate({
+          opacity: 1,
+          duration: 250
+        });
+        return menu.animate({
+          opacity: 0,
+          duration: 500,
+          complete: function() {
+            return menu.css({
+              top: -1000,
+              left: -1000
+            });
+          }
+        });
+      });
+    };
+    for (menu in this.menus) {
+      menu = $(menu);
+      _fn(menu);
+    }
     menu = this.$('.menu_button');
     menu.bind('touchstart.menu', function() {
       _this.$('document.body').one('touchend.next', function() {
@@ -206,37 +244,17 @@ window.app = {
         opacity: 0.25,
         duration: 250
       });
-      levelSelect.css({
+      _this.menus[_this.activeMenu].css({
         opacity: 0,
-        top: (_this.height - levelSelect.height()) / 2,
-        left: (_this.width - levelSelect.width()) / 2
+        top: (_this.height - _this.menus[_this.activeMenu].height()) / 2,
+        left: (_this.width - _this.menus[_this.activeMenu].width()) / 2
       });
-      return levelSelect.animate({
+      return _this.menus[_this.activeMenu].animate({
         opacity: 1,
         duration: 500
       });
     });
-    closeMenu = this.$('#close_menu_button');
-    return closeMenu.bind('touchstart.close_menu', function() {
-      _this.$('document.body').one('touchend.next', function() {
-        return closeMenu.removeClass('active');
-      });
-      closeMenu.addClass('active');
-      _this.$('.scramble_content').animate({
-        opacity: 1,
-        duration: 250
-      });
-      return levelSelect.animate({
-        opacity: 0,
-        duration: 500,
-        complete: function() {
-          return levelSelect.css({
-            top: -1000,
-            left: -1000
-          });
-        }
-      });
-    });
+    return this.initLevelSelectMenu();
   },
   initKeyboard: function() {
     var addBreak, addLetter, keyboard, letter, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,

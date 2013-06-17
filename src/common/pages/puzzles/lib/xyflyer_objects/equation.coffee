@@ -117,7 +117,7 @@ class equation.Equation
         area.append(@container)
         @addFirstDropArea()
         
-    display: (html) -> (html or '').replace(/\*/ig, '&middot;')
+    display: (html) -> (html or '').replace(/\*/ig, '<b>&middot;</b>')
     read: (html) -> (html or '').replace(/·/ig, '*')
      
     addFirstDropArea: ->

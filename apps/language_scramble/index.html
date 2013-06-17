@@ -15,22 +15,10 @@
         <script type="text/javascript" language="javascript">
                 // This event handler is fired once the AppMobi libraries are ready
                 function onDeviceReady() {
-                    //user AppMobi viewport
                     AppMobi.display.useViewport(600,960);
-
-                    //lock orientation
-                    AppMobi.device.setRotateOrientation("landscape");
-                    AppMobi.device.setAutoRotate(false);
-
-                    // manage power
-                    // AppMobi.device.managePower(true,false);
-
-                	//any app-specific initialization
+                    AppMobi.device.setAutoRotate(true);
         	        window.app.initialize();
-        	        
         	        AppMobi.device.hideStatusBar();
-                    
-        	        //hide splash screen
         			AppMobi.device.hideSplashScreen();
                 }
 
@@ -44,14 +32,7 @@
                 	window.scroll(0, 0);
                 	return false;
                 };
-                document.addEventListener('touchmove', preventDefaultScroll, false);
-                
-                
-                //function onDeviceOrientationChange() {
-                //    AppMobi.display.useViewport(600,960);
-                //    AppMobi.device.setRotateOrientation("landscape");
-                //}
-                //document.addEventListener('appMobi.device.orientation.change', onDeviceOrientationChange, false);
+                document.addEventListener('touchmove', preventDefaultScroll, false);                
         </script> 
 
         <link rel="stylesheet" type="text/css" href="css/index.css" />
@@ -97,8 +78,16 @@
             <p>Please email us to let us know you'd like us to add more levels</p>
             <p><a href='mailto:info@puzzleschool.com'>info@puzzleschool</a></p>
         </div>
+        <div id='native_select_menu' class='floating_message'>
+            <a class='close_menu_button'></a>
+            <h2 class='papered'>What is your native language?</h2>
+        </div>
+        <div id='foreign_select_menu' class='floating_message'>
+            <a class='close_menu_button'></a>
+            <h2 class='papered'>Select A Foreign Language</h2>
+        </div>
         <div id='level_select_menu' class='levels floating_message'>
-            <a id='close_menu_button'></a>
+            <a class='close_menu_button'></a>
             <h2 class='papered'>Select A Level</h2>
             <div class='levels_container'></div>
             <a class='navigation previous'></a>

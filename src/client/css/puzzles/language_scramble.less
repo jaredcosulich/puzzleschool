@@ -91,27 +91,30 @@ body {
     .level_progress_meter {
       width: 100%;
       position: absolute;
-      left: 0;
-      bottom: 12px;
+      left: 15px;
+      bottom: 15px;
       &::after {
           display: block;
           content: "\00a0";
-          width: 100%;
+          width: 927px;
           height: 30px;
           background: transparent url('/assets/images/puzzles/language_scramble/progress.png') no-repeat;
           margin-top: -12px;
           z-index: 3;
           position: absolute;
       }
-      .percent_complete {
-        display: block;
-        overflow: hidden;
-        float: left;
-        .pill(lighten(@green, 5%));
-        height: 15px;
-        .rounded(3px);  
-        margin-left: 21px;
-      }
+      .percent_complete_container {
+          overflow: hidden;
+          margin: 0 0 -9px 1px;
+          width: 921px;
+          .percent_complete {
+            float: left;
+            display: block;
+            .pill(lighten(@green, 5%));
+            height: 15px;
+            .rounded(3px);  
+          }
+       }
     }        
     
     
