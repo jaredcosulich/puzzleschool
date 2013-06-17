@@ -491,36 +491,46 @@ class languageScramble.ViewHelper
             container.width(containerWidth + 2)
             container.css(float: 'none', margin: 'auto')
             
+            centerWordGroups = (lg, rg) ->
+                rg = lg if not rg
+                containerRight = container.offset().left + container.offset().width
+                right = rg.offset().left + rg.offset().width
+                if (space = rg.children()[0])
+                    right += $(space).width() if space.className.indexOf('space') > -1
+                
+                unless right > containerRight
+                    lg.css(marginLeft: ((containerRight - right)/2))
+                    
             wordGroups = container.find('.word_group')
-            if wordGroups.length > 1
-                centerWordGroups = (lg, rg) ->
-                    rg = lg if not rg
-                    containerRight = container.offset().left + container.offset().width
-                    right = rg.offset().left + rg.offset().width
-                    if (space = rg.children()[0])
-                        right += $(space).width() if space.className.indexOf('space') > -1
-                    
-                    unless right > containerRight
-                        lg.css(marginLeft: ((containerRight - right)/2))
-                    
-                for wordGroup, index in wordGroups
-                    wordGroupOffsetTop = wordGroup.offsetTop or 1
-                    if currentOffsetTop and (currentOffsetTop != wordGroupOffsetTop)
-                        centerWordGroups(leftGroup, rightGroup)
-                        leftGroup = null
-                        rightGroup = null
-                        currentOffsetTop = null
-
-                    if not currentOffsetTop
-                        leftGroup = $(wordGroup)
-                        currentOffsetTop = wordGroupOffsetTop
-                    else
-                        rightGroup = $(wordGroup)
+            for wordGroup, index in wordGroups
+                wordGroupOffsetTop = wordGroup.offsetTop or 1
+                
+                letters = $(wordGroup).find('.letter') 
+                lastLetterOffset = null
+                for l in letters
+                    letter = $(l)
+                    if lastLetterOffset and letter.offset().top != lastLetterOffset
+                        nextLineLetter = $(letters[Math.round(letters.length / 2)])
+                        nextLineLetter.before('<br/>')
+                        nextLineLetter.css(marginLeft: letter.width()/2) if letters.length % 2 == 1
+                    lastLetterOffset = letter.offset().top
                         
-                centerWordGroups(leftGroup, rightGroup)
-                leftGroup = null
-                rightGroup = null
-                currentOffsetTop = null
+                if currentOffsetTop and (currentOffsetTop != wordGroupOffsetTop)
+                    centerWordGroups(leftGroup, rightGroup)
+                    leftGroup = null
+                    rightGroup = null
+                    currentOffsetTop = null
+
+                if not currentOffsetTop
+                    leftGroup = $(wordGroup)
+                    currentOffsetTop = wordGroupOffsetTop
+                else
+                    rightGroup = $(wordGroup)
+                        
+            centerWordGroups(leftGroup, rightGroup)
+            leftGroup = null
+            rightGroup = null
+            currentOffsetTop = null
             
             container.height(container.height())
 
@@ -534,18 +544,29 @@ class languageScramble.ViewHelper
             total += $(container).height() + 15
         return total
 
+    maxWordGroupLines: (container, letter) ->
+        container = ".#{container}"
+        letter = $(@$(container).find('.letter')[0]) unless letter
+        max = 0
+        letterHeight = letter.height()
+        for wordGroup in @$("#{container} .word_group")
+            lines = $(wordGroup).height() / letterHeight
+            max = lines if max < lines
+        
+        return parseInt(max)
+
     resize: ->
         letters = @$('.scrambled').find('.letter')
         letter = $(letters[0])
         @letterFontSize = parseInt(letter.css('fontSize'))
         @sizeLetter(letter)
         
-        targetHeight = @$('.scramble_content').height()
+        targetHeight = @$('.scramble_content').height() - 60
         height = if window.innerHeight then window.innerHeight else window.landheight
         targetHeight = Math.min(targetHeight, height)
 
         windowWidth = if window.AppMobi then window.innerWidth or window.landwidth else @$('.scramble_content').width()
-        maxFontSize = Math.min(windowWidth / letters.length, 66)
+        maxFontSize = 66
         increment = Math.min(maxFontSize, @letterFontSize) - 1
         
         while increment >= 1
@@ -560,17 +581,21 @@ class languageScramble.ViewHelper
         while @containerHeights() > targetHeight
             @letterFontSize -= 1
             @sizeLetter(letter)
-        
+
+        while @maxWordGroupLines('guesses', letter) > 1
+            @letterFontSize -= 1
+            @sizeLetter(letter)
+
         if @letterFontSize <= 0
             @letterFontSize = 1
             @sizeLetter(letter)
-        
+
         if @letterFontSize >= maxFontSize
             @letterFontSize = maxFontSize
             @sizeLetter(letter)
 
         @centerContainers()
-        @setSectionPadding()
+        @setSectionPadding(targetHeight)
 
     sizeLetter: (letter) ->
         @$('.guesses, .scrambled').css(fontSize: "#{@letterFontSize}px")
@@ -584,14 +609,15 @@ class languageScramble.ViewHelper
             height: @letterDim
         @$('.guesses, .scrambled').find('.space').css(width: @letterDim / 2)
 
-    setSectionPadding: ->
+    setSectionPadding: (targetHeight) ->
         @$('.section').css(padding: 0)
         buffer = if @activeLevel.match('Hard') then 180 else 60
-        totalHeight = 0
+        totalHeight = 0        
         totalHeight += $(section).height() for section in @$('.section')
-        padding = (@$('.scramble_content').height() - buffer - totalHeight)/6
-        padding = 45 if padding > 45
+        totalPadding = (targetHeight - buffer - totalHeight)
+        padding = Math.min(totalPadding/6, 30)
         @$('.section').css(padding: "#{padding}px 0")
+        @$('.display_words').css(paddingTop: "#{padding + ((totalPadding - (padding*6))/2)}")
 
     createWordGroup: ->
         wordGroup = $(document.createElement("DIV"))

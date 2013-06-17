@@ -53,7 +53,7 @@ task 'build:file', 'Build a file', ->
         #'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
         # 'coffee --compile --bare --output build/common/pages/puzzles/lib/xyflyer_objects src/common/pages/puzzles/lib/xyflyer_objects/levels.coffee'
         #'coffee --compile --bare --output build/common/pages/puzzles/lib/word_problem_objects src/common/pages/puzzles/lib/word_problem_objects/interaction.coffee'
-        #'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/xyflyer_editor.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/language_scramble.coffee'
         'lessc src/client/css/puzzles/language_scramble.less build/client/css/puzzles/language_scramble.css'
         #'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
         'cp -r src/common/templates build/common'
@@ -61,7 +61,7 @@ task 'build:file', 'Build a file', ->
 
 task 'build:language_scramble', 'Build the language scramble app', ->
     execCmds [
-        'cake build:site'
+        'cake build:file'
         'coffee --compile --bare --output apps/language_scramble/web src/apps/language_scramble/js/*.coffee'
         'cp build/common/pages/puzzles/lib/language_scramble.js apps/language_scramble/web/language_scramble.js'
         'cp ender.js apps/language_scramble/web/ender.js'

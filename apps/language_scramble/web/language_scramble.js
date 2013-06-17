@@ -720,7 +720,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.centerContainers = function(containers) {
-    var centerWordGroups, container, containerWidth, currentOffsetTop, index, leftGroup, rightGroup, wordGroup, wordGroupOffsetTop, wordGroups, _i, _j, _len, _len1;
+    var centerWordGroups, container, containerWidth, currentOffsetTop, index, l, lastLetterOffset, leftGroup, letter, letters, nextLineLetter, rightGroup, wordGroup, wordGroupOffsetTop, wordGroups, _i, _j, _k, _len, _len1, _len2;
     if (containers == null) {
       containers = this.$('.container');
     }
@@ -733,47 +733,61 @@ languageScramble.ViewHelper = (function() {
         float: 'none',
         margin: 'auto'
       });
-      wordGroups = container.find('.word_group');
-      if (wordGroups.length > 1) {
-        centerWordGroups = function(lg, rg) {
-          var containerRight, right, space;
-          if (!rg) {
-            rg = lg;
-          }
-          containerRight = container.offset().left + container.offset().width;
-          right = rg.offset().left + rg.offset().width;
-          if ((space = rg.children()[0])) {
-            if (space.className.indexOf('space') > -1) {
-              right += $(space).width();
-            }
-          }
-          if (!(right > containerRight)) {
-            return lg.css({
-              marginLeft: (containerRight - right) / 2
-            });
-          }
-        };
-        for (index = _j = 0, _len1 = wordGroups.length; _j < _len1; index = ++_j) {
-          wordGroup = wordGroups[index];
-          wordGroupOffsetTop = wordGroup.offsetTop || 1;
-          if (currentOffsetTop && (currentOffsetTop !== wordGroupOffsetTop)) {
-            centerWordGroups(leftGroup, rightGroup);
-            leftGroup = null;
-            rightGroup = null;
-            currentOffsetTop = null;
-          }
-          if (!currentOffsetTop) {
-            leftGroup = $(wordGroup);
-            currentOffsetTop = wordGroupOffsetTop;
-          } else {
-            rightGroup = $(wordGroup);
+      centerWordGroups = function(lg, rg) {
+        var containerRight, right, space;
+        if (!rg) {
+          rg = lg;
+        }
+        containerRight = container.offset().left + container.offset().width;
+        right = rg.offset().left + rg.offset().width;
+        if ((space = rg.children()[0])) {
+          if (space.className.indexOf('space') > -1) {
+            right += $(space).width();
           }
         }
-        centerWordGroups(leftGroup, rightGroup);
-        leftGroup = null;
-        rightGroup = null;
-        currentOffsetTop = null;
+        if (!(right > containerRight)) {
+          return lg.css({
+            marginLeft: (containerRight - right) / 2
+          });
+        }
+      };
+      wordGroups = container.find('.word_group');
+      for (index = _j = 0, _len1 = wordGroups.length; _j < _len1; index = ++_j) {
+        wordGroup = wordGroups[index];
+        wordGroupOffsetTop = wordGroup.offsetTop || 1;
+        letters = $(wordGroup).find('.letter');
+        lastLetterOffset = null;
+        for (_k = 0, _len2 = letters.length; _k < _len2; _k++) {
+          l = letters[_k];
+          letter = $(l);
+          if (lastLetterOffset && letter.offset().top !== lastLetterOffset) {
+            nextLineLetter = $(letters[Math.round(letters.length / 2)]);
+            nextLineLetter.before('<br/>');
+            if (letters.length % 2 === 1) {
+              nextLineLetter.css({
+                marginLeft: letter.width() / 2
+              });
+            }
+          }
+          lastLetterOffset = letter.offset().top;
+        }
+        if (currentOffsetTop && (currentOffsetTop !== wordGroupOffsetTop)) {
+          centerWordGroups(leftGroup, rightGroup);
+          leftGroup = null;
+          rightGroup = null;
+          currentOffsetTop = null;
+        }
+        if (!currentOffsetTop) {
+          leftGroup = $(wordGroup);
+          currentOffsetTop = wordGroupOffsetTop;
+        } else {
+          rightGroup = $(wordGroup);
+        }
       }
+      centerWordGroups(leftGroup, rightGroup);
+      leftGroup = null;
+      rightGroup = null;
+      currentOffsetTop = null;
       container.height(container.height());
     }
     return this.$('.guesses, .scrambled').find('.guess, .letter, .blank_letter').css({
@@ -793,17 +807,36 @@ languageScramble.ViewHelper = (function() {
     return total;
   };
 
+  ViewHelper.prototype.maxWordGroupLines = function(container, letter) {
+    var letterHeight, lines, max, wordGroup, _i, _len, _ref;
+    container = "." + container;
+    if (!letter) {
+      letter = $(this.$(container).find('.letter')[0]);
+    }
+    max = 0;
+    letterHeight = letter.height();
+    _ref = this.$("" + container + " .word_group");
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      wordGroup = _ref[_i];
+      lines = $(wordGroup).height() / letterHeight;
+      if (max < lines) {
+        max = lines;
+      }
+    }
+    return parseInt(max);
+  };
+
   ViewHelper.prototype.resize = function() {
     var height, increase, increment, letter, letters, maxFontSize, targetHeight, windowWidth;
     letters = this.$('.scrambled').find('.letter');
     letter = $(letters[0]);
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
-    targetHeight = this.$('.scramble_content').height();
+    targetHeight = this.$('.scramble_content').height() - 60;
     height = window.innerHeight ? window.innerHeight : window.landheight;
     targetHeight = Math.min(targetHeight, height);
     windowWidth = window.AppMobi ? window.innerWidth || window.landwidth : this.$('.scramble_content').width();
-    maxFontSize = Math.min(windowWidth / letters.length, 66);
+    maxFontSize = 66;
     increment = Math.min(maxFontSize, this.letterFontSize) - 1;
     while (increment >= 1) {
       if (increase && this.letterFontSize >= maxFontSize) {
@@ -823,6 +856,10 @@ languageScramble.ViewHelper = (function() {
       this.letterFontSize -= 1;
       this.sizeLetter(letter);
     }
+    while (this.maxWordGroupLines('guesses', letter) > 1) {
+      this.letterFontSize -= 1;
+      this.sizeLetter(letter);
+    }
     if (this.letterFontSize <= 0) {
       this.letterFontSize = 1;
       this.sizeLetter(letter);
@@ -832,7 +869,7 @@ languageScramble.ViewHelper = (function() {
       this.sizeLetter(letter);
     }
     this.centerContainers();
-    return this.setSectionPadding();
+    return this.setSectionPadding(targetHeight);
   };
 
   ViewHelper.prototype.sizeLetter = function(letter) {
@@ -855,8 +892,8 @@ languageScramble.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.setSectionPadding = function() {
-    var buffer, padding, section, totalHeight, _i, _len, _ref;
+  ViewHelper.prototype.setSectionPadding = function(targetHeight) {
+    var buffer, padding, section, totalHeight, totalPadding, _i, _len, _ref;
     this.$('.section').css({
       padding: 0
     });
@@ -867,12 +904,13 @@ languageScramble.ViewHelper = (function() {
       section = _ref[_i];
       totalHeight += $(section).height();
     }
-    padding = (this.$('.scramble_content').height() - buffer - totalHeight) / 6;
-    if (padding > 45) {
-      padding = 45;
-    }
-    return this.$('.section').css({
+    totalPadding = targetHeight - buffer - totalHeight;
+    padding = Math.min(totalPadding / 6, 30);
+    this.$('.section').css({
       padding: "" + padding + "px 0"
+    });
+    return this.$('.display_words').css({
+      paddingTop: "" + (padding + ((totalPadding - (padding * 6)) / 2))
     });
   };
 
