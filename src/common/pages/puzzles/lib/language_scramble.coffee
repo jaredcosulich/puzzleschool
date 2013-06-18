@@ -343,19 +343,21 @@ class languageScramble.ViewHelper
 
         displayWords.html("<span class='words papered'>#{sentence}</span>")
         @displayScramble()
-
+        
     displayScramble: ->
         @initializingScramble = true
+        @el.addClass('initializing_scramble')
         @initScrambleAreas('scrambled')
         @initScrambleAreas('guesses')
-        @resize()
-        @assignColors('scrambled')
-        @assignColors('guesses')
-        @scrambleScrambleArea()
+        @resize =>
+            @assignColors('scrambled')
+            @assignColors('guesses')
+            @scrambleScrambleArea()
 
-        @$('.scrambled .letter').addClass('sized')
+            @$('.scrambled .letter').addClass('sized')
         
-        @initializingScramble = false
+            @el.removeClass('initializing_scramble')
+            @initializingScramble = false
     
     selectOption: () ->
         @orderedOptions or= []
@@ -499,7 +501,7 @@ class languageScramble.ViewHelper
                     right += $(space).width() if space.className.indexOf('space') > -1
                 
                 unless right > containerRight
-                    lg.css(marginLeft: ((containerRight - right)/2))
+                    lg.css(marginLeft: ((containerRight - right)/2) - 3)
                     
             wordGroups = container.find('.word_group')
             for wordGroup, index in wordGroups
@@ -555,47 +557,62 @@ class languageScramble.ViewHelper
         
         return parseInt(max)
 
-    resize: ->
+    resize: (callback, targetHeight, increment, maxFontSize=66) ->
         letters = @$('.scrambled').find('.letter')
         letter = $(letters[0])
+
         @letterFontSize = parseInt(letter.css('fontSize'))
         @sizeLetter(letter)
         
-        targetHeight = @$('.scramble_content').height() - 60
-        height = if window.innerHeight then window.innerHeight else window.landheight
-        targetHeight = Math.min(targetHeight, height)
+        if not targetHeight
+            targetHeight = @$('.scramble_content').height() - 30
+            height = if window.innerHeight then window.innerHeight else window.landheight
+            targetHeight = Math.min(targetHeight, height)
 
-        windowWidth = if window.AppMobi then window.innerWidth or window.landwidth else @$('.scramble_content').width()
-        maxFontSize = 66
-        increment = Math.min(maxFontSize, @letterFontSize) - 1
+        transitionSize = (size, increment) =>
+            @letterFontSize = size
+            @sizeLetter(letter)
+            $.timeout 5, => @resize(callback, targetHeight, increment, maxFontSize)
         
-        while increment >= 1
-            break if increase and @letterFontSize >= maxFontSize
+        increment = Math.min(maxFontSize, @letterFontSize) - 1 if not increment    
+        if increment >= 1 and not (increase and @letterFontSize >= maxFontSize)
             increase = @containerHeights() < targetHeight
             increment = increment / 2
-            while increase == (@containerHeights() < targetHeight)
-                break if (increase and @letterFontSize >= maxFontSize)
-                @letterFontSize += increment * (if increase then 1 else -1)
-                @sizeLetter(letter)
+            if increase == (@containerHeights() < targetHeight) and not (increase and @letterFontSize >= maxFontSize)
+                transitionSize(@letterFontSize + increment * (if increase then 1 else -1), increment)
+                return
         
-        while @containerHeights() > targetHeight
-            @letterFontSize -= 1
-            @sizeLetter(letter)
-
-        while @maxWordGroupLines('guesses', letter) > 1
-            @letterFontSize -= 1
-            @sizeLetter(letter)
+        if @containerHeights() > targetHeight or @maxWordGroupLines('guesses', letter) > 1
+            transitionSize(@letterFontSize - 1, -1)
+            return
 
         if @letterFontSize <= 0
-            @letterFontSize = 1
-            @sizeLetter(letter)
+            transitionSize(1, -1)
+            return
 
-        if @letterFontSize >= maxFontSize
-            @letterFontSize = maxFontSize
-            @sizeLetter(letter)
+        if @letterFontSize > maxFontSize
+            transitionSize(maxFontSize, -1)
+            return
 
-        @centerContainers()
-        @setSectionPadding(targetHeight)
+        
+
+        @resizeDisplayWords =>
+            @centerContainers()
+            @setSectionPadding(targetHeight, 30)
+            callback()
+
+
+    resizeDisplayWords: (callback) ->
+        displayWords = @$('.display_words')
+        padding = displayWords.css('padding')
+        displayWords.css(padding: 0)
+        lineHeight = parseInt(displayWords.find('span').css('lineHeight'))
+        if displayWords.height() > lineHeight
+            fontSize = parseInt(displayWords.css('fontSize'))
+            displayWords.css(fontSize: fontSize - 1)
+            $.timeout 5, => @resizeDisplayWords(callback)
+            return
+        callback()
 
     sizeLetter: (letter) ->
         @$('.guesses, .scrambled').css(fontSize: "#{@letterFontSize}px")
@@ -609,7 +626,7 @@ class languageScramble.ViewHelper
             height: @letterDim
         @$('.guesses, .scrambled').find('.space').css(width: @letterDim / 2)
 
-    setSectionPadding: (targetHeight) ->
+    setSectionPadding: (targetHeight, bufferTop) ->
         @$('.section').css(padding: 0)
         buffer = if @activeLevel.match('Hard') then 180 else 60
         totalHeight = 0        
@@ -617,7 +634,7 @@ class languageScramble.ViewHelper
         totalPadding = (targetHeight - buffer - totalHeight)
         padding = Math.min(totalPadding/6, 30)
         @$('.section').css(padding: "#{padding}px 0")
-        @$('.display_words').css(paddingTop: "#{padding + ((totalPadding - (padding*6))/2)}")
+        @$('.display_words').css(paddingTop: "#{bufferTop + padding + ((totalPadding - (padding*6))/2)}")
 
     createWordGroup: ->
         wordGroup = $(document.createElement("DIV"))
@@ -775,9 +792,9 @@ class languageScramble.ViewHelper
     modifyScramble: (word) ->
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
         add = switch word.length
-            when 1,2,3,4,5 then 3
-            when 6 then 2
-            when 7 then 1
+            when 1,2 then 3
+            when 3,4 then 2
+            when 5,6 then 1
             else  0
 
         for i in [0...add]

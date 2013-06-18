@@ -512,15 +512,19 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.displayScramble = function() {
+    var _this = this;
     this.initializingScramble = true;
+    this.el.addClass('initializing_scramble');
     this.initScrambleAreas('scrambled');
     this.initScrambleAreas('guesses');
-    this.resize();
-    this.assignColors('scrambled');
-    this.assignColors('guesses');
-    this.scrambleScrambleArea();
-    this.$('.scrambled .letter').addClass('sized');
-    return this.initializingScramble = false;
+    return this.resize(function() {
+      _this.assignColors('scrambled');
+      _this.assignColors('guesses');
+      _this.scrambleScrambleArea();
+      _this.$('.scrambled .letter').addClass('sized');
+      _this.el.removeClass('initializing_scramble');
+      return _this.initializingScramble = false;
+    });
   };
 
   ViewHelper.prototype.selectOption = function() {
@@ -747,7 +751,7 @@ languageScramble.ViewHelper = (function() {
         }
         if (!(right > containerRight)) {
           return lg.css({
-            marginLeft: (containerRight - right) / 2
+            marginLeft: ((containerRight - right) / 2) - 3
           });
         }
       };
@@ -826,50 +830,78 @@ languageScramble.ViewHelper = (function() {
     return parseInt(max);
   };
 
-  ViewHelper.prototype.resize = function() {
-    var height, increase, increment, letter, letters, maxFontSize, targetHeight, windowWidth;
+  ViewHelper.prototype.resize = function(callback, targetHeight, increment, maxFontSize) {
+    var height, increase, letter, letters, transitionSize,
+      _this = this;
+    if (maxFontSize == null) {
+      maxFontSize = 66;
+    }
     letters = this.$('.scrambled').find('.letter');
     letter = $(letters[0]);
     this.letterFontSize = parseInt(letter.css('fontSize'));
     this.sizeLetter(letter);
-    targetHeight = this.$('.scramble_content').height() - 60;
-    height = window.innerHeight ? window.innerHeight : window.landheight;
-    targetHeight = Math.min(targetHeight, height);
-    windowWidth = window.AppMobi ? window.innerWidth || window.landwidth : this.$('.scramble_content').width();
-    maxFontSize = 66;
-    increment = Math.min(maxFontSize, this.letterFontSize) - 1;
-    while (increment >= 1) {
-      if (increase && this.letterFontSize >= maxFontSize) {
-        break;
-      }
+    if (!targetHeight) {
+      targetHeight = this.$('.scramble_content').height() - 30;
+      height = window.innerHeight ? window.innerHeight : window.landheight;
+      targetHeight = Math.min(targetHeight, height);
+    }
+    transitionSize = function(size, increment) {
+      _this.letterFontSize = size;
+      _this.sizeLetter(letter);
+      return $.timeout(5, function() {
+        return _this.resize(callback, targetHeight, increment, maxFontSize);
+      });
+    };
+    if (!increment) {
+      increment = Math.min(maxFontSize, this.letterFontSize) - 1;
+    }
+    if (increment >= 1 && !(increase && this.letterFontSize >= maxFontSize)) {
       increase = this.containerHeights() < targetHeight;
       increment = increment / 2;
-      while (increase === (this.containerHeights() < targetHeight)) {
-        if (increase && this.letterFontSize >= maxFontSize) {
-          break;
-        }
-        this.letterFontSize += increment * (increase ? 1 : -1);
-        this.sizeLetter(letter);
+      if (increase === (this.containerHeights() < targetHeight) && !(increase && this.letterFontSize >= maxFontSize)) {
+        transitionSize(this.letterFontSize + increment * (increase ? 1 : -1), increment);
+        return;
       }
     }
-    while (this.containerHeights() > targetHeight) {
-      this.letterFontSize -= 1;
-      this.sizeLetter(letter);
-    }
-    while (this.maxWordGroupLines('guesses', letter) > 1) {
-      this.letterFontSize -= 1;
-      this.sizeLetter(letter);
+    if (this.containerHeights() > targetHeight || this.maxWordGroupLines('guesses', letter) > 1) {
+      transitionSize(this.letterFontSize - 1, -1);
+      return;
     }
     if (this.letterFontSize <= 0) {
-      this.letterFontSize = 1;
-      this.sizeLetter(letter);
+      transitionSize(1, -1);
+      return;
     }
-    if (this.letterFontSize >= maxFontSize) {
-      this.letterFontSize = maxFontSize;
-      this.sizeLetter(letter);
+    if (this.letterFontSize > maxFontSize) {
+      transitionSize(maxFontSize, -1);
+      return;
     }
-    this.centerContainers();
-    return this.setSectionPadding(targetHeight);
+    return this.resizeDisplayWords(function() {
+      _this.centerContainers();
+      _this.setSectionPadding(targetHeight, 30);
+      return callback();
+    });
+  };
+
+  ViewHelper.prototype.resizeDisplayWords = function(callback) {
+    var displayWords, fontSize, lineHeight, padding,
+      _this = this;
+    displayWords = this.$('.display_words');
+    padding = displayWords.css('padding');
+    displayWords.css({
+      padding: 0
+    });
+    lineHeight = parseInt(displayWords.find('span').css('lineHeight'));
+    if (displayWords.height() > lineHeight) {
+      fontSize = parseInt(displayWords.css('fontSize'));
+      displayWords.css({
+        fontSize: fontSize - 1
+      });
+      $.timeout(5, function() {
+        return _this.resizeDisplayWords(callback);
+      });
+      return;
+    }
+    return callback();
   };
 
   ViewHelper.prototype.sizeLetter = function(letter) {
@@ -892,7 +924,7 @@ languageScramble.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.setSectionPadding = function(targetHeight) {
+  ViewHelper.prototype.setSectionPadding = function(targetHeight, bufferTop) {
     var buffer, padding, section, totalHeight, totalPadding, _i, _len, _ref;
     this.$('.section').css({
       padding: 0
@@ -910,7 +942,7 @@ languageScramble.ViewHelper = (function() {
       padding: "" + padding + "px 0"
     });
     return this.$('.display_words').css({
-      paddingTop: "" + (padding + ((totalPadding - (padding * 6)) / 2))
+      paddingTop: "" + (bufferTop + padding + ((totalPadding - (padding * 6)) / 2))
     });
   };
 
@@ -1152,13 +1184,12 @@ languageScramble.ViewHelper = (function() {
       switch (word.length) {
         case 1:
         case 2:
+          return 3;
         case 3:
         case 4:
-        case 5:
-          return 3;
-        case 6:
           return 2;
-        case 7:
+        case 5:
+        case 6:
           return 1;
         default:
           return 0;

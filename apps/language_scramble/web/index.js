@@ -257,7 +257,7 @@ window.app = {
     return this.initLevelSelectMenu();
   },
   initKeyboard: function() {
-    var addBreak, addLetter, keyboard, letter, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+    var addBreak, addLetter, keyboard, letter, _i, _len, _ref,
       _this = this;
     keyboard = this.$('.keyboard');
     addLetter = function(letter) {
@@ -268,21 +268,9 @@ window.app = {
     addBreak = function() {
       return keyboard.append('<br/>');
     };
-    _ref = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&lsaquo;'];
+    _ref = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '&lsaquo;'];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       letter = _ref[_i];
-      addLetter(letter);
-    }
-    addBreak();
-    _ref1 = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      letter = _ref1[_j];
-      addLetter(letter);
-    }
-    addBreak();
-    _ref2 = ['z', 'x', 'c', 'v', 'b', 'n', 'm'];
-    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-      letter = _ref2[_k];
       addLetter(letter);
     }
     return keyboard.find('.letter').bind('touchstart.letter', function(e) {

@@ -18,7 +18,14 @@ body {
 }
 .language_scramble {
   background-color: #fafafa;
+  transition: opacity 0.5s ease;
 }
+
+.language_scramble.initializing_scramble {
+    visibility: hidden;
+    opacity: 0;
+}
+
 .papered {
   background-image: url('images/paper-middle.png');
   background-position: center 12px;
@@ -590,7 +597,7 @@ body {
 
 .language_scramble .keyboard_container {
     position: absolute;
-    top: 360px;
+    bottom: 45px;
     left: 0px; 
 }
 .language_scramble .hide_keyboard .keyboard_container {

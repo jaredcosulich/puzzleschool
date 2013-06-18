@@ -220,11 +220,10 @@ window.app =
             color = if letter.match(/&.*;/) then 'red' else 'blue'
             keyboard.append("<a class='letter'><span class='#{color}_button'>#{letter}</span></a>")
         addBreak = -> keyboard.append('<br/>')
-        addLetter(letter) for letter in ['q','w','e','r','t','y','u','i','o','p','&lsaquo;']
-        addBreak()
-        addLetter(letter) for letter in ['a','s','d','f','g','h','j','k','l']
-        addBreak()
-        addLetter(letter) for letter in ['z','x','c','v','b','n','m']
+        addLetter(letter) for letter in [
+            'a','b','c','d','e','f','g','h','i','j','k','l','m','n',
+            'o','p','q','r','s','t','u','v','w','x','y','z','&lsaquo;'
+        ]
         keyboard.find('.letter').bind 'touchstart.letter', (e) =>
             letter = $(e.currentTarget)
             letter.addClass('active')

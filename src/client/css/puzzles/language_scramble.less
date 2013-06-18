@@ -11,6 +11,11 @@ body {
     margin-bottom: 60px;
     position: relative;
     .rounded(12px);
+    transition: opacity 0.5s ease;
+
+    &.initializing_scramble {
+        opacity: 0;
+    }
 
     .header {
         padding: 6px 0;

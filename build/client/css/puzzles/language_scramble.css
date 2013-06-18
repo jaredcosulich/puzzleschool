@@ -9,6 +9,7 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
+  transition: opacity 0.5s ease;
   /*    &.foreign .scramble_content {
         background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
     }  
@@ -23,6 +24,9 @@ body {
 
   /* iPhone [portrait + landscape] */
 
+}
+.language_scramble.initializing_scramble {
+  opacity: 0;
 }
 .language_scramble .header {
   padding: 6px 0;
