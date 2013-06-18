@@ -408,7 +408,6 @@ class languageScramble.ViewHelper
         shuffledOptions = shuffle(optionsToAdd[level])
         @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
 
-        level = 6
         switch level  
             when 6
                 @activeLevel = 'foreignHard'

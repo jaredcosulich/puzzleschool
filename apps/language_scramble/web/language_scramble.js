@@ -621,7 +621,6 @@ languageScramble.ViewHelper = (function() {
       option = _ref1[_m];
       this.orderedOptions.push(option);
     }
-    level = 6;
     switch (level) {
       case 6:
         this.activeLevel = 'foreignHard';
