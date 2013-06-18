@@ -490,6 +490,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.newScramble = function() {
     var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
     this.initializingScramble = true;
+    this.el.addClass('initializing_scramble');
     this.answerTimes || (this.answerTimes = []);
     this.answerTimes.push(new Date());
     this.lettersAdded = [];
@@ -519,8 +520,6 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.displayScramble = function() {
     var _this = this;
-    this.initializingScramble = true;
-    this.el.addClass('initializing_scramble');
     this.initScrambleAreas('scrambled');
     this.initScrambleAreas('guesses');
     return this.resize(function() {
@@ -1244,7 +1243,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.setProgress = function() {
     var _this = this;
     if (!this.$(".progress_meter .bar ." + this.level.data[0].id).length) {
-      this.$('.progress_meter').animate({
+      return this.$('.progress_meter').animate({
         opacity: 0,
         duration: 300,
         complete: function() {
@@ -1273,15 +1272,13 @@ languageScramble.ViewHelper = (function() {
         }
       });
     } else {
-      this.updateProgress();
+      return this.updateProgress();
     }
-    return this.setLevelProgress();
   };
 
   ViewHelper.prototype.updateProgress = function() {
-    var id, level, scrambleInfo, _i, _len, _ref, _results;
+    var id, level, scrambleInfo, _i, _len, _ref;
     _ref = this.level.data;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       scrambleInfo = _ref[_i];
       id = scrambleInfo.id;
@@ -1290,16 +1287,16 @@ languageScramble.ViewHelper = (function() {
         if (level > this.maxLevel) {
           level = this.maxLevel;
         }
-        _results.push(this.$(".progress_meter .bar ." + id).css({
+        this.$(".progress_meter .bar ." + id).css({
           opacity: 1 - ((1 / this.maxLevel) * level)
-        }));
+        });
       } else {
-        _results.push(this.$(".progress_meter .bar ." + id).css({
+        this.$(".progress_meter .bar ." + id).css({
           opacity: 1
-        }));
+        });
       }
     }
-    return _results;
+    return this.setLevelProgress();
   };
 
   ViewHelper.prototype.next = function() {
@@ -1349,13 +1346,7 @@ languageScramble.ViewHelper = (function() {
       $('#clickarea').unbind('keyup.shownext');
       _this.setProgress();
       _this.saveLevel();
-      return _this.$('.display_words, .scrambled, .guesses').animate({
-        opacity: 0,
-        duration: 300,
-        complete: function() {
-          return displayNext();
-        }
-      });
+      return displayNext();
     };
     displayNext = function() {
       if (guessAnimationOngoing) {
@@ -1364,13 +1355,10 @@ languageScramble.ViewHelper = (function() {
       }
       _this.$('.scrambled, .guesses').css({
         width: null,
-        height: null
+        height: null,
+        opacity: null
       });
-      _this.newScramble();
-      return _this.$('.display_words, .scrambled, .guesses').animate({
-        opacity: 1,
-        duration: 300
-      });
+      return _this.newScramble();
     };
     this.$('.guesses').animate({
       opacity: 0,

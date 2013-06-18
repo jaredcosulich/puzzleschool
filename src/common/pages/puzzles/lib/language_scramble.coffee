@@ -318,6 +318,8 @@ class languageScramble.ViewHelper
         
     newScramble: ->
         @initializingScramble = true
+        @el.addClass('initializing_scramble')
+        
         @answerTimes or= []
         @answerTimes.push(new Date()) 
 
@@ -348,8 +350,6 @@ class languageScramble.ViewHelper
         @displayScramble()
         
     displayScramble: ->
-        @initializingScramble = true
-        @el.addClass('initializing_scramble')
         @initScrambleAreas('scrambled')
         @initScrambleAreas('guesses')
         @resize =>
@@ -854,7 +854,7 @@ class languageScramble.ViewHelper
                             duration: 300
         else
             @updateProgress()
-        @setLevelProgress()
+        
     
     updateProgress: ->
         for scrambleInfo in @level.data
@@ -865,6 +865,7 @@ class languageScramble.ViewHelper
                 @$(".progress_meter .bar .#{id}").css(opacity: 1 - ((1/@maxLevel) * level))
             else
                 @$(".progress_meter .bar .#{id}").css(opacity: 1)
+        @setLevelProgress()
     
     next: () ->
         @initializingScramble = true
@@ -910,21 +911,15 @@ class languageScramble.ViewHelper
             $('#clickarea').unbind 'keyup.shownext'
             @setProgress()
             @saveLevel()
-            @$('.display_words, .scrambled, .guesses').animate
-                opacity: 0
-                duration: 300
-                complete: () => displayNext()
+            displayNext()
                     
         displayNext = =>
             if guessAnimationOngoing
                 $.timeout 10, displayNext
                 return
                 
-            @$('.scrambled, .guesses').css(width: null, height: null)
+            @$('.scrambled, .guesses').css(width: null, height: null, opacity: null)
             @newScramble()
-            @$('.display_words, .scrambled, .guesses').animate
-                opacity: 1
-                duration: 300            
 
         @$('.guesses').animate
             opacity: 0

@@ -18,14 +18,17 @@ body {
 }
 .language_scramble {
   background-color: #fafafa;
-  transition: opacity 0.5s ease;
 }
-
-.language_scramble.initializing_scramble {
-    visibility: hidden;
-    opacity: 0;
+.language_scramble .guesses
+.language_scramble .scrambled,
+.language_scramble .display_words {
+    transition: opacity 0.25s ease;
 }
-
+.language_scramble.initializing_scramble .guesses,
+.language_scramble.initializing_scramble .scrambled,
+.language_scramble.initializing_scramble .display_words {
+    opacity: 0;    
+}
 .papered {
   background-image: url('images/paper-middle.png');
   background-position: center 12px;
@@ -414,6 +417,10 @@ body {
   left: 15px;
   bottom: 15px;
 }
+.language_scramble.portrait .level_progress_meter {
+  bottom: 21px;
+  left: 21px;
+}
 .language_scramble .level_progress_meter::after {
   display: block;
   content: "\00a0";
@@ -424,10 +431,19 @@ body {
   z-index: 3;
   position: absolute;
 }
+.language_scramble.portrait .level_progress_meter::after {
+  width: 600px;
+  height: 24px;
+  background: transparent url('images/portrait_progress.png') no-repeat;
+  margin-top: -18px;
+}
 .language_scramble .level_progress_meter .percent_complete_container {
   overflow: hidden;
   margin: 0 0 -9px 1px;
   width: 921px;
+}
+.language_scramble.portrait .level_progress_meter .percent_complete_container {
+  width: 594px;
 }
 .language_scramble .level_progress_meter .percent_complete_container .percent_complete {
   float: left;
