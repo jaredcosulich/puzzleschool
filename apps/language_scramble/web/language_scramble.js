@@ -100,6 +100,7 @@ languageScramble.ViewHelper = (function() {
     this.clientX = __bind(this.clientX, this);
 
     this.puzzleData = JSON.parse(JSON.stringify(puzzleData));
+    this.fontSizes = {};
     this.maxLevel || (this.maxLevel = 7);
     this.formatLevelLinks();
     this.data = languageScramble.data;
@@ -838,12 +839,14 @@ languageScramble.ViewHelper = (function() {
     }
     letters = this.$('.scrambled').find('.letter');
     letter = $(letters[0]);
-    this.letterFontSize = parseInt(letter.css('fontSize'));
-    this.sizeLetter(letter);
     if (!targetHeight) {
-      targetHeight = this.$('.scramble_content').height() - 30;
+      targetHeight = this.$('.scramble_content').height() - 60;
       height = window.innerHeight ? window.innerHeight : window.landheight;
       targetHeight = Math.min(targetHeight, height);
+    }
+    if (!increment) {
+      this.letterFontSize = this.fontSizes[letters.length] || maxFontSize;
+      this.sizeLetter(letter);
     }
     transitionSize = function(size, increment) {
       _this.letterFontSize = size;
@@ -852,18 +855,22 @@ languageScramble.ViewHelper = (function() {
         return _this.resize(callback, targetHeight, increment, maxFontSize);
       });
     };
-    if (!increment) {
-      increment = Math.min(maxFontSize, this.letterFontSize) - 1;
-    }
-    if (increment >= 1 && !(increase && this.letterFontSize >= maxFontSize)) {
+    if (increment > 0 || this.containerHeights() > targetHeight) {
+      if (increment) {
+        increment = increment / 2;
+      } else {
+        increment = Math.abs((this.letterFontSize * (targetHeight / this.containerHeights())) - this.letterFontSize);
+      }
+      if (increment < 1) {
+        increment = 1;
+      }
       increase = this.containerHeights() < targetHeight;
-      increment = increment / 2;
-      if (increase === (this.containerHeights() < targetHeight) && !(increase && this.letterFontSize >= maxFontSize)) {
-        transitionSize(this.letterFontSize + increment * (increase ? 1 : -1), increment);
+      if (increment > 3 || !increase) {
+        transitionSize(this.letterFontSize + (increment * (increase ? 1 : -1)), increment);
         return;
       }
     }
-    if (this.containerHeights() > targetHeight || this.maxWordGroupLines('guesses', letter) > 1) {
+    if (this.maxWordGroupLines('guesses', letter) > 1) {
       transitionSize(this.letterFontSize - 1, -1);
       return;
     }
@@ -875,9 +882,10 @@ languageScramble.ViewHelper = (function() {
       transitionSize(maxFontSize, -1);
       return;
     }
+    this.fontSizes[letters.length] = this.letterFontSize;
     return this.resizeDisplayWords(function() {
       _this.centerContainers();
-      _this.setSectionPadding(targetHeight, 30);
+      _this.setSectionPadding(targetHeight, 45);
       return callback();
     });
   };
@@ -936,7 +944,7 @@ languageScramble.ViewHelper = (function() {
       section = _ref[_i];
       totalHeight += $(section).height();
     }
-    totalPadding = targetHeight - buffer - totalHeight;
+    totalPadding = targetHeight - bufferTop - buffer - totalHeight;
     padding = Math.min(totalPadding / 6, 30);
     this.$('.section').css({
       padding: "" + padding + "px 0"

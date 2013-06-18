@@ -55,6 +55,7 @@ class languageScramble.ViewHelper
 
     constructor: ({@el, puzzleData, @languages, @saveProgress, @maxLevel, @dragOffset}) ->
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
+        @fontSizes = {}
         @maxLevel or= 7
         @formatLevelLinks()
         @data = languageScramble.data
@@ -561,28 +562,32 @@ class languageScramble.ViewHelper
         letters = @$('.scrambled').find('.letter')
         letter = $(letters[0])
 
-        @letterFontSize = parseInt(letter.css('fontSize'))
-        @sizeLetter(letter)
-        
         if not targetHeight
-            targetHeight = @$('.scramble_content').height() - 30
+            targetHeight = @$('.scramble_content').height() - 60
             height = if window.innerHeight then window.innerHeight else window.landheight
             targetHeight = Math.min(targetHeight, height)
 
+        if not increment
+            @letterFontSize = @fontSizes[letters.length] or maxFontSize
+            @sizeLetter(letter)
+            
         transitionSize = (size, increment) =>
             @letterFontSize = size
             @sizeLetter(letter)
             $.timeout 5, => @resize(callback, targetHeight, increment, maxFontSize)
         
-        increment = Math.min(maxFontSize, @letterFontSize) - 1 if not increment    
-        if increment >= 1 and not (increase and @letterFontSize >= maxFontSize)
+        if increment > 0 or @containerHeights() > targetHeight
+            if increment
+                increment = increment / 2
+            else
+                increment = Math.abs((@letterFontSize * (targetHeight/@containerHeights())) - @letterFontSize)
+            increment = 1 if increment < 1
             increase = @containerHeights() < targetHeight
-            increment = increment / 2
-            if increase == (@containerHeights() < targetHeight) and not (increase and @letterFontSize >= maxFontSize)
-                transitionSize(@letterFontSize + increment * (if increase then 1 else -1), increment)
+            if increment > 3 or not increase
+                transitionSize(@letterFontSize + (increment * (if increase then 1 else -1)), increment)
                 return
-        
-        if @containerHeights() > targetHeight or @maxWordGroupLines('guesses', letter) > 1
+                
+        if @maxWordGroupLines('guesses', letter) > 1
             transitionSize(@letterFontSize - 1, -1)
             return
 
@@ -593,12 +598,12 @@ class languageScramble.ViewHelper
         if @letterFontSize > maxFontSize
             transitionSize(maxFontSize, -1)
             return
-
-        
+            
+        @fontSizes[letters.length] = @letterFontSize    
 
         @resizeDisplayWords =>
             @centerContainers()
-            @setSectionPadding(targetHeight, 30)
+            @setSectionPadding(targetHeight, 45)
             callback()
 
 
@@ -631,7 +636,7 @@ class languageScramble.ViewHelper
         buffer = if @activeLevel.match('Hard') then 180 else 60
         totalHeight = 0        
         totalHeight += $(section).height() for section in @$('.section')
-        totalPadding = (targetHeight - buffer - totalHeight)
+        totalPadding = (targetHeight - bufferTop - buffer - totalHeight)
         padding = Math.min(totalPadding/6, 30)
         @$('.section').css(padding: "#{padding}px 0")
         @$('.display_words').css(paddingTop: "#{bufferTop + padding + ((totalPadding - (padding*6))/2)}")
