@@ -174,8 +174,7 @@ window.app =
             foreign: @$('#foreign_select_menu')
             level: @$('#level_select_menu')
         
-        for menu of @menus
-            menu = $(menu)
+        for name, menu of @menus
             do (menu) =>
                 closeMenu = menu.find('.close_menu_button')
                 closeMenu.bind 'touchstart.close_menu', =>

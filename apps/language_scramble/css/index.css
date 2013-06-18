@@ -294,10 +294,10 @@ body {
   padding: 30px 0 0 6px;
 }
 .language_scramble .guesses .hidden_message {
-  display: none;
   position: absolute;
   font-size: 21px;
   line-height: 72px;
+  left: -10000px;
 }
 .language_scramble .guesses .hidden_message span {
   background-image: url('images/paper-middle.png');
@@ -305,10 +305,10 @@ body {
   background-repeat: repeat-x;
   display: inline-block;
   position: relative;
-  -webkit-background-size: 123px;
-  -moz-background-size: 123px;
-  -o-background-size: 123px;
-  background-size: 123px;
+  -webkit-background-size: 126px;
+  -moz-background-size: 126px;
+  -o-background-size: 126px;
+  background-size: 126px;
 }
 .language_scramble .guesses .hidden_message span::before {
   background-image: url('images/paper-left.png');
@@ -354,12 +354,6 @@ body {
 .language_scramble .scrambled.hidden .space {
   visibility: hidden;
 }
-.language_scramble .guesses.hidden .hidden_message,
-.language_scramble .scrambled.hidden .hidden_message {
-  display: block;
-  left: 236px;
-  top: 72px;
-}
 .language_scramble .guesses .color1 .correct_letter::after,
 .language_scramble .guesses .color2 .correct_letter::after,
 .language_scramble .guesses .color3 .correct_letter::after,
@@ -383,17 +377,10 @@ body {
 .language_scramble .guesses.hidden .letter {
   visibility: visible;
 }
+/*
 .language_scramble .guesses.hidden .hidden_message {
   left: 250px;
   top: 72px;
-}
-/*
-.language_scramble.foreign .scramble_content .guesses .guess {
-  background: transparent url('images/sunken_foreign.png') no-repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 */
 #next_level .success {
@@ -424,23 +411,27 @@ body {
 .language_scramble .level_progress_meter {
   width: 100%;
   position: absolute;
-  left: 0;
-  bottom:6px;
+  left: 15px;
+  bottom: 15px;
 }
 .language_scramble .level_progress_meter::after {
   display: block;
   content: "\00a0";
-  width: 100%;
+  width: 927px;
   height: 30px;
   background: transparent url('images/progress.png') no-repeat;
-  bottom: 0;
+  margin-top: -12px;
   z-index: 3;
   position: absolute;
 }
-.language_scramble .level_progress_meter .percent_complete {
-  display: block;
+.language_scramble .level_progress_meter .percent_complete_container {
   overflow: hidden;
+  margin: 0 0 -9px 1px;
+  width: 921px;
+}
+.language_scramble .level_progress_meter .percent_complete_container .percent_complete {
   float: left;
+  display: block;
   -moz-box-shadow: inset 0px 1px 0px 0px #64e581;
   -webkit-box-shadow: inset 0px 1px 0px 0px #64e581;
   box-shadow: inset 0px 1px 0px 0px #64e581;
@@ -451,7 +442,6 @@ body {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  margin: -12px 0 0 21px;
 }
 
 .language_scramble .progress_meter {

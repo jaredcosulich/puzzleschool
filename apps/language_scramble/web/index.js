@@ -198,7 +198,7 @@ window.app = {
     });
   },
   initMenus: function() {
-    var menu, _fn,
+    var menu, name, _fn, _ref,
       _this = this;
     this.activeMenu = 'level';
     this.menus = {
@@ -206,6 +206,7 @@ window.app = {
       foreign: this.$('#foreign_select_menu'),
       level: this.$('#level_select_menu')
     };
+    _ref = this.menus;
     _fn = function(menu) {
       var closeMenu;
       closeMenu = menu.find('.close_menu_button');
@@ -230,8 +231,8 @@ window.app = {
         });
       });
     };
-    for (menu in this.menus) {
-      menu = $(menu);
+    for (name in _ref) {
+      menu = _ref[name];
       _fn(menu);
     }
     menu = this.$('.menu_button');

@@ -408,6 +408,7 @@ class languageScramble.ViewHelper
         shuffledOptions = shuffle(optionsToAdd[level])
         @orderedOptions.push(option) for option in shuffledOptions[0...3]                 
 
+        level = 6
         switch level  
             when 6
                 @activeLevel = 'foreignHard'
@@ -563,7 +564,7 @@ class languageScramble.ViewHelper
         letter = $(letters[0])
 
         if not targetHeight
-            targetHeight = @$('.scramble_content').height() - 60
+            targetHeight = @$('.scramble_content').height() - 90
             height = if window.innerHeight then window.innerHeight else window.landheight
             targetHeight = Math.min(targetHeight, height)
 
@@ -640,6 +641,7 @@ class languageScramble.ViewHelper
         padding = Math.min(totalPadding/6, 30)
         @$('.section').css(padding: "#{padding}px 0")
         @$('.display_words').css(paddingTop: "#{bufferTop + padding + ((totalPadding - (padding*6))/2)}")
+        @$('.hidden_message').css(top: (@$('.guesses').height()/3))
 
     createWordGroup: ->
         wordGroup = $(document.createElement("DIV"))
@@ -829,8 +831,9 @@ class languageScramble.ViewHelper
         if message
             message.show()
             message.width(message.width() + 30)
-            message.css('left', (@$('.scramble_content').width() - message.width()) / 2)
-    
+            message.css
+                left: (@$('.scramble_content').width() - message.width()) / 2
+                
     setProgress: ->
         if not @$(".progress_meter .bar .#{@level.data[0].id}").length
             @$('.progress_meter').animate

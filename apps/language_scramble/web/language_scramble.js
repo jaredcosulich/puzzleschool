@@ -621,6 +621,7 @@ languageScramble.ViewHelper = (function() {
       option = _ref1[_m];
       this.orderedOptions.push(option);
     }
+    level = 6;
     switch (level) {
       case 6:
         this.activeLevel = 'foreignHard';
@@ -840,7 +841,7 @@ languageScramble.ViewHelper = (function() {
     letters = this.$('.scrambled').find('.letter');
     letter = $(letters[0]);
     if (!targetHeight) {
-      targetHeight = this.$('.scramble_content').height() - 60;
+      targetHeight = this.$('.scramble_content').height() - 90;
       height = window.innerHeight ? window.innerHeight : window.landheight;
       targetHeight = Math.min(targetHeight, height);
     }
@@ -949,8 +950,11 @@ languageScramble.ViewHelper = (function() {
     this.$('.section').css({
       padding: "" + padding + "px 0"
     });
-    return this.$('.display_words').css({
+    this.$('.display_words').css({
       paddingTop: "" + (bufferTop + padding + ((totalPadding - (padding * 6)) / 2))
+    });
+    return this.$('.hidden_message').css({
+      top: this.$('.guesses').height() / 3
     });
   };
 
@@ -1227,7 +1231,9 @@ languageScramble.ViewHelper = (function() {
     if (message) {
       message.show();
       message.width(message.width() + 30);
-      return message.css('left', (this.$('.scramble_content').width() - message.width()) / 2);
+      return message.css({
+        left: (this.$('.scramble_content').width() - message.width()) / 2
+      });
     }
   };
 
