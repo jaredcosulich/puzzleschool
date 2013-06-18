@@ -86,13 +86,7 @@ class languageScramble.ViewHelper
     saveLevel: () ->
         @answerTimes.push(new Date())
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
-        progress = @$(".progress_meter .bar .progress_section")
-        progressIncrement = 100.0 / progress.length
-        leftToGo = 0
-        leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
-        percentComplete = 100 - leftToGo
-        @$('.level_progress_meter .percent_complete').width("#{percentComplete}%")
-        
+        @setProgress()
 
         if percentComplete > 95
             allComplete = true
@@ -106,6 +100,14 @@ class languageScramble.ViewHelper
         $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
             
         @saveProgress(@puzzleData)
+
+    setLevelProgress: ->
+        progress = @$(".progress_meter .bar .progress_section")
+        progressIncrement = 100.0 / progress.length
+        leftToGo = 0
+        leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
+        percentComplete = 100 - leftToGo
+        @$('.level_progress_meter .percent_complete').width("#{percentComplete}%")
 
     setTitle: ->
         if $('.header .level .title').html() != @level.title
@@ -852,6 +854,7 @@ class languageScramble.ViewHelper
                             duration: 300
         else
             @updateProgress()
+        @setLevelProgress()
     
     updateProgress: ->
         for scrambleInfo in @level.data

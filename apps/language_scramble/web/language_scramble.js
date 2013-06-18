@@ -143,18 +143,10 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.saveLevel = function() {
-    var allComplete, id, leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
+    var allComplete, id, percentComplete;
     this.answerTimes.push(new Date());
     this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
-    progress = this.$(".progress_meter .bar .progress_section");
-    progressIncrement = 100.0 / progress.length;
-    leftToGo = 0;
-    for (_i = 0, _len = progress.length; _i < _len; _i++) {
-      progressSection = progress[_i];
-      leftToGo += $(progressSection).css('opacity') * progressIncrement;
-    }
-    percentComplete = 100 - leftToGo;
-    this.$('.level_progress_meter .percent_complete').width("" + percentComplete + "%");
+    this.setProgress();
     if (percentComplete > 95) {
       allComplete = true;
       for (id in this.puzzleData.levels[this.languages][this.levelName]) {
@@ -170,6 +162,19 @@ languageScramble.ViewHelper = (function() {
     this.puzzleData.levels[this.languages][this.levelName].percentComplete = percentComplete;
     $("#level_link_" + this.levelName + " .percent_complete").width("" + percentComplete + "%");
     return this.saveProgress(this.puzzleData);
+  };
+
+  ViewHelper.prototype.setLevelProgress = function() {
+    var leftToGo, percentComplete, progress, progressIncrement, progressSection, _i, _len;
+    progress = this.$(".progress_meter .bar .progress_section");
+    progressIncrement = 100.0 / progress.length;
+    leftToGo = 0;
+    for (_i = 0, _len = progress.length; _i < _len; _i++) {
+      progressSection = progress[_i];
+      leftToGo += $(progressSection).css('opacity') * progressIncrement;
+    }
+    percentComplete = 100 - leftToGo;
+    return this.$('.level_progress_meter .percent_complete').width("" + percentComplete + "%");
   };
 
   ViewHelper.prototype.setTitle = function() {
@@ -1239,7 +1244,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.setProgress = function() {
     var _this = this;
     if (!this.$(".progress_meter .bar ." + this.level.data[0].id).length) {
-      return this.$('.progress_meter').animate({
+      this.$('.progress_meter').animate({
         opacity: 0,
         duration: 300,
         complete: function() {
@@ -1268,8 +1273,9 @@ languageScramble.ViewHelper = (function() {
         }
       });
     } else {
-      return this.updateProgress();
+      this.updateProgress();
     }
+    return this.setLevelProgress();
   };
 
   ViewHelper.prototype.updateProgress = function() {
