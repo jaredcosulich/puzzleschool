@@ -209,7 +209,23 @@ soma.views
         initCustom: ->
             customButton = @$('.custom_button')
             customize = @$('.customize')
+            buttons = customize.find("div.buttons") 
+
+            hide = =>
+                customize.animate
+                    opacity: 0
+                    duration: 500
+                    complete: =>
+                        customize.css
+                            top: -10000
+                            left: -10000
+            
+            hideSections = =>
+                customize.find('.custom_section').hide()
+        
             customButton.bind 'click', =>
+                hideSections()             
+                buttons.show()
                 customize.css
                     opacity: 0
                     top: 150
@@ -218,21 +234,26 @@ soma.views
                     opacity: 1
                     duration: 500
             
-            hideSections = =>
-                customize.find('.custom_section').hide()
-            
-            hideSections() 
-            
-            buttons = customize.find("div.buttons") 
-            buttons.show()
-            
-            for sectionName in ['add_equation', 'remove_equation', 'add_equation_fragment', 'remove_equation_fragment']        
+            for sectionName in ['add_equation', 'remove_equation', 'add_fragment', 'remove_fragment']        
                 do (sectionName) =>
                     customize.find("a.#{sectionName}").bind 'click', =>
                         hideSections()
-                        customize.find("div.#{sectionName}").show()
+                        section = customize.find("div.#{sectionName}")
+                        section.show()
+                        section.find('.cancel_button').bind 'click', =>
+                            hideSections()
+                            buttons.show()
                 
+            customize.find('.add_equation .save_button').bind 'click', =>
+                @helper.addEquation('', customize.find('.add_equation input').val(), @level.variables)    
+                hide()
                 
+            customize.find('.add_fragment .save_button').bind 'click', =>
+                @helper.addEquationComponent(customize.find('.add_fragment input').val())
+                hide()
+            
+            customize.find('.cancel_custom').bind 'click', => hide()
+            
         initReset: ->
             @$('.reset_button').bind 'click', =>
                 @initLevel() if confirm('Are you sure you want to completely reset this level?')

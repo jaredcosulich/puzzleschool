@@ -779,10 +779,10 @@
   border: 1px solid #ccc;
   z-index: 98;
   cursor: move;
+  text-align: center;
 }
 .xyflyer .customize h3,
 .xyflyer .customize p {
-  text-align: center;
   margin: 0;
 }
 .xyflyer .customize p {
@@ -791,6 +791,11 @@
 .xyflyer .customize a {
   font-size: 11px;
   padding: 6px;
+}
+.xyflyer .customize input {
+  vertical-align: -2px;
+  font-size: 15px;
+  text-align: center;
 }
 .xyflyer .editor {
   position: absolute;

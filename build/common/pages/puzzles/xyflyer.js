@@ -286,11 +286,29 @@ soma.views({
       }
     },
     initCustom: function() {
-      var buttons, customButton, customize, hideSections, sectionName, _i, _len, _ref, _results,
+      var buttons, customButton, customize, hide, hideSections, sectionName, _fn, _i, _len, _ref,
         _this = this;
       customButton = this.$('.custom_button');
       customize = this.$('.customize');
+      buttons = customize.find("div.buttons");
+      hide = function() {
+        return customize.animate({
+          opacity: 0,
+          duration: 500,
+          complete: function() {
+            return customize.css({
+              top: -10000,
+              left: -10000
+            });
+          }
+        });
+      };
+      hideSections = function() {
+        return customize.find('.custom_section').hide();
+      };
       customButton.bind('click', function() {
+        hideSections();
+        buttons.show();
         customize.css({
           opacity: 0,
           top: 150,
@@ -301,24 +319,34 @@ soma.views({
           duration: 500
         });
       });
-      hideSections = function() {
-        return customize.find('.custom_section').hide();
+      _ref = ['add_equation', 'remove_equation', 'add_fragment', 'remove_fragment'];
+      _fn = function(sectionName) {
+        return customize.find("a." + sectionName).bind('click', function() {
+          var section;
+          hideSections();
+          section = customize.find("div." + sectionName);
+          section.show();
+          return section.find('.cancel_button').bind('click', function() {
+            hideSections();
+            return buttons.show();
+          });
+        });
       };
-      hideSections();
-      buttons = customize.find("div.buttons");
-      buttons.show();
-      _ref = ['add_equation', 'remove_equation', 'add_equation_fragment', 'remove_equation_fragment'];
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         sectionName = _ref[_i];
-        _results.push((function(sectionName) {
-          return customize.find("a." + sectionName).bind('click', function() {
-            hideSections();
-            return customize.find("div." + sectionName).show();
-          });
-        })(sectionName));
+        _fn(sectionName);
       }
-      return _results;
+      customize.find('.add_equation .save_button').bind('click', function() {
+        _this.helper.addEquation('', customize.find('.add_equation input').val(), _this.level.variables);
+        return hide();
+      });
+      customize.find('.add_fragment .save_button').bind('click', function() {
+        _this.helper.addEquationComponent(customize.find('.add_fragment input').val());
+        return hide();
+      });
+      return customize.find('.cancel_custom').bind('click', function() {
+        return hide();
+      });
     },
     initReset: function() {
       var _this = this;
