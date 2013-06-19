@@ -36,8 +36,11 @@ class equationComponent.EquationComponent
         
     display: (html) -> html.replace('*', '<b>&middot;</b>')    
         
-    initMove: ->
+    disableMove: ->    
         @elementContainer.unbind('mousedown.drag touchstart.drag')
+        
+    initMove: ->
+        @disableMove()
         if window.appScale
             @elementContainer.bind 'touchstart.drag', (e) => @mousedown(e)
         else

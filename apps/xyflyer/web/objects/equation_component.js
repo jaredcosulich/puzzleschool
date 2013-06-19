@@ -66,9 +66,13 @@ equationComponent.EquationComponent = (function() {
     return html.replace('*', '<b>&middot;</b>');
   };
 
+  EquationComponent.prototype.disableMove = function() {
+    return this.elementContainer.unbind('mousedown.drag touchstart.drag');
+  };
+
   EquationComponent.prototype.initMove = function() {
     var _this = this;
-    this.elementContainer.unbind('mousedown.drag touchstart.drag');
+    this.disableMove();
     if (window.appScale) {
       return this.elementContainer.bind('touchstart.drag', function(e) {
         return _this.mousedown(e);

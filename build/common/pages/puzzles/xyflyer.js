@@ -286,13 +286,29 @@ soma.views({
       }
     },
     initCustom: function() {
-      var buttons, customButton, customize, hide, hideSections, sectionName, _fn, _i, _len, _ref,
+      var buttons, customButton, customize, hide, hideSections, resetRemove, sectionName, _fn, _i, _len, _ref,
         _this = this;
       customButton = this.$('.custom_button');
       customize = this.$('.customize');
       buttons = customize.find("div.buttons");
+      resetRemove = function() {
+        var c, e, _i, _j, _len, _len1, _ref, _ref1, _results;
+        _ref = _this.helper.equations.equationComponents;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          c = _ref[_i];
+          c.element.unbind('mousedown.remove');
+          c.initMove();
+        }
+        _ref1 = _this.helper.equations.equations;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          e = _ref1[_j];
+          _results.push(e.el.unbind('mousedown.remove'));
+        }
+        return _results;
+      };
       hide = function() {
-        return customize.animate({
+        customize.animate({
           opacity: 0,
           duration: 500,
           complete: function() {
@@ -302,9 +318,11 @@ soma.views({
             });
           }
         });
+        return resetRemove();
       };
       hideSections = function() {
-        return customize.find('.custom_section').hide();
+        customize.find('.custom_section').hide();
+        return resetRemove();
       };
       customButton.bind('click', function() {
         hideSections();
@@ -321,12 +339,12 @@ soma.views({
       });
       _ref = ['add_equation', 'remove_equation', 'add_fragment', 'remove_fragment'];
       _fn = function(sectionName) {
-        return customize.find("a." + sectionName).bind('click', function() {
+        return customize.find("a." + sectionName).bind('click.show_section', function() {
           var section;
           hideSections();
           section = customize.find("div." + sectionName);
           section.show();
-          return section.find('.cancel_button').bind('click', function() {
+          return section.find('.cancel_button').bind('click.hide_section', function() {
             hideSections();
             return buttons.show();
           });
@@ -336,13 +354,65 @@ soma.views({
         sectionName = _ref[_i];
         _fn(sectionName);
       }
-      customize.find('.add_equation .save_button').bind('click', function() {
-        _this.helper.addEquation('', customize.find('.add_equation input').val(), _this.level.variables);
-        return hide();
+      customize.find('.add_equation .save_button').bind('click.save', function() {
+        hide();
+        return _this.helper.addEquation('', customize.find('.add_equation input').val(), _this.level.variables);
       });
-      customize.find('.add_fragment .save_button').bind('click', function() {
-        _this.helper.addEquationComponent(customize.find('.add_fragment input').val());
-        return hide();
+      customize.find('.add_fragment .save_button').bind('click.save', function() {
+        var component;
+        hide();
+        component = _this.helper.addEquationComponent(customize.find('.add_fragment input').val());
+        return component.custom = true;
+      });
+      customize.find('a.remove_equation').bind('click.init', function() {
+        var equation, _j, _len1, _ref1, _results;
+        _ref1 = _this.helper.equations.equations;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          equation = _ref1[_j];
+          _results.push((function(equation) {
+            return equation.el.bind('mousedown.remove', function() {
+              var dropArea, _k, _len2, _ref2, _ref3;
+              if (equation.solution) {
+                return alert('You can not remove this equation.');
+              } else {
+                hide();
+                _ref2 = equation.dropAreas;
+                for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                  dropArea = _ref2[_k];
+                  if ((_ref3 = dropArea.component) != null) {
+                    _ref3.reset();
+                  }
+                }
+                return _this.helper.equations.remove(equation);
+              }
+            });
+          })(equation));
+        }
+        return _results;
+      });
+      customize.find('a.remove_fragment').bind('click.init', function() {
+        var component, _j, _len1, _ref1, _results;
+        _ref1 = _this.helper.equations.equationComponents;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          component = _ref1[_j];
+          _results.push((function(component) {
+            component.disableMove();
+            return component.element.bind('mousedown.remove', function() {
+              if (!component.custom) {
+                return alert('You can not remove this equation fragment.');
+              } else {
+                hide();
+                if (component.variable) {
+                  delete _this.variables[component.variable];
+                }
+                return _this.helper.equations.removeComponent(component);
+              }
+            });
+          })(component));
+        }
+        return _results;
       });
       return customize.find('.cancel_custom').bind('click', function() {
         return hide();

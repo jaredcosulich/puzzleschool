@@ -210,7 +210,15 @@ soma.views
             customButton = @$('.custom_button')
             customize = @$('.customize')
             buttons = customize.find("div.buttons") 
-
+            
+            resetRemove = =>
+                for c in @helper.equations.equationComponents
+                    c.element.unbind('mousedown.remove') 
+                    c.initMove()
+                
+                for e in @helper.equations.equations
+                    e.el.unbind('mousedown.remove') 
+            
             hide = =>
                 customize.animate
                     opacity: 0
@@ -218,10 +226,12 @@ soma.views
                     complete: =>
                         customize.css
                             top: -10000
-                            left: -10000
+                            left: -10000                    
+                resetRemove()
             
             hideSections = =>
                 customize.find('.custom_section').hide()
+                resetRemove()
         
             customButton.bind 'click', =>
                 hideSections()             
@@ -236,21 +246,48 @@ soma.views
             
             for sectionName in ['add_equation', 'remove_equation', 'add_fragment', 'remove_fragment']        
                 do (sectionName) =>
-                    customize.find("a.#{sectionName}").bind 'click', =>
+                    customize.find("a.#{sectionName}").bind 'click.show_section', =>
                         hideSections()
                         section = customize.find("div.#{sectionName}")
                         section.show()
-                        section.find('.cancel_button').bind 'click', =>
+                        section.find('.cancel_button').bind 'click.hide_section', =>
                             hideSections()
                             buttons.show()
                 
-            customize.find('.add_equation .save_button').bind 'click', =>
+            customize.find('.add_equation .save_button').bind 'click.save', =>
+                hide()
                 @helper.addEquation('', customize.find('.add_equation input').val(), @level.variables)    
-                hide()
                 
-            customize.find('.add_fragment .save_button').bind 'click', =>
-                @helper.addEquationComponent(customize.find('.add_fragment input').val())
+            customize.find('.add_fragment .save_button').bind 'click.save', =>
                 hide()
+                component = @helper.addEquationComponent(customize.find('.add_fragment input').val())
+                component.custom = true
+                
+            customize.find('a.remove_equation').bind 'click.init', =>
+                for equation in @helper.equations.equations
+                    do (equation) =>
+                        equation.el.bind 'mousedown.remove', =>
+                            if equation.solution
+                                alert('You can not remove this equation.')
+                            else
+                                hide()
+                                dropArea.component?.reset() for dropArea in equation.dropAreas                             
+                                @helper.equations.remove(equation)
+                
+            customize.find('a.remove_fragment').bind 'click.init', =>
+                for component in @helper.equations.equationComponents
+                    do (component) =>
+                        component.disableMove()
+                        component.element.bind 'mousedown.remove', =>
+                            if not component.custom
+                                alert('You can not remove this equation fragment.')
+                            else
+                                hide()
+                                    
+                                if component.variable
+                                    delete @variables[component.variable]
+                                @helper.equations.removeComponent(component)
+                
             
             customize.find('.cancel_custom').bind 'click', => hide()
             
