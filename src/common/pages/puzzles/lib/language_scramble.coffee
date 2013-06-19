@@ -797,7 +797,9 @@ class languageScramble.ViewHelper
         return null
 
     checkCorrectAnswer: () ->
-        @$('.guesses .letter, .guesses .space').map((html) -> $(html).html()).join('') == (@scrambleInfo[@activeType])
+        @$('.guesses .letter, .guesses .space').map(
+            (html) -> $(html).html()
+        ).join('').replace(/\s/g, '') == (@scrambleInfo[@activeType]).replace(/\s/g, '')
 
     modifyScramble: (word) ->
         commonLetters = (letter for letter in 'etaoinshrdlumkpcd')
@@ -925,7 +927,7 @@ class languageScramble.ViewHelper
 
         @$('.guesses').animate
             opacity: 0
-            height: 0
+            height: (@$('.guesses').height() / 4)
             paddingTop: 0
             paddingBottom: 0
             duration: 500

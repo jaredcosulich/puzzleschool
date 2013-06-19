@@ -1180,7 +1180,7 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.checkCorrectAnswer = function() {
     return this.$('.guesses .letter, .guesses .space').map(function(html) {
       return $(html).html();
-    }).join('') === this.scrambleInfo[this.activeType];
+    }).join('').replace(/\s/g, '') === this.scrambleInfo[this.activeType].replace(/\s/g, '');
   };
 
   ViewHelper.prototype.modifyScramble = function(word) {
@@ -1362,7 +1362,7 @@ languageScramble.ViewHelper = (function() {
     };
     this.$('.guesses').animate({
       opacity: 0,
-      height: 0,
+      height: this.$('.guesses').height() / 4,
       paddingTop: 0,
       paddingBottom: 0,
       duration: 500,
