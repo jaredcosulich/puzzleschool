@@ -747,13 +747,13 @@ languageScramble.ViewHelper = (function() {
         if (!rg) {
           rg = lg;
         }
-        containerRight = container.offset().left + container.offset().width;
-        right = rg.offset().left + rg.offset().width;
-        if ((space = rg.children()[0])) {
+        if ((space = lg.children()[0])) {
           if (space.className.indexOf('space') > -1) {
-            right += $(space).width();
+            $(space).remove();
           }
         }
+        containerRight = container.offset().left + container.width();
+        right = rg.offset().left + rg.width();
         if (!(right > containerRight)) {
           return lg.css({
             marginLeft: ((containerRight - right) / 2) - 3
@@ -844,7 +844,7 @@ languageScramble.ViewHelper = (function() {
     letters = this.$('.scrambled').find('.letter');
     letter = $(letters[0]);
     if (!targetHeight) {
-      targetHeight = this.$('.scramble_content').height() - 90;
+      targetHeight = this.$('.scramble_content').height() - 60;
       height = window.innerHeight ? window.innerHeight : window.landheight;
       targetHeight = Math.min(targetHeight, height);
     }

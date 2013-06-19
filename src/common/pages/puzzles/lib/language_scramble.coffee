@@ -498,14 +498,16 @@ class languageScramble.ViewHelper
             
             centerWordGroups = (lg, rg) ->
                 rg = lg if not rg
-                containerRight = container.offset().left + container.offset().width
-                right = rg.offset().left + rg.offset().width
-                if (space = rg.children()[0])
-                    right += $(space).width() if space.className.indexOf('space') > -1
+
+                if (space = lg.children()[0])
+                    $(space).remove() if space.className.indexOf('space') > -1
+
+                containerRight = container.offset().left + container.width()
+                right = rg.offset().left + rg.width()
                 
                 unless right > containerRight
                     lg.css(marginLeft: ((containerRight - right)/2) - 3)
-                    
+        
             wordGroups = container.find('.word_group')
             for wordGroup, index in wordGroups
                 wordGroupOffsetTop = wordGroup.offsetTop or 1
@@ -565,7 +567,7 @@ class languageScramble.ViewHelper
         letter = $(letters[0])
 
         if not targetHeight
-            targetHeight = @$('.scramble_content').height() - 90
+            targetHeight = @$('.scramble_content').height() - 60
             height = if window.innerHeight then window.innerHeight else window.landheight
             targetHeight = Math.min(targetHeight, height)
 
