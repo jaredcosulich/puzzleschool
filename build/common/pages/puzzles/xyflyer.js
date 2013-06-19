@@ -285,6 +285,49 @@ soma.views({
         }
       }
     },
+    initCustom: function() {
+      var buttons, customButton, customize, hideSections, sectionName, _i, _len, _ref, _results,
+        _this = this;
+      customButton = this.$('.custom_button');
+      customize = this.$('.customize');
+      customButton.bind('click', function() {
+        customize.css({
+          opacity: 0,
+          top: 150,
+          left: 120
+        });
+        return customize.animate({
+          opacity: 1,
+          duration: 500
+        });
+      });
+      hideSections = function() {
+        return customize.find('.custom_section').hide();
+      };
+      hideSections();
+      buttons = customize.find("div.buttons");
+      buttons.show();
+      _ref = ['add_equation', 'remove_equation', 'add_equation_fragment', 'remove_equation_fragment'];
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        sectionName = _ref[_i];
+        _results.push((function(sectionName) {
+          return customize.find("a." + sectionName).bind('click', function() {
+            hideSections();
+            return customize.find("div." + sectionName).show();
+          });
+        })(sectionName));
+      }
+      return _results;
+    },
+    initReset: function() {
+      var _this = this;
+      return this.$('.reset_button').bind('click', function() {
+        if (confirm('Are you sure you want to completely reset this level?')) {
+          return _this.initLevel();
+        }
+      });
+    },
     load: function() {
       var asset, assets, index, _ref, _ref1, _ref2,
         _this = this;
@@ -483,11 +526,13 @@ soma.views({
         _this.load();
         (_base1 = _this.puzzleProgress[_this.level.id]).started || (_base1.started = new Date().getTime());
         _this.saveProgress();
-        return _this.setLevelIcon({
+        _this.setLevelIcon({
           id: _this.level.id,
           started: true,
           completed: (_ref = _this.puzzleData.levels[_this.level.id]) != null ? _ref.completed : void 0
         });
+        _this.initReset();
+        return _this.initCustom();
       }), 100);
       this.currentLevel = this.level.id;
       return setInterval((function() {

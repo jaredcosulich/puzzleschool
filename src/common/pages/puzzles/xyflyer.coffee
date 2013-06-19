@@ -206,6 +206,37 @@ soma.views
                 for level in stage.levels
                     return stage if level.id == @level.id
             
+        initCustom: ->
+            customButton = @$('.custom_button')
+            customize = @$('.customize')
+            customButton.bind 'click', =>
+                customize.css
+                    opacity: 0
+                    top: 150
+                    left: 120
+                customize.animate
+                    opacity: 1
+                    duration: 500
+            
+            hideSections = =>
+                customize.find('.custom_section').hide()
+            
+            hideSections() 
+            
+            buttons = customize.find("div.buttons") 
+            buttons.show()
+            
+            for sectionName in ['add_equation', 'remove_equation', 'add_equation_fragment', 'remove_equation_fragment']        
+                do (sectionName) =>
+                    customize.find("a.#{sectionName}").bind 'click', =>
+                        hideSections()
+                        customize.find("div.#{sectionName}").show()
+                
+                
+        initReset: ->
+            @$('.reset_button').bind 'click', =>
+                @initLevel() if confirm('Are you sure you want to completely reset this level?')
+                    
         load: ->
             @dynamicContent.html(@originalHTML)
             
@@ -331,7 +362,9 @@ soma.views
                     id: @level.id, 
                     started: true, 
                     completed: @puzzleData.levels[@level.id]?.completed
-
+                    
+                @initReset()
+                @initCustom()                
             ), 100)
 
             @currentLevel = @level.id

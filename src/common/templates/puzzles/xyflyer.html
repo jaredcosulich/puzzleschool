@@ -86,6 +86,10 @@
                     <p class='editor_explanation'>Add a new equation using the Add Equation<br/>button in the Editor Controls to start your level.</p>
                     {/editor}
                 </div>
+                {!editor}
+                <div class='custom_button'><a class='custom button go'><i class='icon-plus'></i></a></div>
+                <div class='reset_button'><a class='reset button go'><i class='icon-undo'></i></a></div>
+                {/editor}
                 <div class='launch_button'><a class='launch button go'>Launch!</a></div>
         
                 <div class='possible_fragments'>
@@ -155,6 +159,29 @@
                 {instructions}
             </div>
 
+            {!editor}
+            <div class='customize'>
+                <h3>Have A Creative Solution?</h3>
+                <p>Add extra equations and equation fragments to solve this challenge in your own creative way.</p>
+                <div class='custom_section buttons'>
+                    <p><a class='blue_button add_equation'>Add Equation</a> --- <a class='red_button remove_equation'>Remove</a></p>
+                    <p><a class='blue_button add_fragment'>Add Equation Fragment</a> --- <a class='red_button remove_fragment red'>Remove</a></p>
+                </div>
+                <div class='custom_section add_equation'>
+                    Add Equation - Coming Soon (probably by tomorrow)
+                </div>
+                <div class='custom_section remove_equation'>
+                    Remove Equation - Coming Soon (probably by tomorrow)
+                </div>
+                <div class='custom_section add_equation_fragment'>
+                    Add Equation Fragment - Coming Soon (probably by tomorrow)
+                </div>
+                <div class='custom_section remove_equation_fragment'>
+                    Remove Equation Fragment - Coming Soon (probably by tomorrow)
+                </div>
+            </div>                
+            {/editor}
+            
             {:editor}
             <div class='editor'>
                 <h3>Editor Controls</h3>

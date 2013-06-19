@@ -182,7 +182,7 @@ class xyflyer.ViewHelper
         @complete = false
         @plane.reset() if @plane
         ring.reset() for ring in @rings
-    
+            
     completeLevel: ->
         return if @complete
         @complete = true

@@ -106,7 +106,7 @@
             }
             
             .menu {
-                right: 42px;
+                right: 45px;
             }
         
             .equations {
@@ -246,13 +246,37 @@
                 }    
             }
                     
-            .launch_button {
+            .launch_button, .custom_button, .reset_button {
                 text-align: center;
             }
+            
+            .custom_button {
+                position: absolute;
+                right: 45px;       
+                .custom {
+                    .button-color(@green);
+                }         
+            }
 
+            .reset_button {
+                position: absolute;
+                right: 6px;
+                .reset {
+                    .button-color(@grey);
+                }
+            }
+
+            .custom_button .custom, .reset_button .reset {
+                padding: 0;
+                height: 24px;
+                width: 27px;
+                line-height: 24px;
+                font-size: 12px;
+            }
+            
             .possible_fragments {
                 background-color: @lightgrey;
-                margin: 30px 12px 0 12px;
+                margin: 30px 6px 0 6px;
                 padding: 6px;
                 .rounded(6px);
                 text-align: center;
@@ -570,6 +594,30 @@
         position: absolute;
         top: -10000px;
         left: -10000px;
+    }
+    
+    .customize {
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+        width: 300px;
+        background-color: white;
+        padding: 15px 30px;
+        .rounded(6px);
+        border: 1px solid #ccc;
+        z-index: 98;
+        cursor: move;
+        h3, p {
+            text-align: center;
+            margin: 0;
+        }
+        p {
+            padding: 12px 0;
+        }
+        a {
+            font-size: @smallsize;
+            padding: 6px;
+        }        
     }
        
     .editor {
