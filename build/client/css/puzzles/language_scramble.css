@@ -9,7 +9,6 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
-  transition: opacity 0.5s ease;
   /*    &.foreign .scramble_content {
         background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
     }  
@@ -25,7 +24,14 @@ body {
   /* iPhone [portrait + landscape] */
 
 }
-.language_scramble.initializing_scramble {
+.language_scramble .guesses,
+.language_scramble .scrambled,
+.language_scramble .display_words {
+  transition: opacity 0.25s ease;
+}
+.language_scramble.initializing_scramble .guesses,
+.language_scramble.initializing_scramble .scrambled,
+.language_scramble.initializing_scramble .display_words {
   opacity: 0;
 }
 .language_scramble .header {
@@ -400,6 +406,7 @@ body {
   position: absolute;
   font-size: 15px;
   line-height: 45px;
+  left: -10000px;
 }
 .language_scramble .guesses .hidden_message .papered,
 .language_scramble .scrambled .hidden_message .papered {
@@ -494,12 +501,8 @@ body {
   display: block;
   color: gray;
   z-index: 2;
-  margin-top: -10000px;
-  margin-left: -10000px;
-}
-.language_scramble .hide_keyboard #clickarea {
-  top: -1000px;
-  left: -1000px;
+  top: 420px;
+  left: -10000px;
 }
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .language_scramble #clickarea {

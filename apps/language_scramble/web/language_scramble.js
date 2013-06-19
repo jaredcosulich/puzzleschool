@@ -488,38 +488,46 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.newScramble = function() {
-    var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
+    var _this = this;
     this.initializingScramble = true;
     this.el.addClass('initializing_scramble');
     this.answerTimes || (this.answerTimes = []);
     this.answerTimes.push(new Date());
     this.lettersAdded = [];
-    this.scrambleInfo = this.selectOption();
-    if (!this.scrambleInfo) {
-      return;
-    }
-    (_base = this.puzzleData.levels[this.languages][this.levelName])[_name = this.scrambleInfo.id] || (_base[_name] = 1);
-    displayWords = this.$('.display_words');
-    if ((this.scrambleInfo["" + this.displayLevel + "Sentence"] != null) && this.scrambleInfo["" + this.displayLevel + "Sentence"].length) {
-      sentence = this.scrambleInfo["" + this.displayLevel + "Sentence"];
-    } else {
-      sentence = this.scrambleInfo[this.displayLevel];
-    }
-    sentence = " " + sentence + " ";
-    highlighted = this.scrambleInfo[this.displayLevel];
-    if (!highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))) {
-      _ref = [' ', '?', ','];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        boundary = _ref[_i];
-        sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+    return $.timeout(300, function() {
+      var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
+      _this.scrambleInfo = _this.selectOption();
+      if (!_this.scrambleInfo) {
+        return;
       }
-    }
-    displayWords.html("<span class='words papered'>" + sentence + "</span>");
-    return this.displayScramble();
+      (_base = _this.puzzleData.levels[_this.languages][_this.levelName])[_name = _this.scrambleInfo.id] || (_base[_name] = 1);
+      displayWords = _this.$('.display_words');
+      if ((_this.scrambleInfo["" + _this.displayLevel + "Sentence"] != null) && _this.scrambleInfo["" + _this.displayLevel + "Sentence"].length) {
+        sentence = _this.scrambleInfo["" + _this.displayLevel + "Sentence"];
+      } else {
+        sentence = _this.scrambleInfo[_this.displayLevel];
+      }
+      sentence = " " + sentence + " ";
+      highlighted = _this.scrambleInfo[_this.displayLevel];
+      if (!highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))) {
+        _ref = [' ', '?', ','];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          boundary = _ref[_i];
+          sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+        }
+      }
+      displayWords.html("<span class='words papered'>" + sentence + "</span>");
+      return _this.displayScramble();
+    });
   };
 
   ViewHelper.prototype.displayScramble = function() {
     var _this = this;
+    this.$('.scrambled, .guesses').css({
+      width: null,
+      height: null,
+      opacity: null
+    });
     this.initScrambleAreas('scrambled');
     this.initScrambleAreas('guesses');
     return this.resize(function() {
@@ -1353,11 +1361,6 @@ languageScramble.ViewHelper = (function() {
         $.timeout(10, displayNext);
         return;
       }
-      _this.$('.scrambled, .guesses').css({
-        width: null,
-        height: null,
-        opacity: null
-      });
       return _this.newScramble();
     };
     this.$('.guesses').animate({

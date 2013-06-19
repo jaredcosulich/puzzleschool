@@ -325,31 +325,34 @@ class languageScramble.ViewHelper
 
         @lettersAdded = []
 
-        @scrambleInfo = @selectOption()
-        return unless @scrambleInfo     
-        @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
+        $.timeout 300, => 
+            @scrambleInfo = @selectOption()
+            return unless @scrambleInfo     
+            @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
 
-        # if @activeLevel.match(/foreign/) and not @el.hasClass('foreign')
-        #     @el.addClass('foreign')
-        # else if not @activeLevel.match(/foreign/) and @el.hasClass('foreign')
-        #     @el.removeClass('foreign')
-        # 
-        displayWords = @$('.display_words')
-        if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
-            sentence = @scrambleInfo["#{@displayLevel}Sentence"]
-        else
-            sentence = @scrambleInfo[@displayLevel]
-        sentence = " #{sentence} "
-        highlighted = @scrambleInfo[@displayLevel]
+            # if @activeLevel.match(/foreign/) and not @el.hasClass('foreign')
+            #     @el.addClass('foreign')
+            # else if not @activeLevel.match(/foreign/) and @el.hasClass('foreign')
+            #     @el.removeClass('foreign')
+            # 
+            displayWords = @$('.display_words')
+            if @scrambleInfo["#{@displayLevel}Sentence"]? && @scrambleInfo["#{@displayLevel}Sentence"].length 
+                sentence = @scrambleInfo["#{@displayLevel}Sentence"]
+            else
+                sentence = @scrambleInfo[@displayLevel]
+            sentence = " #{sentence} "
+            highlighted = @scrambleInfo[@displayLevel]
         
-        unless highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))
-            for boundary in [' ', '?', ',']
-                sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+            unless highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))
+                for boundary in [' ', '?', ',']
+                    sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        displayWords.html("<span class='words papered'>#{sentence}</span>")
-        @displayScramble()
+            displayWords.html("<span class='words papered'>#{sentence}</span>")
+            
+            @displayScramble()
         
     displayScramble: ->
+        @$('.scrambled, .guesses').css(width: null, height: null, opacity: null)        
         @initScrambleAreas('scrambled')
         @initScrambleAreas('guesses')
         @resize =>
@@ -922,7 +925,6 @@ class languageScramble.ViewHelper
                 $.timeout 10, displayNext
                 return
                 
-            @$('.scrambled, .guesses').css(width: null, height: null, opacity: null)
             @newScramble()
 
         @$('.guesses').animate

@@ -11,10 +11,15 @@ body {
     margin-bottom: 60px;
     position: relative;
     .rounded(12px);
-    transition: opacity 0.5s ease;
+    
+    .guesses, .scrambled, .display_words {
+        transition: opacity 0.25s ease;
+    }
 
     &.initializing_scramble {
-        opacity: 0;
+        .guesses, .scrambled, .display_words {
+            opacity: 0;
+        }
     }
 
     .header {
@@ -342,6 +347,7 @@ body {
             position: absolute;
             font-size: 15px;
             line-height: 45px;
+            left: -10000px;
             .papered {
                 .background_size(90px);  
                 
@@ -425,13 +431,8 @@ body {
         display: block;
         color: gray;
         z-index: 2; 
-        margin-top: -10000px;
-        margin-left: -10000px;
-    }
-    
-    .hide_keyboard #clickarea {
-        top: -1000px;
-        left: -1000px;        
+        top: 420px;
+        left: -10000px;        
     }
 
     /* iPad [portrait + landscape] */
