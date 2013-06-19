@@ -250,18 +250,23 @@ soma.views
                         hideSections()
                         section = customize.find("div.#{sectionName}")
                         section.show()
+                        section.find('input')?.focus()
                         section.find('.cancel_button').bind 'click.hide_section', =>
                             hideSections()
                             buttons.show()
                 
             customize.find('.add_equation .save_button').bind 'click.save', =>
                 hide()
-                @helper.addEquation('', customize.find('.add_equation input').val(), @level.variables)    
+                input = customize.find('.add_equation input')
+                @helper.addEquation('', input.val(), @level.variables)    
+                input.val('x')
                 
             customize.find('.add_fragment .save_button').bind 'click.save', =>
                 hide()
-                component = @helper.addEquationComponent(customize.find('.add_fragment input').val())
+                input = customize.find('.add_fragment input')
+                component = @helper.addEquationComponent(input.val())
                 component.custom = true
+                input.val('')
                 
             customize.find('a.remove_equation').bind 'click.init', =>
                 for equation in @helper.equations.equations
@@ -283,9 +288,7 @@ soma.views
                                 alert('You can not remove this equation fragment.')
                             else
                                 hide()
-                                    
-                                if component.variable
-                                    delete @variables[component.variable]
+                                delete @variables[component.variable] if component.variable
                                 @helper.equations.removeComponent(component)
                 
             

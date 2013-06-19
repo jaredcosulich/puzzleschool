@@ -85,7 +85,6 @@ equations.Equations = (function() {
       }
     });
     equationComponent.appendTo(this.possibleFragments.find('.fragments'));
-    console.log(equationComponent);
     this.equationComponents.push(equationComponent);
     rows = [];
     top = 0;

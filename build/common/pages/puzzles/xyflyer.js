@@ -340,10 +340,13 @@ soma.views({
       _ref = ['add_equation', 'remove_equation', 'add_fragment', 'remove_fragment'];
       _fn = function(sectionName) {
         return customize.find("a." + sectionName).bind('click.show_section', function() {
-          var section;
+          var section, _ref1;
           hideSections();
           section = customize.find("div." + sectionName);
           section.show();
+          if ((_ref1 = section.find('input')) != null) {
+            _ref1.focus();
+          }
           return section.find('.cancel_button').bind('click.hide_section', function() {
             hideSections();
             return buttons.show();
@@ -355,14 +358,19 @@ soma.views({
         _fn(sectionName);
       }
       customize.find('.add_equation .save_button').bind('click.save', function() {
+        var input;
         hide();
-        return _this.helper.addEquation('', customize.find('.add_equation input').val(), _this.level.variables);
+        input = customize.find('.add_equation input');
+        _this.helper.addEquation('', input.val(), _this.level.variables);
+        return input.val('x');
       });
       customize.find('.add_fragment .save_button').bind('click.save', function() {
-        var component;
+        var component, input;
         hide();
-        component = _this.helper.addEquationComponent(customize.find('.add_fragment input').val());
-        return component.custom = true;
+        input = customize.find('.add_fragment input');
+        component = _this.helper.addEquationComponent(input.val());
+        component.custom = true;
+        return input.val('');
       });
       customize.find('a.remove_equation').bind('click.init', function() {
         var equation, _j, _len1, _ref1, _results;
