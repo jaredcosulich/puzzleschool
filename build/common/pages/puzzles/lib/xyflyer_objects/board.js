@@ -167,7 +167,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addIsland = function() {
-    var island, islandHeight, islandWidth, islandX, islandY, person, personHeight, personWidth, personX, personY, planeX, planeY, text,
+    var island, islandHeight, islandWidth, islandX, islandXString, islandY, person, personHeight, personWidth, personX, personY, planeX, planeY, text, xPath,
       _this = this;
     person = this.objects.find('.person img');
     personWidth = person.width() * this.scale;
@@ -199,7 +199,13 @@ board.Board = (function(_super) {
       stroke: 'none',
       'font-size': 9 + (2 * this.scale)
     }).toFront();
-    return this.island.push(this.islandLabel);
+    this.island.push(this.islandLabel);
+    islandXString = "M" + planeX + ",0\nL" + planeX + "," + this.height;
+    xPath = this.paper.path(islandXString);
+    return xPath.attr({
+      stroke: 'rgba(255,255,255,0.3)',
+      'stroke-dasharray': '--'
+    });
   };
 
   Board.prototype.moveIsland = function(x, y) {

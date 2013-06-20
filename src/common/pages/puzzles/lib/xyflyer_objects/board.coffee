@@ -143,6 +143,14 @@ class board.Board extends xyflyerObject.Object
         ).attr(fill: '#ddd', stroke: 'none', 'font-size': 9+(2*@scale)).toFront()
         
         @island.push(@islandLabel)
+        
+        islandXString = """
+            M#{planeX},0
+            L#{planeX},#{@height}
+        """
+
+        xPath = @paper.path(islandXString)
+        xPath.attr(stroke: 'rgba(255,255,255,0.3)', 'stroke-dasharray': '--')
                 
     moveIsland: (x, y) ->
         if not @island
@@ -162,7 +170,7 @@ class board.Board extends xyflyerObject.Object
             x: @paperX(x)
             y: @paperY(y)   
         
-        @island.transform("...t#{relativeX},#{relativeY}")       
+        @island.transform("...t#{relativeX},#{relativeY}")      
         
         @islandLabel.attr(text: @islandText())
         return @islandCoordinates
