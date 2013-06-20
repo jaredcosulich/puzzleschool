@@ -361,7 +361,7 @@ class languageScramble.ViewHelper
             @scrambleScrambleArea()
 
             @$('.scrambled .letter').addClass('sized')
-        
+            
             @el.removeClass('initializing_scramble')
             @initializingScramble = false
     
@@ -874,9 +874,14 @@ class languageScramble.ViewHelper
                 @$(".progress_meter .bar .#{id}").css(opacity: 1)
         @setLevelProgress()
     
+    capitalizeFirstLetter: (string) ->
+        "#{string.charAt(0).toUpperCase()}#{string.slice(1)}"
+    
     next: () ->
         @initializingScramble = true
-        correct = $(document.createElement('DIV'))
+
+        dictionary = @$('.dictionary')
+
         if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length
             correctSentence = @scrambleInfo["#{@activeType}Sentence"] 
         else 
@@ -889,26 +894,8 @@ class languageScramble.ViewHelper
             for boundary in [' ', '?', ',']
                 correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
 
-        correctSentence += '<div class=\'tap\'>Next Scramble</div>'
-
-        correct.html("<div class='papered'>#{correctSentence}</div>")
-        correct.addClass('correct')
-        correct.css(opacity: 0)
-        scrambled = @$('.scrambled')
-        @clearContainer(scrambled)
-        @$('.scrambled .hidden_message').hide()
-        @$('.scrambled').css(width: null)
-        scrambled.append(correct)
-
-        displayedSentence = @$('.display_words').html()
-
-        # @$('.last_answer').animate
-        #     opacity: 0
-        #     duration: 300
-
-        guessAnimationOngoing = true
         nextShown = false
-        showNext = () =>
+        showNext = =>
             return if nextShown
             nextShown = true
             $(document.body).unbind 'mousemove.drag touchmove.drag'
@@ -916,41 +903,107 @@ class languageScramble.ViewHelper
             $(document.body).unbind 'click.shownext'
             $(document.body).unbind 'touchstart.shownext'
             $('#clickarea').unbind 'keyup.shownext'
-            @setProgress()
-            @saveLevel()
-            displayNext()
-                    
-        displayNext = =>
-            if guessAnimationOngoing
-                $.timeout 10, displayNext
-                return
-                
-            @newScramble()
+            @el.removeClass('extra_info')
+            dictionary.animate
+                opacity: 0
+                duration: 500
+                complete: =>
+                    dictionary.css
+                        top: -10000
+                        left: -10000
 
-        @$('.guesses').animate
+        inactiveType = if @activeType == 'native' then 'foreign' else 'native'
+        nativeLanguage = @languages.split(/_/)[if @activeType == 'native' then 1 else 0]
+        foreignLanguage = @languages.split(/_/)[if @activeType == 'foreign' then 1 else 0]
+        dictionary.html """
+            <table class='sentences'>
+                <tr>
+                    <td class='language'>#{@capitalizeFirstLetter(nativeLanguage)}</td>
+                    <td class='sentence'>#{@$('.display_words span').html()}</td>
+                </tr>
+                <tr>
+                    <td class='language'>#{@capitalizeFirstLetter(foreignLanguage)}</td>
+                    <td class='sentence'>#{correctSentence}</td>
+                </tr>
+            </table>
+        """
+        
+        alternatives = @scrambleInfo["#{@activeType}Alternatives"]
+        if alternatives
+            alternativeHtml = """
+                <div class='extra'>
+                    <div class='title'>Alternative translations for <b>#{@scrambleInfo[inactiveType]}</b>:</div>
+            """
+            
+            for wordType, translations of alternatives
+                alternativeHtml += """
+                    <p>
+                        <b>(#{wordType}s)</b>:
+                        #{(translation for translation in translations).join(', ')}
+                    </p>
+                """
+            
+            alternativeHtml += '</div>'
+            dictionary.append(alternativeHtml)
+
+        conjugations = @scrambleInfo["#{@activeType}Conjugations"]
+        otherConjugations = @scrambleInfo["#{inactiveType}Conjugations"]
+        if conjugations and otherConjugations
+            dictionary.append """
+                <div class='extra'>
+                    <div class='title'>Conjugations of the verb <b>#{@scrambleInfo[inactiveType]}</b></div>
+                    <table>
+                        <tr>
+                            #{("<td><b>#{conjugation}</b></td>" for conjugation in conjugations).join('')}
+                        </tr>
+                        <tr>
+                            #{("<td>#{conjugation}</td>" for conjugation in otherConjugations).join('')}
+                        </tr>
+                    </table>
+                </div>
+            """
+            
+        showNextButton = $(document.createElement('A'))
+        showNextButton.addClass('next')
+        showNextButton.html('Next Scramble')
+        showNextButton.bind 'click', (e) => 
+            e.stop()
+            showNext()
+        dictionary.append(showNextButton)
+            
+        dictionary.css
             opacity: 0
-            height: (@$('.guesses').height() / 4)
-            paddingTop: 0
-            paddingBottom: 0
-            duration: 500
-            complete: -> guessAnimationOngoing = false
+            top: (@el.height() - dictionary.height()) / 2
+            left: (@el.width() - dictionary.width()) / 2
 
-        if window.AppMobi
-            $(document.body).bind 'touchstart.shownext', (e) =>
-                e.stop() 
-                $(document.body).unbind 'touchstart.shownext'
-                $(document.body).one 'touchend.shownext', (e) => 
-                    e.stop()
-                    showNext()
-        else
-            $(document.body).bind 'click.shownext', () => showNext() 
-            $('#clickarea').bind 'keydown.shownext', (e) => showNext()
+        # @$('.guesses').animate
+        #     opacity: 0
+        #     height: (@$('.guesses').height() / 4)
+        #     paddingTop: 0
+        #     paddingBottom: 0
+        #     duration: 500
+        #     complete: -> guessAnimationOngoing = false
 
-        correct.animate
-            opacity: 1
-            duration: 500
-            complete: () =>
-                $.timeout 1000 + (100 * correctSentence.length), () => showNext()
+        # if window.AppMobi
+        #     $(document.body).bind 'touchstart.shownext', (e) =>
+        #         e.stop() 
+        #         $(document.body).unbind 'touchstart.shownext'
+        #         $(document.body).one 'touchend.shownext', (e) => 
+        #             e.stop()
+        #             showNext()
+        # else
+        #     $(document.body).bind 'click.shownext', () => showNext() 
+        #     $('#clickarea').bind 'keydown.shownext', (e) => showNext()
+
+        $.timeout 500, =>
+            dictionary.animate
+                opacity: 1
+                duration: 500
+                complete: =>
+                    @el.addClass('extra_info')
+                    @setProgress()
+                    @saveLevel()
+                    @newScramble()
 
     nextLevel: () ->        
         message = @$('#next_level')
@@ -978,83 +1031,44 @@ class languageScramble.ViewHelper
 
 languageScramble.data =
     english_italian: 
-        displayName: "English - Italian"
+        displayLanguages: 'English - Italian'
         levels:
-            animals:
-                title: 'Animals'
-                subtitle: 'Types of animals'
-                nextLevels: ['apples']
-                data: [
-                    {native: 'bear', foreign: 'l\'orso'}
-                    {native: 'bird', foreign: 'l\'uccello'}
-                    {native: 'cat', foreign: 'il gatto'}
-                    {native: 'deer', foreign: 'il cervo'}
-                    {native: 'dog', foreign: 'il cane'}
-                    {native: 'duck', foreign: 'l\'anatra'}
-                    {native: 'elephant', foreign: 'l\'elefante'}
-                    {native: 'falcon', foreign: 'il falcone'}
-                    {native: 'fish', foreign: 'il pesce'}
-                    {native: 'fox', foreign: 'la volpe'}
-                    {native: 'goat', foreign: 'la capra'}
-                    {native: 'horse', foreign: 'il cavallo'}
-                    {native: 'lion', foreign: 'il leone'}
-                    {native: 'mole', foreign: 'la talpa'}
-                    {native: 'monkey', foreign: 'la scimmia'}
-                    {native: 'mouse', foreign: 'il topo'}
-                    {native: 'rabbit', foreign: 'il coniglio'}
-                    {native: 'rat', foreign: 'il ratto'}
-                    {native: 'shark', foreign: 'lo squalo'}
-                    {native: 'snake', foreign: 'il serpente'}
-                    {native: 'squirrel', foreign: 'lo scoiattolo'}
-                    {native: 'swan', foreign: 'il cigno'}
-                    {native: 'tiger', foreign: 'la tigre'}
-                    {native: 'wild boar', foreign: 'il cinghiale'}
-                    {native: 'worm', foreign: 'il verme'}
-                ]
-            apples:
-                title: 'Apples'
-                subtitle: 'Phrases about apples.'
-                nextLevels: ['fathers']
-                data: [
-                    {native: 'the apple is red', foreign: 'la mela è rossa'}
-                    {native: 'it is John\'s apple', foreign: 'è mela Giovanni'}
-                    {native: 'i give John the apple', foreign: 'rendo Giovanni la mela'}
-                    {native: 'we give him the apple', foreign: 'noi gli diamo la mela'}
-                    {native: 'he gives it to John', foreign: 'egli dà a John'}
-                    {native: 'she gives it to him', foreign: 'lei dà a lui'}
-                    {native: 'is the apple red?', foreign: 'è la mela rossa?'}
-                    {native: 'the apples are red', foreign: 'le mele sono rosse'}
-                    {native: 'i have eaten the apple.', foreign: 'ho mangiato la mela.'}
-                    {native: 'i must give it to him.', foreign: 'devo dare a lui.'}
-                    {native: 'i want to give it to her.', foreign: 'voglio dare a lei.'}
-                    {native: 'i\'m going to know tomorrow', foreign: 'ho intenzione di conoscere domani'}
-                    {native: 'i can\'t eat the apple.', foreign: 'non riesco a mangiare la mela.'}
-                ]
-            fathers:
-                title: 'Fathers'
-                subtitle: 'Phrases about fathers.'
-                nextLevels: ['top10nouns']
-                data: [
-                    {native: 'my father is old', foreign: 'mio padre è vecchio'}
-                    {native: 'it is father\'s office', foreign: 'e l\'ufficio del padre'}
-                    {native: 'i loan father the money', foreign: 'mi padre prestito il denaro'}
-                    {native: 'i know father is happy', foreign: 'so che il padre è felice'}
-                    {native: 'we need father to know', foreign: 'abbiamo bisogno di conoscere il padre'}
-                    {native: 'she loves father', foreign: 'lei ama il padre'}
-                    {native: 'is father old?', foreign: 'è il padre vecchio?'}
-                    {native: 'fathers are essential', foreign: 'padri sono essenziali'}
-                    {native: 'i have seen father', foreign: 'ho visto il padre'}
-                    {native: 'i must talk to father', foreign: 'devo parlare con il padre'}
-                    {native: 'i want to hug father', foreign: 'voglio abbracciare il padre'}
-                    {native: 'i\'m going to dance with father', foreign: 'io vado a ballare con il padre'}
-                    {native: 'i can\'t wait for father', foreign: 'non vedo l\'ora per il padre'}
-                ]
             top10nouns:
                 title: 'Top 10 Nouns'
                 subtitle: 'The 10 most commonly used nouns.'
-                nextLevels: ['top10verbs']
                 data: [
-                    {native: 'what', foreign: 'cosa'}
+                    {
+                        native: 'what', 
+                        foreign: 'cosa',
+                        type: 'pronoun'
+                        foreignAlternatives:
+                            pronoun: [
+                                'ciò che'
+                                'che'
+                                'quello che'
+                                'che cosa'
+                                'quella che'
+                                'quelli che'
+                                'quelle che'
+                            ]
+                            adjective: [
+                                'quali'
+                                'che'
+                                'quale'
+                            ]
+                            conjunction: [
+                                'che'
+                            ]
+                        nativeAlternatives: 
+                            noun: [
+                                'thing'
+                                'matter'
+                                'stuff'
+                                'object'
+                                'piece'
+                                'dud'
+                            ]
+                    }
                     {native: 'year', foreign: 'anno'}
                     {native: 'man', foreign: 'uomo'}
                     {native: 'daytime', foreign: 'giorno'}
@@ -1070,8 +1084,48 @@ languageScramble.data =
                 subtitle: 'The 10 most commonly used verbs.'
                 nextLevels: ['top10sentences']
                 data: [
-                    {native: 'to be', foreign: 'essere'}
-                    {native: 'to have', foreign: 'avere'}
+                    {
+                        native: 'to be' 
+                        foreign: 'essere'
+                        type: 'verb'
+                        nativeConjugations: [
+                            'i am'
+                            'you are'
+                            'he/she is'
+                            'we are'
+                            'you are'
+                            'they are'
+                        ]
+                        foreignConjugations: [
+                            'io sono'
+                            'tu sei'
+                            'lui/lei è'
+                            'noi siamo'
+                            'voi siete'
+                            'loro sono'
+                        ]
+                    }
+                    {
+                        native: 'to have'
+                        foreign: 'avere'
+                        type: 'verb'
+                        nativeConjugations: [
+                            'i have'
+                            'you have'
+                            'he/she has'
+                            'we have'
+                            'you have'
+                            'they have'
+                        ]
+                        foreignConjugations: [
+                            'io ho'
+                            'tu hai'
+                            'lui/lei ha'
+                            'noi abbiamo'
+                            'voi avete'
+                            'loro hanno'
+                        ]
+                    }
                     {native: 'to say', foreign: 'dire'}
                     {native: 'to be able to', foreign: 'potere'}
                     {native: 'to want', foreign: 'volere'}
@@ -1401,6 +1455,76 @@ languageScramble.data =
                     {native: 'daughter', foreign: 'figlia'}
                     {native: 'rest', foreign: 'resto'}
                 ]            
+            animals:
+                title: 'Animals'
+                subtitle: 'Types of animals'
+                nextLevels: ['apples']
+                data: [
+                    {native: 'bear', foreign: 'l\'orso'}
+                    {native: 'bird', foreign: 'l\'uccello'}
+                    {native: 'cat', foreign: 'il gatto'}
+                    {native: 'deer', foreign: 'il cervo'}
+                    {native: 'dog', foreign: 'il cane'}
+                    {native: 'duck', foreign: 'l\'anatra'}
+                    {native: 'elephant', foreign: 'l\'elefante'}
+                    {native: 'falcon', foreign: 'il falcone'}
+                    {native: 'fish', foreign: 'il pesce'}
+                    {native: 'fox', foreign: 'la volpe'}
+                    {native: 'goat', foreign: 'la capra'}
+                    {native: 'horse', foreign: 'il cavallo'}
+                    {native: 'lion', foreign: 'il leone'}
+                    {native: 'mole', foreign: 'la talpa'}
+                    {native: 'monkey', foreign: 'la scimmia'}
+                    {native: 'mouse', foreign: 'il topo'}
+                    {native: 'rabbit', foreign: 'il coniglio'}
+                    {native: 'rat', foreign: 'il ratto'}
+                    {native: 'shark', foreign: 'lo squalo'}
+                    {native: 'snake', foreign: 'il serpente'}
+                    {native: 'squirrel', foreign: 'lo scoiattolo'}
+                    {native: 'swan', foreign: 'il cigno'}
+                    {native: 'tiger', foreign: 'la tigre'}
+                    {native: 'wild boar', foreign: 'il cinghiale'}
+                    {native: 'worm', foreign: 'il verme'}
+                ]
+            apples:
+                title: 'Apples'
+                subtitle: 'Phrases about apples.'
+                nextLevels: ['fathers']
+                data: [
+                    {native: 'the apple is red', foreign: 'la mela è rossa'}
+                    {native: 'it is John\'s apple', foreign: 'è mela Giovanni'}
+                    {native: 'i give John the apple', foreign: 'rendo Giovanni la mela'}
+                    {native: 'we give him the apple', foreign: 'noi gli diamo la mela'}
+                    {native: 'he gives it to John', foreign: 'egli dà a John'}
+                    {native: 'she gives it to him', foreign: 'lei dà a lui'}
+                    {native: 'is the apple red?', foreign: 'è la mela rossa?'}
+                    {native: 'the apples are red', foreign: 'le mele sono rosse'}
+                    {native: 'i have eaten the apple.', foreign: 'ho mangiato la mela.'}
+                    {native: 'i must give it to him.', foreign: 'devo dare a lui.'}
+                    {native: 'i want to give it to her.', foreign: 'voglio dare a lei.'}
+                    {native: 'i\'m going to know tomorrow', foreign: 'ho intenzione di conoscere domani'}
+                    {native: 'i can\'t eat the apple.', foreign: 'non riesco a mangiare la mela.'}
+                ]
+            fathers:
+                title: 'Fathers'
+                subtitle: 'Phrases about fathers.'
+                nextLevels: ['top10nouns']
+                data: [
+                    {native: 'my father is old', foreign: 'mio padre è vecchio'}
+                    {native: 'it is father\'s office', foreign: 'e l\'ufficio del padre'}
+                    {native: 'i loan father the money', foreign: 'mi padre prestito il denaro'}
+                    {native: 'i know father is happy', foreign: 'so che il padre è felice'}
+                    {native: 'we need father to know', foreign: 'abbiamo bisogno di conoscere il padre'}
+                    {native: 'she loves father', foreign: 'lei ama il padre'}
+                    {native: 'is father old?', foreign: 'è il padre vecchio?'}
+                    {native: 'fathers are essential', foreign: 'padri sono essenziali'}
+                    {native: 'i have seen father', foreign: 'ho visto il padre'}
+                    {native: 'i must talk to father', foreign: 'devo parlare con il padre'}
+                    {native: 'i want to hug father', foreign: 'voglio abbracciare il padre'}
+                    {native: 'i\'m going to dance with father', foreign: 'io vado a ballare con il padre'}
+                    {native: 'i can\'t wait for father', foreign: 'non vedo l\'ora per il padre'}
+                ]
+                
             greetings:
                 title: 'Greetings'
                 subtitle: 'Common conversational greetings.'
@@ -2634,8 +2758,6 @@ x = [
     {native: 'has the flight landed?', foreign: 'è atteratto il volo?'}
     {native: 'how late will the flight be?', foreign: 'di quanto ritarderà il volo?'}
 ]
-
-
 
 
 

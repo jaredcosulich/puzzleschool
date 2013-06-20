@@ -53,9 +53,9 @@ task 'build:file', 'Build a file', ->
         #'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
         # 'coffee --compile --bare --output build/common/pages/puzzles/lib/xyflyer_objects src/common/pages/puzzles/lib/xyflyer_objects/levels.coffee'
         #'coffee --compile --bare --output build/common/pages/puzzles/lib/word_problem_objects src/common/pages/puzzles/lib/word_problem_objects/interaction.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/xyflyer.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/xyflyer.coffee'
-        'lessc src/client/css/puzzles/xyflyer.less build/client/css/puzzles/xyflyer.css'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/language_scramble.coffee'
+        # 'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/xyflyer.coffee'
+        'lessc src/client/css/puzzles/language_scramble.less build/client/css/puzzles/language_scramble.css'
         #'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
         'cp -r src/common/templates build/common'
     ]

@@ -16,7 +16,7 @@ body {
         transition: opacity 0.25s ease;
     }
 
-    &.initializing_scramble {
+    &.initializing_scramble, &.extra_info {
         .guesses, .scrambled, .display_words {
             opacity: 0;
         }
@@ -420,6 +420,92 @@ body {
         .highlighted {
             .bg-alpha(@green, 0.25);
             padding: 0 3px;
+        }
+    }
+    
+    .dictionary {
+        background-color: @white;
+        width: 540px;
+        height: 540px;
+        padding: 12px;
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+        overflow: auto;
+        text-align: center;
+        font-size: @h1size;
+
+        .sentences {
+            margin-top: 45px;
+            border-spacing: 12px;
+            
+            td {
+                padding: 12px 0; 
+                margin-bottom: 12px;
+            }
+            .language {
+                font-size: 36px;
+                padding-right: 6px;
+                text-align: right;
+            }
+            .sentence {
+                padding: 12px 30px;
+                border: 1px solid @black;
+                min-width: 330px;
+                .rounded(12px);     
+                position: relative;
+                          
+                .highlighted {
+                    .bg-alpha(@green, 0.25);                
+                }                
+                
+                &::after {
+                    background-color: @white;
+                    height: 18px;
+                    width: 18px;
+                    content: "\00a0";
+                    display: block;
+                    left: -8px;
+                    top: 36%;
+                    position: absolute;
+                    .box-shadow(1px 1px rgb(0,0,0));
+                    transform:               rotate( 135deg );  
+                        -moz-transform:      rotate( 135deg );  
+                        -ms-transform:       rotate( 135deg );  
+                        -o-transform:        rotate( 135deg );  
+                        -webkit-transform:   rotate( 135deg );  
+                }
+            }    
+        }
+            
+        .type {
+            padding: 60px 0;
+        }
+        
+        .extra {
+            padding-top: 60px;
+            p, table {
+                margin: 6px 0;
+                font-size: @h4size;
+            }
+            table {
+                width: 100%;
+            }
+        }
+        
+        .next {
+            display: block;
+            margin: 60px auto 0 auto;
+            background-image: url('/assets/images/puzzles/language_scramble/wide_button.png'); 
+            color: @black;
+            height: 92px;
+            width: 372px;
+            line-height: 81px;
+            text-indent: 20px;
+            font-size: 36px;
+            cursor: pointer;
+            .no_select();
+            
         }
     }
     

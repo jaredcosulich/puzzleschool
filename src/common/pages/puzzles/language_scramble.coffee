@@ -41,7 +41,7 @@ soma.chunks
             languageScramble = require('./lib/language_scramble')
             
             @languages = (@puzzleData.lastLanguages or 'english_italian') unless @languages && @languages.length
-            @levelName = (@puzzleData.lastLevelPlayed or 'top10words') unless @levelName && @levelName.length
+            @levelName = (@puzzleData.lastLevelPlayed or 'top10nouns') unless @levelName && @levelName.length
             @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]
             @chunkHelper = new languageScramble.ChunkHelper(@languages, @levelName, @puzzleData)
             

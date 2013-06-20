@@ -84,7 +84,7 @@ soma.chunks({
         this.languages = this.puzzleData.lastLanguages || 'english_italian';
       }
       if (!(this.levelName && this.levelName.length)) {
-        this.levelName = this.puzzleData.lastLevelPlayed || 'top10words';
+        this.levelName = this.puzzleData.lastLevelPlayed || 'top10nouns';
       }
       if (!this.puzzleData.levels[this.languages]) {
         this.puzzleData.levels[this.languages] = {};

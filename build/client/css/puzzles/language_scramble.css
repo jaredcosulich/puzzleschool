@@ -30,8 +30,11 @@ body {
   transition: opacity 0.25s ease;
 }
 .language_scramble.initializing_scramble .guesses,
+.language_scramble.extra_info .guesses,
 .language_scramble.initializing_scramble .scrambled,
-.language_scramble.initializing_scramble .display_words {
+.language_scramble.extra_info .scrambled,
+.language_scramble.initializing_scramble .display_words,
+.language_scramble.extra_info .display_words {
   opacity: 0;
 }
 .language_scramble .header {
@@ -492,6 +495,93 @@ body {
 .language_scramble .last_answer .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
   padding: 0 3px;
+}
+.language_scramble .dictionary {
+  background-color: #fafafa;
+  width: 540px;
+  height: 540px;
+  padding: 12px;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  overflow: auto;
+  text-align: center;
+  font-size: 27px;
+}
+.language_scramble .dictionary .sentences {
+  margin-top: 45px;
+  border-spacing: 12px;
+}
+.language_scramble .dictionary .sentences td {
+  padding: 12px 0;
+  margin-bottom: 12px;
+}
+.language_scramble .dictionary .sentences .language {
+  font-size: 36px;
+  padding-right: 6px;
+  text-align: right;
+}
+.language_scramble .dictionary .sentences .sentence {
+  padding: 12px 30px;
+  border: 1px solid #262626;
+  min-width: 330px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  position: relative;
+}
+.language_scramble .dictionary .sentences .sentence .highlighted {
+  background-color: rgba(36, 219, 75, 0.25);
+}
+.language_scramble .dictionary .sentences .sentence::after {
+  background-color: #fafafa;
+  height: 18px;
+  width: 18px;
+  content: "\00a0";
+  display: block;
+  left: -8px;
+  top: 36%;
+  position: absolute;
+  box-shadow: 1px 1px #000000;
+  -webkit-box-shadow: 1px 1px #000000;
+  -moz-box-shadow: 1px 1px #000000;
+  transform: rotate(135deg);
+  -moz-transform: rotate(135deg);
+  -ms-transform: rotate(135deg);
+  -o-transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+.language_scramble .dictionary .type {
+  padding: 60px 0;
+}
+.language_scramble .dictionary .extra {
+  padding-top: 60px;
+}
+.language_scramble .dictionary .extra p,
+.language_scramble .dictionary .extra table {
+  margin: 6px 0;
+  font-size: 15px;
+}
+.language_scramble .dictionary .extra table {
+  width: 100%;
+}
+.language_scramble .dictionary .next {
+  display: block;
+  margin: 60px auto 0 auto;
+  background-image: url('/assets/images/puzzles/language_scramble/wide_button.png');
+  color: #262626;
+  height: 92px;
+  width: 372px;
+  line-height: 81px;
+  text-indent: 20px;
+  font-size: 36px;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble #clickarea {
   position: absolute;
