@@ -290,7 +290,7 @@ soma.views
                                 hide()
                                 delete @variables[component.variable] if component.variable
                                 @helper.equations.removeComponent(component)
-                
+                                @helper.equations.positionComponents()  
             
             customize.find('.cancel_custom').bind 'click', => hide()
             

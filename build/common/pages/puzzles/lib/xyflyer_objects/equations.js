@@ -71,7 +71,7 @@ equations.Equations = (function() {
   };
 
   Equations.prototype.addComponent = function(equationFragment, side) {
-    var equationComponent, first, fragmentsWidth, index, lastRow, lastRowShift, rows, shift, top, _i, _len, _ref,
+    var equationComponent,
       _this = this;
     equationComponent = new EquationComponent({
       gameArea: this.gameArea,
@@ -86,6 +86,11 @@ equations.Equations = (function() {
     });
     equationComponent.appendTo(this.possibleFragments.find('.fragments'));
     this.equationComponents.push(equationComponent);
+    return this.positionComponents();
+  };
+
+  Equations.prototype.positionComponents = function() {
+    var equationComponent, first, fragmentsWidth, index, lastRow, lastRowShift, rows, shift, top, _i, _j, _len, _len1, _ref, _ref1;
     rows = [];
     top = 0;
     first = this.equationComponents[0];
@@ -117,6 +122,12 @@ equations.Equations = (function() {
           marginLeft: shift
         });
       }
+    }
+    _ref1 = this.equationComponents;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      equationComponent = _ref1[_j];
+      equationComponent.initMeasurements();
+      equationComponent.positionPlaceHolder();
     }
     return equationComponent;
   };

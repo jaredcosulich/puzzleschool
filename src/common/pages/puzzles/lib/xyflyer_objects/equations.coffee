@@ -56,7 +56,9 @@ class equations.Equations
 
         equationComponent.appendTo(@possibleFragments.find('.fragments'))
         @equationComponents.push(equationComponent)
+        @positionComponents()
 
+    positionComponents: ->
         rows = []
         top = 0
         first = @equationComponents[0]
@@ -79,7 +81,11 @@ class equations.Equations
                 shift = ((@possibleFragments.width() - fragmentsWidth) / 2) - 6
                 
                 first.elementContainer.css(marginLeft: shift)
-                
+        
+        for equationComponent in @equationComponents   
+                equationComponent.initMeasurements()
+                equationComponent.positionPlaceHolder() 
+
         return equationComponent
         
     removeComponent: (equationComponent) ->
