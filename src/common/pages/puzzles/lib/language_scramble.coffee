@@ -903,11 +903,11 @@ class languageScramble.ViewHelper
             $(document.body).unbind 'click.shownext'
             $(document.body).unbind 'touchstart.shownext'
             $('#clickarea').unbind 'keyup.shownext'
-            @el.removeClass('extra_info')
             dictionary.animate
                 opacity: 0
                 duration: 500
                 complete: =>
+                    @el.removeClass('extra_info')
                     dictionary.css
                         top: -10000
                         left: -10000
@@ -966,7 +966,7 @@ class languageScramble.ViewHelper
         showNextButton = $(document.createElement('A'))
         showNextButton.addClass('next')
         showNextButton.html('Next Scramble')
-        showNextButton.bind 'click', (e) => 
+        showNextButton.bind 'touchstart.next click.next', (e) => 
             e.stop()
             showNext()
         dictionary.append(showNextButton)

@@ -1341,11 +1341,11 @@ languageScramble.ViewHelper = (function() {
       $(document.body).unbind('click.shownext');
       $(document.body).unbind('touchstart.shownext');
       $('#clickarea').unbind('keyup.shownext');
-      _this.el.removeClass('extra_info');
       return dictionary.animate({
         opacity: 0,
         duration: 500,
         complete: function() {
+          _this.el.removeClass('extra_info');
           return dictionary.css({
             top: -10000,
             left: -10000
@@ -1399,7 +1399,7 @@ languageScramble.ViewHelper = (function() {
     showNextButton = $(document.createElement('A'));
     showNextButton.addClass('next');
     showNextButton.html('Next Scramble');
-    showNextButton.bind('click', function(e) {
+    showNextButton.bind('touchstart.next click.next', function(e) {
       e.stop();
       return showNext();
     });
