@@ -142,8 +142,8 @@ languageScramble.ViewHelper = (function() {
     return this.setProgress();
   };
 
-  ViewHelper.prototype.saveLevel = function() {
-    var allComplete, id, percentComplete;
+  ViewHelper.prototype.saveLevel = function(percentComplete) {
+    var allComplete, id;
     this.answerTimes.push(new Date());
     this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
     this.setProgress();
@@ -174,7 +174,8 @@ languageScramble.ViewHelper = (function() {
       leftToGo += $(progressSection).css('opacity') * progressIncrement;
     }
     percentComplete = 100 - leftToGo;
-    return this.$('.level_progress_meter .percent_complete').width("" + percentComplete + "%");
+    this.$('.level_progress_meter .percent_complete').width("" + percentComplete + "%");
+    return percentComplete;
   };
 
   ViewHelper.prototype.setTitle = function() {
@@ -1270,11 +1271,11 @@ languageScramble.ViewHelper = (function() {
               });
             }
             _this.$('.progress_meter .bar').append(section);
-            _this.updateProgress();
-            _results.push(_this.$('.progress_meter').animate({
+            _this.$('.progress_meter').animate({
               opacity: 1,
               duration: 300
-            }));
+            });
+            _results.push(_this.updateProgress());
           }
           return _results;
         }
@@ -1312,9 +1313,31 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.next = function() {
+    var _this = this;
+    this.initializingScramble = true;
+    this.$('.guesses').addClass('all_correct');
+    return $.timeout(750, function() {
+      _this.$('.guesses').removeClass('all_correct');
+      return $.timeout(250, function() {
+        return _this.showDictionary();
+      });
+    });
+  };
+
+  ViewHelper.prototype.showDictionary = function() {
     var alternativeHtml, alternatives, boundary, conjugation, conjugations, correctSentence, dictionary, foreignLanguage, highlighted, inactiveType, nativeLanguage, nextShown, otherConjugations, showNext, showNextButton, translation, translations, wordType, _i, _len, _ref,
       _this = this;
-    this.initializingScramble = true;
+    if (this.activeLevel.match(/Hard/)) {
+      this.el.addClass('extra_info');
+      $.timeout(250, function() {
+        _this.saveLevel(_this.setProgress());
+        _this.newScramble();
+        return $.timeout(100, function() {
+          return _this.el.removeClass('extra_info');
+        });
+      });
+      return;
+    }
     dictionary = this.$('.dictionary');
     if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
       correctSentence = this.scrambleInfo["" + this.activeType + "Sentence"];
@@ -1406,20 +1429,17 @@ languageScramble.ViewHelper = (function() {
     dictionary.append(showNextButton);
     dictionary.css({
       opacity: 0,
-      top: (this.el.height() - dictionary.height()) / 2,
-      left: (this.el.width() - dictionary.width()) / 2
+      top: (this.$('.scramble_content').height() - dictionary.height()) / 2,
+      left: (this.$('.scramble_content').width() - dictionary.width()) / 2
     });
-    return $.timeout(500, function() {
-      return dictionary.animate({
-        opacity: 1,
-        duration: 500,
-        complete: function() {
-          _this.el.addClass('extra_info');
-          _this.setProgress();
-          _this.saveLevel();
-          return _this.newScramble();
-        }
-      });
+    return dictionary.animate({
+      opacity: 1,
+      duration: 500,
+      complete: function() {
+        _this.el.addClass('extra_info');
+        _this.saveLevel(_this.setProgress());
+        return _this.newScramble();
+      }
     });
   };
 
@@ -1436,6 +1456,10 @@ languageScramble.ViewHelper = (function() {
         opacity: 0,
         duration: 250,
         complete: function() {
+          message.css({
+            top: -10000,
+            left: -10000
+          });
           return _this.$('.menu_button').trigger('click.menu touchstart.menu');
         }
       });

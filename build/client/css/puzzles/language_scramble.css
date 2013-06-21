@@ -453,6 +453,9 @@ body {
   left: 236px;
   top: 30px;
 }
+.language_scramble .guesses {
+  transition: box-shadow 0.5s ease;
+}
 .language_scramble .guesses .color1 .correct_letter::after,
 .language_scramble .guesses .color2 .correct_letter::after,
 .language_scramble .guesses .color3 .correct_letter::after,
@@ -479,6 +482,11 @@ body {
 .language_scramble .guesses.hidden .hidden_message {
   left: 250px;
   top: 60px;
+}
+.language_scramble .guesses.all_correct {
+  box-shadow: 0 0 150px #ffffff;
+  -webkit-box-shadow: 0 0 150px #ffffff;
+  -moz-box-shadow: 0 0 150px #ffffff;
 }
 .language_scramble .floating_message {
   position: absolute;

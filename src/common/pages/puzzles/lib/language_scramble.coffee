@@ -83,7 +83,7 @@ class languageScramble.ViewHelper
         @setProgress()
         
 
-    saveLevel: () ->
+    saveLevel: (percentComplete) ->
         @answerTimes.push(new Date())
         @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
         @setProgress()
@@ -95,7 +95,6 @@ class languageScramble.ViewHelper
                     allComplete = false
                     break
             percentComplete = 100 if allComplete
-        
         @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete        
         $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
             
@@ -108,6 +107,7 @@ class languageScramble.ViewHelper
         leftToGo += $(progressSection).css('opacity') * progressIncrement for progressSection in progress
         percentComplete = 100 - leftToGo
         @$('.level_progress_meter .percent_complete').width("#{percentComplete}%")
+        return percentComplete
 
     setTitle: ->
         if $('.header .level .title').html() != @level.title
@@ -324,7 +324,7 @@ class languageScramble.ViewHelper
         @answerTimes.push(new Date()) 
 
         @lettersAdded = []
-
+        
         $.timeout 300, => 
             @scrambleInfo = @selectOption()
             return unless @scrambleInfo     
@@ -855,10 +855,10 @@ class languageScramble.ViewHelper
                         section.addClass(scramble.id)
                         section.css(borderRight: 'none') if (index + 1) == @level.data.length
                         @$('.progress_meter .bar').append(section)
-                        @updateProgress()
                         @$('.progress_meter').animate
                             opacity: 1
                             duration: 300
+                        @updateProgress()
         else
             @updateProgress()
         
@@ -879,7 +879,22 @@ class languageScramble.ViewHelper
     
     next: () ->
         @initializingScramble = true
-
+        
+        @$('.guesses').addClass('all_correct')
+        $.timeout 750, =>
+            @$('.guesses').removeClass('all_correct')
+            $.timeout 250, => @showDictionary()
+        
+        
+    showDictionary: ->
+        if @activeLevel.match(/Hard/)
+            @el.addClass('extra_info')
+            $.timeout 250, => 
+                @saveLevel(@setProgress())
+                @newScramble()
+                $.timeout 100, => @el.removeClass('extra_info')                
+            return
+            
         dictionary = @$('.dictionary')
 
         if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length
@@ -973,8 +988,8 @@ class languageScramble.ViewHelper
             
         dictionary.css
             opacity: 0
-            top: (@el.height() - dictionary.height()) / 2
-            left: (@el.width() - dictionary.width()) / 2
+            top: (@$('.scramble_content').height() - dictionary.height()) / 2
+            left: (@$('.scramble_content').width() - dictionary.width()) / 2
 
         # @$('.guesses').animate
         #     opacity: 0
@@ -995,15 +1010,13 @@ class languageScramble.ViewHelper
         #     $(document.body).bind 'click.shownext', () => showNext() 
         #     $('#clickarea').bind 'keydown.shownext', (e) => showNext()
 
-        $.timeout 500, =>
-            dictionary.animate
-                opacity: 1
-                duration: 500
-                complete: =>
-                    @el.addClass('extra_info')
-                    @setProgress()
-                    @saveLevel()
-                    @newScramble()
+        dictionary.animate
+            opacity: 1
+            duration: 500
+            complete: =>
+                @el.addClass('extra_info')
+                @saveLevel(@setProgress())
+                @newScramble()
 
     nextLevel: () ->        
         message = @$('#next_level')
@@ -1017,6 +1030,9 @@ class languageScramble.ViewHelper
                 opacity: 0
                 duration: 250
                 complete: =>
+                    message.css
+                        top: -10000
+                        left: -10000
                     @$('.menu_button').trigger('click.menu touchstart.menu')
 
         message.css

@@ -379,9 +379,12 @@ body {
     }
 
     .guesses { 
+        transition: box-shadow 0.5s ease;
         .color1, .color2, .color3, .color4, .color5, .color6, .color7, .color8 {
-            .correct_letter::after {
-                border-color: @green;
+            .correct_letter {
+                &::after {
+                    border-color: @green;
+                }
             }
 
             .wrong_letter::after {
@@ -397,6 +400,9 @@ body {
                 left: 250px;    
                 top: 60px;            
             }
+        }
+        &.all_correct {
+            .box-shadow(0 0 150px rgba(255, 255, 255, 1));
         }
     }
     

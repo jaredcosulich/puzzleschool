@@ -22,7 +22,9 @@ body {
 .language_scramble .guesses
 .language_scramble .scrambled,
 .language_scramble .display_words {
-    transition: opacity 0.25s ease;
+    transition: opacity 0.25s linear;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 0.25s;"
 }
 .language_scramble.initializing_scramble .guesses,
 .language_scramble.extra_info .guesses,
@@ -360,6 +362,11 @@ body {
 .language_scramble .scrambled.hidden .space {
   visibility: hidden;
 }
+.language_scramble .guesses {
+    transition: box-shadow 0.5s linear;
+    -webkit-transition-property: box-shadow;
+    -webkit-transition-duration: 0.5s;
+}
 .language_scramble .guesses .color1 .correct_letter::after,
 .language_scramble .guesses .color2 .correct_letter::after,
 .language_scramble .guesses .color3 .correct_letter::after,
@@ -389,6 +396,11 @@ body {
   top: 72px;
 }
 */
+.language_scramble .guesses.all_correct {
+    box-shadow: 0 0 150px rgba(255, 255, 255, 1);
+    -webkit-box-shadow: 0 0 150px rgba(255, 255, 255, 1); 
+    -moz-box-shadow: 0 0 150px rgba(255, 255, 255, 1);
+}
 #next_level .success {
     width: 240px;
     margin: 120px auto 24px auto;
