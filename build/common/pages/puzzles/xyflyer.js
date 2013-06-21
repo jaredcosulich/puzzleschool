@@ -415,7 +415,8 @@ soma.views({
                 if (component.variable) {
                   delete _this.variables[component.variable];
                 }
-                return _this.helper.equations.removeComponent(component);
+                _this.helper.equations.removeComponent(component);
+                return _this.helper.equations.positionComponents();
               }
             });
           })(component));
