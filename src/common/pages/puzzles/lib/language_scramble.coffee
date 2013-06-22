@@ -883,18 +883,15 @@ class languageScramble.ViewHelper
         @$('.guesses').addClass('all_correct')
         $.timeout 750, =>
             @$('.guesses').removeClass('all_correct')
-            $.timeout 250, => @showDictionary()
-        
-        
-    showDictionary: ->
-        if @activeLevel.match(/Hard/)
-            @el.addClass('extra_info')
             $.timeout 250, => 
-                @saveLevel(@setProgress())
-                @newScramble()
-                $.timeout 100, => @el.removeClass('extra_info')                
-            return
-            
+                if @activeLevel.match(/Hard/)
+                    @saveLevel(@setProgress())
+                    @newScramble()
+                else
+                    @showDictionary()
+        
+        
+    showDictionary: ->            
         dictionary = @$('.dictionary')
 
         if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length

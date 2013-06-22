@@ -1319,7 +1319,12 @@ languageScramble.ViewHelper = (function() {
     return $.timeout(750, function() {
       _this.$('.guesses').removeClass('all_correct');
       return $.timeout(250, function() {
-        return _this.showDictionary();
+        if (_this.activeLevel.match(/Hard/)) {
+          _this.saveLevel(_this.setProgress());
+          return _this.newScramble();
+        } else {
+          return _this.showDictionary();
+        }
       });
     });
   };
@@ -1327,17 +1332,6 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.showDictionary = function() {
     var alternativeHtml, alternatives, boundary, conjugation, conjugations, correctSentence, dictionary, foreignLanguage, highlighted, inactiveType, nativeLanguage, nextShown, otherConjugations, showNext, showNextButton, translation, translations, wordType, _i, _len, _ref,
       _this = this;
-    if (this.activeLevel.match(/Hard/)) {
-      this.el.addClass('extra_info');
-      $.timeout(250, function() {
-        _this.saveLevel(_this.setProgress());
-        _this.newScramble();
-        return $.timeout(100, function() {
-          return _this.el.removeClass('extra_info');
-        });
-      });
-      return;
-    }
     dictionary = this.$('.dictionary');
     if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
       correctSentence = this.scrambleInfo["" + this.activeType + "Sentence"];
