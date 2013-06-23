@@ -845,20 +845,25 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.resize = function(callback, targetHeight, increment, maxFontSize) {
-    var height, increase, letter, letters, transitionSize,
+    var fontRatio, height, increase, letter, letters, longestWord, maxWidth, transitionSize,
       _this = this;
     if (maxFontSize == null) {
       maxFontSize = 66;
     }
     letters = this.$('.scrambled').find('.letter');
     letter = $(letters[0]);
+    longestWord = this.scrambleInfo[this.activeType].split(/\s/).sort(function(a, b) {
+      return b.length - a.length;
+    })[0];
     if (!targetHeight) {
       targetHeight = this.$('.scramble_content').height() - 60;
       height = window.innerHeight ? window.innerHeight : window.landheight;
       targetHeight = Math.min(targetHeight, height);
     }
     if (!increment) {
-      this.letterFontSize = this.fontSizes[letters.length] || maxFontSize;
+      fontRatio = letter.width() / parseInt(letter.css('fontSize'));
+      maxWidth = this.$('.scramble_content').width();
+      this.letterFontSize = Math.min(maxWidth / (longestWord.length * fontRatio), maxFontSize);
       this.sizeLetter(letter);
     }
     transitionSize = function(size, increment) {
@@ -895,7 +900,6 @@ languageScramble.ViewHelper = (function() {
       transitionSize(maxFontSize, -1);
       return;
     }
-    this.fontSizes[letters.length] = this.letterFontSize;
     return this.resizeDisplayWords(function() {
       _this.centerContainers();
       _this.setSectionPadding(targetHeight, 45);
@@ -1316,9 +1320,9 @@ languageScramble.ViewHelper = (function() {
     var _this = this;
     this.initializingScramble = true;
     this.$('.guesses').addClass('all_correct');
-    return $.timeout(750, function() {
+    return $.timeout(1000, function() {
       _this.$('.guesses').removeClass('all_correct');
-      return $.timeout(250, function() {
+      return $.timeout(500, function() {
         if (_this.activeLevel.match(/Hard/)) {
           _this.saveLevel(_this.setProgress());
           return _this.newScramble();

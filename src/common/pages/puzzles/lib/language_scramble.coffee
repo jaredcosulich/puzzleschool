@@ -568,6 +568,7 @@ class languageScramble.ViewHelper
     resize: (callback, targetHeight, increment, maxFontSize=66) ->
         letters = @$('.scrambled').find('.letter')
         letter = $(letters[0])
+        longestWord = @scrambleInfo[@activeType].split(/\s/).sort((a,b) -> b.length - a.length)[0]
 
         if not targetHeight
             targetHeight = @$('.scramble_content').height() - 60
@@ -575,7 +576,9 @@ class languageScramble.ViewHelper
             targetHeight = Math.min(targetHeight, height)
 
         if not increment
-            @letterFontSize = @fontSizes[letters.length] or maxFontSize
+            fontRatio = letter.width() / parseInt(letter.css('fontSize'))
+            maxWidth = @$('.scramble_content').width()
+            @letterFontSize = Math.min((maxWidth / (longestWord.length*fontRatio)), maxFontSize)
             @sizeLetter(letter)
             
         transitionSize = (size, increment) =>
@@ -606,8 +609,6 @@ class languageScramble.ViewHelper
             transitionSize(maxFontSize, -1)
             return
             
-        @fontSizes[letters.length] = @letterFontSize    
-
         @resizeDisplayWords =>
             @centerContainers()
             @setSectionPadding(targetHeight, 45)
@@ -881,9 +882,9 @@ class languageScramble.ViewHelper
         @initializingScramble = true
         
         @$('.guesses').addClass('all_correct')
-        $.timeout 750, =>
+        $.timeout 1000, =>
             @$('.guesses').removeClass('all_correct')
-            $.timeout 250, => 
+            $.timeout 500, => 
                 if @activeLevel.match(/Hard/)
                     @saveLevel(@setProgress())
                     @newScramble()
