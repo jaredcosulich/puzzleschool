@@ -882,7 +882,7 @@ class languageScramble.ViewHelper
         @initializingScramble = true
         
         @$('.guesses').addClass('all_correct')
-        $.timeout 1000, =>
+        $.timeout 500, =>
             @$('.guesses').removeClass('all_correct')
             $.timeout 500, => 
                 if @activeLevel.match(/Hard/)

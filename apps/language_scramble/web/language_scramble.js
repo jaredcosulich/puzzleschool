@@ -1320,7 +1320,7 @@ languageScramble.ViewHelper = (function() {
     var _this = this;
     this.initializingScramble = true;
     this.$('.guesses').addClass('all_correct');
-    return $.timeout(1000, function() {
+    return $.timeout(500, function() {
       _this.$('.guesses').removeClass('all_correct');
       return $.timeout(500, function() {
         if (_this.activeLevel.match(/Hard/)) {
