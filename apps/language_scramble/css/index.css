@@ -569,11 +569,21 @@ body {
     left: -10000px;
 }
 
-.language_scramble .scramble_content .menu_button, .language_scramble .close_menu_button {
+.language_scramble .scramble_content .menu_button, 
+.language_scramble .close_menu_button,
+.language_scramble .up_menu_button {
     display: block;
     position: absolute;
     top: 6px;
+}
+
+.language_scramble .scramble_content .menu_button, 
+.language_scramble .close_menu_button {
     right: 6px;
+}
+
+.language_scramble .up_menu_button {
+    left: 6px;
 }
 
 .language_scramble .scramble_content .menu_button span {
@@ -597,16 +607,23 @@ body {
 }
 
 .language_scramble .close_menu_button span {
-    display: block;
     background: transparent url('images/menu_close.png');
+}   
+.language_scramble .up_menu_button span {
+    background: transparent url('images/button_up.png');
+}   
+
+.language_scramble .up_menu_button span,
+.language_scramble .close_menu_button span {
+    display: block;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     width: 60px;
     height: 60px;
-    content: "\00a0";
 }   
+
 .language_scramble .floating_message {
     position: absolute;
     top: -1000px;
@@ -630,22 +647,22 @@ body {
     line-height: 102px;
 }
 
-.language_scramble #level_select_menu .levels_container, .language_scramble #level_select_menu .levels_group {
+.language_scramble .floating_message .levels_container, .language_scramble .floating_message .levels_group {
     height: 420px;
     overflow: hidden;
 }
 
-.language_scramble #level_select_menu .levels_container {
+.language_scramble .floating_message.levels_container {
     margin-left: -4px;
 }
 
-.language_scramble #level_select_menu .levels_group {
+.language_scramble .floating_message .levels_group {
     width: 588px;
     float: left;
     margin-left: 4px;
 }
 
-.language_scramble #level_select_menu .level {
+.language_scramble .floating_message .level {
     margin: 0 auto 12px auto;
     float: none;
     background: transparent url('images/wide_button.png');
@@ -654,7 +671,7 @@ body {
     overflow: hidden;
 }
 
-.language_scramble #level_select_menu .level_link {
+.language_scramble .floating_message .level_link {
     padding-top: 12px;
     display: block;
     text-decoration: none;
@@ -662,10 +679,15 @@ body {
     font-size: 30px;
 }
 
-.language_scramble #level_select_menu .level_link small {
+.language_scramble #foreign_select_menu .level_link {
+    font-size: 42px;
+    line-height: 60px;
+}
+
+.language_scramble .floating_message .level_link small {
     font-size: 18px;
 }
-.language_scramble #level_select_menu .mini_progress_meter {
+.language_scramble .floating_message .mini_progress_meter {
   margin: -9px 0 0 9px;
   position: relative;
   overflow: hidden;
@@ -681,7 +703,7 @@ body {
   background-repeat: no-repeat;
 }
 
-.language_scramble #level_select_menu .percent_complete {
+.language_scramble .floating_message .percent_complete {
   background-color: #0c8d28;
   height: 6px;
   margin: 9px 0 0 18px;
@@ -689,7 +711,7 @@ body {
   max-width: 344px;
 }
 
-.language_scramble #level_select_menu .navigation {
+.language_scramble .floating_message .navigation {
     display: block;
     content: "\00a0";
     width: 91px;
@@ -697,13 +719,13 @@ body {
     position: absolute;    
 }
 
-.language_scramble #level_select_menu .next {
+.language_scramble .floating_message .next {
     bottom: 6px;
     right: 6px;
     background: transparent url('images/button_next.png');
 }
 
-.language_scramble #level_select_menu .previous {
+.language_scramble .floating_message .previous {
     bottom: 6px;
     left: 6px;
     background: transparent url('images/button_previous.png');

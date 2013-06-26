@@ -30,12 +30,10 @@ window.app =
             dragOffset: 60
             saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
 
-        @initProgressMeter()
         @initMenus()
         @initKeyboard()
 
         @checkSize(50)
-        @sizeElements()
         
         @viewHelper.setLevel(@levelName)
 
@@ -52,18 +50,6 @@ window.app =
             @sizeElements()            
             @viewHelper.displayScramble()
         $.timeout interval, () => @checkSize(interval * 2)
-
-    sizeElements: ->
-        return
-        @progressMeter.css(top: @height - @percentComplete.height())
-        levelSelect = @$('#level_select_menu')
-        levelSelect.width(@width)
-        levelSelect.height(@height)
-    
-    initProgressMeter: ->
-        return
-        @progressMeter = @viewHelper.$('.level_progress_meter')
-        @percentComplete = @progressMeter.find('.percent_complete')
 
     saveProgress: (puzzleProgress) ->
         # percentComplete = 0
@@ -83,7 +69,7 @@ window.app =
         
         
     initLevelSelectMenu: ->
-        levelSelect = @$('#level_select_menu')
+        levelSelect = @$('#italian_select_menu')
         startPosition = {}
         levelSelect.bind 'touchstart', (e) =>
             startPosition = 
@@ -163,19 +149,31 @@ window.app =
                 duration: 500
                 complete: => previous.bind 'touchstart.previous', => showPrevious()
         previous.bind 'touchstart.previous', => showPrevious()
+
+    showMenu: (name) ->
+        @menus[@activeMenu].css
+            top: -10000
+            left: -10000
+        @activeMenu = name
+        @menus[@activeMenu].css
+            opacity: 1
+            top: (@height - @menus[@activeMenu].height()) / 2
+            left: (@width - @menus[@activeMenu].width()) / 2
     
-                
-        
     
     initMenus: ->
-        @activeMenu = 'level'
+        @activeMenu = 'foreign'
         @menus = 
             native: @$('#native_select_menu')
             foreign: @$('#foreign_select_menu')
-            level: @$('#level_select_menu')
+            italian: @$('#italian_select_menu')
+            spanish: @$('#spanish_select_menu')
         
         for name, menu of @menus
             do (menu) =>
+                upMenu = menu.find('.up_menu_button')
+                upMenu.bind 'touchstart.up_menu', => @showMenu('foreign')
+                
                 closeMenu = menu.find('.close_menu_button')
                 closeMenu.bind 'touchstart.close_menu', =>
                     return if @animatingMenu
@@ -215,9 +213,23 @@ window.app =
                 complete: => @animatingMenu = false
                 
         # @initNativeMenu()
-        # @initForeignMenu()
+        @initForeignMenu()
         @initLevelSelectMenu()
         
+    initForeignMenu: ->
+        foreignGroup = @$('#foreign_select_menu .levels_container .levels_group')
+        
+        for language in ['Italian', 'Spanish']
+            do (language) =>        
+                levelLinkDiv = document.createElement("DIV")
+                levelLinkDiv.className = 'level'
+                levelLink = document.createElement("A")
+                levelLink.className = 'level_link'
+                levelLink.innerHTML = language
+                $(levelLink).bind 'touchstart.select_level', () => @showMenu(language.toLowerCase())
+                $(levelLinkDiv).append(levelLink)
+                foreignGroup.append(levelLinkDiv)
+                
                         
     initKeyboard: ->
         keyboard = @$('.keyboard')
