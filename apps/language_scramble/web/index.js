@@ -211,6 +211,10 @@ window.app = {
       var closeMenu;
       closeMenu = menu.find('.close_menu_button');
       return closeMenu.bind('touchstart.close_menu', function() {
+        if (_this.animatingMenu) {
+          return;
+        }
+        _this.animatingMenu = true;
         _this.$('document.body').one('touchend.next', function() {
           return closeMenu.removeClass('active');
         });
@@ -223,9 +227,10 @@ window.app = {
           opacity: 0,
           duration: 500,
           complete: function() {
+            _this.animatingMenu = false;
             return menu.css({
-              top: -1000,
-              left: -1000
+              top: -10000,
+              left: -10000
             });
           }
         });
@@ -237,7 +242,11 @@ window.app = {
     }
     menu = this.$('.menu_button');
     menu.bind('touchstart.menu', function() {
-      _this.$('document.body').one('touchend.next', function() {
+      if (_this.animatingMenu) {
+        return;
+      }
+      _this.animatingMenu = true;
+      $.timeout(200, function() {
         return menu.removeClass('active');
       });
       menu.addClass('active');
@@ -252,7 +261,10 @@ window.app = {
       });
       return _this.menus[_this.activeMenu].animate({
         opacity: 1,
-        duration: 500
+        duration: 500,
+        complete: function() {
+          return _this.animatingMenu = false;
+        }
       });
     });
     return this.initLevelSelectMenu();

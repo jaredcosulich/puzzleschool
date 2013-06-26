@@ -178,6 +178,8 @@ window.app =
             do (menu) =>
                 closeMenu = menu.find('.close_menu_button')
                 closeMenu.bind 'touchstart.close_menu', =>
+                    return if @animatingMenu
+                    @animatingMenu = true
                     @$('document.body').one 'touchend.next', => closeMenu.removeClass('active')
                     closeMenu.addClass('active')
                     @$('.scramble_content').animate
@@ -187,14 +189,17 @@ window.app =
                     menu.animate
                         opacity: 0
                         duration: 500
-                        complete: ->
+                        complete: =>
+                            @animatingMenu = false
                             menu.css
-                                top: -1000
-                                left: -1000
+                                top: -10000
+                                left: -10000
 
         menu = @$('.menu_button')
         menu.bind 'touchstart.menu', =>
-            @$('document.body').one 'touchend.next', => menu.removeClass('active')
+            return if @animatingMenu
+            @animatingMenu = true
+            $.timeout 200, => menu.removeClass('active')
             menu.addClass('active')
             @$('.scramble_content').animate
                 opacity: 0.25
@@ -207,6 +212,7 @@ window.app =
             @menus[@activeMenu].animate
                 opacity: 1
                 duration: 500
+                complete: => @animatingMenu = false
                 
         # @initNativeMenu()
         # @initForeignMenu()

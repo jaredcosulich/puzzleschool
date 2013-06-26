@@ -4,6 +4,7 @@ body {
   margin: 0;
   background: #fafafa url('images/wood.jpg');
   font-size: 24px;
+  .no_select()
 }
 /*
 .foreign {
@@ -570,33 +571,38 @@ body {
 
 .language_scramble .scramble_content .menu_button, .language_scramble .close_menu_button {
     display: block;
-    cursor: pointer;
-}
-
-.language_scramble .scramble_content .menu_button {
     position: absolute;
     top: 6px;
     right: 6px;
+}
+
+.language_scramble .scramble_content .menu_button span {
     font-size: 30px;
     text-align: center;
     padding: 9px 18px 12px 18px;
     text-indent: 9px;
-    background: transparent url('images/medium_button.png');
+    background: transparent url('images/medium_button.png') no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    display: block;
 }
 
-.language_scramble .close_menu_button {
+.language_scramble .scramble_content .menu_button.active span {
+    background-position: -5px 5px;
+    text-indent: 2px;
+    padding-top: 12px;
+    padding-bottom: 9px;
+}
+
+.language_scramble .close_menu_button span {
+    display: block;
     background: transparent url('images/menu_close.png');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    position: absolute;
-    top: 6px;
-    right: 6px;
     width: 60px;
     height: 60px;
     content: "\00a0";
@@ -732,6 +738,14 @@ body {
     -o-background-size: cover;
     background-size: cover;
     background-repeat: no-repeat;
+}
+.language_scramble .keyboard .letter.active span {
+    text-indent: -4px;
+    background-position: -3px 5px;
+    width: 68px;
+    height: 68px;
+    margin-left: 4px;
+    
 }
 .language_scramble .blue_button {
   background-image: url('images/tile.png');
