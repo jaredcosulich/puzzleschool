@@ -460,12 +460,13 @@ body {
   -moz-border-radius: 12px;
   border-radius: 12px;
   position: relative;
+  background-color: #F1ECE5;
 }
 .language_scramble .dictionary .sentences .sentence .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
 }
 .language_scramble .dictionary .sentences .sentence::after {
-  background-color: #E9E4DA;
+  background-color: #F1ECE5;
   height: 18px;
   width: 18px;
   content: "\00a0";
