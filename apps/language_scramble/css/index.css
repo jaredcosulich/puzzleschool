@@ -228,6 +228,8 @@ body {
   border-width: 2px;
   border-style: solid;
 }
+.language_scramble.initializing_scramble .guesses .letter,
+.language_scramble.initializing_scramble .scrambled .letter,
 .language_scramble .guesses .letter.dragging,
 .language_scramble .scrambled .letter.dragging {
   background: transparent url('images/tile-dragging.png') no-repeat;
@@ -235,6 +237,9 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+.language_scramble .guesses .letter.dragging,
+.language_scramble .scrambled .letter.dragging {
   padding: 1.5% 1.5% 2.5% 2.5%;
 }
 .language_scramble .guesses .letter.dragging.sized::after,
