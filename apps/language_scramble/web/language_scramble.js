@@ -94,7 +94,7 @@ languageScramble.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     var puzzleData;
-    this.el = _arg.el, puzzleData = _arg.puzzleData, this.languages = _arg.languages, this.saveProgress = _arg.saveProgress, this.maxLevel = _arg.maxLevel, this.dragOffset = _arg.dragOffset;
+    this.el = _arg.el, puzzleData = _arg.puzzleData, this.saveProgress = _arg.saveProgress, this.maxLevel = _arg.maxLevel, this.dragOffset = _arg.dragOffset;
     this.clientY = __bind(this.clientY, this);
 
     this.clientX = __bind(this.clientX, this);
@@ -128,11 +128,11 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.setLevel = function(levelName) {
     this.levelName = levelName;
-    this.languageData = this.data[this.languages];
+    this.languageData = this.data[this.languages()];
     this.level = languageScramble.getLevel(this.languageData, this.levelName);
     this.options = this.level.data;
-    if (!this.puzzleData.levels[this.languages][this.levelName]) {
-      this.puzzleData.levels[this.languages][this.levelName] = {};
+    if (!this.puzzleData.levels[this.languages()][this.levelName]) {
+      this.puzzleData.levels[this.languages()][this.levelName] = {};
     }
     this.puzzleData.lastLevelPlayed = this.levelName;
     this.saveProgress(this.puzzleData);
@@ -142,15 +142,19 @@ languageScramble.ViewHelper = (function() {
     return this.setProgress();
   };
 
+  ViewHelper.prototype.languages = function() {
+    return "" + (this.puzzleData.nativeLanguage.toLowerCase()) + "_" + (this.puzzleData.foreignLanguage.toLowerCase());
+  };
+
   ViewHelper.prototype.saveLevel = function(percentComplete) {
     var allComplete, id;
     this.answerTimes.push(new Date());
-    this.puzzleData.levels[this.languages][this.levelName][this.scrambleInfo.id] += 1;
+    this.puzzleData.levels[this.languages()][this.levelName][this.scrambleInfo.id] += 1;
     this.setProgress();
     if (percentComplete > 95) {
       allComplete = true;
-      for (id in this.puzzleData.levels[this.languages][this.levelName]) {
-        if (this.puzzleData.levels[this.languages][this.levelName][id] < this.maxLevel) {
+      for (id in this.puzzleData.levels[this.languages()][this.levelName]) {
+        if (this.puzzleData.levels[this.languages()][this.levelName][id] < this.maxLevel) {
           allComplete = false;
           break;
         }
@@ -159,7 +163,7 @@ languageScramble.ViewHelper = (function() {
         percentComplete = 100;
       }
     }
-    this.puzzleData.levels[this.languages][this.levelName].percentComplete = percentComplete;
+    this.puzzleData.levels[this.languages()][this.levelName].percentComplete = percentComplete;
     $("#level_link_" + this.levelName + " .percent_complete").width("" + percentComplete + "%");
     return this.saveProgress(this.puzzleData);
   };
@@ -198,6 +202,11 @@ languageScramble.ViewHelper = (function() {
     } else {
       return this.positionTitle();
     }
+  };
+
+  ViewHelper.prototype.setForeignLanguage = function(language) {
+    this.puzzleData.foreignLanguage = language;
+    return this.puzzleData.levels[this.languages()] = {};
   };
 
   ViewHelper.prototype.positionTitle = function() {
@@ -501,7 +510,7 @@ languageScramble.ViewHelper = (function() {
       if (!_this.scrambleInfo) {
         return;
       }
-      (_base = _this.puzzleData.levels[_this.languages][_this.levelName])[_name = _this.scrambleInfo.id] || (_base[_name] = 1);
+      (_base = _this.puzzleData.levels[_this.languages()][_this.levelName])[_name = _this.scrambleInfo.id] || (_base[_name] = 1);
       displayWords = _this.$('.display_words');
       if ((_this.scrambleInfo["" + _this.displayLevel + "Sentence"] != null) && _this.scrambleInfo["" + _this.displayLevel + "Sentence"].length) {
         sentence = _this.scrambleInfo["" + _this.displayLevel + "Sentence"];
@@ -561,7 +570,7 @@ languageScramble.ViewHelper = (function() {
       if (__indexOf.call(this.orderedOptions.slice(-4), option) >= 0) {
         continue;
       }
-      optionLevel = this.puzzleData.levels[this.languages][this.levelName][option.id] || 1;
+      optionLevel = this.puzzleData.levels[this.languages()][this.levelName][option.id] || 1;
       optionsToAdd[optionLevel] || (optionsToAdd[optionLevel] = []);
       optionsToAdd[optionLevel].push(option);
       if (optionLevel < minLevel) {
@@ -575,7 +584,7 @@ languageScramble.ViewHelper = (function() {
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           option = _ref1[_j];
-          if ((this.puzzleData.levels[this.languages][this.levelName][option.id] || 1) < this.maxLevel) {
+          if ((this.puzzleData.levels[this.languages()][this.levelName][option.id] || 1) < this.maxLevel) {
             _results.push(option);
           }
         }
@@ -1295,7 +1304,7 @@ languageScramble.ViewHelper = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       scrambleInfo = _ref[_i];
       id = scrambleInfo.id;
-      level = this.puzzleData.levels[this.languages][this.levelName][id];
+      level = this.puzzleData.levels[this.languages()][this.levelName][id];
       if (level) {
         if (level > this.maxLevel) {
           level = this.maxLevel;
@@ -1334,7 +1343,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.showDictionary = function() {
-    var alternativeHtml, alternatives, boundary, conjugation, conjugations, correctSentence, dictionary, foreignLanguage, highlighted, inactiveType, nativeLanguage, nextShown, otherConjugations, showNext, showNextButton, translation, translations, wordType, _i, _len, _ref,
+    var alternativeHtml, alternatives, boundary, conjugation, conjugations, correctSentence, dictionary, highlighted, inactiveType, nextShown, otherConjugations, showNext, showNextButton, translation, translations, wordType, _i, _len, _ref,
       _this = this;
     dictionary = this.$('.dictionary');
     if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
@@ -1362,22 +1371,10 @@ languageScramble.ViewHelper = (function() {
       $(document.body).unbind('click.shownext');
       $(document.body).unbind('touchstart.shownext');
       $('#clickarea').unbind('keyup.shownext');
-      return dictionary.animate({
-        opacity: 0,
-        duration: 500,
-        complete: function() {
-          _this.el.removeClass('extra_info');
-          return dictionary.css({
-            top: -10000,
-            left: -10000
-          });
-        }
-      });
+      return _this.hideDictionary();
     };
     inactiveType = this.activeType === 'native' ? 'foreign' : 'native';
-    nativeLanguage = this.languages.split(/_/)[this.activeType === 'native' ? 1 : 0];
-    foreignLanguage = this.languages.split(/_/)[this.activeType === 'foreign' ? 1 : 0];
-    dictionary.html("<table class='sentences'>\n    <tr>\n        <td class='language'>" + (this.capitalizeFirstLetter(nativeLanguage)) + "</td>\n        <td class='sentence'>" + (this.$('.display_words span').html()) + "</td>\n    </tr>\n    <tr>\n        <td class='language'>" + (this.capitalizeFirstLetter(foreignLanguage)) + "</td>\n        <td class='sentence'>" + correctSentence + "</td>\n    </tr>\n</table>");
+    dictionary.html("<table class='sentences'>\n    <tr>\n        <td class='language'>" + this.puzzleData.nativeLanguage + "</td>\n        <td class='sentence'>" + (this.$('.display_words span').html()) + "</td>\n    </tr>\n    <tr>\n        <td class='language'>" + this.puzzleData.foreignLanguage + "</td>\n        <td class='sentence'>" + correctSentence + "</td>\n    </tr>\n</table>");
     alternatives = this.scrambleInfo["" + this.activeType + "Alternatives"];
     if (alternatives) {
       alternativeHtml = "<div class='extra'>\n    <div class='title'>Alternative translations for <b>" + this.scrambleInfo[inactiveType] + "</b>:</div>";
@@ -1441,6 +1438,23 @@ languageScramble.ViewHelper = (function() {
     });
   };
 
+  ViewHelper.prototype.hideDictionary = function() {
+    var dictionary,
+      _this = this;
+    dictionary = this.$('.dictionary');
+    return dictionary.animate({
+      opacity: 0,
+      duration: 500,
+      complete: function() {
+        _this.el.removeClass('extra_info');
+        return dictionary.css({
+          top: -10000,
+          left: -10000
+        });
+      }
+    });
+  };
+
   ViewHelper.prototype.nextLevel = function() {
     var message,
       _this = this;
@@ -1477,6 +1491,10 @@ languageScramble.ViewHelper = (function() {
 })();
 
 languageScramble.data = {
+  english_spanish: {
+    displayLanguages: 'English - Spanish',
+    levels: {}
+  },
   english_italian: {
     displayLanguages: 'English - Italian',
     levels: {

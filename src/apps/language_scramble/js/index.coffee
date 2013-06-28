@@ -18,15 +18,16 @@ window.app =
                 
         @puzzleData = {levels: {}} unless @puzzleData
         
-        @languages = "english_italian"
-        @puzzleData.levels[@languages] = {} unless @puzzleData.levels[@languages]        
-
-        @levelName = @puzzleData.lastLevelPlayed or "top10words"
+        @puzzleData.nativeLanguage = 'English' unless @puzzleData.nativeLanguage
         
+        if not @puzzleData.foreignLanguage
+            @puzzleData.menu = 'foreign'
+        else if not @puzzleData.levels["#{@puzzleData.nativeLanguage}_#{@puzzleData.foreignLanguage}"]    
+            @puzzleData.levels["#{@puzzleData.nativeLanguage}_#{@puzzleData.foreignLanguage}"] = {}
+
         @viewHelper = new languageScramble.ViewHelper
             el: $(@selector)
             puzzleData: @puzzleData
-            languages: @languages
             dragOffset: 60
             saveProgress: (puzzleProgress) => @saveProgress(puzzleProgress)
 
@@ -35,11 +36,16 @@ window.app =
 
         @checkSize(50)
         
-        @viewHelper.setLevel(@levelName)
-
         @viewHelper.bindWindow()
         @viewHelper.bindKeyPress()
-        @viewHelper.newScramble() 
+
+        @levelName = @puzzleData.lastLevelPlayed
+        
+        if @levelName and @puzzleData.foreignLanguage
+            @viewHelper.setLevel(@levelName)
+            @viewHelper.newScramble() 
+        else
+            @showMenu()
         
     $: (selector) -> @selector.find(selector)    
     
@@ -56,6 +62,7 @@ window.app =
         # if puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed]?.percentComplete
         #     percentComplete = puzzleProgress.levels[@languages][puzzleProgress.lastLevelPlayed].percentComplete
         # @percentComplete.width("#{percentComplete}%")
+        puzzleProgress.menu = @puzzleData.menu
         AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1)
         # AppMobi.device.getRemoteData(
         #     "http://puzzleschool.com/api/puzzles/language_scramble/update", 
@@ -68,8 +75,9 @@ window.app =
         # )
         
         
-    initLevelSelectMenu: ->
-        levelSelect = @$('#italian_select_menu')
+    initLevelSelectMenu: (language) ->
+        language = language.toLowerCase()
+        levelSelect = @$("##{language}_select_menu")
         startPosition = {}
         levelSelect.bind 'touchstart', (e) =>
             startPosition = 
@@ -96,17 +104,18 @@ window.app =
                         top: -1000
                         left: -1000
     
+        languages = "#{@puzzleData.nativeLanguage.toLowerCase()}_#{language.toLowerCase()}"
         levelsContainer = levelSelect.find('.levels_container')
         levelsGroup = null
         levelsAdded = 0
-        for key of languageScramble.data[@languages].levels
+        for key of languageScramble.data[languages].levels
             if levelsAdded % 4 == 0
                 levelsGroup = $(document.createElement("DIV"))
                 levelsGroup.addClass('levels_group')
                 levelsContainer.append(levelsGroup)
                 levelsContainer.width(levelsGroup.width() * (1 + (levelsAdded / 4)))
             do (key, levelsGroup, levelsAdded) =>        
-                info = languageScramble.data[@languages].levels[key]
+                info = languageScramble.data[languages].levels[key]
                 levelLinkDiv = document.createElement("DIV")
                 levelLinkDiv.className = 'level'
                 levelLinkDiv.id = "level_link_#{key}"
@@ -119,7 +128,7 @@ window.app =
                 
                 percentComplete = document.createElement("DIV")
                 percentComplete.className = 'percent_complete'
-                $(percentComplete).width("#{@puzzleData.levels[@languages][key]?.percentComplete or 0}%")
+                $(percentComplete).width("#{@puzzleData.levels[languages]?[key]?.percentComplete or 0}%")
                 $(levelLinkDiv).append(percentComplete)
 
                 levelProgress = document.createElement("DIV")
@@ -150,19 +159,18 @@ window.app =
                 complete: => previous.bind 'touchstart.previous', => showPrevious()
         previous.bind 'touchstart.previous', => showPrevious()
 
-    showMenu: (name) ->
-        @menus[@activeMenu].css
+    showMenu: (name=@puzzleData.menu) ->
+        @$('.floating_message').css
             top: -10000
             left: -10000
-        @activeMenu = name
-        @menus[@activeMenu].css
+        @puzzleData.menu = name
+        @menus[@puzzleData.menu].css
             opacity: 1
-            top: (@height - @menus[@activeMenu].height()) / 2
-            left: (@width - @menus[@activeMenu].width()) / 2
+            top: (@height - @menus[@puzzleData.menu].height()) / 2
+            left: (@width - @menus[@puzzleData.menu].width()) / 2
     
     
     initMenus: ->
-        @activeMenu = 'foreign'
         @menus = 
             native: @$('#native_select_menu')
             foreign: @$('#foreign_select_menu')
@@ -199,22 +207,24 @@ window.app =
             @animatingMenu = true
             $.timeout 200, => menu.removeClass('active')
             menu.addClass('active')
+            
             @$('.scramble_content').animate
                 opacity: 0.25
                 duration: 250
+            @viewHelper.hideDictionary()
 
-            @menus[@activeMenu].css
+            menuName = @puzzleData.foreignLanguage?.toLowerCase() or @puzzleData.menu
+            @menus[menuName].css
                 opacity: 0
-                top: (@height - @menus[@activeMenu].height()) / 2
-                left: (@width - @menus[@activeMenu].width()) / 2
-            @menus[@activeMenu].animate
+                top: (@height - @menus[menuName].height()) / 2
+                left: (@width - @menus[menuName].width()) / 2
+            @menus[menuName].animate
                 opacity: 1
                 duration: 500
                 complete: => @animatingMenu = false
                 
         # @initNativeMenu()
         @initForeignMenu()
-        @initLevelSelectMenu()
         
     initForeignMenu: ->
         foreignGroup = @$('#foreign_select_menu .levels_container .levels_group')
@@ -226,9 +236,13 @@ window.app =
                 levelLink = document.createElement("A")
                 levelLink.className = 'level_link'
                 levelLink.innerHTML = language
-                $(levelLink).bind 'touchstart.select_level', () => @showMenu(language.toLowerCase())
+                $(levelLink).bind 'touchstart.select_level', () => 
+                    @viewHelper.setForeignLanguage(language)
+                    @showMenu(language.toLowerCase())
                 $(levelLinkDiv).append(levelLink)
                 foreignGroup.append(levelLinkDiv)
+            @initLevelSelectMenu(language)
+            
                 
                         
     initKeyboard: ->

@@ -53,7 +53,7 @@ class languageScramble.ChunkHelper
 
 class languageScramble.ViewHelper
 
-    constructor: ({@el, puzzleData, @languages, @saveProgress, @maxLevel, @dragOffset}) ->
+    constructor: ({@el, puzzleData, @saveProgress, @maxLevel, @dragOffset}) ->
         @puzzleData = JSON.parse(JSON.stringify(puzzleData))
         @fontSizes = {}
         @maxLevel or= 7
@@ -69,10 +69,10 @@ class languageScramble.ViewHelper
             percentComplete.css(height: height, marginTop: height * -1)
 
     setLevel: (@levelName) ->   
-        @languageData = @data[@languages]
+        @languageData = @data[@languages()]
         @level = languageScramble.getLevel(@languageData, @levelName)
         @options = @level.data
-        @puzzleData.levels[@languages][@levelName] = {} unless @puzzleData.levels[@languages][@levelName]
+        @puzzleData.levels[@languages()][@levelName] = {} unless @puzzleData.levels[@languages()][@levelName]
 
         @puzzleData.lastLevelPlayed = @levelName
         
@@ -82,20 +82,21 @@ class languageScramble.ViewHelper
         @setTitle()
         @setProgress()
         
+    languages: -> "#{@puzzleData.nativeLanguage.toLowerCase()}_#{@puzzleData.foreignLanguage.toLowerCase()}"
 
     saveLevel: (percentComplete) ->
         @answerTimes.push(new Date())
-        @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] += 1
+        @puzzleData.levels[@languages()][@levelName][@scrambleInfo.id] += 1
         @setProgress()
 
         if percentComplete > 95
             allComplete = true
-            for id of @puzzleData.levels[@languages][@levelName]
-                if @puzzleData.levels[@languages][@levelName][id] < @maxLevel
+            for id of @puzzleData.levels[@languages()][@levelName]
+                if @puzzleData.levels[@languages()][@levelName][id] < @maxLevel
                     allComplete = false
                     break
             percentComplete = 100 if allComplete
-        @puzzleData.levels[@languages][@levelName].percentComplete = percentComplete        
+        @puzzleData.levels[@languages()][@levelName].percentComplete = percentComplete        
         $("#level_link_#{@levelName} .percent_complete").width("#{percentComplete}%")
             
         @saveProgress(@puzzleData)
@@ -124,6 +125,10 @@ class languageScramble.ViewHelper
                         duration: 300
         else
             @positionTitle()
+            
+    setForeignLanguage: (language) -> 
+        @puzzleData.foreignLanguage = language
+        @puzzleData.levels[@languages()] = {}
             
     positionTitle: ->
         halfWidth = @$('.header').width() / 2 
@@ -328,7 +333,7 @@ class languageScramble.ViewHelper
         $.timeout 300, => 
             @scrambleInfo = @selectOption()
             return unless @scrambleInfo     
-            @puzzleData.levels[@languages][@levelName][@scrambleInfo.id] or= 1    
+            @puzzleData.levels[@languages()][@levelName][@scrambleInfo.id] or= 1    
 
             # if @activeLevel.match(/foreign/) and not @el.hasClass('foreign')
             #     @el.addClass('foreign')
@@ -381,13 +386,13 @@ class languageScramble.ViewHelper
         
         for option in @options
             continue if option in @orderedOptions[-4..-1]
-            optionLevel = @puzzleData.levels[@languages][@levelName][option.id] || 1
+            optionLevel = @puzzleData.levels[@languages()][@levelName][option.id] || 1
             optionsToAdd[optionLevel] or= []
             optionsToAdd[optionLevel].push(option)
             minLevel = optionLevel if optionLevel < minLevel
 
         if minLevel == @maxLevel
-            incomplete = (option for option in @options when (@puzzleData.levels[@languages][@levelName][option.id] || 1) < @maxLevel)
+            incomplete = (option for option in @options when (@puzzleData.levels[@languages()][@levelName][option.id] || 1) < @maxLevel)
             if incomplete.length
                 @orderedOptions.push(option) for option in incomplete
                 return @orderedOptions[@orderedOptionsIndex]
@@ -867,7 +872,7 @@ class languageScramble.ViewHelper
     updateProgress: ->
         for scrambleInfo in @level.data
             id = scrambleInfo.id
-            level = @puzzleData.levels[@languages][@levelName][id]
+            level = @puzzleData.levels[@languages()][@levelName][id]
             if level
                 level = @maxLevel if level > @maxLevel
                 @$(".progress_meter .bar .#{id}").css(opacity: 1 - ((1/@maxLevel) * level))
@@ -916,26 +921,17 @@ class languageScramble.ViewHelper
             $(document.body).unbind 'click.shownext'
             $(document.body).unbind 'touchstart.shownext'
             $('#clickarea').unbind 'keyup.shownext'
-            dictionary.animate
-                opacity: 0
-                duration: 500
-                complete: =>
-                    @el.removeClass('extra_info')
-                    dictionary.css
-                        top: -10000
-                        left: -10000
-
+            @hideDictionary()
+            
         inactiveType = if @activeType == 'native' then 'foreign' else 'native'
-        nativeLanguage = @languages.split(/_/)[if @activeType == 'native' then 1 else 0]
-        foreignLanguage = @languages.split(/_/)[if @activeType == 'foreign' then 1 else 0]
         dictionary.html """
             <table class='sentences'>
                 <tr>
-                    <td class='language'>#{@capitalizeFirstLetter(nativeLanguage)}</td>
+                    <td class='language'>#{@puzzleData.nativeLanguage}</td>
                     <td class='sentence'>#{@$('.display_words span').html()}</td>
                 </tr>
                 <tr>
-                    <td class='language'>#{@capitalizeFirstLetter(foreignLanguage)}</td>
+                    <td class='language'>#{@puzzleData.foreignLanguage}</td>
                     <td class='sentence'>#{correctSentence}</td>
                 </tr>
             </table>
@@ -1015,6 +1011,18 @@ class languageScramble.ViewHelper
                 @el.addClass('extra_info')
                 @saveLevel(@setProgress())
                 @newScramble()
+                
+    hideDictionary: ->
+        dictionary = @$('.dictionary')
+        dictionary.animate
+            opacity: 0
+            duration: 500
+            complete: =>
+                @el.removeClass('extra_info')
+                dictionary.css
+                    top: -10000
+                    left: -10000
+        
 
     nextLevel: () ->        
         message = @$('#next_level')
@@ -1044,6 +1052,9 @@ class languageScramble.ViewHelper
 
 
 languageScramble.data =
+    english_spanish:
+        displayLanguages: 'English - Spanish'
+        levels: {} 
     english_italian: 
         displayLanguages: 'English - Italian'
         levels:

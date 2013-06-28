@@ -30,15 +30,17 @@ window.app = {
         levels: {}
       };
     }
-    this.languages = "english_italian";
-    if (!this.puzzleData.levels[this.languages]) {
-      this.puzzleData.levels[this.languages] = {};
+    if (!this.puzzleData.nativeLanguage) {
+      this.puzzleData.nativeLanguage = 'English';
     }
-    this.levelName = this.puzzleData.lastLevelPlayed || "top10words";
+    if (!this.puzzleData.foreignLanguage) {
+      this.puzzleData.menu = 'foreign';
+    } else if (!this.puzzleData.levels["" + this.puzzleData.nativeLanguage + "_" + this.puzzleData.foreignLanguage]) {
+      this.puzzleData.levels["" + this.puzzleData.nativeLanguage + "_" + this.puzzleData.foreignLanguage] = {};
+    }
     this.viewHelper = new languageScramble.ViewHelper({
       el: $(this.selector),
       puzzleData: this.puzzleData,
-      languages: this.languages,
       dragOffset: 60,
       saveProgress: function(puzzleProgress) {
         return _this.saveProgress(puzzleProgress);
@@ -47,10 +49,15 @@ window.app = {
     this.initMenus();
     this.initKeyboard();
     this.checkSize(50);
-    this.viewHelper.setLevel(this.levelName);
     this.viewHelper.bindWindow();
     this.viewHelper.bindKeyPress();
-    return this.viewHelper.newScramble();
+    this.levelName = this.puzzleData.lastLevelPlayed;
+    if (this.levelName && this.puzzleData.foreignLanguage) {
+      this.viewHelper.setLevel(this.levelName);
+      return this.viewHelper.newScramble();
+    } else {
+      return this.showMenu();
+    }
   },
   $: function(selector) {
     return this.selector.find(selector);
@@ -68,12 +75,14 @@ window.app = {
     });
   },
   saveProgress: function(puzzleProgress) {
+    puzzleProgress.menu = this.puzzleData.menu;
     return AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1);
   },
-  initLevelSelectMenu: function() {
-    var key, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
+  initLevelSelectMenu: function(language) {
+    var key, languages, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
       _this = this;
-    levelSelect = this.$('#italian_select_menu');
+    language = language.toLowerCase();
+    levelSelect = this.$("#" + language + "_select_menu");
     startPosition = {};
     levelSelect.bind('touchstart', function(e) {
       return startPosition = {
@@ -104,12 +113,13 @@ window.app = {
         }
       });
     };
+    languages = "" + (this.puzzleData.nativeLanguage.toLowerCase()) + "_" + (language.toLowerCase());
     levelsContainer = levelSelect.find('.levels_container');
     levelsGroup = null;
     levelsAdded = 0;
     _fn = function(key, levelsGroup, levelsAdded) {
-      var info, levelLink, levelLinkDiv, levelProgress, percentComplete, _ref;
-      info = languageScramble.data[_this.languages].levels[key];
+      var info, levelLink, levelLinkDiv, levelProgress, percentComplete, _ref, _ref1;
+      info = languageScramble.data[languages].levels[key];
       levelLinkDiv = document.createElement("DIV");
       levelLinkDiv.className = 'level';
       levelLinkDiv.id = "level_link_" + key;
@@ -123,13 +133,13 @@ window.app = {
       levelsGroup.append(levelLinkDiv);
       percentComplete = document.createElement("DIV");
       percentComplete.className = 'percent_complete';
-      $(percentComplete).width("" + (((_ref = _this.puzzleData.levels[_this.languages][key]) != null ? _ref.percentComplete : void 0) || 0) + "%");
+      $(percentComplete).width("" + (((_ref = _this.puzzleData.levels[languages]) != null ? (_ref1 = _ref[key]) != null ? _ref1.percentComplete : void 0 : void 0) || 0) + "%");
       $(levelLinkDiv).append(percentComplete);
       levelProgress = document.createElement("DIV");
       levelProgress.className = 'mini_progress_meter';
       return $(levelLinkDiv).append(levelProgress);
     };
-    for (key in languageScramble.data[this.languages].levels) {
+    for (key in languageScramble.data[languages].levels) {
       if (levelsAdded % 4 === 0) {
         levelsGroup = $(document.createElement("DIV"));
         levelsGroup.addClass('levels_group');
@@ -181,21 +191,23 @@ window.app = {
     });
   },
   showMenu: function(name) {
-    this.menus[this.activeMenu].css({
+    if (name == null) {
+      name = this.puzzleData.menu;
+    }
+    this.$('.floating_message').css({
       top: -10000,
       left: -10000
     });
-    this.activeMenu = name;
-    return this.menus[this.activeMenu].css({
+    this.puzzleData.menu = name;
+    return this.menus[this.puzzleData.menu].css({
       opacity: 1,
-      top: (this.height - this.menus[this.activeMenu].height()) / 2,
-      left: (this.width - this.menus[this.activeMenu].width()) / 2
+      top: (this.height - this.menus[this.puzzleData.menu].height()) / 2,
+      left: (this.width - this.menus[this.puzzleData.menu].width()) / 2
     });
   },
   initMenus: function() {
     var menu, name, _fn, _ref,
       _this = this;
-    this.activeMenu = 'foreign';
     this.menus = {
       "native": this.$('#native_select_menu'),
       foreign: this.$('#foreign_select_menu'),
@@ -242,6 +254,7 @@ window.app = {
     }
     menu = this.$('.menu_button');
     menu.bind('touchstart.menu', function() {
+      var menuName, _ref1;
       if (_this.animatingMenu) {
         return;
       }
@@ -254,12 +267,14 @@ window.app = {
         opacity: 0.25,
         duration: 250
       });
-      _this.menus[_this.activeMenu].css({
+      _this.viewHelper.hideDictionary();
+      menuName = ((_ref1 = _this.puzzleData.foreignLanguage) != null ? _ref1.toLowerCase() : void 0) || _this.puzzleData.menu;
+      _this.menus[menuName].css({
         opacity: 0,
-        top: (_this.height - _this.menus[_this.activeMenu].height()) / 2,
-        left: (_this.width - _this.menus[_this.activeMenu].width()) / 2
+        top: (_this.height - _this.menus[menuName].height()) / 2,
+        left: (_this.width - _this.menus[menuName].width()) / 2
       });
-      return _this.menus[_this.activeMenu].animate({
+      return _this.menus[menuName].animate({
         opacity: 1,
         duration: 500,
         complete: function() {
@@ -267,30 +282,32 @@ window.app = {
         }
       });
     });
-    this.initForeignMenu();
-    return this.initLevelSelectMenu();
+    return this.initForeignMenu();
   },
   initForeignMenu: function() {
-    var foreignGroup, language, _i, _len, _ref, _results,
+    var foreignGroup, language, _fn, _i, _len, _ref, _results,
       _this = this;
     foreignGroup = this.$('#foreign_select_menu .levels_container .levels_group');
     _ref = ['Italian', 'Spanish'];
+    _fn = function(language) {
+      var levelLink, levelLinkDiv;
+      levelLinkDiv = document.createElement("DIV");
+      levelLinkDiv.className = 'level';
+      levelLink = document.createElement("A");
+      levelLink.className = 'level_link';
+      levelLink.innerHTML = language;
+      $(levelLink).bind('touchstart.select_level', function() {
+        _this.viewHelper.setForeignLanguage(language);
+        return _this.showMenu(language.toLowerCase());
+      });
+      $(levelLinkDiv).append(levelLink);
+      return foreignGroup.append(levelLinkDiv);
+    };
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       language = _ref[_i];
-      _results.push((function(language) {
-        var levelLink, levelLinkDiv;
-        levelLinkDiv = document.createElement("DIV");
-        levelLinkDiv.className = 'level';
-        levelLink = document.createElement("A");
-        levelLink.className = 'level_link';
-        levelLink.innerHTML = language;
-        $(levelLink).bind('touchstart.select_level', function() {
-          return _this.showMenu(language.toLowerCase());
-        });
-        $(levelLinkDiv).append(levelLink);
-        return foreignGroup.append(levelLinkDiv);
-      })(language));
+      _fn(language);
+      _results.push(this.initLevelSelectMenu(language));
     }
     return _results;
   },
