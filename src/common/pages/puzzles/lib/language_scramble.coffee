@@ -963,10 +963,17 @@ class languageScramble.ViewHelper
                     <div class='title'>Conjugations of the verb <b>#{@scrambleInfo[inactiveType]}</b></div>
                     <table>
                         <tr>
-                            #{("<td><b>#{conjugation}</b></td>" for conjugation in conjugations).join('')}
+                            #{("<td><b>#{conjugation}</b></td>" for conjugation in conjugations[0..2]).join('')}
                         </tr>
                         <tr>
-                            #{("<td>#{conjugation}</td>" for conjugation in otherConjugations).join('')}
+                            #{("<td>#{conjugation}</td>" for conjugation in otherConjugations[0..2]).join('')}
+                        </tr>
+                        <tr class='extra_line'><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr>
+                            #{("<td><b>#{conjugation}</b></td>" for conjugation in conjugations[3..-1]).join('')}
+                        </tr>
+                        <tr>
+                            #{("<td>#{conjugation}</td>" for conjugation in otherConjugations[3..-1]).join('')}
                         </tr>
                     </table>
                 </div>

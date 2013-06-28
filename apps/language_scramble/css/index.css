@@ -445,7 +445,7 @@ body {
   font-size: 27px;
 }
 .language_scramble .dictionary .sentences {
-  margin-top: 45px;
+  margin-top: 30px;
   border-spacing: 12px;
 }
 .language_scramble .dictionary .sentences td {
@@ -465,13 +465,12 @@ body {
   -moz-border-radius: 12px;
   border-radius: 12px;
   position: relative;
-  background-color: #F1ECE5;
 }
 .language_scramble .dictionary .sentences .sentence .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
 }
 .language_scramble .dictionary .sentences .sentence::after {
-  background-color: #F1ECE5;
+  background-color: #EEE7D7;
   height: 18px;
   width: 18px;
   content: "\00a0";
@@ -488,23 +487,24 @@ body {
   -o-transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
-.language_scramble .dictionary .type {
-  padding: 60px 0;
-}
 .language_scramble .dictionary .extra {
-  padding-top: 60px;
+  padding-top: 30px;
+  height: 210px;
 }
 .language_scramble .dictionary .extra p,
 .language_scramble .dictionary .extra table {
   margin: 6px 0;
-  font-size: 15px;
+  font-size: 21px;
 }
 .language_scramble .dictionary .extra table {
   width: 100%;
 }
+.language_scramble .dictionary .extra table .extra_line {
+  font-size: 12px;
+}
 .language_scramble .dictionary .next {
   display: block;
-  margin: 60px auto 0 auto;
+  margin: auto;
   background-image: url('images/wide_button.png');
   color: #262626;
   height: 92px;
@@ -742,6 +742,7 @@ body {
     bottom: 45px;
     left: 0px; 
 }
+.language_scramble.extra_info .keyboard_container,
 .language_scramble .hide_keyboard .keyboard_container {
     top: -10000px;
     left: -10000px;

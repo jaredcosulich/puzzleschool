@@ -1397,18 +1397,38 @@ languageScramble.ViewHelper = (function() {
     otherConjugations = this.scrambleInfo["" + inactiveType + "Conjugations"];
     if (conjugations && otherConjugations) {
       dictionary.append("<div class='extra'>\n    <div class='title'>Conjugations of the verb <b>" + this.scrambleInfo[inactiveType] + "</b></div>\n    <table>\n        <tr>\n            " + (((function() {
-        var _j, _len1, _results;
+        var _j, _len1, _ref1, _results;
+        _ref1 = conjugations.slice(0, 3);
         _results = [];
-        for (_j = 0, _len1 = conjugations.length; _j < _len1; _j++) {
-          conjugation = conjugations[_j];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          conjugation = _ref1[_j];
           _results.push("<td><b>" + conjugation + "</b></td>");
         }
         return _results;
       })()).join('')) + "\n        </tr>\n        <tr>\n            " + (((function() {
-        var _j, _len1, _results;
+        var _j, _len1, _ref1, _results;
+        _ref1 = otherConjugations.slice(0, 3);
         _results = [];
-        for (_j = 0, _len1 = otherConjugations.length; _j < _len1; _j++) {
-          conjugation = otherConjugations[_j];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          conjugation = _ref1[_j];
+          _results.push("<td>" + conjugation + "</td>");
+        }
+        return _results;
+      })()).join('')) + "\n        </tr>\n        <tr class='extra_line'><td>&nbsp;</td><td>&nbsp;</td></tr>\n        <tr>\n            " + (((function() {
+        var _j, _len1, _ref1, _results;
+        _ref1 = conjugations.slice(3);
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          conjugation = _ref1[_j];
+          _results.push("<td><b>" + conjugation + "</b></td>");
+        }
+        return _results;
+      })()).join('')) + "\n        </tr>\n        <tr>\n            " + (((function() {
+        var _j, _len1, _ref1, _results;
+        _ref1 = otherConjugations.slice(3);
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          conjugation = _ref1[_j];
           _results.push("<td>" + conjugation + "</td>");
         }
         return _results;
