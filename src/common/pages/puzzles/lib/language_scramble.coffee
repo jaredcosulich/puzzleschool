@@ -945,12 +945,13 @@ class languageScramble.ViewHelper
             """
             
             for wordType, translations of alternatives
-                alternativeHtml += """
-                    <p>
-                        <b>(#{wordType}s)</b>:
-                        #{(translation for translation in translations).join(', ')}
-                    </p>
-                """
+                for translation, altTranslations of translations
+                    alternativeHtml += """
+                        <p>
+                            <b>#{translation}</b> (#{wordType}):
+                            #{(t for t in altTranslations).join(', ')}
+                        </p>
+                    """
             
             alternativeHtml += '</div>'
             dictionary.append(alternativeHtml)
@@ -1072,44 +1073,166 @@ languageScramble.data =
                     {
                         native: 'what', 
                         foreign: 'cosa',
+                        nativeSentence: 'what are you doing?'
+                        foreignSentence: 'cosa stai facendo?'
                         type: 'pronoun'
                         foreignAlternatives:
-                            pronoun: [
-                                'ciò che'
-                                'che'
-                                'quello che'
-                                'che cosa'
-                                'quella che'
-                                'quelli che'
-                                'quelle che'
-                            ]
-                            adjective: [
-                                'quali'
-                                'che'
-                                'quale'
-                            ]
-                            conjunction: [
-                                'che'
-                            ]
+                            pronoun: 
+                                'ciò che': ['what', 'whatever']
+                                'che': ['which', 'who', 'what']
+                            conconjunction: 
+                                'che': ['that', 'than', 'what']
+                            
                         nativeAlternatives: 
-                            noun: [
-                                'thing'
-                                'matter'
-                                'stuff'
-                                'object'
-                                'piece'
-                                'dud'
-                            ]
+                            noun: 
+                                'thing': ['cosa', 'oggetto', 'coso']
+                                'matter': ['materia', 'questione']
+                                'stuff': ['roba', 'materiale', 'cosa']
                     }
-                    {native: 'year', foreign: 'anno'}
-                    {native: 'man', foreign: 'uomo'}
-                    {native: 'daytime', foreign: 'giorno'}
-                    {native: 'time', foreign: 'volta'}
-                    {native: 'home', foreign: 'casa'}
-                    {native: 'part', foreign: 'parte'}
-                    {native: 'life', foreign: 'vita'}
-                    {native: 'time', foreign: 'tempo'}
-                    {native: 'woman', foreign: 'donna'}
+                    {
+                        native: 'year', 
+                        foreign: 'anno',
+                        nativeSentence: 'what year is it?'
+                        foreignSentence: 'che anno è?'
+                        foreignAlternatives: 
+                            noun: 
+                                'annata': ['vintage', 'year']
+                        nativeAlternatives:
+                            noun: 
+                                'grade': ['grado', 'qualità', 'classe']
+                                'twelvemonth': ['anno']
+                    }
+                    {
+                        native: 'man' 
+                        foreign: 'uomo'
+                        nativeSentence: 'a tall man'
+                        foreignSentence: 'un uomo alto'
+                        foreignAlternatives:
+                            noun: 
+                                'persona': ['person', 'man', 'body'] 
+                                'signore': ['sir', 'lord', 'man']
+                                'maschio': ['male', 'boy', 'man']
+                            verb: 
+                                'equipaggiare': ['equip', 'man', 'fit out']
+                        nativeAlternatives:
+                            noun: 
+                                'mankind': ['umanità', 'genere', 'uomo']
+                                'humanity': ['umanità', 'uomo']
+                    }
+                    {
+                        native: 'day'
+                        foreign: 'giorno'
+                        nativeSentence: 'what day is it?'
+                        foreignSentence: 'che giorno è?'
+                        foreignAlternatives:
+                            noun: 
+                                'giornata': ['day', 'daytime']
+                                'tempo': ['time', 'weather', 'day']
+                            adjective:
+                                'giornaliero': ['daily', 'day', 'everyday']
+                        nativeAlternatives:
+                            noun: 
+                                'daytime': ['giorno', 'giornata']
+                                'daylight': ['luce del giorno', 'giorno']                        
+                    }
+                    {
+                        native: 'time'
+                        foreign: 'volta'
+                        nativeSentence: 'i went one time'
+                        foreignSentence: 'sono andato una volta'
+                        foreignAlternatives:
+                            noun: 
+                                'tempo': ['time', 'weather', 'period']
+                                'momento': ['time', 'moment', 'present']
+                            verb: 
+                                'cronometrare': []
+                        nativeAlternatives: 
+                            noun: 
+                                'vault': ['volta', 'volteggio', 'cripta']
+                                'turn': ['volta', 'turno', 'direzione']
+                                'archway': ['arcata', 'volta']
+                    }
+                    {
+                        native: 'home'
+                        foreign: 'casa'
+                        nativeSentence: 'welcome home'
+                        foreignSentence: 'benvenuto a casa'
+                        nativeAlternatives:   
+                            noun: 
+                                'house': ['casa', 'abitazione', 'edificio']
+                                'household': ['famiglia', 'casa']
+                                'family': ['famiglia', 'familiare', 'casa']
+                        foreignAlternatives:
+                            noun: 
+                                'abitazione': ['home', 'house', 'dwelling'] 
+                                'dimora': ['residence', 'home', 'dwelling']
+                            adjective: 
+                                'domestico': ['domestic', 'home', 'household']
+                    }
+                    {
+                        native: 'part'
+                        foreign: 'parte'
+                        nativeSentence: 'a big part'
+                        foreignSentence: 'una grande parte'
+                        nativeAlternatives: 
+                            noun: 
+                                'portion': ['porzione', 'parte', 'quota']
+                                'share': ['quota', 'azione', 'parte']
+                                'side': ['lato', 'parte', 'fianco']
+                        foreignAlternatives: 
+                            noun: 
+                                'pezzo': ['piece', 'part', 'bit']
+                            adjective: 
+                                'parziale': ['partial', 'part', 'biased']
+                            adverb: 
+                                'parzialmente': ['partly', 'part']
+                    }
+                    {
+                        native: 'life'
+                        foreign: 'vita'
+                        nativeSentence: 'life is good'
+                        foreignSentence: 'la vita è buona'
+                        nativeAlternatives:                     
+                            noun: 
+                                'living': ['vita', 'il vivere', 'pane']
+                                'waist': ['vita', 'cintola', 'strozzatura']
+                                'age': ['età', 'anni', 'vita']   
+                        foreignAlternatives:
+                            noun: 
+                                'durata': ['duration', 'life', 'length']
+                                'il vivere': ['living', 'life']
+                    }
+                    {
+                        native: 'time'
+                        foreign: 'tempo'
+                        nativeSentence: 'it takes time'
+                        foreignSentence: 'ci vuole tempo'
+                        nativeAlternatives:      
+                            noun: 
+                                'weather': ['tempo']
+                                'period': ['periodo', 'epoca', 'tempo']
+                                'stage': ['fase', 'scena', 'tempo']                  
+                        foreignAlternatives:
+                            noun: 
+                                'volta': ['time', 'vault', 'turn']
+                                'momento': ['time', 'moment', 'present']
+                            verb: 
+                                'cronometrare': ['time', 'clock', 'minute']
+                    }
+                    {
+                        native: 'woman'
+                        foreign: 'donna'
+                        nativeSentence: 'a smart woman'
+                        foreignSentence: 'una donna intelligente'
+                        nativeAlternatives:       
+                            noun: 
+                                'female': ['femmina', 'donna']
+                                'queen': ['regina', 'donna']
+                                'girlfriend': ['ragazza', 'fidanzata', 'donna']                 
+                        foreignAlternatives:
+                            noun: 
+                                'femmina': ['female', 'girl', 'woman']
+                    }
                 ]
             top10verbs:
                 title: 'Top 10 Verbs'
@@ -1158,14 +1281,166 @@ languageScramble.data =
                             'loro hanno'
                         ]
                     }
-                    {native: 'to say', foreign: 'dire'}
-                    {native: 'to be able to', foreign: 'potere'}
-                    {native: 'to want', foreign: 'volere'}
-                    {native: 'to know', foreign: 'sapere'}
-                    {native: 'to stay', foreign: 'stare'}
-                    {native: 'to have to', foreign: 'dovere'}
-                    {native: 'to see', foreign: 'vedere'}
-                    {native: 'to go', foreign: 'andare'}
+                    {
+                        native: 'to say'
+                        foreign: 'dire'
+                        nativeConjugations: [
+                            'I say'
+                            'you say'
+                            'he/she says'
+                            'we say'
+                            'you say'
+                            'they say'
+                        ]
+                        foreignConjugations: [
+                            'io dico'
+                            'tu dici'
+                            'lui/lei dice'
+                            'noi diciamo'
+                            'voi dite'
+                            'loro dicono'
+                        ]
+                    }
+                    {
+                        native: 'to be able to'
+                        foreign: 'potere'
+                        nativeConjugations: [
+                            'I am able to'
+                            'you are able to'
+                            'he/she is able to'
+                            'we are able to'
+                            'you are able to'
+                            'they are able to'
+                        ]
+                        foreignConjugations: [
+                            'io posso'
+                            'tu puoi'
+                            'lui/lei può'
+                            'noi possiamo'
+                            'voi potete'
+                            'loro possono'
+                        ]
+                    }
+                    {
+                        native: 'to want'
+                        foreign: 'volere'
+                        nativeConjugations: [
+                            'I want'
+                            'you want'
+                            'he/she wants'
+                            'we want'
+                            'you want'
+                            'they want'
+                        ]
+                        foreignConjugations: [
+                            'io voglio'
+                            'tu vuoi'
+                            'lui/lei vuole'
+                            'noi vogliamo'
+                            'voi volete'
+                            'loro vogliono'
+                        ]
+                    }
+                    {
+                        native: 'to know'
+                        foreign: 'sapere'
+                        nativeConjugations: [
+                            'I know'
+                            'you know'
+                            'he/she knows'
+                            'we know'
+                            'you know'
+                            'they know'
+                        ]
+                        foreignConjugations: [
+                            'io so'
+                            'tu sai'
+                            'lui/lei sa'
+                            'noi sappiamo'
+                            'voi sapete'
+                            'loro sanno'
+                        ]
+                    }
+                    {
+                        native: 'to stay'
+                        foreign: 'stare'
+                        nativeConjugations: [
+                            'I stay'
+                            'you stay'
+                            'he/she stays'
+                            'we stay'
+                            'you stay'
+                            'they stay'
+                        ]
+                        foreignConjugations: [
+                            'io sto'
+                            'tu stai'
+                            'lui/lei sta'
+                            'noi stiamo'
+                            'voi state'
+                            'loro stanno'
+                        ]
+                    }
+                    {
+                        native: 'to have to'
+                        foreign: 'dovere'
+                        nativeConjugations: [
+                            'I have to'
+                            'you have tp'
+                            'he/she has to'
+                            'we have to'
+                            'you have to'
+                            'they have to'
+                        ]
+                        foreignConjugations: [
+                            'io devo'
+                            'tu devi'
+                            'lui/lei deve'
+                            'noi dobbiamo'
+                            'voi dovete'
+                            'loro devono'
+                        ]
+                    }
+                    {
+                        native: 'to see'
+                        foreign: 'vedere'
+                        nativeConjugations: [
+                            'I see'
+                            'you see'
+                            'he/she sees'
+                            'we see'
+                            'you see'
+                            'they see'
+                        ]
+                        foreignConjugations: [
+                            'io vedo'
+                            'tu vedi'
+                            'lui/lei vede'
+                            'noi vediamo'
+                            'voi vedete'
+                            'loro vedono'
+                        ]
+                    }
+                    {
+                        native: 'to go'
+                        foreign: 'andare'
+                        nativeConjugations: [
+                            'I go'
+                            'you go'
+                            'he/she goes'
+                            'we go'
+                            'you go'
+                            'they go'
+                        ]
+                        foreignConjugations: [
+                            'io vado'
+                            'tu vai'
+                            'lui/lei va'
+                            'noi andiamo'
+                            'voi andate'
+                            'loro vanno'
+                        ]
+                    }
                 ]
             top10sentences:
                 title: 'Top 10 Sentences'

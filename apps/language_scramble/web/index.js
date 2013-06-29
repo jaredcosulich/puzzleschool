@@ -2,7 +2,7 @@
 
 window.app = {
   initialize: function() {
-    var languageScramble,
+    var data, languageScramble,
       _this = this;
     if (!(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight)) {
       $.timeout(100, function() {
@@ -16,6 +16,15 @@ window.app = {
     languageScramble = require('./lib/language_scramble');
     this.selector = $('.language_scramble');
     $('.scramble_content').height(window.innerHeight);
+    if (AppMobi) {
+      if (data = AppMobi.cache.getCookie('data')) {
+        this.puzzleData = JSON.parse(data);
+      }
+    } else {
+      if (data = window.localStorage.getItem('data')) {
+        this.puzzleData = JSON.parse(data);
+      }
+    }
     if (!this.puzzleData) {
       this.puzzleData = {
         levels: {}

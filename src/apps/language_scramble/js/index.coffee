@@ -9,12 +9,12 @@ window.app =
         @selector = $('.language_scramble')
         $('.scramble_content').height(window.innerHeight)
 
-        # if AppMobi
-        #     if data = AppMobi.cache.getCookie('data')
-        #         @puzzleData = JSON.parse(data)
-        # else
-        #     if data = window.localStorage.getItem('data')
-        #         @puzzleData = JSON.parse(data)
+        if AppMobi
+            if data = AppMobi.cache.getCookie('data')
+                @puzzleData = JSON.parse(data)
+        else
+            if data = window.localStorage.getItem('data')
+                @puzzleData = JSON.parse(data)
                 
         @puzzleData = {levels: {}} unless @puzzleData
         

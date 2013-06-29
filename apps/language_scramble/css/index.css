@@ -67,7 +67,7 @@ body {
 }
 .language_scramble .display_words .highlighted,
 .language_scramble .scrambled .highlighted {
-    background-color: rgba(36, 219, 75, 0.8);
+    background-color: rgba(59, 172, 82, 0.4);
     padding: 0 6px;
     display: inline-block;
     line-height: 42px;
@@ -489,14 +489,17 @@ body {
 }
 .language_scramble .dictionary .extra {
   padding-top: 30px;
-  height: 210px;
+  height: 201px;
 }
 .language_scramble .dictionary .extra p,
 .language_scramble .dictionary .extra table {
-  margin: 6px 0;
   font-size: 21px;
 }
+.language_scramble .dictionary .extra p {
+    margin-top: 18px;
+}
 .language_scramble .dictionary .extra table {
+  margin: 6px 0;
   width: 100%;
 }
 .language_scramble .dictionary .extra table .extra_line {
