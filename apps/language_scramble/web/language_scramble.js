@@ -505,7 +505,7 @@ languageScramble.ViewHelper = (function() {
     this.answerTimes.push(new Date());
     this.lettersAdded = [];
     return $.timeout(300, function() {
-      var boundary, displayWords, highlighted, sentence, _base, _i, _len, _name, _ref;
+      var displayWords, sentence, _base, _name;
       _this.scrambleInfo = _this.selectOption();
       if (!_this.scrambleInfo) {
         return;
@@ -517,18 +517,22 @@ languageScramble.ViewHelper = (function() {
       } else {
         sentence = _this.scrambleInfo[_this.displayLevel];
       }
-      sentence = " " + sentence + " ";
-      highlighted = _this.scrambleInfo[_this.displayLevel];
-      if (!highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))) {
-        _ref = [' ', '?', ','];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          boundary = _ref[_i];
-          sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
-        }
-      }
+      sentence = _this.highlight(" " + sentence + " ", _this.scrambleInfo[_this.displayLevel]);
       displayWords.html("<span class='words papered'>" + sentence + "</span>");
       return _this.displayScramble();
     });
+  };
+
+  ViewHelper.prototype.highlight = function(sentence, highlighted) {
+    var boundary, _i, _len, _ref;
+    if (!highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))) {
+      _ref = [' ', '?', ','];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        boundary = _ref[_i];
+        sentence = sentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
+      }
+    }
+    return sentence;
   };
 
   ViewHelper.prototype.displayScramble = function() {
@@ -1343,7 +1347,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.showDictionary = function() {
-    var altTranslations, alternativeHtml, alternatives, boundary, conjugation, conjugations, correctSentence, dictionary, highlighted, inactiveType, nextShown, otherConjugations, showNext, showNextButton, t, translation, translations, wordType, _i, _len, _ref,
+    var container, correctSentence, dictionary, inactiveType, nextShown, sentences, showNext, showNextButton,
       _this = this;
     dictionary = this.$('.dictionary');
     if ((this.scrambleInfo["" + this.activeType + "Sentence"] != null) && this.scrambleInfo["" + this.activeType + "Sentence"].length) {
@@ -1351,15 +1355,7 @@ languageScramble.ViewHelper = (function() {
     } else {
       correctSentence = this.scrambleInfo[this.activeType];
     }
-    correctSentence = " " + correctSentence + " ";
-    highlighted = this.scrambleInfo[this.activeType];
-    if (!highlighted.replace(/\s/g, '').match(correctSentence.replace(/\s/g, ''))) {
-      _ref = [' ', '?', ','];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        boundary = _ref[_i];
-        correctSentence = correctSentence.replace(" " + highlighted + boundary, " <span class='highlighted'>" + highlighted + "</span>" + boundary);
-      }
-    }
+    correctSentence = this.highlight(" " + correctSentence + " ", this.scrambleInfo[this.activeType]);
     nextShown = false;
     showNext = function() {
       if (nextShown) {
@@ -1374,69 +1370,12 @@ languageScramble.ViewHelper = (function() {
       return _this.hideDictionary();
     };
     inactiveType = this.activeType === 'native' ? 'foreign' : 'native';
-    dictionary.html("<table class='sentences'>\n    <tr>\n        <td class='language'>" + this.puzzleData.nativeLanguage + "</td>\n        <td class='sentence'>" + (this.$('.display_words span').html()) + "</td>\n    </tr>\n    <tr>\n        <td class='language'>" + this.puzzleData.foreignLanguage + "</td>\n        <td class='sentence'>" + correctSentence + "</td>\n    </tr>\n</table>");
-    alternatives = this.scrambleInfo["" + this.activeType + "Alternatives"];
-    if (alternatives) {
-      alternativeHtml = "<div class='extra'>\n    <div class='title'>Alternative translations for <b>" + this.scrambleInfo[inactiveType] + "</b>:</div>";
-      for (wordType in alternatives) {
-        translations = alternatives[wordType];
-        for (translation in translations) {
-          altTranslations = translations[translation];
-          alternativeHtml += "<p>\n    <b>" + translation + "</b> (" + wordType + "):\n    " + (((function() {
-            var _j, _len1, _results;
-            _results = [];
-            for (_j = 0, _len1 = altTranslations.length; _j < _len1; _j++) {
-              t = altTranslations[_j];
-              _results.push(t);
-            }
-            return _results;
-          })()).join(', ')) + "\n</p>";
-        }
-      }
-      alternativeHtml += '</div>';
-      dictionary.append(alternativeHtml);
-    }
-    conjugations = this.scrambleInfo["" + this.activeType + "Conjugations"];
-    otherConjugations = this.scrambleInfo["" + inactiveType + "Conjugations"];
-    if (conjugations && otherConjugations) {
-      dictionary.append("<div class='extra'>\n    <div class='title'>Conjugations of the verb <b>" + this.scrambleInfo[inactiveType] + "</b></div>\n    <table>\n        <tr>\n            " + (((function() {
-        var _j, _len1, _ref1, _results;
-        _ref1 = conjugations.slice(0, 3);
-        _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          conjugation = _ref1[_j];
-          _results.push("<td><b>" + conjugation + "</b></td>");
-        }
-        return _results;
-      })()).join('')) + "\n        </tr>\n        <tr>\n            " + (((function() {
-        var _j, _len1, _ref1, _results;
-        _ref1 = otherConjugations.slice(0, 3);
-        _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          conjugation = _ref1[_j];
-          _results.push("<td>" + conjugation + "</td>");
-        }
-        return _results;
-      })()).join('')) + "\n        </tr>\n        <tr class='extra_line'><td>&nbsp;</td><td>&nbsp;</td></tr>\n        <tr>\n            " + (((function() {
-        var _j, _len1, _ref1, _results;
-        _ref1 = conjugations.slice(3);
-        _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          conjugation = _ref1[_j];
-          _results.push("<td><b>" + conjugation + "</b></td>");
-        }
-        return _results;
-      })()).join('')) + "\n        </tr>\n        <tr>\n            " + (((function() {
-        var _j, _len1, _ref1, _results;
-        _ref1 = otherConjugations.slice(3);
-        _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          conjugation = _ref1[_j];
-          _results.push("<td>" + conjugation + "</td>");
-        }
-        return _results;
-      })()).join('')) + "\n        </tr>\n    </table>\n</div>");
-    }
+    dictionary.html("<div class='sentences_container'>\n    <div class='sentences'>\n        <div class='sentence'>" + (this.$('.display_words span').html()) + "</div>\n        <div class='sentence'>" + correctSentence + "</div>\n    </div>\n</div>");
+    container = dictionary.find('.sentences_container');
+    sentences = dictionary.find('.sentences');
+    sentences.find('.sentence:first-child').css({
+      paddingTop: (container.height() - sentences.height()) / 2
+    });
     showNextButton = $(document.createElement('A'));
     showNextButton.addClass('next');
     showNextButton.html('Next Scramble');
@@ -1526,205 +1465,55 @@ languageScramble.data = {
         subtitle: 'The 10 most commonly used nouns.',
         data: [
           {
-            "native": 'what',
+            "native": 'thing',
             foreign: 'cosa',
-            nativeSentence: 'what are you doing?',
-            foreignSentence: 'cosa stai facendo?',
-            type: 'pronoun',
-            foreignAlternatives: {
-              pronoun: {
-                'ciò che': ['what', 'whatever'],
-                'che': ['which', 'who', 'what']
-              },
-              conconjunction: {
-                'che': ['that', 'than', 'what']
-              }
-            },
-            nativeAlternatives: {
-              noun: {
-                'thing': ['cosa', 'oggetto', 'coso'],
-                'matter': ['materia', 'questione'],
-                'stuff': ['roba', 'materiale', 'cosa']
-              }
-            }
+            nativeSentence: 'one thing to know',
+            foreignSentence: 'una cosa è sapere'
           }, {
             "native": 'year',
             foreign: 'anno',
             nativeSentence: 'what year is it?',
-            foreignSentence: 'che anno è?',
-            foreignAlternatives: {
-              noun: {
-                'annata': ['vintage', 'year']
-              }
-            },
-            nativeAlternatives: {
-              noun: {
-                'grade': ['grado', 'qualità', 'classe'],
-                'twelvemonth': ['anno']
-              }
-            }
+            foreignSentence: 'che anno è?'
           }, {
             "native": 'man',
             foreign: 'uomo',
             nativeSentence: 'a tall man',
-            foreignSentence: 'un uomo alto',
-            foreignAlternatives: {
-              noun: {
-                'persona': ['person', 'man', 'body'],
-                'signore': ['sir', 'lord', 'man'],
-                'maschio': ['male', 'boy', 'man']
-              },
-              verb: {
-                'equipaggiare': ['equip', 'man', 'fit out']
-              }
-            },
-            nativeAlternatives: {
-              noun: {
-                'mankind': ['umanità', 'genere', 'uomo'],
-                'humanity': ['umanità', 'uomo']
-              }
-            }
+            foreignSentence: 'un uomo alto'
           }, {
             "native": 'day',
             foreign: 'giorno',
             nativeSentence: 'what day is it?',
-            foreignSentence: 'che giorno è?',
-            foreignAlternatives: {
-              noun: {
-                'giornata': ['day', 'daytime'],
-                'tempo': ['time', 'weather', 'day']
-              },
-              adjective: {
-                'giornaliero': ['daily', 'day', 'everyday']
-              }
-            },
-            nativeAlternatives: {
-              noun: {
-                'daytime': ['giorno', 'giornata'],
-                'daylight': ['luce del giorno', 'giorno']
-              }
-            }
+            foreignSentence: 'che giorno è?'
           }, {
             "native": 'time',
             foreign: 'volta',
             nativeSentence: 'i went one time',
-            foreignSentence: 'sono andato una volta',
-            foreignAlternatives: {
-              noun: {
-                'tempo': ['time', 'weather', 'period'],
-                'momento': ['time', 'moment', 'present']
-              },
-              verb: {
-                'cronometrare': []
-              }
-            },
-            nativeAlternatives: {
-              noun: {
-                'vault': ['volta', 'volteggio', 'cripta'],
-                'turn': ['volta', 'turno', 'direzione'],
-                'archway': ['arcata', 'volta']
-              }
-            }
+            foreignSentence: 'sono andato una volta'
           }, {
             "native": 'home',
             foreign: 'casa',
             nativeSentence: 'welcome home',
-            foreignSentence: 'benvenuto a casa',
-            nativeAlternatives: {
-              noun: {
-                'house': ['casa', 'abitazione', 'edificio'],
-                'household': ['famiglia', 'casa'],
-                'family': ['famiglia', 'familiare', 'casa']
-              }
-            },
-            foreignAlternatives: {
-              noun: {
-                'abitazione': ['home', 'house', 'dwelling'],
-                'dimora': ['residence', 'home', 'dwelling']
-              },
-              adjective: {
-                'domestico': ['domestic', 'home', 'household']
-              }
-            }
+            foreignSentence: 'benvenuto a casa'
           }, {
             "native": 'part',
             foreign: 'parte',
             nativeSentence: 'a big part',
-            foreignSentence: 'una grande parte',
-            nativeAlternatives: {
-              noun: {
-                'portion': ['porzione', 'parte', 'quota'],
-                'share': ['quota', 'azione', 'parte'],
-                'side': ['lato', 'parte', 'fianco']
-              }
-            },
-            foreignAlternatives: {
-              noun: {
-                'pezzo': ['piece', 'part', 'bit']
-              },
-              adjective: {
-                'parziale': ['partial', 'part', 'biased']
-              },
-              adverb: {
-                'parzialmente': ['partly', 'part']
-              }
-            }
+            foreignSentence: 'una grande parte'
           }, {
             "native": 'life',
             foreign: 'vita',
             nativeSentence: 'life is good',
-            foreignSentence: 'la vita è buona',
-            nativeAlternatives: {
-              noun: {
-                'living': ['vita', 'il vivere', 'pane'],
-                'waist': ['vita', 'cintola', 'strozzatura'],
-                'age': ['età', 'anni', 'vita']
-              }
-            },
-            foreignAlternatives: {
-              noun: {
-                'durata': ['duration', 'life', 'length'],
-                'il vivere': ['living', 'life']
-              }
-            }
+            foreignSentence: 'la vita è buona'
           }, {
             "native": 'time',
             foreign: 'tempo',
             nativeSentence: 'it takes time',
-            foreignSentence: 'ci vuole tempo',
-            nativeAlternatives: {
-              noun: {
-                'weather': ['tempo'],
-                'period': ['periodo', 'epoca', 'tempo'],
-                'stage': ['fase', 'scena', 'tempo']
-              }
-            },
-            foreignAlternatives: {
-              noun: {
-                'volta': ['time', 'vault', 'turn'],
-                'momento': ['time', 'moment', 'present']
-              },
-              verb: {
-                'cronometrare': ['time', 'clock', 'minute']
-              }
-            }
+            foreignSentence: 'ci vuole tempo'
           }, {
             "native": 'woman',
             foreign: 'donna',
             nativeSentence: 'a smart woman',
-            foreignSentence: 'una donna intelligente',
-            nativeAlternatives: {
-              noun: {
-                'female': ['femmina', 'donna'],
-                'queen': ['regina', 'donna'],
-                'girlfriend': ['ragazza', 'fidanzata', 'donna']
-              }
-            },
-            foreignAlternatives: {
-              noun: {
-                'femmina': ['female', 'girl', 'woman']
-              }
-            }
+            foreignSentence: 'una donna intelligente'
           }
         ]
       },
@@ -1735,56 +1524,34 @@ languageScramble.data = {
         data: [
           {
             "native": 'to be',
-            foreign: 'essere',
-            type: 'verb',
-            nativeConjugations: ['i am', 'you are', 'he/she is', 'we are', 'you are', 'they are'],
-            foreignConjugations: ['io sono', 'tu sei', 'lui/lei è', 'noi siamo', 'voi siete', 'loro sono']
+            foreign: 'essere'
           }, {
             "native": 'to have',
-            foreign: 'avere',
-            type: 'verb',
-            nativeConjugations: ['i have', 'you have', 'he/she has', 'we have', 'you have', 'they have'],
-            foreignConjugations: ['io ho', 'tu hai', 'lui/lei ha', 'noi abbiamo', 'voi avete', 'loro hanno']
+            foreign: 'avere'
           }, {
             "native": 'to say',
-            foreign: 'dire',
-            nativeConjugations: ['I say', 'you say', 'he/she says', 'we say', 'you say', 'they say'],
-            foreignConjugations: ['io dico', 'tu dici', 'lui/lei dice', 'noi diciamo', 'voi dite', 'loro dicono']
+            foreign: 'dire'
           }, {
             "native": 'to be able to',
-            foreign: 'potere',
-            nativeConjugations: ['I am able to', 'you are able to', 'he/she is able to', 'we are able to', 'you are able to', 'they are able to'],
-            foreignConjugations: ['io posso', 'tu puoi', 'lui/lei può', 'noi possiamo', 'voi potete', 'loro possono']
+            foreign: 'potere'
           }, {
             "native": 'to want',
-            foreign: 'volere',
-            nativeConjugations: ['I want', 'you want', 'he/she wants', 'we want', 'you want', 'they want'],
-            foreignConjugations: ['io voglio', 'tu vuoi', 'lui/lei vuole', 'noi vogliamo', 'voi volete', 'loro vogliono']
+            foreign: 'volere'
           }, {
             "native": 'to know',
-            foreign: 'sapere',
-            nativeConjugations: ['I know', 'you know', 'he/she knows', 'we know', 'you know', 'they know'],
-            foreignConjugations: ['io so', 'tu sai', 'lui/lei sa', 'noi sappiamo', 'voi sapete', 'loro sanno']
+            foreign: 'sapere'
           }, {
             "native": 'to stay',
-            foreign: 'stare',
-            nativeConjugations: ['I stay', 'you stay', 'he/she stays', 'we stay', 'you stay', 'they stay'],
-            foreignConjugations: ['io sto', 'tu stai', 'lui/lei sta', 'noi stiamo', 'voi state', 'loro stanno']
+            foreign: 'stare'
           }, {
             "native": 'to have to',
-            foreign: 'dovere',
-            nativeConjugations: ['I have to', 'you have tp', 'he/she has to', 'we have to', 'you have to', 'they have to'],
-            foreignConjugations: ['io devo', 'tu devi', 'lui/lei deve', 'noi dobbiamo', 'voi dovete', 'loro devono']
+            foreign: 'dovere'
           }, {
             "native": 'to see',
-            foreign: 'vedere',
-            nativeConjugations: ['I see', 'you see', 'he/she sees', 'we see', 'you see', 'they see'],
-            foreignConjugations: ['io vedo', 'tu vedi', 'lui/lei vede', 'noi vediamo', 'voi vedete', 'loro vedono']
+            foreign: 'vedere'
           }, {
             "native": 'to go',
-            foreign: 'andare',
-            nativeConjugations: ['I go', 'you go', 'he/she goes', 'we go', 'you go', 'they go'],
-            foreignConjugations: ['io vado', 'tu vai', 'lui/lei va', 'noi andiamo', 'voi andate', 'loro vanno']
+            foreign: 'andare'
           }
         ]
       },

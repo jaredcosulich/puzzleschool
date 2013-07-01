@@ -2,7 +2,7 @@
 
 window.app = {
   initialize: function() {
-    var data, languageScramble,
+    var data, languageScramble, _ref,
       _this = this;
     if (!(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight)) {
       $.timeout(100, function() {
@@ -25,8 +25,9 @@ window.app = {
         this.puzzleData = JSON.parse(data);
       }
     }
-    if (!this.puzzleData) {
+    if (((_ref = this.puzzleData) != null ? _ref.version : void 0) !== 1372545647064) {
       this.puzzleData = {
+        version: 1372545647064,
         levels: {}
       };
     }

@@ -345,16 +345,17 @@ class languageScramble.ViewHelper
                 sentence = @scrambleInfo["#{@displayLevel}Sentence"]
             else
                 sentence = @scrambleInfo[@displayLevel]
-            sentence = " #{sentence} "
-            highlighted = @scrambleInfo[@displayLevel]
-        
-            unless highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))
-                for boundary in [' ', '?', ',']
-                    sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+            sentence = @highlight(" #{sentence} ", @scrambleInfo[@displayLevel])
 
             displayWords.html("<span class='words papered'>#{sentence}</span>")
             
             @displayScramble()
+            
+    highlight: (sentence, highlighted) ->
+        unless highlighted.replace(/\s/g, '').match(sentence.replace(/\s/g, ''))
+            for boundary in [' ', '?', ',']
+                sentence = sentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+        return sentence
         
     displayScramble: ->
         @$('.scrambled, .guesses').css(width: null, height: null, opacity: null)        
@@ -905,12 +906,7 @@ class languageScramble.ViewHelper
         else 
             correctSentence = @scrambleInfo[@activeType]
 
-        correctSentence = " #{correctSentence} "
-        highlighted = @scrambleInfo[@activeType]
-
-        unless highlighted.replace(/\s/g, '').match(correctSentence.replace(/\s/g, ''))
-            for boundary in [' ', '?', ',']
-                correctSentence = correctSentence.replace(" #{highlighted}#{boundary}", " <span class='highlighted'>#{highlighted}</span>#{boundary}")           
+        correctSentence = @highlight(" #{correctSentence} ", @scrambleInfo[@activeType])
 
         nextShown = false
         showNext = =>
@@ -925,61 +921,19 @@ class languageScramble.ViewHelper
             
         inactiveType = if @activeType == 'native' then 'foreign' else 'native'
         dictionary.html """
-            <table class='sentences'>
-                <tr>
-                    <td class='language'>#{@puzzleData.nativeLanguage}</td>
-                    <td class='sentence'>#{@$('.display_words span').html()}</td>
-                </tr>
-                <tr>
-                    <td class='language'>#{@puzzleData.foreignLanguage}</td>
-                    <td class='sentence'>#{correctSentence}</td>
-                </tr>
-            </table>
-        """
-        
-        alternatives = @scrambleInfo["#{@activeType}Alternatives"]
-        if alternatives
-            alternativeHtml = """
-                <div class='extra'>
-                    <div class='title'>Alternative translations for <b>#{@scrambleInfo[inactiveType]}</b>:</div>
-            """
-            
-            for wordType, translations of alternatives
-                for translation, altTranslations of translations
-                    alternativeHtml += """
-                        <p>
-                            <b>#{translation}</b> (#{wordType}):
-                            #{(t for t in altTranslations).join(', ')}
-                        </p>
-                    """
-            
-            alternativeHtml += '</div>'
-            dictionary.append(alternativeHtml)
-
-        conjugations = @scrambleInfo["#{@activeType}Conjugations"]
-        otherConjugations = @scrambleInfo["#{inactiveType}Conjugations"]
-        if conjugations and otherConjugations
-            dictionary.append """
-                <div class='extra'>
-                    <div class='title'>Conjugations of the verb <b>#{@scrambleInfo[inactiveType]}</b></div>
-                    <table>
-                        <tr>
-                            #{("<td><b>#{conjugation}</b></td>" for conjugation in conjugations[0..2]).join('')}
-                        </tr>
-                        <tr>
-                            #{("<td>#{conjugation}</td>" for conjugation in otherConjugations[0..2]).join('')}
-                        </tr>
-                        <tr class='extra_line'><td>&nbsp;</td><td>&nbsp;</td></tr>
-                        <tr>
-                            #{("<td><b>#{conjugation}</b></td>" for conjugation in conjugations[3..-1]).join('')}
-                        </tr>
-                        <tr>
-                            #{("<td>#{conjugation}</td>" for conjugation in otherConjugations[3..-1]).join('')}
-                        </tr>
-                    </table>
+            <div class='sentences_container'>
+                <div class='sentences'>
+                    <div class='sentence'>#{@$('.display_words span').html()}</div>
+                    <div class='sentence'>#{correctSentence}</div>
                 </div>
-            """
-            
+            </div>
+        """
+
+        container = dictionary.find('.sentences_container')
+        sentences = dictionary.find('.sentences')
+        sentences.find('.sentence:first-child').css
+            paddingTop: (container.height() - sentences.height()) / 2
+
         showNextButton = $(document.createElement('A'))
         showNextButton.addClass('next')
         showNextButton.html('Next Scramble')
@@ -992,25 +946,6 @@ class languageScramble.ViewHelper
             opacity: 0
             top: (@$('.scramble_content').height() - dictionary.height()) / 2
             left: (@$('.scramble_content').width() - dictionary.width()) / 2
-
-        # @$('.guesses').animate
-        #     opacity: 0
-        #     height: (@$('.guesses').height() / 4)
-        #     paddingTop: 0
-        #     paddingBottom: 0
-        #     duration: 500
-        #     complete: -> guessAnimationOngoing = false
-
-        # if window.AppMobi
-        #     $(document.body).bind 'touchstart.shownext', (e) =>
-        #         e.stop() 
-        #         $(document.body).unbind 'touchstart.shownext'
-        #         $(document.body).one 'touchend.shownext', (e) => 
-        #             e.stop()
-        #             showNext()
-        # else
-        #     $(document.body).bind 'click.shownext', () => showNext() 
-        #     $('#clickarea').bind 'keydown.shownext', (e) => showNext()
 
         dictionary.animate
             opacity: 1
@@ -1071,167 +1006,64 @@ languageScramble.data =
                 subtitle: 'The 10 most commonly used nouns.'
                 data: [
                     {
-                        native: 'what', 
-                        foreign: 'cosa',
-                        nativeSentence: 'what are you doing?'
-                        foreignSentence: 'cosa stai facendo?'
-                        type: 'pronoun'
-                        foreignAlternatives:
-                            pronoun: 
-                                'ciò che': ['what', 'whatever']
-                                'che': ['which', 'who', 'what']
-                            conconjunction: 
-                                'che': ['that', 'than', 'what']
-                            
-                        nativeAlternatives: 
-                            noun: 
-                                'thing': ['cosa', 'oggetto', 'coso']
-                                'matter': ['materia', 'questione']
-                                'stuff': ['roba', 'materiale', 'cosa']
+                        native: 'thing'
+                        foreign: 'cosa'
+                        nativeSentence: 'one thing to know'
+                        foreignSentence: 'una cosa è sapere'
                     }
                     {
-                        native: 'year', 
-                        foreign: 'anno',
+                        native: 'year' 
+                        foreign: 'anno'
                         nativeSentence: 'what year is it?'
                         foreignSentence: 'che anno è?'
-                        foreignAlternatives: 
-                            noun: 
-                                'annata': ['vintage', 'year']
-                        nativeAlternatives:
-                            noun: 
-                                'grade': ['grado', 'qualità', 'classe']
-                                'twelvemonth': ['anno']
                     }
                     {
                         native: 'man' 
                         foreign: 'uomo'
                         nativeSentence: 'a tall man'
                         foreignSentence: 'un uomo alto'
-                        foreignAlternatives:
-                            noun: 
-                                'persona': ['person', 'man', 'body'] 
-                                'signore': ['sir', 'lord', 'man']
-                                'maschio': ['male', 'boy', 'man']
-                            verb: 
-                                'equipaggiare': ['equip', 'man', 'fit out']
-                        nativeAlternatives:
-                            noun: 
-                                'mankind': ['umanità', 'genere', 'uomo']
-                                'humanity': ['umanità', 'uomo']
                     }
                     {
                         native: 'day'
                         foreign: 'giorno'
                         nativeSentence: 'what day is it?'
                         foreignSentence: 'che giorno è?'
-                        foreignAlternatives:
-                            noun: 
-                                'giornata': ['day', 'daytime']
-                                'tempo': ['time', 'weather', 'day']
-                            adjective:
-                                'giornaliero': ['daily', 'day', 'everyday']
-                        nativeAlternatives:
-                            noun: 
-                                'daytime': ['giorno', 'giornata']
-                                'daylight': ['luce del giorno', 'giorno']                        
                     }
                     {
                         native: 'time'
                         foreign: 'volta'
                         nativeSentence: 'i went one time'
                         foreignSentence: 'sono andato una volta'
-                        foreignAlternatives:
-                            noun: 
-                                'tempo': ['time', 'weather', 'period']
-                                'momento': ['time', 'moment', 'present']
-                            verb: 
-                                'cronometrare': []
-                        nativeAlternatives: 
-                            noun: 
-                                'vault': ['volta', 'volteggio', 'cripta']
-                                'turn': ['volta', 'turno', 'direzione']
-                                'archway': ['arcata', 'volta']
                     }
                     {
                         native: 'home'
                         foreign: 'casa'
                         nativeSentence: 'welcome home'
                         foreignSentence: 'benvenuto a casa'
-                        nativeAlternatives:   
-                            noun: 
-                                'house': ['casa', 'abitazione', 'edificio']
-                                'household': ['famiglia', 'casa']
-                                'family': ['famiglia', 'familiare', 'casa']
-                        foreignAlternatives:
-                            noun: 
-                                'abitazione': ['home', 'house', 'dwelling'] 
-                                'dimora': ['residence', 'home', 'dwelling']
-                            adjective: 
-                                'domestico': ['domestic', 'home', 'household']
                     }
                     {
                         native: 'part'
                         foreign: 'parte'
                         nativeSentence: 'a big part'
                         foreignSentence: 'una grande parte'
-                        nativeAlternatives: 
-                            noun: 
-                                'portion': ['porzione', 'parte', 'quota']
-                                'share': ['quota', 'azione', 'parte']
-                                'side': ['lato', 'parte', 'fianco']
-                        foreignAlternatives: 
-                            noun: 
-                                'pezzo': ['piece', 'part', 'bit']
-                            adjective: 
-                                'parziale': ['partial', 'part', 'biased']
-                            adverb: 
-                                'parzialmente': ['partly', 'part']
                     }
                     {
                         native: 'life'
                         foreign: 'vita'
                         nativeSentence: 'life is good'
                         foreignSentence: 'la vita è buona'
-                        nativeAlternatives:                     
-                            noun: 
-                                'living': ['vita', 'il vivere', 'pane']
-                                'waist': ['vita', 'cintola', 'strozzatura']
-                                'age': ['età', 'anni', 'vita']   
-                        foreignAlternatives:
-                            noun: 
-                                'durata': ['duration', 'life', 'length']
-                                'il vivere': ['living', 'life']
                     }
                     {
                         native: 'time'
                         foreign: 'tempo'
                         nativeSentence: 'it takes time'
                         foreignSentence: 'ci vuole tempo'
-                        nativeAlternatives:      
-                            noun: 
-                                'weather': ['tempo']
-                                'period': ['periodo', 'epoca', 'tempo']
-                                'stage': ['fase', 'scena', 'tempo']                  
-                        foreignAlternatives:
-                            noun: 
-                                'volta': ['time', 'vault', 'turn']
-                                'momento': ['time', 'moment', 'present']
-                            verb: 
-                                'cronometrare': ['time', 'clock', 'minute']
                     }
                     {
                         native: 'woman'
                         foreign: 'donna'
                         nativeSentence: 'a smart woman'
                         foreignSentence: 'una donna intelligente'
-                        nativeAlternatives:       
-                            noun: 
-                                'female': ['femmina', 'donna']
-                                'queen': ['regina', 'donna']
-                                'girlfriend': ['ragazza', 'fidanzata', 'donna']                 
-                        foreignAlternatives:
-                            noun: 
-                                'femmina': ['female', 'girl', 'woman']
                     }
                 ]
             top10verbs:
@@ -1242,204 +1074,42 @@ languageScramble.data =
                     {
                         native: 'to be' 
                         foreign: 'essere'
-                        type: 'verb'
-                        nativeConjugations: [
-                            'i am'
-                            'you are'
-                            'he/she is'
-                            'we are'
-                            'you are'
-                            'they are'
-                        ]
-                        foreignConjugations: [
-                            'io sono'
-                            'tu sei'
-                            'lui/lei è'
-                            'noi siamo'
-                            'voi siete'
-                            'loro sono'
-                        ]
                     }
                     {
                         native: 'to have'
                         foreign: 'avere'
-                        type: 'verb'
-                        nativeConjugations: [
-                            'i have'
-                            'you have'
-                            'he/she has'
-                            'we have'
-                            'you have'
-                            'they have'
-                        ]
-                        foreignConjugations: [
-                            'io ho'
-                            'tu hai'
-                            'lui/lei ha'
-                            'noi abbiamo'
-                            'voi avete'
-                            'loro hanno'
-                        ]
                     }
                     {
                         native: 'to say'
                         foreign: 'dire'
-                        nativeConjugations: [
-                            'I say'
-                            'you say'
-                            'he/she says'
-                            'we say'
-                            'you say'
-                            'they say'
-                        ]
-                        foreignConjugations: [
-                            'io dico'
-                            'tu dici'
-                            'lui/lei dice'
-                            'noi diciamo'
-                            'voi dite'
-                            'loro dicono'
-                        ]
                     }
                     {
                         native: 'to be able to'
                         foreign: 'potere'
-                        nativeConjugations: [
-                            'I am able to'
-                            'you are able to'
-                            'he/she is able to'
-                            'we are able to'
-                            'you are able to'
-                            'they are able to'
-                        ]
-                        foreignConjugations: [
-                            'io posso'
-                            'tu puoi'
-                            'lui/lei può'
-                            'noi possiamo'
-                            'voi potete'
-                            'loro possono'
-                        ]
                     }
                     {
                         native: 'to want'
                         foreign: 'volere'
-                        nativeConjugations: [
-                            'I want'
-                            'you want'
-                            'he/she wants'
-                            'we want'
-                            'you want'
-                            'they want'
-                        ]
-                        foreignConjugations: [
-                            'io voglio'
-                            'tu vuoi'
-                            'lui/lei vuole'
-                            'noi vogliamo'
-                            'voi volete'
-                            'loro vogliono'
-                        ]
                     }
                     {
                         native: 'to know'
                         foreign: 'sapere'
-                        nativeConjugations: [
-                            'I know'
-                            'you know'
-                            'he/she knows'
-                            'we know'
-                            'you know'
-                            'they know'
-                        ]
-                        foreignConjugations: [
-                            'io so'
-                            'tu sai'
-                            'lui/lei sa'
-                            'noi sappiamo'
-                            'voi sapete'
-                            'loro sanno'
-                        ]
                     }
                     {
                         native: 'to stay'
                         foreign: 'stare'
-                        nativeConjugations: [
-                            'I stay'
-                            'you stay'
-                            'he/she stays'
-                            'we stay'
-                            'you stay'
-                            'they stay'
-                        ]
-                        foreignConjugations: [
-                            'io sto'
-                            'tu stai'
-                            'lui/lei sta'
-                            'noi stiamo'
-                            'voi state'
-                            'loro stanno'
-                        ]
                     }
                     {
                         native: 'to have to'
                         foreign: 'dovere'
-                        nativeConjugations: [
-                            'I have to'
-                            'you have tp'
-                            'he/she has to'
-                            'we have to'
-                            'you have to'
-                            'they have to'
-                        ]
-                        foreignConjugations: [
-                            'io devo'
-                            'tu devi'
-                            'lui/lei deve'
-                            'noi dobbiamo'
-                            'voi dovete'
-                            'loro devono'
-                        ]
                     }
                     {
                         native: 'to see'
                         foreign: 'vedere'
-                        nativeConjugations: [
-                            'I see'
-                            'you see'
-                            'he/she sees'
-                            'we see'
-                            'you see'
-                            'they see'
-                        ]
-                        foreignConjugations: [
-                            'io vedo'
-                            'tu vedi'
-                            'lui/lei vede'
-                            'noi vediamo'
-                            'voi vedete'
-                            'loro vedono'
-                        ]
                     }
                     {
                         native: 'to go'
                         foreign: 'andare'
-                        nativeConjugations: [
-                            'I go'
-                            'you go'
-                            'he/she goes'
-                            'we go'
-                            'you go'
-                            'they go'
-                        ]
-                        foreignConjugations: [
-                            'io vado'
-                            'tu vai'
-                            'lui/lei va'
-                            'noi andiamo'
-                            'voi andate'
-                            'loro vanno'
-                        ]
                     }
                 ]
             top10sentences:

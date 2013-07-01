@@ -434,76 +434,27 @@ body {
 }
 .language_scramble .dictionary {
   background-image: url('images/dictionary.png');
-  width: 540px;
-  height: 540px;
+  width: 573px;
+  height: 573px;
   padding: 12px;
   position: absolute;
   top: -10000px;
   left: -10000px;
   overflow: auto;
   text-align: center;
-  font-size: 27px;
-}
-.language_scramble .dictionary .sentences {
-  margin-top: 30px;
-  border-spacing: 12px;
-}
-.language_scramble .dictionary .sentences td {
-  padding: 12px 0;
-  margin-bottom: 12px;
-}
-.language_scramble .dictionary .sentences .language {
   font-size: 36px;
-  padding-right: 6px;
-  text-align: right;
+  margin-left: -3px;
 }
-.language_scramble .dictionary .sentences .sentence {
-  padding: 12px 30px;
-  border: 1px solid #262626;
-  min-width: 330px;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  position: relative;
+.language_scramble .dictionary .sentences_container {
+  margin-top: 30px;
+  height: 390px;
+  font-size: 54px;
 }
-.language_scramble .dictionary .sentences .sentence .highlighted {
+.language_scramble .dictionary .sentences .sentence:last-child {
+  padding-top: 60px;
+}
+.language_scramble .dictionary .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
-}
-.language_scramble .dictionary .sentences .sentence::after {
-  background-color: #EEE7D7;
-  height: 18px;
-  width: 18px;
-  content: "\00a0";
-  display: block;
-  left: -8px;
-  top: 36%;
-  position: absolute;
-  box-shadow: 1px 1px #000000;
-  -webkit-box-shadow: 1px 1px #000000;
-  -moz-box-shadow: 1px 1px #000000;
-  transform: rotate(135deg);
-  -moz-transform: rotate(135deg);
-  -ms-transform: rotate(135deg);
-  -o-transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
-}
-.language_scramble .dictionary .extra {
-  padding-top: 30px;
-  height: 201px;
-}
-.language_scramble .dictionary .extra p,
-.language_scramble .dictionary .extra table {
-  font-size: 21px;
-}
-.language_scramble .dictionary .extra p {
-    margin-top: 18px;
-}
-.language_scramble .dictionary .extra table {
-  margin: 6px 0;
-  width: 100%;
-}
-.language_scramble .dictionary .extra table .extra_line {
-  font-size: 12px;
 }
 .language_scramble .dictionary .next {
   display: block;

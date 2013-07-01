@@ -16,7 +16,11 @@ window.app =
             if data = window.localStorage.getItem('data')
                 @puzzleData = JSON.parse(data)
                 
-        @puzzleData = {levels: {}} unless @puzzleData
+
+        if @puzzleData?.version != 1372545647064
+            @puzzleData = {version: 1372545647064, levels: {}}
+
+        # @puzzleData = {levels: {}} unless @puzzleData
         
         @puzzleData.nativeLanguage = 'English' unless @puzzleData.nativeLanguage
         
