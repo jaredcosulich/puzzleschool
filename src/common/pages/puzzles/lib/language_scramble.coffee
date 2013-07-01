@@ -1001,9 +1001,9 @@ languageScramble.data =
     english_italian: 
         displayLanguages: 'English - Italian'
         levels:
-            top10nouns:
-                title: 'Top 10 Nouns'
-                subtitle: 'The 10 most commonly used nouns.'
+            commonNouns1:
+                title: '10 Common Nouns #1'
+                subtitle: '10 common Italian nouns - set #1'
                 data: [
                     {
                         native: 'thing'
@@ -1065,6 +1065,78 @@ languageScramble.data =
                         nativeSentence: 'a smart woman'
                         foreignSentence: 'una donna intelligente'
                     }
+                ]
+            commonVerbs1    
+                title: 'Common Verbs #1'
+                subtitle: 'Common Italian verbs - set #1'
+                data: [
+                    {
+                        native: 'i am' 
+                        foreign: 'io sono'
+                        nativeSentence: 'i am angry'
+                        foreignSentence: 'io sono arrabbiato'
+                    }
+                    {
+                        native: 'you are' 
+                        foreign: 'tu sei'
+                        nativeSentence: 'you are smart'
+                        foreignSentence: 'tu sei intelligente'
+                    }
+                    {
+                        native: 'i have' 
+                        foreign: 'io ho'
+                        nativeSentence: 'i have one dollar'
+                        foreignSentence: 'ho un dollaro'
+                    }
+                    {
+                        native: 'you have' 
+                        foreign: 'tu hai'
+                        nativeSentence: 'dp you have a pencil?'
+                        foreignSentence: 'hai una matita?'
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    {
+                        native: '' 
+                        foreign: ''
+                        nativeSentence: ''
+                        foreignSentence: ''
+                    }
+                    
                 ]
             top10verbs:
                 title: 'Top 10 Verbs'
