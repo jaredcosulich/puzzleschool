@@ -122,7 +122,7 @@ soma.views
             language = language.toLowerCase()
             levelSelect = @$("##{language}_select_menu")
             startPosition = {}
-            levelSelect.bind 'touchstart', (e) =>
+            levelSelect.bind 'mousedown', (e) =>
                 startPosition = 
                     scrollTop: parseInt(levelSelect.scrollTop())
                     touch: @viewHelper.clientY(e)
@@ -164,8 +164,8 @@ soma.views
                     levelLinkDiv.id = "level_link_#{key}"
                     levelLink = document.createElement("A")
                     levelLink.className = 'level_link'
-                    levelLink.innerHTML = "#{info.title}<br/><small>#{info.subtitle}</small>"
-                    $(levelLink).bind 'touchstart.select_level', () => showLevel(key)
+                    levelLink.innerHTML = info.title
+                    $(levelLink).bind 'mousedown.select_level', () => showLevel(key)
                     $(levelLinkDiv).append(levelLink)
                     levelsGroup.append(levelLinkDiv)
 
@@ -182,27 +182,28 @@ soma.views
 
             next = levelSelect.find('.next')
             showNext = =>
-                next.unbind 'touchstart.next'
-                @$('document.body').one 'touchend.next', => next.removeClass('active')
+                next.unbind 'mousedown.next'
+                @$('document.body').one 'mouseup.next', => next.removeClass('active')
                 next.addClass('active')    
                 levelsContainer.animate
                     marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width()
                     duration: 500
-                    complete: => next.bind 'touchstart.next', => showNext()            
-            next.bind 'touchstart.next', => showNext()
+                    complete: => next.bind 'mousedown.next', => showNext()            
+            next.bind 'mousedown.next', => showNext()
 
             previous = levelSelect.find('.previous')
             showPrevious = =>
-                previous.unbind 'touchstart.previous'
-                @$('document.body').one 'touchend.previous', => previous.removeClass('active')
+                previous.unbind 'mousedown.previous'
+                @$('document.body').one 'mouseup.previous', => previous.removeClass('active')
                 previous.addClass('active')
                 levelsContainer.animate
                     marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width()
                     duration: 500
-                    complete: => previous.bind 'touchstart.previous', => showPrevious()
-            previous.bind 'touchstart.previous', => showPrevious()
+                    complete: => previous.bind 'mousedown.previous', => showPrevious()
+            previous.bind 'mousedown.previous', => showPrevious()
 
         showMenu: (name=@puzzleData.menu) ->
+            console.log(name)
             gameAreaOffset = @el.offset()
             contentOffset = @$('.scramble_content').offset()
             @$('.floating_message').css
@@ -224,13 +225,13 @@ soma.views
             for name, menu of @menus
                 do (menu) =>
                     upMenu = menu.find('.up_menu_button')
-                    upMenu.bind 'touchstart.up_menu', => @showMenu('foreign')
+                    upMenu.bind 'mousedown.up_menu', => @showMenu('foreign')
 
                     closeMenu = menu.find('.close_menu_button')
-                    closeMenu.bind 'touchstart.close_menu', =>
+                    closeMenu.bind 'mousedown.close_menu', =>
                         return if @animatingMenu
                         @animatingMenu = true
-                        @$('document.body').one 'touchend.next', => closeMenu.removeClass('active')
+                        @$('document.body').one 'mouseup.next', => closeMenu.removeClass('active')
                         closeMenu.addClass('active')
                         @$('.scramble_content').animate
                             opacity: 1
@@ -246,7 +247,7 @@ soma.views
                                     left: -10000
 
             menu = @$('.menu_button')
-            menu.bind 'touchstart.menu', =>
+            menu.bind 'mousedown.menu', =>
                 return if @animatingMenu
                 @animatingMenu = true
                 $.timeout 200, => menu.removeClass('active')
@@ -280,7 +281,7 @@ soma.views
                     levelLink = document.createElement("A")
                     levelLink.className = 'level_link'
                     levelLink.innerHTML = language
-                    $(levelLink).bind 'touchstart.select_level', () => 
+                    $(levelLink).bind 'mousedown.select_level', () => 
                         @viewHelper.setForeignLanguage(language)
                         @showMenu(language.toLowerCase())
                     $(levelLinkDiv).append(levelLink)

@@ -196,7 +196,7 @@ soma.views({
       language = language.toLowerCase();
       levelSelect = this.$("#" + language + "_select_menu");
       startPosition = {};
-      levelSelect.bind('touchstart', function(e) {
+      levelSelect.bind('mousedown', function(e) {
         return startPosition = {
           scrollTop: parseInt(levelSelect.scrollTop()),
           touch: _this.viewHelper.clientY(e)
@@ -237,8 +237,8 @@ soma.views({
         levelLinkDiv.id = "level_link_" + key;
         levelLink = document.createElement("A");
         levelLink.className = 'level_link';
-        levelLink.innerHTML = "" + info.title + "<br/><small>" + info.subtitle + "</small>";
-        $(levelLink).bind('touchstart.select_level', function() {
+        levelLink.innerHTML = info.title;
+        $(levelLink).bind('mousedown.select_level', function() {
           return showLevel(key);
         });
         $(levelLinkDiv).append(levelLink);
@@ -263,8 +263,8 @@ soma.views({
       }
       next = levelSelect.find('.next');
       showNext = function() {
-        next.unbind('touchstart.next');
-        _this.$('document.body').one('touchend.next', function() {
+        next.unbind('mousedown.next');
+        _this.$('document.body').one('mouseup.next', function() {
           return next.removeClass('active');
         });
         next.addClass('active');
@@ -272,19 +272,19 @@ soma.views({
           marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width(),
           duration: 500,
           complete: function() {
-            return next.bind('touchstart.next', function() {
+            return next.bind('mousedown.next', function() {
               return showNext();
             });
           }
         });
       };
-      next.bind('touchstart.next', function() {
+      next.bind('mousedown.next', function() {
         return showNext();
       });
       previous = levelSelect.find('.previous');
       showPrevious = function() {
-        previous.unbind('touchstart.previous');
-        _this.$('document.body').one('touchend.previous', function() {
+        previous.unbind('mousedown.previous');
+        _this.$('document.body').one('mouseup.previous', function() {
           return previous.removeClass('active');
         });
         previous.addClass('active');
@@ -292,13 +292,13 @@ soma.views({
           marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width(),
           duration: 500,
           complete: function() {
-            return previous.bind('touchstart.previous', function() {
+            return previous.bind('mousedown.previous', function() {
               return showPrevious();
             });
           }
         });
       };
-      return previous.bind('touchstart.previous', function() {
+      return previous.bind('mousedown.previous', function() {
         return showPrevious();
       });
     },
@@ -307,6 +307,7 @@ soma.views({
       if (name == null) {
         name = this.puzzleData.menu;
       }
+      console.log(name);
       gameAreaOffset = this.el.offset();
       contentOffset = this.$('.scramble_content').offset();
       this.$('.floating_message').css({
@@ -314,7 +315,6 @@ soma.views({
         left: -10000
       });
       this.puzzleData.menu = name;
-      console.log(contentOffset.left, contentOffset.width, this.menus[this.puzzleData.menu].width());
       return this.menus[this.puzzleData.menu].css({
         opacity: 1,
         top: (contentOffset.top - gameAreaOffset.top) + ((contentOffset.height - this.menus[this.puzzleData.menu].height()) / 2),
@@ -334,16 +334,16 @@ soma.views({
       _fn = function(menu) {
         var closeMenu, upMenu;
         upMenu = menu.find('.up_menu_button');
-        upMenu.bind('touchstart.up_menu', function() {
+        upMenu.bind('mousedown.up_menu', function() {
           return _this.showMenu('foreign');
         });
         closeMenu = menu.find('.close_menu_button');
-        return closeMenu.bind('touchstart.close_menu', function() {
+        return closeMenu.bind('mousedown.close_menu', function() {
           if (_this.animatingMenu) {
             return;
           }
           _this.animatingMenu = true;
-          _this.$('document.body').one('touchend.next', function() {
+          _this.$('document.body').one('mouseup.next', function() {
             return closeMenu.removeClass('active');
           });
           closeMenu.addClass('active');
@@ -369,7 +369,7 @@ soma.views({
         _fn(menu);
       }
       menu = this.$('.menu_button');
-      menu.bind('touchstart.menu', function() {
+      menu.bind('mousedown.menu', function() {
         var menuName, _ref1;
         if (_this.animatingMenu) {
           return;
@@ -412,7 +412,7 @@ soma.views({
         levelLink = document.createElement("A");
         levelLink.className = 'level_link';
         levelLink.innerHTML = language;
-        $(levelLink).bind('touchstart.select_level', function() {
+        $(levelLink).bind('mousedown.select_level', function() {
           _this.viewHelper.setForeignLanguage(language);
           return _this.showMenu(language.toLowerCase());
         });
