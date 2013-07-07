@@ -497,8 +497,95 @@ body {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
-  background-color: #fafafa;
-  padding: 60px;
+  background: transparent url('/assets/images/puzzles/language_scramble/menu_wood.jpg');
+  border: 3px solid #110E0C;
+  overflow: hidden;
+  z-index: 99;
+  width: 588px;
+  height: 588px;
+}
+.language_scramble .floating_message a {
+  color: #262626;
+}
+.language_scramble .floating_message h2 {
+  width: 9em;
+  margin: 12px auto;
+  font-weight: normal;
+  line-height: 102px;
+}
+.language_scramble .floating_message .levels_container,
+.language_scramble .floating_message .levels_group {
+  height: 420px;
+  overflow: hidden;
+}
+.language_scramble .floating_message .levels_container {
+  margin-left: -4px;
+}
+.language_scramble .floating_message .levels_group {
+  width: 588px;
+  float: left;
+  margin-left: 4px;
+}
+.language_scramble .floating_message .level {
+  margin: 0 auto 12px auto;
+  float: none;
+  background: transparent url('/assets/images/puzzles/language_scramble/wide_button.png');
+  height: 92px;
+  width: 372px;
+  overflow: hidden;
+}
+.language_scramble .floating_message .level_link {
+  padding-top: 12px;
+  display: block;
+  text-decoration: none;
+  line-height: 21px;
+  font-size: 30px;
+}
+.language_scramble .floating_message .level_link small {
+  font-size: 18px;
+}
+.language_scramble .floating_message .mini_progress_meter {
+  margin: -9px 0 0 9px;
+  position: relative;
+  overflow: hidden;
+  height: 16px;
+  width: 355px;
+  content: "\00a0";
+  float: left;
+  background: transparent url('/assets/images/puzzles/language_scramble/mini-progress.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.language_scramble .floating_message .percent_complete {
+  background-color: #0c8d28;
+  height: 6px;
+  margin: 9px 0 0 18px;
+  content: "\00a0";
+  max-width: 344px;
+}
+.language_scramble .floating_message .navigation {
+  display: block;
+  content: "\00a0";
+  width: 91px;
+  height: 90px;
+  position: absolute;
+}
+.language_scramble .floating_message .language_scramble .floating_message .next {
+  bottom: 6px;
+  right: 6px;
+  background: transparent url('/assets/images/puzzles/language_scramble/button_next.png');
+}
+.language_scramble .floating_message .language_scramble .floating_message .previous {
+  bottom: 6px;
+  left: 6px;
+  background: transparent url('/assets/images/puzzles/language_scramble/button_previous.png');
+}
+.language_scramble #foreign_select_menu .level_link {
+  font-size: 42px;
+  line-height: 60px;
 }
 .language_scramble .last_answer .highlighted {
   background-color: rgba(36, 219, 75, 0.25);

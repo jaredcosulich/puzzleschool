@@ -82,7 +82,7 @@ class languageScramble.ViewHelper
         @setTitle()
         @setProgress()
         
-    languages: -> "#{@puzzleData.nativeLanguage.toLowerCase()}_#{@puzzleData.foreignLanguage.toLowerCase()}"
+    languages: -> "#{@puzzleData.nativeLanguage?.toLowerCase()}_#{@puzzleData.foreignLanguage?.toLowerCase()}"
 
     saveLevel: (percentComplete) ->
         @answerTimes.push(new Date())
@@ -1066,7 +1066,7 @@ languageScramble.data =
                         foreignSentence: 'una donna intelligente'
                     }
                 ]
-            commonVerbs1    
+            commonVerbs1:
                 title: 'Common Verbs #1'
                 subtitle: 'Common Italian verbs - set #1'
                 data: [
@@ -1086,57 +1086,50 @@ languageScramble.data =
                         native: 'i have' 
                         foreign: 'io ho'
                         nativeSentence: 'i have one dollar'
-                        foreignSentence: 'ho un dollaro'
+                        foreignSentence: 'io ho un dollaro'
                     }
                     {
                         native: 'you have' 
                         foreign: 'tu hai'
-                        nativeSentence: 'dp you have a pencil?'
-                        foreignSentence: 'hai una matita?'
+                        nativeSentence: 'do you have a pencil?'
+                        foreignSentence: 'tu hai una matita?'
                     }
                     {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
+                        native: 'i say' 
+                        foreign: 'io dico'
+                        nativeSentence: 'i say no'
+                        foreignSentence: 'io dico di no'
                     }
                     {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
+                        native: 'you say' 
+                        foreign: 'tu dici'
+                        nativeSentence: 'you say ok'
+                        foreignSentence: 'tu dici ok'
                     }
                     {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
+                        native: 'i can' 
+                        foreign: 'io posso'
+                        nativeSentence: 'i can go'
+                        foreignSentence: 'io posso andare'
                     }
                     {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
+                        native: 'you can' 
+                        foreign: 'tu puoi'
+                        nativeSentence: 'you can come'
+                        foreignSentence: 'tu puoi venire'
                     }
                     {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
+                        native: 'i want' 
+                        foreign: 'io voglio'
+                        nativeSentence: 'i want to leave'
+                        foreignSentence: 'io voglio lasciare'
                     }
                     {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
+                        native: 'you want' 
+                        foreign: 'tu vuoi'
+                        nativeSentence: 'do you want some?'
+                        foreignSentence: 'tu vuoi un po\'?'
                     }
-                    {
-                        native: '' 
-                        foreign: ''
-                        nativeSentence: ''
-                        foreignSentence: ''
-                    }
-                    
                 ]
             top10verbs:
                 title: 'Top 10 Verbs'

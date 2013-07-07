@@ -143,7 +143,8 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.languages = function() {
-    return "" + (this.puzzleData.nativeLanguage.toLowerCase()) + "_" + (this.puzzleData.foreignLanguage.toLowerCase());
+    var _ref, _ref1;
+    return "" + ((_ref = this.puzzleData.nativeLanguage) != null ? _ref.toLowerCase() : void 0) + "_" + ((_ref1 = this.puzzleData.foreignLanguage) != null ? _ref1.toLowerCase() : void 0);
   };
 
   ViewHelper.prototype.saveLevel = function(percentComplete) {
@@ -1460,9 +1461,9 @@ languageScramble.data = {
   english_italian: {
     displayLanguages: 'English - Italian',
     levels: {
-      top10nouns: {
-        title: 'Top 10 Nouns',
-        subtitle: 'The 10 most commonly used nouns.',
+      commonNouns1: {
+        title: '10 Common Nouns #1',
+        subtitle: '10 common Italian nouns - set #1',
         data: [
           {
             "native": 'thing',
@@ -1514,6 +1515,63 @@ languageScramble.data = {
             foreign: 'donna',
             nativeSentence: 'a smart woman',
             foreignSentence: 'una donna intelligente'
+          }
+        ]
+      },
+      commonVerbs1: {
+        title: 'Common Verbs #1',
+        subtitle: 'Common Italian verbs - set #1',
+        data: [
+          {
+            "native": 'i am',
+            foreign: 'io sono',
+            nativeSentence: 'i am angry',
+            foreignSentence: 'io sono arrabbiato'
+          }, {
+            "native": 'you are',
+            foreign: 'tu sei',
+            nativeSentence: 'you are smart',
+            foreignSentence: 'tu sei intelligente'
+          }, {
+            "native": 'i have',
+            foreign: 'io ho',
+            nativeSentence: 'i have one dollar',
+            foreignSentence: 'io ho un dollaro'
+          }, {
+            "native": 'you have',
+            foreign: 'tu hai',
+            nativeSentence: 'do you have a pencil?',
+            foreignSentence: 'tu hai una matita?'
+          }, {
+            "native": 'i say',
+            foreign: 'io dico',
+            nativeSentence: 'i say no',
+            foreignSentence: 'io dico di no'
+          }, {
+            "native": 'you say',
+            foreign: 'tu dici',
+            nativeSentence: 'you say ok',
+            foreignSentence: 'tu dici ok'
+          }, {
+            "native": 'i can',
+            foreign: 'io posso',
+            nativeSentence: 'i can go',
+            foreignSentence: 'io posso andare'
+          }, {
+            "native": 'you can',
+            foreign: 'tu puoi',
+            nativeSentence: 'you can come',
+            foreignSentence: 'tu puoi venire'
+          }, {
+            "native": 'i want',
+            foreign: 'io voglio',
+            nativeSentence: 'i want to leave',
+            foreignSentence: 'io voglio lasciare'
+          }, {
+            "native": 'you want',
+            foreign: 'tu vuoi',
+            nativeSentence: 'do you want some?',
+            foreignSentence: 'tu vuoi un po\'?'
           }
         ]
       },

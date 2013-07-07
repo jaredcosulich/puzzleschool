@@ -417,10 +417,112 @@ body {
         left: -1000px;
         opacity: 0;
         text-align: center;
-        .rounded(12px);
-        background-color: @white;
-        padding: 60px;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        background: transparent url('/assets/images/puzzles/language_scramble/menu_wood.jpg');
+        border: 3px solid #110E0C;
+        overflow: hidden;
+        z-index: 99;
+        width: 588px;
+        height: 588px;
+        
+        a {
+            color: @black;
+        }
+
+        h2 {
+            width: 9em;
+            margin: 12px auto;
+            font-weight: normal;
+            line-height: 90px;
+        }
+
+        .levels_container, .levels_group {
+            height: 420px;
+            overflow: hidden;
+        }
+
+        .levels_container {
+            margin-left: -4px;
+        }
+
+        .levels_group {
+            width: 588px;
+            float: left;
+            margin-left: 4px;
+        }
+
+        .level {
+            margin: 0 auto 12px auto;
+            float: none;
+            background: transparent url('/assets/images/puzzles/language_scramble/wide_button.png');
+            height: 92px;
+            width: 372px;
+            overflow: hidden;
+        }
+
+        .level_link {
+            padding-top: 12px;
+            display: block;
+            text-decoration: none;
+            line-height: 21px;
+            font-size: 30px;
+        }
+
+        .level_link small {
+            font-size: 18px;
+        }
+        
+        .mini_progress_meter {
+          margin: -9px 0 0 9px;
+          position: relative;
+          overflow: hidden;
+          height: 16px;
+          width: 355px;
+          content: "\00a0";
+          float: left;
+          background: transparent url('/assets/images/puzzles/language_scramble/mini-progress.png') no-repeat;
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;
+          background-repeat: no-repeat;
+        }
+
+        .percent_complete {
+          background-color: #0c8d28;
+          height: 6px;
+          margin: 9px 0 0 18px;
+          content: "\00a0";
+          max-width: 344px;
+        }
+
+        .navigation {
+            display: block;
+            content: "\00a0";
+            width: 91px;
+            height: 90px;
+            position: absolute;    
+        }
+
+        .language_scramble .floating_message .next {
+            bottom: 6px;
+            right: 6px;
+            background: transparent url('/assets/images/puzzles/language_scramble/button_next.png');
+        }
+
+        .language_scramble .floating_message .previous {
+            bottom: 6px;
+            left: 6px;
+            background: transparent url('/assets/images/puzzles/language_scramble/button_previous.png');
+        }
     }
+    
+    #foreign_select_menu .level_link {
+        font-size: 42px;
+        line-height: 60px;
+    }    
     
     .last_answer {
         .highlighted {
