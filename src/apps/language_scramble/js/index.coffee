@@ -126,7 +126,6 @@ window.app =
                 levelLink = document.createElement("A")
                 levelLink.className = 'level_link'
                 levelLink.innerHTML = "#{info.title}<br/><small>#{info.subtitle}</small>"
-                $(levelLink).bind 'touchstart.select_level', () => showLevel(key)
                 $(levelLinkDiv).append(levelLink)
                 levelsGroup.append(levelLinkDiv)
                 
@@ -138,6 +137,9 @@ window.app =
                 levelProgress = document.createElement("DIV")
                 levelProgress.className = 'mini_progress_meter'
                 $(levelLinkDiv).append(levelProgress)
+
+                $(levelLinkDiv).bind 'touchstart.select_level', () => showLevel(key)
+
             levelsAdded += 1
 
             
@@ -164,6 +166,11 @@ window.app =
         previous.bind 'touchstart.previous', => showPrevious()
 
     showMenu: (name=@puzzleData.menu) ->
+        @$('.scramble_content').animate
+            opacity: 0.25
+            duration: 250
+        @viewHelper.hideDictionary()
+
         @$('.floating_message').css
             top: -10000
             left: -10000
@@ -212,16 +219,9 @@ window.app =
             $.timeout 200, => menu.removeClass('active')
             menu.addClass('active')
             
-            @$('.scramble_content').animate
-                opacity: 0.25
-                duration: 250
-            @viewHelper.hideDictionary()
-
             menuName = @puzzleData.foreignLanguage?.toLowerCase() or @puzzleData.menu
-            @menus[menuName].css
-                opacity: 0
-                top: (@height - @menus[menuName].height()) / 2
-                left: (@width - @menus[menuName].width()) / 2
+            @menus[menuName].css(opacity: 0)
+            @showMenu(menuName)
             @menus[menuName].animate
                 opacity: 1
                 duration: 500

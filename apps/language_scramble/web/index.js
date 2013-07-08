@@ -127,9 +127,6 @@ window.app = {
       levelLink = document.createElement("A");
       levelLink.className = 'level_link';
       levelLink.innerHTML = "" + info.title + "<br/><small>" + info.subtitle + "</small>";
-      $(levelLink).bind('touchstart.select_level', function() {
-        return showLevel(key);
-      });
       $(levelLinkDiv).append(levelLink);
       levelsGroup.append(levelLinkDiv);
       percentComplete = document.createElement("DIV");
@@ -138,7 +135,10 @@ window.app = {
       $(levelLinkDiv).append(percentComplete);
       levelProgress = document.createElement("DIV");
       levelProgress.className = 'mini_progress_meter';
-      return $(levelLinkDiv).append(levelProgress);
+      $(levelLinkDiv).append(levelProgress);
+      return $(levelLinkDiv).bind('touchstart.select_level', function() {
+        return showLevel(key);
+      });
     };
     for (key in languageScramble.data[languages].levels) {
       if (levelsAdded % 4 === 0) {
@@ -195,6 +195,11 @@ window.app = {
     if (name == null) {
       name = this.puzzleData.menu;
     }
+    this.$('.scramble_content').animate({
+      opacity: 0.25,
+      duration: 250
+    });
+    this.viewHelper.hideDictionary();
     this.$('.floating_message').css({
       top: -10000,
       left: -10000
@@ -264,17 +269,11 @@ window.app = {
         return menu.removeClass('active');
       });
       menu.addClass('active');
-      _this.$('.scramble_content').animate({
-        opacity: 0.25,
-        duration: 250
-      });
-      _this.viewHelper.hideDictionary();
       menuName = ((_ref1 = _this.puzzleData.foreignLanguage) != null ? _ref1.toLowerCase() : void 0) || _this.puzzleData.menu;
       _this.menus[menuName].css({
-        opacity: 0,
-        top: (_this.height - _this.menus[menuName].height()) / 2,
-        left: (_this.width - _this.menus[menuName].width()) / 2
+        opacity: 0
       });
+      _this.showMenu(menuName);
       return _this.menus[menuName].animate({
         opacity: 1,
         duration: 500,

@@ -165,7 +165,6 @@ soma.views
                     levelLink = document.createElement("A")
                     levelLink.className = 'level_link'
                     levelLink.innerHTML = info.title
-                    $(levelLink).bind 'mousedown.select_level', () => showLevel(key)
                     $(levelLinkDiv).append(levelLink)
                     levelsGroup.append(levelLinkDiv)
 
@@ -177,6 +176,9 @@ soma.views
                     levelProgress = document.createElement("DIV")
                     levelProgress.className = 'mini_progress_meter'
                     $(levelLinkDiv).append(levelProgress)
+
+                    $(levelLinkDiv).bind 'mousedown.select_level', () => showLevel(key)
+                    
                 levelsAdded += 1
 
 
@@ -203,6 +205,11 @@ soma.views
             previous.bind 'mousedown.previous', => showPrevious()
 
         showMenu: (name=@puzzleData.menu) ->
+            @$('.scramble_content').animate
+                opacity: 0.25
+                duration: 250
+            @viewHelper.hideDictionary()
+            
             gameAreaOffset = @el.offset()
             contentOffset = @$('.scramble_content').offset()
             @$('.floating_message').css
@@ -252,16 +259,9 @@ soma.views
                 $.timeout 200, => menu.removeClass('active')
                 menu.addClass('active')
 
-                @$('.scramble_content').animate
-                    opacity: 0.25
-                    duration: 250
-                @viewHelper.hideDictionary()
-
                 menuName = @puzzleData.foreignLanguage?.toLowerCase() or @puzzleData.menu
-                @menus[menuName].css
-                    opacity: 0
-                    top: (@height - @menus[menuName].height()) / 2
-                    left: (@width - @menus[menuName].width()) / 2
+                @menus[menuName].css(opacity: 0)
+                @showMenu(menuName)
                 @menus[menuName].animate
                     opacity: 1
                     duration: 500

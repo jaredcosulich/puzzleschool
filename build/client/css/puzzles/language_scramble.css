@@ -436,6 +436,55 @@
   -webkit-box-shadow: 0 0 150px #ffffff;
   -moz-box-shadow: 0 0 150px #ffffff;
 }
+.language_scramble .scramble_content .menu_button,
+.language_scramble .close_menu_button,
+.language_scramble .up_menu_button {
+  display: block;
+  position: absolute;
+  top: 6px;
+  color: #262626;
+}
+.language_scramble .scramble_content .menu_button,
+.language_scramble .close_menu_button {
+  right: 6px;
+}
+.language_scramble .up_menu_button {
+  left: 6px;
+}
+.language_scramble .scramble_content .menu_button span {
+  font-size: 30px;
+  text-align: center;
+  padding: 9px 18px 12px 18px;
+  text-indent: 9px;
+  background: transparent url('/assets/images/puzzles/language_scramble/medium_button.png') no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  display: block;
+}
+.language_scramble .scramble_content .menu_button.active span {
+  background-position: -5px 5px;
+  text-indent: 2px;
+  padding-top: 12px;
+  padding-bottom: 9px;
+}
+.language_scramble .close_menu_button span {
+  background: transparent url('/assets/images/puzzles/language_scramble/menu_close.png');
+}
+.language_scramble .up_menu_button span {
+  background: transparent url('/assets/images/puzzles/language_scramble/button_up.png');
+}
+.language_scramble .up_menu_button span,
+.language_scramble .close_menu_button span {
+  display: block;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 60px;
+  height: 60px;
+}
 .language_scramble .floating_message {
   position: absolute;
   top: -1000px;
@@ -504,6 +553,7 @@
   -o-background-size: cover;
   background-size: cover;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .language_scramble .floating_message .percent_complete {
   background-color: #0c8d28;
@@ -519,12 +569,12 @@
   height: 90px;
   position: absolute;
 }
-.language_scramble .floating_message .language_scramble .floating_message .next {
+.language_scramble .floating_message .next {
   bottom: 6px;
   right: 6px;
   background: transparent url('/assets/images/puzzles/language_scramble/button_next.png');
 }
-.language_scramble .floating_message .language_scramble .floating_message .previous {
+.language_scramble .floating_message .previous {
   bottom: 6px;
   left: 6px;
   background: transparent url('/assets/images/puzzles/language_scramble/button_previous.png');
