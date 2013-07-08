@@ -1,7 +1,6 @@
 .language_scramble {
   width: 960px;
-  margin-left: -12px;
-  margin-bottom: 60px;
+  margin: 0 0 60px -12px;
   position: relative;
   /*    &.foreign .scramble_content {
         background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
@@ -32,6 +31,7 @@
   opacity: 0;
 }
 .language_scramble .scramble_content {
+  margin-top: 18px;
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
   border-radius: 12px;
@@ -39,6 +39,11 @@
   width: 960px;
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
   position: relative;
+}
+.language_scramble .progress_meter {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
 }
 .language_scramble .display_words .papered,
 .language_scramble .scrambled .papered {
@@ -453,7 +458,7 @@
 .language_scramble .floating_message h2 {
   width: 9em;
   margin: 12px auto;
-  font-size: 30px;
+  font-size: 36px;
   font-weight: normal;
   line-height: 90px;
 }
@@ -525,7 +530,7 @@
   background: transparent url('/assets/images/puzzles/language_scramble/button_previous.png');
 }
 .language_scramble #foreign_select_menu .level_link {
-  font-size: 42px;
+  font-size: 36px;
   line-height: 60px;
 }
 .language_scramble .last_answer .highlighted {

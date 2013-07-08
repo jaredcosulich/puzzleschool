@@ -3,8 +3,7 @@
 
 .language_scramble {
     width: 960px;
-    margin-left: -12px;
-    margin-bottom: 60px;
+    margin: 0 0 60px -12px;
     position: relative;
     
     .guesses, .scrambled, .display_words {
@@ -18,6 +17,7 @@
     }
     
     .scramble_content {
+        margin-top: 18px;
         .rounded(12px);
         height: 640px;
         width: 960px;
@@ -29,6 +29,13 @@
         background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
     }  
 */
+
+    .progress_meter {
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+    }
+
     .display_words, .scrambled {
         .papered {
             line-height: 84px;
@@ -379,7 +386,7 @@
         h2 {
             width: 9em;
             margin: 12px auto;
-            font-size: 30px;
+            font-size: 36px;
             font-weight: normal;
             line-height: 90px;
         }
@@ -462,7 +469,7 @@
     }
     
     #foreign_select_menu .level_link {
-        font-size: 42px;
+        font-size: 36px;
         line-height: 60px;
     }    
     
