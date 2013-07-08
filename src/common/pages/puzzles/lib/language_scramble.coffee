@@ -889,7 +889,7 @@ class languageScramble.ViewHelper
         @initializingScramble = true
         
         @$('.guesses').addClass('all_correct')
-        $.timeout 500, =>
+        $.timeout 600, =>
             @$('.guesses').removeClass('all_correct')
             $.timeout 500, => 
                 if @activeLevel.match(/Hard/)
@@ -938,7 +938,7 @@ class languageScramble.ViewHelper
         showNextButton = $(document.createElement('A'))
         showNextButton.addClass('next')
         showNextButton.html('Next Scramble')
-        showNextButton.bind 'touchstart.next click.next', (e) => 
+        showNextButton.bind 'touchstart.next mousedown.next', (e) => 
             e.stop()
             showNext()
         dictionary.append(showNextButton)
@@ -998,7 +998,73 @@ class languageScramble.ViewHelper
 languageScramble.data =
     english_spanish:
         displayLanguages: 'English - Spanish'
-        levels: {} 
+        levels: 
+            commonNouns1:
+                title: '10 Common Nouns #1'
+                subtitle: '10 common Spanish nouns - set #1'
+                data: [
+                    {
+                        native: 'time'
+                        foreign: 'vez'
+                        nativeSentence: 'i went one time'
+                        foreignSentence: 'fui una vez'
+                    }
+                    {
+                        native: 'year' 
+                        foreign: 'año'
+                        nativeSentence: 'what year is it?'
+                        foreignSentence: 'qué año es?'
+                    }
+                    {
+                        native: 'weather'
+                        foreign: 'tiempo'
+                        nativeSentence: 'what nice weather'
+                        foreignSentence: 'lo que hace buen tiempo'
+                    }
+                    {
+                        native: 'day'
+                        foreign: 'día'
+                        nativeSentence: 'what day is it?'
+                        foreignSentence: '¿qué día es?'
+                    }
+                    {
+                        native: 'thing'
+                        foreign: 'cosa'
+                        nativeSentence: 'one thing to know'
+                        foreignSentence: 'una cosa es saber'
+                    }
+                    {
+                        native: 'man' 
+                        foreign: 'hombre'
+                        nativeSentence: 'a tall man'
+                        foreignSentence: 'un hombre alto'
+                    }
+                    {
+                        native: 'moment'
+                        foreign: 'momento'
+                        nativeSentence: 'a moment ago'
+                        foreignSentence: 'hace un momento'
+                    }
+                    {
+                        native: 'part'
+                        foreign: 'parte'
+                        nativeSentence: 'part of our time'
+                        foreignSentence: 'parte de nuestro tiempo'
+                    }
+                    {
+                        native: 'life'
+                        foreign: 'vida'
+                        nativeSentence: 'life is good'
+                        foreignSentence: 'la vida es buena'
+                    }
+                    {
+                        native: 'way'
+                        foreign: 'forma'
+                        nativeSentence: 'one way or another'
+                        foreignSentence: 'una forma u otra'
+                    }
+                ]
+             
     english_italian: 
         displayLanguages: 'English - Italian'
         levels:
@@ -1055,10 +1121,10 @@ languageScramble.data =
                         foreignSentence: 'la vita è buona'
                     }
                     {
-                        native: 'time'
+                        native: 'weather'
                         foreign: 'tempo'
-                        nativeSentence: 'it takes time'
-                        foreignSentence: 'ci vuole tempo'
+                        nativeSentence: 'what nice weather'
+                        foreignSentence: 'cosa bel tempo'
                     }
                     {
                         native: 'woman'

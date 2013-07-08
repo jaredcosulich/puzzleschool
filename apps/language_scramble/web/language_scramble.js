@@ -1335,7 +1335,7 @@ languageScramble.ViewHelper = (function() {
     var _this = this;
     this.initializingScramble = true;
     this.$('.guesses').addClass('all_correct');
-    return $.timeout(500, function() {
+    return $.timeout(600, function() {
       _this.$('.guesses').removeClass('all_correct');
       return $.timeout(500, function() {
         if (_this.activeLevel.match(/Hard/)) {
@@ -1381,7 +1381,7 @@ languageScramble.ViewHelper = (function() {
     showNextButton = $(document.createElement('A'));
     showNextButton.addClass('next');
     showNextButton.html('Next Scramble');
-    showNextButton.bind('touchstart.next click.next', function(e) {
+    showNextButton.bind('touchstart.next mousedown.next', function(e) {
       e.stop();
       return showNext();
     });
@@ -1457,7 +1457,65 @@ languageScramble.ViewHelper = (function() {
 languageScramble.data = {
   english_spanish: {
     displayLanguages: 'English - Spanish',
-    levels: {}
+    levels: {
+      commonNouns1: {
+        title: '10 Common Nouns #1',
+        subtitle: '10 common Spanish nouns - set #1',
+        data: [
+          {
+            "native": 'time',
+            foreign: 'vez',
+            nativeSentence: 'i went one time',
+            foreignSentence: 'fui una vez'
+          }, {
+            "native": 'year',
+            foreign: 'año',
+            nativeSentence: 'what year is it?',
+            foreignSentence: 'qué año es?'
+          }, {
+            "native": 'weather',
+            foreign: 'tiempo',
+            nativeSentence: 'what nice weather',
+            foreignSentence: 'lo que hace buen tiempo'
+          }, {
+            "native": 'day',
+            foreign: 'día',
+            nativeSentence: 'what day is it?',
+            foreignSentence: '¿qué día es?'
+          }, {
+            "native": 'thing',
+            foreign: 'cosa',
+            nativeSentence: 'one thing to know',
+            foreignSentence: 'una cosa es saber'
+          }, {
+            "native": 'man',
+            foreign: 'hombre',
+            nativeSentence: 'a tall man',
+            foreignSentence: 'un hombre alto'
+          }, {
+            "native": 'moment',
+            foreign: 'momento',
+            nativeSentence: 'a moment ago',
+            foreignSentence: 'hace un momento'
+          }, {
+            "native": 'part',
+            foreign: 'parte',
+            nativeSentence: 'part of our time',
+            foreignSentence: 'parte de nuestro tiempo'
+          }, {
+            "native": 'life',
+            foreign: 'vida',
+            nativeSentence: 'life is good',
+            foreignSentence: 'la vida es buena'
+          }, {
+            "native": 'way',
+            foreign: 'forma',
+            nativeSentence: 'one way or another',
+            foreignSentence: 'una forma u otra'
+          }
+        ]
+      }
+    }
   },
   english_italian: {
     displayLanguages: 'English - Italian',
@@ -1507,10 +1565,10 @@ languageScramble.data = {
             nativeSentence: 'life is good',
             foreignSentence: 'la vita è buona'
           }, {
-            "native": 'time',
+            "native": 'weather',
             foreign: 'tempo',
-            nativeSentence: 'it takes time',
-            foreignSentence: 'ci vuole tempo'
+            nativeSentence: 'what nice weather',
+            foreignSentence: 'cosa bel tempo'
           }, {
             "native": 'woman',
             foreign: 'donna',
