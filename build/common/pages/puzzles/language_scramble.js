@@ -135,7 +135,9 @@ soma.views({
         this.viewHelper.setLevel(this.levelName);
         return this.viewHelper.newScramble();
       } else {
-        return this.showMenu();
+        return $.timeout(100, function() {
+          return _this.showMenu();
+        });
       }
     },
     saveProgress: function(puzzleProgress, callback) {
@@ -307,7 +309,6 @@ soma.views({
       if (name == null) {
         name = this.puzzleData.menu;
       }
-      console.log(name);
       gameAreaOffset = this.el.offset();
       contentOffset = this.$('.scramble_content').offset();
       this.$('.floating_message').css({

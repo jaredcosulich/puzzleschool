@@ -1,16 +1,11 @@
 @import '../variables';
 @import '../methods';
 
-body {
-    background-color: @darkgrey;
-}
-
 .language_scramble {
     width: 960px;
     margin-left: -12px;
     margin-bottom: 60px;
     position: relative;
-    .rounded(12px);
     
     .guesses, .scrambled, .display_words {
         transition: opacity 0.25s ease;
@@ -21,59 +16,9 @@ body {
             opacity: 0;
         }
     }
-
-    .header {
-        padding: 6px 0;
-        overflow: hidden;
-        text-align: center;
-        background-color: #eee;
-        .border-top-left-radius(12px);
-        .border-top-right-radius(12px);
-        h1 {
-            margin: 12px 0 0 24px;
-            float: left;
-            height: 45px;
-            line-height: 45px;
-            color: @darkred;
-        }
-        .progress_meter {
-            margin: 12px 24px 0 0;
-            float: right;
-            height: 60px;
-            .bar {
-                border: 1px solid #ccc;
-                height: 15px;
-                background-color: white;
-                overflow: hidden;
-                .progress_section {
-                    width: 9px;
-                    border-right: 1px solid #ccc;
-                    background-color: @darkgreen;
-                    height: 15px;
-                    float: left;
-                }
-            }
-        }
-        .level {
-            font-size: 18px;
-            float: left;
-            .languages { 
-                font-size: 22px;
-                margin-bottom: 3px;
-            }
-            small {
-                display: block;
-                font-size: 10px;
-            }
-        }
-        .explanation {
-            margin: 0;
-            padding: 6px;
-            clear: both;
-        }
-    }
     
     .scramble_content {
+        .rounded(12px);
         height: 640px;
         width: 960px;
         background: @white url('/assets/images/puzzles/language_scramble/wood.jpg');   
@@ -602,37 +547,4 @@ body {
     	    left: 444px;
         }
     }
-    
-    .footer {
-        padding: 15px 0;
-        overflow: hidden;
-        background-color: #eee;
-        .border-bottom-left-radius(12px);
-        .border-bottom-right-radius(12px);
-        
-        .levels {
-            padding: 0 88px;
-            text-align: center;
-            .level {
-                background-color: #fdfdfd;
-                border: 1px solid #ccc;
-                float: left;
-                margin: 12px 0 0 30px;
-                width: 330px;
-                .level_link {
-                    display: block;
-                    margin: 6px 0;
-                }
-                .percent_complete {
-                    opacity: 0.3;
-                    margin-top: -48px;
-                    overflow: hidden;
-                    height: 48px;
-                    float: left;
-                    background-color: @darkgreen;
-                }
-            }
-        }
-    }
-    
 }

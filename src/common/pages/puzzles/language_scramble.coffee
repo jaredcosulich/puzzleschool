@@ -85,7 +85,7 @@ soma.views
                 @viewHelper.setLevel(@levelName)
                 @viewHelper.newScramble() 
             else
-                @showMenu()
+                $.timeout 100, => @showMenu()
             
         saveProgress: (puzzleProgress, callback) ->
             if @cookies.get('user')
@@ -203,7 +203,6 @@ soma.views
             previous.bind 'mousedown.previous', => showPrevious()
 
         showMenu: (name=@puzzleData.menu) ->
-            console.log(name)
             gameAreaOffset = @el.offset()
             contentOffset = @$('.scramble_content').offset()
             @$('.floating_message').css
@@ -212,7 +211,7 @@ soma.views
             @puzzleData.menu = name
             @menus[@puzzleData.menu].css
                 opacity: 1
-                top: (contentOffset.top - gameAreaOffset.top) + ((contentOffset.height - @menus[@puzzleData.menu].height()) / 2) 
+                top: (contentOffset.top - gameAreaOffset.top) + ((contentOffset.height - @menus[@puzzleData.menu].height()) / 2)
                 left: ((contentOffset.width - @menus[@puzzleData.menu].width()) / 2) 
 
         initMenus: ->

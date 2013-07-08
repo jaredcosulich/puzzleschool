@@ -1,14 +1,8 @@
-body {
-  background-color: #484848;
-}
 .language_scramble {
   width: 960px;
   margin-left: -12px;
   margin-bottom: 60px;
   position: relative;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
   /*    &.foreign .scramble_content {
         background: @white url('/assets/images/puzzles/language_scramble/wood_foreign.jpg'); 
     }  
@@ -37,61 +31,10 @@ body {
 .language_scramble.extra_info .display_words {
   opacity: 0;
 }
-.language_scramble .header {
-  padding: 6px 0;
-  overflow: hidden;
-  text-align: center;
-  background-color: #eee;
-  border-top-left-radius: 12px;
-  -webkit-border-top-left-radius: 12px;
-  -moz-border-radius-topleft: 12px;
-  border-top-right-radius: 12px;
-  -webkit-border-top-right-radius: 12px;
-  -moz-border-radius-topright: 12px;
-}
-.language_scramble .header h1 {
-  margin: 12px 0 0 24px;
-  float: left;
-  height: 45px;
-  line-height: 45px;
-  color: #a61c0e;
-}
-.language_scramble .header .progress_meter {
-  margin: 12px 24px 0 0;
-  float: right;
-  height: 60px;
-}
-.language_scramble .header .progress_meter .bar {
-  border: 1px solid #ccc;
-  height: 15px;
-  background-color: white;
-  overflow: hidden;
-}
-.language_scramble .header .progress_meter .bar .progress_section {
-  width: 9px;
-  border-right: 1px solid #ccc;
-  background-color: #0c8d28;
-  height: 15px;
-  float: left;
-}
-.language_scramble .header .level {
-  font-size: 18px;
-  float: left;
-}
-.language_scramble .header .level .languages {
-  font-size: 22px;
-  margin-bottom: 3px;
-}
-.language_scramble .header .level small {
-  display: block;
-  font-size: 10px;
-}
-.language_scramble .header .explanation {
-  margin: 0;
-  padding: 6px;
-  clear: both;
-}
 .language_scramble .scramble_content {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
   height: 640px;
   width: 960px;
   background: #fafafa url('/assets/images/puzzles/language_scramble/wood.jpg');
@@ -653,38 +596,4 @@ body {
     top: 284px;
     left: 444px;
   }
-}
-.language_scramble .footer {
-  padding: 15px 0;
-  overflow: hidden;
-  background-color: #eee;
-  border-bottom-left-radius: 12px;
-  -webkit-border-bottom-left-radius: 12px;
-  -moz-border-radius-bottomleft: 12px;
-  border-bottom-right-radius: 12px;
-  -webkit-border-bottom-right-radius: 12px;
-  -moz-border-radius-bottomright: 12px;
-}
-.language_scramble .footer .levels {
-  padding: 0 88px;
-  text-align: center;
-}
-.language_scramble .footer .levels .level {
-  background-color: #fdfdfd;
-  border: 1px solid #ccc;
-  float: left;
-  margin: 12px 0 0 30px;
-  width: 330px;
-}
-.language_scramble .footer .levels .level .level_link {
-  display: block;
-  margin: 6px 0;
-}
-.language_scramble .footer .levels .level .percent_complete {
-  opacity: 0.3;
-  margin-top: -48px;
-  overflow: hidden;
-  height: 48px;
-  float: left;
-  background-color: #0c8d28;
 }

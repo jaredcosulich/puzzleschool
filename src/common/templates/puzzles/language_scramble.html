@@ -1,23 +1,11 @@
 <img class='page_image' src='/assets/images/reviews/language_scramble.jpg'/>
 
-<div class='language_scramble' data-languages={languages} data-level_name={levelName} data-puzzle_data={puzzleData}>
-    <div class='header'>
-        <h1 class="red">Language Scramble</h1>
-        <div class='progress_meter'>
-            Level Progress
-            <div class='bar'>
-                {:data}
-                    <div class='progress_section {id}'></div>
-                {/data}
-            </div>
-        </div>
-        <div class='level'>
-            <div class='languages'>{displayLanguages}</div>
-            <div class='title'>{title}</div>
-            <small class='subtitle'>{subtitle}</small>
-        </div>
-        <p class='explanation'>Translate the words below by unscrambling the letters.</p>
-    </div>
+<div class='page language_scramble' data-languages={languages} data-level_name={levelName} data-puzzle_data={puzzleData}>
+    
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
+        Language Scramble
+    </h1>
 
     <div class='scramble_content hide_keyboard'>
         <!-- <h2 class='clear text-center'>Translate the green word(s)</h2> -->
@@ -83,7 +71,4 @@
         <a class='navigation previous'></a>
         <a class='navigation next'></a>
     </div>   
-
-    <div class='footer'>
-    </div>
 </div>
