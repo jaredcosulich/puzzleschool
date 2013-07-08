@@ -143,27 +143,43 @@ window.app =
             levelsAdded += 1
 
             
-        next = levelSelect.find('.next')
-        showNext = =>
-            next.unbind 'touchstart.next'
-            @$('document.body').one 'touchend.next', => next.removeClass('active')
-            next.addClass('active')    
-            levelsContainer.animate
-                marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width()
-                duration: 500
-                complete: => next.bind 'touchstart.next', => showNext()            
-        next.bind 'touchstart.next', => showNext()
+            previous = levelSelect.find('.previous')
+            next = levelSelect.find('.next')
 
-        previous = levelSelect.find('.previous')
-        showPrevious = =>
-            previous.unbind 'touchstart.previous'
-            @$('document.body').one 'touchend.previous', => previous.removeClass('active')
-            previous.addClass('active')
-            levelsContainer.animate
-                marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width()
-                duration: 500
-                complete: => previous.bind 'touchstart.previous', => showPrevious()
-        previous.bind 'touchstart.previous', => showPrevious()
+            startingPoint = parseInt(levelsContainer.css('marginLeft'))
+            checkPrevious = (marginLeft=parseInt(levelsContainer.css('marginLeft')))=>
+                if marginLeft >= startingPoint
+                    previous.animate(opacity: 0, duration: 250)
+                else
+                    previous.animate(opacity: 1, duration: 250)
+
+            showNext = =>
+                next.unbind 'touchstart.next'
+                @$('document.body').one 'touchend.next', => next.removeClass('active')
+                next.addClass('active') 
+                marginLeft = parseInt(levelsContainer.css('marginLeft')) - levelSelect.width() 
+                checkPrevious(marginLeft)
+                levelsContainer.animate
+                    marginLeft: marginLeft
+                    duration: 500
+                    complete: => next.bind 'touchstart.next', => showNext()            
+            next.bind 'touchstart.next', => showNext()
+
+            showPrevious = =>
+                previous.unbind 'touchstart.previous'
+                @$('document.body').one 'touchend.previous', => previous.removeClass('active')
+                previous.addClass('active')
+                marginLeft = parseInt(levelsContainer.css('marginLeft')) + levelSelect.width() 
+                checkPrevious(marginLeft)
+                levelsContainer.animate
+                    marginLeft: marginLeft
+                    duration: 500
+                    complete: => 
+                        checkPrevious()
+                        previous.bind 'touchstart.previous', => showPrevious()
+            previous.bind 'touchstart.previous', => showPrevious()
+
+            checkPrevious()
 
     showMenu: (name=@puzzleData.menu) ->
         @$('.scramble_content').animate

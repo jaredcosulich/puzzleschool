@@ -193,7 +193,7 @@ soma.views({
       }
     },
     initLevelSelectMenu: function(language) {
-      var key, languages, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
+      var checkPrevious, key, languages, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, startingPoint, _fn,
         _this = this;
       language = language.toLowerCase();
       levelSelect = this.$("#" + language + "_select_menu");
@@ -263,15 +263,36 @@ soma.views({
         _fn(key, levelsGroup, levelsAdded);
         levelsAdded += 1;
       }
+      previous = levelSelect.find('.previous');
       next = levelSelect.find('.next');
+      startingPoint = parseInt(levelsContainer.css('marginLeft'));
+      checkPrevious = function(marginLeft) {
+        if (marginLeft == null) {
+          marginLeft = parseInt(levelsContainer.css('marginLeft'));
+        }
+        if (marginLeft >= startingPoint) {
+          return previous.animate({
+            opacity: 0,
+            duration: 250
+          });
+        } else {
+          return previous.animate({
+            opacity: 1,
+            duration: 250
+          });
+        }
+      };
       showNext = function() {
+        var marginLeft;
         next.unbind('mousedown.next');
         _this.$('document.body').one('mouseup.next', function() {
           return next.removeClass('active');
         });
         next.addClass('active');
+        marginLeft = parseInt(levelsContainer.css('marginLeft')) - levelSelect.width();
+        checkPrevious(marginLeft);
         return levelsContainer.animate({
-          marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width(),
+          marginLeft: marginLeft,
           duration: 500,
           complete: function() {
             return next.bind('mousedown.next', function() {
@@ -283,26 +304,30 @@ soma.views({
       next.bind('mousedown.next', function() {
         return showNext();
       });
-      previous = levelSelect.find('.previous');
       showPrevious = function() {
+        var marginLeft;
         previous.unbind('mousedown.previous');
         _this.$('document.body').one('mouseup.previous', function() {
           return previous.removeClass('active');
         });
         previous.addClass('active');
+        marginLeft = parseInt(levelsContainer.css('marginLeft')) + levelSelect.width();
+        checkPrevious(marginLeft);
         return levelsContainer.animate({
-          marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width(),
+          marginLeft: marginLeft,
           duration: 500,
           complete: function() {
+            checkPrevious();
             return previous.bind('mousedown.previous', function() {
               return showPrevious();
             });
           }
         });
       };
-      return previous.bind('mousedown.previous', function() {
+      previous.bind('mousedown.previous', function() {
         return showPrevious();
       });
+      return checkPrevious();
     },
     showMenu: function(name) {
       var contentOffset, gameAreaOffset;

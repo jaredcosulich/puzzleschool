@@ -267,6 +267,7 @@ languageScramble.ViewHelper = (function() {
     });
     lastPress = null;
     return $('#clickarea').bind('keypress.type', function(e) {
+      _this.hideDictionary();
       if (_this.initializingScramble) {
         return;
       }

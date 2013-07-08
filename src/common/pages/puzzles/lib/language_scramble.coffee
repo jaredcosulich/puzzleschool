@@ -167,6 +167,7 @@ class languageScramble.ViewHelper
             
         lastPress = null
         $('#clickarea').bind 'keypress.type', (e) =>
+            @hideDictionary() 
             return if @initializingScramble
             return if lastPress && new Date() - lastPress < 10
             lastPress = new Date()

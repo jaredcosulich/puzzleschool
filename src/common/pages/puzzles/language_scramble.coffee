@@ -181,28 +181,43 @@ soma.views
                     
                 levelsAdded += 1
 
-
+            previous = levelSelect.find('.previous')
             next = levelSelect.find('.next')
+
+            startingPoint = parseInt(levelsContainer.css('marginLeft'))
+            checkPrevious = (marginLeft=parseInt(levelsContainer.css('marginLeft')))=>
+                if marginLeft >= startingPoint
+                    previous.animate(opacity: 0, duration: 250)
+                else
+                    previous.animate(opacity: 1, duration: 250)
+
             showNext = =>
                 next.unbind 'mousedown.next'
                 @$('document.body').one 'mouseup.next', => next.removeClass('active')
-                next.addClass('active')    
+                next.addClass('active') 
+                marginLeft = parseInt(levelsContainer.css('marginLeft')) - levelSelect.width() 
+                checkPrevious(marginLeft)
                 levelsContainer.animate
-                    marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width()
+                    marginLeft: marginLeft
                     duration: 500
                     complete: => next.bind 'mousedown.next', => showNext()            
             next.bind 'mousedown.next', => showNext()
 
-            previous = levelSelect.find('.previous')
             showPrevious = =>
                 previous.unbind 'mousedown.previous'
                 @$('document.body').one 'mouseup.previous', => previous.removeClass('active')
                 previous.addClass('active')
+                marginLeft = parseInt(levelsContainer.css('marginLeft')) + levelSelect.width() 
+                checkPrevious(marginLeft)
                 levelsContainer.animate
-                    marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width()
+                    marginLeft: marginLeft
                     duration: 500
-                    complete: => previous.bind 'mousedown.previous', => showPrevious()
+                    complete: => 
+                        checkPrevious()
+                        previous.bind 'mousedown.previous', => showPrevious()
             previous.bind 'mousedown.previous', => showPrevious()
+
+            checkPrevious()
 
         showMenu: (name=@puzzleData.menu) ->
             @$('.scramble_content').animate

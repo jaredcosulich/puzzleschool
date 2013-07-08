@@ -573,11 +573,24 @@
   bottom: 6px;
   right: 6px;
   background: transparent url('/assets/images/puzzles/language_scramble/button_next.png');
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble .floating_message .previous {
+  opacity: 0;
   bottom: 6px;
   left: 6px;
   background: transparent url('/assets/images/puzzles/language_scramble/button_previous.png');
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble #foreign_select_menu .level_link {
   font-size: 36px;

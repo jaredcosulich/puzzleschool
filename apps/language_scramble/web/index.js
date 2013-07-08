@@ -80,7 +80,7 @@ window.app = {
     return AppMobi.cache.setCookie("data", JSON.stringify(puzzleProgress), -1);
   },
   initLevelSelectMenu: function(language) {
-    var key, languages, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, _fn,
+    var checkPrevious, key, languages, levelSelect, levelsAdded, levelsContainer, levelsGroup, next, previous, showLevel, showNext, showPrevious, startPosition, startingPoint, _fn, _results,
       _this = this;
     language = language.toLowerCase();
     levelSelect = this.$("#" + language + "_select_menu");
@@ -140,6 +140,7 @@ window.app = {
         return showLevel(key);
       });
     };
+    _results = [];
     for (key in languageScramble.data[languages].levels) {
       if (levelsAdded % 4 === 0) {
         levelsGroup = $(document.createElement("DIV"));
@@ -149,47 +150,73 @@ window.app = {
       }
       _fn(key, levelsGroup, levelsAdded);
       levelsAdded += 1;
+      previous = levelSelect.find('.previous');
+      next = levelSelect.find('.next');
+      startingPoint = parseInt(levelsContainer.css('marginLeft'));
+      checkPrevious = function(marginLeft) {
+        if (marginLeft == null) {
+          marginLeft = parseInt(levelsContainer.css('marginLeft'));
+        }
+        if (marginLeft >= startingPoint) {
+          return previous.animate({
+            opacity: 0,
+            duration: 250
+          });
+        } else {
+          return previous.animate({
+            opacity: 1,
+            duration: 250
+          });
+        }
+      };
+      showNext = function() {
+        var marginLeft;
+        next.unbind('touchstart.next');
+        _this.$('document.body').one('touchend.next', function() {
+          return next.removeClass('active');
+        });
+        next.addClass('active');
+        marginLeft = parseInt(levelsContainer.css('marginLeft')) - levelSelect.width();
+        checkPrevious(marginLeft);
+        return levelsContainer.animate({
+          marginLeft: marginLeft,
+          duration: 500,
+          complete: function() {
+            return next.bind('touchstart.next', function() {
+              return showNext();
+            });
+          }
+        });
+      };
+      next.bind('touchstart.next', function() {
+        return showNext();
+      });
+      showPrevious = function() {
+        var marginLeft;
+        previous.unbind('touchstart.previous');
+        _this.$('document.body').one('touchend.previous', function() {
+          return previous.removeClass('active');
+        });
+        previous.addClass('active');
+        marginLeft = parseInt(levelsContainer.css('marginLeft')) + levelSelect.width();
+        checkPrevious(marginLeft);
+        return levelsContainer.animate({
+          marginLeft: marginLeft,
+          duration: 500,
+          complete: function() {
+            checkPrevious();
+            return previous.bind('touchstart.previous', function() {
+              return showPrevious();
+            });
+          }
+        });
+      };
+      previous.bind('touchstart.previous', function() {
+        return showPrevious();
+      });
+      _results.push(checkPrevious());
     }
-    next = levelSelect.find('.next');
-    showNext = function() {
-      next.unbind('touchstart.next');
-      _this.$('document.body').one('touchend.next', function() {
-        return next.removeClass('active');
-      });
-      next.addClass('active');
-      return levelsContainer.animate({
-        marginLeft: parseInt(levelsContainer.css('marginLeft')) - levelSelect.width(),
-        duration: 500,
-        complete: function() {
-          return next.bind('touchstart.next', function() {
-            return showNext();
-          });
-        }
-      });
-    };
-    next.bind('touchstart.next', function() {
-      return showNext();
-    });
-    previous = levelSelect.find('.previous');
-    showPrevious = function() {
-      previous.unbind('touchstart.previous');
-      _this.$('document.body').one('touchend.previous', function() {
-        return previous.removeClass('active');
-      });
-      previous.addClass('active');
-      return levelsContainer.animate({
-        marginLeft: parseInt(levelsContainer.css('marginLeft')) + levelSelect.width(),
-        duration: 500,
-        complete: function() {
-          return previous.bind('touchstart.previous', function() {
-            return showPrevious();
-          });
-        }
-      });
-    };
-    return previous.bind('touchstart.previous', function() {
-      return showPrevious();
-    });
+    return _results;
   },
   showMenu: function(name) {
     if (name == null) {
