@@ -540,7 +540,7 @@
   font-size: 24px;
 }
 .language_scramble .floating_message .mini_progress_meter {
-  margin: -9px 0 0 9px;
+  margin: -12px 0 0 10px;
   position: relative;
   overflow: hidden;
   height: 16px;
@@ -557,7 +557,7 @@
 }
 .language_scramble .floating_message .percent_complete {
   background-color: #0c8d28;
-  height: 6px;
+  height: 9px;
   margin: 9px 0 0 18px;
   content: "\00a0";
   max-width: 344px;
