@@ -130,6 +130,7 @@
         .guess, .letter, .blank_letter, .space {
             float: left;
             margin: 3px;
+            .no_select()
         }
         .space {
             width: 24px;
@@ -481,6 +482,7 @@
             text-decoration: none;
             line-height: 45px;
             font-size: 24px;
+            .no_select()
         }
         
         .mini_progress_meter {
@@ -582,12 +584,7 @@
             text-indent: 20px;
             font-size: 36px;
             cursor: pointer;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            .no_select()
         }
     }
      

@@ -152,6 +152,12 @@
 .language_scramble .scrambled .space {
   float: left;
   margin: 3px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble .guesses .space,
 .language_scramble .scrambled .space {
@@ -538,6 +544,12 @@
   text-decoration: none;
   line-height: 45px;
   font-size: 24px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .language_scramble .floating_message .mini_progress_meter {
   margin: -12px 0 0 10px;
