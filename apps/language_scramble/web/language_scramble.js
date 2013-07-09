@@ -715,7 +715,7 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.scrambleScrambleArea = function() {
-    var color, container, containers, letter, letters, scrambled, wordGroup, wordGroups, _i, _j, _k, _len, _len1, _len2, _name, _ref, _ref1;
+    var color, container, containers, index, letter, letters, scrambled, wordGroup, wordGroups, _i, _j, _k, _len, _len1, _len2, _name, _ref, _ref1;
     scrambled = this.$('.scrambled');
     wordGroups = {};
     _ref = scrambled.find('.word_group');
@@ -735,9 +735,9 @@ languageScramble.ViewHelper = (function() {
       wordGroup = this.createWordGroup();
       wordGroup[0].className = color;
       letters = this.shuffleWord(wordGroups[color]);
-      for (_k = 0, _len2 = letters.length; _k < _len2; _k++) {
-        letter = letters[_k];
-        wordGroup.append(this.createLetter(letter));
+      for (index = _k = 0, _len2 = letters.length; _k < _len2; index = ++_k) {
+        letter = letters[index];
+        wordGroup.append(this.createLetter(letter, index));
       }
       containers.push(container);
       container.append(wordGroup);
@@ -1071,10 +1071,11 @@ languageScramble.ViewHelper = (function() {
     return shuffled;
   };
 
-  ViewHelper.prototype.createLetter = function(letter) {
+  ViewHelper.prototype.createLetter = function(letter, index) {
     var letterContainer;
     letterContainer = $(document.createElement("DIV"));
     letterContainer.addClass('letter');
+    letterContainer.data('position', index);
     this.formatLetterOrGuess(letterContainer);
     letterContainer.addClass("letter_" + letter);
     letterContainer.html(letter);
@@ -1085,20 +1086,22 @@ languageScramble.ViewHelper = (function() {
   ViewHelper.prototype.replaceLetterWithBlank = function(letter) {
     var blankLetter;
     blankLetter = $(document.createElement("DIV"));
-    blankLetter.addClass('blank_letter').addClass(letter.html());
+    blankLetter.addClass('blank_letter').addClass(letter.html()).addClass("position_" + (letter.data('position')));
     this.formatLetterOrGuess(blankLetter);
     return blankLetter.insertBefore(letter, this.$(".scrambled ." + (this.containerClassName(letter))));
   };
 
   ViewHelper.prototype.replaceBlankWithLetter = function(letter) {
-    var blankLetter, containerClass;
+    var blankLetter, containerClass, position;
     containerClass = this.containerClassName(letter);
-    blankLetter = this.$(".scrambled ." + containerClass + " ." + (letter.html()))[0];
+    position = letter.data('position');
+    blankLetter = this.$(".scrambled ." + containerClass + " .position_" + position)[0];
     if (blankLetter == null) {
       return;
     }
     blankLetter = $(blankLetter);
     letter.remove().insertBefore(blankLetter, this.$(".scrambled ." + containerClass));
+    letter.data('position', position);
     if (letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/) != null) {
       letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
       letter.removeClass('wrong_letter');
@@ -1114,13 +1117,15 @@ languageScramble.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.replaceGuessWithLetter = function(guess, letter) {
-    var guessLetter, letterPosition;
+    var guessLetter, letterPosition, position;
     $('.guesses .hidden_message').hide();
     $('.guesses .space').css({
       visibility: 'visible'
     });
     guess = $(guess);
+    position = letter.data('position');
     letter.remove().insertBefore(guess, this.$('.guesses'));
+    letter.data('position', position);
     letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0]);
     letter.removeClass('recently_static_guess');
     letter.removeClass('recently_static_letter');

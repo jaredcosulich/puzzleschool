@@ -218,7 +218,7 @@ class languageScramble.ViewHelper
         @dragPathY = []
 
         letter = $(letter)
-
+        
         startDrag = (e) =>
             return if @initializingScramble
             return if @dragging 
@@ -269,11 +269,8 @@ class languageScramble.ViewHelper
             letter.css(position: 'absolute', top: y - @dragAdjustmentY, left: x - @dragAdjustmentX)  
         
         endDrag = (e) =>
-            
             return if @initializingScramble
-
             return unless @dragging == letter
-
             e.preventDefault() if e?.preventDefault?
 
             letter.removeClass('dragging')
@@ -488,7 +485,7 @@ class languageScramble.ViewHelper
             wordGroup = @createWordGroup()
             wordGroup[0].className = color
             letters = @shuffleWord(wordGroups[color])
-            wordGroup.append(@createLetter(letter)) for letter in letters
+            wordGroup.append(@createLetter(letter, index)) for letter, index in letters
 
             containers.push(container)
             container.append(wordGroup)
@@ -707,9 +704,10 @@ class languageScramble.ViewHelper
         shuffled = @shuffleWord(shuffled) if shuffled == word
         return shuffled
         
-    createLetter: (letter) ->
+    createLetter: (letter, index) ->
         letterContainer = $(document.createElement("DIV"))
         letterContainer.addClass('letter')
+        letterContainer.data('position', index)
         @formatLetterOrGuess(letterContainer)
         letterContainer.addClass("letter_#{letter}")
         letterContainer.html(letter)
@@ -718,16 +716,18 @@ class languageScramble.ViewHelper
         
     replaceLetterWithBlank: (letter) ->
         blankLetter = $(document.createElement("DIV"))
-        blankLetter.addClass('blank_letter').addClass(letter.html())
+        blankLetter.addClass('blank_letter').addClass(letter.html()).addClass("position_#{letter.data('position')}")
         @formatLetterOrGuess(blankLetter)
         blankLetter.insertBefore(letter, @$(".scrambled .#{@containerClassName(letter)}"))
 
     replaceBlankWithLetter: (letter) ->
         containerClass = @containerClassName(letter)
-        blankLetter = @$(".scrambled .#{containerClass} .#{letter.html()}")[0]
+        position = letter.data('position')
+        blankLetter = @$(".scrambled .#{containerClass} .position_#{position}")[0]
         return unless blankLetter?
         blankLetter = $(blankLetter)
         letter.remove().insertBefore(blankLetter, @$(".scrambled .#{containerClass}"))
+        letter.data('position', position)
         if letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)?
             letter.removeClass(letter[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
             letter.removeClass('wrong_letter')
@@ -745,12 +745,14 @@ class languageScramble.ViewHelper
         $('.guesses .space').css(visibility: 'visible')
 
         guess = $(guess)
+        position = letter.data('position')
         letter.remove().insertBefore(guess, @$('.guesses'))
+        letter.data('position', position)
         letter.addClass(guess[0].className.match(/actual_letter_(\w|[^\x00-\x80]+)/)[0])
         letter.removeClass('recently_static_guess')
         letter.removeClass('recently_static_letter')
         letter.css(position: 'static')
-            
+
         guess.remove()
         @bindLetter(letter)
         @lettersAdded.push(letter.html())
