@@ -17,8 +17,8 @@ window.app =
                 @puzzleData = JSON.parse(data)
                 
 
-        if @puzzleData?.version != 1372974943610
-            @puzzleData = {version: 1372974943610, levels: {}}
+        if @puzzleData?.version != 1373337874092
+            @puzzleData = {version: 1373337874092, levels: {}}
 
         # @puzzleData = {levels: {}} unless @puzzleData
         

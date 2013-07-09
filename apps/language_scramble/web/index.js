@@ -25,9 +25,9 @@ window.app = {
         this.puzzleData = JSON.parse(data);
       }
     }
-    if (((_ref = this.puzzleData) != null ? _ref.version : void 0) !== 1372974943610) {
+    if (((_ref = this.puzzleData) != null ? _ref.version : void 0) !== 1373337874092) {
       this.puzzleData = {
-        version: 1372974943610,
+        version: 1373337874092,
         levels: {}
       };
     }

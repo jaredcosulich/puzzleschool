@@ -4,7 +4,6 @@ body {
   margin: 0;
   background: #fafafa url('images/wood.jpg');
   font-size: 24px;
-  .no_select()
 }
 /*
 .foreign {
@@ -80,12 +79,6 @@ body {
 .language_scramble .guesses,
 .language_scramble .scrambled {
   clear: left;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .language_scramble .guesses .container,
 .language_scramble .scrambled .container {
@@ -109,12 +102,6 @@ body {
   float: left;
   margin: 3px;
   vertical-align: top;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .language_scramble .guesses .guess,
 .language_scramble .scrambled .guess {
@@ -439,12 +426,6 @@ body {
     background: transparent url('images/wide_button.png');
     width: 372px;
     height: 92px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 .language_scramble .last_answer .highlighted {
   background-color: rgba(36, 219, 75, 0.25);
@@ -601,7 +582,7 @@ body {
     width: 60px;
     height: 60px;
 }   
-``
+
 .language_scramble .floating_message {
     position: absolute;
     top: -1000px;
@@ -695,16 +676,6 @@ body {
     width: 91px;
     height: 90px;
     position: absolute;    
-}
-
-.language_scramble .floating_message .next, 
-.language_scramble .floating_message .previous {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .language_scramble .floating_message .next {
