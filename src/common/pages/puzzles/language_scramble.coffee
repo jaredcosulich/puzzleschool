@@ -187,8 +187,12 @@ soma.views
             startingPoint = parseInt(levelsContainer.css('marginLeft'))
             checkPrevious = (marginLeft=parseInt(levelsContainer.css('marginLeft')))=>
                 if marginLeft >= startingPoint
-                    previous.animate(opacity: 0, duration: 250)
+                    previous.animate
+                        opacity: 0
+                        duration: 250
+                        complete: -> previous.addClass('hidden')
                 else
+                    previous.removeClass('hidden')
                     previous.animate(opacity: 1, duration: 250)
 
             showNext = =>

@@ -273,9 +273,13 @@ soma.views({
         if (marginLeft >= startingPoint) {
           return previous.animate({
             opacity: 0,
-            duration: 250
+            duration: 250,
+            complete: function() {
+              return previous.addClass('hidden');
+            }
           });
         } else {
+          previous.removeClass('hidden');
           return previous.animate({
             opacity: 1,
             duration: 250

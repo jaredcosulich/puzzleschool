@@ -613,6 +613,9 @@
   -ms-user-select: none;
   user-select: none;
 }
+.language_scramble .floating_message .previous.hidden {
+  left: -10000px;
+}
 .language_scramble #foreign_select_menu .level_link {
   font-size: 36px;
   line-height: 60px;

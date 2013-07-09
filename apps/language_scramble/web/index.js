@@ -126,7 +126,7 @@ window.app = {
       levelLinkDiv.id = "level_link_" + key;
       levelLink = document.createElement("A");
       levelLink.className = 'level_link';
-      levelLink.innerHTML = "" + info.title + "<br/><small>" + info.subtitle + "</small>";
+      levelLink.innerHTML = info.title;
       $(levelLinkDiv).append(levelLink);
       levelsGroup.append(levelLinkDiv);
       percentComplete = document.createElement("DIV");
@@ -160,9 +160,13 @@ window.app = {
         if (marginLeft >= startingPoint) {
           return previous.animate({
             opacity: 0,
-            duration: 250
+            duration: 250,
+            complete: function() {
+              return previous.addClass('hidden');
+            }
           });
         } else {
+          previous.removeClass('hidden');
           return previous.animate({
             opacity: 1,
             duration: 250

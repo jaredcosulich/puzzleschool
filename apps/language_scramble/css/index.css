@@ -652,7 +652,7 @@ body {
     padding-top: 12px;
     display: block;
     text-decoration: none;
-    line-height: 21px;
+    line-height: 42px;
     font-size: 30px;
 }
 
@@ -716,6 +716,10 @@ body {
     bottom: 6px;
     left: 6px;
     background: transparent url('images/button_previous.png');
+}
+
+.language_scramble .floating_message .previous.hidden {
+    left: -10000px;
 }
 
 .language_scramble .keyboard_container {

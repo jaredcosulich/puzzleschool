@@ -125,7 +125,7 @@ window.app =
                 levelLinkDiv.id = "level_link_#{key}"
                 levelLink = document.createElement("A")
                 levelLink.className = 'level_link'
-                levelLink.innerHTML = "#{info.title}<br/><small>#{info.subtitle}</small>"
+                levelLink.innerHTML = info.title
                 $(levelLinkDiv).append(levelLink)
                 levelsGroup.append(levelLinkDiv)
                 
@@ -149,8 +149,12 @@ window.app =
             startingPoint = parseInt(levelsContainer.css('marginLeft'))
             checkPrevious = (marginLeft=parseInt(levelsContainer.css('marginLeft')))=>
                 if marginLeft >= startingPoint
-                    previous.animate(opacity: 0, duration: 250)
+                    previous.animate
+                        opacity: 0
+                        duration: 250
+                        complete: -> previous.addClass('hidden')
                 else
+                    previous.removeClass('hidden')
                     previous.animate(opacity: 1, duration: 250)
 
             showNext = =>

@@ -532,7 +532,11 @@
             bottom: 6px;
             left: 6px;
             background: transparent url('/assets/images/puzzles/language_scramble/button_previous.png');
-            .no_select()
+            .no_select();
+            
+            &.hidden {
+                left: -10000px;
+            }
         }
     }
     
