@@ -26,6 +26,7 @@ task 'build:site', 'Build the site files', ->
         'lessc src/client/css/puzzles/space_fractions.less build/client/css/puzzles/space_fractions.css'
         'lessc src/client/css/puzzles/neurobehav.less build/client/css/puzzles/neurobehav.css'
         'lessc src/client/css/puzzles/xyflyer.less build/client/css/puzzles/xyflyer.css'
+        'lessc src/client/css/puzzles/circuitous.less build/client/css/puzzles/circuitous.css'
         'lessc src/client/css/puzzles/code.less build/client/css/puzzles/code.css'
         'lessc src/client/css/puzzles/history.less build/client/css/puzzles/history.css'
         'lessc src/client/css/puzzles/word_problems.less build/client/css/puzzles/word_problems.css'
@@ -44,6 +45,7 @@ task 'build:site', 'Build the site files', ->
         'coffee --compile --bare --output build/common/pages/puzzles/lib/common_objects src/common/pages/puzzles/lib/common_objects/*.coffee'
         'coffee --compile --bare --output build/common/pages/puzzles/lib/neurobehav_objects src/common/pages/puzzles/lib/neurobehav_objects/*.coffee'
         'coffee --compile --bare --output build/common/pages/puzzles/lib/xyflyer_objects src/common/pages/puzzles/lib/xyflyer_objects/*.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib/circuitous_objects src/common/pages/puzzles/lib/circuitous_objects/*.coffee'
         'coffee --compile --bare --output build/common/pages/puzzles/lib/word_problem_objects src/common/pages/puzzles/lib/word_problem_objects/*.coffee'
         'cp -r src/common/templates build/common'
     ]
@@ -52,13 +54,25 @@ task 'build:file', 'Build a file', ->
     execCmds [
         #'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
         # 'coffee --compile --bare --output build/common/pages/puzzles/lib/xyflyer_objects src/common/pages/puzzles/lib/xyflyer_objects/levels.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/language_scramble.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/language_scramble.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/circuitous.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/circuitous.coffee'
         # 'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/xyflyer.coffee'
-        'lessc src/client/css/puzzles/language_scramble.less build/client/css/puzzles/language_scramble.css'
+        'lessc src/client/css/puzzles/circuitous.less build/client/css/puzzles/circuitous.css'
         #'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
         'cp -r src/common/templates build/common'
     ]
+
+
+task 'build:circuitous', 'Build the circuitous app', ->
+    execCmds [
+        'cake build:file'
+        # 'coffee --compile --bare --output apps/circuitous/web src/apps/circuitous/js/*.coffee'
+        # 'cp build/common/pages/puzzles/lib/circuitous.js apps/circuitous/web/circuitous.js'
+        # 'cp ender.js apps/circuitous/web/ender.js'
+        # 'cp assets/images/puzzles/circuitous/* apps/circuitous/css/images/'
+        # 'cp -r apps/circuitous/* ~/workspace/puzzleschoolapps/circuitous/'
+    ]
+
 
 task 'build:language_scramble', 'Build the language scramble app', ->
     execCmds [

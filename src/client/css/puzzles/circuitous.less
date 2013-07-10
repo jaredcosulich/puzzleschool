@@ -1,0 +1,44 @@
+@import '../variables';
+@import '../methods';
+
+
+@height: 640px;
+@width: 960px;
+@boardWidth: 620px;
+
+.circuitous {
+    height: @height;
+    width: @width;
+    margin: 18px 0 0 -12px;
+    position: relative;
+    overflow: hidden;
+
+    .board {
+        border: 1px solid @white;
+        float: left;
+        width: @boardWidth;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat; 
+        background-color: lighten(#000, 10%);
+        height: @boardWidth;   
+    }
+    
+    .right_side {
+        float: right;
+        
+        .options {
+            width: (@width - @boardWidth - 24);
+            height: (@height * 2 / 3);
+            background-color: red;
+        }
+        
+        .menu {
+            margin-top: 12px;
+            width: (@width - @boardWidth - 24);
+            height: (@height * 1 / 3);
+            background-color: green;
+        }
+    }
+    
+}

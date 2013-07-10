@@ -1,0 +1,31 @@
+.circuitous {
+  height: 640px;
+  width: 960px;
+  margin: 18px 0 0 -12px;
+  position: relative;
+  overflow: hidden;
+}
+.circuitous .board {
+  border: 1px solid #fafafa;
+  float: left;
+  width: 620px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
+  background-color: #1a1a1a;
+  height: 620px;
+}
+.circuitous .right_side {
+  float: right;
+}
+.circuitous .right_side .options {
+  width: 316px;
+  height: 426.6666666666667px;
+  background-color: red;
+}
+.circuitous .right_side .menu {
+  margin-top: 12px;
+  width: 316px;
+  height: 213.33333333333334px;
+  background-color: green;
+}
