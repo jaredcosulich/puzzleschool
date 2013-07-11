@@ -4,28 +4,45 @@
   margin: 18px 0 0 -12px;
   position: relative;
   overflow: hidden;
+  border: 1px solid black;
 }
 .circuitous .board {
-  border: 1px solid #fafafa;
   float: left;
-  width: 620px;
+  width: 640px;
   overflow: hidden;
   margin-bottom: 12px;
-  background: url(/assets/images/puzzles/space_fractions/whitecloth.jpg) repeat;
-  background-color: #1a1a1a;
-  height: 620px;
+  background-color: tan;
+  height: 640px;
 }
 .circuitous .right_side {
   float: right;
 }
 .circuitous .right_side .options {
-  width: 316px;
+  width: 314px;
   height: 426.6666666666667px;
   background-color: red;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.circuitous .right_side .options .option {
+  border-left: 1px solid #262626;
+  border-bottom: 1px solid #262626;
 }
 .circuitous .right_side .menu {
-  margin-top: 12px;
-  width: 316px;
+  margin-top: 6px;
+  width: 314px;
   height: 213.33333333333334px;
   background-color: green;
+}
+.circuitous .selector {
+  text-align: center;
+}
+.circuitous .selector .button {
+  font-size: 45px;
+  padding: 0 15px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  background-color: blue;
+  color: white;
 }
