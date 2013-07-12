@@ -3,6 +3,7 @@ circuitousObject = require('./object')
 
 class options.Options extends circuitousObject.Object
     constructor: ({@el, @rows, @columns, @items}) ->
+        @items or= []
         @init()
         
     $: (selector) -> $(selector, @el)   
@@ -12,6 +13,7 @@ class options.Options extends circuitousObject.Object
         @height = @el.height()
         @construct()
         @initSelector()
+        @attachSelector(@$('.empty_option')[0])
         @addItems()
         
     construct: ->
@@ -32,11 +34,15 @@ class options.Options extends circuitousObject.Object
         @selector = new circuitous.Selector
             add: (item) => @addItem(item)
             
-        @selector.attachTo(@$('.empty_option')[0])
+    attachSelector: (cell) -> @selector.attachTo(cell)    
     
     addItems: ->
         return unless @items?.length
         @addItem(item) for item in @items
     
     addItem: (item) ->
-        console.log(item)
+        @items.push(item)
+        @attachSelector(@$('.empty_option')[1])
+        emptyOption = $(@$('.empty_option')[0])
+        emptyOption.append(item.imageElement())
+        emptyOption.removeClass('empty_option')

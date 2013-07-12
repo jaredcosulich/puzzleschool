@@ -32,8 +32,10 @@
             border-spacing: 0;
             border-collapse: collapse;
             .option {
+                text-align: center;
                 border-left: 1px solid @black;
                 border-bottom: 1px solid @black;
+                .no_select();
             }
         }
         
@@ -45,19 +47,33 @@
         }
     }
     
-    .selector {
+    .selector_button {
+        font-size: 45px;
+        padding: 0 15px;
+        .rounded(30px);
+        background-color: blue;
+        color: white;
+        .no_select();
+    }
+    
+    .selector_dialog {
         text-align: center;
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+        opacity: 0;
+        width: 390px;
+        height: 390px;
+        padding: 12px;
+        border: 1px solid @black;
+        background-color: @white;
+        .rounded(6px);
         
-        .button {
-            font-size: 45px;
-            padding: 0 15px;
-            .rounded(30px);
-            background-color: blue;
-            color: white;
-        }
-        
-        .dialog {
-            
+        .items {
+            width: 100%;
+            .item {
+                padding: 12px 0;
+            }    
         }
     }
     

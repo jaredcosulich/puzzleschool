@@ -9,6 +9,16 @@ object.Object = (function() {
 
   function Object() {}
 
+  Object.prototype.image = function() {
+    var filename;
+    filename = this.constructor.name.replace(/(.)([A-Z])/g, '$1_$2').toLowerCase();
+    return "" + this.baseFolder + filename + ".png";
+  };
+
+  Object.prototype.imageElement = function() {
+    return "<img src='" + (this.image()) + "' />";
+  };
+
   return Object;
 
 })();

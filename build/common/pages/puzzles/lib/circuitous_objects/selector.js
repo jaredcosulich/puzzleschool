@@ -7,35 +7,119 @@ selector = typeof exports !== "undefined" && exports !== null ? exports : provid
 
 circuitousObject = require('./object');
 
+selector.ITEM_TYPES = ['Battery', 'Resistor', 'Lightbulb', 'Toggle Switch'];
+
 selector.Selector = (function(_super) {
 
   __extends(Selector, _super);
 
   function Selector(_arg) {
-    this.add = _arg.add;
-    this.init();
+    var selectorHtml;
+    this.add = _arg.add, selectorHtml = _arg.selectorHtml;
+    selectorHtml || (selectorHtml = '<h2>Select An Item</h2>\n<p>Click an item below to add it to the list.</p>');
+    this.init(selectorHtml);
   }
 
-  Selector.prototype.init = function() {
-    return this.construct();
+  Selector.prototype.init = function(selectorHtml) {
+    return this.construct(selectorHtml);
   };
 
-  Selector.prototype.construct = function() {
-    this.el = $(document.createElement('DIV'));
-    this.el.addClass('selector');
+  Selector.prototype.construct = function(selectorHtml) {
+    var column, columns, itemRow, itemTable, row, _fn, _i, _j, _ref,
+      _this = this;
     this.button = $(document.createElement('A'));
-    this.button.addClass('button');
+    this.button.addClass('selector_button');
     this.button.html('+');
-    this.el.append(this.button);
     this.dialog = $(document.createElement('DIV'));
-    this.dialog.addClass('dialog');
-    return this.el.append(this.dialog);
+    this.dialog.addClass('selector_dialog');
+    this.dialog.html(selectorHtml);
+    this.dialog.bind('mousedown.do_not_close click.do_not_close mouseup.do_not_close', function(e) {
+      return e.stop();
+    });
+    itemTable = $(document.createElement('TABLE'));
+    itemTable.addClass('items');
+    columns = Math.ceil(Math.sqrt(selector.ITEM_TYPES.length));
+    for (row = _i = 0, _ref = Math.ceil(selector.ITEM_TYPES.length / columns); 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
+      itemRow = $(document.createElement('TR'));
+      _fn = function(row, column, columns) {
+        var item, itemCell, itemObject;
+        item = selector.ITEM_TYPES[row * columns + column];
+        itemObject = new circuitous[item.replace(/\s/g, '')]();
+        itemCell = $(document.createElement('TD'));
+        itemCell.addClass('item');
+        itemCell.html("" + (itemObject.imageElement()) + "\n<div>" + item + "</div>");
+        itemCell.bind('click', function() {
+          _this.add(new circuitous[item.replace(/\s/g, '')]());
+          return _this.hide();
+        });
+        return itemRow.append(itemCell);
+      };
+      for (column = _j = 0; 0 <= columns ? _j < columns : _j > columns; column = 0 <= columns ? ++_j : --_j) {
+        _fn(row, column, columns);
+      }
+      itemTable.append(itemRow);
+    }
+    return this.dialog.append(itemTable);
+  };
+
+  Selector.prototype.itemFileName = function(item) {
+    return item.toLowerCase().replace(/\s/g, '_');
   };
 
   Selector.prototype.attachTo = function(container) {
-    container = $(container);
-    this.el.remove();
-    return container.append(this.el);
+    var _this = this;
+    this.container = $(container);
+    this.button.remove();
+    this.container.append(this.button);
+    this.button.bind('click.toggle_selector', function() {
+      return _this.toggleDialog();
+    });
+    if (!this.overallContainer) {
+      this.overallContainer = this.container.closest('.circuitous');
+      return this.overallContainer.append(this.dialog);
+    }
+  };
+
+  Selector.prototype.toggleDialog = function() {
+    if (parseInt(this.dialog.css('opacity')) > 0) {
+      return this.hide();
+    } else {
+      return this.show();
+    }
+  };
+
+  Selector.prototype.hide = function() {
+    var _this = this;
+    $(document.body).unbind('mouseup.hide_selector');
+    return this.dialog.animate({
+      opacity: 0,
+      duration: 250,
+      complete: function() {
+        return _this.dialog.css({
+          top: -10000,
+          left: -10000
+        });
+      }
+    });
+  };
+
+  Selector.prototype.show = function() {
+    var areaOffset,
+      _this = this;
+    areaOffset = this.overallContainer.offset();
+    this.dialog.css({
+      top: (areaOffset.height - this.dialog.height()) / 2,
+      left: (areaOffset.width - this.dialog.width()) / 2
+    });
+    this.dialog.animate({
+      opacity: 1,
+      duration: 250
+    });
+    return $.timeout(100, function() {
+      return $(document.body).one('mouseup.hide_selector', function() {
+        return _this.hide();
+      });
+    });
   };
 
   return Selector;

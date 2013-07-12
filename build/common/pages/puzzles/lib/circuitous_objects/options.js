@@ -13,6 +13,7 @@ options.Options = (function(_super) {
 
   function Options(_arg) {
     this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.items = _arg.items;
+    this.items || (this.items = []);
     this.init();
   }
 
@@ -25,6 +26,7 @@ options.Options = (function(_super) {
     this.height = this.el.height();
     this.construct();
     this.initSelector();
+    this.attachSelector(this.$('.empty_option')[0]);
     return this.addItems();
   };
 
@@ -51,12 +53,15 @@ options.Options = (function(_super) {
 
   Options.prototype.initSelector = function() {
     var _this = this;
-    this.selector = new circuitous.Selector({
+    return this.selector = new circuitous.Selector({
       add: function(item) {
         return _this.addItem(item);
       }
     });
-    return this.selector.attachTo(this.$('.empty_option')[0]);
+  };
+
+  Options.prototype.attachSelector = function(cell) {
+    return this.selector.attachTo(cell);
   };
 
   Options.prototype.addItems = function() {
@@ -74,7 +79,12 @@ options.Options = (function(_super) {
   };
 
   Options.prototype.addItem = function(item) {
-    return console.log(item);
+    var emptyOption;
+    this.items.push(item);
+    this.attachSelector(this.$('.empty_option')[1]);
+    emptyOption = $(this.$('.empty_option')[0]);
+    emptyOption.append(item.imageElement());
+    return emptyOption.removeClass('empty_option');
   };
 
   return Options;

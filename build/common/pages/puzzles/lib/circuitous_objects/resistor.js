@@ -7,17 +7,17 @@ resistor = typeof exports !== "undefined" && exports !== null ? exports : provid
 
 circuitousObject = require('./object');
 
-resistor.Resitor = (function(_super) {
+resistor.Resistor = (function(_super) {
 
-  __extends(Resitor, _super);
+  __extends(Resistor, _super);
 
-  function Resitor(_arg) {
+  function Resistor(_arg) {
     _arg;
     this.init();
   }
 
-  Resitor.prototype.init = function() {};
+  Resistor.prototype.init = function() {};
 
-  return Resitor;
+  return Resistor;
 
 })(circuitousObject.Object);

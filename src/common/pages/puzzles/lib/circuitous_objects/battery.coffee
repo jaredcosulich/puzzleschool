@@ -6,3 +6,4 @@ class battery.Battery extends circuitousObject.Object
         @init()
 
     init: ->
+        
