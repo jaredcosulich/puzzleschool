@@ -11,14 +11,20 @@
   width: 640px;
   overflow: hidden;
   margin-bottom: 12px;
-  background-color: tan;
+  background-color: #f6f0e8;
   height: 640px;
+}
+.circuitous .board .cell {
+  border-right: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  content: "\00a0";
+  float: left;
 }
 .circuitous .right_side {
   float: right;
 }
 .circuitous .right_side .options {
-  width: 314px;
+  width: 320px;
   height: 426.6666666666667px;
   background-color: red;
   border-spacing: 0;
@@ -36,8 +42,7 @@
   user-select: none;
 }
 .circuitous .right_side .menu {
-  margin-top: 6px;
-  width: 314px;
+  width: 320px;
   height: 213.33333333333334px;
   background-color: green;
 }

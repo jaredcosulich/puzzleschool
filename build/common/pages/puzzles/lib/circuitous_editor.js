@@ -15,6 +15,9 @@ circuitousEditor.EditorHelper = (function() {
   };
 
   EditorHelper.prototype.initOptions = function() {
+    this.board = new circuitous.Board({
+      el: this.$('.board')
+    });
     return this.options = new circuitous.Options({
       el: this.$('.options'),
       rows: 5,

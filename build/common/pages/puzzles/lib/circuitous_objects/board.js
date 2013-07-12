@@ -11,14 +11,42 @@ board.Board = (function(_super) {
 
   __extends(Board, _super);
 
-  Board.prototype.maxUnits = 10;
+  Board.prototype.cellDimension = 20;
 
   function Board(_arg) {
     this.el = _arg.el;
     this.init();
   }
 
-  Board.prototype.init = function() {};
+  Board.prototype.init = function() {
+    this.width = this.el.width();
+    this.height = this.el.height();
+    return this.drawGrid();
+  };
+
+  Board.prototype.drawGrid = function() {
+    var cell, column, columns, row, rows, _i, _results;
+    rows = this.height / this.cellDimension;
+    columns = this.width / this.cellDimension;
+    _results = [];
+    for (row = _i = 1; 1 <= rows ? _i <= rows : _i >= rows; row = 1 <= rows ? ++_i : --_i) {
+      _results.push((function() {
+        var _j, _results1;
+        _results1 = [];
+        for (column = _j = 1; 1 <= columns ? _j <= columns : _j >= columns; column = 1 <= columns ? ++_j : --_j) {
+          cell = $(document.createElement('DIV'));
+          cell.addClass('cell');
+          cell.css({
+            width: this.cellDimension - 1,
+            height: this.cellDimension - 1
+          });
+          _results1.push(this.el.append(cell));
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
+  };
 
   return Board;
 

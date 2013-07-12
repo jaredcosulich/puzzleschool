@@ -18,15 +18,22 @@
         width: @height;
         overflow: hidden;
         margin-bottom: 12px;
-        background-color: tan;
-        height: @height;   
+        background-color: lighten(tan, 25%);
+        height: @height;  
+        
+        .cell {
+            border-right: 1px solid @lightgrey;
+            border-bottom: 1px solid @lightgrey;
+            content: "\00a0";
+            float: left;
+        } 
     }
     
     .right_side {
         float: right;
         
         .options {
-            width: (@width - @height - 6);
+            width: (@width - @height);
             height: (@height * 2 / 3);
             background-color: red;
             border-spacing: 0;
@@ -40,8 +47,7 @@
         }
         
         .menu {
-            margin-top: 6px;
-            width: (@width - @height - 6);
+            width: (@width - @height);
             height: (@height / 3);
             background-color: green;
         }
