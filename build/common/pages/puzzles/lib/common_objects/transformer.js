@@ -35,7 +35,7 @@ transformer.Transformer = (function() {
 
   Transformer.prototype.setTranslation = function(dx, dy) {
     this.dx = dx;
-    return this.dy = dy;
+    this.dy = dy;
   };
 
   return Transformer;

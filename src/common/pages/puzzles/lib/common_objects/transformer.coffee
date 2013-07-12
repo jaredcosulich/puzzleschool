@@ -21,6 +21,4 @@ class transformer.Transformer
     adjustTranslation: (dx, dy) ->
         @setTranslation(@dx + dx, @dy + dy)
 
-    setTranslation: (dx, dy) ->
-        @dx = dx
-        @dy = dy
+    setTranslation: (@dx, @dy) ->

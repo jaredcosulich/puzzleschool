@@ -15,6 +15,7 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     this.el = _arg.el;
+    this.items = [];
     this.init();
   }
 
@@ -47,6 +48,20 @@ board.Board = (function(_super) {
     }
     return _results;
   };
+
+  Board.prototype.addItem = function(item, x, y) {
+    var offset, onBoardX, onBoardY;
+    offset = this.el.offset();
+    onBoardX = (offset.left < x && x < offset.left + this.width);
+    onBoardY = (offset.top < y && y < offset.top + this.height);
+    if (onBoardX && onBoardY) {
+      return this.items.push(item);
+    } else {
+      return false;
+    }
+  };
+
+  Board.prototype.drawWire = function() {};
 
   return Board;
 

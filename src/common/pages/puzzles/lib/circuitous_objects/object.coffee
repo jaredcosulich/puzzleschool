@@ -1,6 +1,7 @@
 object = exports ? provide('./object', {})
+Draggable = require('../common_objects/draggable').Draggable
 
-class object.Object
+class object.Object extends Draggable
     baseFolder: '/assets/images/puzzles/circuitous/'
     constructor: -> 
         
@@ -8,5 +9,6 @@ class object.Object
         filename = @constructor.name.replace(/(.)([A-Z])/g, '$1_$2').toLowerCase()
         "#{@baseFolder}#{filename}.png"
         
-    imageElement: ->
-        "<img src='#{@image()}' />"
+    imageElement: -> "<img src='#{@image()}' />"
+        
+        

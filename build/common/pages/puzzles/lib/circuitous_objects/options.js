@@ -12,7 +12,7 @@ options.Options = (function(_super) {
   __extends(Options, _super);
 
   function Options(_arg) {
-    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.items = _arg.items;
+    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.items = _arg.items, this.addToBoard = _arg.addToBoard;
     this.items || (this.items = []);
     this.init();
   }
@@ -79,12 +79,26 @@ options.Options = (function(_super) {
   };
 
   Options.prototype.addItem = function(item) {
-    var emptyOption;
+    var emptyOption,
+      _this = this;
     this.items.push(item);
     this.attachSelector(this.$('.empty_option')[1]);
     emptyOption = $(this.$('.empty_option')[0]);
     emptyOption.append(item.imageElement());
-    return emptyOption.removeClass('empty_option');
+    emptyOption.removeClass('empty_option');
+    return $.timeout(10, function() {
+      return item.initDrag(emptyOption.find('img'), function(item, x, y, stopDrag) {
+        return _this.dragItem(item, x, y, stopDrag);
+      });
+    });
+  };
+
+  Options.prototype.dragItem = function(item, x, y, stopDrag) {
+    if (stopDrag) {
+      if (!this.addToBoard(item, x, y)) {
+        return item.resetDrag();
+      }
+    }
   };
 
   return Options;
