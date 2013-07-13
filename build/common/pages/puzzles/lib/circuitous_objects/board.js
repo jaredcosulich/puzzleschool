@@ -89,7 +89,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawWire = function(e) {
-    var active, offset, x, xDiff, y, yDiff;
+    var active, offset, rightOffset, x, xDiff, y, yDiff;
     x = Client.x(e);
     y = Client.y(e);
     active = this.wireInfo.active;
@@ -110,9 +110,10 @@ board.Board = (function(_super) {
       active.element.addClass(active.direction);
     }
     if (active.direction === 'horizontal') {
+      rightOffset = this.el.closest('.circuitous').width() - this.width;
       return active.element.css({
         left: (active.start.x < x ? active.start.x - offset.left : null),
-        right: (active.start.x > x ? this.width - (active.start.x - offset.left) : null),
+        right: (active.start.x > x ? this.width - (active.start.x - offset.left) + rightOffset : null),
         width: Math.abs(x - active.start.x)
       });
     } else {

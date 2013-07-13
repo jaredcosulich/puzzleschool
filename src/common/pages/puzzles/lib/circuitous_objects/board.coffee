@@ -74,9 +74,10 @@ class board.Board extends circuitousObject.Object
             active.element.addClass(active.direction)
             
         if active.direction == 'horizontal'    
+            rightOffset = @el.closest('.circuitous').width() - @width
             active.element.css
                 left: (if active.start.x < x then active.start.x - offset.left else null)
-                right: (if active.start.x > x then @width - (active.start.x - offset.left)  else null)
+                right: (if active.start.x > x then @width - (active.start.x - offset.left) + rightOffset  else null)
                 width: Math.abs(x - active.start.x)
         else
             active.element.css
