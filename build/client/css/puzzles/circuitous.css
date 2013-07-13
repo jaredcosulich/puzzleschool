@@ -26,6 +26,15 @@
   content: "\00a0";
   float: left;
 }
+.circuitous .board .wire {
+  position: absolute;
+}
+.circuitous .board .wire.horizontal {
+  border-top: 3px solid #262626;
+}
+.circuitous .board .wire.vertical {
+  border-left: 3px solid #262626;
+}
 .circuitous .right_side {
   float: right;
 }

@@ -28,6 +28,19 @@
             content: "\00a0";
             float: left;
         } 
+        
+        .wire {
+            position: absolute;
+            
+            &.horizontal {
+                border-top: 3px solid @black;
+            }
+            
+            &.vertical {
+                border-left: 3px solid @black;
+            }
+            
+        }
     }
     
     .right_side {
