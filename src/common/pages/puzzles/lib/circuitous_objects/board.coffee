@@ -39,36 +39,35 @@ class board.Board extends circuitousObject.Object
         @el.bind 'mousedown.draw_wire', (e) =>
             $(document.body).one 'mouseup.draw_wire', => 
                 @el.unbind('mousemove.draw_wire')
-                delete @wireStart
-                
-            @wireInfo.active =
-                start: 
-                    x: Client.x(e)
-                    y: Client.y(e)
-                position: 
-                    x: Client.x(e)
-                    y: Client.y(e)
-            
-                
+                delete @wireInfo.active                
             @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
-            
+            @drawWire(e)
+          
     drawWire: (e) ->
         x = Client.x(e)
         y = Client.y(e)
         
         active = @wireInfo.active
         offset = @el.offset()
-        if not active.element
-            active.element = $(document.createElement('DIV'))
-            active.element.addClass('wire')
-            active.element.css
-                left: active.start.x - offset.left
-                top: active.start.y - offset.top
-            @el.append(active.element)
-            
-        xDiff = Math.abs(active.position.x - x)
-        yDiff = Math.abs(active.position.y - y)
+
+        if active
+            xDiff = Math.abs(active.position.x - x)
+            yDiff = Math.abs(active.position.y - y)
+            if (active.direction == 'horizontal' and yDiff > xDiff) or
+               (active.direction == 'vertical' and xDiff > yDiff)
+                x = active.position.x
+                y = active.position.y
+                active.element.remove() unless active.element.height() and active.element.width()
+                delete @wireInfo.active
+                active = null
+            else
+                active.position.x = x
+                active.position.y = y                
         
+        if not active
+            @createWire(x, y)
+            return
+            
         if not active.direction
             active.direction = (if xDiff > yDiff then 'horizontal' else 'vertical')
             active.element.addClass(active.direction)
@@ -86,6 +85,18 @@ class board.Board extends circuitousObject.Object
                 height: Math.abs(y - active.start.y)
                 
         
+    createWire: (x, y) ->
+        offset = @el.offset()
+        active = @wireInfo.active =
+            start: {x: x, y: y}
+            position: {x: x, y: y}
+            element: $(document.createElement('DIV'))
+            
+        active.element.addClass('wire')
+        active.element.css
+            left: active.start.x - offset.left
+            top: active.start.y - offset.top
+        @el.append(active.element)
         
         
         

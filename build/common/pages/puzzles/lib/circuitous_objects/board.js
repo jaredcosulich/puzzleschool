@@ -70,21 +70,12 @@ board.Board = (function(_super) {
     return this.el.bind('mousedown.draw_wire', function(e) {
       $(document.body).one('mouseup.draw_wire', function() {
         _this.el.unbind('mousemove.draw_wire');
-        return delete _this.wireStart;
+        return delete _this.wireInfo.active;
       });
-      _this.wireInfo.active = {
-        start: {
-          x: Client.x(e),
-          y: Client.y(e)
-        },
-        position: {
-          x: Client.x(e),
-          y: Client.y(e)
-        }
-      };
-      return _this.el.bind('mousemove.draw_wire', function(e) {
+      _this.el.bind('mousemove.draw_wire', function(e) {
         return _this.drawWire(e);
       });
+      return _this.drawWire(e);
     });
   };
 
@@ -94,17 +85,26 @@ board.Board = (function(_super) {
     y = Client.y(e);
     active = this.wireInfo.active;
     offset = this.el.offset();
-    if (!active.element) {
-      active.element = $(document.createElement('DIV'));
-      active.element.addClass('wire');
-      active.element.css({
-        left: active.start.x - offset.left,
-        top: active.start.y - offset.top
-      });
-      this.el.append(active.element);
+    if (active) {
+      xDiff = Math.abs(active.position.x - x);
+      yDiff = Math.abs(active.position.y - y);
+      if ((active.direction === 'horizontal' && yDiff > xDiff) || (active.direction === 'vertical' && xDiff > yDiff)) {
+        x = active.position.x;
+        y = active.position.y;
+        if (!(active.element.height() && active.element.width())) {
+          active.element.remove();
+        }
+        delete this.wireInfo.active;
+        active = null;
+      } else {
+        active.position.x = x;
+        active.position.y = y;
+      }
     }
-    xDiff = Math.abs(active.position.x - x);
-    yDiff = Math.abs(active.position.y - y);
+    if (!active) {
+      this.createWire(x, y);
+      return;
+    }
     if (!active.direction) {
       active.direction = (xDiff > yDiff ? 'horizontal' : 'vertical');
       active.element.addClass(active.direction);
@@ -123,6 +123,28 @@ board.Board = (function(_super) {
         height: Math.abs(y - active.start.y)
       });
     }
+  };
+
+  Board.prototype.createWire = function(x, y) {
+    var active, offset;
+    offset = this.el.offset();
+    active = this.wireInfo.active = {
+      start: {
+        x: x,
+        y: y
+      },
+      position: {
+        x: x,
+        y: y
+      },
+      element: $(document.createElement('DIV'))
+    };
+    active.element.addClass('wire');
+    active.element.css({
+      left: active.start.x - offset.left,
+      top: active.start.y - offset.top
+    });
+    return this.el.append(active.element);
   };
 
   return Board;
