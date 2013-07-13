@@ -57,12 +57,13 @@ class board.Board extends circuitousObject.Object
         y = Client.y(e)
         
         active = @wireInfo.active
+        offset = @el.offset()
         if not active.element
             active.element = $(document.createElement('DIV'))
             active.element.addClass('wire')
             active.element.css
-                left: active.start.x - @el.offset().left
-                bottom: @height - (active.start.y - @el.offset().top)
+                left: active.start.x - offset.left
+                top: active.start.y - offset.top
             @el.append(active.element)
             
         xDiff = Math.abs(active.position.x - x)
@@ -73,9 +74,15 @@ class board.Board extends circuitousObject.Object
             active.element.addClass(active.direction)
             
         if active.direction == 'horizontal'    
-            active.element.css(width: x - active.start.xDiff)
+            active.element.css
+                left: (if active.start.x < x then active.start.x - offset.left else null)
+                right: (if active.start.x > x then @width - (active.start.x - offset.left)  else null)
+                width: Math.abs(x - active.start.x)
         else
-            active.element.css(height: active.start.y - y)
+            active.element.css
+                top: (if active.start.y < y then active.start.y - offset.top else null)
+                bottom: (if active.start.y > y then @height - (active.start.y - offset.top)  else null)
+                height: Math.abs(y - active.start.y)
                 
         
         

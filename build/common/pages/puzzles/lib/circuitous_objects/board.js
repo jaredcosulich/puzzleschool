@@ -89,17 +89,17 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawWire = function(e) {
-    var active, x, xDiff, y, yDiff;
+    var active, offset, x, xDiff, y, yDiff;
     x = Client.x(e);
     y = Client.y(e);
     active = this.wireInfo.active;
+    offset = this.el.offset();
     if (!active.element) {
       active.element = $(document.createElement('DIV'));
       active.element.addClass('wire');
-      console.log(this.el.scrollTop());
       active.element.css({
-        left: active.start.x - this.el.offset().left,
-        bottom: this.height - (active.start.y - this.el.offset().top)
+        left: active.start.x - offset.left,
+        top: active.start.y - offset.top
       });
       this.el.append(active.element);
     }
@@ -110,13 +110,16 @@ board.Board = (function(_super) {
       active.element.addClass(active.direction);
     }
     if (active.direction === 'horizontal') {
-      console.log(active.start.x - x);
       return active.element.css({
-        width: x - active.start.x
+        left: (active.start.x < x ? active.start.x - offset.left : null),
+        right: (active.start.x > x ? this.width - (active.start.x - offset.left) : null),
+        width: Math.abs(x - active.start.x)
       });
     } else {
       return active.element.css({
-        height: active.start.y - y
+        top: (active.start.y < y ? active.start.y - offset.top : null),
+        bottom: (active.start.y > y ? this.height - (active.start.y - offset.top) : null),
+        height: Math.abs(y - active.start.y)
       });
     }
   };

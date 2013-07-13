@@ -19,6 +19,7 @@
   margin-bottom: 12px;
   background-color: #f6f0e8;
   height: 640px;
+  position: relative;
 }
 .circuitous .board .cell {
   border-right: 1px solid #c7c7c7;
