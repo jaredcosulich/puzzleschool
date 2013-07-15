@@ -105,7 +105,7 @@ board.Board = (function(_super) {
       if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
         return;
       }
-      if ((active.direction === 'horizontal' && yDiff > xDiff) || (active.direction === 'vertical' && xDiff > yDiff)) {
+      if ((active.direction === 'horizontal' && Math.abs(active.start.y - coords.y) > (this.cellDimension * 0.75)) || (active.direction === 'vertical' && Math.abs(active.start.x - coords.x) > (this.cellDimension * 0.75))) {
         coords.x = active.position.x;
         coords.y = active.position.y;
         if (!(active.element.height() && active.element.width())) {

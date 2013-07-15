@@ -63,8 +63,10 @@ class board.Board extends circuitousObject.Object
             xDiff = Math.abs(active.position.x - coords.x)
             yDiff = Math.abs(active.position.y - coords.y)
             return if xDiff < @cellDimension and yDiff < @cellDimension
-            if (active.direction == 'horizontal' and yDiff > xDiff) or
-               (active.direction == 'vertical' and xDiff > yDiff)
+            
+            
+            if (active.direction == 'horizontal' and Math.abs(active.start.y - coords.y) > (@cellDimension * 0.75)) or
+               (active.direction == 'vertical' and Math.abs(active.start.x - coords.x) > (@cellDimension * 0.75))
                 coords.x = active.position.x
                 coords.y = active.position.y
                 active.element.remove() unless active.element.height() and active.element.width()
