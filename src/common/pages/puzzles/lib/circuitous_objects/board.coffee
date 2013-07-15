@@ -44,8 +44,8 @@ class board.Board extends circuitousObject.Object
             @drawWire(e)
           
     drawWire: (e) ->
-        x = Client.x(e)
-        y = Client.y(e)
+        x = Math.round(Client.x(e) / @cellDimension) * @cellDimension
+        y = Math.round(Client.y(e) / @cellDimension) * @cellDimension
         
         active = @wireInfo.active
         offset = @el.offset()
@@ -53,6 +53,7 @@ class board.Board extends circuitousObject.Object
         if active
             xDiff = Math.abs(active.position.x - x)
             yDiff = Math.abs(active.position.y - y)
+            return if xDiff < @cellDimension and yDiff < @cellDimension
             if (active.direction == 'horizontal' and yDiff > xDiff) or
                (active.direction == 'vertical' and xDiff > yDiff)
                 x = active.position.x
@@ -60,9 +61,6 @@ class board.Board extends circuitousObject.Object
                 active.element.remove() unless active.element.height() and active.element.width()
                 delete @wireInfo.active
                 active = null
-            else
-                active.position.x = x
-                active.position.y = y                
         
         if not active
             @createWire(x, y)
@@ -78,15 +76,20 @@ class board.Board extends circuitousObject.Object
                 left: (if active.start.x < x then active.start.x - offset.left else null)
                 right: (if active.start.x > x then @width - (active.start.x - offset.left) + rightOffset  else null)
                 width: Math.abs(x - active.start.x)
+            active.position.x = x
         else
             active.element.css
                 top: (if active.start.y < y then active.start.y - offset.top else null)
                 bottom: (if active.start.y > y then @height - (active.start.y - offset.top)  else null)
-                height: Math.abs(y - active.start.y)
-                
+                height: Math.abs(y - active.start.y)                
+            active.position.y = y
         
     createWire: (x, y) ->
         offset = @el.offset()
+
+        x = Math.round(x / @cellDimension) * @cellDimension
+        y = Math.round(y / @cellDimension) * @cellDimension
+            
         active = @wireInfo.active =
             start: {x: x, y: y}
             position: {x: x, y: y}

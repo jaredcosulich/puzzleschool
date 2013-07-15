@@ -81,13 +81,16 @@ board.Board = (function(_super) {
 
   Board.prototype.drawWire = function(e) {
     var active, offset, rightOffset, x, xDiff, y, yDiff;
-    x = Client.x(e);
-    y = Client.y(e);
+    x = Math.round(Client.x(e) / this.cellDimension) * this.cellDimension;
+    y = Math.round(Client.y(e) / this.cellDimension) * this.cellDimension;
     active = this.wireInfo.active;
     offset = this.el.offset();
     if (active) {
       xDiff = Math.abs(active.position.x - x);
       yDiff = Math.abs(active.position.y - y);
+      if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
+        return;
+      }
       if ((active.direction === 'horizontal' && yDiff > xDiff) || (active.direction === 'vertical' && xDiff > yDiff)) {
         x = active.position.x;
         y = active.position.y;
@@ -96,9 +99,6 @@ board.Board = (function(_super) {
         }
         delete this.wireInfo.active;
         active = null;
-      } else {
-        active.position.x = x;
-        active.position.y = y;
       }
     }
     if (!active) {
@@ -111,23 +111,27 @@ board.Board = (function(_super) {
     }
     if (active.direction === 'horizontal') {
       rightOffset = this.el.closest('.circuitous').width() - this.width;
-      return active.element.css({
+      active.element.css({
         left: (active.start.x < x ? active.start.x - offset.left : null),
         right: (active.start.x > x ? this.width - (active.start.x - offset.left) + rightOffset : null),
         width: Math.abs(x - active.start.x)
       });
+      return active.position.x = x;
     } else {
-      return active.element.css({
+      active.element.css({
         top: (active.start.y < y ? active.start.y - offset.top : null),
         bottom: (active.start.y > y ? this.height - (active.start.y - offset.top) : null),
         height: Math.abs(y - active.start.y)
       });
+      return active.position.y = y;
     }
   };
 
   Board.prototype.createWire = function(x, y) {
     var active, offset;
     offset = this.el.offset();
+    x = Math.round(x / this.cellDimension) * this.cellDimension;
+    y = Math.round(y / this.cellDimension) * this.cellDimension;
     active = this.wireInfo.active = {
       start: {
         x: x,
