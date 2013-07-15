@@ -13,7 +13,7 @@ board.Board = (function(_super) {
 
   __extends(Board, _super);
 
-  Board.prototype.cellDimension = 20;
+  Board.prototype.cellDimension = 32;
 
   function Board(_arg) {
     this.el = _arg.el;
@@ -79,21 +79,39 @@ board.Board = (function(_super) {
     });
   };
 
-  Board.prototype.drawWire = function(e) {
-    var active, offset, rightOffset, x, xDiff, y, yDiff;
-    x = Math.round(Client.x(e) / this.cellDimension) * this.cellDimension;
-    y = Math.round(Client.y(e) / this.cellDimension) * this.cellDimension;
-    active = this.wireInfo.active;
+  Board.prototype.roundedCoordinates = function(coords) {
+    var leftRemainder, offset, topRemainder;
     offset = this.el.offset();
+    leftRemainder = offset.left % this.cellDimension;
+    if (leftRemainder > (this.cellDimension / 2)) {
+      leftRemainder = leftRemaineder - this.cellDimension;
+    }
+    topRemainder = offset.top % this.cellDimension;
+    if (topRemainder > (this.cellDimension / 2)) {
+      topRemainder = topRemainder - this.cellDimension;
+    }
+    return {
+      x: (Math.floor(coords.x / this.cellDimension) * this.cellDimension) + (this.cellDimension / 2) + leftRemainder,
+      y: (Math.floor(coords.y / this.cellDimension) * this.cellDimension) + (this.cellDimension / 2) + topRemainder
+    };
+  };
+
+  Board.prototype.drawWire = function(e) {
+    var active, coords, xDiff, yDiff;
+    coords = this.roundedCoordinates({
+      x: Client.x(e),
+      y: Client.y(e)
+    });
+    active = this.wireInfo.active;
     if (active) {
-      xDiff = Math.abs(active.position.x - x);
-      yDiff = Math.abs(active.position.y - y);
+      xDiff = Math.abs(active.position.x - coords.x);
+      yDiff = Math.abs(active.position.y - coords.y);
       if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
         return;
       }
       if ((active.direction === 'horizontal' && yDiff > xDiff) || (active.direction === 'vertical' && xDiff > yDiff)) {
-        x = active.position.x;
-        y = active.position.y;
+        coords.x = active.position.x;
+        coords.y = active.position.y;
         if (!(active.element.height() && active.element.width())) {
           active.element.remove();
         }
@@ -102,44 +120,51 @@ board.Board = (function(_super) {
       }
     }
     if (!active) {
-      this.createWire(x, y);
+      this.createWire(coords);
       return;
     }
     if (!active.direction) {
       active.direction = (xDiff > yDiff ? 'horizontal' : 'vertical');
       active.element.addClass(active.direction);
     }
+    return this.adjustActiveWire(coords);
+  };
+
+  Board.prototype.adjustActiveWire = function(coords) {
+    var active, offset, rightOffset;
+    if (!(active = this.wireInfo.active)) {
+      return;
+    }
+    offset = this.el.offset();
     if (active.direction === 'horizontal') {
       rightOffset = this.el.closest('.circuitous').width() - this.width;
       active.element.css({
-        left: (active.start.x < x ? active.start.x - offset.left : null),
-        right: (active.start.x > x ? this.width - (active.start.x - offset.left) + rightOffset : null),
-        width: Math.abs(x - active.start.x)
+        left: (active.start.x < coords.x ? active.start.x - offset.left : null),
+        right: (active.start.x > coords.x ? this.width - (active.start.x - offset.left) + rightOffset : null),
+        width: Math.abs(coords.x - active.start.x)
       });
-      return active.position.x = x;
+      return active.position.x = coords.x;
     } else {
       active.element.css({
-        top: (active.start.y < y ? active.start.y - offset.top : null),
-        bottom: (active.start.y > y ? this.height - (active.start.y - offset.top) : null),
-        height: Math.abs(y - active.start.y)
+        top: (active.start.y < coords.y ? active.start.y - offset.top : null),
+        bottom: (active.start.y > coords.y ? this.height - (active.start.y - offset.top) : null),
+        height: Math.abs(coords.y - active.start.y)
       });
-      return active.position.y = y;
+      return active.position.y = coords.y;
     }
   };
 
-  Board.prototype.createWire = function(x, y) {
+  Board.prototype.createWire = function(coords) {
     var active, offset;
     offset = this.el.offset();
-    x = Math.round(x / this.cellDimension) * this.cellDimension;
-    y = Math.round(y / this.cellDimension) * this.cellDimension;
     active = this.wireInfo.active = {
       start: {
-        x: x,
-        y: y
+        x: coords.x,
+        y: coords.y
       },
       position: {
-        x: x,
-        y: y
+        x: coords.x,
+        y: coords.y
       },
       element: $(document.createElement('DIV'))
     };

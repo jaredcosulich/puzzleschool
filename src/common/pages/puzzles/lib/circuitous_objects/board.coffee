@@ -3,7 +3,7 @@ circuitousObject = require('./object')
 Client = require('../common_objects/client').Client
 
 class board.Board extends circuitousObject.Object
-    cellDimension: 20
+    cellDimension: 32
     
     constructor: ({@el}) ->
         @items = []
@@ -42,57 +42,70 @@ class board.Board extends circuitousObject.Object
                 delete @wireInfo.active                
             @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
             @drawWire(e)
-          
-    drawWire: (e) ->
-        x = Math.round(Client.x(e) / @cellDimension) * @cellDimension
-        y = Math.round(Client.y(e) / @cellDimension) * @cellDimension
-        
-        active = @wireInfo.active
+            
+    roundedCoordinates: (coords) ->
         offset = @el.offset()
 
+        leftRemainder = offset.left % @cellDimension
+        leftRemainder = leftRemaineder - @cellDimension if leftRemainder > (@cellDimension / 2)
+
+        topRemainder = offset.top % @cellDimension
+        topRemainder = topRemainder - @cellDimension if topRemainder > (@cellDimension / 2)
+
+        return {
+            x: (Math.floor(coords.x / @cellDimension) * @cellDimension) + (@cellDimension / 2) + leftRemainder
+            y: (Math.floor(coords.y / @cellDimension) * @cellDimension) + (@cellDimension / 2) + topRemainder
+        }
+         
+    drawWire: (e) ->
+        coords = @roundedCoordinates(x: Client.x(e), y: Client.y(e))
+        
+        active = @wireInfo.active
+
         if active
-            xDiff = Math.abs(active.position.x - x)
-            yDiff = Math.abs(active.position.y - y)
+            xDiff = Math.abs(active.position.x - coords.x)
+            yDiff = Math.abs(active.position.y - coords.y)
             return if xDiff < @cellDimension and yDiff < @cellDimension
             if (active.direction == 'horizontal' and yDiff > xDiff) or
                (active.direction == 'vertical' and xDiff > yDiff)
-                x = active.position.x
-                y = active.position.y
+                coords.x = active.position.x
+                coords.y = active.position.y
                 active.element.remove() unless active.element.height() and active.element.width()
                 delete @wireInfo.active
                 active = null
         
         if not active
-            @createWire(x, y)
+            @createWire(coords)
             return
             
         if not active.direction
             active.direction = (if xDiff > yDiff then 'horizontal' else 'vertical')
             active.element.addClass(active.direction)
             
-        if active.direction == 'horizontal'    
+        @adjustActiveWire(coords)
+            
+    adjustActiveWire: (coords) ->
+        return unless active = @wireInfo.active
+        offset = @el.offset()
+        if active.direction == 'horizontal'
             rightOffset = @el.closest('.circuitous').width() - @width
             active.element.css
-                left: (if active.start.x < x then active.start.x - offset.left else null)
-                right: (if active.start.x > x then @width - (active.start.x - offset.left) + rightOffset  else null)
-                width: Math.abs(x - active.start.x)
-            active.position.x = x
+                left: (if active.start.x <coords. x then active.start.x - offset.left else null)
+                right: (if active.start.x > coords.x then @width - (active.start.x - offset.left) + rightOffset  else null)
+                width: Math.abs(coords.x - active.start.x)
+            active.position.x = coords.x
         else
             active.element.css
-                top: (if active.start.y < y then active.start.y - offset.top else null)
-                bottom: (if active.start.y > y then @height - (active.start.y - offset.top)  else null)
-                height: Math.abs(y - active.start.y)                
-            active.position.y = y
+                top: (if active.start.y < coords.y then active.start.y - offset.top else null)
+                bottom: (if active.start.y > coords.y then @height - (active.start.y - offset.top)  else null)
+                height: Math.abs(coords.y - active.start.y)                
+            active.position.y = coords.y
         
-    createWire: (x, y) ->
+    createWire: (coords) ->
         offset = @el.offset()
-
-        x = Math.round(x / @cellDimension) * @cellDimension
-        y = Math.round(y / @cellDimension) * @cellDimension
-            
         active = @wireInfo.active =
-            start: {x: x, y: y}
-            position: {x: x, y: y}
+            start: {x: coords.x, y: coords.y}
+            position: {x: coords.x, y: coords.y}
             element: $(document.createElement('DIV'))
             
         active.element.addClass('wire')
