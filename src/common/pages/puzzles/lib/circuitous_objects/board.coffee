@@ -45,24 +45,21 @@ class board.Board extends circuitousObject.Object
             
     roundedCoordinates: (coords) ->
         offset = @el.offset()
-
-        leftRemainder = offset.left % @cellDimension
-        leftRemainder = leftRemaineder - @cellDimension if leftRemainder > (@cellDimension / 2)
-
-        topRemainder = offset.top % @cellDimension
-        topRemainder = topRemainder - @cellDimension if topRemainder > (@cellDimension / 2)
-
+        
+        halfDim = @cellDimension / 2
+        offsetCoords = 
+            x: coords.x - offset.left + halfDim
+            y: coords.y - offset.top + halfDim
+            
         return {
-            x: (Math.floor(coords.x / @cellDimension) * @cellDimension) + (@cellDimension / 2) + leftRemainder
-            y: (Math.floor(coords.y / @cellDimension) * @cellDimension) + (@cellDimension / 2) + topRemainder
+            x: (Math.round(offsetCoords.x / @cellDimension) * @cellDimension) - halfDim
+            y: (Math.round(offsetCoords.y / @cellDimension) * @cellDimension) - halfDim
         }
          
     drawWire: (e) ->
         coords = @roundedCoordinates(x: Client.x(e), y: Client.y(e))
-        
-        active = @wireInfo.active
 
-        if active
+        if active = @wireInfo.active
             xDiff = Math.abs(active.position.x - coords.x)
             yDiff = Math.abs(active.position.y - coords.y)
             return if xDiff < @cellDimension and yDiff < @cellDimension
@@ -86,23 +83,21 @@ class board.Board extends circuitousObject.Object
             
     adjustActiveWire: (coords) ->
         return unless active = @wireInfo.active
-        offset = @el.offset()
         if active.direction == 'horizontal'
             rightOffset = @el.closest('.circuitous').width() - @width
             active.element.css
-                left: (if active.start.x <coords. x then active.start.x - offset.left else null)
-                right: (if active.start.x > coords.x then @width - (active.start.x - offset.left) + rightOffset  else null)
+                left: (if active.start.x < coords. x then active.start.x else null)
+                right: (if active.start.x > coords.x then @width - active.start.x + rightOffset  else null)
                 width: Math.abs(coords.x - active.start.x)
             active.position.x = coords.x
         else
             active.element.css
-                top: (if active.start.y < coords.y then active.start.y - offset.top else null)
-                bottom: (if active.start.y > coords.y then @height - (active.start.y - offset.top)  else null)
+                top: (if active.start.y < coords.y then active.start.y else null)
+                bottom: (if active.start.y > coords.y then @height - active.start.y else null)
                 height: Math.abs(coords.y - active.start.y)                
             active.position.y = coords.y
         
     createWire: (coords) ->
-        offset = @el.offset()
         active = @wireInfo.active =
             start: {x: coords.x, y: coords.y}
             position: {x: coords.x, y: coords.y}
@@ -110,8 +105,8 @@ class board.Board extends circuitousObject.Object
             
         active.element.addClass('wire')
         active.element.css
-            left: active.start.x - offset.left
-            top: active.start.y - offset.top
+            left: active.start.x
+            top: active.start.y
         @el.append(active.element)
         
         
