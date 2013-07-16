@@ -94,7 +94,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawWire = function(e) {
-    var active, coords, xDiff, yDiff;
+    var active, coords, xDiff, xStartDiff, yDiff, yStartDiff;
     coords = this.roundedCoordinates({
       x: Client.x(e),
       y: Client.y(e)
@@ -105,7 +105,9 @@ board.Board = (function(_super) {
       if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
         return;
       }
-      if ((active.direction === 'horizontal' && Math.abs(active.start.y - coords.y) > (this.cellDimension * 0.75)) || (active.direction === 'vertical' && Math.abs(active.start.x - coords.x) > (this.cellDimension * 0.75))) {
+      xStartDiff = Math.abs(active.start.x - coords.x);
+      yStartDiff = Math.abs(active.start.y - coords.y);
+      if ((active.direction === 'horizontal' && yStartDiff - xDiff > (this.cellDimension * 0.75)) || (active.direction === 'vertical' && xStartDiff - yDiff > (this.cellDimension * 0.75))) {
         coords.x = active.position.x;
         coords.y = active.position.y;
         if (!(active.element.height() && active.element.width())) {
@@ -127,25 +129,32 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.adjustActiveWire = function(coords) {
-    var active, rightOffset;
+    var active, className, down, right, rightOffset;
     if (!(active = this.wireInfo.active)) {
       return;
     }
     if (active.direction === 'horizontal') {
       rightOffset = this.el.closest('.circuitous').width() - this.width;
+      right = active.start.x < coords.x;
       active.element.css({
-        left: (active.start.x < coords.x ? active.start.x : null),
-        right: (active.start.x > coords.x ? this.width - active.start.x + rightOffset : null),
+        left: (right ? active.start.x : null),
+        right: (!right ? this.width - active.start.x + rightOffset : null),
         width: Math.abs(coords.x - active.start.x)
       });
-      return active.position.x = coords.x;
+      active.position.x = coords.x;
+      className = right ? 'right' : 'left';
     } else {
+      down = active.start.y < coords.y;
       active.element.css({
-        top: (active.start.y < coords.y ? active.start.y : null),
-        bottom: (active.start.y > coords.y ? this.height - active.start.y : null),
+        top: (down ? active.start.y : null),
+        bottom: (!down ? this.height - active.start.y : null),
         height: Math.abs(coords.y - active.start.y)
       });
-      return active.position.y = coords.y;
+      active.position.y = coords.y;
+      className = down ? 'down' : 'up';
+    }
+    if (!active.element.hasClass(className)) {
+      return active.element.addClass(className);
     }
   };
 

@@ -33,13 +33,29 @@
 }
 .circuitous .board .wire.horizontal {
   height: 9px;
-  margin-left: -6px;
-  margin-top: -6px;
+}
+.circuitous .board .wire.horizontal.right {
+  margin-top: -5px;
+  margin-left: -5px;
+  padding-right: 9px;
+}
+.circuitous .board .wire.horizontal.left {
+  margin-top: -5px;
+  margin-right: -6px;
+  padding-left: 9px;
 }
 .circuitous .board .wire.vertical {
   width: 9px;
-  margin-left: -6px;
-  margin-top: -6px;
+}
+.circuitous .board .wire.vertical.up {
+  margin-left: -5px;
+  margin-bottom: -4px;
+  padding-top: 9px;
+}
+.circuitous .board .wire.vertical.down {
+  margin-left: -5px;
+  margin-top: -5px;
+  padding-bottom: 9px;
 }
 .circuitous .right_side {
   float: right;

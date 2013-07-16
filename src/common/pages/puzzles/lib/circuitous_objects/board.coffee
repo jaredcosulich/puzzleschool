@@ -63,10 +63,11 @@ class board.Board extends circuitousObject.Object
             xDiff = Math.abs(active.position.x - coords.x)
             yDiff = Math.abs(active.position.y - coords.y)
             return if xDiff < @cellDimension and yDiff < @cellDimension
-            
-            
-            if (active.direction == 'horizontal' and Math.abs(active.start.y - coords.y) > (@cellDimension * 0.75)) or
-               (active.direction == 'vertical' and Math.abs(active.start.x - coords.x) > (@cellDimension * 0.75))
+                        
+            xStartDiff = Math.abs(active.start.x - coords.x)
+            yStartDiff = Math.abs(active.start.y - coords.y)
+            if (active.direction == 'horizontal' and yStartDiff - xDiff > (@cellDimension * 0.75)) or
+               (active.direction == 'vertical' and xStartDiff - yDiff > (@cellDimension * 0.75))
                 coords.x = active.position.x
                 coords.y = active.position.y
                 active.element.remove() unless active.element.height() and active.element.width()
@@ -87,17 +88,22 @@ class board.Board extends circuitousObject.Object
         return unless active = @wireInfo.active
         if active.direction == 'horizontal'
             rightOffset = @el.closest('.circuitous').width() - @width
+            right = active.start.x < coords.x
             active.element.css
-                left: (if active.start.x < coords. x then active.start.x else null)
-                right: (if active.start.x > coords.x then @width - active.start.x + rightOffset  else null)
+                left: (if right then active.start.x else null)
+                right: (if not right then @width - active.start.x + rightOffset  else null)
                 width: Math.abs(coords.x - active.start.x)
             active.position.x = coords.x
+            className = if right then 'right' else 'left'
         else
+            down = active.start.y < coords.y
             active.element.css
-                top: (if active.start.y < coords.y then active.start.y else null)
-                bottom: (if active.start.y > coords.y then @height - active.start.y else null)
+                top: (if down then active.start.y else null)
+                bottom: (if not down then @height - active.start.y else null)
                 height: Math.abs(coords.y - active.start.y)                
             active.position.y = coords.y
+            className = if down then 'down' else 'up'
+        active.element.addClass(className) unless active.element.hasClass(className)
         
     createWire: (coords) ->
         active = @wireInfo.active =
