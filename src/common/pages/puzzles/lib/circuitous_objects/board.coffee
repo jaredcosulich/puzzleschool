@@ -35,11 +35,14 @@ class board.Board extends circuitousObject.Object
             return false
             
     initWire: ->
-        @wireInfo = {}
+        @wireInfo = {positions: {}}
         @el.bind 'mousedown.draw_wire', (e) =>
             $(document.body).one 'mouseup.draw_wire', => 
                 @el.unbind('mousemove.draw_wire')
-                delete @wireInfo.active                
+                delete @wireInfo.active      
+                delete @wireInfo.continuation
+                delete @wireInfo.erasing
+                          
             @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
             @drawWire(e)
             
@@ -55,6 +58,10 @@ class board.Board extends circuitousObject.Object
             x: (Math.round(offsetCoords.x / @cellDimension) * @cellDimension) - halfDim
             y: (Math.round(offsetCoords.y / @cellDimension) * @cellDimension) - halfDim
         }
+        
+    recordWirePosition: (coords) ->
+        @wireInfo.positions[coords.x] or= {}
+        @wireInfo.positions[coords.x][coords.y] = @wireInfo.active 
          
     drawWire: (e) ->
         coords = @roundedCoordinates(x: Client.x(e), y: Client.y(e))
@@ -68,6 +75,7 @@ class board.Board extends circuitousObject.Object
             yStartDiff = Math.abs(active.start.y - coords.y)
             if (active.direction == 'horizontal' and yStartDiff - xDiff > (@cellDimension * 0.75)) or
                (active.direction == 'vertical' and xStartDiff - yDiff > (@cellDimension * 0.75))
+                @wireInfo.continuation = true
                 coords.x = active.position.x
                 coords.y = active.position.y
                 active.element.remove() unless active.element.height() and active.element.width()
@@ -78,14 +86,19 @@ class board.Board extends circuitousObject.Object
             @createWire(coords)
             return
             
-        if not active.direction
-            active.direction = (if xDiff > yDiff then 'horizontal' else 'vertical')
-            active.element.addClass(active.direction)
+        if @wireInfo.erasing
+            @eraseActiveWire(coords)
+        else
+            if not active.direction
+                active.direction = (if xDiff > yDiff then 'horizontal' else 'vertical')
+                active.element.addClass(active.direction)
             
-        @adjustActiveWire(coords)
+            @adjustActiveWire(coords)
             
     adjustActiveWire: (coords) ->
         return unless active = @wireInfo.active
+        @recordWirePosition(coords)
+
         if active.direction == 'horizontal'
             rightOffset = @el.closest('.circuitous').width() - @width
             right = active.start.x < coords.x
@@ -105,18 +118,33 @@ class board.Board extends circuitousObject.Object
             className = if down then 'down' else 'up'
         active.element.addClass(className) unless active.element.hasClass(className)
         
-    createWire: (coords) ->
-        active = @wireInfo.active =
-            start: {x: coords.x, y: coords.y}
-            position: {x: coords.x, y: coords.y}
-            element: $(document.createElement('DIV'))
-            
-        active.element.addClass('wire')
-        active.element.css
-            left: active.start.x
-            top: active.start.y
-        @el.append(active.element)
+    eraseActiveWire: (coords) ->    
+        console.log('erase', coords)
+        @wireInfo.active.position = {x: coords.x, y: coords.y}
+        @adjustActiveWire(coords)
         
+        
+    splitActiveWire: (coords) ->
+        
+        
+    createWire: (coords) ->
+        if (!@wireInfo.continuation and active = @wireInfo.active = @wireInfo.positions[coords.x]?[coords.y])
+            @wireInfo.erasing = true
+            @eraseActiveWire(coords)
+        else    
+            @recordWirePosition(coords)
+            active = @wireInfo.active = 
+                element: $(document.createElement('DIV'))             
+                start: {x: coords.x, y: coords.y}
+                position: {x: coords.x, y: coords.y}
+            active.element.addClass('wire')
+            active.element.css
+                left: active.start.x
+                top: active.start.y
+            @el.append(active.element)
+        
+        
+
         
         
         
