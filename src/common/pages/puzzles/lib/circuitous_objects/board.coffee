@@ -43,8 +43,8 @@ class board.Board extends circuitousObject.Object
                 delete @wireInfo.continuation
                 delete @wireInfo.erasing
                           
-            @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
-            @drawWire(e)
+            @el.bind 'mousemove.draw_wire', (e) => @drawActiveWire(e)
+            @drawActiveWire(e)
             
     roundedCoordinates: (coords) ->
         offset = @el.offset()
@@ -59,11 +59,11 @@ class board.Board extends circuitousObject.Object
             y: (Math.round(offsetCoords.y / @cellDimension) * @cellDimension) - halfDim
         }
         
-    recordWirePosition: (coords) ->
+    recordActiveWirePosition: (coords) ->
         @wireInfo.positions[coords.x] or= {}
         @wireInfo.positions[coords.x][coords.y] = @wireInfo.active 
          
-    drawWire: (e) ->
+    drawActiveWire: (e) ->
         coords = @roundedCoordinates(x: Client.x(e), y: Client.y(e))
 
         if active = @wireInfo.active
@@ -83,7 +83,7 @@ class board.Board extends circuitousObject.Object
                 active = null
         
         if not active
-            @createWire(coords)
+            @createActiveWire(coords)
             return
             
         if @wireInfo.erasing
@@ -95,55 +95,69 @@ class board.Board extends circuitousObject.Object
             
             @adjustActiveWire(coords)
             
-    adjustActiveWire: (coords) ->
-        return unless active = @wireInfo.active
-        @recordWirePosition(coords)
-
-        if active.direction == 'horizontal'
-            rightOffset = @el.closest('.circuitous').width() - @width
-            right = active.start.x < coords.x
-            active.element.css
-                left: (if right then active.start.x else null)
-                right: (if not right then @width - active.start.x + rightOffset  else null)
-                width: Math.abs(coords.x - active.start.x)
-            active.position.x = coords.x
-            className = if right then 'right' else 'left'
-        else
-            down = active.start.y < coords.y
-            active.element.css
-                top: (if down then active.start.y else null)
-                bottom: (if not down then @height - active.start.y else null)
-                height: Math.abs(coords.y - active.start.y)                
-            active.position.y = coords.y
-            className = if down then 'down' else 'up'
-        active.element.addClass(className) unless active.element.hasClass(className)
-        
-    eraseActiveWire: (coords) ->    
-        console.log('erase', coords)
-        @wireInfo.active.position = {x: coords.x, y: coords.y}
-        @adjustActiveWire(coords)
-        
-        
-    splitActiveWire: (coords) ->
-        
-        
-    createWire: (coords) ->
+    createActiveWire: (coords) ->
         if (!@wireInfo.continuation and active = @wireInfo.active = @wireInfo.positions[coords.x]?[coords.y])
             @wireInfo.erasing = true
             @eraseActiveWire(coords)
         else    
-            @recordWirePosition(coords)
             active = @wireInfo.active = 
                 element: $(document.createElement('DIV'))             
-                start: {x: coords.x, y: coords.y}
                 position: {x: coords.x, y: coords.y}
+            @setActiveWireStart(coords)
             active.element.addClass('wire')
-            active.element.css
-                left: active.start.x
-                top: active.start.y
             @el.append(active.element)
+            @recordActiveWirePosition(coords)
         
+    setActiveWireStart: (coords) ->
+        return unless (active = @wireInfo.active)
+        active.start = {x: coords.x, y: coords.y}
+        @positionActiveWire(coords)
         
+    positionActiveWire: (coords) ->      
+        return unless (active = @wireInfo.active)
+        
+        if active.direction == 'horizontal'
+            rightOffset = @el.closest('.circuitous').width() - @width  
+            left = active.start.x >= coords.x
+            className = (if left then 'left' else 'right')
+        else 
+            top = active.start.y >= coords.y
+            className = (if top then 'up' else 'down')
+
+        active.element.css
+            left: (if not left then active.start.x else null)
+            right: (if left then @width - active.start.x + rightOffset else null)
+            top: (if not top then active.start.y else null)
+            bottom: (if top then @height - active.start.y else null)
+    
+        active.element.addClass(className) unless active.element.hasClass(className)
+            
+    adjustActiveWire: (coords) ->
+        return unless active = @wireInfo.active
+        @recordActiveWirePosition(coords)
+
+        @positionActiveWire(coords)
+        if active.direction == 'horizontal'
+            active.element.css(width: Math.abs(coords.x - active.start.x))
+            active.position.x = coords.x
+        else
+            active.element.css(height: Math.abs(coords.y - active.start.y))                
+            active.position.y = coords.y
+        
+    splitActiveWire: (coords) ->
+
+    eraseActiveWire: (coords) ->    
+        console.log('erase', coords)
+        return unless (active = @wireInfo.active)        
+        active.position = {x: coords.x, y: coords.y}
+        if coords.x == active.start.x and coords.y == active.start.y
+            if active.direction == 'horizontal'
+                active.element.width = parseInt(active.element.width() - Math.abs(coords.x - active.start.x))            
+            else
+                active.element.height = parseInt(active.element.height() - Math.abs(coords.y - active.start.y))            
+            @setActiveWireStart(coords)
+        else
+            @adjustActiveWire(coords)
 
         
         
