@@ -74,7 +74,8 @@ board.Board = (function(_super) {
         _this.el.unbind('mousemove.draw_wire');
         delete _this.wireInfo.start;
         delete _this.wireInfo.continuation;
-        return delete _this.wireInfo.erasing;
+        delete _this.wireInfo.erasing;
+        return delete _this.wireInfo.lastSegment;
       });
       _this.el.bind('mousemove.draw_wire', function(e) {
         return _this.drawWire(e);
@@ -111,7 +112,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawWire = function(e) {
-    var coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
+    var coords, i, last, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
     coords = this.roundedCoordinates({
       x: Client.x(e),
       y: Client.y(e)
@@ -119,6 +120,13 @@ board.Board = (function(_super) {
     if (start = this.wireInfo.start) {
       xDiff = Math.abs(start.x - coords.x);
       yDiff = Math.abs(start.y - coords.y);
+      if (last = this.wireInfo.lastSegment) {
+        if (last.hasClass('vertical')) {
+          xDiff = xDiff * 0.75;
+        } else {
+          yDiff = yDiff * 0.75;
+        }
+      }
       if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
         return;
       }
@@ -170,15 +178,18 @@ board.Board = (function(_super) {
     }
     this.el.append(segment);
     this.recordSegmentPosition(segment, this.wireInfo.start, coords);
+    this.wireInfo.lastSegment = segment;
     this.wireInfo.start = coords;
     return this.wireInfo.continuation = true;
   };
 
   Board.prototype.eraseWireSegment = function(coords) {
-    var _ref;
-    if ((_ref = this.getSegmentPosition(this.wireInfo.start, coords)) != null) {
-      _ref.remove();
+    var segment;
+    if (!(segment = this.getSegmentPosition(this.wireInfo.start, coords))) {
+      return;
     }
+    segment.remove();
+    this.wireInfo.lastSegment = segment;
     this.recordSegmentPosition(null, this.wireInfo.start, coords);
     this.wireInfo.start = coords;
     return this.wireInfo.erasing = true;

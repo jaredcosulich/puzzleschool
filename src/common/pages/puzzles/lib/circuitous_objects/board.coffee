@@ -42,6 +42,7 @@ class board.Board extends circuitousObject.Object
                 delete @wireInfo.start      
                 delete @wireInfo.continuation
                 delete @wireInfo.erasing
+                delete @wireInfo.lastSegment      
                           
             @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
             @drawWire(e)
@@ -74,6 +75,13 @@ class board.Board extends circuitousObject.Object
         if start = @wireInfo.start
             xDiff = Math.abs(start.x - coords.x)
             yDiff = Math.abs(start.y - coords.y)
+            
+            if last = @wireInfo.lastSegment
+                if last.hasClass('vertical')
+                    xDiff = xDiff * 0.75 
+                else
+                    yDiff = yDiff * 0.75 
+            
             return if xDiff < @cellDimension and yDiff < @cellDimension
             
             xDelta = yDelta = 0
@@ -110,12 +118,15 @@ class board.Board extends circuitousObject.Object
             segment.addClass('vertical')
             
         @el.append(segment)
-        @recordSegmentPosition(segment, @wireInfo.start, coords)    
+        @recordSegmentPosition(segment, @wireInfo.start, coords)   
+        @wireInfo.lastSegment = segment 
         @wireInfo.start = coords
         @wireInfo.continuation = true
     
     eraseWireSegment: (coords) ->
-        @getSegmentPosition(@wireInfo.start, coords)?.remove()
+        return unless (segment = @getSegmentPosition(@wireInfo.start, coords))
+        segment.remove()
+        @wireInfo.lastSegment = segment 
         @recordSegmentPosition(null, @wireInfo.start, coords)
         @wireInfo.start = coords
         @wireInfo.erasing = true
