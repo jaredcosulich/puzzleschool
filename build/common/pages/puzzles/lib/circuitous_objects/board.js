@@ -111,7 +111,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.drawWire = function(e) {
-    var coords, start, xDiff, yDiff;
+    var coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
     coords = this.roundedCoordinates({
       x: Client.x(e),
       y: Client.y(e)
@@ -122,7 +122,20 @@ board.Board = (function(_super) {
       if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
         return;
       }
-      return this.createOrEraseWireSegment(coords);
+      xDelta = yDelta = 0;
+      if (xDiff > yDiff) {
+        xDelta = this.cellDimension * (start.x > coords.x ? -1 : 1);
+      } else {
+        yDelta = this.cellDimension * (start.y > coords.y ? -1 : 1);
+      }
+      _results = [];
+      for (i = _i = 0, _ref = Math.max(xDiff, yDiff) / this.cellDimension; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        _results.push(this.createOrEraseWireSegment({
+          x: start.x + xDelta,
+          y: start.y + yDelta
+        }));
+      }
+      return _results;
     } else {
       return this.wireInfo.start = coords;
     }

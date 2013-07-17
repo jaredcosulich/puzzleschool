@@ -75,7 +75,15 @@ class board.Board extends circuitousObject.Object
             xDiff = Math.abs(start.x - coords.x)
             yDiff = Math.abs(start.y - coords.y)
             return if xDiff < @cellDimension and yDiff < @cellDimension
-            @createOrEraseWireSegment(coords)
+            
+            xDelta = yDelta = 0
+            if xDiff > yDiff
+                xDelta = @cellDimension * (if start.x > coords.x then -1 else 1)
+            else 
+                yDelta = @cellDimension * (if start.y > coords.y then -1 else 1)
+                
+            for i in [0...(Math.max(xDiff, yDiff) / @cellDimension)]
+                @createOrEraseWireSegment(x: start.x + xDelta, y: start.y + yDelta)
         else
             @wireInfo.start = coords
             
