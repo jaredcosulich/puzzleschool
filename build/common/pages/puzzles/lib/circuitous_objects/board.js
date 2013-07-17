@@ -137,7 +137,7 @@ board.Board = (function(_super) {
         yDelta = this.cellDimension * (start.y > coords.y ? -1 : 1);
       }
       _results = [];
-      for (i = _i = 0, _ref = Math.max(xDiff, yDiff) / this.cellDimension; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = _i = 0, _ref = Math.floor(Math.max(xDiff, yDiff) / this.cellDimension); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         _results.push(this.createOrEraseWireSegment({
           x: start.x + xDelta,
           y: start.y + yDelta
@@ -150,15 +150,19 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.createOrEraseWireSegment = function(coords) {
-    var existingSegment;
+    var existingSegment, segment;
     existingSegment = this.getSegmentPosition(this.wireInfo.start, coords);
     if (this.wireInfo.erasing || (existingSegment && !this.wireInfo.continuation)) {
       if (existingSegment) {
-        return this.eraseWireSegment(coords);
+        segment = this.eraseWireSegment(coords);
       }
     } else {
-      return this.createWireSegment(coords);
+      if (!existingSegment) {
+        segment = this.createWireSegment(coords);
+      }
     }
+    this.wireInfo.lastSegment = segment;
+    return this.wireInfo.start = coords;
   };
 
   Board.prototype.createWireSegment = function(coords) {
@@ -178,9 +182,8 @@ board.Board = (function(_super) {
     }
     this.el.append(segment);
     this.recordSegmentPosition(segment, this.wireInfo.start, coords);
-    this.wireInfo.lastSegment = segment;
-    this.wireInfo.start = coords;
-    return this.wireInfo.continuation = true;
+    this.wireInfo.continuation = true;
+    return segment;
   };
 
   Board.prototype.eraseWireSegment = function(coords) {
@@ -189,10 +192,9 @@ board.Board = (function(_super) {
       return;
     }
     segment.remove();
-    this.wireInfo.lastSegment = segment;
     this.recordSegmentPosition(null, this.wireInfo.start, coords);
-    this.wireInfo.start = coords;
-    return this.wireInfo.erasing = true;
+    this.wireInfo.erasing = true;
+    return segment;
   };
 
   return Board;

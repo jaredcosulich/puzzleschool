@@ -90,7 +90,7 @@ class board.Board extends circuitousObject.Object
             else 
                 yDelta = @cellDimension * (if start.y > coords.y then -1 else 1)
                 
-            for i in [0...(Math.max(xDiff, yDiff) / @cellDimension)]
+            for i in [0...Math.floor(Math.max(xDiff, yDiff) / @cellDimension)]
                 @createOrEraseWireSegment(x: start.x + xDelta, y: start.y + yDelta)
         else
             @wireInfo.start = coords
@@ -99,9 +99,12 @@ class board.Board extends circuitousObject.Object
         existingSegment = @getSegmentPosition(@wireInfo.start, coords)
 
         if @wireInfo.erasing or (existingSegment and !@wireInfo.continuation)
-            @eraseWireSegment(coords) if existingSegment
+            segment = @eraseWireSegment(coords) if existingSegment
         else
-            @createWireSegment(coords)
+            segment = @createWireSegment(coords) unless existingSegment
+            
+        @wireInfo.lastSegment = segment 
+        @wireInfo.start = coords
         
     createWireSegment: (coords) ->
         segment = $(document.createElement('DIV'))
@@ -119,18 +122,15 @@ class board.Board extends circuitousObject.Object
             
         @el.append(segment)
         @recordSegmentPosition(segment, @wireInfo.start, coords)   
-        @wireInfo.lastSegment = segment 
-        @wireInfo.start = coords
         @wireInfo.continuation = true
+        return segment
     
     eraseWireSegment: (coords) ->
         return unless (segment = @getSegmentPosition(@wireInfo.start, coords))
         segment.remove()
-        @wireInfo.lastSegment = segment 
         @recordSegmentPosition(null, @wireInfo.start, coords)
-        @wireInfo.start = coords
         @wireInfo.erasing = true
-        
+        return segment
         
         
         
