@@ -72,14 +72,14 @@ board.Board = (function(_super) {
     return this.el.bind('mousedown.draw_wire', function(e) {
       $(document.body).one('mouseup.draw_wire', function() {
         _this.el.unbind('mousemove.draw_wire');
-        delete _this.wireInfo.active;
+        delete _this.wireInfo.start;
         delete _this.wireInfo.continuation;
         return delete _this.wireInfo.erasing;
       });
       _this.el.bind('mousemove.draw_wire', function(e) {
-        return _this.drawActiveWire(e);
+        return _this.drawWire(e);
       });
-      return _this.drawActiveWire(e);
+      return _this.drawWire(e);
     });
   };
 
@@ -97,150 +97,78 @@ board.Board = (function(_super) {
     };
   };
 
-  Board.prototype.recordActiveWirePosition = function(coords) {
-    var _base, _name;
-    (_base = this.wireInfo.positions)[_name = coords.x] || (_base[_name] = {});
-    return this.wireInfo.positions[coords.x][coords.y] = this.wireInfo.active;
+  Board.prototype.recordSegmentPosition = function(segment, start, end) {
+    var xCoords, yCoords, _base;
+    xCoords = [start.x, end.x].sort().join(':');
+    yCoords = [start.y, end.y].sort().join(':');
+    (_base = this.wireInfo.positions)[xCoords] || (_base[xCoords] = {});
+    return this.wireInfo.positions[xCoords][yCoords] = segment;
   };
 
-  Board.prototype.drawActiveWire = function(e) {
-    var active, coords, xDiff, xStartDiff, yDiff, yStartDiff;
+  Board.prototype.getSegmentPosition = function(start, end) {
+    var _ref;
+    return (_ref = this.wireInfo.positions[[start.x, end.x].sort().join(':')]) != null ? _ref[[start.y, end.y].sort().join(':')] : void 0;
+  };
+
+  Board.prototype.drawWire = function(e) {
+    var coords, start, xDiff, yDiff;
     coords = this.roundedCoordinates({
       x: Client.x(e),
       y: Client.y(e)
     });
-    if (active = this.wireInfo.active) {
-      xDiff = Math.abs(active.position.x - coords.x);
-      yDiff = Math.abs(active.position.y - coords.y);
+    if (start = this.wireInfo.start) {
+      xDiff = Math.abs(start.x - coords.x);
+      yDiff = Math.abs(start.y - coords.y);
       if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
         return;
       }
-      xStartDiff = Math.abs(active.start.x - coords.x);
-      yStartDiff = Math.abs(active.start.y - coords.y);
-      if ((active.direction === 'horizontal' && yStartDiff - xDiff > (this.cellDimension * 0.75)) || (active.direction === 'vertical' && xStartDiff - yDiff > (this.cellDimension * 0.75))) {
-        this.wireInfo.continuation = true;
-        coords.x = active.position.x;
-        coords.y = active.position.y;
-        if (!(active.element.height() && active.element.width())) {
-          active.element.remove();
-        }
-        delete this.wireInfo.active;
-        active = null;
+      return this.createOrEraseWireSegment(coords);
+    } else {
+      return this.wireInfo.start = coords;
+    }
+  };
+
+  Board.prototype.createOrEraseWireSegment = function(coords) {
+    var existingSegment;
+    existingSegment = this.getSegmentPosition(this.wireInfo.start, coords);
+    if (this.wireInfo.erasing || (existingSegment && !this.wireInfo.continuation)) {
+      if (existingSegment) {
+        return this.eraseWireSegment(coords);
       }
-    }
-    if (!active) {
-      this.createActiveWire(coords);
-      return;
-    }
-    if (this.wireInfo.erasing) {
-      return this.eraseActiveWire(coords);
     } else {
-      if (!active.direction) {
-        active.direction = (xDiff > yDiff ? 'horizontal' : 'vertical');
-        active.element.addClass(active.direction);
-      }
-      return this.adjustActiveWire(coords);
+      return this.createWireSegment(coords);
     }
   };
 
-  Board.prototype.createActiveWire = function(coords) {
-    var active, _ref;
-    if (!this.wireInfo.continuation && (active = this.wireInfo.active = (_ref = this.wireInfo.positions[coords.x]) != null ? _ref[coords.y] : void 0)) {
-      this.wireInfo.erasing = true;
-      return this.eraseActiveWire(coords);
-    } else {
-      active = this.wireInfo.active = {
-        element: $(document.createElement('DIV')),
-        position: {
-          x: coords.x,
-          y: coords.y
-        }
-      };
-      this.setActiveWireStart(coords);
-      active.element.addClass('wire');
-      this.el.append(active.element);
-      return this.recordActiveWirePosition(coords);
-    }
-  };
-
-  Board.prototype.setActiveWireStart = function(coords) {
-    var active;
-    if (!(active = this.wireInfo.active)) {
-      return;
-    }
-    active.start = {
-      x: coords.x,
-      y: coords.y
-    };
-    return this.positionActiveWire(coords);
-  };
-
-  Board.prototype.positionActiveWire = function(coords) {
-    var active, className, left, rightOffset, top;
-    if (!(active = this.wireInfo.active)) {
-      return;
-    }
-    if (active.direction === 'horizontal') {
-      rightOffset = this.el.closest('.circuitous').width() - this.width;
-      left = active.start.x >= coords.x;
-      className = (left ? 'left' : 'right');
-    } else {
-      top = active.start.y >= coords.y;
-      className = (top ? 'up' : 'down');
-    }
-    active.element.css({
-      left: (!left ? active.start.x : null),
-      right: (left ? this.width - active.start.x + rightOffset : null),
-      top: (!top ? active.start.y : null),
-      bottom: (top ? this.height - active.start.y : null)
+  Board.prototype.createWireSegment = function(coords) {
+    var segment;
+    segment = $(document.createElement('DIV'));
+    segment.addClass('wire_segment');
+    segment.css({
+      left: Math.min(this.wireInfo.start.x, coords.x),
+      top: Math.min(this.wireInfo.start.y, coords.y)
     });
-    if (!active.element.hasClass(className)) {
-      return active.element.addClass(className);
+    if (Math.abs(this.wireInfo.start.x - coords.x) > Math.abs(this.wireInfo.start.y - coords.y)) {
+      segment.width(this.cellDimension);
+      segment.addClass('horizontal');
+    } else {
+      segment.height(this.cellDimension);
+      segment.addClass('vertical');
     }
+    this.el.append(segment);
+    this.recordSegmentPosition(segment, this.wireInfo.start, coords);
+    this.wireInfo.start = coords;
+    return this.wireInfo.continuation = true;
   };
 
-  Board.prototype.adjustActiveWire = function(coords) {
-    var active;
-    if (!(active = this.wireInfo.active)) {
-      return;
+  Board.prototype.eraseWireSegment = function(coords) {
+    var _ref;
+    if ((_ref = this.getSegmentPosition(this.wireInfo.start, coords)) != null) {
+      _ref.remove();
     }
-    this.recordActiveWirePosition(coords);
-    this.positionActiveWire(coords);
-    if (active.direction === 'horizontal') {
-      active.element.css({
-        width: Math.abs(coords.x - active.start.x)
-      });
-      return active.position.x = coords.x;
-    } else {
-      active.element.css({
-        height: Math.abs(coords.y - active.start.y)
-      });
-      return active.position.y = coords.y;
-    }
-  };
-
-  Board.prototype.splitActiveWire = function(coords) {};
-
-  Board.prototype.eraseActiveWire = function(coords) {
-    var active;
-    console.log('erase', coords);
-    if (!(active = this.wireInfo.active)) {
-      return;
-    }
-    active.position = {
-      x: coords.x,
-      y: coords.y
-    };
-    if (coords.x === active.start.x && coords.y === active.start.y) {
-      if (active.direction === 'horizontal') {
-        active.element.width = parseInt(active.element.width() - Math.abs(coords.x - active.start.x));
-      } else {
-        active.element.height = parseInt(active.element.height() - Math.abs(coords.y - active.start.y));
-      }
-      return this.setActiveWireStart(coords);
-    } else {
-      return this.adjustActiveWire(coords);
-    }
+    this.recordSegmentPosition(null, this.wireInfo.start, coords);
+    this.wireInfo.start = coords;
+    return this.wireInfo.erasing = true;
   };
 
   return Board;
