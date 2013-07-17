@@ -152,7 +152,7 @@ board.Board = (function(_super) {
   Board.prototype.createOrEraseWireSegment = function(coords) {
     var existingSegment, segment;
     existingSegment = this.getSegmentPosition(this.wireInfo.start, coords);
-    if (this.wireInfo.erasing || (existingSegment && !this.wireInfo.continuation)) {
+    if (this.wireInfo.erasing || (existingSegment && (!this.wireInfo.continuation || (existingSegment === this.wireInfo.lastSegment)))) {
       if (existingSegment) {
         segment = this.eraseWireSegment(coords);
       }
@@ -193,7 +193,9 @@ board.Board = (function(_super) {
     }
     segment.remove();
     this.recordSegmentPosition(null, this.wireInfo.start, coords);
-    this.wireInfo.erasing = true;
+    if (!this.wireInfo.continuation) {
+      this.wireInfo.erasing = true;
+    }
     return segment;
   };
 

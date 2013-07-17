@@ -98,7 +98,7 @@ class board.Board extends circuitousObject.Object
     createOrEraseWireSegment: (coords) ->
         existingSegment = @getSegmentPosition(@wireInfo.start, coords)
 
-        if @wireInfo.erasing or (existingSegment and !@wireInfo.continuation)
+        if @wireInfo.erasing or (existingSegment and (!@wireInfo.continuation or (existingSegment == @wireInfo.lastSegment)))
             segment = @eraseWireSegment(coords) if existingSegment
         else
             segment = @createWireSegment(coords) unless existingSegment
@@ -129,7 +129,7 @@ class board.Board extends circuitousObject.Object
         return unless (segment = @getSegmentPosition(@wireInfo.start, coords))
         segment.remove()
         @recordSegmentPosition(null, @wireInfo.start, coords)
-        @wireInfo.erasing = true
+        @wireInfo.erasing = true unless @wireInfo.continuation
         return segment
         
         
