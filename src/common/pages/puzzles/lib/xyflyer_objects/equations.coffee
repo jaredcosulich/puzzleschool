@@ -91,8 +91,7 @@ class equations.Equations
     removeComponent: (equationComponent) ->
         index = (if equationComponent then @equationComponents.indexOf(equationComponent) else @equationComponents.length - 1)
         equationComponent = @equationComponents.splice(index, 1)[0]
-        equationComponent.element.remove()
-        
+        equationComponent.remove()
         
     trackComponentDragging: (left, top, width, height, component) ->
         @el.addClass('show_places') unless @el.hasClass('show_places')

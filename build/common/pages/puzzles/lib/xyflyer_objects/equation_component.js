@@ -195,6 +195,11 @@ equationComponent.EquationComponent = (function() {
     return $(document.body).unbind('mousemove.drag touchmove.drag');
   };
 
+  EquationComponent.prototype.remove = function() {
+    this.elementContainer.remove();
+    return this.placeHolder.remove();
+  };
+
   EquationComponent.prototype.reset = function() {
     this.element.removeClass('dragging');
     this.placeHolder.hide();

@@ -136,7 +136,7 @@ equations.Equations = (function() {
     var index;
     index = (equationComponent ? this.equationComponents.indexOf(equationComponent) : this.equationComponents.length - 1);
     equationComponent = this.equationComponents.splice(index, 1)[0];
-    return equationComponent.element.remove();
+    return equationComponent.remove();
   };
 
   Equations.prototype.trackComponentDragging = function(left, top, width, height, component) {

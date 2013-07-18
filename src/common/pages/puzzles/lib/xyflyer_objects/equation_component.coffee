@@ -123,6 +123,10 @@ class equationComponent.EquationComponent
         
         $(document.body).unbind('mousemove.drag touchmove.drag')
     
+    remove: ->
+        @elementContainer.remove()
+        @placeHolder.remove()
+    
     reset: ->
         @element.removeClass('dragging')
         @placeHolder.hide()
