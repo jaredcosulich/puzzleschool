@@ -11,22 +11,33 @@ draggable.Draggable = (function() {
 
   function Draggable() {}
 
-  Draggable.prototype.initDrag = function(dragElement, trackDrag) {
+  Draggable.prototype.initDrag = function(dragElement, trackDrag, center) {
     var _this = this;
     this.dragElement = dragElement;
     this.trackDrag = trackDrag;
     this.transformer = new Transformer(this.dragElement);
     return this.dragElement.bind('mousedown.drag touchstart.drag', function(e) {
+      var offset;
       e.stop();
       $(document.body).one('mouseup.drag touchend.drag', function(e) {
         $(document.body).unbind('mousemove.drag touchstart.drag');
         return _this.drag(e, true);
       });
-      if (!_this.startX) {
-        _this.startX = Client.x(e);
-      }
-      if (!_this.startY) {
-        _this.startY = Client.y(e);
+      if (center) {
+        offset = _this.dragElement.offset();
+        if (!_this.startX) {
+          _this.startX = offset.left + (offset.width / 2);
+        }
+        if (!_this.startY) {
+          _this.startY = offset.top + (offset.height / 2);
+        }
+      } else {
+        if (!_this.startX) {
+          _this.startX = Client.x(e);
+        }
+        if (!_this.startY) {
+          _this.startY = Client.y(e);
+        }
       }
       return $(document.body).bind('mousemove.drag touchstart.drag', function(e) {
         return _this.drag(e);
@@ -36,10 +47,17 @@ draggable.Draggable = (function() {
 
   Draggable.prototype.drag = function(e, stopDrag) {
     var currentX, currentY;
+    console.log(this.dragElement.offset(), this.startX, this.startY);
     currentX = Client.x(e);
     currentY = Client.y(e);
     this.transformer.translate(currentX - this.startX, currentY - this.startY);
     return this.trackDrag(this, currentX, currentY, stopDrag);
+  };
+
+  Draggable.prototype.dragTo = function(_arg) {
+    var x, y;
+    x = _arg.x, y = _arg.y;
+    return this.transformer.translate(x - this.startX, y - this.startY);
   };
 
   Draggable.prototype.resetDrag = function() {

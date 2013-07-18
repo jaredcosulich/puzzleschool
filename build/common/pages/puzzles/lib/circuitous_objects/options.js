@@ -84,12 +84,12 @@ options.Options = (function(_super) {
     this.items.push(item);
     this.attachSelector(this.$('.empty_option')[1]);
     emptyOption = $(this.$('.empty_option')[0]);
-    emptyOption.append(item.imageElement());
+    item.appendTo(emptyOption);
     emptyOption.removeClass('empty_option');
     return $.timeout(10, function() {
-      return item.initDrag(emptyOption.find('img'), function(item, x, y, stopDrag) {
+      return item.initDrag(item.el, function(item, x, y, stopDrag) {
         return _this.dragItem(item, x, y, stopDrag);
-      });
+      }, true);
     });
   };
 

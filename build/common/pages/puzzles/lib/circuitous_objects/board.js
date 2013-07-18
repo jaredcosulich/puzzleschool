@@ -58,7 +58,11 @@ board.Board = (function(_super) {
     onBoardX = (offset.left < x && x < offset.left + this.width);
     onBoardY = (offset.top < y && y < offset.top + this.height);
     if (onBoardX && onBoardY) {
-      return this.items.push(item);
+      this.items.push(item);
+      return item.positionAt(this.roundedCoordinates({
+        x: x,
+        y: y
+      }));
     } else {
       return false;
     }
@@ -84,13 +88,12 @@ board.Board = (function(_super) {
     });
   };
 
-  Board.prototype.roundedCoordinates = function(coords) {
-    var halfDim, offset, offsetCoords;
-    offset = this.el.offset();
+  Board.prototype.roundedCoordinates = function(coords, offset) {
+    var halfDim, offsetCoords;
     halfDim = this.cellDimension / 2;
     offsetCoords = {
-      x: coords.x - offset.left + halfDim,
-      y: coords.y - offset.top + halfDim
+      x: coords.x - ((offset != null ? offset.left : void 0) || 0) + halfDim,
+      y: coords.y - ((offset != null ? offset.top : void 0) || 0) + halfDim
     };
     return {
       x: (Math.round(offsetCoords.x / this.cellDimension) * this.cellDimension) - halfDim,
@@ -116,7 +119,7 @@ board.Board = (function(_super) {
     coords = this.roundedCoordinates({
       x: Client.x(e),
       y: Client.y(e)
-    });
+    }, this.el.offset());
     if (start = this.wireInfo.start) {
       xDiff = Math.abs(start.x - coords.x);
       yDiff = Math.abs(start.y - coords.y);

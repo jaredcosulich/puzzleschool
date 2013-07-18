@@ -11,4 +11,12 @@ class object.Object extends Draggable
         
     imageElement: -> "<img src='#{@image()}' />"
         
+    appendTo: (container) -> 
+        container.append(@imageElement())
+        @el = container.find("img[src=\'#{@image()}\']")
+
+    positionAt: ({x, y}) ->
+        @dragTo
+            x: x + @centerOffset.x
+            y: y + @centerOffset.y
         

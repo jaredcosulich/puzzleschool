@@ -31,6 +31,7 @@ class board.Board extends circuitousObject.Object
         onBoardY = offset.top < y < offset.top + @height
         if onBoardX and onBoardY 
             @items.push(item)
+            item.positionAt(@roundedCoordinates({x: x, y: y}))
         else
             return false
             
@@ -47,13 +48,11 @@ class board.Board extends circuitousObject.Object
             @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
             @drawWire(e)
             
-    roundedCoordinates: (coords) ->
-        offset = @el.offset()
-        
+    roundedCoordinates: (coords, offset) ->
         halfDim = @cellDimension / 2
         offsetCoords = 
-            x: coords.x - offset.left + halfDim
-            y: coords.y - offset.top + halfDim
+            x: coords.x - (offset?.left or 0) + halfDim
+            y: coords.y - (offset?.top or 0) + halfDim
             
         return {
             x: (Math.round(offsetCoords.x / @cellDimension) * @cellDimension) - halfDim
@@ -70,7 +69,7 @@ class board.Board extends circuitousObject.Object
         @wireInfo.positions[[start.x, end.x].sort().join(':')]?[[start.y, end.y].sort().join(':')]
          
     drawWire: (e) ->
-        coords = @roundedCoordinates(x: Client.x(e), y: Client.y(e))
+        coords = @roundedCoordinates({x: Client.x(e), y: Client.y(e)}, @el.offset())
 
         if start = @wireInfo.start
             xDiff = Math.abs(start.x - coords.x)

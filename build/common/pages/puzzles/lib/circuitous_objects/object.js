@@ -25,6 +25,20 @@ object.Object = (function(_super) {
     return "<img src='" + (this.image()) + "' />";
   };
 
+  Object.prototype.appendTo = function(container) {
+    container.append(this.imageElement());
+    return this.el = container.find("img[src=\'" + (this.image()) + "\']");
+  };
+
+  Object.prototype.positionAt = function(_arg) {
+    var x, y;
+    x = _arg.x, y = _arg.y;
+    return this.dragTo({
+      x: x + this.centerOffset.x,
+      y: y + this.centerOffset.y
+    });
+  };
+
   return Object;
 
 })(Draggable);

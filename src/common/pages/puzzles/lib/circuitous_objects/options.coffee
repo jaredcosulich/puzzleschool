@@ -44,12 +44,13 @@ class options.Options extends circuitousObject.Object
         @items.push(item)
         @attachSelector(@$('.empty_option')[1])
         emptyOption = $(@$('.empty_option')[0])
-        emptyOption.append(item.imageElement())
+        item.appendTo(emptyOption)
         emptyOption.removeClass('empty_option')
         $.timeout 10, => 
             item.initDrag(
-                emptyOption.find('img'), 
-                (item, x, y, stopDrag) => @dragItem(item, x, y, stopDrag)
+                item.el, 
+                (item, x, y, stopDrag) => @dragItem(item, x, y, stopDrag),
+                true
             )
 
     dragItem: (item, x, y, stopDrag) ->

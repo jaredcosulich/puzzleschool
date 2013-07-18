@@ -11,6 +11,11 @@ battery.Battery = (function(_super) {
 
   __extends(Battery, _super);
 
+  Battery.prototype.centerOffset = {
+    x: 10.5,
+    y: 2
+  };
+
   function Battery(_arg) {
     _arg;
     this.init();
