@@ -294,6 +294,21 @@ soma.views
             
             customize.find('.cancel_custom').bind 'click', => hide()
             
+            customize.bind 'mousedown.customize', (e) =>
+                body = $(document.body)
+                leftStart = customize.offset().left - @el.offset().left
+                leftClick = e.clientX
+                topStart = customize.offset().top - @el.offset().top
+                topClick = e.clientY
+                body.bind 'mousemove.customize', (e) =>
+                    return if document.activeElement.type == 'text'
+                    e.preventDefault() if e.preventDefault
+                    customize.css(left: leftStart+(e.clientX-leftClick), top: topStart+(e.clientY-topClick))
+
+                body.one 'mouseup', =>
+                    body.unbind('mousemove.customize')    
+            
+            
         initReset: ->
             @$('.reset_button').bind 'click', =>
                 @initLevel() if confirm('Are you sure you want to completely reset this level?')

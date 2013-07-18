@@ -780,6 +780,12 @@
   z-index: 98;
   cursor: move;
   text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .xyflyer .customize h3,
 .xyflyer .customize p {
@@ -796,6 +802,7 @@
   vertical-align: -2px;
   font-size: 15px;
   text-align: center;
+  width: 150px;
 }
 .xyflyer .editor {
   position: absolute;

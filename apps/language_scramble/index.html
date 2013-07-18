@@ -17,6 +17,7 @@
                 function onDeviceReady() {
                     AppMobi.display.useViewport(600,960);
                     AppMobi.device.setAutoRotate(true);
+                    AppMobi.device.setRotateOrientation("any");
         	        window.app.initialize();
         	        AppMobi.device.hideStatusBar();
         			AppMobi.device.hideSplashScreen();

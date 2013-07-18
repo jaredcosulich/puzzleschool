@@ -423,8 +423,31 @@ soma.views({
         }
         return _results;
       });
-      return customize.find('.cancel_custom').bind('click', function() {
+      customize.find('.cancel_custom').bind('click', function() {
         return hide();
+      });
+      return customize.bind('mousedown.customize', function(e) {
+        var body, leftClick, leftStart, topClick, topStart;
+        body = $(document.body);
+        leftStart = customize.offset().left - _this.el.offset().left;
+        leftClick = e.clientX;
+        topStart = customize.offset().top - _this.el.offset().top;
+        topClick = e.clientY;
+        body.bind('mousemove.customize', function(e) {
+          if (document.activeElement.type === 'text') {
+            return;
+          }
+          if (e.preventDefault) {
+            e.preventDefault();
+          }
+          return customize.css({
+            left: leftStart + (e.clientX - leftClick),
+            top: topStart + (e.clientY - topClick)
+          });
+        });
+        return body.one('mouseup', function() {
+          return body.unbind('mousemove.customize');
+        });
       });
     },
     initReset: function() {
