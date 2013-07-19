@@ -56,7 +56,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addItem = function(item, x, y) {
-    var boardNode, offset, onBoardX, onBoardY;
+    var offset, onBoardX, onBoardY;
     offset = this.el.offset();
     onBoardX = (offset.left < x && x < offset.left + this.width);
     onBoardY = (offset.top < y && y < offset.top + this.height);
@@ -66,10 +66,6 @@ board.Board = (function(_super) {
         x: x,
         y: y
       }));
-      boardNode = {
-        x: item.currentX - offset.left + item.powerNodes[0].x,
-        y: item.currentY - offset.top + item.powerNodes[0].y
-      };
     } else {
       return false;
     }
@@ -142,7 +138,7 @@ board.Board = (function(_super) {
     node2 = "" + end.x + ":" + end.y;
     if (element) {
       segment = {
-        element: element,
+        el: element,
         nodes: [start, end]
       };
       xCoords = [start.x, end.x].sort().join(':');
@@ -256,7 +252,7 @@ board.Board = (function(_super) {
     if (!(segment = this.getSegmentPosition(this.wireInfo.start, coords))) {
       return;
     }
-    segment.element.remove();
+    segment.el.remove();
     this.recordSegmentPosition(null, this.wireInfo.start, coords);
     if (!this.wireInfo.continuation) {
       this.wireInfo.erasing = true;
@@ -277,11 +273,10 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var boardNode, connection, item, offset, powerNode, _i, _len, _ref, _results;
-    if (parseInt(elapsed) % 100 !== 0) {
+    var item, negativeTerminal, _i, _len, _ref, _results;
+    if (parseInt(elapsed) % 200 !== 0) {
       return;
     }
-    offset = this.el.offset();
     _ref = this.items;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -289,24 +284,15 @@ board.Board = (function(_super) {
       if (item.powerSource) {
         _results.push((function() {
           var _j, _len1, _ref1, _results1;
-          _ref1 = item.powerNodes;
+          _ref1 = item.currentTerminals('negative');
           _results1 = [];
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            powerNode = _ref1[_j];
-            boardNode = {
-              x: item.currentX - offset.left + powerNode.x,
-              y: item.currentY - offset.top + powerNode.y
-            };
-            _results1.push((function() {
-              var _k, _len2, _ref2, _results2;
-              _ref2 = this.findConnections(boardNode);
-              _results2 = [];
-              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                connection = _ref2[_k];
-                _results2.push(console.log('connection', connection));
-              }
-              return _results2;
-            }).call(this));
+            negativeTerminal = _ref1[_j];
+            if (this.traceConnections(this.boardNode(negativeTerminal), item)) {
+              _results1.push(console.log('complete'));
+            } else {
+              _results1.push(console.log('incomplete'));
+            }
           }
           return _results1;
         }).call(this));
@@ -315,9 +301,78 @@ board.Board = (function(_super) {
     return _results;
   };
 
-  Board.prototype.findConnections = function(node) {
-    console.log('looking for connection at', node, this.getSegmentsAt(node), this.wireInfo.nodes);
-    return [];
+  Board.prototype.boardNode = function(objectNode) {
+    var offset;
+    offset = this.el.offset();
+    return {
+      x: objectNode.x - offset.left,
+      y: objectNode.y - offset.top
+    };
+  };
+
+  Board.prototype.compareNodes = function(node1, node2) {
+    return node1.x === node2.x && node1.y === node2.y;
+  };
+
+  Board.prototype.traceConnections = function(node, item) {
+    var nextNodeInfo;
+    if ((nextNodeInfo = this.findConnection(node, item))) {
+      if (nextNodeInfo.item.powerSource) {
+        return true;
+      }
+      return this.traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item);
+    }
+    return false;
+  };
+
+  Board.prototype.findConnection = function(node, item) {
+    var i, n, otherNode, positiveTerminal, segment, wireSegment, _i, _j, _len, _len1, _ref, _ref1;
+    _ref = this.items;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      i = _ref[_i];
+      if (i.powerSource) {
+        _ref1 = i.currentTerminals('positive');
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          positiveTerminal = _ref1[_j];
+          if (this.compareNodes(this.boardNode(positiveTerminal), node)) {
+            return {
+              item: i
+            };
+          }
+        }
+      }
+    }
+    wireSegment = ((function() {
+      var _k, _len2, _ref2, _results;
+      _ref2 = this.getSegmentsAt(node);
+      _results = [];
+      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+        segment = _ref2[_k];
+        if (segment.el !== item.el) {
+          _results.push(segment);
+        }
+      }
+      return _results;
+    }).call(this))[0];
+    if (!wireSegment) {
+      return false;
+    }
+    otherNode = ((function() {
+      var _k, _len2, _ref2, _results;
+      _ref2 = wireSegment.nodes;
+      _results = [];
+      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+        n = _ref2[_k];
+        if (!this.compareNodes(n, node)) {
+          _results.push(n);
+        }
+      }
+      return _results;
+    }).call(this))[0];
+    return {
+      item: wireSegment,
+      otherNode: otherNode
+    };
   };
 
   return Board;

@@ -18,10 +18,17 @@ battery.Battery = (function(_super) {
     y: 0
   };
 
-  Battery.prototype.powerNodes = [
+  Battery.prototype.negativeTerminals = [
     {
       x: 1,
       y: 50
+    }
+  ];
+
+  Battery.prototype.positiveTerminals = [
+    {
+      x: 1,
+      y: -46
     }
   ];
 
@@ -31,6 +38,20 @@ battery.Battery = (function(_super) {
   }
 
   Battery.prototype.init = function() {};
+
+  Battery.prototype.currentTerminals = function(type) {
+    var terminal, _i, _len, _ref, _results;
+    _ref = this["" + type + "Terminals"];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      terminal = _ref[_i];
+      _results.push({
+        x: this.currentX + terminal.x,
+        y: this.currentY + terminal.y
+      });
+    }
+    return _results;
+  };
 
   return Battery;
 

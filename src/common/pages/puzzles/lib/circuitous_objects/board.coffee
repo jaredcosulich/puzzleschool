@@ -34,9 +34,6 @@ class board.Board extends circuitousObject.Object
         if onBoardX and onBoardY 
             @items.push(item)
             item.positionAt(@roundedCoordinates({x: x, y: y}))
-            boardNode = 
-                x: item.currentX - offset.left + item.powerNodes[0].x
-                y: item.currentY - offset.top + item.powerNodes[0].y
         else
             return false
         return true
@@ -91,7 +88,7 @@ class board.Board extends circuitousObject.Object
         
         if element
             segment = 
-                element: element
+                el: element
                 nodes: [start, end]
         
             xCoords = [start.x, end.x].sort().join(':')
@@ -172,7 +169,7 @@ class board.Board extends circuitousObject.Object
     
     eraseWireSegment: (coords) ->
         return unless (segment = @getSegmentPosition(@wireInfo.start, coords))
-        segment.element.remove()
+        segment.el.remove()
         @recordSegmentPosition(null, @wireInfo.start, coords)
         @wireInfo.erasing = true unless @wireInfo.continuation
         return segment
@@ -183,20 +180,38 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        return unless parseInt(elapsed) % 100 == 0
-        offset = @el.offset()
+        return unless parseInt(elapsed) % 200 == 0
+        
         for item in @items when item.powerSource
-            for powerNode in item.powerNodes
-                boardNode = 
-                    x: item.currentX- offset.left + powerNode.x 
-                    y: item.currentY - offset.top + powerNode.y
+            for negativeTerminal in item.currentTerminals('negative')
+                if @traceConnections(@boardNode(negativeTerminal), item)
+                    console.log('complete')
+                else
+                    console.log('incomplete')
                     
-                for connection in @findConnections(boardNode)
-                    console.log('connection', connection)
+    boardNode: (objectNode) ->
+        offset = @el.offset()
+        return {
+            x: objectNode.x - offset.left 
+            y: objectNode.y - offset.top
+        }
+        
+    compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
                     
-    findConnections: (node) ->
-        console.log('looking for connection at', node, @getSegmentsAt(node), @wireInfo.nodes)
-        return []
+    traceConnections: (node, item) -> 
+        if (nextNodeInfo = @findConnection(node, item))
+            return true if nextNodeInfo.item.powerSource
+            return @traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item)
+        return false
     
-            
+    findConnection: (node, item) ->
+        for i in @items when i.powerSource
+            for positiveTerminal in i.currentTerminals('positive')
+                return {item: i} if @compareNodes(@boardNode(positiveTerminal), node)
+                
+        wireSegment = (segment for segment in @getSegmentsAt(node) when segment.el != item.el)[0]
+        return false unless wireSegment
+        otherNode = (n for n in wireSegment.nodes when not @compareNodes(n, node))[0]
+        return {item: wireSegment, otherNode: otherNode}
+         
             
