@@ -11,6 +11,8 @@ lightbulb.Lightbulb = (function(_super) {
 
   __extends(Lightbulb, _super);
 
+  Lightbulb.prototype.resistance = 5;
+
   function Lightbulb(_arg) {
     _arg;
     this.init();

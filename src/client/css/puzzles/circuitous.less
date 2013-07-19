@@ -32,11 +32,12 @@
         .wire_segment {
             position: absolute;
             content: "\00a0";
-            background-color: @black;
+            background-color: #000;
             width: 8px;                
             height: 8px;
             margin-top: -4px;
             margin-left: -4px;    
+            transition: background-color 3s ease;            
             
             &.vertical {
                 padding-bottom: 8px;

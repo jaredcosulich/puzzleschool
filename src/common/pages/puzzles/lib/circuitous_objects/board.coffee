@@ -172,7 +172,7 @@ class board.Board extends circuitousObject.Object
         segment.el.remove()
         @recordSegmentPosition(null, @wireInfo.start, coords)
         @wireInfo.erasing = true unless @wireInfo.continuation
-        return segment
+        return segment.el
      
     initElectricity: ->
         @electricalAnimation = new Animation()    
@@ -180,14 +180,25 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        return unless parseInt(elapsed) % 200 == 0
+        # return unless parseInt(elapsed) % 200 == 0
         
         for item in @items when item.powerSource
             for negativeTerminal in item.currentTerminals('negative')
-                if @traceConnections(@boardNode(negativeTerminal), item)
-                    console.log('complete')
+                if (circuit = @traceConnections(@boardNode(negativeTerminal), item)).complete
+                    if circuit.totalResistance > 0
+                        amps = item.voltage / circuit.totalResistance
+                        console.log('complete', circuit.totalResistance, amps)
+                    else
+                        amps = 'infinite'
+                        for item in circuit.items
+                            item.el.css(backgroundColor: '#FF0000')
+                        console.log('complete', circuit.totalResistance, amps)
+                        return
                 else
                     console.log('incomplete')
+
+                for item in circuit.items
+                    item.el.css(backgroundColor: '#000')
                     
     boardNode: (objectNode) ->
         offset = @el.offset()
@@ -198,11 +209,17 @@ class board.Board extends circuitousObject.Object
         
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
                     
-    traceConnections: (node, item) -> 
+    traceConnections: (node, item, circuit={totalResistance: 0, items: []}) ->         
         if (nextNodeInfo = @findConnection(node, item))
-            return true if nextNodeInfo.item.powerSource
-            return @traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item)
-        return false
+            circuit.totalResistance += nextNodeInfo.item.resistance or 0
+            circuit.items.push(nextNodeInfo.item)
+            if nextNodeInfo.item.powerSource    
+                circuit.complete = true 
+            else           
+                return @traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item, circuit)
+        else
+            circuit.complete = false
+        return circuit
     
     findConnection: (node, item) ->
         for i in @items when i.powerSource

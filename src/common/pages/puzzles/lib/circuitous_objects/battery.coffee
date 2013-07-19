@@ -14,6 +14,8 @@ class battery.Battery extends circuitousObject.Object
     positiveTerminals: [
         {x: 1, y: -46}    
     ]
+
+    voltage: 9
         
     constructor: ({}) ->
         @init()

@@ -32,6 +32,8 @@ battery.Battery = (function(_super) {
     }
   ];
 
+  Battery.prototype.voltage = 9;
+
   function Battery(_arg) {
     _arg;
     this.init();

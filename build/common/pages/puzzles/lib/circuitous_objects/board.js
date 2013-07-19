@@ -257,7 +257,7 @@ board.Board = (function(_super) {
     if (!this.wireInfo.continuation) {
       this.wireInfo.erasing = true;
     }
-    return segment;
+    return segment.el;
   };
 
   Board.prototype.initElectricity = function() {
@@ -273,32 +273,43 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var item, negativeTerminal, _i, _len, _ref, _results;
-    if (parseInt(elapsed) % 200 !== 0) {
-      return;
-    }
+    var amps, circuit, item, negativeTerminal, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
     _ref = this.items;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       item = _ref[_i];
       if (item.powerSource) {
-        _results.push((function() {
-          var _j, _len1, _ref1, _results1;
-          _ref1 = item.currentTerminals('negative');
-          _results1 = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            negativeTerminal = _ref1[_j];
-            if (this.traceConnections(this.boardNode(negativeTerminal), item)) {
-              _results1.push(console.log('complete'));
+        _ref1 = item.currentTerminals('negative');
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          negativeTerminal = _ref1[_j];
+          if ((circuit = this.traceConnections(this.boardNode(negativeTerminal), item)).complete) {
+            if (circuit.totalResistance > 0) {
+              amps = item.voltage / circuit.totalResistance;
+              console.log('complete', circuit.totalResistance, amps);
             } else {
-              _results1.push(console.log('incomplete'));
+              amps = 'infinite';
+              _ref2 = circuit.items;
+              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                item = _ref2[_k];
+                item.el.css({
+                  backgroundColor: '#FF0000'
+                });
+              }
+              console.log('complete', circuit.totalResistance, amps);
+              return;
             }
+          } else {
+            console.log('incomplete');
           }
-          return _results1;
-        }).call(this));
+          _ref3 = circuit.items;
+          for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+            item = _ref3[_l];
+            item.el.css({
+              backgroundColor: '#000'
+            });
+          }
+        }
       }
     }
-    return _results;
   };
 
   Board.prototype.boardNode = function(objectNode) {
@@ -314,15 +325,26 @@ board.Board = (function(_super) {
     return node1.x === node2.x && node1.y === node2.y;
   };
 
-  Board.prototype.traceConnections = function(node, item) {
+  Board.prototype.traceConnections = function(node, item, circuit) {
     var nextNodeInfo;
-    if ((nextNodeInfo = this.findConnection(node, item))) {
-      if (nextNodeInfo.item.powerSource) {
-        return true;
-      }
-      return this.traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item);
+    if (circuit == null) {
+      circuit = {
+        totalResistance: 0,
+        items: []
+      };
     }
-    return false;
+    if ((nextNodeInfo = this.findConnection(node, item))) {
+      circuit.totalResistance += nextNodeInfo.item.resistance || 0;
+      circuit.items.push(nextNodeInfo.item);
+      if (nextNodeInfo.item.powerSource) {
+        circuit.complete = true;
+      } else {
+        return this.traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item, circuit);
+      }
+    } else {
+      circuit.complete = false;
+    }
+    return circuit;
   };
 
   Board.prototype.findConnection = function(node, item) {

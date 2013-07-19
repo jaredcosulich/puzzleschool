@@ -11,6 +11,8 @@ resistor.Resistor = (function(_super) {
 
   __extends(Resistor, _super);
 
+  Resistor.prototype.resistance = 10;
+
   function Resistor(_arg) {
     _arg;
     this.init();
