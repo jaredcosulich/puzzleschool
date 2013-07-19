@@ -31,11 +31,11 @@ object.Object = (function(_super) {
   };
 
   Object.prototype.positionAt = function(_arg) {
-    var x, y;
+    var x, y, _ref, _ref1;
     x = _arg.x, y = _arg.y;
     return this.dragTo({
-      x: x + this.centerOffset.x,
-      y: y + this.centerOffset.y
+      x: x + (((_ref = this.centerOffset) != null ? _ref.x : void 0) || 0),
+      y: y + (((_ref1 = this.centerOffset) != null ? _ref1.y : void 0) || 0)
     });
   };
 

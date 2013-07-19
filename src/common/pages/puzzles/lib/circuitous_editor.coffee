@@ -14,7 +14,7 @@ class circuitousEditor.EditorHelper
             el: @$('.options')
             rows: 5
             columns: 4
-            addToBoard: (item, x, y) => @board.addItem(item, x, y)
+            board: @board
         
     
 

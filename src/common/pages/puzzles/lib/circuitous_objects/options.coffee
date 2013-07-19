@@ -2,7 +2,7 @@ options = exports ? provide('./options', {})
 circuitousObject = require('./object')
 
 class options.Options extends circuitousObject.Object
-    constructor: ({@el, @rows, @columns, @items, @addToBoard}) ->
+    constructor: ({@el, @rows, @columns, @items, @board}) ->
         @items or= []
         @init()
         
@@ -55,4 +55,6 @@ class options.Options extends circuitousObject.Object
 
     dragItem: (item, x, y, stopDrag) ->
         if stopDrag
-            item.resetDrag() unless @addToBoard(item, x, y)
+            if not @board.addItem(item, x, y)
+                @board.removeItem(item)
+                item.resetDrag()

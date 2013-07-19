@@ -20,15 +20,13 @@ class draggable.Draggable
                 @startY = Client.y(e) unless @startY
             $(document.body).bind 'mousemove.drag touchstart.drag', (e) => @drag(e)
 
-    drag: (e, stopDrag) ->
-        console.log(@dragElement.offset(), @startX, @startY)
-        currentX = Client.x(e)
-        currentY = Client.y(e)
-        @transformer.translate(currentX - @startX, currentY - @startY)
-        @trackDrag(@, currentX, currentY, stopDrag)
+    drag: (e, stopDrag) -> @dragTo(x: Client.x(e), y: Client.y(e), stopDrag: stopDrag)
         
-    dragTo: ({x, y}) ->
-        @transformer.translate(x - @startX, y - @startY)
+    dragTo: ({x, y, stopDrag}) ->
+        @currentX = x
+        @currentY = y
+        @transformer.translate(@currentX - @startX, @currentY - @startY)
+        @trackDrag(@, @currentX, @currentY, stopDrag)
 
     resetDrag: -> 
         delete @startX

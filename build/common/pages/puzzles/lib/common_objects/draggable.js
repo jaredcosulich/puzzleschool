@@ -46,18 +46,20 @@ draggable.Draggable = (function() {
   };
 
   Draggable.prototype.drag = function(e, stopDrag) {
-    var currentX, currentY;
-    console.log(this.dragElement.offset(), this.startX, this.startY);
-    currentX = Client.x(e);
-    currentY = Client.y(e);
-    this.transformer.translate(currentX - this.startX, currentY - this.startY);
-    return this.trackDrag(this, currentX, currentY, stopDrag);
+    return this.dragTo({
+      x: Client.x(e),
+      y: Client.y(e),
+      stopDrag: stopDrag
+    });
   };
 
   Draggable.prototype.dragTo = function(_arg) {
-    var x, y;
-    x = _arg.x, y = _arg.y;
-    return this.transformer.translate(x - this.startX, y - this.startY);
+    var stopDrag, x, y;
+    x = _arg.x, y = _arg.y, stopDrag = _arg.stopDrag;
+    this.currentX = x;
+    this.currentY = y;
+    this.transformer.translate(this.currentX - this.startX, this.currentY - this.startY);
+    return this.trackDrag(this, this.currentX, this.currentY, stopDrag);
   };
 
   Draggable.prototype.resetDrag = function() {

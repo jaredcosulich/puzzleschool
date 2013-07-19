@@ -12,7 +12,7 @@ options.Options = (function(_super) {
   __extends(Options, _super);
 
   function Options(_arg) {
-    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.items = _arg.items, this.addToBoard = _arg.addToBoard;
+    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.items = _arg.items, this.board = _arg.board;
     this.items || (this.items = []);
     this.init();
   }
@@ -95,7 +95,8 @@ options.Options = (function(_super) {
 
   Options.prototype.dragItem = function(item, x, y, stopDrag) {
     if (stopDrag) {
-      if (!this.addToBoard(item, x, y)) {
+      if (!this.board.addItem(item, x, y)) {
+        this.board.removeItem(item);
         return item.resetDrag();
       }
     }

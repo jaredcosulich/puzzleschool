@@ -11,10 +11,19 @@ battery.Battery = (function(_super) {
 
   __extends(Battery, _super);
 
+  Battery.prototype.powerSource = true;
+
   Battery.prototype.centerOffset = {
-    x: 10.5,
-    y: 2
+    x: -13,
+    y: 0
   };
+
+  Battery.prototype.powerNodes = [
+    {
+      x: 1,
+      y: 50
+    }
+  ];
 
   function Battery(_arg) {
     _arg;

@@ -29,6 +29,7 @@ soma.chunks({
     prepare: function(_arg) {
       this.classId = _arg.classId, this.levelId = _arg.levelId;
       this.template = this.loadTemplate("/build/common/templates/puzzles/circuitous.html");
+      this.loadScript('/build/common/pages/puzzles/lib/common_objects/animation.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/client.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/transformer.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/draggable.js');

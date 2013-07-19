@@ -23,6 +23,7 @@ soma.chunks
         prepare: ({@classId, @levelId}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/circuitous.html"
 
+            @loadScript '/build/common/pages/puzzles/lib/common_objects/animation.js'
             @loadScript '/build/common/pages/puzzles/lib/common_objects/client.js'
             @loadScript '/build/common/pages/puzzles/lib/common_objects/transformer.js'
             @loadScript '/build/common/pages/puzzles/lib/common_objects/draggable.js'

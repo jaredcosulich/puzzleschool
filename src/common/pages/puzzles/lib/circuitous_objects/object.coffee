@@ -17,6 +17,6 @@ class object.Object extends Draggable
 
     positionAt: ({x, y}) ->
         @dragTo
-            x: x + @centerOffset.x
-            y: y + @centerOffset.y
+            x: x + (@centerOffset?.x or 0)
+            y: y + (@centerOffset?.y or 0)
         

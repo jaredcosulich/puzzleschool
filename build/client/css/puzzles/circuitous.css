@@ -30,16 +30,16 @@
   position: absolute;
   content: "\00a0";
   background-color: #262626;
-  width: 9px;
-  height: 9px;
-  margin-top: -5px;
-  margin-left: -5px;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
 }
 .circuitous .board .wire_segment.vertical {
-  padding-bottom: 9px;
+  padding-bottom: 8px;
 }
 .circuitous .board .wire_segment.horizontal {
-  padding-right: 9px;
+  padding-right: 8px;
 }
 .circuitous .right_side {
   float: right;
