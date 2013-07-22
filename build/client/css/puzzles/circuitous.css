@@ -1,3 +1,11 @@
+.page {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .circuitous {
   height: 640px;
   width: 960px;
@@ -34,7 +42,6 @@
   height: 8px;
   margin-top: -4px;
   margin-left: -4px;
-  transition: background-color 3s ease;
 }
 .circuitous .board .wire_segment.vertical {
   padding-bottom: 8px;
@@ -70,6 +77,14 @@
   width: 320px;
   height: 213.33333333333334px;
   background-color: green;
+}
+.circuitous .board .wire_segment,
+.circuitous .right_side .options .option img {
+  transition: background-color 3s ease;
+}
+.circuitous .board .wire_segment.excessive_current,
+.circuitous .right_side .options .option img.excessive_current {
+  background-color: #FF0000;
 }
 .circuitous .selector_button {
   font-size: 45px;

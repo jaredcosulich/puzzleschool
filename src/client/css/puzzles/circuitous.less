@@ -5,6 +5,10 @@
 @height: 640px;
 @width: 960px;
 
+.page {
+    .no_select();
+}
+
 .circuitous {
     height: @height;
     width: @width;
@@ -37,7 +41,6 @@
             height: 8px;
             margin-top: -4px;
             margin-left: -4px;    
-            transition: background-color 3s ease;            
             
             &.vertical {
                 padding-bottom: 8px;
@@ -73,6 +76,14 @@
             width: (@width - @height);
             height: (@height / 3);
             background-color: green;
+        }
+    }
+    
+    .board .wire_segment, 
+    .right_side .options .option img {
+        transition: background-color 3s ease;            
+        &.excessive_current {
+            background-color: #FF0000;
         }
     }
     

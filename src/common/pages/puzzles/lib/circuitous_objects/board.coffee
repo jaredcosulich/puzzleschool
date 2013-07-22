@@ -27,6 +27,11 @@ class board.Board extends circuitousObject.Object
                 cell.css(width: @cellDimension-1, height: @cellDimension-1)
                 @el.append(cell)
                 
+    componentsAndWires: -> 
+        wireSegments = []
+        wireSegments.push((wireSegment for xCoords, wireSegment of nodes)...) for yCoords, nodes of @wireInfo.positions
+        [@components..., wireSegments...]
+                
     addComponent: (component, x, y) ->
         offset = @el.offset()
         onBoardX = offset.left < x < offset.left + @width
@@ -117,13 +122,7 @@ class board.Board extends circuitousObject.Object
         if start = @wireInfo.start
             xDiff = Math.abs(start.x - coords.x)
             yDiff = Math.abs(start.y - coords.y)
-            
-            if last = @wireInfo.lastSegment
-                if last.hasClass('vertical')
-                    xDiff = xDiff * 0.75 
-                else
-                    yDiff = yDiff * 0.75 
-            
+                        
             return if xDiff < @cellDimension and yDiff < @cellDimension
             
             xDelta = yDelta = 0
@@ -180,27 +179,27 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        # return unless parseInt(elapsed) % 200 == 0
+        piece.excessiveCurrent = false for piece in @componentsAndWires()
         
         for component in @components when component.powerSource
             for negativeTerminal in component.currentTerminals('negative')
-                if (circuit = @traceConnections(@boardNode(negativeTerminal), component)).complete
+                if (circuit = @traceConnections(@boardPosition(negativeTerminal), component)).complete
                     if circuit.totalResistance > 0
                         amps = component.voltage / circuit.totalResistance
-                        console.log('complete', circuit.totalResistance, amps)
+                        # console.log('complete', circuit.totalResistance, amps)
                     else
                         amps = 'infinite'
                         for component in circuit.components
-                            component.el.css(backgroundColor: '#FF0000')
-                        console.log('complete', circuit.totalResistance, amps)
-                        return
+                            component.excessiveCurrent = true
+                            component.el.addClass('excessive_current')
+                        # console.log('complete', circuit.totalResistance, amps)
                 else
-                    console.log('incomplete')
+                    # console.log('incomplete')
 
-                for component in circuit.components
-                    component.el.css(backgroundColor: '#000')
+        for piece in @componentsAndWires()
+            piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
                     
-    boardNode: (componentNode) ->
+    boardPosition: (componentNode) ->
         offset = @el.offset()
         return {
             x: componentNode.x - offset.left 
@@ -224,7 +223,7 @@ class board.Board extends circuitousObject.Object
     findConnection: (node, component) ->
         for i in @components when i.powerSource
             for positiveTerminal in i.currentTerminals('positive')
-                return {component: i} if @compareNodes(@boardNode(positiveTerminal), node)
+                return {component: i} if @compareNodes(@boardPosition(positiveTerminal), node)
                 
         wireSegment = (segment for segment in @getSegmentsAt(node) when segment.el != component.el)[0]
         return false unless wireSegment
