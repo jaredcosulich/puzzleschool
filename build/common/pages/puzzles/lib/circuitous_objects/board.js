@@ -19,7 +19,7 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     this.el = _arg.el;
-    this.items = [];
+    this.components = [];
     this.init();
   }
 
@@ -55,14 +55,14 @@ board.Board = (function(_super) {
     return _results;
   };
 
-  Board.prototype.addItem = function(item, x, y) {
+  Board.prototype.addComponent = function(component, x, y) {
     var offset, onBoardX, onBoardY;
     offset = this.el.offset();
     onBoardX = (offset.left < x && x < offset.left + this.width);
     onBoardY = (offset.top < y && y < offset.top + this.height);
     if (onBoardX && onBoardY) {
-      this.items.push(item);
-      item.positionAt(this.roundedCoordinates({
+      this.components.push(component);
+      component.positionAt(this.roundedCoordinates({
         x: x,
         y: y
       }));
@@ -72,8 +72,8 @@ board.Board = (function(_super) {
     return true;
   };
 
-  Board.prototype.removeItem = function(item) {
-    return this.items.splice(this.items.indexOf(item), 1);
+  Board.prototype.removeComponent = function(component) {
+    return this.components.splice(this.components.indexOf(component), 1);
   };
 
   Board.prototype.initWire = function() {
@@ -84,13 +84,13 @@ board.Board = (function(_super) {
     };
     return this.el.bind('mousedown.draw_wire', function(e) {
       $(document.body).one('mouseup.draw_wire', function() {
-        _this.el.unbind('mousemove.draw_wire');
+        $(document.body).unbind('mousemove.draw_wire');
         delete _this.wireInfo.start;
         delete _this.wireInfo.continuation;
         delete _this.wireInfo.erasing;
         return delete _this.wireInfo.lastSegment;
       });
-      _this.el.bind('mousemove.draw_wire', function(e) {
+      $(document.body).bind('mousemove.draw_wire', function(e) {
         return _this.drawWire(e);
       });
       return _this.drawWire(e);
@@ -273,24 +273,24 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var amps, circuit, item, negativeTerminal, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
-    _ref = this.items;
+    var amps, circuit, component, negativeTerminal, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+    _ref = this.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      item = _ref[_i];
-      if (item.powerSource) {
-        _ref1 = item.currentTerminals('negative');
+      component = _ref[_i];
+      if (component.powerSource) {
+        _ref1 = component.currentTerminals('negative');
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           negativeTerminal = _ref1[_j];
-          if ((circuit = this.traceConnections(this.boardNode(negativeTerminal), item)).complete) {
+          if ((circuit = this.traceConnections(this.boardNode(negativeTerminal), component)).complete) {
             if (circuit.totalResistance > 0) {
-              amps = item.voltage / circuit.totalResistance;
+              amps = component.voltage / circuit.totalResistance;
               console.log('complete', circuit.totalResistance, amps);
             } else {
               amps = 'infinite';
-              _ref2 = circuit.items;
+              _ref2 = circuit.components;
               for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                item = _ref2[_k];
-                item.el.css({
+                component = _ref2[_k];
+                component.el.css({
                   backgroundColor: '#FF0000'
                 });
               }
@@ -300,10 +300,10 @@ board.Board = (function(_super) {
           } else {
             console.log('incomplete');
           }
-          _ref3 = circuit.items;
+          _ref3 = circuit.components;
           for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-            item = _ref3[_l];
-            item.el.css({
+            component = _ref3[_l];
+            component.el.css({
               backgroundColor: '#000'
             });
           }
@@ -312,12 +312,12 @@ board.Board = (function(_super) {
     }
   };
 
-  Board.prototype.boardNode = function(objectNode) {
+  Board.prototype.boardNode = function(componentNode) {
     var offset;
     offset = this.el.offset();
     return {
-      x: objectNode.x - offset.left,
-      y: objectNode.y - offset.top
+      x: componentNode.x - offset.left,
+      y: componentNode.y - offset.top
     };
   };
 
@@ -325,21 +325,21 @@ board.Board = (function(_super) {
     return node1.x === node2.x && node1.y === node2.y;
   };
 
-  Board.prototype.traceConnections = function(node, item, circuit) {
+  Board.prototype.traceConnections = function(node, component, circuit) {
     var nextNodeInfo;
     if (circuit == null) {
       circuit = {
         totalResistance: 0,
-        items: []
+        components: []
       };
     }
-    if ((nextNodeInfo = this.findConnection(node, item))) {
-      circuit.totalResistance += nextNodeInfo.item.resistance || 0;
-      circuit.items.push(nextNodeInfo.item);
-      if (nextNodeInfo.item.powerSource) {
+    if ((nextNodeInfo = this.findConnection(node, component))) {
+      circuit.totalResistance += nextNodeInfo.component.resistance || 0;
+      circuit.components.push(nextNodeInfo.component);
+      if (nextNodeInfo.component.powerSource) {
         circuit.complete = true;
       } else {
-        return this.traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item, circuit);
+        return this.traceConnections(nextNodeInfo.otherNode, nextNodeInfo.component, circuit);
       }
     } else {
       circuit.complete = false;
@@ -347,9 +347,9 @@ board.Board = (function(_super) {
     return circuit;
   };
 
-  Board.prototype.findConnection = function(node, item) {
+  Board.prototype.findConnection = function(node, component) {
     var i, n, otherNode, positiveTerminal, segment, wireSegment, _i, _j, _len, _len1, _ref, _ref1;
-    _ref = this.items;
+    _ref = this.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       i = _ref[_i];
       if (i.powerSource) {
@@ -358,7 +358,7 @@ board.Board = (function(_super) {
           positiveTerminal = _ref1[_j];
           if (this.compareNodes(this.boardNode(positiveTerminal), node)) {
             return {
-              item: i
+              component: i
             };
           }
         }
@@ -370,7 +370,7 @@ board.Board = (function(_super) {
       _results = [];
       for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
         segment = _ref2[_k];
-        if (segment.el !== item.el) {
+        if (segment.el !== component.el) {
           _results.push(segment);
         }
       }
@@ -392,7 +392,7 @@ board.Board = (function(_super) {
       return _results;
     }).call(this))[0];
     return {
-      item: wireSegment,
+      component: wireSegment,
       otherNode: otherNode
     };
   };

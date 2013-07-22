@@ -7,7 +7,7 @@ class board.Board extends circuitousObject.Object
     cellDimension: 32
     
     constructor: ({@el}) ->
-        @items = []
+        @components = []
         @init()
 
     init: ->
@@ -27,30 +27,30 @@ class board.Board extends circuitousObject.Object
                 cell.css(width: @cellDimension-1, height: @cellDimension-1)
                 @el.append(cell)
                 
-    addItem: (item, x, y) ->
+    addComponent: (component, x, y) ->
         offset = @el.offset()
         onBoardX = offset.left < x < offset.left + @width
         onBoardY = offset.top < y < offset.top + @height
         if onBoardX and onBoardY 
-            @items.push(item)
-            item.positionAt(@roundedCoordinates({x: x, y: y}))
+            @components.push(component)
+            component.positionAt(@roundedCoordinates({x: x, y: y}))
         else
             return false
         return true
             
-    removeItem: (item) -> @items.splice(@items.indexOf(item), 1)
+    removeComponent: (component) -> @components.splice(@components.indexOf(component), 1)
             
     initWire: ->
         @wireInfo = {positions: {}, nodes: {}}
         @el.bind 'mousedown.draw_wire', (e) =>
             $(document.body).one 'mouseup.draw_wire', => 
-                @el.unbind('mousemove.draw_wire')
+                $(document.body).unbind('mousemove.draw_wire')
                 delete @wireInfo.start      
                 delete @wireInfo.continuation
                 delete @wireInfo.erasing
                 delete @wireInfo.lastSegment      
                           
-            @el.bind 'mousemove.draw_wire', (e) => @drawWire(e)
+            $(document.body).bind 'mousemove.draw_wire', (e) => @drawWire(e)
             @drawWire(e)
             
     roundedCoordinates: (coords, offset) ->
@@ -182,53 +182,53 @@ class board.Board extends circuitousObject.Object
     moveElectricity: (deltaTime, elapsed) ->
         # return unless parseInt(elapsed) % 200 == 0
         
-        for item in @items when item.powerSource
-            for negativeTerminal in item.currentTerminals('negative')
-                if (circuit = @traceConnections(@boardNode(negativeTerminal), item)).complete
+        for component in @components when component.powerSource
+            for negativeTerminal in component.currentTerminals('negative')
+                if (circuit = @traceConnections(@boardNode(negativeTerminal), component)).complete
                     if circuit.totalResistance > 0
-                        amps = item.voltage / circuit.totalResistance
+                        amps = component.voltage / circuit.totalResistance
                         console.log('complete', circuit.totalResistance, amps)
                     else
                         amps = 'infinite'
-                        for item in circuit.items
-                            item.el.css(backgroundColor: '#FF0000')
+                        for component in circuit.components
+                            component.el.css(backgroundColor: '#FF0000')
                         console.log('complete', circuit.totalResistance, amps)
                         return
                 else
                     console.log('incomplete')
 
-                for item in circuit.items
-                    item.el.css(backgroundColor: '#000')
+                for component in circuit.components
+                    component.el.css(backgroundColor: '#000')
                     
-    boardNode: (objectNode) ->
+    boardNode: (componentNode) ->
         offset = @el.offset()
         return {
-            x: objectNode.x - offset.left 
-            y: objectNode.y - offset.top
+            x: componentNode.x - offset.left 
+            y: componentNode.y - offset.top
         }
         
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
                     
-    traceConnections: (node, item, circuit={totalResistance: 0, items: []}) ->         
-        if (nextNodeInfo = @findConnection(node, item))
-            circuit.totalResistance += nextNodeInfo.item.resistance or 0
-            circuit.items.push(nextNodeInfo.item)
-            if nextNodeInfo.item.powerSource    
+    traceConnections: (node, component, circuit={totalResistance: 0, components: []}) ->         
+        if (nextNodeInfo = @findConnection(node, component))
+            circuit.totalResistance += nextNodeInfo.component.resistance or 0
+            circuit.components.push(nextNodeInfo.component)
+            if nextNodeInfo.component.powerSource    
                 circuit.complete = true 
             else           
-                return @traceConnections(nextNodeInfo.otherNode, nextNodeInfo.item, circuit)
+                return @traceConnections(nextNodeInfo.otherNode, nextNodeInfo.component, circuit)
         else
             circuit.complete = false
         return circuit
     
-    findConnection: (node, item) ->
-        for i in @items when i.powerSource
+    findConnection: (node, component) ->
+        for i in @components when i.powerSource
             for positiveTerminal in i.currentTerminals('positive')
-                return {item: i} if @compareNodes(@boardNode(positiveTerminal), node)
+                return {component: i} if @compareNodes(@boardNode(positiveTerminal), node)
                 
-        wireSegment = (segment for segment in @getSegmentsAt(node) when segment.el != item.el)[0]
+        wireSegment = (segment for segment in @getSegmentsAt(node) when segment.el != component.el)[0]
         return false unless wireSegment
         otherNode = (n for n in wireSegment.nodes when not @compareNodes(n, node))[0]
-        return {item: wireSegment, otherNode: otherNode}
+        return {component: wireSegment, otherNode: otherNode}
          
             

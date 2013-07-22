@@ -2,8 +2,8 @@ options = exports ? provide('./options', {})
 circuitousObject = require('./object')
 
 class options.Options extends circuitousObject.Object
-    constructor: ({@el, @rows, @columns, @items, @board}) ->
-        @items or= []
+    constructor: ({@el, @rows, @columns, @components, @board}) ->
+        @components or= []
         @init()
         
     $: (selector) -> $(selector, @el)   
@@ -14,7 +14,7 @@ class options.Options extends circuitousObject.Object
         @construct()
         @initSelector()
         @attachSelector(@$('.empty_option')[0])
-        @addItems()
+        @addComponents()
         
     construct: ->
         for row in [1..@rows]
@@ -32,29 +32,29 @@ class options.Options extends circuitousObject.Object
             
     initSelector: ->
         @selector = new circuitous.Selector
-            add: (item) => @addItem(item)
+            add: (component) => @addComponent(component)
             
     attachSelector: (cell) -> @selector.attachTo(cell)    
     
-    addItems: ->
-        return unless @items?.length
-        @addItem(item) for item in @items
+    addComponents: ->
+        return unless @components?.length
+        @addComponent(component) for component in @components
     
-    addItem: (item) ->
-        @items.push(item)
+    addComponent: (component) ->
+        @components.push(component)
         @attachSelector(@$('.empty_option')[1])
         emptyOption = $(@$('.empty_option')[0])
-        item.appendTo(emptyOption)
+        component.appendTo(emptyOption)
         emptyOption.removeClass('empty_option')
         $.timeout 10, => 
-            item.initDrag(
-                item.el, 
-                (item, x, y, stopDrag) => @dragItem(item, x, y, stopDrag),
+            component.initDrag(
+                component.el, 
+                (component, x, y, stopDrag) => @dragComponent(component, x, y, stopDrag),
                 true
             )
 
-    dragItem: (item, x, y, stopDrag) ->
+    dragComponent: (component, x, y, stopDrag) ->
         if stopDrag
-            if not @board.addItem(item, x, y)
-                @board.removeItem(item)
-                item.resetDrag()
+            if not @board.addComponent(component, x, y)
+                @board.removeComponent(component)
+                component.resetDrag()

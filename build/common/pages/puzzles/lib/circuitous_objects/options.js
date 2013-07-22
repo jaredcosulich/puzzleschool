@@ -12,8 +12,8 @@ options.Options = (function(_super) {
   __extends(Options, _super);
 
   function Options(_arg) {
-    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.items = _arg.items, this.board = _arg.board;
-    this.items || (this.items = []);
+    this.el = _arg.el, this.rows = _arg.rows, this.columns = _arg.columns, this.components = _arg.components, this.board = _arg.board;
+    this.components || (this.components = []);
     this.init();
   }
 
@@ -27,7 +27,7 @@ options.Options = (function(_super) {
     this.construct();
     this.initSelector();
     this.attachSelector(this.$('.empty_option')[0]);
-    return this.addItems();
+    return this.addComponents();
   };
 
   Options.prototype.construct = function() {
@@ -54,8 +54,8 @@ options.Options = (function(_super) {
   Options.prototype.initSelector = function() {
     var _this = this;
     return this.selector = new circuitous.Selector({
-      add: function(item) {
-        return _this.addItem(item);
+      add: function(component) {
+        return _this.addComponent(component);
       }
     });
   };
@@ -64,40 +64,40 @@ options.Options = (function(_super) {
     return this.selector.attachTo(cell);
   };
 
-  Options.prototype.addItems = function() {
-    var item, _i, _len, _ref, _ref1, _results;
-    if (!((_ref = this.items) != null ? _ref.length : void 0)) {
+  Options.prototype.addComponents = function() {
+    var component, _i, _len, _ref, _ref1, _results;
+    if (!((_ref = this.components) != null ? _ref.length : void 0)) {
       return;
     }
-    _ref1 = this.items;
+    _ref1 = this.components;
     _results = [];
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-      item = _ref1[_i];
-      _results.push(this.addItem(item));
+      component = _ref1[_i];
+      _results.push(this.addComponent(component));
     }
     return _results;
   };
 
-  Options.prototype.addItem = function(item) {
+  Options.prototype.addComponent = function(component) {
     var emptyOption,
       _this = this;
-    this.items.push(item);
+    this.components.push(component);
     this.attachSelector(this.$('.empty_option')[1]);
     emptyOption = $(this.$('.empty_option')[0]);
-    item.appendTo(emptyOption);
+    component.appendTo(emptyOption);
     emptyOption.removeClass('empty_option');
     return $.timeout(10, function() {
-      return item.initDrag(item.el, function(item, x, y, stopDrag) {
-        return _this.dragItem(item, x, y, stopDrag);
+      return component.initDrag(component.el, function(component, x, y, stopDrag) {
+        return _this.dragComponent(component, x, y, stopDrag);
       }, true);
     });
   };
 
-  Options.prototype.dragItem = function(item, x, y, stopDrag) {
+  Options.prototype.dragComponent = function(component, x, y, stopDrag) {
     if (stopDrag) {
-      if (!this.board.addItem(item, x, y)) {
-        this.board.removeItem(item);
-        return item.resetDrag();
+      if (!this.board.addComponent(component, x, y)) {
+        this.board.removeComponent(component);
+        return component.resetDrag();
       }
     }
   };

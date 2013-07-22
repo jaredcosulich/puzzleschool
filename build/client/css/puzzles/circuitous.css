@@ -63,6 +63,9 @@
   -ms-user-select: none;
   user-select: none;
 }
+.circuitous .right_side .options .option img {
+  transition: background-color 3s ease;
+}
 .circuitous .right_side .menu {
   width: 320px;
   height: 213.33333333333334px;
