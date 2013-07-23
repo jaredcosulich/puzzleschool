@@ -4,15 +4,15 @@ circuitousObject = require('./object')
 class battery.Battery extends circuitousObject.Object
     powerSource: true
     centerOffset: 
-        x: -13
-        y: 0
+        x: 0
+        y: 16
     
     negativeTerminals: [
-        {x: 1, y: 50}
+        {x: 0, y: 48}
     ]
     
     positiveTerminals: [
-        {x: 1, y: -46}    
+        {x: 0, y: -48}    
     ]
 
     voltage: 9

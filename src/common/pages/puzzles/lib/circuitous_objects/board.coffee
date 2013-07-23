@@ -7,7 +7,7 @@ class board.Board extends circuitousObject.Object
     cellDimension: 32
     
     constructor: ({@el}) ->
-        @components = []
+        @components = {}
         @init()
 
     init: ->
@@ -30,22 +30,27 @@ class board.Board extends circuitousObject.Object
     componentsAndWires: -> 
         wireSegments = []
         wireSegments.push((wireSegment for xCoords, wireSegment of nodes)...) for yCoords, nodes of @wireInfo.positions
-        [@components..., wireSegments...]
+        [(component for id, component of @components)..., wireSegments...]
                 
     addComponent: (component, x, y) ->
+        component.boardId = "#{new Date().getTime()}#{Math.random()}" unless component.boardId
+        
         offset = @el.offset()
-        onBoardX = offset.left < x < offset.left + @width
-        onBoardY = offset.top < y < offset.top + @height
+        boardPosition = @boardPosition(x: x, y: y)
+        
+        onBoardX = 0 < boardPosition.x < @width
+        onBoardY = 0 < boardPosition.y < @height
         if onBoardX and onBoardY 
-            @components.push(component)
-            component.positionAt(@roundedCoordinates({x: x, y: y}))
+            @components[component.boardId] = component
+            roundedBoardPosition = @roundedCoordinates(boardPosition, component.centerOffset)
+            component.positionAt(@componentPosition(roundedBoardPosition))
             # for node in component.currentNodes()
             #     @addDot(@boardPosition(node))
         else
             return false
         return true
             
-    removeComponent: (component) -> @components.splice(@components.indexOf(component), 1)
+    removeComponent: (component) -> delete @components[component.boardId]
             
     initWire: ->
         @wireInfo = {positions: {}, nodes: {}}
@@ -63,8 +68,8 @@ class board.Board extends circuitousObject.Object
     roundedCoordinates: (coords, offset) ->
         halfDim = @cellDimension / 2
         offsetCoords = 
-            x: coords.x - (offset?.left or 0) + halfDim
-            y: coords.y - (offset?.top or 0) + halfDim
+            x: coords.x - (offset?.left or offset?.x or 0) + halfDim
+            y: coords.y - (offset?.top or offset?.y or 0) + halfDim
             
         return {
             x: (Math.round(offsetCoords.x / @cellDimension) * @cellDimension) - halfDim
@@ -183,15 +188,15 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        # @slowTime = (@slowTime or 0) + deltaTime
-        # return unless @slowTime > 1000
-        # @slowTime -= 1000
+        @slowTime = (@slowTime or 0) + deltaTime
+        return unless @slowTime > 2000
+        @slowTime -= 2000
         
         for piece in @componentsAndWires()
             piece.receivingCurrent = false
             piece.excessiveCurrent = false 
         
-        for component in @components when component.powerSource
+        for id, component of @components when component.powerSource
             for negativeTerminal in component.currentTerminals('negative')
                 if (circuit = @traceConnections(@boardPosition(negativeTerminal), component)).complete
                     if circuit.totalResistance > 0
@@ -213,11 +218,18 @@ class board.Board extends circuitousObject.Object
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
             piece.setCurrent?(0) unless piece.receivingCurrent
                     
-    boardPosition: (componentNode) ->
+    boardPosition: (componentPosition) ->
         offset = @el.offset()
         return {
-            x: componentNode.x - offset.left 
-            y: componentNode.y - offset.top
+            x: componentPosition.x - offset.left + 1
+            y: componentPosition.y - offset.top + 1
+        }
+        
+    componentPosition: (boardPosition) ->
+        offset = @el.offset()
+        return {
+            x: boardPosition.x + offset.left - 1
+            y: boardPosition.y + offset.top - 1
         }
         
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
@@ -236,7 +248,7 @@ class board.Board extends circuitousObject.Object
         return circuit
     
     findConnection: (node, component, circuitId) ->
-        for c in @components when c != component
+        for id, c of @components when c != component
             if c.powerSource
                 for positiveTerminal in c.currentTerminals('positive')
                     return {component: c} if @compareNodes(@boardPosition(positiveTerminal), node)

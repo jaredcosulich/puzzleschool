@@ -53,8 +53,10 @@ class options.Options extends circuitousObject.Object
                 true
             )
 
-    dragComponent: (component, x, y, stopDrag) ->
-        if stopDrag
+    dragComponent: (component, x, y, state) ->
+        if state == 'start'
+            @board.removeComponent(component)
+        else if state == 'stop'
             if not @board.addComponent(component, x, y)
                 @board.removeComponent(component)
                 component.resetDrag()

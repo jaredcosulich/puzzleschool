@@ -14,21 +14,21 @@ battery.Battery = (function(_super) {
   Battery.prototype.powerSource = true;
 
   Battery.prototype.centerOffset = {
-    x: -13,
-    y: 0
+    x: 0,
+    y: 16
   };
 
   Battery.prototype.negativeTerminals = [
     {
-      x: 1,
-      y: 50
+      x: 0,
+      y: 48
     }
   ];
 
   Battery.prototype.positiveTerminals = [
     {
-      x: 1,
-      y: -46
+      x: 0,
+      y: -48
     }
   ];
 

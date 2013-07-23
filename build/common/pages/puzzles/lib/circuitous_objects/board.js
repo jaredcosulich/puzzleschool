@@ -20,7 +20,7 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     this.el = _arg.el;
-    this.components = [];
+    this.components = {};
     this.init();
   }
 
@@ -57,7 +57,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.componentsAndWires = function() {
-    var nodes, wireSegment, wireSegments, xCoords, yCoords, _ref;
+    var component, id, nodes, wireSegment, wireSegments, xCoords, yCoords, _ref;
     wireSegments = [];
     _ref = this.wireInfo.positions;
     for (yCoords in _ref) {
@@ -72,20 +72,34 @@ board.Board = (function(_super) {
         return _results;
       })());
     }
-    return __slice.call(this.components).concat(__slice.call(wireSegments));
+    return __slice.call((function() {
+        var _ref1, _results;
+        _ref1 = this.components;
+        _results = [];
+        for (id in _ref1) {
+          component = _ref1[id];
+          _results.push(component);
+        }
+        return _results;
+      }).call(this)).concat(__slice.call(wireSegments));
   };
 
   Board.prototype.addComponent = function(component, x, y) {
-    var offset, onBoardX, onBoardY;
+    var boardPosition, offset, onBoardX, onBoardY, roundedBoardPosition, _ref, _ref1;
+    if (!component.boardId) {
+      component.boardId = "" + (new Date().getTime()) + (Math.random());
+    }
     offset = this.el.offset();
-    onBoardX = (offset.left < x && x < offset.left + this.width);
-    onBoardY = (offset.top < y && y < offset.top + this.height);
+    boardPosition = this.boardPosition({
+      x: x,
+      y: y
+    });
+    onBoardX = (0 < (_ref = boardPosition.x) && _ref < this.width);
+    onBoardY = (0 < (_ref1 = boardPosition.y) && _ref1 < this.height);
     if (onBoardX && onBoardY) {
-      this.components.push(component);
-      component.positionAt(this.roundedCoordinates({
-        x: x,
-        y: y
-      }));
+      this.components[component.boardId] = component;
+      roundedBoardPosition = this.roundedCoordinates(boardPosition, component.centerOffset);
+      component.positionAt(this.componentPosition(roundedBoardPosition));
     } else {
       return false;
     }
@@ -93,7 +107,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.removeComponent = function(component) {
-    return this.components.splice(this.components.indexOf(component), 1);
+    return delete this.components[component.boardId];
   };
 
   Board.prototype.initWire = function() {
@@ -121,8 +135,8 @@ board.Board = (function(_super) {
     var halfDim, offsetCoords;
     halfDim = this.cellDimension / 2;
     offsetCoords = {
-      x: coords.x - ((offset != null ? offset.left : void 0) || 0) + halfDim,
-      y: coords.y - ((offset != null ? offset.top : void 0) || 0) + halfDim
+      x: coords.x - ((offset != null ? offset.left : void 0) || (offset != null ? offset.x : void 0) || 0) + halfDim,
+      y: coords.y - ((offset != null ? offset.top : void 0) || (offset != null ? offset.y : void 0) || 0) + halfDim
     };
     return {
       x: (Math.round(offsetCoords.x / this.cellDimension) * this.cellDimension) - halfDim,
@@ -286,7 +300,12 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var amps, c, circuit, component, negativeTerminal, piece, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
+    var amps, c, circuit, component, id, negativeTerminal, piece, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
+    this.slowTime = (this.slowTime || 0) + deltaTime;
+    if (!(this.slowTime > 2000)) {
+      return;
+    }
+    this.slowTime -= 2000;
     _ref = this.componentsAndWires();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       piece = _ref[_i];
@@ -294,18 +313,18 @@ board.Board = (function(_super) {
       piece.excessiveCurrent = false;
     }
     _ref1 = this.components;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      component = _ref1[_j];
+    for (id in _ref1) {
+      component = _ref1[id];
       if (component.powerSource) {
         _ref2 = component.currentTerminals('negative');
-        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-          negativeTerminal = _ref2[_k];
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          negativeTerminal = _ref2[_j];
           if ((circuit = this.traceConnections(this.boardPosition(negativeTerminal), component)).complete) {
             if (circuit.totalResistance > 0) {
               amps = component.voltage / circuit.totalResistance;
               _ref3 = circuit.components;
-              for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                c = _ref3[_l];
+              for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+                c = _ref3[_k];
                 c.receivingCurrent = true;
                 if (typeof c.setCurrent === "function") {
                   c.setCurrent(amps);
@@ -314,8 +333,8 @@ board.Board = (function(_super) {
             } else {
               amps = 'infinite';
               _ref4 = circuit.components;
-              for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
-                c = _ref4[_m];
+              for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
+                c = _ref4[_l];
                 c.excessiveCurrent = true;
                 c.el.addClass('excessive_current');
               }
@@ -328,8 +347,8 @@ board.Board = (function(_super) {
     }
     _ref5 = this.componentsAndWires();
     _results = [];
-    for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
-      piece = _ref5[_n];
+    for (_m = 0, _len4 = _ref5.length; _m < _len4; _m++) {
+      piece = _ref5[_m];
       if (!piece.excessiveCurrent) {
         piece.el.removeClass('excessive_current');
       }
@@ -342,12 +361,21 @@ board.Board = (function(_super) {
     return _results;
   };
 
-  Board.prototype.boardPosition = function(componentNode) {
+  Board.prototype.boardPosition = function(componentPosition) {
     var offset;
     offset = this.el.offset();
     return {
-      x: componentNode.x - offset.left,
-      y: componentNode.y - offset.top
+      x: componentPosition.x - offset.left + 1,
+      y: componentPosition.y - offset.top + 1
+    };
+  };
+
+  Board.prototype.componentPosition = function(boardPosition) {
+    var offset;
+    offset = this.el.offset();
+    return {
+      x: boardPosition.x + offset.left - 1,
+      y: boardPosition.y + offset.top - 1
     };
   };
 
@@ -381,15 +409,15 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.findConnection = function(node, component, circuitId) {
-    var c, n, otherNode, positiveTerminal, segment, wireSegment, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4;
+    var c, id, n, otherNode, positiveTerminal, segment, wireSegment, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4;
     _ref = this.components;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      c = _ref[_i];
+    for (id in _ref) {
+      c = _ref[id];
       if (c !== component) {
         if (c.powerSource) {
           _ref1 = c.currentTerminals('positive');
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            positiveTerminal = _ref1[_j];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            positiveTerminal = _ref1[_i];
             if (this.compareNodes(this.boardPosition(positiveTerminal), node)) {
               return {
                 component: c
@@ -398,8 +426,8 @@ board.Board = (function(_super) {
           }
         } else {
           _ref2 = c.currentNodes();
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            n = _ref2[_k];
+          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+            n = _ref2[_j];
             if (!(this.compareNodes(this.boardPosition(n), node))) {
               continue;
             }
@@ -408,11 +436,11 @@ board.Board = (function(_super) {
               otherNode = n;
             } else {
               otherNode = ((function() {
-                var _l, _len3, _ref3, _results;
+                var _k, _len2, _ref3, _results;
                 _ref3 = c.currentNodes();
                 _results = [];
-                for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                  otherNode = _ref3[_l];
+                for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+                  otherNode = _ref3[_k];
                   if (!this.compareNodes(this.boardPosition(n), otherNode)) {
                     _results.push(otherNode);
                   }
@@ -429,8 +457,8 @@ board.Board = (function(_super) {
       }
     }
     _ref3 = this.getSegmentsAt(node);
-    for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-      segment = _ref3[_l];
+    for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+      segment = _ref3[_k];
       if (segment.el === component.el) {
         continue;
       }
@@ -444,11 +472,11 @@ board.Board = (function(_super) {
       return false;
     }
     otherNode = ((function() {
-      var _len4, _m, _ref5, _results;
+      var _l, _len3, _ref5, _results;
       _ref5 = wireSegment.nodes;
       _results = [];
-      for (_m = 0, _len4 = _ref5.length; _m < _len4; _m++) {
-        n = _ref5[_m];
+      for (_l = 0, _len3 = _ref5.length; _l < _len3; _l++) {
+        n = _ref5[_l];
         if (!this.compareNodes(n, node)) {
           _results.push(n);
         }

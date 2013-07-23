@@ -14,8 +14,8 @@ lightbulb.Lightbulb = (function(_super) {
   Lightbulb.prototype.resistance = 5;
 
   Lightbulb.prototype.centerOffset = {
-    x: -12,
-    y: -15
+    x: 0,
+    y: 31
   };
 
   Lightbulb.prototype.nodes = [

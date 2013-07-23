@@ -93,8 +93,10 @@ options.Options = (function(_super) {
     });
   };
 
-  Options.prototype.dragComponent = function(component, x, y, stopDrag) {
-    if (stopDrag) {
+  Options.prototype.dragComponent = function(component, x, y, state) {
+    if (state === 'start') {
+      return this.board.removeComponent(component);
+    } else if (state === 'stop') {
       if (!this.board.addComponent(component, x, y)) {
         this.board.removeComponent(component);
         return component.resetDrag();

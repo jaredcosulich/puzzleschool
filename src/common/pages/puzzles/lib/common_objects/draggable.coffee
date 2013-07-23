@@ -9,7 +9,7 @@ class draggable.Draggable
             e.stop()
             $(document.body).one 'mouseup.drag touchend.drag', (e) =>
                 $(document.body).unbind('mousemove.drag touchstart.drag')
-                @drag(e, true)
+                @drag(e, 'stop')
                 
             if center   
                 offset = @dragElement.offset()
@@ -18,15 +18,17 @@ class draggable.Draggable
             else 
                 @startX = Client.x(e) unless @startX
                 @startY = Client.y(e) unless @startY
-            $(document.body).bind 'mousemove.drag touchstart.drag', (e) => @drag(e)
 
-    drag: (e, stopDrag) -> @dragTo(x: Client.x(e), y: Client.y(e), stopDrag: stopDrag)
+            @drag(e, 'start')
+            $(document.body).bind 'mousemove.drag touchmove.drag', (e) => @drag(e, 'move')
+
+    drag: (e, state) -> @dragTo(x: Client.x(e), y: Client.y(e), state: state)
         
-    dragTo: ({x, y, stopDrag}) ->
+    dragTo: ({x, y, state}) ->
         @currentX = x
         @currentY = y
         @transformer.translate(@currentX - @startX, @currentY - @startY)
-        @trackDrag(@, @currentX, @currentY, stopDrag)
+        @trackDrag(@, @currentX, @currentY, state)
 
     resetDrag: -> 
         delete @startX
