@@ -50,7 +50,9 @@ class board.Board extends circuitousObject.Object
             return false
         return true
             
-    removeComponent: (component) -> delete @components[component.boardId]
+    removeComponent: (component) -> 
+        @components[component.boardId]?.setCurrent(0)
+        delete @components[component.boardId]
             
     initWire: ->
         @wireInfo = {positions: {}, nodes: {}}
@@ -188,9 +190,9 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        @slowTime = (@slowTime or 0) + deltaTime
-        return unless @slowTime > 2000
-        @slowTime -= 2000
+        # @slowTime = (@slowTime or 0) + deltaTime
+        # return unless @slowTime > 2000
+        # @slowTime -= 2000
         
         for piece in @componentsAndWires()
             piece.receivingCurrent = false

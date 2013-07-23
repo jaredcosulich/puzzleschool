@@ -107,6 +107,10 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.removeComponent = function(component) {
+    var _ref;
+    if ((_ref = this.components[component.boardId]) != null) {
+      _ref.setCurrent(0);
+    }
     return delete this.components[component.boardId];
   };
 
@@ -301,11 +305,6 @@ board.Board = (function(_super) {
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
     var amps, c, circuit, component, id, negativeTerminal, piece, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
-    this.slowTime = (this.slowTime || 0) + deltaTime;
-    if (!(this.slowTime > 2000)) {
-      return;
-    }
-    this.slowTime -= 2000;
     _ref = this.componentsAndWires();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       piece = _ref[_i];
