@@ -3,6 +3,7 @@ Draggable = require('../common_objects/draggable').Draggable
 
 class object.Object extends Draggable
     baseFolder: '/assets/images/puzzles/circuitous/'
+    circuitPaths: {}
     constructor: -> 
         
     image: ->
@@ -19,4 +20,12 @@ class object.Object extends Draggable
         @dragTo
             x: x + (@centerOffset?.x or 0)
             y: y + (@centerOffset?.y or 0)
+        
+    currentNodes: ->
+        {x: @currentX + node.x, y: @currentY + node.y} for node in (@nodes or [])
+            
+    setComingFrom: (circuitId, component) ->
+        @circuitPaths[circuitId] = component
+        
+    comingFrom: (circuitId) -> @circuitPaths[circuitId]
         

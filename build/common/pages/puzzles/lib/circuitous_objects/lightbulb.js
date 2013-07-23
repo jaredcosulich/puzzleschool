@@ -13,6 +13,20 @@ lightbulb.Lightbulb = (function(_super) {
 
   Lightbulb.prototype.resistance = 5;
 
+  Lightbulb.prototype.centerOffset = {
+    x: -12,
+    y: -15
+  };
+
+  Lightbulb.prototype.nodes = [
+    {
+      x: 0,
+      y: 33
+    }
+  ];
+
+  Lightbulb.prototype.soloNode = true;
+
   function Lightbulb(_arg) {
     _arg;
     this.init();

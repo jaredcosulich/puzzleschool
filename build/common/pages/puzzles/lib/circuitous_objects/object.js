@@ -13,6 +13,8 @@ object.Object = (function(_super) {
 
   Object.prototype.baseFolder = '/assets/images/puzzles/circuitous/';
 
+  Object.prototype.circuitPaths = {};
+
   function Object() {}
 
   Object.prototype.image = function() {
@@ -37,6 +39,28 @@ object.Object = (function(_super) {
       x: x + (((_ref = this.centerOffset) != null ? _ref.x : void 0) || 0),
       y: y + (((_ref1 = this.centerOffset) != null ? _ref1.y : void 0) || 0)
     });
+  };
+
+  Object.prototype.currentNodes = function() {
+    var node, _i, _len, _ref, _results;
+    _ref = this.nodes || [];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      node = _ref[_i];
+      _results.push({
+        x: this.currentX + node.x,
+        y: this.currentY + node.y
+      });
+    }
+    return _results;
+  };
+
+  Object.prototype.setComingFrom = function(circuitId, component) {
+    return this.circuitPaths[circuitId] = component;
+  };
+
+  Object.prototype.comingFrom = function(circuitId) {
+    return this.circuitPaths[circuitId];
   };
 
   return Object;

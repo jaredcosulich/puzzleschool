@@ -39,6 +39,8 @@ class board.Board extends circuitousObject.Object
         if onBoardX and onBoardY 
             @components.push(component)
             component.positionAt(@roundedCoordinates({x: x, y: y}))
+            # for node in component.currentNodes()
+            #     @addDot(@boardPosition(node))
         else
             return false
         return true
@@ -70,7 +72,6 @@ class board.Board extends circuitousObject.Object
         }
         
     addDot: ({x, y, color}) ->
-        console.log('dot', x, y)
         dot =  $(document.createElement('DIV'))
         dot.html('&nbsp;')
         dot.css
@@ -84,8 +85,11 @@ class board.Board extends circuitousObject.Object
             top: y
             zIndex: 9
         @el.append(dot)
+        console.log('dot', x, y, dot)
         
     recordSegmentPosition: (element, start, end) ->
+        # @addDot(start)
+        # @addDot(end)
         xCoords = [start.x, end.x].sort().join(':')
         yCoords = [start.y, end.y].sort().join(':')
         node1 = "#{start.x}:#{start.y}"
@@ -179,6 +183,10 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
+        @slowTime = (@slowTime or 0) + deltaTime
+        return unless @slowTime > 1000
+        @slowTime -= 1000
+        
         piece.excessiveCurrent = false for piece in @componentsAndWires()
         
         for component in @components when component.powerSource
@@ -186,15 +194,15 @@ class board.Board extends circuitousObject.Object
                 if (circuit = @traceConnections(@boardPosition(negativeTerminal), component)).complete
                     if circuit.totalResistance > 0
                         amps = component.voltage / circuit.totalResistance
-                        # console.log('complete', circuit.totalResistance, amps)
+                        console.log('complete', circuit.totalResistance, amps)
                     else
                         amps = 'infinite'
                         for component in circuit.components
                             component.excessiveCurrent = true
                             component.el.addClass('excessive_current')
-                        # console.log('complete', circuit.totalResistance, amps)
+                        console.log('complete', circuit.totalResistance, amps)
                 else
-                    # console.log('incomplete')
+                    console.log('incomplete')
 
         for piece in @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
@@ -208,8 +216,9 @@ class board.Board extends circuitousObject.Object
         
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
                     
-    traceConnections: (node, component, circuit={totalResistance: 0, components: []}) ->         
-        if (nextNodeInfo = @findConnection(node, component))
+    traceConnections: (node, component, circuit={totalResistance: 0, components: []}) ->
+        circuit.id = "#{new Date().getTime()}#{Math.random()}" unless circuit.id        
+        if (nextNodeInfo = @findConnection(node, component, circuit.id))
             circuit.totalResistance += nextNodeInfo.component.resistance or 0
             circuit.components.push(nextNodeInfo.component)
             if nextNodeInfo.component.powerSource    
@@ -220,12 +229,26 @@ class board.Board extends circuitousObject.Object
             circuit.complete = false
         return circuit
     
-    findConnection: (node, component) ->
-        for i in @components when i.powerSource
-            for positiveTerminal in i.currentTerminals('positive')
-                return {component: i} if @compareNodes(@boardPosition(positiveTerminal), node)
-                
-        wireSegment = (segment for segment in @getSegmentsAt(node) when segment.el != component.el)[0]
+    findConnection: (node, component, circuitId) ->
+        for c in @components when c != component
+            if c.powerSource
+                for positiveTerminal in c.currentTerminals('positive')
+                    return {component: c} if @compareNodes(@boardPosition(positiveTerminal), node)
+            else
+                for n in c.currentNodes() when @compareNodes(@boardPosition(n), node)
+                    if c.soloNode
+                        c.setComingFrom(circuitId, component)
+                        otherNode = n
+                    else
+                        otherNode = (otherNode for otherNode in c.currentNodes() when not @compareNodes(@boardPosition(n), otherNode))[0]
+                    return {component: c, otherNode: @boardPosition(otherNode)}
+                        
+        for segment in @getSegmentsAt(node)
+            continue if segment.el == component.el
+            continue if segment.el == component.comingFrom?(circuitId)?.el
+            wireSegment = segment
+            break
+            
         return false unless wireSegment
         otherNode = (n for n in wireSegment.nodes when not @compareNodes(n, node))[0]
         return {component: wireSegment, otherNode: otherNode}
