@@ -28,4 +28,7 @@ class object.Object extends Draggable
         @circuitPaths[circuitId] = component
         
     comingFrom: (circuitId) -> @circuitPaths[circuitId]
+    
+    setCurrent: (@current) -> 
+        
         

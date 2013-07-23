@@ -34,6 +34,19 @@ lightbulb.Lightbulb = (function(_super) {
 
   Lightbulb.prototype.init = function() {};
 
+  Lightbulb.prototype.setCurrent = function(current) {
+    this.current = current;
+    if (this.current > 0) {
+      return this.el.css({
+        backgroundColor: 'yellow'
+      });
+    } else {
+      return this.el.css({
+        backgroundColor: null
+      });
+    }
+  };
+
   return Lightbulb;
 
 })(circuitousObject.Object);

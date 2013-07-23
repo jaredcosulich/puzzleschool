@@ -286,15 +286,11 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var amps, circuit, component, negativeTerminal, piece, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4, _results;
-    this.slowTime = (this.slowTime || 0) + deltaTime;
-    if (!(this.slowTime > 1000)) {
-      return;
-    }
-    this.slowTime -= 1000;
+    var amps, c, circuit, component, negativeTerminal, piece, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
     _ref = this.componentsAndWires();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       piece = _ref[_i];
+      piece.receivingCurrent = false;
       piece.excessiveCurrent = false;
     }
     _ref1 = this.components;
@@ -307,29 +303,38 @@ board.Board = (function(_super) {
           if ((circuit = this.traceConnections(this.boardPosition(negativeTerminal), component)).complete) {
             if (circuit.totalResistance > 0) {
               amps = component.voltage / circuit.totalResistance;
-              console.log('complete', circuit.totalResistance, amps);
-            } else {
-              amps = 'infinite';
               _ref3 = circuit.components;
               for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                component = _ref3[_l];
-                component.excessiveCurrent = true;
-                component.el.addClass('excessive_current');
+                c = _ref3[_l];
+                c.receivingCurrent = true;
+                if (typeof c.setCurrent === "function") {
+                  c.setCurrent(amps);
+                }
               }
-              console.log('complete', circuit.totalResistance, amps);
+            } else {
+              amps = 'infinite';
+              _ref4 = circuit.components;
+              for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
+                c = _ref4[_m];
+                c.excessiveCurrent = true;
+                c.el.addClass('excessive_current');
+              }
             }
           } else {
-            console.log('incomplete');
+
           }
         }
       }
     }
-    _ref4 = this.componentsAndWires();
+    _ref5 = this.componentsAndWires();
     _results = [];
-    for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
-      piece = _ref4[_m];
+    for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
+      piece = _ref5[_n];
       if (!piece.excessiveCurrent) {
-        _results.push(piece.el.removeClass('excessive_current'));
+        piece.el.removeClass('excessive_current');
+      }
+      if (!piece.receivingCurrent) {
+        _results.push(typeof piece.setCurrent === "function" ? piece.setCurrent(0) : void 0);
       } else {
         _results.push(void 0);
       }

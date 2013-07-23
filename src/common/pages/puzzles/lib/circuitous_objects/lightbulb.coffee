@@ -14,3 +14,10 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         @init()
 
     init: ->
+        
+    setCurrent: (@current) ->
+        if @current > 0
+            @el.css(backgroundColor: 'yellow')
+        else
+            @el.css(backgroundColor: null)
+        

@@ -63,6 +63,10 @@ object.Object = (function(_super) {
     return this.circuitPaths[circuitId];
   };
 
+  Object.prototype.setCurrent = function(current) {
+    this.current = current;
+  };
+
   return Object;
 
 })(Draggable);

@@ -183,29 +183,35 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        @slowTime = (@slowTime or 0) + deltaTime
-        return unless @slowTime > 1000
-        @slowTime -= 1000
+        # @slowTime = (@slowTime or 0) + deltaTime
+        # return unless @slowTime > 1000
+        # @slowTime -= 1000
         
-        piece.excessiveCurrent = false for piece in @componentsAndWires()
+        for piece in @componentsAndWires()
+            piece.receivingCurrent = false
+            piece.excessiveCurrent = false 
         
         for component in @components when component.powerSource
             for negativeTerminal in component.currentTerminals('negative')
                 if (circuit = @traceConnections(@boardPosition(negativeTerminal), component)).complete
                     if circuit.totalResistance > 0
                         amps = component.voltage / circuit.totalResistance
-                        console.log('complete', circuit.totalResistance, amps)
+                        for c in circuit.components   
+                            c.receivingCurrent = true
+                            c.setCurrent?(amps)                         
+                        # console.log('complete', circuit.totalResistance, amps)
                     else
                         amps = 'infinite'
-                        for component in circuit.components
-                            component.excessiveCurrent = true
-                            component.el.addClass('excessive_current')
-                        console.log('complete', circuit.totalResistance, amps)
+                        for c in circuit.components
+                            c.excessiveCurrent = true
+                            c.el.addClass('excessive_current')
+                        # console.log('complete', circuit.totalResistance, amps)
                 else
-                    console.log('incomplete')
+                    # console.log('incomplete')
 
         for piece in @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
+            piece.setCurrent?(0) unless piece.receivingCurrent
                     
     boardPosition: (componentNode) ->
         offset = @el.offset()
