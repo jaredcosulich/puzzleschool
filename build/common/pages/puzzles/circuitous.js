@@ -13,6 +13,8 @@ https://www.khanacademy.org/science/physics/electricity-and-magnetism/v/circuits
 http://en.wikipedia.org/wiki/Electrical_circuit
 
 http://www.allaboutcircuits.com
+
+https://6002x.mitx.mit.edu
 */
 
 var soma, wings;

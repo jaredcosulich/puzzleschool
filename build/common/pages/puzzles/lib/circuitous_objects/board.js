@@ -19,7 +19,11 @@ board.Board = (function(_super) {
 
   function Board(_arg) {
     this.el = _arg.el;
-    this.circuitInfo = {};
+    this.circuitInfo = {
+      nodes: {},
+      sections: {},
+      components: {}
+    };
     this.components = {};
     this.init();
   }
@@ -250,7 +254,8 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.createWireSegment = function(coords) {
-    var segment;
+    var position, segment,
+      _this = this;
     segment = $(document.createElement('DIV'));
     segment.addClass('wire_segment');
     segment.css({
@@ -264,6 +269,10 @@ board.Board = (function(_super) {
       segment.height(this.cellDimension);
       segment.addClass('vertical');
     }
+    position = "" + (JSON.stringify(this.wireInfo.start)) + " -- " + (JSON.stringify(coords));
+    segment.bind('mouseover', function() {
+      return console.log(position);
+    });
     this.el.append(segment);
     this.recordSegmentPosition(segment, this.wireInfo.start, coords);
     this.wireInfo.continuation = true;
@@ -292,7 +301,7 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var amps, c, circuit, component, id, negativeTerminal, piece, _i, _len, _ref, _ref1, _ref2, _ref3, _results;
+    var component, id, negativeTerminal, piece, _i, _len, _ref, _ref1, _ref2, _ref3, _results;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];
@@ -306,29 +315,7 @@ board.Board = (function(_super) {
         _ref2 = component.currentNodes('negative');
         for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
           negativeTerminal = _ref2[_i];
-          if ((circuit = this.traceConnections(this.boardPosition(negativeTerminal), component)).complete) {
-            if (circuit.totalResistance > 0) {
-              amps = component.voltage / circuit.totalResistance;
-              for (id in circuit.components) {
-                c = this.componentsAndWires()[id];
-                c.receivingCurrent = true;
-                if (typeof c.setCurrent === "function") {
-                  c.setCurrent(amps);
-                }
-              }
-              console.log('complete', circuit.totalResistance, amps);
-            } else {
-              amps = 'infinite';
-              for (id in circuit.components) {
-                c = this.componentsAndWires()[id];
-                c.excessiveCurrent = true;
-                c.el.addClass('excessive_current');
-              }
-              console.log('complete', circuit.totalResistance, amps);
-            }
-          } else {
-            console.log('incomplete', circuit);
-          }
+          this.compileSections(this.boardPosition(negativeTerminal), component);
         }
       }
     }
@@ -374,63 +361,86 @@ board.Board = (function(_super) {
     return "" + (new Date().getTime()) + (Math.random());
   };
 
-  Board.prototype.newCircuit = function(parent) {
-    var circuit;
-    circuit = {
-      parentId: parent != null ? parent.id : void 0,
+  Board.prototype.newSection = function(node) {
+    var section;
+    section = {
+      nodes: [node],
       totalResistance: 0,
       components: {},
       id: this.generateId()
     };
-    if (parent) {
-      parent.parallel || (parent.parallel = {});
-      parent.parallel[circuit.id] = circuit;
-    }
-    this.circuitInfo[circuit.id] = circuit;
-    return circuit;
+    return section;
   };
 
-  Board.prototype.addToCircuit = function(circuit, component) {
-    circuit.totalResistance += component.resistance || 0;
-    return circuit.components[component.id] = true;
+  Board.prototype.addToSection = function(section, node, component) {
+    if (this.circuitInfo.components[component.id]) {
+      return false;
+    }
+    if (component.powerSource && node.negative) {
+      section.negativeComponent = component;
+    }
+    section.totalResistance += component.resistance || 0;
+    section.components[component.id] = true;
+    if (!component.powerSource) {
+      this.circuitInfo.components[component.id] = section.id;
+    }
+    return true;
   };
 
-  Board.prototype.traceConnections = function(node, component, circuit) {
-    var connection, connections, parallelCircuit, totalParallelResistance, _i, _len;
-    if (circuit == null) {
-      circuit = this.newCircuit();
+  Board.prototype.endSection = function(section, node, component) {
+    var color, colors, componentId, node1Coords, node2Coords, _base, _base1, _name, _name1;
+    if (component.powerSource && node.positive) {
+      section.positiveComponent = component;
     }
-    component.el.addClass('excessive_current');
-    debugger;
-    component.el.removeClass('excessive_current');
-    if (node.negative) {
-      if (circuit.powerSourceId === component.id) {
-        circuit.complete = true;
-        return circuit;
-      } else if (!circuit.powerSourceId) {
-        circuit.powerSourceId = component.id;
-      }
+    section.nodes.push(node);
+    node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
+    node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
+    this.circuitInfo.sections[section.id] = section;
+    (_base = this.circuitInfo.nodes)[_name = "node:" + node1Coords] || (_base[_name] = {});
+    this.circuitInfo.nodes["node:" + node1Coords][section.id] = section;
+    (_base1 = this.circuitInfo.nodes)[_name1 = "node:" + node2Coords] || (_base1[_name1] = {});
+    this.circuitInfo.nodes["node:" + node2Coords][section.id] = section;
+    this.circuitInfo.nodes["nodes:" + node1Coords + node2Coords] = section;
+    this.circuitInfo.nodes["nodes:" + node2Coords + node1Coords] = section;
+    colors = ['red', 'green', 'yellow', 'purple', 'orange', 'blue'];
+    for (componentId in section.components) {
+      color = colors[Object.keys(this.circuitInfo.sections).length - 1];
+      this.componentsAndWires()[componentId].el.css({
+        backgroundColor: color
+      });
     }
-    this.addToCircuit(circuit, component);
-    if ((connections = this.findConnections(node, component, circuit)).length === 1) {
-      return this.traceConnections(connections[0].otherNode, connections[0].component, circuit);
-    } else if (connections.length > 1) {
-      totalParallelResistance = 0;
-      for (_i = 0, _len = connections.length; _i < _len; _i++) {
-        connection = connections[_i];
-        connection.otherNode.negative = true;
-        parallelCircuit = this.traceConnections(connection.otherNode, connection.component, this.newCircuit(circuit));
-        totalParallelResistance += 1.0 / parallelCircuit.totalResistance;
+    return console.log('end', color, JSON.stringify(section.nodes));
+  };
+
+  Board.prototype.compileSections = function(node, component, section) {
+    var connection, connections, parallelSection, _i, _len, _results;
+    if (section == null) {
+      section = this.newSection(node);
+    }
+    if (this.addToSection(section, node, component)) {
+      if ((connections = this.findConnections(node, component, section)).length === 1) {
+        connection = connections[0];
+        if (section.components[connection.component.id]) {
+          return this.endSection(section, connection.matchingNode, connection.component);
+        } else {
+          return this.compileSections(connection.otherNode, connection.component, section);
+        }
+      } else if (connections.length > 1) {
+        this.endSection(section, node, component);
+        _results = [];
+        for (_i = 0, _len = connections.length; _i < _len; _i++) {
+          connection = connections[_i];
+          _results.push(parallelSection = this.compileSections(connection.otherNode, connection.component));
+        }
+        return _results;
       }
-      circuit.totalResistance += 1.0 / totalParallelResistance;
     } else {
-      circuit.complete = false;
+      return this.endSection(section, node, component);
     }
-    return circuit;
   };
 
   Board.prototype.findConnections = function(node, component, circuit) {
-    var c, connections, id, n, nodes, otherNode, segment, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+    var c, connections, id, matchingNode, n, nodes, otherNode, segment, _i, _j, _len, _len1, _ref, _ref1, _ref2;
     connections = [];
     _ref = this.components;
     for (id in _ref) {
@@ -439,14 +449,16 @@ board.Board = (function(_super) {
         _ref1 = (nodes = c.currentNodes());
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           n = _ref1[_i];
-          if (!(this.compareNodes(this.boardPosition(n), node))) {
+          matchingNode = this.boardPosition(n);
+          if (!this.compareNodes(matchingNode, node)) {
             continue;
           }
           if (nodes.length === 1) {
             return [
               {
                 component: c,
-                otherNode: this.boardPosition(n)
+                matchingNode: matchingNode,
+                otherNode: matchingNode
               }
             ];
           } else {
@@ -455,7 +467,7 @@ board.Board = (function(_super) {
               _results = [];
               for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
                 otherNode = nodes[_j];
-                if (!this.compareNodes(this.boardPosition(n), otherNode)) {
+                if (!this.compareNodes(matchingNode, otherNode)) {
                   _results.push(otherNode);
                 }
               }
@@ -464,6 +476,7 @@ board.Board = (function(_super) {
           }
           connections.push({
             component: c,
+            matchingNode: matchingNode,
             otherNode: this.boardPosition(otherNode)
           });
         }
@@ -475,6 +488,18 @@ board.Board = (function(_super) {
       if (!(!circuit.components[segment.id])) {
         continue;
       }
+      matchingNode = ((function() {
+        var _k, _len2, _ref3, _results;
+        _ref3 = segment.nodes;
+        _results = [];
+        for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+          n = _ref3[_k];
+          if (this.compareNodes(n, node)) {
+            _results.push(n);
+          }
+        }
+        return _results;
+      }).call(this))[0];
       otherNode = ((function() {
         var _k, _len2, _ref3, _results;
         _ref3 = segment.nodes;
@@ -489,6 +514,7 @@ board.Board = (function(_super) {
       }).call(this))[0];
       connections.push({
         component: segment,
+        matchingNode: matchingNode,
         otherNode: otherNode
       });
     }

@@ -7,7 +7,7 @@ class board.Board extends circuitousObject.Object
     cellDimension: 32
     
     constructor: ({@el}) ->
-        @circuitInfo = {}
+        @circuitInfo = {nodes: {}, sections: {}, components: {}}
         @components = {}
         @init()
 
@@ -177,6 +177,9 @@ class board.Board extends circuitousObject.Object
             segment.height(@cellDimension)
             segment.addClass('vertical')
             
+        position = "#{JSON.stringify(@wireInfo.start)} -- #{JSON.stringify(coords)}"
+        segment.bind 'mouseover', => console.log(position)    
+            
         @el.append(segment)
         @recordSegmentPosition(segment, @wireInfo.start, coords)   
         @wireInfo.continuation = true
@@ -206,23 +209,24 @@ class board.Board extends circuitousObject.Object
         
         for id, component of @components when component.powerSource
             for negativeTerminal in component.currentNodes('negative')
-                if (circuit = @traceConnections(@boardPosition(negativeTerminal), component)).complete
-                    if circuit.totalResistance > 0
-                        amps = component.voltage / circuit.totalResistance
-                        for id of circuit.components  
-                            c = @componentsAndWires()[id] 
-                            c.receivingCurrent = true
-                            c.setCurrent?(amps)                         
-                        console.log('complete', circuit.totalResistance, amps)
-                    else
-                        amps = 'infinite'
-                        for id of circuit.components
-                            c = @componentsAndWires()[id] 
-                            c.excessiveCurrent = true
-                            c.el.addClass('excessive_current')
-                        console.log('complete', circuit.totalResistance, amps)
-                else
-                    console.log('incomplete', circuit)
+                @compileSections(@boardPosition(negativeTerminal), component)
+                # if (circuit = ).complete
+                #     if circuit.totalResistance > 0
+                #         amps = component.voltage / circuit.totalResistance
+                #         for id of circuit.components  
+                #             c = @componentsAndWires()[id] 
+                #             c.receivingCurrent = true
+                #             c.setCurrent?(amps)                         
+                #         console.log('complete', circuit.totalResistance, amps)
+                #     else
+                #         amps = 'infinite'
+                #         for id of circuit.components
+                #             c = @componentsAndWires()[id] 
+                #             c.excessiveCurrent = true
+                #             c.el.addClass('excessive_current')
+                #         console.log('complete', circuit.totalResistance, amps)
+                # else
+                #     console.log('incomplete', circuit)
 
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
@@ -245,59 +249,78 @@ class board.Board extends circuitousObject.Object
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
     
     generateId: -> "#{new Date().getTime()}#{Math.random()}"
+    
+    newSection: (node) ->
+        section = {nodes: [node], totalResistance: 0, components: {}, id: @generateId()}
+        return section
 
-    newCircuit: (parent)->
-        circuit = {parentId: parent?.id, totalResistance: 0, components: {}, id: @generateId()}
-        if parent
-            parent.parallel or= {}
-            parent.parallel[circuit.id] = circuit
-        @circuitInfo[circuit.id] = circuit        
-        return circuit
+    addToSection: (section, node, component) ->
+        return false if @circuitInfo.components[component.id]
+        
+        if component.powerSource and node.negative
+            section.negativeComponent = component   
 
-    addToCircuit: (circuit, component) ->
-        circuit.totalResistance += component.resistance or 0            
-        circuit.components[component.id] = true            
-                    
-    traceConnections: (node, component, circuit=@newCircuit()) ->
-        component.el.addClass('excessive_current')
-        debugger
-        component.el.removeClass('excessive_current')
+        section.totalResistance += component.resistance or 0            
+        section.components[component.id] = true
+        @circuitInfo.components[component.id] = section.id unless component.powerSource
+        return true
         
-        if node.negative
-            if circuit.powerSourceId == component.id
-                circuit.complete = true
-                return circuit            
-            else if not circuit.powerSourceId
-                circuit.powerSourceId = component.id
+    endSection: (section, node, component) ->
+        if component.powerSource and node.positive
+            section.positiveComponent = component
+
+        section.nodes.push(node)             
+
+        node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
+        node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
         
-        @addToCircuit(circuit, component)
+        @circuitInfo.sections[section.id] = section        
+        @circuitInfo.nodes["node:#{node1Coords}"] or= {}
+        @circuitInfo.nodes["node:#{node1Coords}"][section.id] = section
+        @circuitInfo.nodes["node:#{node2Coords}"] or= {}
+        @circuitInfo.nodes["node:#{node2Coords}"][section.id] = section
+        @circuitInfo.nodes["nodes:#{node1Coords}#{node2Coords}"] = section
+        @circuitInfo.nodes["nodes:#{node2Coords}#{node1Coords}"] = section
+
+        colors = ['red', 'green', 'yellow', 'purple', 'orange', 'blue']
+        for componentId of section.components
+            color = colors[Object.keys(@circuitInfo.sections).length - 1]
+            @componentsAndWires()[componentId].el.css(backgroundColor: color)
+        console.log('end', color, JSON.stringify(section.nodes))
+        # debugger
         
-        if (connections = @findConnections(node, component, circuit)).length == 1
-            return @traceConnections(connections[0].otherNode, connections[0].component, circuit)
-        else if connections.length > 1
-            totalParallelResistance = 0
-            for connection in connections
-                connection.otherNode.negative = true
-                parallelCircuit = @traceConnections(connection.otherNode, connection.component, @newCircuit(circuit))
-                totalParallelResistance += (1.0/parallelCircuit.totalResistance)
-            circuit.totalResistance += (1.0/totalParallelResistance)
+    compileSections: (node, component, section=@newSection(node)) ->
+        # component.el.css(backgroundColor: 'blue')
+        # debugger
+        if @addToSection(section, node, component)            
+            if (connections = @findConnections(node, component, section)).length == 1
+                connection = connections[0]
+                if section.components[connection.component.id]
+                    @endSection(section, connection.matchingNode, connection.component)
+                else
+                    return @compileSections(connection.otherNode, connection.component, section)
+            else if connections.length > 1
+                @endSection(section, node, component)
+                for connection in connections
+                    parallelSection = @compileSections(connection.otherNode, connection.component)
         else
-            circuit.complete = false
-            
-        return circuit
+            @endSection(section, node, component)
     
     findConnections: (node, component, circuit) ->
         connections = []
         for id, c of @components when (c != component and (id == circuit.powerSourceId or !circuit.components[id]))
-            for n in (nodes = c.currentNodes()) when @compareNodes(@boardPosition(n), node)
+            for n in (nodes = c.currentNodes())
+                matchingNode = @boardPosition(n)
+                continue unless @compareNodes(matchingNode, node)
                 if nodes.length == 1
-                    return [{component: c, otherNode: @boardPosition(n)}]                    
+                    return [{component: c, matchingNode: matchingNode, otherNode: matchingNode}]                    
                 else
-                    otherNode = (otherNode for otherNode in nodes when not @compareNodes(@boardPosition(n), otherNode))[0]
-                connections.push({component: c, otherNode: @boardPosition(otherNode)})
+                    otherNode = (otherNode for otherNode in nodes when not @compareNodes(matchingNode, otherNode))[0]
+                connections.push({component: c, matchingNode: matchingNode, otherNode: @boardPosition(otherNode)})
              
         for segment in @getSegmentsAt(node) when not circuit.components[segment.id]
+            matchingNode = (n for n in segment.nodes when @compareNodes(n, node))[0] 
             otherNode = (n for n in segment.nodes when not @compareNodes(n, node))[0]
-            connections.push({component: segment, otherNode: otherNode})
+            connections.push({component: segment, matchingNode: matchingNode, otherNode: otherNode})
          
         return connections

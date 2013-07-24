@@ -80,7 +80,7 @@
 }
 .circuitous .board .wire_segment,
 .circuitous .right_side .options .option img {
-  transition: background-color 1s ease;
+  transition: background-color 0.5s ease;
 }
 .circuitous .board .wire_segment.excessive_current,
 .circuitous .right_side .options .option img.excessive_current {
