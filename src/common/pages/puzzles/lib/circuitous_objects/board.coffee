@@ -195,9 +195,9 @@ class board.Board extends circuitousObject.Object
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         
     moveElectricity: (deltaTime, elapsed) ->
-        @slowTime = (@slowTime or 0) + deltaTime
-        return unless @slowTime > 5000
-        @slowTime -= 5000
+        # @slowTime = (@slowTime or 0) + deltaTime
+        # return unless @slowTime > 5000
+        # @slowTime -= 5000
         
         for id, piece of @componentsAndWires()
             piece.receivingCurrent = false
@@ -212,16 +212,16 @@ class board.Board extends circuitousObject.Object
                             c = @componentsAndWires()[id] 
                             c.receivingCurrent = true
                             c.setCurrent?(amps)                         
-                        console.log('complete', circuit.totalResistance, amps)
+                        # console.log('complete', circuit.totalResistance, amps)
                     else
                         amps = 'infinite'
                         for id of circuit.components
                             c = @componentsAndWires()[id] 
                             c.excessiveCurrent = true
                             c.el.addClass('excessive_current')
-                        console.log('complete', circuit.totalResistance, amps)
+                        # console.log('complete', circuit.totalResistance, amps)
                 else
-                    console.log('incomplete')
+                    # console.log('incomplete', circuit)
 
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
@@ -286,11 +286,11 @@ class board.Board extends circuitousObject.Object
         for id, c of @components when (c != component and (id == circuit.powerSourceId or !circuit.components[id]))
             for n in (nodes = c.currentNodes()) when @compareNodes(@boardPosition(n), node)
                 if nodes.length == 1
-                    otherNode = n
+                    return [{component: c, otherNode: @boardPosition(n)}]                    
                 else
                     otherNode = (otherNode for otherNode in nodes when not @compareNodes(@boardPosition(n), otherNode))[0]
                 connections.push({component: c, otherNode: @boardPosition(otherNode)})
-                        
+             
         for segment in @getSegmentsAt(node) when not circuit.components[segment.id]
             otherNode = (n for n in segment.nodes when not @compareNodes(n, node))[0]
             connections.push({component: segment, otherNode: otherNode})

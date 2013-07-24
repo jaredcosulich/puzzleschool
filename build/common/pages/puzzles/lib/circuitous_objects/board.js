@@ -297,11 +297,6 @@ board.Board = (function(_super) {
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
     var amps, c, circuit, component, id, negativeTerminal, piece, _i, _len, _ref, _ref1, _ref2, _ref3, _results;
-    this.slowTime = (this.slowTime || 0) + deltaTime;
-    if (!(this.slowTime > 5000)) {
-      return;
-    }
-    this.slowTime -= 5000;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];
@@ -325,7 +320,6 @@ board.Board = (function(_super) {
                   c.setCurrent(amps);
                 }
               }
-              console.log('complete', circuit.totalResistance, amps);
             } else {
               amps = 'infinite';
               for (id in circuit.components) {
@@ -333,10 +327,9 @@ board.Board = (function(_super) {
                 c.excessiveCurrent = true;
                 c.el.addClass('excessive_current');
               }
-              console.log('complete', circuit.totalResistance, amps);
             }
           } else {
-            console.log('incomplete');
+
           }
         }
       }
@@ -449,7 +442,12 @@ board.Board = (function(_super) {
             continue;
           }
           if (nodes.length === 1) {
-            otherNode = n;
+            return [
+              {
+                component: c,
+                otherNode: this.boardPosition(n)
+              }
+            ];
           } else {
             otherNode = ((function() {
               var _j, _len1, _results;
