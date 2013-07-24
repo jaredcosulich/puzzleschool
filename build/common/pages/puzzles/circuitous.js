@@ -11,6 +11,8 @@ http://phet.colorado.edu/en/simulation/circuit-construction-kit-dc
 https://www.khanacademy.org/science/physics/electricity-and-magnetism/v/circuits--part-1
 
 http://en.wikipedia.org/wiki/Electrical_circuit
+
+http://www.allaboutcircuits.com
 */
 
 var soma, wings;

@@ -8,7 +8,6 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         y: 31
         
     nodes: [{x: 0, y: 33}]
-    soloNode: true
         
     constructor: ({}) ->
         @init()

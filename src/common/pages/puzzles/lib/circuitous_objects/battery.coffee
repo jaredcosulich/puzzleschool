@@ -7,12 +7,9 @@ class battery.Battery extends circuitousObject.Object
         x: 0
         y: 16
     
-    negativeTerminals: [
-        {x: 0, y: 48}
-    ]
-    
-    positiveTerminals: [
-        {x: 0, y: -48}    
+    nodes: [
+        {x: 0, y: 48, negative: true}
+        {x: 0, y: -48, positive: true}    
     ]
 
     voltage: 9
@@ -21,7 +18,3 @@ class battery.Battery extends circuitousObject.Object
         @init()
 
     init: ->
-       
-    currentTerminals: (type) ->
-        for terminal in @["#{type}Terminals"]
-            {x: @currentX + terminal.x, y: @currentY + terminal.y}

@@ -25,8 +25,6 @@ lightbulb.Lightbulb = (function(_super) {
     }
   ];
 
-  Lightbulb.prototype.soloNode = true;
-
   function Lightbulb(_arg) {
     _arg;
     this.init();

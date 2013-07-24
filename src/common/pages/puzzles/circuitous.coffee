@@ -11,6 +11,8 @@ https://www.khanacademy.org/science/physics/electricity-and-magnetism/v/circuits
 
 http://en.wikipedia.org/wiki/Electrical_circuit
 
+http://www.allaboutcircuits.com
+
 ###
 
 soma = require('soma')

@@ -21,13 +21,13 @@ class object.Object extends Draggable
             x: x + (@centerOffset?.x or 0)
             y: y + (@centerOffset?.y or 0)
         
-    currentNodes: ->
-        {x: @currentX + node.x, y: @currentY + node.y} for node in (@nodes or [])
-            
-    setComingFrom: (circuitId, component) ->
-        @circuitPaths[circuitId] = component
-        
-    comingFrom: (circuitId) -> @circuitPaths[circuitId]
+    currentNodes: (type) ->
+        for node in (@nodes or [])
+            continue if type and not node[type]
+            info = JSON.parse(JSON.stringify(node))
+            info.x = @currentX + node.x
+            info.y = @currentY + node.y
+            info
     
     setCurrent: (@current) -> 
         

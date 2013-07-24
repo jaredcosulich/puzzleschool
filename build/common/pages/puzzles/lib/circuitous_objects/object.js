@@ -41,26 +41,21 @@ object.Object = (function(_super) {
     });
   };
 
-  Object.prototype.currentNodes = function() {
-    var node, _i, _len, _ref, _results;
+  Object.prototype.currentNodes = function(type) {
+    var info, node, _i, _len, _ref, _results;
     _ref = this.nodes || [];
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       node = _ref[_i];
-      _results.push({
-        x: this.currentX + node.x,
-        y: this.currentY + node.y
-      });
+      if (type && !node[type]) {
+        continue;
+      }
+      info = JSON.parse(JSON.stringify(node));
+      info.x = this.currentX + node.x;
+      info.y = this.currentY + node.y;
+      _results.push(info);
     }
     return _results;
-  };
-
-  Object.prototype.setComingFrom = function(circuitId, component) {
-    return this.circuitPaths[circuitId] = component;
-  };
-
-  Object.prototype.comingFrom = function(circuitId) {
-    return this.circuitPaths[circuitId];
   };
 
   Object.prototype.setCurrent = function(current) {
