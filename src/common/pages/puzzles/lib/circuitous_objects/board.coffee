@@ -191,13 +191,14 @@ class board.Board extends circuitousObject.Object
      
     initElectricity: ->
         @electricalAnimation = new Animation()    
-        @electricalAnimation.start 
-            method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
+        # @electricalAnimation.start 
+        #     method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
+        $('.menu').bind 'click', => @moveElectricity()
         
     moveElectricity: (deltaTime, elapsed) ->
         # @slowTime = (@slowTime or 0) + deltaTime
-        # return unless @slowTime > 5000
-        # @slowTime -= 5000
+        # return unless @slowTime > 2000
+        # @slowTime -= 2000
         
         for id, piece of @componentsAndWires()
             piece.receivingCurrent = false
@@ -212,16 +213,16 @@ class board.Board extends circuitousObject.Object
                             c = @componentsAndWires()[id] 
                             c.receivingCurrent = true
                             c.setCurrent?(amps)                         
-                        # console.log('complete', circuit.totalResistance, amps)
+                        console.log('complete', circuit.totalResistance, amps)
                     else
                         amps = 'infinite'
                         for id of circuit.components
                             c = @componentsAndWires()[id] 
                             c.excessiveCurrent = true
                             c.el.addClass('excessive_current')
-                        # console.log('complete', circuit.totalResistance, amps)
+                        console.log('complete', circuit.totalResistance, amps)
                 else
-                    # console.log('incomplete', circuit)
+                    console.log('incomplete', circuit)
 
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
@@ -258,6 +259,10 @@ class board.Board extends circuitousObject.Object
         circuit.components[component.id] = true            
                     
     traceConnections: (node, component, circuit=@newCircuit()) ->
+        component.el.addClass('excessive_current')
+        debugger
+        component.el.removeClass('excessive_current')
+        
         if node.negative
             if circuit.powerSourceId == component.id
                 circuit.complete = true

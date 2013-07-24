@@ -286,12 +286,8 @@ board.Board = (function(_super) {
   Board.prototype.initElectricity = function() {
     var _this = this;
     this.electricalAnimation = new Animation();
-    return this.electricalAnimation.start({
-      method: function(_arg) {
-        var deltaTime, elapsed;
-        deltaTime = _arg.deltaTime, elapsed = _arg.elapsed;
-        return _this.moveElectricity(deltaTime, elapsed);
-      }
+    return $('.menu').bind('click', function() {
+      return _this.moveElectricity();
     });
   };
 
@@ -320,6 +316,7 @@ board.Board = (function(_super) {
                   c.setCurrent(amps);
                 }
               }
+              console.log('complete', circuit.totalResistance, amps);
             } else {
               amps = 'infinite';
               for (id in circuit.components) {
@@ -327,9 +324,10 @@ board.Board = (function(_super) {
                 c.excessiveCurrent = true;
                 c.el.addClass('excessive_current');
               }
+              console.log('complete', circuit.totalResistance, amps);
             }
           } else {
-
+            console.log('incomplete', circuit);
           }
         }
       }
@@ -402,6 +400,9 @@ board.Board = (function(_super) {
     if (circuit == null) {
       circuit = this.newCircuit();
     }
+    component.el.addClass('excessive_current');
+    debugger;
+    component.el.removeClass('excessive_current');
     if (node.negative) {
       if (circuit.powerSourceId === component.id) {
         circuit.complete = true;

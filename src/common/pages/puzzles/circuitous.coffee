@@ -13,6 +13,8 @@ http://en.wikipedia.org/wiki/Electrical_circuit
 
 http://www.allaboutcircuits.com
 
+https://6002x.mitx.mit.edu
+
 ###
 
 soma = require('soma')
