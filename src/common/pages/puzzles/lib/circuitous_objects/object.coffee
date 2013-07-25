@@ -16,6 +16,8 @@ class object.Object extends Draggable
         container.append(@imageElement())
         @el = container.find("img[src=\'#{@image()}\']")
 
+    generateId: (namespace) -> "#{(if n = namespace then n else '')}#{new Date().getTime()}#{Math.random()}"
+
     positionAt: ({x, y}) ->
         @dragTo
             x: x + (@centerOffset?.x or 0)

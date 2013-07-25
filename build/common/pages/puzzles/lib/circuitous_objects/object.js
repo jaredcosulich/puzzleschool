@@ -32,6 +32,11 @@ object.Object = (function(_super) {
     return this.el = container.find("img[src=\'" + (this.image()) + "\']");
   };
 
+  Object.prototype.generateId = function(namespace) {
+    var n;
+    return "" + ((n = namespace) ? n : '') + (new Date().getTime()) + (Math.random());
+  };
+
   Object.prototype.positionAt = function(_arg) {
     var x, y, _ref, _ref1;
     x = _arg.x, y = _arg.y;

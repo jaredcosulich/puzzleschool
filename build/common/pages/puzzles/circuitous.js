@@ -38,6 +38,8 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/transformer.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/draggable.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/object.js');
+      this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/analyzer.js');
+      this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/wires.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/selector.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/battery.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/resistor.js');

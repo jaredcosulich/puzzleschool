@@ -33,6 +33,8 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/common_objects/draggable.js'
 
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/object.js'
+            @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/analyzer.js'
+            @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/wires.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/selector.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/battery.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/resistor.js'
