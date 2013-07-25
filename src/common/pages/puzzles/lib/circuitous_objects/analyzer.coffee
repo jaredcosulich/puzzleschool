@@ -42,7 +42,8 @@ class analyzer.Analyzer extends circuitousObject.Object
         @initLevel(level)
         for id, component of @board.components when component.powerSource
             for negativeTerminal in component.currentNodes('negative')
-                @combineSections(level, @board.boardPosition(negativeTerminal), component)
+                node = @board.boardPosition(negativeTerminal)
+                @combineSections(level, node, component, @newSection(node))
 
         level += 1
         @initLevel(level)
@@ -51,35 +52,36 @@ class analyzer.Analyzer extends circuitousObject.Object
     reduceParallels: (level) ->
         reductionFound = false
 
-        for nodeIds, sections of @info.nodes[level-1] when Object.keys(sections).length > 1 and not sections.parallel
-            reductionFound = true
-            resistance = 0
-            resistance += (1.0 / section.resistance) for id, section of sections
-            parallel = {id: @generateId(), resistance: (1.0 / resistance), nodes: section.nodes}
-            @info.node[level]["#{section.nodes[0].x}:#{section.nodes[0].y}"][parallel.id] = parallel
-            @info.node[level]["#{section.nodes[1].x}:#{section.nodes[1].y}"][parallel.id] = parallel
-
-            @board.clearColors()
-            componentIds = []
-            componentIds = componentIds.concat(id for id of section.components) for id, section of sections
-            @board.color(componentIds, 0)            
-            debugger
+        for nodeIds, sections of @info.nodes[level-1] when Object.keys(sections).length > 1
+            console.log('parallel', nodeIds)
+            # reductionFound = true
+            # resistance = 0
+            # resistance += (1.0 / section.resistance) for id, section of sections
+            # parallel = {id: @generateId(), resistance: (1.0 / resistance), nodes: section.nodes}
+            # @info.node[level]["#{section.nodes[0].x}:#{section.nodes[0].y}"][parallel.id] = parallel
+            # @info.node[level]["#{section.nodes[1].x}:#{section.nodes[1].y}"][parallel.id] = parallel
+            # 
+            # @board.clearColors()
+            # componentIds = []
+            # componentIds = componentIds.concat(id for id of section.components) for id, section of sections
+            # @board.color(componentIds, 0)            
+            # debugger
 
         @reduceParallels() if reductionFound
         return reductionFound
 
-    combineSections: (level, node, component, section=@newSection(node)) ->
+    combineSections: (level, node, component, section) ->
         if @addToSection(level, section, node, component)            
             if (connections = @findConnections(level, node, component, section)).length == 1
                 connection = connections[0]
                 if section.components[connection.component.id]
-                    @endSection(level, section, connection.matchingNode, connection.component)
+                    @endSection(level, section, node, connection.component)
                 else
-                    return @combineSections(level, connection.otherNode, connection.component, section)
+                    return @combineSections(level, connection.otherNode, connection.component, section, @newSection(node))
             else if connections.length > 1
                 @endSection(level, section, node, component)
                 for connection in connections
-                    parallelSection = @combineSections(level, connection.otherNode, connection.component)
+                    parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
         else
             @endSection(level, section, node, component)
 
@@ -143,7 +145,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.nodes[level]["#{node1Coords}#{node2Coords}"][section.id] = section
         @info.nodes[level]["#{node2Coords}#{node1Coords}"] or= {}
         @info.nodes[level]["#{node2Coords}#{node1Coords}"][section.id] = section
-        @board.color((id for id of section.components), Object.keys(@info.sections).length - 1)
+        @board.color((id for id of section.components), Object.keys(@info.sections[level]).length - 1)
         
         
         

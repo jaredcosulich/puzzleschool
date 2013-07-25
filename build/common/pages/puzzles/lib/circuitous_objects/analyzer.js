@@ -41,7 +41,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceSections = function(level) {
-    var component, id, negativeTerminal, _i, _len, _ref, _ref1;
+    var component, id, negativeTerminal, node, _i, _len, _ref, _ref1;
     if (level == null) {
       level = 1;
     }
@@ -53,7 +53,8 @@ analyzer.Analyzer = (function(_super) {
         _ref1 = component.currentNodes('negative');
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           negativeTerminal = _ref1[_i];
-          this.combineSections(level, this.board.boardPosition(negativeTerminal), component);
+          node = this.board.boardPosition(negativeTerminal);
+          this.combineSections(level, node, component, this.newSection(node));
         }
       }
     }
@@ -65,42 +66,14 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceParallels = function(level) {
-    var componentIds, id, nodeIds, parallel, reductionFound, resistance, section, sections, _ref;
+    var nodeIds, reductionFound, sections, _ref;
     reductionFound = false;
     _ref = this.info.nodes[level - 1];
     for (nodeIds in _ref) {
       sections = _ref[nodeIds];
-      if (!(Object.keys(sections).length > 1 && !sections.parallel)) {
-        continue;
+      if (Object.keys(sections).length > 1) {
+        console.log('parallel', nodeIds);
       }
-      reductionFound = true;
-      resistance = 0;
-      for (id in sections) {
-        section = sections[id];
-        resistance += 1.0 / section.resistance;
-      }
-      parallel = {
-        id: this.generateId(),
-        resistance: 1.0 / resistance,
-        nodes: section.nodes
-      };
-      this.info.node[level]["" + section.nodes[0].x + ":" + section.nodes[0].y][parallel.id] = parallel;
-      this.info.node[level]["" + section.nodes[1].x + ":" + section.nodes[1].y][parallel.id] = parallel;
-      this.board.clearColors();
-      componentIds = [];
-      for (id in sections) {
-        section = sections[id];
-        componentIds = componentIds.concat((function() {
-          var _results;
-          _results = [];
-          for (id in section.components) {
-            _results.push(id);
-          }
-          return _results;
-        })());
-      }
-      this.board.color(componentIds, 0);
-      debugger;
     }
     if (reductionFound) {
       this.reduceParallels();
@@ -110,23 +83,20 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.combineSections = function(level, node, component, section) {
     var connection, connections, parallelSection, _i, _len, _results;
-    if (section == null) {
-      section = this.newSection(node);
-    }
     if (this.addToSection(level, section, node, component)) {
       if ((connections = this.findConnections(level, node, component, section)).length === 1) {
         connection = connections[0];
         if (section.components[connection.component.id]) {
-          return this.endSection(level, section, connection.matchingNode, connection.component);
+          return this.endSection(level, section, node, connection.component);
         } else {
-          return this.combineSections(level, connection.otherNode, connection.component, section);
+          return this.combineSections(level, connection.otherNode, connection.component, section, this.newSection(node));
         }
       } else if (connections.length > 1) {
         this.endSection(level, section, node, component);
         _results = [];
         for (_i = 0, _len = connections.length; _i < _len; _i++) {
           connection = connections[_i];
-          _results.push(parallelSection = this.combineSections(level, connection.otherNode, connection.component));
+          _results.push(parallelSection = this.combineSections(level, connection.otherNode, connection.component, this.newSection(node)));
         }
         return _results;
       }
@@ -296,7 +266,7 @@ analyzer.Analyzer = (function(_super) {
         _results.push(id);
       }
       return _results;
-    })(), Object.keys(this.info.sections).length - 1);
+    })(), Object.keys(this.info.sections[level]).length - 1);
   };
 
   return Analyzer;
