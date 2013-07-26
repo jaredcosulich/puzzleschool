@@ -141,9 +141,6 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.combineSections = function(level, node, component, section) {
     var connection, connections, id, parallelSection, _i, _len, _results;
-    if (level > 1) {
-      console.log(component);
-    }
     if (level > 1 && component.components) {
       this.board.color((function() {
         var _results;
@@ -170,6 +167,8 @@ analyzer.Analyzer = (function(_super) {
           _results.push(parallelSection = this.combineSections(level, connection.otherNode, connection.component, this.newSection(node)));
         }
         return _results;
+      } else {
+        return this.endSection(level, section, node, component);
       }
     } else {
       if (Object.keys(section.components).length) {
@@ -182,6 +181,7 @@ analyzer.Analyzer = (function(_super) {
     var c, connection, connections, id, matchingNode, n, nodes, otherNode, segment, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3;
     connections = [];
     if (level > 1) {
+      debugger;
       _ref = this.info.node[level]["" + node.x + ":" + node.y];
       for (id in _ref) {
         connection = _ref[id];
@@ -284,17 +284,20 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.addToSection = function(level, section, node, component) {
+    var cid;
     if (this.info.components[level][component.id]) {
       return false;
     }
     if (component.powerSource && node.negative) {
       section.powerSource = true;
       section.negativeComponentId = component.id;
-      console.log('set negative', section.nodes);
       section.nodes[0].negative = true;
     }
     section.resistance += component.resistance || 0;
     section.components[component.id] = true;
+    for (cid in component.components) {
+      section.components[cid] = true;
+    }
     if (!component.powerSource) {
       this.info.components[level][component.id] = section.id;
     }
@@ -303,14 +306,14 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.endSection = function(level, section, node, component, record) {
     var id;
-    console.log('end section', level);
     if (component.powerSource && node.positive) {
       section.powerSource = true;
       section.positiveComponent = component;
     }
     section.nodes.push(node);
+    console.log('end section', level, JSON.stringify(section.nodes));
     this.recordSection(level, section);
-    return this.board.color((function() {
+    this.board.color((function() {
       var _results;
       _results = [];
       for (id in section.components) {
@@ -318,6 +321,7 @@ analyzer.Analyzer = (function(_super) {
       }
       return _results;
     })(), Object.keys(this.info.sections[level]).length - 1);
+    debugger;
   };
 
   return Analyzer;

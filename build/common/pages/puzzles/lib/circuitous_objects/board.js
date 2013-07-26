@@ -184,15 +184,15 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.color = function(componentIds, index) {
-    var color, colors, componentId, _i, _len, _results;
+    var color, colors, componentId, _i, _len, _ref, _ref1, _results;
     colors = ['red', 'green', 'yellow', 'purple', 'orange', 'blue', 'brown', 'chartreuse', 'cyan', 'gray', 'khaki', 'pink', 'lavender'];
     _results = [];
     for (_i = 0, _len = componentIds.length; _i < _len; _i++) {
       componentId = componentIds[_i];
       color = colors[index];
-      _results.push(this.componentsAndWires()[componentId].el.css({
+      _results.push((_ref = this.componentsAndWires()[componentId]) != null ? (_ref1 = _ref.el) != null ? _ref1.css({
         backgroundColor: color
-      }));
+      }) : void 0 : void 0);
     }
     return _results;
   };

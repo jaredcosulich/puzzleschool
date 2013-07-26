@@ -111,7 +111,7 @@ class board.Board extends circuitousObject.Object
         colors = ['red', 'green', 'yellow', 'purple', 'orange', 'blue', 'brown', 'chartreuse', 'cyan', 'gray', 'khaki', 'pink', 'lavender']
         for componentId in componentIds
             color = colors[index]
-            @componentsAndWires()[componentId].el.css(backgroundColor: color)
+            @componentsAndWires()[componentId]?.el?.css(backgroundColor: color)
     
     addDot: ({x, y, color}) ->
         dot =  $(document.createElement('DIV'))

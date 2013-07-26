@@ -100,7 +100,6 @@ class analyzer.Analyzer extends circuitousObject.Object
         return reductionFound
 
     combineSections: (level, node, component, section) ->
-        console.log(component) if level > 1
         @board.color((id for id of component.components), 1) if level > 1 and component.components
         if @addToSection(level, section, node, component)            
             if (connections = @findConnections(level, node, component, section)).length == 1
@@ -113,13 +112,15 @@ class analyzer.Analyzer extends circuitousObject.Object
                 @endSection(level, section, node, component)
                 for connection in connections
                     parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
+            else
+                @endSection(level, section, node, component)
         else
             @endSection(level, section, node, component) if Object.keys(section.components).length
 
     findConnections: (level, node, component, circuit) ->
         connections = []
         if level > 1          
-            # debugger 
+            debugger 
             for id, connection of @info.node[level]["#{node.x}:#{node.y}"] when connection.id != component.id
                 otherNode = (otherNode for otherNode in connection.nodes when not @compareNodes(node, otherNode))[0]
                 connections.push({component: connection, otherNode: otherNode})
@@ -155,19 +156,20 @@ class analyzer.Analyzer extends circuitousObject.Object
 
         section.resistance += component.resistance or 0            
         section.components[component.id] = true
+        section.components[cid] = true for cid of component.components
         @info.components[level][component.id] = section.id unless component.powerSource
         return true
 
     endSection: (level, section, node, component, record) ->
-        console.log('end section', level)
         if component.powerSource and node.positive
             section.powerSource = true
             section.positiveComponent = component
 
         section.nodes.push(node)             
+        console.log('end section', level, JSON.stringify(section.nodes))
         @recordSection(level, section)
         @board.color((id for id of section.components), Object.keys(@info.sections[level]).length - 1)
-        # debugger
+        debugger
         
         
         
