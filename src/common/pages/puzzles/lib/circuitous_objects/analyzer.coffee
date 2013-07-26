@@ -9,7 +9,8 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info = {node: {}, nodes: {}, sections: {}, components: {}}
         
     run: ->
-        @reduceSections()
+        @initLevel(1)        
+        @reduceSections(1)
 
         # for 
         # if (circuit = ).complete
@@ -39,7 +40,7 @@ class analyzer.Analyzer extends circuitousObject.Object
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
 
     reduceSections: (level=1) ->
-        @initLevel(level)
+        @board.clearColors()
         for id, component of @board.components when component.powerSource
             for negativeTerminal in component.currentNodes('negative')
                 node = @board.boardPosition(negativeTerminal)
@@ -49,90 +50,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @initLevel(level)
         @reduceSections(level) if @reduceParallels(level)
 
-    reduceParallels: (level) ->
-        reductionFound = false
-
-        for nodeIds, sections of @info.nodes[level-1] when Object.keys(sections).length > 1
-            console.log('parallel', nodeIds)
-            # reductionFound = true
-            # resistance = 0
-            # resistance += (1.0 / section.resistance) for id, section of sections
-            # parallel = {id: @generateId(), resistance: (1.0 / resistance), nodes: section.nodes}
-            # @info.node[level]["#{section.nodes[0].x}:#{section.nodes[0].y}"][parallel.id] = parallel
-            # @info.node[level]["#{section.nodes[1].x}:#{section.nodes[1].y}"][parallel.id] = parallel
-            # 
-            # @board.clearColors()
-            # componentIds = []
-            # componentIds = componentIds.concat(id for id of section.components) for id, section of sections
-            # @board.color(componentIds, 0)            
-            # debugger
-
-        @reduceParallels() if reductionFound
-        return reductionFound
-
-    combineSections: (level, node, component, section) ->
-        if @addToSection(level, section, node, component)            
-            if (connections = @findConnections(level, node, component, section)).length == 1
-                connection = connections[0]
-                if section.components[connection.component.id]
-                    @endSection(level, section, node, connection.component)
-                else
-                    return @combineSections(level, connection.otherNode, connection.component, section, @newSection(node))
-            else if connections.length > 1
-                @endSection(level, section, node, component)
-                for connection in connections
-                    parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
-        else
-            @endSection(level, section, node, component)
-
-    findConnections: (level, node, component, circuit) ->
-        connections = []
-        if level > 1
-            existingConnections = @info.node[level-1]["#{node.x}:#{node.y}"]
-            if existingConnections and (Object.keys(existingConnections).length == 1 or existingConnections.parallel)
-                connection = existingConnections.parallel
-                connection = existingConnections[0] unless connection
-                otherNode = (otherNode for otherNode in connection.nodes when not @compareNodes(node, otherNode))[0]
-                return [{component: connection, node: node, otherNode: otherNode}]
-        else
-            for id, c of @board.components when (c != component and (id == circuit.negativeComponentId or !circuit.components[id]))
-                for n in (nodes = c.currentNodes())
-                    matchingNode = @board.boardPosition(n)
-                    continue unless @compareNodes(matchingNode, node)
-                    if nodes.length == 1
-                        return [{component: c, matchingNode: matchingNode, otherNode: matchingNode}]                    
-                    else
-                        otherNode = (otherNode for otherNode in nodes when not @compareNodes(matchingNode, otherNode))[0]
-                    connections.push({component: c, matchingNode: matchingNode, otherNode: @board.boardPosition(otherNode)})
-
-            for segment in @board.wires.find(node) when not circuit.components[segment.id]
-                matchingNode = (n for n in segment.nodes when @compareNodes(n, node))[0] 
-                otherNode = (n for n in segment.nodes when not @compareNodes(n, node))[0]
-                connections.push({component: segment, matchingNode: matchingNode, otherNode: otherNode})
-
-        return connections
-
-    newSection: (node) ->
-        section = {nodes: [node], resistance: 0, components: {}, id: @generateId()}
-        return section
-
-    addToSection: (level, section, node, component) ->
-        return false if @info.components[level][component.id]
-
-        if component.powerSource and node.negative
-            section.negativeComponentId = component.id   
-
-        section.resistance += component.resistance or 0            
-        section.components[component.id] = true
-        @info.components[level][component.id] = section.id unless component.powerSource
-        return true
-
-    endSection: (level, section, node, component) ->
-        if component.powerSource and node.positive
-            section.positiveComponent = component
-
-        section.nodes.push(node)             
-
+    recordSection: (level, section) ->
         node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
         node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
 
@@ -144,8 +62,112 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.nodes[level]["#{node1Coords}#{node2Coords}"] or= {} 
         @info.nodes[level]["#{node1Coords}#{node2Coords}"][section.id] = section
         @info.nodes[level]["#{node2Coords}#{node1Coords}"] or= {}
-        @info.nodes[level]["#{node2Coords}#{node1Coords}"][section.id] = section
+        @info.nodes[level]["#{node2Coords}#{node1Coords}"][section.id] = section        
+
+    reduceParallels: (level) ->
+        reductionFound = false
+
+        analyzed = {}
+        for nodeIds, sections of @info.nodes[level-1]
+            section = sections[Object.keys(sections)[0]]
+            node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
+            node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
+                        
+            continue if analyzed[node1Coords] and analyzed[node2Coords] and analyzed[node1Coords] == analyzed[node2Coords]
+            
+            if Object.keys(sections).length > 1
+                reductionFound = true
+                resistance = 0
+                resistance += (1.0 / section.resistance) for id, section of sections
+                parallel = {id: @generateId(), resistance: (1.0 / resistance), components: {}, nodes: section.nodes}   
+                
+                for id, section of sections
+                    for cid of section.components
+                        parallel.components[cid] = true
+                                  
+                analyzed[node1Coords] = analyzed[node2Coords] = parallel.id
+                @recordSection(level, parallel)
+            
+                @board.clearColors()
+                componentIds = []
+                componentIds = componentIds.concat(id for id of section.components) for id, section of sections
+                @board.color(componentIds, 0)            
+                # debugger
+            else
+                @recordSection(level, section)
+
+        @reduceParallels() if reductionFound
+        return reductionFound
+
+    combineSections: (level, node, component, section) ->
+        console.log(component) if level > 1
+        @board.color((id for id of component.components), 1) if level > 1 and component.components
+        if @addToSection(level, section, node, component)            
+            if (connections = @findConnections(level, node, component, section)).length == 1
+                connection = connections[0]
+                if section.components[connection.component.id]
+                    @endSection(level, section, node, connection.component)
+                else
+                    return @combineSections(level, connection.otherNode, connection.component, section)
+            else if connections.length > 1
+                @endSection(level, section, node, component)
+                for connection in connections
+                    parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
+        else
+            @endSection(level, section, node, component) if Object.keys(section.components).length
+
+    findConnections: (level, node, component, circuit) ->
+        connections = []
+        if level > 1          
+            # debugger 
+            for id, connection of @info.node[level]["#{node.x}:#{node.y}"] when connection.id != component.id
+                otherNode = (otherNode for otherNode in connection.nodes when not @compareNodes(node, otherNode))[0]
+                connections.push({component: connection, otherNode: otherNode})
+            return connections
+        else
+            for id, c of @board.components when (c != component and (id == circuit.negativeComponentId or !circuit.components[id]))
+                for n in (nodes = c.currentNodes())
+                    matchingNode = @board.boardPosition(n)
+                    continue unless @compareNodes(matchingNode, node)
+                    if nodes.length == 1
+                        return [{component: c, otherNode: matchingNode}]                    
+                    else
+                        otherNode = (otherNode for otherNode in nodes when not @compareNodes(matchingNode, otherNode))[0]
+                    connections.push({component: c, otherNode: @board.boardPosition(otherNode)})
+
+            for segment in @board.wires.find(node) when not circuit.components[segment.id]
+                otherNode = (n for n in segment.nodes when not @compareNodes(n, node))[0]
+                connections.push({component: segment, otherNode: otherNode})
+
+        return connections
+
+    newSection: (node) ->
+        section = {nodes: [node], resistance: 0, components: {}, id: @generateId()}
+        return section
+
+    addToSection: (level, section, node, component) ->
+        return false if @info.components[level][component.id]
+
+        if component.powerSource and node.negative
+            section.powerSource = true
+            section.negativeComponentId = component.id
+            section.nodes[0].negative = true   
+
+        section.resistance += component.resistance or 0            
+        section.components[component.id] = true
+        @info.components[level][component.id] = section.id unless component.powerSource
+        return true
+
+    endSection: (level, section, node, component, record) ->
+        console.log('end section', level)
+        if component.powerSource and node.positive
+            section.powerSource = true
+            section.positiveComponent = component
+
+        section.nodes.push(node)             
+        @recordSection(level, section)
         @board.color((id for id of section.components), Object.keys(@info.sections[level]).length - 1)
+        # debugger
         
         
         
