@@ -9,9 +9,9 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info = {node: {}, nodes: {}, sections: {}, components: {}}
         
     run: ->
-        @initLevel(1)        
-        @reduceSections(1)
-
+        @reduceSections()
+        
+        console.log('done', @level, @info.nodes[@level], @info.sections[@level])
         # for 
         # if (circuit = ).complete
         #     if circuit.resistance > 0
@@ -31,7 +31,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         # else
         #     console.log('incomplete', circuit)
 
-    initLevel: (level) ->
+    initLevel: (@level) ->
         @info.node[level] = {}
         @info.nodes[level] = {}
         @info.sections[level] = {}
@@ -40,16 +40,17 @@ class analyzer.Analyzer extends circuitousObject.Object
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
 
     reduceSections: (level=1) ->
+        @initLevel(level)
         @board.clearColors()
         for id, component of @board.components when component.powerSource
             for negativeTerminal in component.currentNodes('negative')
                 node = @board.boardPosition(negativeTerminal)
                 @combineSections(level, node, component, @newSection(node))
 
-        level += 1
-        @initLevel(level)
-        @reduceSections(level) if @reduceParallels(level)
-
+        @initLevel(@level+1)
+        if @reduceParallels(@level)
+            @reduceSections(@level+1) 
+            
     recordSection: (level, section) ->
         node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
         node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
@@ -86,21 +87,24 @@ class analyzer.Analyzer extends circuitousObject.Object
                         parallel.components[cid] = true
                                   
                 analyzed[node1Coords] = analyzed[node2Coords] = parallel.id
+                console.log('parallel', level, parallel) if level == 3
                 @recordSection(level, parallel)
             
                 @board.clearColors()
                 componentIds = []
                 componentIds = componentIds.concat(id for id of section.components) for id, section of sections
-                @board.color(componentIds, 0)            
+                # @board.color(componentIds, 0)            
                 # debugger
             else
+                analyzed[node1Coords] = analyzed[node2Coords] = section.id
+                console.log('not parallel', level, section) if level == 3
                 @recordSection(level, section)
 
         @reduceParallels() if reductionFound
         return reductionFound
 
     combineSections: (level, node, component, section) ->
-        @board.color((id for id of component.components), 1) if level > 1 and component.components
+        # @board.color((id for id of component.components), 1) if level > 1 and component.components
         if @addToSection(level, section, node, component)            
             if (connections = @findConnections(level, node, component, section)).length == 1
                 connection = connections[0]
@@ -120,7 +124,6 @@ class analyzer.Analyzer extends circuitousObject.Object
     findConnections: (level, node, component, circuit) ->
         connections = []
         if level > 1          
-            debugger 
             for id, connection of @info.node[level]["#{node.x}:#{node.y}"] when connection.id != component.id
                 otherNode = (otherNode for otherNode in connection.nodes when not @compareNodes(node, otherNode))[0]
                 connections.push({component: connection, otherNode: otherNode})
@@ -166,10 +169,11 @@ class analyzer.Analyzer extends circuitousObject.Object
             section.positiveComponent = component
 
         section.nodes.push(node)             
-        console.log('end section', level, JSON.stringify(section.nodes))
         @recordSection(level, section)
-        @board.color((id for id of section.components), Object.keys(@info.sections[level]).length - 1)
-        debugger
+
+        # console.log('end section', level, JSON.stringify(section.nodes))
+        # @board.color((id for id of section.components), Object.keys(@info.sections[level]).length - 1)
+        # debugger if level > 1
         
         
         

@@ -26,11 +26,12 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
-    this.initLevel(1);
-    return this.reduceSections(1);
+    this.reduceSections();
+    return console.log('done', this.level, this.info.nodes[this.level], this.info.sections[this.level]);
   };
 
   Analyzer.prototype.initLevel = function(level) {
+    this.level = level;
     this.info.node[level] = {};
     this.info.nodes[level] = {};
     this.info.sections[level] = {};
@@ -46,6 +47,7 @@ analyzer.Analyzer = (function(_super) {
     if (level == null) {
       level = 1;
     }
+    this.initLevel(level);
     this.board.clearColors();
     _ref = this.board.components;
     for (id in _ref) {
@@ -59,10 +61,9 @@ analyzer.Analyzer = (function(_super) {
         }
       }
     }
-    level += 1;
-    this.initLevel(level);
-    if (this.reduceParallels(level)) {
-      return this.reduceSections(level);
+    this.initLevel(this.level + 1);
+    if (this.reduceParallels(this.level)) {
+      return this.reduceSections(this.level + 1);
     }
   };
 
@@ -114,6 +115,9 @@ analyzer.Analyzer = (function(_super) {
           }
         }
         analyzed[node1Coords] = analyzed[node2Coords] = parallel.id;
+        if (level === 3) {
+          console.log('parallel', level, parallel);
+        }
         this.recordSection(level, parallel);
         this.board.clearColors();
         componentIds = [];
@@ -128,8 +132,11 @@ analyzer.Analyzer = (function(_super) {
             return _results;
           })());
         }
-        this.board.color(componentIds, 0);
       } else {
+        analyzed[node1Coords] = analyzed[node2Coords] = section.id;
+        if (level === 3) {
+          console.log('not parallel', level, section);
+        }
         this.recordSection(level, section);
       }
     }
@@ -140,17 +147,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.combineSections = function(level, node, component, section) {
-    var connection, connections, id, parallelSection, _i, _len, _results;
-    if (level > 1 && component.components) {
-      this.board.color((function() {
-        var _results;
-        _results = [];
-        for (id in component.components) {
-          _results.push(id);
-        }
-        return _results;
-      })(), 1);
-    }
+    var connection, connections, parallelSection, _i, _len, _results;
     if (this.addToSection(level, section, node, component)) {
       if ((connections = this.findConnections(level, node, component, section)).length === 1) {
         connection = connections[0];
@@ -181,7 +178,6 @@ analyzer.Analyzer = (function(_super) {
     var c, connection, connections, id, matchingNode, n, nodes, otherNode, segment, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3;
     connections = [];
     if (level > 1) {
-      debugger;
       _ref = this.info.node[level]["" + node.x + ":" + node.y];
       for (id in _ref) {
         connection = _ref[id];
@@ -305,23 +301,15 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.endSection = function(level, section, node, component, record) {
-    var id;
     if (component.powerSource && node.positive) {
       section.powerSource = true;
       section.positiveComponent = component;
     }
     section.nodes.push(node);
-    console.log('end section', level, JSON.stringify(section.nodes));
-    this.recordSection(level, section);
-    this.board.color((function() {
-      var _results;
-      _results = [];
-      for (id in section.components) {
-        _results.push(id);
-      }
-      return _results;
-    })(), Object.keys(this.info.sections[level]).length - 1);
-    debugger;
+    if (level === 3) {
+      console.log('end', level, section);
+    }
+    return this.recordSection(level, section);
   };
 
   return Analyzer;
