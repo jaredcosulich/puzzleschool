@@ -46,7 +46,6 @@ class analyzer.Analyzer extends circuitousObject.Object
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
     compareObjectNodes: (object, nodes) ->
         objectNodes = (@board.boardPosition(n) for n in object.currentNodes())
-        console.log(JSON.stringify(nodes), JSON.stringify(objectNodes))
         return true if (@compareNodes(nodes[0], objectNodes[0]) or @compareNodes(nodes[0], objectNodes[1])) and
                        (@compareNodes(nodes[1], objectNodes[0]) or @compareNodes(nodes[1], objectNodes[1]))
         return false

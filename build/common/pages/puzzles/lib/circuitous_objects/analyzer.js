@@ -86,7 +86,6 @@ analyzer.Analyzer = (function(_super) {
       }
       return _results;
     }).call(this);
-    console.log(JSON.stringify(nodes), JSON.stringify(objectNodes));
     if ((this.compareNodes(nodes[0], objectNodes[0]) || this.compareNodes(nodes[0], objectNodes[1])) && (this.compareNodes(nodes[1], objectNodes[0]) || this.compareNodes(nodes[1], objectNodes[1]))) {
       return true;
     }

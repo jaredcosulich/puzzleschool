@@ -43,7 +43,7 @@ class wires.Wires extends circuitousObject.Object
             @info.start = coords
 
     createOrErase: (coords) ->
-        existingSegment = @getPosition(@info.start, coords)
+        existingSegment = @find(@info.start, coords)
 
         if @info.erasing or (existingSegment and (!@info.continuation or (existingSegment == @info.lastSegment)))
             segment = @erase(coords) if existingSegment
@@ -76,19 +76,15 @@ class wires.Wires extends circuitousObject.Object
         return segment
 
     erase: (coords) ->
-        return unless (segment = @getPosition(@info.start, coords))
+        return unless (segment = @find(@info.start, coords))
         segment.el.remove()
         @recordPosition(null, @info.start, coords)
         @info.erasing = true unless @info.continuation
         return segment.el
 
-    sortCoords: (coord1, coord2) -> [coord1, coord2].sort((a, b) -> b.x - a.x)
-
     recordPosition: (element, start, end) ->
         # @addDot(start)
         # @addDot(end)
-        xCoords = [start.x, end.x].sort().join(':')
-        yCoords = [start.y, end.y].sort().join(':')
         node1 = "#{start.x}:#{start.y}"
         node2 = "#{end.x}:#{end.y}"
 
@@ -98,28 +94,22 @@ class wires.Wires extends circuitousObject.Object
                 el: element
                 nodes: [start, end]
 
-            coords = @sortCoords(start, end)
-            xCoords = [coords[0].x, coords[1].x].join(':')
-            yCoords = [coords[0].y, coords[1].y].join(':')
             @info.all[segment.id] = segment
             
-            @info.positions[xCoords] or= {}
-            @info.positions[xCoords][yCoords] = segment
-
             @info.nodes[node1] or= {}
             @info.nodes[node1][node2] = segment
 
             @info.nodes[node2] or= {}
             @info.nodes[node2][node1] = segment
         else
-            delete @info.positions[xCoords][yCoords]
-            delete @info.nodes[node1][node2]
-            delete @info.nodes[node2][node1]
+            delete @info.nodes[node1]?[node2]
+            delete @info.nodes[node2]?[node1]
 
-    getPosition: (start, end) ->
-        coords = @sortCoords(start, end)
-        xCoords = [coords[0].x, coords[1].x].join(':')
-        yCoords = [coords[0].y, coords[1].y].join(':')
-        @info.positions[xCoords]?[yCoords]
-
-    find: (node) -> (segment for endPoint, segment of @info.nodes["#{node.x}:#{node.y}"])  
+    find: (start, end=null) ->
+        node1 = "#{start.x}:#{start.y}"
+        if end
+            node2 = "#{end.x}:#{end.y}" 
+            @info.nodes[node1]?[node2] or @info.nodes[node2]?[node1]
+        else
+            (segment for endPoint, segment of @info.nodes[node1]) 
+``

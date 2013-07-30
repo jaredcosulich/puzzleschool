@@ -77,7 +77,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.createOrErase = function(coords) {
     var existingSegment, segment;
-    existingSegment = this.getPosition(this.info.start, coords);
+    existingSegment = this.find(this.info.start, coords);
     if (this.info.erasing || (existingSegment && (!this.info.continuation || (existingSegment === this.info.lastSegment)))) {
       if (existingSegment) {
         segment = this.erase(coords);
@@ -114,7 +114,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.erase = function(coords) {
     var segment;
-    if (!(segment = this.getPosition(this.info.start, coords))) {
+    if (!(segment = this.find(this.info.start, coords))) {
       return;
     }
     segment.el.remove();
@@ -125,16 +125,8 @@ wires.Wires = (function(_super) {
     return segment.el;
   };
 
-  Wires.prototype.sortCoords = function(coord1, coord2) {
-    return [coord1, coord2].sort(function(a, b) {
-      return b.x - a.x;
-    });
-  };
-
   Wires.prototype.recordPosition = function(element, start, end) {
-    var coords, node1, node2, segment, xCoords, yCoords, _base, _base1, _base2;
-    xCoords = [start.x, end.x].sort().join(':');
-    yCoords = [start.y, end.y].sort().join(':');
+    var node1, node2, segment, _base, _base1, _ref, _ref1;
     node1 = "" + start.x + ":" + start.y;
     node2 = "" + end.x + ":" + end.y;
     if (element) {
@@ -143,42 +135,42 @@ wires.Wires = (function(_super) {
         el: element,
         nodes: [start, end]
       };
-      coords = this.sortCoords(start, end);
-      xCoords = [coords[0].x, coords[1].x].join(':');
-      yCoords = [coords[0].y, coords[1].y].join(':');
       this.info.all[segment.id] = segment;
-      (_base = this.info.positions)[xCoords] || (_base[xCoords] = {});
-      this.info.positions[xCoords][yCoords] = segment;
-      (_base1 = this.info.nodes)[node1] || (_base1[node1] = {});
+      (_base = this.info.nodes)[node1] || (_base[node1] = {});
       this.info.nodes[node1][node2] = segment;
-      (_base2 = this.info.nodes)[node2] || (_base2[node2] = {});
+      (_base1 = this.info.nodes)[node2] || (_base1[node2] = {});
       return this.info.nodes[node2][node1] = segment;
     } else {
-      delete this.info.positions[xCoords][yCoords];
-      delete this.info.nodes[node1][node2];
-      return delete this.info.nodes[node2][node1];
+      if ((_ref = this.info.nodes[node1]) != null) {
+        delete _ref[node2];
+      }
+      return (_ref1 = this.info.nodes[node2]) != null ? delete _ref1[node1] : void 0;
     }
   };
 
-  Wires.prototype.getPosition = function(start, end) {
-    var coords, xCoords, yCoords, _ref;
-    coords = this.sortCoords(start, end);
-    xCoords = [coords[0].x, coords[1].x].join(':');
-    yCoords = [coords[0].y, coords[1].y].join(':');
-    return (_ref = this.info.positions[xCoords]) != null ? _ref[yCoords] : void 0;
-  };
-
-  Wires.prototype.find = function(node) {
-    var endPoint, segment, _ref, _results;
-    _ref = this.info.nodes["" + node.x + ":" + node.y];
-    _results = [];
-    for (endPoint in _ref) {
-      segment = _ref[endPoint];
-      _results.push(segment);
+  Wires.prototype.find = function(start, end) {
+    var endPoint, node1, node2, segment, _ref, _ref1, _ref2, _results;
+    if (end == null) {
+      end = null;
     }
-    return _results;
+    node1 = "" + start.x + ":" + start.y;
+    if (end) {
+      node2 = "" + end.x + ":" + end.y;
+      return ((_ref = this.info.nodes[node1]) != null ? _ref[node2] : void 0) || ((_ref1 = this.info.nodes[node2]) != null ? _ref1[node1] : void 0);
+    } else {
+      _ref2 = this.info.nodes[node1];
+      _results = [];
+      for (endPoint in _ref2) {
+        segment = _ref2[endPoint];
+        _results.push(segment);
+      }
+      return _results;
+    }
   };
 
   return Wires;
 
 })(circuitousObject.Object);
+
+;
+
