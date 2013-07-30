@@ -28,30 +28,34 @@ analyzer.Analyzer = (function(_super) {
   Analyzer.prototype.run = function() {
     var amps, c, circuit, id, keys, powerSource;
     this.reduceSections();
-    if ((keys = Object.keys(this.info.sections[this.level])).length > 1) {
+    if ((keys = Object.keys(this.info.sections[this.level])).length !== 1) {
       console.log('incomplete', circuit);
     }
     circuit = this.info.sections[this.level][keys[0]];
-    powerSource = this.board.components[circuit.negativeComponentId];
-    if (this.compareObjectNodes(powerSource, circuit.nodes)) {
-      if (circuit.resistance > 0) {
-        amps = powerSource.voltage / circuit.resistance;
-        for (id in circuit.components) {
-          c = this.componentsAndWires()[id];
-          c.receivingCurrent = true;
-          if (typeof c.setCurrent === "function") {
-            c.setCurrent(amps);
+    if (circuit && circuit.negativeComponentId && Object.keys(circuit.components).length > 1) {
+      powerSource = this.board.components[circuit.negativeComponentId];
+      if (this.compareObjectNodes(powerSource, circuit.nodes)) {
+        if (circuit.resistance > 0) {
+          amps = powerSource.voltage / circuit.resistance;
+          for (id in circuit.components) {
+            c = this.board.componentsAndWires()[id];
+            c.receivingCurrent = true;
+            if (typeof c.setCurrent === "function") {
+              c.setCurrent(amps);
+            }
           }
+          return console.log('complete', circuit.resistance, amps);
+        } else {
+          amps = 'infinite';
+          for (id in circuit.components) {
+            c = this.board.componentsAndWires()[id];
+            c.excessiveCurrent = true;
+            c.el.addClass('excessive_current');
+          }
+          return console.log('complete', circuit.resistance, amps);
         }
-        return console.log('complete', circuit.resistance, amps);
       } else {
-        amps = 'infinite';
-        for (id in circuit.components) {
-          c = this.componentsAndWires()[id];
-          c.excessiveCurrent = true;
-          c.el.addClass('excessive_current');
-        }
-        return console.log('complete', circuit.resistance, amps);
+        return console.log('incomplete');
       }
     } else {
       return console.log('incomplete');
@@ -74,7 +78,7 @@ analyzer.Analyzer = (function(_super) {
     var n, objectNodes;
     objectNodes = (function() {
       var _i, _len, _ref, _results;
-      _ref = object.nodes;
+      _ref = object.currentNodes();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         n = _ref[_i];
