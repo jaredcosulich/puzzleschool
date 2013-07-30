@@ -90,15 +90,33 @@ class board.Board extends circuitousObject.Object
         # $('.menu').bind 'click', => @moveElectricity()
         
     moveElectricity: (deltaTime, elapsed) ->
-        @slowTime = (@slowTime or 0) + deltaTime
-        return unless @slowTime > 2000
-        @slowTime -= 2000
+        # @slowTime = (@slowTime or 0) + deltaTime
+        # return unless @slowTime > 5000
+        # @slowTime -= 5000
         
         for id, piece of @componentsAndWires()
             piece.receivingCurrent = false
             piece.excessiveCurrent = false 
         
-        @analyzer.run()
+        circuit = @analyzer.run()
+        if circuit and circuit.complete
+            if circuit.resistance > 0
+                amps = powerSource.voltage / circuit.resistance
+                for id of circuit.components  
+                    c = @componentsAndWires()[id] 
+                    c.receivingCurrent = true
+                    c.setCurrent?(amps)                         
+                console.log('complete', circuit.resistance, amps)
+            else
+                amps = 'infinite'
+                # debugger
+                for id of circuit.components
+                    c = @componentsAndWires()[id] 
+                    c.excessiveCurrent = true
+                    c.el.addClass('excessive_current')
+                console.log('complete', circuit.resistance, amps)
+        else
+            console.log('incomplete')
         
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent

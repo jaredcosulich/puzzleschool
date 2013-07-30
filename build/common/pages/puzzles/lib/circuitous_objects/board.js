@@ -150,19 +150,37 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var id, piece, _ref, _ref1, _results;
-    this.slowTime = (this.slowTime || 0) + deltaTime;
-    if (!(this.slowTime > 2000)) {
-      return;
-    }
-    this.slowTime -= 2000;
+    var amps, c, circuit, id, piece, _ref, _ref1, _results;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];
       piece.receivingCurrent = false;
       piece.excessiveCurrent = false;
     }
-    this.analyzer.run();
+    circuit = this.analyzer.run();
+    if (circuit && circuit.complete) {
+      if (circuit.resistance > 0) {
+        amps = powerSource.voltage / circuit.resistance;
+        for (id in circuit.components) {
+          c = this.componentsAndWires()[id];
+          c.receivingCurrent = true;
+          if (typeof c.setCurrent === "function") {
+            c.setCurrent(amps);
+          }
+        }
+        console.log('complete', circuit.resistance, amps);
+      } else {
+        amps = 'infinite';
+        for (id in circuit.components) {
+          c = this.componentsAndWires()[id];
+          c.excessiveCurrent = true;
+          c.el.addClass('excessive_current');
+        }
+        console.log('complete', circuit.resistance, amps);
+      }
+    } else {
+      console.log('incomplete');
+    }
     _ref1 = this.componentsAndWires();
     _results = [];
     for (id in _ref1) {

@@ -131,7 +131,7 @@ wires.Wires = (function(_super) {
     node2 = "" + end.x + ":" + end.y;
     if (element) {
       segment = {
-        id: "segment" + node1 + node2,
+        id: "wire" + node1 + node2,
         el: element,
         nodes: [start, end]
       };

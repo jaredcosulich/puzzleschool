@@ -859,8 +859,15 @@ languageScramble.ViewHelper = (function() {
     return parseInt(max);
   };
 
+  ViewHelper.prototype.targetHeight = function() {
+    var height, targetHeight;
+    targetHeight = this.$('.scramble_content').height() - 60;
+    height = window.innerHeight ? window.innerHeight : window.landheight;
+    return targetHeight = Math.min(targetHeight, height);
+  };
+
   ViewHelper.prototype.resize = function(callback, targetHeight, increment, maxFontSize) {
-    var fontRatio, height, increase, letter, letters, longestWord, maxWidth, transitionSize,
+    var fontRatio, increase, letter, letters, longestWord, maxWidth, transitionSize,
       _this = this;
     if (maxFontSize == null) {
       maxFontSize = 66;
@@ -871,9 +878,7 @@ languageScramble.ViewHelper = (function() {
       return b.length - a.length;
     })[0];
     if (!targetHeight) {
-      targetHeight = this.$('.scramble_content').height() - 60;
-      height = window.innerHeight ? window.innerHeight : window.landheight;
-      targetHeight = Math.min(targetHeight, height);
+      targetHeight = this.targetHeight();
     }
     if (!increment) {
       fontRatio = letter.width() / parseInt(letter.css('fontSize'));
@@ -1393,7 +1398,7 @@ languageScramble.ViewHelper = (function() {
     dictionary.append(showNextButton);
     dictionary.css({
       opacity: 0,
-      top: (this.$('.scramble_content').height() - dictionary.height()) / 2,
+      top: (this.targetHeight() - dictionary.height()) / 2,
       left: (this.$('.scramble_content').width() - dictionary.width()) / 2
     });
     return dictionary.animate({

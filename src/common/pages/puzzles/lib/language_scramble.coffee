@@ -569,15 +569,17 @@ class languageScramble.ViewHelper
         
         return parseInt(max)
 
+    targetHeight: ->
+        targetHeight = @$('.scramble_content').height() - 60
+        height = if window.innerHeight then window.innerHeight else window.landheight
+        targetHeight = Math.min(targetHeight, height)        
+
     resize: (callback, targetHeight, increment, maxFontSize=66) ->
         letters = @$('.scrambled').find('.letter')
         letter = $(letters[0])
         longestWord = @scrambleInfo[@activeType].split(/\s/).sort((a,b) -> b.length - a.length)[0]
 
-        if not targetHeight
-            targetHeight = @$('.scramble_content').height() - 60
-            height = if window.innerHeight then window.innerHeight else window.landheight
-            targetHeight = Math.min(targetHeight, height)
+        targetHeight = @targetHeight() if not targetHeight
 
         if not increment
             fontRatio = letter.width() / parseInt(letter.css('fontSize'))
@@ -901,7 +903,7 @@ class languageScramble.ViewHelper
                     @showDictionary()
         
         
-    showDictionary: ->            
+    showDictionary: ->  
         dictionary = @$('.dictionary')
 
         if @scrambleInfo["#{@activeType}Sentence"]? && @scrambleInfo["#{@activeType}Sentence"].length
@@ -947,7 +949,7 @@ class languageScramble.ViewHelper
             
         dictionary.css
             opacity: 0
-            top: (@$('.scramble_content').height() - dictionary.height()) / 2
+            top: (@targetHeight() - dictionary.height()) / 2
             left: (@$('.scramble_content').width() - dictionary.width()) / 2
 
         dictionary.animate

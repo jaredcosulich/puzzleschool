@@ -26,40 +26,19 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
-    var amps, c, circuit, id, keys, powerSource;
+    var circuit, keys, powerSource;
     this.reduceSections();
     if ((keys = Object.keys(this.info.sections[this.level])).length !== 1) {
-      console.log('incomplete', circuit);
+      return;
     }
     circuit = this.info.sections[this.level][keys[0]];
-    if (circuit && circuit.negativeComponentId && Object.keys(circuit.components).length > 1) {
+    if (circuit && circuit.negativeComponentId) {
       powerSource = this.board.components[circuit.negativeComponentId];
-      if (this.compareObjectNodes(powerSource, circuit.nodes)) {
-        if (circuit.resistance > 0) {
-          amps = powerSource.voltage / circuit.resistance;
-          for (id in circuit.components) {
-            c = this.board.componentsAndWires()[id];
-            c.receivingCurrent = true;
-            if (typeof c.setCurrent === "function") {
-              c.setCurrent(amps);
-            }
-          }
-          return console.log('complete', circuit.resistance, amps);
-        } else {
-          amps = 'infinite';
-          for (id in circuit.components) {
-            c = this.board.componentsAndWires()[id];
-            c.excessiveCurrent = true;
-            c.el.addClass('excessive_current');
-          }
-          return console.log('complete', circuit.resistance, amps);
-        }
-      } else {
-        return console.log('incomplete');
-      }
+      circuit.complete = this.compareObjectNodes(powerSource, circuit.nodes);
     } else {
-      return console.log('incomplete');
+      circuit.complete = false;
     }
+    return circuit;
   };
 
   Analyzer.prototype.initLevel = function(level) {
@@ -93,21 +72,47 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceSections = function(level) {
-    var component, id, negativeTerminal, node, _i, _len, _ref, _ref1;
+    var cid, component, existingSection, n, negativeTerminal, node, otherNode, s, sid, _i, _len, _ref, _ref1;
     if (level == null) {
       level = 1;
     }
     this.initLevel(level);
-    this.board.clearColors();
     _ref = this.board.components;
-    for (id in _ref) {
-      component = _ref[id];
+    for (cid in _ref) {
+      component = _ref[cid];
       if (component.powerSource) {
         _ref1 = component.currentNodes('negative');
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           negativeTerminal = _ref1[_i];
           node = this.board.boardPosition(negativeTerminal);
-          this.combineSections(level, node, component, this.newSection(node));
+          existingSection = ((function() {
+            var _ref2, _ref3, _results;
+            _ref2 = this.info.sections[level - 1] || {};
+            _results = [];
+            for (sid in _ref2) {
+              s = _ref2[sid];
+              if ((_ref3 = s.components) != null ? _ref3[cid] : void 0) {
+                _results.push(s);
+              }
+            }
+            return _results;
+          }).call(this))[0];
+          if (existingSection) {
+            otherNode = ((function() {
+              var _j, _len1, _ref2, _results;
+              _ref2 = existingSection.nodes;
+              _results = [];
+              for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+                n = _ref2[_j];
+                if (!this.compareNodes(node, n)) {
+                  _results.push(n);
+                }
+              }
+              return _results;
+            }).call(this))[0];
+            otherNode.negative = true;
+          }
+          this.combineSections(level, otherNode || node, existingSection || component, this.newSection(node));
         }
       }
     }
@@ -167,11 +172,7 @@ analyzer.Analyzer = (function(_super) {
           }
         }
         analyzed[node1Coords] = analyzed[node2Coords] = parallel.id;
-        if (level === 3) {
-          console.log('parallel', level, parallel);
-        }
         this.recordSection(level, parallel);
-        this.board.clearColors();
         componentIds = [];
         for (id in sections) {
           section = sections[id];
@@ -186,9 +187,6 @@ analyzer.Analyzer = (function(_super) {
         }
       } else {
         analyzed[node1Coords] = analyzed[node2Coords] = section.id;
-        if (level === 3) {
-          console.log('not parallel', level, section);
-        }
         this.recordSection(level, section);
       }
     }
@@ -199,38 +197,32 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.combineSections = function(level, node, component, section) {
-    var connection, connections, parallelSection, _i, _len, _results;
+    var connection, connections, parallelSection, _i, _len;
     if (this.addToSection(level, section, node, component)) {
       if ((connections = this.findConnections(level, node, component, section)).length === 1) {
         connection = connections[0];
-        if (section.components[connection.component.id]) {
-          return this.endSection(level, section, node, connection.component);
-        } else {
-          return this.combineSections(level, connection.otherNode, connection.component, section);
+        if (section.components[connection.component.id] || !this.combineSections(level, connection.otherNode, connection.component, section)) {
+          this.endSection(level, section, node, connection.component);
         }
       } else if (connections.length > 1) {
         this.endSection(level, section, node, component);
-        _results = [];
         for (_i = 0, _len = connections.length; _i < _len; _i++) {
           connection = connections[_i];
-          _results.push(parallelSection = this.combineSections(level, connection.otherNode, connection.component, this.newSection(node)));
+          parallelSection = this.combineSections(level, connection.otherNode, connection.component, this.newSection(node));
         }
-        return _results;
       } else {
-        return this.endSection(level, section, node, component);
+        this.endSection(level, section, node, component);
       }
-    } else {
-      if (Object.keys(section.components).length) {
-        return this.endSection(level, section, node, component);
-      }
+      return true;
     }
+    return false;
   };
 
   Analyzer.prototype.findConnections = function(level, node, component, circuit) {
     var c, connection, connections, id, matchingNode, n, nodes, otherNode, segment, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3;
     connections = [];
     if (level > 1) {
-      _ref = this.info.node[level]["" + node.x + ":" + node.y];
+      _ref = this.info.node[level - 1]["" + node.x + ":" + node.y];
       for (id in _ref) {
         connection = _ref[id];
         if (!(connection.id !== component.id)) {
@@ -338,17 +330,18 @@ analyzer.Analyzer = (function(_super) {
     }
     if (component.powerSource && node.negative) {
       section.powerSource = true;
-      section.negativeComponentId = component.id;
+      section.negativeComponentId = component.negativeComponentId || component.id;
       section.nodes[0].negative = true;
     }
     section.resistance += component.resistance || 0;
-    section.components[component.id] = true;
-    for (cid in component.components) {
-      section.components[cid] = true;
+    if (component.components) {
+      for (cid in component.components) {
+        section.components[cid] = true;
+      }
+    } else {
+      section.components[component.id] = true;
     }
-    if (!component.powerSource) {
-      this.info.components[level][component.id] = section.id;
-    }
+    this.info.components[level][component.id] = section.id;
     return true;
   };
 
@@ -357,8 +350,10 @@ analyzer.Analyzer = (function(_super) {
       section.powerSource = true;
       section.positiveComponent = component;
     }
-    section.nodes.push(node);
-    return this.recordSection(level, section);
+    if (Object.keys(section.components).length > 1) {
+      section.nodes.push(node);
+      return this.recordSection(level, section);
+    }
   };
 
   return Analyzer;

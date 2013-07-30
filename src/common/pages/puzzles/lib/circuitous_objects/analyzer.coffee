@@ -11,32 +11,18 @@ class analyzer.Analyzer extends circuitousObject.Object
     run: ->
         @reduceSections()
         
-        if (keys = Object.keys(@info.sections[@level])).length != 1
-            console.log('incomplete', circuit)
+        return if (keys = Object.keys(@info.sections[@level])).length != 1
             
         circuit = @info.sections[@level][keys[0]]
-        if circuit and circuit.negativeComponentId and Object.keys(circuit.components).length > 1
+        if circuit and circuit.negativeComponentId
             powerSource = @board.components[circuit.negativeComponentId]
-            if (@compareObjectNodes(powerSource, circuit.nodes))
-                if circuit.resistance > 0
-                    amps = powerSource.voltage / circuit.resistance
-                    for id of circuit.components  
-                        c = @board.componentsAndWires()[id] 
-                        c.receivingCurrent = true
-                        c.setCurrent?(amps)                         
-                    console.log('complete', circuit.resistance, amps)
-                else
-                    amps = 'infinite'
-                    for id of circuit.components
-                        c = @board.componentsAndWires()[id] 
-                        c.excessiveCurrent = true
-                        c.el.addClass('excessive_current')
-                    console.log('complete', circuit.resistance, amps)
-            else
-                console.log('incomplete')
+            circuit.complete = (@compareObjectNodes(powerSource, circuit.nodes))
         else
-            console.log('incomplete')
+            circuit.complete = false
 
+        return circuit
+        
+        
     initLevel: (@level) ->
         @info.node[level] = {}
         @info.nodes[level] = {}
@@ -52,11 +38,14 @@ class analyzer.Analyzer extends circuitousObject.Object
 
     reduceSections: (level=1) ->
         @initLevel(level)
-        @board.clearColors()
-        for id, component of @board.components when component.powerSource
+        for cid, component of @board.components when component.powerSource
             for negativeTerminal in component.currentNodes('negative')
                 node = @board.boardPosition(negativeTerminal)
-                @combineSections(level, node, component, @newSection(node))
+                existingSection = (s for sid, s of (@info.sections[level-1] or {}) when s.components?[cid])[0]
+                if existingSection
+                    otherNode = (n for n in existingSection.nodes when not @compareNodes(node, n))[0]
+                    otherNode.negative = true
+                @combineSections(level, otherNode or node, existingSection or component, @newSection(node))
     
         if Object.keys(@info.sections[@level]).length > 1
             @initLevel(@level+1)
@@ -67,7 +56,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
         node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
 
-        @info.sections[level][section.id] = section        
+        @info.sections[level][section.id] = section 
         @info.node[level]["#{node1Coords}"] or= {} 
         @info.node[level]["#{node1Coords}"][section.id] = section
         @info.node[level]["#{node2Coords}"] or= {}
@@ -99,44 +88,36 @@ class analyzer.Analyzer extends circuitousObject.Object
                         parallel.components[cid] = true
                                   
                 analyzed[node1Coords] = analyzed[node2Coords] = parallel.id
-                console.log('parallel', level, parallel) if level == 3
                 @recordSection(level, parallel)
             
-                @board.clearColors()
                 componentIds = []
                 componentIds = componentIds.concat(id for id of section.components) for id, section of sections
-                # @board.color(componentIds, 0)            
-                # debugger
             else
                 analyzed[node1Coords] = analyzed[node2Coords] = section.id
-                console.log('not parallel', level, section) if level == 3
                 @recordSection(level, section)
 
         @reduceParallels() if reductionFound
         return reductionFound
 
     combineSections: (level, node, component, section) ->
-        # @board.color((id for id of component.components), 1) if level > 1 and component.components
         if @addToSection(level, section, node, component)            
             if (connections = @findConnections(level, node, component, section)).length == 1
                 connection = connections[0]
-                if section.components[connection.component.id]
+                if section.components[connection.component.id] or not @combineSections(level, connection.otherNode, connection.component, section)
                     @endSection(level, section, node, connection.component)
-                else
-                    return @combineSections(level, connection.otherNode, connection.component, section)
             else if connections.length > 1
                 @endSection(level, section, node, component)
                 for connection in connections
                     parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
             else
                 @endSection(level, section, node, component)
-        else
-            @endSection(level, section, node, component) if Object.keys(section.components).length
+            return true
+        return false
 
     findConnections: (level, node, component, circuit) ->
         connections = []
         if level > 1          
-            for id, connection of @info.node[level]["#{node.x}:#{node.y}"] when connection.id != component.id
+            for id, connection of @info.node[level-1]["#{node.x}:#{node.y}"] when connection.id != component.id
                 otherNode = (otherNode for otherNode in connection.nodes when not @compareNodes(node, otherNode))[0]
                 connections.push({component: connection, otherNode: otherNode})
             return connections
@@ -166,13 +147,15 @@ class analyzer.Analyzer extends circuitousObject.Object
 
         if component.powerSource and node.negative
             section.powerSource = true
-            section.negativeComponentId = component.id
+            section.negativeComponentId = component.negativeComponentId or component.id
             section.nodes[0].negative = true   
 
-        section.resistance += component.resistance or 0            
-        section.components[component.id] = true
-        section.components[cid] = true for cid of component.components
-        @info.components[level][component.id] = section.id unless component.powerSource
+        section.resistance += component.resistance or 0
+        if component.components            
+            section.components[cid] = true for cid of component.components
+        else
+            section.components[component.id] = true
+        @info.components[level][component.id] = section.id# unless component.powerSource
         return true
 
     endSection: (level, section, node, component, record) ->
@@ -180,8 +163,9 @@ class analyzer.Analyzer extends circuitousObject.Object
             section.powerSource = true
             section.positiveComponent = component
 
-        section.nodes.push(node)             
-        @recordSection(level, section)
+        if Object.keys(section.components).length > 1
+            section.nodes.push(node)              
+            @recordSection(level, section)
 
         # console.log('end section', level, JSON.stringify(section.nodes))
         # @board.color((id for id of section.components), Object.keys(@info.sections[level]).length - 1)

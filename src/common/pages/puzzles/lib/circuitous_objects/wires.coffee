@@ -90,7 +90,7 @@ class wires.Wires extends circuitousObject.Object
 
         if element
             segment = 
-                id: "segment#{node1}#{node2}"
+                id: "wire#{node1}#{node2}"
                 el: element
                 nodes: [start, end]
 
