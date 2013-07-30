@@ -131,6 +131,13 @@ equationComponent.EquationComponent = (function() {
   EquationComponent.prototype.showPlaceHolder = function() {
     this.placeHolder.show();
     this.placeHolder.html(this.display(this.element.html()));
+    return this.positionPlaceHolder();
+  };
+
+  EquationComponent.prototype.positionPlaceHolder = function() {
+    if (!this.placeHolder || !this.offset || !this.container) {
+      return;
+    }
     return this.placeHolder.css({
       position: 'absolute',
       top: this.offset.top - this.container.offset().top,
@@ -186,6 +193,11 @@ equationComponent.EquationComponent = (function() {
       this.reset();
     }
     return $(document.body).unbind('mousemove.drag touchmove.drag');
+  };
+
+  EquationComponent.prototype.remove = function() {
+    this.elementContainer.remove();
+    return this.placeHolder.remove();
   };
 
   EquationComponent.prototype.reset = function() {

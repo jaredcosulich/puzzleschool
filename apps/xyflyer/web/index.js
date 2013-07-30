@@ -643,7 +643,7 @@ window.app = {
       _this.populatePlayer();
       return _this.showPlayer();
     });
-    return this.settings.find('.form .actions .cancel').bind('touchstart.cancel', function(e) {
+    this.settings.find('.form .actions .cancel').bind('touchstart.cancel', function(e) {
       var button;
       button = $(e.currentTarget);
       button.addClass('active');
@@ -651,6 +651,18 @@ window.app = {
         return button.removeClass('active');
       });
       return _this.showPlayer();
+    });
+    return this.settings.find('.form .actions .reset').bind('touchstart.reset', function(e) {
+      var button;
+      button = $(e.currentTarget);
+      button.addClass('active');
+      $(document.body).one('touchend.cancel', function() {
+        return button.removeClass('active');
+      });
+      if (confirm('Are you sure you want to reset this player\'s progress?')) {
+        _this.resetPlayer();
+        return _this.showPlayer();
+      }
     });
   },
   initRadios: function() {
@@ -834,6 +846,19 @@ window.app = {
     this.initLevel();
     (_base = this.puzzleProgress)[_name = this.level.id] || (_base[_name] = {});
     return this.populatePlayer();
+  },
+  resetPlayer: function() {
+    var levelElement;
+    this.selectedPlayer.attempted = 0;
+    this.selectedPlayer.completed = 0;
+    this.selectedPlayer.name = 'New Player';
+    this.selectedPlayer.hand = 'Right';
+    this.puzzleProgress = {};
+    this.clear();
+    levelElement = $(this.levelSelector.find('.stage .level')[0]);
+    levelElement.addClass('active');
+    this.level = this.findLevel(levelElement.data('id'));
+    return this.initLevel();
   },
   populatePlayer: function() {
     var completed, id, info, key, value, _ref;

@@ -76,7 +76,7 @@ task 'build:circuitous', 'Build the circuitous app', ->
 
 task 'build:language_scramble', 'Build the language scramble app', ->
     execCmds [
-        'cake build:file'
+        'cake build:site'
         'coffee --compile --bare --output apps/language_scramble/web src/apps/language_scramble/js/*.coffee'
         'cp build/common/pages/puzzles/lib/language_scramble.js apps/language_scramble/web/language_scramble.js'
         'cp ender.js apps/language_scramble/web/ender.js'
@@ -86,7 +86,7 @@ task 'build:language_scramble', 'Build the language scramble app', ->
 
 task 'build:xyflyer', 'Build the xyflyer app', ->
     execCmds [
-        'cake build:file'
+        'cake build:site'
         'coffee --compile --bare --output apps/xyflyer/web src/apps/xyflyer/js/*.coffee'
         'cp build/common/pages/puzzles/lib/xyflyer.js apps/xyflyer/web/xyflyer.js'
         'cp build/common/pages/puzzles/lib/xyflyer_objects/* apps/xyflyer/web/objects/'

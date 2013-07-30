@@ -426,6 +426,13 @@ window.app =
             $(document.body).one 'touchend.cancel', => button.removeClass('active')
             @showPlayer()    
 
+        @settings.find('.form .actions .reset').bind 'touchstart.reset', (e) =>
+            button = $(e.currentTarget)
+            button.addClass('active')
+            $(document.body).one 'touchend.cancel', => button.removeClass('active')
+            if confirm('Are you sure you want to reset this player\'s progress?')    
+                @resetPlayer() 
+                @showPlayer()
         
     initRadios: ->
         for direction in ['left', 'right']
@@ -506,6 +513,20 @@ window.app =
         @initLevel()
         @puzzleProgress[@level.id] or= {}
         @populatePlayer()
+        
+    resetPlayer: () ->
+        @selectedPlayer.attempted = 0
+        @selectedPlayer.completed = 0
+        @selectedPlayer.name = 'New Player'
+        @selectedPlayer.hand = 'Right'        
+        @puzzleProgress = {}
+        
+        @clear()
+        levelElement = $(@levelSelector.find('.stage .level')[0])
+        levelElement.addClass('active')
+        @level = @findLevel(levelElement.data('id'))
+                    
+        @initLevel()
     
     populatePlayer: ->
         return unless @selectedPlayer

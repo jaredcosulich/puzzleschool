@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name = "format-detection" content = "telephone=no"/>
-        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5;" />
+        <!--<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1;" />-->
         
         <!-- <script src="http://debug.appmobi.com/target/target-script-min.js#af6ef072-5a70-4b53-82ef-f5d0af8793b0"></script> -->
         <!-- the line below is required for access to the appMobi JS library -->
@@ -15,7 +15,30 @@
         <script type="text/javascript" language="javascript">
                 // This event handler is fired once the AppMobi libraries are ready
                 function onDeviceReady() {
-                    AppMobi.display.useViewport(600,960);
+        			if (navigator.userAgent.toUpperCase().indexOf("IPHONE")!=-1 ||
+                    	navigator.userAgent.toUpperCase().indexOf("IPOD")!=-1) {
+                    	$('head').append( '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5" />' );
+                        window.appScale = 1
+                        AppMobi.display.useViewport(600,960);
+                        window.appSized = true;
+                    } else if (navigator.userAgent.toUpperCase().indexOf("IPAD")!=-1) {
+                    	$('head').append( '<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />' );
+                        window.appScale = 1.5
+                        AppMobi.display.useViewport(600,960);
+                        window.appSized = true;
+                    } else if (navigator.userAgent.toUpperCase().indexOf("ANDROID")!=-1) {
+                    	window.appScale = 0.4
+                    	$.timeout(500, function() {
+                            AppMobi.display.useViewport(600*(600/(window.innerHeight*1.6)),960*(960/(window.innerWidth*1.65)));
+                            window.appSized = true;
+                    	})
+                	} else {
+                	    window.appScale = 1
+                        AppMobi.display.useViewport(600,960);
+                        window.appSized = true;
+                	}
+
+                    // AppMobi.display.useViewport(600,960);
                     AppMobi.device.setAutoRotate(true);
                     AppMobi.device.setRotateOrientation("any");
         	        window.app.initialize();
@@ -40,7 +63,7 @@
         <title>Language Scramble</title>
     </head>
     
-    <body class='language_scramble portrait'>
+    <body class='language_scramble'>
         <div class='scramble_content hide_keyboard'>
             <div class="section display_words text-center"></div>
             <div class="section guesses text-center">

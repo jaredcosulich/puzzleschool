@@ -26,8 +26,36 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
+    var amps, c, circuit, id, keys, powerSource;
     this.reduceSections();
-    return console.log('done', this.level, this.info.nodes[this.level], this.info.sections[this.level]);
+    if ((keys = Object.keys(this.info.sections[this.level])).length > 1) {
+      console.log('incomplete', circuit);
+    }
+    circuit = this.info.sections[this.level][keys[0]];
+    powerSource = this.board.components[circuit.negativeComponentId];
+    if (this.compareObjectNodes(powerSource, circuit.nodes)) {
+      if (circuit.resistance > 0) {
+        amps = powerSource.voltage / circuit.resistance;
+        for (id in circuit.components) {
+          c = this.componentsAndWires()[id];
+          c.receivingCurrent = true;
+          if (typeof c.setCurrent === "function") {
+            c.setCurrent(amps);
+          }
+        }
+        return console.log('complete', circuit.resistance, amps);
+      } else {
+        amps = 'infinite';
+        for (id in circuit.components) {
+          c = this.componentsAndWires()[id];
+          c.excessiveCurrent = true;
+          c.el.addClass('excessive_current');
+        }
+        return console.log('complete', circuit.resistance, amps);
+      }
+    } else {
+      return console.log('incomplete');
+    }
   };
 
   Analyzer.prototype.initLevel = function(level) {
@@ -40,6 +68,25 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.compareNodes = function(node1, node2) {
     return node1.x === node2.x && node1.y === node2.y;
+  };
+
+  Analyzer.prototype.compareObjectNodes = function(object, nodes) {
+    var n, objectNodes;
+    objectNodes = (function() {
+      var _i, _len, _ref, _results;
+      _ref = object.nodes;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        n = _ref[_i];
+        _results.push(this.board.boardPosition(n));
+      }
+      return _results;
+    }).call(this);
+    console.log(JSON.stringify(nodes), JSON.stringify(objectNodes));
+    if ((this.compareNodes(nodes[0], objectNodes[0]) || this.compareNodes(nodes[0], objectNodes[1])) && (this.compareNodes(nodes[1], objectNodes[0]) || this.compareNodes(nodes[1], objectNodes[1]))) {
+      return true;
+    }
+    return false;
   };
 
   Analyzer.prototype.reduceSections = function(level) {
@@ -61,9 +108,11 @@ analyzer.Analyzer = (function(_super) {
         }
       }
     }
-    this.initLevel(this.level + 1);
-    if (this.reduceParallels(this.level)) {
-      return this.reduceSections(this.level + 1);
+    if (Object.keys(this.info.sections[this.level]).length > 1) {
+      this.initLevel(this.level + 1);
+      if (this.reduceParallels(this.level)) {
+        return this.reduceSections(this.level + 1);
+      }
     }
   };
 
@@ -306,9 +355,6 @@ analyzer.Analyzer = (function(_super) {
       section.positiveComponent = component;
     }
     section.nodes.push(node);
-    if (level === 3) {
-      console.log('end', level, section);
-    }
     return this.recordSection(level, section);
   };
 

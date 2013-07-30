@@ -11,25 +11,28 @@ class analyzer.Analyzer extends circuitousObject.Object
     run: ->
         @reduceSections()
         
-        console.log('done', @level, @info.nodes[@level], @info.sections[@level])
-        # for 
-        # if (circuit = ).complete
-        #     if circuit.resistance > 0
-        #         amps = component.voltage / circuit.resistance
-        #         for id of circuit.components  
-        #             c = @componentsAndWires()[id] 
-        #             c.receivingCurrent = true
-        #             c.setCurrent?(amps)                         
-        #         console.log('complete', circuit.resistance, amps)
-        #     else
-        #         amps = 'infinite'
-        #         for id of circuit.components
-        #             c = @componentsAndWires()[id] 
-        #             c.excessiveCurrent = true
-        #             c.el.addClass('excessive_current')
-        #         console.log('complete', circuit.resistance, amps)
-        # else
-        #     console.log('incomplete', circuit)
+        if (keys = Object.keys(@info.sections[@level])).length > 1
+            console.log('incomplete', circuit)
+            
+        circuit = @info.sections[@level][keys[0]]
+        powerSource = @board.components[circuit.negativeComponentId]
+        if (@compareObjectNodes(powerSource, circuit.nodes))
+            if circuit.resistance > 0
+                amps = powerSource.voltage / circuit.resistance
+                for id of circuit.components  
+                    c = @componentsAndWires()[id] 
+                    c.receivingCurrent = true
+                    c.setCurrent?(amps)                         
+                console.log('complete', circuit.resistance, amps)
+            else
+                amps = 'infinite'
+                for id of circuit.components
+                    c = @componentsAndWires()[id] 
+                    c.excessiveCurrent = true
+                    c.el.addClass('excessive_current')
+                console.log('complete', circuit.resistance, amps)
+        else
+            console.log('incomplete')
 
     initLevel: (@level) ->
         @info.node[level] = {}
@@ -38,6 +41,12 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.components[level] = {}
 
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
+    compareObjectNodes: (object, nodes) ->
+        objectNodes = (@board.boardPosition(n) for n in object.nodes)
+        console.log(JSON.stringify(nodes), JSON.stringify(objectNodes))
+        return true if (@compareNodes(nodes[0], objectNodes[0]) or @compareNodes(nodes[0], objectNodes[1])) and
+                       (@compareNodes(nodes[1], objectNodes[0]) or @compareNodes(nodes[1], objectNodes[1]))
+        return false
 
     reduceSections: (level=1) ->
         @initLevel(level)
@@ -46,10 +55,11 @@ class analyzer.Analyzer extends circuitousObject.Object
             for negativeTerminal in component.currentNodes('negative')
                 node = @board.boardPosition(negativeTerminal)
                 @combineSections(level, node, component, @newSection(node))
-
-        @initLevel(@level+1)
-        if @reduceParallels(@level)
-            @reduceSections(@level+1) 
+    
+        if Object.keys(@info.sections[@level]).length > 1
+            @initLevel(@level+1)
+            if @reduceParallels(@level)
+                @reduceSections(@level+1) 
             
     recordSection: (level, section) ->
         node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"

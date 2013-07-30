@@ -494,7 +494,7 @@ body {
 .language_scramble .level_progress_meter {
   width: 100%;
   position: absolute;
-  left: 15px;
+  left: 45px;
   bottom: 15px;
 }
 .language_scramble.portrait .level_progress_meter {
@@ -507,7 +507,7 @@ body {
   width: 927px;
   height: 30px;
   background: transparent url('images/progress.png') no-repeat;
-  margin-top: -12px;
+  margin-top: -18px;
   z-index: 3;
   position: absolute;
 }

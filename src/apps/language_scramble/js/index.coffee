@@ -1,6 +1,6 @@
 window.app = 
     initialize: ->
-        if not (@width = window.innerWidth or window.landwidth) or not (@height = window.innerHeight or window.landheight)# or @width < @height
+        if not window.appSized or not (@width = window.innerWidth or window.landwidth) or not (@height = window.innerHeight or window.landheight)# or @width < @height
             $.timeout 100, -> window.app.initialize()
             return
             
@@ -57,7 +57,7 @@ window.app =
         if @width != (window.innerWidth or window.landwidth)
             @width = window.innerWidth or window.landwidth
             @height = window.innerHeight or window.landheight
-            @sizeElements()            
+            # @sizeElements()            
             @viewHelper.displayScramble()
         $.timeout interval, () => @checkSize(interval * 2)
 
@@ -83,11 +83,11 @@ window.app =
         language = language.toLowerCase()
         levelSelect = @$("##{language}_select_menu")
         startPosition = {}
-        levelSelect.bind 'touchstart', (e) =>
+        levelSelect.bind 'touchstart.scroll_levels', (e) =>
             startPosition = 
                 scrollTop: parseInt(levelSelect.scrollTop())
                 touch: @viewHelper.clientY(e)
-        levelSelect.bind 'touchmove', (e) =>
+        levelSelect.bind 'touchmove.scroll_levels', (e) =>
             levelSelect.scrollTop(startPosition.scrollTop - (@viewHelper.clientY(e) - startPosition.touch))
     
         showLevel = (level) =>
@@ -202,6 +202,10 @@ window.app =
     
     
     initMenus: ->
+        #RESET BUTTON TO BE REMOVED
+        @$('#foreign_select_menu h2').bind 'click.reset', =>
+            @resetPuzzleData() if confirm('Are you sure you want to reset your progress?')
+            
         @menus = 
             native: @$('#native_select_menu')
             foreign: @$('#foreign_select_menu')
@@ -298,5 +302,9 @@ window.app =
             else    
                 @viewHelper.typeLetter(htmlLetter, true)
 
+    resetPuzzleData: ->
+        @puzzleData.levels = {}
+        @viewHelper.puzzleData = @puzzleData
+        @$('.percent_complete').width(0)
             
             

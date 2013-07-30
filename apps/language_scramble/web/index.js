@@ -4,7 +4,7 @@ window.app = {
   initialize: function() {
     var data, languageScramble, _ref,
       _this = this;
-    if (!(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight)) {
+    if (!window.appSized || !(this.width = window.innerWidth || window.landwidth) || !(this.height = window.innerHeight || window.landheight)) {
       $.timeout(100, function() {
         return window.app.initialize();
       });
@@ -68,7 +68,6 @@ window.app = {
     if (this.width !== (window.innerWidth || window.landwidth)) {
       this.width = window.innerWidth || window.landwidth;
       this.height = window.innerHeight || window.landheight;
-      this.sizeElements();
       this.viewHelper.displayScramble();
     }
     return $.timeout(interval, function() {
@@ -85,13 +84,13 @@ window.app = {
     language = language.toLowerCase();
     levelSelect = this.$("#" + language + "_select_menu");
     startPosition = {};
-    levelSelect.bind('touchstart', function(e) {
+    levelSelect.bind('touchstart.scroll_levels', function(e) {
       return startPosition = {
         scrollTop: parseInt(levelSelect.scrollTop()),
         touch: _this.viewHelper.clientY(e)
       };
     });
-    levelSelect.bind('touchmove', function(e) {
+    levelSelect.bind('touchmove.scroll_levels', function(e) {
       return levelSelect.scrollTop(startPosition.scrollTop - (_this.viewHelper.clientY(e) - startPosition.touch));
     });
     showLevel = function(level) {
@@ -245,6 +244,11 @@ window.app = {
   initMenus: function() {
     var menu, name, _fn, _ref,
       _this = this;
+    this.$('#foreign_select_menu h2').bind('click.reset', function() {
+      if (confirm('Are you sure you want to reset your progress?')) {
+        return _this.resetPuzzleData();
+      }
+    });
     this.menus = {
       "native": this.$('#native_select_menu'),
       foreign: this.$('#foreign_select_menu'),
@@ -384,5 +388,10 @@ window.app = {
       default:
         return this.viewHelper.typeLetter(htmlLetter, true);
     }
+  },
+  resetPuzzleData: function() {
+    this.puzzleData.levels = {};
+    this.viewHelper.puzzleData = this.puzzleData;
+    return this.$('.percent_complete').width(0);
   }
 };
