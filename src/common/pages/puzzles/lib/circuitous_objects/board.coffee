@@ -90,9 +90,9 @@ class board.Board extends circuitousObject.Object
         # $('.menu').bind 'click', => @moveElectricity()
         
     moveElectricity: (deltaTime, elapsed) ->
-        # @slowTime = (@slowTime or 0) + deltaTime
-        # return unless @slowTime > 5000
-        # @slowTime -= 5000
+        @slowTime = (@slowTime or 0) + deltaTime
+        return unless @slowTime > 5000
+        @slowTime -= 5000
         
         for id, piece of @componentsAndWires()
             piece.receivingCurrent = false
@@ -100,21 +100,17 @@ class board.Board extends circuitousObject.Object
         
         circuit = @analyzer.run()
         if circuit and circuit.complete
-            if circuit.resistance > 0
-                amps = @components[circuit.negativeComponentId].voltage / circuit.resistance
-                for id of circuit.components  
-                    c = @componentsAndWires()[id] 
-                    c.receivingCurrent = true
-                    c.setCurrent?(amps)                         
-                console.log('complete', circuit.resistance, amps)
-            else
-                amps = 'infinite'
-                # debugger
-                for id of circuit.components
-                    c = @componentsAndWires()[id] 
-                    c.excessiveCurrent = true
-                    c.el.addClass('excessive_current')
-                console.log('complete', circuit.resistance, amps)
+            for section in circuit.sections
+                if section.amps == 'infinite'   
+                    for id of section.components
+                        c = @componentsAndWires()[id] 
+                        c.excessiveCurrent = true
+                        c.el.addClass('excessive_current')
+                else
+                    for id of section.components  
+                        c = @componentsAndWires()[id] 
+                        c.receivingCurrent = true
+                        c.setCurrent?(section.amps)
         else
             console.log('incomplete')
         

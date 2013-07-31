@@ -21,12 +21,13 @@ analyzer.Analyzer = (function(_super) {
       node: {},
       nodes: {},
       sections: {},
-      components: {}
+      components: {},
+      path: {}
     };
   };
 
   Analyzer.prototype.run = function() {
-    var circuit, keys, powerSource;
+    var circuit, keys, parallelSection, powerSource, section, sid, _i, _len, _ref;
     this.reduceSections();
     if ((keys = Object.keys(this.info.sections[this.level])).length !== 1) {
       return;
@@ -35,8 +36,33 @@ analyzer.Analyzer = (function(_super) {
     if (circuit && circuit.negativeComponentId) {
       powerSource = this.board.components[circuit.negativeComponentId];
       circuit.complete = this.compareObjectNodes(powerSource, circuit.nodes);
+      if (circuit.resistance > 0) {
+        circuit.amps = powerSource.voltage / circuit.resistance;
+      } else {
+        circuit.amps = 'infinite';
+      }
     } else {
       circuit.complete = false;
+    }
+    circuit.sections = [];
+    _ref = this.info.path[1];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      sid = _ref[_i];
+      section = this.info.sections[1][sid];
+      if (section.parallelSection) {
+        parallelSection = this.info.sections[2][section.parallelSection];
+        if (!parallelSection.amps) {
+          parallelSection.amps = circuit.amps;
+        }
+        if (!circuit.resistance) {
+          section.amps = (section.resistance ? 0 : 'infinite');
+        } else {
+          section.amps = parallelSection.amps * (section.resistance / circuit.resistance);
+        }
+      } else {
+        section.amps = circuit.amps;
+      }
+      circuit.sections.push(section);
     }
     return circuit;
   };
@@ -46,7 +72,8 @@ analyzer.Analyzer = (function(_super) {
     this.info.node[level] = {};
     this.info.nodes[level] = {};
     this.info.sections[level] = {};
-    return this.info.components[level] = {};
+    this.info.components[level] = {};
+    return this.info.path[level] = [];
   };
 
   Analyzer.prototype.compareNodes = function(node1, node2) {
@@ -128,6 +155,7 @@ analyzer.Analyzer = (function(_super) {
     var node1Coords, node2Coords, _base, _base1, _base2, _base3, _name, _name1, _name2, _name3;
     node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
     node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
+    this.info.path[level].push(section.id);
     this.info.sections[level][section.id] = section;
     (_base = this.info.node[level])[_name = "" + node1Coords] || (_base[_name] = {});
     this.info.node[level]["" + node1Coords][section.id] = section;
@@ -175,10 +203,13 @@ analyzer.Analyzer = (function(_super) {
           id: this.generateId(),
           resistance: 1.0 / resistance,
           components: {},
-          nodes: section.nodes
+          nodes: section.nodes,
+          sections: []
         };
         for (id in sections) {
           section = sections[id];
+          section.parallelSection = parallel.id;
+          parallel.sections.push(id);
           for (cid in section.components) {
             parallel.components[cid] = true;
           }

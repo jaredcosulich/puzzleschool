@@ -150,7 +150,12 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var amps, c, circuit, id, piece, _ref, _ref1, _results;
+    var c, circuit, id, piece, section, _i, _len, _ref, _ref1, _ref2, _results;
+    this.slowTime = (this.slowTime || 0) + deltaTime;
+    if (!(this.slowTime > 5000)) {
+      return;
+    }
+    this.slowTime -= 5000;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];
@@ -159,32 +164,32 @@ board.Board = (function(_super) {
     }
     circuit = this.analyzer.run();
     if (circuit && circuit.complete) {
-      if (circuit.resistance > 0) {
-        amps = this.components[circuit.negativeComponentId].voltage / circuit.resistance;
-        for (id in circuit.components) {
-          c = this.componentsAndWires()[id];
-          c.receivingCurrent = true;
-          if (typeof c.setCurrent === "function") {
-            c.setCurrent(amps);
+      _ref1 = circuit.sections;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        section = _ref1[_i];
+        if (section.amps === 'infinite') {
+          for (id in section.components) {
+            c = this.componentsAndWires()[id];
+            c.excessiveCurrent = true;
+            c.el.addClass('excessive_current');
+          }
+        } else {
+          for (id in section.components) {
+            c = this.componentsAndWires()[id];
+            c.receivingCurrent = true;
+            if (typeof c.setCurrent === "function") {
+              c.setCurrent(section.amps);
+            }
           }
         }
-        console.log('complete', circuit.resistance, amps);
-      } else {
-        amps = 'infinite';
-        for (id in circuit.components) {
-          c = this.componentsAndWires()[id];
-          c.excessiveCurrent = true;
-          c.el.addClass('excessive_current');
-        }
-        console.log('complete', circuit.resistance, amps);
       }
     } else {
       console.log('incomplete');
     }
-    _ref1 = this.componentsAndWires();
+    _ref2 = this.componentsAndWires();
     _results = [];
-    for (id in _ref1) {
-      piece = _ref1[id];
+    for (id in _ref2) {
+      piece = _ref2[id];
       if (!piece.excessiveCurrent) {
         piece.el.removeClass('excessive_current');
       }

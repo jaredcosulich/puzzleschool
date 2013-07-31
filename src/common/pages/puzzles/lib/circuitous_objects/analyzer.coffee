@@ -6,7 +6,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @init()
 
     init: ->
-        @info = {node: {}, nodes: {}, sections: {}, components: {}}
+        @info = {node: {}, nodes: {}, sections: {}, components: {}, path: {}}
         
     run: ->
         @reduceSections()
@@ -16,8 +16,26 @@ class analyzer.Analyzer extends circuitousObject.Object
         if circuit and circuit.negativeComponentId
             powerSource = @board.components[circuit.negativeComponentId]
             circuit.complete = (@compareObjectNodes(powerSource, circuit.nodes))
+            if circuit.resistance > 0
+                circuit.amps = powerSource.voltage / circuit.resistance
+            else
+                circuit.amps = 'infinite'
         else
             circuit.complete = false
+            
+        circuit.sections = []
+        for sid in @info.path[1]
+            section = @info.sections[1][sid]
+            if section.parallelSection
+                parallelSection = @info.sections[2][section.parallelSection]
+                parallelSection.amps = circuit.amps unless parallelSection.amps
+                if not circuit.resistance
+                    section.amps = (if section.resistance then 0 else 'infinite')
+                else 
+                    section.amps = parallelSection.amps * (section.resistance / circuit.resistance)
+            else
+                section.amps = circuit.amps
+            circuit.sections.push(section)
 
         return circuit
         
@@ -27,6 +45,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.nodes[level] = {}
         @info.sections[level] = {}
         @info.components[level] = {}
+        @info.path[level] = []
 
     compareNodes: (node1, node2) -> node1.x == node2.x and node1.y == node2.y
     compareObjectNodes: (object, nodes) ->
@@ -55,6 +74,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
         node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
 
+        @info.path[level].push(section.id)
         @info.sections[level][section.id] = section 
         @info.node[level]["#{node1Coords}"] or= {} 
         @info.node[level]["#{node1Coords}"][section.id] = section
@@ -88,9 +108,16 @@ class analyzer.Analyzer extends circuitousObject.Object
                 reductionFound = true
                 resistance = 0
                 resistance += (1.0 / section.resistance) for id, section of sections
-                parallel = {id: @generateId(), resistance: (1.0 / resistance), components: {}, nodes: section.nodes}   
+                parallel = 
+                    id: @generateId()
+                    resistance: (1.0 / resistance)
+                    components: {}
+                    nodes: section.nodes
+                    sections: []  
                 
                 for id, section of sections
+                    section.parallelSection = parallel.id
+                    parallel.sections.push(id)
                     for cid of section.components
                         parallel.components[cid] = true
                                   
