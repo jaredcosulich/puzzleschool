@@ -81,10 +81,12 @@
 .circuitous .board .wire_segment,
 .circuitous .right_side .options .option img {
   transition: background-color 0.5s ease;
+  z-index: 1;
 }
 .circuitous .board .wire_segment.excessive_current,
 .circuitous .right_side .options .option img.excessive_current {
   background-color: #FF0000;
+  z-index: 2;
 }
 .circuitous .selector_button {
   font-size: 45px;

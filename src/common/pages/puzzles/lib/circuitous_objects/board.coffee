@@ -101,7 +101,7 @@ class board.Board extends circuitousObject.Object
         circuit = @analyzer.run()
         if circuit and circuit.complete
             if circuit.resistance > 0
-                amps = powerSource.voltage / circuit.resistance
+                amps = @components[circuit.negativeComponentId].voltage / circuit.resistance
                 for id of circuit.components  
                     c = @componentsAndWires()[id] 
                     c.receivingCurrent = true

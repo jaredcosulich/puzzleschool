@@ -81,9 +81,11 @@
     
     .board .wire_segment, 
     .right_side .options .option img {
-        transition: background-color 0.5s ease;            
+        transition: background-color 0.5s ease;
+        z-index: 1;            
         &.excessive_current {
             background-color: #FF0000;
+            z-index: 2;
         }
     }
     

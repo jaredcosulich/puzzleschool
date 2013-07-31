@@ -10,7 +10,6 @@ class analyzer.Analyzer extends circuitousObject.Object
         
     run: ->
         @reduceSections()
-        
         return if (keys = Object.keys(@info.sections[@level])).length != 1
             
         circuit = @info.sections[@level][keys[0]]
@@ -68,7 +67,7 @@ class analyzer.Analyzer extends circuitousObject.Object
 
     reduceParallels: (level) ->
         reductionFound = false
-
+        
         analyzed = {}
         for nodeIds, sections of @info.nodes[level-1]
             section = sections[Object.keys(sections)[0]]
@@ -76,6 +75,14 @@ class analyzer.Analyzer extends circuitousObject.Object
             node2Coords = "#{section.nodes[1].x}:#{section.nodes[1].y}"
                         
             continue if analyzed[node1Coords] and analyzed[node2Coords] and analyzed[node1Coords] == analyzed[node2Coords]
+
+            for id, s of sections when s.deadEnd  
+                reductionFound = true
+                delete sections[id]
+                
+            if not Object.keys(sections).length
+                delete @info.nodes[level-1][nodeIds]
+                continue       
             
             if Object.keys(sections).length > 1
                 reductionFound = true
@@ -103,13 +110,15 @@ class analyzer.Analyzer extends circuitousObject.Object
         if @addToSection(level, section, node, component)            
             if (connections = @findConnections(level, node, component, section)).length == 1
                 connection = connections[0]
-                if section.components[connection.component.id] or not @combineSections(level, connection.otherNode, connection.component, section)
+                if section.components[connection.component.id] or not 
+                   @combineSections(level, connection.otherNode, connection.component, section)
                     @endSection(level, section, node, connection.component)
             else if connections.length > 1
                 @endSection(level, section, node, component)
                 for connection in connections
                     parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
             else
+                section.deadEnd = true
                 @endSection(level, section, node, component)
             return true
         return false

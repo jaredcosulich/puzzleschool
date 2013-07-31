@@ -140,7 +140,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceParallels = function(level) {
-    var analyzed, cid, componentIds, id, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, section, sections, _ref;
+    var analyzed, cid, componentIds, id, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, s, section, sections, _ref;
     reductionFound = false;
     analyzed = {};
     _ref = this.info.nodes[level - 1];
@@ -150,6 +150,18 @@ analyzer.Analyzer = (function(_super) {
       node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
       node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
       if (analyzed[node1Coords] && analyzed[node2Coords] && analyzed[node1Coords] === analyzed[node2Coords]) {
+        continue;
+      }
+      for (id in sections) {
+        s = sections[id];
+        if (!s.deadEnd) {
+          continue;
+        }
+        reductionFound = true;
+        delete sections[id];
+      }
+      if (!Object.keys(sections).length) {
+        delete this.info.nodes[level - 1][nodeIds];
         continue;
       }
       if (Object.keys(sections).length > 1) {
@@ -211,6 +223,7 @@ analyzer.Analyzer = (function(_super) {
           parallelSection = this.combineSections(level, connection.otherNode, connection.component, this.newSection(node));
         }
       } else {
+        section.deadEnd = true;
         this.endSection(level, section, node, component);
       }
       return true;

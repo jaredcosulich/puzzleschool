@@ -160,7 +160,7 @@ board.Board = (function(_super) {
     circuit = this.analyzer.run();
     if (circuit && circuit.complete) {
       if (circuit.resistance > 0) {
-        amps = powerSource.voltage / circuit.resistance;
+        amps = this.components[circuit.negativeComponentId].voltage / circuit.resistance;
         for (id in circuit.components) {
           c = this.componentsAndWires()[id];
           c.receivingCurrent = true;
