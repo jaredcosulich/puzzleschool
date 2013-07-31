@@ -151,11 +151,6 @@ board.Board = (function(_super) {
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
     var c, circuit, id, piece, section, _i, _len, _ref, _ref1, _ref2, _results;
-    this.slowTime = (this.slowTime || 0) + deltaTime;
-    if (!(this.slowTime > 2000)) {
-      return;
-    }
-    this.slowTime -= 2000;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];

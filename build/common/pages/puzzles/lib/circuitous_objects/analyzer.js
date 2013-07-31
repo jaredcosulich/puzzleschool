@@ -27,7 +27,7 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.run = function() {
     var circuit, keys, parallelSection, powerSource, section, sid, _ref;
-    this.reduceSections();
+    this.reduce();
     if ((keys = Object.keys(this.info.sections[this.level])).length !== 1) {
       return;
     }
@@ -44,10 +44,12 @@ analyzer.Analyzer = (function(_super) {
       circuit.complete = false;
     }
     circuit.sections = [];
-    console.log(this.level);
     _ref = this.info.sections[1];
     for (sid in _ref) {
       section = _ref[sid];
+      if (section.deadEnd) {
+        continue;
+      }
       if (section.parallelSection) {
         parallelSection = this.info.sections[2][section.parallelSection];
         if (!parallelSection.amps) {
@@ -96,11 +98,12 @@ analyzer.Analyzer = (function(_super) {
     return false;
   };
 
-  Analyzer.prototype.reduceSections = function(level) {
+  Analyzer.prototype.reduce = function(level) {
     var cid, component, existingSection, n, negativeTerminal, node, otherNode, s, sid, _i, _len, _ref, _ref1;
     if (level == null) {
       level = 1;
     }
+    this.board.clearColors();
     this.initLevel(level);
     _ref = this.board.components;
     for (cid in _ref) {
@@ -141,10 +144,11 @@ analyzer.Analyzer = (function(_super) {
         }
       }
     }
+    this.board.clearColors();
     if (Object.keys(this.info.sections[this.level]).length > 1) {
       this.initLevel(this.level + 1);
       if (this.reduceParallels(this.level)) {
-        return this.reduceSections(this.level + 1);
+        return this.reduce(this.level + 1);
       }
     }
   };

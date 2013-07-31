@@ -90,9 +90,9 @@ class board.Board extends circuitousObject.Object
         # $('.menu').bind 'click', => @moveElectricity()
         
     moveElectricity: (deltaTime, elapsed) ->
-        @slowTime = (@slowTime or 0) + deltaTime
-        return unless @slowTime > 2000
-        @slowTime -= 2000
+        # @slowTime = (@slowTime or 0) + deltaTime
+        # return unless @slowTime > 2000
+        # @slowTime -= 2000
         
         for id, piece of @componentsAndWires()
             piece.receivingCurrent = false

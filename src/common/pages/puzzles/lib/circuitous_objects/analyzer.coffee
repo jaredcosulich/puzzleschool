@@ -9,7 +9,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info = {node: {}, nodes: {}, sections: {}, components: {}}
         
     run: ->
-        @reduceSections()
+        @reduce()
         return if (keys = Object.keys(@info.sections[@level])).length != 1
             
         circuit = @info.sections[@level][keys[0]]
@@ -24,8 +24,8 @@ class analyzer.Analyzer extends circuitousObject.Object
             circuit.complete = false
             
         circuit.sections = []
-        console.log(@level)
         for sid, section of @info.sections[1]
+            continue if section.deadEnd
             if section.parallelSection
                 parallelSection = @info.sections[2][section.parallelSection]
                 parallelSection.amps = circuit.amps unless parallelSection.amps
@@ -53,7 +53,8 @@ class analyzer.Analyzer extends circuitousObject.Object
                        (@compareNodes(nodes[1], objectNodes[0]) or @compareNodes(nodes[1], objectNodes[1]))
         return false
 
-    reduceSections: (level=1) ->
+    reduce: (level=1) ->
+        @board.clearColors()
         @initLevel(level)
         for cid, component of @board.components when component.powerSource
             for negativeTerminal in component.currentNodes('negative')
@@ -64,10 +65,11 @@ class analyzer.Analyzer extends circuitousObject.Object
                     otherNode.negative = true
                 @combineSections(level, otherNode or node, existingSection or component, @newSection(node))
     
+        @board.clearColors()
         if Object.keys(@info.sections[@level]).length > 1
             @initLevel(@level+1)
             if @reduceParallels(@level)
-                @reduceSections(@level+1) 
+                @reduce(@level+1) 
             
     recordSection: (level, section) ->
         node1Coords = "#{section.nodes[0].x}:#{section.nodes[0].y}"
