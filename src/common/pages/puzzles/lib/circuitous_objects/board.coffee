@@ -91,8 +91,8 @@ class board.Board extends circuitousObject.Object
         
     moveElectricity: (deltaTime, elapsed) ->
         @slowTime = (@slowTime or 0) + deltaTime
-        return unless @slowTime > 5000
-        @slowTime -= 5000
+        return unless @slowTime > 2000
+        @slowTime -= 2000
         
         for id, piece of @componentsAndWires()
             piece.receivingCurrent = false
