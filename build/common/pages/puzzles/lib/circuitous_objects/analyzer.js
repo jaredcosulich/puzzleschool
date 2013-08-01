@@ -21,7 +21,8 @@ analyzer.Analyzer = (function(_super) {
       node: {},
       nodes: {},
       sections: {},
-      components: {}
+      components: {},
+      path: {}
     };
   };
 
@@ -32,7 +33,7 @@ analyzer.Analyzer = (function(_super) {
       return;
     }
     circuit = this.info.sections[this.level][keys[0]];
-    if (circuit && circuit.negativeComponentId) {
+    if (circuit && circuit.negativeComponentId && Object.keys(circuit.components).length > 1) {
       powerSource = this.board.components[circuit.negativeComponentId];
       circuit.complete = this.compareObjectNodes(powerSource, circuit.nodes);
       if (circuit.resistance > 0) {
@@ -44,26 +45,28 @@ analyzer.Analyzer = (function(_super) {
       circuit.complete = false;
     }
     circuit.sections = [];
-    _ref = this.info.sections[1];
-    for (sid in _ref) {
-      section = _ref[sid];
-      if (section.deadEnd) {
-        continue;
-      }
-      if (section.parallelSection) {
-        parallelSection = this.info.sections[2][section.parallelSection];
-        if (!parallelSection.amps) {
-          parallelSection.amps = circuit.amps;
+    if (circuit.complete) {
+      _ref = this.info.sections[1];
+      for (sid in _ref) {
+        section = _ref[sid];
+        if (section.deadEnd) {
+          continue;
         }
-        if (!circuit.resistance) {
-          section.amps = (section.resistance ? 0 : 'infinite');
+        if (section.parallelSection) {
+          parallelSection = this.info.sections[2][section.parallelSection];
+          if (!parallelSection.amps) {
+            parallelSection.amps = circuit.amps;
+          }
+          if (!circuit.resistance) {
+            section.amps = (section.resistance ? 0 : 'infinite');
+          } else {
+            section.amps = parallelSection.amps * (section.resistance / circuit.resistance);
+          }
         } else {
-          section.amps = parallelSection.amps * (section.resistance / circuit.resistance);
+          section.amps = circuit.amps;
         }
-      } else {
-        section.amps = circuit.amps;
+        circuit.sections.push(section);
       }
-      circuit.sections.push(section);
     }
     return circuit;
   };
@@ -73,7 +76,8 @@ analyzer.Analyzer = (function(_super) {
     this.info.node[level] = {};
     this.info.nodes[level] = {};
     this.info.sections[level] = {};
-    return this.info.components[level] = {};
+    this.info.components[level] = {};
+    return this.info.path[level] = [];
   };
 
   Analyzer.prototype.compareNodes = function(node1, node2) {
@@ -99,11 +103,10 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduce = function(level) {
-    var cid, component, existingSection, n, negativeTerminal, node, otherNode, s, sid, _i, _len, _ref, _ref1;
+    var cid, component, existingSection, negativeTerminal, node, otherNode, s, sid, _i, _len, _ref, _ref1;
     if (level == null) {
       level = 1;
     }
-    this.board.clearColors();
     this.initLevel(level);
     _ref = this.board.components;
     for (cid in _ref) {
@@ -126,25 +129,16 @@ analyzer.Analyzer = (function(_super) {
             return _results;
           }).call(this))[0];
           if (existingSection) {
-            otherNode = ((function() {
-              var _j, _len1, _ref2, _results;
-              _ref2 = existingSection.nodes;
-              _results = [];
-              for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-                n = _ref2[_j];
-                if (!this.compareNodes(node, n)) {
-                  _results.push(n);
-                }
-              }
-              return _results;
-            }).call(this))[0];
+            otherNode = this.otherNode(existingSection.nodes, node);
             otherNode.negative = true;
           }
           this.combineSections(level, otherNode || node, existingSection || component, this.newSection(node));
         }
       }
     }
-    this.board.clearColors();
+    if (Object.keys(this.info.sections[this.level]).length > 1) {
+      this.redraw(this.level);
+    }
     if (Object.keys(this.info.sections[this.level]).length > 1) {
       this.initLevel(this.level + 1);
       if (this.reduceParallels(this.level)) {
@@ -154,10 +148,15 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.recordSection = function(level, section) {
+    this.info.path[level].push(section.id);
+    this.info.sections[level][section.id] = section;
+    return this.recordSectionAtNodes(level, section);
+  };
+
+  Analyzer.prototype.recordSectionAtNodes = function(level, section) {
     var node1Coords, node2Coords, _base, _base1, _base2, _base3, _name, _name1, _name2, _name3;
     node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
     node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
-    this.info.sections[level][section.id] = section;
     (_base = this.info.node[level])[_name = "" + node1Coords] || (_base[_name] = {});
     this.info.node[level]["" + node1Coords][section.id] = section;
     (_base1 = this.info.node[level])[_name1 = "" + node2Coords] || (_base1[_name1] = {});
@@ -166,6 +165,94 @@ analyzer.Analyzer = (function(_super) {
     this.info.nodes[level]["" + node1Coords + node2Coords][section.id] = section;
     (_base3 = this.info.nodes[level])[_name3 = "" + node2Coords + node1Coords] || (_base3[_name3] = {});
     return this.info.nodes[level]["" + node2Coords + node1Coords][section.id] = section;
+  };
+
+  Analyzer.prototype.deleteSection = function(level, section) {
+    this.info.path[level].splice(this.info.path[level].indexOf(section.id), 1);
+    delete this.info.sections[level][section.id];
+    return this.deleteSectionAtNodes(level, section);
+  };
+
+  Analyzer.prototype.deleteSectionAtNodes = function(level, section) {
+    var node1Coords, node2Coords;
+    node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
+    node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
+    delete this.info.node[level]["" + node1Coords][section.id];
+    delete this.info.node[level]["" + node2Coords][section.id];
+    delete this.info.nodes[level]["" + node1Coords + node2Coords][section.id];
+    return delete this.info.nodes[level]["" + node2Coords + node1Coords][section.id];
+  };
+
+  Analyzer.prototype.otherNode = function(nodes, node) {
+    var n;
+    return ((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+        n = nodes[_i];
+        if (!this.compareNodes(n, node)) {
+          _results.push(n);
+        }
+      }
+      return _results;
+    }).call(this))[0];
+  };
+
+  Analyzer.prototype.redraw = function(level) {
+    var cConnections, cEndNode, ccStartNodeIndex, ccid, ccs, ccsid, changeMade, connectingSection, connections, csid, endNode, endNodeIndex, otherNode, section, sid, _i, _len, _ref;
+    changeMade = false;
+    endNode = null;
+    _ref = this.info.path[level];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      sid = _ref[_i];
+      section = this.info.sections[level][sid];
+      endNode = endNode ? this.otherNode(section.nodes, endNode) : section.nodes[1];
+      connections = this.info.node[level]["" + endNode.x + ":" + endNode.y];
+      if (Object.keys(connections).length > 2) {
+        for (csid in connections) {
+          connectingSection = connections[csid];
+          if (csid !== sid) {
+            if (!connectingSection.resistance && !connectingSection.powerSource) {
+              changeMade = true;
+              this.deleteSection(level, connectingSection);
+              cEndNode = this.otherNode(connectingSection.nodes, endNode);
+              cConnections = this.info.node[level]["" + cEndNode.x + ":" + cEndNode.y];
+              for (ccsid in cConnections) {
+                ccs = cConnections[ccsid];
+                this.deleteSectionAtNodes(level, ccs);
+                ccStartNodeIndex = (this.compareNodes(ccs.nodes[0], cEndNode) ? 0 : 1);
+                ccs.nodes[ccStartNodeIndex] = endNode;
+                this.recordSectionAtNodes(level, ccs);
+                if (this.compareNodes.apply(this, ccs.nodes)) {
+                  this.deleteSection(level, ccs);
+                }
+              }
+              for (ccid in connectingSection.components) {
+                section.components[ccid] = true;
+              }
+            }
+          }
+        }
+      } else if (Object.keys(connections).length === 2) {
+        for (csid in connections) {
+          connectingSection = connections[csid];
+          if (!(csid !== sid)) {
+            continue;
+          }
+          otherNode = this.otherNode(connectingSection.nodes, endNode);
+          this.deleteSection(level, connectingSection);
+          this.addToSection(level, section, otherNode, connectingSection);
+          endNodeIndex = (this.compareNodes(section.nodes[0], endNode) ? 0 : 1);
+          section.nodes[endNodeIndex] = otherNode;
+          changeMade = true;
+        }
+      }
+      if (changeMade) {
+        this.redraw(level);
+        return true;
+      }
+    }
+    return false;
   };
 
   Analyzer.prototype.reduceParallels = function(level) {
@@ -273,18 +360,7 @@ analyzer.Analyzer = (function(_super) {
         if (!(connection.id !== component.id)) {
           continue;
         }
-        otherNode = ((function() {
-          var _i, _len, _ref1, _results;
-          _ref1 = connection.nodes;
-          _results = [];
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            otherNode = _ref1[_i];
-            if (!this.compareNodes(node, otherNode)) {
-              _results.push(otherNode);
-            }
-          }
-          return _results;
-        }).call(this))[0];
+        otherNode = this.otherNode(connection.nodes, node);
         connections.push({
           component: connection,
           otherNode: otherNode
@@ -311,17 +387,7 @@ analyzer.Analyzer = (function(_super) {
                 }
               ];
             } else {
-              otherNode = ((function() {
-                var _j, _len1, _results;
-                _results = [];
-                for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
-                  otherNode = nodes[_j];
-                  if (!this.compareNodes(matchingNode, otherNode)) {
-                    _results.push(otherNode);
-                  }
-                }
-                return _results;
-              }).call(this))[0];
+              otherNode = this.otherNode(nodes, matchingNode);
             }
             connections.push({
               component: c,
@@ -333,25 +399,12 @@ analyzer.Analyzer = (function(_super) {
       _ref3 = this.board.wires.find(node);
       for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
         segment = _ref3[_j];
-        if (!(!circuit.components[segment.id])) {
-          continue;
+        if (!circuit.components[segment.id]) {
+          connections.push({
+            component: segment,
+            otherNode: this.otherNode(segment.nodes, node)
+          });
         }
-        otherNode = ((function() {
-          var _k, _len2, _ref4, _results;
-          _ref4 = segment.nodes;
-          _results = [];
-          for (_k = 0, _len2 = _ref4.length; _k < _len2; _k++) {
-            n = _ref4[_k];
-            if (!this.compareNodes(n, node)) {
-              _results.push(n);
-            }
-          }
-          return _results;
-        }).call(this))[0];
-        connections.push({
-          component: segment,
-          otherNode: otherNode
-        });
       }
     }
     return connections;
@@ -391,14 +444,11 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.endSection = function(level, section, node, component, record) {
-    if (component.powerSource && node.positive) {
+    if (component.powerSource) {
       section.powerSource = true;
-      section.positiveComponent = component;
     }
-    if (Object.keys(section.components).length > 1) {
-      section.nodes.push(node);
-      return this.recordSection(level, section);
-    }
+    section.nodes.push(node);
+    return this.recordSection(level, section);
   };
 
   return Analyzer;

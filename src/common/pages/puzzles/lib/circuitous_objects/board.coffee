@@ -111,8 +111,6 @@ class board.Board extends circuitousObject.Object
                         c = @componentsAndWires()[id] 
                         c.receivingCurrent = true
                         c.setCurrent?(section.amps)
-        else
-            console.log('incomplete')
         
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent

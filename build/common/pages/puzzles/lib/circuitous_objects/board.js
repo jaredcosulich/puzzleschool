@@ -178,8 +178,6 @@ board.Board = (function(_super) {
           }
         }
       }
-    } else {
-      console.log('incomplete');
     }
     _ref2 = this.componentsAndWires();
     _results = [];
