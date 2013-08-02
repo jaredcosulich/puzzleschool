@@ -165,6 +165,7 @@ describe("Analyzer", function() {
                                         expect(wire.el.hasClass('excessive_current')).toBe(true);
                                     }
                                 });
+
                             })                            
                         });
                         
