@@ -23,50 +23,70 @@ describe("Analyzer", function() {
     
     describe('with one battery', function() {
         it('should be an incomplete circuit with just one component', function() {
-            circuit = board.analyzer.run()
+            var circuit = board.analyzer.run()
             expect(Object.keys(circuit.components).length).toEqual(1);
             expect(circuit.complete).toBe(false);
         });        
         
         describe('and wire', function() {            
             it('should be an incomplete circuit with multiple components/wires when just a little is added', function() {
-                start = board.boardPosition(battery.currentNodes()[1]);
+                var start = board.boardPosition(battery.currentNodes()[1]);
                 drawWire(board, start, 0, 3);
-                circuit = board.analyzer.run()
+                var circuit = board.analyzer.run()
                 expect(Object.keys(circuit.components).length).toBeGreaterThan(1);
                 expect(circuit.complete).toBe(false); 
             });
             
             describe('completing the circuit', function() {
                 beforeEach(function() {
-                    start = board.boardPosition(battery.currentNodes()[1]);
-                    lastNode = drawWire(board, start, 0, 2);
-                    lastNode = drawWire(board, lastNode, 7, 0);
-                    lastNode = drawWire(board, lastNode, 0, -7);
-                    lastNode = drawWire(board, lastNode, -7, 0);
-                    lastNode = drawWire(board, lastNode, 0, 2);                    
+                    var start = board.boardPosition(battery.currentNodes()[1]);
+                    var lastNode = drawWire(board, start, 0, 2);
+                    var lastNode = drawWire(board, lastNode, 7, 0);
+                    var lastNode = drawWire(board, lastNode, 0, -7);
+                    var lastNode = drawWire(board, lastNode, -7, 0);
+                    drawWire(board, lastNode, 0, 2);                    
                 });
 
                 it('should be a complete circuit with infinite amps', function() {
-                    circuit = board.analyzer.run()
+                    var circuit = board.analyzer.run()
                     expect(circuit.complete).toBe(true);
                     expect(circuit.amps).toBe('infinite') 
                 });
-
-                it('should not have resistance if a lightbulb is added', function() {
-                    bulb = createComponent(board, 'Lightbulb')
-                    node = wireAt(board, 16).nodes[0]
-                    onBoard = addToBoard(board, bulb, node.x, node.y);
-                    expect(onBoard).toBe(true);
+                
+                describe('and a lightbulb', function() {
+                    var bulb;
                     
-                    circuit = board.analyzer.run()
-                    expect(circuit.components[bulb.id]).toBe(true)
-                    expect(circuit.complete).toBe(true);
-                    expect(circuit.resistance).toBe(5) 
-                    expect(circuit.amps).toBe(1.8) 
+                    beforeEach(function() {
+                        bulb = createComponent(board, 'Lightbulb')
+                        var node = wireAt(board, 16).nodes[0]
+                        var onBoard = addToBoard(board, bulb, node.x, node.y);
+                        expect(onBoard).toBe(true);                        
+                    });
+
+                    it('should have resistance and non-infinite amps', function() {
+                        var circuit = board.analyzer.run();
+                        expect(circuit.components[bulb.id]).toBe(true);
+                        expect(circuit.complete).toBe(true);
+                        expect(circuit.resistance).toBe(5) ;
+                        expect(circuit.amps).toBe(1.8) ;
+                    });
+                    
+                    describe('with a short circuit', function() {
+                        beforeEach(function() {
+                            var node = wireAt(board, 5).nodes[0];
+                            drawWire(board, node, 0, -7);                            
+                        });
+                        
+                        it('should create a circuit with infinite amps and no lightbulb', function() {
+                            var circuit = board.analyzer.run();
+                            expect(circuit.complete).toBe(true);
+                            expect(circuit.amps).toBe('infinite') ;
+                            expect(circuit.components[bulb.id]).toBeUndefined();
+                        });
+                    });
                 });
-            })
-        })
+            });
+        });
     });
     
 });
