@@ -16,6 +16,8 @@ describe("Analyzer", function() {
         battery = createComponent(board, 'Battery')
         onBoard = addToBoard(board, battery, 100, 300);
         expect(onBoard).toBe(true);
+        
+        if (debugInfo) $('.circuitous').css({top: 100});
     }); 
     
     afterEach(function() {
@@ -90,7 +92,7 @@ describe("Analyzer", function() {
                         var bulb2;
                         
                         beforeEach(function() {
-                            var node = wireAt(board, 4).nodes[0]
+                            var node = wireAt(board, 5).nodes[0]
                             var lastNode = drawWire(board, node, 0, -1);
                             var bulb2Node = drawWire(board, lastNode, 2, 0);
                             lastNode = drawWire(board, bulb2Node, 4, 0);
@@ -111,14 +113,68 @@ describe("Analyzer", function() {
                             board.moveElectricity();
                             expect(bulb.current).toEqual(1.8);
                             expect(bulb2.current).toEqual(1.8);
+                        });                        
+                        
+                        describe('and a short circuit', function() {
+                            beforeEach(function() {
+                                drawWire(board, wireAt(board, 3).nodes[0], 0, -7);
+                            });
+                            
+                            it('should create an complete circuit with infinite amps', function() {
+                                var circuit = board.analyzer.run();
+                                expect(circuit.complete).toBe(true);
+                                expect(circuit.amps).toBe('infinite');
+                                expect(circuit.resistance).toBe(0);
+                            });
+
+                            it('should provide no amps to either bulb', function() {
+                                board.moveElectricity();
+                                expect(bulb.current).toBe(0);
+                                expect(bulb2.current).toBe(0);
+                            });                            
                         });
+
+                        describe('and a short circuit in between bulbs', function() {
+                            beforeEach(function() {
+                                drawWire(board, wireAt(board, 11).nodes[0], 0, -7);
+                            });
+                            
+                            it('should create an complete circuit with infinite amps', function() {
+                                var circuit = board.analyzer.run();
+                                expect(circuit.complete).toBe(true);
+                                expect(circuit.amps).toBe('infinite');
+                                expect(circuit.resistance).toBe(0);
+                            });
+
+                            it('should provide no amps to either bulb', function() {
+                                board.moveElectricity();
+                                expect(bulb.current).toBe(0);
+                                expect(bulb2.current).toBe(0);
+                            });
+                            
+                            describe('and both bulbs removed', function() {
+                                beforeEach(function() {
+                                    board.removeComponent(bulb);
+                                    board.removeComponent(bulb2);
+                                })
+                                
+                                it('all wires should have excessive_current class', function() {
+                                    board.moveElectricity();
+                                    for (wireId in board.wires.all()) {
+                                        var wire = board.wires.all()[wireId];
+                                        expect(wire.el.hasClass('excessive_current')).toBe(true);
+                                    }
+                                });
+                            })                            
+                        });
+                        
                     });
                     
                     describe('with a lightbulb in series', function() {
                         var bulb2;
                         
                         beforeEach(function() {
-                            var bulb2Node = wireAt(board, 4).nodes[0]
+                            var bulb2Node = wireAt(board, 5).nodes[0]
                             bulb2 = createComponent(board, 'Lightbulb')
                             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
                             expect(onBoard).toBe(true);                                                    
@@ -135,6 +191,25 @@ describe("Analyzer", function() {
                             board.moveElectricity();
                             expect(bulb.current).toEqual(0.9);
                             expect(bulb2.current).toEqual(0.9);                            
+                        });
+                        
+                        describe('and a short circuit', function() {
+                            beforeEach(function() {
+                                drawWire(board, wireAt(board, 3).nodes[0], 0, -7);
+                            });
+                            
+                            it('should create an complete circuit with infinite amps', function() {
+                                var circuit = board.analyzer.run();
+                                expect(circuit.complete).toBe(true);
+                                expect(circuit.amps).toBe('infinite');
+                                expect(circuit.resistance).toBe(0);
+                            });
+
+                            it('should provide no amps to either bulb', function() {
+                                board.moveElectricity();
+                                expect(bulb.current).toBe(0);
+                                expect(bulb2.current).toBe(0);
+                            });                            
                         });
                     });
                     
