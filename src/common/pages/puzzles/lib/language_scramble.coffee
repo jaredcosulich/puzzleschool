@@ -570,7 +570,7 @@ class languageScramble.ViewHelper
         return parseInt(max)
 
     targetHeight: ->
-        targetHeight = @$('.scramble_content').height() - 60
+        targetHeight = @$('.scramble_content').height()
         height = if window.innerHeight then window.innerHeight else window.landheight
         targetHeight = Math.min(targetHeight, height)        
 
@@ -579,7 +579,7 @@ class languageScramble.ViewHelper
         letter = $(letters[0])
         longestWord = @scrambleInfo[@activeType].split(/\s/).sort((a,b) -> b.length - a.length)[0]
 
-        targetHeight = @targetHeight() if not targetHeight
+        targetHeight = @targetHeight() - 60 if not targetHeight
 
         if not increment
             fontRatio = letter.width() / parseInt(letter.css('fontSize'))

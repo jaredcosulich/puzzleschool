@@ -861,7 +861,7 @@ languageScramble.ViewHelper = (function() {
 
   ViewHelper.prototype.targetHeight = function() {
     var height, targetHeight;
-    targetHeight = this.$('.scramble_content').height() - 60;
+    targetHeight = this.$('.scramble_content').height();
     height = window.innerHeight ? window.innerHeight : window.landheight;
     return targetHeight = Math.min(targetHeight, height);
   };
@@ -878,7 +878,7 @@ languageScramble.ViewHelper = (function() {
       return b.length - a.length;
     })[0];
     if (!targetHeight) {
-      targetHeight = this.targetHeight();
+      targetHeight = this.targetHeight() - 60;
     }
     if (!increment) {
       fontRatio = letter.width() / parseInt(letter.css('fontSize'));
