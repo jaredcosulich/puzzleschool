@@ -24,7 +24,6 @@ class wires.Wires extends circuitousObject.Object
         
     draw: (e) ->
         coords = @board.roundedCoordinates({x: Client.x(e), y: Client.y(e)}, @el.offset())
-
         if start = @info.start
             xDiff = Math.abs(start.x - coords.x)
             yDiff = Math.abs(start.y - coords.y)
@@ -36,9 +35,9 @@ class wires.Wires extends circuitousObject.Object
                 xDelta = @cellDimension * (if start.x > coords.x then -1 else 1)
             else 
                 yDelta = @cellDimension * (if start.y > coords.y then -1 else 1)
-
-            for i in [0...Math.floor(Math.max(xDiff, yDiff) / @cellDimension)]
-                @createOrErase(x: start.x + xDelta, y: start.y + yDelta)
+            
+            for i in [1..Math.floor(Math.max(xDiff, yDiff) / @cellDimension)]
+                @createOrErase(x: start.x + xDelta * i, y: start.y + yDelta * i)
         else
             @info.start = coords
 
@@ -87,7 +86,7 @@ class wires.Wires extends circuitousObject.Object
         # @addDot(end)
         node1 = "#{start.x}:#{start.y}"
         node2 = "#{end.x}:#{end.y}"
-
+        
         if element
             segment = 
                 id: "wire#{node1}#{node2}"
@@ -107,6 +106,7 @@ class wires.Wires extends circuitousObject.Object
 
     find: (start, end=null) ->
         node1 = "#{start.x}:#{start.y}"
+        
         if end
             node2 = "#{end.x}:#{end.y}" 
             @info.nodes[node1]?[node2] or @info.nodes[node2]?[node1]

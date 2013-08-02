@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Circuitous Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.2.0/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="../build/client/css/puzzles/circuitous.css" />
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css">
+  <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
+  <script type="text/javascript" charset="utf-8" charset="utf-8" src="/ender.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="spec/SpecHelper.js"></script>
+
+  <!-- Circuitous Specs -->  
+  <script type="text/javascript" src="spec/circuitous/AnalyzerSpec.js"></script>
+  
+  <!-- include spec files here... -->
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/common_objects/animation.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/common_objects/client.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/common_objects/transformer.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/common_objects/draggable.js"></script>
+    
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/object.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/analyzer.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/wires.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/selector.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/battery.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/resistor.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/toggle_switch.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/lightbulb.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/board.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/options.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/menu.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_objects/index.js"></script>
+  
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous_editor.js"></script>
+  <script type="text/javascript" src="../build/common/pages/puzzles/lib/circuitous.js"></script>
+  
+  
+  
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+    <div class='circuitous' style='top: -1000px; left: -1000px; position: absolute; visibility: hidden;'>
+        <div class='board'></div>
+        <div class='right_side'>
+            <table class='options'></table>
+            <div class='menu'></div>
+        </div>        
+    </div>
+    
+</body>
+
+</html>

@@ -19,10 +19,8 @@ board.Board = (function(_super) {
 
   __extends(Board, _super);
 
-  Board.prototype.cellDimension = 32;
-
   function Board(_arg) {
-    this.el = _arg.el;
+    this.el = _arg.el, this.cellDimension = _arg.cellDimension;
     this.init();
   }
 
@@ -140,12 +138,8 @@ board.Board = (function(_super) {
     var _this = this;
     this.analyzer = new Analyzer(this);
     this.electricalAnimation = new Animation();
-    return this.electricalAnimation.start({
-      method: function(_arg) {
-        var deltaTime, elapsed;
-        deltaTime = _arg.deltaTime, elapsed = _arg.elapsed;
-        return _this.moveElectricity(deltaTime, elapsed);
-      }
+    return $('.menu').bind('click', function() {
+      return _this.moveElectricity();
     });
   };
 

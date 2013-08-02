@@ -8,8 +8,8 @@ class battery.Battery extends circuitousObject.Object
         y: 16
     
     nodes: [
-        {x: 0, y: 48, negative: true}
         {x: 0, y: -48, positive: true}    
+        {x: 0, y: 48, negative: true}
     ]
 
     voltage: 9

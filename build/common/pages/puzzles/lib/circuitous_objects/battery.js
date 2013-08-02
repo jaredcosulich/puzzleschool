@@ -21,12 +21,12 @@ battery.Battery = (function(_super) {
   Battery.prototype.nodes = [
     {
       x: 0,
-      y: 48,
-      negative: true
-    }, {
-      x: 0,
       y: -48,
       positive: true
+    }, {
+      x: 0,
+      y: 48,
+      negative: true
     }
   ];
 

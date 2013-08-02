@@ -63,10 +63,10 @@ wires.Wires = (function(_super) {
         yDelta = this.cellDimension * (start.y > coords.y ? -1 : 1);
       }
       _results = [];
-      for (i = _i = 0, _ref = Math.floor(Math.max(xDiff, yDiff) / this.cellDimension); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = _i = 1, _ref = Math.floor(Math.max(xDiff, yDiff) / this.cellDimension); 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
         _results.push(this.createOrErase({
-          x: start.x + xDelta,
-          y: start.y + yDelta
+          x: start.x + xDelta * i,
+          y: start.y + yDelta * i
         }));
       }
       return _results;

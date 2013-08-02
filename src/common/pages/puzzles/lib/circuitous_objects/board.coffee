@@ -6,9 +6,7 @@ Client = require('../common_objects/client').Client
 Animation = require('../common_objects/animation').Animation
 
 class board.Board extends circuitousObject.Object
-    cellDimension: 32
-    
-    constructor: ({@el}) ->
+    constructor: ({@el, @cellDimension}) ->
         @init()
 
     init: ->
@@ -85,9 +83,9 @@ class board.Board extends circuitousObject.Object
     initElectricity: ->
         @analyzer = new Analyzer(@)
         @electricalAnimation = new Animation()    
-        @electricalAnimation.start 
-            method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
-        # $('.menu').bind 'click', => @moveElectricity()
+        # @electricalAnimation.start 
+        #     method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
+        $('.menu').bind 'click', => @moveElectricity()
         
     moveElectricity: (deltaTime, elapsed) ->
         # @slowTime = (@slowTime or 0) + deltaTime
