@@ -33,7 +33,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                     if not circuit.resistance
                         section.amps = (if section.resistance then 0 else 'infinite')
                     else 
-                        section.amps = parallelSection.amps * (section.resistance / circuit.resistance)
+                        section.amps = parallelSection.amps * (circuit.resistance/section.resistance)
                 else
                     section.amps = circuit.amps
                 circuit.sections.push(section)

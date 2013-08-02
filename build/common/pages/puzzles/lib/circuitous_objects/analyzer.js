@@ -60,7 +60,7 @@ analyzer.Analyzer = (function(_super) {
           if (!circuit.resistance) {
             section.amps = (section.resistance ? 0 : 'infinite');
           } else {
-            section.amps = parallelSection.amps * (section.resistance / circuit.resistance);
+            section.amps = parallelSection.amps / (section.resistance / circuit.resistance);
           }
         } else {
           section.amps = circuit.amps;

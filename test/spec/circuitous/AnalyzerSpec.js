@@ -1,3 +1,4 @@
+var debugInfo = false;
 describe("Analyzer", function() {
     var html, game, board, adderSquare;
     
@@ -41,9 +42,9 @@ describe("Analyzer", function() {
                 beforeEach(function() {
                     var start = board.boardPosition(battery.currentNodes()[1]);
                     var lastNode = drawWire(board, start, 0, 2);
-                    var lastNode = drawWire(board, lastNode, 7, 0);
-                    var lastNode = drawWire(board, lastNode, 0, -7);
-                    var lastNode = drawWire(board, lastNode, -7, 0);
+                    lastNode = drawWire(board, lastNode, 12, 0);
+                    lastNode = drawWire(board, lastNode, 0, -7);
+                    lastNode = drawWire(board, lastNode, -12, 0);
                     drawWire(board, lastNode, 0, 2);                    
                 });
 
@@ -58,7 +59,7 @@ describe("Analyzer", function() {
                     
                     beforeEach(function() {
                         bulb = createComponent(board, 'Lightbulb')
-                        var node = wireAt(board, 16).nodes[0]
+                        var node = wireAt(board, 22).nodes[0]
                         var onBoard = addToBoard(board, bulb, node.x, node.y);
                         expect(onBoard).toBe(true);                        
                     });
@@ -67,8 +68,8 @@ describe("Analyzer", function() {
                         var circuit = board.analyzer.run();
                         expect(circuit.components[bulb.id]).toBe(true);
                         expect(circuit.complete).toBe(true);
-                        expect(circuit.resistance).toBe(5) ;
-                        expect(circuit.amps).toBe(1.8) ;
+                        expect(circuit.resistance).toBe(5);
+                        expect(circuit.amps).toBe(1.8);
                     });
                     
                     describe('with a short circuit', function() {
@@ -84,6 +85,59 @@ describe("Analyzer", function() {
                             expect(circuit.components[bulb.id]).toBeUndefined();
                         });
                     });
+
+                    describe('with a parallel lightbulb', function() {
+                        var bulb2;
+                        
+                        beforeEach(function() {
+                            var node = wireAt(board, 4).nodes[0]
+                            var lastNode = drawWire(board, node, 0, -1);
+                            var bulb2Node = drawWire(board, lastNode, 2, 0);
+                            lastNode = drawWire(board, bulb2Node, 4, 0);
+                            drawWire(board, lastNode, 0, -6)
+                            bulb2 = createComponent(board, 'Lightbulb')
+                            var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                            expect(onBoard).toBe(true);                                                    
+                        });
+                        
+                        it('should create a complete circuit with twice the amps', function() {
+                            var circuit = board.analyzer.run();
+                            expect(circuit.complete).toBe(true);
+                            expect(circuit.amps).toBe(3.6);
+                            expect(circuit.resistance).toBe(2.5);
+                        });
+                        
+                        it('should provide the full amout of amps to each bulb', function() {
+                            board.moveElectricity();
+                            expect(bulb.current).toEqual(1.8);
+                            expect(bulb2.current).toEqual(1.8);
+                        });
+                    });
+                    
+                    describe('with a lightbulb in series', function() {
+                        var bulb2;
+                        
+                        beforeEach(function() {
+                            var bulb2Node = wireAt(board, 4).nodes[0]
+                            bulb2 = createComponent(board, 'Lightbulb')
+                            var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                            expect(onBoard).toBe(true);                                                    
+                        });
+                        
+                        it('should create a complete circuit with half the amps and twice the resistance', function() {
+                            var circuit = board.analyzer.run();
+                            expect(circuit.complete).toBe(true);
+                            expect(circuit.amps).toBe(0.9);
+                            expect(circuit.resistance).toBe(10);
+                        });
+                        
+                        it('should provide full amount of amps (half of simple circuit) to bulbs', function() {
+                            board.moveElectricity();
+                            expect(bulb.current).toEqual(0.9);
+                            expect(bulb2.current).toEqual(0.9);                            
+                        });
+                    });
+                    
                 });
             });
         });
@@ -93,7 +147,13 @@ describe("Analyzer", function() {
 
 addToBoard = function(board, component, x, y) {
     boardOffset = board.el.offset()
-    return board.addComponent(component, boardOffset.left + x, boardOffset.top + y)
+    var onBoard = board.addComponent(
+        component, 
+        boardOffset.left + x - component.centerOffset.x, 
+        boardOffset.top + y - component.centerOffset.y
+    )
+    if (debugInfo) board.addDot(board.boardPosition(component.currentNodes()[0]));
+    return onBoard;
 }
 
 createComponent = function(board, type) {
