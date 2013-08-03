@@ -17,7 +17,7 @@ describe("Analyzer", function() {
         onBoard = addToBoard(board, battery, 100, 300);
         expect(onBoard).toBe(true);
         
-        if (debugInfo) $('.circuitous').css({top: 100});
+        if (!debugInfo) $('.circuitous').css({top: -10000});
     }); 
     
     afterEach(function() {
@@ -35,7 +35,7 @@ describe("Analyzer", function() {
             it('should be an incomplete circuit with multiple components/wires when just a little is added', function() {
                 var start = board.boardPosition(battery.currentNodes()[1]);
                 drawWire(board, start, 0, 3);
-                var circuit = board.analyzer.run()
+                var circuit = board.analyzer.run();
                 expect(Object.keys(circuit.components).length).toBeGreaterThan(1);
                 expect(circuit.complete).toBe(false); 
             });

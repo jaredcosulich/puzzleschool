@@ -199,7 +199,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.redraw = function(level) {
-    var cConnections, cEndNode, ccStartNodeIndex, ccid, ccs, ccsid, changeMade, connectingSection, connections, csid, endNode, endNodeIndex, otherNode, section, sid, _i, _len, _ref;
+    var cConnections, cEndNode, ccStartNodeIndex, ccs, ccsid, changeMade, connectingSection, connections, csid, endNode, endNodeIndex, otherNode, section, sid, _i, _len, _ref;
     changeMade = false;
     endNode = null;
     _ref = this.info.path[level];
@@ -224,12 +224,13 @@ analyzer.Analyzer = (function(_super) {
                 ccs.nodes[ccStartNodeIndex] = endNode;
                 this.recordSectionAtNodes(level, ccs);
                 if (this.compareNodes.apply(this, ccs.nodes)) {
+                  if (!ccs.resistance) {
+                    this.consumeSection(section, ccs);
+                  }
                   this.deleteSection(level, ccs);
                 }
               }
-              for (ccid in connectingSection.components) {
-                section.components[ccid] = true;
-              }
+              this.consumeSection(section, connectingSection);
             }
           }
         }
@@ -325,6 +326,15 @@ analyzer.Analyzer = (function(_super) {
       this.reduceParallels();
     }
     return reductionFound;
+  };
+
+  Analyzer.prototype.consumeSection = function(section, toBeConsumedSection) {
+    var cid, _results;
+    _results = [];
+    for (cid in toBeConsumedSection.components) {
+      _results.push(section.components[cid] = true);
+    }
+    return _results;
   };
 
   Analyzer.prototype.combineSections = function(level, node, component, section) {

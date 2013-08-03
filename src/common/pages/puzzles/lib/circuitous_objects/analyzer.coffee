@@ -146,13 +146,17 @@ class analyzer.Analyzer extends circuitousObject.Object
                         # @board.color((id for id of ccs.components), 4) for ccsid, ccs of cConnections when ccsid != csid
                         # debugger
                         
-                        for ccsid, ccs of cConnections
+                        for ccsid, ccs of cConnections                                    
                             @deleteSectionAtNodes(level, ccs)
                             ccStartNodeIndex = (if @compareNodes(ccs.nodes[0], cEndNode) then 0 else 1)
                             ccs.nodes[ccStartNodeIndex] = endNode
                             @recordSectionAtNodes(level, ccs) 
-                            @deleteSection(level, ccs) if @compareNodes(ccs.nodes...)
-                        section.components[ccid] = true for ccid of connectingSection.components
+                            if @compareNodes(ccs.nodes...)
+                                @consumeSection(section, ccs) unless ccs.resistance
+                                @deleteSection(level, ccs)
+                                    
+                        @consumeSection(section, connectingSection)
+                        
             else if Object.keys(connections).length == 2
                 for csid, connectingSection of connections when csid != sid
                     otherNode = @otherNode(connectingSection.nodes, endNode)
@@ -215,6 +219,9 @@ class analyzer.Analyzer extends circuitousObject.Object
 
         @reduceParallels() if reductionFound
         return reductionFound
+
+    consumeSection: (section, toBeConsumedSection) ->
+        section.components[cid] = true for cid of toBeConsumedSection.components
 
     combineSections: (level, node, component, section) ->
         if @addToSection(level, section, node, component)            
