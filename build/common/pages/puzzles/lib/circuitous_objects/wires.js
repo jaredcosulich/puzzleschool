@@ -135,6 +135,9 @@ wires.Wires = (function(_super) {
         el: element,
         nodes: [start, end]
       };
+      segment.setCurrent = function(current) {
+        return segment.current = current;
+      };
       this.info.all[segment.id] = segment;
       (_base = this.info.nodes)[node1] || (_base[node1] = {});
       this.info.nodes[node1][node2] = segment;

@@ -3,6 +3,7 @@ describe("Analyzer", function() {
     var html, game, board, adderSquare;
     
     beforeEach(function() {
+        if (!debugInfo) $('.circuitous').css({top: -10000});
         html = $('.circuitous').html()
         game = new circuitous.ViewHelper({
             el: $('.circuitous')
@@ -16,8 +17,6 @@ describe("Analyzer", function() {
         battery = createComponent(board, 'Battery')
         onBoard = addToBoard(board, battery, 100, 300);
         expect(onBoard).toBe(true);
-        
-        if (!debugInfo) $('.circuitous').css({top: -10000});
     }); 
     
     afterEach(function() {
@@ -217,9 +216,56 @@ describe("Analyzer", function() {
                 });
             });
         });
+        
+        describe('and a complicated circuit', function() {
+            var bulbs = [];
+            
+            beforeEach(function() {
+                var start = board.boardPosition(battery.currentNodes()[1]);
+                var lastNode = drawWire(board, start, 0, 1);
+                var split1Node = drawWire(board, lastNode, 3, 0);
+                var bulb1Node = drawWire(board, split1Node, 0, -3);
+
+                lastNode = drawWire(board, split1Node, 6, 0);
+                var bulb2Node = drawWire(board, lastNode, 0, -3);
+                var split3Node = drawWire(board, bulb2Node, 0, -3);
+
+                var split2Node = drawWire(board, bulb1Node, 0, -3);
+                var bulb3Node = drawWire(board, split2Node, 3, 0);
+                drawWire(board, bulb3Node, 3, 0)    
+                
+                lastNode = drawWire(board, split3Node, 0, -3);
+                var bulb4Node = drawWire(board, lastNode, -5, 0);
+                lastNode = drawWire(board, bulb4Node, -4, 0);
+                drawWire(board, lastNode, 0, 3);
+                
+                lastNode = drawWire(board, split2Node, -3, 0);
+                drawWire(board, lastNode, 0, 2);
+                                    
+                var bulbNodes = [bulb1Node, bulb2Node, bulb3Node, bulb4Node];
+                for (var i=0; i<bulbNodes.length; ++i) {
+                    bulbs.push(createComponent(board, 'Lightbulb'));
+                    if (i<2) bulbs[i].resistance = 10;
+                    var onBoard = addToBoard(board, bulbs[i], bulbNodes[i].x, bulbNodes[i].y);
+                    expect(onBoard).toBe(true);
+                }                
+            });
+            
+            it('should have all the correct values', function() {
+                board.moveElectricity();
+                expect(wireAt(board, 1).current).toEqual(1.62)
+                expect(bulbs[0].current).toEqual(0.9)             
+                expect(bulbs[0].current).toEqual(0.9)             
+                expect(bulbs[1].current).toEqual(0.72)             
+                expect(bulbs[2].current).toEqual(0.36)             
+                expect(bulbs[3].current).toEqual(0.36)             
+            });
+        });
     });
     
 });
+
+
 
 addToBoard = function(board, component, x, y) {
     boardOffset = board.el.offset()
@@ -228,7 +274,12 @@ addToBoard = function(board, component, x, y) {
         boardOffset.left + x - component.centerOffset.x, 
         boardOffset.top + y - component.centerOffset.y
     )
-    if (debugInfo) board.addDot(board.boardPosition(component.currentNodes()[0]));
+    if (debugInfo) {
+        var nodes = component.currentNodes();
+        for (var i=0; i<nodes.length; ++i) {
+            board.addDot(board.boardPosition(nodes[i]));            
+        }        
+    } 
     return onBoard;
 }
 

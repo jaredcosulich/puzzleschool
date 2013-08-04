@@ -27,7 +27,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
-    var circuit, keys, parallelSection, powerSource, section, sid, _ref;
+    var circuit, keys, level, parallelSection, parentSection, percentageFlow, powerSource, roundedAmps, section, sid, _i, _ref, _ref1, _ref2;
     this.reduce();
     if ((keys = Object.keys(this.info.sections[this.level])).length !== 1) {
       return;
@@ -46,26 +46,36 @@ analyzer.Analyzer = (function(_super) {
     }
     circuit.sections = [];
     if (circuit.complete) {
-      _ref = this.info.sections[1];
-      for (sid in _ref) {
-        section = _ref[sid];
-        if (section.deadEnd) {
-          continue;
-        }
-        if (section.parallelSection) {
-          parallelSection = this.info.sections[2][section.parallelSection];
-          if (!parallelSection.amps) {
-            parallelSection.amps = circuit.amps;
+      for (level = _i = _ref = Math.max(this.level - 1, 1); _i >= 1; level = _i += -1) {
+        _ref1 = this.info.sections[level];
+        for (sid in _ref1) {
+          section = _ref1[sid];
+          if (section.deadEnd && !section.powerSource) {
+            continue;
           }
-          if (!circuit.resistance) {
-            section.amps = (section.resistance ? 0 : 'infinite');
+          if (section.parallelSection) {
+            parallelSection = this.info.sections[level + 1][section.parallelSection];
+            if (!parallelSection.amps) {
+              parallelSection.amps = circuit.amps;
+            }
+            if (!circuit.resistance) {
+              section.amps = (section.resistance ? 0 : 'infinite');
+            } else {
+              percentageFlow = (parallelSection.summedResistance - section.resistance) / parallelSection.summedResistance;
+              section.amps = parallelSection.amps * percentageFlow;
+            }
           } else {
-            section.amps = parallelSection.amps * (circuit.resistance / section.resistance);
+            parentSection = ((_ref2 = this.info.sections[level + 1]) != null ? _ref2[section.parentId] : void 0) || circuit;
+            section.amps = parentSection.amps;
           }
-        } else {
-          section.amps = circuit.amps;
+          if (level === 1) {
+            roundedAmps = Math.round(1000.0 * section.amps) / 1000.0;
+            if (!isNaN(roundedAmps)) {
+              section.amps = roundedAmps;
+            }
+            circuit.sections.push(section);
+          }
         }
-        circuit.sections.push(section);
       }
     }
     return circuit;
@@ -147,7 +157,18 @@ analyzer.Analyzer = (function(_super) {
     }
   };
 
-  Analyzer.prototype.recordSection = function(level, section) {
+  Analyzer.prototype.recordSection = function(level, section, children) {
+    var child, _i, _len;
+    if (children) {
+      if (!/Array/.test(children.constructor)) {
+        children = [children];
+      }
+      for (_i = 0, _len = children.length; _i < _len; _i++) {
+        child = children[_i];
+        child.parentId = section.id;
+        section.sections[child.id] = true;
+      }
+    }
     this.info.path[level].push(section.id);
     this.info.sections[level][section.id] = section;
     return this.recordSectionAtNodes(level, section);
@@ -199,7 +220,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.redraw = function(level) {
-    var cConnections, cEndNode, ccStartNodeIndex, ccs, ccsid, changeMade, connectingSection, connections, csid, endNode, endNodeIndex, otherNode, section, sid, _i, _len, _ref;
+    var cConnections, cEndNode, ccStartNodeIndex, ccs, ccsid, changeMade, childSectionId, connectingSection, connections, csid, endNode, endNodeIndex, otherNode, section, sid, _i, _len, _ref, _ref1;
     changeMade = false;
     endNode = null;
     _ref = this.info.path[level];
@@ -243,6 +264,11 @@ analyzer.Analyzer = (function(_super) {
           otherNode = this.otherNode(connectingSection.nodes, endNode);
           this.deleteSection(level, connectingSection);
           this.addToSection(level, section, otherNode, connectingSection);
+          for (childSectionId in connectingSection.sections) {
+            if ((_ref1 = this.info.sections[childSectionId]) != null) {
+              _ref1.parentId;
+            }
+          }
           endNodeIndex = (this.compareNodes(section.nodes[0], endNode) ? 0 : 1);
           section.nodes[endNodeIndex] = otherNode;
           changeMade = true;
@@ -257,12 +283,15 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceParallels = function(level) {
-    var analyzed, cid, componentIds, id, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, s, section, sections, _ref;
+    var analyzed, cid, componentIds, id, newSection, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, s, section, sections, summedResistance, _ref;
     reductionFound = false;
     analyzed = {};
     _ref = this.info.nodes[level - 1];
     for (nodeIds in _ref) {
       sections = _ref[nodeIds];
+      if (!(Object.keys(sections).length)) {
+        continue;
+      }
       section = sections[Object.keys(sections)[0]];
       node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
       node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
@@ -271,7 +300,7 @@ analyzer.Analyzer = (function(_super) {
       }
       for (id in sections) {
         s = sections[id];
-        if (!s.deadEnd) {
+        if (!(s.deadEnd && !s.powerSource)) {
           continue;
         }
         reductionFound = true;
@@ -283,13 +312,18 @@ analyzer.Analyzer = (function(_super) {
       }
       if (Object.keys(sections).length > 1) {
         reductionFound = true;
-        resistance = 0;
+        resistance = summedResistance = 0;
+        for (id in sections) {
+          section = sections[id];
+          summedResistance += section.resistance;
+        }
         for (id in sections) {
           section = sections[id];
           resistance += 1.0 / section.resistance;
         }
         parallel = {
           id: this.generateId(),
+          summedResistance: summedResistance,
           resistance: 1.0 / resistance,
           components: {},
           nodes: section.nodes,
@@ -304,7 +338,7 @@ analyzer.Analyzer = (function(_super) {
           }
         }
         analyzed[node1Coords] = analyzed[node2Coords] = parallel.id;
-        this.recordSection(level, parallel);
+        this.recordSection(level, parallel, sections);
         componentIds = [];
         for (id in sections) {
           section = sections[id];
@@ -319,7 +353,9 @@ analyzer.Analyzer = (function(_super) {
         }
       } else {
         analyzed[node1Coords] = analyzed[node2Coords] = section.id;
-        this.recordSection(level, section);
+        newSection = JSON.parse(JSON.stringify(section));
+        newSection.id = this.generateId();
+        this.recordSection(level, newSection, section);
       }
     }
     if (reductionFound) {
@@ -329,7 +365,11 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.consumeSection = function(section, toBeConsumedSection) {
-    var cid, _results;
+    var childSection, cid, csid, _results;
+    for (csid in toBeConsumedSection) {
+      childSection = toBeConsumedSection[csid];
+      childSection.parentId = section.id;
+    }
     _results = [];
     for (cid in toBeConsumedSection.components) {
       _results.push(section.components[cid] = true);
@@ -426,6 +466,7 @@ analyzer.Analyzer = (function(_super) {
       nodes: [node],
       resistance: 0,
       components: {},
+      sections: {},
       id: this.generateId()
     };
     return section;
@@ -450,6 +491,8 @@ analyzer.Analyzer = (function(_super) {
       section.components[component.id] = true;
     }
     this.info.components[level][component.id] = section.id;
+    component.parentId = section.id;
+    section.sections[component.id] = true;
     return true;
   };
 
@@ -457,8 +500,9 @@ analyzer.Analyzer = (function(_super) {
     if (component.powerSource) {
       section.powerSource = true;
     }
+    this.info.components[level][component.id] = section.id;
     section.nodes.push(node);
-    return this.recordSection(level, section);
+    return this.recordSection(level, section, component);
   };
 
   return Analyzer;

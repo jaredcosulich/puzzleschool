@@ -92,6 +92,8 @@ class wires.Wires extends circuitousObject.Object
                 id: "wire#{node1}#{node2}"
                 el: element
                 nodes: [start, end]
+                
+            segment.setCurrent = (current) -> segment.current = current
 
             @info.all[segment.id] = segment
             

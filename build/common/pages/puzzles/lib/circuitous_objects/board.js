@@ -156,15 +156,14 @@ board.Board = (function(_super) {
       _ref1 = circuit.sections;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         section = _ref1[_i];
-        if (section.amps === 'infinite') {
-          for (id in section.components) {
-            c = this.componentsAndWires()[id];
+        for (id in section.components) {
+          if (!(c = this.componentsAndWires()[id])) {
+            continue;
+          }
+          if (section.amps === 'infinite') {
             c.excessiveCurrent = true;
             c.el.addClass('excessive_current');
-          }
-        } else {
-          for (id in section.components) {
-            c = this.componentsAndWires()[id];
+          } else {
             c.receivingCurrent = true;
             if (typeof c.setCurrent === "function") {
               c.setCurrent(section.amps);
