@@ -243,9 +243,10 @@ describe("Analyzer", function() {
         });
         
         describe('and a complicated circuit', function() {
-            var bulbs = [];
+            var bulbs;
             
             beforeEach(function() {
+                bulbs = [];
                 var start = board.boardPosition(battery.currentNodes()[1]);
                 var lastNode = drawWire(board, start, 0, 1);
                 var split1Node = drawWire(board, lastNode, 3, 0);
@@ -280,11 +281,39 @@ describe("Analyzer", function() {
                 board.moveElectricity();
                 expect(wireAt(board, 1).current).toEqual(1.62)
                 expect(bulbs[0].current).toEqual(0.9)             
-                expect(bulbs[0].current).toEqual(0.9)             
                 expect(bulbs[1].current).toEqual(0.72)             
                 expect(bulbs[2].current).toEqual(0.36)             
                 expect(bulbs[3].current).toEqual(0.36)             
             });
+            
+            describe('and another parallel path', function() {
+                beforeEach(function() {
+                    var lastNode = drawWire(board, wireAt(board, 28).nodes[0], 1, 0);
+                    lastNode = drawWire(board, lastNode, 0, 8);
+                    var bulbNode = drawWire(board, lastNode, -6, 0);
+                    
+                    var bulb = createComponent(board, 'Lightbulb');
+                    bulb.resistance = 10;
+                    bulbs.push(bulb);
+                    var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
+                    expect(onBoard).toBe(true);
+                    expect(bulbs[4].id).not.toBe(undefined);
+                    
+                    lastNode = drawWire(board, bulbNode, -5, 0);
+                    lastNode = drawWire(board, lastNode, 0, -8);
+                    lastNode = drawWire(board, lastNode, 1, 0);
+                });
+                
+                it('should have all of the correct values', function() {
+                    board.moveElectricity();
+                    expect(wireAt(board, 1).current).toEqual(1.65);
+                    expect(bulbs[0].current).toEqual(0.9);             
+                    expect(bulbs[1].current).toEqual(0.75);             
+                    expect(bulbs[2].current).toEqual(0.3);             
+                    expect(bulbs[3].current).toEqual(0.3);             
+                    expect(bulbs[4].current).toEqual(0.15);    
+                });
+            })
         });
     });
     
