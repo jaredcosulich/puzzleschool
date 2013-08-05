@@ -61,7 +61,7 @@ analyzer.Analyzer = (function(_super) {
             if (!circuit.resistance) {
               section.amps = (section.resistance ? 0 : 'infinite');
             } else {
-              percentageFlow = (parallelSection.summedResistance - section.resistance) / parallelSection.summedResistance;
+              percentageFlow = (1.0 / section.resistance) / (1.0 / parallelSection.resistance);
               section.amps = parallelSection.amps * percentageFlow;
             }
           } else {
@@ -283,7 +283,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceParallels = function(level) {
-    var analyzed, cid, componentIds, id, newSection, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, s, section, sections, summedResistance, _ref;
+    var analyzed, cid, componentIds, id, newSection, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, s, section, sections, _ref;
     reductionFound = false;
     analyzed = {};
     _ref = this.info.nodes[level - 1];
@@ -312,18 +312,13 @@ analyzer.Analyzer = (function(_super) {
       }
       if (Object.keys(sections).length > 1) {
         reductionFound = true;
-        resistance = summedResistance = 0;
-        for (id in sections) {
-          section = sections[id];
-          summedResistance += section.resistance;
-        }
+        resistance = 0;
         for (id in sections) {
           section = sections[id];
           resistance += 1.0 / section.resistance;
         }
         parallel = {
           id: this.generateId(),
-          summedResistance: summedResistance,
           resistance: 1.0 / resistance,
           components: {},
           nodes: section.nodes,

@@ -34,7 +34,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                         if not circuit.resistance
                             section.amps = (if section.resistance then 0 else 'infinite')
                         else 
-                            percentageFlow = (parallelSection.summedResistance - section.resistance) / parallelSection.summedResistance 
+                            percentageFlow = (1.0 / section.resistance) / (1.0 / parallelSection.resistance)
                             section.amps = parallelSection.amps * percentageFlow
                     else
                         parentSection = @info.sections[level+1]?[section.parentId] or circuit
@@ -192,12 +192,10 @@ class analyzer.Analyzer extends circuitousObject.Object
             
             if Object.keys(sections).length > 1
                 reductionFound = true
-                resistance = summedResistance = 0
-                summedResistance += section.resistance for id, section of sections
+                resistance = 0
                 resistance += (1.0 / section.resistance) for id, section of sections
                 parallel = 
                     id: @generateId()
-                    summedResistance: summedResistance
                     resistance: (1.0 / resistance)
                     components: {}
                     nodes: section.nodes

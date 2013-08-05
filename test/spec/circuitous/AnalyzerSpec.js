@@ -164,9 +164,34 @@ describe("Analyzer", function() {
                                         expect(wire.el.hasClass('excessive_current')).toBe(true);
                                     }
                                 });
-
-                            })                            
+                            });                            
                         });
+                        
+                        describe('and another parallel circuit', function() {
+                            var bulb3;
+                            
+                            beforeEach(function() {
+                                var lastNode = drawWire(board, wireAt(board, 5).nodes[0], 0, 1);
+                                bulbNode = drawWire(board, lastNode, 5, 0);
+                                
+                                bulb3 = createComponent(board, 'Lightbulb')
+                                var onBoard = addToBoard(board, bulb3, bulbNode.x, bulbNode.y);
+                                expect(onBoard).toBe(true);
+                                
+                                lastNode = drawWire(board, bulbNode, 5, 0);
+                                lastNode = drawWire(board, lastNode, 0, -9);
+                                lastNode = drawWire(board, lastNode, -4, 0);
+                                drawWire(board, lastNode, 0, 1);
+                            })
+                            
+                            it('should have all the correct values', function() {
+                                board.moveElectricity();
+                                expect(bulb.current).toEqual(1.8);
+                                expect(bulb2.current).toEqual(1.8);                                                               
+                                expect(bulb3.current).toEqual(1.8);  
+                                expect(wireAt(board, 1).current).toEqual(5.4)
+                            })
+                        })
                         
                     });
                     
