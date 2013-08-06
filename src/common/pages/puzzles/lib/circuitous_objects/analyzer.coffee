@@ -255,14 +255,14 @@ class analyzer.Analyzer extends circuitousObject.Object
                     matchingNode = @board.boardPosition(n)
                     continue unless @compareNodes(matchingNode, node)
                     if nodes.length == 1
-                        return [{component: c, otherNode: matchingNode}]                    
+                        otherNode = matchingNode                    
                     else
-                        otherNode = @otherNode(nodes, matchingNode)
+                        otherNode = @otherNode(nodes, n)
                     connections.push({component: c, otherNode: @board.boardPosition(otherNode)})
 
             for segment in @board.wires.find(node) when not circuit.components[segment.id]
                 connections.push({component: segment, otherNode: @otherNode(segment.nodes, node)})
-
+            
         return connections
 
     newSection: (node) ->

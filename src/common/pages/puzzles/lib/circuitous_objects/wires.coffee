@@ -82,8 +82,8 @@ class wires.Wires extends circuitousObject.Object
         return segment.el
 
     recordPosition: (element, start, end) ->
-        # @addDot(start)
-        # @addDot(end)
+        # @board.addDot(start)
+        # @board.addDot(end)
         node1 = "#{start.x}:#{start.y}"
         node2 = "#{end.x}:#{end.y}"
         

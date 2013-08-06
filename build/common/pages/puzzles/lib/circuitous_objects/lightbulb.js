@@ -14,14 +14,17 @@ lightbulb.Lightbulb = (function(_super) {
   Lightbulb.prototype.resistance = 5;
 
   Lightbulb.prototype.centerOffset = {
-    x: 0,
-    y: 31
+    x: -16,
+    y: 25
   };
 
   Lightbulb.prototype.nodes = [
     {
-      x: 0,
-      y: 33
+      x: 16,
+      y: 39
+    }, {
+      x: -16,
+      y: 39
     }
   ];
 

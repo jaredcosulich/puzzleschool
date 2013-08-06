@@ -425,14 +425,9 @@ analyzer.Analyzer = (function(_super) {
               continue;
             }
             if (nodes.length === 1) {
-              return [
-                {
-                  component: c,
-                  otherNode: matchingNode
-                }
-              ];
+              otherNode = matchingNode;
             } else {
-              otherNode = this.otherNode(nodes, matchingNode);
+              otherNode = this.otherNode(nodes, n);
             }
             connections.push({
               component: c,
