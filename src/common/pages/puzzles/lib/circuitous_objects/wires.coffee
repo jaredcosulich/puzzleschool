@@ -103,6 +103,8 @@ class wires.Wires extends circuitousObject.Object
             @info.nodes[node2] or= {}
             @info.nodes[node2][node1] = segment
         else
+            segment = @info.nodes[node1][node2]
+            delete @info.all[segment.id] if segment
             delete @info.nodes[node1]?[node2]
             delete @info.nodes[node2]?[node1]
 

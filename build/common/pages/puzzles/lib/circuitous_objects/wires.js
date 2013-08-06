@@ -144,6 +144,10 @@ wires.Wires = (function(_super) {
       (_base1 = this.info.nodes)[node2] || (_base1[node2] = {});
       return this.info.nodes[node2][node1] = segment;
     } else {
+      segment = this.info.nodes[node1][node2];
+      if (segment) {
+        delete this.info.all[segment.id];
+      }
       if ((_ref = this.info.nodes[node1]) != null) {
         delete _ref[node2];
       }

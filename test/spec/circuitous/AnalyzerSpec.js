@@ -15,7 +15,7 @@ describe("Analyzer", function() {
         })
 
         battery = createComponent(board, 'Battery')
-        onBoard = addToBoard(board, battery, 100, 300);
+        onBoard = addToBoard(board, battery, 90, 420);
         expect(onBoard).toBe(true);
     }); 
     
@@ -33,7 +33,7 @@ describe("Analyzer", function() {
         describe('and wire', function() {            
             it('should be an incomplete circuit with multiple components/wires when just a little is added', function() {
                 var start = board.boardPosition(battery.currentNodes()[1]);
-                drawWire(board, start, 0, 3);
+                drawOrEraseWire(board, start, 0, 3);
                 var circuit = board.analyzer.run();
                 expect(Object.keys(circuit.components).length).toBeGreaterThan(1);
                 expect(circuit.complete).toBe(false); 
@@ -42,11 +42,11 @@ describe("Analyzer", function() {
             describe('completing the circuit', function() {
                 beforeEach(function() {
                     var start = board.boardPosition(battery.currentNodes()[1]);
-                    var lastNode = drawWire(board, start, 0, 2);
-                    lastNode = drawWire(board, lastNode, 12, 0);
-                    lastNode = drawWire(board, lastNode, 0, -7);
-                    lastNode = drawWire(board, lastNode, -12, 0);
-                    drawWire(board, lastNode, 0, 2);                    
+                    var lastNode = drawOrEraseWire(board, start, 0, 2);
+                    lastNode = drawOrEraseWire(board, lastNode, 12, 0);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, -7);
+                    lastNode = drawOrEraseWire(board, lastNode, -13, 0);
+                    drawOrEraseWire(board, lastNode, 0, 5);
                 });
 
                 it('should be a complete circuit with infinite amps', function() {
@@ -60,7 +60,10 @@ describe("Analyzer", function() {
                     
                     beforeEach(function() {
                         bulb = createComponent(board, 'Lightbulb')
-                        var node = wireAt(board, 22).nodes[0]
+                        var wire = wireAt(board, 22);
+                        wire.el.addClass('excessive_current')
+                        var node = wire.nodes[1];
+                        drawOrEraseWire(board, node, 1, 0);
                         var onBoard = addToBoard(board, bulb, node.x, node.y);
                         expect(onBoard).toBe(true);                        
                     });
@@ -76,7 +79,7 @@ describe("Analyzer", function() {
                     describe('with a short circuit', function() {
                         beforeEach(function() {
                             var node = wireAt(board, 5).nodes[0];
-                            drawWire(board, node, 0, -7);                            
+                            drawOrEraseWire(board, node, 0, -7);                            
                         });
                         
                         it('should create a circuit with infinite amps and no lightbulb', function() {
@@ -92,11 +95,13 @@ describe("Analyzer", function() {
                         
                         beforeEach(function() {
                             var node = wireAt(board, 5).nodes[0]
-                            var lastNode = drawWire(board, node, 0, -1);
-                            var bulb2Node = drawWire(board, lastNode, 2, 0);
-                            lastNode = drawWire(board, bulb2Node, 4, 0);
-                            drawWire(board, lastNode, 0, -6)
-                            bulb2 = createComponent(board, 'Lightbulb')
+                            var lastNode = drawOrEraseWire(board, node, 0, -1);
+                            var bulb2Node = drawOrEraseWire(board, lastNode, 2, 0);
+                            lastNode = drawOrEraseWire(board, bulb2Node, 4, 0);
+                            drawOrEraseWire(board, lastNode, 0, -6);
+                            
+                            bulb2 = createComponent(board, 'Lightbulb');
+                            drawOrEraseWire(board, bulb2Node, 1, 0);
                             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
                             expect(onBoard).toBe(true);                                                    
                         });
@@ -116,7 +121,7 @@ describe("Analyzer", function() {
                         
                         describe('and a short circuit', function() {
                             beforeEach(function() {
-                                drawWire(board, wireAt(board, 3).nodes[0], 0, -7);
+                                drawOrEraseWire(board, wireAt(board, 4).nodes[0], 0, -7);
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
@@ -135,7 +140,7 @@ describe("Analyzer", function() {
 
                         describe('and a short circuit in between bulbs', function() {
                             beforeEach(function() {
-                                drawWire(board, wireAt(board, 11).nodes[0], 0, -7);
+                                drawOrEraseWire(board, wireAt(board, 11).nodes[0], 0, -7);
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
@@ -154,7 +159,9 @@ describe("Analyzer", function() {
                             describe('and both bulbs removed', function() {
                                 beforeEach(function() {
                                     board.removeComponent(bulb);
+                                    drawOrEraseWire(board, board.boardPosition(bulb.currentNodes()[0]), 1, 0);
                                     board.removeComponent(bulb2);
+                                    drawOrEraseWire(board, board.boardPosition(bulb2.currentNodes()[0]), 1, 0);
                                 })
                                 
                                 it('all wires should have excessive_current class', function() {
@@ -171,17 +178,17 @@ describe("Analyzer", function() {
                             var bulb3;
                             
                             beforeEach(function() {
-                                var lastNode = drawWire(board, wireAt(board, 5).nodes[0], 0, 1);
-                                bulbNode = drawWire(board, lastNode, 5, 0);
+                                var lastNode = drawOrEraseWire(board, wireAt(board, 5).nodes[0], 0, 1);
+                                bulbNode = drawOrEraseWire(board, lastNode, 5, 0);
+                                lastNode = drawOrEraseWire(board, bulbNode, 5, 0);
+                                lastNode = drawOrEraseWire(board, lastNode, 0, -9);
+                                lastNode = drawOrEraseWire(board, lastNode, -4, 0);
+                                drawOrEraseWire(board, lastNode, 0, 1);
                                 
-                                bulb3 = createComponent(board, 'Lightbulb')
+                                bulb3 = createComponent(board, 'Lightbulb');
+                                drawOrEraseWire(board, bulbNode, 1, 0);
                                 var onBoard = addToBoard(board, bulb3, bulbNode.x, bulbNode.y);
                                 expect(onBoard).toBe(true);
-                                
-                                lastNode = drawWire(board, bulbNode, 5, 0);
-                                lastNode = drawWire(board, lastNode, 0, -9);
-                                lastNode = drawWire(board, lastNode, -4, 0);
-                                drawWire(board, lastNode, 0, 1);
                             })
                             
                             it('should have all the correct values', function() {
@@ -199,8 +206,10 @@ describe("Analyzer", function() {
                         var bulb2;
                         
                         beforeEach(function() {
-                            var bulb2Node = wireAt(board, 5).nodes[0]
-                            bulb2 = createComponent(board, 'Lightbulb')
+                            var wire = wireAt(board, 5)
+                            var bulb2Node = wire.nodes[0];
+                            drawOrEraseWire(board, wire.nodes[0], 1, 0);
+                            bulb2 = createComponent(board, 'Lightbulb');
                             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
                             expect(onBoard).toBe(true);                                                    
                         });
@@ -220,7 +229,7 @@ describe("Analyzer", function() {
                         
                         describe('and a short circuit', function() {
                             beforeEach(function() {
-                                drawWire(board, wireAt(board, 3).nodes[0], 0, -7);
+                                drawOrEraseWire(board, wireAt(board, 3).nodes[0], 0, -7);
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
@@ -248,28 +257,31 @@ describe("Analyzer", function() {
             beforeEach(function() {
                 bulbs = [];
                 var start = board.boardPosition(battery.currentNodes()[1]);
-                var lastNode = drawWire(board, start, 0, 1);
-                var split1Node = drawWire(board, lastNode, 3, 0);
-                var bulb1Node = drawWire(board, split1Node, 0, -3);
+                var lastNode = drawOrEraseWire(board, start, 0, 1);
+                var split1Node = drawOrEraseWire(board, lastNode, 3, 0);
+                var bulb1Node = drawOrEraseWire(board, split1Node, 0, -3);
 
-                lastNode = drawWire(board, split1Node, 6, 0);
-                var bulb2Node = drawWire(board, lastNode, 0, -3);
-                var split3Node = drawWire(board, bulb2Node, 0, -3);
+                lastNode = drawOrEraseWire(board, split1Node, 5, 0);
+                var bulb2Node = drawOrEraseWire(board, lastNode, 0, -3);
+                lastNode = drawOrEraseWire(board, bulb2Node, 1, 0);
+                var split3Node = drawOrEraseWire(board, lastNode, 0, -3);
 
-                var split2Node = drawWire(board, bulb1Node, 0, -3);
-                var bulb3Node = drawWire(board, split2Node, 3, 0);
-                drawWire(board, bulb3Node, 3, 0)    
+                lastNode = drawOrEraseWire(board, bulb1Node, 1, 0);
+                var split2Node = drawOrEraseWire(board, lastNode, 0, -3);
+                var bulb3Node = drawOrEraseWire(board, split2Node, 2, 0);
+                drawOrEraseWire(board, bulb3Node, 3, 0)    
                 
-                lastNode = drawWire(board, split3Node, 0, -3);
-                var bulb4Node = drawWire(board, lastNode, -5, 0);
-                lastNode = drawWire(board, bulb4Node, -4, 0);
-                drawWire(board, lastNode, 0, 3);
+                lastNode = drawOrEraseWire(board, split3Node, 0, -3);
+                var bulb4Node = drawOrEraseWire(board, lastNode, -5, 0);
+                lastNode = drawOrEraseWire(board, bulb4Node, -5, 0);
+                drawOrEraseWire(board, lastNode, 0, 3);
                 
-                lastNode = drawWire(board, split2Node, -3, 0);
-                drawWire(board, lastNode, 0, 2);
+                lastNode = drawOrEraseWire(board, split2Node, -5, 0);
+                drawOrEraseWire(board, lastNode, 0, 5);
                                     
                 var bulbNodes = [bulb1Node, bulb2Node, bulb3Node, bulb4Node];
                 for (var i=0; i<bulbNodes.length; ++i) {
+                    drawOrEraseWire(board, bulbNodes[i], 1, 0);
                     bulbs.push(createComponent(board, 'Lightbulb'));
                     if (i<2) bulbs[i].resistance = 10;
                     var onBoard = addToBoard(board, bulbs[i], bulbNodes[i].x, bulbNodes[i].y);
@@ -288,20 +300,20 @@ describe("Analyzer", function() {
             
             describe('and another parallel path', function() {
                 beforeEach(function() {
-                    var lastNode = drawWire(board, wireAt(board, 28).nodes[0], 1, 0);
-                    lastNode = drawWire(board, lastNode, 0, 8);
-                    var bulbNode = drawWire(board, lastNode, -6, 0);
-                    
+                    var lastNode = drawOrEraseWire(board, wireAt(board, 25).nodes[0], 1, 0);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, 8);
+                    var bulbNode = drawOrEraseWire(board, lastNode, -6, 0);
+                    lastNode = drawOrEraseWire(board, bulbNode, -6, 0);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, -8);
+                    lastNode = drawOrEraseWire(board, lastNode, 1, 0);
+
                     var bulb = createComponent(board, 'Lightbulb');
                     bulb.resistance = 10;
                     bulbs.push(bulb);
+                    drawOrEraseWire(board, bulbNode, 1, 0);
                     var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
                     expect(onBoard).toBe(true);
                     expect(bulbs[4].id).not.toBe(undefined);
-                    
-                    lastNode = drawWire(board, bulbNode, -5, 0);
-                    lastNode = drawWire(board, lastNode, 0, -8);
-                    lastNode = drawWire(board, lastNode, 1, 0);
                 });
                 
                 it('should have all of the correct values', function() {
@@ -348,7 +360,7 @@ createComponent = function(board, type) {
     return component;
 }
 
-drawWire = function(board, from, deltaX, deltaY) {
+drawOrEraseWire = function(board, from, deltaX, deltaY) {
     offset = board.el.offset()
     board.el.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
     end  = {x: from.x + (deltaX * board.cellDimension), y: from.y + (deltaY * board.cellDimension)}

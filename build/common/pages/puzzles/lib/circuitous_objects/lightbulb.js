@@ -20,10 +20,10 @@ lightbulb.Lightbulb = (function(_super) {
 
   Lightbulb.prototype.nodes = [
     {
-      x: 16,
+      x: -16,
       y: 39
     }, {
-      x: -16,
+      x: 16,
       y: 39
     }
   ];

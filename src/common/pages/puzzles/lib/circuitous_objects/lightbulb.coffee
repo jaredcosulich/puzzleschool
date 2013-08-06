@@ -8,8 +8,8 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         y: 25
         
     nodes: [
-        {x: 16, y: 39}
         {x: -16, y: 39}
+        {x: 16, y: 39}
     ]
         
     constructor: ({}) ->
