@@ -55,15 +55,34 @@ describe("Analyzer", function() {
                     expect(circuit.amps).toBe('infinite') 
                 });
                 
+                describe('and a light emitting diode hooked up the wrong way', function() {
+                    var led;
+                    
+                    beforeEach(function() {
+                        led = createComponent(board, 'LightEmittingDiode');
+                        var node = wireAt(board, 8).nodes[1];
+                        drawOrEraseWire(board, node, 1, 0)
+                        var onBoard = addToBoard(board, led, node.x, node.y);
+                        expect(onBoard).toBe(true);                                                
+                    });
+                    
+                    it('should not be a complete circuit', function() {
+                        var circuit = board.analyzer.run();
+                        expect(circuit.complete).toBe(false);
+                    });
+                    
+                    it('should not provide and current to the led', function() {
+                        board.moveElectricity();
+                        expect(led.current).toEqual(0);
+                    });
+                })
+                
                 describe('and a lightbulb', function() {
                     var bulb;
                     
                     beforeEach(function() {
-                        bulb = createComponent(board, 'Lightbulb')
-                        var wire = wireAt(board, 22);
-                        wire.el.addClass('excessive_current')
-                        var node = wire.nodes[1];
-                        drawOrEraseWire(board, node, 1, 0);
+                        bulb = createComponent(board, 'Lightbulb');
+                        var node = wireAt(board, 22).nodes[1];
                         var onBoard = addToBoard(board, bulb, node.x, node.y);
                         expect(onBoard).toBe(true);                        
                     });
@@ -90,17 +109,19 @@ describe("Analyzer", function() {
                         });
                     });
 
-                    describe('with a parallel lightbulb', function() {
+                    describe('with a parallel light emitting diode', function() {
                         var bulb2;
                         
                         beforeEach(function() {
-                            var node = wireAt(board, 5).nodes[0]
+                            var node = wireAt(board, 9).nodes[0]
                             var lastNode = drawOrEraseWire(board, node, 0, -1);
-                            var bulb2Node = drawOrEraseWire(board, lastNode, 2, 0);
-                            lastNode = drawOrEraseWire(board, bulb2Node, 4, 0);
-                            drawOrEraseWire(board, lastNode, 0, -6);
+                            var bulb2Node = drawOrEraseWire(board, lastNode, -2, 0);
+                            lastNode = drawOrEraseWire(board, bulb2Node, -2, 0);
+                            lastNode = drawOrEraseWire(board, lastNode, 0, -3);
+                            lastNode = drawOrEraseWire(board, lastNode, 5, 0);
+                            lastNode = drawOrEraseWire(board, lastNode, 0, -3);
                             
-                            bulb2 = createComponent(board, 'Lightbulb');
+                            bulb2 = createComponent(board, 'LightEmittingDiode');
                             drawOrEraseWire(board, bulb2Node, 1, 0);
                             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
                             expect(onBoard).toBe(true);                                                    
@@ -178,14 +199,14 @@ describe("Analyzer", function() {
                             var bulb3;
                             
                             beforeEach(function() {
-                                var lastNode = drawOrEraseWire(board, wireAt(board, 5).nodes[0], 0, 1);
-                                bulbNode = drawOrEraseWire(board, lastNode, 5, 0);
-                                lastNode = drawOrEraseWire(board, bulbNode, 5, 0);
+                                var lastNode = drawOrEraseWire(board, wireAt(board, 9).nodes[0], 0, 1);
+                                lastNode = drawOrEraseWire(board, lastNode, 6, 0);
                                 lastNode = drawOrEraseWire(board, lastNode, 0, -9);
-                                lastNode = drawOrEraseWire(board, lastNode, -4, 0);
+                                var bulbNode = drawOrEraseWire(board, lastNode, -2, 0);
+                                lastNode = drawOrEraseWire(board, bulbNode, -3, 0);
                                 drawOrEraseWire(board, lastNode, 0, 1);
                                 
-                                bulb3 = createComponent(board, 'Lightbulb');
+                                bulb3 = createComponent(board, 'LightEmittingDiode');
                                 drawOrEraseWire(board, bulbNode, 1, 0);
                                 var onBoard = addToBoard(board, bulb3, bulbNode.x, bulbNode.y);
                                 expect(onBoard).toBe(true);
@@ -208,7 +229,6 @@ describe("Analyzer", function() {
                         beforeEach(function() {
                             var wire = wireAt(board, 5)
                             var bulb2Node = wire.nodes[0];
-                            drawOrEraseWire(board, wire.nodes[0], 1, 0);
                             bulb2 = createComponent(board, 'Lightbulb');
                             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
                             expect(onBoard).toBe(true);                                                    
@@ -281,7 +301,6 @@ describe("Analyzer", function() {
                                     
                 var bulbNodes = [bulb1Node, bulb2Node, bulb3Node, bulb4Node];
                 for (var i=0; i<bulbNodes.length; ++i) {
-                    drawOrEraseWire(board, bulbNodes[i], 1, 0);
                     bulbs.push(createComponent(board, 'Lightbulb'));
                     if (i<2) bulbs[i].resistance = 10;
                     var onBoard = addToBoard(board, bulbs[i], bulbNodes[i].x, bulbNodes[i].y);
@@ -300,7 +319,7 @@ describe("Analyzer", function() {
             
             describe('and another parallel path', function() {
                 beforeEach(function() {
-                    var lastNode = drawOrEraseWire(board, wireAt(board, 25).nodes[0], 1, 0);
+                    var lastNode = drawOrEraseWire(board, wireAt(board, 28).nodes[0], 1, 0);
                     lastNode = drawOrEraseWire(board, lastNode, 0, 8);
                     var bulbNode = drawOrEraseWire(board, lastNode, -6, 0);
                     lastNode = drawOrEraseWire(board, bulbNode, -6, 0);
@@ -310,7 +329,6 @@ describe("Analyzer", function() {
                     var bulb = createComponent(board, 'Lightbulb');
                     bulb.resistance = 10;
                     bulbs.push(bulb);
-                    drawOrEraseWire(board, bulbNode, 1, 0);
                     var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
                     expect(onBoard).toBe(true);
                     expect(bulbs[4].id).not.toBe(undefined);

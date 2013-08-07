@@ -9,6 +9,9 @@ for name, fn of require('./battery')
 for name, fn of require('./lightbulb')
     circuitous_objects[name] = fn
 
+for name, fn of require('./light_emitting_diode')
+    circuitous_objects[name] = fn
+
 for name, fn of require('./resistor')
     circuitous_objects[name] = fn
 

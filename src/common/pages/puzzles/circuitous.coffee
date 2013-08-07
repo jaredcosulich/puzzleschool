@@ -39,6 +39,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/battery.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/resistor.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/toggle_switch.js'
+            @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/light_emitting_diode.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/lightbulb.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/board.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/options.js'

@@ -50,9 +50,6 @@ analyzer.Analyzer = (function(_super) {
         _ref1 = this.info.sections[level];
         for (sid in _ref1) {
           section = _ref1[sid];
-          if (section.deadEnd && !section.powerSource) {
-            continue;
-          }
           if (section.parallelSection) {
             parallelSection = this.info.sections[level + 1][section.parallelSection];
             if (!parallelSection.amps) {
@@ -169,7 +166,9 @@ analyzer.Analyzer = (function(_super) {
         section.sections[child.id] = true;
       }
     }
-    this.info.path[level].push(section.id);
+    if (!(this.info.path[level].indexOf(section.id) > -1)) {
+      this.info.path[level].push(section.id);
+    }
     this.info.sections[level][section.id] = section;
     return this.recordSectionAtNodes(level, section);
   };
@@ -189,6 +188,10 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.deleteSection = function(level, section) {
+    var cid;
+    for (cid in section.components) {
+      delete this.info.components[level][cid];
+    }
     this.info.path[level].splice(this.info.path[level].indexOf(section.id), 1);
     delete this.info.sections[level][section.id];
     return this.deleteSectionAtNodes(level, section);
@@ -283,7 +286,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceParallels = function(level) {
-    var analyzed, cid, componentIds, id, newSection, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, s, section, sections, _ref;
+    var analyzed, cid, componentIds, id, newSection, node1Coords, node2Coords, nodeIds, parallel, reductionFound, resistance, section, sections, _ref;
     reductionFound = false;
     analyzed = {};
     _ref = this.info.nodes[level - 1];
@@ -296,18 +299,6 @@ analyzer.Analyzer = (function(_super) {
       node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
       node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
       if (analyzed[node1Coords] && analyzed[node2Coords] && analyzed[node1Coords] === analyzed[node2Coords]) {
-        continue;
-      }
-      for (id in sections) {
-        s = sections[id];
-        if (!(s.deadEnd && !s.powerSource)) {
-          continue;
-        }
-        reductionFound = true;
-        delete sections[id];
-      }
-      if (!Object.keys(sections).length) {
-        delete this.info.nodes[level - 1][nodeIds];
         continue;
       }
       if (Object.keys(sections).length > 1) {
@@ -373,26 +364,38 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.combineSections = function(level, node, component, section) {
-    var connection, connections, parallelSection, _i, _len;
+    var c, connectingConnections, connections, _i, _j, _len, _len1;
+    connections = this.analyzeSection(level, node, component, section);
+    if (connections.length > 1) {
+      for (_i = 0, _len = connections.length; _i < _len; _i++) {
+        c = connections[_i];
+        connectingConnections = this.analyzeSection(level, c.otherNode, c.component, this.newSection(c.node));
+      }
+      for (_j = 0, _len1 = connectingConnections.length; _j < _len1; _j++) {
+        c = connectingConnections[_j];
+        this.combineSections(level, c.otherNode, c.component, this.newSection(c.node));
+      }
+    }
+    return true;
+  };
+
+  Analyzer.prototype.analyzeSection = function(level, node, component, section) {
+    var connection, connections;
+    connections = [];
     if (this.addToSection(level, section, node, component)) {
       if ((connections = this.findConnections(level, node, component, section)).length === 1) {
         connection = connections[0];
-        if (section.components[connection.component.id] || !this.combineSections(level, connection.otherNode, connection.component, section)) {
+        if (connection.otherNode.negative || section.components[connection.component.id] || !(connections = this.analyzeSection(level, connection.otherNode, connection.component, section)).length) {
           this.endSection(level, section, node, connection.component);
         }
       } else if (connections.length > 1) {
         this.endSection(level, section, node, component);
-        for (_i = 0, _len = connections.length; _i < _len; _i++) {
-          connection = connections[_i];
-          parallelSection = this.combineSections(level, connection.otherNode, connection.component, this.newSection(node));
-        }
+        return connections;
       } else {
-        section.deadEnd = true;
         this.endSection(level, section, node, component);
       }
-      return true;
     }
-    return false;
+    return connections;
   };
 
   Analyzer.prototype.findConnections = function(level, node, component, circuit) {
@@ -408,7 +411,8 @@ analyzer.Analyzer = (function(_super) {
         otherNode = this.otherNode(connection.nodes, node);
         connections.push({
           component: connection,
-          otherNode: otherNode
+          otherNode: otherNode,
+          node: node
         });
       }
       return connections;
@@ -425,13 +429,20 @@ analyzer.Analyzer = (function(_super) {
               continue;
             }
             if (nodes.length === 1) {
-              otherNode = matchingNode;
+              return [
+                {
+                  component: c,
+                  otherNode: matchingNode,
+                  node: node
+                }
+              ];
             } else {
-              otherNode = this.otherNode(nodes, n);
+              otherNode = this.board.boardPosition(this.otherNode(nodes, n));
             }
             connections.push({
               component: c,
-              otherNode: this.board.boardPosition(otherNode)
+              otherNode: otherNode,
+              node: node
             });
           }
         }
@@ -442,7 +453,8 @@ analyzer.Analyzer = (function(_super) {
         if (!circuit.components[segment.id]) {
           connections.push({
             component: segment,
-            otherNode: this.otherNode(segment.nodes, node)
+            otherNode: this.otherNode(segment.nodes, node),
+            node: node
           });
         }
       }

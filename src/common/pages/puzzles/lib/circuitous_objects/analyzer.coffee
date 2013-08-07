@@ -27,7 +27,6 @@ class analyzer.Analyzer extends circuitousObject.Object
         if circuit.complete
             for level in [Math.max(@level-1, 1)..1] by -1
                 for sid, section of @info.sections[level]
-                    continue if section.deadEnd and not section.powerSource
                     if section.parallelSection
                         parallelSection = @info.sections[level+1][section.parallelSection]
                         parallelSection.amps = circuit.amps unless parallelSection.amps
@@ -88,7 +87,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                 child.parentId = section.id  
                 section.sections[child.id] = true
         
-        @info.path[level].push(section.id)
+        @info.path[level].push(section.id) unless @info.path[level].indexOf(section.id) > -1
         @info.sections[level][section.id] = section 
     
         # @board.clearColors()
@@ -110,7 +109,8 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.nodes[level]["#{node2Coords}#{node1Coords}"] or= {}
         @info.nodes[level]["#{node2Coords}#{node1Coords}"][section.id] = section        
         
-    deleteSection: (level, section) ->        
+    deleteSection: (level, section) ->       
+        delete @info.components[level][cid] for cid of section.components
         @info.path[level].splice(@info.path[level].indexOf(section.id), 1)
         delete @info.sections[level][section.id]
         @deleteSectionAtNodes(level, section)
@@ -131,7 +131,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         endNode = null
         for sid in @info.path[level]
             section = @info.sections[level][sid]
-
+            
             endNode = if endNode then @otherNode(section.nodes, endNode) else section.nodes[1]
             connections = @info.node[level]["#{endNode.x}:#{endNode.y}"]
             
@@ -182,14 +182,6 @@ class analyzer.Analyzer extends circuitousObject.Object
                         
             continue if analyzed[node1Coords] and analyzed[node2Coords] and analyzed[node1Coords] == analyzed[node2Coords]
 
-            for id, s of sections when s.deadEnd and not s.powerSource
-                reductionFound = true
-                delete sections[id]
-                
-            if not Object.keys(sections).length
-                delete @info.nodes[level-1][nodeIds]
-                continue       
-            
             if Object.keys(sections).length > 1
                 reductionFound = true
                 resistance = 0
@@ -226,28 +218,34 @@ class analyzer.Analyzer extends circuitousObject.Object
         section.components[cid] = true for cid of toBeConsumedSection.components
 
     combineSections: (level, node, component, section) ->
+        connections = @analyzeSection(level, node, component, section)
+        if connections.length > 1
+            connectingConnections = @analyzeSection(level, c.otherNode, c.component, @newSection(c.node)) for c in connections
+            @combineSections(level, c.otherNode, c.component, @newSection(c.node)) for c in connectingConnections
+        return true
+        
+    analyzeSection: (level, node, component, section) ->
+        connections = []
         if @addToSection(level, section, node, component)            
             if (connections = @findConnections(level, node, component, section)).length == 1
                 connection = connections[0]
-                if section.components[connection.component.id] or 
-                   not @combineSections(level, connection.otherNode, connection.component, section)
+                if connection.otherNode.negative or 
+                   section.components[connection.component.id] or 
+                   not (connections = @analyzeSection(level, connection.otherNode, connection.component, section)).length
                     @endSection(level, section, node, connection.component)
             else if connections.length > 1
                 @endSection(level, section, node, component)
-                for connection in connections
-                    parallelSection = @combineSections(level, connection.otherNode, connection.component, @newSection(node))
+                return connections
             else
-                section.deadEnd = true
                 @endSection(level, section, node, component)
-            return true
-        return false
-
+        return connections
+        
     findConnections: (level, node, component, circuit) ->
         connections = []
         if level > 1          
             for id, connection of @info.node[level-1]["#{node.x}:#{node.y}"] when connection.id != component.id
                 otherNode = @otherNode(connection.nodes, node)
-                connections.push({component: connection, otherNode: otherNode})
+                connections.push({component: connection, otherNode: otherNode, node: node})
             return connections
         else
             for id, c of @board.components when (c != component and (id == circuit.negativeComponentId or !circuit.components[id]))
@@ -255,13 +253,13 @@ class analyzer.Analyzer extends circuitousObject.Object
                     matchingNode = @board.boardPosition(n)
                     continue unless @compareNodes(matchingNode, node)
                     if nodes.length == 1
-                        otherNode = matchingNode                    
+                        return [{component: c, otherNode: matchingNode, node: node}]                   
                     else
-                        otherNode = @otherNode(nodes, n)
-                    connections.push({component: c, otherNode: @board.boardPosition(otherNode)})
+                        otherNode = @board.boardPosition(@otherNode(nodes, n))
+                    connections.push({component: c, otherNode: otherNode, node: node})
 
             for segment in @board.wires.find(node) when not circuit.components[segment.id]
-                connections.push({component: segment, otherNode: @otherNode(segment.nodes, node)})
+                connections.push({component: segment, otherNode: @otherNode(segment.nodes, node), node: node})
             
         return connections
 

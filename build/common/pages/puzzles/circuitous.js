@@ -44,6 +44,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/battery.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/resistor.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/toggle_switch.js');
+      this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/light_emitting_diode.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/lightbulb.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/board.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/options.js');

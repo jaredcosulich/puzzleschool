@@ -7,7 +7,7 @@ selector = typeof exports !== "undefined" && exports !== null ? exports : provid
 
 circuitousObject = require('./object');
 
-selector.ITEM_TYPES = ['Battery', 'Resistor', 'Lightbulb', 'Toggle Switch'];
+selector.ITEM_TYPES = ['Battery', 'Resistor', 'Lightbulb', 'Light Emitting Diode', 'Toggle Switch'];
 
 selector.Selector = (function(_super) {
 
@@ -25,7 +25,7 @@ selector.Selector = (function(_super) {
   };
 
   Selector.prototype.construct = function(selectorHtml) {
-    var column, columns, itemRow, itemTable, row, _fn, _i, _j, _ref,
+    var column, columns, item, itemRow, itemTable, row, _fn, _i, _j, _ref,
       _this = this;
     this.button = $(document.createElement('A'));
     this.button.addClass('selector_button');
@@ -41,9 +41,8 @@ selector.Selector = (function(_super) {
     columns = Math.ceil(Math.sqrt(selector.ITEM_TYPES.length));
     for (row = _i = 0, _ref = Math.ceil(selector.ITEM_TYPES.length / columns); 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
       itemRow = $(document.createElement('TR'));
-      _fn = function(row, column, columns) {
-        var item, itemCell, itemObject;
-        item = selector.ITEM_TYPES[row * columns + column];
+      _fn = function(item) {
+        var itemCell, itemObject;
         itemObject = new circuitous[item.replace(/\s/g, '')]();
         itemCell = $(document.createElement('TD'));
         itemCell.addClass('item');
@@ -55,7 +54,11 @@ selector.Selector = (function(_super) {
         return itemRow.append(itemCell);
       };
       for (column = _j = 0; 0 <= columns ? _j < columns : _j > columns; column = 0 <= columns ? ++_j : --_j) {
-        _fn(row, column, columns);
+        item = selector.ITEM_TYPES[row * columns + column];
+        if (!item) {
+          continue;
+        }
+        _fn(item);
       }
       itemTable.append(itemRow);
     }

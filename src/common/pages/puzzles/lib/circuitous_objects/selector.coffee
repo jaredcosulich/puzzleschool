@@ -5,6 +5,7 @@ selector.ITEM_TYPES = [
     'Battery'
     'Resistor'
     'Lightbulb'
+    'Light Emitting Diode'
     'Toggle Switch'
 ]
 
@@ -35,8 +36,9 @@ class selector.Selector extends circuitousObject.Object
         for row in [0...Math.ceil(selector.ITEM_TYPES.length / columns)]
             itemRow = $(document.createElement('TR'))
             for column in [0...columns]
-                do (row, column, columns) =>
-                    item = selector.ITEM_TYPES[row * columns + column]
+                item = selector.ITEM_TYPES[row * columns + column]
+                continue if not item
+                do (item) =>
                     itemObject = new circuitous[item.replace(/\s/g, '')]()
                     itemCell = $(document.createElement('TD'))
                     itemCell.addClass('item')
