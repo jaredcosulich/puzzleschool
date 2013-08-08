@@ -1,6 +1,6 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("Analyzer", function() {
-    var html, game, board, adderSquare;
+    var html, game, board, adderSquare, battery;
     
     beforeEach(function() {
         if (!debugInfo) $('.circuitous').css({top: -10000});
@@ -343,6 +343,67 @@ describe("Analyzer", function() {
                     expect(bulbs[3].current).toEqual(0.3);             
                     expect(bulbs[4].current).toEqual(0.15);    
                 });
+            })
+        });
+        
+        describe('and a complicated circuit with two batteries', function() {
+            var bulbs;
+            
+            beforeEach(function() {
+                battery.voltage = 8;
+                
+                bulbs = [];
+                var start = board.boardPosition(battery.currentNodes()[1]);
+                var lastNode = drawOrEraseWire(board, start, 0, 1);
+                lastNode = drawOrEraseWire(board, lastNode, -2, 0);
+                lastNode = drawOrEraseWire(board, lastNode, 0, -6);
+                var split1Node = drawOrEraseWire(board, lastNode, 2, 0);
+                lastNode = drawOrEraseWire(board, split1Node, 0, -2);
+                var battery2Node = drawOrEraseWire(board, lastNode, 1, 0);
+                var battery2 = createComponent(board, 'Battery');
+                battery2.voltage = 12;
+                onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+                expect(onBoard).toBe(true);
+                var bulb1Node = drawOrEraseWire(board, battery2Node, 3, 0);
+                drawOrEraseWire(board, battery2Node, 1, 0);
+                
+                var bulb1 = createComponent(board, 'Lightbulb');
+                bulbs.push(bulb1);
+                bulb1.resistance = 4;
+                var onBoard = addToBoard(board, bulb1, bulb1Node.x, bulb1Node.y);
+                expect(onBoard).toBe(true);
+                lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);
+                lastNode = drawOrEraseWire(board, lastNode, 0, 4);
+                
+                lastNode = drawOrEraseWire(board, split1Node, 0, 2);
+                var bulb2Node = drawOrEraseWire(board, lastNode, 3, 0);
+                var bulb2 = createComponent(board, 'Lightbulb');
+                bulbs.push(bulb2);
+                bulb2.resistance = 2;
+                var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                expect(onBoard).toBe(true);
+                lastNode = drawOrEraseWire(board, bulb2Node, 3, 0);
+                
+                var end = board.boardPosition(battery.currentNodes()[0]);
+                lastNode = drawOrEraseWire(board, end, 0, -1);
+                lastNode = drawOrEraseWire(board, lastNode, 2, 0);
+                lastNode = drawOrEraseWire(board, lastNode, 0, 2);
+                var bulb3Node = drawOrEraseWire(board, lastNode, 3, 0);
+                var bulb3 = createComponent(board, 'Lightbulb');
+                bulbs.push(bulb2);
+                bulb3.resistance = 6;
+                var onBoard = addToBoard(board, bulb3, bulb3Node.x, bulb3Node.y);
+                expect(onBoard).toBe(true);
+                lastNode = drawOrEraseWire(board, bulb3Node, 2, 0);
+                drawOrEraseWire(board, lastNode, 0, -4);
+            });
+            
+            it('should have all the correct values', function() {
+                board.moveElectricity();
+                expect(wireAt(board, 1).current).toEqual(1.64);
+                expect(bulbs[0].current).toEqual(2.54);             
+                expect(bulbs[1].current).toEqual(0.91);             
+                expect(bulbs[2].current).toEqual(1.64);
             })
         });
     });
