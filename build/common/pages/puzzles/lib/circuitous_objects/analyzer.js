@@ -27,8 +27,20 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
+    var circuit, matrix, solution;
+    this.reduceComplex();
+    circuit = this.info.sections[this.level][keys[0]];
+    if (circuit.complete) {
+      this.assignCurrentDirections(circuit);
+      matrix = this.createMatrix(circuit);
+      solution = this.solveMatrix(matrix);
+      return console.log(solution);
+    }
+  };
+
+  Analyzer.prototype.runSimple = function() {
     var circuit, keys, level, parallelSection, parentSection, percentageFlow, powerSource, roundedAmps, section, sid, _i, _ref, _ref1, _ref2;
-    this.reduce();
+    this.reduceSimple();
     if ((keys = Object.keys(this.info.sections[this.level])).length !== 1) {
       return;
     }
@@ -109,7 +121,7 @@ analyzer.Analyzer = (function(_super) {
     return false;
   };
 
-  Analyzer.prototype.reduce = function(level) {
+  Analyzer.prototype.reduceComplex = function(level) {
     var cid, component, existingSection, negativeTerminal, node, otherNode, s, sid, _i, _len, _ref, _ref1;
     if (level == null) {
       level = 1;
@@ -118,38 +130,94 @@ analyzer.Analyzer = (function(_super) {
     _ref = this.board.components;
     for (cid in _ref) {
       component = _ref[cid];
-      if (component.powerSource) {
-        _ref1 = component.currentNodes('negative');
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          negativeTerminal = _ref1[_i];
-          node = this.board.boardPosition(negativeTerminal);
-          existingSection = ((function() {
-            var _ref2, _ref3, _results;
-            _ref2 = this.info.sections[level - 1] || {};
-            _results = [];
-            for (sid in _ref2) {
-              s = _ref2[sid];
-              if ((_ref3 = s.components) != null ? _ref3[cid] : void 0) {
-                _results.push(s);
-              }
+      if (!component.powerSource) {
+        continue;
+      }
+      if (this.info.components[level][cid]) {
+        continue;
+      }
+      _ref1 = component.currentNodes('negative');
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        negativeTerminal = _ref1[_i];
+        node = this.board.boardPosition(negativeTerminal);
+        existingSection = ((function() {
+          var _ref2, _ref3, _results;
+          _ref2 = this.info.sections[level - 1] || {};
+          _results = [];
+          for (sid in _ref2) {
+            s = _ref2[sid];
+            if ((_ref3 = s.components) != null ? _ref3[cid] : void 0) {
+              _results.push(s);
             }
-            return _results;
-          }).call(this))[0];
-          if (existingSection) {
-            otherNode = this.otherNode(existingSection.nodes, node);
-            otherNode.negative = true;
           }
-          this.combineSections(level, otherNode || node, existingSection || component, this.newSection(node));
+          return _results;
+        }).call(this))[0];
+        if (existingSection) {
+          otherNode = this.otherNode(existingSection.nodes, node);
+          otherNode.negative = true;
         }
+        this.combineSections(level, otherNode || node, existingSection || component, this.newSection(node));
+      }
+    }
+    if (Object.keys(this.info.sections[this.level]).length > 1) {
+      return this.redraw(this.level);
+    }
+  };
+
+  Analyzer.prototype.reduceSimple = function(level) {
+    var cid, component, existingSection, negativeTerminal, node, otherNode, s, sid, _i, _len, _ref, _ref1;
+    if (level == null) {
+      level = 1;
+    }
+    this.initLevel(level);
+    _ref = this.board.components;
+    for (cid in _ref) {
+      component = _ref[cid];
+      if (!component.powerSource) {
+        continue;
+      }
+      if (this.info.components[level][cid]) {
+        continue;
+      }
+      _ref1 = component.currentNodes('negative');
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        negativeTerminal = _ref1[_i];
+        node = this.board.boardPosition(negativeTerminal);
+        existingSection = ((function() {
+          var _ref2, _ref3, _results;
+          _ref2 = this.info.sections[level - 1] || {};
+          _results = [];
+          for (sid in _ref2) {
+            s = _ref2[sid];
+            if ((_ref3 = s.components) != null ? _ref3[cid] : void 0) {
+              _results.push(s);
+            }
+          }
+          return _results;
+        }).call(this))[0];
+        if (existingSection) {
+          otherNode = this.otherNode(existingSection.nodes, node);
+          otherNode.negative = true;
+        }
+        this.combineSections(level, otherNode || node, existingSection || component, this.newSection(node));
       }
     }
     if (Object.keys(this.info.sections[this.level]).length > 1) {
       this.redraw(this.level);
     }
+    console.log('');
+    console.log('');
+    if (level === 1) {
+      console.log("node: {1: " + (JSON.stringify(this.info.node[1])) + "}");
+      console.log("sections: {1: " + (JSON.stringify(this.info.sections[1])) + "}");
+      console.log("path: {1: " + (JSON.stringify(this.info.path[1])) + "}");
+    }
+    console.log('');
+    console.log('');
     if (Object.keys(this.info.sections[this.level]).length > 1) {
       this.initLevel(this.level + 1);
       if (this.reduceParallels(this.level)) {
-        return this.reduce(this.level + 1);
+        return this.reduceSimple(this.level + 1);
       }
     }
   };
@@ -505,6 +573,22 @@ analyzer.Analyzer = (function(_super) {
     this.info.components[level][component.id] = section.id;
     section.nodes.push(node);
     return this.recordSection(level, section, component);
+  };
+
+  Analyzer.prototype.assignCurrentDirections = function(level) {
+    var index, section, sid, _i, _len, _ref, _results;
+    _ref = this.info.path[level];
+    _results = [];
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      sid = _ref[index];
+      section = this.info.sections[level][sid];
+      if (index > 1 && section.negativeComponentId) {
+        _results.push(section.direction = section.components[section.negativeComponentId].direction);
+      } else {
+        _results.push(section.direction = 1);
+      }
+    }
+    return _results;
   };
 
   return Analyzer;

@@ -1,453 +1,126 @@
-var debugInfo = true;
 describe("Analyzer", function() {
-    var html, game, board, adderSquare, battery;
+    var analyzer;
     
     beforeEach(function() {
-        if (!debugInfo) $('.circuitous').css({top: -10000});
-        html = $('.circuitous').html()
-        game = new circuitous.ViewHelper({
-            el: $('.circuitous')
-        });
-        
-        board = new circuitous.Board({
-            el: $('.board'),
-            cellDimension: 32
-        })
-
-        battery = createComponent(board, 'Battery')
-        onBoard = addToBoard(board, battery, 90, 420);
-        expect(onBoard).toBe(true);
-    }); 
-    
-    afterEach(function() {
-        $('.circuitous').html(html)
-    })
-    
-    describe('with one battery', function() {
-        it('should be an incomplete circuit with just one component', function() {
-            var circuit = board.analyzer.run()
-            expect(Object.keys(circuit.components).length).toEqual(1);
-            expect(circuit.complete).toBe(false);
-        });        
-        
-        describe('and wire', function() {            
-            it('should be an incomplete circuit with multiple components/wires when just a little is added', function() {
-                var start = board.boardPosition(battery.currentNodes()[1]);
-                drawOrEraseWire(board, start, 0, 3);
-                var circuit = board.analyzer.run();
-                expect(Object.keys(circuit.components).length).toBeGreaterThan(1);
-                expect(circuit.complete).toBe(false); 
-            });
-            
-            describe('completing the circuit', function() {
-                beforeEach(function() {
-                    var start = board.boardPosition(battery.currentNodes()[1]);
-                    var lastNode = drawOrEraseWire(board, start, 0, 2);
-                    lastNode = drawOrEraseWire(board, lastNode, 12, 0);
-                    lastNode = drawOrEraseWire(board, lastNode, 0, -7);
-                    lastNode = drawOrEraseWire(board, lastNode, -13, 0);
-                    drawOrEraseWire(board, lastNode, 0, 5);
-                });
-
-                it('should be a complete circuit with infinite amps', function() {
-                    var circuit = board.analyzer.run()
-                    expect(circuit.complete).toBe(true);
-                    expect(circuit.amps).toBe('infinite') 
-                });
-                
-                describe('and a light emitting diode hooked up the wrong way', function() {
-                    var led;
-                    
-                    beforeEach(function() {
-                        led = createComponent(board, 'LightEmittingDiode');
-                        var node = wireAt(board, 8).nodes[1];
-                        drawOrEraseWire(board, node, 1, 0)
-                        var onBoard = addToBoard(board, led, node.x, node.y);
-                        expect(onBoard).toBe(true);                                                
-                    });
-                    
-                    it('should not be a complete circuit', function() {
-                        var circuit = board.analyzer.run();
-                        expect(circuit.complete).toBe(false);
-                    });
-                    
-                    it('should not provide and current to the led', function() {
-                        board.moveElectricity();
-                        expect(led.current).toEqual(0);
-                    });
-                })
-                
-                describe('and a lightbulb', function() {
-                    var bulb;
-                    
-                    beforeEach(function() {
-                        bulb = createComponent(board, 'Lightbulb');
-                        var node = wireAt(board, 22).nodes[1];
-                        var onBoard = addToBoard(board, bulb, node.x, node.y);
-                        expect(onBoard).toBe(true);                        
-                    });
-
-                    it('should have resistance and non-infinite amps', function() {
-                        var circuit = board.analyzer.run();
-                        expect(circuit.components[bulb.id]).toBe(true);
-                        expect(circuit.complete).toBe(true);
-                        expect(circuit.resistance).toBe(5);
-                        expect(circuit.amps).toBe(1.8);
-                    });
-                    
-                    describe('with a short circuit', function() {
-                        beforeEach(function() {
-                            var node = wireAt(board, 5).nodes[0];
-                            drawOrEraseWire(board, node, 0, -7);                            
-                        });
-                        
-                        it('should create a circuit with infinite amps and no lightbulb', function() {
-                            var circuit = board.analyzer.run();
-                            expect(circuit.complete).toBe(true);
-                            expect(circuit.amps).toBe('infinite') ;
-                            expect(circuit.components[bulb.id]).toBeUndefined();
-                        });
-                    });
-
-                    describe('with a parallel light emitting diode', function() {
-                        var bulb2;
-                        
-                        beforeEach(function() {
-                            var node = wireAt(board, 9).nodes[0]
-                            var lastNode = drawOrEraseWire(board, node, 0, -1);
-                            var bulb2Node = drawOrEraseWire(board, lastNode, -2, 0);
-                            lastNode = drawOrEraseWire(board, bulb2Node, -2, 0);
-                            lastNode = drawOrEraseWire(board, lastNode, 0, -3);
-                            lastNode = drawOrEraseWire(board, lastNode, 5, 0);
-                            lastNode = drawOrEraseWire(board, lastNode, 0, -3);
-                            
-                            bulb2 = createComponent(board, 'LightEmittingDiode');
-                            drawOrEraseWire(board, bulb2Node, 1, 0);
-                            var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
-                            expect(onBoard).toBe(true);                                                    
-                        });
-                        
-                        it('should create a complete circuit with twice the amps', function() {
-                            var circuit = board.analyzer.run();
-                            expect(circuit.complete).toBe(true);
-                            expect(circuit.amps).toBe(3.6);
-                            expect(circuit.resistance).toBe(2.5);
-                        });
-                        
-                        it('should provide the full amout of amps to each bulb', function() {
-                            board.moveElectricity();
-                            expect(bulb.current).toEqual(1.8);
-                            expect(bulb2.current).toEqual(1.8);
-                        });                        
-                        
-                        describe('and a short circuit', function() {
-                            beforeEach(function() {
-                                drawOrEraseWire(board, wireAt(board, 4).nodes[0], 0, -7);
-                            });
-                            
-                            it('should create an complete circuit with infinite amps', function() {
-                                var circuit = board.analyzer.run();
-                                expect(circuit.complete).toBe(true);
-                                expect(circuit.amps).toBe('infinite');
-                                expect(circuit.resistance).toBe(0);
-                            });
-
-                            it('should provide no amps to either bulb', function() {
-                                board.moveElectricity();
-                                expect(bulb.current).toBe(0);
-                                expect(bulb2.current).toBe(0);
-                            });                            
-                        });
-
-                        describe('and a short circuit in between bulbs', function() {
-                            beforeEach(function() {
-                                drawOrEraseWire(board, wireAt(board, 11).nodes[0], 0, -7);
-                            });
-                            
-                            it('should create an complete circuit with infinite amps', function() {
-                                var circuit = board.analyzer.run();
-                                expect(circuit.complete).toBe(true);
-                                expect(circuit.amps).toBe('infinite');
-                                expect(circuit.resistance).toBe(0);
-                            });
-
-                            it('should provide no amps to either bulb', function() {
-                                board.moveElectricity();
-                                expect(bulb.current).toBe(0);
-                                expect(bulb2.current).toBe(0);
-                            });
-                            
-                            describe('and both bulbs removed', function() {
-                                beforeEach(function() {
-                                    board.removeComponent(bulb);
-                                    drawOrEraseWire(board, board.boardPosition(bulb.currentNodes()[0]), 1, 0);
-                                    board.removeComponent(bulb2);
-                                    drawOrEraseWire(board, board.boardPosition(bulb2.currentNodes()[0]), 1, 0);
-                                })
-                                
-                                it('all wires should have excessive_current class', function() {
-                                    board.moveElectricity();
-                                    for (wireId in board.wires.all()) {
-                                        var wire = board.wires.all()[wireId];
-                                        expect(wire.el.hasClass('excessive_current')).toBe(true);
-                                    }
-                                });
-                            });                            
-                        });
-                        
-                        describe('and another parallel circuit', function() {
-                            var bulb3;
-                            
-                            beforeEach(function() {
-                                var lastNode = drawOrEraseWire(board, wireAt(board, 9).nodes[0], 0, 1);
-                                lastNode = drawOrEraseWire(board, lastNode, 6, 0);
-                                lastNode = drawOrEraseWire(board, lastNode, 0, -9);
-                                var bulbNode = drawOrEraseWire(board, lastNode, -2, 0);
-                                lastNode = drawOrEraseWire(board, bulbNode, -3, 0);
-                                drawOrEraseWire(board, lastNode, 0, 1);
-                                
-                                bulb3 = createComponent(board, 'LightEmittingDiode');
-                                drawOrEraseWire(board, bulbNode, 1, 0);
-                                var onBoard = addToBoard(board, bulb3, bulbNode.x, bulbNode.y);
-                                expect(onBoard).toBe(true);
-                            })
-                            
-                            it('should have all the correct values', function() {
-                                board.moveElectricity();
-                                expect(bulb.current).toEqual(1.8);
-                                expect(bulb2.current).toEqual(1.8);                                                               
-                                expect(bulb3.current).toEqual(1.8);  
-                                expect(wireAt(board, 1).current).toEqual(5.4)
-                            })
-                        })
-                        
-                    });
-                    
-                    describe('with a lightbulb in series', function() {
-                        var bulb2;
-                        
-                        beforeEach(function() {
-                            var wire = wireAt(board, 5)
-                            var bulb2Node = wire.nodes[0];
-                            bulb2 = createComponent(board, 'Lightbulb');
-                            var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
-                            expect(onBoard).toBe(true);                                                    
-                        });
-                        
-                        it('should create a complete circuit with half the amps and twice the resistance', function() {
-                            var circuit = board.analyzer.run();
-                            expect(circuit.complete).toBe(true);
-                            expect(circuit.amps).toBe(0.9);
-                            expect(circuit.resistance).toBe(10);
-                        });
-                        
-                        it('should provide full amount of amps (half of simple circuit) to bulbs', function() {
-                            board.moveElectricity();
-                            expect(bulb.current).toEqual(0.9);
-                            expect(bulb2.current).toEqual(0.9);                            
-                        });
-                        
-                        describe('and a short circuit', function() {
-                            beforeEach(function() {
-                                drawOrEraseWire(board, wireAt(board, 3).nodes[0], 0, -7);
-                            });
-                            
-                            it('should create an complete circuit with infinite amps', function() {
-                                var circuit = board.analyzer.run();
-                                expect(circuit.complete).toBe(true);
-                                expect(circuit.amps).toBe('infinite');
-                                expect(circuit.resistance).toBe(0);
-                            });
-
-                            it('should provide no amps to either bulb', function() {
-                                board.moveElectricity();
-                                expect(bulb.current).toBe(0);
-                                expect(bulb2.current).toBe(0);
-                            });                            
-                        });
-                    });
-                    
-                });
-            });
-        });
-        
-        describe('and a complicated circuit', function() {
-            var bulbs;
-            
-            beforeEach(function() {
-                bulbs = [];
-                var start = board.boardPosition(battery.currentNodes()[1]);
-                var lastNode = drawOrEraseWire(board, start, 0, 1);
-                var split1Node = drawOrEraseWire(board, lastNode, 3, 0);
-                var bulb1Node = drawOrEraseWire(board, split1Node, 0, -3);
-
-                lastNode = drawOrEraseWire(board, split1Node, 5, 0);
-                var bulb2Node = drawOrEraseWire(board, lastNode, 0, -3);
-                lastNode = drawOrEraseWire(board, bulb2Node, 1, 0);
-                var split3Node = drawOrEraseWire(board, lastNode, 0, -3);
-
-                lastNode = drawOrEraseWire(board, bulb1Node, 1, 0);
-                var split2Node = drawOrEraseWire(board, lastNode, 0, -3);
-                var bulb3Node = drawOrEraseWire(board, split2Node, 2, 0);
-                drawOrEraseWire(board, bulb3Node, 3, 0)    
-                
-                lastNode = drawOrEraseWire(board, split3Node, 0, -3);
-                var bulb4Node = drawOrEraseWire(board, lastNode, -5, 0);
-                lastNode = drawOrEraseWire(board, bulb4Node, -5, 0);
-                drawOrEraseWire(board, lastNode, 0, 3);
-                
-                lastNode = drawOrEraseWire(board, split2Node, -5, 0);
-                drawOrEraseWire(board, lastNode, 0, 5);
-                                    
-                var bulbNodes = [bulb1Node, bulb2Node, bulb3Node, bulb4Node];
-                for (var i=0; i<bulbNodes.length; ++i) {
-                    bulbs.push(createComponent(board, 'Lightbulb'));
-                    if (i<2) bulbs[i].resistance = 10;
-                    var onBoard = addToBoard(board, bulbs[i], bulbNodes[i].x, bulbNodes[i].y);
-                    expect(onBoard).toBe(true);
-                }                
-            });
-            
-            it('should have all the correct values', function() {
-                board.moveElectricity();
-                expect(wireAt(board, 1).current).toEqual(1.62)
-                expect(bulbs[0].current).toEqual(0.9)             
-                expect(bulbs[1].current).toEqual(0.72)             
-                expect(bulbs[2].current).toEqual(0.36)             
-                expect(bulbs[3].current).toEqual(0.36)             
-            });
-            
-            describe('and another parallel path', function() {
-                beforeEach(function() {
-                    var lastNode = drawOrEraseWire(board, wireAt(board, 28).nodes[0], 1, 0);
-                    lastNode = drawOrEraseWire(board, lastNode, 0, 8);
-                    var bulbNode = drawOrEraseWire(board, lastNode, -6, 0);
-                    lastNode = drawOrEraseWire(board, bulbNode, -6, 0);
-                    lastNode = drawOrEraseWire(board, lastNode, 0, -8);
-                    lastNode = drawOrEraseWire(board, lastNode, 1, 0);
-
-                    var bulb = createComponent(board, 'Lightbulb');
-                    bulb.resistance = 10;
-                    bulbs.push(bulb);
-                    var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
-                    expect(onBoard).toBe(true);
-                    expect(bulbs[4].id).not.toBe(undefined);
-                });
-                
-                it('should have all of the correct values', function() {
-                    board.moveElectricity();
-                    expect(wireAt(board, 1).current).toEqual(1.65);
-                    expect(bulbs[0].current).toEqual(0.9);             
-                    expect(bulbs[1].current).toEqual(0.75);             
-                    expect(bulbs[2].current).toEqual(0.3);             
-                    expect(bulbs[3].current).toEqual(0.3);             
-                    expect(bulbs[4].current).toEqual(0.15);    
-                });
-            })
-        });
-        
-        describe('and a complicated circuit with two batteries', function() {
-            var bulbs;
-            
-            beforeEach(function() {
-                battery.voltage = 8;
-                
-                bulbs = [];
-                var start = board.boardPosition(battery.currentNodes()[1]);
-                var lastNode = drawOrEraseWire(board, start, 0, 1);
-                lastNode = drawOrEraseWire(board, lastNode, -2, 0);
-                lastNode = drawOrEraseWire(board, lastNode, 0, -6);
-                var split1Node = drawOrEraseWire(board, lastNode, 2, 0);
-                lastNode = drawOrEraseWire(board, split1Node, 0, -2);
-                var battery2Node = drawOrEraseWire(board, lastNode, 1, 0);
-                var battery2 = createComponent(board, 'Battery');
-                battery2.voltage = 12;
-                onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
-                expect(onBoard).toBe(true);
-                var bulb1Node = drawOrEraseWire(board, battery2Node, 3, 0);
-                drawOrEraseWire(board, battery2Node, 1, 0);
-                
-                var bulb1 = createComponent(board, 'Lightbulb');
-                bulbs.push(bulb1);
-                bulb1.resistance = 4;
-                var onBoard = addToBoard(board, bulb1, bulb1Node.x, bulb1Node.y);
-                expect(onBoard).toBe(true);
-                lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);
-                lastNode = drawOrEraseWire(board, lastNode, 0, 4);
-                
-                lastNode = drawOrEraseWire(board, split1Node, 0, 2);
-                var bulb2Node = drawOrEraseWire(board, lastNode, 3, 0);
-                var bulb2 = createComponent(board, 'Lightbulb');
-                bulbs.push(bulb2);
-                bulb2.resistance = 2;
-                var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
-                expect(onBoard).toBe(true);
-                lastNode = drawOrEraseWire(board, bulb2Node, 3, 0);
-                
-                var end = board.boardPosition(battery.currentNodes()[0]);
-                lastNode = drawOrEraseWire(board, end, 0, -1);
-                lastNode = drawOrEraseWire(board, lastNode, 2, 0);
-                lastNode = drawOrEraseWire(board, lastNode, 0, 2);
-                var bulb3Node = drawOrEraseWire(board, lastNode, 3, 0);
-                var bulb3 = createComponent(board, 'Lightbulb');
-                bulbs.push(bulb2);
-                bulb3.resistance = 6;
-                var onBoard = addToBoard(board, bulb3, bulb3Node.x, bulb3Node.y);
-                expect(onBoard).toBe(true);
-                lastNode = drawOrEraseWire(board, bulb3Node, 2, 0);
-                drawOrEraseWire(board, lastNode, 0, -4);
-            });
-            
-            it('should have all the correct values', function() {
-                board.moveElectricity();
-                expect(wireAt(board, 1).current).toEqual(1.64);
-                expect(bulbs[0].current).toEqual(2.54);             
-                expect(bulbs[1].current).toEqual(0.91);             
-                expect(bulbs[2].current).toEqual(1.64);
-            })
-        });
+        analyzer = new Analyzer()
     });
     
+    it('should instantiate an analyzer', function() {
+        expect(analyzer).not.toBe(undefined);
+        expect(analyzer.info).not.toBe(undefined);
+    });
+    
+    describe('assigning current directions', function() {
+        describe('with a simple circuit', function () {
+            beforeEach(function() {
+                analyzer.info = CIRCUITS['simple'];
+                analyzer.assignCurrentDirections(1);
+            });
+        
+            it('should assign a direction to each section', function() {
+                var sections = analyzer.info.sections[1];
+                for (var sectionId in sections) {
+                    expect(sections[sectionId].direction).toEqual(1); 
+                }
+            })
+        });
+        
+        describe('with a parallel circuit', function () {
+            var sections;
+            beforeEach(function() {
+                analyzer.info = CIRCUITS['parallel'];
+                analyzer.assignCurrentDirections(1);
+                sections = analyzer.info.sections[1];
+            });
+        
+            it('should assign a direction to each section', function() {
+                for (var sectionId in sections) {
+                    expect(sections[sectionId].direction).toEqual(1); 
+                }
+             });
+             
+             it('should never have all sections flowing toward same node', function() {                 
+                 expect(nodesHaveFlowInAndOut(analyzer.info.node[1], sections)).toBe(true);
+             });
+        });
+
+        describe('with a circuit with two batteries', function () {
+            var sections;
+            beforeEach(function() {
+                analyzer.info = CIRCUITS['two_batteries'];
+                analyzer.assignCurrentDirections(1);
+                sections = analyzer.info.sections[1];
+            });
+    
+            it('should assign a direction to each section', function() {
+                for (var sectionId in sections) {
+                    expect(sections[sectionId].direction).toEqual(1); 
+                }
+             });
+         
+             it('should never have all sections flowing toward same node', function() {                 
+                 expect(nodesHaveFlowInAndOut(analyzer.info.node[1], sections)).toBe(true);
+             });
+        });
+    })
 });
 
-
-
-addToBoard = function(board, component, x, y) {
-    boardOffset = board.el.offset()
-    var onBoard = board.addComponent(
-        component, 
-        boardOffset.left + x - component.centerOffset.x, 
-        boardOffset.top + y - component.centerOffset.y
-    )
-    if (debugInfo) {
-        var nodes = component.currentNodes();
-        for (var i=0; i<nodes.length; ++i) {
-            board.addDot(board.boardPosition(nodes[i]));            
-        }        
-    } 
-    return onBoard;
+function nodesHaveFlowInAndOut(nodeInfo, sections) {
+    for (var nodeId in nodeInfo) {
+        if (Object.keys(nodeInfo[nodeId]).length > 2) {
+            var inCount = 0;
+            var outCount = 0;
+            for (sectionId in nodeInfo[nodeId]) {
+                var section = sections[sectionId];
+                var towardNode = section.nodes[1].x + ':' + section.nodes[1].y == nodeId
+                if ((towardNode && section.direction == 1) || (!towardNode && section.direction == -1)) {
+                    inCount++;                    
+                } else {
+                    outCount++;
+                }
+            }
+            if (!inCount || !outCount) return false;
+        }
+    }
+    return true;
 }
 
-createComponent = function(board, type) {
-    component = new circuitous[type]()
-    component.appendTo($('.options'))
-    component.initDrag(
-        component.el, 
-        function (component, x, y, state) {},
-        true
-    );
-    return component;
+CIRCUITS = {
+    'simple': {
+        'node': {
+            1: {
+                "80:368":{"13761055906210.2643529905471951":{"nodes":[{"x":80,"y":368,"negative":true},{"x":48,"y":368}],"resistance":0,"components":{"13761055906050.6037901090458035":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true,"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"wire400:208368:208":true,"wire368:208336:208":true,"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"sections":{"13761055906050.6037901090458035":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true,"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"wire400:208368:208":true,"wire368:208336:208":true,"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"id":"13761055906210.2643529905471951","powerSource":true,"negativeComponentId":"13761055906050.6037901090458035"}},
+                "48:368":{"13761055906210.2643529905471951":{"nodes":[{"x":80,"y":368,"negative":true},{"x":48,"y":368}],"resistance":0,"components":{"13761055906050.6037901090458035":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true,"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"wire400:208368:208":true,"wire368:208336:208":true,"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"sections":{"13761055906050.6037901090458035":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true,"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"wire400:208368:208":true,"wire368:208336:208":true,"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"id":"13761055906210.2643529905471951","powerSource":true,"negativeComponentId":"13761055906050.6037901090458035"}}
+            }
+        },
+        'sections': {
+            1: {
+                "13761055906210.2643529905471951":{"nodes":[{"x":80,"y":368,"negative":true},{"x":48,"y":368}],"resistance":0,"components":{"13761055906050.6037901090458035":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true,"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"wire400:208368:208":true,"wire368:208336:208":true,"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"sections":{"13761055906050.6037901090458035":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true,"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"wire400:208368:208":true,"wire368:208336:208":true,"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"id":"13761055906210.2643529905471951","powerSource":true,"negativeComponentId":"13761055906050.6037901090458035"}
+            }
+        }, 
+        'path': {
+            1: ["13761055906210.2643529905471951"]
+        }
+    },
+    'parallel': {
+        'node': {1: {"80:368":{"13761079949430.3101677957456559":{"nodes":[{"x":80,"y":368,"negative":true},{"x":304,"y":432}],"resistance":0,"components":{"13761079948900.9301576144061983":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true},"sections":{"13761079948900.9301576144061983":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true},"id":"13761079949430.3101677957456559","powerSource":true,"negativeComponentId":"13761079948900.9301576144061983"}},"304:432":{"13761079949430.3101677957456559":{"nodes":[{"x":80,"y":368,"negative":true},{"x":304,"y":432}],"resistance":0,"components":{"13761079948900.9301576144061983":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true},"sections":{"13761079948900.9301576144061983":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true},"id":"13761079949430.3101677957456559","powerSource":true,"negativeComponentId":"13761079948900.9301576144061983"},"13761079949450.12440646812319756":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"13761079949100.13825370674021542":true,"wire400:208368:208":true,"wire368:208336:208":true},"sections":{"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"13761079949100.13825370674021542":true,"wire400:208368:208":true,"wire368:208336:208":true},"id":"13761079949450.12440646812319756"},"13761079949460.22205855301581323":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432304:400":true,"wire304:400272:400":true,"13761079949260.42761160526424646":true,"wire240:400208:400":true,"wire208:400176:400":true,"wire176:400176:368":true,"wire176:368176:336":true,"wire176:336176:304":true,"wire176:304208:304":true,"wire208:304240:304":true,"wire240:304272:304":true,"wire272:304304:304":true,"wire304:304336:304":true,"wire336:304336:272":true,"wire336:272336:240":true,"wire336:240336:208":true},"sections":{"wire304:432304:400":true,"wire304:400272:400":true,"13761079949260.42761160526424646":true,"wire240:400208:400":true,"wire208:400176:400":true,"wire176:400176:368":true,"wire176:368176:336":true,"wire176:336176:304":true,"wire176:304208:304":true,"wire208:304240:304":true,"wire240:304272:304":true,"wire272:304304:304":true,"wire304:304336:304":true,"wire336:304336:272":true,"wire336:272336:240":true,"wire336:240336:208":true},"id":"13761079949460.22205855301581323"},"13761079949470.5491027522366494":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432304:464":true,"wire304:464336:464":true,"wire336:464368:464":true,"wire368:464400:464":true,"wire400:464432:464":true,"wire432:464464:464":true,"wire464:464496:464":true,"wire496:464496:432":true,"wire496:432496:400":true,"wire496:400496:368":true,"wire496:368496:336":true,"wire496:336496:304":true,"wire496:304496:272":true,"wire496:272496:240":true,"wire496:240496:208":true,"wire496:208496:176":true,"wire496:176464:176":true,"13761079949410.5025921880733222":true,"wire432:176400:176":true,"wire400:176368:176":true,"wire368:176336:176":true,"wire336:176336:208":true},"sections":{"wire304:432304:464":true,"wire304:464336:464":true,"wire336:464368:464":true,"wire368:464400:464":true,"wire400:464432:464":true,"wire432:464464:464":true,"wire464:464496:464":true,"wire496:464496:432":true,"wire496:432496:400":true,"wire496:400496:368":true,"wire496:368496:336":true,"wire496:336496:304":true,"wire496:304496:272":true,"wire496:272496:240":true,"wire496:240496:208":true,"wire496:208496:176":true,"wire496:176464:176":true,"13761079949410.5025921880733222":true,"wire432:176400:176":true,"wire400:176368:176":true,"wire368:176336:176":true,"wire336:176336:208":true},"id":"13761079949470.5491027522366494"}},"336:208":{"13761079949450.12440646812319756":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"13761079949100.13825370674021542":true,"wire400:208368:208":true,"wire368:208336:208":true},"sections":{"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"13761079949100.13825370674021542":true,"wire400:208368:208":true,"wire368:208336:208":true},"id":"13761079949450.12440646812319756"},"13761079949460.22205855301581323":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432304:400":true,"wire304:400272:400":true,"13761079949260.42761160526424646":true,"wire240:400208:400":true,"wire208:400176:400":true,"wire176:400176:368":true,"wire176:368176:336":true,"wire176:336176:304":true,"wire176:304208:304":true,"wire208:304240:304":true,"wire240:304272:304":true,"wire272:304304:304":true,"wire304:304336:304":true,"wire336:304336:272":true,"wire336:272336:240":true,"wire336:240336:208":true},"sections":{"wire304:432304:400":true,"wire304:400272:400":true,"13761079949260.42761160526424646":true,"wire240:400208:400":true,"wire208:400176:400":true,"wire176:400176:368":true,"wire176:368176:336":true,"wire176:336176:304":true,"wire176:304208:304":true,"wire208:304240:304":true,"wire240:304272:304":true,"wire272:304304:304":true,"wire304:304336:304":true,"wire336:304336:272":true,"wire336:272336:240":true,"wire336:240336:208":true},"id":"13761079949460.22205855301581323"},"13761079949470.5491027522366494":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432304:464":true,"wire304:464336:464":true,"wire336:464368:464":true,"wire368:464400:464":true,"wire400:464432:464":true,"wire432:464464:464":true,"wire464:464496:464":true,"wire496:464496:432":true,"wire496:432496:400":true,"wire496:400496:368":true,"wire496:368496:336":true,"wire496:336496:304":true,"wire496:304496:272":true,"wire496:272496:240":true,"wire496:240496:208":true,"wire496:208496:176":true,"wire496:176464:176":true,"13761079949410.5025921880733222":true,"wire432:176400:176":true,"wire400:176368:176":true,"wire368:176336:176":true,"wire336:176336:208":true},"sections":{"wire304:432304:464":true,"wire304:464336:464":true,"wire336:464368:464":true,"wire368:464400:464":true,"wire400:464432:464":true,"wire432:464464:464":true,"wire464:464496:464":true,"wire496:464496:432":true,"wire496:432496:400":true,"wire496:400496:368":true,"wire496:368496:336":true,"wire496:336496:304":true,"wire496:304496:272":true,"wire496:272496:240":true,"wire496:240496:208":true,"wire496:208496:176":true,"wire496:176464:176":true,"13761079949410.5025921880733222":true,"wire432:176400:176":true,"wire400:176368:176":true,"wire368:176336:176":true,"wire336:176336:208":true},"id":"13761079949470.5491027522366494"},"13761079949490.9245002567768097":{"nodes":[{"x":336,"y":208},{"x":48,"y":368}],"resistance":0,"components":{"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"sections":{"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true,"13761079948900.9301576144061983":true},"id":"13761079949490.9245002567768097","powerSource":true}},"48:368":{"13761079949490.9245002567768097":{"nodes":[{"x":336,"y":208},{"x":48,"y":368}],"resistance":0,"components":{"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"sections":{"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true,"13761079948900.9301576144061983":true},"id":"13761079949490.9245002567768097","powerSource":true}}}} ,
+        'sections': {1: {"13761079949430.3101677957456559":{"nodes":[{"x":80,"y":368,"negative":true},{"x":304,"y":432}],"resistance":0,"components":{"13761079948900.9301576144061983":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true},"sections":{"13761079948900.9301576144061983":true,"wire80:36880:400":true,"wire80:40080:432":true,"wire80:432112:432":true,"wire112:432144:432":true,"wire144:432176:432":true,"wire176:432208:432":true,"wire208:432240:432":true,"wire240:432272:432":true,"wire272:432304:432":true},"id":"13761079949430.3101677957456559","powerSource":true,"negativeComponentId":"13761079948900.9301576144061983"},"13761079949450.12440646812319756":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"13761079949100.13825370674021542":true,"wire400:208368:208":true,"wire368:208336:208":true},"sections":{"wire304:432336:432":true,"wire336:432368:432":true,"wire368:432400:432":true,"wire400:432432:432":true,"wire432:432464:432":true,"wire464:432464:400":true,"wire464:400464:368":true,"wire464:368464:336":true,"wire464:336464:304":true,"wire464:304464:272":true,"wire464:272464:240":true,"wire464:240464:208":true,"wire464:208432:208":true,"wire432:208400:208":true,"13761079949100.13825370674021542":true,"wire400:208368:208":true,"wire368:208336:208":true},"id":"13761079949450.12440646812319756"},"13761079949460.22205855301581323":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432304:400":true,"wire304:400272:400":true,"13761079949260.42761160526424646":true,"wire240:400208:400":true,"wire208:400176:400":true,"wire176:400176:368":true,"wire176:368176:336":true,"wire176:336176:304":true,"wire176:304208:304":true,"wire208:304240:304":true,"wire240:304272:304":true,"wire272:304304:304":true,"wire304:304336:304":true,"wire336:304336:272":true,"wire336:272336:240":true,"wire336:240336:208":true},"sections":{"wire304:432304:400":true,"wire304:400272:400":true,"13761079949260.42761160526424646":true,"wire240:400208:400":true,"wire208:400176:400":true,"wire176:400176:368":true,"wire176:368176:336":true,"wire176:336176:304":true,"wire176:304208:304":true,"wire208:304240:304":true,"wire240:304272:304":true,"wire272:304304:304":true,"wire304:304336:304":true,"wire336:304336:272":true,"wire336:272336:240":true,"wire336:240336:208":true},"id":"13761079949460.22205855301581323"},"13761079949470.5491027522366494":{"nodes":[{"x":304,"y":432},{"x":336,"y":208}],"resistance":5,"components":{"wire304:432304:464":true,"wire304:464336:464":true,"wire336:464368:464":true,"wire368:464400:464":true,"wire400:464432:464":true,"wire432:464464:464":true,"wire464:464496:464":true,"wire496:464496:432":true,"wire496:432496:400":true,"wire496:400496:368":true,"wire496:368496:336":true,"wire496:336496:304":true,"wire496:304496:272":true,"wire496:272496:240":true,"wire496:240496:208":true,"wire496:208496:176":true,"wire496:176464:176":true,"13761079949410.5025921880733222":true,"wire432:176400:176":true,"wire400:176368:176":true,"wire368:176336:176":true,"wire336:176336:208":true},"sections":{"wire304:432304:464":true,"wire304:464336:464":true,"wire336:464368:464":true,"wire368:464400:464":true,"wire400:464432:464":true,"wire432:464464:464":true,"wire464:464496:464":true,"wire496:464496:432":true,"wire496:432496:400":true,"wire496:400496:368":true,"wire496:368496:336":true,"wire496:336496:304":true,"wire496:304496:272":true,"wire496:272496:240":true,"wire496:240496:208":true,"wire496:208496:176":true,"wire496:176464:176":true,"13761079949410.5025921880733222":true,"wire432:176400:176":true,"wire400:176368:176":true,"wire368:176336:176":true,"wire336:176336:208":true},"id":"13761079949470.5491027522366494"},"13761079949490.9245002567768097":{"nodes":[{"x":336,"y":208},{"x":48,"y":368}],"resistance":0,"components":{"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true},"sections":{"wire336:208304:208":true,"wire304:208272:208":true,"wire272:208240:208":true,"wire240:208208:208":true,"wire208:208176:208":true,"wire176:208144:208":true,"wire144:208112:208":true,"wire112:20880:208":true,"wire80:20848:208":true,"wire48:20848:240":true,"wire48:24048:272":true,"wire48:27248:304":true,"wire48:30448:336":true,"wire48:33648:368":true,"13761079948900.9301576144061983":true},"id":"13761079949490.9245002567768097","powerSource":true}}},
+        'path': {1: ["13761079949430.3101677957456559","13761079949450.12440646812319756","13761079949460.22205855301581323","13761079949470.5491027522366494","13761079949490.9245002567768097"]} 
+    },
+    'two_batteries': {
+        'node': {1: {"80:368":{"13761452563520.5332565419375896":{"nodes":[{"x":80,"y":368,"negative":true},{"x":80,"y":208}],"resistance":0,"components":{"13761452563080.4356007305905223":true,"wire80:36880:400":true,"wire80:40048:400":true,"wire48:40016:400":true,"wire16:40016:368":true,"wire16:36816:336":true,"wire16:33616:304":true,"wire16:30416:272":true,"wire16:27216:240":true,"wire16:24016:208":true,"wire16:20848:208":true,"wire48:20880:208":true},"sections":{"13761452563080.4356007305905223":true,"wire80:36880:400":true,"wire80:40048:400":true,"wire48:40016:400":true,"wire16:40016:368":true,"wire16:36816:336":true,"wire16:33616:304":true,"wire16:30416:272":true,"wire16:27216:240":true,"wire16:24016:208":true,"wire16:20848:208":true,"wire48:20880:208":true},"id":"13761452563520.5332565419375896","powerSource":true,"negativeComponentId":"13761452563080.4356007305905223"}},"80:208":{"13761452563520.5332565419375896":{"nodes":[{"x":80,"y":368,"negative":true},{"x":80,"y":208}],"resistance":0,"components":{"13761452563080.4356007305905223":true,"wire80:36880:400":true,"wire80:40048:400":true,"wire48:40016:400":true,"wire16:40016:368":true,"wire16:36816:336":true,"wire16:33616:304":true,"wire16:30416:272":true,"wire16:27216:240":true,"wire16:24016:208":true,"wire16:20848:208":true,"wire48:20880:208":true},"sections":{"13761452563080.4356007305905223":true,"wire80:36880:400":true,"wire80:40048:400":true,"wire48:40016:400":true,"wire16:40016:368":true,"wire16:36816:336":true,"wire16:33616:304":true,"wire16:30416:272":true,"wire16:27216:240":true,"wire16:24016:208":true,"wire16:20848:208":true,"wire48:20880:208":true},"id":"13761452563520.5332565419375896","powerSource":true,"negativeComponentId":"13761452563080.4356007305905223"},"13761452563550.35089874849654734":{"nodes":[{"x":80,"y":208},{"x":112,"y":144}],"resistance":0,"components":{"wire80:20880:176":true,"wire80:17680:144":true,"wire80:144112:144":true},"sections":{"wire80:20880:176":true,"wire80:17680:144":true,"wire80:144112:144":true,"13761452563220.9913657924626023":true},"id":"13761452563550.35089874849654734","powerSource":true},"13761452563550.2440642393194139":{"nodes":[{"x":80,"y":208},{"x":272,"y":272}],"resistance":2,"components":{"wire80:20880:240":true,"wire80:24080:272":true,"wire80:272112:272":true,"wire112:272144:272":true,"wire144:272176:272":true,"13761452563350.07735791965387762":true,"wire176:272208:272":true,"wire208:272240:272":true,"wire240:272272:272":true},"sections":{"wire80:20880:240":true,"wire80:24080:272":true,"wire80:272112:272":true,"wire112:272144:272":true,"wire144:272176:272":true,"13761452563350.07735791965387762":true,"wire176:272208:272":true,"wire208:272240:272":true,"wire240:272272:272":true},"id":"13761452563550.2440642393194139"}},"112:144":{"13761452563550.35089874849654734":{"nodes":[{"x":80,"y":208},{"x":112,"y":144}],"resistance":0,"components":{"wire80:20880:176":true,"wire80:17680:144":true,"wire80:144112:144":true},"sections":{"wire80:20880:176":true,"wire80:17680:144":true,"wire80:144112:144":true,"13761452563220.9913657924626023":true},"id":"13761452563550.35089874849654734","powerSource":true}},"272:272":{"13761452563550.2440642393194139":{"nodes":[{"x":80,"y":208},{"x":272,"y":272}],"resistance":2,"components":{"wire80:20880:240":true,"wire80:24080:272":true,"wire80:272112:272":true,"wire112:272144:272":true,"wire144:272176:272":true,"13761452563350.07735791965387762":true,"wire176:272208:272":true,"wire208:272240:272":true,"wire240:272272:272":true},"sections":{"wire80:20880:240":true,"wire80:24080:272":true,"wire80:272112:272":true,"wire112:272144:272":true,"wire144:272176:272":true,"13761452563350.07735791965387762":true,"wire176:272208:272":true,"wire208:272240:272":true,"wire240:272272:272":true},"id":"13761452563550.2440642393194139"},"13761452563560.5368677829392254":{"nodes":[{"x":272,"y":272},{"x":144,"y":144},{"x":176,"y":144},{"x":208,"y":144},{"x":208,"y":144},{"x":240,"y":144},{"x":272,"y":144},{"x":272,"y":176},{"x":272,"y":208},{"x":272,"y":240}],"resistance":4,"components":{"wire272:240272:272":true,"wire272:208272:240":true,"wire272:176272:208":true,"wire272:144272:176":true,"wire240:144272:144":true,"wire208:144240:144":true,"13761452563270.20863117324188352":true,"wire176:144208:144":true,"wire144:144176:144":true},"sections":{"wire272:240272:272":true,"wire272:208272:240":true,"wire272:176272:208":true,"wire272:144272:176":true,"wire240:144272:144":true,"wire208:144240:144":true,"13761452563270.20863117324188352":true,"wire176:144208:144":true,"wire144:144176:144":true,"13761452563220.9913657924626023":true},"id":"13761452563560.5368677829392254","powerSource":true},"13761452563570.8700519271660596":{"nodes":[{"x":272,"y":272},{"x":48,"y":368}],"resistance":6,"components":{"wire272:304272:272":true,"wire272:336272:304":true,"wire272:368272:336":true,"wire272:400272:368":true,"wire240:400272:400":true,"wire208:400240:400":true,"13761452563470.5101394760422409":true,"wire176:400208:400":true,"wire144:400176:400":true,"wire112:400144:400":true,"wire112:368112:400":true,"wire112:336112:368":true,"wire80:336112:336":true,"wire48:33680:336":true,"wire48:36848:336":true},"sections":{"wire272:304272:272":true,"wire272:336272:304":true,"wire272:368272:336":true,"wire272:400272:368":true,"wire240:400272:400":true,"wire208:400240:400":true,"13761452563470.5101394760422409":true,"wire176:400208:400":true,"wire144:400176:400":true,"wire112:400144:400":true,"wire112:368112:400":true,"wire112:336112:368":true,"wire80:336112:336":true,"wire48:33680:336":true,"wire48:36848:336":true,"13761452563080.4356007305905223":true},"id":"13761452563570.8700519271660596","powerSource":true}},"144:144":{"13761452563560.5368677829392254":{"nodes":[{"x":272,"y":272},{"x":144,"y":144},{"x":176,"y":144},{"x":208,"y":144},{"x":208,"y":144},{"x":240,"y":144},{"x":272,"y":144},{"x":272,"y":176},{"x":272,"y":208},{"x":272,"y":240}],"resistance":4,"components":{"wire272:240272:272":true,"wire272:208272:240":true,"wire272:176272:208":true,"wire272:144272:176":true,"wire240:144272:144":true,"wire208:144240:144":true,"13761452563270.20863117324188352":true,"wire176:144208:144":true,"wire144:144176:144":true},"sections":{"wire272:240272:272":true,"wire272:208272:240":true,"wire272:176272:208":true,"wire272:144272:176":true,"wire240:144272:144":true,"wire208:144240:144":true,"13761452563270.20863117324188352":true,"wire176:144208:144":true,"wire144:144176:144":true,"13761452563220.9913657924626023":true},"id":"13761452563560.5368677829392254","powerSource":true}},"48:368":{"13761452563570.8700519271660596":{"nodes":[{"x":272,"y":272},{"x":48,"y":368}],"resistance":6,"components":{"wire272:304272:272":true,"wire272:336272:304":true,"wire272:368272:336":true,"wire272:400272:368":true,"wire240:400272:400":true,"wire208:400240:400":true,"13761452563470.5101394760422409":true,"wire176:400208:400":true,"wire144:400176:400":true,"wire112:400144:400":true,"wire112:368112:400":true,"wire112:336112:368":true,"wire80:336112:336":true,"wire48:33680:336":true,"wire48:36848:336":true},"sections":{"wire272:304272:272":true,"wire272:336272:304":true,"wire272:368272:336":true,"wire272:400272:368":true,"wire240:400272:400":true,"wire208:400240:400":true,"13761452563470.5101394760422409":true,"wire176:400208:400":true,"wire144:400176:400":true,"wire112:400144:400":true,"wire112:368112:400":true,"wire112:336112:368":true,"wire80:336112:336":true,"wire48:33680:336":true,"wire48:36848:336":true,"13761452563080.4356007305905223":true},"id":"13761452563570.8700519271660596","powerSource":true}}}},
+        'sections': {1: {"13761452563520.5332565419375896":{"nodes":[{"x":80,"y":368,"negative":true},{"x":80,"y":208}],"resistance":0,"components":{"13761452563080.4356007305905223":true,"wire80:36880:400":true,"wire80:40048:400":true,"wire48:40016:400":true,"wire16:40016:368":true,"wire16:36816:336":true,"wire16:33616:304":true,"wire16:30416:272":true,"wire16:27216:240":true,"wire16:24016:208":true,"wire16:20848:208":true,"wire48:20880:208":true},"sections":{"13761452563080.4356007305905223":true,"wire80:36880:400":true,"wire80:40048:400":true,"wire48:40016:400":true,"wire16:40016:368":true,"wire16:36816:336":true,"wire16:33616:304":true,"wire16:30416:272":true,"wire16:27216:240":true,"wire16:24016:208":true,"wire16:20848:208":true,"wire48:20880:208":true},"id":"13761452563520.5332565419375896","powerSource":true,"negativeComponentId":"13761452563080.4356007305905223"},"13761452563550.35089874849654734":{"nodes":[{"x":80,"y":208},{"x":112,"y":144}],"resistance":0,"components":{"wire80:20880:176":true,"wire80:17680:144":true,"wire80:144112:144":true},"sections":{"wire80:20880:176":true,"wire80:17680:144":true,"wire80:144112:144":true,"13761452563220.9913657924626023":true},"id":"13761452563550.35089874849654734","powerSource":true},"13761452563550.2440642393194139":{"nodes":[{"x":80,"y":208},{"x":272,"y":272}],"resistance":2,"components":{"wire80:20880:240":true,"wire80:24080:272":true,"wire80:272112:272":true,"wire112:272144:272":true,"wire144:272176:272":true,"13761452563350.07735791965387762":true,"wire176:272208:272":true,"wire208:272240:272":true,"wire240:272272:272":true},"sections":{"wire80:20880:240":true,"wire80:24080:272":true,"wire80:272112:272":true,"wire112:272144:272":true,"wire144:272176:272":true,"13761452563350.07735791965387762":true,"wire176:272208:272":true,"wire208:272240:272":true,"wire240:272272:272":true},"id":"13761452563550.2440642393194139"},"13761452563560.5368677829392254":{"nodes":[{"x":272,"y":272},{"x":144,"y":144},{"x":176,"y":144},{"x":208,"y":144},{"x":208,"y":144},{"x":240,"y":144},{"x":272,"y":144},{"x":272,"y":176},{"x":272,"y":208},{"x":272,"y":240}],"resistance":4,"components":{"wire272:240272:272":true,"wire272:208272:240":true,"wire272:176272:208":true,"wire272:144272:176":true,"wire240:144272:144":true,"wire208:144240:144":true,"13761452563270.20863117324188352":true,"wire176:144208:144":true,"wire144:144176:144":true},"sections":{"wire272:240272:272":true,"wire272:208272:240":true,"wire272:176272:208":true,"wire272:144272:176":true,"wire240:144272:144":true,"wire208:144240:144":true,"13761452563270.20863117324188352":true,"wire176:144208:144":true,"wire144:144176:144":true,"13761452563220.9913657924626023":true},"id":"13761452563560.5368677829392254","powerSource":true},"13761452563570.8700519271660596":{"nodes":[{"x":272,"y":272},{"x":48,"y":368}],"resistance":6,"components":{"wire272:304272:272":true,"wire272:336272:304":true,"wire272:368272:336":true,"wire272:400272:368":true,"wire240:400272:400":true,"wire208:400240:400":true,"13761452563470.5101394760422409":true,"wire176:400208:400":true,"wire144:400176:400":true,"wire112:400144:400":true,"wire112:368112:400":true,"wire112:336112:368":true,"wire80:336112:336":true,"wire48:33680:336":true,"wire48:36848:336":true},"sections":{"wire272:304272:272":true,"wire272:336272:304":true,"wire272:368272:336":true,"wire272:400272:368":true,"wire240:400272:400":true,"wire208:400240:400":true,"13761452563470.5101394760422409":true,"wire176:400208:400":true,"wire144:400176:400":true,"wire112:400144:400":true,"wire112:368112:400":true,"wire112:336112:368":true,"wire80:336112:336":true,"wire48:33680:336":true,"wire48:36848:336":true,"13761452563080.4356007305905223":true},"id":"13761452563570.8700519271660596","powerSource":true}}} ,
+        'path': {1: ["13761452563520.5332565419375896","13761452563550.35089874849654734","13761452563550.2440642393194139","13761452563560.5368677829392254","13761452563570.8700519271660596"]} 
+    }
 }
 
-drawOrEraseWire = function(board, from, deltaX, deltaY) {
-    offset = board.el.offset()
-    board.el.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
-    end  = {x: from.x + (deltaX * board.cellDimension), y: from.y + (deltaY * board.cellDimension)}
-    board.wires.draw({clientX: offset.left + end.x, clientY: offset.top + end.y});
-    $(document.body).trigger('mouseup.draw_wire');
-    return end
-}
 
-wireAt = function(board, index) {
-    return board.wires.all()[Object.keys(board.wires.all())[index]]
-}
+
+
+
+
+
+
+
+
+

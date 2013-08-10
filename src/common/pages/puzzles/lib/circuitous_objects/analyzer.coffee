@@ -9,7 +9,17 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info = {node: {}, nodes: {}, sections: {}, components: {}, path: {}}
         
     run: ->
-        @reduce()
+        @reduceComplex()
+
+        circuit = @info.sections[@level][keys[0]]
+        if circuit.complete
+            @assignCurrentDirections(circuit)
+            matrix = @createMatrix(circuit)
+            solution = @solveMatrix(matrix)
+            console.log(solution)
+        
+    runSimple: ->
+        @reduceSimple()
         return if (keys = Object.keys(@info.sections[@level])).length != 1
         
         circuit = @info.sections[@level][keys[0]]
@@ -45,8 +55,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                         circuit.sections.push(section) 
 
         return circuit
-        
-        
+                
     initLevel: (@level) ->
         @info.node[level] = {}
         @info.nodes[level] = {}
@@ -61,9 +70,10 @@ class analyzer.Analyzer extends circuitousObject.Object
                        (@compareNodes(nodes[1], objectNodes[0]) or @compareNodes(nodes[1], objectNodes[1]))
         return false
 
-    reduce: (level=1) ->
+    reduceComplex: (level=1) ->
         @initLevel(level)
         for cid, component of @board.components when component.powerSource
+            continue if @info.components[level][cid]
             for negativeTerminal in component.currentNodes('negative')
                 node = @board.boardPosition(negativeTerminal)
                 existingSection = (s for sid, s of (@info.sections[level-1] or {}) when s.components?[cid])[0]
@@ -75,10 +85,36 @@ class analyzer.Analyzer extends circuitousObject.Object
         if Object.keys(@info.sections[@level]).length > 1
             @redraw(@level)
         
+        
+
+    reduceSimple: (level=1) ->
+        @initLevel(level)
+        for cid, component of @board.components when component.powerSource
+            continue if @info.components[level][cid]
+            for negativeTerminal in component.currentNodes('negative')
+                node = @board.boardPosition(negativeTerminal)
+                existingSection = (s for sid, s of (@info.sections[level-1] or {}) when s.components?[cid])[0]
+                if existingSection
+                    otherNode = @otherNode(existingSection.nodes, node)
+                    otherNode.negative = true
+                @combineSections(level, otherNode or node, existingSection or component, @newSection(node))
+
+        if Object.keys(@info.sections[@level]).length > 1
+            @redraw(@level)
+        
+        console.log('')
+        console.log('')
+        if level == 1
+            console.log("node: {1: #{JSON.stringify(@info.node[1])}}") 
+            console.log("sections: {1: #{JSON.stringify(@info.sections[1])}}") 
+            console.log("path: {1: #{JSON.stringify(@info.path[1])}}") 
+        console.log('')
+        console.log('')
+        
         if Object.keys(@info.sections[@level]).length > 1
             @initLevel(@level+1)
             if @reduceParallels(@level)
-                @reduce(@level+1) 
+                @reduceSimple(@level+1) 
             
     recordSection: (level, section, children) ->
         if children
@@ -291,5 +327,13 @@ class analyzer.Analyzer extends circuitousObject.Object
         section.nodes.push(node)              
         @recordSection(level, section, component)
         
-        
+    assignCurrentDirections: (level) ->
+        for sid, index in @info.path[level]
+            section = @info.sections[level][sid]
+            if index > 1 and section.negativeComponentId
+                section.direction = section.components[section.negativeComponentId].direction
+            else
+                section.direction = 1
+            
+            
         
