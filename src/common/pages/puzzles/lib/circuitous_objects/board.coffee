@@ -28,8 +28,8 @@ class board.Board extends circuitousObject.Object
                 @el.append(cell)
                 
     addComponent: (component, x, y) ->
-        component.id = @generateId() unless component.id
-        
+        component.id = @generateId('component') unless component.id
+
         offset = @el.offset()
         boardPosition = @boardPosition(x: x, y: y)
         

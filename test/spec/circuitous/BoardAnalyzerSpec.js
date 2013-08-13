@@ -1,9 +1,9 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
     beforeEach(function() {
-        if (debugInfo) $('.circuitous').css({top: 400});
+        if (debugInfo) $('.circuitous').css({top: 100});
         html = $('.circuitous').html()
         game = new circuitous.ViewHelper({
             el: $('.circuitous')

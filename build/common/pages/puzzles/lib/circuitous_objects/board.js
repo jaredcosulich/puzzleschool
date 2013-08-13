@@ -60,7 +60,7 @@ board.Board = (function(_super) {
   Board.prototype.addComponent = function(component, x, y) {
     var boardPosition, offset, onBoardX, onBoardY, roundedBoardPosition, _ref, _ref1;
     if (!component.id) {
-      component.id = this.generateId();
+      component.id = this.generateId('component');
     }
     offset = this.el.offset();
     boardPosition = this.boardPosition({
