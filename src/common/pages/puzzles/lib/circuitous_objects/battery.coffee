@@ -2,7 +2,6 @@ battery = exports ? provide('./battery', {})
 circuitousObject = require('./object')
 
 class battery.Battery extends circuitousObject.Object
-    powerSource: true
     centerOffset: 
         x: 16
         y: 16

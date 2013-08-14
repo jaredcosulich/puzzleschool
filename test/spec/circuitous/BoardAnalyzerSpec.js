@@ -1,4 +1,4 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
