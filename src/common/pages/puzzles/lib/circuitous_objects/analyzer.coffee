@@ -6,13 +6,13 @@ class analyzer.Analyzer extends circuitousObject.Object
         @init()
 
     init: ->
-        @info = {matrix: {}, node: {}, nodes: {}, sections: {}, components: {}}
+        @info = {matrix: {}, node: {}, sections: {}, components: {}}
         
     run: ->
         @analyze()
         @createMatrix()
-        console.log(@info.matrix)
-        # solution = @solveMatrix()
+        console.log(JSON.stringify(@info.matrix))
+        @solveMatrix()
         # console.log(solution)
                         
     analyze: ->
@@ -53,7 +53,7 @@ class analyzer.Analyzer extends circuitousObject.Object
 
         if component.powerSource
             section.direction = (if node.negative then 1 else -1)
-            voltage = component.voltage * component.direction
+            voltage = component.voltage * section.direction
             section.voltage = (section.voltage or 0) + voltage
             section.powerSource = true
             section.negativeComponentId = component.negativeComponentId or component.id
@@ -105,10 +105,6 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.node["#{node1Coords}"][section.id] = section
         @info.node["#{node2Coords}"] or= {}
         @info.node["#{node2Coords}"][section.id] = section
-        @info.nodes["#{node1Coords}#{node2Coords}"] or= {} 
-        @info.nodes["#{node1Coords}#{node2Coords}"][section.id] = section
-        @info.nodes["#{node2Coords}#{node1Coords}"] or= {}
-        @info.nodes["#{node2Coords}#{node1Coords}"][section.id] = section    
         
         # @board.clearColors()
         # console.log('record section', section.id, section.direction, node1Coords, node2Coords)
@@ -125,20 +121,21 @@ class analyzer.Analyzer extends circuitousObject.Object
             
     addToMatrixLoop: (section, direction) ->
         @currentMatrixLoop().start = section.id unless @currentMatrixLoop().start
-        @currentMatrixLoop()[section.id] = {resistance: section.resistance * direction}
+        @currentMatrixLoop().sections[section.id] = {resistance: section.resistance * direction}
         @currentMatrixLoop().voltage += section.voltage * direction if section.voltage
-
+        @currentMatrixLoop.complete = @compareNodes(section.nodes...)
+        
         # @board.color((cid for cid of section.components), 1)
         # console.log('add to loop', @info.matrix.currentLoop, direction, @currentMatrixLoop()[section.id], @currentMatrixLoop().voltage)
         # debugger
            
     addMatrixLoop: () ->
-        @board.clearColors()
-        @info.matrix.currentLoop or= 0
-        @info.matrix.currentLoop += 1
-        @info.matrix[@info.matrix.currentLoop] = {voltage: 0}
+        @info.matrix.loops or= {}
+        @info.matrix.currentLoop or= 1
+        @info.matrix.currentLoop += 1 until not @info.matrix.loops[@info.matrix.currentLoop]
+        @info.matrix.loops[@info.matrix.currentLoop] = {voltage: 0, sections: {}}
         
-    currentMatrixLoop: -> @info.matrix[@info.matrix.currentLoop]
+    currentMatrixLoop: -> @info.matrix.loops[@info.matrix.currentLoop]
                  
     matrixLoopDirection: (section, startingNode) ->
         nodeAligned = @compareNodes(section.nodes[0], startingNode)
@@ -147,9 +144,17 @@ class analyzer.Analyzer extends circuitousObject.Object
         else
             direction = -1        
         return direction
-           
+        
+    addMatrixIndentityLoop: (node, sections) ->
+        index = @info.matrix.currentLoop
+        index += 1 while @info.matrix.loops[index]
+        identityLoop = @info.matrix.loops[index] = {voltage: 0, sections: {}}
+        for sid, section of sections
+            identityLoop.sections[sid] = {resistance: @matrixLoopDirection(section, node)}
+        
     createMatrix: ->
         allSections = {}
+        identitySections = {}
         allSections[sid] = true for sid of @info.sections
 
         @addMatrixLoop()
@@ -164,6 +169,13 @@ class analyzer.Analyzer extends circuitousObject.Object
             nextSection = null
             nextSections = @info.node["#{nextNode.x}:#{nextNode.y}"]
             
+            if Object.keys(nextSections).length > 2
+                allIdentified = true
+                for sid, section of nextSections
+                    allIdentified = false unless identitySections[sid]
+                    identitySections[sid] = true
+                @addMatrixIndentityLoop(nextNode, nextSections) if not allIdentified
+                
             for sid, section of nextSections when sid != lastSection.id and sid == @currentMatrixLoop().start
                 nextSection = section
                 break
@@ -175,12 +187,13 @@ class analyzer.Analyzer extends circuitousObject.Object
                     break if direction == 1
                     
             if not nextSection
-                for sid, section of nextSections when not @currentMatrixLoop()[sid]
+                for sid, section of nextSections when not @currentMatrixLoop().sections[sid]
                     nextSection = section 
                     direction = @matrixLoopDirection(section, nextNode) 
                     break if direction == 1
 
-            @currentMatrixLoop().completed = (nextSection.id == @currentMatrixLoop().start)
+            if nextSection
+                @currentMatrixLoop().completed = (nextSection.id == @currentMatrixLoop().start)
 
             if not nextSection or @currentMatrixLoop().completed
                 return unless Object.keys(allSections).length               
@@ -192,5 +205,45 @@ class analyzer.Analyzer extends circuitousObject.Object
             @addToMatrixLoop(nextSection, direction)
             delete allSections[nextSection.id]
             nextNode = @otherNode(nextSection.nodes, nextNode)
+    
+    fillOutMatrix: ->
+        for index, loopInfo of @info.matrix.loops
+            loopInfo.adjustedVoltage = loopInfo.voltage
+            for sectionId of loopInfo.sections
+                loopInfo.sections[sectionId].adjusted = loopInfo.sections[sectionId].resistance
+                for index2, loopInfo2 of @info.matrix.loops when index2 != index
+                    loopInfo2.sections[sectionId] or= {resistance: 0, adjusted: 0}
+
+    reduceMatrix: ->
+        sectionIds = Object.keys(@info.matrix.loops[1].sections)    
+
+        for sectionId, variableIndex in sectionIds
+            factorLoop = @info.matrix.loops[variableIndex + 1]
+            factor = factorLoop.sections[sectionId].adjusted
+                
+            for loopIndex in [1..@info.matrix.currentLoop] when loopIndex != variableIndex + 1
+                adjustingLoop = @info.matrix.loops[loopIndex]
+                adjustingfactor = adjustingLoop.sections[sectionId].adjusted
+                
+                for adjustingSectionId, adjustingVariableIndex in sectionIds
+                    adjustingSection = adjustingLoop.sections[adjustingSectionId]
+                    adjustingSection.adjusted = adjustingSection.adjusted - (factorLoop.sections[adjustingSectionId].adjusted * (adjustingfactor/factor))
+                
+                adjustingLoop.adjustedVoltage = adjustingLoop.adjustedVoltage - (factorLoop.adjustedVoltage * (adjustingfactor/factor))
         
+        return sectionIds
+                
+    assignCurrents: (sections) ->
+        for sectionId, index in sections
+            loopInfo = @info.matrix.loops[index + 1]
+            current = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0
+            for loopIndex, settingLoop of @info.matrix.loops
+                settingLoop.sections[sectionId].current = current
+            
+    solveMatrix: ->
+        @fillOutMatrix()
+        inOrderSections = @reduceMatrix()
+        @assignCurrents(inOrderSections)           
+
+
         
