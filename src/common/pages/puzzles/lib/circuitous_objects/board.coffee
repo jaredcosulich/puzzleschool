@@ -96,17 +96,14 @@ class board.Board extends circuitousObject.Object
             piece.receivingCurrent = false
             piece.excessiveCurrent = false 
         
-        circuit = @analyzer.run()
-        if circuit and circuit.complete
-            for section in circuit.sections
-                for id of section.components
-                    continue unless (c = @componentsAndWires()[id])                     
-                    if section.amps == 'infinite'   
-                        c.excessiveCurrent = true
-                        c.el.addClass('excessive_current')
-                    else
-                        c.receivingCurrent = true
-                        c.setCurrent?(section.amps)
+        for componentId, componentInfo of @analyzer.run()
+            continue unless (c = @componentsAndWires()[componentId])                     
+            if componentInfo.amps == 'infinite'   
+                c.excessiveCurrent = true
+                c.el.addClass('excessive_current')
+            else
+                c.receivingCurrent = true
+                c.setCurrent?(componentInfo.amps)
         
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent

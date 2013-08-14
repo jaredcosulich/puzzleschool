@@ -18,7 +18,7 @@ describe("Analyzer", function() {
             });
             
             it('should solve for the current', function() {
-                expect(analyzer.info.matrix.loops[1].sections['section13764261443130.5193100867327303'].current).toEqual(9/5);
+                expect(analyzer.info.matrix.loops[1].sections['section13764261443130.5193100867327303'].amps).toEqual(9/5);
             });
         });
 
@@ -32,7 +32,7 @@ describe("Analyzer", function() {
                 var sections = analyzer.info.matrix.loops[1].sections;
                 var currentMap = {2: 0.91, 4: 2.55, 6: 1.64, 0: 1.64};
                 for (sid in sections) {
-                    expect(sections[sid].current).toEqual(currentMap[sections[sid].resistance])
+                    expect(sections[sid].amps).toEqual(currentMap[sections[sid].resistance])
                 }
             });
         });

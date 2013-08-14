@@ -144,31 +144,26 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var c, circuit, id, piece, section, _i, _len, _ref, _ref1, _ref2, _results;
+    var c, componentId, componentInfo, id, piece, _ref, _ref1, _ref2, _results;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];
       piece.receivingCurrent = false;
       piece.excessiveCurrent = false;
     }
-    circuit = this.analyzer.run();
-    if (circuit && circuit.complete) {
-      _ref1 = circuit.sections;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        section = _ref1[_i];
-        for (id in section.components) {
-          if (!(c = this.componentsAndWires()[id])) {
-            continue;
-          }
-          if (section.amps === 'infinite') {
-            c.excessiveCurrent = true;
-            c.el.addClass('excessive_current');
-          } else {
-            c.receivingCurrent = true;
-            if (typeof c.setCurrent === "function") {
-              c.setCurrent(section.amps);
-            }
-          }
+    _ref1 = this.analyzer.run();
+    for (componentId in _ref1) {
+      componentInfo = _ref1[componentId];
+      if (!(c = this.componentsAndWires()[componentId])) {
+        continue;
+      }
+      if (componentInfo.amps === 'infinite') {
+        c.excessiveCurrent = true;
+        c.el.addClass('excessive_current');
+      } else {
+        c.receivingCurrent = true;
+        if (typeof c.setCurrent === "function") {
+          c.setCurrent(componentInfo.amps);
         }
       }
     }

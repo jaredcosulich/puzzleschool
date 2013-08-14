@@ -1,4 +1,4 @@
-var debugInfo = true;
+var debugInfo = false;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -88,11 +88,11 @@ describe("BoardAnalyzer", function() {
                     });
 
                     it('should have resistance and non-infinite amps', function() {
-                        var circuit = board.analyzer.run();
-                        expect(circuit.components[bulb.id]).toBe(true);
-                        expect(circuit.complete).toBe(true);
-                        expect(circuit.resistance).toBe(5);
-                        expect(circuit.amps).toBe(1.8);
+                        var componentInfo = board.analyzer.run();
+                        var analyzedBulb = componentInfo[bulb.id];
+                        expect(analyzedBulb).not.toBe(undefined);
+                        expect(analyzedBulb.resistance).toBe(5);
+                        expect(analyzedBulb.amps).toBe(1.8);
                     });
                     
                     describe('with a short circuit', function() {
@@ -390,7 +390,7 @@ describe("BoardAnalyzer", function() {
                 lastNode = drawOrEraseWire(board, lastNode, 0, 2);
                 var bulb3Node = drawOrEraseWire(board, lastNode, 3, 0);
                 var bulb3 = createComponent(board, 'Lightbulb');
-                bulbs.push(bulb2);
+                bulbs.push(bulb3);
                 bulb3.resistance = 6;
                 var onBoard = addToBoard(board, bulb3, bulb3Node.x, bulb3Node.y);
                 expect(onBoard).toBe(true);
@@ -401,7 +401,7 @@ describe("BoardAnalyzer", function() {
             it('should have all the correct values', function() {
                 board.moveElectricity();
                 expect(wireAt(board, 1).current).toEqual(1.64);
-                expect(bulbs[0].current).toEqual(2.54);             
+                expect(bulbs[0].current).toEqual(2.55);             
                 expect(bulbs[1].current).toEqual(0.91);             
                 expect(bulbs[2].current).toEqual(1.64);
             })

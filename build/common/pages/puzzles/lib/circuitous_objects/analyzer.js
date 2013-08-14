@@ -26,10 +26,21 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
+    var cid, component, componentInfo, sectionId, sectionInfo, _ref, _ref1;
     this.analyze();
     this.createMatrix();
-    console.log(JSON.stringify(this.info.matrix));
-    return this.solveMatrix();
+    this.solveMatrix();
+    componentInfo = {};
+    _ref = this.info.matrix.loops[1].sections;
+    for (sectionId in _ref) {
+      sectionInfo = _ref[sectionId];
+      _ref1 = this.info.sections[sectionId].components;
+      for (cid in _ref1) {
+        component = _ref1[cid];
+        componentInfo[cid] = sectionInfo;
+      }
+    }
+    return componentInfo;
   };
 
   Analyzer.prototype.analyze = function() {
@@ -432,20 +443,20 @@ analyzer.Analyzer = (function(_super) {
     return sectionIds;
   };
 
-  Analyzer.prototype.assignCurrents = function(sections) {
-    var current, index, loopIndex, loopInfo, sectionId, settingLoop, _i, _len, _results;
+  Analyzer.prototype.assignAmps = function(sections) {
+    var amps, index, loopIndex, loopInfo, sectionId, settingLoop, _i, _len, _results;
     _results = [];
     for (index = _i = 0, _len = sections.length; _i < _len; index = ++_i) {
       sectionId = sections[index];
       loopInfo = this.info.matrix.loops[index + 1];
-      current = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0;
+      amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0;
       _results.push((function() {
         var _ref, _results1;
         _ref = this.info.matrix.loops;
         _results1 = [];
         for (loopIndex in _ref) {
           settingLoop = _ref[loopIndex];
-          _results1.push(settingLoop.sections[sectionId].current = current);
+          _results1.push(settingLoop.sections[sectionId].amps = amps);
         }
         return _results1;
       }).call(this));
@@ -457,7 +468,7 @@ analyzer.Analyzer = (function(_super) {
     var inOrderSections;
     this.fillOutMatrix();
     inOrderSections = this.reduceMatrix();
-    return this.assignCurrents(inOrderSections);
+    return this.assignAmps(inOrderSections);
   };
 
   return Analyzer;

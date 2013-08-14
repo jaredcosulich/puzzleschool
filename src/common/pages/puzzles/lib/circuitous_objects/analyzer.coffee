@@ -11,9 +11,12 @@ class analyzer.Analyzer extends circuitousObject.Object
     run: ->
         @analyze()
         @createMatrix()
-        console.log(JSON.stringify(@info.matrix))
         @solveMatrix()
-        # console.log(solution)
+        componentInfo = {}
+        for sectionId, sectionInfo of @info.matrix.loops[1].sections
+            for cid, component of @info.sections[sectionId].components
+                componentInfo[cid] = sectionInfo
+        return componentInfo
                         
     analyze: ->
         for cid, component of @board.components when component.powerSource
@@ -233,17 +236,17 @@ class analyzer.Analyzer extends circuitousObject.Object
         
         return sectionIds
                 
-    assignCurrents: (sections) ->
+    assignAmps: (sections) ->
         for sectionId, index in sections
             loopInfo = @info.matrix.loops[index + 1]
-            current = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0
+            amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0
             for loopIndex, settingLoop of @info.matrix.loops
-                settingLoop.sections[sectionId].current = current
+                settingLoop.sections[sectionId].amps = amps
             
     solveMatrix: ->
         @fillOutMatrix()
         inOrderSections = @reduceMatrix()
-        @assignCurrents(inOrderSections)           
+        @assignAmps(inOrderSections)           
 
 
         
