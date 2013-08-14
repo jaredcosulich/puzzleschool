@@ -1,4 +1,4 @@
-var debugInfo = true;
+var debugInfo = false;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -128,10 +128,8 @@ describe("BoardAnalyzer", function() {
                         });
                         
                         it('should create a complete circuit with twice the amps', function() {
-                            var circuit = board.analyzer.run();
-                            expect(circuit.complete).toBe(true);
-                            expect(circuit.amps).toBe(3.6);
-                            expect(circuit.resistance).toBe(2.5);
+                            var componentInfo = board.analyzer.run();
+                            expect(componentInfo[battery.id].amps).toBe(3.6);
                         });
                         
                         it('should provide the full amout of amps to each bulb', function() {
