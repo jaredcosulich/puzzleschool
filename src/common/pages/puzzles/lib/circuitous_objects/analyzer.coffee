@@ -11,14 +11,14 @@ class analyzer.Analyzer extends circuitousObject.Object
     run: ->
         @analyze()
         @createMatrix()
-        console.log(JSON.stringify(@info.matrix))
+        @deleteShorts()
+        # console.log(JSON.stringify(@info.matrix))
         @solveMatrix()
         componentInfo = {}
         
-        if @info.matrix.totalLoops > 0
-            for sectionId, sectionInfo of @info.matrix.loops[Object.keys(@info.matrix.loops)[0]].sections
-                for cid, component of @info.sections[sectionId].components
-                    componentInfo[cid] = sectionInfo
+        for sectionId, section of @info.sections
+            for cid, component of section.components
+                componentInfo[cid] = {resistance: section.resistance, amps: section.amps}
         return componentInfo
         
     analyze: ->
@@ -311,12 +311,11 @@ class analyzer.Analyzer extends circuitousObject.Object
                 break if loopInfo.sections[sectionId].adjusted != 0
             amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0
             # console.log(index+1, amps)
-            for loopIndex, settingLoop of @info.matrix.loops
-                settingLoop.sections[sectionId].amps = amps
+            @info.sections[sectionId].amps = amps
 
         # console.log('')
         # for loopId, loopInfo of @info.matrix.loops
-        #     console.log(("#{loopInfo.sections[sid].adjusted} / #{loopInfo.sections[sid].amps}" for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
+        #     console.log(("#{loopInfo.sections[sid].adjusted} / #{@info.sections[sid].amps}" for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
 
             
     solveMatrix: ->
@@ -324,5 +323,19 @@ class analyzer.Analyzer extends circuitousObject.Object
         return unless @reduceMatrix()
         @assignAmps()           
 
+    deleteShorts: ->
+        for loopId, loopInfo of @info.matrix.loops when not loopInfo.identity
+            shortCircuit = true
+            for sid, section of loopInfo.sections
+                shortCircuit = false if section.resistance != 0 
+            if shortCircuit
+                for sid of loopInfo.sections
+                    section = @info.sections[sid]
+                    section.amps = 'infinite'
+                for loopId, loopInfo in @info.matrix.loops
+                    for sid of loopInfo.sections
+                        delete @info.matrix.loops[loopId] if @info.sections[sid].amps == 'infinite'
+                        
+        
 
         

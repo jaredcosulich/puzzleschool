@@ -1,4 +1,4 @@
-var debugInfo = true;
+var debugInfo = false;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -24,18 +24,17 @@ describe("BoardAnalyzer", function() {
     })
     
     describe('with one battery', function() {
-        it('should be an incomplete circuit with just one component', function() {
+        it('should be nothing', function() {
             componentInfo = board.analyzer.run()
             expect(Object.keys(componentInfo).length).toEqual(0);
         });        
         
         describe('and wire', function() {            
-            it('should be an incomplete circuit with multiple components/wires when just a little is added', function() {
+            it('should be nothing', function() {
                 var start = board.boardPosition(battery.currentNodes()[1]);
                 drawOrEraseWire(board, start, 0, 3);
-                var circuit = board.analyzer.run();
-                expect(Object.keys(circuit.components).length).toBeGreaterThan(1);
-                expect(circuit.complete).toBe(false); 
+                var componentInfo = board.analyzer.run();
+                expect(Object.keys(componentInfo).length).toEqual(0)
             });
             
             describe('completing the circuit', function() {
@@ -49,9 +48,8 @@ describe("BoardAnalyzer", function() {
                 });
 
                 it('should be a complete circuit with infinite amps', function() {
-                    var circuit = board.analyzer.run()
-                    expect(circuit.complete).toBe(true);
-                    expect(circuit.amps).toBe('infinite') 
+                    var componentInfo = board.analyzer.run()
+                    expect(componentInfo[battery.id].amps).toBe('infinite') 
                 });
                 
                 describe('and a light emitting diode hooked up the wrong way', function() {

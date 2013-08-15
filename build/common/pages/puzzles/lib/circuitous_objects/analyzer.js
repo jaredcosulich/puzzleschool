@@ -27,21 +27,22 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
-    var cid, component, componentInfo, sectionId, sectionInfo, _ref, _ref1;
+    var cid, component, componentInfo, section, sectionId, _ref, _ref1;
     this.analyze();
     this.createMatrix();
-    console.log(JSON.stringify(this.info.matrix));
+    this.deleteShorts();
     this.solveMatrix();
     componentInfo = {};
-    if (this.info.matrix.totalLoops > 0) {
-      _ref = this.info.matrix.loops[Object.keys(this.info.matrix.loops)[0]].sections;
-      for (sectionId in _ref) {
-        sectionInfo = _ref[sectionId];
-        _ref1 = this.info.sections[sectionId].components;
-        for (cid in _ref1) {
-          component = _ref1[cid];
-          componentInfo[cid] = sectionInfo;
-        }
+    _ref = this.info.sections;
+    for (sectionId in _ref) {
+      section = _ref[sectionId];
+      _ref1 = section.components;
+      for (cid in _ref1) {
+        component = _ref1[cid];
+        componentInfo[cid] = {
+          resistance: section.resistance,
+          amps: section.amps
+        };
       }
     }
     return componentInfo;
@@ -519,7 +520,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.assignAmps = function() {
-    var amps, index, loopIndex, loopInfo, loopInfoIndex, sectionId, settingLoop, _i, _len, _ref, _ref1, _results;
+    var amps, index, loopInfo, loopInfoIndex, sectionId, _i, _len, _ref, _ref1, _results;
     _ref = this.info.matrix.sections;
     _results = [];
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
@@ -532,16 +533,7 @@ analyzer.Analyzer = (function(_super) {
         }
       }
       amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0;
-      _results.push((function() {
-        var _ref2, _results1;
-        _ref2 = this.info.matrix.loops;
-        _results1 = [];
-        for (loopIndex in _ref2) {
-          settingLoop = _ref2[loopIndex];
-          _results1.push(settingLoop.sections[sectionId].amps = amps);
-        }
-        return _results1;
-      }).call(this));
+      _results.push(this.info.sections[sectionId].amps = amps);
     }
     return _results;
   };
@@ -552,6 +544,56 @@ analyzer.Analyzer = (function(_super) {
       return;
     }
     return this.assignAmps();
+  };
+
+  Analyzer.prototype.deleteShorts = function() {
+    var loopId, loopInfo, section, shortCircuit, sid, _ref, _ref1, _results;
+    _ref = this.info.matrix.loops;
+    _results = [];
+    for (loopId in _ref) {
+      loopInfo = _ref[loopId];
+      if (!(!loopInfo.identity)) {
+        continue;
+      }
+      shortCircuit = true;
+      _ref1 = loopInfo.sections;
+      for (sid in _ref1) {
+        section = _ref1[sid];
+        if (section.resistance !== 0) {
+          shortCircuit = false;
+        }
+      }
+      if (shortCircuit) {
+        for (sid in loopInfo.sections) {
+          section = this.info.sections[sid];
+          section.amps = 'infinite';
+        }
+        _results.push((function() {
+          var _i, _len, _ref2, _results1;
+          _ref2 = this.info.matrix.loops;
+          _results1 = [];
+          for (loopInfo = _i = 0, _len = _ref2.length; _i < _len; loopInfo = ++_i) {
+            loopId = _ref2[loopInfo];
+            _results1.push((function() {
+              var _results2;
+              _results2 = [];
+              for (sid in loopInfo.sections) {
+                if (this.info.sections[sid].amps === 'infinite') {
+                  _results2.push(delete this.info.matrix.loops[loopId]);
+                } else {
+                  _results2.push(void 0);
+                }
+              }
+              return _results2;
+            }).call(this));
+          }
+          return _results1;
+        }).call(this));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
 
   return Analyzer;
