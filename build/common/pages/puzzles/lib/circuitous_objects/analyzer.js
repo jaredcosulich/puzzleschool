@@ -28,6 +28,7 @@ analyzer.Analyzer = (function(_super) {
   Analyzer.prototype.run = function() {
     var cid, component, componentInfo, sectionId, sectionInfo, _ref, _ref1;
     this.analyze();
+    debugger;
     this.createMatrix();
     console.log(this.info.matrix);
     this.solveMatrix();
@@ -63,7 +64,12 @@ analyzer.Analyzer = (function(_super) {
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           positiveTerminal = _ref1[_i];
           startNode = this.board.boardPosition(positiveTerminal);
-          this.createSection(component, startNode);
+          this.createSections([
+            {
+              component: component,
+              node: startNode
+            }
+          ]);
           startSections = this.info.node["" + startNode.x + ":" + startNode.y];
           if ((startKeys = Object.keys(startSections)).length === 2) {
             startKey = this.compareNodes(startSections[startKeys[1]].nodes[1], startNode) ? 1 : 0;
@@ -92,17 +98,24 @@ analyzer.Analyzer = (function(_super) {
     return section;
   };
 
+  Analyzer.prototype.createSections = function(sectionInfos) {
+    var connections, sectionInfo, _i, _len;
+    connections = [];
+    for (_i = 0, _len = sectionInfos.length; _i < _len; _i++) {
+      sectionInfo = sectionInfos[_i];
+      connections = connections.concat(this.createSection(sectionInfo.component, sectionInfo.node));
+    }
+    if (connections.length) {
+      return this.createSections(connections);
+    }
+  };
+
   Analyzer.prototype.createSection = function(component, node) {
-    var c, connections, section, _i, _len;
+    var connections, section;
     section = this.newSection(node);
     connections = this.analyzeSection(section, component, this.otherNode(this.boardNodes(component), node));
-    if ((connections != null ? connections.length : void 0) > 1) {
-      for (_i = 0, _len = connections.length; _i < _len; _i++) {
-        c = connections[_i];
-        this.createSection(c.component, c.node);
-      }
-    }
-    return this.endSection(section);
+    this.endSection(section);
+    return connections;
   };
 
   Analyzer.prototype.analyzeSection = function(section, component, node) {
@@ -116,12 +129,17 @@ analyzer.Analyzer = (function(_super) {
         return connections;
       }
     }
+    return [];
   };
 
   Analyzer.prototype.addToSection = function(section, component, node) {
     var voltage;
     if (this.info.components[component.id]) {
       return false;
+    }
+    if (!Object.keys(section.components).length) {
+      this.board.color([component.id], 0);
+      debugger;
     }
     if (component.voltage) {
       section.direction = (node.negative ? 1 : -1);
@@ -137,13 +155,15 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.consumeSection = function(section, sectionToBeConsumed) {
     var cid;
+    this.deleteSection(section);
     this.deleteSection(sectionToBeConsumed);
     for (cid in sectionToBeConsumed.components) {
       section.components[cid] = true;
     }
     section.resistance = (section.resistance || 0) + (sectionToBeConsumed.resistance || 0);
     section.voltage = (section.voltage || 0) + (sectionToBeConsumed.voltage || 0);
-    return section.nodes[1] = sectionToBeConsumed.nodes[1];
+    section.nodes[1] = sectionToBeConsumed.nodes[1];
+    return this.recordSection(section);
   };
 
   Analyzer.prototype.endSection = function(section) {
@@ -252,18 +272,29 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.addToMatrixLoop = function(section, direction) {
+    var cid;
     if (!this.info.matrix.currentLoop.start) {
       this.info.matrix.currentLoop.start = section.id;
     }
     this.info.matrix.currentLoop.sections[section.id] = {
-      resistance: section.resistance * direction
+      resistance: section.resistance * direction * -1
     };
     if (section.voltage) {
       this.info.matrix.currentLoop.voltage += section.voltage * direction;
     }
     if (this.compareNodes.apply(this, section.nodes)) {
-      return this.completeMatrixLoop();
+      this.completeMatrixLoop();
     }
+    this.board.color((function() {
+      var _results;
+      _results = [];
+      for (cid in section.components) {
+        _results.push(cid);
+      }
+      return _results;
+    })(), 1);
+    console.log('add to loop', this.info.matrix.totalLoops, direction, this.info.matrix.currentLoop.voltage, section.resistance * direction * -1);
+    debugger;
   };
 
   Analyzer.prototype.initMatrix = function() {
@@ -280,7 +311,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.completeMatrixLoop = function(loopInfo) {
-    var index, sid, _ref;
+    var sid;
     if (loopInfo == null) {
       loopInfo = this.info.matrix.currentLoop;
     }
@@ -290,23 +321,18 @@ analyzer.Analyzer = (function(_super) {
         this.info.matrix.sections.push(sid);
       }
     }
-    index = 1;
-    while ((sid = this.info.matrix.sections[index - 1]) && (!((_ref = loopInfo.sections[sid]) != null ? _ref.resistance : void 0) || this.info.matrix.loops[index])) {
-      index += 1;
-    }
-    this.info.matrix.loops[index] = loopInfo;
-    return this.info.matrix.totalLoops += 1;
+    this.info.matrix.totalLoops += 1;
+    return this.info.matrix.loops[this.info.matrix.totalLoops] = loopInfo;
   };
 
   Analyzer.prototype.matrixLoopDirection = function(section, startingNode) {
     var direction, nodeAligned;
     nodeAligned = this.compareNodes(section.nodes[0], startingNode);
     if ((nodeAligned && section.direction === 1) || (!nodeAligned && section.direction === -1)) {
-      direction = 1;
+      return direction = 1;
     } else {
-      direction = -1;
+      return direction = -1;
     }
-    return direction;
   };
 
   Analyzer.prototype.addMatrixIndentityLoop = function(node, sections) {
@@ -325,9 +351,8 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.createMatrix = function() {
-    var allSections, direction, identityLoopId, identityLoops, lastSection, nextNode, nextSection, nextSections, section, sid;
+    var allSections, direction, lastSection, nextNode, nextSection, nextSections, section, sid;
     this.initMatrix();
-    identityLoops = {};
     allSections = {};
     for (sid in this.info.sections) {
       allSections[sid] = true;
@@ -342,18 +367,7 @@ analyzer.Analyzer = (function(_super) {
       nextSection = null;
       nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
       if (Object.keys(nextSections).length > 2) {
-        identityLoopId = ((function() {
-          var _results;
-          _results = [];
-          for (sid in nextSections) {
-            _results.push(sid);
-          }
-          return _results;
-        })()).sort().join('__');
-        if (!identityLoops[identityLoopId]) {
-          identityLoops[identityLoopId] = true;
-          this.addMatrixIndentityLoop(nextNode, nextSections);
-        }
+        this.addMatrixIndentityLoop(nextNode, nextSections);
       }
       for (sid in nextSections) {
         section = nextSections[sid];
@@ -449,49 +463,98 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceMatrix = function() {
-    var adjustingLoop, adjustingSection, adjustingSectionId, adjustingVariableIndex, adjustingfactor, factor, factorLoop, loopIndex, sectionId, sectionIds, variableIndex, _i, _len, _results;
+    var adjustingLoop, adjustingSection, adjustingSectionId, adjustingVariableIndex, adjustingfactor, debugLoopIndex, factor, factorLoop, factorLoopIndex, loopIndex, sectionId, sectionIds, sid, testIndex, testSectionId, tested, variableIndex, _i, _j, _k, _l, _len, _len1, _len2, _m, _n, _ref, _ref1, _ref2, _ref3, _results;
     sectionIds = this.info.matrix.sections;
-    _results = [];
-    for (variableIndex = _i = 0, _len = sectionIds.length; _i < _len; variableIndex = ++_i) {
-      sectionId = sectionIds[variableIndex];
-      factorLoop = this.info.matrix.loops[variableIndex + 1];
-      factor = factorLoop.sections[sectionId].adjusted;
-      _results.push((function() {
-        var _j, _k, _len1, _ref, _results1;
-        _results1 = [];
-        for (loopIndex = _j = 1, _ref = this.info.matrix.totalLoops; 1 <= _ref ? _j <= _ref : _j >= _ref; loopIndex = 1 <= _ref ? ++_j : --_j) {
-          if (!(loopIndex !== variableIndex + 1)) {
-            continue;
-          }
-          adjustingLoop = this.info.matrix.loops[loopIndex];
-          adjustingfactor = adjustingLoop.sections[sectionId].adjusted;
-          for (adjustingVariableIndex = _k = 0, _len1 = sectionIds.length; _k < _len1; adjustingVariableIndex = ++_k) {
-            adjustingSectionId = sectionIds[adjustingVariableIndex];
-            adjustingSection = adjustingLoop.sections[adjustingSectionId];
-            adjustingSection.adjusted = adjustingSection.adjusted - (factorLoop.sections[adjustingSectionId].adjusted * (adjustingfactor / factor));
-          }
-          _results1.push(adjustingLoop.adjustedVoltage = adjustingLoop.adjustedVoltage - (factorLoop.adjustedVoltage * (adjustingfactor / factor)));
+    for (debugLoopIndex = _i = 1, _ref = this.info.matrix.totalLoops; 1 <= _ref ? _i <= _ref : _i >= _ref; debugLoopIndex = 1 <= _ref ? ++_i : --_i) {
+      console.log(((function() {
+        var _j, _len, _results;
+        _results = [];
+        for (_j = 0, _len = sectionIds.length; _j < _len; _j++) {
+          sid = sectionIds[_j];
+          _results.push(this.info.matrix.loops[debugLoopIndex].sections[sid].adjusted);
         }
-        return _results1;
-      }).call(this));
+        return _results;
+      }).call(this)).join(' | '), this.info.matrix.loops[debugLoopIndex].adjustedVoltage);
+    }
+    console.log('');
+    _results = [];
+    for (variableIndex = _j = 0, _len = sectionIds.length; _j < _len; variableIndex = ++_j) {
+      sectionId = sectionIds[variableIndex];
+      _ref1 = this.info.matrix.loops;
+      for (factorLoopIndex in _ref1) {
+        factorLoop = _ref1[factorLoopIndex];
+        tested = true;
+        for (testIndex = _k = 0, _len1 = sectionIds.length; _k < _len1; testIndex = ++_k) {
+          testSectionId = sectionIds[testIndex];
+          if (testIndex < variableIndex) {
+            if (factorLoop.sections[testSectionId].adjusted > 0) {
+              tested = false;
+              break;
+            }
+          }
+        }
+        if (!(factorLoop.sections[sectionId].adjusted > 0)) {
+          tested = false;
+        }
+        if (tested) {
+          break;
+        }
+      }
+      factor = factorLoop.sections[sectionId].adjusted;
+      if (!factor) {
+        continue;
+      }
+      console.log(factorLoopIndex, factor);
+      for (loopIndex = _l = 1, _ref2 = this.info.matrix.totalLoops; 1 <= _ref2 ? _l <= _ref2 : _l >= _ref2; loopIndex = 1 <= _ref2 ? ++_l : --_l) {
+        if (!(("" + loopIndex) !== ("" + factorLoopIndex))) {
+          continue;
+        }
+        adjustingLoop = this.info.matrix.loops[loopIndex];
+        adjustingfactor = adjustingLoop.sections[sectionId].adjusted;
+        for (adjustingVariableIndex = _m = 0, _len2 = sectionIds.length; _m < _len2; adjustingVariableIndex = ++_m) {
+          adjustingSectionId = sectionIds[adjustingVariableIndex];
+          adjustingSection = adjustingLoop.sections[adjustingSectionId];
+          adjustingSection.adjusted = adjustingSection.adjusted - (factorLoop.sections[adjustingSectionId].adjusted * (adjustingfactor / factor));
+        }
+        adjustingLoop.adjustedVoltage = adjustingLoop.adjustedVoltage - (factorLoop.adjustedVoltage * (adjustingfactor / factor));
+      }
+      for (debugLoopIndex = _n = 1, _ref3 = this.info.matrix.totalLoops; 1 <= _ref3 ? _n <= _ref3 : _n >= _ref3; debugLoopIndex = 1 <= _ref3 ? ++_n : --_n) {
+        console.log(((function() {
+          var _len3, _o, _results1;
+          _results1 = [];
+          for (_o = 0, _len3 = sectionIds.length; _o < _len3; _o++) {
+            sid = sectionIds[_o];
+            _results1.push(this.info.matrix.loops[debugLoopIndex].sections[sid].adjusted);
+          }
+          return _results1;
+        }).call(this)).join(' | '), this.info.matrix.loops[debugLoopIndex].adjustedVoltage);
+      }
+      _results.push(console.log(''));
     }
     return _results;
   };
 
   Analyzer.prototype.assignAmps = function() {
-    var amps, index, loopIndex, loopInfo, sectionId, settingLoop, _i, _len, _ref, _results;
+    var amps, index, loopIndex, loopInfo, loopInfoIndex, sectionId, settingLoop, _i, _len, _ref, _ref1, _results;
     _ref = this.info.matrix.sections;
     _results = [];
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
       sectionId = _ref[index];
-      loopInfo = this.info.matrix.loops[index + 1];
+      _ref1 = this.info.matrix.loops;
+      for (loopInfoIndex in _ref1) {
+        loopInfo = _ref1[loopInfoIndex];
+        if (loopInfo.sections[sectionId].adjusted !== 0) {
+          break;
+        }
+      }
       amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0;
+      console.log(index + 1, amps);
       _results.push((function() {
-        var _ref1, _results1;
-        _ref1 = this.info.matrix.loops;
+        var _ref2, _results1;
+        _ref2 = this.info.matrix.loops;
         _results1 = [];
-        for (loopIndex in _ref1) {
-          settingLoop = _ref1[loopIndex];
+        for (loopIndex in _ref2) {
+          settingLoop = _ref2[loopIndex];
           _results1.push(settingLoop.sections[sectionId].amps = amps);
         }
         return _results1;

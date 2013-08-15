@@ -113,7 +113,7 @@ class board.Board extends circuitousObject.Object
         c.el.css(backgroundColor: null) for id, c of @componentsAndWires()
 
     color: (componentIds, index) ->
-        colors = ['red', 'green', 'yellow', 'purple', 'orange', 'blue', 'brown', 'chartreuse', 'cyan', 'gray', 'khaki', 'pink', 'lavender']
+        colors = ['green', 'red', 'yellow', 'purple', 'orange', 'blue', 'brown', 'chartreuse', 'cyan', 'gray', 'khaki', 'pink', 'lavender']
         for componentId in componentIds
             color = colors[index]
             @componentsAndWires()[componentId]?.el?.css(backgroundColor: color)

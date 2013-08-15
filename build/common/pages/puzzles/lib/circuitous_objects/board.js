@@ -198,7 +198,7 @@ board.Board = (function(_super) {
 
   Board.prototype.color = function(componentIds, index) {
     var color, colors, componentId, _i, _len, _ref, _ref1, _results;
-    colors = ['red', 'green', 'yellow', 'purple', 'orange', 'blue', 'brown', 'chartreuse', 'cyan', 'gray', 'khaki', 'pink', 'lavender'];
+    colors = ['green', 'red', 'yellow', 'purple', 'orange', 'blue', 'brown', 'chartreuse', 'cyan', 'gray', 'khaki', 'pink', 'lavender'];
     _results = [];
     for (_i = 0, _len = componentIds.length; _i < _len; _i++) {
       componentId = componentIds[_i];

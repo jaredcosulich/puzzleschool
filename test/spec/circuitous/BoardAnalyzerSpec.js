@@ -1,4 +1,4 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -215,7 +215,8 @@ describe("BoardAnalyzer", function() {
                                 expect(bulb.current).toEqual(1.8);
                                 expect(bulb2.current).toEqual(1.8);                                                               
                                 expect(bulb3.current).toEqual(1.8);  
-                                expect(wireAt(board, 1).current).toEqual(5.4)
+                                expect(wireAt(board, 1).current).toEqual(5.4);
+                                debugger
                             })
                         })
                         
