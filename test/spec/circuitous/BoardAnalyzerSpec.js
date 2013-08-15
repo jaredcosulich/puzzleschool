@@ -31,13 +31,12 @@ describe("BoardAnalyzer", function() {
         });        
         
         describe('and wire', function() {            
-            var componentInfo;
             beforeEach(function() {
                 var start = board.boardPosition(battery.currentNodes()[1]);
                 drawOrEraseWire(board, start, 0, 3);
-                componentInfo = board.analyzer.run();                
             });
             it('should be a bunch of components all with no amps', function() {
+                var componentInfo = board.analyzer.run();                
                 expect(Object.keys(componentInfo).length).toBeGreaterThan(1);
                 for (componentId in componentInfo) {
                     expect(componentInfo[componentId].amps).toBe(undefined);
@@ -45,6 +44,7 @@ describe("BoardAnalyzer", function() {
             });
             
             it('should show each wire with a direction of 1', function() {
+                var componentInfo = board.analyzer.run();                
                 for (componentId in componentInfo) {
                     expect(board.componentsAndWires()[componentId].direction).toEqual(1);
                 }
@@ -89,7 +89,7 @@ describe("BoardAnalyzer", function() {
                     
                     it('should not provide and current to the led', function() {
                         board.moveElectricity();
-                        expect(led.current).toEqual(0);
+                        expect(led.current).toEqual(undefined);
                     });
                 })
                 
@@ -107,7 +107,7 @@ describe("BoardAnalyzer", function() {
                         var componentInfo = board.analyzer.run();
                         var analyzedBulb = componentInfo[bulb.id];
                         expect(analyzedBulb).not.toBe(undefined);
-                        expect(analyzedBulb.resistance).toBe(-5);
+                        expect(analyzedBulb.resistance).toBe(5);
                         expect(analyzedBulb.amps).toBe(1.8);
                     });
                     
@@ -118,10 +118,10 @@ describe("BoardAnalyzer", function() {
                         });
                         
                         it('should create a circuit with infinite amps and no lightbulb', function() {
-                            var circuit = board.analyzer.run();
-                            expect(circuit.complete).toBe(true);
-                            expect(circuit.amps).toBe('infinite') ;
-                            expect(circuit.components[bulb.id]).toBeUndefined();
+                            var componentInfo = board.analyzer.run();
+                            console.log(componentInfo)
+                            expect(componentInfo[battery.id].amps).toBe('infinite') ;
+                            expect(componentInfo[bulb.id].amps).toBeUndefined();
                         });
                     });
 

@@ -33,6 +33,7 @@ analyzer.Analyzer = (function(_super) {
     this.createMatrix();
     this.deleteShorts();
     this.solveMatrix();
+    this.checkPolarizedComponents();
     componentInfo = {};
     _ref = this.info.sections;
     for (sectionId in _ref) {
@@ -137,11 +138,13 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.addToSection = function(section, component, node) {
-    var voltage;
+    var componentNodes, voltage;
     if (this.info.components[component.id]) {
       return false;
     }
-    component.direction = (this.compareNodes(node, this.boardNodes(component)[1]) ? 1 : -1);
+    if ((componentNodes = this.boardNodes(component)).length > 1) {
+      component.direction = (this.compareNodes(node, componentNodes[1]) ? 1 : -1);
+    }
     if (component.voltage) {
       section.direction = (node.negative ? 1 : -1);
       voltage = component.voltage * section.direction;
@@ -605,6 +608,41 @@ analyzer.Analyzer = (function(_super) {
       }
     }
     return _results;
+  };
+
+  Analyzer.prototype.checkPolarizedComponents = function() {
+    var changeMade, cid, component, loopId, loopInfo, section, sid, _ref, _ref1, _ref2;
+    changeMade = false;
+    _ref = this.board.components;
+    for (cid in _ref) {
+      component = _ref[cid];
+      if (!(component.nodes.length > 1 && component.nodes && !component.voltage)) {
+        continue;
+      }
+      section = this.info.sections[this.info.components[cid]];
+      if (this.info.matrix.sections.indexOf(section.id) > -1) {
+        if (section.amps > 0 && component.direction < 0 || section.amps < 0 && component.direction > 0) {
+          changeMade = true;
+          this.info.matrix.sections.splice(this.info.matrix.sections.indexOf(section.id, 1));
+          _ref1 = this.info.matrix.loops;
+          for (loopId in _ref1) {
+            loopInfo = _ref1[loopId];
+            if (loopInfo.sections[section.id]) {
+              delete this.info.matrix.loops[loopId];
+            }
+          }
+        }
+      }
+    }
+    if (changeMade) {
+      _ref2 = this.info.sections;
+      for (sid in _ref2) {
+        section = _ref2[sid];
+        delete section.amps;
+      }
+      this.solveMatrix();
+      return this.checkPolarizedComponents();
+    }
   };
 
   return Analyzer;

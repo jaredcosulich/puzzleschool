@@ -15,7 +15,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @deleteShorts()
         # console.log(JSON.stringify(@info.matrix))
         @solveMatrix()
-        # @checkPolarizedComponents()
+        @checkPolarizedComponents()
         componentInfo = {}
         
         for sectionId, section of @info.sections
@@ -81,7 +81,8 @@ class analyzer.Analyzer extends circuitousObject.Object
         #     @board.color([component.id], 0) 
         #     debugger
 
-        component.direction = (if @compareNodes(node, @boardNodes(component)[1]) then 1 else -1)
+        if (componentNodes = @boardNodes(component)).length > 1
+            component.direction = (if @compareNodes(node, componentNodes[1]) then 1 else -1)
 
         if component.voltage
             section.direction = (if node.negative then 1 else -1)
@@ -347,9 +348,19 @@ class analyzer.Analyzer extends circuitousObject.Object
                     for sid of loopInfo.sections
                         delete @info.matrix.loops[loopId] if @info.sections[sid].amps == 'infinite'
                         
-    # checkPolarizedComponents: ->
-    #     changeMade = false
-    #     for cid, component of @board.components when component.nodes.length > 1 and not component.voltage
-    #         section = @info.sections[@info.components[cid]]
-    #         if section.amps > 0
+    checkPolarizedComponents: ->
+        changeMade = false
+        for cid, component of @board.components when component.nodes.length > 1 and component.nodes and not component.voltage
+            section = @info.sections[@info.components[cid]]
+            if @info.matrix.sections.indexOf(section.id) > -1
+                if section.amps > 0 and component.direction < 0 or section.amps < 0 and component.direction > 0
+                    changeMade = true
+                    @info.matrix.sections.splice(@info.matrix.sections.indexOf(section.id, 1))
+                    for loopId, loopInfo of @info.matrix.loops
+                        delete @info.matrix.loops[loopId] if loopInfo.sections[section.id]
+        
+        if changeMade
+            delete section.amps for sid, section of @info.sections
+            @solveMatrix()
+            @checkPolarizedComponents()
         
