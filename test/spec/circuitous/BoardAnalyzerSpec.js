@@ -25,9 +25,8 @@ describe("BoardAnalyzer", function() {
     
     describe('with one battery', function() {
         it('should be an incomplete circuit with just one component', function() {
-            var circuit = board.analyzer.run()
-            expect(Object.keys(circuit.components).length).toEqual(1);
-            expect(circuit.complete).toBe(false);
+            componentInfo = board.analyzer.run()
+            expect(Object.keys(componentInfo).length).toEqual(0);
         });        
         
         describe('and wire', function() {            
@@ -91,7 +90,7 @@ describe("BoardAnalyzer", function() {
                         var componentInfo = board.analyzer.run();
                         var analyzedBulb = componentInfo[bulb.id];
                         expect(analyzedBulb).not.toBe(undefined);
-                        expect(analyzedBulb.resistance).toBe(5);
+                        expect(analyzedBulb.resistance).toBe(-5);
                         expect(analyzedBulb.amps).toBe(1.8);
                     });
                     
@@ -216,7 +215,6 @@ describe("BoardAnalyzer", function() {
                                 expect(bulb2.current).toEqual(1.8);                                                               
                                 expect(bulb3.current).toEqual(1.8);  
                                 expect(wireAt(board, 1).current).toEqual(5.4);
-                                debugger
                             })
                         })
                         
@@ -401,7 +399,7 @@ describe("BoardAnalyzer", function() {
                 board.moveElectricity();
                 expect(wireAt(board, 1).current).toEqual(1.64);
                 expect(bulbs[0].current).toEqual(2.55);             
-                expect(bulbs[1].current).toEqual(0.91);             
+                expect(bulbs[1].current).toEqual(-0.91);             
                 expect(bulbs[2].current).toEqual(1.64);
             })
         });

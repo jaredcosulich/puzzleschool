@@ -34,3 +34,4 @@ class object.Object extends Draggable
     setCurrent: (@current) -> 
         
         
+        

@@ -13,26 +13,33 @@ describe("Analyzer", function() {
     describe('solving a matrix', function() {
         describe('with a simple circuit', function () {
             beforeEach(function() {
-                analyzer.info.matrix = {loops: {"1":{"voltage":9,"start":"section13764261443130.5193100867327303","sections": {"section13764261443130.5193100867327303":{"resistance":5}}}},"currentLoop":1};
+                analyzer.info.matrix = {"loops":{"section13765946458540.7231298091355711":{"voltage":-9,"sections":{"section13765946458540.7231298091355711":{"resistance":-5}},"path":["section13765946458540.7231298091355711"],"start":"section13765946458540.7231298091355711","completed":true,"id":"section13765946458540.7231298091355711"}},"sections":["section13765946458540.7231298091355711"],"pathsAnalyzed":{},"totalLoops":1,"currentLoop":{"voltage":-9,"sections":{"section13765946458540.7231298091355711":{"resistance":-5}},"path":["section13765946458540.7231298091355711"],"start":"section13765946458540.7231298091355711","completed":true,"id":"section13765946458540.7231298091355711"}};
                 analyzer.solveMatrix();
             });
             
             it('should solve for the current', function() {
-                expect(analyzer.info.matrix.loops[1].sections['section13764261443130.5193100867327303'].amps).toEqual(9/5);
+                expect(analyzer.info.matrix.loops['section13765946458540.7231298091355711'].sections['section13765946458540.7231298091355711'].amps).toEqual(9/5);
             });
         });
 
         describe('with a two battery circuit', function () {
             beforeEach(function() {
-                analyzer.info.matrix = {"loops":{"1":{"voltage":12,"sections":{"section13764524611460.7137672745157033":{"resistance":2},"section13764524611440.2006309200078249":{"resistance":4}},"start":"section13764524611460.7137672745157033","completed":true},"2":{"voltage":0,"sections":{"section13764524611460.7137672745157033":{"resistance":-1},"section13764524611440.2006309200078249":{"resistance":1},"section13764524611420.8093564675655216":{"resistance":-1}}},"3":{"voltage":0,"sections":{"section13764524611460.7137672745157033":{"resistance":1},"section13764524611470.528651462867856":{"resistance":1},"section13764524611440.2006309200078249":{"resistance":-1}}},"4":{"voltage":20,"sections":{"section13764524611470.528651462867856":{"resistance":6},"section13764524611420.8093564675655216":{"resistance":0},"section13764524611440.2006309200078249":{"resistance":4}},"start":"section13764524611470.528651462867856","completed":true}},"currentLoop":4};
+                analyzer.info.matrix = {"loops":{"section13765948167660.7938740598037839__section13765948167680.11242776503786445__section13765948167690.7465420099906623":{"voltage":0,"sections":{"section13765948167660.7938740598037839":{"resistance":1},"section13765948167680.11242776503786445":{"resistance":1},"section13765948167690.7465420099906623":{"resistance":-1}},"completed":true,"id":"section13765948167660.7938740598037839__section13765948167680.11242776503786445__section13765948167690.7465420099906623"},"section13765948167660.7938740598037839__section13765948167690.7465420099906623":{"voltage":-20,"sections":{"section13765948167690.7465420099906623":{"resistance":-6},"section13765948167660.7938740598037839":{"resistance":-4}},"path":["section13765948167690.7465420099906623","section13765948167660.7938740598037839"],"start":"section13765948167690.7465420099906623","completed":true,"id":"section13765948167660.7938740598037839__section13765948167690.7465420099906623"},"section13765948167680.11242776503786445__section13765948167690.7465420099906623":{"voltage":-8,"sections":{"section13765948167690.7465420099906623":{"resistance":-6},"section13765948167680.11242776503786445":{"resistance":-2}},"path":["section13765948167690.7465420099906623","section13765948167680.11242776503786445"],"start":"section13765948167690.7465420099906623","completed":true,"id":"section13765948167680.11242776503786445__section13765948167690.7465420099906623"}},"sections":["section13765948167660.7938740598037839","section13765948167680.11242776503786445","section13765948167690.7465420099906623"],"pathsAnalyzed":{},"totalLoops":6,"currentLoop":{"voltage":-8,"sections":{"section13765948167690.7465420099906623":{"resistance":-6},"section13765948167680.11242776503786445":{"resistance":-2}},"path":["section13765948167690.7465420099906623","section13765948167680.11242776503786445"],"start":"section13765948167690.7465420099906623","completed":true,"id":"section13765948167680.11242776503786445__section13765948167690.7465420099906623"}};
                 analyzer.solveMatrix();
             });
             
             it('should assign all currents correctly', function() {
-                var sections = analyzer.info.matrix.loops[1].sections;
-                var currentMap = {2: 0.91, 4: 2.55, 6: 1.64, 0: 1.64};
-                for (sid in sections) {
-                    expect(sections[sid].amps).toEqual(currentMap[sections[sid].resistance])
+                var currentMap = {'-2': -0.91, '-4': 2.55, '-6': 1.64};
+                for (loopId in analyzer.info.matrix.loops) {
+                    var loopInfo = analyzer.info.matrix.loops[loopId];
+                    if (loopInfo.identity) continue; 
+                    for (sid in loopInfo.sections) {
+                        var section = loopInfo.sections[sid];
+                        var stringResistance = section.resistance.toString();
+                        if (currentMap[stringResistance]) {
+                            expect(section.amps).toEqual(currentMap[stringResistance])                            
+                        }
+                    }                
                 }
             });
         });
