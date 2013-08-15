@@ -24,17 +24,30 @@ describe("BoardAnalyzer", function() {
     })
     
     describe('with one battery', function() {
-        it('should be nothing', function() {
+        it('should be one component with no amps', function() {
             componentInfo = board.analyzer.run()
-            expect(Object.keys(componentInfo).length).toEqual(0);
+            expect(Object.keys(componentInfo).length).toEqual(1);
+            expect(componentInfo[battery.id].amps).toBe(undefined);
         });        
         
         describe('and wire', function() {            
-            it('should be nothing', function() {
+            var componentInfo;
+            beforeEach(function() {
                 var start = board.boardPosition(battery.currentNodes()[1]);
                 drawOrEraseWire(board, start, 0, 3);
-                var componentInfo = board.analyzer.run();
-                expect(Object.keys(componentInfo).length).toEqual(0)
+                componentInfo = board.analyzer.run();                
+            });
+            it('should be a bunch of components all with no amps', function() {
+                expect(Object.keys(componentInfo).length).toBeGreaterThan(1);
+                for (componentId in componentInfo) {
+                    expect(componentInfo[componentId].amps).toBe(undefined);
+                }
+            });
+            
+            it('should show each wire with a direction of 1', function() {
+                for (componentId in componentInfo) {
+                    expect(board.componentsAndWires()[componentId].direction).toEqual(1);
+                }
             });
             
             describe('completing the circuit', function() {
@@ -45,11 +58,12 @@ describe("BoardAnalyzer", function() {
                     lastNode = drawOrEraseWire(board, lastNode, 0, -7);
                     lastNode = drawOrEraseWire(board, lastNode, -13, 0);
                     drawOrEraseWire(board, lastNode, 0, 5);
-                });
+                    drawOrEraseWire(board, start, 0, 2);
+                 });
 
                 it('should be a complete circuit with infinite amps', function() {
                     var componentInfo = board.analyzer.run()
-                    expect(componentInfo[battery.id].amps).toBe('infinite') 
+                    expect(componentInfo[battery.id].amps).toBe('infinite')
                 });
                 
                 describe('and a light emitting diode hooked up the wrong way', function() {
@@ -63,9 +77,14 @@ describe("BoardAnalyzer", function() {
                         expect(onBoard).toBe(true);                                                
                     });
                     
-                    it('should not be a complete circuit', function() {
-                        var circuit = board.analyzer.run();
-                        expect(circuit.complete).toBe(false);
+                    it('should show the led\'s direction to be -1', function() {
+                        var componentInfo = board.analyzer.run();
+                        expect(board.components[led.id].direction).toEqual(-1);
+                    });
+                    
+                    it('should not have any current anywhere', function() {
+                        var componentInfo = board.analyzer.run();
+                        expect(componentInfo[battery.id].amps).toBe(undefined);
                     });
                     
                     it('should not provide and current to the led', function() {

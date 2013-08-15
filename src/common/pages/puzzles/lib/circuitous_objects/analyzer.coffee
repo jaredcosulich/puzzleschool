@@ -9,11 +9,13 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info = {matrix: {}, node: {}, sections: {}, components: {}}
         
     run: ->
+        @init()
         @analyze()
         @createMatrix()
         @deleteShorts()
         # console.log(JSON.stringify(@info.matrix))
         @solveMatrix()
+        # @checkPolarizedComponents()
         componentInfo = {}
         
         for sectionId, section of @info.sections
@@ -79,6 +81,8 @@ class analyzer.Analyzer extends circuitousObject.Object
         #     @board.color([component.id], 0) 
         #     debugger
 
+        component.direction = (if @compareNodes(node, @boardNodes(component)[1]) then 1 else -1)
+
         if component.voltage
             section.direction = (if node.negative then 1 else -1)
             voltage = component.voltage * section.direction
@@ -105,6 +109,12 @@ class analyzer.Analyzer extends circuitousObject.Object
     endSection: (section) ->
         return unless Object.keys(section.components).length
         section.direction = 1 unless section.direction
+        
+        if section.direction == -1
+            for cid of section.components
+                component = @board.componentsAndWires()[cid]
+                component.direction = component.direction * -1
+                
         @recordSection(section, component)
                         
     findConnections: (node, exceptInSection) ->
@@ -229,29 +239,30 @@ class analyzer.Analyzer extends circuitousObject.Object
 
                 lastSection = nextSection
                 nextSection = null
-                nextSections = @info.node["#{nextNode.x}:#{nextNode.y}"]
+                if nextNode
+                    nextSections = @info.node["#{nextNode.x}:#{nextNode.y}"]
             
-                if Object.keys(nextSections).length > 2
-                    @addMatrixIndentityLoop(nextNode, nextSections)
+                    if Object.keys(nextSections).length > 2
+                        @addMatrixIndentityLoop(nextNode, nextSections)
                 
-                for sid, section of nextSections when sid != lastSection.id and sid == @info.matrix.currentLoop.start
-                    nextSection = section
-                    break
-                
-                if not nextSection
-                    for sid, section of nextSections when allSections[sid]
+                    for sid, section of nextSections when sid != lastSection.id and sid == @info.matrix.currentLoop.start
                         nextSection = section
-                        direction = @matrixLoopDirection(section, nextNode) 
-                        break if direction == 1
+                        break
+                
+                    if not nextSection
+                        for sid, section of nextSections when allSections[sid]
+                            nextSection = section
+                            direction = @matrixLoopDirection(section, nextNode) 
+                            break if direction == 1
 
-                if not nextSection
-                    for sid, section of nextSections when not @info.matrix.currentLoop.sections[sid]
-                        continue if @info.matrix.pathsAnalyzed[[@info.matrix.currentLoop.path..., sid].join('__')]
-                        nextSection = section 
-                        direction = @matrixLoopDirection(section, nextNode) 
-                        break if direction == 1
+                    if not nextSection
+                        for sid, section of nextSections when not @info.matrix.currentLoop.sections[sid]
+                            continue if @info.matrix.pathsAnalyzed[[@info.matrix.currentLoop.path..., sid].join('__')]
+                            nextSection = section 
+                            direction = @matrixLoopDirection(section, nextNode) 
+                            break if direction == 1
 
-                @completeMatrixLoop() if nextSection and nextSection.id == @info.matrix.currentLoop.start
+                    @completeMatrixLoop() if nextSection and nextSection.id == @info.matrix.currentLoop.start
 
                 if not nextSection or @info.matrix.currentLoop.completed
                     return unless Object.keys(allSections).length or @info.matrix.totalLoops < totalSections               
@@ -336,6 +347,9 @@ class analyzer.Analyzer extends circuitousObject.Object
                     for sid of loopInfo.sections
                         delete @info.matrix.loops[loopId] if @info.sections[sid].amps == 'infinite'
                         
-        
-
+    # checkPolarizedComponents: ->
+    #     changeMade = false
+    #     for cid, component of @board.components when component.nodes.length > 1 and not component.voltage
+    #         section = @info.sections[@info.components[cid]]
+    #         if section.amps > 0
         

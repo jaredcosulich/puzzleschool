@@ -28,6 +28,7 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.run = function() {
     var cid, component, componentInfo, section, sectionId, _ref, _ref1;
+    this.init();
     this.analyze();
     this.createMatrix();
     this.deleteShorts();
@@ -140,6 +141,7 @@ analyzer.Analyzer = (function(_super) {
     if (this.info.components[component.id]) {
       return false;
     }
+    component.direction = (this.compareNodes(node, this.boardNodes(component)[1]) ? 1 : -1);
     if (component.voltage) {
       section.direction = (node.negative ? 1 : -1);
       voltage = component.voltage * section.direction;
@@ -167,11 +169,18 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.endSection = function(section) {
+    var cid, component;
     if (!Object.keys(section.components).length) {
       return;
     }
     if (!section.direction) {
       section.direction = 1;
+    }
+    if (section.direction === -1) {
+      for (cid in section.components) {
+        component = this.board.componentsAndWires()[cid];
+        component.direction = component.direction * -1;
+      }
     }
     return this.recordSection(section, component);
   };
@@ -378,49 +387,51 @@ analyzer.Analyzer = (function(_super) {
         }
         lastSection = nextSection;
         nextSection = null;
-        nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
-        if (Object.keys(nextSections).length > 2) {
-          this.addMatrixIndentityLoop(nextNode, nextSections);
-        }
-        for (sid in nextSections) {
-          section = nextSections[sid];
-          if (!(sid !== lastSection.id && sid === this.info.matrix.currentLoop.start)) {
-            continue;
+        if (nextNode) {
+          nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
+          if (Object.keys(nextSections).length > 2) {
+            this.addMatrixIndentityLoop(nextNode, nextSections);
           }
-          nextSection = section;
-          break;
-        }
-        if (!nextSection) {
           for (sid in nextSections) {
             section = nextSections[sid];
-            if (!allSections[sid]) {
+            if (!(sid !== lastSection.id && sid === this.info.matrix.currentLoop.start)) {
               continue;
             }
             nextSection = section;
-            direction = this.matrixLoopDirection(section, nextNode);
-            if (direction === 1) {
-              break;
+            break;
+          }
+          if (!nextSection) {
+            for (sid in nextSections) {
+              section = nextSections[sid];
+              if (!allSections[sid]) {
+                continue;
+              }
+              nextSection = section;
+              direction = this.matrixLoopDirection(section, nextNode);
+              if (direction === 1) {
+                break;
+              }
             }
           }
-        }
-        if (!nextSection) {
-          for (sid in nextSections) {
-            section = nextSections[sid];
-            if (!(!this.info.matrix.currentLoop.sections[sid])) {
-              continue;
-            }
-            if (this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
-              continue;
-            }
-            nextSection = section;
-            direction = this.matrixLoopDirection(section, nextNode);
-            if (direction === 1) {
-              break;
+          if (!nextSection) {
+            for (sid in nextSections) {
+              section = nextSections[sid];
+              if (!(!this.info.matrix.currentLoop.sections[sid])) {
+                continue;
+              }
+              if (this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
+                continue;
+              }
+              nextSection = section;
+              direction = this.matrixLoopDirection(section, nextNode);
+              if (direction === 1) {
+                break;
+              }
             }
           }
-        }
-        if (nextSection && nextSection.id === this.info.matrix.currentLoop.start) {
-          this.completeMatrixLoop();
+          if (nextSection && nextSection.id === this.info.matrix.currentLoop.start) {
+            this.completeMatrixLoop();
+          }
         }
         if (!nextSection || this.info.matrix.currentLoop.completed) {
           if (!(Object.keys(allSections).length || this.info.matrix.totalLoops < totalSections)) {

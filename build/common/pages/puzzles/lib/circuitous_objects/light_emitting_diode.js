@@ -20,13 +20,13 @@ lightEmittingDiode.LightEmittingDiode = (function(_super) {
 
   LightEmittingDiode.prototype.nodes = [
     {
-      x: -16,
-      y: 39,
-      positive: true
-    }, {
       x: 16,
       y: 39,
       negative: true
+    }, {
+      x: -16,
+      y: 39,
+      positive: true
     }
   ];
 

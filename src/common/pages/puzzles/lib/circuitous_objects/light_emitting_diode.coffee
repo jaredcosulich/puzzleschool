@@ -8,8 +8,8 @@ class lightEmittingDiode.LightEmittingDiode extends circuitousObject.Object
         y: 25
         
     nodes: [
-        {x: -16, y: 39, positive: true}
         {x: 16, y: 39, negative: true}
+        {x: -16, y: 39, positive: true}
     ]
         
     constructor: ({}) ->
