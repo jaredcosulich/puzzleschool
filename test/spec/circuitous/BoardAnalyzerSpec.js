@@ -1,4 +1,4 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -159,16 +159,14 @@ describe("BoardAnalyzer", function() {
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
-                                var circuit = board.analyzer.run();
-                                expect(circuit.complete).toBe(true);
-                                expect(circuit.amps).toBe('infinite');
-                                expect(circuit.resistance).toBe(0);
+                                var componentInfo = board.analyzer.run();
+                                expect(componentInfo[battery.id].amps).toBe('infinite');
                             });
 
                             it('should provide no amps to either bulb', function() {
                                 board.moveElectricity();
-                                expect(bulb.current).toBe(0);
-                                expect(bulb2.current).toBe(0);
+                                expect(bulb.current).toBe(undefined);
+                                expect(bulb2.current).toBe(undefined);
                             });                            
                         });
 
@@ -178,24 +176,22 @@ describe("BoardAnalyzer", function() {
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
-                                var circuit = board.analyzer.run();
-                                expect(circuit.complete).toBe(true);
-                                expect(circuit.amps).toBe('infinite');
-                                expect(circuit.resistance).toBe(0);
+                                var componentInfo = board.analyzer.run();
+                                expect(componentInfo[battery.id].amps).toBe('infinite');
                             });
 
                             it('should provide no amps to either bulb', function() {
                                 board.moveElectricity();
-                                expect(bulb.current).toBe(0);
-                                expect(bulb2.current).toBe(0);
+                                expect(bulb.current).toBe(undefined);
+                                expect(bulb2.current).toBe(undefined);
                             });
                             
                             describe('and both bulbs removed', function() {
                                 beforeEach(function() {
                                     board.removeComponent(bulb);
-                                    drawOrEraseWire(board, board.boardPosition(bulb.currentNodes()[0]), 1, 0);
                                     board.removeComponent(bulb2);
-                                    drawOrEraseWire(board, board.boardPosition(bulb2.currentNodes()[0]), 1, 0);
+                                    drawOrEraseWire(board, board.boardPosition(bulb2.currentNodes()[0]), -1, 0);
+                                    drawOrEraseWire(board, wireAt(board, 1).nodes[0], 0, 1);
                                 })
                                 
                                 it('all wires should have excessive_current class', function() {
@@ -264,16 +260,14 @@ describe("BoardAnalyzer", function() {
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
-                                var circuit = board.analyzer.run();
-                                expect(circuit.complete).toBe(true);
-                                expect(circuit.amps).toBe('infinite');
-                                expect(circuit.resistance).toBe(0);
+                                var componentInfo = board.analyzer.run();
+                                expect(componentInfo[battery.id].amps).toBe('infinite');
                             });
 
                             it('should provide no amps to either bulb', function() {
                                 board.moveElectricity();
-                                expect(bulb.current).toBe(0);
-                                expect(bulb2.current).toBe(0);
+                                expect(bulb.current).toBe(undefined);
+                                expect(bulb2.current).toBe(undefined);
                             });                            
                         });
                     });
@@ -324,7 +318,7 @@ describe("BoardAnalyzer", function() {
                 expect(wireAt(board, 1).current).toEqual(1.62)
                 expect(bulbs[0].current).toEqual(0.9)             
                 expect(bulbs[1].current).toEqual(0.72)             
-                expect(bulbs[2].current).toEqual(0.36)             
+                expect(bulbs[2].current).toEqual(-0.36)             
                 expect(bulbs[3].current).toEqual(0.36)             
             });
             
@@ -352,7 +346,7 @@ describe("BoardAnalyzer", function() {
                     expect(bulbs[1].current).toEqual(0.75);             
                     expect(bulbs[2].current).toEqual(0.3);             
                     expect(bulbs[3].current).toEqual(0.3);             
-                    expect(bulbs[4].current).toEqual(0.15);    
+                    expect(bulbs[4].current).toEqual(0.15);   
                 });
             })
         });
