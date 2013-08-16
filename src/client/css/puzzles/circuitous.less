@@ -4,6 +4,7 @@
 
 @height: 640px;
 @width: 960px;
+@border: 8px;
 
 .page {
     .no_select();
@@ -12,23 +13,25 @@
 .circuitous {
     height: @height;
     width: @width;
+    outline: 3px solid darken(@white, 25%);
     margin: 18px 0 0 -12px;
     position: relative;
     overflow: hidden;
-    border: 1px solid black;
+    background-color: #FFFFFF;
     .no_select();
 
     .board {
         float: left;
-        width: @height;
+        border: @border solid white;
+        height: @height - (@border * 2);  
+        width: @height - (@border * 2);
         overflow: hidden;
         margin-bottom: 12px;
-        background-color: lighten(tan, 25%);
-        height: @height;  
+        .inner-shadow(0, 0, 24px, 80%);
         
         .cell {
-            border-right: 1px solid @lightgrey;
-            border-bottom: 1px solid @lightgrey;
+            border-right: 1px dashed @lightestgrey;
+            border-bottom: 1px dashed @lightestgrey;
             content: "\00a0";
             float: left;
         } 
@@ -54,11 +57,13 @@
     
     .right_side {
         float: right;
+        border: @border solid white;
+        border-left: none;
         
         .options {
-            width: (@width - @height);
-            height: (@height * 2 / 3);
-            background-color: red;
+            .inner-shadow(0, 0, 24px, 80%);            
+            width: (@width - @height - (@border * 2));
+            height: (@height * 2 / 3 - (@border * 2));
             border-spacing: 0;
             border-collapse: collapse;
             .option {
@@ -73,9 +78,8 @@
         }
         
         .menu {
-            width: (@width - @height);
-            height: (@height / 3);
-            background-color: green;
+            width: (@width - @height - (@border * 2));
+            height: (@height / 3 - (@border * 2));
         }
     }
     
@@ -110,6 +114,7 @@
         border: 1px solid @black;
         background-color: @white;
         .rounded(6px);
+        z-index: 99;
         
         .items {
             width: 100%;

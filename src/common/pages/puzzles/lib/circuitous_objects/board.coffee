@@ -6,7 +6,9 @@ Client = require('../common_objects/client').Client
 Animation = require('../common_objects/animation').Animation
 
 class board.Board extends circuitousObject.Object
-    constructor: ({@el, @cellDimension}) ->
+    cellDimension: 32
+    
+    constructor: ({@el}) ->
         @init()
 
     init: ->
@@ -50,7 +52,7 @@ class board.Board extends circuitousObject.Object
         delete @components[component.id]
             
     roundedCoordinates: (coords, offset) ->
-        halfDim = @cellDimension / 2
+        halfDim = @cellDimension / 2 - (parseInt(@el.css('border')) - 1)
         offsetCoords = 
             x: coords.x - (offset?.left or offset?.x or 0) + halfDim
             y: coords.y - (offset?.top or offset?.y or 0) + halfDim
@@ -63,15 +65,15 @@ class board.Board extends circuitousObject.Object
     boardPosition: (componentPosition) ->
         offset = @el.offset()
         position = JSON.parse(JSON.stringify(componentPosition))
-        position.x = componentPosition.x - offset.left + 1
-        position.y = componentPosition.y - offset.top + 1
+        position.x = componentPosition.x - offset.left# + 7
+        position.y = componentPosition.y - offset.top# + 7
         return position
 
     componentPosition: (boardPosition) ->
         offset = @el.offset()
         position = JSON.parse(JSON.stringify(boardPosition))
-        position.x = boardPosition.x + offset.left - 1
-        position.y = boardPosition.y + offset.top - 1
+        position.x = boardPosition.x + offset.left# + 7
+        position.y = boardPosition.y + offset.top# + 7
         return position
 
     componentsAndWires: ->

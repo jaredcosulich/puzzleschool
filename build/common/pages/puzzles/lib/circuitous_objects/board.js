@@ -19,8 +19,10 @@ board.Board = (function(_super) {
 
   __extends(Board, _super);
 
+  Board.prototype.cellDimension = 32;
+
   function Board(_arg) {
-    this.el = _arg.el, this.cellDimension = _arg.cellDimension;
+    this.el = _arg.el;
     this.init();
   }
 
@@ -89,7 +91,7 @@ board.Board = (function(_super) {
 
   Board.prototype.roundedCoordinates = function(coords, offset) {
     var halfDim, offsetCoords;
-    halfDim = this.cellDimension / 2;
+    halfDim = this.cellDimension / 2 - (parseInt(this.el.css('border')) - 1);
     offsetCoords = {
       x: coords.x - ((offset != null ? offset.left : void 0) || (offset != null ? offset.x : void 0) || 0) + halfDim,
       y: coords.y - ((offset != null ? offset.top : void 0) || (offset != null ? offset.y : void 0) || 0) + halfDim
@@ -104,8 +106,8 @@ board.Board = (function(_super) {
     var offset, position;
     offset = this.el.offset();
     position = JSON.parse(JSON.stringify(componentPosition));
-    position.x = componentPosition.x - offset.left + 1;
-    position.y = componentPosition.y - offset.top + 1;
+    position.x = componentPosition.x - offset.left;
+    position.y = componentPosition.y - offset.top;
     return position;
   };
 
@@ -113,8 +115,8 @@ board.Board = (function(_super) {
     var offset, position;
     offset = this.el.offset();
     position = JSON.parse(JSON.stringify(boardPosition));
-    position.x = boardPosition.x + offset.left - 1;
-    position.y = boardPosition.y + offset.top - 1;
+    position.x = boardPosition.x + offset.left;
+    position.y = boardPosition.y + offset.top;
     return position;
   };
 

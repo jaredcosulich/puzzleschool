@@ -10,8 +10,7 @@ describe("BoardAnalyzer", function() {
         });
         
         board = new circuitous.Board({
-            el: $('.board'),
-            cellDimension: 32
+            el: $('.board')
         })
 
         battery = createComponent(board, 'Battery')

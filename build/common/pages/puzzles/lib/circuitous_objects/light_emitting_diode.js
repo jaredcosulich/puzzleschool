@@ -39,7 +39,7 @@ lightEmittingDiode.LightEmittingDiode = (function(_super) {
 
   LightEmittingDiode.prototype.setCurrent = function(current) {
     this.current = current;
-    if (this.current > 0) {
+    if (this.current) {
       return this.el.css({
         backgroundColor: 'yellow'
       });

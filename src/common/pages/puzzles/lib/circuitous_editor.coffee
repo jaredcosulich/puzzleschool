@@ -9,7 +9,6 @@ class circuitousEditor.EditorHelper
     initOptions: ->
         @board = new circuitous.Board
             el: @$('.board')
-            cellDimension: 32
         
         @options = new circuitous.Options
             el: @$('.options')
