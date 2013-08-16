@@ -13,7 +13,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @analyze()
         @createMatrix()
         @deleteShorts()
-        console.log(@info.matrix)
+        # console.log(@info.matrix)
         @saveMatrixIdentityLoops()
         # console.log(JSON.stringify(@info.matrix))
         @solveMatrix()
@@ -247,9 +247,9 @@ class analyzer.Analyzer extends circuitousObject.Object
         allSections = {}
         allSections[sid] = true for sid of @info.sections
 
-        for cid, component of @board.components# when component.voltage
+        for cid, component of @board.components
             @addMatrixLoop()
-            nextSection = componentSection = @info.sections[@info.components[cid]]
+            nextSection = @info.sections[@info.components[cid]]
             @addToMatrixLoop(nextSection, 1, nextSection.nodes[0])
             delete allSections[nextSection.id]
             

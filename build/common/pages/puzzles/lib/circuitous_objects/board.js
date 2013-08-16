@@ -138,8 +138,12 @@ board.Board = (function(_super) {
     var _this = this;
     this.analyzer = new Analyzer(this);
     this.electricalAnimation = new Animation();
-    return $('.menu').bind('click', function() {
-      return _this.moveElectricity();
+    return this.electricalAnimation.start({
+      method: function(_arg) {
+        var deltaTime, elapsed;
+        deltaTime = _arg.deltaTime, elapsed = _arg.elapsed;
+        return _this.moveElectricity(deltaTime, elapsed);
+      }
     });
   };
 

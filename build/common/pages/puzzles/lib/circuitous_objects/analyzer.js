@@ -32,7 +32,6 @@ analyzer.Analyzer = (function(_super) {
     this.analyze();
     this.createMatrix();
     this.deleteShorts();
-    console.log(this.info.matrix);
     this.saveMatrixIdentityLoops();
     this.solveMatrix();
     this.checkPolarizedComponents();
@@ -390,7 +389,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.createMatrix = function() {
-    var allSections, cid, component, componentSection, direction, index, lastSection, nextNode, nextSection, nextSections, path, section, sectionId, sid, totalSections, _i, _len, _ref;
+    var allSections, cid, component, direction, index, lastSection, nextNode, nextSection, nextSections, path, section, sectionId, sid, totalSections, _i, _len, _ref;
     this.initMatrix();
     totalSections = Object.keys(this.info.sections);
     allSections = {};
@@ -401,7 +400,7 @@ analyzer.Analyzer = (function(_super) {
     for (cid in _ref) {
       component = _ref[cid];
       this.addMatrixLoop();
-      nextSection = componentSection = this.info.sections[this.info.components[cid]];
+      nextSection = this.info.sections[this.info.components[cid]];
       this.addToMatrixLoop(nextSection, 1, nextSection.nodes[0]);
       delete allSections[nextSection.id];
       nextNode = nextSection.nodes[0];
