@@ -401,6 +401,9 @@ analyzer.Analyzer = (function(_super) {
       component = _ref[cid];
       this.addMatrixLoop();
       nextSection = this.info.sections[this.info.components[cid]];
+      if (!nextSection) {
+        continue;
+      }
       this.addToMatrixLoop(nextSection, 1, nextSection.nodes[0]);
       delete allSections[nextSection.id];
       nextNode = nextSection.nodes[0];

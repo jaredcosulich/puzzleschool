@@ -250,6 +250,8 @@ class analyzer.Analyzer extends circuitousObject.Object
         for cid, component of @board.components
             @addMatrixLoop()
             nextSection = @info.sections[@info.components[cid]]
+            continue if not nextSection
+            
             @addToMatrixLoop(nextSection, 1, nextSection.nodes[0])
             delete allSections[nextSection.id]
             

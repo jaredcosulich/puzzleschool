@@ -450,6 +450,19 @@ describe("BoardAnalyzer", function() {
                 expect(bulbs[2].current).toEqual(1.64);
             })
         });
+
+        
+        describe('and a circuit with a mid-wire short', function() {
+            var bulbs;
+            
+            beforeEach(function() {
+                console.log('weird_short')
+            });
+            
+            it('should have all the correct values', function() {
+                expect(false).toBe(true)
+            })
+        });
     });
     
 });
