@@ -32,6 +32,7 @@ analyzer.Analyzer = (function(_super) {
     this.analyze();
     this.createMatrix();
     this.deleteShorts();
+    console.log(this.info.matrix);
     this.saveMatrixIdentityLoops();
     this.solveMatrix();
     this.checkPolarizedComponents();
@@ -284,10 +285,11 @@ analyzer.Analyzer = (function(_super) {
     }
   };
 
-  Analyzer.prototype.addToMatrixLoop = function(section, direction) {
+  Analyzer.prototype.addToMatrixLoop = function(section, direction, node) {
     this.info.matrix.currentLoop.path.push(section.id);
-    if (!this.info.matrix.currentLoop.start) {
-      this.info.matrix.currentLoop.start = section.id;
+    this.info.matrix.currentLoop.nodes["" + node.x + ":" + node.y] = true;
+    if (!this.info.matrix.currentLoop.startNode) {
+      this.info.matrix.currentLoop.startNode = node;
     }
     this.info.matrix.currentLoop.sections[section.id] = {
       resistance: section.resistance * direction * -1
@@ -298,7 +300,7 @@ analyzer.Analyzer = (function(_super) {
     if (this.compareNodes.apply(this, section.nodes)) {
       this.completeMatrixLoop();
     }
-    return this.info.matrix.pathsAnalyzed[this.info.matrix.currentLoop.path.join('__')];
+    return this.info.matrix.pathsAnalyzed[this.info.matrix.currentLoop.path.join('__')] = true;
   };
 
   Analyzer.prototype.initMatrix = function() {
@@ -315,7 +317,8 @@ analyzer.Analyzer = (function(_super) {
     return this.info.matrix.currentLoop = {
       voltage: 0,
       sections: {},
-      path: []
+      path: [],
+      nodes: {}
     };
   };
 
@@ -387,7 +390,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.createMatrix = function() {
-    var allSectionKeys, allSections, cid, component, componentSection, direction, index, lastSection, nextNode, nextSection, nextSections, path, section, sectionId, sid, totalSections, _i, _len, _ref;
+    var allSections, cid, component, componentSection, direction, index, lastSection, nextNode, nextSection, nextSections, path, section, sectionId, sid, totalSections, _i, _len, _ref;
     this.initMatrix();
     totalSections = Object.keys(this.info.sections);
     allSections = {};
@@ -397,70 +400,61 @@ analyzer.Analyzer = (function(_super) {
     _ref = this.board.components;
     for (cid in _ref) {
       component = _ref[cid];
-      if (!component.voltage) {
-        continue;
-      }
       this.addMatrixLoop();
       nextSection = componentSection = this.info.sections[this.info.components[cid]];
-      this.addToMatrixLoop(nextSection, 1);
+      this.addToMatrixLoop(nextSection, 1, nextSection.nodes[0]);
       delete allSections[nextSection.id];
-      nextNode = nextSection.nodes[1];
-      while (Object.keys(allSections).length || this.info.matrix.totalLoops < totalSections || !this.info.matrix.currentLoop.completed || this.info.matrix.pathsToTry.length) {
+      nextNode = nextSection.nodes[0];
+      while (nextSection) {
+        nextNode = this.otherNode(nextSection.nodes, nextNode);
         lastSection = nextSection;
         nextSection = null;
-        if (nextNode) {
-          nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
-          if (Object.keys(nextSections).length > 2) {
-            this.addMatrixIndentityLoop(nextNode, nextSections);
-            for (sid in nextSections) {
-              if (allSections[sid]) {
-                this.info.matrix.pathsToTry.push(this.info.matrix.currentLoop.path.concat([sid]));
+        if (!nextNode || this.compareNodes(nextNode, this.info.matrix.currentLoop.startNode)) {
+          this.completeMatrixLoop();
+        } else {
+          if (nextNode && !this.info.matrix.currentLoop.nodes["" + nextNode.x + ":" + nextNode.y]) {
+            nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
+            if (Object.keys(nextSections).length > 2) {
+              this.addMatrixIndentityLoop(nextNode, nextSections);
+              for (sid in nextSections) {
+                if (allSections[sid] && !this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
+                  this.info.matrix.pathsToTry.push(this.info.matrix.currentLoop.path.concat([sid]));
+                }
               }
             }
-          }
-          for (sid in nextSections) {
-            section = nextSections[sid];
-            if (!(sid !== lastSection.id && sid === this.info.matrix.currentLoop.start)) {
-              continue;
-            }
-            nextSection = section;
-            break;
-          }
-          if (!nextSection) {
-            for (sid in nextSections) {
-              section = nextSections[sid];
-              if (!allSections[sid]) {
-                continue;
-              }
-              nextSection = section;
-              direction = this.matrixLoopDirection(section, nextNode);
-              if (direction === 1) {
-                break;
+            if (!nextSection) {
+              for (sid in nextSections) {
+                section = nextSections[sid];
+                if (!allSections[sid]) {
+                  continue;
+                }
+                nextSection = section;
+                direction = this.matrixLoopDirection(section, nextNode);
+                if (direction === 1) {
+                  break;
+                }
               }
             }
-          }
-          if (!nextSection) {
-            for (sid in nextSections) {
-              section = nextSections[sid];
-              if (!(!this.info.matrix.currentLoop.sections[sid])) {
-                continue;
-              }
-              if (this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
-                continue;
-              }
-              nextSection = section;
-              direction = this.matrixLoopDirection(section, nextNode);
-              if (direction === 1) {
-                break;
+            if (!nextSection) {
+              for (sid in nextSections) {
+                section = nextSections[sid];
+                if (!(!this.info.matrix.currentLoop.sections[sid])) {
+                  continue;
+                }
+                if (this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
+                  continue;
+                }
+                nextSection = section;
+                direction = this.matrixLoopDirection(section, nextNode);
+                if (direction === 1) {
+                  break;
+                }
               }
             }
-          }
-          if (nextSection && nextSection.id === this.info.matrix.currentLoop.start) {
-            this.completeMatrixLoop();
           }
         }
         if (!nextSection || this.info.matrix.currentLoop.completed) {
-          if (!(Object.keys(allSections).length || this.info.matrix.totalLoops < totalSections)) {
+          if (this.info.matrix.totalLoops >= totalSections - 1 && !Object.keys(allSections).length) {
             return;
           }
           this.addMatrixLoop();
@@ -471,24 +465,17 @@ analyzer.Analyzer = (function(_super) {
               nextSection = this.info.sections[sectionId];
               direction = this.matrixLoopDirection(nextSection, nextNode);
               if (index < path.length - 1) {
-                this.addToMatrixLoop(nextSection, direction);
+                this.addToMatrixLoop(nextSection, direction, nextNode);
                 delete allSections[nextSection.id];
                 nextNode = this.otherNode(nextSection.nodes, nextNode);
               }
             }
-          } else {
-            if ((allSectionKeys = Object.keys(allSections)).length) {
-              nextSection = this.info.sections[allSectionKeys[0]];
-            } else {
-              nextSection = componentSection;
-            }
-            direction = 1;
-            nextNode = nextSection.nodes[0];
           }
         }
-        this.addToMatrixLoop(nextSection, direction);
-        delete allSections[nextSection.id];
-        nextNode = this.otherNode(nextSection.nodes, nextNode);
+        if (nextSection) {
+          this.addToMatrixLoop(nextSection, direction, nextNode);
+          delete allSections[nextSection.id];
+        }
       }
     }
   };
