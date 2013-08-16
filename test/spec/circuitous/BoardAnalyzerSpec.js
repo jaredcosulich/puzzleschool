@@ -122,7 +122,46 @@ describe("BoardAnalyzer", function() {
                             expect(componentInfo[battery.id].amps).toBe('infinite') ;
                             expect(componentInfo[bulb.id].amps).toBeUndefined();
                         });
+                        
+                        describe('that is incomplete', function() {
+                            beforeEach(function() {
+                                var node = wireAt(board, 42).nodes[0];
+                                drawOrEraseWire(board, node, 0, 1);
+                            });
+                            
+                            it('should provide the lightbulb with current', function() {
+                                var componentInfo = board.analyzer.run();
+                                expect(componentInfo[bulb.id].amps).toEqual(1.8);
+                            });
+                        });
                     });
+
+                    
+                    describe('with a short circuit on the other side of the bulb', function() {
+                        beforeEach(function() {
+                            var node = wireAt(board, 18).nodes[0];
+                            drawOrEraseWire(board, node, -13, 0);                            
+                        });
+                        
+                        it('should create a circuit with infinite amps and no lightbulb', function() {
+                            var componentInfo = board.analyzer.run();
+                            expect(componentInfo[battery.id].amps).toBe('infinite') ;
+                            expect(componentInfo[bulb.id].amps).toBeUndefined();                            
+                        });
+                        
+                        describe('that is incomplete', function() {
+                            beforeEach(function() {
+                                var node = wireAt(board, 48).nodes[0];
+                                drawOrEraseWire(board, node, 1, 0);
+                            });
+                            
+                            it('should provide the lightbulb with current', function() {
+                                var componentInfo = board.analyzer.run();
+                                expect(componentInfo[bulb.id].amps).toEqual(1.8);
+                            });
+                        });
+                    });
+
 
                     describe('with a parallel light emitting diode', function() {
                         var bulb2;

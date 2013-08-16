@@ -193,21 +193,22 @@ class analyzer.Analyzer extends circuitousObject.Object
         
     completeMatrixLoop: (loopInfo=@info.matrix.currentLoop)->
         loopInfo.completed = true
+        loopInfo.id = (sid for sid of loopInfo.sections).sort().join('__')
+        return if @info.matrix.loops[loopInfo.id]
         
         for sid of loopInfo.sections
             @info.matrix.sections.push(sid) if @info.matrix.sections.indexOf(sid) == -1
         
-        loopInfo.id = (sid for sid of loopInfo.sections).sort().join('__')
         @info.matrix.totalLoops += 1
         @info.matrix.loops[loopInfo.id] = loopInfo
 
-        console.log('')
-        @board.clearColors()
-        for sid of loopInfo.sections
-            @board.color((cid for cid of @info.sections[sid].components), 2)
-            console.log('completeLoop', @info.matrix.sections.indexOf(sid), loopInfo.sections[sid].resistance)
-        debugger
-        @board.clearColors()
+        # console.log('')
+        # @board.clearColors()
+        # for sid of loopInfo.sections
+        #     @board.color((cid for cid of @info.sections[sid].components), 2)
+        #     console.log('completeLoop', @info.matrix.sections.indexOf(sid), loopInfo.sections[sid].resistance, @info.matrix)
+        # debugger
+        # @board.clearColors()
         
     matrixLoopDirection: (section, startingNode) ->
         nodeAligned = @compareNodes(section.nodes[0], startingNode)
@@ -254,10 +255,6 @@ class analyzer.Analyzer extends circuitousObject.Object
             while Object.keys(allSections).length or @info.matrix.totalLoops < totalSections or 
                   not @info.matrix.currentLoop.completed or @info.matrix.pathsToTry.length
                 
-                if @info.matrix.totalLoops > 100
-                    console.log('figure out how to get rid of this')
-                    return 
-
                 lastSection = nextSection
                 nextSection = null
                 if nextNode
@@ -325,9 +322,9 @@ class analyzer.Analyzer extends circuitousObject.Object
         sectionIds = @info.matrix.sections    
 
         # console.log(sectionIds)
-        for loopId, loopInfo of @info.matrix.loops
-            console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
-        console.log('')
+        # for loopId, loopInfo of @info.matrix.loops
+        #     console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
+        # console.log('')
 
         for sectionId, variableIndex in sectionIds
             for factorLoopId, factorLoop of @info.matrix.loops
@@ -339,7 +336,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                 tested = false unless factorLoop.sections[sectionId].adjusted != 0
                 break if tested
             factor = factorLoop.sections[sectionId].adjusted
-            console.log(variableIndex, factor)
+            # console.log(variableIndex, factor)
             continue unless factor
                 
             for adjustingLoopId, adjustingLoop of @info.matrix.loops when adjustingLoopId != factorLoopId
@@ -351,9 +348,9 @@ class analyzer.Analyzer extends circuitousObject.Object
                 
                 adjustingLoop.adjustedVoltage = adjustingLoop.adjustedVoltage - (factorLoop.adjustedVoltage * (adjustingfactor/factor))
         
-            for loopId, loopInfo of @info.matrix.loops
-                console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
-            console.log('')
+            # for loopId, loopInfo of @info.matrix.loops
+            #     console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
+            # console.log('')
             
         for loopId, loopInfo of @info.matrix.loops
             variableCount = 0
@@ -369,7 +366,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                 break if loopInfo.sections[sectionId].adjusted != 0
             amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0
             # console.log(index+1, amps)
-            @info.sections[sectionId].amps = amps
+            @info.sections[sectionId].amps = amps unless @info.sections[sectionId].amps
 
         # console.log('')
         # for loopId, loopInfo of @info.matrix.loops
