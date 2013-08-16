@@ -119,7 +119,6 @@ describe("BoardAnalyzer", function() {
                         
                         it('should create a circuit with infinite amps and no lightbulb', function() {
                             var componentInfo = board.analyzer.run();
-                            console.log(componentInfo)
                             expect(componentInfo[battery.id].amps).toBe('infinite') ;
                             expect(componentInfo[bulb.id].amps).toBeUndefined();
                         });

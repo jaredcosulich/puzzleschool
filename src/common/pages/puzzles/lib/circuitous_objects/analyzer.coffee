@@ -180,11 +180,12 @@ class analyzer.Analyzer extends circuitousObject.Object
     initMatrix: ->
         @info.matrix.loops = {}
         @info.matrix.sections = []
+        @info.matrix.pathsToTry = []
         @info.matrix.pathsAnalyzed = {}
         @info.matrix.totalLoops = 0
            
     addMatrixLoop: ->
-        # @board.clearColors()
+        @board.clearColors()
         @info.matrix.currentLoop = {voltage: 0, sections: {}, path: []}
 
     completeMatrixLoop: (loopInfo=@info.matrix.currentLoop)->
@@ -243,9 +244,6 @@ class analyzer.Analyzer extends circuitousObject.Object
                 if nextNode
                     nextSections = @info.node["#{nextNode.x}:#{nextNode.y}"]
             
-                    if Object.keys(nextSections).length > 2
-                        @addMatrixIndentityLoop(nextNode, nextSections)
-                
                     for sid, section of nextSections when sid != lastSection.id and sid == @info.matrix.currentLoop.start
                         nextSection = section
                         break
@@ -268,9 +266,28 @@ class analyzer.Analyzer extends circuitousObject.Object
                 if not nextSection or @info.matrix.currentLoop.completed
                     return unless Object.keys(allSections).length or @info.matrix.totalLoops < totalSections               
                     @addMatrixLoop()
-                    nextSection = componentSection
-                    direction = 1
-                    nextNode = nextSection.nodes[0]
+                    if (path = @info.matrix.pathsToTry.splice(0, 1)[0])
+                        nextNode = @info.sections[path[0]].nodes[0]
+                        for sectionId, index in path
+                            nextSection = @info.sections[sectionId]
+                            direction = @matrixLoopDirection(nextSection, nextNode)
+                            if index < path.length - 1
+                                @addToMatrixLoop(nextSection, direction)
+                                delete allSections[nextSection.id]
+                                nextNode = @otherNode(nextSection.nodes, nextNode)                            
+                    else 
+                        if (allSectionKeys = Object.keys(allSections)).length
+                            nextSection = @info.sections[allSectionKeys[0]]
+                        else
+                            nextSection = componentSection
+                        direction = 1
+                        nextNode = nextSection.nodes[0]
+                else
+                    if Object.keys(nextSections).length > 2
+                        @addMatrixIndentityLoop(nextNode, nextSections)
+                        for sid of nextSections when allSections[sid] and sid != nextSection.id
+                            @info.matrix.pathsToTry.push(@info.matrix.currentLoop.path.concat([sid]))
+                        
                 
                 @addToMatrixLoop(nextSection, direction)
                 delete allSections[nextSection.id]            

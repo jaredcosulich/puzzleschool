@@ -303,11 +303,13 @@ analyzer.Analyzer = (function(_super) {
   Analyzer.prototype.initMatrix = function() {
     this.info.matrix.loops = {};
     this.info.matrix.sections = [];
+    this.info.matrix.pathsToTry = [];
     this.info.matrix.pathsAnalyzed = {};
     return this.info.matrix.totalLoops = 0;
   };
 
   Analyzer.prototype.addMatrixLoop = function() {
+    this.board.clearColors();
     return this.info.matrix.currentLoop = {
       voltage: 0,
       sections: {},
@@ -365,7 +367,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.createMatrix = function() {
-    var allSections, cid, component, componentSection, direction, lastSection, nextNode, nextSection, nextSections, section, sid, totalSections, _ref;
+    var allSectionKeys, allSections, cid, component, componentSection, direction, index, lastSection, nextNode, nextSection, nextSections, path, section, sectionId, sid, totalSections, _i, _len, _ref;
     this.initMatrix();
     totalSections = Object.keys(this.info.sections);
     allSections = {};
@@ -392,9 +394,6 @@ analyzer.Analyzer = (function(_super) {
         nextSection = null;
         if (nextNode) {
           nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
-          if (Object.keys(nextSections).length > 2) {
-            this.addMatrixIndentityLoop(nextNode, nextSections);
-          }
           for (sid in nextSections) {
             section = nextSections[sid];
             if (!(sid !== lastSection.id && sid === this.info.matrix.currentLoop.start)) {
@@ -441,9 +440,36 @@ analyzer.Analyzer = (function(_super) {
             return;
           }
           this.addMatrixLoop();
-          nextSection = componentSection;
-          direction = 1;
-          nextNode = nextSection.nodes[0];
+          if ((path = this.info.matrix.pathsToTry.splice(0, 1)[0])) {
+            nextNode = this.info.sections[path[0]].nodes[0];
+            for (index = _i = 0, _len = path.length; _i < _len; index = ++_i) {
+              sectionId = path[index];
+              nextSection = this.info.sections[sectionId];
+              direction = this.matrixLoopDirection(nextSection, nextNode);
+              if (index < path.length - 1) {
+                this.addToMatrixLoop(nextSection, direction);
+                delete allSections[nextSection.id];
+                nextNode = this.otherNode(nextSection.nodes, nextNode);
+              }
+            }
+          } else {
+            if ((allSectionKeys = Object.keys(allSections)).length) {
+              nextSection = this.info.sections[allSectionKeys[0]];
+            } else {
+              nextSection = componentSection;
+            }
+            direction = 1;
+            nextNode = nextSection.nodes[0];
+          }
+        } else {
+          if (Object.keys(nextSections).length > 2) {
+            this.addMatrixIndentityLoop(nextNode, nextSections);
+            for (sid in nextSections) {
+              if (allSections[sid] && sid !== nextSection.id) {
+                this.info.matrix.pathsToTry.push(this.info.matrix.currentLoop.path.concat([sid]));
+              }
+            }
+          }
         }
         this.addToMatrixLoop(nextSection, direction);
         delete allSections[nextSection.id];
