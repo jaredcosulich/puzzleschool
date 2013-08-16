@@ -344,6 +344,13 @@ class analyzer.Analyzer extends circuitousObject.Object
             # for loopId, loopInfo of @info.matrix.loops
             #     console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
             # console.log('')
+            
+        for loopId, loopInfo of @info.matrix.loops
+            variableCount = 0
+            for sectionId, sectionInfo of loopInfo.sections
+                variableCount += 1 if sectionInfo.adjusted != 0
+            return false if variableCount > 1
+        
         return true
                     
     assignAmps: ->

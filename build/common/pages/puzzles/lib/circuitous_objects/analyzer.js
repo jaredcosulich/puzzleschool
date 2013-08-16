@@ -530,7 +530,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceMatrix = function() {
-    var adjustingLoop, adjustingLoopId, adjustingSection, adjustingSectionId, adjustingVariableIndex, adjustingfactor, factor, factorLoop, factorLoopId, sectionId, sectionIds, testIndex, testSectionId, tested, variableIndex, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
+    var adjustingLoop, adjustingLoopId, adjustingSection, adjustingSectionId, adjustingVariableIndex, adjustingfactor, factor, factorLoop, factorLoopId, loopId, loopInfo, sectionId, sectionIds, sectionInfo, testIndex, testSectionId, tested, variableCount, variableIndex, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
     sectionIds = this.info.matrix.sections;
     for (variableIndex = _i = 0, _len = sectionIds.length; _i < _len; variableIndex = ++_i) {
       sectionId = sectionIds[variableIndex];
@@ -571,6 +571,21 @@ analyzer.Analyzer = (function(_super) {
           adjustingSection.adjusted = adjustingSection.adjusted - (factorLoop.sections[adjustingSectionId].adjusted * (adjustingfactor / factor));
         }
         adjustingLoop.adjustedVoltage = adjustingLoop.adjustedVoltage - (factorLoop.adjustedVoltage * (adjustingfactor / factor));
+      }
+    }
+    _ref2 = this.info.matrix.loops;
+    for (loopId in _ref2) {
+      loopInfo = _ref2[loopId];
+      variableCount = 0;
+      _ref3 = loopInfo.sections;
+      for (sectionId in _ref3) {
+        sectionInfo = _ref3[sectionId];
+        if (sectionInfo.adjusted !== 0) {
+          variableCount += 1;
+        }
+      }
+      if (variableCount > 1) {
+        return false;
       }
     }
     return true;

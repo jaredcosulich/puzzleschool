@@ -248,10 +248,8 @@ describe("BoardAnalyzer", function() {
                         });
                         
                         it('should create a complete circuit with half the amps and twice the resistance', function() {
-                            var circuit = board.analyzer.run();
-                            expect(circuit.complete).toBe(true);
-                            expect(circuit.amps).toBe(0.9);
-                            expect(circuit.resistance).toBe(10);
+                            var componentInfo = board.analyzer.run();
+                            expect(componentInfo[battery.id].amps).toBe(0.9);
                         });
                         
                         it('should provide full amount of amps (half of simple circuit) to bulbs', function() {
