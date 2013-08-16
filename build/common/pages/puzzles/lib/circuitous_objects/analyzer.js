@@ -32,6 +32,7 @@ analyzer.Analyzer = (function(_super) {
     this.analyze();
     this.createMatrix();
     this.deleteShorts();
+    this.saveMatrixIdentityLoops();
     this.solveMatrix();
     this.checkPolarizedComponents();
     componentInfo = {};
@@ -302,6 +303,7 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.initMatrix = function() {
     this.info.matrix.loops = {};
+    this.info.matrix.unsavedIdentityLoops = [];
     this.info.matrix.sections = [];
     this.info.matrix.pathsToTry = [];
     this.info.matrix.pathsAnalyzed = {};
@@ -363,7 +365,22 @@ analyzer.Analyzer = (function(_super) {
         resistance: this.matrixLoopDirection(section, node) * -1
       };
     }
-    return this.completeMatrixLoop(identityLoop);
+    return this.info.matrix.unsavedIdentityLoops.push(identityLoop);
+  };
+
+  Analyzer.prototype.saveMatrixIdentityLoops = function() {
+    var identityLoop, sectionId, _i, _len, _ref;
+    _ref = this.info.matrix.unsavedIdentityLoops;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      identityLoop = _ref[_i];
+      for (sectionId in identityLoop.sections) {
+        if (this.info.matrix.sections.indexOf(sectionId) === -1) {
+          delete identityLoop.sections[sectionId];
+        }
+      }
+      this.completeMatrixLoop(identityLoop);
+    }
+    return delete this.info.matrix.unsavedIdentityLoops;
   };
 
   Analyzer.prototype.createMatrix = function() {

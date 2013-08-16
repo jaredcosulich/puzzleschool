@@ -13,6 +13,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @analyze()
         @createMatrix()
         @deleteShorts()
+        @saveMatrixIdentityLoops()
         # console.log(JSON.stringify(@info.matrix))
         @solveMatrix()
         @checkPolarizedComponents()
@@ -174,11 +175,12 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.matrix.pathsAnalyzed[@info.matrix.currentLoop.path.join('__')]
         
         # @board.color((cid for cid of section.components), 1)
-        # console.log('add to loop', @info.matrix.totalLoops, direction, @info.matrix.currentLoop.voltage, section.resistance * direction * -1)
+        # console.log('add to loop', @info.matrix.totalLoops, direction, @info.matrix.currentLoop.voltage, section.resistance * direction * -1, section.id)
         # debugger
 
     initMatrix: ->
         @info.matrix.loops = {}
+        @info.matrix.unsavedIdentityLoops = []
         @info.matrix.sections = []
         @info.matrix.pathsToTry = []
         @info.matrix.pathsAnalyzed = {}
@@ -187,7 +189,7 @@ class analyzer.Analyzer extends circuitousObject.Object
     addMatrixLoop: ->
         @board.clearColors()
         @info.matrix.currentLoop = {voltage: 0, sections: {}, path: []}
-
+        
     completeMatrixLoop: (loopInfo=@info.matrix.currentLoop)->
         loopInfo.completed = true
         
@@ -217,7 +219,14 @@ class analyzer.Analyzer extends circuitousObject.Object
         identityLoop = {identity: true, voltage: 0, sections: {}}
         for sid, section of sections
             identityLoop.sections[sid] = {resistance: @matrixLoopDirection(section, node) * -1}
-        @completeMatrixLoop(identityLoop)
+        @info.matrix.unsavedIdentityLoops.push(identityLoop)
+        
+    saveMatrixIdentityLoops: ->
+        for identityLoop in @info.matrix.unsavedIdentityLoops
+            for sectionId of identityLoop.sections when @info.matrix.sections.indexOf(sectionId) == -1
+                delete identityLoop.sections[sectionId]
+            @completeMatrixLoop(identityLoop)
+        delete @info.matrix.unsavedIdentityLoops
         
     createMatrix: ->
         @initMatrix()
@@ -287,11 +296,12 @@ class analyzer.Analyzer extends circuitousObject.Object
                         @addMatrixIndentityLoop(nextNode, nextSections)
                         for sid of nextSections when allSections[sid] and sid != nextSection.id
                             @info.matrix.pathsToTry.push(@info.matrix.currentLoop.path.concat([sid]))
-                        
+        
                 
                 @addToMatrixLoop(nextSection, direction)
                 delete allSections[nextSection.id]            
                 nextNode = @otherNode(nextSection.nodes, nextNode)
+                     
     
     fillOutMatrix: ->
         for index, loopInfo of @info.matrix.loops
@@ -304,6 +314,7 @@ class analyzer.Analyzer extends circuitousObject.Object
     reduceMatrix: ->
         sectionIds = @info.matrix.sections    
 
+        # console.log(sectionIds)
         # for loopId, loopInfo of @info.matrix.loops
         #     console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
         # console.log('')
@@ -318,6 +329,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                 tested = false unless factorLoop.sections[sectionId].adjusted != 0
                 break if tested
             factor = factorLoop.sections[sectionId].adjusted
+            # console.log(variableIndex, factor)
             return false unless factor
                 
             for adjustingLoopId, adjustingLoop of @info.matrix.loops when adjustingLoopId != factorLoopId
