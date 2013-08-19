@@ -101,8 +101,7 @@ class analyzer.Analyzer extends circuitousObject.Object
             component.direction = (if @compareNodes(node, componentNodes[1]) then 1 else -1)
 
         if component.voltage
-            section.direction = (if node.negative then 1 else -1)
-            voltage = component.voltage * section.direction
+            voltage = component.voltage * (if node.negative then 1 else -1)
             section.voltage = (section.voltage or 0) + voltage
 
         section.resistance += component.resistance or 0
@@ -222,7 +221,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         # @board.clearColors()
         # for sid of loopInfo.sections
         #     @board.color((cid for cid of @info.sections[sid].components), 2)
-        #     console.log('completeLoop', "identity=#{loopInfo.identity}", @info.matrix.sections.indexOf(sid), loopInfo.sections[sid].resistance, @info.matrix)
+        # console.log('completeLoop', "identity=#{loopInfo.identity}", loopInfo.voltage, (s.resistance for sid, s of loopInfo.sections))
         # debugger
         # @board.clearColors()
         

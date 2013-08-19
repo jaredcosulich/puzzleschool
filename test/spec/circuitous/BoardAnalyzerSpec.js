@@ -542,15 +542,15 @@ describe("BoardAnalyzer", function() {
                     
                     it('should force all current through the inner loop', function() {
                         board.moveElectricity();
-                        expect(bulb2.current).toEqual(-1.8);
-                        expect(wireAt(board, 6).current).toEqual(-1.8);
+                        expect(bulb2.current).toEqual(1.8);
+                        expect(wireAt(board, 6).current).toEqual(1.8);
                         expect(wireAt(board, 12).current).toEqual(-1.8); 
                     });
                     
                     it('should prevent energy from flowing to original bulb', function() {
                         board.moveElectricity();
-                        expect(wireAt(board, 1).current).toBeUndefined();
-                        expect(bulb.current).toBeUndefined();
+                        expect(wireAt(board, 1).current).toEqual(0);
+                        expect(bulb.current).toEqual(0);
                     });
                 })
             })

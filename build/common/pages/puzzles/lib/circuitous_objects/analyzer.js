@@ -161,8 +161,7 @@ analyzer.Analyzer = (function(_super) {
       component.direction = (this.compareNodes(node, componentNodes[1]) ? 1 : -1);
     }
     if (component.voltage) {
-      section.direction = (node.negative ? 1 : -1);
-      voltage = component.voltage * section.direction;
+      voltage = component.voltage * (node.negative ? 1 : -1);
       section.voltage = (section.voltage || 0) + voltage;
     }
     section.resistance += component.resistance || 0;
