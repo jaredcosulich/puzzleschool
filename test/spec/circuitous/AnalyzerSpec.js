@@ -32,7 +32,7 @@ describe("Analyzer", function() {
                 var currentMap = {2: -0.91, 4: 2.55, 6: 1.64, 0: 1.64};
                 for (sectionId in analyzer.info.sections) {
                     var section = analyzer.info.sections[sectionId];
-                    expect(section.amps).toEqual(currentMap[section.resistance]);                       
+                    expect(section.amps).toBeCloseTo(currentMap[section.resistance]);                       
                 }
             });
         });

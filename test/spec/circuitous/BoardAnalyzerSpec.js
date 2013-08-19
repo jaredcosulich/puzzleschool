@@ -171,7 +171,7 @@ describe("BoardAnalyzer", function() {
                             var bulb2Node = drawOrEraseWire(board, lastNode, -2, 0);
                             lastNode = drawOrEraseWire(board, bulb2Node, -2, 0);
                             lastNode = drawOrEraseWire(board, lastNode, 0, -3);
-                            lastNode = drawOrEraseWire(board, lastNode, 5, 0);
+                            lastNode = drawOrEraseWire(board, lastNode, 3, 0);
                             lastNode = drawOrEraseWire(board, lastNode, 0, -3);
                             
                             bulb2 = createComponent(board, 'LightEmittingDiode');
@@ -210,7 +210,7 @@ describe("BoardAnalyzer", function() {
 
                         describe('and a short circuit in between bulbs', function() {
                             beforeEach(function() {
-                                drawOrEraseWire(board, wireAt(board, 11).nodes[0], 0, -7);
+                                drawOrEraseWire(board, wireAt(board, 41).nodes[0], 0, -6);
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
@@ -452,14 +452,107 @@ describe("BoardAnalyzer", function() {
 
         
         describe('and a circuit with a mid-wire short', function() {
-            var bulbs;
+            var bulb, bulb2Node, battery2Node;
             
             beforeEach(function() {
-                console.log('weird_short')
+                var start = board.boardPosition(battery.currentNodes()[1]);
+                var lastNode = drawOrEraseWire(board, start, 0, -1);
+                var split1 = drawOrEraseWire(board, lastNode, 3, 0);
+                
+                lastNode = drawOrEraseWire(board, split1, 0, -2);
+                bulb2Node = drawOrEraseWire(board, lastNode, 2, 0);
+                drawOrEraseWire(board, bulb2Node, 2, 0);
+                
+                battery2Node = drawOrEraseWire(board, split1, 2, 0);
+                lastNode = drawOrEraseWire(board, battery2Node, 2, 0);
+                lastNode = drawOrEraseWire(board, lastNode, 0, -4);
+
+                var bulbNode = drawOrEraseWire(board, lastNode, -4, 0);
+                bulb = createComponent(board, 'Lightbulb');
+                var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
+                expect(onBoard).toBe(true);
+                
+                lastNode = drawOrEraseWire(board, bulbNode, -4, 0);
+                drawOrEraseWire(board, lastNode, 0, 5);
             });
             
             it('should have all the correct values', function() {
-                expect(false).toBe(true)
+                board.moveElectricity();
+                expect(wireAt(board, 1).current).toEqual(1.8);
+                expect(wireAt(board, 6).current).toEqual(0.9);
+                expect(wireAt(board, 12).current).toEqual(0.9);
+                expect(bulb.current).toEqual(1.8);
+            });
+            
+            describe('with another lightbulb', function() {
+                var bulb2;
+                beforeEach(function() {
+                    bulb2 = createComponent(board, 'Lightbulb');
+                    var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                    expect(onBoard).toBe(true);                    
+                });
+                
+                it('should not receive any current', function() {
+                    board.moveElectricity();
+                    expect(bulb2.current).toEqual(0);                    
+                });
+                
+                it('should force all current through other loop', function() {
+                    board.moveElectricity();
+                    expect(wireAt(board, 6).current).toBeUndefined
+                    expect(wireAt(board, 12).current).toEqual(1.8);                    
+                });
+                
+                describe('and another battery facing against the current', function() {
+                    beforeEach(function() {
+                        battery2 = createComponent(board, 'Battery');
+                        var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+                        expect(onBoard).toBe(true);                                            
+                        
+                        drawOrEraseWire(board, battery2Node, 1, 0);
+                    });
+                    
+                    it('should increase current throughout', function() {
+                        board.moveElectricity();
+                        expect(wireAt(board, 1).current).toEqual(3.6);
+                        expect(bulb.current).toEqual(3.6)
+                        expect(bulb2.current).toEqual(-1.8);
+                        expect(wireAt(board, 6).current).toEqual(-1.8);
+                        expect(wireAt(board, 12).current).toEqual(5.4); 
+                    });
+                });
+                
+                describe('and another battery facing against the current', function() {
+                    beforeEach(function() {
+                        battery2 = createComponent(board, 'Battery');
+                        var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
+                        expect(onBoard).toBe(true);                                            
+                        
+                        drawOrEraseWire(board, battery2Node, 2, 0);
+                        var lastNode = drawOrEraseWire(board, battery2Node, 1, 0);
+                        drawOrEraseWire(board, lastNode, 0, 1);
+                        
+                        drawOrEraseWire(board, battery2Node, 0, 1);
+                        lastNode = drawOrEraseWire(board, battery2Node, 0, 1);
+                        lastNode = drawOrEraseWire(board, lastNode, -1, 0);
+                        lastNode = drawOrEraseWire(board, lastNode, 0, 2);
+                        lastNode = drawOrEraseWire(board, lastNode, 3, 0);
+                        drawOrEraseWire(board, lastNode, 0, -3);
+                    });
+                    
+                    it('should force all current through the inner loop', function() {
+                        board.moveElectricity();
+                        expect(bulb2.current).toEqual(-1.8);
+                        expect(wireAt(board, 6).current).toEqual(-1.8);
+                        expect(wireAt(board, 12).current).toEqual(-1.8); 
+                    });
+                    
+                    it('should prevent energy from flowing to original bulb', function() {
+                        board.moveElectricity();
+                        expect(wireAt(board, 1).current).toBeUndefined();
+                        expect(bulb.current).toBeUndefined();
+                    });
+                })
             })
         });
     });

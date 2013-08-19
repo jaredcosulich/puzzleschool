@@ -137,16 +137,8 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.initElectricity = function() {
-    var _this = this;
     this.analyzer = new Analyzer(this);
-    this.electricalAnimation = new Animation();
-    return this.electricalAnimation.start({
-      method: function(_arg) {
-        var deltaTime, elapsed;
-        deltaTime = _arg.deltaTime, elapsed = _arg.elapsed;
-        return _this.moveElectricity(deltaTime, elapsed);
-      }
-    });
+    return this.electricalAnimation = new Animation();
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {

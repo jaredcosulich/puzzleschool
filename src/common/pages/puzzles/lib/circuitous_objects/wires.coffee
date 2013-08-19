@@ -2,6 +2,7 @@ wires = exports ? provide('./wires', {})
 circuitousObject = require('./object')
 
 class wires.Wires extends circuitousObject.Object
+    resistance: 0.00001
     constructor: (@board) ->
         @init()
 
@@ -91,6 +92,7 @@ class wires.Wires extends circuitousObject.Object
             segment = 
                 id: "wire#{node1}#{node2}"
                 el: element
+                resistance: @resistance
                 nodes: [start, end]
                 
             segment.setCurrent = (current) -> segment.current = current

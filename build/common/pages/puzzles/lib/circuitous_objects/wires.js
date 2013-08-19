@@ -11,6 +11,8 @@ wires.Wires = (function(_super) {
 
   __extends(Wires, _super);
 
+  Wires.prototype.resistance = 0.00001;
+
   function Wires(board) {
     this.board = board;
     this.init();
@@ -133,6 +135,7 @@ wires.Wires = (function(_super) {
       segment = {
         id: "wire" + node1 + node2,
         el: element,
+        resistance: this.resistance,
         nodes: [start, end]
       };
       segment.setCurrent = function(current) {

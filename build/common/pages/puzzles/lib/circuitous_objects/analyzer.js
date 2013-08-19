@@ -27,24 +27,38 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.run = function() {
-    var cid, component, componentInfo, section, sectionId, _ref, _ref1;
     this.init();
     this.analyze();
     this.createMatrix();
-    this.deleteShorts();
     this.saveMatrixIdentityLoops();
     this.solveMatrix();
+    this.deleteShorts();
     this.checkPolarizedComponents();
+    return this.roundedComponentValues();
+  };
+
+  Analyzer.prototype.roundedComponentValues = function() {
+    var amps, cid, componentInfo, resistance, round, section, sectionId, _ref;
     componentInfo = {};
+    round = function(number) {
+      if (isNaN(number)) {
+        return number;
+      } else {
+        return Math.round(number * 100.0) / 100.0;
+      }
+    };
     _ref = this.info.sections;
     for (sectionId in _ref) {
       section = _ref[sectionId];
-      _ref1 = section.components;
-      for (cid in _ref1) {
-        component = _ref1[cid];
+      for (cid in section.components) {
+        resistance = round(section.resistance);
+        amps = round(section.amps);
+        if (amps > 1000) {
+          amps = 'infinite';
+        }
         componentInfo[cid] = {
-          resistance: section.resistance,
-          amps: section.amps
+          resistance: resistance,
+          amps: amps
         };
       }
     }
@@ -327,7 +341,7 @@ analyzer.Analyzer = (function(_super) {
       loopInfo = this.info.matrix.currentLoop;
     }
     loopInfo.completed = true;
-    loopInfo.id = ((function() {
+    loopInfo.id = (loopInfo.identity ? "identity" + this.info.matrix.totalLoops : '') + ((function() {
       var _results;
       _results = [];
       for (sid in loopInfo.sections) {
@@ -383,7 +397,9 @@ analyzer.Analyzer = (function(_super) {
           delete identityLoop.sections[sectionId];
         }
       }
-      this.completeMatrixLoop(identityLoop);
+      if (Object.keys(identityLoop.sections).length) {
+        this.completeMatrixLoop(identityLoop);
+      }
     }
     return delete this.info.matrix.unsavedIdentityLoops;
   };
@@ -409,15 +425,17 @@ analyzer.Analyzer = (function(_super) {
       nextNode = nextSection.nodes[0];
       while (nextSection) {
         nextNode = this.otherNode(nextSection.nodes, nextNode);
+        if (nextNode) {
+          nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
+          this.addMatrixIndentityLoop(nextNode, nextSections);
+        }
         lastSection = nextSection;
         nextSection = null;
         if (!nextNode || this.compareNodes(nextNode, this.info.matrix.currentLoop.startNode)) {
           this.completeMatrixLoop();
         } else {
           if (nextNode && !this.info.matrix.currentLoop.nodes["" + nextNode.x + ":" + nextNode.y]) {
-            nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
             if (Object.keys(nextSections).length > 2) {
-              this.addMatrixIndentityLoop(nextNode, nextSections);
               for (sid in nextSections) {
                 if (allSections[sid] && !this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
                   this.info.matrix.pathsToTry.push(this.info.matrix.currentLoop.path.concat([sid]));
@@ -517,8 +535,14 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.reduceMatrix = function() {
-    var adjustingLoop, adjustingLoopId, adjustingSection, adjustingSectionId, adjustingVariableIndex, adjustingfactor, factor, factorLoop, factorLoopId, loopId, loopInfo, sectionId, sectionIds, sectionInfo, testIndex, testSectionId, tested, variableCount, variableIndex, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+    var adjustingLoop, adjustingLoopId, adjustingSection, adjustingSectionId, adjustingVariableIndex, adjustingfactor, equalsZero, factor, factorLoop, factorLoopId, loopId, loopInfo, sectionId, sectionIds, sectionInfo, testIndex, testSectionId, tested, variableCount, variableIndex, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+    if (!Object.keys(this.info.matrix.loops).length) {
+      return;
+    }
     sectionIds = this.info.matrix.sections;
+    equalsZero = function(number) {
+      return (-0.000001 < number && number < 0.000001);
+    };
     for (variableIndex = _i = 0, _len = sectionIds.length; _i < _len; variableIndex = ++_i) {
       sectionId = sectionIds[variableIndex];
       _ref = this.info.matrix.loops;
@@ -528,13 +552,13 @@ analyzer.Analyzer = (function(_super) {
         for (testIndex = _j = 0, _len1 = sectionIds.length; _j < _len1; testIndex = ++_j) {
           testSectionId = sectionIds[testIndex];
           if (testIndex < variableIndex) {
-            if (factorLoop.sections[testSectionId].adjusted !== 0) {
+            if (!equalsZero(factorLoop.sections[testSectionId].adjusted)) {
               tested = false;
               break;
             }
           }
         }
-        if (factorLoop.sections[sectionId].adjusted === 0) {
+        if (equalsZero(factorLoop.sections[sectionId].adjusted)) {
           tested = false;
         }
         if (tested) {
@@ -556,8 +580,14 @@ analyzer.Analyzer = (function(_super) {
           adjustingSectionId = sectionIds[adjustingVariableIndex];
           adjustingSection = adjustingLoop.sections[adjustingSectionId];
           adjustingSection.adjusted = adjustingSection.adjusted - (factorLoop.sections[adjustingSectionId].adjusted * (adjustingfactor / factor));
+          if (equalsZero(adjustingSection.adjusted)) {
+            adjustingSection.adjusted = 0;
+          }
         }
         adjustingLoop.adjustedVoltage = adjustingLoop.adjustedVoltage - (factorLoop.adjustedVoltage * (adjustingfactor / factor));
+        if (equalsZero(adjustingLoop.adjustedVoltage)) {
+          adjustingLoop.adjustedVoltage = 0;
+        }
       }
     }
     _ref2 = this.info.matrix.loops;
@@ -567,7 +597,7 @@ analyzer.Analyzer = (function(_super) {
       _ref3 = loopInfo.sections;
       for (sectionId in _ref3) {
         sectionInfo = _ref3[sectionId];
-        if (sectionInfo.adjusted !== 0) {
+        if (!equalsZero(sectionInfo.adjusted)) {
           variableCount += 1;
         }
       }
@@ -579,11 +609,14 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.assignAmps = function() {
-    var amps, index, loopInfo, loopInfoIndex, sectionId, _i, _len, _ref, _ref1, _results;
+    var index, loopInfo, loopInfoIndex, sectionId, _i, _len, _ref, _ref1, _results;
     _ref = this.info.matrix.sections;
     _results = [];
     for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
       sectionId = _ref[index];
+      if (this.info.sections[sectionId].amps) {
+        continue;
+      }
       _ref1 = this.info.matrix.loops;
       for (loopInfoIndex in _ref1) {
         loopInfo = _ref1[loopInfoIndex];
@@ -591,12 +624,7 @@ analyzer.Analyzer = (function(_super) {
           break;
         }
       }
-      amps = Math.round(100.0 * (loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted)) / 100.0;
-      if (!this.info.sections[sectionId].amps) {
-        _results.push(this.info.sections[sectionId].amps = amps);
-      } else {
-        _results.push(void 0);
-      }
+      _results.push(this.info.sections[sectionId].amps = loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted);
     }
     return _results;
   };
@@ -610,53 +638,36 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.deleteShorts = function() {
-    var loopId, loopInfo, section, shortCircuit, sid, _ref, _ref1, _results;
-    _ref = this.info.matrix.loops;
-    _results = [];
-    for (loopId in _ref) {
-      loopInfo = _ref[loopId];
-      if (!(!loopInfo.identity)) {
-        continue;
-      }
-      shortCircuit = true;
-      _ref1 = loopInfo.sections;
-      for (sid in _ref1) {
-        section = _ref1[sid];
-        if (section.resistance !== 0) {
-          shortCircuit = false;
-        }
-      }
-      if (shortCircuit) {
-        for (sid in loopInfo.sections) {
-          section = this.info.sections[sid];
-          section.amps = 'infinite';
-        }
-        _results.push((function() {
-          var _i, _len, _ref2, _results1;
-          _ref2 = this.info.matrix.loops;
-          _results1 = [];
-          for (loopInfo = _i = 0, _len = _ref2.length; _i < _len; loopInfo = ++_i) {
-            loopId = _ref2[loopInfo];
-            _results1.push((function() {
-              var _results2;
-              _results2 = [];
-              for (sid in loopInfo.sections) {
-                if (this.info.sections[sid].amps === 'infinite') {
-                  _results2.push(delete this.info.matrix.loops[loopId]);
-                } else {
-                  _results2.push(void 0);
-                }
-              }
-              return _results2;
-            }).call(this));
-          }
-          return _results1;
-        }).call(this));
-      } else {
-        _results.push(void 0);
+    var changeMade, loopId, loopInfo, section, sid, _ref, _ref1, _ref2;
+    changeMade = false;
+    _ref = this.info.sections;
+    for (sid in _ref) {
+      section = _ref[sid];
+      if (section.resistance < 0.01 && Math.abs(section.amps) > 1000) {
+        changeMade = true;
+        section.amps = 'infinite';
       }
     }
-    return _results;
+    _ref1 = this.info.matrix.loops;
+    for (loopId in _ref1) {
+      loopInfo = _ref1[loopId];
+      for (sid in loopInfo.sections) {
+        if (this.info.sections[sid].amps === 'infinite') {
+          delete this.info.matrix.loops[loopId];
+        }
+      }
+    }
+    if (changeMade) {
+      _ref2 = this.info.sections;
+      for (sid in _ref2) {
+        section = _ref2[sid];
+        if (section.amps !== 'infinite') {
+          delete section.amps;
+        }
+      }
+      this.solveMatrix();
+      return this.deleteShorts();
+    }
   };
 
   Analyzer.prototype.checkPolarizedComponents = function() {
