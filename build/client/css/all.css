@@ -422,15 +422,15 @@ a {
 }
 .stats table td {
   border: 1px solid #ccc;
+  padding: 12px;
 }
-.stats table td.success,
-.stats table td.appropriate {
+.stats table td.success {
   background-color: #24d94c;
 }
-.stats table td.easy {
+.stats table td.hints {
   background-color: #ffbd2a;
 }
-.stats table td.hard {
+.stats table td.fail {
   background-color: #ff6e5f;
 }
 /*!

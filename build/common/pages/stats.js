@@ -24,6 +24,7 @@ sortLevels = function(levels) {
 
 soma.chunks({
   Stats: {
+    pageSize: 10,
     meta: function() {
       return new soma.chunks.Base({
         content: this
@@ -79,15 +80,15 @@ soma.chunks({
                   _results.push(userId);
                 }
                 return _results;
-              })()).sort().slice(_this.page * 5, (_this.page + 1) * 5);
-              if (_this.users.length >= (_this.page + 1) * 5) {
+              })()).sort();
+              if (_this.users.length >= (_this.page + 1) * _this.pageSize) {
                 _this.nextPage = true;
               }
               userLevelClassInfos = [];
               _ref3 = _this.classInfo.levels;
               for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
                 level = _ref3[_l];
-                _ref4 = _this.users;
+                _ref4 = _this.users.slice(_this.pageSize * _this.page, _this.pageSize * (_this.page + 1));
                 for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
                   userId = _ref4[_m];
                   userLevelClassInfos.push({
@@ -96,7 +97,7 @@ soma.chunks({
                   });
                 }
               }
-              _this.stats = [];
+              _this.statsHash = {};
               _results = [];
               for (i = _n = 0, _ref5 = userLevelClassInfos.length; _n <= _ref5; i = _n += 100) {
                 _this.loadData({
@@ -105,46 +106,30 @@ soma.chunks({
                     objectInfos: userLevelClassInfos.slice(i, i + 100)
                   },
                   success: function(userLevelClassStats) {
-                    var duration, levelId, minutes, seconds, stat, statsHash, userInfo, userStat, _len5, _len6, _len7, _o, _p, _q, _ref10, _ref11, _ref12, _ref13, _ref14, _ref6, _ref7, _ref8, _ref9, _results1;
-                    statsHash = {};
+                    var duration, levelId, minutes, seconds, stat, _base, _len5, _o, _ref10, _ref11, _ref6, _ref7, _ref8, _ref9, _results1;
                     _ref6 = userLevelClassStats.stats;
+                    _results1 = [];
                     for (_o = 0, _len5 = _ref6.length; _o < _len5; _o++) {
                       stat = _ref6[_o];
                       userId = stat.objectId.split('/')[0];
                       levelId = stat.objectId.split('/')[1];
-                      statsHash[levelId] || (statsHash[levelId] = {});
-                      statsHash[levelId][userId] = stat;
-                    }
-                    _ref7 = _this.classInfo.levels;
-                    _results1 = [];
-                    for (_p = 0, _len6 = _ref7.length; _p < _len6; _p++) {
-                      level = _ref7[_p];
-                      userInfo = [];
-                      _ref8 = _this.users;
-                      for (_q = 0, _len7 = _ref8.length; _q < _len7; _q++) {
-                        userId = _ref8[_q];
-                        userStat = (_ref9 = statsHash[level.id]) != null ? _ref9[userId] : void 0;
-                        duration = (userStat != null ? userStat.duration : void 0) || 0;
-                        seconds = Math.round(duration / 1000);
-                        minutes = Math.floor(seconds / 60);
-                        seconds = seconds - (minutes * 60);
-                        userInfo.push({
-                          level: level.name,
-                          user: userId,
-                          attempted: (userStat ? true : false),
-                          moves: (userStat != null ? userStat.moves : void 0) || 0,
-                          hints: (userStat != null ? userStat.hints : void 0) || 0,
-                          success: ((userStat != null ? (_ref10 = userStat.success) != null ? _ref10.length : void 0 : void 0) ? true : false),
-                          successClass: ((userStat != null ? (_ref11 = userStat.hints) != null ? _ref11.length : void 0 : void 0) ? 'hard' : userStat != null ? (_ref12 = userStat.challenge) != null ? _ref12[0] : void 0 : void 0),
-                          duration: "" + minutes + " min, " + seconds + " sec",
-                          assessment: userStat != null ? (_ref13 = userStat.challenge) != null ? _ref13.length : void 0 : void 0,
-                          challenge: userStat != null ? (_ref14 = userStat.challenge) != null ? _ref14[0] : void 0 : void 0
-                        });
-                      }
-                      _results1.push(_this.stats.push({
-                        levelName: level.name,
-                        users: userInfo
-                      }));
+                      (_base = _this.statsHash)[userId] || (_base[userId] = {});
+                      duration = stat.duration || 0;
+                      seconds = Math.round(duration / 1000);
+                      minutes = Math.floor(seconds / 60);
+                      seconds = seconds - (minutes * 60);
+                      _results1.push(_this.statsHash[userId][levelId] = {
+                        level: level.name,
+                        user: userId,
+                        attempted: true,
+                        moves: stat.moves || 0,
+                        hints: stat.hints || 0,
+                        success: (((_ref7 = stat.success) != null ? _ref7.length : void 0) ? true : false),
+                        successClass: (((_ref8 = stat.hints) != null ? _ref8.length : void 0) ? 'hard' : (_ref9 = stat.challenge) != null ? _ref9[0] : void 0),
+                        duration: "" + minutes + " min, " + seconds + " sec",
+                        assessment: (_ref10 = stat.challenge) != null ? _ref10.length : void 0,
+                        challenge: (_ref11 = stat.challenge) != null ? _ref11[0] : void 0
+                      });
                     }
                     return _results1;
                   }
@@ -174,13 +159,50 @@ soma.chunks({
       });
     },
     build: function() {
+      var info, level, levelInfo, levels, user, _i, _len, _ref, _ref1;
+      this.stats = [];
+      _ref = this.statsHash;
+      for (user in _ref) {
+        levelInfo = _ref[user];
+        levels = [];
+        _ref1 = this.classInfo.levels;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          level = _ref1[_i];
+          info = levelInfo[level.id] || {
+            user: user,
+            attempted: false,
+            moves: 0,
+            hints: 0,
+            success: false
+          };
+          info.level = level.name;
+          levels.push(info);
+        }
+        this.stats.push({
+          user: user,
+          levels: levels
+        });
+      }
+      this.stats.sort(function(a, b) {
+        if (a.user > b.user) {
+          return 1;
+        } else {
+          if (a.user < b.user) {
+            return -1;
+          } else {
+            return 0;
+          }
+        }
+      });
       this.setTitle("Stats - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
         className: this.classInfo.name,
         users: this.users,
         stats: this.stats,
         nextPage: this.nextPage,
-        nextPageLink: "/stats/" + this.classId + "/{@page + 1}"
+        nextPageLink: "/stats/class/" + this.classId + "/" + (this.page + 1),
+        previousPage: this.page > 0,
+        previousPageLink: "/stats/class/" + this.classId + "/" + (this.page - 1)
       });
     }
   }
