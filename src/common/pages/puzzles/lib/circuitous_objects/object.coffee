@@ -31,7 +31,9 @@ class object.Object extends Draggable
             info.y = @currentY + node.y
             info
     
-    setCurrent: (@current) -> 
+    setCurrent: (@current) ->
+        
+     
         
         
         

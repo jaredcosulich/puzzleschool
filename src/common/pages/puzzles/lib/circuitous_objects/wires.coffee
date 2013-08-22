@@ -1,8 +1,11 @@
 wires = exports ? provide('./wires', {})
+Transformer = require('../common_objects/transformer').Transformer
 circuitousObject = require('./object')
 
 class wires.Wires extends circuitousObject.Object
     resistance: 0.00001
+    electronsPerSegment: 2
+    
     constructor: (@board) ->
         @init()
 
@@ -85,6 +88,7 @@ class wires.Wires extends circuitousObject.Object
     recordPosition: (element, start, end) ->
         # @board.addDot(start)
         # @board.addDot(end)
+        @board.changesMade = true
         node1 = "#{start.x}:#{start.y}"
         node2 = "#{end.x}:#{end.y}"
         
@@ -92,6 +96,7 @@ class wires.Wires extends circuitousObject.Object
             segment = 
                 id: "wire#{node1}#{node2}"
                 el: element
+                horizontal: element.hasClass('horizontal')
                 resistance: @resistance
                 nodes: [start, end]
                 
@@ -118,4 +123,57 @@ class wires.Wires extends circuitousObject.Object
             @info.nodes[node1]?[node2] or @info.nodes[node2]?[node1]
         else
             (segment for endPoint, segment of @info.nodes[node1]) 
+            
+    initElectrons: (segment) ->
+        return if segment.electrons
+        segment.electrons = []
+        electrons = $(document.createElement('DIV'))
+        electrons.addClass('electrons')
+        for i in [1..@electronsPerSegment]
+            electron = $(document.createElement('DIV'))
+            electron.addClass('electron')
+            
+            if segment.horizontal
+                electron.css(left: (segment.el.width() / (@electronsPerSegment + 1)) * i)
+            else
+                electron.css(top: (segment.el.height() / (@electronsPerSegment + 1)) * i)
+            
+            electrons.append(electron)
+            segment.electrons.push(el: electron, transformer: new Transformer(electron))
+
+        segment.el.append(electrons)
+    
+    moveElectrons: (segment, elapsedTime) ->
+        totalMovement = ((elapsedTime/500) * segment.current)
+        reverse = (segment.nodes[0].x < segment.nodes[1].x) or (segment.nodes[0].y < segment.nodes[1].y)
+        for electron in segment.electrons
+            x = y = 0
+            if segment.horizontal
+                left = parseInt(electron.el.css('left'))
+                width = segment.el.width()
+                if reverse
+                    x = (((width - left) - totalMovement) % width) + (width - left)
+                else
+                    x = ((left + totalMovement) % width) - left          
+            else
+                top = parseInt(electron.el.css('top'))
+                height = segment.el.height()
+                if reverse
+                    y = (((height - top) - totalMovement) % height) + (height - top)
+                else
+                    y = ((top + totalMovement) % height) - top          
+
+            electron.transformer.translate(x, y)
+            
+    clearElectrons: (segment) ->
+        electron.el.remove() for electron in (segment?.electrons or [])
+        delete segment.electrons
+        
+    showCurrent: (elapsedTime) ->
+        for segmentId, segment of @info.all        
+            if segment.current
+                @initElectrons(segment) 
+                @moveElectrons(segment, elapsedTime)    
+            else
+                @clearElectrons(segment)
 ``

@@ -13,6 +13,7 @@ class board.Board extends circuitousObject.Object
 
     init: ->
         @components = {}
+        @changesMade = false
         @width = @el.width()
         @height = @el.height()
         @drawGrid()
@@ -30,6 +31,7 @@ class board.Board extends circuitousObject.Object
                 @el.append(cell)
                 
     addComponent: (component, x, y) ->
+        @changesMade = true
         component.id = @generateId('component') unless component.id
 
         offset = @el.offset()
@@ -48,6 +50,7 @@ class board.Board extends circuitousObject.Object
         return true
             
     removeComponent: (component) -> 
+        @changesMade = true
         @components[component.id]?.setCurrent(0)
         delete @components[component.id]
             
@@ -87,9 +90,16 @@ class board.Board extends circuitousObject.Object
         @electricalAnimation = new Animation()    
         @electricalAnimation.start 
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
-        # $('.menu').bind 'click', => @moveElectricity()
+        # $('.menu').bind 'click', => @moveElectricity(18.6)
+        
+    runAnalysis: ->
+        return unless @changesMade
+        @changesMade = false
+        @analyzedComponentsAndWires = @analyzer.run()
         
     moveElectricity: (deltaTime, elapsed) ->
+        return if @movingElectricty
+        @movingElectricty = true
         # @slowTime = (@slowTime or 0) + deltaTime
         # return unless @slowTime > 2000
         # @slowTime -= 2000
@@ -98,7 +108,8 @@ class board.Board extends circuitousObject.Object
             piece.receivingCurrent = false
             piece.excessiveCurrent = false 
         
-        for componentId, componentInfo of @analyzer.run()
+        @runAnalysis()
+        for componentId, componentInfo of @analyzedComponentsAndWires
             continue unless (c = @componentsAndWires()[componentId])                     
             if componentInfo.amps == 'infinite'   
                 c.excessiveCurrent = true
@@ -106,10 +117,14 @@ class board.Board extends circuitousObject.Object
             else
                 c.receivingCurrent = true
                 c.setCurrent?(componentInfo.amps)
+
+        @wires.showCurrent(elapsed)
         
         for id, piece of @componentsAndWires()
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
             piece.setCurrent?(0) unless piece.receivingCurrent
+        
+        @movingElectricty = false
             
     clearColors: ->
         c.el.css(backgroundColor: null) for id, c of @componentsAndWires()

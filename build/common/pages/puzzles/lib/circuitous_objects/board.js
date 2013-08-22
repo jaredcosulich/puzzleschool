@@ -28,6 +28,7 @@ board.Board = (function(_super) {
 
   Board.prototype.init = function() {
     this.components = {};
+    this.changesMade = false;
     this.width = this.el.width();
     this.height = this.el.height();
     this.drawGrid();
@@ -61,6 +62,7 @@ board.Board = (function(_super) {
 
   Board.prototype.addComponent = function(component, x, y) {
     var boardPosition, offset, onBoardX, onBoardY, roundedBoardPosition, _ref, _ref1;
+    this.changesMade = true;
     if (!component.id) {
       component.id = this.generateId('component');
     }
@@ -83,6 +85,7 @@ board.Board = (function(_super) {
 
   Board.prototype.removeComponent = function(component) {
     var _ref;
+    this.changesMade = true;
     if ((_ref = this.components[component.id]) != null) {
       _ref.setCurrent(0);
     }
@@ -149,15 +152,28 @@ board.Board = (function(_super) {
     });
   };
 
+  Board.prototype.runAnalysis = function() {
+    if (!this.changesMade) {
+      return;
+    }
+    this.changesMade = false;
+    return this.analyzedComponentsAndWires = this.analyzer.run();
+  };
+
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var c, componentId, componentInfo, id, piece, _ref, _ref1, _ref2, _results;
+    var c, componentId, componentInfo, id, piece, _ref, _ref1, _ref2;
+    if (this.movingElectricty) {
+      return;
+    }
+    this.movingElectricty = true;
     _ref = this.componentsAndWires();
     for (id in _ref) {
       piece = _ref[id];
       piece.receivingCurrent = false;
       piece.excessiveCurrent = false;
     }
-    _ref1 = this.analyzer.run();
+    this.runAnalysis();
+    _ref1 = this.analyzedComponentsAndWires;
     for (componentId in _ref1) {
       componentInfo = _ref1[componentId];
       if (!(c = this.componentsAndWires()[componentId])) {
@@ -173,20 +189,20 @@ board.Board = (function(_super) {
         }
       }
     }
+    this.wires.showCurrent(elapsed);
     _ref2 = this.componentsAndWires();
-    _results = [];
     for (id in _ref2) {
       piece = _ref2[id];
       if (!piece.excessiveCurrent) {
         piece.el.removeClass('excessive_current');
       }
       if (!piece.receivingCurrent) {
-        _results.push(typeof piece.setCurrent === "function" ? piece.setCurrent(0) : void 0);
-      } else {
-        _results.push(void 0);
+        if (typeof piece.setCurrent === "function") {
+          piece.setCurrent(0);
+        }
       }
     }
-    return _results;
+    return this.movingElectricty = false;
   };
 
   Board.prototype.clearColors = function() {

@@ -50,8 +50,26 @@
 .circuitous .board .wire_segment.vertical {
   padding-bottom: 8px;
 }
+.circuitous .board .wire_segment.vertical .electrons .electron {
+  left: 2px;
+}
 .circuitous .board .wire_segment.horizontal {
   padding-right: 8px;
+}
+.circuitous .board .wire_segment.horizontal .electrons .electron {
+  top: 2px;
+}
+.circuitous .board .wire_segment .electrons {
+  position: relative;
+}
+.circuitous .board .wire_segment .electrons .electron {
+  width: 4px;
+  height: 4px;
+  position: absolute;
+  background-color: #c7c7c7;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 .circuitous .right_side {
   float: right;

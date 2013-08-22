@@ -47,10 +47,27 @@
             
             &.vertical {
                 padding-bottom: 8px;
+                .electrons .electron {
+                    left: 2px;
+                }
             }        
             
             &.horizontal {
                 padding-right: 8px;
+                .electrons .electron {
+                    top: 2px;
+                }
+            }
+
+            .electrons {
+                position: relative;
+                .electron {
+                    width: 4px;
+                    height: 4px;
+                    position: absolute;
+                    background-color: @lightgrey;
+                    .rounded(4px);
+                }
             }
         }
     }
