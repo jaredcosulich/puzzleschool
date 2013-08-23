@@ -24,13 +24,24 @@
 .circuitous .board {
   float: left;
   border: 8px solid #ffffff;
-  height: 624px;
-  width: 624px;
   overflow: hidden;
   margin-bottom: 12px;
   box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
   -moz-box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+.circuitous .board .cells,
+.circuitous .board .wires,
+.circuitous .board .electrons {
+  height: 624px;
+  width: 624px;
+}
+.circuitous .board .wires,
+.circuitous .board .electrons {
+  position: absolute;
+  top: -8px;
+  left: -7px;
 }
 .circuitous .board .cell {
   border-right: 1px dashed #ededed;
@@ -50,26 +61,32 @@
 .circuitous .board .wire_segment.vertical {
   padding-bottom: 8px;
 }
-.circuitous .board .wire_segment.vertical .electrons .electron {
-  left: 2px;
-}
 .circuitous .board .wire_segment.horizontal {
   padding-right: 8px;
 }
-.circuitous .board .wire_segment.horizontal .electrons .electron {
-  top: 2px;
-}
-.circuitous .board .wire_segment .electrons {
-  position: relative;
-}
-.circuitous .board .wire_segment .electrons .electron {
-  width: 4px;
-  height: 4px;
+.circuitous .board .electrons_segment {
   position: absolute;
-  background-color: red;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  content: "\00a0";
+  width: 8px;
+  height: 8px;
+  margin-left: -2px;
+  margin-top: -2px;
+}
+.circuitous .board .electrons_segment.up,
+.circuitous .board .electrons_segment.down {
+  margin-left: -4px;
+  background: transparent url('/assets/images/puzzles/circuitous/electrons_vertical.png');
+}
+.circuitous .board .electrons_segment.up {
+  margin-top: 14px;
+}
+.circuitous .board .electrons_segment.left,
+.circuitous .board .electrons_segment.right {
+  margin-top: -4px;
+  background: transparent url('/assets/images/puzzles/circuitous/electrons_horizontal.png');
+}
+.circuitous .board .electrons_segment.left {
+  margin-left: 14px;
 }
 .circuitous .right_side {
   float: right;
@@ -104,11 +121,13 @@
   height: 197.33333333333334px;
 }
 .circuitous .board .wire_segment,
+.circuitous .board .electrons_segment,
 .circuitous .right_side .options .option img {
   transition: background-color 0.5s ease;
   z-index: 1;
 }
 .circuitous .board .wire_segment.excessive_current,
+.circuitous .board .electrons_segment.excessive_current,
 .circuitous .right_side .options .option img.excessive_current {
   background-color: #FF0000;
   z-index: 2;

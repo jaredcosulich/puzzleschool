@@ -1,4 +1,4 @@
-var debugInfo = true;
+var debugInfo = false;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -19,7 +19,7 @@ describe("BoardAnalyzer", function() {
     }); 
     
     afterEach(function() {
-        // $('.circuitous').html(html)
+        $('.circuitous').html(html)
     })
     
     describe('with one battery', function() {
@@ -564,7 +564,7 @@ describe("BoardAnalyzer", function() {
                             lastNode = drawOrEraseWire(board, wire1.nodes[0], 1, 0);
                             drawOrEraseWire(board, lastNode, -1, 0);
 
-                            var wire2 = wireAt(board, 12);
+                            var wire2 = wireAt(board, 11);
                             wire2Direction = wire2.direction;
                             expect(wire2Direction).toEqual(1);
                             lastNode = drawOrEraseWire(board, wire2.nodes[0], 0, -1);
@@ -572,15 +572,17 @@ describe("BoardAnalyzer", function() {
                         });
                     
                         it('should maintain same values', function() {
+                            board.movingElectricty = false;
                             board.moveElectricity();
                             expect(bulb2.current).toEqual(1.8);
                             expect(wireAt(board, 6).current).toEqual(1.8);
-                            expect(wireAt(board, 12).current).toEqual(-1.8); 
+                            expect(wireAt(board, 11).current).toEqual(-1.8); 
                             expect(wireAt(board, 1).current).toEqual(0);
                             expect(bulb.current).toEqual(0);
                         });
                     
                         it('should show current flowing in same direction as surrounding wires', function() {
+                            board.movingElectricty = false;
                             board.moveElectricity();
                             expect(wireAt(board, 38).direction).toEqual(wire1Direction * -1)
                             expect(wireAt(board, 39).direction).toEqual(wire2Direction * -1)
@@ -624,7 +626,7 @@ createComponent = function(board, type) {
 
 drawOrEraseWire = function(board, from, deltaX, deltaY) {
     offset = board.el.offset()
-    board.el.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
+    board.wires.electrons.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
     end  = {x: from.x + (deltaX * board.cellDimension), y: from.y + (deltaY * board.cellDimension)}
     board.wires.draw({clientX: offset.left + end.x, clientY: offset.top + end.y});
     $(document.body).trigger('mouseup.draw_wire');

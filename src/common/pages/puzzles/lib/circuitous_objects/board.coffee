@@ -12,6 +12,7 @@ class board.Board extends circuitousObject.Object
         @init()
 
     init: ->
+        @cells = @el.find('.cells')
         @components = {}
         @changesMade = false
         @width = @el.width()
@@ -28,7 +29,7 @@ class board.Board extends circuitousObject.Object
                 cell = $(document.createElement('DIV'))
                 cell.addClass('cell')
                 cell.css(width: @cellDimension-1, height: @cellDimension-1)
-                @el.append(cell)
+                @cells.append(cell)
                 
     addComponent: (component, x, y) ->
         @changesMade = true
@@ -128,7 +129,7 @@ class board.Board extends circuitousObject.Object
             piece.el.removeClass('excessive_current') unless piece.excessiveCurrent
             piece.setCurrent?(0) unless piece.receivingCurrent
         
-        @movingElectricty = false
+        $.timeout(50, =>  @movingElectricty = false)
             
     clearColors: ->
         c.el.css(backgroundColor: null) for id, c of @componentsAndWires()

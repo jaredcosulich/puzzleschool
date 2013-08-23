@@ -27,6 +27,7 @@ board.Board = (function(_super) {
   }
 
   Board.prototype.init = function() {
+    this.cells = this.el.find('.cells');
     this.components = {};
     this.changesMade = false;
     this.width = this.el.width();
@@ -52,7 +53,7 @@ board.Board = (function(_super) {
             width: this.cellDimension - 1,
             height: this.cellDimension - 1
           });
-          _results1.push(this.el.append(cell));
+          _results1.push(this.cells.append(cell));
         }
         return _results1;
       }).call(this));
@@ -161,7 +162,8 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.moveElectricity = function(deltaTime, elapsed) {
-    var c, componentId, componentInfo, id, piece, _ref, _ref1, _ref2;
+    var c, componentId, componentInfo, id, piece, _ref, _ref1, _ref2,
+      _this = this;
     if (this.movingElectricty) {
       return;
     }
@@ -202,7 +204,9 @@ board.Board = (function(_super) {
         }
       }
     }
-    return this.movingElectricty = false;
+    return $.timeout(50, function() {
+      return _this.movingElectricty = false;
+    });
   };
 
   Board.prototype.clearColors = function() {

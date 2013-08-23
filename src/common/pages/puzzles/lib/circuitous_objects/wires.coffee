@@ -11,9 +11,10 @@ class wires.Wires extends circuitousObject.Object
 
     init: ->
         @info = {all: {}, positions: {}, nodes: {}}
-        @el = @board.el
+        @el = @board.el.find('.wires')
+        @electrons = @board.el.find('.electrons')
         @cellDimension = @board.cellDimension
-        @el.bind 'mousedown.draw_wire', (e) =>
+        @electrons.bind 'mousedown.draw_wire', (e) =>
             $(document.body).one 'mouseup.draw_wire', => 
                 $(document.body).unbind('mousemove.draw_wire')
                 delete @info.start      
@@ -80,6 +81,7 @@ class wires.Wires extends circuitousObject.Object
 
     erase: (coords) ->
         return unless (segment = @find(@info.start, coords))
+        @clearElectrons(segment)
         segment.el.remove()
         @recordPosition(null, @info.start, coords)
         @info.erasing = true unless @info.continuation
@@ -126,53 +128,51 @@ class wires.Wires extends circuitousObject.Object
             
     initElectrons: (segment) ->
         return if segment.electrons
-        segment.electrons = []
-        electrons = $(document.createElement('DIV'))
-        electrons.addClass('electrons')
-        for i in [0...@electronsPerSegment]
-            do (i) =>
-                electron = $(document.createElement('DIV'))
-                electron.addClass('electron')
-                electrons.append(electron)
-                $.timeout 10, =>
-                    if segment.horizontal
-                        electron.css(left: (((segment.el.height()/2)-(electron.width()/2)) + (@cellDimension/2) * i))
-                    else
-                        electron.css(top: (((segment.el.width()/2)-(electron.height()/2)) + (@cellDimension/2) * i))
-                segment.electrons.push(el: electron, transformer: new Transformer(electron))
-                segment.el.append(electrons)
-    
+        electronsSegment = $(document.createElement('DIV'))
+        electronsSegment.addClass('electrons_segment')
+
+        reverse = ((segment.direction * segment.current) < 1)        
+        if segment.horizontal
+            pointedRight = segment.nodes[0].x < segment.nodes[1].x
+            pointedRight = !pointedRight if reverse
+            electronsSegment.addClass(if pointedRight then 'right' else 'left')
+            electronsSegment.width(@cellDimension)
+        else
+            pointedDown = segment.nodes[0].y < segment.nodes[1].y
+            pointedDown = !pointedDown if reverse
+            electronsSegment.addClass(if pointedDown then 'down' else 'up')
+            electronsSegment.height(@cellDimension)
+        
+        electronsSegment.css(top: segment.el.css('top'), left: segment.el.css('left'))
+        @electrons.append(electronsSegment)
+        segment.electrons = {el: electronsSegment, transformer: new Transformer(electronsSegment)}
+        
+        
     moveElectrons: (segment, elapsedTime) ->
         totalMovement = ((elapsedTime/200) * Math.abs(segment.current))
-        reverse = ((segment.direction * segment.current) < 1)
-        for electron in segment.electrons
-            x = y = 0
-            if segment.horizontal
-                pointedRight = (segment.nodes[0].x < segment.nodes[1].x)
-                left = parseInt(electron.el.css('left'))
-                width = segment.el.width()
-                if (pointedRight and not reverse) or (reverse and not pointedRight)
-                    x = ((left + totalMovement) % @cellDimension) - left          
-                else
-                    x = @cellDimension + ((left - (@cellDimension + totalMovement)) % @cellDimension) - left
-            else
-                pointedDown = (segment.nodes[0].y < segment.nodes[1].y)
-                top = parseInt(electron.el.css('top'))
-                height = segment.el.height()
-                if (pointedDown and not reverse) or (reverse and not pointedDown)
-                    y = ((top + totalMovement) % @cellDimension) - top          
-                else
-                    y = @cellDimension + ((top - (@cellDimension + totalMovement)) % @cellDimension) - top
+        x = y = 0
+        if segment.horizontal
+            pointedRight = 
+            width = segment.el.width()
+            x = totalMovement % ((width % @cellDimension) * 2) 
+            if segment.electrons.el.hasClass('left')
+                x = x * -1
+        else
+            pointedDown = (segment.nodes[0].y < segment.nodes[1].y)
+            height = segment.el.height()
+            y = totalMovement % ((height % @cellDimension) * 2) 
+            if segment.electrons.el.hasClass('up')
+                y = y * -1
 
-            electron.transformer.translate(x, y)
+        segment.electrons.transformer.translate(x, y)
             
     clearElectrons: (segment) ->
         return unless segment.electrons
-        electron.el.remove() for electron in (segment?.electrons or [])
+        segment.electrons.el.remove()
         delete segment.electrons
         
     showCurrent: (elapsedTime) ->
-        for segmentId, segment of @info.all        
+        for segmentId, segment of @info.all
             if segment.current
                 @initElectrons(segment) 
                 @moveElectrons(segment, elapsedTime)    

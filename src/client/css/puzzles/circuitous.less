@@ -23,11 +23,21 @@
     .board {
         float: left;
         border: @border solid white;
-        height: @height - (@border * 2);  
-        width: @height - (@border * 2);
         overflow: hidden;
         margin-bottom: 12px;
         .inner-shadow(0, 0, 24px, 80%);
+        position: relative;
+
+        .cells, .wires, .electrons {
+            height: @height - (@border * 2);  
+            width: @height - (@border * 2);
+        }
+        
+        .wires, .electrons {
+            position: absolute;
+            top: -8px;
+            left: -7px;
+        }
         
         .cell {
             border-right: 1px dashed @lightestgrey;
@@ -47,27 +57,37 @@
             
             &.vertical {
                 padding-bottom: 8px;
-                .electrons .electron {
-                    left: 2px;
-                }
             }        
             
             &.horizontal {
                 padding-right: 8px;
-                .electrons .electron {
-                    top: 2px;
-                }
             }
-
-            .electrons {
-                position: relative;
-                .electron {
-                    width: 4px;
-                    height: 4px;
-                    position: absolute;
-                    background-color: red;//@lightgrey;
-                    .rounded(4px);
-                }
+        }
+        
+        .electrons_segment {
+            position: absolute;            
+            content: "\00a0";
+            width: 8px;
+            height: 8px;
+            margin-left: -2px;
+            margin-top: -2px;
+            
+            &.up, &.down {
+                margin-left: -4px;
+                background: transparent url('/assets/images/puzzles/circuitous/electrons_vertical.png');
+            }
+            
+            &.up {
+                margin-top: 14px;
+            }        
+            
+            &.left, &.right {
+                margin-top: -4px;
+                background: transparent url('/assets/images/puzzles/circuitous/electrons_horizontal.png');
+            }
+            
+            &.left {
+                margin-left: 14px;
             }
         }
     }
@@ -100,7 +120,7 @@
         }
     }
     
-    .board .wire_segment, 
+    .board .wire_segment, .board .electrons_segment,
     .right_side .options .option img {
         transition: background-color 0.5s ease;
         z-index: 1;            
