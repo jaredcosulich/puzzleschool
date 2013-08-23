@@ -14,7 +14,7 @@ class wires.Wires extends circuitousObject.Object
         @el = @board.el.find('.wires')
         @electrons = @board.el.find('.electrons')
         @cellDimension = @board.cellDimension
-        @electrons.bind 'mousedown.draw_wire', (e) =>
+        @board.el.bind 'mousedown.draw_wire', (e) =>
             $(document.body).one 'mouseup.draw_wire', => 
                 $(document.body).unbind('mousemove.draw_wire')
                 delete @info.start      
@@ -32,7 +32,6 @@ class wires.Wires extends circuitousObject.Object
         if start = @info.start
             xDiff = Math.abs(start.x - coords.x)
             yDiff = Math.abs(start.y - coords.y)
-
             return if xDiff < @cellDimension and yDiff < @cellDimension
 
             xDelta = yDelta = 0

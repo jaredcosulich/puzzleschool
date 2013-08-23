@@ -32,7 +32,7 @@ wires.Wires = (function(_super) {
     this.el = this.board.el.find('.wires');
     this.electrons = this.board.el.find('.electrons');
     this.cellDimension = this.board.cellDimension;
-    return this.electrons.bind('mousedown.draw_wire', function(e) {
+    return this.board.el.bind('mousedown.draw_wire', function(e) {
       $(document.body).one('mouseup.draw_wire', function() {
         $(document.body).unbind('mousemove.draw_wire');
         delete _this.info.start;

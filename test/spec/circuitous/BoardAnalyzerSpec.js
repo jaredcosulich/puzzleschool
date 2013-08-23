@@ -626,7 +626,7 @@ createComponent = function(board, type) {
 
 drawOrEraseWire = function(board, from, deltaX, deltaY) {
     offset = board.el.offset()
-    board.wires.electrons.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
+    board.el.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
     end  = {x: from.x + (deltaX * board.cellDimension), y: from.y + (deltaY * board.cellDimension)}
     board.wires.draw({clientX: offset.left + end.x, clientY: offset.top + end.y});
     $(document.body).trigger('mouseup.draw_wire');
