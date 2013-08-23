@@ -90,7 +90,11 @@ class board.Board extends circuitousObject.Object
         @electricalAnimation = new Animation()    
         @electricalAnimation.start 
             method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
-        # $('.menu').bind 'click', => @moveElectricity(18.6)
+        # $('.menu').bind 'click', => 
+        #     @elapsed or= 0
+        #     deltaTime = 300
+        #     @elapsed += deltaTime            
+        #     @moveElectricity(deltaTime, @elapsed)
         
     runAnalysis: ->
         return unless @changesMade
@@ -136,6 +140,7 @@ class board.Board extends circuitousObject.Object
             @componentsAndWires()[componentId]?.el?.css(backgroundColor: color)
     
     addDot: ({x, y, color}) ->
+        return
         dot =  $(document.createElement('DIV'))
         dot.html('&nbsp;')
         dot.css

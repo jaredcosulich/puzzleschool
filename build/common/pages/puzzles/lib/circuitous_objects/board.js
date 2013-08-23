@@ -235,6 +235,7 @@ board.Board = (function(_super) {
   Board.prototype.addDot = function(_arg) {
     var color, dot, x, y;
     x = _arg.x, y = _arg.y, color = _arg.color;
+    return;
     dot = $(document.createElement('DIV'));
     dot.html('&nbsp;');
     dot.css({

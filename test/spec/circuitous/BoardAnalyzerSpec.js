@@ -1,4 +1,4 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -19,7 +19,7 @@ describe("BoardAnalyzer", function() {
     }); 
     
     afterEach(function() {
-        $('.circuitous').html(html)
+        // $('.circuitous').html(html)
     })
     
     describe('with one battery', function() {
@@ -552,7 +552,41 @@ describe("BoardAnalyzer", function() {
                         expect(wireAt(board, 1).current).toEqual(0);
                         expect(bulb.current).toEqual(0);
                     });
-                })
+                
+                    describe('and various wires switched direction', function() {
+                        var wire1Direction, wire2Direction;
+                        beforeEach(function() {
+                            board.moveElectricity();
+                            
+                            var wire1 = wireAt(board, 6);
+                            wire1Direction = wire1.direction;
+                            expect(wire1Direction).toEqual(1);
+                            lastNode = drawOrEraseWire(board, wire1.nodes[0], 1, 0);
+                            drawOrEraseWire(board, lastNode, -1, 0);
+
+                            var wire2 = wireAt(board, 12);
+                            wire2Direction = wire2.direction;
+                            expect(wire2Direction).toEqual(1);
+                            lastNode = drawOrEraseWire(board, wire2.nodes[0], 0, -1);
+                            drawOrEraseWire(board, lastNode, 0, 1);
+                        });
+                    
+                        it('should maintain same values', function() {
+                            board.moveElectricity();
+                            expect(bulb2.current).toEqual(1.8);
+                            expect(wireAt(board, 6).current).toEqual(1.8);
+                            expect(wireAt(board, 12).current).toEqual(-1.8); 
+                            expect(wireAt(board, 1).current).toEqual(0);
+                            expect(bulb.current).toEqual(0);
+                        });
+                    
+                        it('should show current flowing in same direction as surrounding wires', function() {
+                            board.moveElectricity();
+                            expect(wireAt(board, 38).direction).toEqual(wire1Direction * -1)
+                            expect(wireAt(board, 39).direction).toEqual(wire2Direction * -1)
+                        });
+                    })
+                })                    
             })
         });
     });

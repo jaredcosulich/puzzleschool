@@ -15,7 +15,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.resistance = 0.00001;
 
-  Wires.prototype.electronsPerSegment = 2;
+  Wires.prototype.electronsPerSegment = 3;
 
   function Wires(board) {
     this.board = board;
@@ -185,58 +185,68 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.initElectrons = function(segment) {
-    var electron, electrons, i, _i, _ref;
+    var electrons, i, _i, _ref, _results,
+      _this = this;
     if (segment.electrons) {
       return;
     }
     segment.electrons = [];
     electrons = $(document.createElement('DIV'));
     electrons.addClass('electrons');
-    for (i = _i = 1, _ref = this.electronsPerSegment; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-      electron = $(document.createElement('DIV'));
-      electron.addClass('electron');
-      if (segment.horizontal) {
-        electron.css({
-          left: (segment.el.width() / (this.electronsPerSegment + 1)) * i
+    _results = [];
+    for (i = _i = 0, _ref = this.electronsPerSegment; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      _results.push((function(i) {
+        var electron;
+        electron = $(document.createElement('DIV'));
+        electron.addClass('electron');
+        electrons.append(electron);
+        $.timeout(10, function() {
+          if (segment.horizontal) {
+            return electron.css({
+              left: ((segment.el.height() / 2) - (electron.width() / 2)) + (_this.cellDimension / 2) * i
+            });
+          } else {
+            return electron.css({
+              top: ((segment.el.width() / 2) - (electron.height() / 2)) + (_this.cellDimension / 2) * i
+            });
+          }
         });
-      } else {
-        electron.css({
-          top: (segment.el.height() / (this.electronsPerSegment + 1)) * i
+        segment.electrons.push({
+          el: electron,
+          transformer: new Transformer(electron)
         });
-      }
-      electrons.append(electron);
-      segment.electrons.push({
-        el: electron,
-        transformer: new Transformer(electron)
-      });
+        return segment.el.append(electrons);
+      })(i));
     }
-    return segment.el.append(electrons);
+    return _results;
   };
 
   Wires.prototype.moveElectrons = function(segment, elapsedTime) {
-    var electron, height, left, reverse, top, totalMovement, width, x, y, _i, _len, _ref, _results;
-    totalMovement = (elapsedTime / 500) * segment.current;
-    reverse = (segment.nodes[0].x < segment.nodes[1].x) || (segment.nodes[0].y < segment.nodes[1].y);
+    var electron, height, left, pointedDown, pointedRight, reverse, top, totalMovement, width, x, y, _i, _len, _ref, _results;
+    totalMovement = (elapsedTime / 200) * Math.abs(segment.current);
+    reverse = (segment.direction * segment.current) < 1;
     _ref = segment.electrons;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       electron = _ref[_i];
       x = y = 0;
       if (segment.horizontal) {
+        pointedRight = segment.nodes[0].x < segment.nodes[1].x;
         left = parseInt(electron.el.css('left'));
         width = segment.el.width();
-        if (reverse) {
-          x = (((width - left) - totalMovement) % width) + (width - left);
+        if ((pointedRight && !reverse) || (reverse && !pointedRight)) {
+          x = ((left + totalMovement) % this.cellDimension) - left;
         } else {
-          x = ((left + totalMovement) % width) - left;
+          x = this.cellDimension + ((left - (this.cellDimension + totalMovement)) % this.cellDimension) - left;
         }
       } else {
+        pointedDown = segment.nodes[0].y < segment.nodes[1].y;
         top = parseInt(electron.el.css('top'));
         height = segment.el.height();
-        if (reverse) {
-          y = (((height - top) - totalMovement) % height) + (height - top);
+        if ((pointedDown && !reverse) || (reverse && !pointedDown)) {
+          y = ((top + totalMovement) % this.cellDimension) - top;
         } else {
-          y = ((top + totalMovement) % height) - top;
+          y = this.cellDimension + ((top - (this.cellDimension + totalMovement)) % this.cellDimension) - top;
         }
       }
       _results.push(electron.transformer.translate(x, y));
@@ -246,6 +256,9 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.clearElectrons = function(segment) {
     var electron, _i, _len, _ref;
+    if (!segment.electrons) {
+      return;
+    }
     _ref = (segment != null ? segment.electrons : void 0) || [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       electron = _ref[_i];
