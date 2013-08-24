@@ -82,8 +82,34 @@ soma.views
                 circuitousEditor = require('./lib/circuitous_editor')
                 @editor = new circuitousEditor.EditorHelper
                     el: $(@selector)
-
             
+            window.loadInstructions = (instructions) => @loadInstructions(instructions)
+            window.getInstructions = => @getInstructions()
+                    
+        loadInstructions: (instructions) ->
+            for name, info of instructions
+                do (name, info) =>
+                    if name == 'wires'
+                        @editor.board.wires.create(nodes...) for nodes in info
+                    else
+                        component = new circuitous[name]
+                        @editor.options.addComponent(component)
+                        setTimeout(( =>
+                            @editor.board.addComponent(component, info.x, info.y)                            
+                        ), 15)
+                    
+                    
+        getInstructions: ->
+            instructions = []
+            for id, component of @editor.board.components
+                instructions.push("#{component.constructor.name}: {x: #{component.currentX}, y: #{component.currentY}}")
+                
+            wires = []
+            for id, wire of @editor.board.wires.all()
+                wires.push("[{x: #{wire.nodes[0].x}, y: #{wire.nodes[0].y}}, {x: #{wire.nodes[1].x}, y: #{wire.nodes[1].y}}]")
+            instructions.push("wires: [#{wires.join(',')}]")
+        
+            "{#{instructions.join(',')}}"
 soma.routes
     '/puzzles/circuitous/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Circuitous
@@ -95,4 +121,8 @@ soma.routes
             levelId: levelId
     
     '/puzzles/circuitous': -> new soma.chunks.Circuitous
+    
+    
+    
+    
 

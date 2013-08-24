@@ -79,7 +79,8 @@ soma.views({
   Circuitous: {
     selector: '#content .circuitous',
     create: function() {
-      var circuitous, circuitousEditor;
+      var circuitous, circuitousEditor,
+        _this = this;
       circuitous = require('./lib/circuitous');
       this.viewHelper = new circuitous.ViewHelper({
         el: $(this.selector)
@@ -87,10 +88,59 @@ soma.views({
       this.levelId = this.el.data('level_id');
       if (this.levelId === 'editor') {
         circuitousEditor = require('./lib/circuitous_editor');
-        return this.editor = new circuitousEditor.EditorHelper({
+        this.editor = new circuitousEditor.EditorHelper({
           el: $(this.selector)
         });
       }
+      window.loadInstructions = function(instructions) {
+        return _this.loadInstructions(instructions);
+      };
+      return window.getInstructions = function() {
+        return _this.getInstructions();
+      };
+    },
+    loadInstructions: function(instructions) {
+      var info, name, _results,
+        _this = this;
+      _results = [];
+      for (name in instructions) {
+        info = instructions[name];
+        _results.push((function(name, info) {
+          var component, nodes, _i, _len, _ref, _results1;
+          if (name === 'wires') {
+            _results1 = [];
+            for (_i = 0, _len = info.length; _i < _len; _i++) {
+              nodes = info[_i];
+              _results1.push((_ref = _this.editor.board.wires).create.apply(_ref, nodes));
+            }
+            return _results1;
+          } else {
+            component = new circuitous[name];
+            _this.editor.options.addComponent(component);
+            return setTimeout((function() {
+              return _this.editor.board.addComponent(component, info.x, info.y);
+            }), 15);
+          }
+        })(name, info));
+      }
+      return _results;
+    },
+    getInstructions: function() {
+      var component, id, instructions, wire, wires, _ref, _ref1;
+      instructions = [];
+      _ref = this.editor.board.components;
+      for (id in _ref) {
+        component = _ref[id];
+        instructions.push("" + component.constructor.name + ": {x: " + component.currentX + ", y: " + component.currentY + "}");
+      }
+      wires = [];
+      _ref1 = this.editor.board.wires.all();
+      for (id in _ref1) {
+        wire = _ref1[id];
+        wires.push("[{x: " + wire.nodes[0].x + ", y: " + wire.nodes[0].y + "}, {x: " + wire.nodes[1].x + ", y: " + wire.nodes[1].y + "}]");
+      }
+      instructions.push("wires: [" + (wires.join(',')) + "]");
+      return "{" + (instructions.join(',')) + "}";
     }
   }
 });

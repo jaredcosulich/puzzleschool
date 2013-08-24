@@ -309,7 +309,7 @@ analyzer.Analyzer = (function(_super) {
     if (section.voltage) {
       this.info.matrix.currentLoop.voltage += section.voltage * direction * -1;
     }
-    if (this.compareNodes.apply(this, section.nodes)) {
+    if (this.compareNodes.apply(this, section.nodes) && Object.keys(this.info.matrix.currentLoop.sections).length === 1) {
       this.completeMatrixLoop();
     }
     return this.info.matrix.pathsAnalyzed[this.info.matrix.currentLoop.path.join('__')] = true;
@@ -325,7 +325,6 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.addMatrixLoop = function() {
-    this.board.clearColors();
     return this.info.matrix.currentLoop = {
       voltage: 0,
       sections: {},
@@ -430,44 +429,42 @@ analyzer.Analyzer = (function(_super) {
         }
         lastSection = nextSection;
         nextSection = null;
-        if (!nextNode || this.compareNodes(nextNode, this.info.matrix.currentLoop.startNode)) {
+        if (nextNode && this.compareNodes(nextNode, this.info.matrix.currentLoop.startNode)) {
           this.completeMatrixLoop();
-        } else {
-          if (nextNode && !this.info.matrix.currentLoop.nodes["" + nextNode.x + ":" + nextNode.y]) {
-            if (Object.keys(nextSections).length > 2) {
-              for (sid in nextSections) {
-                if (allSections[sid] && !this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
-                  this.info.matrix.pathsToTry.push(this.info.matrix.currentLoop.path.concat([sid]));
-                }
+        } else if (nextNode && !this.info.matrix.currentLoop.nodes["" + nextNode.x + ":" + nextNode.y]) {
+          if (Object.keys(nextSections).length > 2) {
+            for (sid in nextSections) {
+              if (allSections[sid] && !this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
+                this.info.matrix.pathsToTry.push(this.info.matrix.currentLoop.path.concat([sid]));
               }
             }
-            if (!nextSection) {
-              for (sid in nextSections) {
-                section = nextSections[sid];
-                if (!allSections[sid]) {
-                  continue;
-                }
-                nextSection = section;
-                direction = this.matrixLoopDirection(section, nextNode);
-                if (direction === 1) {
-                  break;
-                }
+          }
+          if (!nextSection) {
+            for (sid in nextSections) {
+              section = nextSections[sid];
+              if (!allSections[sid]) {
+                continue;
+              }
+              nextSection = section;
+              direction = this.matrixLoopDirection(section, nextNode);
+              if (direction === 1) {
+                break;
               }
             }
-            if (!nextSection) {
-              for (sid in nextSections) {
-                section = nextSections[sid];
-                if (!(!this.info.matrix.currentLoop.sections[sid])) {
-                  continue;
-                }
-                if (this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
-                  continue;
-                }
-                nextSection = section;
-                direction = this.matrixLoopDirection(section, nextNode);
-                if (direction === 1) {
-                  break;
-                }
+          }
+          if (!nextSection) {
+            for (sid in nextSections) {
+              section = nextSections[sid];
+              if (!(!this.info.matrix.currentLoop.sections[sid])) {
+                continue;
+              }
+              if (this.info.matrix.pathsAnalyzed[__slice.call(this.info.matrix.currentLoop.path).concat([sid]).join('__')]) {
+                continue;
+              }
+              nextSection = section;
+              direction = this.matrixLoopDirection(section, nextNode);
+              if (direction === 1) {
+                break;
               }
             }
           }

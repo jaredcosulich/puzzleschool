@@ -185,7 +185,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.matrix.currentLoop.startNode = node unless @info.matrix.currentLoop.startNode
         @info.matrix.currentLoop.sections[section.id] = {resistance: section.resistance * direction * -1}
         @info.matrix.currentLoop.voltage += section.voltage * direction * -1 if section.voltage
-        @completeMatrixLoop() if @compareNodes(section.nodes...)
+        @completeMatrixLoop() if @compareNodes(section.nodes...) and Object.keys(@info.matrix.currentLoop.sections).length == 1
         
         @info.matrix.pathsAnalyzed[@info.matrix.currentLoop.path.join('__')] = true
 
@@ -203,7 +203,6 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.matrix.totalLoops = 0
            
     addMatrixLoop: ->
-        @board.clearColors()
         @info.matrix.currentLoop = {voltage: 0, sections: {}, path: [], nodes: {}}
         
     completeMatrixLoop: (loopInfo=@info.matrix.currentLoop)->
@@ -280,27 +279,25 @@ class analyzer.Analyzer extends circuitousObject.Object
                 lastSection = nextSection
                 nextSection = null
 
-                if !nextNode or @compareNodes(nextNode, @info.matrix.currentLoop.startNode)
+                if nextNode and @compareNodes(nextNode, @info.matrix.currentLoop.startNode)
                     @completeMatrixLoop() 
-                else    
-                    if nextNode and not @info.matrix.currentLoop.nodes["#{nextNode.x}:#{nextNode.y}"]                        
-            
-                        if Object.keys(nextSections).length > 2
-                            for sid of nextSections when allSections[sid] and not @info.matrix.pathsAnalyzed[[@info.matrix.currentLoop.path..., sid].join('__')]
-                                @info.matrix.pathsToTry.push(@info.matrix.currentLoop.path.concat([sid]))
-                    
-                        if not nextSection
-                            for sid, section of nextSections when allSections[sid]
-                                nextSection = section
-                                direction = @matrixLoopDirection(section, nextNode) 
-                                break if direction == 1
+                else if nextNode and not @info.matrix.currentLoop.nodes["#{nextNode.x}:#{nextNode.y}"]
+                    if Object.keys(nextSections).length > 2
+                        for sid of nextSections when allSections[sid] and not @info.matrix.pathsAnalyzed[[@info.matrix.currentLoop.path..., sid].join('__')]
+                            @info.matrix.pathsToTry.push(@info.matrix.currentLoop.path.concat([sid]))
+                
+                    if not nextSection
+                        for sid, section of nextSections when allSections[sid]
+                            nextSection = section
+                            direction = @matrixLoopDirection(section, nextNode) 
+                            break if direction == 1
 
-                        if not nextSection
-                            for sid, section of nextSections when not @info.matrix.currentLoop.sections[sid]
-                                continue if @info.matrix.pathsAnalyzed[[@info.matrix.currentLoop.path..., sid].join('__')]
-                                nextSection = section 
-                                direction = @matrixLoopDirection(section, nextNode) 
-                                break if direction == 1
+                    if not nextSection
+                        for sid, section of nextSections when not @info.matrix.currentLoop.sections[sid]
+                            continue if @info.matrix.pathsAnalyzed[[@info.matrix.currentLoop.path..., sid].join('__')]
+                            nextSection = section 
+                            direction = @matrixLoopDirection(section, nextNode) 
+                            break if direction == 1
 
                 if not nextSection or @info.matrix.currentLoop.completed
                     return if @info.matrix.totalLoops >= totalSections - 1 and not Object.keys(allSections).length               

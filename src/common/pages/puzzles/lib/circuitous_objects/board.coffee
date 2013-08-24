@@ -141,7 +141,6 @@ class board.Board extends circuitousObject.Object
             @componentsAndWires()[componentId]?.el?.css(backgroundColor: color)
     
     addDot: ({x, y, color}) ->
-        return
         dot =  $(document.createElement('DIV'))
         dot.html('&nbsp;')
         dot.css
@@ -149,8 +148,8 @@ class board.Board extends circuitousObject.Object
             backgroundColor: color or 'red'
             width: 4
             height: 4
-            marginTop: -2
-            marginLeft: -2
+            marginTop: -9
+            marginLeft: -9
             left: x
             top: y
             zIndex: 9

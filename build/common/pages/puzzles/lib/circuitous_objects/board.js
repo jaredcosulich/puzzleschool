@@ -239,7 +239,6 @@ board.Board = (function(_super) {
   Board.prototype.addDot = function(_arg) {
     var color, dot, x, y;
     x = _arg.x, y = _arg.y, color = _arg.color;
-    return;
     dot = $(document.createElement('DIV'));
     dot.html('&nbsp;');
     dot.css({
@@ -247,8 +246,8 @@ board.Board = (function(_super) {
       backgroundColor: color || 'red',
       width: 4,
       height: 4,
-      marginTop: -2,
-      marginLeft: -2,
+      marginTop: -9,
+      marginLeft: -9,
       left: x,
       top: y,
       zIndex: 9

@@ -87,26 +87,26 @@ wires.Wires = (function(_super) {
     existingSegment = this.find(this.info.start, coords);
     if (this.info.erasing || (existingSegment && (!this.info.continuation || (existingSegment === this.info.lastSegment)))) {
       if (existingSegment) {
-        segment = this.erase(coords);
+        segment = this.erase(this.info.start, coords);
       }
     } else {
       if (!existingSegment) {
-        segment = this.create(coords);
+        segment = this.create(this.info.start, coords);
       }
     }
     this.info.lastSegment = segment;
     return this.info.start = coords;
   };
 
-  Wires.prototype.create = function(coords) {
+  Wires.prototype.create = function(start, end) {
     var segment;
     segment = $(document.createElement('DIV'));
     segment.addClass('wire_segment');
     segment.css({
-      left: Math.min(this.info.start.x, coords.x),
-      top: Math.min(this.info.start.y, coords.y)
+      left: Math.min(start.x, end.x),
+      top: Math.min(start.y, end.y)
     });
-    if (Math.abs(this.info.start.x - coords.x) > Math.abs(this.info.start.y - coords.y)) {
+    if (Math.abs(start.x - end.x) > Math.abs(start.y - end.y)) {
       segment.width(this.cellDimension);
       segment.addClass('horizontal');
     } else {
@@ -114,19 +114,19 @@ wires.Wires = (function(_super) {
       segment.addClass('vertical');
     }
     this.el.append(segment);
-    this.recordPosition(segment, this.info.start, coords);
+    this.recordPosition(segment, start, end);
     this.info.continuation = true;
     return segment;
   };
 
-  Wires.prototype.erase = function(coords) {
+  Wires.prototype.erase = function(start, end) {
     var segment;
-    if (!(segment = this.find(this.info.start, coords))) {
+    if (!(segment = this.find(start, end))) {
       return;
     }
     this.clearElectrons(segment);
     segment.el.remove();
-    this.recordPosition(null, this.info.start, coords);
+    this.recordPosition(null, start, end);
     if (!this.info.continuation) {
       this.info.erasing = true;
     }

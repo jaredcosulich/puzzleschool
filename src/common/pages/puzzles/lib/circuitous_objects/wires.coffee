@@ -49,21 +49,21 @@ class wires.Wires extends circuitousObject.Object
         existingSegment = @find(@info.start, coords)
 
         if @info.erasing or (existingSegment and (!@info.continuation or (existingSegment == @info.lastSegment)))
-            segment = @erase(coords) if existingSegment
+            segment = @erase(@info.start, coords) if existingSegment
         else
-            segment = @create(coords) unless existingSegment
+            segment = @create(@info.start, coords) unless existingSegment
 
         @info.lastSegment = segment 
         @info.start = coords
 
-    create: (coords) ->
+    create: (start, end) ->
         segment = $(document.createElement('DIV'))
         segment.addClass('wire_segment')
         segment.css
-            left: Math.min(@info.start.x, coords.x)
-            top: Math.min(@info.start.y, coords.y)
+            left: Math.min(start.x, end.x)
+            top: Math.min(start.y, end.y)
 
-        if Math.abs(@info.start.x - coords.x) > Math.abs(@info.start.y - coords.y)
+        if Math.abs(start.x - end.x) > Math.abs(start.y - end.y)
             segment.width(@cellDimension)
             segment.addClass('horizontal')
         else
@@ -74,15 +74,15 @@ class wires.Wires extends circuitousObject.Object
         # segment.bind 'mouseover', => console.log(position)    
 
         @el.append(segment)
-        @recordPosition(segment, @info.start, coords)   
+        @recordPosition(segment, start, end)   
         @info.continuation = true
         return segment
 
-    erase: (coords) ->
-        return unless (segment = @find(@info.start, coords))
+    erase: (start, end) ->
+        return unless (segment = @find(start, end))
         @clearElectrons(segment)
         segment.el.remove()
-        @recordPosition(null, @info.start, coords)
+        @recordPosition(null, start, end)
         @info.erasing = true unless @info.continuation
         return segment.el
 

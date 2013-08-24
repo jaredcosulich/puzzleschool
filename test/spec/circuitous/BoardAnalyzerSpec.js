@@ -1,4 +1,4 @@
-var debugInfo = false;
+var debugInfo = true;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -19,7 +19,7 @@ describe("BoardAnalyzer", function() {
     }); 
     
     afterEach(function() {
-        $('.circuitous').html(html)
+        // $('.circuitous').html(html)
     })
     
     describe('with one battery', function() {
@@ -47,6 +47,24 @@ describe("BoardAnalyzer", function() {
                 for (componentId in componentInfo) {
                     expect(board.componentsAndWires()[componentId].direction).toEqual(1);
                 }
+            });
+            
+            describe('connecting back to itself', function() {
+                beforeEach(function() {
+                    var start = board.boardPosition(battery.currentNodes()[1]);
+                    var lastNode = drawOrEraseWire(board, start, 0, -4);                    
+                    lastNode = drawOrEraseWire(board, lastNode, -1, 0);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, -3);
+                    lastNode = drawOrEraseWire(board, lastNode, 6, 0);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, 3);
+                    drawOrEraseWire(board, lastNode, -5, 0);
+                });
+
+                it('should be an incomplete circuit with no amps', function() {
+                    var componentInfo = board.analyzer.run()
+                    expect(componentInfo[battery.id].amps).toBeUndefined()
+                    expect(componentInfo[wireAt(board, 1).id].amps).toBeUndefined()
+                });
             });
             
             describe('completing the circuit', function() {
@@ -593,6 +611,64 @@ describe("BoardAnalyzer", function() {
         });
     });
     
+    describe('a crazy circuit with three batteries and multiple parallel paths', function() {
+        var battery2Node, battery2, bulb1, bulb2, bulb2Node, bulb3;
+       
+        beforeEach(function() {
+            var start = board.boardPosition(battery.currentNodes()[1]);
+            battery2Node = drawOrEraseWire(board, start, 2, 0);         
+            battery2 = createComponent(board, 'Battery');
+            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+            expect(onBoard).toBe(true);
+
+            var split1Node = {x: battery2Node.x + 32, y: battery2Node.y}
+            var battery3Node = drawOrEraseWire(board, split1Node, 2, 0);         
+            var battery3 = createComponent(board, 'Battery');
+            var onBoard = addToBoard(board, battery3, battery3Node.x + 32, battery3Node.y + 64);
+            expect(onBoard).toBe(true);
+
+            lastNode = drawOrEraseWire(board, {x: battery3Node.x + 32, y: battery3Node.y}, 1, 0);
+            drawOrEraseWire(board, lastNode, 0, -2);
+                  
+            lastNode = drawOrEraseWire(board, split1Node, 0, -2);  
+            var bulb1Node = drawOrEraseWire(board, lastNode, 2, 0);  
+            bulb1 = createComponent(board, 'Lightbulb');
+            var onBoard = addToBoard(board, bulb1, bulb1Node.x, bulb1Node.y);
+            expect(onBoard).toBe(true);
+
+            lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);  
+            bulb2Node = drawOrEraseWire(board, lastNode, 0, -2);  
+            bulb2 = createComponent(board, 'Lightbulb');
+            var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+            expect(onBoard).toBe(true);
+        });
+       
+        it('should be showing a complete circuit even though whole circtuit is not complete', function() {
+            board.moveElectricity();
+            expect(bulb1.current).toEqual(1.8)
+        });
+       
+        it('should maintain consistently flowing current once compeleted, changed, and recompleted', function() {
+            var split3Node = drawOrEraseWire(board, bulb2Node, -4, 0);
+            drawOrEraseWire(board, split3Node, 0, 2);
+
+            var bulb3Node = drawOrEraseWire(board, split3Node, -2, 0);
+            bulb3 = createComponent(board, 'Lightbulb');
+            var onBoard = addToBoard(board, bulb3, bulb3Node.x, bulb3Node.y);
+            expect(onBoard).toBe(true);
+
+            var lastNode = drawOrEraseWire(board, bulb3Node, -2, 0);
+            drawOrEraseWire(board, lastNode, 0, 4);
+            
+            board.moveElectricity();
+            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
+            expect(onBoard).toBe(true);
+
+            board.moveElectricity();
+            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+            expect(onBoard).toBe(true);
+        });  
+    });
 });
 
 
