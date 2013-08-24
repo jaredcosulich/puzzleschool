@@ -87,23 +87,23 @@ soma.views
             window.getInstructions = => @getInstructions()
                     
         loadInstructions: (instructions) ->
-            for name, info of instructions
-                do (name, info) =>
-                    if name == 'wires'
-                        @editor.board.wires.create(nodes...) for nodes in info
-                    else
-                        component = new circuitous[name]
-                        @editor.options.addComponent(component)
-                        setTimeout(( =>
-                            @editor.board.addComponent(component, info.x, info.y)                            
-                        ), 15)
-                    
+            @editor.board.wires.create(nodes...) for nodes in instructions.wires
+            
+            for info in instructions.components
+                do (info) =>
+                    component = new circuitous[info.name]
+                    @editor.options.addComponent(component)
+                    setTimeout(( =>
+                        @editor.board.addComponent(component, info.x, info.y - 16)                            
+                    ), 15)                                    
                     
         getInstructions: ->
             instructions = []
+            components = []
             for id, component of @editor.board.components
-                instructions.push("#{component.constructor.name}: {x: #{component.currentX}, y: #{component.currentY}}")
-                
+                components.push("{name: #{component.constructor.name}, x: #{component.currentX}, y: #{component.currentY}}")
+            instructions.push("components: [#{components.join(',')}]")    
+            
             wires = []
             for id, wire of @editor.board.wires.all()
                 wires.push("[{x: #{wire.nodes[0].x}, y: #{wire.nodes[0].y}}, {x: #{wire.nodes[1].x}, y: #{wire.nodes[1].y}}]")
