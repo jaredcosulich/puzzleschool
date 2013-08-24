@@ -129,19 +129,6 @@ class wires.Wires extends circuitousObject.Object
         return if segment.electrons
         electronsSegment = $(document.createElement('DIV'))
         electronsSegment.addClass('electrons_segment')
-
-        reverse = ((segment.direction * segment.current) < 1)        
-        if segment.horizontal
-            pointedRight = segment.nodes[0].x < segment.nodes[1].x
-            pointedRight = !pointedRight if reverse
-            electronsSegment.addClass(if pointedRight then 'right' else 'left')
-            electronsSegment.width(@cellDimension)
-        else
-            pointedDown = segment.nodes[0].y < segment.nodes[1].y
-            pointedDown = !pointedDown if reverse
-            electronsSegment.addClass(if pointedDown then 'down' else 'up')
-            electronsSegment.height(@cellDimension)
-        
         electronsSegment.css(top: segment.el.css('top'), left: segment.el.css('left'))
         @electrons.append(electronsSegment)
         segment.electrons = {el: electronsSegment, transformer: new Transformer(electronsSegment)}
@@ -170,10 +157,26 @@ class wires.Wires extends circuitousObject.Object
         segment.electrons.el.remove()
         delete segment.electrons
         
+    setDirection: (segment) ->
+        return if segment.reverse == (reverse = ((segment.direction * segment.current) < 1))
+        segment.reverse = reverse
+        segment.electrons.el[0].className = 'electrons_segment'        
+        if segment.horizontal
+            pointedRight = segment.nodes[0].x < segment.nodes[1].x
+            pointedRight = !pointedRight if segment.reverse
+            segment.electrons.el.addClass(if pointedRight then 'right' else 'left')
+            segment.electrons.el.width(@cellDimension)
+        else
+            pointedDown = segment.nodes[0].y < segment.nodes[1].y
+            pointedDown = !pointedDown if segment.reverse
+            segment.electrons.el.addClass(if pointedDown then 'down' else 'up')
+            segment.electrons.el.height(@cellDimension)
+        
     showCurrent: (elapsedTime) ->
         for segmentId, segment of @info.all
             if segment.current
                 @initElectrons(segment) 
+                @setDirection(segment)
                 @moveElectrons(segment, elapsedTime)    
             else
                 @clearElectrons(segment)

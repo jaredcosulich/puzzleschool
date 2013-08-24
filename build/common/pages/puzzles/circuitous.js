@@ -95,9 +95,10 @@ soma.views({
       window.loadInstructions = function(instructions) {
         return _this.loadInstructions(instructions);
       };
-      return window.getInstructions = function() {
+      window.getInstructions = function() {
         return _this.getInstructions();
       };
+      return window.wires = this.editor.board.wires;
     },
     loadInstructions: function(instructions) {
       var info, nodes, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,

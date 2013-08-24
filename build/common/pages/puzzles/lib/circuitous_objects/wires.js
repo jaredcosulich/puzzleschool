@@ -187,28 +187,12 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.initElectrons = function(segment) {
-    var electronsSegment, pointedDown, pointedRight, reverse;
+    var electronsSegment;
     if (segment.electrons) {
       return;
     }
     electronsSegment = $(document.createElement('DIV'));
     electronsSegment.addClass('electrons_segment');
-    reverse = (segment.direction * segment.current) < 1;
-    if (segment.horizontal) {
-      pointedRight = segment.nodes[0].x < segment.nodes[1].x;
-      if (reverse) {
-        pointedRight = !pointedRight;
-      }
-      electronsSegment.addClass(pointedRight ? 'right' : 'left');
-      electronsSegment.width(this.cellDimension);
-    } else {
-      pointedDown = segment.nodes[0].y < segment.nodes[1].y;
-      if (reverse) {
-        pointedDown = !pointedDown;
-      }
-      electronsSegment.addClass(pointedDown ? 'down' : 'up');
-      electronsSegment.height(this.cellDimension);
-    }
     electronsSegment.css({
       top: segment.el.css('top'),
       left: segment.el.css('left')
@@ -249,6 +233,30 @@ wires.Wires = (function(_super) {
     return delete segment.electrons;
   };
 
+  Wires.prototype.setDirection = function(segment) {
+    var pointedDown, pointedRight, reverse;
+    if (segment.reverse === (reverse = (segment.direction * segment.current) < 1)) {
+      return;
+    }
+    segment.reverse = reverse;
+    segment.electrons.el[0].className = 'electrons_segment';
+    if (segment.horizontal) {
+      pointedRight = segment.nodes[0].x < segment.nodes[1].x;
+      if (segment.reverse) {
+        pointedRight = !pointedRight;
+      }
+      segment.electrons.el.addClass(pointedRight ? 'right' : 'left');
+      return segment.electrons.el.width(this.cellDimension);
+    } else {
+      pointedDown = segment.nodes[0].y < segment.nodes[1].y;
+      if (segment.reverse) {
+        pointedDown = !pointedDown;
+      }
+      segment.electrons.el.addClass(pointedDown ? 'down' : 'up');
+      return segment.electrons.el.height(this.cellDimension);
+    }
+  };
+
   Wires.prototype.showCurrent = function(elapsedTime) {
     var segment, segmentId, _ref, _results;
     _ref = this.info.all;
@@ -257,6 +265,7 @@ wires.Wires = (function(_super) {
       segment = _ref[segmentId];
       if (segment.current) {
         this.initElectrons(segment);
+        this.setDirection(segment);
         _results.push(this.moveElectrons(segment, elapsedTime));
       } else {
         _results.push(this.clearElectrons(segment));

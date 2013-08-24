@@ -85,6 +85,7 @@ soma.views
             
             window.loadInstructions = (instructions) => @loadInstructions(instructions)
             window.getInstructions = => @getInstructions()
+            window.wires = @editor.board.wires
                     
         loadInstructions: (instructions) ->
             @editor.board.wires.create(nodes...) for nodes in instructions.wires
