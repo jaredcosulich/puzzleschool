@@ -89,8 +89,8 @@ class board.Board extends circuitousObject.Object
     initElectricity: ->
         @analyzer = new Analyzer(@)
         @electricalAnimation = new Animation()    
-        @electricalAnimation.start 
-            method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
+        # @electricalAnimation.start 
+        #     method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
         # $('.menu').bind 'click', => 
         #     @elapsed or= 0
         #     deltaTime = 300

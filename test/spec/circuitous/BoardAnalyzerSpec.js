@@ -620,7 +620,7 @@ describe("BoardAnalyzer", function() {
             battery2 = createComponent(board, 'Battery');
             var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
             expect(onBoard).toBe(true);
-
+    
             var split1Node = {x: battery2Node.x + 32, y: battery2Node.y}
             var battery3Node = drawOrEraseWire(board, split1Node, 2, 0);         
             var battery3 = createComponent(board, 'Battery');
@@ -645,7 +645,7 @@ describe("BoardAnalyzer", function() {
        
         it('should be showing a complete circuit even though whole circtuit is not complete', function() {
             board.moveElectricity();
-            expect(bulb1.current).toEqual(1.8)
+            expect(bulb1.current).toEqual(-1.8)
         });
        
         it('should maintain consistently flowing current once compeleted, changed, and recompleted', function() {
