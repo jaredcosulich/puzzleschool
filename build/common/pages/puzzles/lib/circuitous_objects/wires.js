@@ -230,6 +230,7 @@ wires.Wires = (function(_super) {
       return;
     }
     segment.electrons.el.remove();
+    delete segment.reverse;
     return delete segment.electrons;
   };
 

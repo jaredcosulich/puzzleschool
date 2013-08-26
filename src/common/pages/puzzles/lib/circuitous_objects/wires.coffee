@@ -132,8 +132,7 @@ class wires.Wires extends circuitousObject.Object
         electronsSegment.css(top: segment.el.css('top'), left: segment.el.css('left'))
         @electrons.append(electronsSegment)
         segment.electrons = {el: electronsSegment, transformer: new Transformer(electronsSegment)}
-        
-        
+                
     moveElectrons: (segment, elapsedTime) ->
         totalMovement = ((elapsedTime/200) * Math.abs(segment.current))
         x = y = 0
@@ -155,6 +154,7 @@ class wires.Wires extends circuitousObject.Object
     clearElectrons: (segment) ->
         return unless segment.electrons
         segment.electrons.el.remove()
+        delete segment.reverse
         delete segment.electrons
         
     setDirection: (segment) ->
