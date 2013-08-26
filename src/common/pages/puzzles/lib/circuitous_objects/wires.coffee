@@ -160,7 +160,7 @@ class wires.Wires extends circuitousObject.Object
         delete segment.electrons
         
     setDirection: (segment) ->
-        return if segment.reverse == (reverse = ((segment.direction * segment.current) < 1))
+        return if segment.reverse == (reverse = ((segment.direction * segment.current) < 0))
         segment.reverse = reverse
         segment.electrons.el[0].className = 'electrons_segment'        
         if segment.horizontal

@@ -241,7 +241,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.setDirection = function(segment) {
     var pointedDown, pointedRight, reverse;
-    if (segment.reverse === (reverse = (segment.direction * segment.current) < 1)) {
+    if (segment.reverse === (reverse = (segment.direction * segment.current) < 0)) {
       return;
     }
     segment.reverse = reverse;
