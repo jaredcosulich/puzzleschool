@@ -206,7 +206,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.moveElectrons = function(segment, elapsedTime) {
     var height, pointedDown, pointedRight, totalMovement, width, x, y;
-    totalMovement = (elapsedTime / 200) * Math.abs(segment.current);
+    totalMovement = (elapsedTime / 100) * Math.abs(segment.current);
     x = y = 0;
     if (segment.horizontal) {
       pointedRight = width = segment.el.width();

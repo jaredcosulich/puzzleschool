@@ -117,20 +117,30 @@ soma.views({
           component = new circuitous[info.name];
           _this.editor.options.addComponent(component);
           return setTimeout((function() {
-            return _this.editor.board.addComponent(component, info.x, info.y - 16);
-          }), 15);
+            var componentPosition;
+            component.setStartDrag({}, true);
+            componentPosition = _this.editor.board.componentPosition({
+              x: info.x,
+              y: info.y
+            });
+            return _this.editor.board.addComponent(component, componentPosition.x, componentPosition.y);
+          }), 50);
         })(info));
       }
       return _results;
     },
     getInstructions: function() {
-      var component, components, id, instructions, wire, wires, _ref, _ref1;
+      var boardPosition, component, components, id, instructions, wire, wires, _ref, _ref1;
       instructions = [];
       components = [];
       _ref = this.editor.board.components;
       for (id in _ref) {
         component = _ref[id];
-        components.push("{name: " + component.constructor.name + ", x: " + component.currentX + ", y: " + component.currentY + "}");
+        boardPosition = this.editor.board.boardPosition({
+          x: component.currentX,
+          y: component.currentY
+        });
+        components.push("{name: '" + component.constructor.name + "', x: " + boardPosition.x + ", y: " + boardPosition.y + "}");
       }
       instructions.push("components: [" + (components.join(',')) + "]");
       wires = [];

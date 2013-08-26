@@ -134,7 +134,7 @@ class wires.Wires extends circuitousObject.Object
         segment.electrons = {el: electronsSegment, transformer: new Transformer(electronsSegment)}
                 
     moveElectrons: (segment, elapsedTime) ->
-        totalMovement = ((elapsedTime/200) * Math.abs(segment.current))
+        totalMovement = ((elapsedTime/100) * Math.abs(segment.current))
         x = y = 0
         if segment.horizontal
             pointedRight = 

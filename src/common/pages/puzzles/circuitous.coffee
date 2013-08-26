@@ -95,14 +95,18 @@ soma.views
                     component = new circuitous[info.name]
                     @editor.options.addComponent(component)
                     setTimeout(( =>
-                        @editor.board.addComponent(component, info.x, info.y - 16)                            
-                    ), 15)                                    
+                        component.setStartDrag({}, true)
+                        componentPosition = @editor.board.componentPosition(x: info.x, y: info.y)
+                        @editor.board.addComponent(component, componentPosition.x, componentPosition.y)                            
+                    ), 50)                                    
                     
         getInstructions: ->
             instructions = []
             components = []
+            
             for id, component of @editor.board.components
-                components.push("{name: #{component.constructor.name}, x: #{component.currentX}, y: #{component.currentY}}")
+                boardPosition = @editor.board.boardPosition(x: component.currentX, y: component.currentY) 
+                components.push("{name: '#{component.constructor.name}', x: #{boardPosition.x}, y: #{boardPosition.y}}")
             instructions.push("components: [#{components.join(',')}]")    
             
             wires = []

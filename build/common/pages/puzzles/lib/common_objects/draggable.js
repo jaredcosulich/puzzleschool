@@ -12,35 +12,34 @@ draggable.Draggable = (function() {
   function Draggable() {}
 
   Draggable.prototype.initDrag = function(dragElement, trackDrag, center) {
-    var offset,
-      _this = this;
+    var _this = this;
     this.dragElement = dragElement;
     this.trackDrag = trackDrag;
     this.transformer = new Transformer(this.dragElement);
-    if (center) {
-      offset = this.dragElement.offset();
-      this.startX = offset.left + (offset.width / 2);
-      this.startY = offset.top + (offset.height / 2);
-    }
     return this.dragElement.bind('mousedown.drag touchstart.drag', function(e) {
       e.stop();
       $(document.body).one('mouseup.drag touchend.drag', function(e) {
         $(document.body).unbind('mousemove.drag touchstart.drag');
         return _this.drag(e, 'stop');
       });
-      if (!center) {
-        if (!_this.startX) {
-          _this.startX = Client.x(e);
-        }
-        if (!_this.startY) {
-          _this.startY = Client.y(e);
-        }
-      }
+      _this.setStartDrag(e, center);
       _this.drag(e, 'start');
       return $(document.body).bind('mousemove.drag touchmove.drag', function(e) {
         return _this.drag(e, 'move');
       });
     });
+  };
+
+  Draggable.prototype.setStartDrag = function(e, center) {
+    var offset;
+    if (center) {
+      offset = this.dragElement.offset();
+      this.startX = offset.left + (offset.width / 2);
+      return this.startY = offset.top + (offset.height / 2);
+    } else {
+      this.startX = Client.x(e);
+      return this.startY = Client.y(e);
+    }
   };
 
   Draggable.prototype.drag = function(e, state) {
