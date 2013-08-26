@@ -202,12 +202,15 @@ class analyzer.Analyzer extends circuitousObject.Object
         @info.matrix.totalLoops = 0
            
     addMatrixLoop: ->
-        @board.clearColors()
+        # @board.clearColors()
         @info.matrix.currentLoop = {voltage: 0, sections: {}, path: [], nodes: {}}
         
     completeMatrixLoop: (loopInfo=@info.matrix.currentLoop)->
         loopInfo.completed = true
-        loopInfo.id = (if loopInfo.identity then "identity#{@info.matrix.totalLoops}" else '') + (sid for sid of loopInfo.sections).sort().join('__')
+        if loopInfo.identity
+            loopInfo.id = ("#{sid}:#{s.resistance}" for sid, s of loopInfo.sections).join('__')        
+        else
+            loopInfo.id = (sid for sid of loopInfo.sections).sort().join('__')
         return if @info.matrix.loops[loopInfo.id]
         
         for sid of loopInfo.sections
@@ -319,7 +322,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         #     console.log((loopInfo.sections[sid].adjusted for sid in sectionIds).join(' | '), loopInfo.adjustedVoltage)
         # console.log('')
         
-        equalsZero = (number) -> (-0.000001 < number < 0.000001)
+        equalsZero = (number) => ((@board.wires.resistance * -1) < number < @board.wires.resistance)
 
         for sectionId, variableIndex in sectionIds
             for factorLoopId, factorLoop of @info.matrix.loops
@@ -353,31 +356,30 @@ class analyzer.Analyzer extends circuitousObject.Object
             variableCount = 0
             for sectionId, sectionInfo of loopInfo.sections
                 variableCount += 1 unless equalsZero(sectionInfo.adjusted)
-            return false if variableCount > 1
-        
-        return true
+            loopInfo.unsolved = true if variableCount > 1
                     
     assignAmps: ->
         for sectionId, index in @info.matrix.sections
             continue if @info.sections[sectionId].amps
-            for loopInfoIndex, loopInfo of @info.matrix.loops
+            for loopInfoIndex, loopInfo of @info.matrix.loops when not loopInfo.unsolved
                 break if loopInfo.sections[sectionId].adjusted != 0
-            @info.sections[sectionId].amps = loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted
+            if loopInfo    
+                @info.sections[sectionId].amps = loopInfo.adjustedVoltage / loopInfo.sections[sectionId].adjusted
             
             # @board.clearColors()
             # @board.color((cid for cid of @info.sections[sectionId].components), 1)
             # console.log('amps', @info.sections[sectionId].amps)
             # debugger
             
-
         # console.log('')
         # for loopId, loopInfo of @info.matrix.loops
         #     console.log(("#{loopInfo.sections[sid].adjusted} / #{@info.sections[sid].amps}" for sid in @info.matrix.sections).join(' | '), loopInfo.adjustedVoltage)
 
             
     solveMatrix: ->
+        delete loopInfo.unsolved for loopId, loopInfo of @info.matrix.loops
         @fillOutMatrix()
-        return unless @reduceMatrix()
+        @reduceMatrix()
         @assignAmps()           
 
     deleteShorts: ->

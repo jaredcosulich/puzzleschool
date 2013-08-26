@@ -1,4 +1,4 @@
-var debugInfo = true;
+var debugInfo = false;
 describe("BoardAnalyzer", function() {
     var html, game, board, adderSquare, battery;
     
@@ -19,7 +19,7 @@ describe("BoardAnalyzer", function() {
     }); 
     
     afterEach(function() {
-        // $('.circuitous').html(html)
+        $('.circuitous').html(html)
     })
     
     describe('with one battery', function() {

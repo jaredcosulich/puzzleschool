@@ -2,7 +2,7 @@ describe("Analyzer", function() {
     var analyzer;
     
     beforeEach(function() {
-        analyzer = new Analyzer()
+        analyzer = new Analyzer({wires: {resistance: 0.00001}})
     });
     
     it('should instantiate an analyzer', function() {
