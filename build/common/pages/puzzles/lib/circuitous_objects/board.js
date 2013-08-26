@@ -62,7 +62,8 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addComponent = function(component, x, y) {
-    var boardPosition, onBoardX, onBoardY, roundedBoardPosition, _ref, _ref1;
+    var boardPosition, onBoardX, onBoardY, roundedBoardPosition, _ref, _ref1,
+      _this = this;
     this.changesMade = true;
     if (!component.id) {
       component.id = this.generateId('component');
@@ -77,6 +78,9 @@ board.Board = (function(_super) {
       this.components[component.id] = component;
       roundedBoardPosition = this.roundedCoordinates(boardPosition, component.centerOffset);
       component.positionAt(this.componentPosition(roundedBoardPosition));
+      component.el.bind('dragstart.board', function(e) {
+        return _this.wires.initDraw(e);
+      });
     } else {
       return false;
     }

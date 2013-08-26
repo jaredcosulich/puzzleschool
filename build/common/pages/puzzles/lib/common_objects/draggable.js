@@ -11,12 +11,21 @@ draggable.Draggable = (function() {
 
   function Draggable() {}
 
-  Draggable.prototype.initDrag = function(dragElement, trackDrag, center) {
+  Draggable.prototype.initDrag = function(dragElement, trackDrag, center, buffer) {
     var _this = this;
     this.dragElement = dragElement;
     this.trackDrag = trackDrag;
     this.transformer = new Transformer(this.dragElement);
     return this.dragElement.bind('mousedown.drag touchstart.drag', function(e) {
+      var offset, shiftX, shiftY, _ref, _ref1;
+      if (buffer) {
+        offset = _this.dragElement.offset();
+        shiftX = _this.currentX ? _this.currentX - _this.startX : 0;
+        shiftY = _this.currentY ? _this.currentY - _this.startY : 0;
+        if (!((offset.left + buffer.x < (_ref = Client.x(e) - shiftX) && _ref < offset.left + offset.width - buffer.x)) || !((offset.top + buffer.y < (_ref1 = Client.y(e) - shiftY) && _ref1 < offset.top + offset.height - buffer.y))) {
+          return true;
+        }
+      }
       e.stop();
       $(document.body).one('mouseup.drag touchend.drag', function(e) {
         $(document.body).unbind('mousemove.drag touchstart.drag');

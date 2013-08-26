@@ -2,6 +2,10 @@ battery = exports ? provide('./battery', {})
 circuitousObject = require('./object')
 
 class battery.Battery extends circuitousObject.Object
+    dragBuffer:
+        x: 0
+        y: 15
+    
     centerOffset: 
         x: 16
         y: 16

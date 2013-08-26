@@ -3,10 +3,18 @@ Transformer = require('../common_objects/transformer').Transformer
 Client = require('../common_objects/client').Client
 
 class draggable.Draggable
-    initDrag: (@dragElement, @trackDrag, center) ->
+    initDrag: (@dragElement, @trackDrag, center, buffer) ->
         @transformer = new Transformer(@dragElement)
         
         @dragElement.bind 'mousedown.drag touchstart.drag', (e) =>
+            if buffer
+                offset = @dragElement.offset()
+                shiftX = if @currentX then @currentX - @startX else 0
+                shiftY = if @currentY then @currentY - @startY else 0
+                if not (offset.left + buffer.x < Client.x(e) - shiftX < offset.left + offset.width - buffer.x) or
+                   not (offset.top + buffer.y < Client.y(e) - shiftY < offset.top + offset.height - buffer.y)
+                    return
+
             e.stop()
             $(document.body).one 'mouseup.drag touchend.drag', (e) =>
                 $(document.body).unbind('mousemove.drag touchstart.drag')

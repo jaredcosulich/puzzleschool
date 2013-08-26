@@ -14,18 +14,20 @@ class wires.Wires extends circuitousObject.Object
         @el = @board.el.find('.wires')
         @electrons = @board.el.find('.electrons')
         @cellDimension = @board.cellDimension
-        @board.el.bind 'mousedown.draw_wire', (e) =>
-            $(document.body).one 'mouseup.draw_wire', => 
-                $(document.body).unbind('mousemove.draw_wire')
-                delete @info.start      
-                delete @info.continuation
-                delete @info.erasing
-                delete @info.lastSegment      
-                          
-            $(document.body).bind 'mousemove.draw_wire', (e) => @draw(e)
-            @draw(e)
+        @board.el.bind 'mousedown.draw_wire', (e) => @initDraw(e)
             
     all: -> @info.all 
+        
+    initDraw: (e) ->
+        $(document.body).one 'mouseup.draw_wire', => 
+            $(document.body).unbind('mousemove.draw_wire')
+            delete @info.start      
+            delete @info.continuation
+            delete @info.erasing
+            delete @info.lastSegment      
+                      
+        $(document.body).bind 'mousemove.draw_wire', (e) => @draw(e)
+        @draw(e)
         
     draw: (e) ->
         coords = @board.roundedCoordinates({x: Client.x(e), y: Client.y(e)}, @el.offset())

@@ -15,6 +15,7 @@ class object.Object extends Draggable
     appendTo: (container) -> 
         container.append(@imageElement())
         @el = container.find("img[src=\'#{@image()}\']")
+        @el.bind 'dragstart', (e) => e.preventDefault()
 
     generateId: (namespace) -> "#{(if n = namespace then n else '')}#{new Date().getTime()}#{Math.random()}"
 

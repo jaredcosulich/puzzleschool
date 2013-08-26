@@ -50,7 +50,8 @@ class options.Options extends circuitousObject.Object
             component.initDrag(
                 component.el, 
                 (component, x, y, stopDrag) => @dragComponent(component, x, y, stopDrag),
-                true
+                true,
+                component.dragBuffer
             )
 
     dragComponent: (component, x, y, state) ->

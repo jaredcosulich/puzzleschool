@@ -33,22 +33,27 @@ wires.Wires = (function(_super) {
     this.electrons = this.board.el.find('.electrons');
     this.cellDimension = this.board.cellDimension;
     return this.board.el.bind('mousedown.draw_wire', function(e) {
-      $(document.body).one('mouseup.draw_wire', function() {
-        $(document.body).unbind('mousemove.draw_wire');
-        delete _this.info.start;
-        delete _this.info.continuation;
-        delete _this.info.erasing;
-        return delete _this.info.lastSegment;
-      });
-      $(document.body).bind('mousemove.draw_wire', function(e) {
-        return _this.draw(e);
-      });
-      return _this.draw(e);
+      return _this.initDraw(e);
     });
   };
 
   Wires.prototype.all = function() {
     return this.info.all;
+  };
+
+  Wires.prototype.initDraw = function(e) {
+    var _this = this;
+    $(document.body).one('mouseup.draw_wire', function() {
+      $(document.body).unbind('mousemove.draw_wire');
+      delete _this.info.start;
+      delete _this.info.continuation;
+      delete _this.info.erasing;
+      return delete _this.info.lastSegment;
+    });
+    $(document.body).bind('mousemove.draw_wire', function(e) {
+      return _this.draw(e);
+    });
+    return this.draw(e);
   };
 
   Wires.prototype.draw = function(e) {

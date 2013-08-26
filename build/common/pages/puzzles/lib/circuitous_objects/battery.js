@@ -11,6 +11,11 @@ battery.Battery = (function(_super) {
 
   __extends(Battery, _super);
 
+  Battery.prototype.dragBuffer = {
+    x: 0,
+    y: 15
+  };
+
   Battery.prototype.centerOffset = {
     x: 16,
     y: 16

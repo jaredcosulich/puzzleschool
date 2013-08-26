@@ -13,6 +13,11 @@ lightbulb.Lightbulb = (function(_super) {
 
   Lightbulb.prototype.resistance = 5;
 
+  Lightbulb.prototype.dragBuffer = {
+    x: 10,
+    y: 10
+  };
+
   Lightbulb.prototype.centerOffset = {
     x: 0,
     y: 25

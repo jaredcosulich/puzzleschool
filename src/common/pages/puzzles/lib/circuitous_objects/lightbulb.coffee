@@ -3,6 +3,11 @@ circuitousObject = require('./object')
 
 class lightbulb.Lightbulb extends circuitousObject.Object
     resistance: 5
+    
+    dragBuffer:
+        x: 10
+        y: 10
+        
     centerOffset: 
         x: 0
         y: 25

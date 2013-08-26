@@ -43,10 +43,14 @@ class board.Board extends circuitousObject.Object
             @components[component.id] = component
             roundedBoardPosition = @roundedCoordinates(boardPosition, component.centerOffset)
             component.positionAt(@componentPosition(roundedBoardPosition))
+            
+            component.el.bind 'dragstart.board', (e) => @wires.initDraw(e)
+            
             # for node in component.currentNodes()
             #     @addDot(@boardPosition(node))
         else
             return false
+            
         return true
             
     removeComponent: (component) -> 

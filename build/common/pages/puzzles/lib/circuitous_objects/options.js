@@ -89,7 +89,7 @@ options.Options = (function(_super) {
     return $.timeout(10, function() {
       return component.initDrag(component.el, function(component, x, y, stopDrag) {
         return _this.dragComponent(component, x, y, stopDrag);
-      }, true);
+      }, true, component.dragBuffer);
     });
   };
 

@@ -28,8 +28,12 @@ object.Object = (function(_super) {
   };
 
   Object.prototype.appendTo = function(container) {
+    var _this = this;
     container.append(this.imageElement());
-    return this.el = container.find("img[src=\'" + (this.image()) + "\']");
+    this.el = container.find("img[src=\'" + (this.image()) + "\']");
+    return this.el.bind('dragstart', function(e) {
+      return e.preventDefault();
+    });
   };
 
   Object.prototype.generateId = function(namespace) {
