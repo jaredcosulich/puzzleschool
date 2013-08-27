@@ -17,13 +17,17 @@ draggable.Draggable = (function() {
     this.trackDrag = trackDrag;
     this.transformer = new Transformer(this.dragElement);
     return this.dragElement.bind('mousedown.drag touchstart.drag', function(e) {
-      var offset, shiftX, shiftY, _ref, _ref1;
+      var bottomBuffer, leftBuffer, offset, rightBuffer, shiftX, shiftY, topBuffer, _ref, _ref1;
       if (buffer) {
+        leftBuffer = buffer.left || 0;
+        rightBuffer = buffer.right || 0;
+        topBuffer = buffer.top || 0;
+        bottomBuffer = buffer.bottom || 0;
         offset = _this.dragElement.offset();
         shiftX = _this.currentX ? _this.currentX - _this.startX : 0;
         shiftY = _this.currentY ? _this.currentY - _this.startY : 0;
-        if (!((offset.left + buffer.x < (_ref = Client.x(e) - shiftX) && _ref < offset.left + offset.width - buffer.x)) || !((offset.top + buffer.y < (_ref1 = Client.y(e) - shiftY) && _ref1 < offset.top + offset.height - buffer.y))) {
-          return true;
+        if (!((offset.left + leftBuffer < (_ref = Client.x(e) - shiftX) && _ref < offset.left + offset.width - rightBuffer)) || !((offset.top + topBuffer < (_ref1 = Client.y(e) - shiftY) && _ref1 < offset.top + offset.height - bottomBuffer))) {
+          return;
         }
       }
       e.stop();

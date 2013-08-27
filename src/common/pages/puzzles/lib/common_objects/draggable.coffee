@@ -8,11 +8,15 @@ class draggable.Draggable
         
         @dragElement.bind 'mousedown.drag touchstart.drag', (e) =>
             if buffer
+                leftBuffer = buffer.left or 0
+                rightBuffer = buffer.right or 0
+                topBuffer = buffer.top or 0
+                bottomBuffer = buffer.bottom or 0
                 offset = @dragElement.offset()
                 shiftX = if @currentX then @currentX - @startX else 0
                 shiftY = if @currentY then @currentY - @startY else 0
-                if not (offset.left + buffer.x < Client.x(e) - shiftX < offset.left + offset.width - buffer.x) or
-                   not (offset.top + buffer.y < Client.y(e) - shiftY < offset.top + offset.height - buffer.y)
+                if not (offset.left + leftBuffer < Client.x(e) - shiftX < offset.left + offset.width - rightBuffer) or
+                   not (offset.top + topBuffer < Client.y(e) - shiftY < offset.top + offset.height - bottomBuffer)
                     return
 
             e.stop()

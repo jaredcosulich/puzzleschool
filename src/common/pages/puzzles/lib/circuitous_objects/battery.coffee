@@ -3,8 +3,7 @@ circuitousObject = require('./object')
 
 class battery.Battery extends circuitousObject.Object
     dragBuffer:
-        x: 0
-        y: 15
+        top: 15
     
     centerOffset: 
         x: 16

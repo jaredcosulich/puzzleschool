@@ -5,8 +5,9 @@ class lightbulb.Lightbulb extends circuitousObject.Object
     resistance: 5
     
     dragBuffer:
-        x: 10
-        y: 10
+        left: 5
+        right: 5
+        bottom: 10
         
     centerOffset: 
         x: 0
