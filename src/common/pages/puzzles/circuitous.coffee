@@ -84,8 +84,12 @@ soma.views
                     el: $(@selector)
             
             window.loadInstructions = (instructions) => @loadInstructions(instructions)
+            $('.load_instructions .load button').bind 'click', =>
+                @loadInstructions(JSON.parse($('.load_instructions .load textarea').val()))
+
             window.getInstructions = => @getInstructions()
-            window.wires = @editor.board.wires
+            $('.load_instructions .get button').bind 'click', =>
+                $('.load_instructions .get textarea').val(@getInstructions())
                     
         loadInstructions: (instructions) ->
             @editor.board.wires.create(nodes...) for nodes in instructions.wires
@@ -106,13 +110,13 @@ soma.views
             
             for id, component of @editor.board.components
                 boardPosition = @editor.board.boardPosition(x: component.currentX, y: component.currentY) 
-                components.push("{name: '#{component.constructor.name}', x: #{boardPosition.x}, y: #{boardPosition.y}}")
-            instructions.push("components: [#{components.join(',')}]")    
+                components.push("{\"name\": \"#{component.constructor.name}\", \"x\": #{boardPosition.x}, \"y\": #{boardPosition.y}}")
+            instructions.push("\"components\": [#{components.join(',')}]")    
             
             wires = []
             for id, wire of @editor.board.wires.all()
-                wires.push("[{x: #{wire.nodes[0].x}, y: #{wire.nodes[0].y}}, {x: #{wire.nodes[1].x}, y: #{wire.nodes[1].y}}]")
-            instructions.push("wires: [#{wires.join(',')}]")
+                wires.push("[{\"x\": #{wire.nodes[0].x}, \"y\": #{wire.nodes[0].y}}, {\"x\": #{wire.nodes[1].x}, \"y\": #{wire.nodes[1].y}}]")
+            instructions.push("\"wires\": [#{wires.join(',')}]")
         
             "{#{instructions.join(',')}}"
 soma.routes

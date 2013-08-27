@@ -95,10 +95,15 @@ soma.views({
       window.loadInstructions = function(instructions) {
         return _this.loadInstructions(instructions);
       };
+      $('.load_instructions .load button').bind('click', function() {
+        return _this.loadInstructions(JSON.parse($('.load_instructions .load textarea').val()));
+      });
       window.getInstructions = function() {
         return _this.getInstructions();
       };
-      return window.wires = this.editor.board.wires;
+      return $('.load_instructions .get button').bind('click', function() {
+        return $('.load_instructions .get textarea').val(_this.getInstructions());
+      });
     },
     loadInstructions: function(instructions) {
       var info, nodes, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
@@ -140,16 +145,16 @@ soma.views({
           x: component.currentX,
           y: component.currentY
         });
-        components.push("{name: '" + component.constructor.name + "', x: " + boardPosition.x + ", y: " + boardPosition.y + "}");
+        components.push("{\"name\": \"" + component.constructor.name + "\", \"x\": " + boardPosition.x + ", \"y\": " + boardPosition.y + "}");
       }
-      instructions.push("components: [" + (components.join(',')) + "]");
+      instructions.push("\"components\": [" + (components.join(',')) + "]");
       wires = [];
       _ref1 = this.editor.board.wires.all();
       for (id in _ref1) {
         wire = _ref1[id];
-        wires.push("[{x: " + wire.nodes[0].x + ", y: " + wire.nodes[0].y + "}, {x: " + wire.nodes[1].x + ", y: " + wire.nodes[1].y + "}]");
+        wires.push("[{\"x\": " + wire.nodes[0].x + ", \"y\": " + wire.nodes[0].y + "}, {\"x\": " + wire.nodes[1].x + ", \"y\": " + wire.nodes[1].y + "}]");
       }
-      instructions.push("wires: [" + (wires.join(',')) + "]");
+      instructions.push("\"wires\": [" + (wires.join(',')) + "]");
       return "{" + (instructions.join(',')) + "}";
     }
   }
