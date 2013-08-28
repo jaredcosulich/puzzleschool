@@ -148,7 +148,6 @@ class wires.Wires extends circuitousObject.Object
             
     removeDirectionLabel: (segment, direction) ->
         for className in segment.el[0].className.split(/\s/) when className.match("#{direction}_")
-            console.log(className)
             segment.el.removeClass(className) 
 
     recordPosition: (element, start, end) ->
@@ -184,8 +183,8 @@ class wires.Wires extends circuitousObject.Object
         else
             segment = @info.nodes[node1][node2]
             delete @info.all[segment.id] if segment
-            delete @info.node[node1]
-            delete @info.node[node2]
+            delete @info.node[node1][segment.id]
+            delete @info.node[node2][segment.id]
             delete @info.nodes[node1]?[node2]
             delete @info.nodes[node2]?[node1]
     

@@ -248,11 +248,9 @@ wires.Wires = (function(_super) {
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       className = _ref[_i];
-      if (!(className.match("" + direction + "_"))) {
-        continue;
+      if (className.match("" + direction + "_")) {
+        _results.push(segment.el.removeClass(className));
       }
-      console.log(className);
-      _results.push(segment.el.removeClass(className));
     }
     return _results;
   };
@@ -287,8 +285,8 @@ wires.Wires = (function(_super) {
       if (segment) {
         delete this.info.all[segment.id];
       }
-      delete this.info.node[node1];
-      delete this.info.node[node2];
+      delete this.info.node[node1][segment.id];
+      delete this.info.node[node2][segment.id];
       if ((_ref = this.info.nodes[node1]) != null) {
         delete _ref[node2];
       }
