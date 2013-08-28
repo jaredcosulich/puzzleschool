@@ -62,6 +62,17 @@
                 width: 4px;
             } 
             
+            &.left_all, &.up_all {
+                &::after {
+                    display: none;
+                }
+            }
+            &.right_all, &.down_all {
+                &::before {
+                    display: none;
+                }
+            }
+            
             &.vertical {
                 padding-bottom: 8px;
                 width: 4px;
@@ -259,16 +270,36 @@
         &.excessive_current {
             background-color: #FF0000;
             z-index: 2;
-            &.right_down, &.right_up {
+            &.right_down, &.right_up, &.right_left, &.right_t, &.right_all, 
+            &.down_up, &.down_t, &.down_all {
+                border-color: #FF0000;
                 &::before {
-                    background-color: #FF0000;                
+                    background-color: #FF0000;   
+                    border-color: #FF0000;
                 }                    
             }
-            &.left_down, &.left_up {
+            &.right_all, &.down_all {
+                &::before {
+                    display: block;
+                    width: 6px;
+                    height: 6px;
+                }                
+            }
+            &.left_down, &.left_up, &.left_right, &.left_t, &.left_all,
+            &.up_down, &.up_t, &.up_all {
+                border-color: #FF0000;
                 &::after {
                     background-color: #FF0000;                
+                    border-color: #FF0000;
                 }                    
             }                
+            &.left_all, &.up_all {
+                &::after {
+                    display: block;
+                    width: 6px;
+                    height: 6px;
+                }                
+            }
         }
     }
     

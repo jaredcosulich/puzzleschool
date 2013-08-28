@@ -157,8 +157,8 @@ wires.Wires = (function(_super) {
       segment = this.info.all[segmentId];
       direction = this.segmentDirection(segment, node);
       this.removeDirectionLabel(segment, direction);
-      if (segmentIds.length === 4) {
-        segment.el.addClass('all');
+      if (Object.keys(segmentIds).length === 4) {
+        segment.el.addClass("" + direction + "_all");
       } else {
         directions.push({
           direction: direction,
@@ -244,13 +244,15 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.removeDirectionLabel = function(segment, direction) {
     var className, _i, _len, _ref, _results;
-    _ref = ['all', 'right_down', 'right_up', 'left_down', 'left_up', 'up_right', 'up_left', 'down_right', 'down_left', 'right_left', 'left_right', 'up_down', 'down_up', 'right_t', 'left_t', 'up_t', 'down_t', 'right_blank_t', 'left_blank_t', 'up_blank_t', 'down_blank_t'];
+    _ref = segment.el[0].className.split(/\s/);
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       className = _ref[_i];
-      if (className.match("" + direction + "_")) {
-        _results.push(segment.el.removeClass(className));
+      if (!(className.match("" + direction + "_"))) {
+        continue;
       }
+      console.log(className);
+      _results.push(segment.el.removeClass(className));
     }
     return _results;
   };

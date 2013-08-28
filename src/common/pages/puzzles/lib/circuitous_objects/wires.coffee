@@ -98,8 +98,8 @@ class wires.Wires extends circuitousObject.Object
             segment = @info.all[segmentId]
             direction = @segmentDirection(segment, node)
             @removeDirectionLabel(segment, direction)
-            if segmentIds.length == 4
-                segment.el.addClass('all') 
+            if Object.keys(segmentIds).length == 4
+                segment.el.addClass("#{direction}_all") 
             else
                 directions.push(direction: direction, segment: segment)
             
@@ -147,13 +147,9 @@ class wires.Wires extends circuitousObject.Object
                 return 'up'
             
     removeDirectionLabel: (segment, direction) ->
-        segment.el.removeClass(className) for className in [
-            'all', 'right_down', 'right_up', 'left_down', 'left_up', 
-            'up_right', 'up_left', 'down_right', 'down_left',
-            'right_left', 'left_right', 'up_down', 'down_up',
-            'right_t', 'left_t', 'up_t', 'down_t',
-            'right_blank_t', 'left_blank_t', 'up_blank_t', 'down_blank_t'
-        ] when className.match("#{direction}_")
+        for className in segment.el[0].className.split(/\s/) when className.match("#{direction}_")
+            console.log(className)
+            segment.el.removeClass(className) 
 
     recordPosition: (element, start, end) ->
         # @board.addDot(start)
