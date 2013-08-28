@@ -77,6 +77,7 @@ board.Board = (function(_super) {
     if (onBoardX && onBoardY) {
       this.components[component.id] = component;
       roundedBoardPosition = this.roundedCoordinates(boardPosition, component.centerOffset);
+      console.log('position at', boardPosition, roundedBoardPosition, this.componentPosition(roundedBoardPosition));
       component.positionAt(this.componentPosition(roundedBoardPosition));
       component.el.bind('dragstart.board', function(e) {
         return _this.wires.initDraw(e);
@@ -98,7 +99,7 @@ board.Board = (function(_super) {
 
   Board.prototype.roundedCoordinates = function(coords, offset) {
     var halfDim, offsetCoords;
-    halfDim = this.cellDimension / 2 - (parseInt(this.el.css('border')) - 1);
+    halfDim = this.cellDimension / 2 - (parseInt(this.el.css('borderLeftWidth')) - 1);
     offsetCoords = {
       x: coords.x - ((offset != null ? offset.left : void 0) || (offset != null ? offset.x : void 0) || 0) + halfDim,
       y: coords.y - ((offset != null ? offset.top : void 0) || (offset != null ? offset.y : void 0) || 0) + halfDim

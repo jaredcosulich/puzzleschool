@@ -42,6 +42,7 @@ class board.Board extends circuitousObject.Object
         if onBoardX and onBoardY 
             @components[component.id] = component
             roundedBoardPosition = @roundedCoordinates(boardPosition, component.centerOffset)
+            console.log('position at', boardPosition, roundedBoardPosition, @componentPosition(roundedBoardPosition))
             component.positionAt(@componentPosition(roundedBoardPosition))
             
             component.el.bind 'dragstart.board', (e) => @wires.initDraw(e)
@@ -59,7 +60,7 @@ class board.Board extends circuitousObject.Object
         delete @components[component.id]
             
     roundedCoordinates: (coords, offset) ->
-        halfDim = @cellDimension / 2 - (parseInt(@el.css('border')) - 1)
+        halfDim = @cellDimension / 2 - (parseInt(@el.css('borderLeftWidth')) - 1)
         offsetCoords = 
             x: coords.x - (offset?.left or offset?.x or 0) + halfDim
             y: coords.y - (offset?.top or offset?.y or 0) + halfDim
