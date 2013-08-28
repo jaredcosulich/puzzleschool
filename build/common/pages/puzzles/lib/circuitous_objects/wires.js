@@ -13,6 +13,8 @@ wires.Wires = (function(_super) {
 
   __extends(Wires, _super);
 
+  Wires.prototype.edgeBuffer = 6;
+
   Wires.prototype.resistance = 0.00001;
 
   Wires.prototype.electronsPerSegment = 3;
@@ -27,7 +29,8 @@ wires.Wires = (function(_super) {
     this.info = {
       all: {},
       positions: {},
-      nodes: {}
+      nodes: {},
+      node: {}
     };
     this.el = this.board.el.find('.wires');
     this.electrons = this.board.el.find('.electrons');
@@ -112,10 +115,16 @@ wires.Wires = (function(_super) {
       top: Math.min(start.y, end.y)
     });
     if (Math.abs(start.x - end.x) > Math.abs(start.y - end.y)) {
-      segment.width(this.cellDimension);
+      segment.css({
+        left: Math.min(start.x, end.x) + this.edgeBuffer
+      });
+      segment.width(this.cellDimension - (this.edgeBuffer * 2));
       segment.addClass('horizontal');
     } else {
-      segment.height(this.cellDimension);
+      segment.css({
+        top: Math.min(start.y, end.y) + this.edgeBuffer
+      });
+      segment.height(this.cellDimension - (this.edgeBuffer * 2));
       segment.addClass('vertical');
     }
     this.el.append(segment);
@@ -138,11 +147,91 @@ wires.Wires = (function(_super) {
     return segment.el;
   };
 
+  Wires.prototype.labelSegments = function(node) {
+    var direction, directions, info, info2, segment, segmentId, segmentIds, _i, _len, _results;
+    if (!(segmentIds = this.info.node[this.nodeId(node)])) {
+      return;
+    }
+    directions = [];
+    for (segmentId in segmentIds) {
+      segment = this.info.all[segmentId];
+      direction = this.segmentDirection(segment, node);
+      this.removeDirectionLabel(segment, direction);
+      if (segmentIds.length === 4) {
+        segment.el.addClass('all');
+      } else {
+        directions.push({
+          direction: direction,
+          segment: segment
+        });
+      }
+    }
+    if (Object.keys(segmentIds).length === 2) {
+      _results = [];
+      for (_i = 0, _len = directions.length; _i < _len; _i++) {
+        info = directions[_i];
+        _results.push((function() {
+          var _j, _len1, _results1;
+          _results1 = [];
+          for (_j = 0, _len1 = directions.length; _j < _len1; _j++) {
+            info2 = directions[_j];
+            if (info2.segment.id !== info.segment.id) {
+              _results1.push(info2.segment.el.addClass("" + info2.direction + "_" + info.direction));
+            } else {
+              _results1.push(void 0);
+            }
+          }
+          return _results1;
+        })());
+      }
+      return _results;
+    }
+  };
+
+  Wires.prototype.otherNode = function(segment, node) {
+    if (segment.nodes[0].x === node.x && segment.nodes[0].y === node.y) {
+      return segment.nodes[1];
+    } else {
+      return segment.nodes[0];
+    }
+  };
+
+  Wires.prototype.segmentDirection = function(segment, node) {
+    var otherNode;
+    otherNode = this.otherNode(segment, node);
+    if (segment.horizontal) {
+      if (node.x > otherNode.x) {
+        return 'right';
+      } else {
+        return 'left';
+      }
+    } else {
+      if (node.y > otherNode.y) {
+        return 'down';
+      } else {
+        return 'up';
+      }
+    }
+  };
+
+  Wires.prototype.removeDirectionLabel = function(segment, direction) {
+    var className, _i, _len, _ref, _results;
+    _ref = ['all', 'right_bottom', 'right_top', 'left_bottom', 'left_top', 'top_right', 'top_left', 'bottom_right', 'bottom_left', 'right_left', 'left_right', 'top_bottom', 'bottom_top', 'right_t', 'left_t', 'top_t', 'bottom_t'];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      className = _ref[_i];
+      if (className.match("" + direction + "_")) {
+        _results.push(segment.el.removeClass(className));
+      }
+    }
+    return _results;
+  };
+
   Wires.prototype.recordPosition = function(element, start, end) {
-    var node1, node2, segment, _base, _base1, _ref, _ref1;
+    var node1, node2, segment, _base, _base1, _base2, _base3, _ref, _ref1;
     this.board.changesMade = true;
-    node1 = "" + start.x + ":" + start.y;
-    node2 = "" + end.x + ":" + end.y;
+    node1 = this.nodeId(start);
+    node2 = this.nodeId(end);
     if (element) {
       segment = {
         id: "wire" + node1 + node2,
@@ -155,20 +244,34 @@ wires.Wires = (function(_super) {
         return segment.current = current;
       };
       this.info.all[segment.id] = segment;
-      (_base = this.info.nodes)[node1] || (_base[node1] = {});
+      (_base = this.info.node)[node1] || (_base[node1] = {});
+      this.info.node[node1][segment.id] = true;
+      (_base1 = this.info.node)[node2] || (_base1[node2] = {});
+      this.info.node[node2][segment.id] = true;
+      (_base2 = this.info.nodes)[node1] || (_base2[node1] = {});
       this.info.nodes[node1][node2] = segment;
-      (_base1 = this.info.nodes)[node2] || (_base1[node2] = {});
-      return this.info.nodes[node2][node1] = segment;
+      (_base3 = this.info.nodes)[node2] || (_base3[node2] = {});
+      this.info.nodes[node2][node1] = segment;
     } else {
       segment = this.info.nodes[node1][node2];
       if (segment) {
         delete this.info.all[segment.id];
       }
+      delete this.info.node[node1];
+      delete this.info.node[node2];
       if ((_ref = this.info.nodes[node1]) != null) {
         delete _ref[node2];
       }
-      return (_ref1 = this.info.nodes[node2]) != null ? delete _ref1[node1] : void 0;
+      if ((_ref1 = this.info.nodes[node2]) != null) {
+        delete _ref1[node1];
+      }
     }
+    this.labelSegments(start);
+    return this.labelSegments(end);
+  };
+
+  Wires.prototype.nodeId = function(node) {
+    return "" + node.x + ":" + node.y;
   };
 
   Wires.prototype.find = function(start, end) {
@@ -202,6 +305,15 @@ wires.Wires = (function(_super) {
       top: segment.el.css('top'),
       left: segment.el.css('left')
     });
+    if (segment.horizontal) {
+      electronsSegment.css({
+        left: parseInt(segment.el.css('left')) - this.edgeBuffer
+      });
+    } else {
+      electronsSegment.css({
+        top: parseInt(segment.el.css('top')) - this.edgeBuffer
+      });
+    }
     this.electrons.append(electronsSegment);
     return segment.electrons = {
       el: electronsSegment,
@@ -210,18 +322,17 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.moveElectrons = function(segment, elapsedTime) {
-    var height, pointedDown, pointedRight, totalMovement, width, x, y;
+    var height, totalMovement, width, x, y;
     totalMovement = (elapsedTime / 100) * Math.abs(segment.current);
     x = y = 0;
     if (segment.horizontal) {
-      pointedRight = width = segment.el.width();
+      width = segment.el.width() + (this.edgeBuffer * 2);
       x = totalMovement % ((width % this.cellDimension) * 2);
       if (segment.electrons.el.hasClass('left')) {
         x = x * -1;
       }
     } else {
-      pointedDown = segment.nodes[0].y < segment.nodes[1].y;
-      height = segment.el.height();
+      height = segment.el.height() + (this.edgeBuffer * 2);
       y = totalMovement % ((height % this.cellDimension) * 2);
       if (segment.electrons.el.hasClass('up')) {
         y = y * -1;

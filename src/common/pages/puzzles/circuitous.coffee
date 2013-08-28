@@ -86,6 +86,8 @@ soma.views
             window.loadInstructions = (instructions) => @loadInstructions(instructions)
             $('.load_instructions .load button').bind 'click', =>
                 @loadInstructions(JSON.parse($('.load_instructions .load textarea').val()))
+            if $('.load_instructions .load textarea').val().length
+                $('.load_instructions .load button').trigger 'click'
 
             window.getInstructions = => @getInstructions()
             $('.load_instructions .get button').bind 'click', =>

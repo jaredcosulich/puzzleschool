@@ -3,6 +3,7 @@ Transformer = require('../common_objects/transformer').Transformer
 circuitousObject = require('./object')
 
 class wires.Wires extends circuitousObject.Object
+    edgeBuffer: 6
     resistance: 0.00001
     electronsPerSegment: 3
     
@@ -10,7 +11,7 @@ class wires.Wires extends circuitousObject.Object
         @init()
 
     init: ->
-        @info = {all: {}, positions: {}, nodes: {}}
+        @info = {all: {}, positions: {}, nodes: {}, node: {}}
         @el = @board.el.find('.wires')
         @electrons = @board.el.find('.electrons')
         @cellDimension = @board.cellDimension
@@ -66,17 +67,19 @@ class wires.Wires extends circuitousObject.Object
             top: Math.min(start.y, end.y)
 
         if Math.abs(start.x - end.x) > Math.abs(start.y - end.y)
-            segment.width(@cellDimension)
+            segment.css(left: Math.min(start.x, end.x) + @edgeBuffer)
+            segment.width(@cellDimension - (@edgeBuffer * 2))
             segment.addClass('horizontal')
         else
-            segment.height(@cellDimension)
+            segment.css(top: Math.min(start.y, end.y) + @edgeBuffer)
+            segment.height(@cellDimension - (@edgeBuffer * 2))
             segment.addClass('vertical')
 
         # position = "#{JSON.stringify(@info.start)} -- #{JSON.stringify(coords)}"
         # segment.bind 'mouseover', => console.log(position)    
 
         @el.append(segment)
-        @recordPosition(segment, start, end)   
+        @recordPosition(segment, start, end)
         @info.continuation = true
         return segment
 
@@ -87,13 +90,64 @@ class wires.Wires extends circuitousObject.Object
         @recordPosition(null, start, end)
         @info.erasing = true unless @info.continuation
         return segment.el
+        
+    labelSegments: (node) ->
+        return unless (segmentIds = @info.node[@nodeId(node)])
+        directions = []
+        for segmentId of segmentIds   
+            segment = @info.all[segmentId]
+            direction = @segmentDirection(segment, node)
+            @removeDirectionLabel(segment, direction)
+            if segmentIds.length == 4
+                segment.el.addClass('all') 
+            else
+                directions.push(direction: direction, segment: segment)
+            
+        if Object.keys(segmentIds).length == 2
+            for info in directions
+                for info2 in directions
+                    if info2.segment.id != info.segment.id
+                        info2.segment.el.addClass("#{info2.direction}_#{info.direction}")
+        
+        # for segmentId of segmentIds
+        #     @board.clearColors()
+        #     console.log("coloring #{Object.keys(segmentIds).length}", @info.all[segmentId].el[0].className)
+        #     @board.color([segmentId], 1)
+        #     debugger
+            
+    otherNode: (segment, node) ->
+        if segment.nodes[0].x == node.x and segment.nodes[0].y == node.y
+            return segment.nodes[1]
+        else
+            return segment.nodes[0]
+    
+    segmentDirection: (segment, node) ->
+        otherNode = @otherNode(segment, node)
+        if segment.horizontal
+            if node.x > otherNode.x
+                return 'right'
+            else
+                return 'left'
+        else
+            if node.y > otherNode.y
+                return 'down'
+            else
+                return 'up'
+            
+    removeDirectionLabel: (segment, direction) ->
+        segment.el.removeClass(className) for className in [
+            'all', 'right_bottom', 'right_top', 'left_bottom', 'left_top', 
+            'top_right', 'top_left', 'bottom_right', 'bottom_left',
+            'right_left', 'left_right', 'top_bottom', 'bottom_top',
+            'right_t', 'left_t', 'top_t', 'bottom_t'
+        ] when className.match("#{direction}_")
 
     recordPosition: (element, start, end) ->
         # @board.addDot(start)
         # @board.addDot(end)
         @board.changesMade = true
-        node1 = "#{start.x}:#{start.y}"
-        node2 = "#{end.x}:#{end.y}"
+        node1 = @nodeId(start)
+        node2 = @nodeId(end)
         
         if element
             segment = 
@@ -107,6 +161,12 @@ class wires.Wires extends circuitousObject.Object
 
             @info.all[segment.id] = segment
             
+            @info.node[node1] or= {}
+            @info.node[node1][segment.id] = true
+
+            @info.node[node2] or= {}
+            @info.node[node2][segment.id] = true
+            
             @info.nodes[node1] or= {}
             @info.nodes[node1][node2] = segment
 
@@ -115,8 +175,15 @@ class wires.Wires extends circuitousObject.Object
         else
             segment = @info.nodes[node1][node2]
             delete @info.all[segment.id] if segment
+            delete @info.node[node1]
+            delete @info.node[node2]
             delete @info.nodes[node1]?[node2]
             delete @info.nodes[node2]?[node1]
+    
+        @labelSegments(start)
+        @labelSegments(end)   
+    
+    nodeId: (node) -> "#{node.x}:#{node.y}"
 
     find: (start, end=null) ->
         node1 = "#{start.x}:#{start.y}"
@@ -132,6 +199,10 @@ class wires.Wires extends circuitousObject.Object
         electronsSegment = $(document.createElement('DIV'))
         electronsSegment.addClass('electrons_segment')
         electronsSegment.css(top: segment.el.css('top'), left: segment.el.css('left'))
+        if segment.horizontal
+            electronsSegment.css(left: parseInt(segment.el.css('left')) - @edgeBuffer)
+        else
+            electronsSegment.css(top: parseInt(segment.el.css('top')) - @edgeBuffer)
         @electrons.append(electronsSegment)
         segment.electrons = {el: electronsSegment, transformer: new Transformer(electronsSegment)}
                 
@@ -139,14 +210,12 @@ class wires.Wires extends circuitousObject.Object
         totalMovement = ((elapsedTime/100) * Math.abs(segment.current))
         x = y = 0
         if segment.horizontal
-            pointedRight = 
-            width = segment.el.width()
+            width = segment.el.width() + (@edgeBuffer * 2)
             x = totalMovement % ((width % @cellDimension) * 2) 
             if segment.electrons.el.hasClass('left')
                 x = x * -1
         else
-            pointedDown = (segment.nodes[0].y < segment.nodes[1].y)
-            height = segment.el.height()
+            height = segment.el.height() + (@edgeBuffer * 2)
             y = totalMovement % ((height % @cellDimension) * 2) 
             if segment.electrons.el.hasClass('up')
                 y = y * -1

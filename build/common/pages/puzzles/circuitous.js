@@ -98,6 +98,9 @@ soma.views({
       $('.load_instructions .load button').bind('click', function() {
         return _this.loadInstructions(JSON.parse($('.load_instructions .load textarea').val()));
       });
+      if ($('.load_instructions .load textarea').val().length) {
+        $('.load_instructions .load button').trigger('click');
+      }
       window.getInstructions = function() {
         return _this.getInstructions();
       };
