@@ -148,7 +148,7 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.labelSegments = function(node) {
-    var direction, directions, info, info2, segment, segmentId, segmentIds, _i, _len, _results;
+    var direction, directions, i, info, info2, oppositeDirection, segment, segmentId, segmentIds, _i, _j, _k, _len, _len1, _len2, _results;
     if (!(segmentIds = this.info.node[this.nodeId(node)])) {
       return;
     }
@@ -167,22 +167,50 @@ wires.Wires = (function(_super) {
       }
     }
     if (Object.keys(segmentIds).length === 2) {
-      _results = [];
       for (_i = 0, _len = directions.length; _i < _len; _i++) {
         info = directions[_i];
-        _results.push((function() {
-          var _j, _len1, _results1;
-          _results1 = [];
-          for (_j = 0, _len1 = directions.length; _j < _len1; _j++) {
-            info2 = directions[_j];
-            if (info2.segment.id !== info.segment.id) {
-              _results1.push(info2.segment.el.addClass("" + info2.direction + "_" + info.direction));
-            } else {
-              _results1.push(void 0);
-            }
+        for (_j = 0, _len1 = directions.length; _j < _len1; _j++) {
+          info2 = directions[_j];
+          if (info2.segment.id !== info.segment.id) {
+            info2.segment.el.addClass("" + info2.direction + "_" + info.direction);
           }
-          return _results1;
-        })());
+        }
+      }
+    }
+    if (Object.keys(segmentIds).length === 3) {
+      _results = [];
+      for (_k = 0, _len2 = directions.length; _k < _len2; _k++) {
+        info = directions[_k];
+        if (info.segment.horizontal) {
+          oppositeDirection = ((function() {
+            var _l, _len3, _results1;
+            _results1 = [];
+            for (_l = 0, _len3 = directions.length; _l < _len3; _l++) {
+              i = directions[_l];
+              if (i.direction === (info.direction === 'left' ? 'right' : 'left')) {
+                _results1.push(i);
+              }
+            }
+            return _results1;
+          })())[0];
+        } else {
+          oppositeDirection = ((function() {
+            var _l, _len3, _results1;
+            _results1 = [];
+            for (_l = 0, _len3 = directions.length; _l < _len3; _l++) {
+              i = directions[_l];
+              if (i.direction === (info.direction === 'up' ? 'down' : 'up')) {
+                _results1.push(i);
+              }
+            }
+            return _results1;
+          })())[0];
+        }
+        if (oppositeDirection) {
+          _results.push(info.segment.el.addClass("" + info.direction + "_blank_t"));
+        } else {
+          _results.push(info.segment.el.addClass("" + info.direction + "_t"));
+        }
       }
       return _results;
     }
@@ -216,7 +244,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.removeDirectionLabel = function(segment, direction) {
     var className, _i, _len, _ref, _results;
-    _ref = ['all', 'right_bottom', 'right_top', 'left_bottom', 'left_top', 'top_right', 'top_left', 'bottom_right', 'bottom_left', 'right_left', 'left_right', 'top_bottom', 'bottom_top', 'right_t', 'left_t', 'top_t', 'bottom_t'];
+    _ref = ['all', 'right_down', 'right_up', 'left_down', 'left_up', 'up_right', 'up_left', 'down_right', 'down_left', 'right_left', 'left_right', 'up_down', 'down_up', 'right_t', 'left_t', 'up_t', 'down_t', 'right_blank_t', 'left_blank_t', 'up_blank_t', 'down_blank_t'];
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       className = _ref[_i];

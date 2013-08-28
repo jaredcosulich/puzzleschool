@@ -108,6 +108,18 @@ class wires.Wires extends circuitousObject.Object
                 for info2 in directions
                     if info2.segment.id != info.segment.id
                         info2.segment.el.addClass("#{info2.direction}_#{info.direction}")
+
+        if Object.keys(segmentIds).length == 3
+            for info in directions
+                if info.segment.horizontal
+                    oppositeDirection = (i for i in directions when i.direction == (if info.direction == 'left' then 'right' else 'left'))[0]
+                else
+                    oppositeDirection = (i for i in directions when i.direction == (if info.direction == 'up' then 'down' else 'up'))[0]
+                
+                if oppositeDirection
+                    info.segment.el.addClass("#{info.direction}_blank_t")
+                else
+                    info.segment.el.addClass("#{info.direction}_t")
         
         # for segmentId of segmentIds
         #     @board.clearColors()
@@ -136,10 +148,11 @@ class wires.Wires extends circuitousObject.Object
             
     removeDirectionLabel: (segment, direction) ->
         segment.el.removeClass(className) for className in [
-            'all', 'right_bottom', 'right_top', 'left_bottom', 'left_top', 
-            'top_right', 'top_left', 'bottom_right', 'bottom_left',
-            'right_left', 'left_right', 'top_bottom', 'bottom_top',
-            'right_t', 'left_t', 'top_t', 'bottom_t'
+            'all', 'right_down', 'right_up', 'left_down', 'left_up', 
+            'up_right', 'up_left', 'down_right', 'down_left',
+            'right_left', 'left_right', 'up_down', 'down_up',
+            'right_t', 'left_t', 'up_t', 'down_t',
+            'right_blank_t', 'left_blank_t', 'up_blank_t', 'down_blank_t'
         ] when className.match("#{direction}_")
 
     recordPosition: (element, start, end) ->

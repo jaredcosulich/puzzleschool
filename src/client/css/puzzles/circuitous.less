@@ -74,21 +74,35 @@
                     border-left: 2px solid @blue;
                     border-right: 2px solid @blue;
                 }
-                &.up_left, &.up_right {
-                    &::after {
-                        border: none;
-                    }
-                }
-                &.down_left, &.down_right {
-                    &::before {
-                        border: none;
-                    }
-                }
                 &::before {
                     bottom:  -6px;
                 }                
                 &::after {
                     top:  -6px;
+                }
+                &.up_left, &.up_right, &.up_blank_t {
+                    &::after {
+                        border: none;
+                    }
+                }
+                &.down_left, &.down_right, &.down_blank_t {
+                    &::before {
+                        border: none;
+                    }
+                }
+                &.up_t {
+                    &::after {
+                        width: 6px;
+                        border: none;
+                        border-top: 2px solid @blue;
+                    }
+                }
+                &.down_t {
+                    &::before {
+                        width: 6px;
+                        border: none;
+                        border-bottom: 2px solid @blue;
+                    }
                 }
             }        
             
@@ -153,6 +167,32 @@
                         .border-top-left-radius(16px);                                                  
                     }                                          
                 }                
+                &.right_t {
+                    &::before {
+                        right: -6px;
+                        height: 6px;
+                        border: none;
+                        border-right: 2px solid @blue;
+                    }
+                }
+                &.right_blank_t {
+                    &::before {
+                        border: none;
+                    }
+                }
+                &.left_t {
+                    &::after {
+                        left: -6px;
+                        height: 6px;
+                        border: none;
+                        border-left: 2px solid @blue;
+                    }
+                }
+                &.left_blank_t {
+                    &::after {
+                        border: none;
+                    }
+                }
             }
         }
         

@@ -78,19 +78,31 @@
   border-left: 2px solid #24aac3;
   border-right: 2px solid #24aac3;
 }
-.circuitous .board .wire_segment.vertical.up_left::after,
-.circuitous .board .wire_segment.vertical.up_right::after {
-  border: none;
-}
-.circuitous .board .wire_segment.vertical.down_left::before,
-.circuitous .board .wire_segment.vertical.down_right::before {
-  border: none;
-}
 .circuitous .board .wire_segment.vertical::before {
   bottom: -6px;
 }
 .circuitous .board .wire_segment.vertical::after {
   top: -6px;
+}
+.circuitous .board .wire_segment.vertical.up_left::after,
+.circuitous .board .wire_segment.vertical.up_right::after,
+.circuitous .board .wire_segment.vertical.up_blank_t::after {
+  border: none;
+}
+.circuitous .board .wire_segment.vertical.down_left::before,
+.circuitous .board .wire_segment.vertical.down_right::before,
+.circuitous .board .wire_segment.vertical.down_blank_t::before {
+  border: none;
+}
+.circuitous .board .wire_segment.vertical.up_t::after {
+  width: 6px;
+  border: none;
+  border-top: 2px solid #24aac3;
+}
+.circuitous .board .wire_segment.vertical.down_t::before {
+  width: 6px;
+  border: none;
+  border-bottom: 2px solid #24aac3;
 }
 .circuitous .board .wire_segment.horizontal {
   padding-right: 8px;
@@ -151,6 +163,24 @@
   border-top-left-radius: 16px;
   -webkit-border-top-left-radius: 16px;
   -moz-border-radius-topleft: 16px;
+}
+.circuitous .board .wire_segment.horizontal.right_t::before {
+  right: -6px;
+  height: 6px;
+  border: none;
+  border-right: 2px solid #24aac3;
+}
+.circuitous .board .wire_segment.horizontal.right_blank_t::before {
+  border: none;
+}
+.circuitous .board .wire_segment.horizontal.left_t::after {
+  left: -6px;
+  height: 6px;
+  border: none;
+  border-left: 2px solid #24aac3;
+}
+.circuitous .board .wire_segment.horizontal.left_blank_t::after {
+  border: none;
 }
 .circuitous .board .electrons_segment {
   position: absolute;
