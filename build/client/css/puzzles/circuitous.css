@@ -111,35 +111,38 @@
 .circuitous .board .wire_segment.horizontal::after {
   left: -4px;
 }
-.circuitous .board .wire_segment.horizontal.right_down::before {
+.circuitous .board .wire_segment.horizontal.right_down::before,
+.circuitous .board .wire_segment.horizontal.right_up::before {
   border-right: 2px solid #24aac3;
-  border-bottom: 2px solid #24aac3;
-  border-top: none;
   height: 6px;
   right: -6px;
+}
+.circuitous .board .wire_segment.horizontal.left_down::after,
+.circuitous .board .wire_segment.horizontal.left_up::after {
+  height: 6px;
+  left: -6px;
+  border-left: 2px solid #24aac3;
+}
+.circuitous .board .wire_segment.horizontal.right_down::before {
+  border-bottom: 2px solid #24aac3;
+  border-top: none;
   border-bottom-right-radius: 16px;
   -webkit-border-bottom-right-radius: 16px;
   -moz-border-radius-bottomright: 16px;
 }
 .circuitous .board .wire_segment.horizontal.right_up::before {
-  border-right: 2px solid #24aac3;
   border-top: 2px solid #24aac3;
   border-bottom: none;
   border-top-right-radius: 16px;
   -webkit-border-top-right-radius: 16px;
   -moz-border-radius-topright: 16px;
-  height: 6px;
-  right: -6px;
 }
 .circuitous .board .wire_segment.horizontal.left_down::after {
-  border-left: 2px solid #24aac3;
   border-bottom: 2px solid #24aac3;
   border-top: none;
   border-bottom-left-radius: 16px;
   -webkit-border-bottom-left-radius: 16px;
   -moz-border-radius-bottomleft: 16px;
-  height: 6px;
-  left: -6px;
 }
 .circuitous .board .wire_segment.horizontal.left_up::after {
   border-left: 2px solid #24aac3;
@@ -148,8 +151,6 @@
   border-top-left-radius: 16px;
   -webkit-border-top-left-radius: 16px;
   -moz-border-radius-topleft: 16px;
-  height: 6px;
-  left: -6px;
 }
 .circuitous .board .electrons_segment {
   position: absolute;
@@ -218,6 +219,22 @@
 .circuitous .right_side .options .option img.excessive_current {
   background-color: #FF0000;
   z-index: 2;
+}
+.circuitous .board .wire_segment.excessive_current.right_down::before,
+.circuitous .board .electrons_segment.excessive_current.right_down::before,
+.circuitous .right_side .options .option img.excessive_current.right_down::before,
+.circuitous .board .wire_segment.excessive_current.right_up::before,
+.circuitous .board .electrons_segment.excessive_current.right_up::before,
+.circuitous .right_side .options .option img.excessive_current.right_up::before {
+  background-color: #FF0000;
+}
+.circuitous .board .wire_segment.excessive_current.left_down::after,
+.circuitous .board .electrons_segment.excessive_current.left_down::after,
+.circuitous .right_side .options .option img.excessive_current.left_down::after,
+.circuitous .board .wire_segment.excessive_current.left_up::after,
+.circuitous .board .electrons_segment.excessive_current.left_up::after,
+.circuitous .right_side .options .option img.excessive_current.left_up::after {
+  background-color: #FF0000;
 }
 .circuitous .selector_button {
   font-size: 45px;

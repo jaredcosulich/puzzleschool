@@ -110,34 +110,39 @@
                 &::after {
                     left:  -4px;
                 }       
-                &.right_down {
+                &.right_down, &.right_up {
                     &::before {
                         border-right: 2px solid @blue;
-                        border-bottom: 2px solid @blue;
-                        border-top: none;
                         height: 6px;
                         right: -6px;
+                    }                    
+                }
+                &.left_down, &.left_up {
+                    &::after {
+                        height: 6px;
+                        left: -6px;
+                        border-left: 2px solid @blue;
+                    }                    
+                }                
+                &.right_down {
+                    &::before {
+                        border-bottom: 2px solid @blue;
+                        border-top: none;
                         .border-bottom-right-radius(16px);
                     }
                 }
                 &.right_up {
                     &::before {
-                        border-right: 2px solid @blue;
                         border-top: 2px solid @blue;
                         border-bottom: none;
                         .border-top-right-radius(16px);                                             
-                        height: 6px;
-                        right: -6px;
                     }                    
                 }
                 &.left_down {
                     &::after {
-                        border-left: 2px solid @blue;
                         border-bottom: 2px solid @blue;
                         border-top: none;
-                        .border-bottom-left-radius(16px); 
-                        height: 6px;
-                        left: -6px;
+                        .border-bottom-left-radius(16px);                                                  
                     }                                     
                 }
                 &.left_up {
@@ -145,9 +150,7 @@
                         border-left: 2px solid @blue;
                         border-top: 2px solid @blue;
                         border-bottom: none;
-                        .border-top-left-radius(16px);  
-                        height: 6px;     
-                        left: -6px;
+                        .border-top-left-radius(16px);                                                  
                     }                                          
                 }                
             }
@@ -216,6 +219,16 @@
         &.excessive_current {
             background-color: #FF0000;
             z-index: 2;
+            &.right_down, &.right_up {
+                &::before {
+                    background-color: #FF0000;                
+                }                    
+            }
+            &.left_down, &.left_up {
+                &::after {
+                    background-color: #FF0000;                
+                }                    
+            }                
         }
     }
     
