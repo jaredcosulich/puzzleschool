@@ -234,10 +234,13 @@
   border-spacing: 0;
   border-collapse: collapse;
 }
-.circuitous .right_side .options .option {
-  text-align: center;
+.circuitous .right_side .options td {
   border-left: 1px solid #262626;
   border-bottom: 1px solid #262626;
+}
+.circuitous .right_side .options td .option {
+  position: relative;
+  text-align: center;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -245,10 +248,16 @@
   -ms-user-select: none;
   user-select: none;
 }
-.circuitous .right_side .options .option .component {
-  position: relative;
+.circuitous .right_side .options td .option .component {
+  position: absolute;
+  top: 12px;
+  left: 15px;
 }
-.circuitous .right_side .options .option .component .current_image {
+.circuitous .right_side .options td .option .component.in_options img {
+  height: 60px;
+  width: 45px;
+}
+.circuitous .right_side .options td .option .component .current_image {
   transition: opacity 0.5s ease-out;
   position: absolute;
   opacity: 0;
@@ -444,8 +453,12 @@
   height: 6px;
 }
 .circuitous .selector_button {
+  margin: auto;
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin-top: 15px;
   font-size: 45px;
-  padding: 0 15px;
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px;

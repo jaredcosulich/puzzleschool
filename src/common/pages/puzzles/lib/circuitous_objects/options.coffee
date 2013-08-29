@@ -20,14 +20,16 @@ class options.Options extends circuitousObject.Object
         for row in [1..@rows]
             optionRow = $(document.createElement('TR'))
             for column in [1..@columns]
-                option = $(document.createElement('TD'))
+                optionTd = $(document.createElement('TD'))
+                option = $(document.createElement('DIV'))
+                optionTd.append(option)
                 option.addClass('option')
                 option.addClass("option_#{row * column}")
                 option.addClass('empty_option')
                 option.css
-                    width: @width / @columns
-                    height: @height / @rows
-                optionRow.append(option)
+                    width: @width / @columns - 1
+                    height: @height / @rows - 1
+                optionRow.append(optionTd)
             @el.append(optionRow)
             
     initSelector: ->
@@ -45,6 +47,7 @@ class options.Options extends circuitousObject.Object
         @attachSelector(@$('.empty_option')[1])
         emptyOption = $(@$('.empty_option')[0])
         component.appendTo(emptyOption)
+        component.el.addClass('in_options')
         emptyOption.removeClass('empty_option')
         $.timeout 10, => 
             component.initDrag(
@@ -55,9 +58,11 @@ class options.Options extends circuitousObject.Object
             )
 
     dragComponent: (component, x, y, state) ->
+        component.el.removeClass('in_options')
         if state == 'start'
             @board.removeComponent(component)
         else if state == 'stop'
             if not @board.addComponent(component, x, y)
                 @board.removeComponent(component)
+                component.el.addClass('in_options')
                 component.resetDrag()

@@ -21,13 +21,13 @@ lightbulb.Lightbulb = (function(_super) {
 
   Lightbulb.prototype.centerOffset = {
     x: 0,
-    y: 34
+    y: 32
   };
 
   Lightbulb.prototype.nodes = [
     {
       x: 0,
-      y: 30
+      y: 32
     }
   ];
 
@@ -57,7 +57,7 @@ lightbulb.Lightbulb = (function(_super) {
     }
     if (this.current) {
       return this.currentImage.css({
-        opacity: this.current / 4.0
+        opacity: this.current / 6.0
       });
     } else {
       return this.currentImage.css({

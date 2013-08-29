@@ -25,7 +25,9 @@ class draggable.Draggable
                 @drag(e, 'stop')
             @setStartDrag(e, center)
             @drag(e, 'start')
-            $(document.body).bind 'mousemove.drag touchmove.drag', (e) => @drag(e, 'move')
+            $(document.body).bind 'mousemove.drag touchmove.drag', (e) => 
+                @setStartDrag(e, center)
+                @drag(e, 'move')
     
     setStartDrag: (e, center) ->
         if center
@@ -33,8 +35,8 @@ class draggable.Draggable
             @startX = offset.left + (offset.width/2)
             @startY = offset.top + (offset.height/2)
         else
-            @startX = Client.x(e)
-            @startY = Client.y(e)        
+            @startX = Client.x(e) unless @startX
+            @startY = Client.y(e) unless @startY
 
     drag: (e, state) -> @dragTo(x: Client.x(e), y: Client.y(e), state: state)
         

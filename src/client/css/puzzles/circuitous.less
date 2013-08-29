@@ -247,19 +247,30 @@
             height: (@height * 2 / 3 - (@border * 2));
             border-spacing: 0;
             border-collapse: collapse;
-            .option {
-                text-align: center;
+            td {
                 border-left: 1px solid @black;
                 border-bottom: 1px solid @black;
-                .no_select();
-                
-                
-                .component {
+
+                .option {
                     position: relative;
-                    .current_image {
-                        transition: opacity 0.5s ease-out;
+                    text-align: center;
+                    .no_select();
+
+                    .component {
                         position: absolute;
-                        opacity: 0;
+                        top: 12px;
+                        left: 15px;
+                        &.in_options {
+                            img {
+                                height: 60px;
+                                width: 45px;
+                            }
+                        }                    
+                        .current_image {
+                            transition: opacity 0.5s ease-out;
+                            position: absolute;
+                            opacity: 0;
+                        }
                     }
                 }
             }
@@ -312,8 +323,12 @@
     }
     
     .selector_button {
+        margin: auto;
+        display: block;
+        width: 60px;
+        height: 60px;
+        margin-top: 15px;
         font-size: 45px;
-        padding: 0 15px;
         .rounded(30px);
         background-color: blue;
         color: white;

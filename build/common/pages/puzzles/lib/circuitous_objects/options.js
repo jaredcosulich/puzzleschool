@@ -31,20 +31,22 @@ options.Options = (function(_super) {
   };
 
   Options.prototype.construct = function() {
-    var column, option, optionRow, row, _i, _j, _ref, _ref1, _results;
+    var column, option, optionRow, optionTd, row, _i, _j, _ref, _ref1, _results;
     _results = [];
     for (row = _i = 1, _ref = this.rows; 1 <= _ref ? _i <= _ref : _i >= _ref; row = 1 <= _ref ? ++_i : --_i) {
       optionRow = $(document.createElement('TR'));
       for (column = _j = 1, _ref1 = this.columns; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; column = 1 <= _ref1 ? ++_j : --_j) {
-        option = $(document.createElement('TD'));
+        optionTd = $(document.createElement('TD'));
+        option = $(document.createElement('DIV'));
+        optionTd.append(option);
         option.addClass('option');
         option.addClass("option_" + (row * column));
         option.addClass('empty_option');
         option.css({
-          width: this.width / this.columns,
-          height: this.height / this.rows
+          width: this.width / this.columns - 1,
+          height: this.height / this.rows - 1
         });
-        optionRow.append(option);
+        optionRow.append(optionTd);
       }
       _results.push(this.el.append(optionRow));
     }
@@ -85,6 +87,7 @@ options.Options = (function(_super) {
     this.attachSelector(this.$('.empty_option')[1]);
     emptyOption = $(this.$('.empty_option')[0]);
     component.appendTo(emptyOption);
+    component.el.addClass('in_options');
     emptyOption.removeClass('empty_option');
     return $.timeout(10, function() {
       return component.initDrag(component.el, function(component, x, y, stopDrag) {
@@ -94,11 +97,13 @@ options.Options = (function(_super) {
   };
 
   Options.prototype.dragComponent = function(component, x, y, state) {
+    component.el.removeClass('in_options');
     if (state === 'start') {
       return this.board.removeComponent(component);
     } else if (state === 'stop') {
       if (!this.board.addComponent(component, x, y)) {
         this.board.removeComponent(component);
+        component.el.addClass('in_options');
         return component.resetDrag();
       }
     }

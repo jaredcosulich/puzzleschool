@@ -38,6 +38,7 @@ draggable.Draggable = (function() {
       _this.setStartDrag(e, center);
       _this.drag(e, 'start');
       return $(document.body).bind('mousemove.drag touchmove.drag', function(e) {
+        _this.setStartDrag(e, center);
         return _this.drag(e, 'move');
       });
     });
@@ -50,8 +51,12 @@ draggable.Draggable = (function() {
       this.startX = offset.left + (offset.width / 2);
       return this.startY = offset.top + (offset.height / 2);
     } else {
-      this.startX = Client.x(e);
-      return this.startY = Client.y(e);
+      if (!this.startX) {
+        this.startX = Client.x(e);
+      }
+      if (!this.startY) {
+        return this.startY = Client.y(e);
+      }
     }
   };
 

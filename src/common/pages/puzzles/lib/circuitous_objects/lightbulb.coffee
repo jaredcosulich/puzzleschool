@@ -11,10 +11,10 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         
     centerOffset: 
         x: 0
-        y: 34
+        y: 32
         
     nodes: [
-        {x: 0, y: 30}
+        {x: 0, y: 32}
     ]
         
     constructor: ({}) ->
@@ -34,7 +34,7 @@ class lightbulb.Lightbulb extends circuitousObject.Object
             @el.append(@currentImage)
                 
         if @current
-            @currentImage.css(opacity: @current / 4.0)
+            @currentImage.css(opacity: @current / 6.0)
         else
             @currentImage.css(opacity: 0)
         
