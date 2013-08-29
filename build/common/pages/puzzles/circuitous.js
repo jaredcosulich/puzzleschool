@@ -88,13 +88,8 @@ soma.views({
       this.levelId = this.el.data('level_id');
       if (this.levelId === 'editor') {
         circuitousEditor = require('./lib/circuitous_editor');
-        this.editor = new circuitousEditor.EditorHelper({
-          el: $(this.selector)
-        });
+        this.editor = new circuitousEditor.EditorHelper();
       }
-      window.loadInstructions = function(instructions) {
-        return _this.loadInstructions(instructions);
-      };
       $('.load_instructions .load button').bind('click', function() {
         var instructions;
         instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '');
@@ -103,64 +98,97 @@ soma.views({
         }
       });
       $('.load_instructions .load button').trigger('click');
-      window.getInstructions = function() {
-        return _this.getInstructions();
-      };
-      return $('.load_instructions .get button').bind('click', function() {
+      $('.load_instructions .get button').bind('click', function() {
         return $('.load_instructions .get textarea').val(_this.getInstructions());
+      });
+      return $('.load_instructions .get_values button').bind('click', function() {
+        return $('.load_instructions .get_values textarea').val(_this.getValues());
       });
     },
     loadInstructions: function(instructions) {
-      var info, nodes, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results,
+      var getCoordinates, info, nodes, position, positions, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _results,
         _this = this;
+      getCoordinates = function(position) {
+        var cellDimension, xCell, yCell, _ref;
+        _ref = position.split(','), xCell = _ref[0], yCell = _ref[1];
+        cellDimension = _this.viewHelper.board.cellDimension;
+        return [(parseInt(xCell) + 0.5) * cellDimension, (parseInt(yCell) + 0.5) * cellDimension];
+      };
       _ref = instructions.wires;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        nodes = _ref[_i];
-        (_ref1 = this.editor.board.wires).create.apply(_ref1, nodes);
+        positions = _ref[_i];
+        nodes = [];
+        for (_j = 0, _len1 = positions.length; _j < _len1; _j++) {
+          position = positions[_j];
+          _ref1 = getCoordinates(position), x = _ref1[0], y = _ref1[1];
+          nodes.push({
+            x: x,
+            y: y
+          });
+        }
+        (_ref2 = this.viewHelper.board.wires).create.apply(_ref2, nodes);
       }
-      _ref2 = instructions.components;
+      _ref3 = instructions.components;
       _results = [];
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        info = _ref2[_j];
+      for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+        info = _ref3[_k];
         _results.push((function(info) {
           var component;
           component = new circuitous[info.name];
-          _this.editor.options.addComponent(component);
+          _this.viewHelper.options.addComponent(component);
           return setTimeout((function() {
-            var componentPosition;
+            var componentPosition, _ref4;
+            component.el.removeClass('in_options');
             component.setStartDrag({}, true);
-            componentPosition = _this.editor.board.componentPosition({
-              x: info.x,
-              y: info.y
+            _ref4 = getCoordinates(info.position), x = _ref4[0], y = _ref4[1];
+            componentPosition = _this.viewHelper.board.componentPosition({
+              x: x - component.nodes[0].x,
+              y: y - component.nodes[0].y
             });
-            return _this.editor.board.addComponent(component, componentPosition.x, componentPosition.y);
+            return _this.viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y);
           }), 50);
         })(info));
       }
       return _results;
     },
     getInstructions: function() {
-      var boardPosition, component, components, id, instructions, wire, wires, _ref, _ref1;
+      var cells, component, components, id, instructions, node, wire, wires, xCell, xCell0, xCell1, yCell, yCell0, yCell1, _ref, _ref1, _ref2, _ref3, _ref4,
+        _this = this;
       instructions = [];
       components = [];
-      _ref = this.editor.board.components;
+      cells = function(node) {
+        var cellDimension;
+        cellDimension = _this.viewHelper.board.cellDimension;
+        return [(node.x / cellDimension) - 0.5, (node.y / cellDimension) - 0.5];
+      };
+      _ref = this.viewHelper.board.components;
       for (id in _ref) {
         component = _ref[id];
-        boardPosition = this.editor.board.boardPosition({
-          x: component.currentX,
-          y: component.currentY
-        });
-        components.push("{\"name\": \"" + component.constructor.name + "\", \"x\": " + boardPosition.x + ", \"y\": " + boardPosition.y + "}");
+        node = this.viewHelper.board.boardPosition(component.currentNodes()[0]);
+        _ref1 = cells(node), xCell = _ref1[0], yCell = _ref1[1];
+        components.push("{\"name\": \"" + component.constructor.name + "\", \"position\": \"" + xCell + "," + yCell + "\"}");
       }
       instructions.push("\"components\": [" + (components.join(',')) + "]");
       wires = [];
-      _ref1 = this.editor.board.wires.all();
-      for (id in _ref1) {
-        wire = _ref1[id];
-        wires.push("[{\"x\": " + wire.nodes[0].x + ", \"y\": " + wire.nodes[0].y + "}, {\"x\": " + wire.nodes[1].x + ", \"y\": " + wire.nodes[1].y + "}]");
+      _ref2 = this.viewHelper.board.wires.all();
+      for (id in _ref2) {
+        wire = _ref2[id];
+        _ref3 = cells(wire.nodes[0]), xCell0 = _ref3[0], yCell0 = _ref3[1];
+        _ref4 = cells(wire.nodes[1]), xCell1 = _ref4[0], yCell1 = _ref4[1];
+        wires.push("[\"" + xCell0 + "," + yCell0 + "\",\"" + xCell1 + "," + yCell1 + "\"]");
       }
       instructions.push("\"wires\": [" + (wires.join(',')) + "]");
       return "{" + (instructions.join(',')) + "}";
+    },
+    getValues: function() {
+      var component, id, values, _ref;
+      values = {};
+      _ref = this.viewHelper.board.components;
+      for (id in _ref) {
+        component = _ref[id];
+        values[id] = component.current;
+      }
+      return JSON.stringify(values);
     }
   }
 });

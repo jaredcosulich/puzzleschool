@@ -9,4 +9,17 @@ class circuitous.ChunkHelper
 
 class circuitous.ViewHelper
     constructor: ({@el}) ->
+        @init()
+        
+    $: (selector) -> $(selector, @el)
+        
+    init: ->
+        @board = new circuitous.Board
+            el: @$('.board')
+        
+        @options = new circuitous.Options
+            el: @$('.options')
+            rows: 5
+            columns: 4
+            board: @board
         

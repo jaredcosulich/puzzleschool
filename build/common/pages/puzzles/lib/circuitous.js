@@ -21,7 +21,24 @@ circuitous.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
     this.el = _arg.el;
+    this.init();
   }
+
+  ViewHelper.prototype.$ = function(selector) {
+    return $(selector, this.el);
+  };
+
+  ViewHelper.prototype.init = function() {
+    this.board = new circuitous.Board({
+      el: this.$('.board')
+    });
+    return this.options = new circuitous.Options({
+      el: this.$('.options'),
+      rows: 5,
+      columns: 4,
+      board: this.board
+    });
+  };
 
   return ViewHelper;
 

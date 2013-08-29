@@ -37,7 +37,6 @@ class board.Board extends circuitousObject.Object
         component.id = @generateId('component') unless component.id
 
         boardPosition = @boardPosition(x: x, y: y)
-        
         onBoardX = 0 < boardPosition.x < @width
         onBoardY = 0 < boardPosition.y < @height
         if onBoardX and onBoardY 

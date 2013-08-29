@@ -80,47 +80,76 @@ soma.views
             
             if @levelId == 'editor'
                 circuitousEditor = require('./lib/circuitous_editor')
-                @editor = new circuitousEditor.EditorHelper
-                    el: $(@selector)
+                @editor = new circuitousEditor.EditorHelper()
             
-            window.loadInstructions = (instructions) => @loadInstructions(instructions)
             $('.load_instructions .load button').bind 'click', =>
                 instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '')
                 @loadInstructions(JSON.parse(instructions)) if instructions.length
             $('.load_instructions .load button').trigger('click')
 
-            window.getInstructions = => @getInstructions()
             $('.load_instructions .get button').bind 'click', =>
                 $('.load_instructions .get textarea').val(@getInstructions())
+
+            $('.load_instructions .get_values button').bind 'click', =>
+                $('.load_instructions .get_values textarea').val(@getValues())
                     
         loadInstructions: (instructions) ->
-            @editor.board.wires.create(nodes...) for nodes in instructions.wires
+            getCoordinates = (position) =>
+                [xCell, yCell] = position.split(',')
+                cellDimension = @viewHelper.board.cellDimension
+                [(parseInt(xCell) + 0.5) * cellDimension, (parseInt(yCell) + 0.5) * cellDimension]
             
+            for positions in instructions.wires
+                nodes = []
+                for position in positions
+                    [x,y] = getCoordinates(position) 
+                    nodes.push(x: x, y: y)
+                @viewHelper.board.wires.create(nodes...)
+                
             for info in instructions.components
                 do (info) =>
                     component = new circuitous[info.name]
-                    @editor.options.addComponent(component)
+                    @viewHelper.options.addComponent(component)
                     setTimeout(( =>
+                        component.el.removeClass('in_options')
                         component.setStartDrag({}, true)
-                        componentPosition = @editor.board.componentPosition(x: info.x, y: info.y)
-                        @editor.board.addComponent(component, componentPosition.x, componentPosition.y)                            
+                        [x, y] = getCoordinates(info.position)
+                        componentPosition = @viewHelper.board.componentPosition
+                            x: x - component.nodes[0].x
+                            y: y - component.nodes[0].y
+                        @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
                     ), 50)                                    
                     
         getInstructions: ->
             instructions = []
             components = []
             
-            for id, component of @editor.board.components
-                boardPosition = @editor.board.boardPosition(x: component.currentX, y: component.currentY) 
-                components.push("{\"name\": \"#{component.constructor.name}\", \"x\": #{boardPosition.x}, \"y\": #{boardPosition.y}}")
+            cells = (node) =>
+                cellDimension = @viewHelper.board.cellDimension
+                [(node.x / cellDimension) - 0.5,  (node.y / cellDimension) - 0.5]
+            
+            for id, component of @viewHelper.board.components
+                node = @viewHelper.board.boardPosition(component.currentNodes()[0])
+                [xCell, yCell] = cells(node)
+                components.push("{\"name\": \"#{component.constructor.name}\", \"position\": \"#{xCell},#{yCell}\"}")
             instructions.push("\"components\": [#{components.join(',')}]")    
             
             wires = []
-            for id, wire of @editor.board.wires.all()
-                wires.push("[{\"x\": #{wire.nodes[0].x}, \"y\": #{wire.nodes[0].y}}, {\"x\": #{wire.nodes[1].x}, \"y\": #{wire.nodes[1].y}}]")
+            for id, wire of @viewHelper.board.wires.all()
+                [xCell0, yCell0] = cells(wire.nodes[0])
+                [xCell1, yCell1] = cells(wire.nodes[1])
+                wires.push("[\"#{xCell0},#{yCell0}\",\"#{xCell1},#{yCell1}\"]")
             instructions.push("\"wires\": [#{wires.join(',')}]")
         
             "{#{instructions.join(',')}}"
+            
+        getValues: ->
+            values = {}
+            for id, component of @viewHelper.board.components
+                values[id] = component.current
+            
+            return JSON.stringify(values)
+                
 soma.routes
     '/puzzles/circuitous/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Circuitous
