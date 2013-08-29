@@ -61,7 +61,10 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.draw = function(e) {
     var border, coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
-    border = parseInt(this.board.el.css('borderLeftWidth')) * 2;
+    border = parseInt(this.board.el.css('borderLeftWidth'));
+    if (!this.board.el.css('border')) {
+      border = border * 2;
+    }
     coords = this.board.roundedCoordinates({
       x: Client.x(e) - border,
       y: Client.y(e) - border

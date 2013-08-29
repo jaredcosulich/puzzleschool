@@ -10,11 +10,11 @@ class object.Object extends Draggable
         filename = @constructor.name.replace(/(.)([A-Z])/g, '$1_$2').toLowerCase()
         "#{@baseFolder}#{filename}.png"
         
-    imageElement: -> "<img src='#{@image()}' />"
+    imageElement: -> "<div class='component'><img src='#{@image()}' /></div>"
         
     appendTo: (container) -> 
         container.append(@imageElement())
-        @el = container.find("img[src=\'#{@image()}\']")
+        @el = container.find('.component')
         @el.bind 'dragstart', (e) => e.preventDefault()
 
     generateId: (namespace) -> "#{(if n = namespace then n else '')}#{new Date().getTime()}#{Math.random()}"

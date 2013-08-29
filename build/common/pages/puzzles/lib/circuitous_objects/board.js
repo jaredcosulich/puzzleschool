@@ -77,7 +77,6 @@ board.Board = (function(_super) {
     if (onBoardX && onBoardY) {
       this.components[component.id] = component;
       roundedBoardPosition = this.roundedCoordinates(boardPosition, component.centerOffset);
-      console.log('position at', boardPosition, roundedBoardPosition, this.componentPosition(roundedBoardPosition));
       component.positionAt(this.componentPosition(roundedBoardPosition));
       component.el.bind('dragstart.board', function(e) {
         return _this.wires.initDraw(e);

@@ -11,10 +11,10 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         
     centerOffset: 
         x: 0
-        y: 25
+        y: 34
         
     nodes: [
-        {x: 0, y: 39}
+        {x: 0, y: 30}
     ]
         
     constructor: ({}) ->
@@ -23,8 +23,18 @@ class lightbulb.Lightbulb extends circuitousObject.Object
     init: ->
         
     setCurrent: (@current) ->
+        if not @currentImage
+            @currentImage = $(document.createElement('IMG'))
+            @currentImage.addClass('current_image')
+            @currentImage.bind 'load', =>
+                @currentImage.css
+                    bottom: 0
+                    left: (@el.width()/2) - (@currentImage.width()/2)
+            @currentImage.attr(src: @image().replace('.png', '_current.png'))
+            @el.append(@currentImage)
+                
         if @current
-            @el.css(backgroundColor: 'yellow')
+            @currentImage.css(opacity: @current / 4.0)
         else
-            @el.css(backgroundColor: null)
+            @currentImage.css(opacity: 0)
         

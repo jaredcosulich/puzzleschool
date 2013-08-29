@@ -28,7 +28,7 @@
         .inner-shadow(0, 0, 24px, 80%);
         position: relative;
         .no_select();
-
+        
         .cells, .wires, .electrons {
             height: @height - (@border * 2);  
             width: @height - (@border * 2);
@@ -252,8 +252,15 @@
                 border-left: 1px solid @black;
                 border-bottom: 1px solid @black;
                 .no_select();
-                img {
-                    transition: background-color 3s ease; 
+                
+                
+                .component {
+                    position: relative;
+                    .current_image {
+                        transition: opacity 0.5s ease-out;
+                        position: absolute;
+                        opacity: 0;
+                    }
                 }
             }
         }

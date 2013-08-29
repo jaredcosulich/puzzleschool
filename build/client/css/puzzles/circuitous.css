@@ -245,8 +245,13 @@
   -ms-user-select: none;
   user-select: none;
 }
-.circuitous .right_side .options .option img {
-  transition: background-color 3s ease;
+.circuitous .right_side .options .option .component {
+  position: relative;
+}
+.circuitous .right_side .options .option .component .current_image {
+  transition: opacity 0.5s ease-out;
+  position: absolute;
+  opacity: 0;
 }
 .circuitous .right_side .menu {
   width: 304px;

@@ -42,7 +42,6 @@ class board.Board extends circuitousObject.Object
         if onBoardX and onBoardY 
             @components[component.id] = component
             roundedBoardPosition = @roundedCoordinates(boardPosition, component.centerOffset)
-            console.log('position at', boardPosition, roundedBoardPosition, @componentPosition(roundedBoardPosition))
             component.positionAt(@componentPosition(roundedBoardPosition))
             
             component.el.bind 'dragstart.board', (e) => @wires.initDraw(e)

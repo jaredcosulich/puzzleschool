@@ -21,13 +21,13 @@ lightbulb.Lightbulb = (function(_super) {
 
   Lightbulb.prototype.centerOffset = {
     x: 0,
-    y: 25
+    y: 34
   };
 
   Lightbulb.prototype.nodes = [
     {
       x: 0,
-      y: 39
+      y: 30
     }
   ];
 
@@ -39,14 +39,29 @@ lightbulb.Lightbulb = (function(_super) {
   Lightbulb.prototype.init = function() {};
 
   Lightbulb.prototype.setCurrent = function(current) {
+    var _this = this;
     this.current = current;
+    if (!this.currentImage) {
+      this.currentImage = $(document.createElement('IMG'));
+      this.currentImage.addClass('current_image');
+      this.currentImage.bind('load', function() {
+        return _this.currentImage.css({
+          bottom: 0,
+          left: (_this.el.width() / 2) - (_this.currentImage.width() / 2)
+        });
+      });
+      this.currentImage.attr({
+        src: this.image().replace('.png', '_current.png')
+      });
+      this.el.append(this.currentImage);
+    }
     if (this.current) {
-      return this.el.css({
-        backgroundColor: 'yellow'
+      return this.currentImage.css({
+        opacity: this.current / 4.0
       });
     } else {
-      return this.el.css({
-        backgroundColor: null
+      return this.currentImage.css({
+        opacity: 0
       });
     }
   };

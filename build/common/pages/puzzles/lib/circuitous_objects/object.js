@@ -24,13 +24,13 @@ object.Object = (function(_super) {
   };
 
   Object.prototype.imageElement = function() {
-    return "<img src='" + (this.image()) + "' />";
+    return "<div class='component'><img src='" + (this.image()) + "' /></div>";
   };
 
   Object.prototype.appendTo = function(container) {
     var _this = this;
     container.append(this.imageElement());
-    this.el = container.find("img[src=\'" + (this.image()) + "\']");
+    this.el = container.find('.component');
     return this.el.bind('dragstart', function(e) {
       return e.preventDefault();
     });
