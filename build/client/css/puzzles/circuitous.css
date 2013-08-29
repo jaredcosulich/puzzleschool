@@ -51,6 +51,8 @@
 .circuitous .board .wires,
 .circuitous .board .electrons {
   position: absolute;
+  top: 0;
+  left: 0;
 }
 .circuitous .board .cell {
   border-right: 1px dashed #ededed;

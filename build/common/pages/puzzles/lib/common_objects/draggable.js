@@ -80,6 +80,8 @@ draggable.Draggable = (function() {
   Draggable.prototype.resetDrag = function() {
     delete this.startX;
     delete this.startY;
+    delete this.currentX;
+    delete this.currentY;
     return this.transformer.translate(0, 0);
   };
 

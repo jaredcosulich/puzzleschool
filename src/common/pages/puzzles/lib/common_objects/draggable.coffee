@@ -49,4 +49,6 @@ class draggable.Draggable
     resetDrag: -> 
         delete @startX
         delete @startY
+        delete @currentX
+        delete @currentY
         @transformer.translate(0, 0)

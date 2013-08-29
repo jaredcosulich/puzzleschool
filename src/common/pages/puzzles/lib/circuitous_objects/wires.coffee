@@ -32,6 +32,7 @@ class wires.Wires extends circuitousObject.Object
         
     draw: (e) ->
         border = @board.border
+        # @board.addDot(el: @el, x: Client.x(e) - @el.offset().left, y: Client.y(e) - @el.offset().top, color: 'green')
         coords = @board.roundedCoordinates({x: Client.x(e) - border, y: Client.y(e) - border}, @el.offset())
         if start = @info.start
             xDiff = Math.abs(start.x - coords.x)

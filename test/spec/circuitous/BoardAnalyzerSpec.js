@@ -412,10 +412,11 @@ describe("BoardAnalyzer", function() {
             
             beforeEach(function() {
                 battery.voltage = 8;
-                
                 bulbs = [];
+                
                 var start = board.boardPosition(battery.currentNodes()[1]);
                 var lastNode = drawOrEraseWire(board, start, 0, 1);
+                
                 lastNode = drawOrEraseWire(board, lastNode, -2, 0);
                 lastNode = drawOrEraseWire(board, lastNode, 0, -6);
                 var split1Node = drawOrEraseWire(board, lastNode, 2, 0);
@@ -423,7 +424,7 @@ describe("BoardAnalyzer", function() {
                 var battery2Node = drawOrEraseWire(board, lastNode, 1, 0);
                 var battery2 = createComponent(board, 'Battery');
                 battery2.voltage = 12;
-                onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+                onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
                 expect(onBoard).toBe(true);
                 var bulb1Node = drawOrEraseWire(board, battery2Node, 3, 0);
                 drawOrEraseWire(board, battery2Node, 1, 0);
@@ -524,7 +525,7 @@ describe("BoardAnalyzer", function() {
                 describe('and another battery facing against the current', function() {
                     beforeEach(function() {
                         battery2 = createComponent(board, 'Battery');
-                        var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+                        var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
                         expect(onBoard).toBe(true);                                            
                         
                         drawOrEraseWire(board, battery2Node, 1, 0);
@@ -543,7 +544,7 @@ describe("BoardAnalyzer", function() {
                 describe('and another battery facing against the current', function() {
                     beforeEach(function() {
                         battery2 = createComponent(board, 'Battery');
-                        var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
+                        var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 128);
                         expect(onBoard).toBe(true);                                            
                         
                         drawOrEraseWire(board, battery2Node, 2, 0);
@@ -618,13 +619,13 @@ describe("BoardAnalyzer", function() {
             var start = board.boardPosition(battery.currentNodes()[1]);
             battery2Node = drawOrEraseWire(board, start, 2, 0);         
             battery2 = createComponent(board, 'Battery');
-            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
             expect(onBoard).toBe(true);
     
             var split1Node = {x: battery2Node.x + 32, y: battery2Node.y}
             var battery3Node = drawOrEraseWire(board, split1Node, 2, 0);         
             var battery3 = createComponent(board, 'Battery');
-            var onBoard = addToBoard(board, battery3, battery3Node.x + 32, battery3Node.y + 64);
+            var onBoard = addToBoard(board, battery3, battery3Node.x + 32, battery3Node.y + 96);
             expect(onBoard).toBe(true);
 
             lastNode = drawOrEraseWire(board, {x: battery3Node.x + 32, y: battery3Node.y}, 1, 0);
@@ -665,7 +666,7 @@ describe("BoardAnalyzer", function() {
             expect(onBoard).toBe(true);
 
             board.moveElectricity();
-            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 64);
+            var onBoard = addToBoard(board, battery2, battery2Node.x + 32, battery2Node.y + 96);
             expect(onBoard).toBe(true);
         });  
     });
@@ -674,7 +675,9 @@ describe("BoardAnalyzer", function() {
 
 
 addToBoard = function(board, component, x, y) {
-    boardOffset = board.el.offset()
+    boardOffset = board.cells.offset()
+    boardOffset.left += board.border
+    boardOffset.top += board.border
     var onBoard = board.addComponent(
         component, 
         boardOffset.left + x - component.centerOffset.x, 
@@ -701,7 +704,9 @@ createComponent = function(board, type) {
 }
 
 drawOrEraseWire = function(board, from, deltaX, deltaY) {
-    offset = board.el.offset()
+    offset = board.wires.el.offset()
+    offset.left -= board.border
+    offset.top -= board.border
     board.el.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
     end  = {x: from.x + (deltaX * board.cellDimension), y: from.y + (deltaY * board.cellDimension)}
     board.wires.draw({clientX: offset.left + end.x, clientY: offset.top + end.y});
