@@ -13,10 +13,11 @@ class board.Board extends circuitousObject.Object
 
     init: ->
         @cells = @el.find('.cells')
+        @border = parseInt(@el.css('borderLeftWidth'))        
         @components = {}
         @changesMade = false
-        @width = @el.width()
-        @height = @el.height()
+        @width = @cells.width()
+        @height = @cells.height()
         @drawGrid()
         @initElectricity()
         @wires = new Wires(@)
@@ -59,28 +60,29 @@ class board.Board extends circuitousObject.Object
         delete @components[component.id]
             
     roundedCoordinates: (coords, offset) ->
-        halfDim = @cellDimension / 2 - (parseInt(@el.css('borderLeftWidth')) - 1)
+        dim = @cellDimension
+        halfDim = dim / 2
         offsetCoords = 
             x: coords.x - (offset?.left or offset?.x or 0) + halfDim
             y: coords.y - (offset?.top or offset?.y or 0) + halfDim
             
         return {
-            x: (Math.round(offsetCoords.x / @cellDimension) * @cellDimension) - halfDim
-            y: (Math.round(offsetCoords.y / @cellDimension) * @cellDimension) - halfDim
+            x: (Math.round(offsetCoords.x / dim) * dim) - halfDim
+            y: (Math.round(offsetCoords.y / dim) * dim) - halfDim
         }
         
     boardPosition: (componentPosition) ->
-        offset = @el.offset()
+        offset = @cells.offset()
         position = JSON.parse(JSON.stringify(componentPosition))
-        position.x = componentPosition.x - offset.left
-        position.y = componentPosition.y - offset.top
+        position.x = componentPosition.x - offset.left - @border
+        position.y = componentPosition.y - offset.top - @border
         return position
 
     componentPosition: (boardPosition) ->
-        offset = @el.offset()
+        offset = @cells.offset()
         position = JSON.parse(JSON.stringify(boardPosition))
-        position.x = boardPosition.x + offset.left
-        position.y = boardPosition.y + offset.top
+        position.x = boardPosition.x + offset.left + @border
+        position.y = boardPosition.y + offset.top + @border
         return position
 
     componentsAndWires: ->
@@ -143,18 +145,20 @@ class board.Board extends circuitousObject.Object
             color = colors[index]
             @componentsAndWires()[componentId]?.el?.css(backgroundColor: color)
     
-    addDot: ({x, y, color}) ->
+    addDot: ({el, x, y, width, height, color}) ->
+        el = @cells if not el
+        color = 'red' if not color
         dot =  $(document.createElement('DIV'))
         dot.html('&nbsp;')
         dot.css
             position: 'absolute'
-            backgroundColor: color or 'red'
-            width: 4
-            height: 4
-            marginTop: -9
-            marginLeft: -9
+            backgroundColor: color
+            width: width or 4
+            height: height or 4
+            marginTop: if height then 0 else -2
+            marginLeft: if width then 0 else -2
             left: x
             top: y
             zIndex: 9
-        @el.append(dot)
-        console.log('dot', x, y, dot)
+        el.append(dot)
+        console.log('dot', x, y, width, height, dot)

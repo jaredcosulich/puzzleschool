@@ -96,11 +96,13 @@ soma.views({
         return _this.loadInstructions(instructions);
       };
       $('.load_instructions .load button').bind('click', function() {
-        return _this.loadInstructions(JSON.parse($('.load_instructions .load textarea').val()));
+        var instructions;
+        instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '');
+        if (instructions.length) {
+          return _this.loadInstructions(JSON.parse(instructions));
+        }
       });
-      if ($('.load_instructions .load textarea').val().length) {
-        $('.load_instructions .load button').trigger('click');
-      }
+      $('.load_instructions .load button').trigger('click');
       window.getInstructions = function() {
         return _this.getInstructions();
       };

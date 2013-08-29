@@ -6,12 +6,12 @@ class battery.Battery extends circuitousObject.Object
         top: 15
     
     centerOffset: 
-        x: 17
-        y: 22
+        x: 16
+        y: 54
     
     nodes: [
-        {x: -17, y: -54, positive: true}    
-        {x: 15, y: -54, negative: true}
+        {x: -16, y: -54, positive: true}    
+        {x: 16, y: -54, negative: true}
     ]
 
     voltage: 9

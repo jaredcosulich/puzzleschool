@@ -23,21 +23,25 @@
     .board {
         float: left;
         border: @border solid white;
+        border-right: none;
         overflow: hidden;
         margin-bottom: 12px;
-        .inner-shadow(0, 0, 24px, 80%);
+        .inner-shadow(0, 0, 18px, 60%);
         position: relative;
+        padding: @border;
         .no_select();
         
         .cells, .wires, .electrons {
-            height: @height - (@border * 2);  
-            width: @height - (@border * 2);
+            height: @height - (@border * 4);  
+            width: @height - (@border * 4);
+        }
+
+        .cells {
+            position: relative;
         }
         
         .wires, .electrons {
             position: absolute;
-            top: -8px;
-            left: -7px;
         }
         
         .cell {
@@ -242,15 +246,18 @@
         border-left: none;
         
         .options {
-            .inner-shadow(0, 0, 24px, 80%);            
+            .inner-shadow(0, 0, 18px, 60%);            
             width: (@width - @height - (@border * 2));
             height: (@height * 2 / 3 - (@border * 2));
             border-spacing: 0;
             border-collapse: collapse;
+            border-top: 1px solid @grey;
+            border-right: 1px solid @grey;
+            
             td {
-                border-left: 1px solid @black;
-                border-bottom: 1px solid @black;
-
+                border-left: 1px solid @grey;
+                border-bottom: 1px solid @grey;
+                
                 .option {
                     position: relative;
                     text-align: center;
@@ -328,7 +335,7 @@
         width: 60px;
         height: 60px;
         margin-top: 15px;
-        font-size: 45px;
+        font-size: 48px;
         .rounded(30px);
         background-color: blue;
         color: white;

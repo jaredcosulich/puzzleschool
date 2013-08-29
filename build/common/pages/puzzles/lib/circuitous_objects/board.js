@@ -28,10 +28,11 @@ board.Board = (function(_super) {
 
   Board.prototype.init = function() {
     this.cells = this.el.find('.cells');
+    this.border = parseInt(this.el.css('borderLeftWidth'));
     this.components = {};
     this.changesMade = false;
-    this.width = this.el.width();
-    this.height = this.el.height();
+    this.width = this.cells.width();
+    this.height = this.cells.height();
     this.drawGrid();
     this.initElectricity();
     return this.wires = new Wires(this);
@@ -97,33 +98,34 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.roundedCoordinates = function(coords, offset) {
-    var halfDim, offsetCoords;
-    halfDim = this.cellDimension / 2 - (parseInt(this.el.css('borderLeftWidth')) - 1);
+    var dim, halfDim, offsetCoords;
+    dim = this.cellDimension;
+    halfDim = dim / 2;
     offsetCoords = {
       x: coords.x - ((offset != null ? offset.left : void 0) || (offset != null ? offset.x : void 0) || 0) + halfDim,
       y: coords.y - ((offset != null ? offset.top : void 0) || (offset != null ? offset.y : void 0) || 0) + halfDim
     };
     return {
-      x: (Math.round(offsetCoords.x / this.cellDimension) * this.cellDimension) - halfDim,
-      y: (Math.round(offsetCoords.y / this.cellDimension) * this.cellDimension) - halfDim
+      x: (Math.round(offsetCoords.x / dim) * dim) - halfDim,
+      y: (Math.round(offsetCoords.y / dim) * dim) - halfDim
     };
   };
 
   Board.prototype.boardPosition = function(componentPosition) {
     var offset, position;
-    offset = this.el.offset();
+    offset = this.cells.offset();
     position = JSON.parse(JSON.stringify(componentPosition));
-    position.x = componentPosition.x - offset.left;
-    position.y = componentPosition.y - offset.top;
+    position.x = componentPosition.x - offset.left - this.border;
+    position.y = componentPosition.y - offset.top - this.border;
     return position;
   };
 
   Board.prototype.componentPosition = function(boardPosition) {
     var offset, position;
-    offset = this.el.offset();
+    offset = this.cells.offset();
     position = JSON.parse(JSON.stringify(boardPosition));
-    position.x = boardPosition.x + offset.left;
-    position.y = boardPosition.y + offset.top;
+    position.x = boardPosition.x + offset.left + this.border;
+    position.y = boardPosition.y + offset.top + this.border;
     return position;
   };
 
@@ -240,23 +242,29 @@ board.Board = (function(_super) {
   };
 
   Board.prototype.addDot = function(_arg) {
-    var color, dot, x, y;
-    x = _arg.x, y = _arg.y, color = _arg.color;
+    var color, dot, el, height, width, x, y;
+    el = _arg.el, x = _arg.x, y = _arg.y, width = _arg.width, height = _arg.height, color = _arg.color;
+    if (!el) {
+      el = this.cells;
+    }
+    if (!color) {
+      color = 'red';
+    }
     dot = $(document.createElement('DIV'));
     dot.html('&nbsp;');
     dot.css({
       position: 'absolute',
-      backgroundColor: color || 'red',
-      width: 4,
-      height: 4,
-      marginTop: -9,
-      marginLeft: -9,
+      backgroundColor: color,
+      width: width || 4,
+      height: height || 4,
+      marginTop: height ? 0 : -2,
+      marginLeft: width ? 0 : -2,
       left: x,
       top: y,
       zIndex: 9
     });
-    this.el.append(dot);
-    return console.log('dot', x, y, dot);
+    el.append(dot);
+    return console.log('dot', x, y, width, height, dot);
   };
 
   return Board;

@@ -24,12 +24,14 @@
 .circuitous .board {
   float: left;
   border: 8px solid #ffffff;
+  border-right: none;
   overflow: hidden;
   margin-bottom: 12px;
-  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
-  -webkit-box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
-  -moz-box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
   position: relative;
+  padding: 8px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -40,14 +42,15 @@
 .circuitous .board .cells,
 .circuitous .board .wires,
 .circuitous .board .electrons {
-  height: 624px;
-  width: 624px;
+  height: 608px;
+  width: 608px;
+}
+.circuitous .board .cells {
+  position: relative;
 }
 .circuitous .board .wires,
 .circuitous .board .electrons {
   position: absolute;
-  top: -8px;
-  left: -7px;
 }
 .circuitous .board .cell {
   border-right: 1px dashed #ededed;
@@ -226,17 +229,19 @@
   border-left: none;
 }
 .circuitous .right_side .options {
-  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
-  -webkit-box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
-  -moz-box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
   width: 304px;
   height: 410.6666666666667px;
   border-spacing: 0;
   border-collapse: collapse;
+  border-top: 1px solid #949494;
+  border-right: 1px solid #949494;
 }
 .circuitous .right_side .options td {
-  border-left: 1px solid #262626;
-  border-bottom: 1px solid #262626;
+  border-left: 1px solid #949494;
+  border-bottom: 1px solid #949494;
 }
 .circuitous .right_side .options td .option {
   position: relative;
@@ -458,7 +463,7 @@
   width: 60px;
   height: 60px;
   margin-top: 15px;
-  font-size: 45px;
+  font-size: 48px;
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px;

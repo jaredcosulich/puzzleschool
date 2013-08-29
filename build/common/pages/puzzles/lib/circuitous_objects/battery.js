@@ -16,17 +16,17 @@ battery.Battery = (function(_super) {
   };
 
   Battery.prototype.centerOffset = {
-    x: 17,
-    y: 22
+    x: 16,
+    y: 54
   };
 
   Battery.prototype.nodes = [
     {
-      x: -17,
+      x: -16,
       y: -54,
       positive: true
     }, {
-      x: 15,
+      x: 16,
       y: -54,
       negative: true
     }
