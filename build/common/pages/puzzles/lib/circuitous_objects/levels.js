@@ -14,80 +14,34 @@ levels.WORLDS = [
         levels: [
           {
             id: 1377808756337,
+            challenge: "Complete the circuit to power the lightbulb.",
             instructions: {
               "components": [
                 {
                   "name": "Battery",
-                  "x": 288,
-                  "y": 294
+                  "position": "7,10"
                 }, {
                   "name": "Lightbulb",
-                  "x": 304,
-                  "y": 80
+                  "position": "8,6"
                 }
               ],
-              "wires": [
-                [
-                  {
-                    "x": 304,
-                    "y": 240
-                  }, {
-                    "x": 304,
-                    "y": 208
-                  }
-                ], [
-                  {
-                    "x": 304,
-                    "y": 208
-                  }, {
-                    "x": 304,
-                    "y": 176
-                  }
-                ], [
-                  {
-                    "x": 304,
-                    "y": 176
-                  }, {
-                    "x": 304,
-                    "y": 144
-                  }
-                ], [
-                  {
-                    "x": 304,
-                    "y": 144
-                  }, {
-                    "x": 304,
-                    "y": 112
-                  }
-                ], [
-                  {
-                    "x": 304,
-                    "y": 112
-                  }, {
-                    "x": 272,
-                    "y": 112
-                  }
-                ], [
-                  {
-                    "x": 272,
-                    "y": 112
-                  }, {
-                    "x": 272,
-                    "y": 144
-                  }
-                ], [
-                  {
-                    "x": 272,
-                    "y": 144
-                  }, {
-                    "x": 272,
-                    "y": 176
-                  }
-                ]
-              ]
+              "wires": [["8,10", "8,9"], ["8,9", "8,8"], ["8,8", "8,7"], ["8,7", "8,6"], ["8,6", "7,6"], ["7,6", "7,7"], ["7,7", "7,8"]]
             },
-            completeInstructions: {},
-            hints: {}
+            hints: ['Click anywhere on the board to draw a wire (click on an existing wire to erase it).', 'Complete the wire by connecting the loose end to the positive node.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "7,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,6"
+                }
+              ],
+              "wires": [["8,10", "8,9"], ["8,9", "8,8"], ["8,8", "8,7"], ["8,7", "8,6"], ["8,6", "7,6"], ["7,6", "7,7"], ["7,7", "7,8"], ["7,8", "7,9"], ["7,9", "7,10"]]
+            },
+            completeValues: [["Battery", 1.8], ["Lightbulb", 1.8]],
+            complete: 'In order for a circuit to provide power to a lightbulb the circuit must provide a connection from \nthe negative terminal of a battery, to the lightbulb, and back to the positive terminal.'
           }
         ]
       }

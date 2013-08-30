@@ -365,6 +365,51 @@
             }    
         }
     }    
+    
+    .modal_menu {
+        opacity: 0;
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+        width: 560px;
+        height: 400px;
+        z-index: 99;
+        background: transparent url('/assets/images/puzzles/circuitous/modal.png');
+        .close {
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            content: "\00a0";  
+        }
+        .content {
+            width: 480px;
+            height: 318px;
+            margin: 40px;
+            .challenge, .complete {
+                padding-top: 30px;
+                text-align: center;
+                h1 {
+                }
+                .description {
+                    font-size: @h3size;
+                    padding: 30px;                    
+                }
+            }
+            .go {
+                .button-color(@blue);
+                font-size: @h2size;
+            }
+            .nav_links {
+                padding-top: 45px;
+                a {
+                    .button-color(@red);
+                }
+            }
+        }
+    }
 }
 
 .load_instructions {

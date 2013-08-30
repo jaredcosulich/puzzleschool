@@ -50,6 +50,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/options.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/menu.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/index.js');
+      this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/levels.js');
       if (this.levelId === 'editor') {
         this.loadScript('/build/common/pages/puzzles/lib/circuitous_editor.js');
       }
@@ -115,7 +116,10 @@ soma.views({
         }
         this.loadInstructions(JSON.parse(instructions));
       }
-      return this.initInstructions();
+      this.initInstructions();
+      this.initWorlds();
+      this.loadLevel();
+      return this.initCompleteListener();
     },
     initInstructions: function() {
       var _this = this;
@@ -193,7 +197,7 @@ soma.views({
         component = _ref[id];
         node = this.viewHelper.board.boardPosition(component.currentNodes()[0]);
         _ref1 = cells(node), xCell = _ref1[0], yCell = _ref1[1];
-        components.push("{\"name\": \"" + component.constructor.name + "\", \"position\": \"" + xCell + "," + yCell + "\"}");
+        components.push("{\"name\": \"" + component.constructor.name + "\", \"position\": \"" + xCell + "," + yCell + "\", \"current\": " + (Math.abs(component.current)) + "}");
       }
       instructions.push("\"components\": [" + (components.join(',')) + "]");
       wires = [];
@@ -208,14 +212,118 @@ soma.views({
       return "{" + (instructions.join(',')) + "}";
     },
     getValues: function() {
-      var component, id, values, _ref;
-      values = {};
+      var component, componentId, values, _ref;
+      values = [];
       _ref = this.viewHelper.board.components;
-      for (id in _ref) {
-        component = _ref[id];
-        values[id] = component.current;
+      for (componentId in _ref) {
+        component = _ref[componentId];
+        values.push(JSON.stringify([component.constructor.name, component.current]));
       }
-      return JSON.stringify(values);
+      return "[" + (values.join(',')) + "]";
+    },
+    initCompleteListener: function() {
+      var _this = this;
+      return this.viewHelper.board.addChangeListener(function() {
+        var component, componentFound, componentId, componentIds, componentType, current, id, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3;
+        if (!_this.level.loaded) {
+          return;
+        }
+        componentIds = {};
+        _ref = Object.keys(_this.viewHelper.board.components);
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          id = _ref[_i];
+          componentIds[id] = true;
+        }
+        _ref1 = _this.level.completeValues;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          _ref2 = _ref1[_j], componentType = _ref2[0], current = _ref2[1];
+          componentFound = false;
+          _ref3 = _this.viewHelper.board.components;
+          for (componentId in _ref3) {
+            component = _ref3[componentId];
+            if (component.constructor.name === componentType && current === Math.abs(component.current)) {
+              componentFound = true;
+              delete componentIds[componentId];
+              break;
+            }
+          }
+          if (!componentFound) {
+            return;
+          }
+        }
+        return _this.showComplete();
+      });
+    },
+    initWorlds: function() {
+      return this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
+    },
+    loadLevel: function(levelId) {
+      if (!levelId) {
+        this.level = this.worlds[0].stages[0].levels[0];
+      } else {
+        this.level = this.findLevel(levelId);
+      }
+      return this.showChallenge();
+    },
+    showChallenge: function() {
+      var _this = this;
+      if (!this.level.challengeElement) {
+        this.level.challengeElement = $(document.createElement('DIV'));
+        this.level.challengeElement.html("<h1>Challenge</h1>\n<p class='description'>" + this.level.challenge + "</p>\n<div class='go'>Get Started</div>\n<div class='nav_links'>\n    <a class='hint'>Show a hint ></a>\n</div>");
+        this.level.challengeElement.addClass('challenge');
+        this.level.challengeElement.find('a.hint').bind('click', function() {
+          return console.log('HINT');
+        });
+        this.level.challengeElement.find('.go').bind('click', function() {
+          _this.loadInstructions(_this.level.instructions);
+          _this.hideModal();
+          return _this.level.loaded = true;
+        });
+      }
+      return this.showModal(this.level.challengeElement);
+    },
+    showComplete: function() {
+      if (!this.level.completeElement) {
+        this.level.completeElement = $(document.createElement('DIV'));
+        this.level.completeElement.html("<h1>Success</h1>\n<p class='description'>" + this.level.complete + "</p>\n<div class='go'>Next Level</div>    ");
+        this.level.completeElement.addClass('complete');
+      }
+      return this.showModal(this.level.completeElement);
+    },
+    showModal: function(content) {
+      var _this = this;
+      if (!this.modalMenu) {
+        this.modalMenu = this.$('.modal_menu');
+        this.modalMenu.find('.close').bind('click', function() {
+          return _this.hideModal();
+        });
+      }
+      this.modalMenu.find('.content').html(content);
+      this.modalMenu.css({
+        opacity: 0,
+        left: (this.el.width() / 2) - (this.modalMenu.width() / 2),
+        top: (this.el.height() / 2) - (this.modalMenu.height() / 2)
+      });
+      return this.modalMenu.animate({
+        opacity: 1,
+        duration: 500
+      });
+    },
+    hideModal: function() {
+      var _this = this;
+      if (!this.modalMenu) {
+        return;
+      }
+      return this.modalMenu.animate({
+        opacity: 0,
+        duration: 500,
+        complete: function() {
+          return _this.modalMenu.css({
+            left: -10000,
+            top: -10000
+          });
+        }
+      });
     }
   }
 });

@@ -500,6 +500,102 @@
 .circuitous .selector_dialog .items .item {
   padding: 12px 0;
 }
+.circuitous .modal_menu {
+  opacity: 0;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  width: 560px;
+  height: 400px;
+  z-index: 99;
+  background: transparent url('/assets/images/puzzles/circuitous/modal.png');
+}
+.circuitous .modal_menu .close {
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  content: "\00a0";
+}
+.circuitous .modal_menu .content {
+  width: 480px;
+  height: 318px;
+  margin: 40px;
+}
+.circuitous .modal_menu .content .challenge,
+.circuitous .modal_menu .content .complete {
+  padding-top: 30px;
+  text-align: center;
+}
+.circuitous .modal_menu .content .challenge .description,
+.circuitous .modal_menu .content .complete .description {
+  font-size: 18px;
+  padding: 30px;
+}
+.circuitous .modal_menu .content .go {
+  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
+  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
+  background-color: #24aac3;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #24aac3;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #24aac3;
+  margin: auto;
+  font-size: 23px;
+}
+.circuitous .modal_menu .content .go:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
+  background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
+  background-color: #24aac3;
+}
+.circuitous .modal_menu .content .go:active {
+  position: relative;
+  top: 1px;
+}
+.circuitous .modal_menu .content .nav_links {
+  padding-top: 45px;
+}
+.circuitous .modal_menu .content .nav_links a {
+  -moz-box-shadow: inset 0px 1px 0px 0px #ff9c92;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #ff9c92;
+  box-shadow: inset 0px 1px 0px 0px #ff9c92;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff6e5f), color-stop(1, #ff402c));
+  background: -moz-linear-gradient(center top, #ff6e5f 5%, #ff402c 100%);
+  background-color: #ff6e5f;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #ff6e5f;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #ff6e5f;
+  margin: auto;
+}
+.circuitous .modal_menu .content .nav_links a:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff9c92), color-stop(1, #ff6e5f));
+  background: -moz-linear-gradient(center top, #ff9c92 5%, #ff6e5f 100%);
+  background-color: #ff6e5f;
+}
+.circuitous .modal_menu .content .nav_links a:active {
+  position: relative;
+  top: 1px;
+}
 .load_instructions {
   clear: both;
   padding: 30px 0;

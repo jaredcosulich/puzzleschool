@@ -45,6 +45,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/options.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/menu.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/index.js'
+            @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/levels.js'
 
             @loadScript '/build/common/pages/puzzles/lib/circuitous_editor.js' if @levelId == 'editor'
             @loadScript '/build/common/pages/puzzles/lib/circuitous.js'
@@ -103,6 +104,10 @@ soma.views
                     
             @initInstructions()
             
+            @initWorlds()
+            @loadLevel()
+            @initCompleteListener()
+        
         initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
                 instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '')
@@ -113,7 +118,7 @@ soma.views
                 $('.load_instructions .get textarea').val(@getInstructions())
                 $('.load_instructions .get_values textarea').val(@getValues())
                     
-        loadInstructions: (instructions) ->
+        loadInstructions: (instructions) ->            
             getCoordinates = (position) =>
                 [xCell, yCell] = position.split(',')
                 cellDimension = @viewHelper.board.cellDimension
@@ -138,7 +143,7 @@ soma.views
                             x: x - component.nodes[0].x
                             y: y - component.nodes[0].y
                         @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
-                    
+            
         getInstructions: ->
             instructions = []
             components = []
@@ -150,7 +155,7 @@ soma.views
             for id, component of @viewHelper.board.components
                 node = @viewHelper.board.boardPosition(component.currentNodes()[0])
                 [xCell, yCell] = cells(node)
-                components.push("{\"name\": \"#{component.constructor.name}\", \"position\": \"#{xCell},#{yCell}\"}")
+                components.push("{\"name\": \"#{component.constructor.name}\", \"position\": \"#{xCell},#{yCell}\", \"current\": #{Math.abs(component.current)}}")
             instructions.push("\"components\": [#{components.join(',')}]")    
             
             wires = []
@@ -161,14 +166,96 @@ soma.views
             instructions.push("\"wires\": [#{wires.join(',')}]")
         
             "{#{instructions.join(',')}}"
-            
+        
         getValues: ->
-            values = {}
-            for id, component of @viewHelper.board.components
-                values[id] = component.current
+            values = []
+            for componentId, component of @viewHelper.board.components
+                values.push(JSON.stringify([component.constructor.name, component.current]))
             
-            return JSON.stringify(values)
+            "[#{values.join(',')}]"
+            
+        initCompleteListener: ->
+            @viewHelper.board.addChangeListener =>
+                return unless @level.loaded
+                componentIds = {}
+                componentIds[id] = true for id in Object.keys(@viewHelper.board.components)
+                for [componentType, current] in @level.completeValues
+                    componentFound = false
+                    for componentId, component of @viewHelper.board.components
+                        if component.constructor.name == componentType and current == Math.abs(component.current)
+                            componentFound = true
+                            delete componentIds[componentId]
+                            break
+                    return unless componentFound
+                @showComplete()
                 
+        initWorlds: ->
+            @worlds = require('./lib/xyflyer_objects/levels').WORLDS
+                
+        loadLevel: (levelId) ->
+            if not levelId
+                @level = @worlds[0].stages[0].levels[0]
+            else
+                @level = @findLevel(levelId)
+                
+            @showChallenge()
+            
+        showChallenge: ->
+            if not @level.challengeElement
+                @level.challengeElement = $(document.createElement('DIV'))
+                @level.challengeElement.html """
+                    <h1>Challenge</h1>
+                    <p class='description'>#{@level.challenge}</p>
+                    <div class='go'>Get Started</div>
+                    <div class='nav_links'>
+                        <a class='hint'>Show a hint ></a>
+                    </div>
+                """
+                @level.challengeElement.addClass('challenge')
+                @level.challengeElement.find('a.hint').bind 'click', => console.log('HINT')
+                @level.challengeElement.find('.go').bind 'click', => 
+                    @loadInstructions(@level.instructions)
+                    @hideModal()
+                    @level.loaded = true
+                    
+            @showModal(@level.challengeElement)
+        
+        showComplete: ->
+            if not @level.completeElement
+                @level.completeElement = $(document.createElement('DIV'))
+                @level.completeElement.html """
+                    <h1>Success</h1>
+                    <p class='description'>#{@level.complete}</p>
+                    <div class='go'>Next Level</div>    
+                """
+                @level.completeElement.addClass('complete')
+                    
+            @showModal(@level.completeElement)
+            
+        
+        showModal: (content) ->
+            if not @modalMenu
+                @modalMenu = @$('.modal_menu')
+                @modalMenu.find('.close').bind 'click', => @hideModal()
+                
+            @modalMenu.find('.content').html(content)
+            @modalMenu.css
+                opacity: 0
+                left: (@el.width()/2) - (@modalMenu.width()/2)
+                top: (@el.height()/2) - (@modalMenu.height()/2) 
+                
+            @modalMenu.animate(opacity: 1, duration: 500)
+            
+        hideModal: ->
+            return unless @modalMenu
+            @modalMenu.animate
+                opacity: 0
+                duration: 500
+                complete: =>
+                    @modalMenu.css
+                        left: -10000
+                        top: -10000
+            
 soma.routes
     '/puzzles/circuitous/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Circuitous

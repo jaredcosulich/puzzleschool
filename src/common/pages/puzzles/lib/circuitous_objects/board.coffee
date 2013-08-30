@@ -38,7 +38,7 @@ class board.Board extends circuitousObject.Object
      
     recordChange: ->
         @changesMade = true
-        $.timeout 100, => listener() for listener in @changeListeners
+        $.timeout 250, => listener() for listener in @changeListeners
                 
     addComponent: (component, x, y) ->
         @recordChange()

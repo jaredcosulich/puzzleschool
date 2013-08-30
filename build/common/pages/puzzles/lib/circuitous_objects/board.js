@@ -70,7 +70,7 @@ board.Board = (function(_super) {
   Board.prototype.recordChange = function() {
     var _this = this;
     this.changesMade = true;
-    return $.timeout(100, function() {
+    return $.timeout(250, function() {
       var listener, _i, _len, _ref, _results;
       _ref = _this.changeListeners;
       _results = [];
