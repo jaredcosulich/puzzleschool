@@ -33,31 +33,32 @@ lightbulb.Lightbulb = (function(_super) {
 
   function Lightbulb(_arg) {
     _arg;
-    this.init();
   }
 
-  Lightbulb.prototype.init = function() {};
+  Lightbulb.prototype.initCurrent = function() {
+    this.currentImage = $(document.createElement('IMG'));
+    this.currentImage.addClass('current_image');
+    this.currentImage.attr({
+      src: this.image().replace('.png', '_current.png')
+    });
+    this.currentImage.css({
+      bottom: 0
+    });
+    return this.el.append(this.currentImage);
+  };
 
   Lightbulb.prototype.setCurrent = function(current) {
-    var _this = this;
+    var left;
     this.current = current;
-    if (!this.currentImage) {
-      this.currentImage = $(document.createElement('IMG'));
-      this.currentImage.addClass('current_image');
-      this.currentImage.bind('load', function() {
-        return _this.currentImage.css({
-          bottom: 0,
-          left: (_this.el.width() / 2) - (_this.currentImage.width() / 2)
-        });
-      });
-      this.currentImage.attr({
-        src: this.image().replace('.png', '_current.png')
-      });
-      this.el.append(this.currentImage);
-    }
     if (this.current) {
+      left = (this.el.width() / 2) - (this.currentImage.width() / 2);
+      if (parseInt(this.currentImage.css('left')) !== left) {
+        this.currentImage.css({
+          left: left
+        });
+      }
       return this.currentImage.css({
-        opacity: this.current / 6.0
+        opacity: Math.abs(this.current) / 6.0
       });
     } else {
       return this.currentImage.css({

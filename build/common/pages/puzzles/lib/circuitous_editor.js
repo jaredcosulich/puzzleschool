@@ -28,7 +28,7 @@ circuitousEditor.EditorHelper = (function() {
       replace = _ref[replaceWith];
       instructions = instructions.replace(new RegExp(escape(replace), 'g'), replaceWith);
     }
-    return console.log(instructions);
+    return location.hash = instructions;
   };
 
   return EditorHelper;

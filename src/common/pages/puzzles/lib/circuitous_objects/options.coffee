@@ -49,7 +49,8 @@ class options.Options extends circuitousObject.Object
         component.appendTo(emptyOption)
         component.el.addClass('in_options')
         emptyOption.removeClass('empty_option')
-        $.timeout 10, => 
+        $.timeout 10, =>
+            component.initCurrent() 
             component.initDrag(
                 component.el, 
                 (component, x, y, stopDrag) => @dragComponent(component, x, y, stopDrag),

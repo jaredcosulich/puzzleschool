@@ -67,6 +67,8 @@ object.Object = (function(_super) {
     return _results;
   };
 
+  Object.prototype.initCurrent = function() {};
+
   Object.prototype.setCurrent = function(current) {
     this.current = current;
   };

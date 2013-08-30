@@ -18,23 +18,19 @@ class lightbulb.Lightbulb extends circuitousObject.Object
     ]
         
     constructor: ({}) ->
-        @init()
-
-    init: ->
+        
+    initCurrent: ->
+        @currentImage = $(document.createElement('IMG'))
+        @currentImage.addClass('current_image')
+        @currentImage.attr(src: @image().replace('.png', '_current.png'))
+        @currentImage.css(bottom: 0)
+        @el.append(@currentImage)
         
     setCurrent: (@current) ->
-        if not @currentImage
-            @currentImage = $(document.createElement('IMG'))
-            @currentImage.addClass('current_image')
-            @currentImage.bind 'load', =>
-                @currentImage.css
-                    bottom: 0
-                    left: (@el.width()/2) - (@currentImage.width()/2)
-            @currentImage.attr(src: @image().replace('.png', '_current.png'))
-            @el.append(@currentImage)
-                
         if @current
-            @currentImage.css(opacity: @current / 6.0)
+            left = (@el.width()/2) - (@currentImage.width()/2)
+            @currentImage.css(left: left) unless parseInt(@currentImage.css('left')) == left
+            @currentImage.css(opacity: Math.abs(@current) / 6.0)
         else
             @currentImage.css(opacity: 0)
         

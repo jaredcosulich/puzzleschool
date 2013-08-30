@@ -83,13 +83,13 @@ soma.views({
       '~b': '{"name": "Battery", ',
       '~c': '{"name": "Lightbulb", ',
       '~d': '"position": ',
-      '~e': '"wires": [',
+      '~e': '"wires": [["',
       '~f': '"],["',
       '~g': '","',
       '~h': '"]]}'
     },
     create: function() {
-      var circuitous, circuitousEditor,
+      var circuitous, circuitousEditor, instructions, replace, replaceWith, _ref,
         _this = this;
       circuitous = require('./lib/circuitous');
       this.viewHelper = new circuitous.ViewHelper({
@@ -106,6 +106,19 @@ soma.views({
           }
         });
       }
+      if ((instructions = location.hash).length) {
+        instructions = instructions.replace(/#/, '');
+        _ref = this.hashReplacements;
+        for (replace in _ref) {
+          replaceWith = _ref[replace];
+          instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith);
+        }
+        this.loadInstructions(JSON.parse(instructions));
+      }
+      return this.initInstructions();
+    },
+    initInstructions: function() {
+      var _this = this;
       $('.load_instructions .load button').bind('click', function() {
         var instructions;
         instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '');
@@ -114,10 +127,8 @@ soma.views({
         }
       });
       $('.load_instructions .load button').trigger('click');
-      this.viewHelper.board.addChangeListener(function() {
-        return $('.load_instructions .get textarea').val(_this.getInstructions());
-      });
-      return $('.load_instructions .get_values button').bind('click', function() {
+      return this.viewHelper.board.addChangeListener(function() {
+        $('.load_instructions .get textarea').val(_this.getInstructions());
         return $('.load_instructions .get_values textarea').val(_this.getValues());
       });
     },
@@ -152,7 +163,7 @@ soma.views({
           var component;
           component = new circuitous[info.name];
           _this.viewHelper.options.addComponent(component);
-          return setTimeout((function() {
+          return component.el.find('img').bind('load', function() {
             var componentPosition, _ref4;
             component.el.removeClass('in_options');
             component.setStartDrag({}, true);
@@ -162,7 +173,7 @@ soma.views({
               y: y - component.nodes[0].y
             });
             return _this.viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y);
-          }), 50);
+          });
         })(info));
       }
       return _results;

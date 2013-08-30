@@ -76,7 +76,7 @@ soma.views
             '~b': '{"name": "Battery", '
             '~c': '{"name": "Lightbulb", '
             '~d': '"position": '
-            '~e': '"wires": ['
+            '~e': '"wires": [["'
             '~f': '"],["'
             '~g': '","'
             '~h': '"]]}'
@@ -94,8 +94,16 @@ soma.views
                     viewHelper: @viewHelper
                     hashReplacements: @hashReplacements
                     getInstructions: => @getInstructions()
+                                
+            if (instructions = location.hash).length
+                instructions = instructions.replace(/#/, '')
+                for replace, replaceWith of @hashReplacements
+                    instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith) 
+                @loadInstructions(JSON.parse(instructions))
                     
+            @initInstructions()
             
+        initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
                 instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '')
                 @loadInstructions(JSON.parse(instructions)) if instructions.length
@@ -103,8 +111,6 @@ soma.views
 
             @viewHelper.board.addChangeListener => 
                 $('.load_instructions .get textarea').val(@getInstructions())
-
-            $('.load_instructions .get_values button').bind 'click', =>
                 $('.load_instructions .get_values textarea').val(@getValues())
                     
         loadInstructions: (instructions) ->
@@ -124,7 +130,7 @@ soma.views
                 do (info) =>
                     component = new circuitous[info.name]
                     @viewHelper.options.addComponent(component)
-                    setTimeout(( =>
+                    component.el.find('img').bind 'load', =>
                         component.el.removeClass('in_options')
                         component.setStartDrag({}, true)
                         [x, y] = getCoordinates(info.position)
@@ -132,7 +138,6 @@ soma.views
                             x: x - component.nodes[0].x
                             y: y - component.nodes[0].y
                         @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
-                    ), 50)                                    
                     
         getInstructions: ->
             instructions = []
