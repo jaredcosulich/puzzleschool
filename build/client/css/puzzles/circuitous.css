@@ -534,6 +534,12 @@
   font-size: 18px;
   padding: 30px;
 }
+.circuitous .modal_menu .content .challenge img,
+.circuitous .modal_menu .content .complete img {
+  display: block;
+  float: right;
+  margin-left: 12px;
+}
 .circuitous .modal_menu .content .go {
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;

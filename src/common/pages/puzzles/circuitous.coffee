@@ -225,6 +225,7 @@ soma.views
                 @level.completeElement = $(document.createElement('DIV'))
                 @level.completeElement.html """
                     <h1>Success</h1>
+                    <img src='/assets/images/puzzles/circuitous/levels/level_#{@level.id}.png'/>
                     <p class='description'>#{@level.complete}</p>
                     <div class='go'>Next Level</div>    
                 """

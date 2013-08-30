@@ -285,7 +285,7 @@ soma.views({
     showComplete: function() {
       if (!this.level.completeElement) {
         this.level.completeElement = $(document.createElement('DIV'));
-        this.level.completeElement.html("<h1>Success</h1>\n<p class='description'>" + this.level.complete + "</p>\n<div class='go'>Next Level</div>    ");
+        this.level.completeElement.html("<h1>Success</h1>\n<img src='/assets/images/puzzles/circuitous/levels/level_" + this.level.id + ".png'/>\n<p class='description'>" + this.level.complete + "</p>\n<div class='go'>Next Level</div>    ");
         this.level.completeElement.addClass('complete');
       }
       return this.showModal(this.level.completeElement);
