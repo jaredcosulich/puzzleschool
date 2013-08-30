@@ -31,9 +31,17 @@ class board.Board extends circuitousObject.Object
                 cell.addClass('cell')
                 cell.css(width: @cellDimension-1, height: @cellDimension-1)
                 @cells.append(cell)
+          
+    addChangeListener: (listener) ->
+        @changeListeners or= []
+        @changeListeners.push(listener)
+     
+    recordChange: ->
+        @changesMade = true
+        $.timeout 100, => listener() for listener in @changeListeners
                 
     addComponent: (component, x, y) ->
-        @changesMade = true
+        @recordChange()
         component.id = @generateId('component') unless component.id
 
         boardPosition = @boardPosition(x: x, y: y)
@@ -54,7 +62,7 @@ class board.Board extends circuitousObject.Object
         return true
             
     removeComponent: (component) -> 
-        @changesMade = true
+        @recordChange()
         @components[component.id]?.setCurrent(0)
         delete @components[component.id]
             

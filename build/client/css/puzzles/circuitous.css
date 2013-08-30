@@ -505,15 +505,11 @@
   padding: 30px 0;
   overflow: hidden;
 }
-.load_instructions .load,
-.load_instructions .get,
-.load_instructions .get_values {
+.load_instructions .instructions {
   float: left;
   padding-right: 60px;
 }
-.load_instructions .load textarea,
-.load_instructions .get textarea,
-.load_instructions .get_values textarea {
+.load_instructions .instructions textarea {
   width: 300px;
   height: 60px;
   display: block;

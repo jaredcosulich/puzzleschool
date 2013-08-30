@@ -71,6 +71,16 @@ soma.chunks
 soma.views
     Circuitous:
         selector: '#content .circuitous'
+        hashReplacements: 
+            '~a': '{"components": ['
+            '~b': '{"name": "Battery", '
+            '~c': '{"name": "Lightbulb", '
+            '~d': '"position": '
+            '~e': '"wires": ['
+            '~f': '"],["'
+            '~g': '","'
+            '~h': '"]]}'
+            
         create: ->
             circuitous = require('./lib/circuitous')
             @viewHelper = new circuitous.ViewHelper
@@ -80,14 +90,18 @@ soma.views
             
             if @levelId == 'editor'
                 circuitousEditor = require('./lib/circuitous_editor')
-                @editor = new circuitousEditor.EditorHelper()
+                @editor = new circuitousEditor.EditorHelper
+                    viewHelper: @viewHelper
+                    hashReplacements: @hashReplacements
+                    getInstructions: => @getInstructions()
+                    
             
             $('.load_instructions .load button').bind 'click', =>
                 instructions = $('.load_instructions .load textarea').val().replace(/\s/g, '')
                 @loadInstructions(JSON.parse(instructions)) if instructions.length
             $('.load_instructions .load button').trigger('click')
 
-            $('.load_instructions .get button').bind 'click', =>
+            @viewHelper.board.addChangeListener => 
                 $('.load_instructions .get textarea').val(@getInstructions())
 
             $('.load_instructions .get_values button').bind 'click', =>

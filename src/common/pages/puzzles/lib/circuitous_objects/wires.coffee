@@ -155,7 +155,7 @@ class wires.Wires extends circuitousObject.Object
     recordPosition: (element, start, end) ->
         # @board.addDot(start)
         # @board.addDot(end)
-        @board.changesMade = true
+        @board.recordChange()
         node1 = @nodeId(start)
         node2 = @nodeId(end)
         

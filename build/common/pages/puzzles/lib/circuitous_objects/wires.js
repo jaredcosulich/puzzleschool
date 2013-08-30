@@ -258,7 +258,7 @@ wires.Wires = (function(_super) {
 
   Wires.prototype.recordPosition = function(element, start, end) {
     var node1, node2, segment, _base, _base1, _base2, _base3, _ref, _ref1;
-    this.board.changesMade = true;
+    this.board.recordChange();
     node1 = this.nodeId(start);
     node2 = this.nodeId(end);
     if (element) {

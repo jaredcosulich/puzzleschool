@@ -78,6 +78,16 @@ soma.chunks({
 soma.views({
   Circuitous: {
     selector: '#content .circuitous',
+    hashReplacements: {
+      '~a': '{"components": [',
+      '~b': '{"name": "Battery", ',
+      '~c': '{"name": "Lightbulb", ',
+      '~d': '"position": ',
+      '~e': '"wires": [',
+      '~f': '"],["',
+      '~g': '","',
+      '~h': '"]]}'
+    },
     create: function() {
       var circuitous, circuitousEditor,
         _this = this;
@@ -88,7 +98,13 @@ soma.views({
       this.levelId = this.el.data('level_id');
       if (this.levelId === 'editor') {
         circuitousEditor = require('./lib/circuitous_editor');
-        this.editor = new circuitousEditor.EditorHelper();
+        this.editor = new circuitousEditor.EditorHelper({
+          viewHelper: this.viewHelper,
+          hashReplacements: this.hashReplacements,
+          getInstructions: function() {
+            return _this.getInstructions();
+          }
+        });
       }
       $('.load_instructions .load button').bind('click', function() {
         var instructions;
@@ -98,7 +114,7 @@ soma.views({
         }
       });
       $('.load_instructions .load button').trigger('click');
-      $('.load_instructions .get button').bind('click', function() {
+      this.viewHelper.board.addChangeListener(function() {
         return $('.load_instructions .get textarea').val(_this.getInstructions());
       });
       return $('.load_instructions .get_values button').bind('click', function() {

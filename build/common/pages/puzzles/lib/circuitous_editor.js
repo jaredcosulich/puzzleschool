@@ -5,7 +5,31 @@ circuitousEditor = typeof exports !== "undefined" && exports !== null ? exports 
 
 circuitousEditor.EditorHelper = (function() {
 
-  function EditorHelper() {}
+  function EditorHelper(_arg) {
+    this.viewHelper = _arg.viewHelper, this.getInstructions = _arg.getInstructions, this.hashReplacements = _arg.hashReplacements;
+    this.init();
+  }
+
+  EditorHelper.prototype.init = function() {
+    var _this = this;
+    return this.viewHelper.board.addChangeListener(function() {
+      return _this.changeHash();
+    });
+  };
+
+  EditorHelper.prototype.changeHash = function() {
+    var escape, instructions, replace, replaceWith, _ref;
+    instructions = this.getInstructions();
+    escape = function(string) {
+      return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    };
+    _ref = this.hashReplacements;
+    for (replaceWith in _ref) {
+      replace = _ref[replaceWith];
+      instructions = instructions.replace(new RegExp(escape(replace), 'g'), replaceWith);
+    }
+    return console.log(instructions);
+  };
 
   return EditorHelper;
 

@@ -62,10 +62,30 @@ board.Board = (function(_super) {
     return _results;
   };
 
+  Board.prototype.addChangeListener = function(listener) {
+    this.changeListeners || (this.changeListeners = []);
+    return this.changeListeners.push(listener);
+  };
+
+  Board.prototype.recordChange = function() {
+    var _this = this;
+    this.changesMade = true;
+    return $.timeout(100, function() {
+      var listener, _i, _len, _ref, _results;
+      _ref = _this.changeListeners;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        listener = _ref[_i];
+        _results.push(listener());
+      }
+      return _results;
+    });
+  };
+
   Board.prototype.addComponent = function(component, x, y) {
     var boardPosition, onBoardX, onBoardY, roundedBoardPosition, _ref, _ref1,
       _this = this;
-    this.changesMade = true;
+    this.recordChange();
     if (!component.id) {
       component.id = this.generateId('component');
     }
@@ -90,7 +110,7 @@ board.Board = (function(_super) {
 
   Board.prototype.removeComponent = function(component) {
     var _ref;
-    this.changesMade = true;
+    this.recordChange();
     if ((_ref = this.components[component.id]) != null) {
       _ref.setCurrent(0);
     }
