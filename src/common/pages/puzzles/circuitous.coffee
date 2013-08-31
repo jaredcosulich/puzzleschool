@@ -136,7 +136,7 @@ soma.views
                     component = new circuitous[info.name]
                     @viewHelper.options.addComponent(component)
                     component.el.find('img').bind 'load', =>
-                        $.timeout 10, =>
+                        setTimeout((=>
                             component.el.removeClass('in_options')
                             component.setStartDrag({}, true)
                             [x, y] = getCoordinates(info.position)
@@ -144,7 +144,7 @@ soma.views
                                 x: x - component.nodes[0].x
                                 y: y - component.nodes[0].y
                             @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
-            
+                        ), 10)
         getInstructions: ->
             instructions = []
             components = []
@@ -241,12 +241,13 @@ soma.views
                 @modalMenu.find('.close').bind 'click', => @hideModal()
                 
             @modalMenu.find('.content').html(content)
-            @modalMenu.css
-                opacity: 0
-                left: (@el.width()/2) - (@modalMenu.width()/2)
-                top: (@el.height()/2) - (@modalMenu.height()/2) 
+            if parseInt(@modalMenu.css('left')) < 0
+                @modalMenu.css
+                    opacity: 0
+                    left: (@el.width()/2) - (@modalMenu.width()/2)
+                    top: (@el.height()/2) - (@modalMenu.height()/2) 
                 
-            @modalMenu.animate(opacity: 1, duration: 500)
+                @modalMenu.animate(opacity: 1, duration: 500)
             
         hideModal: ->
             return unless @modalMenu

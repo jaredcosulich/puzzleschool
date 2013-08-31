@@ -168,7 +168,7 @@ soma.views({
           component = new circuitous[info.name];
           _this.viewHelper.options.addComponent(component);
           return component.el.find('img').bind('load', function() {
-            return $.timeout(10, function() {
+            return setTimeout((function() {
               var componentPosition, _ref4;
               component.el.removeClass('in_options');
               component.setStartDrag({}, true);
@@ -178,7 +178,7 @@ soma.views({
                 y: y - component.nodes[0].y
               });
               return _this.viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y);
-            });
+            }), 10);
           });
         })(info));
       }
@@ -301,15 +301,17 @@ soma.views({
         });
       }
       this.modalMenu.find('.content').html(content);
-      this.modalMenu.css({
-        opacity: 0,
-        left: (this.el.width() / 2) - (this.modalMenu.width() / 2),
-        top: (this.el.height() / 2) - (this.modalMenu.height() / 2)
-      });
-      return this.modalMenu.animate({
-        opacity: 1,
-        duration: 500
-      });
+      if (parseInt(this.modalMenu.css('left')) < 0) {
+        this.modalMenu.css({
+          opacity: 0,
+          left: (this.el.width() / 2) - (this.modalMenu.width() / 2),
+          top: (this.el.height() / 2) - (this.modalMenu.height() / 2)
+        });
+        return this.modalMenu.animate({
+          opacity: 1,
+          duration: 500
+        });
+      }
     },
     hideModal: function() {
       var _this = this;
