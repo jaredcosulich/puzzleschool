@@ -136,13 +136,14 @@ soma.views
                     component = new circuitous[info.name]
                     @viewHelper.options.addComponent(component)
                     component.el.find('img').bind 'load', =>
-                        component.el.removeClass('in_options')
-                        component.setStartDrag({}, true)
-                        [x, y] = getCoordinates(info.position)
-                        componentPosition = @viewHelper.board.componentPosition
-                            x: x - component.nodes[0].x
-                            y: y - component.nodes[0].y
-                        @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
+                        $.timeout 10, =>
+                            component.el.removeClass('in_options')
+                            component.setStartDrag({}, true)
+                            [x, y] = getCoordinates(info.position)
+                            componentPosition = @viewHelper.board.componentPosition
+                                x: x - component.nodes[0].x
+                                y: y - component.nodes[0].y
+                            @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
             
         getInstructions: ->
             instructions = []

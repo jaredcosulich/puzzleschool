@@ -168,15 +168,17 @@ soma.views({
           component = new circuitous[info.name];
           _this.viewHelper.options.addComponent(component);
           return component.el.find('img').bind('load', function() {
-            var componentPosition, _ref4;
-            component.el.removeClass('in_options');
-            component.setStartDrag({}, true);
-            _ref4 = getCoordinates(info.position), x = _ref4[0], y = _ref4[1];
-            componentPosition = _this.viewHelper.board.componentPosition({
-              x: x - component.nodes[0].x,
-              y: y - component.nodes[0].y
+            return $.timeout(10, function() {
+              var componentPosition, _ref4;
+              component.el.removeClass('in_options');
+              component.setStartDrag({}, true);
+              _ref4 = getCoordinates(info.position), x = _ref4[0], y = _ref4[1];
+              componentPosition = _this.viewHelper.board.componentPosition({
+                x: x - component.nodes[0].x,
+                y: y - component.nodes[0].y
+              });
+              return _this.viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y);
             });
-            return _this.viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y);
           });
         })(info));
       }
