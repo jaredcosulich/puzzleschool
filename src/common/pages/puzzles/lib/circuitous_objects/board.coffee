@@ -38,7 +38,8 @@ class board.Board extends circuitousObject.Object
      
     recordChange: ->
         @changesMade = true
-        $.timeout 250, => listener() for listener in @changeListeners
+        if @changeListeners
+            $.timeout 250, => listener() for listener in @changeListeners
                 
     addComponent: (component, x, y) ->
         @recordChange()
@@ -101,13 +102,13 @@ class board.Board extends circuitousObject.Object
     initElectricity: ->
         @analyzer = new Analyzer(@)
         @electricalAnimation = new Animation()    
-        @electricalAnimation.start 
-            method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
-        # $('.menu').bind 'click', => 
-        #     @elapsed or= 0
-        #     deltaTime = 300
-        #     @elapsed += deltaTime            
-        #     @moveElectricity(deltaTime, @elapsed)
+        # @electricalAnimation.start 
+        #     method: ({deltaTime, elapsed}) => @moveElectricity(deltaTime, elapsed)
+        $('.menu').bind 'click', => 
+            @elapsed or= 0
+            deltaTime = 300
+            @elapsed += deltaTime            
+            @moveElectricity(deltaTime, @elapsed)
         
     runAnalysis: ->
         return unless @changesMade

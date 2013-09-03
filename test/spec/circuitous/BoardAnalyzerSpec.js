@@ -152,7 +152,6 @@ describe("BoardAnalyzer", function() {
                             });
                         });
                     });
-
                     
                     describe('with a short circuit on the other side of the bulb', function() {
                         beforeEach(function() {
@@ -331,6 +330,26 @@ describe("BoardAnalyzer", function() {
                 });
             });
         });
+        
+        describe('with a bit of wire continuing past the battery', function() {
+            var bulb;
+            beforeEach(function() {
+                var start = board.boardPosition(battery.currentNodes()[1]);
+                var bulbNode = drawOrEraseWire(board, start, 0, -3);
+                var lastNode = drawOrEraseWire(board, bulbNode, -1, 0);
+                drawOrEraseWire(board, lastNode, 0, 4);
+                
+                bulb = createComponent(board, 'Lightbulb');
+                var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
+                expect(onBoard).toBe(true);                                                    
+            });
+            
+            it('should have the correct values', function() {
+                board.moveElectricity();
+                expect(bulb.current).toEqual(1.8)
+            });
+        });
+        
         
         describe('and a complicated circuit', function() {
             var bulbs;

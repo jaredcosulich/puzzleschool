@@ -66,7 +66,7 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.analyze = function() {
-    var cid, component, end, positiveTerminal, start, startKey, startKeys, startNode, startSections, _ref, _results;
+    var cid, component, end, positiveTerminal, s, start, startKey, startKeys, startNode, startSections, _ref, _results;
     _ref = this.board.components;
     _results = [];
     for (cid in _ref) {
@@ -90,7 +90,18 @@ analyzer.Analyzer = (function(_super) {
               node: startNode
             }
           ]);
-          startSections = this.info.node["" + startNode.x + ":" + startNode.y];
+          startSections = (function() {
+            var _j, _len1, _ref2, _results2;
+            _ref2 = this.info.node[this.nodeId(startNode)];
+            _results2 = [];
+            for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+              s = _ref2[_j];
+              if (!this.compareNodes(s.nodes[0], s.nodes[1])) {
+                _results2.push(s);
+              }
+            }
+            return _results2;
+          }).call(this);
           if ((startKeys = Object.keys(startSections)).length === 2) {
             startKey = this.compareNodes(startSections[startKeys[1]].nodes[1], startNode) ? 1 : 0;
             end = startKey === 1 ? startSections[startKeys[0]] : startSections[startKeys[1]];
@@ -104,6 +115,10 @@ analyzer.Analyzer = (function(_super) {
       }).call(this));
     }
     return _results;
+  };
+
+  Analyzer.prototype.nodeId = function(node) {
+    return "" + node.x + ":" + node.y;
   };
 
   Analyzer.prototype.newSection = function(node) {
@@ -139,9 +154,40 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.analyzeSection = function(section, component, node) {
-    var connection, connections;
+    var c, connection, connections, _i, _len;
     if (this.addToSection(section, component, node)) {
-      connections = this.findConnections(node, section);
+      connections = (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.findConnections(node);
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          c = _ref[_i];
+          if (c.component !== component) {
+            _results.push(c);
+          }
+        }
+        return _results;
+      }).call(this);
+      if (component.nodes.length === 1) {
+        connections = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = connections.length; _i < _len; _i++) {
+            c = connections[_i];
+            if (!this.info.components[c.component.id]) {
+              _results.push(c);
+            }
+          }
+          return _results;
+        }).call(this);
+      }
+      for (_i = 0, _len = connections.length; _i < _len; _i++) {
+        connection = connections[_i];
+        if (connection.component.nodes.length === 1) {
+          connections = [connection];
+          break;
+        }
+      }
       if (connections.length === 1) {
         connection = connections[0];
         return this.analyzeSection(section, connection.component, connection.otherNode);
@@ -202,49 +248,39 @@ analyzer.Analyzer = (function(_super) {
     return this.recordSection(section, component);
   };
 
-  Analyzer.prototype.findConnections = function(node, exceptInSection) {
+  Analyzer.prototype.findConnections = function(node) {
     var c, connections, id, matchingNode, n, nodes, otherNode, segment, _i, _j, _len, _len1, _ref, _ref1, _ref2;
     connections = [];
     _ref = this.board.components;
     for (id in _ref) {
       c = _ref[id];
-      if (!(exceptInSection != null ? exceptInSection.components[id] : void 0)) {
-        _ref1 = (nodes = c.currentNodes());
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          n = _ref1[_i];
-          matchingNode = this.board.boardPosition(n);
-          if (!this.compareNodes(matchingNode, node)) {
-            continue;
-          }
-          if (nodes.length === 1) {
-            return [
-              {
-                component: c,
-                otherNode: matchingNode,
-                node: node
-              }
-            ];
-          } else {
-            otherNode = this.board.boardPosition(this.otherNode(nodes, n));
-          }
-          connections.push({
-            component: c,
-            otherNode: otherNode,
-            node: node
-          });
+      _ref1 = (nodes = c.currentNodes());
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        n = _ref1[_i];
+        matchingNode = this.board.boardPosition(n);
+        if (!this.compareNodes(matchingNode, node)) {
+          continue;
         }
+        if (nodes.length === 1) {
+          otherNode = matchingNode;
+        } else {
+          otherNode = this.board.boardPosition(this.otherNode(nodes, n));
+        }
+        connections.push({
+          component: c,
+          otherNode: otherNode,
+          node: node
+        });
       }
     }
     _ref2 = this.board.wires.find(node);
     for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
       segment = _ref2[_j];
-      if (!(exceptInSection != null ? exceptInSection.components[segment.id] : void 0)) {
-        connections.push({
-          component: segment,
-          otherNode: this.otherNode(segment.nodes, node),
-          node: node
-        });
-      }
+      connections.push({
+        component: segment,
+        otherNode: this.otherNode(segment.nodes, node),
+        node: node
+      });
     }
     return connections;
   };
@@ -254,20 +290,20 @@ analyzer.Analyzer = (function(_super) {
   };
 
   Analyzer.prototype.recordSection = function(section) {
-    var node1Coords, node2Coords, _base, _base1, _name, _name1;
+    var node1Coords, node2Coords, _base, _base1;
     this.info.sections[section.id] = section;
-    node1Coords = "" + section.nodes[0].x + ":" + section.nodes[0].y;
-    node2Coords = "" + section.nodes[1].x + ":" + section.nodes[1].y;
-    (_base = this.info.node)[_name = "" + node1Coords] || (_base[_name] = {});
-    this.info.node["" + node1Coords][section.id] = section;
-    (_base1 = this.info.node)[_name1 = "" + node2Coords] || (_base1[_name1] = {});
-    return this.info.node["" + node2Coords][section.id] = section;
+    node1Coords = this.nodeId(section.nodes[0]);
+    node2Coords = this.nodeId(section.nodes[1]);
+    (_base = this.info.node)[node1Coords] || (_base[node1Coords] = {});
+    this.info.node[node1Coords][section.id] = section;
+    (_base1 = this.info.node)[node2Coords] || (_base1[node2Coords] = {});
+    return this.info.node[node2Coords][section.id] = section;
   };
 
   Analyzer.prototype.deleteSection = function(section) {
     delete this.info.sections[section.id];
-    delete this.info.node["" + section.nodes[0].x + ":" + section.nodes[0].y][section.id];
-    return delete this.info.node["" + section.nodes[1].x + ":" + section.nodes[1].y][section.id];
+    delete this.info.node[this.nodeId(section.nodes[0])][section.id];
+    return delete this.info.node[this.nodeId(section.nodes[1])][section.id];
   };
 
   Analyzer.prototype.otherNode = function(nodes, node) {
@@ -299,7 +335,7 @@ analyzer.Analyzer = (function(_super) {
 
   Analyzer.prototype.addToMatrixLoop = function(section, direction, node) {
     this.info.matrix.currentLoop.path.push(section.id);
-    this.info.matrix.currentLoop.nodes["" + node.x + ":" + node.y] = true;
+    this.info.matrix.currentLoop.nodes[this.nodeId(node)] = true;
     if (!this.info.matrix.currentLoop.startNode) {
       this.info.matrix.currentLoop.startNode = node;
     }
@@ -435,14 +471,14 @@ analyzer.Analyzer = (function(_super) {
         while (nextSection) {
           nextNode = this.otherNode(nextSection.nodes, nextNode);
           if (nextNode) {
-            nextSections = this.info.node["" + nextNode.x + ":" + nextNode.y];
+            nextSections = this.info.node[this.nodeId(nextNode)];
             this.addMatrixIndentityLoop(nextNode, nextSections);
           }
           lastSection = nextSection;
           nextSection = null;
           if (nextNode && this.compareNodes(nextNode, this.info.matrix.currentLoop.startNode)) {
             this.completeMatrixLoop();
-          } else if (nextNode && !this.info.matrix.currentLoop.nodes["" + nextNode.x + ":" + nextNode.y]) {
+          } else if (nextNode && !this.info.matrix.currentLoop.nodes[this.nodeId(nextNode)]) {
             if (Object.keys(nextSections).length > 2) {
               for (sid in nextSections) {
                 if (this.info.matrix.currentLoop.sections[sid]) {

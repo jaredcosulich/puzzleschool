@@ -199,7 +199,7 @@ soma.views({
         component = _ref[id];
         node = this.viewHelper.board.boardPosition(component.currentNodes()[0]);
         _ref1 = cells(node), xCell = _ref1[0], yCell = _ref1[1];
-        components.push("{\"name\": \"" + component.constructor.name + "\", \"position\": \"" + xCell + "," + yCell + "\", \"current\": " + (Math.abs(component.current)) + "}");
+        components.push("{\"name\": \"" + component.constructor.name + "\", \"position\": \"" + xCell + "," + yCell + "\"}");
       }
       instructions.push("\"components\": [" + (components.join(',')) + "]");
       wires = [];

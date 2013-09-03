@@ -50,6 +50,9 @@ lightbulb.Lightbulb = (function(_super) {
   Lightbulb.prototype.setCurrent = function(current) {
     var left;
     this.current = current;
+    if (!this.currentImage) {
+      return;
+    }
     if (this.current) {
       left = (this.el.width() / 2) - (this.currentImage.width() / 2);
       if (parseInt(this.currentImage.css('left')) !== left) {

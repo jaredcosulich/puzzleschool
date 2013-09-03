@@ -70,16 +70,18 @@ board.Board = (function(_super) {
   Board.prototype.recordChange = function() {
     var _this = this;
     this.changesMade = true;
-    return $.timeout(250, function() {
-      var listener, _i, _len, _ref, _results;
-      _ref = _this.changeListeners;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        listener = _ref[_i];
-        _results.push(listener());
-      }
-      return _results;
-    });
+    if (this.changeListeners) {
+      return $.timeout(250, function() {
+        var listener, _i, _len, _ref, _results;
+        _ref = _this.changeListeners;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          listener = _ref[_i];
+          _results.push(listener());
+        }
+        return _results;
+      });
+    }
   };
 
   Board.prototype.addComponent = function(component, x, y) {
@@ -169,12 +171,12 @@ board.Board = (function(_super) {
     var _this = this;
     this.analyzer = new Analyzer(this);
     this.electricalAnimation = new Animation();
-    return this.electricalAnimation.start({
-      method: function(_arg) {
-        var deltaTime, elapsed;
-        deltaTime = _arg.deltaTime, elapsed = _arg.elapsed;
-        return _this.moveElectricity(deltaTime, elapsed);
-      }
+    return $('.menu').bind('click', function() {
+      var deltaTime;
+      _this.elapsed || (_this.elapsed = 0);
+      deltaTime = 300;
+      _this.elapsed += deltaTime;
+      return _this.moveElectricity(deltaTime, _this.elapsed);
     });
   };
 

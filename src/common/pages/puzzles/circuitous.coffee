@@ -82,7 +82,7 @@ soma.views
             '~g': '","'
             '~h': '"]]}'
             
-        create: ->
+        create: ->            
             circuitous = require('./lib/circuitous')
             @viewHelper = new circuitous.ViewHelper
                 el: $(@selector)
@@ -156,7 +156,7 @@ soma.views
             for id, component of @viewHelper.board.components
                 node = @viewHelper.board.boardPosition(component.currentNodes()[0])
                 [xCell, yCell] = cells(node)
-                components.push("{\"name\": \"#{component.constructor.name}\", \"position\": \"#{xCell},#{yCell}\", \"current\": #{Math.abs(component.current)}}")
+                components.push("{\"name\": \"#{component.constructor.name}\", \"position\": \"#{xCell},#{yCell}\"}")
             instructions.push("\"components\": [#{components.join(',')}]")    
             
             wires = []

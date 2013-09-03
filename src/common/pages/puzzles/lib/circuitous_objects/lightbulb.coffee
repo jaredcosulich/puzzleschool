@@ -27,6 +27,7 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         @el.append(@currentImage)
         
     setCurrent: (@current) ->
+        return unless @currentImage
         if @current
             left = (@el.width()/2) - (@currentImage.width()/2)
             @currentImage.css(left: left) unless parseInt(@currentImage.css('left')) == left
