@@ -171,12 +171,12 @@ board.Board = (function(_super) {
     var _this = this;
     this.analyzer = new Analyzer(this);
     this.electricalAnimation = new Animation();
-    return $('.menu').bind('click', function() {
-      var deltaTime;
-      _this.elapsed || (_this.elapsed = 0);
-      deltaTime = 300;
-      _this.elapsed += deltaTime;
-      return _this.moveElectricity(deltaTime, _this.elapsed);
+    return this.electricalAnimation.start({
+      method: function(_arg) {
+        var deltaTime, elapsed;
+        deltaTime = _arg.deltaTime, elapsed = _arg.elapsed;
+        return _this.moveElectricity(deltaTime, elapsed);
+      }
     });
   };
 
