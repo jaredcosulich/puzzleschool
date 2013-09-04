@@ -28,7 +28,6 @@ board.Board = (function(_super) {
 
   Board.prototype.init = function() {
     this.cells = this.el.find('.cells');
-    this.border = parseInt(this.el.css('borderLeftWidth'));
     this.components = {};
     this.changesMade = false;
     this.width = this.cells.width();
@@ -137,8 +136,8 @@ board.Board = (function(_super) {
     var offset, position;
     offset = this.cells.offset();
     position = JSON.parse(JSON.stringify(componentPosition));
-    position.x = componentPosition.x - offset.left - this.border;
-    position.y = componentPosition.y - offset.top - this.border;
+    position.x = componentPosition.x - offset.left;
+    position.y = componentPosition.y - offset.top;
     return position;
   };
 
@@ -146,8 +145,8 @@ board.Board = (function(_super) {
     var offset, position;
     offset = this.cells.offset();
     position = JSON.parse(JSON.stringify(boardPosition));
-    position.x = boardPosition.x + offset.left + this.border;
-    position.y = boardPosition.y + offset.top + this.border;
+    position.x = boardPosition.x + offset.left;
+    position.y = boardPosition.y + offset.top;
     return position;
   };
 

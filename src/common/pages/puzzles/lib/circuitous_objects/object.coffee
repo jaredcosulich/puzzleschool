@@ -14,28 +14,29 @@ class object.Object extends Draggable
         
     appendTo: (container) -> 
         container.append(@imageElement())
-        @el = container.find('.component')
+        @el = container.find('.component').last()
         @el.bind 'dragstart', (e) => e.preventDefault()
 
     generateId: (namespace) -> "#{(if n = namespace then n else '')}#{new Date().getTime()}#{Math.random()}"
 
     positionAt: ({x, y}) ->
         @dragTo
-            x: x + (@centerOffset?.x or 0)
-            y: y + (@centerOffset?.y or 0)
+            x: x + (@centerOffset?.x or 0) + (@offset or 0)
+            y: y + (@centerOffset?.y or 0) + (@offset or 0)
         
     currentNodes: (type) ->
         for node in (@nodes or [])
             continue if type and not node[type]
             info = JSON.parse(JSON.stringify(node))
-            info.x = @currentX + node.x
-            info.y = @currentY + node.y
+            info.x = @currentX + node.x - (@offset or 0)
+            info.y = @currentY + node.y - (@offset or 0)
             info
     
     initCurrent: ->
     
     setCurrent: (@current) ->
-        
+
+    setOffset: (@offset) ->
      
         
         

@@ -10,7 +10,7 @@ levels.WORLDS = [
                 levels: [
                     {
                         id: 1377808756337
-                        challenge: "Complete the circuit to power the lightbulb."
+                        challenge: "Draw more wire to complete the circuit and power the lightbulb."
                         instructions: {"components": [{"name": "Battery", "position": "7,10"},{"name": "Lightbulb", "position": "8,6"}],"wires": [["8,10","8,9"],["8,9","8,8"],["8,8","8,7"],["8,7","8,6"],["8,6","7,6"],["7,6","7,7"],["7,7","7,8"]]}
                         hints: [
                             'Click anywhere on the board to draw a wire (click on an existing wire to erase it).'

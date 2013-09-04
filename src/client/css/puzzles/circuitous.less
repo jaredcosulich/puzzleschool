@@ -20,6 +20,12 @@
     background-color: #FFFFFF;
     .no_select();
 
+    &.editor .board {
+        .cells, .wires, .electrons {
+            width: @height - (@border * 4);           
+        }
+    }
+     
     .board {
         float: left;
         border: @border solid white;
@@ -33,7 +39,7 @@
         
         .cells, .wires, .electrons {
             height: @height - (@border * 4);  
-            width: @height - (@border * 4);
+            width: @width - (@border * 4);            
         }
 
         .cells {
@@ -243,9 +249,26 @@
     }
     
     .right_side {
-        float: right;
-        border: @border solid white;
-        border-left: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: white;
+        
+        .info {
+            height: (@height * 1 / 3);
+            width: (@width / 3);
+            padding: @border;   
+            margin: @border;
+            .outer-shadow(-6px, 8px, 6px, 12%);
+            
+            .challenge {
+                margin-top: 12px;
+                text-align: center;
+                .description {
+                    padding: 12px;
+                }
+            }
+        }
         
         .options {
             .inner-shadow(0, 0, 18px, 60%);            
@@ -264,7 +287,7 @@
                     position: relative;
                     text-align: center;
                     .no_select();
-
+                    
                     .component {
                         position: absolute;
                         top: 12px;
@@ -275,11 +298,6 @@
                                 width: 45px;
                             }
                         }                    
-                        .current_image {
-                            transition: opacity 0.5s ease-out;
-                            position: absolute;
-                            opacity: 0;
-                        }
                     }
                 }
             }
@@ -289,6 +307,25 @@
             width: (@width - @height - (@border * 2));
             height: (@height / 3 - (@border * 2));
         }
+    }
+    
+    &.editor .right_side {
+        border: @border solid white;
+        position: static;
+        float: right;
+        border-left: none;
+    }
+    
+    .component {
+        .current_image {
+            transition: opacity 0.5s ease-out;
+            position: absolute;
+            opacity: 0;
+        }
+    }
+    
+    .board .cells .component {
+        position: absolute;
     }
     
     .board .wire_segment, .board .electrons_segment,

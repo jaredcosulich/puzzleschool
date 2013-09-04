@@ -14,7 +14,7 @@ levels.WORLDS = [
         levels: [
           {
             id: 1377808756337,
-            challenge: "Complete the circuit to power the lightbulb.",
+            challenge: "Draw more wire to complete the circuit and power the lightbulb.",
             instructions: {
               "components": [
                 {

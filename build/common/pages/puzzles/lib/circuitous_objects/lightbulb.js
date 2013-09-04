@@ -42,7 +42,7 @@ lightbulb.Lightbulb = (function(_super) {
       src: this.image().replace('.png', '_current.png')
     });
     this.currentImage.css({
-      bottom: 0
+      bottom: (this.offset || 0) / 2
     });
     return this.el.append(this.currentImage);
   };

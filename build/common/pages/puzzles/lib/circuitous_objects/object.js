@@ -30,7 +30,7 @@ object.Object = (function(_super) {
   Object.prototype.appendTo = function(container) {
     var _this = this;
     container.append(this.imageElement());
-    this.el = container.find('.component');
+    this.el = container.find('.component').last();
     return this.el.bind('dragstart', function(e) {
       return e.preventDefault();
     });
@@ -45,8 +45,8 @@ object.Object = (function(_super) {
     var x, y, _ref, _ref1;
     x = _arg.x, y = _arg.y;
     return this.dragTo({
-      x: x + (((_ref = this.centerOffset) != null ? _ref.x : void 0) || 0),
-      y: y + (((_ref1 = this.centerOffset) != null ? _ref1.y : void 0) || 0)
+      x: x + (((_ref = this.centerOffset) != null ? _ref.x : void 0) || 0) + (this.offset || 0),
+      y: y + (((_ref1 = this.centerOffset) != null ? _ref1.y : void 0) || 0) + (this.offset || 0)
     });
   };
 
@@ -60,8 +60,8 @@ object.Object = (function(_super) {
         continue;
       }
       info = JSON.parse(JSON.stringify(node));
-      info.x = this.currentX + node.x;
-      info.y = this.currentY + node.y;
+      info.x = this.currentX + node.x - (this.offset || 0);
+      info.y = this.currentY + node.y - (this.offset || 0);
       _results.push(info);
     }
     return _results;
@@ -71,6 +71,10 @@ object.Object = (function(_super) {
 
   Object.prototype.setCurrent = function(current) {
     this.current = current;
+  };
+
+  Object.prototype.setOffset = function(offset) {
+    this.offset = offset;
   };
 
   return Object;

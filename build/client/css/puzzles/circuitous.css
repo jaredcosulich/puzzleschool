@@ -21,6 +21,11 @@
   -ms-user-select: none;
   user-select: none;
 }
+.circuitous.editor .board .cells,
+.circuitous.editor .board .wires,
+.circuitous.editor .board .electrons {
+  width: 608px;
+}
 .circuitous .board {
   float: left;
   border: 8px solid #ffffff;
@@ -43,7 +48,7 @@
 .circuitous .board .wires,
 .circuitous .board .electrons {
   height: 608px;
-  width: 608px;
+  width: 928px;
 }
 .circuitous .board .cells {
   position: relative;
@@ -226,9 +231,26 @@
   margin-left: 14px;
 }
 .circuitous .right_side {
-  float: right;
-  border: 8px solid #ffffff;
-  border-left: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: white;
+}
+.circuitous .right_side .info {
+  height: 213.33333333333334px;
+  width: 320px;
+  padding: 8px;
+  margin: 8px;
+  box-shadow: -6px 8px 6px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: -6px 8px 6px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: -6px 8px 6px rgba(0, 0, 0, 0.12);
+}
+.circuitous .right_side .info .challenge {
+  margin-top: 12px;
+  text-align: center;
+}
+.circuitous .right_side .info .challenge .description {
+  padding: 12px;
 }
 .circuitous .right_side .options {
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
@@ -264,14 +286,23 @@
   height: 60px;
   width: 45px;
 }
-.circuitous .right_side .options td .option .component .current_image {
+.circuitous .right_side .menu {
+  width: 304px;
+  height: 197.33333333333334px;
+}
+.circuitous.editor .right_side {
+  border: 8px solid #ffffff;
+  position: static;
+  float: right;
+  border-left: none;
+}
+.circuitous .component .current_image {
   transition: opacity 0.5s ease-out;
   position: absolute;
   opacity: 0;
 }
-.circuitous .right_side .menu {
-  width: 304px;
-  height: 197.33333333333334px;
+.circuitous .board .cells .component {
+  position: absolute;
 }
 .circuitous .board .wire_segment,
 .circuitous .board .electrons_segment,

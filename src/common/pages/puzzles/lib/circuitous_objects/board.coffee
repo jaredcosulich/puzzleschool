@@ -13,7 +13,6 @@ class board.Board extends circuitousObject.Object
 
     init: ->
         @cells = @el.find('.cells')
-        @border = parseInt(@el.css('borderLeftWidth'))        
         @components = {}
         @changesMade = false
         @width = @cells.width()
@@ -82,15 +81,15 @@ class board.Board extends circuitousObject.Object
     boardPosition: (componentPosition) ->
         offset = @cells.offset()
         position = JSON.parse(JSON.stringify(componentPosition))
-        position.x = componentPosition.x - offset.left - @border
-        position.y = componentPosition.y - offset.top - @border
+        position.x = componentPosition.x - offset.left
+        position.y = componentPosition.y - offset.top 
         return position
 
     componentPosition: (boardPosition) ->
         offset = @cells.offset()
         position = JSON.parse(JSON.stringify(boardPosition))
-        position.x = boardPosition.x + offset.left + @border
-        position.y = boardPosition.y + offset.top + @border
+        position.x = boardPosition.x + offset.left
+        position.y = boardPosition.y + offset.top
         return position
 
     componentsAndWires: ->

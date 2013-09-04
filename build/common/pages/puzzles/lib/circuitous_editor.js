@@ -6,12 +6,22 @@ circuitousEditor = typeof exports !== "undefined" && exports !== null ? exports 
 circuitousEditor.EditorHelper = (function() {
 
   function EditorHelper(_arg) {
-    this.viewHelper = _arg.viewHelper, this.getInstructions = _arg.getInstructions, this.hashReplacements = _arg.hashReplacements;
+    this.el = _arg.el, this.viewHelper = _arg.viewHelper, this.getInstructions = _arg.getInstructions, this.hashReplacements = _arg.hashReplacements;
     this.init();
   }
 
+  EditorHelper.prototype.$ = function(selector) {
+    return $(selector, this.el);
+  };
+
   EditorHelper.prototype.init = function() {
     var _this = this;
+    this.options = new circuitous.Options({
+      el: this.$('.options'),
+      rows: 5,
+      columns: 4,
+      board: this.viewHelper.board
+    });
     return this.viewHelper.board.addChangeListener(function() {
       return _this.changeHash();
     });

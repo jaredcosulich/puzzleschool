@@ -70,7 +70,8 @@ soma.chunks({
       this.setMeta('og:description', 'Explore circuits through simple challenges you can solve in creative ways.');
       this.setMeta('description', 'Explore circuits through simple challenges you can solve in creative ways.');
       return this.html = wings.renderTemplate(this.template, {
-        level_id: this.levelId
+        level_id: this.levelId,
+        editor: this.levelId === 'editor'
       });
     }
   }
@@ -100,26 +101,28 @@ soma.views({
       if (this.levelId === 'editor') {
         circuitousEditor = require('./lib/circuitous_editor');
         this.editor = new circuitousEditor.EditorHelper({
+          el: $(this.selector),
           viewHelper: this.viewHelper,
           hashReplacements: this.hashReplacements,
           getInstructions: function() {
             return _this.getInstructions();
           }
         });
-      }
-      if ((instructions = location.hash).length) {
-        instructions = instructions.replace(/#/, '');
-        _ref = this.hashReplacements;
-        for (replace in _ref) {
-          replaceWith = _ref[replace];
-          instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith);
+        if ((instructions = location.hash).length) {
+          instructions = instructions.replace(/#/, '');
+          _ref = this.hashReplacements;
+          for (replace in _ref) {
+            replaceWith = _ref[replace];
+            instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith);
+          }
+          this.loadInstructions(JSON.parse(instructions));
         }
-        this.loadInstructions(JSON.parse(instructions));
+      } else {
+        this.initWorlds();
+        this.loadLevel();
+        this.initCompleteListener();
       }
-      this.initInstructions();
-      this.initWorlds();
-      this.loadLevel();
-      return this.initCompleteListener();
+      return this.initInstructions();
     },
     initInstructions: function() {
       var _this = this;
@@ -166,11 +169,10 @@ soma.views({
         _results.push((function(info) {
           var component;
           component = new circuitous[info.name];
-          _this.viewHelper.options.addComponent(component);
+          _this.viewHelper.addComponent(component);
           return component.el.find('img').bind('load', function() {
             return setTimeout((function() {
               var componentPosition, _ref4;
-              component.el.removeClass('in_options');
               component.setStartDrag({}, true);
               _ref4 = getCoordinates(info.position), x = _ref4[0], y = _ref4[1];
               componentPosition = _this.viewHelper.board.componentPosition({
@@ -268,7 +270,16 @@ soma.views({
       return this.showChallenge();
     },
     showChallenge: function() {
-      var _this = this;
+      var challenge,
+        _this = this;
+      challenge = this.$('.challenge');
+      challenge.find('.description').html(this.level.challenge);
+      challenge.css({
+        marginTop: (this.$('.info').height() - challenge.height()) / 3
+      });
+      this.loadInstructions(this.level.instructions);
+      this.level.loaded = true;
+      return;
       if (!this.level.challengeElement) {
         this.level.challengeElement = $(document.createElement('DIV'));
         this.level.challengeElement.html("<h1>Challenge</h1>\n<p class='description'>" + this.level.challenge + "</p>\n<div class='go'>Get Started</div>\n<div class='nav_links'>\n    <a class='hint'>Show a hint ></a>\n</div>");

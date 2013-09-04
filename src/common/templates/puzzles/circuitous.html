@@ -7,7 +7,7 @@
         Circuitous
     </h1>
     
-    <div class='circuitous' data-level_id={level_id}>        
+    <div class='circuitous {:editor}editor{/editor}' data-level_id={level_id}>        
         <div class='board'>
             <div class='cells'>
                 <div class='wires'></div>
@@ -15,8 +15,19 @@
             </div>
         </div>
         <div class='right_side'>
+            {:editor}
             <table class='options'></table>
             <div class='menu'></div>
+            {/editor}
+            {!editor}
+            <div class='info'>
+                <div class='challenge'>
+                    <h2>The Challenge</h2>
+                    <h3 class='description'></h3>
+                </div>
+            </div>
+            {/editor}
+            
         </div>        
         <div class='modal_menu'><div class='close'></div><div class='content'></div></div>
     </div>

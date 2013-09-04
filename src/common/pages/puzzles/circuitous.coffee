@@ -65,7 +65,8 @@ soma.chunks
             @setMeta('description', 'Explore circuits through simple challenges you can solve in creative ways.')
             
             @html = wings.renderTemplate(@template,
-                level_id: @levelId
+                level_id: @levelId,
+                editor: @levelId == 'editor'
             )
             
         
@@ -92,21 +93,23 @@ soma.views
             if @levelId == 'editor'
                 circuitousEditor = require('./lib/circuitous_editor')
                 @editor = new circuitousEditor.EditorHelper
+                    el: $(@selector)
                     viewHelper: @viewHelper
                     hashReplacements: @hashReplacements
                     getInstructions: => @getInstructions()
-                                
-            if (instructions = location.hash).length
-                instructions = instructions.replace(/#/, '')
-                for replace, replaceWith of @hashReplacements
-                    instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith) 
-                @loadInstructions(JSON.parse(instructions))
+
+                if (instructions = location.hash).length
+                    instructions = instructions.replace(/#/, '')
+                    for replace, replaceWith of @hashReplacements
+                        instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith) 
+                    @loadInstructions(JSON.parse(instructions))            
+            else
+                @initWorlds()
+                @loadLevel()
+                @initCompleteListener()
                     
             @initInstructions()
             
-            @initWorlds()
-            @loadLevel()
-            @initCompleteListener()
         
         initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
@@ -134,10 +137,9 @@ soma.views
             for info in instructions.components
                 do (info) =>
                     component = new circuitous[info.name]
-                    @viewHelper.options.addComponent(component)
+                    @viewHelper.addComponent(component)
                     component.el.find('img').bind 'load', =>
                         setTimeout((=>
-                            component.el.removeClass('in_options')
                             component.setStartDrag({}, true)
                             [x, y] = getCoordinates(info.position)
                             componentPosition = @viewHelper.board.componentPosition
@@ -145,6 +147,7 @@ soma.views
                                 y: y - component.nodes[0].y
                             @viewHelper.board.addComponent(component, componentPosition.x, componentPosition.y)                            
                         ), 10)
+                        
         getInstructions: ->
             instructions = []
             components = []
@@ -202,6 +205,13 @@ soma.views
             @showChallenge()
             
         showChallenge: ->
+            challenge = @$('.challenge')
+            challenge.find('.description').html(@level.challenge)
+            challenge.css(marginTop: (@$('.info').height() - challenge.height()) / 3)
+            @loadInstructions(@level.instructions)
+            @level.loaded = true
+            return
+
             if not @level.challengeElement
                 @level.challengeElement = $(document.createElement('DIV'))
                 @level.challengeElement.html """

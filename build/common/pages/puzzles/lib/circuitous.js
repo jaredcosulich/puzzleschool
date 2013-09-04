@@ -29,15 +29,37 @@ circuitous.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.init = function() {
-    this.board = new circuitous.Board({
+    return this.board = new circuitous.Board({
       el: this.$('.board')
     });
-    return this.options = new circuitous.Options({
-      el: this.$('.options'),
-      rows: 5,
-      columns: 4,
-      board: this.board
+  };
+
+  ViewHelper.prototype.addComponent = function(component) {
+    var img,
+      _this = this;
+    component.appendTo(this.board.cells);
+    img = component.el.find('img');
+    return img.bind('load', function() {
+      component.el.width(img.width());
+      component.el.height(img.height());
+      return $.timeout(10, function() {
+        component.initCurrent();
+        return component.initDrag(component.el, function(component, x, y, stopDrag) {
+          return _this.dragComponent(component, x, y, stopDrag);
+        }, true, component.dragBuffer);
+      });
     });
+  };
+
+  ViewHelper.prototype.dragComponent = function(component, x, y, state) {
+    if (state === 'start') {
+      return this.board.removeComponent(component);
+    } else if (state === 'stop') {
+      if (!this.board.addComponent(component, x, y)) {
+        this.board.removeComponent(component);
+        return component.resetDrag();
+      }
+    }
   };
 
   return ViewHelper;

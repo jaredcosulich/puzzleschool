@@ -1,10 +1,18 @@
 circuitousEditor = exports ? provide('./lib/circuitous_editor', {})
 
 class circuitousEditor.EditorHelper
-    constructor: ({@viewHelper, @getInstructions, @hashReplacements}) ->
+    constructor: ({@el, @viewHelper, @getInstructions, @hashReplacements}) ->
         @init()
         
+    $: (selector) -> $(selector, @el)  
+        
     init: ->
+        @options = new circuitous.Options
+            el: @$('.options')
+            rows: 5
+            columns: 4
+            board: @viewHelper.board
+        
         @viewHelper.board.addChangeListener => @changeHash()
         
     changeHash: ->
