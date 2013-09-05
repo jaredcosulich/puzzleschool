@@ -274,7 +274,7 @@
             background-color: white;
             .outer-shadow(0, 0, 18px, 60%);
             padding-bottom: 12px;
-            .challenge, .complete {
+            .challenge, .complete, .intro {
                 padding: 24px 0;
                 text-align: center;
             }
@@ -547,6 +547,27 @@
         }
     }    
     
+    .level_selector {
+        text-align: center;
+        .world {
+            .stage {
+                padding-top: 12px;
+                .levels {
+                    padding: 12px;
+                    .level {
+                        display: block;
+                        content: "\00a0"; 
+                        width: 24px;
+                        height: 24px;
+                        float: left;
+                        margin: 12px 0 0 12px;
+                        background-color: red;
+                    }                    
+                }
+            }
+        }
+    }
+    
     .modal_menu {
         opacity: 0;
         position: absolute;
@@ -572,8 +593,6 @@
             .challenge, .complete {
                 padding-top: 30px;
                 text-align: center;
-                h1 {
-                }
                 .description {
                     font-size: @h3size;
                     padding: 30px;                    

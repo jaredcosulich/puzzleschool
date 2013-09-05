@@ -104,12 +104,15 @@ soma.views
                         instructions = instructions.replace(new RegExp(replace, 'g'), replaceWith) 
                     @loadInstructions(JSON.parse(instructions))            
             else
+                @initInfo()
                 @initWorlds()
-                @loadLevel()
                 @initCompleteListener()
                     
             @initInstructions()
-            
+            @showLevelSelector()
+        
+        initInfo: ->
+            @$('.info .challenge').hide()
         
         initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
@@ -196,6 +199,12 @@ soma.views
         initWorlds: ->
             @worlds = require('./lib/xyflyer_objects/levels').WORLDS
                 
+        findLevel: (levelId) ->
+            for world in @worlds
+                for stage in world.stages
+                    for level in stage.levels
+                        return level if level.id == levelId        
+        
         loadLevel: (levelId) ->
             if not levelId
                 @level = @worlds[0].stages[0].levels[0]
@@ -205,8 +214,10 @@ soma.views
             @showChallenge()
             
         showChallenge: ->
+            @$('.info .intro').hide()
             challenge = @$('.challenge')
             challenge.find('.description').html(@level.challenge)
+            challenge.show()
             @showHints()
             @loadInstructions(@level.instructions)
             @level.loaded = true
@@ -246,7 +257,7 @@ soma.views
             completeElement.html """
                 <h1>Success</h1>
                 <h3 class='description'>#{@level.complete}</h3>
-                <div class='buttons'><a class='button'>Select Level</a></div>
+                <div class='buttons'><a class='button select_level'>Select Level</a></div>
             """
 
             info = @$('.info') 
@@ -257,6 +268,7 @@ soma.views
                     if @level.completeVideo
                         $.timeout 250, =>
                             completeElement.find('.buttons').css(opacity: 1)
+                            completeElement.find('.select_level').bind 'click', => @showLevelSelector()
                             completeElement.find('.description').append(@level.completeVideo)
                         
                     info.find('.challenge').hide()
@@ -264,13 +276,41 @@ soma.views
                     info.animate
                         height: info.parent().height() * 0.85
                         duration: 500
+                        
+        showLevelSelector: ->
+            levelSelector = $(document.createElement('DIV'))
+            levelSelector.addClass('level_selector')
+            for world, index in @worlds
+                worldContainer = $(document.createElement('DIV'))
+                worldContainer.addClass('world')
+                worldContainer.html("<h2>World #{index + 1}</h2>")
+                levelSelector.append(worldContainer)
+                for stage in world.stages
+                    stageContainer = $(document.createElement('DIV'))
+                    stageContainer.addClass('stage')
+                    stageContainer.html("<h3>#{stage.name}</h3>")
+                    levels = $(document.createElement('DIV'))
+                    levels.addClass('levels')
+                    stageContainer.append(levels)
+                    worldContainer.append(stageContainer)
+                    for level in stage.levels
+                        do (level) =>
+                            levelLink = $(document.createElement('A'))
+                            levelLink.addClass('level')
+                            levelLink.bind 'click', => 
+                                @hideModal => @loadLevel(level.id)
+                                
+                            levels.append(levelLink)
+                        
+            @showModal(levelSelector)
                     
-        showModal: (content) ->
+        showModal: (content=null) ->
             if not @modalMenu
                 @modalMenu = @$('.modal_menu')
                 @modalMenu.find('.close').bind 'click', => @hideModal()
                 
-            @modalMenu.find('.content').html(content)
+            @modalMenu.find('.content').html(content) if content
+            
             if parseInt(@modalMenu.css('left')) < 0
                 @modalMenu.css
                     opacity: 0
@@ -279,12 +319,13 @@ soma.views
                 
                 @modalMenu.animate(opacity: 1, duration: 500)
             
-        hideModal: ->
+        hideModal: (callback) ->
             return unless @modalMenu
             @modalMenu.animate
                 opacity: 0
                 duration: 500
                 complete: =>
+                    callback()
                     @modalMenu.css
                         left: -10000
                         top: -10000

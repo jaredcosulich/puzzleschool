@@ -118,11 +118,15 @@ soma.views({
           this.loadInstructions(JSON.parse(instructions));
         }
       } else {
+        this.initInfo();
         this.initWorlds();
-        this.loadLevel();
         this.initCompleteListener();
       }
-      return this.initInstructions();
+      this.initInstructions();
+      return this.showLevelSelector();
+    },
+    initInfo: function() {
+      return this.$('.info .challenge').hide();
     },
     initInstructions: function() {
       var _this = this;
@@ -261,6 +265,24 @@ soma.views({
     initWorlds: function() {
       return this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
     },
+    findLevel: function(levelId) {
+      var level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+      _ref = this.worlds;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        world = _ref[_i];
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          _ref2 = stage.levels;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            level = _ref2[_k];
+            if (level.id === levelId) {
+              return level;
+            }
+          }
+        }
+      }
+    },
     loadLevel: function(levelId) {
       if (!levelId) {
         this.level = this.worlds[0].stages[0].levels[0];
@@ -271,8 +293,10 @@ soma.views({
     },
     showChallenge: function() {
       var challenge;
+      this.$('.info .intro').hide();
       challenge = this.$('.challenge');
       challenge.find('.description').html(this.level.challenge);
+      challenge.show();
       this.showHints();
       this.loadInstructions(this.level.instructions);
       return this.level.loaded = true;
@@ -328,7 +352,7 @@ soma.views({
       this.level.completed = true;
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
-      completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button'>Select Level</a></div>");
+      completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button select_level'>Select Level</a></div>");
       info = this.$('.info');
       return info.css({
         overflow: 'hidden'
@@ -340,6 +364,9 @@ soma.views({
             $.timeout(250, function() {
               completeElement.find('.buttons').css({
                 opacity: 1
+              });
+              completeElement.find('.select_level').bind('click', function() {
+                return _this.showLevelSelector();
               });
               return completeElement.find('.description').append(_this.level.completeVideo);
             });
@@ -353,15 +380,62 @@ soma.views({
         }
       });
     },
+    showLevelSelector: function() {
+      var index, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+        _this = this;
+      levelSelector = $(document.createElement('DIV'));
+      levelSelector.addClass('level_selector');
+      _ref = this.worlds;
+      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+        world = _ref[index];
+        worldContainer = $(document.createElement('DIV'));
+        worldContainer.addClass('world');
+        worldContainer.html("<h2>World " + (index + 1) + "</h2>");
+        levelSelector.append(worldContainer);
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          stageContainer = $(document.createElement('DIV'));
+          stageContainer.addClass('stage');
+          stageContainer.html("<h3>" + stage.name + "</h3>");
+          levels = $(document.createElement('DIV'));
+          levels.addClass('levels');
+          stageContainer.append(levels);
+          worldContainer.append(stageContainer);
+          _ref2 = stage.levels;
+          _fn = function(level) {
+            var levelLink;
+            levelLink = $(document.createElement('A'));
+            levelLink.addClass('level');
+            levelLink.bind('click', function() {
+              return _this.hideModal(function() {
+                return _this.loadLevel(level.id);
+              });
+            });
+            return levels.append(levelLink);
+          };
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            level = _ref2[_k];
+            _fn(level);
+          }
+        }
+      }
+      return this.showModal(levelSelector);
+    },
     showModal: function(content) {
       var _this = this;
+      if (content == null) {
+        content = null;
+      }
       if (!this.modalMenu) {
         this.modalMenu = this.$('.modal_menu');
         this.modalMenu.find('.close').bind('click', function() {
           return _this.hideModal();
         });
       }
-      this.modalMenu.find('.content').html(content);
+      if (content) {
+        this.modalMenu.find('.content').html(content);
+      }
       if (parseInt(this.modalMenu.css('left')) < 0) {
         this.modalMenu.css({
           opacity: 0,
@@ -374,7 +448,7 @@ soma.views({
         });
       }
     },
-    hideModal: function() {
+    hideModal: function(callback) {
       var _this = this;
       if (!this.modalMenu) {
         return;
@@ -383,6 +457,7 @@ soma.views({
         opacity: 0,
         duration: 500,
         complete: function() {
+          callback();
           return _this.modalMenu.css({
             left: -10000,
             top: -10000

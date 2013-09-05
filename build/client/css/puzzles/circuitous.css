@@ -258,7 +258,8 @@
   padding-bottom: 12px;
 }
 .circuitous .right_side .info .challenge,
-.circuitous .right_side .info .complete {
+.circuitous .right_side .info .complete,
+.circuitous .right_side .info .intro {
   padding: 24px 0;
   text-align: center;
 }
@@ -710,6 +711,24 @@
 }
 .circuitous .selector_dialog .items .item {
   padding: 12px 0;
+}
+.circuitous .level_selector {
+  text-align: center;
+}
+.circuitous .level_selector .world .stage {
+  padding-top: 12px;
+}
+.circuitous .level_selector .world .stage .levels {
+  padding: 12px;
+}
+.circuitous .level_selector .world .stage .levels .level {
+  display: block;
+  content: "\00a0";
+  width: 24px;
+  height: 24px;
+  float: left;
+  margin: 12px 0 0 12px;
+  background-color: red;
 }
 .circuitous .modal_menu {
   opacity: 0;
