@@ -18,30 +18,36 @@
     position: relative;
     overflow: hidden;
     background-color: white;
+    border: @border solid white;        
     .no_select();
+    .inner-shadow(0, 0, 18px, 60%);
 
     &.editor .board {
         float: left;
         border-right: none;
+        
+        .cells {
+            margin: @border;
+        }
     }
      
     .board {
         float: right;
-        border: @border solid white;        
         overflow: hidden;
         margin-bottom: 12px;
-        .inner-shadow(0, 0, 18px, 60%);
         position: relative;
-        padding: @border;
         .no_select();
         
         .cells, .wires, .electrons {
-            height: @height - (@border * 4);  
-            width: @height - (@border * 4);            
+            height: @height - (@border*4);  
+            width: @height - (@border*4);            
         }
 
         .cells {
+            margin: @border*2;
             position: relative;
+            border-left: 1px dashed @lightestgrey;        
+            border-top: 1px dashed @lightestgrey;        
         }
         
         .wires, .electrons {
@@ -250,14 +256,26 @@
         position: absolute;
         left: 0;
         top: 0;
-        background-color: white;
+        height: @height;
+        width: (@width / 3);
+
+        &::before {
+            content: "\00a0";
+            background-color: white;
+            width: 100%;
+            height: @border;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
         
         .info {
-            height: (@height * 1 / 3);
-            width: (@width / 3) - @border;
-
+            background-color: white;
+            margin-top: @border;
+            .outer-shadow(0, 0, 18px, 60%);
+            padding-bottom: 12px;
             .challenge {
-                padding-top: 30px;
+                padding: 30px 0;
                 text-align: center;
                 .description {
                     padding: 12px;
@@ -265,8 +283,21 @@
             }
         }
         
+        .values {
+            margin: 30px 12px 12px 12px;
+            background-color: @lightestgrey;
+            bottom: 12px;
+            position: absolute;
+            width: 96%;
+            height: 30px;
+            text-align: center;
+            h2 {
+                padding: 12px;
+            }
+        }
+        
         .options {
-            .inner-shadow(0, 0, 18px, 60%);            
+            margin: (@border * 2) 0 0 (@border * -1);
             width: (@width - @height - (@border * 2));
             height: (@height * 2 / 3 - (@border * 2));
             border-spacing: 0;
@@ -305,10 +336,13 @@
     }
     
     &.editor .right_side {
-        border: @border solid white;
         position: static;
         float: right;
         border-left: none;
+        
+        &::before {
+            display: none;
+        }
     }
     
     .component {

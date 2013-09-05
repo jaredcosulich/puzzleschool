@@ -23,7 +23,7 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         @currentImage = $(document.createElement('IMG'))
         @currentImage.addClass('current_image')
         @currentImage.attr(src: @image().replace('.png', '_current.png'))
-        @currentImage.css(bottom: (@offset or 0)/2)
+        @currentImage.css(bottom: (@offset or 0))
         @el.append(@currentImage)
         
     setCurrent: (@current) ->
