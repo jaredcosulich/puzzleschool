@@ -270,27 +270,54 @@ soma.views({
       return this.showChallenge();
     },
     showChallenge: function() {
-      var challenge,
-        _this = this;
+      var challenge;
       challenge = this.$('.challenge');
       challenge.find('.description').html(this.level.challenge);
+      this.showHints();
       this.loadInstructions(this.level.instructions);
-      this.level.loaded = true;
-      return;
-      if (!this.level.challengeElement) {
-        this.level.challengeElement = $(document.createElement('DIV'));
-        this.level.challengeElement.html("<h1>Challenge</h1>\n<p class='description'>" + this.level.challenge + "</p>\n<div class='go'>Get Started</div>\n<div class='nav_links'>\n    <a class='hint'>Show a hint ></a>\n</div>");
-        this.level.challengeElement.addClass('challenge');
-        this.level.challengeElement.find('a.hint').bind('click', function() {
-          return console.log('HINT');
+      return this.level.loaded = true;
+    },
+    showHints: function() {
+      var hint, hintsElement, hintsLinks, index, _fn, _i, _len, _ref,
+        _this = this;
+      hintsElement = this.$('.challenge .hints');
+      hintsLinks = $(document.createElement('DIV'));
+      hintsLinks.addClass('hints_links');
+      _ref = this.level.hints;
+      _fn = function(hint, index) {
+        var hintDiv, hintLink;
+        hintLink = $(document.createElement('DIV'));
+        hintLink.addClass('hint_link');
+        if (index > 0) {
+          hintLink.addClass('disabled');
+        }
+        hintLink.html("Hint " + (index + 1));
+        hintDiv = $(document.createElement('DIV'));
+        hintDiv.addClass('hint');
+        hintDiv.html("<b>Hint " + (index + 1) + "</b>: " + hint);
+        hintsElement.append(hintDiv);
+        hintLink.bind('click', function() {
+          if (hintLink.hasClass('disabled')) {
+            return;
+          }
+          hintLink.animate({
+            height: 1,
+            duration: 250
+          });
+          hintDiv.animate({
+            height: 54,
+            paddingTop: 12,
+            duration: 250
+          });
+          return $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled');
         });
-        this.level.challengeElement.find('.go').bind('click', function() {
-          _this.loadInstructions(_this.level.instructions);
-          _this.hideModal();
-          return _this.level.loaded = true;
-        });
+        return hintsLinks.append(hintLink);
+      };
+      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+        hint = _ref[index];
+        _fn(hint, index);
       }
-      return this.showModal(this.level.challengeElement);
+      return hintsElement.append(hintsLinks);
     },
     showComplete: function() {
       if (!this.level.completeElement) {

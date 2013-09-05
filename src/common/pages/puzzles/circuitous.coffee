@@ -207,29 +207,36 @@ soma.views
         showChallenge: ->
             challenge = @$('.challenge')
             challenge.find('.description').html(@level.challenge)
-            # challenge.css(marginTop: (@$('.info').height() - challenge.height()) / 3)
+            @showHints()
             @loadInstructions(@level.instructions)
             @level.loaded = true
-            return
-
-            if not @level.challengeElement
-                @level.challengeElement = $(document.createElement('DIV'))
-                @level.challengeElement.html """
-                    <h1>Challenge</h1>
-                    <p class='description'>#{@level.challenge}</p>
-                    <div class='go'>Get Started</div>
-                    <div class='nav_links'>
-                        <a class='hint'>Show a hint ></a>
-                    </div>
-                """
-                @level.challengeElement.addClass('challenge')
-                @level.challengeElement.find('a.hint').bind 'click', => console.log('HINT')
-                @level.challengeElement.find('.go').bind 'click', => 
-                    @loadInstructions(@level.instructions)
-                    @hideModal()
-                    @level.loaded = true
-                    
-            @showModal(@level.challengeElement)
+        
+        showHints: ->
+            hintsElement = @$('.challenge .hints')
+            hintsLinks = $(document.createElement('DIV'))
+            hintsLinks.addClass('hints_links')
+            for hint, index in @level.hints
+                do (hint, index) =>
+                    hintLink = $(document.createElement('DIV'))
+                    hintLink.addClass('hint_link')
+                    hintLink.addClass('disabled') if index > 0
+                    hintLink.html("Hint #{index + 1}")
+                
+                    hintDiv = $(document.createElement('DIV'))
+                    hintDiv.addClass('hint')
+                    hintDiv.html("<b>Hint #{index+ 1}</b>: #{hint}")
+                    hintsElement.append(hintDiv)
+                
+                    hintLink.bind 'click', =>
+                        return if hintLink.hasClass('disabled')
+                        hintLink.animate(height: 1, duration: 250)
+                        hintDiv.animate(height: 54, paddingTop: 12, duration: 250)
+                        $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled')
+                
+                    hintsLinks.append(hintLink)
+            
+            hintsElement.append(hintsLinks)
+            
         
         showComplete: ->
             if not @level.completeElement

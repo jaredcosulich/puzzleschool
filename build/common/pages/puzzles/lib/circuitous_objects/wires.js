@@ -60,10 +60,11 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.draw = function(e) {
-    var coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
+    var border, coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
+    border = parseInt(this.el.closest('.circuitous').css('borderLeftWidth'));
     coords = this.board.roundedCoordinates({
-      x: Client.x(e),
-      y: Client.y(e)
+      x: Client.x(e) - border,
+      y: Client.y(e) - border
     }, this.el.offset());
     if (start = this.info.start) {
       xDiff = Math.abs(start.x - coords.x);

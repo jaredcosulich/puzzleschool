@@ -27,7 +27,7 @@ levels.WORLDS = [
               ],
               "wires": [["8,10", "8,9"], ["8,9", "8,8"], ["8,8", "8,7"], ["8,7", "8,6"], ["8,6", "7,6"], ["7,6", "7,7"], ["7,7", "7,8"]]
             },
-            hints: ['Click anywhere on the board to draw a wire (click on an existing wire to erase it).', 'Complete the wire by connecting the loose end to the positive node.'],
+            hints: ['Click anywhere on the board to draw a wire (click on an existing wire to erase it).', 'Complete the wire by connecting the loose end to the positive terminal of the battery.', 'The positive terminal is right above the plus sign on the battery.'],
             completeInstructions: {
               "components": [
                 {

@@ -254,10 +254,10 @@
     
     .right_side {
         position: absolute;
-        left: 0;
+        left: 12px;
         top: 0;
         height: @height;
-        width: (@width / 3);
+        width: (@width / 3) - 6;
 
         &::before {
             content: "\00a0";
@@ -278,7 +278,44 @@
                 padding: 30px 0;
                 text-align: center;
                 .description {
-                    padding: 12px;
+                    padding: 12px 12px 45px 12px;
+                }
+                
+                .hints {
+                    .hint {
+                        height: 0;
+                        padding: 0 12px;
+                        border-top: 1px dashed @lightestgrey;
+                        border-bottom: 1px dashed @lightestgrey;
+                        overflow: hidden;
+                    }
+                    
+                    .hints_links {
+                        position: relative;
+                        margin-bottom: -39px;
+
+                        &::before {
+                            content: "\00a0";
+                            background-color: white;
+                            width: 100%;
+                            height: @border * 2;
+                            position: absolute;
+                            top: @border * -1.5;
+                            left: 0;
+                        }
+
+                        .hint_link {
+                            background-color: white;
+                            display: block;
+                            float: left;
+                            height: 30px;
+                            line-height: 30px;
+                            width: 24%;
+                            margin-left: 6%;
+                            .outer-shadow(0, 0, 18px, 60%);
+                            overflow: hidden;
+                        }                                            
+                    }
                 }
             }
         }
@@ -286,7 +323,7 @@
         .instructions {
             margin: 30px 12px 12px 12px;
             background-color: @lightestgrey;
-            bottom: 12px;
+            bottom: 60px;
             position: absolute;
             width: 96%;
             h3 {
@@ -296,6 +333,52 @@
             ol {
                 padding-left: 30px;
             }
+        }
+        
+        .values {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            font-weight: bold;
+            text-align: center;
+            .show_values {
+                display: block;
+                width: 150px;
+                height: 26px;
+                
+                &::before, &::after {
+                    width: 48%;
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    display: inline-block;                    
+                    content: "\00a0";
+                    border: 1px solid #ccc;
+                    .box-shadow(1px 1px 2px rgba(0,0,0,0.5));
+                    background-color: @white;
+                }
+                &.on::before, &.off::after {
+                    .box-shadow(inset -3px 3px 9px rgba(0,0,0,0.5));  
+                    padding: 2px 0;                  
+                }
+                &.on::before {
+                    content: 'ON';
+                    background-color: @blue;
+                }
+                &.off::after {
+                    content: 'OFF';
+                    background-color: @grey;
+                }
+            }
+        }
+        
+        .add_component {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            .button-color(@blue);
+            color: white;
+            padding: 6px 12px;
         }
         
         .options {
