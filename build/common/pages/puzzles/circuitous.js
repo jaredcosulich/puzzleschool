@@ -328,7 +328,7 @@ soma.views({
       this.level.completed = true;
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
-      completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button'>Next Level</a></div>");
+      completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button'>Select Level</a></div>");
       info = this.$('.info');
       return info.css({
         overflow: 'hidden'

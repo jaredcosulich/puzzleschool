@@ -246,7 +246,7 @@ soma.views
             completeElement.html """
                 <h1>Success</h1>
                 <h3 class='description'>#{@level.complete}</h3>
-                <div class='buttons'><a class='button'>Next Level</a></div>
+                <div class='buttons'><a class='button'>Select Level</a></div>
             """
 
             info = @$('.info') 
