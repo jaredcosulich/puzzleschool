@@ -17,19 +17,17 @@
     margin: 18px 0 0 -12px;
     position: relative;
     overflow: hidden;
-    background-color: #FFFFFF;
+    background-color: white;
     .no_select();
 
     &.editor .board {
-        .cells, .wires, .electrons {
-            width: @height - (@border * 4);           
-        }
+        float: left;
+        border-right: none;
     }
      
     .board {
-        float: left;
-        border: @border solid white;
-        border-right: none;
+        float: right;
+        border: @border solid white;        
         overflow: hidden;
         margin-bottom: 12px;
         .inner-shadow(0, 0, 18px, 60%);
@@ -39,7 +37,7 @@
         
         .cells, .wires, .electrons {
             height: @height - (@border * 4);  
-            width: @width - (@border * 4);            
+            width: @height - (@border * 4);            
         }
 
         .cells {
@@ -250,19 +248,16 @@
     
     .right_side {
         position: absolute;
-        right: 0;
+        left: 0;
         top: 0;
         background-color: white;
         
         .info {
             height: (@height * 1 / 3);
-            width: (@width / 3);
-            padding: @border;   
-            margin: @border;
-            .outer-shadow(-6px, 8px, 6px, 12%);
-            
+            width: (@width / 3) - @border;
+
             .challenge {
-                margin-top: 12px;
+                padding-top: 30px;
                 text-align: center;
                 .description {
                     padding: 12px;

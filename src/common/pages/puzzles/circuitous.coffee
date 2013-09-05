@@ -207,7 +207,7 @@ soma.views
         showChallenge: ->
             challenge = @$('.challenge')
             challenge.find('.description').html(@level.challenge)
-            challenge.css(marginTop: (@$('.info').height() - challenge.height()) / 3)
+            # challenge.css(marginTop: (@$('.info').height() - challenge.height()) / 3)
             @loadInstructions(@level.instructions)
             @level.loaded = true
             return

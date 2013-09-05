@@ -13,7 +13,7 @@
   margin: 18px 0 0 -12px;
   position: relative;
   overflow: hidden;
-  background-color: #FFFFFF;
+  background-color: white;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -21,15 +21,13 @@
   -ms-user-select: none;
   user-select: none;
 }
-.circuitous.editor .board .cells,
-.circuitous.editor .board .wires,
-.circuitous.editor .board .electrons {
-  width: 608px;
+.circuitous.editor .board {
+  float: left;
+  border-right: none;
 }
 .circuitous .board {
-  float: left;
+  float: right;
   border: 8px solid #ffffff;
-  border-right: none;
   overflow: hidden;
   margin-bottom: 12px;
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
@@ -48,7 +46,7 @@
 .circuitous .board .wires,
 .circuitous .board .electrons {
   height: 608px;
-  width: 928px;
+  width: 608px;
 }
 .circuitous .board .cells {
   position: relative;
@@ -232,21 +230,16 @@
 }
 .circuitous .right_side {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
   background-color: white;
 }
 .circuitous .right_side .info {
   height: 213.33333333333334px;
-  width: 320px;
-  padding: 8px;
-  margin: 8px;
-  box-shadow: -6px 8px 6px rgba(0, 0, 0, 0.12);
-  -webkit-box-shadow: -6px 8px 6px rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: -6px 8px 6px rgba(0, 0, 0, 0.12);
+  width: 312px;
 }
 .circuitous .right_side .info .challenge {
-  margin-top: 12px;
+  padding-top: 30px;
   text-align: center;
 }
 .circuitous .right_side .info .challenge .description {

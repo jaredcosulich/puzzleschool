@@ -274,9 +274,6 @@ soma.views({
         _this = this;
       challenge = this.$('.challenge');
       challenge.find('.description').html(this.level.challenge);
-      challenge.css({
-        marginTop: (this.$('.info').height() - challenge.height()) / 3
-      });
       this.loadInstructions(this.level.instructions);
       this.level.loaded = true;
       return;
