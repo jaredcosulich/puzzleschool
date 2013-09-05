@@ -41,7 +41,8 @@ levels.WORLDS = [
               "wires": [["8,10", "8,9"], ["8,9", "8,8"], ["8,8", "8,7"], ["8,7", "8,6"], ["8,6", "7,6"], ["7,6", "7,7"], ["7,7", "7,8"], ["7,8", "7,9"], ["7,9", "7,10"]]
             },
             completeValues: [["Battery", 1.8], ["Lightbulb", 1.8]],
-            complete: 'In order for a circuit to provide power to a lightbulb the circuit must provide a connection from \nthe negative terminal of a battery, to the lightbulb, and back to the positive terminal.'
+            complete: 'A circuit is not complete until a wire connects the negative terminal to the positive terminal.\n<br/><br/>\nWhen the circuit is complete electricity will flow, powering the lightbulb.',
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/dBvm5wgBLts?rel=0" frameborder="0" allowfullscreen></iframe>'
           }
         ]
       }

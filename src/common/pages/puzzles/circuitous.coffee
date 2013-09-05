@@ -239,19 +239,32 @@ soma.views
             
         
         showComplete: ->
-            if not @level.completeElement
-                @level.completeElement = $(document.createElement('DIV'))
-                @level.completeElement.html """
-                    <h1>Success</h1>
-                    <img src='/assets/images/puzzles/circuitous/levels/level_#{@level.id}.png'/>
-                    <p class='description'>#{@level.complete}</p>
-                    <div class='go'>Next Level</div>    
-                """
-                @level.completeElement.addClass('complete')
+            return if @level.completed
+            @level.completed = true
+            completeElement = $(document.createElement('DIV'))
+            completeElement.addClass('complete')
+            completeElement.html """
+                <h1>Success</h1>
+                <h3 class='description'>#{@level.complete}</h3>
+                <div class='buttons'><a class='button'>Next Level</a></div>
+            """
+
+            info = @$('.info') 
+            info.css(overflow: 'hidden').animate
+                height: 0
+                duration: 500
+                complete: =>
+                    if @level.completeVideo
+                        $.timeout 250, =>
+                            completeElement.find('.buttons').css(opacity: 1)
+                            completeElement.find('.description').append(@level.completeVideo)
+                        
+                    info.find('.challenge').hide()
+                    info.append(completeElement)
+                    info.animate
+                        height: info.parent().height() * 0.85
+                        duration: 500
                     
-            @showModal(@level.completeElement)
-            
-        
         showModal: (content) ->
             if not @modalMenu
                 @modalMenu = @$('.modal_menu')

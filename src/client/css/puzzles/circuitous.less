@@ -270,13 +270,16 @@
         }
         
         .info {
+            position: relative;            
             background-color: white;
-            margin-top: @border;
             .outer-shadow(0, 0, 18px, 60%);
             padding-bottom: 12px;
-            .challenge {
-                padding: 30px 0;
+            .challenge, .complete {
+                padding: 24px 0;
                 text-align: center;
+            }
+            
+            .challenge {                    
                 .description {
                     padding: 12px 12px 45px 12px;
                 }
@@ -292,15 +295,15 @@
                     
                     .hints_links {
                         position: relative;
-                        margin-bottom: -39px;
+                        margin-bottom: -31px;
 
                         &::before {
                             content: "\00a0";
                             background-color: white;
                             width: 100%;
-                            height: @border * 2;
+                            height: @border * 3;
                             position: absolute;
-                            top: @border * -1.5;
+                            top: @border * -2.5;
                             left: 0;
                         }
 
@@ -318,6 +321,26 @@
                     }
                 }
             }
+            
+            .complete {                
+                iframe {
+                    margin: 24px 0 12px -5px;
+                }
+                
+                .description {
+                    padding: 12px;
+                }
+                
+                .buttons {
+                    opacity: 0;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 12px;
+                    .button {
+                        .button-color(@blue);                        
+                    }
+                }
+            }
         }
         
         .instructions {
@@ -326,10 +349,12 @@
             bottom: 60px;
             position: absolute;
             width: 96%;
+            
             h3 {
                 text-align: center;
                 padding-top: 12px;
             }
+            
             ol {
                 padding-left: 30px;
             }
@@ -379,6 +404,11 @@
             .button-color(@blue);
             color: white;
             padding: 6px 12px;
+            
+            &:active {
+                position: absolute;
+                bottom: 11px;
+            }
         }
         
         .options {

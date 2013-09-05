@@ -320,12 +320,38 @@ soma.views({
       return hintsElement.append(hintsLinks);
     },
     showComplete: function() {
-      if (!this.level.completeElement) {
-        this.level.completeElement = $(document.createElement('DIV'));
-        this.level.completeElement.html("<h1>Success</h1>\n<img src='/assets/images/puzzles/circuitous/levels/level_" + this.level.id + ".png'/>\n<p class='description'>" + this.level.complete + "</p>\n<div class='go'>Next Level</div>    ");
-        this.level.completeElement.addClass('complete');
+      var completeElement, info,
+        _this = this;
+      if (this.level.completed) {
+        return;
       }
-      return this.showModal(this.level.completeElement);
+      this.level.completed = true;
+      completeElement = $(document.createElement('DIV'));
+      completeElement.addClass('complete');
+      completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button'>Next Level</a></div>");
+      info = this.$('.info');
+      return info.css({
+        overflow: 'hidden'
+      }).animate({
+        height: 0,
+        duration: 500,
+        complete: function() {
+          if (_this.level.completeVideo) {
+            $.timeout(250, function() {
+              completeElement.find('.buttons').css({
+                opacity: 1
+              });
+              return completeElement.find('.description').append(_this.level.completeVideo);
+            });
+          }
+          info.find('.challenge').hide();
+          info.append(completeElement);
+          return info.animate({
+            height: info.parent().height() * 0.85,
+            duration: 500
+          });
+        }
+      });
     },
     showModal: function(content) {
       var _this = this;

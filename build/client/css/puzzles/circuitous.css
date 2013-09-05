@@ -250,15 +250,16 @@
   left: 0;
 }
 .circuitous .right_side .info {
+  position: relative;
   background-color: white;
-  margin-top: 8px;
   box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   -webkit-box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   -moz-box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   padding-bottom: 12px;
 }
-.circuitous .right_side .info .challenge {
-  padding: 30px 0;
+.circuitous .right_side .info .challenge,
+.circuitous .right_side .info .complete {
+  padding: 24px 0;
   text-align: center;
 }
 .circuitous .right_side .info .challenge .description {
@@ -273,15 +274,15 @@
 }
 .circuitous .right_side .info .challenge .hints .hints_links {
   position: relative;
-  margin-bottom: -39px;
+  margin-bottom: -31px;
 }
 .circuitous .right_side .info .challenge .hints .hints_links::before {
   content: "\00a0";
   background-color: white;
   width: 100%;
-  height: 16px;
+  height: 24px;
   position: absolute;
-  top: -12px;
+  top: -20px;
   left: 0;
 }
 .circuitous .right_side .info .challenge .hints .hints_links .hint_link {
@@ -296,6 +297,47 @@
   -webkit-box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   -moz-box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   overflow: hidden;
+}
+.circuitous .right_side .info .complete iframe {
+  margin: 24px 0 12px -5px;
+}
+.circuitous .right_side .info .complete .description {
+  padding: 12px;
+}
+.circuitous .right_side .info .complete .buttons {
+  opacity: 0;
+  width: 100%;
+  position: absolute;
+  bottom: 12px;
+}
+.circuitous .right_side .info .complete .buttons .button {
+  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
+  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
+  background-color: #24aac3;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #24aac3;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #24aac3;
+  margin: auto;
+}
+.circuitous .right_side .info .complete .buttons .button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
+  background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
+  background-color: #24aac3;
+}
+.circuitous .right_side .info .complete .buttons .button:active {
+  position: relative;
+  top: 1px;
 }
 .circuitous .right_side .instructions {
   margin: 30px 12px 12px 12px;
@@ -385,6 +427,10 @@
 .circuitous .right_side .add_component:active {
   position: relative;
   top: 1px;
+}
+.circuitous .right_side .add_component:active {
+  position: absolute;
+  bottom: 11px;
 }
 .circuitous .right_side .options {
   margin: 16px 0 0 -8px;
