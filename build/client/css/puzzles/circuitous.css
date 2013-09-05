@@ -264,17 +264,19 @@
 .circuitous .right_side .info .challenge .description {
   padding: 12px;
 }
-.circuitous .right_side .values {
+.circuitous .right_side .instructions {
   margin: 30px 12px 12px 12px;
   background-color: #ededed;
   bottom: 12px;
   position: absolute;
   width: 96%;
-  height: 30px;
-  text-align: center;
 }
-.circuitous .right_side .values h2 {
-  padding: 12px;
+.circuitous .right_side .instructions h3 {
+  text-align: center;
+  padding-top: 12px;
+}
+.circuitous .right_side .instructions ol {
+  padding-left: 30px;
 }
 .circuitous .right_side .options {
   margin: 16px 0 0 -8px;
