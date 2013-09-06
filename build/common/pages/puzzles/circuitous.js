@@ -292,8 +292,13 @@ soma.views({
       return this.showChallenge();
     },
     showChallenge: function() {
-      var challenge;
-      this.$('.info .intro').hide();
+      var challenge, info;
+      info = this.$('.info');
+      info.find('.intro, .complete').remove();
+      info.css({
+        overflow: null,
+        height: null
+      });
       challenge = this.$('.challenge');
       challenge.find('.description').html(this.level.challenge);
       challenge.show();
@@ -305,6 +310,7 @@ soma.views({
       var hint, hintsElement, hintsLinks, index, _fn, _i, _len, _ref,
         _this = this;
       hintsElement = this.$('.challenge .hints');
+      hintsElement.html('');
       hintsLinks = $(document.createElement('DIV'));
       hintsLinks.addClass('hints_links');
       _ref = this.level.hints;

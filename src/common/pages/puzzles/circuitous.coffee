@@ -214,7 +214,9 @@ soma.views
             @showChallenge()
             
         showChallenge: ->
-            @$('.info .intro').hide()
+            info = @$('.info')
+            info.find('.intro, .complete').remove()
+            info.css(overflow: null, height: null)
             challenge = @$('.challenge')
             challenge.find('.description').html(@level.challenge)
             challenge.show()
@@ -224,6 +226,7 @@ soma.views
         
         showHints: ->
             hintsElement = @$('.challenge .hints')
+            hintsElement.html('')
             hintsLinks = $(document.createElement('DIV'))
             hintsLinks.addClass('hints_links')
             for hint, index in @level.hints
