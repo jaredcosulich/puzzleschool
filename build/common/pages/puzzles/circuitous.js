@@ -121,9 +121,9 @@ soma.views({
         this.initInfo();
         this.initWorlds();
         this.initCompleteListener();
+        this.showLevelSelector();
       }
-      this.initInstructions();
-      return this.showLevelSelector();
+      return this.initInstructions();
     },
     initInfo: function() {
       return this.$('.info .challenge').hide();
@@ -289,6 +289,7 @@ soma.views({
       } else {
         this.level = this.findLevel(levelId);
       }
+      this.viewHelper.board.clear();
       return this.showChallenge();
     },
     showChallenge: function() {

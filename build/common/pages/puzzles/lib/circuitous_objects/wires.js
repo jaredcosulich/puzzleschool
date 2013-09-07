@@ -44,6 +44,17 @@ wires.Wires = (function(_super) {
     return this.info.all;
   };
 
+  Wires.prototype.clear = function() {
+    var segment, segmentId, _ref, _results;
+    _ref = this.all();
+    _results = [];
+    for (segmentId in _ref) {
+      segment = _ref[segmentId];
+      _results.push(this.eraseSegment(segment));
+    }
+    return _results;
+  };
+
   Wires.prototype.initDraw = function(e) {
     var _this = this;
     $(document.body).one('mouseup.draw_wire', function() {
@@ -139,12 +150,16 @@ wires.Wires = (function(_super) {
     if (!(segment = this.find(start, end))) {
       return;
     }
-    this.clearElectrons(segment);
-    segment.el.remove();
-    this.recordPosition(null, start, end);
     if (!this.info.continuation) {
       this.info.erasing = true;
     }
+    return this.eraseSegment(segment);
+  };
+
+  Wires.prototype.eraseSegment = function(segment) {
+    this.clearElectrons(segment);
+    segment.el.remove();
+    this.recordPosition(null, segment.nodes[0], segment.nodes[1]);
     return segment.el;
   };
 

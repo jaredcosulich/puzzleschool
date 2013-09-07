@@ -107,9 +107,9 @@ soma.views
                 @initInfo()
                 @initWorlds()
                 @initCompleteListener()
+                @showLevelSelector()
                     
             @initInstructions()
-            @showLevelSelector()
         
         initInfo: ->
             @$('.info .challenge').hide()
@@ -211,6 +211,7 @@ soma.views
             else
                 @level = @findLevel(levelId)
                 
+            @viewHelper.board.clear()
             @showChallenge()
             
         showChallenge: ->

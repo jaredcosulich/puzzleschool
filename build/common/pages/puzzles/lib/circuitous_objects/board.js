@@ -207,14 +207,13 @@ board.Board = (function(_super) {
       if (!(c = this.componentsAndWires()[componentId])) {
         continue;
       }
+      c.receivingCurrent = true;
+      if (typeof c.setCurrent === "function") {
+        c.setCurrent(componentInfo.amps);
+      }
       if (componentInfo.amps === 'infinite') {
         c.excessiveCurrent = true;
         c.el.addClass('excessive_current');
-      } else {
-        c.receivingCurrent = true;
-        if (typeof c.setCurrent === "function") {
-          c.setCurrent(componentInfo.amps);
-        }
       }
     }
     this.wires.showCurrent(elapsed);
@@ -233,6 +232,18 @@ board.Board = (function(_super) {
     return $.timeout(50, function() {
       return _this.movingElectricty = false;
     });
+  };
+
+  Board.prototype.clear = function() {
+    var c, id, _ref, _results;
+    this.wires.clear();
+    _ref = this.components;
+    _results = [];
+    for (id in _ref) {
+      c = _ref[id];
+      _results.push(this.removeComponent(c));
+    }
+    return _results;
   };
 
   Board.prototype.clearColors = function() {

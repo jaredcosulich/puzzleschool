@@ -18,6 +18,8 @@ class wires.Wires extends circuitousObject.Object
         @board.el.bind 'mousedown.draw_wire', (e) => @initDraw(e)
             
     all: -> @info.all 
+    
+    clear: -> @eraseSegment(segment) for segmentId, segment of @all()
         
     initDraw: (e) ->
         $(document.body).one 'mouseup.draw_wire', => 
@@ -87,10 +89,13 @@ class wires.Wires extends circuitousObject.Object
 
     erase: (start, end) ->
         return unless (segment = @find(start, end))
+        @info.erasing = true unless @info.continuation
+        @eraseSegment(segment)
+        
+    eraseSegment: (segment) ->
         @clearElectrons(segment)
         segment.el.remove()
-        @recordPosition(null, start, end)
-        @info.erasing = true unless @info.continuation
+        @recordPosition(null, segment.nodes[0], segment.nodes[1])
         return segment.el
         
     labelSegments: (node) ->

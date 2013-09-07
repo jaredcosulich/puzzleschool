@@ -127,13 +127,13 @@ class board.Board extends circuitousObject.Object
         
         @runAnalysis()
         for componentId, componentInfo of @analyzedComponentsAndWires
-            continue unless (c = @componentsAndWires()[componentId])                     
+            continue unless (c = @componentsAndWires()[componentId])    
+            c.receivingCurrent = true
+            c.setCurrent?(componentInfo.amps)
             if componentInfo.amps == 'infinite'   
                 c.excessiveCurrent = true
                 c.el.addClass('excessive_current')
-            else
-                c.receivingCurrent = true
-                c.setCurrent?(componentInfo.amps)
+
 
         @wires.showCurrent(elapsed)
         
@@ -142,7 +142,11 @@ class board.Board extends circuitousObject.Object
             piece.setCurrent?(0) unless piece.receivingCurrent
         
         $.timeout(50, =>  @movingElectricty = false)
-            
+         
+    clear: ->
+        @wires.clear()
+        @removeComponent(c) for id, c of @components
+           
     clearColors: ->
         c.el.css(backgroundColor: null) for id, c of @componentsAndWires()
 
