@@ -189,7 +189,12 @@ soma.views
                 for [componentType, current] in @level.completeValues
                     componentFound = false
                     for componentId, component of @viewHelper.board.components
-                        if component.constructor.name == componentType and current == Math.abs(component.current)
+                        if component.constructor.name == componentType
+                            continue unless (
+                                (current == 'infinite' and component.current == 'infinite') or
+                                (current == undefined and component.current == undefined) or
+                                (current == Math.abs(component.current))
+                            )
                             componentFound = true
                             delete componentIds[componentId]
                             break
@@ -216,15 +221,19 @@ soma.views
             
         showChallenge: ->
             info = @$('.info')
-            info.find('.intro, .complete').remove()
-            info.css(overflow: null, height: null)
-            challenge = @$('.challenge')
-            challenge.find('.description').html(@level.challenge)
-            challenge.show()
-            @showHints()
-            @loadInstructions(@level.instructions)
-            @level.loaded = true
-        
+            @hideInfo =>
+                info.find('.intro, .complete').remove()
+                challenge = @$('.challenge')
+                challenge.find('.description').html(@level.challenge)
+                challenge.show()
+                @showInfo 
+                    height: 150
+                    callback: =>
+                        info.css(height: null)
+                        @showHints()
+                        @loadInstructions(@level.instructions)
+                        @level.loaded = true
+                
         showHints: ->
             hintsElement = @$('.challenge .hints')
             hintsElement.html('')
@@ -234,6 +243,7 @@ soma.views
                 do (hint, index) =>
                     hintLink = $(document.createElement('DIV'))
                     hintLink.addClass('hint_link')
+                    hintLink.addClass('hidden')
                     hintLink.addClass('disabled') if index > 0
                     hintLink.html("Hint #{index + 1}")
                 
@@ -244,16 +254,33 @@ soma.views
                 
                     hintLink.bind 'click', =>
                         return if hintLink.hasClass('disabled')
-                        hintLink.animate(height: 1, duration: 250)
+                        hintLink.addClass('hidden')
                         height = hintDiv.height()
                         hintDiv.addClass('displayed')
                         hintDiv.animate(height: height + 12, marginTop: -24, marginBottom: 24, paddingTop: 12, duration: 250)
                         $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled')
                 
                     hintsLinks.append(hintLink)
+                    $.timeout 10, -> hintLink.removeClass('hidden')
             
             hintsElement.append(hintsLinks)
             
+        
+        hideInfo: (callback) ->
+            info = @$('.info') 
+            info.css(overflow: 'hidden').animate
+                height: 0
+                duration: 500
+                complete: => callback() if callback
+            
+        showInfo: ({height, callback}) ->
+            info = @$('.info') 
+            info.animate
+                height: height 
+                duration: 500
+                complete: => 
+                    info.css(overflow: null)
+                    callback() if callback
         
         showComplete: ->
             return if @level.completed
@@ -267,21 +294,16 @@ soma.views
             """
 
             info = @$('.info') 
-            info.css(overflow: 'hidden').animate
-                height: 0
-                duration: 500
-                complete: =>
-                    if @level.completeVideo
-                        $.timeout 250, =>
-                            completeElement.find('.buttons').css(opacity: 1)
-                            completeElement.find('.select_level').bind 'click', => @showLevelSelector()
-                            completeElement.find('.description').append(@level.completeVideo)
-                        
-                    info.find('.challenge').hide()
-                    info.append(completeElement)
-                    info.animate
-                        height: info.parent().height() * 0.85
-                        duration: 500
+            @hideInfo =>
+                if @level.completeVideo
+                    $.timeout 250, =>
+                        completeElement.find('.buttons').css(opacity: 1)
+                        completeElement.find('.select_level').bind 'click', => @showLevelSelector()
+                        completeElement.find('.description').append(@level.completeVideo)
+                    
+                info.find('.challenge').hide()
+                info.append(completeElement)
+                @showInfo(height: (info.parent().height() * 0.85))
                         
         showLevelSelector: ->
             levelSelector = $(document.createElement('DIV'))

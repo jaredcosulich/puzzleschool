@@ -249,7 +249,10 @@ soma.views({
           _ref3 = _this.viewHelper.board.components;
           for (componentId in _ref3) {
             component = _ref3[componentId];
-            if (component.constructor.name === componentType && current === Math.abs(component.current)) {
+            if (component.constructor.name === componentType) {
+              if (!((current === 'infinite' && component.current === 'infinite') || (current === void 0 && component.current === void 0) || (current === Math.abs(component.current)))) {
+                continue;
+              }
               componentFound = true;
               delete componentIds[componentId];
               break;
@@ -293,19 +296,27 @@ soma.views({
       return this.showChallenge();
     },
     showChallenge: function() {
-      var challenge, info;
+      var info,
+        _this = this;
       info = this.$('.info');
-      info.find('.intro, .complete').remove();
-      info.css({
-        overflow: null,
-        height: null
+      return this.hideInfo(function() {
+        var challenge;
+        info.find('.intro, .complete').remove();
+        challenge = _this.$('.challenge');
+        challenge.find('.description').html(_this.level.challenge);
+        challenge.show();
+        return _this.showInfo({
+          height: 150,
+          callback: function() {
+            info.css({
+              height: null
+            });
+            _this.showHints();
+            _this.loadInstructions(_this.level.instructions);
+            return _this.level.loaded = true;
+          }
+        });
       });
-      challenge = this.$('.challenge');
-      challenge.find('.description').html(this.level.challenge);
-      challenge.show();
-      this.showHints();
-      this.loadInstructions(this.level.instructions);
-      return this.level.loaded = true;
     },
     showHints: function() {
       var hint, hintsElement, hintsLinks, index, _fn, _i, _len, _ref,
@@ -319,6 +330,7 @@ soma.views({
         var hintDiv, hintLink;
         hintLink = $(document.createElement('DIV'));
         hintLink.addClass('hint_link');
+        hintLink.addClass('hidden');
         if (index > 0) {
           hintLink.addClass('disabled');
         }
@@ -332,10 +344,7 @@ soma.views({
           if (hintLink.hasClass('disabled')) {
             return;
           }
-          hintLink.animate({
-            height: 1,
-            duration: 250
-          });
+          hintLink.addClass('hidden');
           height = hintDiv.height();
           hintDiv.addClass('displayed');
           hintDiv.animate({
@@ -347,13 +356,50 @@ soma.views({
           });
           return $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled');
         });
-        return hintsLinks.append(hintLink);
+        hintsLinks.append(hintLink);
+        return $.timeout(10, function() {
+          return hintLink.removeClass('hidden');
+        });
       };
       for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
         hint = _ref[index];
         _fn(hint, index);
       }
       return hintsElement.append(hintsLinks);
+    },
+    hideInfo: function(callback) {
+      var info,
+        _this = this;
+      info = this.$('.info');
+      return info.css({
+        overflow: 'hidden'
+      }).animate({
+        height: 0,
+        duration: 500,
+        complete: function() {
+          if (callback) {
+            return callback();
+          }
+        }
+      });
+    },
+    showInfo: function(_arg) {
+      var callback, height, info,
+        _this = this;
+      height = _arg.height, callback = _arg.callback;
+      info = this.$('.info');
+      return info.animate({
+        height: height,
+        duration: 500,
+        complete: function() {
+          info.css({
+            overflow: null
+          });
+          if (callback) {
+            return callback();
+          }
+        }
+      });
     },
     showComplete: function() {
       var completeElement, info,
@@ -366,30 +412,23 @@ soma.views({
       completeElement.addClass('complete');
       completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button select_level'>Select Level</a></div>");
       info = this.$('.info');
-      return info.css({
-        overflow: 'hidden'
-      }).animate({
-        height: 0,
-        duration: 500,
-        complete: function() {
-          if (_this.level.completeVideo) {
-            $.timeout(250, function() {
-              completeElement.find('.buttons').css({
-                opacity: 1
-              });
-              completeElement.find('.select_level').bind('click', function() {
-                return _this.showLevelSelector();
-              });
-              return completeElement.find('.description').append(_this.level.completeVideo);
+      return this.hideInfo(function() {
+        if (_this.level.completeVideo) {
+          $.timeout(250, function() {
+            completeElement.find('.buttons').css({
+              opacity: 1
             });
-          }
-          info.find('.challenge').hide();
-          info.append(completeElement);
-          return info.animate({
-            height: info.parent().height() * 0.85,
-            duration: 500
+            completeElement.find('.select_level').bind('click', function() {
+              return _this.showLevelSelector();
+            });
+            return completeElement.find('.description').append(_this.level.completeVideo);
           });
         }
+        info.find('.challenge').hide();
+        info.append(completeElement);
+        return _this.showInfo({
+          height: info.parent().height() * 0.85
+        });
       });
     },
     showLevelSelector: function() {

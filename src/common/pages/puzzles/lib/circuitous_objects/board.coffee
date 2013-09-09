@@ -63,6 +63,7 @@ class board.Board extends circuitousObject.Object
             
     removeComponent: (component) -> 
         @recordChange()
+        component.resetDrag()
         @components[component.id]?.setCurrent(0)
         delete @components[component.id]
             

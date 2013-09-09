@@ -112,6 +112,7 @@ board.Board = (function(_super) {
   Board.prototype.removeComponent = function(component) {
     var _ref;
     this.recordChange();
+    component.resetDrag();
     if ((_ref = this.components[component.id]) != null) {
       _ref.setCurrent(0);
     }

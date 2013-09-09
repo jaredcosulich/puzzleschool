@@ -40,6 +40,9 @@ circuitous.ViewHelper = (function() {
     component.appendTo(this.board.cells);
     img = component.el.find('img');
     return img.bind('load', function() {
+      component.el.css({
+        left: -10000
+      });
       component.el.width(img.width());
       component.el.height(img.height());
       return $.timeout(10, function() {
