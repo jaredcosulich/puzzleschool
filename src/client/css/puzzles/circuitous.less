@@ -281,23 +281,36 @@
             
             .challenge {                    
                 .description {
-                    padding: 12px 12px 45px 12px;
+                    padding: 12px 12px 30px 12px;
                 }
                 
                 .hints {
                     .hint {
-                        height: 0;
-                        padding: 0 12px;
-                        border-top: 1px dashed @lightestgrey;
-                        border-bottom: 1px dashed @lightestgrey;
+                        position: absolute;
+                        left: -10000px;
                         overflow: hidden;
+                        width: 90%;
+                        
+                        &.displayed {
+                            width: auto;
+                            height: 0;
+                            position: static;
+                            left: 0;
+                            padding: 0 12px;
+                            border-top: 1px dashed @lightestgrey;
+                            border-bottom: 1px dashed @lightestgrey;
+                        }
                     }
                     
                     .hints_links {
                         position: relative;
-                        margin-bottom: -31px;
-
-                        &::before {
+                        margin-bottom: -50px;
+                        
+                        &::before { 
+                            content: "\00a0";
+                        }
+                        
+                        &::after {
                             content: "\00a0";
                             background-color: white;
                             width: 100%;
@@ -317,6 +330,11 @@
                             margin-left: 6%;
                             .outer-shadow(0, 0, 18px, 60%);
                             overflow: hidden;
+                            .rounded(6px);
+                            
+                            &.disabled {
+                                background-color: @lightgrey;
+                            }
                         }                                            
                     }
                 }

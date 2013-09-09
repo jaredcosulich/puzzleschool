@@ -264,20 +264,31 @@
   text-align: center;
 }
 .circuitous .right_side .info .challenge .description {
-  padding: 12px 12px 45px 12px;
+  padding: 12px 12px 30px 12px;
 }
 .circuitous .right_side .info .challenge .hints .hint {
+  position: absolute;
+  left: -10000px;
+  overflow: hidden;
+  width: 90%;
+}
+.circuitous .right_side .info .challenge .hints .hint.displayed {
+  width: auto;
   height: 0;
+  position: static;
+  left: 0;
   padding: 0 12px;
   border-top: 1px dashed #ededed;
   border-bottom: 1px dashed #ededed;
-  overflow: hidden;
 }
 .circuitous .right_side .info .challenge .hints .hints_links {
   position: relative;
-  margin-bottom: -31px;
+  margin-bottom: -50px;
 }
 .circuitous .right_side .info .challenge .hints .hints_links::before {
+  content: "\00a0";
+}
+.circuitous .right_side .info .challenge .hints .hints_links::after {
   content: "\00a0";
   background-color: white;
   width: 100%;
@@ -298,6 +309,12 @@
   -webkit-box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   -moz-box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
   overflow: hidden;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.circuitous .right_side .info .challenge .hints .hints_links .hint_link.disabled {
+  background-color: #c7c7c7;
 }
 .circuitous .right_side .info .complete iframe {
   margin: 24px 0 12px -5px;

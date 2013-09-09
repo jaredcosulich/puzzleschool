@@ -328,6 +328,7 @@ soma.views({
         hintDiv.html("<b>Hint " + (index + 1) + "</b>: " + hint);
         hintsElement.append(hintDiv);
         hintLink.bind('click', function() {
+          var height;
           if (hintLink.hasClass('disabled')) {
             return;
           }
@@ -335,8 +336,12 @@ soma.views({
             height: 1,
             duration: 250
           });
+          height = hintDiv.height();
+          hintDiv.addClass('displayed');
           hintDiv.animate({
-            height: 54,
+            height: height + 12,
+            marginTop: -24,
+            marginBottom: 24,
             paddingTop: 12,
             duration: 250
           });

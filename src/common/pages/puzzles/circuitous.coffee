@@ -245,7 +245,9 @@ soma.views
                     hintLink.bind 'click', =>
                         return if hintLink.hasClass('disabled')
                         hintLink.animate(height: 1, duration: 250)
-                        hintDiv.animate(height: 54, paddingTop: 12, duration: 250)
+                        height = hintDiv.height()
+                        hintDiv.addClass('displayed')
+                        hintDiv.animate(height: height + 12, marginTop: -24, marginBottom: 24, paddingTop: 12, duration: 250)
                         $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled')
                 
                     hintsLinks.append(hintLink)
