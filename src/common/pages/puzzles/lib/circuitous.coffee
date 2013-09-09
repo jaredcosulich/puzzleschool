@@ -20,8 +20,8 @@ class circuitous.ViewHelper
     addComponent: (component) ->
         component.appendTo(@board.cells)
         img = component.el.find('img')
+        component.el.css(left: -10000)
         img.bind 'load', =>
-            component.el.css(left: -10000)
             component.el.width(img.width())
             component.el.height(img.height())
             $.timeout 10, =>
