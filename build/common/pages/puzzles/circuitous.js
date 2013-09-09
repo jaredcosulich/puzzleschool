@@ -371,9 +371,7 @@ soma.views({
       var info,
         _this = this;
       info = this.$('.info');
-      return info.css({
-        overflow: 'hidden'
-      }).animate({
+      return info.addClass('hidden').animate({
         height: 0,
         duration: 500,
         complete: function() {
@@ -392,9 +390,7 @@ soma.views({
         height: height,
         duration: 500,
         complete: function() {
-          info.css({
-            overflow: null
-          });
+          info.removeClass('hidden');
           if (callback) {
             return callback();
           }
@@ -415,9 +411,6 @@ soma.views({
       return this.hideInfo(function() {
         if (_this.level.completeVideo) {
           $.timeout(250, function() {
-            completeElement.find('.buttons').css({
-              opacity: 1
-            });
             completeElement.find('.select_level').bind('click', function() {
               return _this.showLevelSelector();
             });

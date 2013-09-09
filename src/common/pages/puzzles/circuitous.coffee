@@ -268,7 +268,7 @@ soma.views
         
         hideInfo: (callback) ->
             info = @$('.info') 
-            info.css(overflow: 'hidden').animate
+            info.addClass('hidden').animate
                 height: 0
                 duration: 500
                 complete: => callback() if callback
@@ -279,7 +279,7 @@ soma.views
                 height: height 
                 duration: 500
                 complete: => 
-                    info.css(overflow: null)
+                    info.removeClass('hidden')
                     callback() if callback
         
         showComplete: ->
@@ -297,7 +297,6 @@ soma.views
             @hideInfo =>
                 if @level.completeVideo
                     $.timeout 250, =>
-                        completeElement.find('.buttons').css(opacity: 1)
                         completeElement.find('.select_level').bind 'click', => @showLevelSelector()
                         completeElement.find('.description').append(@level.completeVideo)
                     

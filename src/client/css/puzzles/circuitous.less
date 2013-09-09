@@ -279,6 +279,15 @@
                 text-align: center;
             }
             
+            &.hidden {
+                overflow: hidden;
+                .complete { 
+                    .buttons {
+                        opacity: 0;
+                    }
+                }
+            }
+            
             .challenge {                    
                 .description {
                     padding: 12px 12px 30px 12px;
@@ -356,7 +365,6 @@
                 }
                 
                 .buttons {
-                    opacity: 0;
                     width: 100%;
                     position: absolute;
                     bottom: 12px;

@@ -263,6 +263,12 @@
   padding: 24px 0;
   text-align: center;
 }
+.circuitous .right_side .info.hidden {
+  overflow: hidden;
+}
+.circuitous .right_side .info.hidden .complete .buttons {
+  opacity: 0;
+}
 .circuitous .right_side .info .challenge .description {
   padding: 12px 12px 30px 12px;
 }
@@ -328,7 +334,6 @@
   padding: 12px;
 }
 .circuitous .right_side .info .complete .buttons {
-  opacity: 0;
   width: 100%;
   position: absolute;
   bottom: 12px;
