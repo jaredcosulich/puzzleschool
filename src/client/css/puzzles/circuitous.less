@@ -591,11 +591,16 @@
                     .level {
                         display: block;
                         content: "\00a0"; 
-                        width: 24px;
                         height: 24px;
+                        line-height: 24px;
+                        .button-color(@black);
                         float: left;
                         margin: 12px 0 0 12px;
-                        background-color: red;
+                        
+                        &.completed {
+                            .button-color(@green);
+                            margin: 12px 0 0 12px;
+                        }
                     }                    
                 }
             }

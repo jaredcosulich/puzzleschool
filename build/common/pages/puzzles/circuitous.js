@@ -447,10 +447,14 @@ soma.views({
           stageContainer.append(levels);
           worldContainer.append(stageContainer);
           _ref2 = stage.levels;
-          _fn = function(level) {
+          _fn = function(level, index) {
             var levelLink;
             levelLink = $(document.createElement('A'));
+            levelLink.html("Level " + (index + 1));
             levelLink.addClass('level');
+            if (level.completed) {
+              levelLink.addClass('completed');
+            }
             levelLink.bind('click', function() {
               return _this.hideModal(function() {
                 return _this.loadLevel(level.id);
@@ -458,9 +462,9 @@ soma.views({
             });
             return levels.append(levelLink);
           };
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            level = _ref2[_k];
-            _fn(level);
+          for (index = _k = 0, _len2 = _ref2.length; _k < _len2; index = ++_k) {
+            level = _ref2[index];
+            _fn(level, index);
           }
         }
       }
@@ -497,17 +501,17 @@ soma.views({
       if (!this.modalMenu) {
         return;
       }
-      return this.modalMenu.animate({
+      this.modalMenu.animate({
         opacity: 0,
         duration: 500,
         complete: function() {
-          callback();
           return _this.modalMenu.css({
             left: -10000,
             top: -10000
           });
         }
       });
+      return setTimeout(callback, 250);
     }
   }
 });

@@ -753,11 +753,67 @@
 .circuitous .level_selector .world .stage .levels .level {
   display: block;
   content: "\00a0";
-  width: 24px;
   height: 24px;
+  line-height: 24px;
+  -moz-box-shadow: inset 0px 1px 0px 0px #404040;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #404040;
+  box-shadow: inset 0px 1px 0px 0px #404040;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #262626), color-stop(1, #0c0c0c));
+  background: -moz-linear-gradient(center top, #262626 5%, #0c0c0c 100%);
+  background-color: #262626;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #262626;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #262626;
+  margin: auto;
   float: left;
   margin: 12px 0 0 12px;
-  background-color: red;
+}
+.circuitous .level_selector .world .stage .levels .level:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #404040), color-stop(1, #262626));
+  background: -moz-linear-gradient(center top, #404040 5%, #262626 100%);
+  background-color: #262626;
+}
+.circuitous .level_selector .world .stage .levels .level:active {
+  position: relative;
+  top: 1px;
+}
+.circuitous .level_selector .world .stage .levels .level.completed {
+  -moz-box-shadow: inset 0px 1px 0px 0px #4ee26f;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #4ee26f;
+  box-shadow: inset 0px 1px 0px 0px #4ee26f;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24d94c), color-stop(1, #1dad3d));
+  background: -moz-linear-gradient(center top, #24d94c 5%, #1dad3d 100%);
+  background-color: #24d94c;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #24d94c;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #24d94c;
+  margin: auto;
+  margin: 12px 0 0 12px;
+}
+.circuitous .level_selector .world .stage .levels .level.completed:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4ee26f), color-stop(1, #24d94c));
+  background: -moz-linear-gradient(center top, #4ee26f 5%, #24d94c 100%);
+  background-color: #24d94c;
+}
+.circuitous .level_selector .world .stage .levels .level.completed:active {
+  position: relative;
+  top: 1px;
 }
 .circuitous .modal_menu {
   opacity: 0;

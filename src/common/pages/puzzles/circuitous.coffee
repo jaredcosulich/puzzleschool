@@ -320,10 +320,12 @@ soma.views
                     levels.addClass('levels')
                     stageContainer.append(levels)
                     worldContainer.append(stageContainer)
-                    for level in stage.levels
-                        do (level) =>
+                    for level, index in stage.levels
+                        do (level, index) =>
                             levelLink = $(document.createElement('A'))
+                            levelLink.html("Level #{index + 1}")
                             levelLink.addClass('level')
+                            levelLink.addClass('completed') if level.completed
                             levelLink.bind 'click', => 
                                 @hideModal => @loadLevel(level.id)
                                 
@@ -352,10 +354,13 @@ soma.views
                 opacity: 0
                 duration: 500
                 complete: =>
-                    callback()
                     @modalMenu.css
                         left: -10000
                         top: -10000
+
+            setTimeout(callback, 250)
+            
+            
             
 soma.routes
     '/puzzles/circuitous/:classId/:levelId': ({classId, levelId}) -> 
