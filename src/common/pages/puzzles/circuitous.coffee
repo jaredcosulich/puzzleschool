@@ -215,7 +215,7 @@ soma.views
                 @level = @worlds[0].stages[0].levels[0]
             else
                 @level = @findLevel(levelId)
-                
+            
             @viewHelper.board.clear()
             @showChallenge()
             
@@ -232,7 +232,7 @@ soma.views
                         info.css(height: null)
                         @showHints()
                         @loadInstructions(@level.instructions)
-                        @level.loaded = true
+                        @level.loaded = new Date().getTime()
                 
         showHints: ->
             hintsElement = @$('.challenge .hints')
@@ -283,8 +283,8 @@ soma.views
                     callback() if callback
         
         showComplete: ->
-            return if @level.completed
-            @level.completed = true
+            return if @level.completed > @level.loaded
+            @level.completed = new Date().getTime()
             completeElement = $(document.createElement('DIV'))
             completeElement.addClass('complete')
             completeElement.html """

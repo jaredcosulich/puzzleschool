@@ -313,7 +313,7 @@ soma.views({
             });
             _this.showHints();
             _this.loadInstructions(_this.level.instructions);
-            return _this.level.loaded = true;
+            return _this.level.loaded = new Date().getTime();
           }
         });
       });
@@ -400,10 +400,10 @@ soma.views({
     showComplete: function() {
       var completeElement, info,
         _this = this;
-      if (this.level.completed) {
+      if (this.level.completed > this.level.loaded) {
         return;
       }
-      this.level.completed = true;
+      this.level.completed = new Date().getTime();
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
       completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button select_level'>Select Level</a></div>");

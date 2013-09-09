@@ -319,6 +319,7 @@
   -moz-border-radius: 6px;
   border-radius: 6px;
   transition: height 0.25s ease-out;
+  cursor: pointer;
 }
 .circuitous .right_side .info .challenge .hints .hints_links .hint_link.hidden {
   height: 1px;
@@ -326,6 +327,7 @@
 .circuitous .right_side .info .challenge .hints .hints_links .hint_link.disabled {
   background-color: #c7c7c7;
   color: #949494;
+  cursor: normal;
 }
 .circuitous .right_side .info .complete iframe {
   margin: 24px 0 12px -5px;
