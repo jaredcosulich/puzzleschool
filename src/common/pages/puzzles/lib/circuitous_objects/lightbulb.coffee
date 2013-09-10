@@ -20,18 +20,30 @@ class lightbulb.Lightbulb extends circuitousObject.Object
     constructor: ({}) ->
         
     initCurrent: ->
-        @currentImage = $(document.createElement('IMG'))
+        @currentImage = $(document.createElement('div'))
         @currentImage.addClass('current_image')
-        @currentImage.attr(src: @image().replace('.png', '_current.png'))
-        @currentImage.css(bottom: 0)
-        @el.append(@currentImage)
+        @currentImage.css
+            width: 150
+            height: 150
+            backgroundImage: "url('#{@image().replace('.png', '_current_spritesheet.png')}')"
+            backgroundPosition: '0 0'
+            bottom: 0
         
-    setCurrent: (@current) ->
+        @el.append(@currentImage)
+        @setCurrent(0)
+        
+    setCurrent: (@current, permanent=false) ->
         return unless @currentImage
-        if @current
-            left = (@el.width()/2) - (@currentImage.width()/2)
-            @currentImage.css(left: left) unless parseInt(@currentImage.css('left')) == left
-            @currentImage.css(opacity: Math.abs(@current) / 6.0)
-        else
-            @currentImage.css(opacity: 0)
+        @current or= 0
+        left = (@el.width()/2) - (@currentImage.width()/2)
+        @currentImage.css(left: left) unless parseInt(@currentImage.css('left')) == left
+        currentStep = 0.45
+        spriteIndex = Math.floor(Math.abs(@current) / currentStep)
+        spriteIndex = 9 if spriteIndex > 9
+        if @spriteIndex != spriteIndex
+            @spriteIndex = spriteIndex if (@spriteIndex is undefined) or permanent
+            @spriteIndex += (if spriteIndex > @spriteIndex then 1 else -1) unless spriteIndex == @spriteIndex
+            @currentImage.css
+                backgroundPosition: "-#{@spriteIndex * @currentImage.width()}px 0"
+                opacity: 1.0 - (0.6 / (@spriteIndex or 1))
         

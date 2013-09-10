@@ -36,7 +36,7 @@ levels.WORLDS = [
                             'Draw a path for the electrons to take from the positive to the negative terminal that does not touch the lightbulb.'
                         ]
                         completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"],["7,7","8,7"],["6,5","7,5"],["7,5","8,5"],["8,5","9,5"],["9,5","10,5"],["10,5","11,5"]]}
-                        completeValues: [["Battery",'infinite'],["Lightbulb",undefined]]
+                        completeValues: [["Battery",'infinite'],["Lightbulb",0]]
                         complete: '''
                             A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.
                         '''
@@ -47,9 +47,9 @@ levels.WORLDS = [
                         challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit."
                         instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "13,3"},{"name": "Lightbulb", "position": "7,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
                         hints: [
-                            ''
-                            ''
-                            ''
+                            'Two lightbulbs placed next to each other in a circuit are said to be in "series".'
+                            'Resistors (in this case the lightbulbs) placed in series add more resistance to the circuit.'
+                            'Drag Lightbulb #2 anywhere in to the circuit, doubling the resistance and dimming Lightbulb #1.'
                         ]
                         completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "7,4"},{"name": "Lightbulb", "position": "10,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
                         completeValues: [["Battery",0.9],["Lightbulb",0.9],["Lightbulb",0.9]]

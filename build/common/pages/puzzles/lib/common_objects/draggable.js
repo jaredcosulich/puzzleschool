@@ -12,41 +12,28 @@ draggable.Draggable = (function() {
   function Draggable() {}
 
   Draggable.prototype.initDrag = function(dragElement, trackDrag, center, buffer) {
-    var _this = this;
     this.dragElement = dragElement;
     this.trackDrag = trackDrag;
+    this.center = center;
+    this.buffer = buffer;
     this.transformer = new Transformer(this.dragElement);
+    return this.bindDrag();
+  };
+
+  Draggable.prototype.bindDrag = function() {
+    var _this = this;
     return this.dragElement.bind('mousedown.drag touchstart.drag', function(e) {
-      var bottomBuffer, leftBuffer, offset, rightBuffer, shiftX, shiftY, topBuffer, _ref, _ref1;
-      if (buffer) {
-        leftBuffer = buffer.left || 0;
-        rightBuffer = buffer.right || 0;
-        topBuffer = buffer.top || 0;
-        bottomBuffer = buffer.bottom || 0;
-        offset = _this.dragElement.offset();
-        shiftX = _this.currentX ? _this.currentX - _this.startX : 0;
-        shiftY = _this.currentY ? _this.currentY - _this.startY : 0;
-        if (!((offset.left + leftBuffer < (_ref = Client.x(e) - shiftX) && _ref < offset.left + offset.width - rightBuffer)) || !((offset.top + topBuffer < (_ref1 = Client.y(e) - shiftY) && _ref1 < offset.top + offset.height - bottomBuffer))) {
-          return;
-        }
-      }
-      e.stop();
-      $(document.body).one('mouseup.drag touchend.drag', function(e) {
-        $(document.body).unbind('mousemove.drag touchstart.drag');
-        return _this.drag(e, 'stop');
-      });
-      _this.setStartDrag(e, center);
-      _this.drag(e, 'start');
-      return $(document.body).bind('mousemove.drag touchmove.drag', function(e) {
-        _this.setStartDrag(e, center);
-        return _this.drag(e, 'move');
-      });
+      return _this.startDrag(e);
     });
   };
 
-  Draggable.prototype.setStartDrag = function(e, center) {
+  Draggable.prototype.unbindDrag = function() {
+    return this.dragElement.unbind('mousedown.drag touchstart.drag');
+  };
+
+  Draggable.prototype.setStartDrag = function(e) {
     var offset;
-    if (center) {
+    if (this.center) {
       offset = this.dragElement.offset();
       this.startX = offset.left + (offset.width / 2);
       return this.startY = offset.top + (offset.height / 2);
@@ -58,6 +45,35 @@ draggable.Draggable = (function() {
         return this.startY = Client.y(e);
       }
     }
+  };
+
+  Draggable.prototype.startDrag = function(e) {
+    var bottomBuffer, leftBuffer, offset, rightBuffer, shiftX, shiftY, topBuffer, _ref, _ref1,
+      _this = this;
+    if (this.buffer) {
+      leftBuffer = this.buffer.left || 0;
+      rightBuffer = this.buffer.right || 0;
+      topBuffer = this.buffer.top || 0;
+      bottomBuffer = this.buffer.bottom || 0;
+      offset = this.dragElement.offset();
+      shiftX = this.currentX ? this.currentX - this.startX : 0;
+      shiftY = this.currentY ? this.currentY - this.startY : 0;
+      if (!((offset.left + leftBuffer < (_ref = Client.x(e) - shiftX) && _ref < offset.left + offset.width - rightBuffer)) || !((offset.top + topBuffer < (_ref1 = Client.y(e) - shiftY) && _ref1 < offset.top + offset.height - bottomBuffer))) {
+        return false;
+      }
+    }
+    e.stop();
+    $(document.body).one('mouseup.drag touchend.drag', function(e) {
+      $(document.body).unbind('mousemove.drag touchstart.drag');
+      return _this.drag(e, 'stop');
+    });
+    this.setStartDrag(e);
+    this.drag(e, 'start');
+    $(document.body).bind('mousemove.drag touchmove.drag', function(e) {
+      _this.setStartDrag(e);
+      return _this.drag(e, 'move');
+    });
+    return true;
   };
 
   Draggable.prototype.drag = function(e, state) {

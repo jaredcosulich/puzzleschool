@@ -100,8 +100,9 @@ board.Board = (function(_super) {
       this.components[component.id] = component;
       roundedBoardPosition = this.roundedCoordinates(boardPosition, component.centerOffset);
       component.positionAt(this.componentPosition(roundedBoardPosition));
-      component.el.bind('dragstart.board', function(e) {
-        return _this.wires.initDraw(e);
+      component.unbindDrag();
+      component.el.bind('mousedown.perpetuate_board', function(e) {
+        return _this.perpetuateDrag(e);
       });
     } else {
       return false;
@@ -109,11 +110,27 @@ board.Board = (function(_super) {
     return true;
   };
 
+  Board.prototype.perpetuateDrag = function(e) {
+    var c, cid, _ref;
+    e.stop();
+    _ref = this.components;
+    for (cid in _ref) {
+      c = _ref[cid];
+      if (c.startDrag(e)) {
+        return;
+      }
+    }
+    return this.wires.initDraw(e);
+  };
+
   Board.prototype.removeComponent = function(component) {
-    var _ref;
+    var _ref, _ref1;
     this.recordChange();
     if ((_ref = this.components[component.id]) != null) {
-      _ref.setCurrent(0);
+      _ref.el.unbind('mousedown.perpetuate_board');
+    }
+    if ((_ref1 = this.components[component.id]) != null) {
+      _ref1.setCurrent(0, true);
     }
     return delete this.components[component.id];
   };

@@ -55,9 +55,8 @@ class options.Options extends circuitousObject.Object
         @components.push(component)
         @attachSelector(@$('.empty_option')[1])
         emptyOption = $(@$('.empty_option')[0])
-        component.appendTo(emptyOption)
-        component.el.addClass('in_options')
         emptyOption.removeClass('empty_option')
+        component.appendTo(emptyOption)
         $.timeout 10, =>
             component.initCurrent() 
             component.initDrag(
@@ -66,6 +65,7 @@ class options.Options extends circuitousObject.Object
                 true,
                 component.dragBuffer
             )
+            component.el.addClass('in_options')
 
     dragComponent: (component, x, y, state) ->
         component.el.removeClass('in_options')
@@ -76,3 +76,5 @@ class options.Options extends circuitousObject.Object
                 @board.removeComponent(component)
                 component.el.addClass('in_options')
                 component.resetDrag()
+                component.bindDrag()
+                

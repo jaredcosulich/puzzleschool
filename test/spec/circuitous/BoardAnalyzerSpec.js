@@ -220,7 +220,7 @@ describe("BoardAnalyzer", function() {
 
                             it('should provide no amps to either bulb', function() {
                                 board.moveElectricity();
-                                expect(bulb.current).toBe(undefined);
+                                expect(bulb.current).toBe(0);
                                 expect(bulb2.current).toBe(undefined);
                             });                            
                         });
@@ -237,7 +237,7 @@ describe("BoardAnalyzer", function() {
 
                             it('should provide no amps to either bulb', function() {
                                 board.moveElectricity();
-                                expect(bulb.current).toBe(undefined);
+                                expect(bulb.current).toBe(0);
                                 expect(bulb2.current).toBe(undefined);
                             });
                             
@@ -321,8 +321,8 @@ describe("BoardAnalyzer", function() {
 
                             it('should provide no amps to either bulb', function() {
                                 board.moveElectricity();
-                                expect(bulb.current).toBe(undefined);
-                                expect(bulb2.current).toBe(undefined);
+                                expect(bulb.current).toBe(0);
+                                expect(bulb2.current).toBe(0);
                             });                            
                         });
                     });

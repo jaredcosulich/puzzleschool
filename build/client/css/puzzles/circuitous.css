@@ -491,9 +491,15 @@
   top: 12px;
   left: 15px;
 }
+.circuitous .right_side .options td .option .component img {
+  display: block;
+}
 .circuitous .right_side .options td .option .component.in_options img {
   height: 60px;
   width: 45px;
+}
+.circuitous .right_side .options td .option .component.in_options .current_image {
+  display: none;
 }
 .circuitous .right_side .menu {
   width: 304px;

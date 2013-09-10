@@ -94,14 +94,14 @@ options.Options = (function(_super) {
     this.components.push(component);
     this.attachSelector(this.$('.empty_option')[1]);
     emptyOption = $(this.$('.empty_option')[0]);
-    component.appendTo(emptyOption);
-    component.el.addClass('in_options');
     emptyOption.removeClass('empty_option');
+    component.appendTo(emptyOption);
     return $.timeout(10, function() {
       component.initCurrent();
-      return component.initDrag(component.el, function(component, x, y, stopDrag) {
+      component.initDrag(component.el, function(component, x, y, stopDrag) {
         return _this.dragComponent(component, x, y, stopDrag);
       }, true, component.dragBuffer);
+      return component.el.addClass('in_options');
     });
   };
 
@@ -113,7 +113,8 @@ options.Options = (function(_super) {
       if (!this.board.addComponent(component, x, y)) {
         this.board.removeComponent(component);
         component.el.addClass('in_options');
-        return component.resetDrag();
+        component.resetDrag();
+        return component.bindDrag();
       }
     }
   };

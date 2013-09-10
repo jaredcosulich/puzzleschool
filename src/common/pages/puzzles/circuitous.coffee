@@ -143,7 +143,7 @@ soma.views
                     @viewHelper.addComponent(component)
                     component.el.find('img').bind 'load', =>
                         setTimeout((=>
-                            component.setStartDrag({}, true)
+                            component.setStartDrag({})
                             [x, y] = getCoordinates(info.position)
                             componentPosition = @viewHelper.board.componentPosition
                                 x: x - component.nodes[0].x

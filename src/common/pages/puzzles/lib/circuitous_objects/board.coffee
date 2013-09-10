@@ -52,7 +52,8 @@ class board.Board extends circuitousObject.Object
             roundedBoardPosition = @roundedCoordinates(boardPosition, component.centerOffset)
             component.positionAt(@componentPosition(roundedBoardPosition))
             
-            component.el.bind 'dragstart.board', (e) => @wires.initDraw(e)
+            component.unbindDrag()
+            component.el.bind 'mousedown.perpetuate_board', (e) => @perpetuateDrag(e)
             
             # for node in component.currentNodes()
             #     @addDot(@boardPosition(node))
@@ -61,9 +62,17 @@ class board.Board extends circuitousObject.Object
             
         return true
             
+    perpetuateDrag: (e) ->
+        e.stop()
+        for cid, c of @components
+            return if c.startDrag(e)
+        @wires.initDraw(e)
+                
+            
     removeComponent: (component) -> 
         @recordChange()
-        @components[component.id]?.setCurrent(0)
+        @components[component.id]?.el.unbind('mousedown.perpetuate_board')
+        @components[component.id]?.setCurrent(0, true)
         delete @components[component.id]
             
     roundedCoordinates: (coords, offset) ->

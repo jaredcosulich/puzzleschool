@@ -177,7 +177,7 @@ soma.views({
           return component.el.find('img').bind('load', function() {
             return setTimeout((function() {
               var componentPosition, _ref4;
-              component.setStartDrag({}, true);
+              component.setStartDrag({});
               _ref4 = getCoordinates(info.position), x = _ref4[0], y = _ref4[1];
               componentPosition = _this.viewHelper.board.componentPosition({
                 x: x - component.nodes[0].x,

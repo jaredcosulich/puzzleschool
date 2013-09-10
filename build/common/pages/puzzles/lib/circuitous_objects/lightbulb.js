@@ -36,36 +36,50 @@ lightbulb.Lightbulb = (function(_super) {
   }
 
   Lightbulb.prototype.initCurrent = function() {
-    this.currentImage = $(document.createElement('IMG'));
+    this.currentImage = $(document.createElement('div'));
     this.currentImage.addClass('current_image');
-    this.currentImage.attr({
-      src: this.image().replace('.png', '_current.png')
-    });
     this.currentImage.css({
+      width: 150,
+      height: 150,
+      backgroundImage: "url('" + (this.image().replace('.png', '_current_spritesheet.png')) + "')",
+      backgroundPosition: '0 0',
       bottom: 0
     });
-    return this.el.append(this.currentImage);
+    this.el.append(this.currentImage);
+    return this.setCurrent(0);
   };
 
-  Lightbulb.prototype.setCurrent = function(current) {
-    var left;
+  Lightbulb.prototype.setCurrent = function(current, permanent) {
+    var currentStep, left, spriteIndex;
     this.current = current;
+    if (permanent == null) {
+      permanent = false;
+    }
     if (!this.currentImage) {
       return;
     }
-    if (this.current) {
-      left = (this.el.width() / 2) - (this.currentImage.width() / 2);
-      if (parseInt(this.currentImage.css('left')) !== left) {
-        this.currentImage.css({
-          left: left
-        });
+    this.current || (this.current = 0);
+    left = (this.el.width() / 2) - (this.currentImage.width() / 2);
+    if (parseInt(this.currentImage.css('left')) !== left) {
+      this.currentImage.css({
+        left: left
+      });
+    }
+    currentStep = 0.45;
+    spriteIndex = Math.floor(Math.abs(this.current) / currentStep);
+    if (spriteIndex > 9) {
+      spriteIndex = 9;
+    }
+    if (this.spriteIndex !== spriteIndex) {
+      if ((this.spriteIndex === void 0) || permanent) {
+        this.spriteIndex = spriteIndex;
+      }
+      if (spriteIndex !== this.spriteIndex) {
+        this.spriteIndex += (spriteIndex > this.spriteIndex ? 1 : -1);
       }
       return this.currentImage.css({
-        opacity: Math.abs(this.current) / 6.0
-      });
-    } else {
-      return this.currentImage.css({
-        opacity: 0
+        backgroundPosition: "-" + (this.spriteIndex * this.currentImage.width()) + "px 0",
+        opacity: 1.0 - (0.6 / (this.spriteIndex || 1))
       });
     }
   };
