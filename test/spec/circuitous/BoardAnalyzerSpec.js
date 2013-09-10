@@ -695,8 +695,6 @@ describe("BoardAnalyzer", function() {
 
 addToBoard = function(board, component, x, y) {
     boardOffset = board.cells.offset()
-    boardOffset.left += board.border
-    boardOffset.top += board.border
     var onBoard = board.addComponent(
         component, 
         boardOffset.left + x - component.centerOffset.x, 
@@ -724,8 +722,6 @@ createComponent = function(board, type) {
 
 drawOrEraseWire = function(board, from, deltaX, deltaY) {
     offset = board.wires.el.offset()
-    offset.left -= board.border
-    offset.top -= board.border
     board.el.trigger('mousedown.draw_wire', {clientX: offset.left + from.x, clientY: offset.top + from.y});
     end  = {x: from.x + (deltaX * board.cellDimension), y: from.y + (deltaY * board.cellDimension)}
     board.wires.draw({clientX: offset.left + end.x, clientY: offset.top + end.y});
