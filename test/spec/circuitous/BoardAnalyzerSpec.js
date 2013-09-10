@@ -19,7 +19,7 @@ describe("BoardAnalyzer", function() {
     }); 
     
     afterEach(function() {
-        // $('.circuitous').html(html)
+        $('.circuitous').html(html)
     })
     
     describe('with one battery', function() {
