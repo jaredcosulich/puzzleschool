@@ -42,6 +42,24 @@ levels.WORLDS = [
                         '''
                         completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
                     }
+                    {
+                        id: 1378789808762
+                        challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit."
+                        instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "13,3"},{"name": "Lightbulb", "position": "7,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
+                        hints: [
+                            ''
+                            ''
+                            ''
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "7,4"},{"name": "Lightbulb", "position": "10,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
+                        completeValues: [["Battery",0.9],["Lightbulb",0.9],["Lightbulb",0.9]]
+                        complete: '''
+                            This is a circuit with two resistors (lightbulbs) placed in series.
+                            <br/><br/>
+                            Lightbulb #1 dims because the circuit now has twice as much resistance in it.
+                        '''
+                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+                    }
                 ]
             }
         ]
