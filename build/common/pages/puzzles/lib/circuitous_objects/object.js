@@ -73,10 +73,6 @@ object.Object = (function(_super) {
     this.current = current;
   };
 
-  Object.prototype.setOffset = function(offset) {
-    this.offset = offset;
-  };
-
   return Object;
 
 })(Draggable);

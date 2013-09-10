@@ -35,8 +35,6 @@ class object.Object extends Draggable
     initCurrent: ->
     
     setCurrent: (@current) ->
-
-    setOffset: (@offset) ->
      
         
         

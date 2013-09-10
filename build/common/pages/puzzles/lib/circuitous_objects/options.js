@@ -95,11 +95,10 @@ options.Options = (function(_super) {
     this.attachSelector(this.$('.empty_option')[1]);
     emptyOption = $(this.$('.empty_option')[0]);
     component.appendTo(emptyOption);
-    component.setOffset(parseInt(this.board.el.css('borderLeftWidth')));
     component.el.addClass('in_options');
     emptyOption.removeClass('empty_option');
     return $.timeout(10, function() {
-      component.initCurrent(parseInt(_this.el.css('borderLeftWidth')));
+      component.initCurrent();
       return component.initDrag(component.el, function(component, x, y, stopDrag) {
         return _this.dragComponent(component, x, y, stopDrag);
       }, true, component.dragBuffer);
