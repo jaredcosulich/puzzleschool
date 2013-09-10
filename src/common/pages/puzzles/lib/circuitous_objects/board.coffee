@@ -63,7 +63,6 @@ class board.Board extends circuitousObject.Object
             
     removeComponent: (component) -> 
         @recordChange()
-        component.resetDrag()
         @components[component.id]?.setCurrent(0)
         delete @components[component.id]
             
@@ -146,7 +145,9 @@ class board.Board extends circuitousObject.Object
          
     clear: ->
         @wires.clear()
-        @removeComponent(c) for id, c of @components
+        for id, c of @components
+            @removeComponent(c) 
+            c.resetDrag()
            
     clearColors: ->
         c.el.css(backgroundColor: null) for id, c of @componentsAndWires()

@@ -26,7 +26,6 @@ options.Options = (function(_super) {
     this.height = this.el.height();
     this.construct();
     this.initSelector();
-    this.attachSelector(this.$('.empty_option')[0]);
     return this.addComponents();
   };
 
@@ -55,15 +54,24 @@ options.Options = (function(_super) {
 
   Options.prototype.initSelector = function() {
     var _this = this;
+    this.selectorButton = $(document.createElement('A'));
+    this.selectorButton.addClass('selector_button');
+    this.selectorButton.html('+');
+    this.attachSelector(this.$('.empty_option')[0]);
     return this.selector = new circuitous.Selector({
       add: function(component) {
         return _this.addComponent(component);
-      }
+      },
+      button: this.selectorButton
     });
   };
 
   Options.prototype.attachSelector = function(cell) {
-    return this.selector.attachTo(cell);
+    this.selectorButton.remove();
+    $(cell).append(this.selectorButton);
+    if (this.selector) {
+      return this.selector.initButton();
+    }
   };
 
   Options.prototype.addComponents = function() {

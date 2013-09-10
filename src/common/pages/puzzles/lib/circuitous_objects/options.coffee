@@ -13,7 +13,6 @@ class options.Options extends circuitousObject.Object
         @height = @el.height()
         @construct()
         @initSelector()
-        @attachSelector(@$('.empty_option')[0])
         @addComponents()
         
     construct: ->
@@ -33,10 +32,20 @@ class options.Options extends circuitousObject.Object
             @el.append(optionRow)
             
     initSelector: ->
+        @selectorButton = $(document.createElement('A'))
+        @selectorButton.addClass('selector_button')
+        @selectorButton.html('+')
+        
+        @attachSelector(@$('.empty_option')[0])
+        
         @selector = new circuitous.Selector
             add: (component) => @addComponent(component)
+            button: @selectorButton
             
-    attachSelector: (cell) -> @selector.attachTo(cell)    
+    attachSelector: (cell) -> 
+        @selectorButton.remove()
+        $(cell).append(@selectorButton)
+        @selector.initButton() if @selector
     
     addComponents: ->
         return unless @components?.length

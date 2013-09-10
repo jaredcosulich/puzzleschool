@@ -29,18 +29,29 @@ circuitous.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.init = function() {
-    return this.board = new circuitous.Board({
+    var _this = this;
+    this.board = new circuitous.Board({
       el: this.$('.board')
+    });
+    return this.selector = new circuitous.Selector({
+      add: function(component) {
+        return _this.addComponent(component, true);
+      },
+      button: this.$('.add_component'),
+      selectorHtml: 'Add Another Component'
     });
   };
 
-  ViewHelper.prototype.addComponent = function(component) {
+  ViewHelper.prototype.addComponent = function(component, onBoard) {
     var img,
       _this = this;
+    if (onBoard == null) {
+      onBoard = false;
+    }
     component.appendTo(this.board.cells);
     img = component.el.find('img');
     component.el.css({
-      left: -10000
+      left: onBoard ? 10 : -10000
     });
     return img.bind('load', function() {
       component.el.width(img.width());

@@ -16,11 +16,16 @@ class circuitous.ViewHelper
     init: ->
         @board = new circuitous.Board
             el: @$('.board')
+
+        @selector = new circuitous.Selector
+            add: (component) => @addComponent(component, true)
+            button: @$('.add_component')
+            selectorHtml: 'Add Another Component'            
         
-    addComponent: (component) ->
+    addComponent: (component, onBoard=false) ->
         component.appendTo(@board.cells)
         img = component.el.find('img')
-        component.el.css(left: -10000)
+        component.el.css(left: if onBoard then 10 else -10000)
         img.bind 'load', =>
             component.el.width(img.width())
             component.el.height(img.height())
@@ -40,3 +45,4 @@ class circuitous.ViewHelper
             if not @board.addComponent(component, x, y)
                 @board.removeComponent(component)
                 component.resetDrag()
+                

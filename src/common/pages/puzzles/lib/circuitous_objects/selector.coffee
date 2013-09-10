@@ -10,7 +10,7 @@ selector.ITEM_TYPES = [
 ]
 
 class selector.Selector extends circuitousObject.Object
-    constructor: ({@add, selectorHtml}) ->
+    constructor: ({@add, @button, selectorHtml}) ->
         selectorHtml or= '''
             <h2>Select An Item</h2>
             <p>Click an item below to add it to the list.</p>
@@ -19,12 +19,9 @@ class selector.Selector extends circuitousObject.Object
 
     init: (selectorHtml) ->
         @construct(selectorHtml)
+        @initButton()
         
     construct: (selectorHtml) ->
-        @button = $(document.createElement('A'))
-        @button.addClass('selector_button')
-        @button.html('+')
-        
         @dialog = $(document.createElement('DIV'))
         @dialog.addClass('selector_dialog')
         @dialog.html(selectorHtml)
@@ -53,18 +50,15 @@ class selector.Selector extends circuitousObject.Object
                     itemRow.append(itemCell)
             itemTable.append(itemRow)
         @dialog.append(itemTable)
+        @overallContainer().append(@dialog)
                 
+    overallContainer: -> @button.closest('.circuitous')            
+    
     itemFileName: (item) -> item.toLowerCase().replace(/\s/g, '_')
         
-    attachTo: (container) ->
-        @container = $(container)
-        @button.remove()
-        @container.append(@button)
+    initButton: () ->
         @button.bind 'click.toggle_selector', => @toggleDialog()
-        
-        unless @overallContainer
-            @overallContainer = @container.closest('.circuitous')
-            @overallContainer.append(@dialog)
+        @overallContainerOffset = @overallContainer().offset()
 
     toggleDialog: ->
         if parseInt(@dialog.css('opacity')) > 0 then @hide() else @show()
@@ -80,10 +74,9 @@ class selector.Selector extends circuitousObject.Object
                     left: -10000
         
     show: ->
-        areaOffset = @overallContainer.offset()
         @dialog.css
-            top: (areaOffset.height - @dialog.height()) / 2
-            left: (areaOffset.width - @dialog.width()) / 2
+            top: (@overallContainerOffset.height - @dialog.height()) / 2
+            left: (@overallContainerOffset.width - @dialog.width()) / 2
         
         @dialog.animate(opacity: 1, duration: 250)
         $.timeout 100, => $(document.body).one 'mouseup.hide_selector', => @hide()

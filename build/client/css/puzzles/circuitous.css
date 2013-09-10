@@ -461,6 +461,7 @@
 .circuitous .right_side .add_component:active {
   position: absolute;
   bottom: 11px;
+  top: auto;
 }
 .circuitous .right_side .options {
   margin: 16px 0 0 -8px;

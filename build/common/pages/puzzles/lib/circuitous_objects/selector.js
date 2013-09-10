@@ -15,21 +15,19 @@ selector.Selector = (function(_super) {
 
   function Selector(_arg) {
     var selectorHtml;
-    this.add = _arg.add, selectorHtml = _arg.selectorHtml;
+    this.add = _arg.add, this.button = _arg.button, selectorHtml = _arg.selectorHtml;
     selectorHtml || (selectorHtml = '<h2>Select An Item</h2>\n<p>Click an item below to add it to the list.</p>');
     this.init(selectorHtml);
   }
 
   Selector.prototype.init = function(selectorHtml) {
-    return this.construct(selectorHtml);
+    this.construct(selectorHtml);
+    return this.initButton();
   };
 
   Selector.prototype.construct = function(selectorHtml) {
     var column, columns, item, itemRow, itemTable, row, _fn, _i, _j, _ref,
       _this = this;
-    this.button = $(document.createElement('A'));
-    this.button.addClass('selector_button');
-    this.button.html('+');
     this.dialog = $(document.createElement('DIV'));
     this.dialog.addClass('selector_dialog');
     this.dialog.html(selectorHtml);
@@ -62,25 +60,24 @@ selector.Selector = (function(_super) {
       }
       itemTable.append(itemRow);
     }
-    return this.dialog.append(itemTable);
+    this.dialog.append(itemTable);
+    return this.overallContainer().append(this.dialog);
+  };
+
+  Selector.prototype.overallContainer = function() {
+    return this.button.closest('.circuitous');
   };
 
   Selector.prototype.itemFileName = function(item) {
     return item.toLowerCase().replace(/\s/g, '_');
   };
 
-  Selector.prototype.attachTo = function(container) {
+  Selector.prototype.initButton = function() {
     var _this = this;
-    this.container = $(container);
-    this.button.remove();
-    this.container.append(this.button);
     this.button.bind('click.toggle_selector', function() {
       return _this.toggleDialog();
     });
-    if (!this.overallContainer) {
-      this.overallContainer = this.container.closest('.circuitous');
-      return this.overallContainer.append(this.dialog);
-    }
+    return this.overallContainerOffset = this.overallContainer().offset();
   };
 
   Selector.prototype.toggleDialog = function() {
@@ -107,12 +104,10 @@ selector.Selector = (function(_super) {
   };
 
   Selector.prototype.show = function() {
-    var areaOffset,
-      _this = this;
-    areaOffset = this.overallContainer.offset();
+    var _this = this;
     this.dialog.css({
-      top: (areaOffset.height - this.dialog.height()) / 2,
-      left: (areaOffset.width - this.dialog.width()) / 2
+      top: (this.overallContainerOffset.height - this.dialog.height()) / 2,
+      left: (this.overallContainerOffset.width - this.dialog.width()) / 2
     });
     this.dialog.animate({
       opacity: 1,
