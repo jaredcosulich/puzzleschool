@@ -19,7 +19,7 @@ describe("BoardAnalyzer", function() {
     }); 
     
     afterEach(function() {
-        $('.circuitous').html(html)
+        // $('.circuitous').html(html)
     })
     
     describe('with one battery', function() {
@@ -695,6 +695,8 @@ describe("BoardAnalyzer", function() {
 
 addToBoard = function(board, component, x, y) {
     boardOffset = board.cells.offset()
+    component.startX = boardOffset.left + 15
+    component.startY = boardOffset.top + (component.centerOffset.y/2) + 15
     var onBoard = board.addComponent(
         component, 
         boardOffset.left + x - component.centerOffset.x, 
@@ -711,12 +713,14 @@ addToBoard = function(board, component, x, y) {
 
 createComponent = function(board, type) {
     component = new circuitous[type]()
-    component.appendTo($('.options'))
+    component.appendTo($('.board'))
+    component.el.css({position: 'absolute', top: 0, left: 0})
     component.initDrag(
         component.el, 
         function (component, x, y, state) {},
         true
     );
+    component.initCurrent();
     return component;
 }
 
