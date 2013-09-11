@@ -415,6 +415,7 @@ class analyzer.Analyzer extends circuitousObject.Object
         changeMade = false
         for cid, component of @board.components when component.nodes.length > 1 and component.nodes and not component.voltage
             section = @info.sections[@info.components[cid]]
+            continue unless section
             if @info.matrix.sections.indexOf(section.id) > -1
                 if section.amps > 0 and component.direction < 0 or section.amps < 0 and component.direction > 0
                     changeMade = true

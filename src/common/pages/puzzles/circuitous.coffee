@@ -82,6 +82,7 @@ soma.views
             '~f': '"],["'
             '~g': '","'
             '~h': '"]]}'
+            '~i': '{"name": "Resistor", '
             
         create: ->            
             circuitous = require('./lib/circuitous')

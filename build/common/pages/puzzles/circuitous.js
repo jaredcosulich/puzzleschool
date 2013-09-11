@@ -88,7 +88,8 @@ soma.views({
       '~e': '"wires": [["',
       '~f': '"],["',
       '~g': '","',
-      '~h': '"]]}'
+      '~h': '"]]}',
+      '~i': '{"name": "Resistor", '
     },
     create: function() {
       var circuitous, circuitousEditor, instructions, replace, replaceWith, _ref,

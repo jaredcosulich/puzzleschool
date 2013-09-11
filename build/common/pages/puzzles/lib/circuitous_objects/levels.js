@@ -75,6 +75,68 @@ levels.WORLDS = [
             complete: 'A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.',
             completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
           }, {
+            id: 1378919605524,
+            challenge: "Add resistance to the circuit to stop the excessive current from flowing.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,8"
+                }, {
+                  "name": "Resistor",
+                  "position": "3,3"
+                }
+              ],
+              "wires": [["8,8", "8,7"], ["8,7", "7,7"], ["7,7", "6,7"], ["6,7", "6,6"], ["6,6", "6,5"], ["11,7", "10,7"], ["10,7", "9,7"], ["9,7", "9,8"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["7,2", "8,2"], ["8,2", "9,2"], ["9,2", "10,2"], ["11,3", "11,4"], ["6,5", "6,4"], ["6,4", "6,3"], ["6,3", "6,2"], ["6,2", "7,2"], ["10,2", "11,2"], ["11,2", "11,3"]]
+            },
+            hints: ['Without any resistance a circuit will overheat and can destroy the battery.', 'You\'ll need to erase part of the circuit in order to fit the resistor in. Click and drag over existing wires to erase them.', 'Erase a section of the circuit and then drag and drop the resistor in to place so that the wires touch each end of the resistor.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,8"
+                }, {
+                  "name": "Resistor",
+                  "position": "6,3"
+                }
+              ],
+              "wires": [["8,8", "8,7"], ["8,7", "7,7"], ["7,7", "6,7"], ["6,7", "6,6"], ["11,7", "10,7"], ["10,7", "9,7"], ["9,7", "9,8"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["7,2", "8,2"], ["8,2", "9,2"], ["9,2", "10,2"], ["11,3", "11,4"], ["6,3", "6,2"], ["6,2", "7,2"], ["10,2", "11,2"], ["11,2", "11,3"]]
+            },
+            completeValues: [["Battery", 0.9], ["Resistor", 0.9]],
+            complete: 'The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.',
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+          }, {
+            id: 1378919614968,
+            challenge: "Reduce the current flowing through the circuit to 0.9 amps.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": [["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "11,7"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,7", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"], ["8,8", "8,9"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"]]
+            },
+            hints: ['Both the lightbulb and the resistor add resistance to the circuit, reducing the flow of current.', 'The flow of current is constant throughout this circuit.', 'Drag and drop both components on to the circuit to reduce the current.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": [["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "11,7"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,7", "7,7"], ["8,7", "8,8"], ["8,8", "8,9"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"], ["7,7", "8,7"], ["6,5", "7,5"], ["7,5", "8,5"], ["8,5", "9,5"], ["9,5", "10,5"], ["10,5", "11,5"]]
+            },
+            completeValues: [["Battery", 'infinite'], ["Lightbulb", 0]],
+            complete: 'A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.',
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+          }, {
             id: 1378789808762,
             challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit.",
             instructions: {

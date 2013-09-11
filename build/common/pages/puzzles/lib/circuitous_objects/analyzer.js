@@ -717,6 +717,9 @@ analyzer.Analyzer = (function(_super) {
         continue;
       }
       section = this.info.sections[this.info.components[cid]];
+      if (!section) {
+        continue;
+      }
       if (this.info.matrix.sections.indexOf(section.id) > -1) {
         if (section.amps > 0 && component.direction < 0 || section.amps < 0 && component.direction > 0) {
           changeMade = true;

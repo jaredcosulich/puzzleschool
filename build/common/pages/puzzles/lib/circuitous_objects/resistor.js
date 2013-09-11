@@ -13,6 +13,21 @@ resistor.Resistor = (function(_super) {
 
   Resistor.prototype.resistance = 10;
 
+  Resistor.prototype.centerOffset = {
+    x: 0,
+    y: 16
+  };
+
+  Resistor.prototype.nodes = [
+    {
+      x: 0,
+      y: -48
+    }, {
+      x: 0,
+      y: 48
+    }
+  ];
+
   function Resistor(_arg) {
     _arg;
     this.init();
