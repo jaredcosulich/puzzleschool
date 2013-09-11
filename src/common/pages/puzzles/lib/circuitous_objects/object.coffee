@@ -34,10 +34,15 @@ class object.Object extends Draggable
     
     initCurrent: ->
     
-    setCurrent: (@current) ->
-
+    setCurrent: (@current) -> 
+        @tag?.setInfo
+            name: @name
+            voltage: @voltage
+            current: @current or 0
+            resistance: @resistance or 0
+            
     initTag: -> @tag = new Tag(el: @el, getInfo: => @getInfo())
      
-        
-        
+    setName: (@name) ->    
+    
         

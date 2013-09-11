@@ -9,12 +9,16 @@ class tag.Tag extends circuitousObject.Object
         @permanent = false
         @tag = $(document.createElement('DIV'))
         @tag.addClass('tag')
-        @tag.bind 'click', =>
-            @permanent = !@permanent
-            if @permanent then @enlarge() else @shrink()
+        @tag.bind 'mousedown.toggle_permanence', => 
+            @tag.one 'mouseup.toggle_permanence', => @togglePermanentlyOpen()
+            $(document.body).bind 'mouseup.toggle_permanence', => @tag.unbind('mouseup.toggle_permanence')
             
-        @tag.bind 'mouseover', => @enlarge() unless @permanent
-        @tag.bind 'mouseout', => @shrink() unless @permanent
+        @tag.bind 'mouseover', => 
+            return if @permanent
+            @enlarge()
+        @tag.bind 'mouseout', => 
+            return if @permanent
+            @shrink()
         
         @content = $(document.createElement('DIV'))
         @content.addClass('content')
@@ -22,21 +26,17 @@ class tag.Tag extends circuitousObject.Object
         
         @smallContent = $(document.createElement('DIV'))
         @smallContent.addClass('small_tag_content')
-        @smallContent.html('9A')
         @content.append(@smallContent)
 
         @largeContent = $(document.createElement('DIV'))
         @largeContent.addClass('large_tag_content hidden')
-        @largeContent.html('Lightbulb #1:<br/>5 Ohms, 9 Amps')
         @content.append(@largeContent)
         
         @el.append(@tag)
         
-    toggleSize: ->
-        if @tag.hasClass('large')
-            @shrink
-        else
-            @enlarge()
+    togglePermanentlyOpen: ->
+        @permanent = !@permanent
+        if @permanent then @enlarge() else @shrink()
     
     enlarge: ->
         @tag.addClass('large')
@@ -48,4 +48,14 @@ class tag.Tag extends circuitousObject.Object
         @smallContent.removeClass('hidden')
         @largeContent.addClass('hidden')
         
-    setInfo: ->
+    setInfo: (info) -> @changeContent(info)
+    
+    changeContent: (@info) ->
+        @smallContent.html("#{@info.current}A")
+        @largeContent.html """
+            <div class='navigation'>x<br/>y</div>
+            #{@info.name}<br/>
+            #{@info.current} Amps, 
+            #{if @info.voltage then "#{@info.voltage} Volts," else ''} 
+            #{@info.resistance} Ohms
+        """

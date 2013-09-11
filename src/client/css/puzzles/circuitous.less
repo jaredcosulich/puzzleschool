@@ -511,7 +511,7 @@
         }
         .tag {
             position: absolute;
-            right: -30px;
+            right: -45px;
             top: 0;
             background-color: @grey;
             .rounded(6px);
@@ -539,7 +539,7 @@
             .content {
                 overflow: hidden;
                 height: 30px;
-                width: 30px;
+                width: 45px;
                 position: relative;
                 transition: height 0.5s ease-out, width 0.5s ease-out;
                 
@@ -547,7 +547,6 @@
                     position: absolute;
                     top: 0;
                     left: 0;
-                    width: 100%;
                     transition: opacity 0.5s ease-out, top 0.5s ease-out;
                 
                     &.hidden {
@@ -556,6 +555,7 @@
                 }
             
                 .small_tag_content {
+                    width: 45px;
                     line-height: 30px;
                     text-align: center;
                 }
@@ -564,12 +564,16 @@
                     top: -15px;
                     line-height: 25px;
                     padding: 6px;
-                    width: 138px;
+                    width: 168px;
+                    
+                    .navigation {
+                        float: right;
+                    }
                 }            
             }
             
             &.large {
-                right: -150px;
+                right: -180px;
                 top: -15px;
             
                 &::before {
@@ -577,7 +581,7 @@
                 }
                 
                 .content {
-                    width: 150px;
+                    width: 180px;
                     height: 60px;
                     
                     .small_tag_content {

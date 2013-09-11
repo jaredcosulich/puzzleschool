@@ -70,7 +70,14 @@ object.Object = (function(_super) {
   Object.prototype.initCurrent = function() {};
 
   Object.prototype.setCurrent = function(current) {
+    var _ref;
     this.current = current;
+    return (_ref = this.tag) != null ? _ref.setInfo({
+      name: this.name,
+      voltage: this.voltage,
+      current: this.current || 0,
+      resistance: this.resistance || 0
+    }) : void 0;
   };
 
   Object.prototype.initTag = function() {
@@ -81,6 +88,10 @@ object.Object = (function(_super) {
         return _this.getInfo();
       }
     });
+  };
+
+  Object.prototype.setName = function(name) {
+    this.name = name;
   };
 
   return Object;

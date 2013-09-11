@@ -24,6 +24,7 @@ class circuitous.ViewHelper
         
     addComponent: (component, onBoard=false) ->
         component.appendTo(@board.cells)
+        component.setName("#{component.constructor.name} ##{1}")
         img = component.el.find('img')
         component.el.css(left: if onBoard then 10 else -10000)
         img.bind 'load', =>

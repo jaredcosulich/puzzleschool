@@ -21,43 +21,44 @@ tag.Tag = (function(_super) {
     this.permanent = false;
     this.tag = $(document.createElement('DIV'));
     this.tag.addClass('tag');
-    this.tag.bind('click', function() {
-      _this.permanent = !_this.permanent;
-      if (_this.permanent) {
-        return _this.enlarge();
-      } else {
-        return _this.shrink();
-      }
+    this.tag.bind('mousedown.toggle_permanence', function() {
+      _this.tag.one('mouseup.toggle_permanence', function() {
+        return _this.togglePermanentlyOpen();
+      });
+      return $(document.body).bind('mouseup.toggle_permanence', function() {
+        return _this.tag.unbind('mouseup.toggle_permanence');
+      });
     });
     this.tag.bind('mouseover', function() {
-      if (!_this.permanent) {
-        return _this.enlarge();
+      if (_this.permanent) {
+        return;
       }
+      return _this.enlarge();
     });
     this.tag.bind('mouseout', function() {
-      if (!_this.permanent) {
-        return _this.shrink();
+      if (_this.permanent) {
+        return;
       }
+      return _this.shrink();
     });
     this.content = $(document.createElement('DIV'));
     this.content.addClass('content');
     this.tag.append(this.content);
     this.smallContent = $(document.createElement('DIV'));
     this.smallContent.addClass('small_tag_content');
-    this.smallContent.html('9A');
     this.content.append(this.smallContent);
     this.largeContent = $(document.createElement('DIV'));
     this.largeContent.addClass('large_tag_content hidden');
-    this.largeContent.html('Lightbulb #1:<br/>5 Ohms, 9 Amps');
     this.content.append(this.largeContent);
     return this.el.append(this.tag);
   };
 
-  Tag.prototype.toggleSize = function() {
-    if (this.tag.hasClass('large')) {
-      return this.shrink;
-    } else {
+  Tag.prototype.togglePermanentlyOpen = function() {
+    this.permanent = !this.permanent;
+    if (this.permanent) {
       return this.enlarge();
+    } else {
+      return this.shrink();
     }
   };
 
@@ -73,7 +74,15 @@ tag.Tag = (function(_super) {
     return this.largeContent.addClass('hidden');
   };
 
-  Tag.prototype.setInfo = function() {};
+  Tag.prototype.setInfo = function(info) {
+    return this.changeContent(info);
+  };
+
+  Tag.prototype.changeContent = function(info) {
+    this.info = info;
+    this.smallContent.html("" + this.info.current + "A");
+    return this.largeContent.html("<div class='navigation'>x<br/>y</div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
+  };
 
   return Tag;
 

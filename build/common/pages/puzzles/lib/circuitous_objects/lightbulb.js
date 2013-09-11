@@ -57,6 +57,7 @@ lightbulb.Lightbulb = (function(_super) {
     if (permanent == null) {
       permanent = false;
     }
+    Lightbulb.__super__.setCurrent.call(this, this.current);
     if (!this.currentImage) {
       return;
     }

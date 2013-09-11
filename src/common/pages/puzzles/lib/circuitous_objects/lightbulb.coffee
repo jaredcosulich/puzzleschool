@@ -34,6 +34,7 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         @setCurrent(0)
                 
     setCurrent: (@current, permanent=false) ->
+        super(@current)
         return unless @currentImage
         @current or= 0
         left = (@el.width()/2) - (@currentImage.width()/2)
