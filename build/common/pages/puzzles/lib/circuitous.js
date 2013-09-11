@@ -58,6 +58,7 @@ circuitous.ViewHelper = (function() {
       component.el.height(img.height());
       return $.timeout(10, function() {
         component.initCurrent();
+        component.initTag();
         return component.initDrag(component.el, function(component, x, y, stopDrag) {
           return _this.dragComponent(component, x, y, stopDrag);
         }, true, component.dragBuffer);

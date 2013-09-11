@@ -36,6 +36,7 @@ class object.Object extends Draggable
     
     setCurrent: (@current) ->
 
+    initTag: -> @tag = new Tag(el: @el, getInfo: => @getInfo())
      
         
         

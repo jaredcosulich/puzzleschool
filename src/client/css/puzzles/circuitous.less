@@ -509,6 +509,88 @@
             position: absolute;
             opacity: 0;
         }
+        .tag {
+            position: absolute;
+            right: -30px;
+            top: 0;
+            background-color: @grey;
+            .rounded(6px);
+            color: white;
+            cursor: pointer;
+            transition: right 0.5s ease-out, top 0.5s ease-out;
+            
+            &::before {
+                background-color: @grey;
+                height: 15px;
+                width: 15px;
+                content: "\00a0";
+                display: block;
+                position: absolute;
+                top: 7px;
+                left: -7px;
+                transform:               rotate( 45deg );  
+                    -moz-transform:      rotate( 45deg );  
+                    -ms-transform:       rotate( 45deg );  
+                    -o-transform:        rotate( 45deg );  
+                    -webkit-transform:   rotate( 45deg );  
+                transition: top 0.5s ease-out;
+            }
+
+            .content {
+                overflow: hidden;
+                height: 30px;
+                width: 30px;
+                position: relative;
+                transition: height 0.5s ease-out, width 0.5s ease-out;
+                
+                .small_tag_content, .large_tag_content {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    transition: opacity 0.5s ease-out, top 0.5s ease-out;
+                
+                    &.hidden {
+                        opacity: 0;
+                    }
+                }
+            
+                .small_tag_content {
+                    line-height: 30px;
+                    text-align: center;
+                }
+            
+                .large_tag_content {
+                    top: -15px;
+                    line-height: 25px;
+                    padding: 6px;
+                    width: 138px;
+                }            
+            }
+            
+            &.large {
+                right: -150px;
+                top: -15px;
+            
+                &::before {
+                    top: 22px;
+                }
+                
+                .content {
+                    width: 150px;
+                    height: 60px;
+                    
+                    .small_tag_content {
+                        top: 15px;
+                    }
+                    
+                    .large_tag_content {
+                        top: 0;
+                    }
+                }
+            }
+            
+        }
     }
     
     .board .cells .component {

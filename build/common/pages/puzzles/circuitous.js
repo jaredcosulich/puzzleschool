@@ -38,6 +38,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/transformer.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/draggable.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/object.js');
+      this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/tag.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/analyzer.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/wires.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/selector.js');
@@ -122,7 +123,11 @@ soma.views({
         this.initInfo();
         this.initWorlds();
         this.initCompleteListener();
-        this.showLevelSelector();
+        if (this.levelId) {
+          this.loadLevel(this.levelId);
+        } else {
+          this.showLevelSelector();
+        }
       }
       return this.initInstructions();
     },

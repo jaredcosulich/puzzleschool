@@ -59,6 +59,7 @@ class options.Options extends circuitousObject.Object
         component.appendTo(emptyOption)
         $.timeout 10, =>
             component.initCurrent() 
+            component.initTag() 
             component.initDrag(
                 component.el, 
                 (component, x, y, stopDrag) => @dragComponent(component, x, y, stopDrag),

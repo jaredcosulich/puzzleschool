@@ -30,7 +30,8 @@ class circuitous.ViewHelper
             component.el.width(img.width())
             component.el.height(img.height())
             $.timeout 10, =>
-                component.initCurrent() 
+                component.initCurrent()
+                component.initTag() 
                 component.initDrag(
                     component.el, 
                     (component, x, y, stopDrag) => @dragComponent(component, x, y, stopDrag),

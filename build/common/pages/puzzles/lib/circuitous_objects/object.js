@@ -73,6 +73,16 @@ object.Object = (function(_super) {
     this.current = current;
   };
 
+  Object.prototype.initTag = function() {
+    var _this = this;
+    return this.tag = new Tag({
+      el: this.el,
+      getInfo: function() {
+        return _this.getInfo();
+      }
+    });
+  };
+
   return Object;
 
 })(Draggable);

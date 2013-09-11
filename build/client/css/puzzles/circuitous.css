@@ -518,6 +518,80 @@
   position: absolute;
   opacity: 0;
 }
+.circuitous .component .tag {
+  position: absolute;
+  right: -30px;
+  top: 0;
+  background-color: #949494;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: right 0.5s ease-out, top 0.5s ease-out;
+}
+.circuitous .component .tag::before {
+  background-color: #949494;
+  height: 15px;
+  width: 15px;
+  content: "\00a0";
+  display: block;
+  position: absolute;
+  top: 7px;
+  left: -7px;
+  transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transition: top 0.5s ease-out;
+}
+.circuitous .component .tag .content {
+  overflow: hidden;
+  height: 30px;
+  width: 30px;
+  position: relative;
+  transition: height 0.5s ease-out, width 0.5s ease-out;
+}
+.circuitous .component .tag .content .small_tag_content,
+.circuitous .component .tag .content .large_tag_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: opacity 0.5s ease-out, top 0.5s ease-out;
+}
+.circuitous .component .tag .content .small_tag_content.hidden,
+.circuitous .component .tag .content .large_tag_content.hidden {
+  opacity: 0;
+}
+.circuitous .component .tag .content .small_tag_content {
+  line-height: 30px;
+  text-align: center;
+}
+.circuitous .component .tag .content .large_tag_content {
+  top: -15px;
+  line-height: 25px;
+  padding: 6px;
+  width: 138px;
+}
+.circuitous .component .tag.large {
+  right: -150px;
+  top: -15px;
+}
+.circuitous .component .tag.large::before {
+  top: 22px;
+}
+.circuitous .component .tag.large .content {
+  width: 150px;
+  height: 60px;
+}
+.circuitous .component .tag.large .content .small_tag_content {
+  top: 15px;
+}
+.circuitous .component .tag.large .content .large_tag_content {
+  top: 0;
+}
 .circuitous .board .cells .component {
   position: absolute;
 }

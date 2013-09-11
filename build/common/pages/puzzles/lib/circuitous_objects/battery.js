@@ -41,6 +41,8 @@ battery.Battery = (function(_super) {
 
   Battery.prototype.init = function() {};
 
+  Battery.prototype.getInfo = function() {};
+
   return Battery;
 
 })(circuitousObject.Object);

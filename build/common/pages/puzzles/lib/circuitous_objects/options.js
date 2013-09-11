@@ -98,6 +98,7 @@ options.Options = (function(_super) {
     component.appendTo(emptyOption);
     return $.timeout(10, function() {
       component.initCurrent();
+      component.initTag();
       component.initDrag(component.el, function(component, x, y, stopDrag) {
         return _this.dragComponent(component, x, y, stopDrag);
       }, true, component.dragBuffer);

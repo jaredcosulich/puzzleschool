@@ -33,6 +33,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/common_objects/draggable.js'
 
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/object.js'
+            @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/tag.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/analyzer.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/wires.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/selector.js'
@@ -108,7 +109,10 @@ soma.views
                 @initInfo()
                 @initWorlds()
                 @initCompleteListener()
-                @showLevelSelector()
+                if @levelId
+                    @loadLevel(@levelId)
+                else
+                    @showLevelSelector()
                     
             @initInstructions()
         

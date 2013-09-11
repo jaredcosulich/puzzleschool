@@ -1,5 +1,6 @@
 lightbulb = exports ? provide('./lightbulb', {})
 circuitousObject = require('./object')
+Tag = require('./tag').Tag
 
 class lightbulb.Lightbulb extends circuitousObject.Object
     resistance: 5
@@ -31,7 +32,7 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         
         @el.append(@currentImage)
         @setCurrent(0)
-        
+                
     setCurrent: (@current, permanent=false) ->
         return unless @currentImage
         @current or= 0
@@ -46,4 +47,6 @@ class lightbulb.Lightbulb extends circuitousObject.Object
             @currentImage.css
                 backgroundPosition: "-#{@spriteIndex * @currentImage.width()}px 0"
                 opacity: 1.0 - (0.6 / (@spriteIndex or 1))
+        
+    getInfo: ->
         
