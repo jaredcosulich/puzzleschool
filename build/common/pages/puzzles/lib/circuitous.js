@@ -68,14 +68,16 @@ circuitous.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.dragComponent = function(component, x, y, state) {
+    var _ref1;
     if (state === 'start') {
-      return this.board.removeComponent(component);
+      this.board.removeComponent(component);
     } else if (state === 'stop') {
       if (!this.board.addComponent(component, x, y)) {
         this.board.removeComponent(component);
-        return component.resetDrag();
+        component.resetDrag();
       }
     }
+    return (_ref1 = component.tag) != null ? _ref1.position() : void 0;
   };
 
   return ViewHelper;

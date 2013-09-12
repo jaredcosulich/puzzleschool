@@ -12,7 +12,7 @@ tag.Tag = (function(_super) {
   __extends(Tag, _super);
 
   function Tag(_arg) {
-    this.el = _arg.el, this.getInfo = _arg.getInfo;
+    this.object = _arg.object;
     this.init();
   }
 
@@ -50,7 +50,18 @@ tag.Tag = (function(_super) {
     this.largeContent = $(document.createElement('DIV'));
     this.largeContent.addClass('large_tag_content hidden');
     this.content.append(this.largeContent);
-    return this.el.append(this.tag);
+    this.object.el.append(this.tag);
+    return this.position();
+  };
+
+  Tag.prototype.position = function() {
+    var parentOffset;
+    parentOffset = this.object.el.parent().offset();
+    if ((this.object.currentX - parentOffset.left) > (parentOffset.width / 2) - (this.object.el.offset().width / 2)) {
+      return this.tag.addClass('right');
+    } else {
+      return this.tag.removeClass('right');
+    }
   };
 
   Tag.prototype.togglePermanentlyOpen = function() {

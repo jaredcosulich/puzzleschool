@@ -47,4 +47,5 @@ class circuitous.ViewHelper
             if not @board.addComponent(component, x, y)
                 @board.removeComponent(component)
                 component.resetDrag()
+        component.tag?.position()
                 

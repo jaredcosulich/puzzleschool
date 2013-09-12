@@ -511,13 +511,13 @@
         }
         .tag {
             position: absolute;
-            right: -45px;
+            left: -45px;
             top: 0;
             background-color: @grey;
             .rounded(6px);
             color: white;
             cursor: pointer;
-            transition: right 0.5s ease-out, top 0.5s ease-out;
+            transition: left 0.5s ease-out, top 0.5s ease-out;
             
             &::before {
                 background-color: @grey;
@@ -527,7 +527,7 @@
                 display: block;
                 position: absolute;
                 top: 7px;
-                left: -7px;
+                right: -7px;
                 transform:               rotate( 45deg );  
                     -moz-transform:      rotate( 45deg );  
                     -ms-transform:       rotate( 45deg );  
@@ -573,12 +573,7 @@
             }
             
             &.large {
-                right: -180px;
-                top: -15px;
-            
-                &::before {
-                    top: 22px;
-                }
+                left: -180px;
                 
                 .content {
                     width: 180px;
@@ -594,6 +589,20 @@
                 }
             }
             
+            &.right {
+                left: auto;
+                right: -45px;  
+                transition: right 0.5s ease-out, top 0.5s ease-out;
+                
+                &::before {
+                    left: -7px;
+                    right: auto;                    
+                }
+                
+                &.large {
+                    right: -180px;                      
+                }              
+            }
         }
     }
     

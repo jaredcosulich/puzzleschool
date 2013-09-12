@@ -520,7 +520,7 @@
 }
 .circuitous .component .tag {
   position: absolute;
-  right: -45px;
+  left: -45px;
   top: 0;
   background-color: #949494;
   -webkit-border-radius: 6px;
@@ -528,7 +528,7 @@
   border-radius: 6px;
   color: white;
   cursor: pointer;
-  transition: right 0.5s ease-out, top 0.5s ease-out;
+  transition: left 0.5s ease-out, top 0.5s ease-out;
 }
 .circuitous .component .tag::before {
   background-color: #949494;
@@ -538,7 +538,7 @@
   display: block;
   position: absolute;
   top: 7px;
-  left: -7px;
+  right: -7px;
   transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -579,11 +579,7 @@
   float: right;
 }
 .circuitous .component .tag.large {
-  right: -180px;
-  top: -15px;
-}
-.circuitous .component .tag.large::before {
-  top: 22px;
+  left: -180px;
 }
 .circuitous .component .tag.large .content {
   width: 180px;
@@ -594,6 +590,18 @@
 }
 .circuitous .component .tag.large .content .large_tag_content {
   top: 0;
+}
+.circuitous .component .tag.right {
+  left: auto;
+  right: -45px;
+  transition: right 0.5s ease-out, top 0.5s ease-out;
+}
+.circuitous .component .tag.right::before {
+  left: -7px;
+  right: auto;
+}
+.circuitous .component .tag.right.large {
+  right: -180px;
 }
 .circuitous .board .cells .component {
   position: absolute;

@@ -78,4 +78,5 @@ class options.Options extends circuitousObject.Object
                 component.el.addClass('in_options')
                 component.resetDrag()
                 component.bindDrag()
+        component.tag?.position()
                 

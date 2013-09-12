@@ -2,13 +2,14 @@ tag = exports ? provide('./tag', {})
 circuitousObject = require('./object')
 
 class tag.Tag extends circuitousObject.Object
-    constructor: ({@el, @getInfo}) ->
+    constructor: ({@object}) ->
         @init()
 
     init: ->
         @permanent = false
         @tag = $(document.createElement('DIV'))
         @tag.addClass('tag')
+
         @tag.bind 'mousedown.toggle_permanence', => 
             @tag.one 'mouseup.toggle_permanence', => @togglePermanentlyOpen()
             $(document.body).bind 'mouseup.toggle_permanence', => @tag.unbind('mouseup.toggle_permanence')
@@ -32,7 +33,16 @@ class tag.Tag extends circuitousObject.Object
         @largeContent.addClass('large_tag_content hidden')
         @content.append(@largeContent)
         
-        @el.append(@tag)
+        @object.el.append(@tag)
+        @position()
+       
+    position: ->   
+        parentOffset = @object.el.parent().offset()
+        if (@object.currentX - parentOffset.left) > (parentOffset.width / 2) - (@object.el.offset().width / 2)
+            @tag.addClass('right')
+        else
+            @tag.removeClass('right')
+        
         
     togglePermanentlyOpen: ->
         @permanent = !@permanent

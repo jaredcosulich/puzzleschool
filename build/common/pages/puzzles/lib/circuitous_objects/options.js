@@ -107,17 +107,19 @@ options.Options = (function(_super) {
   };
 
   Options.prototype.dragComponent = function(component, x, y, state) {
+    var _ref;
     component.el.removeClass('in_options');
     if (state === 'start') {
-      return this.board.removeComponent(component);
+      this.board.removeComponent(component);
     } else if (state === 'stop') {
       if (!this.board.addComponent(component, x, y)) {
         this.board.removeComponent(component);
         component.el.addClass('in_options');
         component.resetDrag();
-        return component.bindDrag();
+        component.bindDrag();
       }
     }
+    return (_ref = component.tag) != null ? _ref.position() : void 0;
   };
 
   return Options;
