@@ -20,7 +20,7 @@ class circuitous.ViewHelper
         @selector = new circuitous.Selector
             add: (component) => @addComponent(component, true)
             button: @$('.add_component')
-            selectorHtml: 'Add Another Component' 
+            selectorHtml: '<h2>Add Another Component</h2>' 
             
         @initValues()           
         
@@ -34,7 +34,7 @@ class circuitous.ViewHelper
             component.el.height(img.height())
             $.timeout 10, =>
                 component.initCurrent()
-                component.initTag() 
+                component.initTag(@$('.show_values').hasClass('on')) 
                 component.initDrag(
                     component.el, 
                     (component, x, y, stopDrag) => @dragComponent(component, x, y, stopDrag),

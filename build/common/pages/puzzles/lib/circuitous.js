@@ -38,7 +38,7 @@ circuitous.ViewHelper = (function() {
         return _this.addComponent(component, true);
       },
       button: this.$('.add_component'),
-      selectorHtml: 'Add Another Component'
+      selectorHtml: '<h2>Add Another Component</h2>'
     });
     return this.initValues();
   };
@@ -60,7 +60,7 @@ circuitous.ViewHelper = (function() {
       component.el.height(img.height());
       return $.timeout(10, function() {
         component.initCurrent();
-        component.initTag();
+        component.initTag(_this.$('.show_values').hasClass('on'));
         return component.initDrag(component.el, function(component, x, y, stopDrag) {
           return _this.dragComponent(component, x, y, stopDrag);
         }, true, component.dragBuffer);

@@ -42,7 +42,8 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 1.8], ["Lightbulb", 1.8]],
             complete: 'A circuit is not complete until a wire connects the negative terminal to the positive terminal.\n<br/><br/>\nWhen the circuit is complete electricity will flow, powering the lightbulb.',
-            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>',
+            values: false
           }, {
             id: 1378413019525,
             challenge: "Stop electricity flowing to the light by creating a short circuit.",
@@ -73,7 +74,8 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 'infinite'], ["Lightbulb", 0]],
             complete: 'A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.',
-            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>',
+            values: false
           }, {
             id: 1378919605524,
             challenge: "Add resistance to the circuit to stop the excessive current from flowing.",
@@ -104,7 +106,8 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 0.9], ["Resistor", 0.9]],
             complete: 'The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.',
-            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>',
+            values: false
           }, {
             id: 1378919614968,
             challenge: "Reduce the current flowing through the circuit to 0.9 amps.",
@@ -135,7 +138,8 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 'infinite'], ["Lightbulb", 0]],
             complete: 'A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.',
-            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>',
+            values: true
           }, {
             id: 1378789808762,
             challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit.",
@@ -172,7 +176,8 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 0.9], ["Lightbulb", 0.9], ["Lightbulb", 0.9]],
             complete: 'This is a circuit with two resistors (lightbulbs) placed in series.\n<br/><br/>\nLightbulb #1 dims because the circuit now has twice as much resistance in it.',
-            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+            completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>',
+            values: true
           }
         ]
       }

@@ -80,9 +80,13 @@ object.Object = (function(_super) {
     }) : void 0;
   };
 
-  Object.prototype.initTag = function() {
+  Object.prototype.initTag = function(show) {
+    if (show == null) {
+      show = false;
+    }
     return this.tag = new Tag({
-      object: this
+      object: this,
+      show: show
     });
   };
 

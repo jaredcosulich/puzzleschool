@@ -318,6 +318,8 @@ soma.views({
               height: null
             });
             _this.showHints();
+            _this.$('.show_values').addClass(_this.level.values ? 'on' : 'off');
+            _this.$('.show_values').removeClass(_this.level.values ? 'off' : 'on');
             _this.loadInstructions(_this.level.instructions);
             return _this.level.loaded = new Date().getTime();
           }

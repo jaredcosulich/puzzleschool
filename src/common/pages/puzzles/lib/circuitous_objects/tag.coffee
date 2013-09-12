@@ -2,8 +2,9 @@ tag = exports ? provide('./tag', {})
 circuitousObject = require('./object')
 
 class tag.Tag extends circuitousObject.Object
-    constructor: ({@object}) ->
+    constructor: ({@object, show}) ->
         @init()
+        if show then @show() else @hide()
 
     init: ->
         @permanent = false

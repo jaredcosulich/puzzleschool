@@ -5,8 +5,8 @@ selector.ITEM_TYPES = [
     'Battery'
     'Resistor'
     'Lightbulb'
-    'Light Emitting Diode'
-    'Toggle Switch'
+    # 'Light Emitting Diode'
+    # 'Toggle Switch'
 ]
 
 class selector.Selector extends circuitousObject.Object
@@ -39,6 +39,7 @@ class selector.Selector extends circuitousObject.Object
                     itemObject = new circuitous[item.replace(/\s/g, '')]()
                     itemCell = $(document.createElement('TD'))
                     itemCell.addClass('item')
+                    itemCell.width("#{100 / columns}%")
                     itemCell.html """
                         #{itemObject.imageElement()}
                         <div>#{item}</div>

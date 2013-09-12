@@ -41,7 +41,7 @@ class object.Object extends Draggable
             current: @current or 0
             resistance: @resistance or 0
             
-    initTag: -> @tag = new Tag(object: @)
+    initTag: (show=false) -> @tag = new Tag(object: @, show: show)
      
     setName: (@name) ->    
     

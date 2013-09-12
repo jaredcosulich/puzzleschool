@@ -12,8 +12,14 @@ tag.Tag = (function(_super) {
   __extends(Tag, _super);
 
   function Tag(_arg) {
-    this.object = _arg.object;
+    var show;
+    this.object = _arg.object, show = _arg.show;
     this.init();
+    if (show) {
+      this.show();
+    } else {
+      this.hide();
+    }
   }
 
   Tag.prototype.init = function() {

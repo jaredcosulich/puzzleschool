@@ -236,6 +236,8 @@ soma.views
                     callback: =>
                         info.css(height: null)
                         @showHints()
+                        @$('.show_values').addClass(if @level.values then 'on' else 'off')
+                        @$('.show_values').removeClass(if @level.values then 'off' else 'on')
                         @loadInstructions(@level.instructions)
                         @level.loaded = new Date().getTime()
                 

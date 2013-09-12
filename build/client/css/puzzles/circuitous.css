@@ -304,7 +304,7 @@
   left: 0;
 }
 .circuitous .right_side .info .challenge .hints .hints_links .hint_link {
-  background-color: white;
+  background-color: #c7c7c7;
   display: block;
   float: left;
   height: 30px;
@@ -869,7 +869,7 @@
   text-shadow: 1px 1px 0px #262626;
   margin: auto;
   float: left;
-  margin: 12px 0 0 12px;
+  margin: 12px 0 0 15px;
 }
 .circuitous .level_selector .world .stage .levels .level:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #404040), color-stop(1, #262626));
@@ -899,7 +899,7 @@
   text-decoration: none;
   text-shadow: 1px 1px 0px #24d94c;
   margin: auto;
-  margin: 12px 0 0 12px;
+  margin: 12px 0 0 15px;
 }
 .circuitous .level_selector .world .stage .levels .level.completed:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4ee26f), color-stop(1, #24d94c));
