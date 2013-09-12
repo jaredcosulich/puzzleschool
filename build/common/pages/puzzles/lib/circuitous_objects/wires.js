@@ -71,7 +71,7 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.draw = function(e) {
-    var border, coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref, _results;
+    var border, coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref;
     border = parseInt(this.el.closest('.circuitous').css('borderLeftWidth'));
     coords = this.board.roundedCoordinates({
       x: Client.x(e) - border,
@@ -89,14 +89,13 @@ wires.Wires = (function(_super) {
       } else {
         yDelta = this.cellDimension * (start.y > coords.y ? -1 : 1);
       }
-      _results = [];
       for (i = _i = 1, _ref = Math.floor(Math.max(xDiff, yDiff) / this.cellDimension); 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-        _results.push(this.createOrErase({
+        this.createOrErase({
           x: start.x + xDelta * i,
           y: start.y + yDelta * i
-        }));
+        });
       }
-      return _results;
+      return this.info.continuation = true;
     } else {
       return this.info.start = coords;
     }
@@ -141,7 +140,6 @@ wires.Wires = (function(_super) {
     }
     this.el.append(segment);
     this.recordPosition(segment, start, end);
-    this.info.continuation = true;
     return segment;
   };
 

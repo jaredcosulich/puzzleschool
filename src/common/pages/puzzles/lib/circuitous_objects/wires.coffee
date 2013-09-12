@@ -49,8 +49,11 @@ class wires.Wires extends circuitousObject.Object
             
             for i in [1..Math.floor(Math.max(xDiff, yDiff) / @cellDimension)]
                 @createOrErase(x: start.x + xDelta * i, y: start.y + yDelta * i)
+
+            @info.continuation = true
         else
             @info.start = coords
+            
 
     createOrErase: (coords) ->
         existingSegment = @find(@info.start, coords)
@@ -84,7 +87,6 @@ class wires.Wires extends circuitousObject.Object
 
         @el.append(segment)
         @recordPosition(segment, start, end)
-        @info.continuation = true
         return segment
 
     erase: (start, end) ->
