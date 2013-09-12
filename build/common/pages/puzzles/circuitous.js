@@ -71,7 +71,7 @@ soma.chunks({
       this.setMeta('og:description', 'Explore circuits through simple challenges you can solve in creative ways.');
       this.setMeta('description', 'Explore circuits through simple challenges you can solve in creative ways.');
       return this.html = wings.renderTemplate(this.template, {
-        level_id: this.levelId,
+        level_id: this.levelId || false,
         editor: this.levelId === 'editor'
       });
     }
@@ -96,8 +96,13 @@ soma.views({
       var circuitous, circuitousEditor, instructions, replace, replaceWith, _ref,
         _this = this;
       circuitous = require('./lib/circuitous');
+      this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
       this.viewHelper = new circuitous.ViewHelper({
-        el: $(this.selector)
+        el: $(this.selector),
+        worlds: this.worlds,
+        loadLevel: function(levelId) {
+          return _this.loadLevel(levelId);
+        }
       });
       this.levelId = this.el.data('level_id');
       if (this.levelId === 'editor') {
@@ -121,17 +126,17 @@ soma.views({
         }
       } else {
         this.initInfo();
-        this.initWorlds();
         this.initCompleteListener();
         if (this.levelId) {
           this.loadLevel(this.levelId);
-        } else {
-          this.showLevelSelector();
         }
       }
       this.initInstructions();
       return setInterval((function() {
         var components;
+        if (!_this.level) {
+          return;
+        }
         if (location.href.indexOf(_this.level.id) > -1) {
           return;
         }
@@ -142,11 +147,8 @@ soma.views({
     initInfo: function() {
       var _this = this;
       this.$('.info .challenge').hide();
-      this.$('.select_level').bind('click', function() {
-        return _this.showLevelSelector();
-      });
-      return this.$('.all_levels').bind('click', function() {
-        return _this.viewHelper.showAllLevels();
+      return this.$('.select_level').bind('click', function() {
+        return _this.viewHelper.showLevelSelector();
       });
     },
     initInstructions: function() {
@@ -286,9 +288,6 @@ soma.views({
         return _this.showComplete();
       });
     },
-    initWorlds: function() {
-      return this.worlds = require('./lib/xyflyer_objects/levels').WORLDS;
-    },
     findLevel: function(levelId) {
       var level, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
       _ref = this.worlds;
@@ -315,7 +314,7 @@ soma.views({
         this.level = this.findLevel(levelId);
       }
       if (!this.level) {
-        this.showLevelSelector();
+        this.viewHelper.showLevelSelector();
         return;
       }
       this.viewHelper.board.clear();
@@ -489,52 +488,6 @@ soma.views({
           height: info.parent().height() * 0.82
         });
       });
-    },
-    showLevelSelector: function() {
-      var index, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
-        _this = this;
-      levelSelector = $(document.createElement('DIV'));
-      levelSelector.addClass('level_selector');
-      _ref = this.worlds;
-      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-        world = _ref[index];
-        worldContainer = $(document.createElement('DIV'));
-        worldContainer.addClass('world');
-        worldContainer.html("<h2>World " + (index + 1) + "</h2>");
-        levelSelector.append(worldContainer);
-        _ref1 = world.stages;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          stage = _ref1[_j];
-          stageContainer = $(document.createElement('DIV'));
-          stageContainer.addClass('stage');
-          stageContainer.html("<h3>" + stage.name + "</h3>");
-          levels = $(document.createElement('DIV'));
-          levels.addClass('levels');
-          stageContainer.append(levels);
-          worldContainer.append(stageContainer);
-          _ref2 = stage.levels;
-          _fn = function(level, index) {
-            var levelLink;
-            levelLink = $(document.createElement('A'));
-            levelLink.html("Level " + (index + 1));
-            levelLink.addClass('level');
-            if (level.completed) {
-              levelLink.addClass('completed');
-            }
-            levelLink.bind('click', function() {
-              return _this.hideModal(function() {
-                return _this.loadLevel(level.id);
-              });
-            });
-            return levels.append(levelLink);
-          };
-          for (index = _k = 0, _len2 = _ref2.length; _k < _len2; index = ++_k) {
-            level = _ref2[index];
-            _fn(level, index);
-          }
-        }
-      }
-      return this.showModal(levelSelector);
     },
     showModal: function(content) {
       var _this = this;

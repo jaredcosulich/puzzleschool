@@ -20,7 +20,7 @@ circuitous.ChunkHelper = (function() {
 circuitous.ViewHelper = (function() {
 
   function ViewHelper(_arg) {
-    this.el = _arg.el;
+    this.el = _arg.el, this.worlds = _arg.worlds, this.loadLevel = _arg.loadLevel;
     this.init();
   }
 
@@ -40,6 +40,7 @@ circuitous.ViewHelper = (function() {
       button: this.$('.add_component'),
       selectorHtml: '<h2>Add Another Component</h2>'
     });
+    this.initLevelSelector();
     return this.initValues();
   };
 
@@ -100,9 +101,93 @@ circuitous.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.showAllLevels = function() {};
+  ViewHelper.prototype.initLevelSelector = function() {
+    var index, lastCompleted, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _i, _len, _ref1, _results;
+    levelSelector = this.$('.level_selector');
+    _ref1 = this.worlds;
+    _results = [];
+    for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+      world = _ref1[index];
+      worldContainer = $(document.createElement('DIV'));
+      worldContainer.addClass('world');
+      levelSelector.append(worldContainer);
+      _results.push((function() {
+        var _j, _len1, _ref2, _results1;
+        _ref2 = world.stages;
+        _results1 = [];
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          stage = _ref2[_j];
+          stageContainer = $(document.createElement('DIV'));
+          stageContainer.addClass('stage');
+          stageContainer.html("<h2>" + stage.name + "</h2>");
+          levels = $(document.createElement('DIV'));
+          levels.addClass('levels');
+          stageContainer.append(levels);
+          worldContainer.append(stageContainer);
+          lastCompleted = true;
+          _results1.push((function() {
+            var _k, _len2, _ref3, _results2,
+              _this = this;
+            _ref3 = stage.levels;
+            _results2 = [];
+            for (index = _k = 0, _len2 = _ref3.length; _k < _len2; index = ++_k) {
+              level = _ref3[index];
+              _results2.push((function(level, index) {
+                var hint, levelElement, levelInfo, levelLink;
+                levelElement = $(document.createElement('DIV'));
+                levelElement.addClass('level');
+                if (level.completed) {
+                  levelElement.addClass('completed');
+                }
+                if (!(level.completed || lastCompleted)) {
+                  levelElement.addClass('inactive');
+                }
+                levelInfo = $(document.createElement('DIV'));
+                levelInfo.addClass('level_info');
+                levelInfo.html("<h3>" + level.challenge + "</h3>\n<div class='completed'>\n    <div  class='hints'>\n        <h3>Hints:</h3>\n        <ul>\n            " + (((function() {
+                  var _l, _len3, _ref4, _results3;
+                  _ref4 = level.hints;
+                  _results3 = [];
+                  for (_l = 0, _len3 = _ref4.length; _l < _len3; _l++) {
+                    hint = _ref4[_l];
+                    _results3.push("<li>" + hint + "</li>");
+                  }
+                  return _results3;
+                })()).join('')) + "\n        </ul>\n    </div>\n    <div class='complete_lesson'>\n        <h3>Lesson:</h3>\n        " + (level.complete.replace('<br/><br/>', '<br/>')) + "\n    </div>\n</div>");
+                levelElement.append(levelInfo);
+                levelElement.prepend(level.completeVideo.replace(/iframe/, 'iframe class=\'completed\''));
+                levelLink = $(document.createElement('A'));
+                if (level.completed) {
+                  levelLink.html('Completed - Load Again');
+                } else {
+                  levelLink.html('Load This Challenge');
+                }
+                levelLink.addClass('level_link');
+                levelLink.bind('click', function() {
+                  _this.loadLevel(level.id);
+                  return _this.showLevel();
+                });
+                levelElement.append(levelLink);
+                levels.append(levelElement);
+                return lastCompleted = level.completed;
+              })(level, index));
+            }
+            return _results2;
+          }).call(this));
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
+  };
 
-  ViewHelper.prototype.showLevel = function() {};
+  ViewHelper.prototype.showLevelSelector = function() {
+    return this.el.addClass('show_level_selector');
+  };
+
+  ViewHelper.prototype.showLevel = function() {
+    return this.el.removeClass('show_level_selector');
+  };
 
   return ViewHelper;
 

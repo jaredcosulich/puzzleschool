@@ -66,7 +66,7 @@ soma.chunks
             @setMeta('description', 'Explore circuits through simple challenges you can solve in creative ways.')
             
             @html = wings.renderTemplate(@template,
-                level_id: @levelId,
+                level_id: @levelId or false,
                 editor: @levelId == 'editor'
             )
             
@@ -87,8 +87,13 @@ soma.views
             
         create: ->            
             circuitous = require('./lib/circuitous')
+            
+            @worlds = require('./lib/xyflyer_objects/levels').WORLDS
+            
             @viewHelper = new circuitous.ViewHelper
                 el: $(@selector)
+                worlds: @worlds
+                loadLevel: (levelId) => @loadLevel(levelId)
                
             @levelId = @el.data('level_id')                  
             
@@ -107,16 +112,14 @@ soma.views
                     @loadInstructions(JSON.parse(instructions))            
             else
                 @initInfo()
-                @initWorlds()
                 @initCompleteListener()
-                if @levelId
-                    @loadLevel(@levelId)
-                else
-                    @showLevelSelector()
+                @loadLevel(@levelId) if @levelId
+                    
                     
             @initInstructions()
         
             setInterval((=>
+                return unless @level
                 return if location.href.indexOf(@level.id) > -1
                 components = location.href.split('/')
                 @loadLevel(parseInt(components[components.length - 1]))
@@ -125,8 +128,7 @@ soma.views
         
         initInfo: ->
             @$('.info .challenge').hide()
-            @$('.select_level').bind 'click', => @showLevelSelector()
-            @$('.all_levels').bind 'click', => @viewHelper.showAllLevels()
+            @$('.select_level').bind 'click', => @viewHelper.showLevelSelector()
         
         initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
@@ -215,9 +217,6 @@ soma.views
                     return unless componentFound
                 @showComplete()
                 
-        initWorlds: ->
-            @worlds = require('./lib/xyflyer_objects/levels').WORLDS
-                
         findLevel: (levelId) ->
             for world in @worlds
                 for stage in world.stages
@@ -231,7 +230,7 @@ soma.views
                 @level = @findLevel(levelId)
 
             if not @level
-                @showLevelSelector()
+                @viewHelper.showLevelSelector()
                 return
             
             @viewHelper.board.clear()
@@ -348,35 +347,6 @@ soma.views
                 info.find('.challenge').hide()
                 info.append(completeElement)
                 @showInfo(height: (info.parent().height() * 0.82))
-                        
-        showLevelSelector: ->
-            levelSelector = $(document.createElement('DIV'))
-            levelSelector.addClass('level_selector')
-            for world, index in @worlds
-                worldContainer = $(document.createElement('DIV'))
-                worldContainer.addClass('world')
-                worldContainer.html("<h2>World #{index + 1}</h2>")
-                levelSelector.append(worldContainer)
-                for stage in world.stages
-                    stageContainer = $(document.createElement('DIV'))
-                    stageContainer.addClass('stage')
-                    stageContainer.html("<h3>#{stage.name}</h3>")
-                    levels = $(document.createElement('DIV'))
-                    levels.addClass('levels')
-                    stageContainer.append(levels)
-                    worldContainer.append(stageContainer)
-                    for level, index in stage.levels
-                        do (level, index) =>
-                            levelLink = $(document.createElement('A'))
-                            levelLink.html("Level #{index + 1}")
-                            levelLink.addClass('level')
-                            levelLink.addClass('completed') if level.completed
-                            levelLink.bind 'click', => 
-                                @hideModal => @loadLevel(level.id)
-                                
-                            levels.append(levelLink)
-                        
-            @showModal(levelSelector)
                     
         showModal: (content=null) ->
             if not @modalMenu

@@ -8,7 +8,7 @@ class circuitous.ChunkHelper
     
 
 class circuitous.ViewHelper
-    constructor: ({@el}) ->
+    constructor: ({@el, @worlds, @loadLevel}) ->
         @init()
         
     $: (selector) -> $(selector, @el)
@@ -22,6 +22,7 @@ class circuitous.ViewHelper
             button: @$('.add_component')
             selectorHtml: '<h2>Add Another Component</h2>' 
             
+        @initLevelSelector()
         @initValues()           
         
     addComponent: (component, onBoard=false) ->
@@ -60,8 +61,64 @@ class circuitous.ViewHelper
             for cid, component of @board.components
                 component.tag[if hideValues then 'hide' else 'show']()
         
-    showAllLevels: ->
+    initLevelSelector: ->    
+        levelSelector = @$('.level_selector')
+        for world, index in @worlds
+            worldContainer = $(document.createElement('DIV'))
+            worldContainer.addClass('world')
+            levelSelector.append(worldContainer)
+            for stage in world.stages
+                stageContainer = $(document.createElement('DIV'))
+                stageContainer.addClass('stage')
+                stageContainer.html("<h2>#{stage.name}</h2>")
+                levels = $(document.createElement('DIV'))
+                levels.addClass('levels')
+                stageContainer.append(levels)
+                worldContainer.append(stageContainer)
+                lastCompleted = true
+                for level, index in stage.levels
+                    do (level, index) =>
+                        levelElement = $(document.createElement('DIV'))
+                        levelElement.addClass('level')
+                        levelElement.addClass('completed')if level.completed
+                        levelElement.addClass('inactive') unless level.completed or lastCompleted
+                        
+                        levelInfo = $(document.createElement('DIV'))
+                        levelInfo.addClass('level_info')
+                        levelInfo.html """
+                            <h3>#{level.challenge}</h3>
+                            <div class='completed'>
+                                <div  class='hints'>
+                                    <h3>Hints:</h3>
+                                    <ul>
+                                        #{("<li>#{hint}</li>" for hint in level.hints).join('')}
+                                    </ul>
+                                </div>
+                                <div class='complete_lesson'>
+                                    <h3>Lesson:</h3>
+                                    #{level.complete.replace('<br/><br/>', '<br/>')}
+                                </div>
+                            </div>
+                        """
+                        levelElement.append(levelInfo)
+                        levelElement.prepend(level.completeVideo.replace(/iframe/, 'iframe class=\'completed\''))
+                        
+                        levelLink = $(document.createElement('A'))
+                        if level.completed
+                            levelLink.html('Completed - Load Again')
+                        else
+                            levelLink.html('Load This Challenge')
+                        levelLink.addClass('level_link')
+                        levelLink.bind 'click', => 
+                            @loadLevel(level.id)
+                            @showLevel()
+                        
+                        levelElement.append(levelLink)
+                            
+                        levels.append(levelElement)
+                        lastCompleted = level.completed
         
+    showLevelSelector: -> @el.addClass('show_level_selector')
         
-    showLevel: ->
+    showLevel: -> @el.removeClass('show_level_selector')
         

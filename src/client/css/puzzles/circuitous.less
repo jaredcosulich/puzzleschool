@@ -15,12 +15,23 @@
     width: @width;
     outline: 3px solid darken(@white, 25%);
     margin: 18px 0 0 -12px;
-    position: relative;
     overflow: hidden;
     background-color: white;
     border: @border solid white;        
     .no_select();
     .inner-shadow(0, 0, 18px, 60%);
+
+    .game {
+        position: relative;
+        overflow: hidden;
+        transition: margin-top 1s ease-out;
+    }
+    
+    &.show_level_selector {
+        .game {
+            margin-top: (@height * -1) - 18;
+        }
+    }
 
     &.editor .board {
         float: left;
@@ -694,25 +705,91 @@
         }
     }    
     
+    
     .level_selector {
-        text-align: center;
+        height: @height;
+        overflow: auto;
+        h1 {
+            padding: 30px;
+            text-align: center;
+        }
+        
         .world {
             .stage {
-                padding-top: 12px;
+                h2 {
+                    text-align: center;
+                }
                 .levels {
-                    padding: 12px;
                     .level {
-                        display: block;
-                        content: "\00a0"; 
-                        height: 24px;
-                        line-height: 24px;
-                        .button-color(@black);
-                        float: left;
-                        margin: 12px 0 0 15px;
+                        border: 1px dashed @lightgrey;
+                        .rounded(12px);
+                        padding: 24px;
+                        margin: 24px 120px;
+                        text-align: center;
+                        overflow: hidden;
+                        
+                        iframe {
+                            float: right;
+                            margin-bottom: 12px;
+                        }
+                        
+                        .level_info {
+                            margin-bottom: 12px;
+                            
+                            .hints, .complete_lesson {
+                                padding-top: 24px;
+                                ul {
+                                    margin: 3px 0 0 0;
+                                    padding-left: 24px;
+                                }
+                            }
+                        }
+                        
+                        .level_link {
+                            clear: both;
+                            .button-color(@blue);
+                            color: @black;
+                        }
+                        
+                        &.inactive {
+                            opacity: 0.4;
+                            color: @grey;
+                            
+                            .level_link {
+                                color: @grey;
+                            }                            
+                        }
+                        
+                        &:hover {
+                            opacity: 1;
+                            color: @black;
+                            
+                            .level_link {
+                                color: @black;
+                            }
+                        }
                         
                         &.completed {
-                            .button-color(@green);
-                            margin: 12px 0 0 15px;
+                            margin: 24px;
+                            
+                            .level_info {
+                                text-align: left;
+                                overflow: hidden;
+                                width: 60%;
+                                min-height: 225px;
+                            }
+                            
+                            .level_link {
+                                .button-color(@green);
+                            }
+                            
+                            .completed {
+                                display: block;
+                            }
+                        }
+                        
+                        .completed {
+                            display: none;
                         }
                     }                    
                 }
