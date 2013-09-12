@@ -33,13 +33,14 @@ circuitous.ViewHelper = (function() {
     this.board = new circuitous.Board({
       el: this.$('.board')
     });
-    return this.selector = new circuitous.Selector({
+    this.selector = new circuitous.Selector({
       add: function(component) {
         return _this.addComponent(component, true);
       },
       button: this.$('.add_component'),
       selectorHtml: 'Add Another Component'
     });
+    return this.initValues();
   };
 
   ViewHelper.prototype.addComponent = function(component, onBoard) {
@@ -78,6 +79,25 @@ circuitous.ViewHelper = (function() {
       }
     }
     return (_ref1 = component.tag) != null ? _ref1.position() : void 0;
+  };
+
+  ViewHelper.prototype.initValues = function() {
+    var showValues,
+      _this = this;
+    showValues = this.$('.show_values');
+    return showValues.bind('click.toggle_values touchstart.toggle_values', function() {
+      var cid, component, hideValues, _ref1, _results;
+      hideValues = showValues.hasClass('on');
+      showValues.removeClass(hideValues ? 'on' : 'off');
+      showValues.addClass(hideValues ? 'off' : 'on');
+      _ref1 = _this.board.components;
+      _results = [];
+      for (cid in _ref1) {
+        component = _ref1[cid];
+        _results.push(component.tag[hideValues ? 'hide' : 'show']());
+      }
+      return _results;
+    });
   };
 
   return ViewHelper;

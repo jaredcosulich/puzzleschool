@@ -20,7 +20,9 @@ class circuitous.ViewHelper
         @selector = new circuitous.Selector
             add: (component) => @addComponent(component, true)
             button: @$('.add_component')
-            selectorHtml: 'Add Another Component'            
+            selectorHtml: 'Add Another Component' 
+            
+        @initValues()           
         
     addComponent: (component, onBoard=false) ->
         component.appendTo(@board.cells)
@@ -48,4 +50,14 @@ class circuitous.ViewHelper
                 @board.removeComponent(component)
                 component.resetDrag()
         component.tag?.position()
-                
+    
+    initValues: ->
+        showValues = @$('.show_values')
+        showValues.bind 'click.toggle_values touchstart.toggle_values', => 
+            hideValues = showValues.hasClass('on')
+            showValues.removeClass(if hideValues then 'on' else 'off')
+            showValues.addClass(if hideValues then 'off' else 'on')
+            for cid, component of @board.components
+                component.tag[if hideValues then 'hide' else 'show']()
+        
+                    

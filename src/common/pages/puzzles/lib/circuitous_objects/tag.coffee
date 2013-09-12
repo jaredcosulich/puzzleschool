@@ -63,9 +63,13 @@ class tag.Tag extends circuitousObject.Object
     changeContent: (@info) ->
         @smallContent.html("#{@info.current}A")
         @largeContent.html """
-            <div class='navigation'>x<br/>y</div>
+            <div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>
             #{@info.name}<br/>
             #{@info.current} Amps, 
             #{if @info.voltage then "#{@info.voltage} Volts," else ''} 
             #{@info.resistance} Ohms
         """
+
+    hide: -> @tag.hide()
+    
+    show: -> @tag.show()

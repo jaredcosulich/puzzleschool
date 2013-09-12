@@ -92,7 +92,15 @@ tag.Tag = (function(_super) {
   Tag.prototype.changeContent = function(info) {
     this.info = info;
     this.smallContent.html("" + this.info.current + "A");
-    return this.largeContent.html("<div class='navigation'>x<br/>y</div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
+    return this.largeContent.html("<div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
+  };
+
+  Tag.prototype.hide = function() {
+    return this.tag.hide();
+  };
+
+  Tag.prototype.show = function() {
+    return this.tag.show();
   };
 
   return Tag;
