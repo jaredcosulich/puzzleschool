@@ -61,7 +61,12 @@ class tag.Tag extends circuitousObject.Object
         
     setInfo: (info) -> @changeContent(info)
     
-    changeContent: (@info) ->
+    changeContent: (info) ->
+        for key, value of info when value != undefined
+            return unless @info?[key] != value 
+
+        @info = info
+        
         @smallContent.html("#{@info.current}A")
         @largeContent.html """
             <div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>
@@ -70,6 +75,14 @@ class tag.Tag extends circuitousObject.Object
             #{if @info.voltage then "#{@info.voltage} Volts," else ''} 
             #{@info.resistance} Ohms
         """
+        $.timeout 10, => 
+            @largeContent.find('.icon-pencil').bind 'mousedown.edit', (e) => 
+                e.stop()
+                alert('Edit component values coming soon.')
+                
+            @largeContent.find('.icon-undo').bind 'mousedown.rotate', (e) => 
+                e.stop()
+                alert('Rotate component coming soon.')
 
     hide: -> @tag.hide()
     

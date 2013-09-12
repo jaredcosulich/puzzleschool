@@ -91,6 +91,12 @@
 .bg-alpha(@color, @alpha: @default-opacity) { background-color: hsla(hue(@color), saturation(@color), lightness(@color), @alpha); }
 .fg-alpha(@color, @alpha: @default-opacity) { background-color: hsla(hue(@color), saturation(@color), lightness(@color), @alpha); }
 
+.rotate(@degrees) {
+    transform:rotate(@degrees);
+    -ms-transform:rotate(@degrees); 
+    -webkit-transform:rotate(@degrees);    
+}
+
 .no_select() {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

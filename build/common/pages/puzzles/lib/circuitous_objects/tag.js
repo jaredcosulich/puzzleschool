@@ -96,9 +96,29 @@ tag.Tag = (function(_super) {
   };
 
   Tag.prototype.changeContent = function(info) {
+    var key, value, _ref,
+      _this = this;
+    for (key in info) {
+      value = info[key];
+      if (value !== void 0) {
+        if (((_ref = this.info) != null ? _ref[key] : void 0) === value) {
+          return;
+        }
+      }
+    }
     this.info = info;
     this.smallContent.html("" + this.info.current + "A");
-    return this.largeContent.html("<div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
+    this.largeContent.html("<div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
+    return $.timeout(10, function() {
+      _this.largeContent.find('.icon-pencil').bind('mousedown.edit', function(e) {
+        e.stop();
+        return alert('Edit component values coming soon.');
+      });
+      return _this.largeContent.find('.icon-undo').bind('mousedown.rotate', function(e) {
+        e.stop();
+        return alert('Rotate component coming soon.');
+      });
+    });
   };
 
   Tag.prototype.hide = function() {
