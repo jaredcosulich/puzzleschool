@@ -129,7 +129,15 @@ soma.views({
           this.showLevelSelector();
         }
       }
-      return this.initInstructions();
+      this.initInstructions();
+      return setInterval((function() {
+        var components;
+        if (location.href.indexOf(_this.level.id) > -1) {
+          return;
+        }
+        components = location.href.split('/');
+        return _this.loadLevel(parseInt(components[components.length - 1]));
+      }), 500);
     },
     initInfo: function() {
       var _this = this;
@@ -300,14 +308,21 @@ soma.views({
       }
     },
     loadLevel: function(levelId) {
+      var title;
       if (!levelId) {
         this.level = this.worlds[0].stages[0].levels[0];
       } else {
         this.level = this.findLevel(levelId);
       }
+      if (!this.level) {
+        this.showLevelSelector();
+        return;
+      }
       this.viewHelper.board.clear();
       this.showChallenge();
-      return history.pushState(null, null, "/puzzles/circuitous/" + this.level.id);
+      title = "Circuitous Level " + this.level.id;
+      history.pushState(null, title, "/puzzles/circuitous/" + this.level.id);
+      return document.title = title;
     },
     showChallenge: function() {
       var info,
@@ -401,6 +416,7 @@ soma.views({
       var info,
         _this = this;
       info = this.$('.info');
+      info.find('iframe').remove();
       return info.addClass('hidden').animate({
         height: 0,
         duration: 500,

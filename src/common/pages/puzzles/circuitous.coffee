@@ -116,6 +116,13 @@ soma.views
                     
             @initInstructions()
         
+            setInterval((=>
+                return if location.href.indexOf(@level.id) > -1
+                components = location.href.split('/')
+                @loadLevel(parseInt(components[components.length - 1]))
+            ), 500)
+            
+        
         initInfo: ->
             @$('.info .challenge').hide()
             @$('.select_level').bind 'click', => @showLevelSelector()
@@ -222,10 +229,16 @@ soma.views
                 @level = @worlds[0].stages[0].levels[0]
             else
                 @level = @findLevel(levelId)
+
+            if not @level
+                @showLevelSelector()
+                return
             
             @viewHelper.board.clear()
             @showChallenge()
-            history.pushState(null, null, "/puzzles/circuitous/#{@level.id}")
+            title = "Circuitous Level #{@level.id}"
+            history.pushState(null, title, "/puzzles/circuitous/#{@level.id}")
+            document.title = title;
             
         showChallenge: ->
             info = @$('.info')
@@ -289,7 +302,8 @@ soma.views
             
         
         hideInfo: (callback) ->
-            info = @$('.info') 
+            info = @$('.info')
+            info.find('iframe').remove() 
             info.addClass('hidden').animate
                 height: 0
                 duration: 500
