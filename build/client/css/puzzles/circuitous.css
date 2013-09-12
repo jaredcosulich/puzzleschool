@@ -329,6 +329,10 @@
   color: #949494;
   cursor: normal;
 }
+.circuitous .right_side .info .challenge .hints .solution {
+  display: block;
+  margin-bottom: -12px;
+}
 .circuitous .right_side .info .complete iframe {
   margin: 24px 0 12px -5px;
 }

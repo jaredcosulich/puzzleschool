@@ -339,7 +339,7 @@ soma.views({
         hintLink = $(document.createElement('DIV'));
         hintLink.addClass('hint_link');
         hintLink.addClass('hidden');
-        if (index > 0) {
+        if (index > 1) {
           hintLink.addClass('disabled');
         }
         hintLink.html("Hint " + (index + 1));
@@ -348,7 +348,7 @@ soma.views({
         hintDiv.html("<b>Hint " + (index + 1) + "</b>: " + hint);
         hintsElement.append(hintDiv);
         hintLink.bind('click', function() {
-          var height;
+          var height, solution;
           if (hintLink.hasClass('disabled')) {
             return;
           }
@@ -362,11 +362,25 @@ soma.views({
             paddingTop: 12,
             duration: 250
           });
-          return $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled');
+          $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled');
+          if (index === _this.level.hints.length - 1) {
+            hintsLinks.remove();
+            solution = $(document.createElement('A'));
+            solution.addClass('solution');
+            solution.html('View An Example Solution');
+            solution.bind('click', function() {
+              return _this.showModal("<img src='/assets/images/puzzles/circuitous/levels/" + _this.level.id + "_solution.png'/>");
+            });
+            return hintsElement.append(solution);
+          }
         });
         hintsLinks.append(hintLink);
         return $.timeout(10, function() {
-          return hintLink.removeClass('hidden');
+          if (index > 0) {
+            return hintLink.removeClass('hidden');
+          } else {
+            return hintLink.trigger('click');
+          }
         });
       };
       for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {

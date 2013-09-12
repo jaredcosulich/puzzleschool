@@ -251,7 +251,7 @@ soma.views
                     hintLink = $(document.createElement('DIV'))
                     hintLink.addClass('hint_link')
                     hintLink.addClass('hidden')
-                    hintLink.addClass('disabled') if index > 0
+                    hintLink.addClass('disabled') if index > 1
                     hintLink.html("Hint #{index + 1}")
                 
                     hintDiv = $(document.createElement('DIV'))
@@ -266,10 +266,22 @@ soma.views
                         hintDiv.addClass('displayed')
                         hintDiv.animate(height: height + 12, marginTop: -24, marginBottom: 24, paddingTop: 12, duration: 250)
                         $(hintsElement.find('.hint_link')[index + 1]).removeClass('disabled')
+                        if index == @level.hints.length - 1
+                            hintsLinks.remove()
+                            solution = $(document.createElement('A'))
+                            solution.addClass('solution')
+                            solution.html('View An Example Solution')
+                            solution.bind 'click', => 
+                                @showModal("<img src='/assets/images/puzzles/circuitous/levels/#{@level.id}_solution.png'/>")
+                            hintsElement.append(solution)
                 
                     hintsLinks.append(hintLink)
-                    $.timeout 10, -> hintLink.removeClass('hidden')
-            
+                    $.timeout 10, -> 
+                        if index > 0
+                            hintLink.removeClass('hidden')
+                        else 
+                            hintLink.trigger('click')
+                            
             hintsElement.append(hintsLinks)
             
         
