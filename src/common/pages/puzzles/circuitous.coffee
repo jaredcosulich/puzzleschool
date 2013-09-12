@@ -118,6 +118,8 @@ soma.views
         
         initInfo: ->
             @$('.info .challenge').hide()
+            @$('.select_level').bind 'click', => @showLevelSelector()
+            @$('.all_levels').bind 'click', => @viewHelper.showAllLevels()
         
         initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
@@ -223,6 +225,7 @@ soma.views
             
             @viewHelper.board.clear()
             @showChallenge()
+            history.pushState(null, null, "/puzzles/circuitous/#{@level.id}")
             
         showChallenge: ->
             info = @$('.info')

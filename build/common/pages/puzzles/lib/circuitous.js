@@ -100,6 +100,10 @@ circuitous.ViewHelper = (function() {
     });
   };
 
+  ViewHelper.prototype.showAllLevels = function() {};
+
+  ViewHelper.prototype.showLevel = function() {};
+
   return ViewHelper;
 
 })();

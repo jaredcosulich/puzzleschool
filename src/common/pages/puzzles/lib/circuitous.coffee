@@ -60,4 +60,8 @@ class circuitous.ViewHelper
             for cid, component of @board.components
                 component.tag[if hideValues then 'hide' else 'show']()
         
-                    
+    showAllLevels: ->
+        
+        
+    showLevel: ->
+        

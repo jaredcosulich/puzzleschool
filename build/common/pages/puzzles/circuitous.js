@@ -132,7 +132,14 @@ soma.views({
       return this.initInstructions();
     },
     initInfo: function() {
-      return this.$('.info .challenge').hide();
+      var _this = this;
+      this.$('.info .challenge').hide();
+      this.$('.select_level').bind('click', function() {
+        return _this.showLevelSelector();
+      });
+      return this.$('.all_levels').bind('click', function() {
+        return _this.viewHelper.showAllLevels();
+      });
     },
     initInstructions: function() {
       var _this = this;
@@ -299,7 +306,8 @@ soma.views({
         this.level = this.findLevel(levelId);
       }
       this.viewHelper.board.clear();
-      return this.showChallenge();
+      this.showChallenge();
+      return history.pushState(null, null, "/puzzles/circuitous/" + this.level.id);
     },
     showChallenge: function() {
       var info,
