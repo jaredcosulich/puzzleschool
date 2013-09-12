@@ -309,19 +309,28 @@ soma.views
             completeElement.html """
                 <h1>Success</h1>
                 <h3 class='description'>#{@level.complete}</h3>
-                <div class='buttons'><a class='button select_level'>Select Level</a></div>
+                <div class='buttons'><a class='button next_level'>Next Level</a></div>
             """
 
             info = @$('.info') 
             @hideInfo =>
                 if @level.completeVideo
                     $.timeout 250, =>
-                        completeElement.find('.select_level').bind 'click', => @showLevelSelector()
+                        completeElement.find('.next_level').bind 'click', => 
+                            selectNext = false
+                            for world in @worlds
+                                for stage in world.stages
+                                    for level in stage.levels
+                                        if selectNext
+                                            @loadLevel(level.id) 
+                                            return true
+                                        selectNext = true if level.id == @level.id        
+                            
                         completeElement.find('.description').append(@level.completeVideo)
                     
                 info.find('.challenge').hide()
                 info.append(completeElement)
-                @showInfo(height: (info.parent().height() * 0.85))
+                @showInfo(height: (info.parent().height() * 0.82))
                         
         showLevelSelector: ->
             levelSelector = $(document.createElement('DIV'))

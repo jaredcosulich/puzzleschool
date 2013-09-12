@@ -399,56 +399,56 @@
             }
         }
         
-        .values {
+        .control_panel {
             position: absolute;
             bottom: 12px;
-            left: 12px;
-            font-weight: bold;
-            text-align: center;
-            .show_values {
-                display: block;
-                width: 150px;
-                height: 26px;
-                
-                &::before, &::after {
-                    width: 48%;
-                    text-align: center;
-                    color: white;
-                    font-weight: bold;
-                    display: inline-block;                    
-                    content: "\00a0";
-                    border: 1px solid #ccc;
-                    .box-shadow(1px 1px 2px rgba(0,0,0,0.5));
-                    background-color: @white;
-                }
-                &.on::before, &.off::after {
-                    .box-shadow(inset -3px 3px 9px rgba(0,0,0,0.5));  
-                    padding: 2px 0;                  
-                }
-                &.on::before {
-                    content: 'ON';
-                    background-color: @blue;
-                }
-                &.off::after {
-                    content: 'OFF';
-                    background-color: @grey;
+            left: 0;
+            width: 100%;
+                   
+            td {
+                width: 50%;
+                text-align: center;
+            }     
+            .values {
+                font-weight: bold;
+                text-align: center;
+                .show_values {
+                    display: block;
+                    width: 150px;
+                    height: 26px;
+                    margin-top: 3px;
+
+                    &::before, &::after {
+                        width: 48%;
+                        text-align: center;
+                        font-weight: bold;
+                        display: inline-block;                    
+                        content: "Values";
+                        color: @black;
+                        border: 1px solid #ccc;
+                        .box-shadow(1px 1px 2px rgba(0,0,0,0.5));
+                        background-color: @white;
+                    }
+                    &.on::before, &.off::after {
+                        .box-shadow(inset -3px 3px 9px rgba(0,0,0,0.5));  
+                        padding: 2px 0;                  
+                    }
+                    &.on::before {
+                        content: 'ON';
+                        background-color: @blue;
+                    }
+                    &.off::after {
+                        content: 'OFF';
+                        background-color: @grey;
+                    }
                 }
             }
-        }
-        
-        .add_component {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            .button-color(@blue);
-            color: white;
-            padding: 6px 12px;
-            
-            &:active {
-                position: absolute;
-                bottom: 11px;
-                top: auto;
-            }
+
+            .add_component, .select_level, .all_levels {
+                .button-color(@blue);
+                color: white;
+                padding: 6px 12px;
+            }            
         }
         
         .options {
@@ -742,29 +742,6 @@
             width: 480px;
             height: 318px;
             margin: 40px;
-            .challenge, .complete {
-                padding-top: 30px;
-                text-align: center;
-                .description {
-                    font-size: @h3size;
-                    padding: 30px;                    
-                }
-                img {
-                    display: block;
-                    float: right;
-                    margin-left: 12px;
-                }
-            }
-            .go {
-                .button-color(@blue);
-                font-size: @h2size;
-            }
-            .nav_links {
-                padding-top: 45px;
-                a {
-                    .button-color(@red);
-                }
-            }
         }
     }
 }
