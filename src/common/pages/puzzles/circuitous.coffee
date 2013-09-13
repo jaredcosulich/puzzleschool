@@ -326,7 +326,7 @@ soma.views
             @level.completed = new Date().getTime()
             @viewHelper.markLevelCompleted(@level.id)
             
-            return
+            # return
             completeElement = $(document.createElement('DIV'))
             completeElement.addClass('complete')
             completeElement.html """
