@@ -18,6 +18,7 @@ class circuitous.ViewHelper
             el: @$('.board')
 
         @selector = new circuitous.Selector
+            container: @$('.game')
             add: (component) => @addComponent(component, true)
             button: @$('.add_component')
             selectorHtml: '<h2>Add Another Component</h2>' 

@@ -34,6 +34,7 @@ circuitous.ViewHelper = (function() {
       el: this.$('.board')
     });
     this.selector = new circuitous.Selector({
+      container: this.$('.game'),
       add: function(component) {
         return _this.addComponent(component, true);
       },

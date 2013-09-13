@@ -494,7 +494,7 @@ soma.views({
         info.find('.challenge').hide();
         info.append(completeElement);
         return _this.showInfo({
-          height: info.parent().height() * 0.82
+          height: info.parent().height() * 0.81
         });
       });
     },

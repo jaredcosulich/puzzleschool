@@ -39,6 +39,7 @@ class options.Options extends circuitousObject.Object
         @attachSelector(@$('.empty_option')[0])
         
         @selector = new circuitous.Selector
+            container: @board.el.closest('.game')
             add: (component) => @addComponent(component)
             button: @selectorButton
             

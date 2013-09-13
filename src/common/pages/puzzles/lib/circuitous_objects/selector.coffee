@@ -10,7 +10,7 @@ selector.ITEM_TYPES = [
 ]
 
 class selector.Selector extends circuitousObject.Object
-    constructor: ({@add, @button, selectorHtml}) ->
+    constructor: ({@container, @add, @button, selectorHtml}) ->
         selectorHtml or= '''
             <h2>Select An Item</h2>
             <p>Click an item below to add it to the list.</p>
@@ -51,7 +51,7 @@ class selector.Selector extends circuitousObject.Object
                     itemRow.append(itemCell)
             itemTable.append(itemRow)
         @dialog.append(itemTable)
-        @overallContainer().append(@dialog)
+        @container.append(@dialog)
                 
     overallContainer: -> @button.closest('.circuitous')            
     
@@ -59,7 +59,7 @@ class selector.Selector extends circuitousObject.Object
         
     initButton: () ->
         @button.bind 'click.toggle_selector', => @toggleDialog()
-        @overallContainerOffset = @overallContainer().offset()
+        @containerOffset = @container.offset()
 
     toggleDialog: ->
         if parseInt(@dialog.css('opacity')) > 0 then @hide() else @show()
@@ -76,8 +76,8 @@ class selector.Selector extends circuitousObject.Object
         
     show: ->
         @dialog.css
-            top: (@overallContainerOffset.height - @dialog.height()) / 2
-            left: (@overallContainerOffset.width - @dialog.width()) / 2
+            top: (@containerOffset.height - @dialog.height()) / 2
+            left: (@containerOffset.width - @dialog.width()) / 2
         
         @dialog.animate(opacity: 1, duration: 250)
         $.timeout 100, => $(document.body).one 'mouseup.hide_selector', => @hide()

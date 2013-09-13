@@ -59,6 +59,7 @@ options.Options = (function(_super) {
     this.selectorButton.html('+');
     this.attachSelector(this.$('.empty_option')[0]);
     return this.selector = new circuitous.Selector({
+      container: this.board.el.closest('.game'),
       add: function(component) {
         return _this.addComponent(component);
       },

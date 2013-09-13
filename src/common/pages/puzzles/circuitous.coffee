@@ -325,6 +325,8 @@ soma.views
             return if @level.completed > @level.loaded
             @level.completed = new Date().getTime()
             @viewHelper.markLevelCompleted(@level.id)
+            
+            # return
             completeElement = $(document.createElement('DIV'))
             completeElement.addClass('complete')
             completeElement.html """
@@ -351,7 +353,7 @@ soma.views
                     
                 info.find('.challenge').hide()
                 info.append(completeElement)
-                @showInfo(height: (info.parent().height() * 0.82))
+                @showInfo(height: (info.parent().height() * 0.81))
 
         showLevelSelector: ->
             levelSelector = $(document.createElement('DIV'))

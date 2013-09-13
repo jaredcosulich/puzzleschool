@@ -15,7 +15,7 @@ selector.Selector = (function(_super) {
 
   function Selector(_arg) {
     var selectorHtml;
-    this.add = _arg.add, this.button = _arg.button, selectorHtml = _arg.selectorHtml;
+    this.container = _arg.container, this.add = _arg.add, this.button = _arg.button, selectorHtml = _arg.selectorHtml;
     selectorHtml || (selectorHtml = '<h2>Select An Item</h2>\n<p>Click an item below to add it to the list.</p>');
     this.init(selectorHtml);
   }
@@ -62,7 +62,7 @@ selector.Selector = (function(_super) {
       itemTable.append(itemRow);
     }
     this.dialog.append(itemTable);
-    return this.overallContainer().append(this.dialog);
+    return this.container.append(this.dialog);
   };
 
   Selector.prototype.overallContainer = function() {
@@ -78,7 +78,7 @@ selector.Selector = (function(_super) {
     this.button.bind('click.toggle_selector', function() {
       return _this.toggleDialog();
     });
-    return this.overallContainerOffset = this.overallContainer().offset();
+    return this.containerOffset = this.container.offset();
   };
 
   Selector.prototype.toggleDialog = function() {
@@ -107,8 +107,8 @@ selector.Selector = (function(_super) {
   Selector.prototype.show = function() {
     var _this = this;
     this.dialog.css({
-      top: (this.overallContainerOffset.height - this.dialog.height()) / 2,
-      left: (this.overallContainerOffset.width - this.dialog.width()) / 2
+      top: (this.containerOffset.height - this.dialog.height()) / 2,
+      left: (this.containerOffset.width - this.dialog.width()) / 2
     });
     this.dialog.animate({
       opacity: 1,
