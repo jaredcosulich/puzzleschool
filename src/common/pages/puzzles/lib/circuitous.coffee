@@ -80,6 +80,7 @@ class circuitous.ViewHelper
                     do (level, index) =>
                         levelElement = $(document.createElement('DIV'))
                         levelElement.addClass('level')
+                        levelElement.addClass("level_#{level.id}")
                         levelElement.addClass('completed')if level.completed
                         levelElement.addClass('inactive') unless level.completed or lastCompleted
                         
@@ -117,6 +118,14 @@ class circuitous.ViewHelper
                             
                         levels.append(levelElement)
                         lastCompleted = level.completed
+        
+    markLevelCompleted: (levelId) ->
+        level = @$(".level_#{levelId}")
+        level.addClass('completed')     
+        level.find('.level_link').html('Completed - Load Again')
+        nextLevel = level.next()
+        nextLevel.removeClass('inactive')
+        @$('.level_selector').scrollTop(nextLevel.offset().top - @$('.level_selector').offset().top - 200)
         
     showLevelSelector: -> @el.addClass('show_level_selector')
         

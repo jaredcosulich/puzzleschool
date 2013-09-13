@@ -449,6 +449,7 @@ soma.views({
         return;
       }
       this.level.completed = new Date().getTime();
+      this.viewHelper.markLevelCompleted(this.level.id);
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
       completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button next_level'>Next Level</a></div>");

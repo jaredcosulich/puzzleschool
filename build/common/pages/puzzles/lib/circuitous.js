@@ -136,6 +136,7 @@ circuitous.ViewHelper = (function() {
                 var hint, levelElement, levelInfo, levelLink;
                 levelElement = $(document.createElement('DIV'));
                 levelElement.addClass('level');
+                levelElement.addClass("level_" + level.id);
                 if (level.completed) {
                   levelElement.addClass('completed');
                 }
@@ -179,6 +180,16 @@ circuitous.ViewHelper = (function() {
       }).call(this));
     }
     return _results;
+  };
+
+  ViewHelper.prototype.markLevelCompleted = function(levelId) {
+    var level, nextLevel;
+    level = this.$(".level_" + levelId);
+    level.addClass('completed');
+    level.find('.level_link').html('Completed - Load Again');
+    nextLevel = level.next();
+    nextLevel.removeClass('inactive');
+    return this.$('.level_selector').scrollTop(nextLevel.offset().top - this.$('.level_selector').offset().top - 200);
   };
 
   ViewHelper.prototype.showLevelSelector = function() {
