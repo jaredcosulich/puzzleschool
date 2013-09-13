@@ -6,7 +6,9 @@ describe("BoardAnalyzer", function() {
         if (debugInfo) $('.circuitous').css({top: 100});
         html = $('.circuitous').html()
         game = new circuitous.ViewHelper({
-            el: $('.circuitous')
+            el: $('.circuitous'),
+            worlds: [], 
+            loadLevel: function() {}
         });
         
         board = new circuitous.Board({
