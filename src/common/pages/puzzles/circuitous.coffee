@@ -113,8 +113,10 @@ soma.views
             else
                 @initInfo()
                 @initCompleteListener()
-                @loadLevel(@levelId)
-                    
+                if @levelId
+                    @loadLevel(@levelId)
+                else
+                    @showLevelSelector()                    
                     
             @initInstructions()
         
@@ -128,7 +130,9 @@ soma.views
         
         initInfo: ->
             @$('.info .challenge').hide()
-            @$('.select_level').bind 'click', => @viewHelper.showLevelSelector()
+            @$('.select_level').bind 'click', => @showLevelSelector()
+            @$('.all_levels').bind 'click', => @viewHelper.showAllLevels()
+            @$('.schematic_mode').bind 'click', => alert('This will show the current circuit in standard schematic notation. We\'ll make the button look enabled when it is ready.')
         
         initInstructions: ->
             $('.load_instructions .load button').bind 'click', =>
@@ -230,7 +234,7 @@ soma.views
                 @level = @findLevel(levelId)
 
             if not @level
-                @viewHelper.showLevelSelector()
+                @showLevelSelector()
                 return
             
             @viewHelper.board.clear()
@@ -348,6 +352,35 @@ soma.views
                 info.find('.challenge').hide()
                 info.append(completeElement)
                 @showInfo(height: (info.parent().height() * 0.82))
+
+        showLevelSelector: ->
+            levelSelector = $(document.createElement('DIV'))
+            levelSelector.addClass('level_selector')
+            for world, index in @worlds
+                worldContainer = $(document.createElement('DIV'))
+                worldContainer.addClass('world')
+                worldContainer.html("<h2>World #{index + 1}</h2>")
+                levelSelector.append(worldContainer)
+                for stage in world.stages
+                    stageContainer = $(document.createElement('DIV'))
+                    stageContainer.addClass('stage')
+                    stageContainer.html("<h3>#{stage.name}</h3>")
+                    levels = $(document.createElement('DIV'))
+                    levels.addClass('levels')
+                    stageContainer.append(levels)
+                    worldContainer.append(stageContainer)
+                    for level, index in stage.levels
+                        do (level, index) =>
+                            levelLink = $(document.createElement('A'))
+                            levelLink.html("Level #{index + 1}")
+                            levelLink.addClass('level')
+                            levelLink.addClass('completed') if level.completed
+                            levelLink.bind 'click', => 
+                                @hideModal => @loadLevel(level.id)
+
+                            levels.append(levelLink)
+
+            @showModal(levelSelector)
                     
         showModal: (content=null) ->
             if not @modalMenu

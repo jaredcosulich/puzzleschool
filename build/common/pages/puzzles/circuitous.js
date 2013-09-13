@@ -127,7 +127,11 @@ soma.views({
       } else {
         this.initInfo();
         this.initCompleteListener();
-        this.loadLevel(this.levelId);
+        if (this.levelId) {
+          this.loadLevel(this.levelId);
+        } else {
+          this.showLevelSelector();
+        }
       }
       this.initInstructions();
       return setInterval((function() {
@@ -145,8 +149,14 @@ soma.views({
     initInfo: function() {
       var _this = this;
       this.$('.info .challenge').hide();
-      return this.$('.select_level').bind('click', function() {
-        return _this.viewHelper.showLevelSelector();
+      this.$('.select_level').bind('click', function() {
+        return _this.showLevelSelector();
+      });
+      this.$('.all_levels').bind('click', function() {
+        return _this.viewHelper.showAllLevels();
+      });
+      return this.$('.schematic_mode').bind('click', function() {
+        return alert('This will show the current circuit in standard schematic notation. We\'ll make the button look enabled when it is ready.');
       });
     },
     initInstructions: function() {
@@ -312,7 +322,7 @@ soma.views({
         this.level = this.findLevel(levelId);
       }
       if (!this.level) {
-        this.viewHelper.showLevelSelector();
+        this.showLevelSelector();
         return;
       }
       this.viewHelper.board.clear();
@@ -487,6 +497,52 @@ soma.views({
           height: info.parent().height() * 0.82
         });
       });
+    },
+    showLevelSelector: function() {
+      var index, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+        _this = this;
+      levelSelector = $(document.createElement('DIV'));
+      levelSelector.addClass('level_selector');
+      _ref = this.worlds;
+      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+        world = _ref[index];
+        worldContainer = $(document.createElement('DIV'));
+        worldContainer.addClass('world');
+        worldContainer.html("<h2>World " + (index + 1) + "</h2>");
+        levelSelector.append(worldContainer);
+        _ref1 = world.stages;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          stage = _ref1[_j];
+          stageContainer = $(document.createElement('DIV'));
+          stageContainer.addClass('stage');
+          stageContainer.html("<h3>" + stage.name + "</h3>");
+          levels = $(document.createElement('DIV'));
+          levels.addClass('levels');
+          stageContainer.append(levels);
+          worldContainer.append(stageContainer);
+          _ref2 = stage.levels;
+          _fn = function(level, index) {
+            var levelLink;
+            levelLink = $(document.createElement('A'));
+            levelLink.html("Level " + (index + 1));
+            levelLink.addClass('level');
+            if (level.completed) {
+              levelLink.addClass('completed');
+            }
+            levelLink.bind('click', function() {
+              return _this.hideModal(function() {
+                return _this.loadLevel(level.id);
+              });
+            });
+            return levels.append(levelLink);
+          };
+          for (index = _k = 0, _len2 = _ref2.length; _k < _len2; index = ++_k) {
+            level = _ref2[index];
+            _fn(level, index);
+          }
+        }
+      }
+      return this.showModal(levelSelector);
     },
     showModal: function(content) {
       var _this = this;

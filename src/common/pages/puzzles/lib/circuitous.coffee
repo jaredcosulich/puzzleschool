@@ -22,7 +22,7 @@ class circuitous.ViewHelper
             button: @$('.add_component')
             selectorHtml: '<h2>Add Another Component</h2>' 
             
-        @initLevelSelector()
+        @initAllLevels()
         @initValues()           
         
     addComponent: (component, onBoard=false) ->
@@ -61,11 +61,11 @@ class circuitous.ViewHelper
             for cid, component of @board.components
                 component.tag[if hideValues then 'hide' else 'show']()
         
-    initLevelSelector: ->    
-        levelSelector = @$('.level_selector')
-        levelSelector.find('.back_to_challenge').bind 'click', => @showLevel()
+    initAllLevels: ->    
+        allLevels = @$('.all_levels')
+        allLevels.find('.back_to_challenge').bind 'click', => @showLevel()
         
-        levelsContainer = levelSelector.find('.levels_container')
+        levelsContainer = allLevels.find('.levels_container')
         for world, index in @worlds
             worldContainer = $(document.createElement('DIV'))
             worldContainer.addClass('world')
@@ -130,7 +130,7 @@ class circuitous.ViewHelper
         nextLevel.removeClass('inactive')
         @$('.levels_container').scrollTop(nextLevel.offset().top - @$('.levels_container').offset().top - 200)
         
-    showLevelSelector: -> @el.addClass('show_level_selector')
+    showAllLevels: -> @el.addClass('show_all_levels')
         
-    showLevel: -> @el.removeClass('show_level_selector')
+    showLevel: -> @el.removeClass('show_all_levels')
         

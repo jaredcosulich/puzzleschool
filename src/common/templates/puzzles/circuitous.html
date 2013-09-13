@@ -8,7 +8,7 @@
     </h1>
     
     <div class='circuitous {:editor}editor{/editor}' data-level_id={level_id}> 
-        <div class='level_selector'>
+        <div class='all_levels'>
             <div class='levels_container'>
                 <h1>Levels</h1>
             </div>
@@ -51,11 +51,17 @@
                 <table class='control_panel'>
                     <tbody>
                         <tr>
+                            <td colspan=2>
+                                <a class='control add_component'>Add Component</a>
+                            </td>
+                        </tr>
+                        <tr><td></td><td></td></tr>
+                        <tr>
                             <td>
                                 <a class='control select_level'>Select Level</a>
                             </td>
                             <td>
-                                <a class='control add_component'>Add Component</a>
+                                <a class='control all_levels'>All Levels</a>
                             </td>
                         </tr>
                         <tr><td></td><td></td></tr>
@@ -71,11 +77,10 @@
                         </tr>
                     </tbody>
                 </table>
-                {/editor}
-            
-            </div>        
+                {/editor}            
+            </div>
+            <div class='modal_menu'><div class='close'></div><div class='content'></div></div>                    
         </div>
-        <div class='modal_menu'><div class='close'></div><div class='content'></div></div>
     </div>
 
     <div class='load_instructions'>

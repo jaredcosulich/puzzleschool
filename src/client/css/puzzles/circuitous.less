@@ -450,14 +450,15 @@
 
             .add_component, .select_level, .all_levels {
                 .button-color(@blue);
+                color: white;
             }            
             
             .schematic_mode {
                 .button-color(@grey);
+                color: @lightgrey;
             }
 
             .add_component, .select_level, .all_levels, .schematic_mode {
-                color: white;
                 padding: 3px 6px;
             }
         }
@@ -705,13 +706,13 @@
         }
     }    
     
-    &.show_level_selector {
-        .level_selector {
+    &.show_all_levels {
+        .all_levels {
             margin-top: 0;
         }
     }
     
-    .level_selector {
+    .all_levels {
         position: relative;
         margin-top: (@height * -1);
         transition: margin-top 1s ease-out;
@@ -818,6 +819,32 @@
                             }
                         }                    
                     }
+                }
+            }
+        }
+    }
+    
+    .level_selector {
+        text-align: center;
+        .world {
+            .stage {
+                padding-top: 12px;
+                .levels {
+                    padding: 12px;
+                    .level {
+                        display: block;
+                        content: "\00a0"; 
+                        height: 24px;
+                        line-height: 24px;
+                        .button-color(@black);
+                        float: left;
+                        margin: 12px 0 0 15px;
+                        
+                        &.completed {
+                            .button-color(@green);
+                            margin: 12px 0 0 15px;
+                        }
+                    }                    
                 }
             }
         }

@@ -40,7 +40,7 @@ circuitous.ViewHelper = (function() {
       button: this.$('.add_component'),
       selectorHtml: '<h2>Add Another Component</h2>'
     });
-    this.initLevelSelector();
+    this.initAllLevels();
     return this.initValues();
   };
 
@@ -101,14 +101,14 @@ circuitous.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.initLevelSelector = function() {
-    var index, lastCompleted, level, levelSelector, levels, levelsContainer, stage, stageContainer, world, worldContainer, _i, _len, _ref1, _results,
+  ViewHelper.prototype.initAllLevels = function() {
+    var allLevels, index, lastCompleted, level, levels, levelsContainer, stage, stageContainer, world, worldContainer, _i, _len, _ref1, _results,
       _this = this;
-    levelSelector = this.$('.level_selector');
-    levelSelector.find('.back_to_challenge').bind('click', function() {
+    allLevels = this.$('.all_levels');
+    allLevels.find('.back_to_challenge').bind('click', function() {
       return _this.showLevel();
     });
-    levelsContainer = levelSelector.find('.levels_container');
+    levelsContainer = allLevels.find('.levels_container');
     _ref1 = this.worlds;
     _results = [];
     for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
@@ -197,12 +197,12 @@ circuitous.ViewHelper = (function() {
     return this.$('.levels_container').scrollTop(nextLevel.offset().top - this.$('.levels_container').offset().top - 200);
   };
 
-  ViewHelper.prototype.showLevelSelector = function() {
-    return this.el.addClass('show_level_selector');
+  ViewHelper.prototype.showAllLevels = function() {
+    return this.el.addClass('show_all_levels');
   };
 
   ViewHelper.prototype.showLevel = function() {
-    return this.el.removeClass('show_level_selector');
+    return this.el.removeClass('show_all_levels');
   };
 
   return ViewHelper;
