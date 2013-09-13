@@ -465,34 +465,34 @@ soma.views({
       return this.hideInfo(function() {
         if (_this.level.completeVideo) {
           $.timeout(250, function() {
-            completeElement.find('.next_level').bind('click', function() {
-              var level, selectNext, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-              selectNext = false;
-              _ref = _this.worlds;
-              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                world = _ref[_i];
-                _ref1 = world.stages;
-                for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-                  stage = _ref1[_j];
-                  _ref2 = stage.levels;
-                  for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                    level = _ref2[_k];
-                    if (selectNext) {
-                      _this.loadLevel(level.id);
-                      return true;
-                    }
-                    if (level.id === _this.level.id) {
-                      selectNext = true;
-                    }
-                  }
-                }
-              }
-            });
             return completeElement.find('.description').append(_this.level.completeVideo);
           });
         } else {
           completeElement.find('.description').append('<div class=\'no_video\'>Video Coming Soon</div>');
         }
+        completeElement.find('.next_level').bind('click', function() {
+          var level, selectNext, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+          selectNext = false;
+          _ref = _this.worlds;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            world = _ref[_i];
+            _ref1 = world.stages;
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              stage = _ref1[_j];
+              _ref2 = stage.levels;
+              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                level = _ref2[_k];
+                if (selectNext) {
+                  _this.loadLevel(level.id);
+                  return true;
+                }
+                if (level.id === _this.level.id) {
+                  selectNext = true;
+                }
+              }
+            }
+          }
+        });
         info.find('.challenge').hide();
         info.append(completeElement);
         return _this.showInfo({

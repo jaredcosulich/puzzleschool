@@ -338,21 +338,21 @@ soma.views
             info = @$('.info') 
             @hideInfo =>
                 if @level.completeVideo
-                    $.timeout 250, =>
-                        completeElement.find('.next_level').bind 'click', => 
-                            selectNext = false
-                            for world in @worlds
-                                for stage in world.stages
-                                    for level in stage.levels
-                                        if selectNext
-                                            @loadLevel(level.id) 
-                                            return true
-                                        selectNext = true if level.id == @level.id        
-                            
+                    $.timeout 250, =>                            
                         completeElement.find('.description').append(@level.completeVideo)
                 else
                     completeElement.find('.description').append('<div class=\'no_video\'>Video Coming Soon</div>')
-                   
+                
+                completeElement.find('.next_level').bind 'click', => 
+                    selectNext = false
+                    for world in @worlds
+                        for stage in world.stages
+                            for level in stage.levels
+                                if selectNext
+                                    @loadLevel(level.id) 
+                                    return true
+                                selectNext = true if level.id == @level.id        
+                           
                 info.find('.challenge').hide()
                 info.append(completeElement)
                 @showInfo(height: (info.parent().height() * 0.81))

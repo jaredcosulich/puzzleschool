@@ -60,22 +60,6 @@ levels.WORLDS = [
                         values: false
                     }
                     {
-                        id: 1378919614968
-                        challenge: "Reduce the current flowing through the circuit to 0.9 amps."
-                        instructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["7,7","8,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"]]}
-                        hints: [
-                            'Both the lightbulb and the resistor add resistance to the circuit, reducing the flow of current.'
-                            'The flow of current is constant throughout this circuit.'
-                            'Drag and drop both components on to the circuit to reduce the current.'
-                        ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"],["7,7","8,7"],["6,5","7,5"],["7,5","8,5"],["8,5","9,5"],["9,5","10,5"],["10,5","11,5"]]}
-                        completeValues: [["Battery",'infinite'],["Lightbulb",0]]
-                        complete: '''
-                            A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.
-                        '''
-                        values: true
-                    }
-                    {
                         id: 1378789808762
                         challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit."
                         instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "13,3"},{"name": "Lightbulb", "position": "7,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
@@ -90,6 +74,24 @@ levels.WORLDS = [
                             This is a circuit with two resistors (lightbulbs) placed in series.
                             <br/><br/>
                             Lightbulb #1 dims because the circuit now has twice as much resistance in it.
+                        '''
+                        values: true
+                    }
+                    {
+                        id: 1378919614968
+                        challenge: "Reduce the current flowing through the circuit to 0.6 amps."
+                        instructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"},{"name": "Resistor", "position": "2,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["7,7","8,7"],["8,7","8,8"],["8,8","8,9"],["6,4","6,5"],["6,5","6,6"],["6,6","6,7"]]}
+                        hints: [
+                            'The lightbulb creates 5 Ohms of resistance and the resistor creates 10 Ohms.'
+                            'If both are added to the circuit there will be 15 Ohms of resistance in the circuit.'
+                            'Erase some wire and add the resistor to the circuit to reduce the current to 0.6 Amps.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"},{"name": "Resistor", "position": "6,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["7,7","8,7"],["8,7","8,8"],["8,8","8,9"]]}
+                        completeValues: [["Battery",0.6],["Lightbulb",0.6],["Resistor",0.6]]
+                        complete: '''
+                            The resistance in this circuit is the resistance of the lightbulb + the resistance of the resistor.
+                            <br/><br/>
+                            The current in the circuit = total voltage / total resistance (9 Volts / 15 Ohms = 0.6 Amps).
                         '''
                         values: true
                     }
