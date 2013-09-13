@@ -61,7 +61,7 @@ class circuitous.ViewHelper
             for cid, component of @board.components
                 component.tag[if hideValues then 'hide' else 'show']()
         
-    initAllLevels: ->    
+    initAllLevels: ->
         allLevels = @$('.all_levels')
         allLevels.find('.back_to_challenge').bind 'click', => @showLevel()
         

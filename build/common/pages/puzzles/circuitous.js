@@ -152,7 +152,7 @@ soma.views({
       this.$('.select_level').bind('click', function() {
         return _this.showLevelSelector();
       });
-      this.$('.all_levels').bind('click', function() {
+      this.$('.all_levels_link').bind('click', function() {
         return _this.viewHelper.showAllLevels();
       });
       return this.$('.schematic_mode').bind('click', function() {

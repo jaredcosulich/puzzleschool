@@ -441,7 +441,7 @@
 }
 .circuitous .right_side .control_panel .add_component,
 .circuitous .right_side .control_panel .select_level,
-.circuitous .right_side .control_panel .all_levels {
+.circuitous .right_side .control_panel .all_levels_link {
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   box-shadow: inset 0px 1px 0px 0px #3fc3db;
@@ -464,14 +464,14 @@
 }
 .circuitous .right_side .control_panel .add_component:hover,
 .circuitous .right_side .control_panel .select_level:hover,
-.circuitous .right_side .control_panel .all_levels:hover {
+.circuitous .right_side .control_panel .all_levels_link:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
   background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
   background-color: #24aac3;
 }
 .circuitous .right_side .control_panel .add_component:active,
 .circuitous .right_side .control_panel .select_level:active,
-.circuitous .right_side .control_panel .all_levels:active {
+.circuitous .right_side .control_panel .all_levels_link:active {
   position: relative;
   top: 1px;
 }
@@ -507,7 +507,7 @@
 }
 .circuitous .right_side .control_panel .add_component,
 .circuitous .right_side .control_panel .select_level,
-.circuitous .right_side .control_panel .all_levels,
+.circuitous .right_side .control_panel .all_levels_link,
 .circuitous .right_side .control_panel .schematic_mode {
   padding: 3px 6px;
 }

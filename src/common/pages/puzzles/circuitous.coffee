@@ -131,7 +131,7 @@ soma.views
         initInfo: ->
             @$('.info .challenge').hide()
             @$('.select_level').bind 'click', => @showLevelSelector()
-            @$('.all_levels').bind 'click', => @viewHelper.showAllLevels()
+            @$('.all_levels_link').bind 'click', => @viewHelper.showAllLevels()
             @$('.schematic_mode').bind 'click', => alert('This will show the current circuit in standard schematic notation. We\'ll make the button look enabled when it is ready.')
         
         initInstructions: ->
