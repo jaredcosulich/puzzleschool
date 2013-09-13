@@ -24,12 +24,16 @@
     .game {
         position: relative;
         overflow: hidden;
+    }
+    
+    .level_selector {
         transition: margin-top 1s ease-out;
+        margin-top: (@height * -1);
     }
     
     &.show_level_selector {
-        .game {
-            margin-top: (@height * -1) - 18;
+        .level_selector {
+            margin-top: 0;
         }
     }
 

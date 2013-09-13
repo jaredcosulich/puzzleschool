@@ -27,10 +27,13 @@
 .circuitous .game {
   position: relative;
   overflow: hidden;
-  transition: margin-top 1s ease-out;
 }
-.circuitous.show_level_selector .game {
-  margin-top: -658px;
+.circuitous .level_selector {
+  transition: margin-top 1s ease-out;
+  margin-top: -640px;
+}
+.circuitous.show_level_selector .level_selector {
+  margin-top: 0;
 }
 .circuitous.editor .board {
   float: left;
