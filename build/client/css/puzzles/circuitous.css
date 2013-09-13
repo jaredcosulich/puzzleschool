@@ -336,8 +336,16 @@
   display: block;
   margin-bottom: -12px;
 }
-.circuitous .right_side .info .complete iframe {
+.circuitous .right_side .info .complete iframe,
+.circuitous .right_side .info .complete .no_video {
   margin: 24px 0 12px -5px;
+}
+.circuitous .right_side .info .complete .no_video {
+  background-color: black;
+  color: #fafafa;
+  line-height: 225px;
+  width: 300px;
+  height: 225px;
 }
 .circuitous .right_side .info .complete .description {
   padding: 12px;
@@ -952,9 +960,14 @@
   text-align: center;
   overflow: hidden;
 }
-.circuitous .all_levels .levels_container .world .stage .levels .level iframe {
+.circuitous .all_levels .levels_container .world .stage .levels .level iframe,
+.circuitous .all_levels .levels_container .world .stage .levels .level .no_video {
   float: right;
   margin-bottom: 12px;
+  background-color: black;
+  color: #fafafa;
+  width: 300px;
+  height: 225px;
 }
 .circuitous .all_levels .levels_container .world .stage .levels .level .level_info {
   margin-bottom: 12px;

@@ -367,8 +367,16 @@
             }
             
             .complete {                
-                iframe {
+                iframe, .no_video {
                     margin: 24px 0 12px -5px;
+                }
+                
+                .no_video {
+                    background-color: black;
+                    color: @white;
+                    line-height: 225px;
+                    width: 300px;
+                    height: 225px;                    
                 }
                 
                 .description {
@@ -754,9 +762,13 @@
                             text-align: center;
                             overflow: hidden;
                         
-                            iframe {
+                            iframe, .no_video {
                                 float: right;
                                 margin-bottom: 12px;
+                                background-color: black;
+                                color: @white;
+                                width: 300px;
+                                height: 225px;
                             }
                         
                             .level_info {

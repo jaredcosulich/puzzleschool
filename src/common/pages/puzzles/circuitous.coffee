@@ -350,7 +350,9 @@ soma.views
                                         selectNext = true if level.id == @level.id        
                             
                         completeElement.find('.description').append(@level.completeVideo)
-                    
+                else
+                    completeElement.find('.description').append('<div class=\'no_video\'>Video Coming Soon</div>')
+                   
                 info.find('.challenge').hide()
                 info.append(completeElement)
                 @showInfo(height: (info.parent().height() * 0.81))

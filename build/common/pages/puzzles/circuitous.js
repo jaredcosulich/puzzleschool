@@ -490,6 +490,8 @@ soma.views({
             });
             return completeElement.find('.description').append(_this.level.completeVideo);
           });
+        } else {
+          completeElement.find('.description').append('<div class=\'no_video\'>Video Coming Soon</div>');
         }
         info.find('.challenge').hide();
         info.append(completeElement);

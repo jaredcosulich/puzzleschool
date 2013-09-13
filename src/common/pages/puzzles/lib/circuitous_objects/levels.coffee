@@ -24,7 +24,7 @@ levels.WORLDS = [
                             <br/><br/>
                             When the circuit is complete electricity will flow, powering the lightbulb.
                         '''
-                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
+                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/pXxzB1l520E?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: false
                     }
                     {
@@ -41,7 +41,6 @@ levels.WORLDS = [
                         complete: '''
                             A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.
                         '''
-                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: false
                     }                    
                     {
@@ -58,7 +57,6 @@ levels.WORLDS = [
                         complete: '''
                             The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.
                         '''
-                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: false
                     }
                     {
@@ -75,7 +73,6 @@ levels.WORLDS = [
                         complete: '''
                             A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.
                         '''
-                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: true
                     }
                     {
@@ -94,7 +91,6 @@ levels.WORLDS = [
                             <br/><br/>
                             Lightbulb #1 dims because the circuit now has twice as much resistance in it.
                         '''
-                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/XRUy1rggIA8?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: true
                     }
                 ]

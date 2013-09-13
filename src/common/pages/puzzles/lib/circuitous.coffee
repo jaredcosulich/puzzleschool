@@ -107,7 +107,10 @@ class circuitous.ViewHelper
                             </div>
                         """
                         levelElement.append(levelInfo)
-                        levelElement.prepend(level.completeVideo.replace(/iframe/, 'iframe class=\'completed\''))
+                        if level.completeVideo
+                            levelElement.prepend(level.completeVideo.replace(/iframe/, 'iframe class=\'completed\''))
+                        else
+                            levelElement.prepend('<div class=\'no_video\'>Video Coming Soon</div>')
                         
                         levelLink = $(document.createElement('A'))
                         if level.completed
