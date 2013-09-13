@@ -46,13 +46,25 @@ circuitous.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.addComponent = function(component, onBoard) {
-    var img,
+    var c, cid, existingCount, img,
       _this = this;
     if (onBoard == null) {
       onBoard = false;
     }
     component.appendTo(this.board.cells);
-    component.setName("" + component.constructor.name + " #" + 1);
+    existingCount = ((function() {
+      var _ref1, _results;
+      _ref1 = this.board.components;
+      _results = [];
+      for (cid in _ref1) {
+        c = _ref1[cid];
+        if (c.constructor.name === component.constructor.name) {
+          _results.push(c);
+        }
+      }
+      return _results;
+    }).call(this)).length;
+    component.setName("" + component.constructor.name + " #" + (existingCount + 1));
     img = component.el.find('img');
     component.el.css({
       left: onBoard ? 10 : -10000

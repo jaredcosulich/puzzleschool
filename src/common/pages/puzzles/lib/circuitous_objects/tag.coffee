@@ -62,8 +62,7 @@ class tag.Tag extends circuitousObject.Object
     setInfo: (info) -> @changeContent(info)
     
     changeContent: (info) ->
-        for key, value of info when value != undefined
-            return unless @info?[key] != value 
+        return unless (key for key, value of info when value != undefined and @info?[key] != value).length
 
         @info = info
         

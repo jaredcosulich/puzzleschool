@@ -96,15 +96,20 @@ tag.Tag = (function(_super) {
   };
 
   Tag.prototype.changeContent = function(info) {
-    var key, value, _ref,
+    var key, value,
       _this = this;
-    for (key in info) {
-      value = info[key];
-      if (value !== void 0) {
-        if (((_ref = this.info) != null ? _ref[key] : void 0) === value) {
-          return;
+    if (!((function() {
+      var _ref, _results;
+      _results = [];
+      for (key in info) {
+        value = info[key];
+        if (value !== void 0 && ((_ref = this.info) != null ? _ref[key] : void 0) !== value) {
+          _results.push(key);
         }
       }
+      return _results;
+    }).call(this)).length) {
+      return;
     }
     this.info = info;
     this.smallContent.html("" + this.info.current + "A");
