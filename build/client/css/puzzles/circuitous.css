@@ -28,13 +28,6 @@
   position: relative;
   overflow: hidden;
 }
-.circuitous .level_selector {
-  transition: margin-top 1s ease-out;
-  margin-top: -640px;
-}
-.circuitous.show_level_selector .level_selector {
-  margin-top: 0;
-}
 .circuitous.editor .board {
   float: left;
   border-right: none;
@@ -467,8 +460,6 @@
   text-decoration: none;
   text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
-  color: white;
-  padding: 6px 12px;
 }
 .circuitous .right_side .control_panel .add_component:hover,
 .circuitous .right_side .control_panel .select_level:hover,
@@ -482,6 +473,42 @@
 .circuitous .right_side .control_panel .all_levels:active {
   position: relative;
   top: 1px;
+}
+.circuitous .right_side .control_panel .schematic_mode {
+  -moz-box-shadow: inset 0px 1px 0px 0px #adadad;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #adadad;
+  box-shadow: inset 0px 1px 0px 0px #adadad;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #949494), color-stop(1, #7a7a7a));
+  background: -moz-linear-gradient(center top, #949494 5%, #7a7a7a 100%);
+  background-color: #949494;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #949494;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #949494;
+  margin: auto;
+}
+.circuitous .right_side .control_panel .schematic_mode:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #adadad), color-stop(1, #949494));
+  background: -moz-linear-gradient(center top, #adadad 5%, #949494 100%);
+  background-color: #949494;
+}
+.circuitous .right_side .control_panel .schematic_mode:active {
+  position: relative;
+  top: 1px;
+}
+.circuitous .right_side .control_panel .add_component,
+.circuitous .right_side .control_panel .select_level,
+.circuitous .right_side .control_panel .all_levels,
+.circuitous .right_side .control_panel .schematic_mode {
+  color: white;
+  padding: 3px 6px;
 }
 .circuitous .right_side .options {
   margin: 16px 0 0 -8px;
@@ -856,18 +883,65 @@
 .circuitous .selector_dialog .items .item {
   padding: 12px 0;
 }
+.circuitous.show_level_selector .level_selector {
+  margin-top: 0;
+}
 .circuitous .level_selector {
-  height: 640px;
-  overflow: auto;
+  position: relative;
+  margin-top: -640px;
+  transition: margin-top 1s ease-out;
+}
+.circuitous .level_selector .back_to_challenge {
+  position: absolute;
+  top: 580px;
+  left: 12px;
+  -moz-box-shadow: inset 0px 1px 0px 0px #4ee26f;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #4ee26f;
+  box-shadow: inset 0px 1px 0px 0px #4ee26f;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24d94c), color-stop(1, #1dad3d));
+  background: -moz-linear-gradient(center top, #24d94c 5%, #1dad3d 100%);
+  background-color: #24d94c;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #24d94c;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #24d94c;
+  margin: auto;
+  color: #fafafa;
+  text-align: center;
+  padding: 6px;
+}
+.circuitous .level_selector .back_to_challenge:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4ee26f), color-stop(1, #24d94c));
+  background: -moz-linear-gradient(center top, #4ee26f 5%, #24d94c 100%);
+  background-color: #24d94c;
+}
+.circuitous .level_selector .back_to_challenge:active {
+  position: relative;
+  top: 1px;
+}
+.circuitous .level_selector .back_to_challenge:active {
+  position: absolute;
+  top: 581px;
 }
 .circuitous .level_selector h1 {
   padding: 30px;
   text-align: center;
 }
-.circuitous .level_selector .world .stage h2 {
+.circuitous .level_selector .levels_container {
+  height: 640px;
+  overflow: auto;
+}
+.circuitous .level_selector .levels_container .world .stage h2 {
   text-align: center;
 }
-.circuitous .level_selector .world .stage .levels .level {
+.circuitous .level_selector .levels_container .world .stage .levels .level {
   border: 1px dashed #c7c7c7;
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
@@ -877,23 +951,23 @@
   text-align: center;
   overflow: hidden;
 }
-.circuitous .level_selector .world .stage .levels .level iframe {
+.circuitous .level_selector .levels_container .world .stage .levels .level iframe {
   float: right;
   margin-bottom: 12px;
 }
-.circuitous .level_selector .world .stage .levels .level .level_info {
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_info {
   margin-bottom: 12px;
 }
-.circuitous .level_selector .world .stage .levels .level .level_info .hints,
-.circuitous .level_selector .world .stage .levels .level .level_info .complete_lesson {
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_info .hints,
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_info .complete_lesson {
   padding-top: 24px;
 }
-.circuitous .level_selector .world .stage .levels .level .level_info .hints ul,
-.circuitous .level_selector .world .stage .levels .level .level_info .complete_lesson ul {
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_info .hints ul,
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_info .complete_lesson ul {
   margin: 3px 0 0 0;
   padding-left: 24px;
 }
-.circuitous .level_selector .world .stage .levels .level .level_link {
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_link {
   clear: both;
   -moz-box-shadow: inset 0px 1px 0px 0px #4ee26f;
   -webkit-box-shadow: inset 0px 1px 0px 0px #4ee26f;
@@ -915,39 +989,39 @@
   margin: auto;
   color: #fafafa;
 }
-.circuitous .level_selector .world .stage .levels .level .level_link:hover {
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_link:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4ee26f), color-stop(1, #24d94c));
   background: -moz-linear-gradient(center top, #4ee26f 5%, #24d94c 100%);
   background-color: #24d94c;
 }
-.circuitous .level_selector .world .stage .levels .level .level_link:active {
+.circuitous .level_selector .levels_container .world .stage .levels .level .level_link:active {
   position: relative;
   top: 1px;
 }
-.circuitous .level_selector .world .stage .levels .level.inactive {
+.circuitous .level_selector .levels_container .world .stage .levels .level.inactive {
   opacity: 0.4;
   color: #949494;
 }
-.circuitous .level_selector .world .stage .levels .level.inactive .level_link {
+.circuitous .level_selector .levels_container .world .stage .levels .level.inactive .level_link {
   color: #949494;
 }
-.circuitous .level_selector .world .stage .levels .level:hover {
+.circuitous .level_selector .levels_container .world .stage .levels .level:hover {
   opacity: 1;
   color: #262626;
 }
-.circuitous .level_selector .world .stage .levels .level:hover .level_link {
+.circuitous .level_selector .levels_container .world .stage .levels .level:hover .level_link {
   color: #fafafa;
 }
-.circuitous .level_selector .world .stage .levels .level.completed {
+.circuitous .level_selector .levels_container .world .stage .levels .level.completed {
   margin: 24px;
 }
-.circuitous .level_selector .world .stage .levels .level.completed .level_info {
+.circuitous .level_selector .levels_container .world .stage .levels .level.completed .level_info {
   text-align: left;
   overflow: hidden;
   width: 60%;
   min-height: 225px;
 }
-.circuitous .level_selector .world .stage .levels .level.completed .level_link {
+.circuitous .level_selector .levels_container .world .stage .levels .level.completed .level_link {
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   box-shadow: inset 0px 1px 0px 0px #3fc3db;
@@ -967,19 +1041,19 @@
   text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
 }
-.circuitous .level_selector .world .stage .levels .level.completed .level_link:hover {
+.circuitous .level_selector .levels_container .world .stage .levels .level.completed .level_link:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
   background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
   background-color: #24aac3;
 }
-.circuitous .level_selector .world .stage .levels .level.completed .level_link:active {
+.circuitous .level_selector .levels_container .world .stage .levels .level.completed .level_link:active {
   position: relative;
   top: 1px;
 }
-.circuitous .level_selector .world .stage .levels .level.completed .completed {
+.circuitous .level_selector .levels_container .world .stage .levels .level.completed .completed {
   display: block;
 }
-.circuitous .level_selector .world .stage .levels .level .completed {
+.circuitous .level_selector .levels_container .world .stage .levels .level .completed {
   display: none;
 }
 .circuitous .modal_menu {

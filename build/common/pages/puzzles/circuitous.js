@@ -127,9 +127,7 @@ soma.views({
       } else {
         this.initInfo();
         this.initCompleteListener();
-        if (this.levelId) {
-          this.loadLevel(this.levelId);
-        }
+        this.loadLevel(this.levelId);
       }
       this.initInstructions();
       return setInterval((function() {

@@ -102,15 +102,20 @@ circuitous.ViewHelper = (function() {
   };
 
   ViewHelper.prototype.initLevelSelector = function() {
-    var index, lastCompleted, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _i, _len, _ref1, _results;
+    var index, lastCompleted, level, levelSelector, levels, levelsContainer, stage, stageContainer, world, worldContainer, _i, _len, _ref1, _results,
+      _this = this;
     levelSelector = this.$('.level_selector');
+    levelSelector.find('.back_to_challenge').bind('click', function() {
+      return _this.showLevel();
+    });
+    levelsContainer = levelSelector.find('.levels_container');
     _ref1 = this.worlds;
     _results = [];
     for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
       world = _ref1[index];
       worldContainer = $(document.createElement('DIV'));
       worldContainer.addClass('world');
-      levelSelector.append(worldContainer);
+      levelsContainer.append(worldContainer);
       _results.push((function() {
         var _j, _len1, _ref2, _results1;
         _ref2 = world.stages;
@@ -161,7 +166,7 @@ circuitous.ViewHelper = (function() {
                 if (level.completed) {
                   levelLink.html('Completed - Load Again');
                 } else {
-                  levelLink.html('Load This Challenge');
+                  levelLink.html('Load Challenge');
                 }
                 levelLink.addClass('level_link');
                 levelLink.bind('click', function() {
@@ -189,7 +194,7 @@ circuitous.ViewHelper = (function() {
     level.find('.level_link').html('Completed - Load Again');
     nextLevel = level.next();
     nextLevel.removeClass('inactive');
-    return this.$('.level_selector').scrollTop(nextLevel.offset().top - this.$('.level_selector').offset().top - 200);
+    return this.$('.levels_container').scrollTop(nextLevel.offset().top - this.$('.levels_container').offset().top - 200);
   };
 
   ViewHelper.prototype.showLevelSelector = function() {

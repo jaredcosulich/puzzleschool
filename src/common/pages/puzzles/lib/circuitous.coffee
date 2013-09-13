@@ -63,10 +63,13 @@ class circuitous.ViewHelper
         
     initLevelSelector: ->    
         levelSelector = @$('.level_selector')
+        levelSelector.find('.back_to_challenge').bind 'click', => @showLevel()
+        
+        levelsContainer = levelSelector.find('.levels_container')
         for world, index in @worlds
             worldContainer = $(document.createElement('DIV'))
             worldContainer.addClass('world')
-            levelSelector.append(worldContainer)
+            levelsContainer.append(worldContainer)
             for stage in world.stages
                 stageContainer = $(document.createElement('DIV'))
                 stageContainer.addClass('stage')
@@ -81,7 +84,7 @@ class circuitous.ViewHelper
                         levelElement = $(document.createElement('DIV'))
                         levelElement.addClass('level')
                         levelElement.addClass("level_#{level.id}")
-                        levelElement.addClass('completed')if level.completed
+                        levelElement.addClass('completed') if level.completed
                         levelElement.addClass('inactive') unless level.completed or lastCompleted
                         
                         levelInfo = $(document.createElement('DIV'))
@@ -108,7 +111,7 @@ class circuitous.ViewHelper
                         if level.completed
                             levelLink.html('Completed - Load Again')
                         else
-                            levelLink.html('Load This Challenge')
+                            levelLink.html('Load Challenge')
                         levelLink.addClass('level_link')
                         levelLink.bind 'click', => 
                             @loadLevel(level.id)
@@ -125,7 +128,7 @@ class circuitous.ViewHelper
         level.find('.level_link').html('Completed - Load Again')
         nextLevel = level.next()
         nextLevel.removeClass('inactive')
-        @$('.level_selector').scrollTop(nextLevel.offset().top - @$('.level_selector').offset().top - 200)
+        @$('.levels_container').scrollTop(nextLevel.offset().top - @$('.levels_container').offset().top - 200)
         
     showLevelSelector: -> @el.addClass('show_level_selector')
         

@@ -113,7 +113,7 @@ soma.views
             else
                 @initInfo()
                 @initCompleteListener()
-                @loadLevel(@levelId) if @levelId
+                @loadLevel(@levelId)
                     
                     
             @initInstructions()

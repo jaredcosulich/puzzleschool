@@ -7,10 +7,17 @@
         Circuitous
     </h1>
     
-    <div class='circuitous {!level_id}show_level_selector{/level_id} {:editor}editor{/editor}' data-level_id={level_id}> 
+    <div class='circuitous {:editor}editor{/editor}' data-level_id={level_id}> 
         <div class='level_selector'>
-            <h1>Levels</h1>
+            <div class='levels_container'>
+                <h1>Levels</h1>
+            </div>
+            <a class='back_to_challenge'>
+                Back To<br/>
+                <i class='icon-double-angle-down'></i> Challenge <i class='icon-double-angle-down'></i>
+            </a>
         </div>
+                
         <div class='game'>       
             <div class='board'>
                 <div class='cells'>
@@ -45,9 +52,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <div class='control values'>
-                                    <h4><a class='show_values off'></a></h4> 
-                                </div>
+                                <a class='control select_level'>Select Level</a>
                             </td>
                             <td>
                                 <a class='control add_component'>Add Component</a>
@@ -56,7 +61,12 @@
                         <tr><td></td><td></td></tr>
                         <tr>
                             <td>
-                                <a class='control select_level'>Select Level</a>
+                                <div class='control values'>
+                                    <h4><a class='show_values off'></a></h4> 
+                                </div>
+                            </td>
+                            <td>
+                                <a class='control schematic_mode'>Schematic Mode</a>
                             </td>
                         </tr>
                     </tbody>

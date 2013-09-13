@@ -26,17 +26,6 @@
         overflow: hidden;
     }
     
-    .level_selector {
-        transition: margin-top 1s ease-out;
-        margin-top: (@height * -1);
-    }
-    
-    &.show_level_selector {
-        .level_selector {
-            margin-top: 0;
-        }
-    }
-
     &.editor .board {
         float: left;
         border-right: none;
@@ -461,9 +450,16 @@
 
             .add_component, .select_level, .all_levels {
                 .button-color(@blue);
-                color: white;
-                padding: 6px 12px;
             }            
+            
+            .schematic_mode {
+                .button-color(@grey);
+            }
+
+            .add_component, .select_level, .all_levels, .schematic_mode {
+                color: white;
+                padding: 3px 6px;
+            }
         }
         
         .options {
@@ -709,93 +705,119 @@
         }
     }    
     
+    &.show_level_selector {
+        .level_selector {
+            margin-top: 0;
+        }
+    }
     
     .level_selector {
-        height: @height;
-        overflow: auto;
+        position: relative;
+        margin-top: (@height * -1);
+        transition: margin-top 1s ease-out;
+
+        .back_to_challenge {
+            position: absolute;
+            top: @height - 60;
+            left: 12px;
+            .button-color(@green);
+            color: @white;
+            text-align: center;
+            padding: 6px;
+            
+            &:active {
+                position: absolute;
+                top: @height - 59;
+            }
+        }
+
         h1 {
             padding: 30px;
             text-align: center;
         }
         
-        .world {
-            .stage {
-                h2 {
-                    text-align: center;
-                }
-                .levels {
-                    .level {
-                        border: 1px dashed @lightgrey;
-                        .rounded(12px);
-                        padding: 24px;
-                        margin: 24px 120px;
+        .levels_container {
+            height: @height;
+            overflow: auto;     
+            .world {
+                .stage {
+                    h2 {
                         text-align: center;
-                        overflow: hidden;
+                    }
+                    .levels {
+                        .level {
+                            border: 1px dashed @lightgrey;
+                            .rounded(12px);
+                            padding: 24px;
+                            margin: 24px 120px;
+                            text-align: center;
+                            overflow: hidden;
                         
-                        iframe {
-                            float: right;
-                            margin-bottom: 12px;
-                        }
+                            iframe {
+                                float: right;
+                                margin-bottom: 12px;
+                            }
                         
-                        .level_info {
-                            margin-bottom: 12px;
+                            .level_info {
+                                margin-bottom: 12px;
                             
-                            .hints, .complete_lesson {
-                                padding-top: 24px;
-                                ul {
-                                    margin: 3px 0 0 0;
-                                    padding-left: 24px;
+                                .hints, .complete_lesson {
+                                    padding-top: 24px;
+                                    ul {
+                                        margin: 3px 0 0 0;
+                                        padding-left: 24px;
+                                    }
                                 }
                             }
-                        }
                         
-                        .level_link {
-                            clear: both;
-                            .button-color(@green);
-                            color: @white;
-                        }
-                        
-                        &.inactive {
-                            opacity: 0.4;
-                            color: @grey;
-                            
                             .level_link {
-                                color: @grey;
-                            }                            
-                        }
-                        
-                        &:hover {
-                            opacity: 1;
-                            color: @black;
-                            
-                            .level_link {
+                                clear: both;
+                                .button-color(@green);
                                 color: @white;
                             }
-                        }
                         
-                        &.completed {
-                            margin: 24px;
+                            &.inactive {
+                                opacity: 0.4;
+                                color: @grey;
                             
-                            .level_info {
-                                text-align: left;
-                                overflow: hidden;
-                                width: 60%;
-                                min-height: 225px;
+                                .level_link {
+                                    color: @grey;
+                                }                            
                             }
+                        
+                            &:hover {
+                                opacity: 1;
+                                color: @black;
                             
-                            .level_link {
-                                .button-color(@blue);
+                                .level_link {
+                                    color: @white;
+                                }
                             }
+                        
+                            &.completed {
+                                margin: 24px;
                             
+                                .level_info {
+                                    text-align: left;
+                                    overflow: hidden;
+                                    width: 60%;
+                                    min-height: 225px;
+                                }
+                            
+                                .level_link {
+                                    .button-color(@blue);
+                                }
+                            
+                                .completed {
+                                    display: block;
+                                }
+                            }
+                        
                             .completed {
-                                display: block;
+                                display: none;
                             }
-                        }
-                        
-                        .completed {
-                            display: none;
-                        }
-                    }                    
+                        }                    
+                    }
                 }
             }
         }
