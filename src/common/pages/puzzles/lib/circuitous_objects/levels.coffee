@@ -95,6 +95,25 @@ levels.WORLDS = [
                         '''
                         values: true
                     }
+                    {
+                        id: 1379192008654
+                        challenge: "Create a circuit with 0.36 amps of current flowing through it."
+                        instructions: {"components": [{"name": "Lightbulb", "position": "11,2"},{"name": "Lightbulb", "position": "13,2"},{"name": "Lightbulb", "position": "15,2"},{"name": "Resistor", "position": "7,0"},{"name": "Resistor", "position": "3,0"},{"name": "Battery", "position": "8,12"},{"name": "Resistor", "position": "5,0"}],"wires": []}
+                        hints: [
+                            'The resistors create 10 Ohms of resistance, the lightbulbs create 5 Ohms of resistance.'
+                            'Resistance (R) = Voltage (V) / Current (I)'
+                            'You\'ll need to add 25 Ohms of resistance to the circuit.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Lightbulb", "position": "13,2"},{"name": "Lightbulb", "position": "15,2"},{"name": "Resistor", "position": "7,0"},{"name": "Battery", "position": "8,12"},{"name": "Resistor", "position": "5,8"},{"name": "Resistor", "position": "12,8"},{"name": "Lightbulb", "position": "9,7"}],"wires": [["8,12","7,12"],["7,12","6,12"],["6,12","5,12"],["5,8","5,7"],["5,7","6,7"],["6,7","7,7"],["7,7","8,7"],["8,7","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","12,7"],["12,7","12,8"],["12,11","12,12"],["12,12","11,12"],["11,12","10,12"],["10,12","9,12"],["5,11","5,12"]]}
+                        completeValues: [["Battery",0.36]]
+                        complete: '''
+                            Ohm\'s law states that I = V/R or Current = Voltage/Resistance.
+                            <br/><br/>
+                            In this case we need to add 25 Ohms of resistance to the circuit to get 0.36 Amps (9 / 25 = 0.36).
+                        '''
+                        values: true
+                    }
+                    
                 ]
             }
         ]

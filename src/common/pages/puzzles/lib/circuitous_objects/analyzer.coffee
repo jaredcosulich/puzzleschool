@@ -413,7 +413,7 @@ class analyzer.Analyzer extends circuitousObject.Object
                         
     checkPolarizedComponents: ->
         changeMade = false
-        for cid, component of @board.components when component.nodes.length > 1 and component.nodes and not component.voltage
+        for cid, component of @board.components when component.nodes.length > 1 and component.nodes[0].negative and not component.voltage
             section = @info.sections[@info.components[cid]]
             continue unless section
             if @info.matrix.sections.indexOf(section.id) > -1

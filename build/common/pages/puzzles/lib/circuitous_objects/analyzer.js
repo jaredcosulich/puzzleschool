@@ -713,7 +713,7 @@ analyzer.Analyzer = (function(_super) {
     _ref = this.board.components;
     for (cid in _ref) {
       component = _ref[cid];
-      if (!(component.nodes.length > 1 && component.nodes && !component.voltage)) {
+      if (!(component.nodes.length > 1 && component.nodes[0].negative && !component.voltage)) {
         continue;
       }
       section = this.info.sections[this.info.components[cid]];

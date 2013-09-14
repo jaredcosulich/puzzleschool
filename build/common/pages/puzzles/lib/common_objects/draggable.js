@@ -48,19 +48,17 @@ draggable.Draggable = (function() {
   };
 
   Draggable.prototype.startDrag = function(e) {
-    var bottomBuffer, leftBuffer, offset, rightBuffer, shiftX, shiftY, topBuffer, _ref, _ref1,
+    var bottomBuffer, leftBuffer, offset, rightBuffer, shiftX, shiftY, topBuffer, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
       _this = this;
-    if (this.buffer) {
-      leftBuffer = this.buffer.left || 0;
-      rightBuffer = this.buffer.right || 0;
-      topBuffer = this.buffer.top || 0;
-      bottomBuffer = this.buffer.bottom || 0;
-      offset = this.dragElement.offset();
-      shiftX = this.currentX ? this.currentX - this.startX : 0;
-      shiftY = this.currentY ? this.currentY - this.startY : 0;
-      if (!((offset.left + leftBuffer < (_ref = Client.x(e) - shiftX) && _ref < offset.left + offset.width - rightBuffer)) || !((offset.top + topBuffer < (_ref1 = Client.y(e) - shiftY) && _ref1 < offset.top + offset.height - bottomBuffer))) {
-        return false;
-      }
+    leftBuffer = ((_ref = this.buffer) != null ? _ref.left : void 0) || 0;
+    rightBuffer = ((_ref1 = this.buffer) != null ? _ref1.right : void 0) || 0;
+    topBuffer = ((_ref2 = this.buffer) != null ? _ref2.top : void 0) || 0;
+    bottomBuffer = ((_ref3 = this.buffer) != null ? _ref3.bottom : void 0) || 0;
+    offset = this.dragElement.offset();
+    shiftX = this.currentX ? this.currentX - this.startX : 0;
+    shiftY = this.currentY ? this.currentY - this.startY : 0;
+    if (!((offset.left + leftBuffer < (_ref4 = Client.x(e) - shiftX) && _ref4 < offset.left + offset.width - rightBuffer)) || !((offset.top + topBuffer < (_ref5 = Client.y(e) - shiftY) && _ref5 < offset.top + offset.height - bottomBuffer))) {
+      return false;
     }
     e.stop();
     $(document.body).one('mouseup.drag touchend.drag', function(e) {

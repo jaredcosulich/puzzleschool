@@ -21,17 +21,16 @@ class draggable.Draggable
             @startY = Client.y(e) unless @startY
 
     startDrag: (e) ->
-        if @buffer
-            leftBuffer = @buffer.left or 0
-            rightBuffer = @buffer.right or 0
-            topBuffer = @buffer.top or 0
-            bottomBuffer = @buffer.bottom or 0
-            offset = @dragElement.offset()
-            shiftX = if @currentX then @currentX - @startX else 0
-            shiftY = if @currentY then @currentY - @startY else 0
-            if not (offset.left + leftBuffer < Client.x(e) - shiftX < offset.left + offset.width - rightBuffer) or
-               not (offset.top + topBuffer < Client.y(e) - shiftY < offset.top + offset.height - bottomBuffer)
-                return false
+        leftBuffer = @buffer?.left or 0
+        rightBuffer = @buffer?.right or 0
+        topBuffer = @buffer?.top or 0
+        bottomBuffer = @buffer?.bottom or 0
+        offset = @dragElement.offset()
+        shiftX = if @currentX then @currentX - @startX else 0
+        shiftY = if @currentY then @currentY - @startY else 0
+        if not (offset.left + leftBuffer < Client.x(e) - shiftX < offset.left + offset.width - rightBuffer) or
+           not (offset.top + topBuffer < Client.y(e) - shiftY < offset.top + offset.height - bottomBuffer)
+            return false
 
         e.stop()
         $(document.body).one 'mouseup.drag touchend.drag', (e) =>
