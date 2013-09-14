@@ -577,7 +577,7 @@
 .circuitous .component .tag {
   position: absolute;
   left: -45px;
-  top: 0;
+  top: 12px;
   background-color: #949494;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
