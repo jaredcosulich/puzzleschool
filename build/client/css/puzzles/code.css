@@ -37,7 +37,7 @@
 }
 .code .challenge .text,
 .code .challenge .success {
-  padding: 12px;
+  padding: 24px 12px 12px 12px;
   text-align: center;
 }
 .code .challenge .success {
@@ -61,6 +61,7 @@
   margin: auto;
 }
 .code .challenge .links {
+  padding-top: 12px;
   width: 50%;
   margin: auto;
   position: relative;
@@ -250,7 +251,7 @@
 .code .level_selector .levels {
   background-color: #eee;
   padding: 12px;
-  margin-bottom: 12px;
+  margin: 12px 0;
 }
 .code .level_selector .levels .level {
   padding: 12px;

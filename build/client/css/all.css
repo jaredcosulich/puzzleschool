@@ -262,6 +262,9 @@ a {
   margin: auto;
   overflow: hidden;
 }
+.home .section table {
+  width: 100%;
+}
 .home .section .puzzle {
   background-color: #e0e0e0;
   -webkit-border-radius: 12px;
@@ -269,24 +272,16 @@ a {
   border-radius: 12px;
   overflow: hidden;
   padding: 12px;
-}
-.home .section .puzzle img {
-  float: left;
-  margin-right: 30px;
+  margin-bottom: 30px;
+  width: 312px;
+  text-align: center;
 }
 .home .section .puzzle h2 {
-  margin-top: 15px;
+  padding-top: 12px;
 }
-.home .section table {
-  margin: auto;
-}
-.home .section table td {
-  padding: 0 15px;
-}
-.home .section table img {
-  width: 120px;
-  height: 120px;
-  text-align: center;
+.home .section .puzzle p {
+  margin: 0;
+  padding-top: 12px;
 }
 .puzzles #labs,
 .reviews #labs {

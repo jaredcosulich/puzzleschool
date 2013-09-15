@@ -59,31 +59,26 @@
         margin: auto;
         overflow: hidden;
         
+        table {
+            width: 100%;
+        }
+        
         .puzzle {
             background-color: lighten(@lightgrey, 10%);
             .rounded(12px);
             overflow: hidden;
             padding: 12px;
-            
-            img {
-                float: left;
-                margin-right: 30px;
-            } 
+            margin-bottom: 30px;
+            width: 312px;
+            text-align: center;
             
             h2 {
-                margin-top: 15px;
+                padding-top: 12px;
             }
-        }
-        
-        table {
-            margin: auto;
-            td {
-                padding: 0 15px;
-            }
-            img {
-                width: 120px;
-                height: 120px;
-                text-align: center;
+            
+            p {
+                margin: 0;
+                padding-top: 12px;
             }
         }
     }

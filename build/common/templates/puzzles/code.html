@@ -7,10 +7,9 @@
     
     <div class='dynamic_content'>
         <div class='challenge'>
-            <h3 class='text'></h3>
             <div class='links'>
-                <a class='link description'>Lesson</a>
-                <a class='link hints'>Hints</a>
+                <a class='link description'>Level Lesson</a>
+                <a class='link hints'>Level Hints</a>
                 <!-- <a class='link tests'>Test</a> -->
                 <div class='clear'></div>
                 
@@ -24,6 +23,7 @@
                     </div>
                 </div> -->
             </div>
+            <h3 class='text'></h3>
         </div>
 
         <div class='test_area'>
@@ -42,10 +42,10 @@
     
     <div class='level_selector'>
         <h2 class='success'>Nice Work. Level Complete!</h2>
-        <h3>Select The Next Level</h3>
+        <h2>Select The Next Level</h2>
         {:stages}
         <div class='levels'>
-            <h4>{name}</h4>
+            <h3>{name}</h3>
             <br/>
             {:levels}
             <a class='level' id='level_{id}' data-id={id}>
