@@ -363,7 +363,6 @@ soma.views
             for world, index in @worlds
                 worldContainer = $(document.createElement('DIV'))
                 worldContainer.addClass('world')
-                worldContainer.html("<h2>World #{index + 1}</h2>")
                 levelSelector.append(worldContainer)
                 for stage in world.stages
                     stageContainer = $(document.createElement('DIV'))

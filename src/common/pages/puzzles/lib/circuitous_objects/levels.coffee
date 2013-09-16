@@ -74,6 +74,22 @@ levels.WORLDS = [
                         '''
                         values: false
                     }
+                    {
+                        id: 1379364502530
+                        challenge: "Draw wire to create a circuit that contains both the lightbulb and the resistor."
+                        instructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Lightbulb", "position": "11,4"},{"name": "Resistor", "position": "7,4"}],"wires": []}
+                        hints: [
+                            'A complete circuit must connect from the negative to the positive terminal of the battery with enough resistance to avoid damaging the battery.'
+                            'Draw wire from the battery through the lightbulb to the resistor and back to the battery.'
+                            'Be sure not to draw wire all the way through the resistor. Draw to one end of the resistor and then start from the other end.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Lightbulb", "position": "11,4"},{"name": "Resistor", "position": "7,4"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","12,7"],["12,7","12,6"],["12,6","12,5"],["12,5","12,4"],["12,4","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,7","7,8"],["7,8","8,8"],["8,8","9,8"]]}
+                        completeValues: [["Battery",0.6],["Lightbulb",0.6],["Resistor",0.6]]
+                        complete: '''
+                            <p>You\'ve created a simple circuit with multiple components.</p>
+                        '''
+                        values: false
+                    }
                 ]
             },{
                 name: 'Ohm\'s Law'

@@ -1080,7 +1080,7 @@
   text-align: center;
 }
 .circuitous .level_selector .world .stage {
-  padding-top: 24px;
+  padding: 36px 0 12px 0;
   overflow: hidden;
 }
 .circuitous .level_selector .world .stage .levels {
@@ -1111,7 +1111,8 @@
   text-shadow: 1px 1px 0px #262626;
   margin: auto;
   float: left;
-  margin: 12px 0 0 15px;
+  padding: 6px 15px;
+  margin: 15px 6px 0 9px;
 }
 .circuitous .level_selector .world .stage .levels .level:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #404040), color-stop(1, #262626));
@@ -1141,7 +1142,8 @@
   text-decoration: none;
   text-shadow: 1px 1px 0px #24d94c;
   margin: auto;
-  margin: 12px 0 0 15px;
+  padding: 6px 15px;
+  margin: 15px 6px 0 9px;
 }
 .circuitous .level_selector .world .stage .levels .level.completed:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4ee26f), color-stop(1, #24d94c));

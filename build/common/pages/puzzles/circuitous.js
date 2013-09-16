@@ -510,7 +510,6 @@ soma.views({
         world = _ref[index];
         worldContainer = $(document.createElement('DIV'));
         worldContainer.addClass('world');
-        worldContainer.html("<h2>World " + (index + 1) + "</h2>");
         levelSelector.append(worldContainer);
         _ref1 = world.stages;
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
