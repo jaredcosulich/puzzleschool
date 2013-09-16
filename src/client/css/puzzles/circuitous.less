@@ -368,7 +368,7 @@
             
             .complete {                
                 iframe, .no_video {
-                    margin: 24px 0 12px -5px;
+                    margin: 12px 0 12px -5px;
                 }
                 
                 .no_video {
@@ -380,13 +380,18 @@
                 }
                 
                 .description {
+                    font-size: @h4size;
                     padding: 12px;
+                    p {
+                        margin: 0;
+                        padding-bottom: 12px;
+                    }
                 }
                 
                 .buttons {
                     width: 100%;
                     position: absolute;
-                    bottom: 12px;
+                    bottom: 24px;
                     .button {
                         .button-color(@blue);                        
                     }
@@ -418,6 +423,7 @@
             width: 100%;
                    
             td {
+                padding: 3px 0;
                 width: 50%;
                 text-align: center;
             }     

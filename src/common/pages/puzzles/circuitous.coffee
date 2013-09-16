@@ -331,7 +331,7 @@ soma.views
             completeElement.addClass('complete')
             completeElement.html """
                 <h1>Success</h1>
-                <h3 class='description'>#{@level.complete}</h3>
+                <div class='description'>#{@level.complete}</div>
                 <div class='buttons'><a class='button next_level'>Next Level</a></div>
             """
 
@@ -355,7 +355,7 @@ soma.views
                            
                 info.find('.challenge').hide()
                 info.append(completeElement)
-                @showInfo(height: (info.parent().height() * 0.81))
+                @showInfo(height: (info.parent().height() * 0.78))
 
         showLevelSelector: ->
             levelSelector = $(document.createElement('DIV'))

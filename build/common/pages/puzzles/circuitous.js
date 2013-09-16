@@ -460,7 +460,7 @@ soma.views({
       this.viewHelper.markLevelCompleted(this.level.id);
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
-      completeElement.html("<h1>Success</h1>\n<h3 class='description'>" + this.level.complete + "</h3>\n<div class='buttons'><a class='button next_level'>Next Level</a></div>");
+      completeElement.html("<h1>Success</h1>\n<div class='description'>" + this.level.complete + "</div>\n<div class='buttons'><a class='button next_level'>Next Level</a></div>");
       info = this.$('.info');
       return this.hideInfo(function() {
         if (_this.level.completeVideo) {
@@ -496,7 +496,7 @@ soma.views({
         info.find('.challenge').hide();
         info.append(completeElement);
         return _this.showInfo({
-          height: info.parent().height() * 0.81
+          height: info.parent().height() * 0.78
         });
       });
     },

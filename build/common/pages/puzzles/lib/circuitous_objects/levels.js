@@ -41,7 +41,7 @@ levels.WORLDS = [
               "wires": [["8,10", "8,9"], ["8,9", "8,8"], ["8,8", "8,7"], ["8,7", "8,6"], ["8,6", "7,6"], ["7,6", "7,7"], ["7,7", "7,8"], ["7,8", "7,9"], ["7,9", "7,10"]]
             },
             completeValues: [["Battery", 1.8], ["Lightbulb", 1.8]],
-            complete: 'A circuit is not complete until a wire connects the negative terminal to the positive terminal.\n<br/><br/>\nWhen the circuit is complete electricity will flow, powering the lightbulb.',
+            complete: '<p>A circuit is not complete until a wire connects the negative terminal to the positive terminal.</p>\n<p>When the circuit is complete electricity will flow, powering the lightbulb.</p>',
             completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/zSOo2_ophoE?rel=0" frameborder="0" allowfullscreen></iframe>',
             values: false
           }, {
@@ -73,7 +73,7 @@ levels.WORLDS = [
               "wires": [["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "11,7"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,7", "7,7"], ["8,7", "8,8"], ["8,8", "8,9"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"], ["7,7", "8,7"], ["6,5", "7,5"], ["7,5", "8,5"], ["8,5", "9,5"], ["9,5", "10,5"], ["10,5", "11,5"]]
             },
             completeValues: [["Battery", 'infinite'], ["Lightbulb", 0]],
-            complete: 'A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.',
+            complete: '<p>A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.</p>',
             values: false
           }, {
             id: 1378919605524,
@@ -104,7 +104,7 @@ levels.WORLDS = [
               "wires": [["8,8", "8,7"], ["8,7", "7,7"], ["7,7", "6,7"], ["6,7", "6,6"], ["11,7", "10,7"], ["10,7", "9,7"], ["9,7", "9,8"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["7,2", "8,2"], ["8,2", "9,2"], ["9,2", "10,2"], ["11,3", "11,4"], ["6,3", "6,2"], ["6,2", "7,2"], ["10,2", "11,2"], ["11,2", "11,3"]]
             },
             completeValues: [["Battery", 0.9], ["Resistor", 0.9]],
-            complete: 'The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.',
+            complete: '<p>The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.</p>',
             values: false
           }, {
             id: 1378789808762,
@@ -141,7 +141,7 @@ levels.WORLDS = [
               "wires": [["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "10,6"], ["10,6", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,4", "6,5"], ["6,5", "6,6"], ["6,6", "7,6"], ["7,6", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"]]
             },
             completeValues: [["Battery", 0.9], ["Lightbulb", 0.9], ["Lightbulb", 0.9]],
-            complete: 'This is a circuit with two resistors (lightbulbs) placed in series.\n<br/><br/>\nLightbulb #1 dims because the circuit now has twice as much resistance in it.',
+            complete: '<p>This is a circuit with two resistors (lightbulbs) placed in series.</p>\n<p>Lightbulb #1 dims because the circuit now has twice as much resistance in it.</p>',
             values: true
           }, {
             id: 1378919614968,
@@ -178,7 +178,7 @@ levels.WORLDS = [
               "wires": [["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "11,7"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,7", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"], ["8,8", "8,9"]]
             },
             completeValues: [["Battery", 0.6], ["Lightbulb", 0.6], ["Resistor", 0.6]],
-            complete: 'The resistance in this circuit is the resistance of the lightbulb + the resistance of the resistor.\n<br/><br/>\nThe current in the circuit = total voltage / total resistance (9 Volts / 15 Ohms = 0.6 Amps).',
+            complete: '<p>The resistance in this circuit is the resistance of the lightbulb + the resistance of the resistor.</p>\n<p>The current in the circuit = total voltage / total resistance (9 Volts / 15 Ohms = 0.6 Amps).</p>',
             values: true
           }, {
             id: 1379192008654,
@@ -239,7 +239,7 @@ levels.WORLDS = [
               "wires": [["8,12", "7,12"], ["7,12", "6,12"], ["6,12", "5,12"], ["5,8", "5,7"], ["5,7", "6,7"], ["6,7", "7,7"], ["7,7", "8,7"], ["8,7", "9,7"], ["9,7", "10,7"], ["10,7", "11,7"], ["11,7", "12,7"], ["12,7", "12,8"], ["12,11", "12,12"], ["12,12", "11,12"], ["11,12", "10,12"], ["10,12", "9,12"], ["5,11", "5,12"]]
             },
             completeValues: [["Battery", 0.36]],
-            complete: 'Ohm\'s law states that I = V/R or Current = Voltage/Resistance.\n<br/><br/>\nIn this case we need to add 25 Ohms of resistance to the circuit to get 0.36 Amps (9 / 25 = 0.36).',
+            complete: '<p>Ohm\'s law states that I = V/R or Current = Voltage/Resistance.</p>\n<p>In this case we need to add 25 Ohms of resistance to the circuit to get 0.36 Amps (9 / 25 = 0.36).</p>',
             values: true
           }
         ]

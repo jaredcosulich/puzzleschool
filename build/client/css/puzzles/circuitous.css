@@ -338,7 +338,7 @@
 }
 .circuitous .right_side .info .complete iframe,
 .circuitous .right_side .info .complete .no_video {
-  margin: 24px 0 12px -5px;
+  margin: 12px 0 12px -5px;
 }
 .circuitous .right_side .info .complete .no_video {
   background-color: black;
@@ -348,12 +348,17 @@
   height: 225px;
 }
 .circuitous .right_side .info .complete .description {
+  font-size: 15px;
   padding: 12px;
+}
+.circuitous .right_side .info .complete .description p {
+  margin: 0;
+  padding-bottom: 12px;
 }
 .circuitous .right_side .info .complete .buttons {
   width: 100%;
   position: absolute;
-  bottom: 12px;
+  bottom: 24px;
 }
 .circuitous .right_side .info .complete .buttons .button {
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
@@ -405,6 +410,7 @@
   width: 100%;
 }
 .circuitous .right_side .control_panel td {
+  padding: 3px 0;
   width: 50%;
   text-align: center;
 }
