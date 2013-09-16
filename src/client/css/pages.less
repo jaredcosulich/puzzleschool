@@ -85,9 +85,8 @@
 }
 
 .puzzles, .reviews {
-    #labs {
+    #labs, #other {
         padding-top: 45px;
-        border-top: 1px solid @lightgrey;
     }
     .section {
         margin-bottom: 45px;
@@ -101,29 +100,12 @@
                     border: 1px solid @grey;
                 }
             }
-            .details {
+            .explanation {
                 margin-top: 12px;
-                .explanation {
-                    padding: 0 12px;
-                    overflow: hidden;
-                    background-color: @lightestgrey;
-                    display: none;
-                    &.selected {
-                        display: block;
-                    }
-                }
-                .rating {
-                    width: 180px;
-                    float: left;
-                    p {
-                        cursor: pointer;
-                        padding: 6px;
-                        margin: 0;
-                        &.selected {
-                            background-color: @lightestgrey;
-                        }
-                    }
-                }
+                .rounded(12px);
+                padding: 0 12px;
+                overflow: hidden;
+                background-color: @lightestgrey;
             }
         }
     }

@@ -284,9 +284,10 @@ a {
   padding-top: 12px;
 }
 .puzzles #labs,
-.reviews #labs {
+.reviews #labs,
+.puzzles #other,
+.reviews #other {
   padding-top: 45px;
-  border-top: 1px solid #c7c7c7;
 }
 .puzzles .section,
 .reviews .section {
@@ -306,34 +307,14 @@ a {
   margin: 12px 12px 0 0;
   border: 1px solid #949494;
 }
-.puzzles .section .puzzle .details,
-.reviews .section .puzzle .details {
+.puzzles .section .puzzle .explanation,
+.reviews .section .puzzle .explanation {
   margin-top: 12px;
-}
-.puzzles .section .puzzle .details .explanation,
-.reviews .section .puzzle .details .explanation {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
   padding: 0 12px;
   overflow: hidden;
-  background-color: #ededed;
-  display: none;
-}
-.puzzles .section .puzzle .details .explanation.selected,
-.reviews .section .puzzle .details .explanation.selected {
-  display: block;
-}
-.puzzles .section .puzzle .details .rating,
-.reviews .section .puzzle .details .rating {
-  width: 180px;
-  float: left;
-}
-.puzzles .section .puzzle .details .rating p,
-.reviews .section .puzzle .details .rating p {
-  cursor: pointer;
-  padding: 6px;
-  margin: 0;
-}
-.puzzles .section .puzzle .details .rating p.selected,
-.reviews .section .puzzle .details .rating p.selected {
   background-color: #ededed;
 }
 .translations #translation_container {

@@ -29,39 +29,9 @@
                 <p><b>Cost:</b> {cost}</p>
                 <p>Try <a href='{&website}' target='_blank'>{title}</a> ></p>
             </div>
-            <div class='details'>
-                <div class='rating'>
-                    <p class='overall selected'><b>Overall:</b> {overall.rating} Stars</p> 
-                    <p class='love_of_learning'><b>Love Of Learning:</b> <img src='/assets/images/reviews/{loveOfLearning.rating}stars.png'/></p> 
-                    <p class='intuitive'><b>Intuitive:</b> <img src='/assets/images/reviews/{intuitive.rating}stars.png'/></p> 
-                    <p class='engagement'><b>Engagement:</b> <img src='/assets/images/reviews/{engagement.rating}stars.png'/></p> 
-                    <p class='practicality'><b>Practicality:</b> <img src='/assets/images/reviews/{practicality.rating}stars.png'/></p> 
-                    <p class='accessibility'><b>Accessibility:</b> <img src='/assets/images/reviews/{accessibility.rating}stars.png'/></p>
-                    {:articles}<p class='articles'><b>Articles</b></p>{/articles}
-                </div>
-                <div class='explanation overall selected'>
-                    {&overall.explanation}
-                    <p>Try <a href='{&website}' target='_blank'>{title}</a> ></p>
-                </div>
-                <div class='explanation love_of_learning'>
-                    {&loveOfLearning.explanation}
-                </div>
-                <div class='explanation intuitive'>
-                    {&intuitive.explanation}
-                </div>
-                <div class='explanation engagement'>
-                    {&engagement.explanation}
-                </div>
-                <div class='explanation practicality'>
-                    {&practicality.explanation}
-                </div>
-                <div class='explanation accessibility'>
-                    {&accessibility.explanation}
-                </div>
-                <div class='explanation articles'>
-                    <p>Here are a collection of articles about {title} from around the web:
-                    {&articles}
-                </div>
+            <div class='explanation overall selected'>
+                {&explanation}
+                <p>Try <a href='{&website}' target='_blank'>{title}</a> ></p>
             </div>
         </div>
         {/reviews}
