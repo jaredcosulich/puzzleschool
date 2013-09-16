@@ -23,7 +23,7 @@ levels.WORLDS = [
                             <p>A circuit is not complete until a wire connects the negative terminal to the positive terminal.</p>
                             <p>When the circuit is complete electricity will flow, powering the lightbulb.</p>
                         '''
-                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/zSOo2_ophoE?rel=0" frameborder="0" allowfullscreen></iframe>'
+                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/T-5qCKcq6xo?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: false
                     }
                     {
@@ -40,6 +40,7 @@ levels.WORLDS = [
                         complete: '''
                             <p>A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.</p>
                         '''
+                        completeVideo: '<iframe width="300" height="225" src="//www.youtube.com/embed/wzMpraDM_U4?rel=0" frameborder="0" allowfullscreen></iframe>'
                         values: false
                     }                    
                     {
