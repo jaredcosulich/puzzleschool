@@ -1080,9 +1080,11 @@
   text-align: center;
 }
 .circuitous .level_selector .world .stage {
-  padding-top: 12px;
+  padding-top: 24px;
+  overflow: hidden;
 }
 .circuitous .level_selector .world .stage .levels {
+  overflow: hidden;
   padding: 12px;
 }
 .circuitous .level_selector .world .stage .levels .level {
