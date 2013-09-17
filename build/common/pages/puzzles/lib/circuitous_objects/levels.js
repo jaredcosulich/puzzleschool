@@ -106,7 +106,7 @@ levels.WORLDS = [
             values: false
           }, {
             id: 1379359682379,
-            challenge: "Stop current from flowing to Battery #2 by adding a path for current to bypass it that has no resistance.",
+            challenge: "Stop current from flowing to Lightbulb #2 by adding a path for current to bypass it that has no resistance.",
             instructions: {
               "components": [
                 {
@@ -122,7 +122,7 @@ levels.WORLDS = [
               ],
               "wires": [["14,5", "14,6"], ["14,6", "14,7"], ["5,5", "5,6"], ["5,6", "5,7"], ["10,9", "11,9"], ["11,9", "12,9"], ["12,9", "13,9"], ["13,9", "14,9"], ["14,9", "14,8"], ["14,8", "14,7"], ["14,5", "13,5"], ["13,5", "12,5"], ["12,5", "11,5"], ["11,5", "10,5"], ["10,5", "9,5"], ["9,5", "8,5"], ["8,5", "7,5"], ["7,5", "6,5"], ["6,5", "5,5"], ["5,7", "5,8"], ["7,9", "8,9"], ["9,9", "8,9"], ["7,9", "6,9"], ["5,9", "6,9"], ["5,9", "5,8"]]
             },
-            hints: ['A path without any components on it will not provide any resistance for the electrons.', 'You need to create a path from the negative terminal to Battery #1 that does not touch Battery #2.', 'Draw more wire from just after the negative terminal to just after Battery #2.'],
+            hints: ['A path without any components on it will not provide any resistance for the electrons.', 'You need to create a path from the negative terminal to Lightbulb #1 that does not touch Lightbulb #2.', 'Draw more wire from just after the negative terminal to just after Lightbulb #2.'],
             completeInstructions: {
               "components": [
                 {
@@ -139,7 +139,7 @@ levels.WORLDS = [
               "wires": [["14,5", "14,6"], ["14,6", "14,7"], ["5,5", "5,6"], ["5,6", "5,7"], ["10,9", "11,9"], ["11,9", "12,9"], ["12,9", "13,9"], ["13,9", "14,9"], ["14,9", "14,8"], ["14,8", "14,7"], ["14,5", "13,5"], ["13,5", "12,5"], ["12,5", "11,5"], ["11,5", "10,5"], ["10,5", "9,5"], ["9,5", "8,5"], ["8,5", "7,5"], ["7,5", "6,5"], ["6,5", "5,5"], ["5,7", "5,8"], ["7,9", "8,9"], ["9,9", "8,9"], ["7,9", "6,9"], ["5,9", "6,9"], ["5,9", "5,8"], ["11,9", "11,8"], ["11,8", "11,7"], ["11,7", "11,6"], ["11,6", "11,5"]]
             },
             completeValues: [["Battery", 1.8], ["Lightbulb", 0], ["Lightbulb", 1.8]],
-            complete: '<p>Current will flow between two paths based on the amount of resistance in each path.</p>\n<p>Adding wire to the circuit bypassing Battery #2 diverts almost all of the current down the new path.</p>',
+            complete: '<p>Current will flow between two paths based on the amount of resistance in each path.</p>\n<p>Adding wire to the circuit bypassing Lightbulb #2 diverts almost all of the current down the new path.</p>',
             values: false
           }, {
             id: 1379364502530,
