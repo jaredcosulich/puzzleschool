@@ -39,7 +39,7 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 1.8], ["Lightbulb", 1.8]],
             complete: '<p>A circuit is not complete until a wire connects the negative terminal to the positive terminal.</p>\n<p>When the circuit is complete electricity will flow, powering the lightbulb.</p>',
-            completeVideoId: 'MxtyAHGBvw4',
+            completeVideoId: 'YPQYgODIQIg',
             values: false
           }, {
             id: 1378413019525,

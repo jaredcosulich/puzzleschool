@@ -933,7 +933,30 @@
   height: 390px;
   padding: 12px;
   border: 1px solid #262626;
-  background-color: #fafafa;
+  background: #e5f8fe;
+  /* Old browsers */
+
+  background: -moz-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e5f8fe), color-stop(100%, #fafafa));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to bottom, #e5f8fe 0%, #fafafa 100%);
+  /* W3C */
+
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='@startColor', endColorstr='@endColor', GradientType=0);
+  /* IE6-9 */
+
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
