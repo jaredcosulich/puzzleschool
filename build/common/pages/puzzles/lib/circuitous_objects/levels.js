@@ -75,7 +75,7 @@ levels.WORLDS = [
             values: false
           }, {
             id: 1378919605524,
-            challenge: "Add resistance to the circuit to stop the excessive current from flowing.",
+            challenge: "Add resistance to the circuit to stop the excessive current from flowing and destroying the battery.",
             instructions: {
               "components": [
                 {
@@ -88,7 +88,7 @@ levels.WORLDS = [
               ],
               "wires": [["8,8", "8,7"], ["8,7", "7,7"], ["7,7", "6,7"], ["6,7", "6,6"], ["6,6", "6,5"], ["11,7", "10,7"], ["10,7", "9,7"], ["9,7", "9,8"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["7,2", "8,2"], ["8,2", "9,2"], ["9,2", "10,2"], ["11,3", "11,4"], ["6,5", "6,4"], ["6,4", "6,3"], ["6,3", "6,2"], ["6,2", "7,2"], ["10,2", "11,2"], ["11,2", "11,3"]]
             },
-            hints: ['Without any resistance a circuit will overheat and can destroy the battery.', 'You\'ll need to erase part of the circuit in order to fit the resistor in. Click and drag over existing wires to erase them.', 'Erase a section of the circuit and then drag and drop the resistor in to place so that the wires touch each end of the resistor.'],
+            hints: ['You\'ll need to erase part of the circuit in order to fit the resistor in.', 'Click and drag over existing wires to erase them.', 'Erase a section of the circuit and then drag and drop the resistor in to place so that the wires touch each end of the resistor.'],
             completeInstructions: {
               "components": [
                 {
