@@ -1077,6 +1077,8 @@
   display: none;
 }
 .circuitous .level_selector {
+  height: 318px;
+  overflow: hidden;
   text-align: center;
 }
 .circuitous .level_selector .world .stage {

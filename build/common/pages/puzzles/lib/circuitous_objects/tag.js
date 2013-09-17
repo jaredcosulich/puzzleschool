@@ -112,7 +112,7 @@ tag.Tag = (function(_super) {
       return;
     }
     this.info = info;
-    this.smallContent.html("" + this.info.current + "A");
+    this.smallContent.html("" + (this.info.current === 'infinite' ? 'Infinite' : "" + this.info.current + "A"));
     this.largeContent.html("<div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
     return $.timeout(10, function() {
       _this.largeContent.find('.icon-pencil').bind('mousedown.edit', function(e) {

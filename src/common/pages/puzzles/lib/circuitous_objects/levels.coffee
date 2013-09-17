@@ -95,6 +95,48 @@ levels.WORLDS = [
                 name: 'Ohm\'s Law'
                 levels: [
                     {
+                        id: 1379374713401
+                        challenge: "Create a circuit that has 0.9 Amps of current flowing through it."
+                        instructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "3,3"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,3","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","6,7"],["6,7","6,8"]]}
+                        hints: [
+                            'You can calculate the amount of current in a circuit using <a href=\'http://en.wikipedia.org/wiki/Ohm%27s_law\' target=\'blank\'>Ohm\'s law</a>: I = V / R <br/> (current = voltage / resistance)'
+                            'The battery provides 9 Volts of electricity. The resistor provides 10 Ohms of resistance.'
+                            'With the resistor added to the circuit there will be 0.9 Amps of electricity (9 / 10 = 0.9).'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "6,3"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"]]}
+                        completeValues: [["Battery",0.9],["Resistor",0.9]]
+                        complete: '''
+                            <p>Adding the resistor to the circuit creates 10 Ohms of resistance.</p>
+                            <p><a href=\'http://en.wikipedia.org/wiki/Ohm%27s_law\'>Ohm\'s law</a> tells us that with 10 Ohms of resistance and 9 Volts of power we get 0.9 Amps of current.</p>
+                        '''
+                        values: true                        
+                    }
+                    {
+                        id: 1379375996057
+                        challenge: "Create a circuit that has 1.8 Amps of current flowing through it."
+                        instructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "3,3"},{"name": "Lightbulb", "position": "16,5"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"],["6,3","6,4"],["6,4","6,5"],["6,5","6,6"]]}
+                        hints: [
+                            'The resistor provides 10 Ohms of resistance while the lightbulb provides 5 Ohms of resistance.'
+                            'Use Ohm\'s law (I = V / R) to figure out how many amps the circuit will have by adding the lightbulb or the resistor.'
+                            'Add only the lightbulb to the circuit to create 0.9 Amps of current.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "3,3"},{"name": "Lightbulb", "position": "13,2"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"],["6,3","6,4"],["6,4","6,5"],["6,5","6,6"]]}
+                        completeValues: [["Battery",1.8],["Resistor",0],["Lightbulb",1.8]]
+                        complete: '''
+                            <p>Using Ohm\'s law we know that the lightbulb, with 5 Ohms of resistance, will create a circuit with 1.8 Amps of current.</p>
+                            <p>The resistor, with 10 Ohms of resistance, would have created 0.9 Amps of current.</p>
+                        '''
+                        values: true                        
+                    }
+                ]
+            }
+        ]
+    }, {
+        stages: [
+            {
+                name: 'Series Circuits'
+                levels: [
+                    {
                         id: 1378789808762
                         challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit."
                         instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "13,3"},{"name": "Lightbulb", "position": "7,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
@@ -106,8 +148,8 @@ levels.WORLDS = [
                         completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "7,4"},{"name": "Lightbulb", "position": "10,4"}],"wires": [["9,8","9,7"],["9,7","10,7"],["10,7","10,6"],["10,6","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","6,5"],["6,5","6,6"],["6,6","7,6"],["7,6","7,7"],["7,7","8,7"],["8,7","8,8"]]}
                         completeValues: [["Battery",0.9],["Lightbulb",0.9],["Lightbulb",0.9]]
                         complete: '''
-                            <p>This is a circuit with two resistors (lightbulbs) placed in series.</p>
-                            <p>Lightbulb #1 dims because the circuit now has twice as much resistance in it.</p>
+                            <p>The two lightbulbs in this circuit create twice as much resistance as one lightbulb did.</p>
+                            <p>The current is constant throughout the circuit so both lightbulbs dim to half the intensity that one lightbulb had.</p>
                         '''
                         values: true
                     }
@@ -124,7 +166,7 @@ levels.WORLDS = [
                         completeValues: [["Battery",0.6],["Lightbulb",0.6],["Resistor",0.6]]
                         complete: '''
                             <p>The resistance in this circuit is the resistance of the lightbulb + the resistance of the resistor.</p>
-                            <p>The current in the circuit = total voltage / total resistance (9 Volts / 15 Ohms = 0.6 Amps).</p>
+                            <p>The current = total voltage / total resistance (9 Volts / 15 Ohms = 0.6 Amps).</p>
                         '''
                         values: true
                     }
@@ -140,7 +182,7 @@ levels.WORLDS = [
                         completeInstructions: {"components": [{"name": "Lightbulb", "position": "13,2"},{"name": "Lightbulb", "position": "15,2"},{"name": "Resistor", "position": "7,0"},{"name": "Battery", "position": "8,12"},{"name": "Resistor", "position": "5,8"},{"name": "Resistor", "position": "12,8"},{"name": "Lightbulb", "position": "9,7"}],"wires": [["8,12","7,12"],["7,12","6,12"],["6,12","5,12"],["5,8","5,7"],["5,7","6,7"],["6,7","7,7"],["7,7","8,7"],["8,7","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","12,7"],["12,7","12,8"],["12,11","12,12"],["12,12","11,12"],["11,12","10,12"],["10,12","9,12"],["5,11","5,12"]]}
                         completeValues: [["Battery",0.36]]
                         complete: '''
-                            <p>Ohm\'s law states that I = V/R or Current = Voltage/Resistance.</p>
+                            <p><a href=\'http://en.wikipedia.org/wiki/Ohm's_law\' target=\'blank\'>Ohm\'s law</a> states that I = V/R or Current = Voltage/Resistance.</p>
                             <p>In this case we need to add 25 Ohms of resistance to the circuit to get 0.36 Amps (9 / 25 = 0.36).</p>
                         '''
                         values: true
