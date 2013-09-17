@@ -206,13 +206,13 @@ soma.views({
         _results.push((function(info) {
           var component;
           component = new circuitous[info.name];
+          _this.viewHelper.addComponent(component);
           if (info.resistance !== void 0) {
             component.setResistance(info.resistance);
           }
           if (info.voltage !== void 0) {
             component.setVoltage(info.voltage);
           }
-          _this.viewHelper.addComponent(component);
           return component.el.find('img').bind('load', function() {
             return setTimeout((function() {
               var componentPosition, _ref4;

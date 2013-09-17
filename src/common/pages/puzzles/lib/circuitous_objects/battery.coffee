@@ -7,11 +7,11 @@ class battery.Battery extends circuitousObject.Object
     
     centerOffset: 
         x: 16
-        y: 54
+        y: 35
     
     nodes: [
-        {x: -16, y: -54, positive: true}    
-        {x: 16, y: -54, negative: true}
+        {x: -16, y: -35, positive: true}    
+        {x: 16, y: -35, negative: true}
     ]
 
     voltage: 9
@@ -20,9 +20,19 @@ class battery.Battery extends circuitousObject.Object
         @init()
 
     init: ->
-        @setVoltage(@voltage)
         
+    appendTo: (container) ->
+        super(container)
+        @setVoltage(@voltage)        
+
     getInfo: ->
         
     setVoltage: (@voltage) ->
+        return unless @el
+        unless @voltageElement
+            @voltageElement = $(document.createElement('DIV'))
+            @voltageElement.addClass('voltage')
+            @el.append(@voltageElement)
+        
+        @voltageElement.html("#{@voltage}V")
         

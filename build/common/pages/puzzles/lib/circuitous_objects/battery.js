@@ -17,17 +17,17 @@ battery.Battery = (function(_super) {
 
   Battery.prototype.centerOffset = {
     x: 16,
-    y: 54
+    y: 35
   };
 
   Battery.prototype.nodes = [
     {
       x: -16,
-      y: -54,
+      y: -35,
       positive: true
     }, {
       x: 16,
-      y: -54,
+      y: -35,
       negative: true
     }
   ];
@@ -39,7 +39,10 @@ battery.Battery = (function(_super) {
     this.init();
   }
 
-  Battery.prototype.init = function() {
+  Battery.prototype.init = function() {};
+
+  Battery.prototype.appendTo = function(container) {
+    Battery.__super__.appendTo.call(this, container);
     return this.setVoltage(this.voltage);
   };
 
@@ -47,6 +50,15 @@ battery.Battery = (function(_super) {
 
   Battery.prototype.setVoltage = function(voltage) {
     this.voltage = voltage;
+    if (!this.el) {
+      return;
+    }
+    if (!this.voltageElement) {
+      this.voltageElement = $(document.createElement('DIV'));
+      this.voltageElement.addClass('voltage');
+      this.el.append(this.voltageElement);
+    }
+    return this.voltageElement.html("" + this.voltage + "V");
   };
 
   return Battery;

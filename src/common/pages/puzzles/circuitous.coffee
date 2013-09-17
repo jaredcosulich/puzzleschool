@@ -162,9 +162,9 @@ soma.views
             for info in instructions.components
                 do (info) =>
                     component = new circuitous[info.name]
+                    @viewHelper.addComponent(component)
                     component.setResistance(info.resistance) unless info.resistance is undefined
                     component.setVoltage(info.voltage) unless info.voltage is undefined
-                    @viewHelper.addComponent(component)
                     component.el.find('img').bind 'load', =>
                         setTimeout((=>
                             component.setStartDrag({})

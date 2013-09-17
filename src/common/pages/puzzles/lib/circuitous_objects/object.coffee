@@ -33,7 +33,7 @@ class object.Object extends Draggable
             info
     
     initCurrent: ->
-    
+        
     setCurrent: (@current) -> 
         @tag?.setInfo
             name: @name
