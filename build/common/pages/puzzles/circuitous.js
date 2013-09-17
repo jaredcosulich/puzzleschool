@@ -459,7 +459,7 @@ soma.views({
       });
     },
     showComplete: function() {
-      var completeElement, info,
+      var completeElement, info, youtube,
         _this = this;
       if (this.level.completed > this.level.loaded) {
         return;
@@ -468,15 +468,16 @@ soma.views({
       this.viewHelper.markLevelCompleted(this.level.id);
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
-      completeElement.html("<h1>Success</h1>\n<div class='description'>" + this.level.complete + "</div>\n<div class='buttons'><a class='button next_level'>Next Level</a></div>");
+      youtube = "<img src='http://img.youtube.com/vi/" + this.level.completeVideoId + "/mqdefault.jpg'/><i class='icon-youtube-play'></i>";
+      completeElement.html("<h1>Success</h1>\n<div class='description'>\n    " + this.level.complete + "\n    <div class='video_thumbnail'>\n        " + (this.level.completeVideoId ? youtube : 'Video Coming Soon') + "\n    </div>\n</div>\n<div class='buttons'><a class='button next_level'>Next Level</a></div>");
       info = this.$('.info');
       return this.hideInfo(function() {
-        if (_this.level.completeVideo) {
-          $.timeout(250, function() {
-            return completeElement.find('.description').append(_this.level.completeVideo);
+        if (_this.level.completeVideoId) {
+          $.timeout(20, function() {
+            return completeElement.find('.video_thumbnail').bind('click', function() {
+              return _this.showModal("<iframe width=\"640\" height=\"480\" src=\"//www.youtube.com/embed/" + _this.level.completeVideoId + "?rel=0&autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
+            });
           });
-        } else {
-          completeElement.find('.description').append('<div class=\'no_video\'>Video Coming Soon</div>');
         }
         completeElement.find('.next_level').bind('click', function() {
           var level, selectNext, stage, world, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
@@ -565,19 +566,21 @@ soma.views({
         });
       }
       if (content) {
-        this.modalMenu.find('.content').html(content);
+        this.modalMenu.find('.modal_content').html(content);
       }
-      if (parseInt(this.modalMenu.css('left')) < 0) {
-        this.modalMenu.css({
-          opacity: 0,
-          left: (this.el.width() / 2) - (this.modalMenu.width() / 2),
-          top: (this.el.height() / 2) - (this.modalMenu.height() / 2)
-        });
-        return this.modalMenu.animate({
-          opacity: 1,
-          duration: 500
-        });
-      }
+      return setTimeout((function() {
+        if (parseInt(_this.modalMenu.css('left')) < 0) {
+          _this.modalMenu.css({
+            opacity: 0,
+            left: (_this.el.width() / 2) - (_this.modalMenu.width() / 2),
+            top: (_this.el.height() / 2) - (_this.modalMenu.height() / 2)
+          });
+          return _this.modalMenu.animate({
+            opacity: 1,
+            duration: 500
+          });
+        }
+      }), 10);
     },
     hideModal: function(callback) {
       var _this = this;

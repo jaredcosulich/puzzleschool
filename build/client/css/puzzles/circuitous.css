@@ -12,7 +12,7 @@
   outline: 3px solid #bababa;
   margin: 18px 0 0 -12px;
   overflow: hidden;
-  background-color: white;
+  background-color: #fafafa;
   border: 8px solid #ffffff;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -237,11 +237,35 @@
   margin-left: 14px;
 }
 .circuitous .right_side {
+  background: #e5f8fe;
+  /* Old browsers */
+
+  background: -moz-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e5f8fe), color-stop(100%, #fafafa));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to bottom, #e5f8fe 0%, #fafafa 100%);
+  /* W3C */
+
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='@startColor', endColorstr='@endColor', GradientType=0);
+  /* IE6-9 */
+
   position: absolute;
-  left: 12px;
+  left: 9px;
   top: 0;
-  height: 640px;
-  width: 314px;
+  height: 628px;
+  width: 326px;
 }
 .circuitous .right_side::before {
   content: "\00a0";
@@ -336,16 +360,28 @@
   display: block;
   margin-bottom: -12px;
 }
-.circuitous .right_side .info .complete iframe,
-.circuitous .right_side .info .complete .no_video {
-  margin: 12px 0 12px -5px;
-}
-.circuitous .right_side .info .complete .no_video {
+.circuitous .right_side .info .complete .video_thumbnail {
+  cursor: pointer;
+  margin: 12px 0;
   background-color: black;
   color: #fafafa;
-  line-height: 225px;
-  width: 300px;
-  height: 225px;
+  width: 100%;
+  height: 180px;
+  line-height: 180px;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+.circuitous .right_side .info .complete .video_thumbnail i {
+  position: absolute;
+  left: 0;
+  top: 36%;
+  width: 100%;
+  font-size: 48px;
+  color: black;
+}
+.circuitous .right_side .info .complete .video_thumbnail img {
+  margin-left: -15px;
 }
 .circuitous .right_side .info .complete .description {
   font-size: 15px;
@@ -405,7 +441,7 @@
 }
 .circuitous .right_side .control_panel {
   position: absolute;
-  bottom: 6px;
+  bottom: 0;
   left: 0;
   width: 100%;
 }
@@ -983,6 +1019,7 @@
   color: #fafafa;
   width: 300px;
   height: 225px;
+  line-height: 225px;
 }
 .circuitous .all_levels .levels_container .world .stage .levels .level .level_info {
   margin-bottom: 12px;
@@ -1170,24 +1207,49 @@
   position: absolute;
   top: -10000px;
   left: -10000px;
-  width: 560px;
-  height: 400px;
   z-index: 99;
-  background: transparent url('/assets/images/puzzles/circuitous/modal.png');
+  background: #e5f8fe;
+  /* Old browsers */
+
+  background: -moz-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e5f8fe), color-stop(100%, #fafafa));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(top, #e5f8fe 0%, #fafafa 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to bottom, #e5f8fe 0%, #fafafa 100%);
+  /* W3C */
+
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='@startColor', endColorstr='@endColor', GradientType=0);
+  /* IE6-9 */
+
+  border: 1px solid #949494;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
 }
 .circuitous .modal_menu .close {
   cursor: pointer;
-  width: 42px;
-  height: 42px;
+  font-size: 30px;
   position: absolute;
-  top: 0;
-  right: 0;
-  content: "\00a0";
+  top: 2px;
+  right: 3px;
 }
-.circuitous .modal_menu .content {
-  width: 480px;
-  height: 318px;
-  margin: 40px;
+.circuitous .modal_menu .modal_content {
+  margin: 30px;
 }
 .load_instructions {
   clear: both;

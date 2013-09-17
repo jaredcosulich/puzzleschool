@@ -5,7 +5,7 @@
 @height: 640px;
 @width: 960px;
 @border: 8px;
-
+@paleblue: #E5F8FE;
 .page {
     .no_select();
 }
@@ -16,7 +16,7 @@
     outline: 3px solid darken(@white, 25%);
     margin: 18px 0 0 -12px;
     overflow: hidden;
-    background-color: white;
+    background-color: @white;
     border: @border solid white;        
     .no_select();
     .inner-shadow(0, 0, 18px, 60%);
@@ -257,11 +257,12 @@
     }
     
     .right_side {
+        .linear-gradient(@paleblue, @white);
         position: absolute;
-        left: 12px;
+        left: 9px;
         top: 0;
-        height: @height;
-        width: (@width / 3) - 6;
+        height: @height - 12;
+        width: (@width / 3) + 6;
 
         &::before {
             content: "\00a0";
@@ -367,16 +368,28 @@
             }
             
             .complete {                
-                iframe, .no_video {
-                    margin: 12px 0 12px -5px;
-                }
-                
-                .no_video {
+                .video_thumbnail {
+                    cursor: pointer;
+                    margin: 12px 0;
                     background-color: black;
                     color: @white;
-                    line-height: 225px;
-                    width: 300px;
-                    height: 225px;                    
+                    width: 100%;
+                    height: 180px;                    
+                    line-height: 180px;
+                    text-align: center;
+                    overflow: hidden;
+                    position: relative;
+                    i {
+                        position: absolute;
+                        left: 0;
+                        top: 36%;
+                        width: 100%;
+                        font-size: 48px;
+                        color: black;
+                    }
+                    img {
+                        margin-left: -15px;
+                    }
                 }
                 
                 .description {
@@ -418,7 +431,7 @@
         
         .control_panel {
             position: absolute;
-            bottom: 6px;
+            bottom: 0;
             left: 0;
             width: 100%;
                    
@@ -784,6 +797,7 @@
                                 color: @white;
                                 width: 300px;
                                 height: 225px;
+                                line-height: 225px;
                             }
                         
                             .level_info {
@@ -888,23 +902,21 @@
         position: absolute;
         top: -10000px;
         left: -10000px;
-        width: 560px;
-        height: 400px;
         z-index: 99;
-        background: transparent url('/assets/images/puzzles/circuitous/modal.png');
+        .linear-gradient(@paleblue, @white);
+        border: 1px solid @grey;
+        .rounded(12px);
+        .outer-shadow(12px, 12px, 18px, 60%);
+        overflow: hidden;
         .close {
             cursor: pointer;
-            width: 42px;
-            height: 42px;
+            font-size: 30px; 
             position: absolute;
-            top: 0;
-            right: 0;
-            content: "\00a0";  
+            top: 2px;
+            right: 3px;
         }
-        .content {
-            width: 480px;
-            height: 318px;
-            margin: 40px;
+        .modal_content {
+            margin: 30px;
         }
     }
 }

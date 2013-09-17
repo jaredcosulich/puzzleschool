@@ -333,19 +333,24 @@ soma.views
             # return
             completeElement = $(document.createElement('DIV'))
             completeElement.addClass('complete')
+            youtube = "<img src='http://img.youtube.com/vi/#{@level.completeVideoId}/mqdefault.jpg'/><i class='icon-youtube-play'></i>"
             completeElement.html """
                 <h1>Success</h1>
-                <div class='description'>#{@level.complete}</div>
+                <div class='description'>
+                    #{@level.complete}
+                    <div class='video_thumbnail'>
+                        #{if @level.completeVideoId then youtube else 'Video Coming Soon'}
+                    </div>
+                </div>
                 <div class='buttons'><a class='button next_level'>Next Level</a></div>
             """
 
             info = @$('.info') 
             @hideInfo =>
-                if @level.completeVideo
-                    $.timeout 250, =>                            
-                        completeElement.find('.description').append(@level.completeVideo)
-                else
-                    completeElement.find('.description').append('<div class=\'no_video\'>Video Coming Soon</div>')
+                if @level.completeVideoId
+                    $.timeout 20, =>                            
+                        completeElement.find('.video_thumbnail').bind 'click', =>
+                            @showModal("<iframe width=\"640\" height=\"480\" src=\"//www.youtube.com/embed/#{@level.completeVideoId}?rel=0&autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>")                
                 
                 completeElement.find('.next_level').bind 'click', => 
                     selectNext = false
@@ -394,15 +399,18 @@ soma.views
                 @modalMenu = @$('.modal_menu')
                 @modalMenu.find('.close').bind 'click', => @hideModal()
                 
-            @modalMenu.find('.content').html(content) if content
+            @modalMenu.find('.modal_content').html(content) if content
             
-            if parseInt(@modalMenu.css('left')) < 0
-                @modalMenu.css
-                    opacity: 0
-                    left: (@el.width()/2) - (@modalMenu.width()/2)
-                    top: (@el.height()/2) - (@modalMenu.height()/2) 
+            setTimeout((=>
+                if parseInt(@modalMenu.css('left')) < 0
+                    @modalMenu.css
+                        opacity: 0
+                        left: (@el.width()/2) - (@modalMenu.width()/2)
+                        top: (@el.height()/2) - (@modalMenu.height()/2) 
                 
-                @modalMenu.animate(opacity: 1, duration: 500)
+                    @modalMenu.animate(opacity: 1, duration: 500)
+            ), 10)
+            
             
         hideModal: (callback) ->
             return unless @modalMenu
