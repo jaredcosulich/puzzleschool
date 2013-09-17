@@ -257,7 +257,7 @@
     }
     
     .right_side {
-        .linear-gradient(@paleblue, @white);
+        .linear-gradient(@white, @paleblue);
         position: absolute;
         left: 9px;
         top: 0;
@@ -445,9 +445,9 @@
                 text-align: center;
                 .show_values {
                     display: block;
-                    width: 150px;
+                    width: 138px;
                     height: 26px;
-                    margin-top: 3px;
+                    margin: 3px 0 0 11px;
 
                     &::before, &::after {
                         width: 48%;
@@ -478,11 +478,13 @@
             .add_component, .select_level, .all_levels_link {
                 .button-color(@blue);
                 color: white;
+                width: 120px;
             }            
             
             .schematic_mode {
                 .button-color(@grey);
                 color: @lightgrey;
+                width: 120px;
             }
 
             .add_component, .select_level, .all_levels_link, .schematic_mode {
@@ -870,8 +872,9 @@
         overflow: hidden;
         text-align: center;
         .world {
+            height: 100%;
             .stage {
-                padding: 36px 0 12px 0;
+                padding: 12px 0 24px 0;
                 overflow: hidden;
                 .levels {
                     overflow: hidden;
@@ -893,6 +896,20 @@
                         }
                     }                    
                 }
+            }
+        }
+        
+        .all_levels_link {
+            bottom: 36px;
+            left: 40%;
+            width: 12.5%;
+            position: absolute;
+            .button-color(@blue);
+            
+            &:active, &.active {
+                position: absolute;
+                top: auto;
+                bottom: 35px;
             }
         }
     }

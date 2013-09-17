@@ -241,6 +241,7 @@ soma.views
                 @showLevelSelector()
                 return
             
+            @hideModal()
             @viewHelper.board.clear()
             @showChallenge()
             title = "Circuitous Level #{@level.id}"
@@ -392,6 +393,12 @@ soma.views
 
                             levels.append(levelLink)
 
+            allLevels = $(document.createElement('A'))
+            allLevels.addClass('all_levels_link')
+            allLevels.html('All Levels')
+            allLevels.bind 'click', => @viewHelper.showAllLevels()
+            levelSelector.append(allLevels)
+            
             @showModal(levelSelector)
                     
         showModal: (content=null) ->

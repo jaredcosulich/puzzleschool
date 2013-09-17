@@ -333,6 +333,7 @@ soma.views({
         this.showLevelSelector();
         return;
       }
+      this.hideModal();
       this.viewHelper.board.clear();
       this.showChallenge();
       title = "Circuitous Level " + this.level.id;
@@ -510,7 +511,7 @@ soma.views({
       });
     },
     showLevelSelector: function() {
-      var index, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+      var allLevels, index, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
         _this = this;
       levelSelector = $(document.createElement('DIV'));
       levelSelector.addClass('level_selector');
@@ -552,6 +553,13 @@ soma.views({
           }
         }
       }
+      allLevels = $(document.createElement('A'));
+      allLevels.addClass('all_levels_link');
+      allLevels.html('All Levels');
+      allLevels.bind('click', function() {
+        return _this.viewHelper.showAllLevels();
+      });
+      levelSelector.append(allLevels);
       return this.showModal(levelSelector);
     },
     showModal: function(content) {
