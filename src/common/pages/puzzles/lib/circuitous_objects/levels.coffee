@@ -104,7 +104,7 @@ levels.WORLDS = [
                             'With the resistor added to the circuit there will be 0.9 Amps of electricity (9 / 10 = 0.9).'
                         ]
                         completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "6,3"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"]]}
-                        completeValues: [["Battery",0.9],["Resistor",0.9]]
+                        completeValues: [["Battery",0.9]]
                         complete: '''
                             <p>Adding the resistor to the circuit creates 10 Ohms of resistance.</p>
                             <p><a href=\'http://en.wikipedia.org/wiki/Ohm%27s_law\'>Ohm\'s law</a> tells us that with 10 Ohms of resistance and 9 Volts of power we get 0.9 Amps of current.</p>
@@ -121,10 +121,27 @@ levels.WORLDS = [
                             'Add only the lightbulb to the circuit to create 0.9 Amps of current.'
                         ]
                         completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "3,3"},{"name": "Lightbulb", "position": "13,2"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"],["6,3","6,4"],["6,4","6,5"],["6,5","6,6"]]}
-                        completeValues: [["Battery",1.8],["Resistor",0],["Lightbulb",1.8]]
+                        completeValues: [["Battery",1.8]]
                         complete: '''
                             <p>Using Ohm\'s law we know that the lightbulb, with 5 Ohms of resistance, will create a circuit with 1.8 Amps of current.</p>
                             <p>The resistor, with 10 Ohms of resistance, would have created 0.9 Amps of current.</p>
+                        '''
+                        values: true                        
+                    }
+                    {
+                        id: 1379377585229
+                        challenge: "Create a circuit that has 0.9 Amps of current flowing through it."
+                        instructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "11,3"},{"name": "Resistor", "position": "5,5"}],"wires": []}
+                        hints: [
+                            'The amount of current in a circuit is inversely proportional to the amount of resistance.'
+                            'The resistor provides more resistance (10 Ohms), so it will reduce the amount of currrent by more than the lightbulb (5 Ohms).'
+                            'Draw wire to include the resistor but not the lightbulb in the circuit.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Resistor", "position": "5,5"},{"name": "Lightbulb", "position": "11,3"}],"wires": [["9,9","10,9"],["10,9","11,9"],["11,9","12,9"],["12,9","12,8"],["12,5","12,4"],["12,4","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","5,4"],["5,4","5,5"],["5,8","5,9"],["5,9","6,9"],["6,9","7,9"],["7,9","8,9"],["12,5","12,6"],["12,6","12,7"],["12,7","12,8"]]}
+                        completeValues: [["Battery",0.9]]
+                        complete: '''
+                            <p>Using Ohm\'s law we know that the resistor, with 10 Ohms of resistance, will create a circuit with 0.9 Amps of current.</p>
+                            <p>With more resistance from the resistor, the circuit will have less current.</p>
                         '''
                         values: true                        
                     }
