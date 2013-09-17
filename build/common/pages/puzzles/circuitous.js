@@ -90,7 +90,9 @@ soma.views({
       '~f': '"],["',
       '~g': '","',
       '~h': '"]]}',
-      '~i': '{"name": "Resistor", '
+      '~i': '{"name": "Resistor", ',
+      '~j': '"volts": ',
+      '~k': '"resistance": '
     },
     create: function() {
       var circuitous, circuitousEditor, instructions, replace, replaceWith, _ref,
@@ -204,6 +206,12 @@ soma.views({
         _results.push((function(info) {
           var component;
           component = new circuitous[info.name];
+          if (info.resistance !== void 0) {
+            component.setResistance(info.resistance);
+          }
+          if (info.voltage !== void 0) {
+            component.setVoltage(info.voltage);
+          }
           _this.viewHelper.addComponent(component);
           return component.el.find('img').bind('load', function() {
             return setTimeout((function() {

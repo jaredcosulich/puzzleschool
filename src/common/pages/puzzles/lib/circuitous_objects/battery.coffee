@@ -20,6 +20,9 @@ class battery.Battery extends circuitousObject.Object
         @init()
 
     init: ->
+        @setVoltage(@voltage)
         
     getInfo: ->
+        
+    setVoltage: (@voltage) ->
         

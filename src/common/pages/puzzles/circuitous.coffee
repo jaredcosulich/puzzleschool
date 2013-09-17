@@ -84,6 +84,8 @@ soma.views
             '~g': '","'
             '~h': '"]]}'
             '~i': '{"name": "Resistor", '
+            '~j': '"volts": '
+            '~k': '"resistance": '
             
         create: ->            
             circuitous = require('./lib/circuitous')
@@ -160,6 +162,8 @@ soma.views
             for info in instructions.components
                 do (info) =>
                     component = new circuitous[info.name]
+                    component.setResistance(info.resistance) unless info.resistance is undefined
+                    component.setVoltage(info.voltage) unless info.voltage is undefined
                     @viewHelper.addComponent(component)
                     component.el.find('img').bind 'load', =>
                         setTimeout((=>

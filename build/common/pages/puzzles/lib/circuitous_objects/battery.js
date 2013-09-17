@@ -39,9 +39,15 @@ battery.Battery = (function(_super) {
     this.init();
   }
 
-  Battery.prototype.init = function() {};
+  Battery.prototype.init = function() {
+    return this.setVoltage(this.voltage);
+  };
 
   Battery.prototype.getInfo = function() {};
+
+  Battery.prototype.setVoltage = function(voltage) {
+    this.voltage = voltage;
+  };
 
   return Battery;
 

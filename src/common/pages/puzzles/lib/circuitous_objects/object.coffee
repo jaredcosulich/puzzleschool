@@ -44,5 +44,12 @@ class object.Object extends Draggable
     initTag: (show=false) -> @tag = new Tag(object: @, show: show)
      
     setName: (@name) ->    
+        
+    setResistance: (@resistance) ->
+        
+    setVoltage: (@voltage) ->
+        
+        
+        
     
         

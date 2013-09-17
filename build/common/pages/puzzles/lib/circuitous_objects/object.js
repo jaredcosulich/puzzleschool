@@ -94,6 +94,14 @@ object.Object = (function(_super) {
     this.name = name;
   };
 
+  Object.prototype.setResistance = function(resistance) {
+    this.resistance = resistance;
+  };
+
+  Object.prototype.setVoltage = function(voltage) {
+    this.voltage = voltage;
+  };
+
   return Object;
 
 })(Draggable);
