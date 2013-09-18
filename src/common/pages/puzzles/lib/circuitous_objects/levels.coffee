@@ -21,7 +21,7 @@ levels.WORLDS = [
                             <p>A circuit is not complete until a wire connects the negative terminal to the positive terminal.</p>
                             <p>When the circuit is complete electricity will flow, powering the lightbulb.</p>
                         '''
-                        completeVideoId: 'YPQYgODIQIg'
+                        completeVideoId: 'XnKQkonpkIU'
                         values: false
                     }
                     {
