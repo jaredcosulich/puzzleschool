@@ -103,6 +103,7 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 0.9], ["Resistor", 0.9]],
             complete: '<p>The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.</p>',
+            completeVideoId: '2iwlpHIw_Ac',
             values: false
           }, {
             id: 1379359682379,
@@ -140,6 +141,7 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 1.8], ["Lightbulb", 0], ["Lightbulb", 1.8]],
             complete: '<p>Current will flow between two paths based on the amount of resistance in each path.</p>\n<p>Adding wire to the circuit bypassing Lightbulb #2 diverts almost all of the current down the new path.</p>',
+            completeVideoId: '7uJkyFJK-Cg',
             values: false
           }, {
             id: 1379364502530,

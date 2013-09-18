@@ -55,6 +55,7 @@ levels.WORLDS = [
                         complete: '''
                             <p>The resistor adds resistance to the circuit, slowing the flow of electrons enough to prevent any damage to the battery.</p>
                         '''
+                        completeVideoId: '2iwlpHIw_Ac'
                         values: false
                     }
                     {
@@ -72,6 +73,7 @@ levels.WORLDS = [
                             <p>Current will flow between two paths based on the amount of resistance in each path.</p>
                             <p>Adding wire to the circuit bypassing Lightbulb #2 diverts almost all of the current down the new path.</p>
                         '''
+                        completeVideoId: '7uJkyFJK-Cg'
                         values: false
                     }
                     {
