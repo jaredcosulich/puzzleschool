@@ -372,13 +372,16 @@
   overflow: hidden;
   position: relative;
 }
-.circuitous .right_side .info .complete .video_thumbnail i {
+.circuitous .right_side .info .complete .video_thumbnail .play_button {
   position: absolute;
   left: 0;
-  top: 36%;
+  top: 0;
   width: 100%;
   font-size: 48px;
   color: black;
+}
+.circuitous .right_side .info .complete .video_thumbnail .play_button i {
+  background-color: white;
 }
 .circuitous .right_side .info .complete .video_thumbnail img {
   margin-left: -15px;

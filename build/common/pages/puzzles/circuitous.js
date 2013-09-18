@@ -469,7 +469,7 @@ soma.views({
       this.viewHelper.markLevelCompleted(this.level.id);
       completeElement = $(document.createElement('DIV'));
       completeElement.addClass('complete');
-      youtube = "<img src='http://img.youtube.com/vi/" + this.level.completeVideoId + "/mqdefault.jpg'/><i class='icon-youtube-play'></i>";
+      youtube = "<img src='http://img.youtube.com/vi/" + this.level.completeVideoId + "/mqdefault.jpg'/><div class='play_button'><i class='icon-youtube-play'></i></div>";
       completeElement.html("<h1>Success</h1>\n<div class='description'>\n    " + this.level.complete + "\n    <div class='video_thumbnail'>\n        " + (this.level.completeVideoId ? youtube : 'Video Coming Soon') + "\n    </div>\n</div>\n<div class='buttons'><a class='button next_level'>Next Level</a></div>");
       info = this.$('.info');
       return this.hideInfo(function() {

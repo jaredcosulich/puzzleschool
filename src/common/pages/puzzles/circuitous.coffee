@@ -334,7 +334,7 @@ soma.views
             # return
             completeElement = $(document.createElement('DIV'))
             completeElement.addClass('complete')
-            youtube = "<img src='http://img.youtube.com/vi/#{@level.completeVideoId}/mqdefault.jpg'/><i class='icon-youtube-play'></i>"
+            youtube = "<img src='http://img.youtube.com/vi/#{@level.completeVideoId}/mqdefault.jpg'/><div class='play_button'><i class='icon-youtube-play'></i></div>"
             completeElement.html """
                 <h1>Success</h1>
                 <div class='description'>
