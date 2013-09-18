@@ -9,13 +9,14 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         left: 5
         right: 5
         bottom: 10
-        
+
     centerOffset: 
-        x: 0
-        y: 32
+        x: -17
+        y: 30
         
     nodes: [
-        {x: 0, y: 32}
+        {x: -15, y: 34}
+        {x: 17, y: 34}
     ]
         
     constructor: ({}) ->

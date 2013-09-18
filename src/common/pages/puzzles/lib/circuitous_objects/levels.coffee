@@ -9,13 +9,13 @@ levels.WORLDS = [
                     {
                         id: 1377808756337
                         challenge: "Draw more wire to complete the circuit and power the lightbulb."
-                        instructions: {"components": [{"name": "Battery", "position": "7,10"},{"name": "Lightbulb", "position": "8,6"}],"wires": [["8,10","8,9"],["8,9","8,8"],["8,8","8,7"],["8,7","8,6"],["8,6","7,6"],["7,6","7,7"],["7,7","7,8"]]}
+                        instructions: {"components": [{"name": "Battery", "position": "7,10"},{"name": "Lightbulb", "position": "7,6"}],"wires": [["8,10","8,9"],["8,9","8,8"],["8,8","8,7"],["8,7","8,6"],["7,6","7,7"],["7,7","7,8"]]}
                         hints: [
                             'Click anywhere on the board to draw a wire. Click on an existing wire to erase it.'
                             'Complete the wire by connecting the loose end to the positive terminal of the battery.'
                             'The positive terminal is right above the plus sign on the battery.'
                         ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "7,10"},{"name": "Lightbulb", "position": "8,6"}],"wires": [["8,10","8,9"],["8,9","8,8"],["8,8","8,7"],["8,7","8,6"],["8,6","7,6"],["7,6","7,7"],["7,7","7,8"],["7,8","7,9"],["7,9","7,10"]]}
+                        completeInstructions: {"components": [{"name": "Battery", "position": "7,10"},{"name": "Lightbulb", "position": "7,6"}],"wires": [["8,10","8,9"],["8,9","8,8"],["8,8","8,7"],["8,7","8,6"],["7,6","7,7"],["7,7","7,8"],["7,8","7,9"],["7,9","7,10"]]}
                         completeValues: [["Battery",1.8],["Lightbulb",1.8]]
                         complete: '''
                             <p>A circuit is not complete until a wire connects the negative terminal to the positive terminal.</p>
@@ -27,13 +27,13 @@ levels.WORLDS = [
                     {
                         id: 1378413019525
                         challenge: "Stop electricity flowing to the light by creating a short circuit."
-                        instructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["7,7","8,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"]]}
+                        instructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "8,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["7,7","8,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"],["10,4","9,4"]]}
                         hints: [
                             'A short circuit is a path from the negative to the positive terminal of the battery with no resistance.'
                             'In this circuit the lightbulb creates resistance.'
                             'Draw a path for the electrons to take from the positive to the negative terminal that does not touch the lightbulb.'
                         ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "9,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"],["7,7","8,7"],["6,5","7,5"],["7,5","8,5"],["8,5","9,5"],["9,5","10,5"],["10,5","11,5"]]}
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Lightbulb", "position": "8,4"}],"wires": [["9,9","9,8"],["9,8","9,7"],["9,7","10,7"],["10,7","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","10,4"],["8,4","7,4"],["7,4","6,4"],["6,7","7,7"],["7,7","8,7"],["8,7","8,8"],["8,8","8,9"],["6,7","6,6"],["6,6","6,5"],["6,5","6,4"],["10,4","9,4"],["6,5","7,5"],["7,5","8,5"],["8,5","9,5"],["9,5","10,5"],["10,5","11,5"]]}
                         completeValues: [["Battery",'infinite'],["Lightbulb",0]]
                         complete: '''
                             <p>A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.</p>
@@ -61,13 +61,13 @@ levels.WORLDS = [
                     {
                         id: 1379359682379
                         challenge: "Stop current from flowing to Lightbulb #2 by adding a path for current to bypass it that has no resistance."
-                        instructions: {"components": [{"name": "Battery", "position": "9,9"},{"name": "Lightbulb", "position": "13,5"},{"name": "Lightbulb", "position": "6,5"}],"wires": [["14,5","14,6"],["14,6","14,7"],["5,5","5,6"],["5,6","5,7"],["10,9","11,9"],["11,9","12,9"],["12,9","13,9"],["13,9","14,9"],["14,9","14,8"],["14,8","14,7"],["14,5","13,5"],["13,5","12,5"],["12,5","11,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,5","7,5"],["7,5","6,5"],["6,5","5,5"],["5,7","5,8"],["7,9","8,9"],["9,9","8,9"],["7,9","6,9"],["5,9","6,9"],["5,9","5,8"]]}
+                        instructions: {"components": [{"name": "Battery", "position": "9,9"},{"name": "Lightbulb", "position": "6,5"},{"name": "Lightbulb", "position": "12,5"}],"wires": [["14,5","14,6"],["14,6","14,7"],["5,5","5,6"],["5,6","5,7"],["10,9","11,9"],["11,9","12,9"],["12,9","13,9"],["13,9","14,9"],["14,9","14,8"],["14,8","14,7"],["14,5","13,5"],["12,5","11,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,5","7,5"],["6,5","5,5"],["5,7","5,8"],["7,9","8,9"],["9,9","8,9"],["7,9","6,9"],["5,9","6,9"],["5,9","5,8"]]}
                         hints: [
                             'A path without any components on it will not provide any resistance for the electrons.'
                             'You need to create a path from the negative terminal to Lightbulb #1 that does not touch Lightbulb #2.'
                             'Draw more wire from just after the negative terminal to just after Lightbulb #2.'
                         ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "9,9"},{"name": "Lightbulb", "position": "13,5"},{"name": "Lightbulb", "position": "6,5"}],"wires": [["14,5","14,6"],["14,6","14,7"],["5,5","5,6"],["5,6","5,7"],["10,9","11,9"],["11,9","12,9"],["12,9","13,9"],["13,9","14,9"],["14,9","14,8"],["14,8","14,7"],["14,5","13,5"],["13,5","12,5"],["12,5","11,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,5","7,5"],["7,5","6,5"],["6,5","5,5"],["5,7","5,8"],["7,9","8,9"],["9,9","8,9"],["7,9","6,9"],["5,9","6,9"],["5,9","5,8"],["11,9","11,8"],["11,8","11,7"],["11,7","11,6"],["11,6","11,5"]]}
+                        completeInstructions: {"components": [{"name": "Battery", "position": "9,9"},{"name": "Lightbulb", "position": "6,5"},{"name": "Lightbulb", "position": "12,5"}],"wires": [["14,5","14,6"],["14,6","14,7"],["5,5","5,6"],["5,6","5,7"],["10,9","11,9"],["11,9","12,9"],["12,9","13,9"],["13,9","14,9"],["14,9","14,8"],["14,8","14,7"],["14,5","13,5"],["12,5","11,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,5","7,5"],["6,5","5,5"],["5,7","5,8"],["7,9","8,9"],["9,9","8,9"],["7,9","6,9"],["5,9","6,9"],["5,9","5,8"],["11,5","11,6"],["11,6","11,7"],["11,7","11,8"],["11,8","11,9"]]}
                         completeValues: [["Battery",1.8],["Lightbulb",0],["Lightbulb",1.8]]
                         complete: '''
                             <p>Current will flow between two paths based on the amount of resistance in each path.</p>
@@ -85,7 +85,7 @@ levels.WORLDS = [
                             'Draw wire from the battery through the lightbulb to the resistor and back to the battery.'
                             'Be sure not to draw wire all the way through the resistor. Draw to one end of the resistor and then start from the other end.'
                         ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Lightbulb", "position": "11,4"},{"name": "Resistor", "position": "7,4"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","12,7"],["12,7","12,6"],["12,6","12,5"],["12,5","12,4"],["12,4","11,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,7","7,8"],["7,8","8,8"],["8,8","9,8"]]}
+                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "7,4"},{"name": "Lightbulb", "position": "11,4"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","12,7"],["12,7","12,6"],["12,6","12,5"],["12,5","12,4"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,7","7,8"],["7,8","8,8"],["8,8","9,8"]]}
                         completeValues: [["Battery",0.6],["Lightbulb",0.6],["Resistor",0.6]]
                         complete: '''
                             <p>You\'ve created a simple circuit with multiple components.</p>
@@ -122,7 +122,7 @@ levels.WORLDS = [
                             'Use Ohm\'s law (I = V / R) to figure out how many amps the circuit will have by adding the lightbulb or the resistor.'
                             'Add only the lightbulb to the circuit to create 0.9 Amps of current.'
                         ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "3,3"},{"name": "Lightbulb", "position": "13,2"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["12,2","11,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"],["6,3","6,4"],["6,4","6,5"],["6,5","6,6"]]}
+                        completeInstructions: {"components": [{"name": "Battery", "position": "9,8"},{"name": "Resistor", "position": "3,3"},{"name": "Lightbulb", "position": "11,2"}],"wires": [["10,8","11,8"],["11,8","12,8"],["12,8","13,8"],["13,8","13,7"],["13,7","13,6"],["13,6","13,5"],["13,5","13,4"],["13,4","13,3"],["13,3","13,2"],["13,2","12,2"],["11,2","10,2"],["10,2","9,2"],["9,2","8,2"],["8,2","7,2"],["7,2","6,2"],["6,8","7,8"],["7,8","8,8"],["8,8","9,8"],["6,2","6,3"],["6,6","6,7"],["6,7","6,8"],["6,3","6,4"],["6,4","6,5"],["6,5","6,6"]]}
                         completeValues: [["Battery",1.8]]
                         complete: '''
                             <p>Using Ohm\'s law we know that the lightbulb, with 5 Ohms of resistance, will create a circuit with 1.8 Amps of current.</p>
@@ -156,7 +156,7 @@ levels.WORLDS = [
                             'With 12 Volts you need to provide 5 Ohms of resistance to have 2.4 Amps of current (12 / 5 = 2.4).'
                             'Add the lightbulb (5 Ohms of resistance) to the circuit.'
                         ]
-                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Resistor", "position": "3,5"},{"name": "Lightbulb", "position": "11,4"}],"wires": [["9,9","10,9"],["10,9","11,9"],["11,4","10,4"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","5,4"],["5,4","5,5"],["8,9","7,9"],["7,9","6,9"],["6,9","5,9"],["5,9","5,8"],["11,4","12,4"],["12,4","12,5"],["12,5","12,6"],["12,6","12,7"],["12,7","12,8"],["12,8","12,9"],["12,9","11,9"],["5,5","5,6"],["5,6","5,7"],["5,7","5,8"]]}
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,9"},{"name": "Resistor", "position": "3,5"},{"name": "Lightbulb", "position": "10,4"}],"wires": [["9,9","10,9"],["10,9","11,9"],["10,4","9,4"],["9,4","8,4"],["8,4","7,4"],["7,4","6,4"],["6,4","5,4"],["5,4","5,5"],["8,9","7,9"],["7,9","6,9"],["6,9","5,9"],["5,9","5,8"],["11,4","12,4"],["12,4","12,5"],["12,5","12,6"],["12,6","12,7"],["12,7","12,8"],["12,8","12,9"],["12,9","11,9"],["5,5","5,6"],["5,6","5,7"],["5,7","5,8"]]}
                         completeValues: [["Battery",2.4]]
                         complete: '''
                             <p>A battery with 9 Volts and a lightbulb with 5 Ohms of resistance would have created 1.8 Amps of current.</p>

@@ -119,6 +119,7 @@ describe("BoardAnalyzer", function() {
                         bulb = createComponent(board, 'Lightbulb');
                         var node = wireAt(board, 22).nodes[1];
                         var onBoard = addToBoard(board, bulb, node.x, node.y);
+                        drawOrEraseWire(board, node, 1, 0);  
                         expect(onBoard).toBe(true);                        
                     });
 
@@ -229,7 +230,7 @@ describe("BoardAnalyzer", function() {
 
                         describe('and a short circuit in between bulbs', function() {
                             beforeEach(function() {
-                                drawOrEraseWire(board, wireAt(board, 41).nodes[0], 0, -6);
+                                drawOrEraseWire(board, wireAt(board, 40).nodes[0], 0, -6);
                             });
                             
                             it('should create an complete circuit with infinite amps', function() {
@@ -247,6 +248,7 @@ describe("BoardAnalyzer", function() {
                                 beforeEach(function() {
                                     board.removeComponent(bulb);
                                     board.removeComponent(bulb2);
+                                    drawOrEraseWire(board, board.boardPosition(bulb.currentNodes()[0]), 1, 0);
                                     drawOrEraseWire(board, board.boardPosition(bulb2.currentNodes()[0]), -1, 0);
                                     drawOrEraseWire(board, wireAt(board, 1).nodes[0], 0, 1);
                                 })
@@ -297,6 +299,7 @@ describe("BoardAnalyzer", function() {
                             var bulb2Node = wire.nodes[0];
                             bulb2 = createComponent(board, 'Lightbulb');
                             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                            drawOrEraseWire(board, bulb2Node, 1, 0);  
                             expect(onBoard).toBe(true);                                                    
                         });
                         
@@ -337,12 +340,13 @@ describe("BoardAnalyzer", function() {
             var bulb;
             beforeEach(function() {
                 var start = board.boardPosition(battery.currentNodes()[1]);
-                var bulbNode = drawOrEraseWire(board, start, 0, -3);
-                var lastNode = drawOrEraseWire(board, bulbNode, -1, 0);
-                drawOrEraseWire(board, lastNode, 0, 4);
+                var lastNode = drawOrEraseWire(board, start, 0, -3);
+                var bulbNode = drawOrEraseWire(board, lastNode, -1, 0);
+                drawOrEraseWire(board, bulbNode, 0, 4);
                 
                 bulb = createComponent(board, 'Lightbulb');
                 var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
+                drawOrEraseWire(board, bulbNode, 1, 0);  
                 expect(onBoard).toBe(true);                                                    
             });
             
@@ -386,6 +390,7 @@ describe("BoardAnalyzer", function() {
                     bulbs.push(createComponent(board, 'Lightbulb'));
                     if (i<2) bulbs[i].resistance = 10;
                     var onBoard = addToBoard(board, bulbs[i], bulbNodes[i].x, bulbNodes[i].y);
+                    drawOrEraseWire(board, bulbNodes[i], 1, 0);  
                     expect(onBoard).toBe(true);
                 }                
             });
@@ -402,16 +407,17 @@ describe("BoardAnalyzer", function() {
             describe('and another parallel path', function() {
                 beforeEach(function() {
                     var lastNode = drawOrEraseWire(board, wireAt(board, 28).nodes[0], 1, 0);
-                    lastNode = drawOrEraseWire(board, lastNode, 0, 8);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, 12);
                     var bulbNode = drawOrEraseWire(board, lastNode, -6, 0);
                     lastNode = drawOrEraseWire(board, bulbNode, -6, 0);
-                    lastNode = drawOrEraseWire(board, lastNode, 0, -8);
+                    lastNode = drawOrEraseWire(board, lastNode, 0, -12);
                     lastNode = drawOrEraseWire(board, lastNode, 1, 0);
 
                     var bulb = createComponent(board, 'Lightbulb');
                     bulb.resistance = 10;
                     bulbs.push(bulb);
                     var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
+                    drawOrEraseWire(board, bulbNode, 1, 0);  
                     expect(onBoard).toBe(true);
                     expect(bulbs[4].id).not.toBe(undefined);
                 });
@@ -450,35 +456,39 @@ describe("BoardAnalyzer", function() {
                 var bulb1Node = drawOrEraseWire(board, battery2Node, 3, 0);
                 drawOrEraseWire(board, battery2Node, 1, 0);
                 
+                lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);
+                lastNode = drawOrEraseWire(board, lastNode, 0, 4);
                 var bulb1 = createComponent(board, 'Lightbulb');
                 bulbs.push(bulb1);
                 bulb1.resistance = 4;
                 var onBoard = addToBoard(board, bulb1, bulb1Node.x, bulb1Node.y);
+                drawOrEraseWire(board, bulb1Node, 1, 0);  
                 expect(onBoard).toBe(true);
-                lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);
-                lastNode = drawOrEraseWire(board, lastNode, 0, 4);
                 
                 lastNode = drawOrEraseWire(board, split1Node, 0, 2);
                 var bulb2Node = drawOrEraseWire(board, lastNode, 3, 0);
+                lastNode = drawOrEraseWire(board, bulb2Node, 3, 0);
                 var bulb2 = createComponent(board, 'Lightbulb');
                 bulbs.push(bulb2);
                 bulb2.resistance = 2;
                 var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                drawOrEraseWire(board, bulb2Node, 1, 0);  
                 expect(onBoard).toBe(true);
-                lastNode = drawOrEraseWire(board, bulb2Node, 3, 0);
                 
                 var end = board.boardPosition(battery.currentNodes()[0]);
                 lastNode = drawOrEraseWire(board, end, 0, -1);
                 lastNode = drawOrEraseWire(board, lastNode, 2, 0);
                 lastNode = drawOrEraseWire(board, lastNode, 0, 2);
                 var bulb3Node = drawOrEraseWire(board, lastNode, 3, 0);
+                lastNode = drawOrEraseWire(board, bulb3Node, 2, 0);
+                drawOrEraseWire(board, lastNode, 0, -4);
+
                 var bulb3 = createComponent(board, 'Lightbulb');
                 bulbs.push(bulb3);
                 bulb3.resistance = 6;
                 var onBoard = addToBoard(board, bulb3, bulb3Node.x, bulb3Node.y);
+                drawOrEraseWire(board, bulb3Node, 1, 0);  
                 expect(onBoard).toBe(true);
-                lastNode = drawOrEraseWire(board, bulb3Node, 2, 0);
-                drawOrEraseWire(board, lastNode, 0, -4);
             });
             
             it('should have all the correct values', function() {
@@ -510,6 +520,7 @@ describe("BoardAnalyzer", function() {
                 var bulbNode = drawOrEraseWire(board, lastNode, -4, 0);
                 bulb = createComponent(board, 'Lightbulb');
                 var onBoard = addToBoard(board, bulb, bulbNode.x, bulbNode.y);
+                drawOrEraseWire(board, bulbNode, 1, 0);  
                 expect(onBoard).toBe(true);
                 
                 lastNode = drawOrEraseWire(board, bulbNode, -4, 0);
@@ -529,6 +540,7 @@ describe("BoardAnalyzer", function() {
                 beforeEach(function() {
                     bulb2 = createComponent(board, 'Lightbulb');
                     var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
+                    drawOrEraseWire(board, bulb2Node, 1, 0);  
                     expect(onBoard).toBe(true);                    
                 });
                 
@@ -616,7 +628,7 @@ describe("BoardAnalyzer", function() {
                             board.moveElectricity();
                             expect(bulb2.current).toEqual(1.8);
                             expect(wireAt(board, 6).current).toEqual(1.8);
-                            expect(wireAt(board, 11).current).toEqual(-1.8); 
+                            expect(wireAt(board, 10).current).toEqual(-1.8); 
                             expect(wireAt(board, 1).current).toEqual(0);
                             expect(bulb.current).toEqual(0);
                         });
@@ -624,8 +636,8 @@ describe("BoardAnalyzer", function() {
                         it('should show current flowing in same direction as surrounding wires', function() {
                             board.movingElectricty = false;
                             board.moveElectricity();
-                            expect(wireAt(board, 38).direction).toEqual(wire1Direction * -1)
-                            expect(wireAt(board, 39).direction).toEqual(wire2Direction * -1)
+                            expect(wireAt(board, 36).direction).toEqual(wire1Direction * -1)
+                            expect(wireAt(board, 37).direction).toEqual(wire2Direction * -1)
                         });
                     })
                 })                    
@@ -654,11 +666,12 @@ describe("BoardAnalyzer", function() {
                   
             lastNode = drawOrEraseWire(board, split1Node, 0, -2);  
             var bulb1Node = drawOrEraseWire(board, lastNode, 2, 0);  
+            lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);  
             bulb1 = createComponent(board, 'Lightbulb');
             var onBoard = addToBoard(board, bulb1, bulb1Node.x, bulb1Node.y);
+            drawOrEraseWire(board, bulb1Node, 1, 0);  
             expect(onBoard).toBe(true);
 
-            lastNode = drawOrEraseWire(board, bulb1Node, 2, 0);  
             bulb2Node = drawOrEraseWire(board, lastNode, 0, -2);  
             bulb2 = createComponent(board, 'Lightbulb');
             var onBoard = addToBoard(board, bulb2, bulb2Node.x, bulb2Node.y);
@@ -677,6 +690,7 @@ describe("BoardAnalyzer", function() {
             var bulb3Node = drawOrEraseWire(board, split3Node, -2, 0);
             bulb3 = createComponent(board, 'Lightbulb');
             var onBoard = addToBoard(board, bulb3, bulb3Node.x, bulb3Node.y);
+            // drawOrEraseWire(board, bulb3Node, 1, 0);  
             expect(onBoard).toBe(true);
 
             var lastNode = drawOrEraseWire(board, bulb3Node, -2, 0);

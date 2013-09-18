@@ -22,14 +22,17 @@ lightbulb.Lightbulb = (function(_super) {
   };
 
   Lightbulb.prototype.centerOffset = {
-    x: 0,
-    y: 32
+    x: -17,
+    y: 30
   };
 
   Lightbulb.prototype.nodes = [
     {
-      x: 0,
-      y: 32
+      x: -15,
+      y: 34
+    }, {
+      x: 17,
+      y: 34
     }
   ];
 
