@@ -606,7 +606,9 @@ soma.views({
           });
         }
       });
-      return setTimeout(callback, 250);
+      if (callback) {
+        return setTimeout(callback, 250);
+      }
     }
   }
 });

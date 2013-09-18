@@ -430,8 +430,7 @@ soma.views
                         left: -10000
                         top: -10000
 
-            setTimeout(callback, 250)
-            
+            setTimeout(callback, 250) if callback
             
             
 soma.routes
