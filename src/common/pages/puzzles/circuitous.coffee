@@ -425,6 +425,7 @@ soma.views
                 opacity: 0
                 duration: 500
                 complete: =>
+                    @modalMenu.find('iframe').attr('src', '')
                     @modalMenu.css
                         left: -10000
                         top: -10000

@@ -162,6 +162,23 @@ levels.WORLDS = [
                         '''
                         values: true                        
                     }
+                    # {
+                    #     id: 1379386664250
+                    #     challenge: "With a battery that has 6 Volts, create a circuit that has 0.6 Amps of current flowing through it."
+                    #     instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Resistor", "position": "4,4"},{"name": "Lightbulb", "position": "13,6"}],"wires": []}
+                    #     hints: [
+                    #         'The battery in this case has more voltage, so the current will increase as well.'
+                    #         'With 12 Volts you need to provide 5 Ohms of resistance to have 2.4 Amps of current (12 / 5 = 2.4).'
+                    #         'Add the lightbulb (5 Ohms of resistance) to the circuit.'
+                    #     ]
+                    #     completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "13,6"},{"name": "Resistor", "position": "6,4"}],"wires": [["9,8","10,8"],["10,8","11,8"],["11,8","11,7"],["11,7","11,6"],["11,6","11,5"],["11,5","11,4"],["11,4","11,3"],["11,3","10,3"],["8,3","7,3"],["7,3","6,3"],["6,3","6,4"],["10,3","9,3"],["9,3","8,3"],["6,7","6,8"],["6,8","7,8"],["7,8","8,8"]]}
+                    #     completeValues: [["Battery",0.6]]
+                    #     complete: '''
+                    #         <p>A battery with 9 Volts and a lightbulb with 5 Ohms of resistance would have created 1.8 Amps of current.</p>
+                    #         <p>With a 12 Volt battery and the same lightbulb, the circuit has 2.4 Amps of current.
+                    #     '''
+                    #     values: true                        
+                    # }
                 ]
             }
         ]

@@ -599,6 +599,7 @@ soma.views({
         opacity: 0,
         duration: 500,
         complete: function() {
+          _this.modalMenu.find('iframe').attr('src', '');
           return _this.modalMenu.css({
             left: -10000,
             top: -10000
