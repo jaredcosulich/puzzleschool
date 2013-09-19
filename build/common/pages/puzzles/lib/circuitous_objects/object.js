@@ -96,12 +96,16 @@ object.Object = (function(_super) {
 
   Object.prototype.setResistance = function(resistance) {
     this.resistance = resistance;
-    return this.recordChange();
+    if (this.recordChange) {
+      return this.recordChange();
+    }
   };
 
   Object.prototype.setVoltage = function(voltage) {
     this.voltage = voltage;
-    return this.recordChange();
+    if (this.recordChange) {
+      return this.recordChange();
+    }
   };
 
   return Object;

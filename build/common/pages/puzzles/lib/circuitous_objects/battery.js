@@ -50,7 +50,9 @@ battery.Battery = (function(_super) {
 
   Battery.prototype.setVoltage = function(voltage) {
     this.voltage = voltage;
-    this.recordChange();
+    if (this.recordChange) {
+      this.recordChange();
+    }
     if (!this.el) {
       return;
     }

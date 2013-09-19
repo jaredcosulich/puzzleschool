@@ -183,7 +183,7 @@ levels.WORLDS = [
           }
         ]
       }, {
-        name: 'Resistance, Voltage, and Current',
+        name: 'Volts, Ohms, and Amps',
         levels: [
           {
             id: 1379563936369,
@@ -252,6 +252,107 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 1.8], ["Resistor", 0], ["Lightbulb", 1.8]],
             complete: '<p>The lightbulb provides 5 Ohms of resistance while the resistor provides 10 Ohms of resistance.</p>\n<p>So the circuit will have the greatest amount of current with the lightbulb only in it.</p>',
+            values: true
+          }, {
+            id: 1379614899596,
+            challenge: "Adjust the resistance in the lightbulb so that there is 0.9 Amps of current in the circuit.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,5"
+                }
+              ],
+              "wires": [["9,8", "9,7"], ["9,7", "9,6"], ["9,6", "9,5"], ["9,8", "9,9"], ["8,5", "8,6"], ["8,6", "8,7"], ["8,7", "8,8"], ["8,8", "8,9"]]
+            },
+            hints: ['You can change the resistance in the lightbulb by mousing over it\'s tag and clicking the pencil icon.', 'The lightbulb currently provides 5 Ohms of resistance. The more resistance a circuit has, the less current it will have.', 'Change the value of the lightbulb\'s resistance in the edit dialog to 10.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,5",
+                  "resistance": 10
+                }
+              ],
+              "wires": [["9,8", "9,7"], ["9,7", "9,6"], ["9,6", "9,5"], ["9,8", "9,9"], ["8,5", "8,6"], ["8,6", "8,7"], ["8,7", "8,8"], ["8,8", "8,9"]]
+            },
+            completeValues: [["Battery", 0.9], ["Lightbulb", 0.9]],
+            complete: '<p>With 9 Volts of electricity, changing the resistance of the lightbulb to 10 Ohms causes the current to decrease to 0.9 Amps.</p>',
+            values: true
+          }, {
+            id: 1379615395276,
+            challenge: "Adjust the voltage in the battery until there is 1.2 Amps of current in the circuit.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,9"
+                }, {
+                  "name": "Resistor",
+                  "position": "6,4"
+                }
+              ],
+              "wires": [["8,9", "7,9"], ["7,9", "6,9"], ["6,9", "6,8"], ["6,8", "6,7"], ["6,4", "6,3"], ["6,3", "7,3"], ["7,3", "8,3"], ["8,3", "9,3"], ["9,3", "10,3"], ["10,3", "11,3"], ["11,9", "11,8"], ["11,8", "11,7"], ["11,7", "11,6"], ["11,9", "10,9"], ["10,9", "9,9"], ["11,5", "11,4"], ["11,4", "11,3"], ["11,5", "11,6"]]
+            },
+            hints: ['You can change the voltage in the battery by mousing over it\'s tag and clicking the pencil icon.', 'The battery currently provides 9 Volts of electricity. The more volts the battery provides, the more current the circuit will have.', 'Change the value of the battery\'s voltage in the edit dialog to 12.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,9",
+                  "voltage": 12
+                }, {
+                  "name": "Resistor",
+                  "position": "6,4"
+                }
+              ],
+              "wires": [["8,9", "7,9"], ["7,9", "6,9"], ["6,9", "6,8"], ["6,8", "6,7"], ["6,4", "6,3"], ["6,3", "7,3"], ["7,3", "8,3"], ["8,3", "9,3"], ["9,3", "10,3"], ["10,3", "11,3"], ["11,9", "11,8"], ["11,8", "11,7"], ["11,7", "11,6"], ["11,9", "10,9"], ["10,9", "9,9"], ["11,5", "11,4"], ["11,4", "11,3"], ["11,5", "11,6"]]
+            },
+            completeValues: [["Battery", 1.2], ["Resistor", 1.2]],
+            complete: '<p>With 12 Volts of electricity and 10 Ohms of resistance from the resistor the circuit will have 1.2 Amps of current.</p>',
+            values: true
+          }, {
+            id: 1379615404628,
+            challenge: "Create a circuit that has 0.6 Amps of current.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Resistor",
+                  "position": "4,4"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "12,6"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['You can use any of the components and change any values.', 'You\'ll need to adjust the voltage of the battery or the resistance in one of the components or both.', 'For example you could set the voltage in the battery to 12 Volts and use the lightbulb\'s 5 Ohms of resistance to get 0.6 Amps.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Resistor",
+                  "position": "4,4"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "12,6"
+                }
+              ],
+              "wires": [["9,10", "10,10"], ["10,10", "11,10"], ["11,10", "12,10"], ["12,10", "13,10"], ["13,10", "13,9"], ["13,9", "13,8"], ["13,8", "13,7"], ["13,7", "13,6"], ["12,6", "11,6"], ["11,6", "10,6"], ["10,6", "9,6"], ["9,6", "8,6"], ["8,6", "8,7"], ["8,7", "8,8"], ["8,8", "8,9"], ["8,9", "8,10"]]
+            },
+            completeValues: [["Battery", 0.6]],
+            complete: '<p>There are a number of ways to create a circuit with 0.6 Amps.</p>\n<p>The key is to control the voltage and the resistance within the circuit to create 0.6 Amps of electricity.</p>',
             values: true
           }
         ]

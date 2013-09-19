@@ -28,7 +28,7 @@ class battery.Battery extends circuitousObject.Object
     getInfo: ->
         
     setVoltage: (@voltage) ->
-        @recordChange()
+        @recordChange() if @recordChange
         return unless @el
         unless @voltageElement
             @voltageElement = $(document.createElement('DIV'))
