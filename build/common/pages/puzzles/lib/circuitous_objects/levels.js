@@ -71,7 +71,7 @@ levels.WORLDS = [
             },
             completeValues: [["Battery", 'infinite'], ["Lightbulb", 0]],
             complete: '<p>A short circuit occurs when electrons have a path from the negative terminal of the battery to the positive terminal without any resistance.</p>',
-            completeVideoId: '23meTsVdTco',
+            completeVideoId: '8oZHA2niCYE',
             values: false
           }, {
             id: 1378919605524,
