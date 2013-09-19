@@ -19,7 +19,7 @@ class lightbulb.Lightbulb extends circuitousObject.Object
         {x: 17, y: 34}
     ]
         
-    constructor: ({}) ->
+    constructor: ({@recordChange}) ->
         
     initCurrent: ->
         @currentImage = $(document.createElement('div'))

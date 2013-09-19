@@ -12,7 +12,7 @@ class lightEmittingDiode.LightEmittingDiode extends circuitousObject.Object
         {x: -16, y: 39, positive: true}
     ]
         
-    constructor: ({}) ->
+    constructor: ({@recordChange}) ->
         @init()
 
     init: ->

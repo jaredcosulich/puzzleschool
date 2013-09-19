@@ -29,7 +29,7 @@ resistor.Resistor = (function(_super) {
   ];
 
   function Resistor(_arg) {
-    _arg;
+    this.recordChange = _arg.recordChange;
     this.init();
   }
 

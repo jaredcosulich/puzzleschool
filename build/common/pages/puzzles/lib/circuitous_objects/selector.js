@@ -41,13 +41,13 @@ selector.Selector = (function(_super) {
       itemRow = $(document.createElement('TR'));
       _fn = function(item) {
         var itemCell, itemObject;
-        itemObject = new circuitous[item.replace(/\s/g, '')]();
+        itemObject = new circuitous[item.replace(/\s/g, '')]({});
         itemCell = $(document.createElement('TD'));
         itemCell.addClass('item');
         itemCell.width("" + (100 / columns) + "%");
         itemCell.html("" + (itemObject.imageElement()) + "\n<div>" + item + "</div>");
         itemCell.bind('click', function() {
-          _this.add(new circuitous[item.replace(/\s/g, '')]());
+          _this.add(new circuitous[item.replace(/\s/g, '')]({}));
           return _this.hide();
         });
         return itemRow.append(itemCell);

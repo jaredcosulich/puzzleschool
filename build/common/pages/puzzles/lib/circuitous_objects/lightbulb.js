@@ -37,7 +37,7 @@ lightbulb.Lightbulb = (function(_super) {
   ];
 
   function Lightbulb(_arg) {
-    _arg;
+    this.recordChange = _arg.recordChange;
   }
 
   Lightbulb.prototype.initCurrent = function() {

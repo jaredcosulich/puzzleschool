@@ -82,6 +82,10 @@ circuitous.ViewHelper = (function() {
     });
   };
 
+  ViewHelper.prototype.recordChange = function() {
+    return this.board.recordChange();
+  };
+
   ViewHelper.prototype.dragComponent = function(component, x, y, state) {
     var _ref1;
     if (state === 'start') {

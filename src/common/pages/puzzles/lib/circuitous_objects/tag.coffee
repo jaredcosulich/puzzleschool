@@ -55,6 +55,7 @@ class tag.Tag extends circuitousObject.Object
         @largeContent.removeClass('hidden')
 
     shrink: ->
+        return if @editing
         @tag.removeClass('large')
         @smallContent.removeClass('hidden')
         @largeContent.addClass('hidden')
@@ -63,9 +64,11 @@ class tag.Tag extends circuitousObject.Object
     
     changeContent: (info) ->
         return unless (key for key, value of info when value != undefined and @info?[key] != value).length
-
         @info = info
+        @displayContent()
         
+    displayContent: ->
+        return if @editing
         @smallContent.html("#{if @info.current == 'infinite' then 'Infinite' else "#{@info.current}A"}")
         @largeContent.html """
             <div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>
@@ -74,15 +77,43 @@ class tag.Tag extends circuitousObject.Object
             #{if @info.voltage then "#{@info.voltage} Volts," else ''} 
             #{@info.resistance} Ohms
         """
-        $.timeout 10, => 
+        $.timeout 100, => 
             @largeContent.find('.icon-pencil').bind 'mousedown.edit', (e) => 
+                @editing = true
                 e.stop()
-                alert('Edit component values coming soon.')
-                
+                @largeContent.html """
+                    <div class='navigation'><a class='cancel icon-remove-sign'></a></div>
+                    <div class='edit_resistance'>Resistance: <input value='#{@info.resistance}' name='Resistance'/> Ohms</div>
+                    #{if @info.voltage then "<div class='edit_voltage'>Voltage: <input value='#{@info.voltage}' name='Voltage'/> Volts</div>" else ''}                         
+                """                
+                $.timeout 100, =>
+                    object = @object
+                    
+                    @largeContent.find('input').bind 'mousedown.enter', (e) -> 
+                        @focus()
+                        e.stop()
+                        
+                    @largeContent.find('input').bind 'keyup.change_value', (e) -> 
+                        e.stop()
+                        input = $(@)
+                        newValue = parseInt(input.val())
+                        if isNaN(newValue)
+                            input.css(backgroundColor: 'red')
+                        else
+                            input.css(backgroundColor: 'white')
+                            object["set#{input.attr('name')}"](newValue)
+                        
+                    @largeContent.find('.cancel').bind 'mousedown.cancel', (e) =>
+                        e.stop()
+                        @editing = false
+                        @displayContent()
+                    
             @largeContent.find('.icon-undo').bind 'mousedown.rotate', (e) => 
                 e.stop()
                 alert('Rotate component coming soon.')
 
-    hide: -> @tag.hide()
+    hide: -> 
+        @editing = false
+        @tag.hide()
     
     show: -> @tag.show()

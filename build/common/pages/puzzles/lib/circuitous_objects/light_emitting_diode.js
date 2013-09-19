@@ -31,7 +31,7 @@ lightEmittingDiode.LightEmittingDiode = (function(_super) {
   ];
 
   function LightEmittingDiode(_arg) {
-    _arg;
+    this.recordChange = _arg.recordChange;
     this.init();
   }
 

@@ -44,6 +44,8 @@ class circuitous.ViewHelper
                     true,
                     component.dragBuffer
                 )
+                
+    recordChange: -> @board.recordChange()
         
     dragComponent: (component, x, y, state) ->
         if state == 'start'

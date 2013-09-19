@@ -205,7 +205,11 @@ soma.views({
         info = _ref3[_k];
         _results.push((function(info) {
           var component;
-          component = new circuitous[info.name];
+          component = new circuitous[info.name]({
+            recordChange: function() {
+              return _this.viewHelper.recordChange();
+            }
+          });
           _this.viewHelper.addComponent(component);
           if (info.resistance !== void 0) {
             component.setResistance(info.resistance);

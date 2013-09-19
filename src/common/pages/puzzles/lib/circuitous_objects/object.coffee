@@ -45,9 +45,9 @@ class object.Object extends Draggable
      
     setName: (@name) ->    
         
-    setResistance: (@resistance) ->
+    setResistance: (@resistance) -> @recordChange()
         
-    setVoltage: (@voltage) ->
+    setVoltage: (@voltage) -> @recordChange()
         
         
         

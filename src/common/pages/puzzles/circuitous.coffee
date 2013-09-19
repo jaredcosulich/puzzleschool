@@ -161,7 +161,7 @@ soma.views
                 
             for info in instructions.components
                 do (info) =>
-                    component = new circuitous[info.name]
+                    component = new circuitous[info.name](recordChange: => @viewHelper.recordChange())
                     @viewHelper.addComponent(component)
                     component.setResistance(info.resistance) unless info.resistance is undefined
                     component.setVoltage(info.voltage) unless info.voltage is undefined

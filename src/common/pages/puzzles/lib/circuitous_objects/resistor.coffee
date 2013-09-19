@@ -13,7 +13,7 @@ class resistor.Resistor extends circuitousObject.Object
         {x: 0, y: 48}
     ]
     
-    constructor: ({}) ->
+    constructor: ({@recordChange}) ->
         @init()
 
     init: ->

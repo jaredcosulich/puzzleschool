@@ -36,7 +36,7 @@ class selector.Selector extends circuitousObject.Object
                 item = selector.ITEM_TYPES[row * columns + column]
                 continue if not item
                 do (item) =>
-                    itemObject = new circuitous[item.replace(/\s/g, '')]()
+                    itemObject = new circuitous[item.replace(/\s/g, '')]({})
                     itemCell = $(document.createElement('TD'))
                     itemCell.addClass('item')
                     itemCell.width("#{100 / columns}%")
@@ -45,7 +45,7 @@ class selector.Selector extends circuitousObject.Object
                         <div>#{item}</div>
                     """
                     itemCell.bind 'click', => 
-                        @add(new circuitous[item.replace(/\s/g, '')]())
+                        @add(new circuitous[item.replace(/\s/g, '')]({}))
                         @hide()
                         
                     itemRow.append(itemCell)

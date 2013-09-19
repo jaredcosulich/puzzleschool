@@ -86,6 +86,9 @@ tag.Tag = (function(_super) {
   };
 
   Tag.prototype.shrink = function() {
+    if (this.editing) {
+      return;
+    }
     this.tag.removeClass('large');
     this.smallContent.removeClass('hidden');
     return this.largeContent.addClass('hidden');
@@ -96,8 +99,7 @@ tag.Tag = (function(_super) {
   };
 
   Tag.prototype.changeContent = function(info) {
-    var key, value,
-      _this = this;
+    var key, value;
     if (!((function() {
       var _ref, _results;
       _results = [];
@@ -112,12 +114,50 @@ tag.Tag = (function(_super) {
       return;
     }
     this.info = info;
+    return this.displayContent();
+  };
+
+  Tag.prototype.displayContent = function() {
+    var _this = this;
+    if (this.editing) {
+      return;
+    }
     this.smallContent.html("" + (this.info.current === 'infinite' ? 'Infinite' : "" + this.info.current + "A"));
     this.largeContent.html("<div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>\n" + this.info.name + "<br/>\n" + this.info.current + " Amps, \n" + (this.info.voltage ? "" + this.info.voltage + " Volts," : '') + " \n" + this.info.resistance + " Ohms");
-    return $.timeout(10, function() {
+    return $.timeout(100, function() {
       _this.largeContent.find('.icon-pencil').bind('mousedown.edit', function(e) {
+        _this.editing = true;
         e.stop();
-        return alert('Edit component values coming soon.');
+        _this.largeContent.html("<div class='navigation'><a class='cancel icon-remove-sign'></a></div>\n<div class='edit_resistance'>Resistance: <input value='" + _this.info.resistance + "' name='Resistance'/> Ohms</div>\n" + (_this.info.voltage ? "<div class='edit_voltage'>Voltage: <input value='" + _this.info.voltage + "' name='Voltage'/> Volts</div>" : '') + "                         ");
+        return $.timeout(100, function() {
+          var object;
+          object = _this.object;
+          _this.largeContent.find('input').bind('mousedown.enter', function(e) {
+            this.focus();
+            return e.stop();
+          });
+          _this.largeContent.find('input').bind('keyup.change_value', function(e) {
+            var input, newValue;
+            e.stop();
+            input = $(this);
+            newValue = parseInt(input.val());
+            if (isNaN(newValue)) {
+              return input.css({
+                backgroundColor: 'red'
+              });
+            } else {
+              input.css({
+                backgroundColor: 'white'
+              });
+              return object["set" + (input.attr('name'))](newValue);
+            }
+          });
+          return _this.largeContent.find('.cancel').bind('mousedown.cancel', function(e) {
+            e.stop();
+            _this.editing = false;
+            return _this.displayContent();
+          });
+        });
       });
       return _this.largeContent.find('.icon-undo').bind('mousedown.rotate', function(e) {
         e.stop();
@@ -127,6 +167,7 @@ tag.Tag = (function(_super) {
   };
 
   Tag.prototype.hide = function() {
+    this.editing = false;
     return this.tag.hide();
   };
 

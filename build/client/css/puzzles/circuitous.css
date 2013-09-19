@@ -684,6 +684,10 @@
 .circuitous .component .tag .content .large_tag_content .navigation {
   float: right;
 }
+.circuitous .component .tag .content .large_tag_content input {
+  width: 30px;
+  text-align: center;
+}
 .circuitous .component .tag.large {
   left: -180px;
 }
