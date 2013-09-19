@@ -416,7 +416,7 @@ soma.views
                         top: (@el.height()/2) - (@modalMenu.height()/2) 
                 
                     @modalMenu.animate(opacity: 1, duration: 500)
-            ), 50)
+            ), 100)
             
             
         hideModal: (callback) ->

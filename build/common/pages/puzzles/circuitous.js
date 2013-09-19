@@ -588,7 +588,7 @@ soma.views({
             duration: 500
           });
         }
-      }), 50);
+      }), 100);
     },
     hideModal: function(callback) {
       var _this = this;
