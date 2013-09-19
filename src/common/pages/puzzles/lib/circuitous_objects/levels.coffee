@@ -94,6 +94,44 @@ levels.WORLDS = [
                     }
                 ]
             },{
+                name: 'Resistance, Voltage, and Current'
+                levels: [
+                    {
+                        id: 1379563936369
+                        challenge: "Create a circuit with 1.8 Amps of current."
+                        instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "8,4"}],"wires": []}
+                        hints: [
+                            'The lightbulb provides 5 Ohms of resistance. The battery provides 9 Volts of electricity.'
+                            'The more resistance in the circuit, the less current will flow.'
+                            'Create a circuit connecting the battery to the lightbulb to create 1.8 Amps of current.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "8,4"}],"wires": [["9,7","9,6"],["9,6","9,5"],["9,5","9,4"],["9,7","9,8"],["8,7","8,6"],["8,6","8,5"],["8,5","8,4"],["8,7","8,8"]]}
+                        completeValues: [["Battery",1.8],["Lightbulb",1.8]]
+                        complete: '''
+                            <p>With a 9 Volt battery and a lightbulb providing 5 Ohms of resistance you get 1.8 Amps of current.</p>
+                            <p>The amount of current in a circuit decreases as the amount of resistance in the circuit increases.</p>
+                        '''
+                        values: true                        
+                    }
+                    {
+                        id: 1379564904210
+                        challenge: "Create the circuit that has the highest amount of current using one or both components."
+                        instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Resistor", "position": "6,3"},{"name": "Lightbulb", "position": "11,5"}],"wires": []}
+                        hints: [
+                            'The lightbulb provides 5 Ohms of resistance. The resistor provides 10 Ohms of resistance.'
+                            'The more resistance a circuit has, the less current it will have.'
+                            'Add the lightbulb only to create a circuit with the maximum amount of current.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Resistor", "position": "6,3"},{"name": "Lightbulb", "position": "11,5"}],"wires": [["9,8","10,8"],["10,8","11,8"],["11,8","12,8"],["12,8","12,7"],["12,7","12,6"],["12,6","12,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,6","8,7"],["8,5","8,6"],["8,7","8,8"]]}
+                        completeValues: [["Battery",1.8],["Resistor",0],["Lightbulb",1.8]]
+                        complete: '''
+                            <p>The lightbulb provides 5 Ohms of resistance while the resistor provides 10 Ohms of resistance.</p>
+                            <p>So the circuit will have the greatest amount of current with the lightbulb only in it.</p>
+                        '''
+                        values: true                        
+                    }
+                ]                
+            },{
                 name: 'Ohm\'s Law'
                 levels: [
                     {
