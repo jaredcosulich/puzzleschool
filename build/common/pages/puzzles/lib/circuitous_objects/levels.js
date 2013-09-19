@@ -107,7 +107,7 @@ levels.WORLDS = [
             values: false
           }, {
             id: 1379359682379,
-            challenge: "Stop current from flowing to Lightbulb #2 by adding a path for current to bypass it that has no resistance.",
+            challenge: "Stop current from flowing to one of the lightbulbs by adding a path for current to bypass it that has no resistance.",
             instructions: {
               "components": [
                 {

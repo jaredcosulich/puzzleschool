@@ -70,17 +70,44 @@ wires.Wires = (function(_super) {
     return this.draw(e);
   };
 
-  Wires.prototype.draw = function(e) {
-    var border, coords, i, start, xDelta, xDiff, yDelta, yDiff, _i, _ref;
-    border = parseInt(this.el.closest('.circuitous').css('borderLeftWidth'));
-    coords = this.board.roundedCoordinates({
-      x: Client.x(e) - border,
-      y: Client.y(e) - border
+  Wires.prototype.roundedCoords = function(coords) {
+    return this.board.roundedCoordinates({
+      x: coords.x,
+      y: coords.y
     }, this.el.offset());
+  };
+
+  Wires.prototype.draw = function(e) {
+    var coords, direction, existing, extended, i, roundedCoords, roundedStart, start, xDelta, xDiff, yDelta, yDiff, _i, _ref;
+    coords = {
+      x: Client.x(e),
+      y: Client.y(e)
+    };
     if (start = this.info.start) {
+      roundedStart = this.roundedCoords(start);
+      roundedCoords = this.roundedCoords(coords);
       xDiff = Math.abs(start.x - coords.x);
       yDiff = Math.abs(start.y - coords.y);
-      if (xDiff < this.cellDimension && yDiff < this.cellDimension) {
+      if (xDiff === 0 && yDiff === 0) {
+        return;
+      }
+      if (roundedStart.x === roundedCoords.x && roundedStart.y === roundedCoords.y) {
+        if (xDiff > yDiff) {
+          direction = start.x > coords.x ? -1 : 1;
+          extended = {
+            x: this.info.start.x + (this.cellDimension * direction),
+            y: this.info.start.y
+          };
+        } else {
+          direction = start.y > coords.y ? -1 : 1;
+          extended = {
+            x: this.info.start.x,
+            y: this.info.start.y + (this.cellDimension * direction)
+          };
+        }
+        if ((existing = this.find(roundedStart, this.roundedCoords(extended)))) {
+          this.createOrErase(extended);
+        }
         return;
       }
       xDelta = yDelta = 0;
@@ -89,7 +116,7 @@ wires.Wires = (function(_super) {
       } else {
         yDelta = this.cellDimension * (start.y > coords.y ? -1 : 1);
       }
-      for (i = _i = 1, _ref = Math.floor(Math.max(xDiff, yDiff) / this.cellDimension); 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+      for (i = _i = 1, _ref = Math.ceil(Math.max(xDiff, yDiff) / this.cellDimension); 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
         this.createOrErase({
           x: start.x + xDelta * i,
           y: start.y + yDelta * i
@@ -102,19 +129,24 @@ wires.Wires = (function(_super) {
   };
 
   Wires.prototype.createOrErase = function(coords) {
-    var existingSegment, segment;
-    existingSegment = this.find(this.info.start, coords);
+    var existingSegment, roundedEnd, roundedStart, segment;
+    roundedStart = this.roundedCoords(this.info.start);
+    roundedEnd = this.roundedCoords(coords);
+    existingSegment = this.find(roundedStart, roundedEnd);
     if (this.info.erasing || (existingSegment && (!this.info.continuation || (existingSegment === this.info.lastSegment)))) {
       if (existingSegment) {
-        segment = this.erase(this.info.start, coords);
+        segment = this.erase(roundedStart, roundedEnd);
       }
     } else {
       if (!existingSegment) {
-        segment = this.create(this.info.start, coords);
+        segment = this.create(roundedStart, roundedEnd);
       }
     }
     this.info.lastSegment = segment;
-    return this.info.start = coords;
+    return this.info.start = {
+      x: roundedEnd.x + this.el.offset().left,
+      y: roundedEnd.y + this.el.offset().top
+    };
   };
 
   Wires.prototype.create = function(start, end) {

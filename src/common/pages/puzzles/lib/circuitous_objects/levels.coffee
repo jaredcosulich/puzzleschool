@@ -60,7 +60,7 @@ levels.WORLDS = [
                     }
                     {
                         id: 1379359682379
-                        challenge: "Stop current from flowing to Lightbulb #2 by adding a path for current to bypass it that has no resistance."
+                        challenge: "Stop current from flowing to one of the lightbulbs by adding a path for current to bypass it that has no resistance."
                         instructions: {"components": [{"name": "Battery", "position": "9,9"},{"name": "Lightbulb", "position": "6,5"},{"name": "Lightbulb", "position": "12,5"}],"wires": [["14,5","14,6"],["14,6","14,7"],["5,5","5,6"],["5,6","5,7"],["10,9","11,9"],["11,9","12,9"],["12,9","13,9"],["13,9","14,9"],["14,9","14,8"],["14,8","14,7"],["14,5","13,5"],["12,5","11,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,5","7,5"],["6,5","5,5"],["5,7","5,8"],["7,9","8,9"],["9,9","8,9"],["7,9","6,9"],["5,9","6,9"],["5,9","5,8"]]}
                         hints: [
                             'A path without any components on it will not provide any resistance for the electrons.'

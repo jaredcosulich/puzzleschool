@@ -32,14 +32,32 @@ class wires.Wires extends circuitousObject.Object
         $(document.body).bind 'mousemove.draw_wire', (e) => @draw(e)
         @draw(e)
         
+    roundedCoords: (coords) -> @board.roundedCoordinates({x: coords.x, y: coords.y}, @el.offset())    
+        
     draw: (e) ->
-        border = parseInt(@el.closest('.circuitous').css('borderLeftWidth'))
-        # @board.addDot(el: @el, x: Client.x(e) - @el.offset().left - border, y: Client.y(e) - @el.offset().top - border, color: 'green')
-        coords = @board.roundedCoordinates({x: Client.x(e) - border, y: Client.y(e) - border}, @el.offset())
+        coords = {x: Client.x(e), y: Client.y(e)}
+        # roundedCoords = @roundedCoords(coords)
+        # @board.addDot(el: @el, x: coords.x - @el.offset().left, y: coords.y - @el.offset().top, color: 'red')
+        # @board.addDot(el: @el, x: roundedCoords.x, y: roundedCoords.y, color: 'green')
         if start = @info.start
+            roundedStart = @roundedCoords(start)
+            roundedCoords = @roundedCoords(coords)
+
             xDiff = Math.abs(start.x - coords.x)
             yDiff = Math.abs(start.y - coords.y)
-            return if xDiff < @cellDimension and yDiff < @cellDimension
+            
+            return if xDiff == 0 and yDiff == 0
+            
+            if roundedStart.x == roundedCoords.x and roundedStart.y == roundedCoords.y
+                if xDiff > yDiff
+                    direction = if start.x > coords.x then -1 else 1
+                    extended = {x: @info.start.x + (@cellDimension * direction), y: @info.start.y}                        
+                else
+                    direction = if start.y > coords.y then -1 else 1
+                    extended = {x: @info.start.x, y: @info.start.y + (@cellDimension * direction)}                        
+                
+                @createOrErase(extended) if (existing = @find(roundedStart, @roundedCoords(extended)))
+                return 
 
             xDelta = yDelta = 0
             if xDiff > yDiff
@@ -47,7 +65,7 @@ class wires.Wires extends circuitousObject.Object
             else 
                 yDelta = @cellDimension * (if start.y > coords.y then -1 else 1)
             
-            for i in [1..Math.floor(Math.max(xDiff, yDiff) / @cellDimension)]
+            for i in [1..Math.ceil(Math.max(xDiff, yDiff) / @cellDimension)]
                 @createOrErase(x: start.x + xDelta * i, y: start.y + yDelta * i)
 
             @info.continuation = true
@@ -56,15 +74,17 @@ class wires.Wires extends circuitousObject.Object
             
 
     createOrErase: (coords) ->
-        existingSegment = @find(@info.start, coords)
+        roundedStart = @roundedCoords(@info.start)
+        roundedEnd = @roundedCoords(coords)
+        existingSegment = @find(roundedStart, roundedEnd)
 
         if @info.erasing or (existingSegment and (!@info.continuation or (existingSegment == @info.lastSegment)))
-            segment = @erase(@info.start, coords) if existingSegment
+            segment = @erase(roundedStart, roundedEnd) if existingSegment
         else
-            segment = @create(@info.start, coords) unless existingSegment
+            segment = @create(roundedStart, roundedEnd) unless existingSegment
 
         @info.lastSegment = segment 
-        @info.start = coords
+        @info.start = {x: roundedEnd.x + @el.offset().left, y: roundedEnd.y + @el.offset().top}
 
     create: (start, end) ->
         segment = $(document.createElement('DIV'))

@@ -728,7 +728,7 @@ addToBoard = function(board, component, x, y) {
 }
 
 createComponent = function(board, type) {
-    component = new circuitous[type]()
+    component = new circuitous[type]({})
     component.appendTo($('.board'))
     component.el.css({position: 'absolute', top: 0, left: 0})
     component.initDrag(
