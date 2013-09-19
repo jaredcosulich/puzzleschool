@@ -245,7 +245,7 @@ soma.views
             @viewHelper.board.clear()
             @showChallenge()
             title = "Circuitous Level #{@level.id}"
-            history.pushState(null, title, "/puzzles/circuitous/#{@level.id}")
+            history.pushState(null, title, "/puzzles/circuitous/#{@level.id}") if history.pushState
             document.title = title;
             
         showChallenge: ->

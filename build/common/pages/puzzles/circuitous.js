@@ -337,7 +337,9 @@ soma.views({
       this.viewHelper.board.clear();
       this.showChallenge();
       title = "Circuitous Level " + this.level.id;
-      history.pushState(null, title, "/puzzles/circuitous/" + this.level.id);
+      if (history.pushState) {
+        history.pushState(null, title, "/puzzles/circuitous/" + this.level.id);
+      }
       return document.title = title;
     },
     showChallenge: function() {
