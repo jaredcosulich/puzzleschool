@@ -335,7 +335,7 @@ levels.WORLDS = [
               ],
               "wires": []
             },
-            hints: ['You can use any of the components and change any values.', 'You\'ll need to adjust the voltage of the battery or the resistance in one of the components or both.', 'For example you could set the voltage in the battery to 12 Volts and use the lightbulb\'s 5 Ohms of resistance to get 0.6 Amps.'],
+            hints: ['You can use any of the components and change any values.', 'You\'ll need to adjust the voltage of the battery or the resistance in one of the components or both.', 'For example you could set the voltage in the battery to 6 Volts and change the resistance in the lightbulb to 10 Ohms.'],
             completeInstructions: {
               "components": [
                 {

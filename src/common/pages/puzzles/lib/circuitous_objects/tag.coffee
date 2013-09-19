@@ -91,6 +91,7 @@ class tag.Tag extends circuitousObject.Object
                     
                     @largeContent.find('input').bind 'mousedown.enter', (e) -> 
                         @focus()
+                        @select()
                         e.stop()
                         
                     @largeContent.find('input').bind 'keyup.change_value', (e) -> 

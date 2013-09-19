@@ -134,6 +134,7 @@ tag.Tag = (function(_super) {
           object = _this.object;
           _this.largeContent.find('input').bind('mousedown.enter', function(e) {
             this.focus();
+            this.select();
             return e.stop();
           });
           _this.largeContent.find('input').bind('keyup.change_value', function(e) {
