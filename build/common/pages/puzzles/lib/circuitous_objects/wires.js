@@ -105,7 +105,7 @@ wires.Wires = (function(_super) {
             y: this.info.start.y + (this.cellDimension * direction)
           };
         }
-        if ((existing = this.find(roundedStart, this.roundedCoords(extended)))) {
+        if (!this.info.continuation && (existing = this.find(roundedStart, this.roundedCoords(extended)))) {
           this.createOrErase(extended);
           this.info.start = coords;
         }

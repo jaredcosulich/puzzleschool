@@ -212,7 +212,7 @@ soma.views
                 componentIds[id] = true for id in Object.keys(@viewHelper.board.components)
                 for [componentType, current] in @level.completeValues
                     componentFound = false
-                    for componentId, component of @viewHelper.board.components
+                    for componentId, component of @viewHelper.board.components when componentIds[componentId]
                         if component.constructor.name == componentType
                             continue unless (
                                 (current == 'infinite' and component.current == 'infinite') or

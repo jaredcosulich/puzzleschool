@@ -616,6 +616,9 @@
 .circuitous.editor .right_side::before {
   display: none;
 }
+.circuitous .component {
+  z-index: 2;
+}
 .circuitous .component .current_image {
   transition: opacity 0.5s ease-out;
   position: absolute;

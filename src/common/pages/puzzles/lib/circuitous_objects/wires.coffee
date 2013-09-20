@@ -56,7 +56,7 @@ class wires.Wires extends circuitousObject.Object
                     direction = if start.y > coords.y then -1 else 1
                     extended = {x: @info.start.x, y: @info.start.y + (@cellDimension * direction)}                        
                 
-                if (existing = @find(roundedStart, @roundedCoords(extended)))
+                if !@info.continuation and (existing = @find(roundedStart, @roundedCoords(extended)))
                     @createOrErase(extended) 
                     @info.start = coords
                 return 

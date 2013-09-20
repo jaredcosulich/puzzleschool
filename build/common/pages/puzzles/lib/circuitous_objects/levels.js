@@ -183,6 +183,206 @@ levels.WORLDS = [
           }
         ]
       }, {
+        name: 'Series And Parallel Circuits',
+        levels: [
+          {
+            id: 1378789808762,
+            challenge: "Reduce the amount of current going to the lightbulb, causing it to dim, by adding the other lightbulb to the circuit.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,8"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "7,4"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "13,3"
+                }
+              ],
+              "wires": [["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "10,6"], ["10,6", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["7,4", "6,4"], ["6,4", "6,5"], ["6,5", "6,6"], ["6,6", "7,6"], ["7,6", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"]]
+            },
+            hints: ['Two lightbulbs placed next to each other in a circuit are said to be in "series".', 'Two lightbulbs placed in series add twice as much resistance to the circuit as one lightbulb would.', 'Erase a bit of the top of the circuit and add the other lighbulb to the circuit.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,8"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "7,4"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": [["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "10,6"], ["10,6", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["7,4", "6,4"], ["6,4", "6,5"], ["6,5", "6,6"], ["6,6", "7,6"], ["7,6", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"], ["8,4", "9,4"], ["11,4", "10,4"]]
+            },
+            completeValues: [["Battery", 0.9], ["Lightbulb", 0.9], ["Lightbulb", 0.9]],
+            complete: '<p>The two lightbulbs in this circuit create twice as much resistance as one lightbulb did.</p>\n<p>The current is constant throughout the circuit so both lightbulbs dim to half the intensity that one lightbulb had.</p>',
+            values: true
+          }, {
+            id: 1379695916644,
+            challenge: "Double the amount of current coming from the battery by adding the second lightbulb to the empty spot in the circuit.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Lightbulb",
+                  "position": "8,7"
+                }, {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "12,3"
+                }
+              ],
+              "wires": [["9,10", "10,10"], ["10,10", "11,10"], ["11,9", "11,8"], ["11,8", "11,7"], ["11,7", "10,7"], ["10,7", "9,7"], ["11,9", "11,10"], ["8,7", "7,7"], ["7,7", "6,7"], ["6,7", "6,8"], ["6,8", "6,9"], ["6,9", "6,10"], ["6,10", "7,10"], ["7,10", "8,10"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "11,3"], ["11,3", "10,3"], ["10,3", "9,3"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"], ["6,4", "6,3"], ["6,3", "7,3"], ["7,3", "8,3"]]
+            },
+            hints: ['You don\'t really need a hint for this one, but pay attention to what happens to the current coming from the battery when you add the second lightbulb.', 'The circuit will behave differently this time because the electrons have two paths to go down.', 'Drag and drop the lightbulb in to the blank spot and notice that the lightbulb in the circuit does not change but the current from the battery does.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Lightbulb",
+                  "position": "8,7"
+                }, {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,3"
+                }
+              ],
+              "wires": [["9,10", "10,10"], ["10,10", "11,10"], ["11,9", "11,8"], ["11,8", "11,7"], ["11,7", "10,7"], ["10,7", "9,7"], ["11,9", "11,10"], ["8,7", "7,7"], ["7,7", "6,7"], ["6,7", "6,8"], ["6,8", "6,9"], ["6,9", "6,10"], ["6,10", "7,10"], ["7,10", "8,10"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "11,3"], ["11,3", "10,3"], ["10,3", "9,3"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"], ["6,4", "6,3"], ["6,3", "7,3"], ["7,3", "8,3"]]
+            },
+            completeValues: [["Lightbulb", 1.8], ["Battery", 3.6], ["Lightbulb", 1.8]],
+            complete: '<p>This is called a Parallel Circuit because each lightbulb has it\'s own path to the battery.</p>\n<p>Two lightbulbs placed in parallel will not affect each other, but will draw twice the amount of current from the battery.</p>\n<p>This is how the circuits in your home work.</p>',
+            values: true
+          }, {
+            id: 1379699050217,
+            challenge: "Provide both lightbulbs with 1.8 Amps of electricity by creating a parallel circuit.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,8"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,4"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['To create a parallel circuit you need to give both lightbulbs a path to the battery that doesn\'t touch the other lightbulb.', 'Draw a circuit containing the first lightbulb and then draw a circuit using the same battery containing the second lightbulb.', 'You should be able to trace a line along the wires to each lightbulb without hitting the other lightbulb.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,8"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,4"
+                }
+              ],
+              "wires": [["9,10", "10,10"], ["10,10", "11,10"], ["11,10", "11,9"], ["11,9", "11,8"], ["11,8", "10,8"], ["10,8", "9,8"], ["8,10", "7,10"], ["7,10", "6,10"], ["6,10", "6,9"], ["6,9", "6,8"], ["6,8", "7,8"], ["7,8", "8,8"], ["6,8", "6,7"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"], ["6,4", "7,4"], ["7,4", "8,4"], ["9,4", "10,4"], ["10,4", "11,4"], ["11,5", "11,6"], ["11,6", "11,7"], ["11,7", "11,8"], ["11,4", "11,5"]]
+            },
+            completeValues: [["Battery", 3.6], ["Lightbulb", 1.8], ["Lightbulb", 1.8]],
+            complete: '<p>In this parallel circuit each lightbulb draws 1.8 Amps of current from the battery.</p>\n<p>The battery provides a total of 3.6 (1.8 * 2) Amps of current because there are two paths for the current to take.</p>',
+            values: true
+          }, {
+            id: 1379699058406,
+            challenge: "Provide both lightbulbs with 0.9 Amps of current.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,8"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,4"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['You\'ll need to create either a series circuit or a parallel circuit.', 'The position of the lightbulbs is not relevant to the challenge.', 'Create a series circuit by drawing one line of wire that connects the battery to both lightbulbs.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,4"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,8"
+                }
+              ],
+              "wires": [["9,10", "10,10"], ["10,10", "11,10"], ["11,10", "11,9"], ["11,9", "11,8"], ["11,8", "10,8"], ["10,8", "9,8"], ["8,8", "7,8"], ["7,8", "7,7"], ["7,7", "7,6"], ["7,6", "7,5"], ["7,5", "8,5"], ["8,5", "9,5"], ["9,5", "10,5"], ["10,5", "10,4"], ["10,4", "9,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,4", "6,5"], ["6,5", "6,6"], ["6,6", "6,7"], ["6,7", "6,8"], ["6,8", "6,9"], ["6,9", "6,10"], ["6,10", "7,10"], ["7,10", "8,10"]]
+            },
+            completeValues: [["Lightbulb", 0.9], ["Lightbulb", 0.9]],
+            complete: '<p>A series circuit creates enough resistance (10 Ohms) from the two lightbulbs to create 0.9 Amps of electricity from the 9 Volt battery.</p>\n<p>If the lightbulbs were placed in parallel they would each draw 1.8 Amps of electricity.</p>',
+            values: true
+          }, {
+            id: 1379700123707,
+            challenge: "Create a circuit that provides each lightbulb with 1.8 Amps of current.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,3"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "4,7"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,7"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['You\'ll need to create either a series circuit or a parallel circuit.', 'In order to put all of the lightbulbs in parallel you\'ll need to connect each to the battery without touching the others.', 'Create a parallel circuit by drawing three paths from the battery to each lightbulb.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "8,10"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,3"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "4,7"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "8,7"
+                }
+              ],
+              "wires": [["9,10", "10,10"], ["10,10", "11,10"], ["11,3", "10,3"], ["10,3", "9,3"], ["8,3", "7,3"], ["7,3", "6,3"], ["7,10", "8,10"], ["11,10", "11,9"], ["11,9", "11,8"], ["11,8", "11,7"], ["11,7", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "11,3"], ["6,10", "6,9"], ["6,9", "6,8"], ["6,8", "6,7"], ["6,7", "6,6"], ["6,6", "6,5"], ["6,5", "6,4"], ["6,4", "6,3"], ["7,10", "6,10"], ["6,7", "5,7"], ["4,7", "3,7"], ["3,7", "3,8"], ["3,8", "3,9"], ["3,9", "3,10"], ["3,10", "3,11"], ["3,11", "3,12"], ["3,12", "4,12"], ["4,12", "4,13"], ["4,13", "5,13"], ["5,13", "6,13"], ["6,13", "7,13"], ["7,13", "8,13"], ["8,13", "9,13"], ["9,13", "10,13"], ["10,13", "10,12"], ["10,12", "10,11"], ["10,11", "10,10"], ["9,10", "9,9"], ["9,9", "9,8"], ["9,8", "9,7"], ["8,10", "8,9"], ["8,9", "8,8"], ["8,8", "8,7"]]
+            },
+            completeValues: [["Lightbulb", 1.8], ["Lightbulb", 1.8], ["Lightbulb", 1.8]],
+            complete: '<p>All three of the lightbulbs can be placed in parallel, each drawing 1.8 Amps of current from the battery.</p>\n<p>With all three lightbulbs in parallel the battery will provide 5.4 Amps of current.</p>',
+            values: true
+          }
+        ]
+      }
+    ]
+  }, {
+    stages: [
+      {
         name: 'Volts, Ohms, and Amps',
         levels: [
           {
@@ -203,7 +403,7 @@ levels.WORLDS = [
               ],
               "wires": []
             },
-            hints: ['The tags will show how much resistance each component provides and how much current is flowing through each component.', 'The less resistance a circuit has, the more current it will have..', 'Add the lightbulb (5 Ohms of resistance) only to create a circuit with the maximum amount of current.'],
+            hints: ['The tags will show how much resistance (ohms) each component provides and how much current (amps) is flowing through each component.', 'The less resistance a circuit has, the more current it will have..', 'Add the lightbulb (5 Ohms of resistance) only to create a circuit with the maximum amount of current.'],
             completeInstructions: {
               "components": [
                 {
@@ -237,7 +437,7 @@ levels.WORLDS = [
               ],
               "wires": []
             },
-            hints: ['The lightbulb provides 5 Ohms of resistance. The battery provides 9 Volts of electricity.', 'The more resistance in the circuit, the less current will flow.', 'Create a circuit connecting the battery to the lightbulb to create 1.8 Amps of current.'],
+            hints: ['The lightbulb provides 5 Ohms of resistance. The battery provides 9 Volts of electricity.', 'The amount of current in the circuit is directly related to the amount of voltage and resistance. Current = Voltage / Resistance', 'Create a circuit connecting the battery to the lightbulb to create 1.8 Amps of current. <br/> 1.8 Amps = 9 Volts / 5 Ohms'],
             completeInstructions: {
               "components": [
                 {
@@ -356,51 +556,10 @@ levels.WORLDS = [
             values: true
           }
         ]
-      }
-    ]
-  }, {
-    stages: [
-      {
+      }, {
         name: 'Series Circuits',
         levels: [
           {
-            id: 1378789808762,
-            challenge: "Reduce the amount of current going to Lightbulb #1, causing it to dim, by adding Lightbulb #2 to the circuit.",
-            instructions: {
-              "components": [
-                {
-                  "name": "Battery",
-                  "position": "8,8"
-                }, {
-                  "name": "Lightbulb",
-                  "position": "13,3"
-                }, {
-                  "name": "Lightbulb",
-                  "position": "7,4"
-                }
-              ],
-              "wires": [["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "10,6"], ["10,6", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,4", "6,5"], ["6,5", "6,6"], ["6,6", "7,6"], ["7,6", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"]]
-            },
-            hints: ['Two lightbulbs placed next to each other in a circuit are said to be in "series".', 'Resistors (in this case the lightbulbs) placed in series add more resistance to the circuit.', 'Drag Lightbulb #2 anywhere in to the circuit, doubling the resistance and dimming Lightbulb #1.'],
-            completeInstructions: {
-              "components": [
-                {
-                  "name": "Battery",
-                  "position": "8,8"
-                }, {
-                  "name": "Lightbulb",
-                  "position": "7,4"
-                }, {
-                  "name": "Lightbulb",
-                  "position": "10,4"
-                }
-              ],
-              "wires": [["9,8", "9,7"], ["9,7", "10,7"], ["10,7", "10,6"], ["10,6", "11,6"], ["11,6", "11,5"], ["11,5", "11,4"], ["11,4", "10,4"], ["10,4", "9,4"], ["9,4", "8,4"], ["8,4", "7,4"], ["7,4", "6,4"], ["6,4", "6,5"], ["6,5", "6,6"], ["6,6", "7,6"], ["7,6", "7,7"], ["7,7", "8,7"], ["8,7", "8,8"]]
-            },
-            completeValues: [["Battery", 0.9], ["Lightbulb", 0.9], ["Lightbulb", 0.9]],
-            complete: '<p>The two lightbulbs in this circuit create twice as much resistance as one lightbulb did.</p>\n<p>The current is constant throughout the circuit so both lightbulbs dim to half the intensity that one lightbulb had.</p>',
-            values: true
-          }, {
             id: 1378919614968,
             challenge: "Reduce the current flowing through the circuit to 0.6 amps.",
             instructions: {
@@ -500,7 +659,11 @@ levels.WORLDS = [
             values: true
           }
         ]
-      }, {
+      }
+    ]
+  }, {
+    stages: [
+      {
         name: 'Ohm\'s Law',
         levels: [
           {

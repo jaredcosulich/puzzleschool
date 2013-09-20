@@ -292,13 +292,15 @@ soma.views({
           _ref3 = _this.viewHelper.board.components;
           for (componentId in _ref3) {
             component = _ref3[componentId];
-            if (component.constructor.name === componentType) {
-              if (!((current === 'infinite' && component.current === 'infinite') || (current === void 0 && component.current === void 0) || (current === Math.abs(component.current)))) {
-                continue;
+            if (componentIds[componentId]) {
+              if (component.constructor.name === componentType) {
+                if (!((current === 'infinite' && component.current === 'infinite') || (current === void 0 && component.current === void 0) || (current === Math.abs(component.current)))) {
+                  continue;
+                }
+                componentFound = true;
+                delete componentIds[componentId];
+                break;
               }
-              componentFound = true;
-              delete componentIds[componentId];
-              break;
             }
           }
           if (!componentFound) {
