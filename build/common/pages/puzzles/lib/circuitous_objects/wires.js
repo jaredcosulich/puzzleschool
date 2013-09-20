@@ -107,6 +107,7 @@ wires.Wires = (function(_super) {
         }
         if ((existing = this.find(roundedStart, this.roundedCoords(extended)))) {
           this.createOrErase(extended);
+          this.info.start = coords;
         }
         return;
       }
