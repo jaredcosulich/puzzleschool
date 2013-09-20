@@ -786,6 +786,7 @@
         .levels_container {
             height: @height;
             overflow: auto;     
+            
             .world {
                 .stage {
                     h2 {
@@ -799,7 +800,7 @@
                             margin: 24px 120px;
                             text-align: center;
                             overflow: hidden;
-                        
+                    
                             iframe, .no_video {
                                 float: right;
                                 margin-bottom: 12px;
@@ -809,10 +810,10 @@
                                 height: 225px;
                                 line-height: 225px;
                             }
-                        
+                    
                             .level_info {
                                 margin-bottom: 12px;
-                            
+                        
                                 .hints, .complete_lesson {
                                     padding-top: 24px;
                                     ul {
@@ -821,50 +822,50 @@
                                     }
                                 }
                             }
-                        
+                    
                             .level_link {
                                 clear: both;
                                 .button-color(@green);
                                 color: @white;
                             }
-                        
+                    
                             &.inactive {
                                 opacity: 0.4;
                                 color: @grey;
-                            
+                        
                                 .level_link {
                                     color: @grey;
                                 }                            
                             }
-                        
+                    
                             &:hover {
                                 opacity: 1;
                                 color: @black;
-                            
+                        
                                 .level_link {
                                     color: @white;
                                 }
                             }
-                        
+                    
                             &.completed {
                                 margin: 24px;
-                            
+                        
                                 .level_info {
                                     text-align: left;
                                     overflow: hidden;
                                     width: 60%;
                                     min-height: 225px;
                                 }
-                            
+                        
                                 .level_link {
                                     .button-color(@blue);
                                 }
-                            
+                        
                                 .completed {
                                     display: block;
                                 }
                             }
-                        
+                    
                             .completed {
                                 display: none;
                             }
@@ -877,48 +878,71 @@
     
     .level_selector {
         height: 318px;
+        width: 486px;
         overflow: hidden;
         text-align: center;
-        .world {
-            height: 100%;
-            .stage {
-                padding: 12px 0 24px 0;
-                overflow: hidden;
-                .levels {
+        
+        .worlds_container {
+            width: 10000px;
+            .world {
+                width: 486px;
+                height: 100%;
+                float: left;
+                .stage {
+                    padding: 12px 0 24px 0;
                     overflow: hidden;
-                    padding: 12px;
-                    .level {
-                        display: block;
-                        content: "\00a0"; 
-                        height: 24px;
-                        line-height: 24px;
-                        .button-color(@black);
-                        float: left;
-                        padding: 6px 15px;
-                        margin: 15px 6px 0 9px;
-                        
-                        &.completed {
-                            .button-color(@green);
+                    .levels {
+                        overflow: hidden;
+                        padding: 12px;
+                        .level {
+                            display: block;
+                            content: "\00a0"; 
+                            height: 24px;
+                            line-height: 24px;
+                            .button-color(@black);
+                            float: left;
                             padding: 6px 15px;
                             margin: 15px 6px 0 9px;
-                        }
-                    }                    
+                        
+                            &.completed {
+                                .button-color(@green);
+                                padding: 6px 15px;
+                                margin: 15px 6px 0 9px;
+                            }
+                        }                    
+                    }
                 }
             }
         }
         
-        .all_levels_link {
+        .all_levels_link, .next_levels_link, .prev_levels_link {
+            width: 90px;
             bottom: 36px;
-            left: 40%;
-            width: 12.5%;
             position: absolute;
             .button-color(@blue);
+            padding: 6px 0;
             
             &:active, &.active {
                 position: absolute;
                 top: auto;
                 bottom: 35px;
             }
+            
+            &.hidden {
+                opacity: 0;
+            }
+        }
+        
+        .all_levels_link {
+            left: 224px;
+        }
+        
+        .prev_levels_link {
+            left: 50px;
+        }
+        
+        .next_levels_link {
+            left: 400px;
         }
     }
     

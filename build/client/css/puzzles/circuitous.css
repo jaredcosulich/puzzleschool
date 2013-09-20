@@ -1156,21 +1156,27 @@
 }
 .circuitous .level_selector {
   height: 318px;
+  width: 486px;
   overflow: hidden;
   text-align: center;
 }
-.circuitous .level_selector .world {
-  height: 100%;
+.circuitous .level_selector .worlds_container {
+  width: 10000px;
 }
-.circuitous .level_selector .world .stage {
+.circuitous .level_selector .worlds_container .world {
+  width: 486px;
+  height: 100%;
+  float: left;
+}
+.circuitous .level_selector .worlds_container .world .stage {
   padding: 12px 0 24px 0;
   overflow: hidden;
 }
-.circuitous .level_selector .world .stage .levels {
+.circuitous .level_selector .worlds_container .world .stage .levels {
   overflow: hidden;
   padding: 12px;
 }
-.circuitous .level_selector .world .stage .levels .level {
+.circuitous .level_selector .worlds_container .world .stage .levels .level {
   display: block;
   content: "\00a0";
   height: 24px;
@@ -1197,16 +1203,16 @@
   padding: 6px 15px;
   margin: 15px 6px 0 9px;
 }
-.circuitous .level_selector .world .stage .levels .level:hover {
+.circuitous .level_selector .worlds_container .world .stage .levels .level:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #404040), color-stop(1, #262626));
   background: -moz-linear-gradient(center top, #404040 5%, #262626 100%);
   background-color: #262626;
 }
-.circuitous .level_selector .world .stage .levels .level:active {
+.circuitous .level_selector .worlds_container .world .stage .levels .level:active {
   position: relative;
   top: 1px;
 }
-.circuitous .level_selector .world .stage .levels .level.completed {
+.circuitous .level_selector .worlds_container .world .stage .levels .level.completed {
   -moz-box-shadow: inset 0px 1px 0px 0px #4ee26f;
   -webkit-box-shadow: inset 0px 1px 0px 0px #4ee26f;
   box-shadow: inset 0px 1px 0px 0px #4ee26f;
@@ -1228,19 +1234,20 @@
   padding: 6px 15px;
   margin: 15px 6px 0 9px;
 }
-.circuitous .level_selector .world .stage .levels .level.completed:hover {
+.circuitous .level_selector .worlds_container .world .stage .levels .level.completed:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4ee26f), color-stop(1, #24d94c));
   background: -moz-linear-gradient(center top, #4ee26f 5%, #24d94c 100%);
   background-color: #24d94c;
 }
-.circuitous .level_selector .world .stage .levels .level.completed:active {
+.circuitous .level_selector .worlds_container .world .stage .levels .level.completed:active {
   position: relative;
   top: 1px;
 }
-.circuitous .level_selector .all_levels_link {
+.circuitous .level_selector .all_levels_link,
+.circuitous .level_selector .next_levels_link,
+.circuitous .level_selector .prev_levels_link {
+  width: 90px;
   bottom: 36px;
-  left: 40%;
-  width: 12.5%;
   position: absolute;
   -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
   -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
@@ -1260,21 +1267,44 @@
   text-decoration: none;
   text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
+  padding: 6px 0;
 }
-.circuitous .level_selector .all_levels_link:hover {
+.circuitous .level_selector .all_levels_link:hover,
+.circuitous .level_selector .next_levels_link:hover,
+.circuitous .level_selector .prev_levels_link:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
   background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
   background-color: #24aac3;
 }
-.circuitous .level_selector .all_levels_link:active {
+.circuitous .level_selector .all_levels_link:active,
+.circuitous .level_selector .next_levels_link:active,
+.circuitous .level_selector .prev_levels_link:active {
   position: relative;
   top: 1px;
 }
 .circuitous .level_selector .all_levels_link:active,
-.circuitous .level_selector .all_levels_link.active {
+.circuitous .level_selector .next_levels_link:active,
+.circuitous .level_selector .prev_levels_link:active,
+.circuitous .level_selector .all_levels_link.active,
+.circuitous .level_selector .next_levels_link.active,
+.circuitous .level_selector .prev_levels_link.active {
   position: absolute;
   top: auto;
   bottom: 35px;
+}
+.circuitous .level_selector .all_levels_link.hidden,
+.circuitous .level_selector .next_levels_link.hidden,
+.circuitous .level_selector .prev_levels_link.hidden {
+  opacity: 0;
+}
+.circuitous .level_selector .all_levels_link {
+  left: 224px;
+}
+.circuitous .level_selector .prev_levels_link {
+  left: 50px;
+}
+.circuitous .level_selector .next_levels_link {
+  left: 400px;
 }
 .circuitous .modal_menu {
   opacity: 0;

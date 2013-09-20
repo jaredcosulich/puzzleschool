@@ -517,16 +517,23 @@ soma.views({
       });
     },
     showLevelSelector: function() {
-      var allLevels, index, level, levelSelector, levels, stage, stageContainer, world, worldContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+      var allLevels, currentWorldIndex, level, levelIndex, levelSelector, levels, nextLevels, prevLevels, stage, stageContainer, world, worldContainer, worldIndex, worldsContainer, _fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
         _this = this;
       levelSelector = $(document.createElement('DIV'));
       levelSelector.addClass('level_selector');
+      worldsContainer = $(document.createElement('DIV'));
+      worldsContainer.addClass('worlds_container');
+      levelSelector.append(worldsContainer);
+      currentWorldIndex = 0;
       _ref = this.worlds;
-      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-        world = _ref[index];
+      for (worldIndex = _i = 0, _len = _ref.length; _i < _len; worldIndex = ++_i) {
+        world = _ref[worldIndex];
+        if (typeof level !== "undefined" && level !== null ? level.completed : void 0) {
+          currentWorldIndex = worldIndex;
+        }
         worldContainer = $(document.createElement('DIV'));
         worldContainer.addClass('world');
-        levelSelector.append(worldContainer);
+        worldsContainer.append(worldContainer);
         _ref1 = world.stages;
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           stage = _ref1[_j];
@@ -538,10 +545,10 @@ soma.views({
           stageContainer.append(levels);
           worldContainer.append(stageContainer);
           _ref2 = stage.levels;
-          _fn = function(level, index) {
+          _fn = function(level, levelIndex) {
             var levelLink;
             levelLink = $(document.createElement('A'));
-            levelLink.html("Level " + (index + 1));
+            levelLink.html("Level " + (levelIndex + 1));
             levelLink.addClass('level');
             if (level.completed) {
               levelLink.addClass('completed');
@@ -553,9 +560,9 @@ soma.views({
             });
             return levels.append(levelLink);
           };
-          for (index = _k = 0, _len2 = _ref2.length; _k < _len2; index = ++_k) {
-            level = _ref2[index];
-            _fn(level, index);
+          for (levelIndex = _k = 0, _len2 = _ref2.length; _k < _len2; levelIndex = ++_k) {
+            level = _ref2[levelIndex];
+            _fn(level, levelIndex);
           }
         }
       }
@@ -566,7 +573,58 @@ soma.views({
         return _this.viewHelper.showAllLevels();
       });
       levelSelector.append(allLevels);
-      return this.showModal(levelSelector);
+      nextLevels = $(document.createElement('A'));
+      nextLevels.addClass('next_levels_link');
+      if (currentWorldIndex >= this.worlds.length - 1) {
+        nextLevels.addClass('hidden');
+      }
+      nextLevels.html('Next &nbsp; <i class=\'icon-chevron-sign-right\'></i>');
+      nextLevels.bind('click', function() {
+        return _this.switchWorld({
+          next: true
+        });
+      });
+      levelSelector.append(nextLevels);
+      prevLevels = $(document.createElement('A'));
+      prevLevels.addClass('prev_levels_link');
+      if (currentWorldIndex === 0) {
+        prevLevels.addClass('hidden');
+      }
+      prevLevels.html('<i class=\'icon-chevron-sign-left\'></i> &nbsp; Previous');
+      prevLevels.bind('click', function() {
+        return _this.switchWorld({
+          next: false
+        });
+      });
+      levelSelector.append(prevLevels);
+      this.showModal(levelSelector);
+      return setTimeout((function() {
+        return worldsContainer.css({
+          marginLeft: worldsContainer.find('.world').width() * (currentWorldIndex * -1)
+        });
+      }), 100);
+    },
+    switchWorld: function(_arg) {
+      var currentMarginLeft, direction, levelSelector, newMarginLeft, next, worldWidth, worldsContainer;
+      next = _arg.next, worldsContainer = _arg.worldsContainer;
+      worldsContainer || (worldsContainer = this.$('.worlds_container'));
+      worldWidth = worldsContainer.find('.world').width();
+      direction = (next ? -1 : 1);
+      currentMarginLeft = parseInt(worldsContainer.css('marginLeft') || 0);
+      newMarginLeft = currentMarginLeft + (worldWidth * direction);
+      worldsContainer.animate({
+        marginLeft: newMarginLeft,
+        duration: 500
+      });
+      levelSelector = worldsContainer.closest('.level_selector');
+      levelSelector.find('.next_levels_link').removeClass('hidden');
+      levelSelector.find('.prev_levels_link').removeClass('hidden');
+      if ((newMarginLeft / worldWidth) * -1 >= this.worlds.length - 1) {
+        levelSelector.find('.next_levels_link').addClass('hidden');
+      }
+      if (newMarginLeft >= 0) {
+        return levelSelector.find('.prev_levels_link').addClass('hidden');
+      }
     },
     showModal: function(content) {
       var _this = this;

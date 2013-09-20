@@ -370,10 +370,17 @@ soma.views
         showLevelSelector: ->
             levelSelector = $(document.createElement('DIV'))
             levelSelector.addClass('level_selector')
-            for world, index in @worlds
+            
+            worldsContainer = $(document.createElement('DIV'))
+            worldsContainer.addClass('worlds_container')
+            levelSelector.append(worldsContainer)
+            
+            currentWorldIndex = 0
+            for world, worldIndex in @worlds
+                currentWorldIndex = worldIndex if level?.completed
                 worldContainer = $(document.createElement('DIV'))
                 worldContainer.addClass('world')
-                levelSelector.append(worldContainer)
+                worldsContainer.append(worldContainer)
                 for stage in world.stages
                     stageContainer = $(document.createElement('DIV'))
                     stageContainer.addClass('stage')
@@ -382,24 +389,57 @@ soma.views
                     levels.addClass('levels')
                     stageContainer.append(levels)
                     worldContainer.append(stageContainer)
-                    for level, index in stage.levels
-                        do (level, index) =>
+                    for level, levelIndex in stage.levels
+                        do (level, levelIndex) =>
                             levelLink = $(document.createElement('A'))
-                            levelLink.html("Level #{index + 1}")
+                            levelLink.html("Level #{levelIndex + 1}")
                             levelLink.addClass('level')
                             levelLink.addClass('completed') if level.completed
                             levelLink.bind 'click', => 
                                 @hideModal => @loadLevel(level.id)
 
                             levels.append(levelLink)
-
+            
             allLevels = $(document.createElement('A'))
             allLevels.addClass('all_levels_link')
             allLevels.html('All Levels')
             allLevels.bind 'click', => @viewHelper.showAllLevels()
             levelSelector.append(allLevels)
+
+            nextLevels = $(document.createElement('A'))
+            nextLevels.addClass('next_levels_link')
+            nextLevels.addClass('hidden') if currentWorldIndex >= @worlds.length - 1
+            nextLevels.html('Next &nbsp; <i class=\'icon-chevron-sign-right\'></i>')
+            nextLevels.bind 'click', => @switchWorld(next: true)
+            levelSelector.append(nextLevels)
+
+            prevLevels = $(document.createElement('A'))
+            prevLevels.addClass('prev_levels_link')
+            prevLevels.addClass('hidden') if currentWorldIndex == 0
+            prevLevels.html('<i class=\'icon-chevron-sign-left\'></i> &nbsp; Previous')
+            prevLevels.bind 'click', => @switchWorld(next: false)
+            levelSelector.append(prevLevels)
             
             @showModal(levelSelector)
+            setTimeout((=>
+                worldsContainer.css(marginLeft: worldsContainer.find('.world').width() * (currentWorldIndex * -1))
+            ), 100)
+    
+        switchWorld: ({next, worldsContainer}) ->
+            worldsContainer or= @$('.worlds_container')
+            worldWidth = worldsContainer.find('.world').width()
+            direction = (if next then -1 else 1)
+            currentMarginLeft = parseInt(worldsContainer.css('marginLeft') or 0)
+            newMarginLeft = currentMarginLeft + (worldWidth * direction)
+            worldsContainer.animate
+                marginLeft: newMarginLeft
+                duration: 500
+                
+            levelSelector = worldsContainer.closest('.level_selector')
+            levelSelector.find('.next_levels_link').removeClass('hidden')
+            levelSelector.find('.prev_levels_link').removeClass('hidden')
+            levelSelector.find('.next_levels_link').addClass('hidden') if (newMarginLeft / worldWidth) * -1 >= @worlds.length - 1
+            levelSelector.find('.prev_levels_link').addClass('hidden') if newMarginLeft >= 0
                     
         showModal: (content=null) ->
             if not @modalMenu
