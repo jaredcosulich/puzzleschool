@@ -285,7 +285,7 @@ soma.views({
           id = _ref[_i];
           componentIds[id] = true;
         }
-        _ref1 = _this.level.completeValues;
+        _ref1 = _this.level.completeValues || [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           _ref2 = _ref1[_j], componentType = _ref2[0], current = _ref2[1];
           componentFound = false;
@@ -294,7 +294,7 @@ soma.views({
             component = _ref3[componentId];
             if (componentIds[componentId]) {
               if (component.constructor.name === componentType) {
-                if (!((current === 'infinite' && component.current === 'infinite') || (current === void 0 && component.current === void 0) || (current === Math.abs(component.current)))) {
+                if (!((current === 'infinite' && component.current === 'infinite') || (current === void 0 && component.current === void 0) || (current === Math.abs(component.current)) || (current === 'used' && Math.abs(component.current) > 0))) {
                   continue;
                 }
                 componentFound = true;

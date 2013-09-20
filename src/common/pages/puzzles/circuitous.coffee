@@ -210,14 +210,15 @@ soma.views
                 return unless @level.loaded
                 componentIds = {}
                 componentIds[id] = true for id in Object.keys(@viewHelper.board.components)
-                for [componentType, current] in @level.completeValues
+                for [componentType, current] in @level.completeValues or []
                     componentFound = false
                     for componentId, component of @viewHelper.board.components when componentIds[componentId]
                         if component.constructor.name == componentType
                             continue unless (
                                 (current == 'infinite' and component.current == 'infinite') or
                                 (current == undefined and component.current == undefined) or
-                                (current == Math.abs(component.current))
+                                (current == Math.abs(component.current)) or
+                                (current == 'used' and Math.abs(component.current) > 0)
                             )
                             componentFound = true
                             delete componentIds[componentId]

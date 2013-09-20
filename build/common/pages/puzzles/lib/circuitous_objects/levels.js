@@ -183,6 +183,138 @@ levels.WORLDS = [
           }
         ]
       }, {
+        name: 'Volts, Ohms, and Amps',
+        levels: [
+          {
+            id: 1379708583220,
+            challenge: "Create a circuit using the 12 Volt battery and the lightbulb.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "12,9",
+                  "voltage": 12
+                }, {
+                  "name": "Battery",
+                  "position": "6,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['The voltage designates how much electricity the battery will provide to the current. The greater the voltage, the more current a circuit will have.', 'Each battery lists its voltage on the front.', 'Create a circuit using the battery that says 12V on it.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "12,9",
+                  "voltage": 12
+                }, {
+                  "name": "Battery",
+                  "position": "6,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": [["12,9", "11,9"], ["11,9", "10,9"], ["10,9", "9,9"], ["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "9,6"], ["9,6", "9,5"], ["9,5", "9,4"], ["13,9", "13,8"], ["13,8", "13,7"], ["13,7", "13,6"], ["13,6", "13,5"], ["13,5", "13,4"], ["13,4", "12,4"], ["12,4", "11,4"], ["11,4", "10,4"]]
+            },
+            completeValues: [["Battery", 2.4], ["Lightbulb", 2.4]],
+            complete: '<p>The more voltage provided to a circuit, the greater the current.</p>\n<p>Here is a more complete definition of voltage: <a href=\'http://en.wikipedia.org/wiki/Voltage\' target=\'blank\'>Voltage on Wikipedia</a>.</p>',
+            values: true
+          }, {
+            id: 1379711476306,
+            challenge: "Create a circuit that has 10 Ohms of resistance.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "12,9",
+                  "voltage": 12
+                }, {
+                  "name": "Battery",
+                  "position": "6,9"
+                }, {
+                  "name": "Resistor",
+                  "position": "6,2"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "12,4"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['You can see how much resistance each component has on the tag. For example the lightbulb provide 5 Ohms of resistance.', 'The more resistance in a circuit, the less current there will be.', 'Create a circuit using the Resistor with 10 Ohms of resistance.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "12,9",
+                  "voltage": 12
+                }, {
+                  "name": "Battery",
+                  "position": "6,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": [["12,9", "11,9"], ["11,9", "10,9"], ["10,9", "9,9"], ["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "9,6"], ["9,6", "9,5"], ["9,5", "9,4"], ["13,9", "13,8"], ["13,8", "13,7"], ["13,7", "13,6"], ["13,6", "13,5"], ["13,5", "13,4"], ["13,4", "12,4"], ["12,4", "11,4"], ["11,4", "10,4"]]
+            },
+            completeValues: [["Resistor", 'used']],
+            complete: '<p>Resistance (Ohms) is inversely related to the amount of current in a circuit. As resistance increases, current decreases.</p>\n<p>Here is a more complete definition of ohm: <a href=\'http://en.wikipedia.org/wiki/Ohm\' target=\'blank\'>Ohm on Wikipedia</a>.</p>',
+            values: true
+          }, {
+            id: 1379712009791,
+            challenge: "Create a circuit that has 1.2 Amps of current.",
+            instructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "12,9",
+                  "voltage": 12
+                }, {
+                  "name": "Battery",
+                  "position": "6,9"
+                }, {
+                  "name": "Resistor",
+                  "position": "6,2"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "12,4"
+                }
+              ],
+              "wires": []
+            },
+            hints: ['The amount of current (Amps) in the circuit is displayed on the tag of each component.', 'The amount of current goes up as more volts are added and down as more resistance is added.', 'Create a circuit using the 12 Volt battery and the resistor with 10 Ohms.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Battery",
+                  "position": "12,9",
+                  "voltage": 12
+                }, {
+                  "name": "Battery",
+                  "position": "6,9"
+                }, {
+                  "name": "Lightbulb",
+                  "position": "9,4"
+                }
+              ],
+              "wires": [["12,9", "11,9"], ["11,9", "10,9"], ["10,9", "9,9"], ["9,9", "9,8"], ["9,8", "9,7"], ["9,7", "9,6"], ["9,6", "9,5"], ["9,5", "9,4"], ["13,9", "13,8"], ["13,8", "13,7"], ["13,7", "13,6"], ["13,6", "13,5"], ["13,5", "13,4"], ["13,4", "12,4"], ["12,4", "11,4"], ["11,4", "10,4"]]
+            },
+            completeValues: [["Battery", 1.2]],
+            complete: '<p>Current (Amps) in a circuit is related to the amount of resistance (Ohms) and voltage (Volts) in a circuit.</p>\n<p>Here is a more complete definition of amps: <a href=\'http://en.wikipedia.org/wiki/Ampere\' target=\'blank\'>Ampere on Wikipedia</a>.</p>',
+            values: true
+          }
+        ]
+      }
+    ]
+  }, {
+    stages: [
+      {
         name: 'Series And Parallel Circuits',
         levels: [
           {
@@ -378,12 +510,8 @@ levels.WORLDS = [
             values: true
           }
         ]
-      }
-    ]
-  }, {
-    stages: [
-      {
-        name: 'Volts, Ohms, and Amps',
+      }, {
+        name: 'Ohm\'s Law',
         levels: [
           {
             id: 1379564904210,
@@ -556,7 +684,11 @@ levels.WORLDS = [
             values: true
           }
         ]
-      }, {
+      }
+    ]
+  }, {
+    stages: [
+      {
         name: 'Series Circuits',
         levels: [
           {
@@ -659,11 +791,7 @@ levels.WORLDS = [
             values: true
           }
         ]
-      }
-    ]
-  }, {
-    stages: [
-      {
+      }, {
         name: 'Ohm\'s Law',
         levels: [
           {
