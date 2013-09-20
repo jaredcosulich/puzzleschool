@@ -56,8 +56,8 @@
 .circuitous .board .cells {
   margin: 16px;
   position: relative;
-  border-left: 1px dashed #ededed;
-  border-top: 1px dashed #ededed;
+  border-left: 1px dashed #c7c7c7;
+  border-top: 1px dashed #c7c7c7;
 }
 .circuitous .board .wires,
 .circuitous .board .electrons {
@@ -66,8 +66,8 @@
   left: 0;
 }
 .circuitous .board .cell {
-  border-right: 1px dashed #ededed;
-  border-bottom: 1px dashed #ededed;
+  border-right: 1px dashed #c7c7c7;
+  border-bottom: 1px dashed #c7c7c7;
   content: "\00a0";
   float: left;
 }

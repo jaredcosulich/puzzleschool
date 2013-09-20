@@ -101,8 +101,8 @@ levels.WORLDS = [
                         challenge: "Create the circuit that has the highest amount of current using one or both components."
                         instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Resistor", "position": "6,3"},{"name": "Lightbulb", "position": "11,5"}],"wires": []}
                         hints: [
+                            'The tags will show how much current is flowing through each component. The less resistance a circuit has, the more current it will have.'
                             'The lightbulb provides 5 Ohms of resistance. The resistor provides 10 Ohms of resistance.'
-                            'The less resistance a circuit has, the more current it will have.'
                             'Add the lightbulb only to create a circuit with the maximum amount of current.'
                         ]
                         completeInstructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Resistor", "position": "6,3"},{"name": "Lightbulb", "position": "11,5"}],"wires": [["9,8","10,8"],["10,8","11,8"],["11,8","12,8"],["12,8","12,7"],["12,7","12,6"],["12,6","12,5"],["11,5","10,5"],["10,5","9,5"],["9,5","8,5"],["8,6","8,7"],["8,5","8,6"],["8,7","8,8"]]}

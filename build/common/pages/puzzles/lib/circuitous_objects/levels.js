@@ -203,7 +203,7 @@ levels.WORLDS = [
               ],
               "wires": []
             },
-            hints: ['The lightbulb provides 5 Ohms of resistance. The resistor provides 10 Ohms of resistance.', 'The less resistance a circuit has, the more current it will have.', 'Add the lightbulb only to create a circuit with the maximum amount of current.'],
+            hints: ['The tags will show how much current is flowing through each component. The less resistance a circuit has, the more current it will have.', 'The lightbulb provides 5 Ohms of resistance. The resistor provides 10 Ohms of resistance.', 'Add the lightbulb only to create a circuit with the maximum amount of current.'],
             completeInstructions: {
               "components": [
                 {
