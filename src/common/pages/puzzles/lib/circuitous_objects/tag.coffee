@@ -69,7 +69,11 @@ class tag.Tag extends circuitousObject.Object
         
     displayContent: ->
         return if @editing
-        @smallContent.html("#{if @info.current == 'infinite' then 'Infinite' else "#{@info.current}A"}")
+        @smallContent.html """
+            #{@info.resistance} Ohms
+            <br/>
+            #{if @info.current == 'infinite' then 'Infinite' else "#{@info.current} Amps"}
+        """            
         @largeContent.html """
             <div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>
             #{@info.name}<br/>

@@ -203,7 +203,7 @@ levels.WORLDS = [
               ],
               "wires": []
             },
-            hints: ['The tags will show how much current is flowing through each component. The less resistance a circuit has, the more current it will have.', 'The lightbulb provides 5 Ohms of resistance. The resistor provides 10 Ohms of resistance.', 'Add the lightbulb only to create a circuit with the maximum amount of current.'],
+            hints: ['The tags will show how much resistance each component provides and how much current is flowing through each component.', 'The less resistance a circuit has, the more current it will have..', 'Add the lightbulb (5 Ohms of resistance) only to create a circuit with the maximum amount of current.'],
             completeInstructions: {
               "components": [
                 {
@@ -220,7 +220,7 @@ levels.WORLDS = [
               "wires": [["9,8", "10,8"], ["10,8", "11,8"], ["11,8", "12,8"], ["12,8", "12,7"], ["12,7", "12,6"], ["12,6", "12,5"], ["11,5", "10,5"], ["10,5", "9,5"], ["9,5", "8,5"], ["8,6", "8,7"], ["8,5", "8,6"], ["8,7", "8,8"]]
             },
             completeValues: [["Battery", 1.8], ["Resistor", 0], ["Lightbulb", 1.8]],
-            complete: '<p>The less resistance a circuit has, the more current it will have.</p>\n<p>A circuit with the lightbulb (5 Ohms of resistance) produces 1.8 Amps of current while the resistor (10 Ohms of resistance) would produce 1.8 Amps.</p>',
+            complete: '<p>The less resistance a circuit has, the more current it will have.</p>\n<p>A circuit with the lightbulb (5 Ohms of resistance) produces 1.8 Amps of current while the resistor (10 Ohms of resistance) would produce 0.9 Amps.</p>',
             values: true
           }, {
             id: 1379563936369,

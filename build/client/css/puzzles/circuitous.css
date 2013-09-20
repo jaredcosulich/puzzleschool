@@ -623,7 +623,7 @@
 }
 .circuitous .component .tag {
   position: absolute;
-  left: -45px;
+  left: -51px;
   top: 12px;
   background-color: #949494;
   -webkit-border-radius: 6px;
@@ -655,7 +655,7 @@
 .circuitous .component .tag .content {
   overflow: hidden;
   height: 30px;
-  width: 45px;
+  width: 51px;
   position: relative;
   transition: height 0.5s ease-out, width 0.5s ease-out;
 }
@@ -671,8 +671,9 @@
   opacity: 0;
 }
 .circuitous .component .tag .content .small_tag_content {
-  width: 45px;
-  line-height: 30px;
+  font-size: 11px;
+  width: 51px;
+  line-height: 16.5px;
   text-align: center;
 }
 .circuitous .component .tag .content .large_tag_content {
@@ -703,7 +704,7 @@
 }
 .circuitous .component .tag.right {
   left: auto;
-  right: -45px;
+  right: -51px;
   transition: right 0.5s ease-out, top 0.5s ease-out;
 }
 .circuitous .component .tag.right::before {

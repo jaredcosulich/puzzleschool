@@ -560,7 +560,7 @@
         }
         .tag {
             position: absolute;
-            left: -45px;
+            left: -51px;
             top: 12px;
             background-color: @grey;
             .rounded(6px);
@@ -592,7 +592,7 @@
             .content {
                 overflow: hidden;
                 height: 30px;
-                width: 45px;
+                width: 51px;
                 position: relative;
                 transition: height 0.5s ease-out, width 0.5s ease-out;
                 
@@ -608,8 +608,9 @@
                 }
             
                 .small_tag_content {
-                    width: 45px;
-                    line-height: 30px;
+                    font-size: @smallsize;
+                    width: 51px;
+                    line-height: @smallsize * 3/2;
                     text-align: center;
                 }
             
@@ -649,7 +650,7 @@
             
             &.right {
                 left: auto;
-                right: -45px;  
+                right: -51px;  
                 transition: right 0.5s ease-out, top 0.5s ease-out;
                 
                 &::before {
