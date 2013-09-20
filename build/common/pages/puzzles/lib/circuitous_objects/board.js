@@ -138,7 +138,7 @@ board.Board = (function(_super) {
   Board.prototype.roundedCoordinates = function(coords, offset) {
     var dim, halfDim, offsetCoords;
     dim = this.cellDimension;
-    halfDim = dim / 2;
+    halfDim = 0;
     offsetCoords = {
       x: coords.x - ((offset != null ? offset.left : void 0) || (offset != null ? offset.x : void 0) || 0) + halfDim,
       y: coords.y - ((offset != null ? offset.top : void 0) || (offset != null ? offset.y : void 0) || 0) + halfDim

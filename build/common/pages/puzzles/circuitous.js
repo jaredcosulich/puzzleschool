@@ -183,7 +183,7 @@ soma.views({
         var cellDimension, xCell, yCell, _ref;
         _ref = position.split(','), xCell = _ref[0], yCell = _ref[1];
         cellDimension = _this.viewHelper.board.cellDimension;
-        return [(parseInt(xCell) + 0.5) * cellDimension, (parseInt(yCell) + 0.5) * cellDimension];
+        return [parseInt(xCell) * cellDimension, parseInt(yCell) * cellDimension];
       };
       _ref = instructions.wires;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -241,7 +241,7 @@ soma.views({
       cells = function(node) {
         var cellDimension;
         cellDimension = _this.viewHelper.board.cellDimension;
-        return [(node.x / cellDimension) - 0.5, (node.y / cellDimension) - 0.5];
+        return [node.x / cellDimension, node.y / cellDimension];
       };
       _ref = this.viewHelper.board.components;
       for (id in _ref) {

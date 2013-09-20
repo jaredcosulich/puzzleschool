@@ -150,7 +150,7 @@ soma.views
             getCoordinates = (position) =>
                 [xCell, yCell] = position.split(',')
                 cellDimension = @viewHelper.board.cellDimension
-                [(parseInt(xCell) + 0.5) * cellDimension, (parseInt(yCell) + 0.5) * cellDimension]
+                [parseInt(xCell) * cellDimension, parseInt(yCell) * cellDimension]
             
             for positions in instructions.wires
                 nodes = []
@@ -181,7 +181,7 @@ soma.views
             
             cells = (node) =>
                 cellDimension = @viewHelper.board.cellDimension
-                [(node.x / cellDimension) - 0.5,  (node.y / cellDimension) - 0.5]
+                [(node.x / cellDimension),  (node.y / cellDimension)]
             
             for id, component of @viewHelper.board.components
                 node = @viewHelper.board.boardPosition(component.currentNodes()[0])

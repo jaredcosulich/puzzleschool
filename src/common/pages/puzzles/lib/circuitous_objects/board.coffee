@@ -77,7 +77,7 @@ class board.Board extends circuitousObject.Object
             
     roundedCoordinates: (coords, offset) ->
         dim = @cellDimension
-        halfDim = dim / 2
+        halfDim = 0#dim / 2
         offsetCoords = 
             x: coords.x - (offset?.left or offset?.x or 0) + halfDim
             y: coords.y - (offset?.top or offset?.y or 0) + halfDim
