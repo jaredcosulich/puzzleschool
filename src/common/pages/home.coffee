@@ -14,7 +14,7 @@ soma.chunks
             @setMeta('og:url', 'http://www.puzzleschool.com')
             @setMeta('og:image', 'http://www.puzzleschool.com/assets/images/logo_med.png')
             @setMeta('og:site_name', 'The Puzzle School')
-            @setMeta('og:description', 'Learning That Is Fun Because It\'s Challenging')
+            @setMeta('og:description', 'An Exploration of Learning Through Puzzles')
             
             @html = wings.renderTemplate(@template)
         
