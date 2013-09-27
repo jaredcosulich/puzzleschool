@@ -427,6 +427,8 @@ soma.views
             ), 100)
     
         switchWorld: ({next, worldsContainer}) ->
+            return if @switchingWorld
+            @switchingWorld = true
             worldsContainer or= @$('.worlds_container')
             worldWidth = worldsContainer.find('.world').width()
             direction = (if next then -1 else 1)
@@ -435,6 +437,7 @@ soma.views
             worldsContainer.animate
                 marginLeft: newMarginLeft
                 duration: 500
+                complete: => delete @switchingWorld
                 
             levelSelector = worldsContainer.closest('.level_selector')
             levelSelector.find('.next_levels_link').removeClass('hidden')
@@ -462,11 +465,11 @@ soma.views
             
         hideModal: (callback) ->
             return unless @modalMenu
+            @modalMenu.find('iframe').attr('src', '')
             @modalMenu.animate
                 opacity: 0
                 duration: 500
                 complete: =>
-                    @modalMenu.find('iframe').attr('src', '')
                     @modalMenu.css
                         left: -10000
                         top: -10000

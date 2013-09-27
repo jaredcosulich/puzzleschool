@@ -607,8 +607,13 @@ soma.views({
       }), 100);
     },
     switchWorld: function(_arg) {
-      var currentMarginLeft, direction, levelSelector, newMarginLeft, next, worldWidth, worldsContainer;
+      var currentMarginLeft, direction, levelSelector, newMarginLeft, next, worldWidth, worldsContainer,
+        _this = this;
       next = _arg.next, worldsContainer = _arg.worldsContainer;
+      if (this.switchingWorld) {
+        return;
+      }
+      this.switchingWorld = true;
       worldsContainer || (worldsContainer = this.$('.worlds_container'));
       worldWidth = worldsContainer.find('.world').width();
       direction = (next ? -1 : 1);
@@ -616,7 +621,10 @@ soma.views({
       newMarginLeft = currentMarginLeft + (worldWidth * direction);
       worldsContainer.animate({
         marginLeft: newMarginLeft,
-        duration: 500
+        duration: 500,
+        complete: function() {
+          return delete _this.switchingWorld;
+        }
       });
       levelSelector = worldsContainer.closest('.level_selector');
       levelSelector.find('.next_levels_link').removeClass('hidden');
@@ -661,11 +669,11 @@ soma.views({
       if (!this.modalMenu) {
         return;
       }
+      this.modalMenu.find('iframe').attr('src', '');
       this.modalMenu.animate({
         opacity: 0,
         duration: 500,
         complete: function() {
-          _this.modalMenu.find('iframe').attr('src', '');
           return _this.modalMenu.css({
             left: -10000,
             top: -10000

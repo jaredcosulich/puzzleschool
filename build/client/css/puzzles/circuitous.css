@@ -1310,7 +1310,7 @@
 .circuitous .level_selector .all_levels_link.hidden,
 .circuitous .level_selector .next_levels_link.hidden,
 .circuitous .level_selector .prev_levels_link.hidden {
-  opacity: 0;
+  display: none;
 }
 .circuitous .level_selector .all_levels_link {
   left: 224px;

@@ -13,6 +13,11 @@ resistor.Resistor = (function(_super) {
 
   Resistor.prototype.resistance = 10;
 
+  Resistor.prototype.dragBuffer = {
+    top: 10,
+    bottom: 10
+  };
+
   Resistor.prototype.centerOffset = {
     x: 0,
     y: 16

@@ -4,6 +4,10 @@ circuitousObject = require('./object')
 class resistor.Resistor extends circuitousObject.Object
     resistance: 10
     
+    dragBuffer:
+        top: 10
+        bottom: 10
+
     centerOffset: 
         x: 0
         y: 16
