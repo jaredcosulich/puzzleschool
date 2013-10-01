@@ -1,7 +1,7 @@
 <div class='page stats'>
     <h1 class='logo upcase'>
         <img src='/assets/images/logo_icon.png'/>
-        {className} Stats
+        {className} Stats (ID: {classId})
     </h1>
 
     <table>
@@ -24,6 +24,7 @@
                     {/levels}
                 </tr>
             {/stats}
+            {!stats}<tr><td>No Stats Yet</td></tr>{/stats}
         </tbody>
     </table>
     

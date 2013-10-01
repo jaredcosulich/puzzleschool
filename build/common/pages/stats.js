@@ -6,6 +6,9 @@ soma = require('soma');
 wings = require('wings');
 
 sortLevels = function(levels) {
+  if (!levels) {
+    return [];
+  }
   return levels.sort(function(level1, level2) {
     var a, b;
     a = level1.difficulty + level1.id;
@@ -199,6 +202,7 @@ soma.chunks({
       });
       this.setTitle("Stats - The Puzzle School");
       return this.html = wings.renderTemplate(this.template, {
+        classId: this.classId,
         className: this.classInfo.name,
         users: this.users,
         stats: this.stats,

@@ -29,8 +29,11 @@ soma.routes
     '/api/classes/info/:id': requireUser ({id}) ->
         l = new Line
             error: (err) => 
-                console.log('Retrieving class failed:', err)
-                @sendError()
+                if @classInfo
+                    @send(@classInfo)
+                else
+                    console.log('Retrieving class failed:', err)
+                    @sendError()
         
             => db.get('classes', id, l.wait())
                 
@@ -39,7 +42,7 @@ soma.routes
                     @send(@classInfo)
                     l.stop()
                     return
-                    
+                
                 db.multiget 'puzzle_levels', @classInfo.levels, l.wait()
                     
             (levelInfo) => 

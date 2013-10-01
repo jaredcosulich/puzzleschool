@@ -41,8 +41,12 @@ soma.routes({
     id = _arg.id;
     return l = new Line({
       error: function(err) {
-        console.log('Retrieving class failed:', err);
-        return _this.sendError();
+        if (_this.classInfo) {
+          return _this.send(_this.classInfo);
+        } else {
+          console.log('Retrieving class failed:', err);
+          return _this.sendError();
+        }
       }
     }, function() {
       return db.get('classes', id, l.wait());
