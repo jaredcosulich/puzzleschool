@@ -34,7 +34,7 @@ soma.routes
         
             => db.get('classes', id, l.wait())
                 
-            (@classInfo) => 
+            (@classInfo) =>
                 if not @classInfo.levels?.length
                     @send(@classInfo)
                     l.stop()
@@ -43,7 +43,9 @@ soma.routes
                 db.multiget 'puzzle_levels', @classInfo.levels, l.wait()
                     
             (levelInfo) => 
-                @classInfo.levels = levelInfo.puzzle_levels
+                for levelInfo in levelInfo.puzzle_levels
+                    @classInfo.levels[@classInfo.levels.indexOf(parseInt(levelInfo.id))] = levelInfo
+                         
                 @send(@classInfo)
             
             

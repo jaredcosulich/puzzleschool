@@ -137,9 +137,9 @@ soma.chunks({
       return this.html = wings.renderTemplate(this.template, {
         puzzleData: JSON.stringify(this.puzzleData),
         objects: this.objects,
-        "class": this.classId || 0,
+        "class": this.classId,
         level: this.levelId,
-        classLevel: this.classLevelId || 0,
+        classLevel: this.classLevelId,
         instructions: (_ref = this.levelInfo) != null ? _ref.instructions : void 0,
         editor: this.levelId === 'editor',
         worlds: worlds,
@@ -664,10 +664,15 @@ soma.views({
         _this.initReset();
         return _this.initCustom();
       }), 100);
-      this.currentLevel = this.level.id;
+      this.levelId = this.level.id;
+      this.initHrefListener();
+      return this.saveClassLevel();
+    },
+    initHrefListener: function() {
+      var _this = this;
       return setInterval((function() {
         var components;
-        if (location.href.indexOf(_this.currentLevel) > -1) {
+        if (location.href.indexOf(_this.levelId) > -1) {
           return;
         }
         components = location.href.split('/');
@@ -676,6 +681,23 @@ soma.views({
           return _this.hideLevelSelector();
         }
       }), 500);
+    },
+    saveClassLevel: function() {
+      if (!this.classId) {
+        return;
+      }
+      return $.ajaj({
+        url: "/api/classes/levels/add/" + this.classId,
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': this.cookies.get('_csrf', {
+            raw: true
+          })
+        },
+        data: {
+          level: this.level.id
+        }
+      });
     },
     initLevelSelector: function() {
       var previousCompleted, stageElement, _i, _len, _ref, _results,
@@ -723,7 +745,7 @@ soma.views({
                 } else {
                   _this.level = levelInfo;
                   _this.initLevel();
-                  history.pushState(null, null, "/puzzles/xyflyer/" + id);
+                  history.pushState(null, null, location.href.replace(/xyflyer.*/, "xyflyer/" + id));
                   return _this.hideLevelSelector();
                 }
               });
@@ -1267,6 +1289,21 @@ soma.views({
 });
 
 soma.routes({
+  '/puzzles/class/:classId/xyflyer/:levelId': function(_arg) {
+    var classId, levelId;
+    classId = _arg.classId, levelId = _arg.levelId;
+    return new soma.chunks.Xyflyer({
+      classId: classId,
+      levelId: levelId
+    });
+  },
+  '/puzzles/class/:classId/xyflyer': function(_arg) {
+    var classId;
+    classId = _arg.classId;
+    return new soma.chunks.Xyflyer({
+      classId: classId
+    });
+  },
   '/puzzles/xyflyer/:classId/:levelId': function(_arg) {
     var classId, levelId;
     classId = _arg.classId, levelId = _arg.levelId;

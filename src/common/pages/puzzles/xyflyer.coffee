@@ -41,7 +41,7 @@ soma.chunks
                     success: (data) =>
                         levels = sortLevels(data.levels)
                         @classLevelId = levels[@levelId - 1].id
-                        
+
                         @loadData 
                             url: "/api/puzzles/levels/#{@classLevelId}"
                             success: (@levelInfo) => 
@@ -93,9 +93,9 @@ soma.chunks
             @html = wings.renderTemplate(@template,     
                 puzzleData: JSON.stringify(@puzzleData)
                 objects: @objects
-                class: @classId or 0
+                class: @classId
                 level: @levelId
-                classLevel: @classLevelId or 0
+                classLevel: @classLevelId
                 instructions: @levelInfo?.instructions
                 editor: @levelId == 'editor'
                 worlds: worlds
@@ -443,14 +443,27 @@ soma.views
                 @initCustom()                
             ), 100)
 
-            @currentLevel = @level.id
+            @levelId = @level.id
+            
+            @initHrefListener()
+            @saveClassLevel()
+            
+        initHrefListener: ->
             setInterval((=>
-                return if location.href.indexOf(@currentLevel) > -1
+                return if location.href.indexOf(@levelId) > -1
                 components = location.href.split('/')
                 if (@level = @findLevel(parseInt(components[components.length - 1])))
                     @initLevel()
                     @hideLevelSelector()
             ), 500)
+            
+        saveClassLevel: ->
+            return unless @classId
+            $.ajaj
+                url: "/api/classes/levels/add/#{@classId}"
+                method: 'POST'
+                headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                data: {level: @level.id}
         
         initLevelSelector: ->
             @levelSelector = @$('.level_selector')
@@ -485,7 +498,8 @@ soma.views
                                 else
                                     @level = levelInfo
                                     @initLevel()
-                                    history.pushState(null, null, "/puzzles/xyflyer/#{id}")
+                                    
+                                    history.pushState(null, null, location.href.replace(/xyflyer.*/, "xyflyer/#{id}"))
                                     @hideLevelSelector()        
                             
                             if @puzzleData.levels[id]?.completed
@@ -852,6 +866,15 @@ soma.views
         
             
 soma.routes
+    '/puzzles/class/:classId/xyflyer/:levelId': ({classId, levelId}) -> 
+        new soma.chunks.Xyflyer
+            classId: classId
+            levelId: levelId
+
+    '/puzzles/class/:classId/xyflyer': ({classId}) -> 
+        new soma.chunks.Xyflyer
+            classId: classId
+
     '/puzzles/xyflyer/:classId/:levelId': ({classId, levelId}) -> 
         new soma.chunks.Xyflyer
             classId: classId

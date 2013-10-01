@@ -39,7 +39,7 @@ soma.chunks({
       return this.loadData({
         url: "/api/classes/info/" + this.classId,
         success: function(data) {
-          var level, levelClassInfos, _i, _len, _ref;
+          var info, levelClassInfos, levelId, _i, _len, _ref;
           _this.classInfo = data;
           _this.classInfo.levels = sortLevels(_this.classInfo.levels);
           levelClassInfos = [
@@ -50,10 +50,11 @@ soma.chunks({
           ];
           _ref = _this.classInfo.levels;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            level = _ref[_i];
+            info = _ref[_i];
+            levelId = info.id || info;
             levelClassInfos.push({
               objectType: 'level_class',
-              objectId: "" + level.id + "/" + _this.classId
+              objectId: "" + levelId + "/" + _this.classId
             });
           }
           return _this.loadData({
@@ -87,13 +88,14 @@ soma.chunks({
               userLevelClassInfos = [];
               _ref3 = _this.classInfo.levels;
               for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                level = _ref3[_l];
+                info = _ref3[_l];
+                levelId = info.id || info;
                 _ref4 = _this.users.slice(_this.pageSize * _this.page, _this.pageSize * (_this.page + 1));
                 for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
                   userId = _ref4[_m];
                   userLevelClassInfos.push({
                     objectType: 'user_level_class',
-                    objectId: "" + userId + "/" + level.id + "/" + _this.classId
+                    objectId: "" + userId + "/" + levelId + "/" + _this.classId
                   });
                 }
               }
@@ -106,7 +108,7 @@ soma.chunks({
                     objectInfos: userLevelClassInfos.slice(i, i + 100)
                   },
                   success: function(userLevelClassStats) {
-                    var duration, levelId, minutes, seconds, stat, _base, _len5, _o, _ref10, _ref11, _ref6, _ref7, _ref8, _ref9, _results1;
+                    var duration, minutes, seconds, stat, _base, _len5, _o, _ref10, _ref11, _ref6, _ref7, _ref8, _ref9, _results1;
                     _ref6 = userLevelClassStats.stats;
                     _results1 = [];
                     for (_o = 0, _len5 = _ref6.length; _o < _len5; _o++) {
@@ -119,7 +121,7 @@ soma.chunks({
                       minutes = Math.floor(seconds / 60);
                       seconds = seconds - (minutes * 60);
                       _results1.push(_this.statsHash[userId][levelId] = {
-                        level: level.name,
+                        level: levelId,
                         user: userId,
                         attempted: true,
                         moves: stat.moves || 0,
@@ -159,7 +161,7 @@ soma.chunks({
       });
     },
     build: function() {
-      var info, level, levelInfo, levels, user, _i, _len, _ref, _ref1;
+      var info, levelId, levelInfo, levels, user, _i, _len, _ref, _ref1;
       this.stats = [];
       _ref = this.statsHash;
       for (user in _ref) {
@@ -167,15 +169,16 @@ soma.chunks({
         levels = [];
         _ref1 = this.classInfo.levels;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          level = _ref1[_i];
-          info = levelInfo[level.id] || {
+          info = _ref1[_i];
+          levelId = info.id || info;
+          info = levelInfo[levelId] || {
             user: user,
             attempted: false,
             moves: 0,
             hints: 0,
             success: false
           };
-          info.level = level.name;
+          info.level = info.name || levelId;
           levels.push(info);
         }
         this.stats.push({

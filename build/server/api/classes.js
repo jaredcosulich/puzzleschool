@@ -56,7 +56,12 @@ soma.routes({
       }
       return db.multiget('puzzle_levels', _this.classInfo.levels, l.wait());
     }, function(levelInfo) {
-      _this.classInfo.levels = levelInfo.puzzle_levels;
+      var _i, _len, _ref;
+      _ref = levelInfo.puzzle_levels;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        levelInfo = _ref[_i];
+        _this.classInfo.levels[_this.classInfo.levels.indexOf(parseInt(levelInfo.id))] = levelInfo;
+      }
       return _this.send(_this.classInfo);
     });
   }),

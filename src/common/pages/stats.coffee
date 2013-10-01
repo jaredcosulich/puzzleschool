@@ -24,8 +24,9 @@ soma.chunks
                     @classInfo.levels = sortLevels(@classInfo.levels)
 
                     levelClassInfos = [{objectType: 'class', objectId: @classId}]
-                    for level in @classInfo.levels
-                        levelClassInfos.push({objectType: 'level_class', objectId: "#{level.id}/#{@classId}"})
+                    for info in @classInfo.levels
+                        levelId = info.id or info
+                        levelClassInfos.push({objectType: 'level_class', objectId: "#{levelId}/#{@classId}"})
                             
                     @loadData 
                         url: "/api/stats"
@@ -38,11 +39,12 @@ soma.chunks
                             @nextPage = true if @users.length >= (@page+1)*@pageSize
                             
                             userLevelClassInfos = []
-                            for level in @classInfo.levels
+                            for info in @classInfo.levels
+                                levelId = info.id or info
                                 for userId in @users[@pageSize * @page...@pageSize * (@page + 1)]
                                     userLevelClassInfos.push(
                                         objectType: 'user_level_class'
-                                        objectId: "#{userId}/#{level.id}/#{@classId}"
+                                        objectId: "#{userId}/#{levelId}/#{@classId}"
                                     )
                             
                             @statsHash = {}
@@ -61,7 +63,7 @@ soma.chunks
                                             minutes = Math.floor(seconds / 60)
                                             seconds = seconds - (minutes * 60)
                                             @statsHash[userId][levelId] = 
-                                                level: level.name
+                                                level: levelId
                                                 user: userId
                                                 attempted: true
                                                 moves: stat.moves or 0
@@ -89,16 +91,17 @@ soma.chunks
             @stats = []
             for user, levelInfo of @statsHash
                 levels = []
-                for level in @classInfo.levels
-                    info = levelInfo[level.id] or {user: user, attempted: false, moves: 0, hints: 0, success: false}
-                    info.level = level.name
+                for info in @classInfo.levels
+                    levelId = info.id or info
+                    info = levelInfo[levelId] or {user: user, attempted: false, moves: 0, hints: 0, success: false}
+                    info.level = info.name or levelId
                     levels.push(info)
                 @stats.push
                     user: user
                     levels: levels
                     
             @stats.sort((a,b) -> (if a.user > b.user then 1 else (if a.user < b.user then -1 else 0)))
-        
+
             @setTitle("Stats - The Puzzle School")
             @html = wings.renderTemplate(@template,
                 className: @classInfo.name

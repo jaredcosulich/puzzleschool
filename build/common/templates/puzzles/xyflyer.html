@@ -56,7 +56,7 @@
     {/editor}
 
 
-    <div class='xyflyer' data-level={level} data-class={class} data-classlevel={classLevel} data-puzzle_data={puzzleData}>
+    <div class='xyflyer' {:level}data-level={level}{/level} {:class}data-class={class}{/class} {:classLevel}data-classlevel={classLevel}{/classLevel} {:puzzleData}data-puzzle_data={puzzleData}{/puzzleData}>
         <div class='dynamic_content' {:noBackground}style="background-image: url('/assets/images/puzzles/xyflyer/background1.jpg')"{!noBackground}>
             <div class='board' id='board'></div>
             <div class='equation_area'>
