@@ -18,6 +18,9 @@ for name, fn of require('./resistor')
 for name, fn of require('./toggle_switch')
     circuitous_objects[name] = fn
 
+for name, fn of require('./ohms_law_worksheet')
+    circuitous_objects[name] = fn
+
 for name, fn of require('./menu')
     circuitous_objects[name] = fn
 

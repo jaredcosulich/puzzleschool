@@ -70,9 +70,9 @@ class tag.Tag extends circuitousObject.Object
     displayContent: ->
         return if @editing
         @smallContent.html """
-            #{@info.resistance} Ohms
+            #{@info.resistance} Ω
             <br/>
-            #{if @info.current == 'infinite' then 'Infinite' else "#{@info.current} Amps"}
+            #{if @info.current == 'infinite' then 'Infinite' else "#{@info.current} A"}
         """            
         @largeContent.html """
             <div class='navigation'><a class='icon-pencil'></a><br/><a class='icon-undo'></a></div>

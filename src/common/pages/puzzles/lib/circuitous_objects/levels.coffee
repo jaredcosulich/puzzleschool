@@ -296,6 +296,24 @@ levels.WORLDS = [
                         values: true                        
                     }
                     {
+                        id: 1380500957205
+                        challenge: "Try to figure out Ohm\'s Law and fill in the missing values."
+                        instructions: {"components": [{"name": "OhmsLawWorksheet", "position": "1,1"}]}
+                        hints: [
+                            'Ohm\'s Law describes the relationship between volts (power), ohms (resistance), and amps (current).'
+                            'As the number of volts in a circuit increases or resistance decreases the current will increase.'
+                            'Current = Voltage / Resistance. So a circuit with 9 Volts and 10 Ohms of resistance would produce 0.9 Amps of current. This is Ohm\'s Law.'
+                        ]
+                        completeInstructions: {"components": [{"name": "Ohms Law Worksheet", "position": "1,1"}]}
+                        completeValues: [["OhmsLawWorksheet",'infinite']]
+                        complete: '''
+                            <p>Ohm\'s Law is usually stated as I = V/R.</p>
+                            <p>I = current, V = Volts, and R = Resistance.</p>
+                            <p>So Current = Volts / Resistance.</p>
+                        '''
+                        values: true                        
+                    }
+                    {
                         id: 1379563936369
                         challenge: "Create a circuit with 1.8 Amps of current."
                         instructions: {"components": [{"name": "Battery", "position": "8,8"},{"name": "Lightbulb", "position": "8,4"}],"wires": []}

@@ -42,6 +42,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/toggle_switch.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/light_emitting_diode.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/lightbulb.js'
+            @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/ohms_law_worksheet.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/board.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/options.js'
             @loadScript '/build/common/pages/puzzles/lib/circuitous_objects/menu.js'
@@ -152,7 +153,7 @@ soma.views
                 cellDimension = @viewHelper.board.cellDimension
                 [parseInt(xCell) * cellDimension, parseInt(yCell) * cellDimension]
             
-            for positions in instructions.wires
+            for positions in instructions.wires or []
                 nodes = []
                 for position in positions
                     [x,y] = getCoordinates(position) 

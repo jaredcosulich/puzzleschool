@@ -47,6 +47,7 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/toggle_switch.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/light_emitting_diode.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/lightbulb.js');
+      this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/ohms_law_worksheet.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/board.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/options.js');
       this.loadScript('/build/common/pages/puzzles/lib/circuitous_objects/menu.js');
@@ -185,7 +186,7 @@ soma.views({
         cellDimension = _this.viewHelper.board.cellDimension;
         return [parseInt(xCell) * cellDimension, parseInt(yCell) * cellDimension];
       };
-      _ref = instructions.wires;
+      _ref = instructions.wires || [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         positions = _ref[_i];
         nodes = [];

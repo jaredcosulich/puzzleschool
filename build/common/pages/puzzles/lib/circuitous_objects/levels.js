@@ -615,6 +615,29 @@ levels.WORLDS = [
             complete: '<p>The less resistance a circuit has, the more current it will have.</p>\n<p>A circuit with the lightbulb (5 Ohms of resistance) produces 1.8 Amps of current while the resistor (10 Ohms of resistance) would produce 0.9 Amps.</p>',
             values: true
           }, {
+            id: 1380500957205,
+            challenge: "Try to figure out Ohm\'s Law and fill in the missing values.",
+            instructions: {
+              "components": [
+                {
+                  "name": "OhmsLawWorksheet",
+                  "position": "1,1"
+                }
+              ]
+            },
+            hints: ['Ohm\'s Law describes the relationship between volts (power), ohms (resistance), and amps (current).', 'As the number of volts in a circuit increases or resistance decreases the current will increase.', 'Current = Voltage / Resistance. So a circuit with 9 Volts and 10 Ohms of resistance would produce 0.9 Amps of current. This is Ohm\'s Law.'],
+            completeInstructions: {
+              "components": [
+                {
+                  "name": "Ohms Law Worksheet",
+                  "position": "1,1"
+                }
+              ]
+            },
+            completeValues: [["OhmsLawWorksheet", 'infinite']],
+            complete: '<p>Ohm\'s Law is usually stated as I = V/R.</p>\n<p>I = current, V = Volts, and R = Resistance.</p>\n<p>So Current = Volts / Resistance.</p>',
+            values: true
+          }, {
             id: 1379563936369,
             challenge: "Create a circuit with 1.8 Amps of current.",
             instructions: {
