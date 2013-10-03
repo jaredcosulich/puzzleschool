@@ -2,6 +2,7 @@ soma = require('soma')
 wings = require('wings')
 
 sortLevels = (levels) ->
+    return [] unless levels
     levels.sort (level1,level2) ->
         a = level1.difficulty + level1.id
         b = level2.difficulty + level2.id
