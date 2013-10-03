@@ -171,7 +171,8 @@ class languageScramble.ViewHelper
             return if @initializingScramble
             return if lastPress && new Date() - lastPress < 10
             lastPress = new Date()
-            @typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), @activeLevel.match(/Hard/))
+            keyCode =  (if typeof e.which == "number" then e.which else e.keyCode)
+            @typeLetter(String.fromCharCode(keyCode).toLowerCase(), @activeLevel.match(/Hard/))
             $.timeout 10, () =>
                 $('#clickarea').val('')        
                 $('#clickarea').html('')        

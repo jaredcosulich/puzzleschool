@@ -267,6 +267,7 @@ languageScramble.ViewHelper = (function() {
     });
     lastPress = null;
     return $('#clickarea').bind('keypress.type', function(e) {
+      var keyCode;
       _this.hideDictionary();
       if (_this.initializingScramble) {
         return;
@@ -275,7 +276,8 @@ languageScramble.ViewHelper = (function() {
         return;
       }
       lastPress = new Date();
-      _this.typeLetter(String.fromCharCode(e.keyCode).toLowerCase(), _this.activeLevel.match(/Hard/));
+      keyCode = (typeof e.which === "number" ? e.which : e.keyCode);
+      _this.typeLetter(String.fromCharCode(keyCode).toLowerCase(), _this.activeLevel.match(/Hard/));
       return $.timeout(10, function() {
         $('#clickarea').val('');
         return $('#clickarea').html('');
