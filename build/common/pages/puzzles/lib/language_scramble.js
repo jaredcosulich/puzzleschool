@@ -306,6 +306,8 @@ languageScramble.ViewHelper = (function() {
               return 'o';
             case 'ù':
               return 'u';
+            case 'ñ':
+              return 'n';
           }
         })();
         if (char === nativeChar) {

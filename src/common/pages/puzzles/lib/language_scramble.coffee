@@ -190,6 +190,7 @@ class languageScramble.ViewHelper
                     when 'ì' then 'i'
                     when 'ò' then 'o'
                     when 'ù' then 'u'
+                    when 'ñ' then 'n'
     
                 char = foreignChar if char == nativeChar
 
