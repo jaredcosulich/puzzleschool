@@ -183,16 +183,21 @@ class languageScramble.ViewHelper
 
         try 
             foreignChar = openGuess.className.match(/actual_letter_(.)/)[1]
-            if foreignChar in ['é', 'è', 'ì', 'ò', 'ù', 'à']  
+            if foreignChar in ['à', 'á', 'é', 'è', 'ì', 'í', 'ò', 'ó', 'ù', 'ú', 'ü', 'ñ']  
                 nativeChar = switch foreignChar
                     when 'à' then 'a'
+                    when 'á' then 'a'
                     when 'é' then 'e'
                     when 'è' then 'e'
                     when 'ì' then 'i'
+                    when 'í' then 'i'
                     when 'ò' then 'o'
+                    when 'ó' then 'o'
                     when 'ù' then 'u'
+                    when 'ú' then 'u'
+                    when 'ü' then 'u'
                     when 'ñ' then 'n'
-    
+
                 char = foreignChar if char == nativeChar
 
             letter = $(".scrambled .#{@containerClassName(openGuess)} .letter_#{char}")[0]

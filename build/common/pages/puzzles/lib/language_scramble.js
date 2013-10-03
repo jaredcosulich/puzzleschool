@@ -293,10 +293,12 @@ languageScramble.ViewHelper = (function() {
     }
     try {
       foreignChar = openGuess.className.match(/actual_letter_(.)/)[1];
-      if (foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'ò' || foreignChar === 'ù' || foreignChar === 'à') {
+      if (foreignChar === 'à' || foreignChar === 'á' || foreignChar === 'é' || foreignChar === 'è' || foreignChar === 'ì' || foreignChar === 'í' || foreignChar === 'ò' || foreignChar === 'ó' || foreignChar === 'ù' || foreignChar === 'ú' || foreignChar === 'ü' || foreignChar === 'ñ') {
         nativeChar = (function() {
           switch (foreignChar) {
             case 'à':
+              return 'a';
+            case 'á':
               return 'a';
             case 'é':
               return 'e';
@@ -304,9 +306,17 @@ languageScramble.ViewHelper = (function() {
               return 'e';
             case 'ì':
               return 'i';
+            case 'í':
+              return 'i';
             case 'ò':
               return 'o';
+            case 'ó':
+              return 'o';
             case 'ù':
+              return 'u';
+            case 'ú':
+              return 'u';
+            case 'ü':
               return 'u';
             case 'ñ':
               return 'n';
