@@ -6,17 +6,6 @@
   -ms-user-select: none;
   user-select: none;
 }
-.beta_message {
-  background-color: #262626;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  color: #fafafa;
-  padding: 0 12px;
-  width: 450px;
-  margin: 30px auto;
-  overflow: hidden;
-}
 .circuitous {
   height: 640px;
   width: 960px;

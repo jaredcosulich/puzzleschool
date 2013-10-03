@@ -409,6 +409,17 @@ a {
 .stats table td.fail {
   background-color: #ff6e5f;
 }
+.beta_message {
+  background-color: #262626;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  color: #fafafa;
+  padding: 0 12px;
+  width: 450px;
+  margin: 30px auto;
+  overflow: hidden;
+}
 /*!
  *  Font Awesome 3.2.1
  *  the iconic font designed for Bootstrap
