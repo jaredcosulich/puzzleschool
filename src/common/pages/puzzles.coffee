@@ -35,7 +35,7 @@ soma.routes
 LABDATA = [{
     id: 'circuitous'
     title: 'Circuitous'
-    website: '/puzzles/code'
+    website: '/puzzles/circuitous'
     thumbnail: '/assets/images/reviews/circuitous.jpg'
     company: 'The Puzzle School'
     companyWebsite: 'http://puzzleschool.com'
