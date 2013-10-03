@@ -63,7 +63,9 @@ soma.chunks({
           success: function(data) {
             var levels;
             levels = sortLevels(data.levels);
-            _this.classLevelId = levels[_this.levelId - 1].id;
+            if (_this.levelId) {
+              _this.classLevelId = levels[_this.levelId - 1].id;
+            }
             return _this.loadData({
               url: "/api/puzzles/levels/" + _this.classLevelId,
               success: function(levelInfo) {

@@ -41,7 +41,7 @@ soma.chunks
                     url: "/api/classes/info/#{@classId}"
                     success: (data) =>
                         levels = sortLevels(data.levels)
-                        @classLevelId = levels[@levelId - 1].id
+                        @classLevelId = levels[@levelId - 1].id if @levelId
 
                         @loadData 
                             url: "/api/puzzles/levels/#{@classLevelId}"
