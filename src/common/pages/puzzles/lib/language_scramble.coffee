@@ -969,6 +969,7 @@ class languageScramble.ViewHelper
                 
     hideDictionary: ->
         dictionary = @$('.dictionary')
+        return unless Math.floor(dictionary.css('opacity')) == 1
         dictionary.animate
             opacity: 0
             duration: 500

@@ -1430,6 +1430,10 @@ languageScramble.ViewHelper = (function() {
     var dictionary,
       _this = this;
     dictionary = this.$('.dictionary');
+    console.log(dictionary.css('opacity'), Math.floor(dictionary.css('opacity')), Math.floor(dictionary.css('opacity')) === 1);
+    if (Math.floor(dictionary.css('opacity')) !== 1) {
+      return;
+    }
     return dictionary.animate({
       opacity: 0,
       duration: 500,
