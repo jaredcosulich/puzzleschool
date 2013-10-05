@@ -171,7 +171,6 @@ soma.views({
       return _results;
     },
     selectLevel: function(id) {
-      console.log('select', id);
       this.level = this.findLevel(id);
       this.initLevel();
       return history.pushState(null, null, "/puzzles/code/" + id);
@@ -224,10 +223,8 @@ soma.views({
       });
     },
     nextLevel: function() {
-      var nextLevel, _ref;
-      console.log('next', (_ref = this.level) != null ? _ref.id : void 0);
+      var nextLevel;
       nextLevel = this.findLevel(this.level.id, true);
-      console.log('next level', nextLevel != null ? nextLevel.id : void 0);
       return this.selectLevel(nextLevel.id);
     },
     showLevelSelector: function(success) {

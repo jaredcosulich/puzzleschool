@@ -124,7 +124,6 @@ soma.views
                     
           
         selectLevel: (id) ->
-            console.log('select', id)
             @level = @findLevel(id)
             @initLevel()
             history.pushState(null, null, "/puzzles/code/#{id}")
@@ -162,9 +161,7 @@ soma.views
                         challengeText.animate(opacity: 1, duration: 250)
             
         nextLevel: ->
-            console.log('next', @level?.id)
             nextLevel = @findLevel(@level.id, true)
-            console.log('next level', nextLevel?.id)
             @selectLevel(nextLevel.id)
             
         showLevelSelector: (success) ->
