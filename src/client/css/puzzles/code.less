@@ -24,26 +24,30 @@
         }
     }
 
-    h2 {
-        text-align: center;
-        margin-bottom: 12px;
+    a.action {
+        .button-color(@darkgreen);
+        position: absolute;
+        top: 11px;
+        font-weight: normal;
         
-        a.action {
-            font-size: @smallsize;
-            font-weight: normal;
-            background-color: @darkgreen;
-            color: white;
-            padding: 3px 6px;
-            margin: 0 72px;
-            .rounded(3px);
+        &:active {
+            position: absolute;
+            top: 12px;
         }
-    }    
-
-    .challenge {
-        margin-bottom: 12px;
         
-        .text, .success {
-            padding: 24px 12px 12px 12px;
+        &.select_level {
+            left: 66px;
+        }
+
+        &.reset_level {
+            right: 66px;
+        }
+    }
+    
+
+    .challenge {        
+        .text {
+            padding: 36px 12px;
             text-align: center;
         }
         
@@ -58,16 +62,10 @@
         }
         
         .next_level {
-            background-color: @blue;
-            display: block;
-            border-top: 1px solid @blue;
-            padding: 4px 0 6px 0;
-            text-align: center;
-            color: white;
-            text-decoration: none;
-            line-height: 15px;
-            width: 12em;
-            margin: auto;
+            .button-color(@blue);
+            font-weight: normal;
+            font-size: @bodysize;
+            margin: -6px 12px;
         }
         
         .links {

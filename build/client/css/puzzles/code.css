@@ -17,27 +17,50 @@
 .code .error p {
   padding: 0 12px;
 }
-.code h2 {
-  text-align: center;
-  margin-bottom: 12px;
-}
-.code h2 a.action {
-  font-size: 11px;
-  font-weight: normal;
+.code a.action {
+  -moz-box-shadow: inset 0px 1px 0px 0px #10bc35;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #10bc35;
+  box-shadow: inset 0px 1px 0px 0px #10bc35;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0c8d28), color-stop(1, #085e1b));
+  background: -moz-linear-gradient(center top, #0c8d28 5%, #085e1b 100%);
   background-color: #0c8d28;
-  color: white;
-  padding: 3px 6px;
-  margin: 0 72px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #0c8d28;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #0c8d28;
+  margin: auto;
+  position: absolute;
+  top: 11px;
+  font-weight: normal;
 }
-.code .challenge {
-  margin-bottom: 12px;
+.code a.action:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #10bc35), color-stop(1, #0c8d28));
+  background: -moz-linear-gradient(center top, #10bc35 5%, #0c8d28 100%);
+  background-color: #0c8d28;
 }
-.code .challenge .text,
-.code .challenge .success {
-  padding: 24px 12px 12px 12px;
+.code a.action:active {
+  position: relative;
+  top: 1px;
+}
+.code a.action:active {
+  position: absolute;
+  top: 12px;
+}
+.code a.action.select_level {
+  left: 66px;
+}
+.code a.action.reset_level {
+  right: 66px;
+}
+.code .challenge .text {
+  padding: 36px 12px;
   text-align: center;
 }
 .code .challenge .success {
@@ -49,16 +72,36 @@
   text-decoration: underline;
 }
 .code .challenge .next_level {
+  -moz-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  box-shadow: inset 0px 1px 0px 0px #3fc3db;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #24aac3), color-stop(1, #1c8498));
+  background: -moz-linear-gradient(center top, #24aac3 5%, #1c8498 100%);
   background-color: #24aac3;
-  display: block;
-  border-top: 1px solid #24aac3;
-  padding: 4px 0 6px 0;
-  text-align: center;
-  color: white;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #24aac3;
+  display: inline-block;
+  color: #fafafa;
+  font-family: arial;
+  font-weight: bold;
+  padding: 6px 24px;
   text-decoration: none;
-  line-height: 15px;
-  width: 12em;
+  text-shadow: 1px 1px 0px #24aac3;
   margin: auto;
+  font-weight: normal;
+  font-size: 13px;
+  margin: -6px 12px;
+}
+.code .challenge .next_level:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3fc3db), color-stop(1, #24aac3));
+  background: -moz-linear-gradient(center top, #3fc3db 5%, #24aac3 100%);
+  background-color: #24aac3;
+}
+.code .challenge .next_level:active {
+  position: relative;
+  top: 1px;
 }
 .code .challenge .links {
   padding-top: 12px;

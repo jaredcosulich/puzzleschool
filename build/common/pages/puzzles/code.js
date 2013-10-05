@@ -91,24 +91,23 @@ soma.views({
         return _this.initLevel();
       });
     },
-    findLevel: function(levelId) {
-      var level, stage, _i, _len;
+    findLevel: function(levelId, nextLevel) {
+      var foundLevel, level, stage, _i, _j, _len, _len1, _ref;
+      if (nextLevel == null) {
+        nextLevel = false;
+      }
+      foundLevel = false;
       for (_i = 0, _len = STAGES.length; _i < _len; _i++) {
         stage = STAGES[_i];
-        level = ((function() {
-          var _j, _len1, _ref, _results;
-          _ref = stage.levels;
-          _results = [];
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            level = _ref[_j];
-            if (level.id === levelId) {
-              _results.push(level);
+        _ref = stage.levels;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          level = _ref[_j];
+          if (level.id === levelId || foundLevel) {
+            if (foundLevel || !nextLevel) {
+              return level;
             }
+            foundLevel = true;
           }
-          return _results;
-        })())[0];
-        if (level) {
-          return level;
         }
       }
     },
@@ -163,15 +162,19 @@ soma.views({
             if (locked) {
               return alert('This level is locked.');
             } else {
-              _this.level = levelInfo;
-              _this.initLevel();
-              history.pushState(null, null, "/puzzles/code/" + id);
+              _this.selectLevel(id);
               return _this.hideLevelSelector();
             }
           });
         })(levelElement));
       }
       return _results;
+    },
+    selectLevel: function(id) {
+      console.log('select', id);
+      this.level = this.findLevel(id);
+      this.initLevel();
+      return history.pushState(null, null, "/puzzles/code/" + id);
     },
     setLevelIcon: function(_arg) {
       var completed, id, levelIcon, locked, replace, started;
@@ -190,7 +193,7 @@ soma.views({
       return levelIcon.attr('src', levelIcon.attr('src').replace(/level(_[a-z]+)*\./, "level" + replace + "."));
     },
     completeLevel: function() {
-      var challenge, test, _i, _len, _ref,
+      var challengeText, test, _i, _len, _ref,
         _this = this;
       this.puzzleProgress[this.level.id].completed = new Date().getTime();
       this.saveProgress();
@@ -202,21 +205,30 @@ soma.views({
           test.clean();
         }
       }
-      challenge = this.$('.challenge');
-      return challenge.animate({
+      challengeText = this.$('.challenge .text');
+      return challengeText.animate({
         opacity: 0,
         duration: 250,
         complete: function() {
-          challenge.html('<h3 class=\'success\'>Success!</h3>\n<a class=\'next_level\'>Select A New Level</a>');
-          challenge.find('.next_level').bind('click', function() {
-            return _this.showLevelSelector(true);
-          });
-          return challenge.animate({
-            opacity: 1,
-            duration: 250
+          challengeText.html('<h3 class=\'success\'>Success! <a class=\'next_level\'>Next Level</a></h3>');
+          return $.timeout(100, function() {
+            challengeText.find('.next_level').bind('click', function() {
+              return _this.nextLevel();
+            });
+            return challengeText.animate({
+              opacity: 1,
+              duration: 250
+            });
           });
         }
       });
+    },
+    nextLevel: function() {
+      var nextLevel, _ref;
+      console.log('next', (_ref = this.level) != null ? _ref.id : void 0);
+      nextLevel = this.findLevel(this.level.id, true);
+      console.log('next level', nextLevel != null ? nextLevel.id : void 0);
+      return this.selectLevel(nextLevel.id);
     },
     showLevelSelector: function(success) {
       var _this = this;
@@ -522,20 +534,20 @@ STAGES = [
     levels: [
       {
         id: 1362617406338,
-        challenge: 'Figure out how to display an alert saying \'Hello World\'.',
+        challenge: 'Figure out how to display an alert that says \'Hello World\' instead of \'Welcome\'.',
         editors: [
           {
             title: 'Page Javascript',
             type: 'javascript',
-            code: 'var button = document.getElementById(\'alert_button\');\nbutton.onclick = function () {\n  alert(\'What should I say?\')\n};'
+            code: 'var button = document.getElementById(\'alert_button\');\nbutton.onclick = function () {\n  alert(\'Welcome\')\n};'
           }, {
             title: 'Page HTML',
             type: 'html',
-            code: '<html>\n  <body>\n    <h1 id=\'header\'>Alerts</h1>\n    <p>\n      Javascript lets you send messages to your user using the \'alert\' method.\n    </p>\n    <p>\n      An alert will cause a message to pop up.\n    </p>\n    <p>\n      Try to change the message of the alert that you see when you click this button:\n    </p>\n    <button id=\'alert_button\'>Click Me</button>\n  </body>\n</html>'
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Alerts</h1>\n    <p>\n      Javascript lets you send messages to your user using the \'alert\' method.\n    </p>\n    <p>\n      An alert will cause a message to pop up. The alert function looks like alert(\'Welcome\');\n    </p>\n    <p>\n      Try to change the message of the alert that you see when you click this button:\n    </p>\n    <button id=\'alert_button\'>Click Me</button>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    Javascript is all about interactions.\n</p>\n<p>\n    In this case the interaction is a button click causing an message to be displayed to the user.\n</p>\n<p>\n    The message is displayed using the \'alert\' function.\n</p>',
-        hints: ['The text that you pass in to the \'alert\' function will be displayed in the alert message.', 'Change the text from \'What should I say?\' to \'Hello World\''],
+        description: '<p>\n    Javascript is all about interactions.\n</p>\n<p>\n    In this case the interaction is a button click causing an message to be displayed to the user.\n</p>\n<p>\n    The message is displayed using the \'alert\' function. The alert function looks like alert(\'Welcome\');\n</p>',
+        hints: ['The text that you pass in to the \'alert\' function will be displayed in the alert message.', 'Change the text from \'Welcome\' to \'Hello World\''],
         tests: [
           {
             description: 'An alert with the words \'Hello World\' is displayed.',

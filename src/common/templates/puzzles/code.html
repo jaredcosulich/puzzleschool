@@ -1,79 +1,89 @@
-<div class='code' data-level={level} data-class={class} data-classlevel={classLevel} data-puzzle_data={puzzleData}>
-    <h2>
-        <a class='action select_level'>Select Level</a>
+<div class='page'>
+    
+    <h1 class='logo upcase'>
+        <img src='/assets/images/logo_icon.png'/>
         Code Puzzles
+    </h1>    
+
+    <div class='code' data-level={level} data-class={class} data-classlevel={classLevel} data-puzzle_data={puzzleData}>
+        <a class='action select_level'>Select Level</a>
         <a class='action reset_level'>Reset Level</a>
-    </h2>
-    
-    <div class='dynamic_content'>
-        <div class='challenge'>
-            <div class='links'>
-                <a class='link description'>Level Lesson</a>
-                <a class='link hints'>Level Hints</a>
-                <!-- <a class='link tests'>Test</a> -->
-                <div class='clear'></div>
+        <div class='dynamic_content'>
+            <div class='challenge'>
+                <div class='links'>
+                    <a class='link description'>Level Lesson</a>
+                    <a class='link hints'>Level Hints</a>
+                    <!-- <a class='link tests'>Test</a> -->
+                    <div class='clear'></div>
                 
-                <div class='description'><div class='inside'></div></div>
-                <div class='hints'><div class='inside'></div></div>
-                <!-- <div class='tests'>
-                    <div class='inside'>
-                        <p class='explanation'>
-                            * Green validation tests have passed, red tests have not.
-                        </p>
-                    </div>
-                </div> -->
+                    <div class='description'><div class='inside'></div></div>
+                    <div class='hints'><div class='inside'></div></div>
+                    <!-- <div class='tests'>
+                        <div class='inside'>
+                            <p class='explanation'>
+                                * Green validation tests have passed, red tests have not.
+                            </p>
+                        </div>
+                    </div> -->
+                </div>
+                <h3 class='text'></h3>
             </div>
-            <h3 class='text'></h3>
-        </div>
 
-        <div class='test_area'>
-            <p>Solved the challenge?</p>
-            <p><a class='run_tests'>Run Tests</a><a class='rerun_tests'>Rerun Tests</a></p>
-            <div class='tests'>
+            <div class='test_area'>
+                <p>Solved the challenge?</p>
+                <p><a class='run_tests'>Run Tests</a><a class='rerun_tests'>Rerun Tests</a></p>
+                <div class='tests'>
+                </div>
             </div>
-        </div>
-        <iframe class='output'></iframe>
+            <iframe class='output'></iframe>
 
-        <div class='editors'>
-        </div>
+            <div class='editors'>
+            </div>
         
-        <div class='error'>ERROR</div>
-    </div>
-    
-    <div class='level_selector'>
-        <h2 class='success'>Nice Work. Level Complete!</h2>
-        <h2>Select The Next Level</h2>
-        {:stages}
-        <div class='levels'>
-            <h3>{name}</h3>
-            <br/>
-            {:levels}
-            <a class='level' id='level_{id}' data-id={id}>
-                <img src='/assets/images/puzzles/code/level.jpg' />
-            </a>
-            {/levels}
+            <div class='error'>ERROR</div>
         </div>
-        {/stages}
-    </div>
-    <div class='clear'></div>
-</div>
-
-<div class='site_explanation'>
-    <h4>What Is This?</h4>
-    <p>
-        Code Puzzles is designed to simulate the process that I, 
-        as a professional programmer, go through on a daily basis.
-    </p>
-    <p>
-        When I am building my own projects, such as 
-        <a href='http://puzzleschool.com' target='_blank'>The Puzzle School</a>,
-        I'm constantly presenting myself with small challenges and then figuring out how to solve them.
-    </p>
-    <p>
-        I will usually Google around quite a bit, looking at other solutions to similar problems
-        that people have written about on blogs and coding websites, looking for inspiration
-        in how to solve my challenge. That's why so many of the hints in Code Puzzles ask you
-        to Google a specific term and try to figure out how to solve the challenge.
-    </p>
     
+        <div class='level_selector'>
+            <h2 class='success'>Nice Work. Level Complete!</h2>
+            <h2>Select The Next Level</h2>
+            {:stages}
+            <div class='levels'>
+                <h3>{name}</h3>
+                <br/>
+                {:levels}
+                <a class='level' id='level_{id}' data-id={id}>
+                    <img src='/assets/images/puzzles/code/level.jpg' />
+                </a>
+                {/levels}
+            </div>
+            {/stages}
+        </div>
+        <div class='clear'></div>
+    </div>
+    
+    <div class='beta_message'>
+        <p>These code puzzles are still in development.<p>
+        <p>If you enjoy them and want us to build more levels please let us know!<p>
+        <p>You can reach us at <a mailto='support@puzzleschool.com'>support@puzzleschool.com</a>. We'd love to hear from you.<p>
+    </div>
+
+    <div class='site_explanation'>
+        <h4>What Is This?</h4>
+        <p>
+            Code Puzzles is designed to simulate the process that I, 
+            as a professional programmer, go through on a daily basis.
+        </p>
+        <p>
+            When I am building my own projects, such as 
+            <a href='http://puzzleschool.com' target='_blank'>The Puzzle School</a>,
+            I'm constantly presenting myself with small challenges and then figuring out how to solve them.
+        </p>
+        <p>
+            I will usually Google around quite a bit, looking at other solutions to similar problems
+            that people have written about on blogs and coding websites, looking for inspiration
+            in how to solve my challenge. That's why so many of the hints in Code Puzzles ask you
+            to Google a specific term and try to figure out how to solve the challenge.
+        </p>
+    
+    </div>
 </div>

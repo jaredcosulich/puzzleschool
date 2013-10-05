@@ -68,10 +68,13 @@ soma.views
             @$('.select_level').bind 'click', => @showLevelSelector()
             @$('.reset_level').bind 'click', => @initLevel()
             
-        findLevel: (levelId) ->
+        findLevel: (levelId, nextLevel=false) ->
+            foundLevel = false
             for stage in STAGES
-                level = (level for level in stage.levels when level.id == levelId)[0]
-                return level if level
+                for level in stage.levels
+                    if level.id == levelId or foundLevel
+                        return level if foundLevel or !nextLevel
+                        foundLevel = true
 
         initLevel: ->
             @el.find('.dynamic_content').html(@originalHTML)
@@ -116,11 +119,15 @@ soma.views
                         if locked
                             alert('This level is locked.')
                         else
-                            @level = levelInfo
-                            @initLevel()
-                            history.pushState(null, null, "/puzzles/code/#{id}")
+                            @selectLevel(id)
                             @hideLevelSelector()              
                     
+          
+        selectLevel: (id) ->
+            console.log('select', id)
+            @level = @findLevel(id)
+            @initLevel()
+            history.pushState(null, null, "/puzzles/code/#{id}")
           
         setLevelIcon: ({id, started, completed, locked}) ->
             levelIcon = @$("#level_#{id}").find('img')
@@ -142,17 +149,23 @@ soma.views
             
             test.clean() for test in @level.tests when test.clean
             
-            challenge = @$('.challenge')
-            challenge.animate
+            challengeText = @$('.challenge .text')
+            challengeText.animate
                 opacity: 0
                 duration: 250
                 complete: =>
-                    challenge.html '''
-                        <h3 class='success'>Success!</h3>
-                        <a class='next_level'>Select A New Level</a>
+                    challengeText.html '''
+                        <h3 class='success'>Success! <a class='next_level'>Next Level</a></h3>
                     '''
-                    challenge.find('.next_level').bind 'click', => @showLevelSelector(true)
-                    challenge.animate(opacity: 1, duration: 250)
+                    $.timeout 100, =>
+                        challengeText.find('.next_level').bind 'click', => @nextLevel()
+                        challengeText.animate(opacity: 1, duration: 250)
+            
+        nextLevel: ->
+            console.log('next', @level?.id)
+            nextLevel = @findLevel(@level.id, true)
+            console.log('next level', nextLevel?.id)
+            @selectLevel(nextLevel.id)
             
         showLevelSelector: (success) ->
             $(document.body).unbind('click.level_selector')
@@ -567,7 +580,7 @@ STAGES = [
             {
                 id: 1362617406338
                 challenge: '''
-                    Figure out how to display an alert saying 'Hello World'.
+                    Figure out how to display an alert that says 'Hello World' instead of 'Welcome'.
                 '''
                 editors: [
                     {
@@ -576,7 +589,7 @@ STAGES = [
                         code: '''
                             var button = document.getElementById('alert_button');
                             button.onclick = function () {
-                              alert('What should I say?')
+                              alert('Welcome')
                             };
                         '''
                     }
@@ -591,7 +604,7 @@ STAGES = [
                                   Javascript lets you send messages to your user using the 'alert' method.
                                 </p>
                                 <p>
-                                  An alert will cause a message to pop up.
+                                  An alert will cause a message to pop up. The alert function looks like alert('Welcome');
                                 </p>
                                 <p>
                                   Try to change the message of the alert that you see when you click this button:
@@ -610,12 +623,12 @@ STAGES = [
                         In this case the interaction is a button click causing an message to be displayed to the user.
                     </p>
                     <p>
-                        The message is displayed using the 'alert' function.
+                        The message is displayed using the 'alert' function. The alert function looks like alert('Welcome');
                     </p>
                 '''
                 hints: [
                     'The text that you pass in to the \'alert\' function will be displayed in the alert message.'
-                    'Change the text from \'What should I say?\' to \'Hello World\''
+                    'Change the text from \'Welcome\' to \'Hello World\''
                 ]
                 tests: [
                     {
