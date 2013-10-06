@@ -396,7 +396,7 @@ STAGES = [
                         There are many html tags, each of which have different attributes.
                     </p>
                     <p>
-                        You can find a list of availablt html tags by googling 
+                        You can find a list of available html tags by googling 
                         <a href='https://www.google.com/search?q=html+tags' target='_blank'>html tags</a>
                     </p>
                     <p>
@@ -419,48 +419,54 @@ STAGES = [
                             html == 'such as the &lt;b&gt; tag'
                     }
                 ]
-            }, {
-                id: 1362072970429
-                challenge: '''
-                    Figure out how to make the header text red.
-                '''
-                editors: [
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1 style='color: green'>Playing With Tags</h1>
-                                <p>
-                                  Html tags can contain attributes that modify the behavior of the tag.
-                                </p>
-                                <p>
-                                  This is an example of an attribute modifying the tags style.
-                                </p>
-                                <p>
-                                  The 'style' attribute with a value of 'color: green' is making the &lt;h1&gt; turn green.
-                                </p>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        You can modify the attributes of a given tag by adding different attributes within the tag.
-                    </p>
-                '''
-                hints: [
-                    'Look for the word \'green\' in the html.'
-                    'Change the word \'green\' to the word \'red\'.'
-                ]
-                tests: [
-                    {
-                        description: 'The &lt;h1&gt; tag has a color of red.'
-                        test: ({frameBody, cleanHtml}) -> frameBody.find('h1').css('color') == 'red'
-                    }
-                ]
+            # }, {
+            #     id: 1381015611155
+            #     challenge: '''
+            #         Figure out how to add "Brown" to the list.
+            #     '''
+            #     editors: [
+            #         {
+            #             title: 'Page HTML'
+            #             type: 'html'
+            #             code: '''
+            #                 <html>
+            #                   <body>
+            #                     <h1>An Unordered List</h1>
+            #                     <ul>
+            #                         <li>Red</li>
+            #                         <li>Green</li>
+            #                         <li>Blue</li>
+            #                         <li>Black</li>
+            #                     </ul>
+            #                   </body>
+            #                 </html>
+            #             '''
+            #         }
+            #     ]
+            #     description: '''
+            #         <p>
+            #             There are many html tags, each look a little different.
+            #         </p>
+            #         <p>
+            #             You can find a list of available html tags by googling 
+            #             <a href='https://www.google.com/search?q=html+tags' target='_blank'>html tags</a>
+            #         </p>
+            #     '''
+            #     hints: [
+            #         'Some tags have tags within them.'
+            #         'Add another &lt;li&gt; to the &lt;ul&gt; tag.'
+            #         'It should look like &lt;li&gt;Brown&lt;/li&gt;.'                     
+            #     ]
+            #     tests: [
+            #         {
+            #             description: 'There is a &lt;li&gt; tag with Brown inside of it.'
+            #             test: ({frameBody, cleanHtml}) -> 
+            #                 for li in frameBody.find('li')
+            #                     html = cleanHtml(li.html())
+            #                     return true if html == 'Brown'
+            #                 return false
+            #         }
+            #     ]
             }, {
                 id: 1362074585433
                 challenge: '''
@@ -518,7 +524,55 @@ STAGES = [
                             return true
                     }
                 ]
-            }, {
+            }
+        ]
+    }
+    {
+        name: 'Basic Styles'
+        levels: [
+            {
+                id: 1362072970429
+                challenge: '''
+                    Figure out how to make the header text red.
+                '''
+                editors: [
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 style='color: green'>Playing With Tags</h1>
+                                <p>
+                                  Html tags can contain attributes that modify the behavior of the tag.
+                                </p>
+                                <p>
+                                  This is an example of an attribute modifying the tags style.
+                                </p>
+                                <p>
+                                  The 'style' attribute with a value of 'color: green' is making the &lt;h1&gt; turn green.
+                                </p>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        You can modify the attributes of a given tag by adding different attributes within the tag.
+                    </p>
+                '''
+                hints: [
+                    'Look for the word \'green\' in the html.'
+                    'Change the word \'green\' to the word \'red\'.'
+                ]
+                tests: [
+                    {
+                        description: 'The &lt;h1&gt; tag has a color of red.'
+                        test: ({frameBody, cleanHtml}) -> frameBody.find('h1').css('color') == 'red'
+                    }
+                ]
+            },{
                 id: 1363103796080
                 challenge: '''
                     Figure out how to stretch the Puzzle School logo so that it is 200px tall.
@@ -569,6 +623,123 @@ STAGES = [
                     }
                 ]
             }
+        ]
+    }
+    {
+        name: 'Javascript: Some Simple Exercises'
+        levels: [
+            {
+                id: 1381036475100
+                challenge: '''
+                    Figure out how to change the text in the header from "Welcome" to "Hello World".
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var header = document.getElementById('header');
+                            header.innerHTML = 'Welcome';
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Welcome</h1>
+                                <p>
+                                  Javascript lets you perform dynamic and interactive actions.
+                                </p>
+                                <p>
+                                  In this case we're just changing the html inside the h1 element.
+                                </p>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript lets you dynamically change the content of a page.
+                    </p>
+                    <p>
+                        In this case we are changing the html inside the h1 tag with the id, "header".
+                    </p>
+                    <p>
+                        The innerHTML property on the h1 tag can be changed through javascript.
+                    </p>
+                '''
+                hints: [
+                    'The innerHTML property lets you set the html inside a tag.'
+                    'Set the innerHTML property to "Hello World", instead of "Welcome".'
+                ]
+                tests: [
+                    {
+                        description: 'The content contains an &lt;h1&gt; tag with html content \'Hello World\'.'
+                        test: ({frameBody, cleanHtml}) -> 
+                            cleanHtml(frameBody.find('h1').html()) == 'hello world'
+                    }
+                ]                
+            }, {
+                id: 1381037360102
+                challenge: '''
+                    Figure out how to change the color of the header tag to green.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var header = document.getElementById('header');
+                            header.style.backgroundColor = 'red';
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Welcome</h1>
+                                <p>
+                                  Javascript gives you access to all aspects of the html.
+                                </p>
+                                <p>
+                                  In this case we're changing the backgroundColor of the h1 element.
+                                </p>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        There are many attributes that you can access about every html tag.
+                    </p>
+                    <p>
+                        In this case we are changing the backgroundColor of the element.
+                    </p>
+                    <p>
+                        We can access the backgroundColor through the style attribute.
+                    </p>
+                '''
+                hints: [
+                    'The style attribute lets us change all aspects of an element\'s style.'
+                    'We can change the backgroundColor property of the style attribute.'
+                    'Change the backgroundColor to "green" instead of "red".'
+                ]
+                tests: [
+                    {
+                        description: 'The backgroundColor of the &lt;h1&gt; tag is \'green\'.'
+                        test: ({frameBody, cleanHtml}) -> 
+                            frameBody.find('h1').css('backgroundColor') == 'green'
+                    }
+                ]
+                
+            }
+            
         ]
     }
     {
