@@ -702,7 +702,7 @@ STAGES = [
                         code: '''
                             <html>
                               <body>
-                                <h1 id='header'>Welcome</h1>
+                                <h1 id='header'>Playing With Attributes</h1>
                                 <p>
                                   Javascript gives you access to all aspects of the html.
                                 </p>
@@ -737,7 +737,54 @@ STAGES = [
                             frameBody.find('h1').css('backgroundColor') == 'green'
                     }
                 ]
-                
+            }, {
+                id: 1381038695554
+                challenge: '''
+                    Figure out how to increase the width of the box to 300px.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var box = document.getElementById('box');
+                            box.style.backgroundColor = 'green';
+                            box.style.width = '100px';
+                            box.style.height = '100px';
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Drawing A Box</h1>
+                                <div id='box'></div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        This is a simple example of drawing something in javascript.
+                    </p>
+                    <p>
+                        We\'ve drawn a simple box and can manipulate it\'s color, height, width, etc.
+                    </p>
+                '''
+                hints: [
+                    'The width attribute controls with width of the div.'
+                    'Change the width attribute to be \'300px\' instead of \'100px\'.'
+                ]
+                tests: [
+                    {
+                        description: 'The &lt;div&gt; with an id of \'box\' has a width of 300px.'
+                        test: ({frameBody, cleanHtml}) -> 
+                            frameBody.find('#box').width() == 300
+                    }
+                ]
             }
             
         ]
