@@ -685,6 +685,187 @@ STAGES = [
                             return false
                     }
                 ]
+            },{
+                id: 1381172866233
+                challenge: '''
+                    Figure out make the header red, shrink it's font size, and remove the italics using css.
+                '''
+                editors: [
+                    {
+                        title: 'Page CSS'
+                        type: 'css'
+                        code: '''
+                            #header {
+                                color: green;
+                                font-size: 30px;
+                                font-style: italic;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Playing With CSS</h1>
+                                <p>
+                                    You can change the appearance of html elements in many ways using css.
+                                </p>
+                                <p>
+                                    Here we are modifying the appearance of the header in a few different ways.
+                                </p>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                      CSS lets you change the appearance of html elements in many ways.
+                    </p>
+                    <p>
+                      There are many, many properties you can change about each element.
+                    </p>
+                    <p>
+                      You can find a full list of css properties <a href='http://www.w3schools.com/cssref/' target='_blank'>here</a>.
+                    </p>
+                '''
+                hints: [
+                    'In order to reduce the fontSize you\'ll need to set it to a lower number of px.'
+                    'In order to remove the italics simply delete that line from the css.'
+                    '''
+                    The css should look like this:<br/>
+                    <br/>
+                    #header {<br/>
+                    &nbsp; &nbsp; color: red;<br/>
+                    &nbsp; &nbsp; font-size: 20px;<br/>
+                    }                    
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The h1 element with an id of \'header\' is red.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if frameBody.find('#header').css('color') == 'rgb(255, 0, 0)'                            
+                            return false
+                    }
+                    {
+                        description: 'The h1 element with an id of \'header\' has a font size less than 30px.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if parseInt(frameBody.find('#header').css('fontSize')) < 30                          
+                            return false
+                    }
+                    {
+                        description: 'The h1 element with an id of \'header\' is not italic.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if frameBody.find('#header').css('fontStyle') != 'italic'                            
+                            return false
+                    }
+                ]
+            },{
+                id: 1381178816174
+                challenge: '''
+                    Figure out make all boxes in the first row 'blue' and all boxes in the second row 'green'.
+                '''
+                editors: [
+                    {
+                        title: 'Page CSS'
+                        type: 'css'
+                        code: '''
+                            .row {
+                                overflow: hidden;
+                                margin: 12px 0;
+                            }
+                            
+                            .box {
+                                width: 30px;
+                                height: 30px;
+                                float: left;
+                                margin-right: 12px;
+                            }
+                            
+                            .row1 .box {
+                                background-color: red;
+                            }
+
+                            .row2 .box {
+                                background-color: red;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>CSS Classes</h1>
+                                <p>
+                                  You can give html elements on the page a class to group them together.
+                                </p>
+                                <p>
+                                  With classes you can change the appearance of a group of elements in the css.
+                                </p>
+                                <div class='row row1'>
+                                    <div class='box'></div>
+                                    <div class='box'></div>
+                                    <div class='box'></div>
+                                </div>
+                                <div class='row row2'>
+                                    <div class='box'></div>
+                                    <div class='box'></div>
+                                    <div class='box'></div>
+                                </div>                                
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                      Adding one or more classes to an html element allows you to reference a group of elements in css.
+                    </p>
+                    <p>
+                      A div with multiple classes looks like this: &lt;div class='class1 class2'&gt;&lt;/div&gt;
+                    </p>
+                    <p>
+                      In the css you can reference the div using .class1 or .class2
+                    </p>
+                '''
+                hints: [
+                    'Adding a class to an element lets you reference it in the css.'
+                    '''
+                    In this case we can reference each row of boxes using .row1 .box and .row2 .box
+                    <br/><br/>
+                    This means "find all elements with a class of 'box' within any element with a class of 'row1'"
+                    '''
+                    '''
+                    Use this code in the css:
+                    <br/>
+                    .row1 .box {<br/>
+                    &nbsp; &nbsp; background-color: blue;<br/>
+                    }<br/>
+                    <br/>
+                    .row2 .box {<br/>
+                    &nbsp; &nbsp; background-color: green;<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The first row of &lt;div&gt; elements are blue.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if frameBody.find('.row1 .box').css('backgroundColor') == 'rgb(0, 0, 255)'                            
+                            return false
+                    }
+                    {
+                        description: 'The second row of &lt;div&gt; elements are green.'
+                        test: ({frameBody, cleanHtml}) => 
+                            return true if frameBody.find('.row2 .box').css('backgroundColor') == 'rgb(0, 128, 0)'                            
+                            return false
+                    }
+                ]
             }
         ]
     }

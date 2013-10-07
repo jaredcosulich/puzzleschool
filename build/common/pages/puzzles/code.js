@@ -564,6 +564,94 @@ STAGES = [
             }
           }
         ]
+      }, {
+        id: 1381172866233,
+        challenge: 'Figure out make the header red, shrink it\'s font size, and remove the italics using css.',
+        editors: [
+          {
+            title: 'Page CSS',
+            type: 'css',
+            code: '#header {\n    color: green;\n    font-size: 30px;\n    font-style: italic;\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>Playing With CSS</h1>\n    <p>\n        You can change the appearance of html elements in many ways using css.\n    </p>\n    <p>\n        Here we are modifying the appearance of the header in a few different ways.\n    </p>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n  CSS lets you change the appearance of html elements in many ways.\n</p>\n<p>\n  There are many, many properties you can change about each element.\n</p>\n<p>\n  You can find a full list of css properties <a href=\'http://www.w3schools.com/cssref/\' target=\'_blank\'>here</a>.\n</p>',
+        hints: ['In order to reduce the fontSize you\'ll need to set it to a lower number of px.', 'In order to remove the italics simply delete that line from the css.', 'The css should look like this:<br/>\n<br/>\n#header {<br/>\n&nbsp; &nbsp; color: red;<br/>\n&nbsp; &nbsp; font-size: 20px;<br/>\n}                    '],
+        tests: [
+          {
+            description: 'The h1 element with an id of \'header\' is red.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (frameBody.find('#header').css('color') === 'rgb(255, 0, 0)') {
+                return true;
+              }
+              return false;
+            }
+          }, {
+            description: 'The h1 element with an id of \'header\' has a font size less than 30px.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (parseInt(frameBody.find('#header').css('fontSize')) < 30) {
+                return true;
+              }
+              return false;
+            }
+          }, {
+            description: 'The h1 element with an id of \'header\' is not italic.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (frameBody.find('#header').css('fontStyle') !== 'italic') {
+                return true;
+              }
+              return false;
+            }
+          }
+        ]
+      }, {
+        id: 1381178816174,
+        challenge: 'Figure out make all boxes in the first row \'blue\' and all boxes in the second row \'green\'.',
+        editors: [
+          {
+            title: 'Page CSS',
+            type: 'css',
+            code: '.row {\n    overflow: hidden;\n    margin: 12px 0;\n}\n\n.box {\n    width: 30px;\n    height: 30px;\n    float: left;\n    margin-right: 12px;\n}\n\n.row1 .box {\n    background-color: red;\n}\n\n.row2 .box {\n    background-color: red;\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>CSS Classes</h1>\n    <p>\n      You can give html elements on the page a class to group them together.\n    </p>\n    <p>\n      With classes you can change the appearance of a group of elements in the css.\n    </p>\n    <div class=\'row row1\'>\n        <div class=\'box\'></div>\n        <div class=\'box\'></div>\n        <div class=\'box\'></div>\n    </div>\n    <div class=\'row row2\'>\n        <div class=\'box\'></div>\n        <div class=\'box\'></div>\n        <div class=\'box\'></div>\n    </div>                                \n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n  Adding one or more classes to an html element allows you to reference a group of elements in css.\n</p>\n<p>\n  A div with multiple classes looks like this: &lt;div class=\'class1 class2\'&gt;&lt;/div&gt;\n</p>\n<p>\n  In the css you can reference the div using .class1 or .class2\n</p>',
+        hints: ['Adding a class to an element lets you reference it in the css.', 'In this case we can reference each row of boxes using .row1 .box and .row2 .box\n<br/><br/>\nThis means "find all elements with a class of \'box\' within any element with a class of \'row1\'"', 'Use this code in the css:\n<br/>\n.row1 .box {<br/>\n&nbsp; &nbsp; background-color: blue;<br/>\n}<br/>\n<br/>\n.row2 .box {<br/>\n&nbsp; &nbsp; background-color: green;<br/>\n}'],
+        tests: [
+          {
+            description: 'The first row of &lt;div&gt; elements are blue.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (frameBody.find('.row1 .box').css('backgroundColor') === 'rgb(0, 0, 255)') {
+                return true;
+              }
+              return false;
+            }
+          }, {
+            description: 'The second row of &lt;div&gt; elements are green.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              if (frameBody.find('.row2 .box').css('backgroundColor') === 'rgb(0, 128, 0)') {
+                return true;
+              }
+              return false;
+            }
+          }
+        ]
       }
     ]
   }, {
