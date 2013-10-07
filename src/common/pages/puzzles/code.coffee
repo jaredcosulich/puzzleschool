@@ -808,6 +808,7 @@ STAGES = [
                                 <h1 id='header'>A Little Math</h1>
                                 <p>One of the most useful applications of programming is to do calculations.</p>
                                 <h3>119 + 271 = <span id='result'></span></h3>
+                                <p>You can use other mathematical operators (+ - * / = ^ %) in javascript as well.</p>
                               </body>
                             </html>
                         '''
@@ -833,6 +834,60 @@ STAGES = [
                         description: "The &lt;span&gt; with an id of \'result\' has innerHTML set to #{119 + 271}."
                         test: ({frameBody, cleanHtml}) -> 
                             frameBody.find('#result').html() == "#{119 + 271}"
+                    }
+                ]
+            }, {
+                id: 1381166315709
+                challenge: '''
+                    Figure out how to calculate and display the square root of 719.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var result = document.getElementById('result');
+                            result.innerHTML = Math.sqrt(9);
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>The Math Object</h1>
+                                <p>There are a few native objects in javascript like the Math object.</p>
+                                <p>The Math object lets you perform calculations such as square roots.</p>
+                                <h3>The square root of 719 = <span id='result'></span></h3>
+                                <p>
+                                    You can see a list of methods that the Math Object provides 
+                                    <a href='http://www.w3schools.com/jsref/jsref_obj_math.asp' target='_blank'>here</a>.
+                                <p>
+                              </body> 
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Javascript provides a number of native objects such as the Math object.
+                    </p>
+                    <p>
+                        You can find out more about the Math object 
+                        <a href='http://www.w3schools.com/jsref/jsref_obj_math.asp' target='_blank'>here</a>.
+                    </p>
+                '''
+                hints: [
+                    'The Math object lets you perform more complex calculations.'
+                    'Math.sqrt() lets you calculate the square root of a number.'
+                    'Set the innerHTML of the result span to Math.sqrt(719).'
+                ]
+                tests: [
+                    {
+                        description: "The &lt;span&gt; with an id of \'result\' has innerHTML set to #{Math.sqrt(719)}."
+                        test: ({frameBody, cleanHtml}) -> 
+                            frameBody.find('#result').html() == "#{Math.sqrt(719)}"
                     }
                 ]
             }
