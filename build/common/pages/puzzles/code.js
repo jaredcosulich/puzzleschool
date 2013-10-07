@@ -593,7 +593,7 @@ STAGES = [
           {
             title: 'Page Javascript',
             type: 'javascript',
-            code: 'var box = document.getElementById(\'box\');\nbox.style.backgroundColor = \'green\';\nbox.style.width = \'100px\';\nbox.style.height = \'100px\';'
+            code: 'var box = document.getElementById(\'box\');\nbox.style.backgroundColor = \'red\';\nbox.style.width = \'100px\';\nbox.style.height = \'100px\';'
           }, {
             title: 'Page HTML',
             type: 'html',
@@ -609,6 +609,32 @@ STAGES = [
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               return frameBody.find('#box').width() === 300;
+            }
+          }
+        ]
+      }, {
+        id: 1381163443472,
+        challenge: 'Figure out how to calculate and display the result of 119 + 271 on the page.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var result = document.getElementById(\'result\');\nresult.innerHTML = 1 + 2;'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1 id=\'header\'>A Little Math</h1>\n    <p>One of the most useful applications of programming is to do calculations.</p>\n    <h3>119 + 271 = <span id=\'result\'></span></h3>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    This is a simple example of using javascript to perform a mathematical calculation.\n</p>\n<p>\n    We\'re performing a basic addition calculation and displaying the result.\n</p>\n<p>\n    You can use many mathematical operators (+ - * / = ^ %) directly in javascript.\n</p>',
+        hints: ['You can do math in javascript by simply using the plus sign (+).', 'Set the innerHTML of the result span to 119 + 271.'],
+        tests: [
+          {
+            description: "The &lt;span&gt; with an id of \'result\' has innerHTML set to " + (119 + 271) + ".",
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              return frameBody.find('#result').html() === ("" + (119 + 271));
             }
           }
         ]
@@ -754,7 +780,6 @@ STAGES = [
         ]
       }, {
         id: 1363805134953,
-        lockedBy: [1363805122021],
         challenge: 'Figure out how to make the header turn green in one second and then red one second later.',
         editors: [
           {

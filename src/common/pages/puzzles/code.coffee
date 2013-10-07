@@ -748,7 +748,7 @@ STAGES = [
                         type: 'javascript'
                         code: '''
                             var box = document.getElementById('box');
-                            box.style.backgroundColor = 'green';
+                            box.style.backgroundColor = 'red';
                             box.style.width = '100px';
                             box.style.height = '100px';
                         '''
@@ -783,6 +783,56 @@ STAGES = [
                         description: 'The &lt;div&gt; with an id of \'box\' has a width of 300px.'
                         test: ({frameBody, cleanHtml}) -> 
                             frameBody.find('#box').width() == 300
+                    }
+                ]
+            }, {
+                id: 1381163443472
+                challenge: '''
+                    Figure out how to calculate and display the result of 119 + 271 on the page.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var result = document.getElementById('result');
+                            result.innerHTML = 1 + 2;
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>A Little Math</h1>
+                                <p>One of the most useful applications of programming is to do calculations.</p>
+                                <h3>119 + 271 = <span id='result'></span></h3>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        This is a simple example of using javascript to perform a mathematical calculation.
+                    </p>
+                    <p>
+                        We\'re performing a basic addition calculation and displaying the result.
+                    </p>
+                    <p>
+                        You can use many mathematical operators (+ - * / = ^ %) directly in javascript.
+                    </p>
+                '''
+                hints: [
+                    'You can do math in javascript by simply using the plus sign (+).'
+                    'Set the innerHTML of the result span to 119 + 271.'
+                ]
+                tests: [
+                    {
+                        description: "The &lt;span&gt; with an id of \'result\' has innerHTML set to #{119 + 271}."
+                        test: ({frameBody, cleanHtml}) -> 
+                            frameBody.find('#result').html() == "#{119 + 271}"
                     }
                 ]
             }
@@ -1033,7 +1083,6 @@ STAGES = [
             },
             {
                 id: 1363805134953
-                lockedBy: [1363805122021]
                 challenge: '''
                     Figure out how to make the header turn green in one second and then red one second later.
                 '''
