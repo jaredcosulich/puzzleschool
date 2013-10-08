@@ -794,7 +794,34 @@ STAGES = [
     levels: [
       {
         id: 1381167499496,
-        challenge: ''
+        challenge: 'Figure out how to create 5 square boxes instead of 3.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'for (var i=0; i<3; ++i) {\n    var box = document.createElement(\'DIV\');\n    box.className = \'box\';\n    document.getElementById(\'boxes\').appendChild(box);\n}'
+          }, {
+            title: 'Page CSS',
+            type: 'css',
+            code: '.boxes {\n    overflow: hidden;\n}\n\n.box {\n    float: left;\n    width: 40px;\n    height: 40px;\n    background-color: red;\n    margin-right: 12px;\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>A For-Loop</h1>\n    <p>\n        For-Loops allow us to execute the same code multiple times.\n    </p>\n    <p>\n        In this case we are using one to draw multiple squares on the page.\n    </p>\n    <div id=\'boxes\'>\n    </div>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    For-Loops allow us to execute the same code multiple times.\n</p>\n<p>\n    They are one of the fundamental building blocks of programming.\n</p>\n<p>\n    A for-loop looks like this:\n</p>\n<p>\n    for (var i=0; i<3; ++i) {<br/>\n    &nbsp; &nbsp; // code to execute<br/>\n    }\n</p>\n<p>\n    This will execute the code 3 times, once when i = 0, and again when i = 1 and i = 2.',
+        hints: ['For-loops execute the same code multiple times.', 'You can change how many times the code is executed by adjusting the "i&lt;3" section.', 'To create 5 boxes you need to change "i&lt;3" to "i&lt;5"', 'The for-loop should look like this:<br/>\nfor (var i=0; i<5; ++i) {<br/>\n    &nbsp; &nbsp; // code<br/>\n}'],
+        tests: [
+          {
+            description: 'There are 5 divs each with a className of \'box\'.',
+            test: function(_arg) {
+              var cleanHtml, frameBody;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              return frameBody.find('.box').length === 5;
+            }
+          }
+        ]
       }, {
         id: 1363033903127,
         challenge: 'Figure out how to fill in each box with a different color when the button is clicked.',

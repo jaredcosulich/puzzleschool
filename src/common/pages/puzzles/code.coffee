@@ -1144,8 +1144,93 @@ STAGES = [
             {
                 id: 1381167499496
                 challenge: '''
-                    
+                    Figure out how to create 5 square boxes instead of 3.
                 '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            for (var i=0; i<3; ++i) {
+                                var box = document.createElement('DIV');
+                                box.className = 'box';
+                                document.getElementById('boxes').appendChild(box);
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page CSS'
+                        type: 'css'
+                        code: '''
+                            .boxes {
+                                overflow: hidden;
+                            }
+                            
+                            .box {
+                                float: left;
+                                width: 40px;
+                                height: 40px;
+                                background-color: red;
+                                margin-right: 12px;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>A For-Loop</h1>
+                                <p>
+                                    For-Loops allow us to execute the same code multiple times.
+                                </p>
+                                <p>
+                                    In this case we are using one to draw multiple squares on the page.
+                                </p>
+                                <div id='boxes'>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        For-Loops allow us to execute the same code multiple times.
+                    </p>
+                    <p>
+                        They are one of the fundamental building blocks of programming.
+                    </p>
+                    <p>
+                        A for-loop looks like this:
+                    </p>
+                    <p>
+                        for (var i=0; i<3; ++i) {<br/>
+                        &nbsp; &nbsp; // code to execute<br/>
+                        }
+                    </p>
+                    <p>
+                        This will execute the code 3 times, once when i = 0, and again when i = 1 and i = 2.
+                '''
+                hints: [
+                    'For-loops execute the same code multiple times.'
+                    'You can change how many times the code is executed by adjusting the "i&lt;3" section.'
+                    'To create 5 boxes you need to change "i&lt;3" to "i&lt;5"'
+                    '''
+                    The for-loop should look like this:<br/>
+                    for (var i=0; i<5; ++i) {<br/>
+                        &nbsp; &nbsp; // code<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'There are 5 divs each with a className of \'box\'.'
+                        test: ({frameBody, cleanHtml}) => 
+                            frameBody.find('.box').length == 5
+                    }
+                ]
             }
             {
                 id: 1363033903127
