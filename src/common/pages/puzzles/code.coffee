@@ -1381,293 +1381,379 @@ STAGES = [
                             return true
                     }
                 ]
-            }, {
-                id: 1363033903127
-                challenge: '''
-                    Figure out how to fill in each box with a different color when the button is clicked.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'];
-                            var button = document.getElementById('color_button');
-                            button.onclick = function() {
-                              var box = document.getElementById('box0');
-                              box.style.backgroundColor = colors[0];
-                            }
-                        '''
-                    }
-                    {
-                        title: 'Page CSS'
-                        type: 'css'
-                        code: '''
-                            .boxes {
-                                overflow: hidden;
-                                margin-bottom: 12px;
-                            }
-                            
-                            .box {
-                                float: left;
-                                width: 66px;
-                                height: 60px;
-                                border: 1px solid #ccc;
-                                margin: 0 6px 6px 0;
-                            }
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1>Loops and Arrays</h1>
-                                <p>
-                                    In this challenge we're working with an array of colors that we want to use
-                                    to assign to the backgroundColor of each box below.
-                                </p>
-                                <p>
-                                    To learn more about arrays, try <a href='https://www.google.com/search?q=javascript+array' target='_new'>googling arrays</a>.
-                                </p>
-                                <p>
-                                    You may also want to consider <a href='https://www.google.com/search?q=javascript+for+loop' target='_new'>googling for-loops</a> as
-                                    a for-loop would be useful in this challenge.
-                                </p>
-                                <div class='boxes'>
-                                    <div class='box' id='box0'></div>
-                                    <div class='box' id='box1'></div>
-                                    <div class='box' id='box2'></div>
-                                    <div class='box' id='box3'></div>
-                                    <div class='box' id='box4'></div>
-                                    <div class='box' id='box5'></div>
-                                    <div class='box' id='box6'></div>
-                                </div>
-                                <button id='color_button'>Click Me</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        This level introduces two newish concepts, arrays and for-loops.
-                    </p>
-                    <p>
-                        The array is this line: var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'].
-                    </p>
-                    <p>
-                        It allows you store a bunch of different objects in one container that can be iterated over.
-                    </p>
-                    <p>
-                        In order to iterate over an array you would use a for-loop.
-                    </p>
-                    <p>
-                        With a for-loop you run a section of code multiple times, often with a different element
-                        of the array each time.
-                    </p>
-                    <p>
-                        It's all a little hard to explain. You'll understand it more as you try using arrays and for-loops in
-                        future challenges. If you'd like to learn more now try 
-                        <a href='https://www.google.com/search?q=javascript+array' target='_new'>googling arrays</a> and
-                        <a href='https://www.google.com/search?q=javascript+for+loop' target='_new'>googling for-loops</a>.
-                    </p>
-                '''
-                hints: [
-                    'This challenge only requires a few lines of code if you use a for-loop.'
-                    'A for loop allows you to iterate over the colors in the array, assigning each color to a box.'
-                    'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }'
-                    '''
-                    This code will do the trick:<br/>
-                    <span class='code_sample'>
-                    for (var i=0; i&lt;colors.length; ++i) {<br/>
-                    &nbsp;&nbsp;var box = document.getElementById('box' + i);<br/>
-                    &nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>
-                    }
-                    </span>
-                    '''
-                ]
-                tests: [
-                    {
-                        description: 'Each box has a different background color.'
-                        test: ({frameBody, cleanHtml}) => 
-                            allDifferent = true
-                            colors = {}
-                            for box in frameBody.find('.box')
-                                color = $(box).css('backgroundColor')
-                                if not color?.length or colors[color]
-                                    allDifferent = false
-                                    break
-                                else
-                                    colors[color] = true
-                            
-                            if allDifferent
-                                clearInterval(@testInterval)
-                                return true 
-                                
-                            return false if @testInterval
-                            @testInterval = setInterval(window.retest, 100)
-                            return false
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null                    
-                    }
-                ]
-            },
-            {
-                id: 1363042104392
-                lockedBy: [1363033903127]
-                challenge: '''
-                    Figure out how to make the second button fill in the colors like the first button but in reverse order.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'];
-                            var button1 = document.getElementById('color_button1');
-                            button1.onclick = function() {
-                              for (var i=0; i<colors.length; ++i) {
-                                var box = document.getElementById('box1' + i);
-                                box.style.backgroundColor = colors[i];                                  
-                              }
-                            }
-                        '''
-                    }
-                    {
-                        title: 'Page CSS'
-                        type: 'css'
-                        code: '''
-                            .boxes {
-                                overflow: hidden;
-                                margin-bottom: 12px;
-                            }
-                            
-                            .box {
-                                float: left;
-                                width: 66px;
-                                height: 60px;
-                                border: 1px solid #ccc;
-                                margin: 0 6px 6px 0;
-                            }
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1>A Reverse Loop</h1>
-                                <p>
-                                    Ok, now you've got to figure out how to make the colors display in reverse 
-                                    when the second button is clicked.
-                                </p>
-                                <p>
-                                    For this challenge, once you think you've written the code properly, click
-                                    'Run Tests' above to have the system validate the results.
-                                </p>
-                                <div class='boxes boxes1'>
-                                    <div class='box' id='box10'></div>
-                                    <div class='box' id='box11'></div>
-                                    <div class='box' id='box12'></div>
-                                    <div class='box' id='box13'></div>
-                                    <div class='box' id='box14'></div>
-                                    <div class='box' id='box15'></div>
-                                    <div class='box' id='box16'></div>
-                                </div>
-                                <div class='boxes boxes2'>
-                                    <div class='box' id='box20'></div>
-                                    <div class='box' id='box21'></div>
-                                    <div class='box' id='box22'></div>
-                                    <div class='box' id='box23'></div>
-                                    <div class='box' id='box24'></div>
-                                    <div class='box' id='box25'></div>
-                                    <div class='box' id='box26'></div>
-                                </div>
-                                
-                                <button id='color_button1'>Button #1</button>
-                                <button id='color_button2'>Button #2</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                '''
-                hints: [
-                    'This challenge only requires a few lines of code if you use a for-loop.'
-                    'A for loop allows you to iterate over the colors in the array, assigning each color to a box.'
-                    'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }'
-                    '''
-                    This code will do the trick:<br/>
-                    <span class='code_sample'>
-                    for (var i=0; i&lt;colors.length; ++i) {<br/>
-                    &nbsp;&nbsp;var box = document.getElementById('box' + i);<br/>
-                    &nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>
-                    }
-                    </span>
-                    '''
-                ]
-                tests: [
-                    {
-                        description: 'When button 1 is clicked each box gets a different color.'
-                        test: ({frameBody, userSubmitted}) => 
-                            return unless userSubmitted
-                            frameBody.find('.box').css('backgroundColor', '')
-                            
-                            frameBody.find('#color_button1').trigger('click')
-                            
-                            allDifferent = true
-                            @boxColors = []
-                            colors = {}
-                            for box in frameBody.find('.boxes1 .box')
-                                color = $(box).css('backgroundColor')
-                                @boxColors.push(color)
-                                if not color?.length or colors[color]
-                                    allDifferent = false
-                                    break
-                                else
-                                    colors[color] = true
-
-                            if allDifferent
-                                return true
-                            else
-                                return false
-                                
-                        clean: =>
-                            @boxColors = null
-                    },
-                    {
-                        description: 'When button 2 is clicked the boxes get the same colors in reverse order.'
-                        test: ({frameBody, userSubmitted}) =>
-                            return unless userSubmitted 
-                    
-                            return false unless @boxColors?.length
-
-                            frameBody.find('#color_button2').trigger('click')
-
-                            reverseColors = @boxColors.reverse()
-                            reverse = true
-                            for box, index in frameBody.find('.boxes2 .box')
-                                color = $(box).css('backgroundColor')
-                                if not color?.length or color != reverseColors[index]
-                                    reverse = false
-                                    break
-                            
-                            if reverse
-                                return true 
-                            else        
-                                return false
-                            
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null                    
-                    },
-                    
-                ]
+            # }, {
+            #     id: 1381254277789
+            #     challenge: '''
+            #         Create a for-loop that displays the square of 1 - 20 (1, 4, 9, ..., 400).
+            #     '''
+            #     editors: [
+            #         {
+            #             title: 'Page Javascript'
+            #             type: 'javascript'
+            #             code: '''
+            #                 var number = document.createElement('DIV');
+            #                 number.innerHTML = Math.pow(2, 2);
+            #                 document.getElementById('numbers').appendChild(number);
+            #             '''
+            #         }
+            #         {
+            #             title: 'Page HTML'
+            #             type: 'html'
+            #             code: '''
+            #                 <html>
+            #                   <body>
+            #                     <h1>Constructing A For-Loop</h1>
+            #                     <p>
+            #                         Now it's time to try creating a for-loop from scratch.
+            #                     </p>
+            #                     <p>
+            #                         Check out the "Level Lesson" and "Level Hints" if you need some help.
+            #                     </p>
+            #                     <div id='numbers'>
+            #                     </div>
+            #                   </body>
+            #                 </html>
+            #             '''
+            #         }
+            #     ]
+            #     description: '''
+            #         <p>
+            #             A For-Loop generally follows the following syntax:
+            #         </p>
+            #         <p>
+            #             for (var i=0; i<10; ++i) {
+            #             &nbsp; &nbsp; // code
+            #             }
+            #         </p>
+            #         <p>
+            #             you could also create a for-loop that goes up by 2 (note the += instead of ++):
+            #         </p>
+            #         <p>
+            #             for (var i=0; i<10; i+=2) {
+            #             &nbsp; &nbsp; // code
+            #             }                        
+            #         </p>
+            #         <p>
+            #             Or goes down by 10:
+            #         </p>
+            #         <p>
+            #             for (var i=100; i>0; i-=10) {
+            #             &nbsp; &nbsp; // code
+            #             }                        
+            #         </p>
+            #             
+            #     '''
+            #     hints: [
+            #         'You\'ll need to wrap the code in a for-loop. Example: for (i=0; i<10; ++i) {}'
+            #         'You\'ll also need to use the variable "i" in the code within the for-loop.'
+            #         '''
+            #         Here is one complete solution:<br/>
+            #         <br/>
+            #         for (var i=1; i<=20; ++i) {<br/>
+            #         &nbsp; &nbsp; var number = document.createElement('DIV');<br/>
+            #         &nbsp; &nbsp; number.innerHTML = Math.pow(i, 2);<br/>
+            #         &nbsp; &nbsp; document.getElementById('numbers').appendChild(number);<br/>
+            #         }
+            #         '''
+            #     ]
+            #     tests: [
+            #         {
+            #             description: 'The numbers on the page are the square of each number from 1 to 20.'
+            #             test: ({frameBody, cleanHtml}) => 
+            #                 for i in [1..20]
+            #                     number = frameBody.find('#numbers div')[i]
+            #                     return false unless number
+            #                     return false unless $(number).html() == "#{i ^ 2}"
+            #                 return true
+            #         }
+            #     ]
+            #}, {
+            #     id: 1363033903127
+            #     challenge: '''
+            #         Figure out how to fill in each box with a different color when the button is clicked.
+            #     '''
+            #     editors: [
+            #         {
+            #             title: 'Page Javascript'
+            #             type: 'javascript'
+            #             code: '''
+            #                 var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'];
+            #                 var button = document.getElementById('color_button');
+            #                 button.onclick = function() {
+            #                   var box = document.getElementById('box0');
+            #                   box.style.backgroundColor = colors[0];
+            #                 }
+            #             '''
+            #         }
+            #         {
+            #             title: 'Page CSS'
+            #             type: 'css'
+            #             code: '''
+            #                 .boxes {
+            #                     overflow: hidden;
+            #                     margin-bottom: 12px;
+            #                 }
+            #                 
+            #                 .box {
+            #                     float: left;
+            #                     width: 66px;
+            #                     height: 60px;
+            #                     border: 1px solid #ccc;
+            #                     margin: 0 6px 6px 0;
+            #                 }
+            #             '''
+            #         }
+            #         {
+            #             title: 'Page HTML'
+            #             type: 'html'
+            #             code: '''
+            #                 <html>
+            #                   <body>
+            #                     <h1>Loops and Arrays</h1>
+            #                     <p>
+            #                         In this challenge we're working with an array of colors that we want to use
+            #                         to assign to the backgroundColor of each box below.
+            #                     </p>
+            #                     <p>
+            #                         To learn more about arrays, try <a href='https://www.google.com/search?q=javascript+array' target='_new'>googling arrays</a>.
+            #                     </p>
+            #                     <p>
+            #                         You may also want to consider <a href='https://www.google.com/search?q=javascript+for+loop' target='_new'>googling for-loops</a> as
+            #                         a for-loop would be useful in this challenge.
+            #                     </p>
+            #                     <div class='boxes'>
+            #                         <div class='box' id='box0'></div>
+            #                         <div class='box' id='box1'></div>
+            #                         <div class='box' id='box2'></div>
+            #                         <div class='box' id='box3'></div>
+            #                         <div class='box' id='box4'></div>
+            #                         <div class='box' id='box5'></div>
+            #                         <div class='box' id='box6'></div>
+            #                     </div>
+            #                     <button id='color_button'>Click Me</button>
+            #                   </body>
+            #                 </html>
+            #             '''
+            #         }
+            #     ]
+            #     description: '''
+            #         <p>
+            #             This level introduces two newish concepts, arrays and for-loops.
+            #         </p>
+            #         <p>
+            #             The array is this line: var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'].
+            #         </p>
+            #         <p>
+            #             It allows you store a bunch of different objects in one container that can be iterated over.
+            #         </p>
+            #         <p>
+            #             In order to iterate over an array you would use a for-loop.
+            #         </p>
+            #         <p>
+            #             With a for-loop you run a section of code multiple times, often with a different element
+            #             of the array each time.
+            #         </p>
+            #         <p>
+            #             It's all a little hard to explain. You'll understand it more as you try using arrays and for-loops in
+            #             future challenges. If you'd like to learn more now try 
+            #             <a href='https://www.google.com/search?q=javascript+array' target='_new'>googling arrays</a> and
+            #             <a href='https://www.google.com/search?q=javascript+for+loop' target='_new'>googling for-loops</a>.
+            #         </p>
+            #     '''
+            #     hints: [
+            #         'This challenge only requires a few lines of code if you use a for-loop.'
+            #         'A for loop allows you to iterate over the colors in the array, assigning each color to a box.'
+            #         'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }'
+            #         '''
+            #         This code will do the trick:<br/>
+            #         <span class='code_sample'>
+            #         for (var i=0; i&lt;colors.length; ++i) {<br/>
+            #         &nbsp;&nbsp;var box = document.getElementById('box' + i);<br/>
+            #         &nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>
+            #         }
+            #         </span>
+            #         '''
+            #     ]
+            #     tests: [
+            #         {
+            #             description: 'Each box has a different background color.'
+            #             test: ({frameBody, cleanHtml}) => 
+            #                 allDifferent = true
+            #                 colors = {}
+            #                 for box in frameBody.find('.box')
+            #                     color = $(box).css('backgroundColor')
+            #                     if not color?.length or colors[color]
+            #                         allDifferent = false
+            #                         break
+            #                     else
+            #                         colors[color] = true
+            #                 
+            #                 if allDifferent
+            #                     clearInterval(@testInterval)
+            #                     return true 
+            #                     
+            #                 return false if @testInterval
+            #                 @testInterval = setInterval(window.retest, 100)
+            #                 return false
+            #             clean: =>
+            #                 clearInterval(@testInterval)
+            #                 @testInterval = null                    
+            #         }
+            #     ]
+            # },
+            # {
+            #     id: 1363042104392
+            #     lockedBy: [1363033903127]
+            #     challenge: '''
+            #         Figure out how to make the second button fill in the colors like the first button but in reverse order.
+            #     '''
+            #     editors: [
+            #         {
+            #             title: 'Page Javascript'
+            #             type: 'javascript'
+            #             code: '''
+            #                 var colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'blue'];
+            #                 var button1 = document.getElementById('color_button1');
+            #                 button1.onclick = function() {
+            #                   for (var i=0; i<colors.length; ++i) {
+            #                     var box = document.getElementById('box1' + i);
+            #                     box.style.backgroundColor = colors[i];                                  
+            #                   }
+            #                 }
+            #             '''
+            #         }
+            #         {
+            #             title: 'Page CSS'
+            #             type: 'css'
+            #             code: '''
+            #                 .boxes {
+            #                     overflow: hidden;
+            #                     margin-bottom: 12px;
+            #                 }
+            #                 
+            #                 .box {
+            #                     float: left;
+            #                     width: 66px;
+            #                     height: 60px;
+            #                     border: 1px solid #ccc;
+            #                     margin: 0 6px 6px 0;
+            #                 }
+            #             '''
+            #         }
+            #         {
+            #             title: 'Page HTML'
+            #             type: 'html'
+            #             code: '''
+            #                 <html>
+            #                   <body>
+            #                     <h1>A Reverse Loop</h1>
+            #                     <p>
+            #                         Ok, now you've got to figure out how to make the colors display in reverse 
+            #                         when the second button is clicked.
+            #                     </p>
+            #                     <p>
+            #                         For this challenge, once you think you've written the code properly, click
+            #                         'Run Tests' above to have the system validate the results.
+            #                     </p>
+            #                     <div class='boxes boxes1'>
+            #                         <div class='box' id='box10'></div>
+            #                         <div class='box' id='box11'></div>
+            #                         <div class='box' id='box12'></div>
+            #                         <div class='box' id='box13'></div>
+            #                         <div class='box' id='box14'></div>
+            #                         <div class='box' id='box15'></div>
+            #                         <div class='box' id='box16'></div>
+            #                     </div>
+            #                     <div class='boxes boxes2'>
+            #                         <div class='box' id='box20'></div>
+            #                         <div class='box' id='box21'></div>
+            #                         <div class='box' id='box22'></div>
+            #                         <div class='box' id='box23'></div>
+            #                         <div class='box' id='box24'></div>
+            #                         <div class='box' id='box25'></div>
+            #                         <div class='box' id='box26'></div>
+            #                     </div>
+            #                     
+            #                     <button id='color_button1'>Button #1</button>
+            #                     <button id='color_button2'>Button #2</button>
+            #                   </body>
+            #                 </html>
+            #             '''
+            #         }
+            #     ]
+            #     description: '''
+            #     '''
+            #     hints: [
+            #         'This challenge only requires a few lines of code if you use a for-loop.'
+            #         'A for loop allows you to iterate over the colors in the array, assigning each color to a box.'
+            #         'A for loop looks like for (var i=0; i&lt;colors.length; ++i) { ... }'
+            #         '''
+            #         This code will do the trick:<br/>
+            #         <span class='code_sample'>
+            #         for (var i=0; i&lt;colors.length; ++i) {<br/>
+            #         &nbsp;&nbsp;var box = document.getElementById('box' + i);<br/>
+            #         &nbsp;&nbsp;box.style.backgroundColor = colors[i];<br/>
+            #         }
+            #         </span>
+            #         '''
+            #     ]
+            #     tests: [
+            #         {
+            #             description: 'When button 1 is clicked each box gets a different color.'
+            #             test: ({frameBody, userSubmitted}) => 
+            #                 return unless userSubmitted
+            #                 frameBody.find('.box').css('backgroundColor', '')
+            #                 
+            #                 frameBody.find('#color_button1').trigger('click')
+            #                 
+            #                 allDifferent = true
+            #                 @boxColors = []
+            #                 colors = {}
+            #                 for box in frameBody.find('.boxes1 .box')
+            #                     color = $(box).css('backgroundColor')
+            #                     @boxColors.push(color)
+            #                     if not color?.length or colors[color]
+            #                         allDifferent = false
+            #                         break
+            #                     else
+            #                         colors[color] = true
+            # 
+            #                 if allDifferent
+            #                     return true
+            #                 else
+            #                     return false
+            #                     
+            #             clean: =>
+            #                 @boxColors = null
+            #         },
+            #         {
+            #             description: 'When button 2 is clicked the boxes get the same colors in reverse order.'
+            #             test: ({frameBody, userSubmitted}) =>
+            #                 return unless userSubmitted 
+            #         
+            #                 return false unless @boxColors?.length
+            # 
+            #                 frameBody.find('#color_button2').trigger('click')
+            # 
+            #                 reverseColors = @boxColors.reverse()
+            #                 reverse = true
+            #                 for box, index in frameBody.find('.boxes2 .box')
+            #                     color = $(box).css('backgroundColor')
+            #                     if not color?.length or color != reverseColors[index]
+            #                         reverse = false
+            #                         break
+            #                 
+            #                 if reverse
+            #                     return true 
+            #                 else        
+            #                     return false
+            #                 
+            #             clean: =>
+            #                 clearInterval(@testInterval)
+            #                 @testInterval = null                    
+            #         },
+            #         
+            #     ]
             }
         ]
     }
