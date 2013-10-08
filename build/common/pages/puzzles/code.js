@@ -810,7 +810,7 @@ STAGES = [
             code: '<html>\n  <body>\n    <h1>A For-Loop</h1>\n    <p>\n        For-Loops allow us to execute the same code multiple times.\n    </p>\n    <p>\n        In this case we are using one to draw multiple squares on the page.\n    </p>\n    <div id=\'boxes\'>\n    </div>\n  </body>\n</html>'
           }
         ],
-        description: '<p>\n    For-Loops allow us to execute the same code multiple times.\n</p>\n<p>\n    They are one of the fundamental building blocks of programming.\n</p>\n<p>\n    A for-loop looks like this:\n</p>\n<p>\n    for (var i=0; i<3; ++i) {<br/>\n    &nbsp; &nbsp; // code to execute<br/>\n    }\n</p>\n<p>\n    This will execute the code 3 times, once when i = 0, and again when i = 1 and i = 2.',
+        description: '<p>\n    For-Loops allow us to execute the same code multiple times.\n</p>\n<p>\n    They are one of the fundamental building blocks of programming.\n</p>\n<p>\n    A for-loop looks like this:\n</p>\n<p>\n    for (var i=0; i<3; ++i) {<br/>\n    &nbsp; &nbsp; // code to execute<br/>\n    }\n</p>\n<p>\n    This will execute the code 3 times, once when i = 0, and again when i = 1 and i = 2.\n</p>',
         hints: ['For-loops execute the same code multiple times.', 'You can change how many times the code is executed by adjusting the "i&lt;3" section.', 'To create 5 boxes you need to change "i&lt;3" to "i&lt;5"', 'The for-loop should look like this:<br/>\nfor (var i=0; i<5; ++i) {<br/>\n    &nbsp; &nbsp; // code<br/>\n}'],
         tests: [
           {
@@ -819,6 +819,76 @@ STAGES = [
               var cleanHtml, frameBody;
               frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
               return frameBody.find('.box').length === 5;
+            }
+          }
+        ]
+      }, {
+        id: 1381206487512,
+        challenge: 'Figure out how to display the numbers 11 - 20 on the page.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'for (var i=0; i<5; ++i) {\n    var number = document.createElement(\'DIV\');\n    number.innerHTML = i;\n    document.getElementById(\'numbers\').appendChild(number);\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>Counting With A For-Loop</h1>\n    <p>\n        We use a variable "i" in for-loops to keep track of where we are.\n    </p>\n    <p>\n        With each iteration "i" the statement "++i" causes "i" to increase by 1.\n    </p>\n    <div id=\'numbers\'>\n    </div>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    For-loops use a variable to track how many times the code in the loop should be executed.\n</p>\n<p>\n    The variable can be anything, but most often it is "i" or "j" (that\'s the convention at least).\n</p>\n<p>\n    This statement:<br/>\n    <br/>\n    for (var i=0; i<5; ++i) {<br/>\n        &nbsp; &nbsp; // code<br/>\n    }<br/>\n    <br/>\n    means "set i equal to 0, then run the code, adding 1 to i each time until i equals 5, then stop".\n</p>',
+        hints: ['The variable "i" in the for-loop controls how many times the code will run.', 'If you adjust the starting point of "i=0" and set it to "i=11", it will start counting at 11.', 'If you adjust the end point from "i<5" to "i<21" then it will end at 20.', 'The for-loop should look like this:<br/>\nfor (var i=11; i<21; ++i) {<br/>\n    &nbsp; &nbsp; // code<br/>\n}'],
+        tests: [
+          {
+            description: 'The numbers on the page count from 11 - 20.',
+            test: function(_arg) {
+              var cleanHtml, frameBody, i, number, _i;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              for (i = _i = 0; _i < 10; i = ++_i) {
+                number = frameBody.find('#numbers div')[i];
+                if (!number) {
+                  return false;
+                }
+                if ($(number).html() !== ("" + (i + 11))) {
+                  return false;
+                }
+              }
+              return true;
+            }
+          }
+        ]
+      }, {
+        id: 1381206887906,
+        challenge: 'Display the even numbers from 0 to 20 (0, 2, 4, ..., 20) on the page.',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'for (var i=0; i<5; ++i) {\n    var number = document.createElement(\'DIV\');\n    number.innerHTML = i;\n    document.getElementById(\'numbers\').appendChild(number);\n}'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>Math Within A For-Loop</h1>\n    <p>\n        Here we\'re using the variable "i" in a slightly more complex way.\n    </p>\n    <p>\n        You\'ll need to modify "i" in some way to display the even numbers from 0 - 20.\n    </p>\n    <div id=\'numbers\'>\n    </div>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    You can use the variable "i" to assist in complicated algorithms.\n</p>\n<p>\n    In this case we need to manipulate "i" in some way to only show even numbers.\n</p>\n<p>\n    You can manipulate "i" in many ways, but here we suggest some math (e.g. add 2).\n</p>',
+        hints: ['You need to figure out how to modify "i" so that it always prints an even number.', 'You also need to modify the end point of the loop so that it runs as long as necessary.', 'One solution run the loop from 0 until i<11 and set the innerHTML = i * 2.', 'Here is one complete solution:<br/>\n<br/>\nfor (var i=0; i<11; ++i) {<br/>\n&nbsp; &nbsp; var number = document.createElement(\'DIV\');<br/>\n&nbsp; &nbsp; number.innerHTML = i * 2;<br/>\n&nbsp; &nbsp; document.getElementById(\'numbers\').appendChild(number);<br/>\n}'],
+        tests: [
+          {
+            description: 'The numbers on the page count from 11 - 20.',
+            test: function(_arg) {
+              var cleanHtml, frameBody, i, number, _i;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              for (i = _i = 0; _i <= 10; i = ++_i) {
+                number = frameBody.find('#numbers div')[i];
+                if (!number) {
+                  return false;
+                }
+                if ($(number).html() !== ("" + (i * 2))) {
+                  return false;
+                }
+              }
+              return true;
             }
           }
         ]

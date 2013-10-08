@@ -1212,6 +1212,7 @@ STAGES = [
                     </p>
                     <p>
                         This will execute the code 3 times, once when i = 0, and again when i = 1 and i = 2.
+                    </p>
                 '''
                 hints: [
                     'For-loops execute the same code multiple times.'
@@ -1231,8 +1232,156 @@ STAGES = [
                             frameBody.find('.box').length == 5
                     }
                 ]
-            }
-            {
+            }, {
+                id: 1381206487512
+                challenge: '''
+                    Figure out how to display the numbers 11 - 20 on the page.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            for (var i=0; i<5; ++i) {
+                                var number = document.createElement('DIV');
+                                number.innerHTML = i;
+                                document.getElementById('numbers').appendChild(number);
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Counting With A For-Loop</h1>
+                                <p>
+                                    We use a variable "i" in for-loops to keep track of where we are.
+                                </p>
+                                <p>
+                                    With each iteration "i" the statement "++i" causes "i" to increase by 1.
+                                </p>
+                                <div id='numbers'>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        For-loops use a variable to track how many times the code in the loop should be executed.
+                    </p>
+                    <p>
+                        The variable can be anything, but most often it is "i" or "j" (that's the convention at least).
+                    </p>
+                    <p>
+                        This statement:<br/>
+                        <br/>
+                        for (var i=0; i<5; ++i) {<br/>
+                            &nbsp; &nbsp; // code<br/>
+                        }<br/>
+                        <br/>
+                        means "set i equal to 0, then run the code, adding 1 to i each time until i equals 5, then stop".
+                    </p>
+                '''
+                hints: [
+                    'The variable "i" in the for-loop controls how many times the code will run.'
+                    'If you adjust the starting point of "i=0" and set it to "i=11", it will start counting at 11.'
+                    'If you adjust the end point from "i<5" to "i<21" then it will end at 20.'
+                    '''
+                    The for-loop should look like this:<br/>
+                    for (var i=11; i<21; ++i) {<br/>
+                        &nbsp; &nbsp; // code<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The numbers on the page count from 11 - 20.'
+                        test: ({frameBody, cleanHtml}) => 
+                            for i in [0...10]
+                                number = frameBody.find('#numbers div')[i]
+                                return false unless number
+                                return false unless $(number).html() == "#{i + 11}"
+                            return true
+                    }
+                ]
+            }, {
+                id: 1381206887906
+                challenge: '''
+                    Display the even numbers from 0 to 20 (0, 2, 4, ..., 20) on the page.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            for (var i=0; i<5; ++i) {
+                                var number = document.createElement('DIV');
+                                number.innerHTML = i;
+                                document.getElementById('numbers').appendChild(number);
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Math Within A For-Loop</h1>
+                                <p>
+                                    Here we're using the variable "i" in a slightly more complex way.
+                                </p>
+                                <p>
+                                    You\'ll need to modify "i" in some way to display the even numbers from 0 - 20.
+                                </p>
+                                <div id='numbers'>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        You can use the variable "i" to assist in complicated algorithms.
+                    </p>
+                    <p>
+                        In this case we need to manipulate "i" in some way to only show even numbers.
+                    </p>
+                    <p>
+                        You can manipulate "i" in many ways, but here we suggest some math (e.g. add 2).
+                    </p>
+                '''
+                hints: [
+                    'You need to figure out how to modify "i" so that it always prints an even number.'
+                    'You also need to modify the end point of the loop so that it runs as long as necessary.'
+                    'One solution run the loop from 0 until i<11 and set the innerHTML = i * 2.'
+                    '''
+                    Here is one complete solution:<br/>
+                    <br/>
+                    for (var i=0; i<11; ++i) {<br/>
+                    &nbsp; &nbsp; var number = document.createElement('DIV');<br/>
+                    &nbsp; &nbsp; number.innerHTML = i * 2;<br/>
+                    &nbsp; &nbsp; document.getElementById('numbers').appendChild(number);<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The numbers on the page count from 11 - 20.'
+                        test: ({frameBody, cleanHtml}) => 
+                            for i in [0..10]
+                                number = frameBody.find('#numbers div')[i]
+                                return false unless number
+                                return false unless $(number).html() == "#{i * 2}"
+                            return true
+                    }
+                ]
+            }, {
                 id: 1363033903127
                 challenge: '''
                     Figure out how to fill in each box with a different color when the button is clicked.
