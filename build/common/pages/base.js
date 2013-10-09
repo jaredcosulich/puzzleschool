@@ -462,7 +462,14 @@ soma.views({
             return setTimeout((function() {
               return container.animate({
                 opacity: 0,
-                duration: 500
+                duration: 500,
+                complete: function() {
+                  container.html("<p class='success'>Success. We'll send updates to " + email + ".</p>");
+                  return container.animate({
+                    opacity: 1,
+                    duration: 500
+                  });
+                }
               });
             }), 1000);
           },

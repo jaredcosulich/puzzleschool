@@ -252,7 +252,12 @@ soma.views
                     success: () =>
                         container.find('.submit_feedback').data('form-button').success()
                         setTimeout((-> 
-                            container.animate(opacity: 0, duration: 500)
+                            container.animate
+                                opacity: 0
+                                duration: 500
+                                complete: -> 
+                                    container.html("<p class='success'>Success. We'll send updates to #{email}.</p>")
+                                    container.animate(opacity: 1, duration: 500)    
                         ), 1000)
                     error: =>
                         container.find('.submit_feedback').data('form-button').error()
