@@ -186,6 +186,7 @@ soma.chunks({
         this.loadScript('/build/common/pages/base.js');
         this.loadScript('/assets/analytics.js');
         this.template = this.loadTemplate('/build/common/templates/base.html');
+        this.emailSubscriptionTemplate = this.loadTemplate('/build/common/templates/_email_subscription.html');
       }
       return this.loadChunk(this.content);
     },
@@ -222,7 +223,8 @@ soma.chunks({
           _results1 = [];
           for (var _j = _ref = (new Date).getFullYear() - 1; _ref <= 1900 ? _j <= 1900 : _j >= 1900; _ref <= 1900 ? _j++ : _j--){ _results1.push(_j); }
           return _results1;
-        }).apply(this)
+        }).apply(this),
+        emailSubscription: wings.renderTemplate(this.emailSubscriptionTemplate)
       };
       return this.html = wings.renderTemplate(this.template, data);
     }
@@ -265,9 +267,10 @@ soma.views({
       this.$('.log_in').bind('click', function() {
         return location.hash = 'login';
       });
-      return this.$('.close_modal').bind('click', function(e) {
+      this.$('.close_modal').bind('click', function(e) {
         return _this.hideModal(e.currentTarget);
       });
+      return this.initEmailSubscription();
     },
     complete: function() {
       return this.onhashchange();
@@ -427,6 +430,55 @@ soma.views({
 
       }
       return window.onbeforeunload = null;
+    },
+    initEmailSubscription: function() {
+      var container, submitEmail,
+        _this = this;
+      container = $('.email_subscription_form');
+      submitEmail = function() {
+        var email;
+        email = $(container.find('input').map((function(a) {
+          return a;
+        }), (function(a) {
+          return $(a).val().length;
+        }))[0]).val();
+        if (!email.length) {
+          container.find('.submit_feedback').data('form-button').error();
+          return;
+        }
+        return $.ajaj({
+          url: '/api/email',
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': _this.cookies.get('_csrf', {
+              raw: true
+            })
+          },
+          data: {
+            email: email
+          },
+          success: function() {
+            container.find('.submit_feedback').data('form-button').success();
+            return setTimeout((function() {
+              return container.animate({
+                opacity: 0,
+                duration: 500
+              });
+            }), 1000);
+          },
+          error: function() {
+            return container.find('.submit_feedback').data('form-button').error();
+          }
+        });
+      };
+      container.find('input').bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+          return submitEmail();
+        }
+      });
+      return container.find('.subscribe_button').bind('click', function() {
+        return submitEmail();
+      });
     }
   }
 });

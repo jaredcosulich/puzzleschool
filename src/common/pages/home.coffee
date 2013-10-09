@@ -7,6 +7,7 @@ soma.chunks
 
         prepare: () ->
             @template = @loadTemplate '/build/common/templates/home.html'
+            @emailSubscriptionTemplate = @loadTemplate '/build/common/templates/_email_subscription.html'
 
         build: () ->
             @setTitle('The Puzzle School')
@@ -16,7 +17,7 @@ soma.chunks
             @setMeta('og:site_name', 'The Puzzle School')
             @setMeta('og:description', 'An Exploration of Learning Through Puzzles')
             
-            @html = wings.renderTemplate(@template)
+            @html = wings.renderTemplate(@template, emailSubscription: wings.renderTemplate(@emailSubscriptionTemplate))
         
 soma.views
     Home:
@@ -41,8 +42,6 @@ soma.views
                     example.animate(opacity: 1, duration: 300)                   
                     $.timeout 100, -> $(document.body).one 'click', close
             
-            
-
 soma.routes
     '': -> new soma.chunks.Home
     '/': -> new soma.chunks.Home

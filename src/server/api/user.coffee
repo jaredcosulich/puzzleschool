@@ -7,21 +7,22 @@ wings = require('wings')
 db = require('../lib/db')
 
 {checkPassword, requireUser} = require('./lib/decorators')
+{email} = require('./lib/email')
 
 registrationTemplate = """
     {name}, 
     
-    We just wanted to welcome you to Min.gl
+    I just wanted to welcome you to the Puzzle School.
     
-    Hope you enjoy it and meet some cool people.
+    We're working on a number of different projects, trying to make
+    it fun and interesting to learn a variety of material.
     
-    Really that's all we wanted to say. 
-    
-    If you have any questions, let us know.
-    
+    Please don't hesitate to reach out. We love hearing from people.
+
     Best,
-        The Min.gl Team
+        Jared
 """
+
 soma.routes
     '/api/login': checkPassword ->
         l = new Line
@@ -41,6 +42,29 @@ soma.routes
             (@user) =>
                 @cookies.set('user', @user, { signed: true })
                 @send()
+                
+    '/api/email': ->
+        return @sendError(new Error('Email was invalid')) unless @data.email and /.+@.+\..+/.test(@data.email)
+        @data.email = @data.email.toLowerCase()
+
+        l = new Line
+            error: (err) => 
+                console.log('Saving email failed:', err)
+                @sendError()
+
+            =>
+                @cookies.set('email', @data.email, { signed: true })
+                db.update 'users', 'emails', {count: {add: 1}, emails: {add: [@data.email]}}, l.wait()
+
+            =>
+                email.sendText 'The Puzzle School <support@puzzleschool.com>', 'Admin <info@puzzleschool.com>',
+                    "New Puzzle School Email",
+                    "#{@data.email}"
+                    l.wait()
+
+            => @send()
+
+        
 
     '/api/register': ->
         return @sendError(new Error('Name was invalid')) unless @data.name and /\S{3,}/.test(@data.name)
@@ -80,10 +104,13 @@ soma.routes
                 @cookies.set('user', @user, { signed: true })
                 db.put 'login', { id: @data.email, password: @data.password, user: @user.id }, l.wait()
 
-        # line => 
-        #     @email.send 'The Puzzle School <support@puzzleschool.com>', @data.email,
-        #         "#{@user.name}, Welcome",
-        #         wings.renderTemplate(registrationTemplate, @user),
-        #         l.wait()
 
+            => db.update 'users', 'data', {count: {add: 1}, ids: {add: [@user.id]}}, l.wait()
+            
+            =>
+                email.sendText 'The Puzzle School <support@puzzleschool.com>', 'Admin <info@puzzleschool.com>',
+                    "New Puzzle School User",
+                    "#{@user.email}, #{@user.name}, #{@user.birthday}"
+                    l.wait()
+                    
             => @send()

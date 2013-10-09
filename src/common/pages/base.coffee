@@ -95,6 +95,7 @@ soma.chunks
                 @loadScript '/assets/analytics.js'
                         
                 @template = @loadTemplate '/build/common/templates/base.html'
+                @emailSubscriptionTemplate = @loadTemplate '/build/common/templates/_email_subscription.html'
                 
             @loadChunk @content
 
@@ -110,6 +111,7 @@ soma.chunks
                 months: ({ label: @shortMonths[i-1], value: i } for i in [1..12])
                 days: [1..31]
                 years: [((new Date).getFullYear() - 1)..1900]
+                emailSubscription: wings.renderTemplate(@emailSubscriptionTemplate)
             
             @html = wings.renderTemplate(@template, data)
             
@@ -137,6 +139,8 @@ soma.views
             @$('.log_in').bind 'click', => location.hash = 'login'
             
             @$('.close_modal').bind 'click', (e) => @hideModal(e.currentTarget)
+            
+            @initEmailSubscription()
             
         complete: -> @onhashchange()
 
@@ -231,5 +235,30 @@ soma.views
             window.onbeforeunload = null
         
         
+        initEmailSubscription: ->
+            container = $('.email_subscription_form')
+            submitEmail = =>                
+                email =  $(container.find('input').map(((a) -> a), ((a) -> $(a).val().length))[0]).val()
+                
+                if not email.length
+                    container.find('.submit_feedback').data('form-button').error()
+                    return
+                    
+                $.ajaj
+                    url: '/api/email'
+                    method: 'POST'
+                    headers: { 'X-CSRF-Token': @cookies.get('_csrf', {raw: true}) }
+                    data: email: email
+                    success: () =>
+                        container.find('.submit_feedback').data('form-button').success()
+                        setTimeout((-> 
+                            container.animate(opacity: 0, duration: 500)
+                        ), 1000)
+                    error: =>
+                        container.find('.submit_feedback').data('form-button').error()
+
+            container.find('input').bind 'keypress', (e) => submitEmail() if e.keyCode == 13
+            container.find('.subscribe_button').bind 'click', () => submitEmail()
+    
                     
             
