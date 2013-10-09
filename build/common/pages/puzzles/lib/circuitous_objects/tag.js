@@ -48,7 +48,7 @@ tag.Tag = (function(_super) {
       return _this.shrink();
     });
     this.content = $(document.createElement('DIV'));
-    this.content.addClass('content');
+    this.content.addClass('tag_content');
     this.tag.append(this.content);
     this.smallContent = $(document.createElement('DIV'));
     this.smallContent.addClass('small_tag_content');

@@ -23,7 +23,7 @@ class tag.Tag extends circuitousObject.Object
             @shrink()
         
         @content = $(document.createElement('DIV'))
-        @content.addClass('content')
+        @content.addClass('tag_content')
         @tag.append(@content)
         
         @smallContent = $(document.createElement('DIV'))

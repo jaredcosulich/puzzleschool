@@ -655,54 +655,54 @@
   -webkit-transform: rotate(45deg);
   transition: top 0.5s ease-out;
 }
-.circuitous .component .tag .content {
+.circuitous .component .tag .tag_content {
   overflow: hidden;
   height: 30px;
   width: 51px;
   position: relative;
   transition: height 0.5s ease-out, width 0.5s ease-out;
 }
-.circuitous .component .tag .content .small_tag_content,
-.circuitous .component .tag .content .large_tag_content {
+.circuitous .component .tag .tag_content .small_tag_content,
+.circuitous .component .tag .tag_content .large_tag_content {
   position: absolute;
   top: 0;
   left: 0;
   transition: opacity 0.5s ease-out, top 0.5s ease-out;
 }
-.circuitous .component .tag .content .small_tag_content.hidden,
-.circuitous .component .tag .content .large_tag_content.hidden {
+.circuitous .component .tag .tag_content .small_tag_content.hidden,
+.circuitous .component .tag .tag_content .large_tag_content.hidden {
   opacity: 0;
 }
-.circuitous .component .tag .content .small_tag_content {
+.circuitous .component .tag .tag_content .small_tag_content {
   font-size: 11px;
   width: 51px;
   line-height: 16.5px;
   text-align: center;
 }
-.circuitous .component .tag .content .large_tag_content {
+.circuitous .component .tag .tag_content .large_tag_content {
   top: -15px;
   line-height: 25px;
   padding: 6px;
   width: 168px;
 }
-.circuitous .component .tag .content .large_tag_content .navigation {
+.circuitous .component .tag .tag_content .large_tag_content .navigation {
   float: right;
 }
-.circuitous .component .tag .content .large_tag_content input {
+.circuitous .component .tag .tag_content .large_tag_content input {
   width: 30px;
   text-align: center;
 }
 .circuitous .component .tag.large {
   left: -180px;
 }
-.circuitous .component .tag.large .content {
+.circuitous .component .tag.large .tag_content {
   width: 180px;
   height: 60px;
 }
-.circuitous .component .tag.large .content .small_tag_content {
+.circuitous .component .tag.large .tag_content .small_tag_content {
   top: 15px;
 }
-.circuitous .component .tag.large .content .large_tag_content {
+.circuitous .component .tag.large .tag_content .large_tag_content {
   top: 0;
 }
 .circuitous .component .tag.right {
