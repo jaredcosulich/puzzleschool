@@ -419,54 +419,54 @@ STAGES = [
                             html == 'such as the &lt;b&gt; tag'
                     }
                 ]
-            # }, {
-            #     id: 1381015611155
-            #     challenge: '''
-            #         Figure out how to add "Brown" to the list.
-            #     '''
-            #     editors: [
-            #         {
-            #             title: 'Page HTML'
-            #             type: 'html'
-            #             code: '''
-            #                 <html>
-            #                   <body>
-            #                     <h1>An Unordered List</h1>
-            #                     <ul>
-            #                         <li>Red</li>
-            #                         <li>Green</li>
-            #                         <li>Blue</li>
-            #                         <li>Black</li>
-            #                     </ul>
-            #                   </body>
-            #                 </html>
-            #             '''
-            #         }
-            #     ]
-            #     description: '''
-            #         <p>
-            #             There are many html tags, each look a little different.
-            #         </p>
-            #         <p>
-            #             You can find a list of available html tags by googling 
-            #             <a href='https://www.google.com/search?q=html+tags' target='_blank'>html tags</a>
-            #         </p>
-            #     '''
-            #     hints: [
-            #         'Some tags have tags within them.'
-            #         'Add another &lt;li&gt; to the &lt;ul&gt; tag.'
-            #         'It should look like &lt;li&gt;Brown&lt;/li&gt;.'                     
-            #     ]
-            #     tests: [
-            #         {
-            #             description: 'There is a &lt;li&gt; tag with Brown inside of it.'
-            #             test: ({frameBody, cleanHtml}) -> 
-            #                 for li in frameBody.find('li')
-            #                     html = cleanHtml(li.html())
-            #                     return true if html == 'Brown'
-            #                 return false
-            #         }
-            #     ]
+            }, {
+                id: 1381015611155
+                challenge: '''
+                    Figure out how to add "Brown" to the list.
+                '''
+                editors: [
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>An Unordered List</h1>
+                                <ul>
+                                    <li>Red</li>
+                                    <li>Green</li>
+                                    <li>Blue</li>
+                                    <li>Black</li>
+                                </ul>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        There are many html tags, each look a little different.
+                    </p>
+                    <p>
+                        You can find a list of available html tags by googling 
+                        <a href='https://www.google.com/search?q=html+tags' target='_blank'>html tags</a>
+                    </p>
+                '''
+                hints: [
+                    'Some tags have tags within them.'
+                    'Add another &lt;li&gt; to the &lt;ul&gt; tag.'
+                    'It should look like &lt;li&gt;Brown&lt;/li&gt;.'                     
+                ]
+                tests: [
+                    {
+                        description: 'There is a &lt;li&gt; tag with Brown inside of it.'
+                        test: ({frameBody, cleanHtml}) -> 
+                            for li in frameBody.find('li')
+                                html = cleanHtml($(li).html())
+                                return true if html?.length and html.toLowerCase() == 'brown'
+                            return false
+                    }
+                ]
             }, {
                 id: 1362074585433
                 challenge: '''
@@ -747,7 +747,8 @@ STAGES = [
                     {
                         description: 'The h1 element with an id of \'header\' is red.'
                         test: ({frameBody, cleanHtml}) => 
-                            return true if frameBody.find('#header').css('color') == 'rgb(255, 0, 0)'                            
+                            color = frameBody.find('#header').css('color')
+                            return true if color == 'rgb(255, 0, 0)' or color == 'red'                           
                             return false
                     }
                     {
@@ -856,13 +857,15 @@ STAGES = [
                     {
                         description: 'The first row of &lt;div&gt; elements are blue.'
                         test: ({frameBody, cleanHtml}) => 
-                            return true if frameBody.find('.row1 .box').css('backgroundColor') == 'rgb(0, 0, 255)'                            
+                            backgroundColor = frameBody.find('.row1 .box').css('backgroundColor')
+                            return true if backgroundColor == 'rgb(0, 0, 255)' or backgroundColor == 'blue'                         
                             return false
                     }
                     {
                         description: 'The second row of &lt;div&gt; elements are green.'
                         test: ({frameBody, cleanHtml}) => 
-                            return true if frameBody.find('.row2 .box').css('backgroundColor') == 'rgb(0, 128, 0)'                            
+                            backgroundColor = frameBody.find('.row2 .box').css('backgroundColor')
+                            return true if backgroundColor == 'rgb(0, 128, 0)' or backgroundColor == 'green'                          
                             return false
                     }
                 ]
@@ -1758,6 +1761,389 @@ STAGES = [
         ]
     }
     {
+        name: 'Javascript: Conditional Statements'
+        levels: [
+            {
+                id: 1381362477555
+                challenge: '''
+                    Figure out how to make the thrid box red instead of the second box.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            for (var i=0; i<5; ++i) {
+                                var box = document.createElement('DIV');
+                                box.className = 'box';
+                                    
+                                if (i == 1) {
+                                    box.style.backgroundColor = 'red';
+                                }   
+                                    
+                                document.getElementById('boxes').appendChild(box);
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page CSS'
+                        type: 'css'
+                        code: '''
+                            .boxes {
+                                overflow: hidden;
+                            }
+                            
+                            .box {
+                                float: left;
+                                width: 40px;
+                                height: 40px;
+                                background-color: green;
+                                margin-right: 12px;
+                            }
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>If Statements</h1>
+                                <p>
+                                    In this case we are using one to draw multiple squares on the page.
+                                </p>
+                                <div id='boxes'>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        An "if" statement, also known as a conditional statement, allows you to execute
+                        code only if certain conditions are true.
+                    </p>
+                    <p>
+                        It is one of the most commonly used statements when programming.
+                    </p>
+                    <p>
+                        One example would be to say "if it is 7am, play an alarm, else if it is 8pm, play quiet music".
+                    </p>
+                    <p>
+                        In code this might look like:<br/>
+                        <br/>
+                        if (time == '7am') {<br/>
+                        &nbsp; &nbsp; // Play an alarm<br/>
+                        } else if (time == '8pm') {<br/>
+                        &nbsp; &nbsp; // Play quiet music<br/>
+                        }<br/>
+                        <br/>
+                        (the line "time == '7am'" won't work without extra code)
+                '''
+                hints: [
+                    'One way to color a single square but not the others is to use an \'if\' statement.'
+                    'You\'ll need to change the conditional statement so that it is true under a different condition'
+                    'You\'ll want to wait until i == 2 instead of i == 1, as i == 2 means "the third square" (0, 1, 2).'
+                    '''
+                    The code should look like this:<br/>
+                    <br/>
+                    if (i == 1) {<br/>
+                    &nbsp; &nbsp; box.style.backgroundColor = 'red';<br/>
+                    }   
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The third div on the page has a red backgroundColor'
+                        test: ({frameBody, cleanHtml}) => 
+                            backgroundColor = frameBody.find('.box')[2]?.style?.backgroundColor
+                            backgroundColor == 'rgb(255, 0, 0)' or backgroundColor == 'red'
+                    }
+                ]
+            }, {
+                id: 1362673042225
+                challenge: '''
+                    Figure out how to make the header toggle from red to green by clicking the button.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('toggle_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              if (header.style.color == '') {
+                                  header.style.color = 'green';
+                              } else {
+                                  header.style.color = 'red';
+                              }
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header' style='color: red;'>Conditional Statements</h1>
+                                <p>
+                                  One of the most important tools in programming is the if/else statement.
+                                </p>
+                                <p>
+                                  An if/else statement, also known as a 'conditional statement' lets the program
+                                  decide which path to go down based on a certain condition.
+                                </p>
+                                <p>
+                                  In this example we want to make the button below change the color of the header to
+                                  green if the color is currently red or change it to red if it is currently green.
+                                </p>
+                                <p>
+                                  Figure out how to change the if/else statement so that clicking the button below
+                                  changes the color of the header to green:
+                                </p>
+                                <button id='toggle_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        One of most useful and common tools in programming is the conditional statement.
+                    </p>
+                    <p>
+                        A conditional statement basically says "if something is true then do one action, if not do another action".
+                    </p>
+                    <p>
+                        For example: "If the oven is preheated then put the food in the oven, otherwise wait."
+                    <p>
+                        In this case we're using a conditional statement to toggle the color of the header.
+                    </p>
+                '''
+                hints: [
+                    'You need to figure out what the proper conditional statement is to toggle the color of the header.'
+                    'We want to say \'if the header is red then change to green else change to red\'.'
+                    'Change this line: \'if (header.style.color == \'\') {\' to \'if (header.style.color == \'red\') {\''
+                ]
+                tests: [
+                    {
+                        description: 'The header color is green.'
+                        test: ({frameBody, cleanHtml}) =>
+                            if frameBody.find('#header').css('color') == 'green'
+                                clearInterval(@testInterval)
+                                return true 
+
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            },
+            {
+                id: 1362851805236
+                lockedBy: [1362673042225]
+                challenge: '''
+                    Figure out how to turn the header green and then yellow and then red with the same button.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var button = document.getElementById('toggle_button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              if (header.style.color == 'green') {
+                                  header.style.color = 'yellow';
+                              }
+                            };
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Complex Conditionals</h1>
+                                <p>
+                                  Conditional statements can be used to choose between more than two paths.
+                                </p>
+                                <p>
+                                  If a conditional statement is used to choose between a large number of code paths
+                                  it might be considered a "code smell" (something that might lead to problems), but
+                                  for 2-4 paths or so, it is usually appropriate.
+                                </p>
+                                <p>
+                                  Figure out how to use if/else statements to make the header go from green to yellow
+                                  to red by clicking the button below:
+                                </p>
+                                <button id='toggle_button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Conditional statements are frequently used when coding.
+                    </p>
+                    <p>
+                        They allow you to execute code only in certain situations.
+                    </p>
+                '''
+                hints: [
+                    'You need to create one or multiple conditions that lead to three different states.'
+                    'You\'ll need one conditional statement to go from black to green, one to go from green to yellow, and one to go from yellow to red.'
+                    'You can also accomplish this with a statement that uses if/else if/else.'
+                    '''
+                    Add this to the end of the existing conditional statement:<br/>
+                    } else if (header.style.color == 'yellow') {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'red';<br/>
+                    } else {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'green';<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The header toggles from green to yellow to red when you click the button 3 times.'
+                        test: ({frameBody, cleanHtml}) =>
+                            @good or= {}
+                            @good[frameBody.find('#header').css('color')] = true
+                            
+                            if @good['green'] and @good['yellow'] and @good['red']                            
+                                clearInterval(@testInterval)
+                                return true 
+
+                            return false if @testInterval
+                            @testInterval = setInterval(window.retest, 100)
+                            return false
+                        clean: =>
+                            clearInterval(@testInterval)
+                            @testInterval = null
+                    }
+                ]
+            }
+            {
+                id: 1363825098036
+                lockedBy: [1362851805236]
+                challenge: '''
+                    Figure out how to turn the header yellow when the button is clicked and the counter reads 1, 
+                    green when it reads 2, red when it reads 3, and blue when it reads 4.
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var counter = document.getElementById('counter');
+                            var button = document.getElementById('button');
+                            button.onclick = function () {
+                              var header = document.getElementById('header');
+                              if (counter.innerHTML == '1') {
+                                  header.style.color = 'red';
+                              }
+                            };
+                            
+                            
+                            if (window.counterInterval) {
+                                window.clearInterval(window.counterInterval);
+                            }
+                            window.counterInterval = setInterval(function() {
+                              if (!counter) return;
+
+                              var value = parseInt(counter.innerHTML);
+                              value += 1;
+                              if (value > 4) {
+                                value = 1;
+                              }
+                              counter.innerHTML = value;
+                              
+                            }, 1000);                        
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1 id='header'>Complex Conditionals 2</h1>
+                                <p>
+                                  Conditional statements are used frequently in programming.
+                                </p>
+                                <p>
+                                  Here we want to make the header change color depending on the innerHTML value
+                                  (the number displayed) in the counter below.
+                                </p>
+                                <p>
+                                    1 = yellow, 2 = green, 3 = red, 4 = blue
+                                </p>
+                                <h2 id='counter'>1</h2>
+                                <button id='button'>Click Me</button>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        Conditional statements are frequently used when coding.
+                    </p>
+                    <p>
+                        They allow you to execute code only in certain situations.
+                    </p>
+                '''
+                hints: [
+                    'You\'ll need to set up a conditional statement that handles all four possible scenarios.'
+                    'The conditional should start with an \'if\' followed by two \'else if\' and a closing \'else\'.'
+                    '''
+                    Code such as this would do the trick:<br/>
+                    if (counter.innerHTML == '1') {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'yellow';<br/>
+                    } else if (counter.innerHTML == '2') {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'green';<br/>
+                    } else if (counter.innerHTML == '3') {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'red';<br/>
+                    } else {<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'blue';<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The header color is either yellow, green, red, or blue depending on the number displayed in the counter.'
+                        test: ({frameBody, cleanHtml}) =>
+                            return true if @passed
+                            button = frameBody.find('#button')
+                            header = frameBody.find('#header')
+                            counter = frameBody.find('#counter')
+                            
+                            onclick = button[0].onclick
+                            button[0].onclick = null
+                            button.bind 'click', =>
+                                onclick()
+                                colors = ['', 'yellow', 'green', 'red', 'blue']
+                                index = parseInt(counter.html())
+                                @passed = header.css('color') == colors[index]
+                                window.retest()
+
+                            return false
+                        clean: =>
+                            delete @passed
+                    }
+                ]
+            }
+        ]
+    }
+    {
         name: 'Javascript: Global Functions'
         levels: [
             {
@@ -2478,291 +2864,6 @@ STAGES = [
             
         ]
     },
-    {
-        name: 'Javascript: Conditional Statements'
-        levels: [
-            {
-                id: 1362673042225
-                challenge: '''
-                    Figure out how to make the header toggle from red to green by clicking the button.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var button = document.getElementById('toggle_button');
-                            button.onclick = function () {
-                              var header = document.getElementById('header');
-                              if (header.style.color == '') {
-                                  header.style.color = 'green';
-                              } else {
-                                  header.style.color = 'red';
-                              }
-                            };
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1 id='header' style='color: red;'>Conditional Statements</h1>
-                                <p>
-                                  One of the most important tools in programming is the if/else statement.
-                                </p>
-                                <p>
-                                  An if/else statement, also known as a 'conditional statement' lets the program
-                                  decide which path to go down based on a certain condition.
-                                </p>
-                                <p>
-                                  In this example we want to make the button below change the color of the header to
-                                  green if the color is currently red or change it to red if it is currently green.
-                                </p>
-                                <p>
-                                  Figure out how to change the if/else statement so that clicking the button below
-                                  changes the color of the header to green:
-                                </p>
-                                <button id='toggle_button'>Click Me</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        One of most useful and common tools in programming is the conditional statement.
-                    </p>
-                    <p>
-                        A conditional statement basically says "if something is true then do one action, if not do another action".
-                    </p>
-                    <p>
-                        For example: "If the oven is preheated then put the food in the oven, otherwise wait."
-                    <p>
-                        In this case we're using a conditional statement to toggle the color of the header.
-                    </p>
-                '''
-                hints: [
-                    'You need to figure out what the proper conditional statement is to toggle the color of the header.'
-                    'We want to say \'if the header is red then change to green else change to red\'.'
-                    'Change this line: \'if (header.style.color == \'\') {\' to \'if (header.style.color == \'red\') {\''
-                ]
-                tests: [
-                    {
-                        description: 'The header color is green.'
-                        test: ({frameBody, cleanHtml}) =>
-                            if frameBody.find('#header').css('color') == 'green'
-                                clearInterval(@testInterval)
-                                return true 
-
-                            return false if @testInterval
-                            @testInterval = setInterval(window.retest, 100)
-                            return false
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null
-                    }
-                ]
-            },
-            {
-                id: 1362851805236
-                lockedBy: [1362673042225]
-                challenge: '''
-                    Figure out how to turn the header green and then yellow and then red with the same button.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var button = document.getElementById('toggle_button');
-                            button.onclick = function () {
-                              var header = document.getElementById('header');
-                              if (header.style.color == 'green') {
-                                  header.style.color = 'yellow';
-                              }
-                            };
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1 id='header'>Complex Conditionals</h1>
-                                <p>
-                                  Conditional statements can be used to choose between more than two paths.
-                                </p>
-                                <p>
-                                  If a conditional statement is used to choose between a large number of code paths
-                                  it might be considered a "code smell" (something that might lead to problems), but
-                                  for 2-4 paths or so, it is usually appropriate.
-                                </p>
-                                <p>
-                                  Figure out how to use if/else statements to make the header go from green to yellow
-                                  to red by clicking the button below:
-                                </p>
-                                <button id='toggle_button'>Click Me</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        Conditional statements are frequently used when coding.
-                    </p>
-                    <p>
-                        They allow you to execute code only in certain situations.
-                    </p>
-                '''
-                hints: [
-                    'You need to create one or multiple conditions that lead to three different states.'
-                    'You\'ll need one conditional statement to go from black to green, one to go from green to yellow, and one to go from yellow to red.'
-                    'You can also accomplish this with a statement that uses if/else if/else.'
-                    '''
-                    Add this to the end of the existing conditional statement:<br/>
-                    } else if (header.style.color == 'yellow') {<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'red';<br/>
-                    } else {<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'green';<br/>
-                    }
-                    '''
-                ]
-                tests: [
-                    {
-                        description: 'The header toggles from green to yellow to red when you click the button 3 times.'
-                        test: ({frameBody, cleanHtml}) =>
-                            @good or= {}
-                            @good[frameBody.find('#header').css('color')] = true
-                            
-                            if @good['green'] and @good['yellow'] and @good['red']                            
-                                clearInterval(@testInterval)
-                                return true 
-
-                            return false if @testInterval
-                            @testInterval = setInterval(window.retest, 100)
-                            return false
-                        clean: =>
-                            clearInterval(@testInterval)
-                            @testInterval = null
-                    }
-                ]
-            }
-            {
-                id: 1363825098036
-                lockedBy: [1362851805236]
-                challenge: '''
-                    Figure out how to turn the header yellow when the button is clicked and the counter reads 1, 
-                    green when it reads 2, red when it reads 3, and blue when it reads 4.
-                '''
-                editors: [
-                    {
-                        title: 'Page Javascript'
-                        type: 'javascript'
-                        code: '''
-                            var counter = document.getElementById('counter');
-                            var button = document.getElementById('button');
-                            button.onclick = function () {
-                              var header = document.getElementById('header');
-                              if (counter.innerHTML == '1') {
-                                  header.style.color = 'red';
-                              }
-                            };
-                            
-                            
-                            if (window.counterInterval) {
-                                window.clearInterval(window.counterInterval);
-                            }
-                            window.counterInterval = setInterval(function() {
-                              if (!counter) return;
-
-                              var value = parseInt(counter.innerHTML);
-                              value += 1;
-                              if (value > 4) {
-                                value = 1;
-                              }
-                              counter.innerHTML = value;
-                              
-                            }, 1000);                        
-                        '''
-                    }
-                    {
-                        title: 'Page HTML'
-                        type: 'html'
-                        code: '''
-                            <html>
-                              <body>
-                                <h1 id='header'>Complex Conditionals 2</h1>
-                                <p>
-                                  Conditional statements are used frequently in programming.
-                                </p>
-                                <p>
-                                  Here we want to make the header change color depending on the innerHTML value
-                                  (the number displayed) in the counter below.
-                                </p>
-                                <p>
-                                    1 = yellow, 2 = green, 3 = red, 4 = blue
-                                </p>
-                                <h2 id='counter'>1</h2>
-                                <button id='button'>Click Me</button>
-                              </body>
-                            </html>
-                        '''
-                    }
-                ]
-                description: '''
-                    <p>
-                        Conditional statements are frequently used when coding.
-                    </p>
-                    <p>
-                        They allow you to execute code only in certain situations.
-                    </p>
-                '''
-                hints: [
-                    'You\'ll need to set up a conditional statement that handles all four possible scenarios.'
-                    'The conditional should start with an \'if\' followed by two \'else if\' and a closing \'else\'.'
-                    '''
-                    Code such as this would do the trick:<br/>
-                    if (counter.innerHTML == '1') {<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'yellow';<br/>
-                    } else if (counter.innerHTML == '2') {<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'green';<br/>
-                    } else if (counter.innerHTML == '3') {<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'red';<br/>
-                    } else {<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;header.style.color = 'blue';<br/>
-                    }
-                    '''
-                ]
-                tests: [
-                    {
-                        description: 'The header color is either yellow, green, red, or blue depending on the number displayed in the counter.'
-                        test: ({frameBody, cleanHtml}) =>
-                            return true if @passed
-                            button = frameBody.find('#button')
-                            header = frameBody.find('#header')
-                            counter = frameBody.find('#counter')
-                            
-                            onclick = button[0].onclick
-                            button[0].onclick = null
-                            button.bind 'click', =>
-                                onclick()
-                                colors = ['', 'yellow', 'green', 'red', 'blue']
-                                index = parseInt(counter.html())
-                                @passed = header.css('color') == colors[index]
-                                window.retest()
-
-                            return false
-                        clean: =>
-                            delete @passed
-                    }
-                ]
-            }
-        ]
-    }
     {
         name: 'Building A Calculator'
         levels: [
