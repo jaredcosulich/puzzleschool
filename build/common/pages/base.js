@@ -224,7 +224,7 @@ soma.chunks({
           for (var _j = _ref = (new Date).getFullYear() - 1; _ref <= 1900 ? _j <= 1900 : _j >= 1900; _ref <= 1900 ? _j++ : _j--){ _results1.push(_j); }
           return _results1;
         }).apply(this),
-        emailSubscription: wings.renderTemplate(this.emailSubscriptionTemplate)
+        emailSubscription: this.badBrowser() ? '' : wings.renderTemplate(this.emailSubscriptionTemplate)
       };
       return this.html = wings.renderTemplate(this.template, data);
     }

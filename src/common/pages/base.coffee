@@ -111,7 +111,7 @@ soma.chunks
                 months: ({ label: @shortMonths[i-1], value: i } for i in [1..12])
                 days: [1..31]
                 years: [((new Date).getFullYear() - 1)..1900]
-                emailSubscription: wings.renderTemplate(@emailSubscriptionTemplate)
+                emailSubscription: if @badBrowser() then '' else wings.renderTemplate(@emailSubscriptionTemplate)
             
             @html = wings.renderTemplate(@template, data)
             
