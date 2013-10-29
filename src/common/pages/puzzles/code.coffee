@@ -1766,7 +1766,7 @@ STAGES = [
             {
                 id: 1381362477555
                 challenge: '''
-                    Figure out how to make the thrid box red instead of the second box.
+                    Figure out how to make the third box red instead of the second box.
                 '''
                 editors: [
                     {

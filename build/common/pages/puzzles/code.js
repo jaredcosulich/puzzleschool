@@ -967,7 +967,7 @@ STAGES = [
     levels: [
       {
         id: 1381362477555,
-        challenge: 'Figure out how to make the thrid box red instead of the second box.',
+        challenge: 'Figure out how to make the third box red instead of the second box.',
         editors: [
           {
             title: 'Page Javascript',
