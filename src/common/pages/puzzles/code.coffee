@@ -1384,92 +1384,92 @@ STAGES = [
                             return true
                     }
                 ]
-            # }, {
-            #     id: 1381254277789
-            #     challenge: '''
-            #         Create a for-loop that displays the square of 1 - 20 (1, 4, 9, ..., 400).
-            #     '''
-            #     editors: [
-            #         {
-            #             title: 'Page Javascript'
-            #             type: 'javascript'
-            #             code: '''
-            #                 var number = document.createElement('DIV');
-            #                 number.innerHTML = Math.pow(2, 2);
-            #                 document.getElementById('numbers').appendChild(number);
-            #             '''
-            #         }
-            #         {
-            #             title: 'Page HTML'
-            #             type: 'html'
-            #             code: '''
-            #                 <html>
-            #                   <body>
-            #                     <h1>Constructing A For-Loop</h1>
-            #                     <p>
-            #                         Now it's time to try creating a for-loop from scratch.
-            #                     </p>
-            #                     <p>
-            #                         Check out the "Level Lesson" and "Level Hints" if you need some help.
-            #                     </p>
-            #                     <div id='numbers'>
-            #                     </div>
-            #                   </body>
-            #                 </html>
-            #             '''
-            #         }
-            #     ]
-            #     description: '''
-            #         <p>
-            #             A For-Loop generally follows the following syntax:
-            #         </p>
-            #         <p>
-            #             for (var i=0; i<10; ++i) {
-            #             &nbsp; &nbsp; // code
-            #             }
-            #         </p>
-            #         <p>
-            #             you could also create a for-loop that goes up by 2 (note the += instead of ++):
-            #         </p>
-            #         <p>
-            #             for (var i=0; i<10; i+=2) {
-            #             &nbsp; &nbsp; // code
-            #             }                        
-            #         </p>
-            #         <p>
-            #             Or goes down by 10:
-            #         </p>
-            #         <p>
-            #             for (var i=100; i>0; i-=10) {
-            #             &nbsp; &nbsp; // code
-            #             }                        
-            #         </p>
-            #             
-            #     '''
-            #     hints: [
-            #         'You\'ll need to wrap the code in a for-loop. Example: for (i=0; i<10; ++i) {}'
-            #         'You\'ll also need to use the variable "i" in the code within the for-loop.'
-            #         '''
-            #         Here is one complete solution:<br/>
-            #         <br/>
-            #         for (var i=1; i<=20; ++i) {<br/>
-            #         &nbsp; &nbsp; var number = document.createElement('DIV');<br/>
-            #         &nbsp; &nbsp; number.innerHTML = Math.pow(i, 2);<br/>
-            #         &nbsp; &nbsp; document.getElementById('numbers').appendChild(number);<br/>
-            #         }
-            #         '''
-            #     ]
-            #     tests: [
-            #         {
-            #             description: 'The numbers on the page are the square of each number from 1 to 20.'
-            #             test: ({frameBody, cleanHtml}) => 
-            #                 for i in [1..20]
-            #                     number = frameBody.find('#numbers div')[i]
-            #                     return false unless number
-            #                     return false unless $(number).html() == "#{i ^ 2}"
-            #                 return true
-            #         }
-            #     ]
+            }, {
+                id: 1381254277789
+                challenge: '''
+                    Create a for-loop that displays the square of 1 - 15 (1, 4, 9, ..., 225).
+                '''
+                editors: [
+                    {
+                        title: 'Page Javascript'
+                        type: 'javascript'
+                        code: '''
+                            var number = document.createElement('DIV');
+                            number.innerHTML = Math.pow(2, 2);
+                            document.getElementById('numbers').appendChild(number);
+                        '''
+                    }
+                    {
+                        title: 'Page HTML'
+                        type: 'html'
+                        code: '''
+                            <html>
+                              <body>
+                                <h1>Constructing A For-Loop</h1>
+                                <p>
+                                    Now it's time to try creating a for-loop from scratch.
+                                </p>
+                                <p>
+                                    Check out the "Level Lesson" and "Level Hints" if you need some help.
+                                </p>
+                                <div id='numbers'>
+                                </div>
+                              </body>
+                            </html>
+                        '''
+                    }
+                ]
+                description: '''
+                    <p>
+                        A For-Loop generally follows the following syntax:
+                    </p>
+                    <p>
+                        for (var i=0; i<10; ++i) {
+                        &nbsp; &nbsp; // code
+                        }
+                    </p>
+                    <p>
+                        you could also create a for-loop that goes up by 2 (note the += instead of ++):
+                    </p>
+                    <p>
+                        for (var i=0; i<10; i+=2) {
+                        &nbsp; &nbsp; // code
+                        }                        
+                    </p>
+                    <p>
+                        Or goes down by 10:
+                    </p>
+                    <p>
+                        for (var i=100; i>0; i-=10) {
+                        &nbsp; &nbsp; // code
+                        }                        
+                    </p>
+                        
+                '''
+                hints: [
+                    'You\'ll need to wrap the code in a for-loop. Example: for (i=0; i<10; ++i) {}'
+                    'You\'ll also need to use the variable "i" in the code within the for-loop.'
+                    '''
+                    Here is one complete solution:<br/>
+                    <br/>
+                    for (var i=1; i<=15; ++i) {<br/>
+                    &nbsp; &nbsp; var number = document.createElement('DIV');<br/>
+                    &nbsp; &nbsp; number.innerHTML = Math.pow(i, 2);<br/>
+                    &nbsp; &nbsp; document.getElementById('numbers').appendChild(number);<br/>
+                    }
+                    '''
+                ]
+                tests: [
+                    {
+                        description: 'The numbers on the page are the square of each number from 1 to 20.'
+                        test: ({frameBody, cleanHtml}) => 
+                            for i in [1..15]
+                                number = frameBody.find('#numbers div')[i]
+                                return false unless number
+                                return false unless $(number).html() == "#{Math.pow(i,2)}"
+                            return true
+                    }
+                ]
             #}, {
             #     id: 1363033903127
             #     challenge: '''

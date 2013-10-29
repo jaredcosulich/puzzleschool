@@ -35,7 +35,7 @@ code.ViewHelper = (function() {
     this.editors = [];
     _ref = this.level.editors;
     _fn = function(editor) {
-      var aceEditor, editorContainer;
+      var aceEditor, editorContainer, session;
       editorContainer = $(document.createElement('DIV'));
       editorContainer.addClass('editor_container');
       editorContainer.html("<div class='editor_header'>\n    <div class='type'>" + editor.type + "</div>\n    <div class='title'>" + editor.title + "</div>\n</div>\n<div class='editor'></div>");
@@ -45,10 +45,12 @@ code.ViewHelper = (function() {
       });
       editor.container = editorContainer;
       aceEditor = ace.edit(editorContainer.find('.editor')[0]);
-      aceEditor.getSession().setMode("ace/mode/" + editor.type);
       aceEditor.setValue(editor.code);
       aceEditor.clearSelection();
-      aceEditor.getSession().on('change', function(e) {
+      aceEditor.setBehavioursEnabled(false);
+      session = aceEditor.getSession();
+      session.setMode("ace/mode/" + editor.type);
+      session.on('change', function(e) {
         _this.setOutput();
         return _this.test();
       });

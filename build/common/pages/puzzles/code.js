@@ -925,6 +925,41 @@ STAGES = [
             }
           }
         ]
+      }, {
+        id: 1381254277789,
+        challenge: 'Create a for-loop that displays the square of 1 - 15 (1, 4, 9, ..., 225).',
+        editors: [
+          {
+            title: 'Page Javascript',
+            type: 'javascript',
+            code: 'var number = document.createElement(\'DIV\');\nnumber.innerHTML = Math.pow(2, 2);\ndocument.getElementById(\'numbers\').appendChild(number);'
+          }, {
+            title: 'Page HTML',
+            type: 'html',
+            code: '<html>\n  <body>\n    <h1>Constructing A For-Loop</h1>\n    <p>\n        Now it\'s time to try creating a for-loop from scratch.\n    </p>\n    <p>\n        Check out the "Level Lesson" and "Level Hints" if you need some help.\n    </p>\n    <div id=\'numbers\'>\n    </div>\n  </body>\n</html>'
+          }
+        ],
+        description: '<p>\n    A For-Loop generally follows the following syntax:\n</p>\n<p>\n    for (var i=0; i<10; ++i) {\n    &nbsp; &nbsp; // code\n    }\n</p>\n<p>\n    you could also create a for-loop that goes up by 2 (note the += instead of ++):\n</p>\n<p>\n    for (var i=0; i<10; i+=2) {\n    &nbsp; &nbsp; // code\n    }                        \n</p>\n<p>\n    Or goes down by 10:\n</p>\n<p>\n    for (var i=100; i>0; i-=10) {\n    &nbsp; &nbsp; // code\n    }                        \n</p>\n    ',
+        hints: ['You\'ll need to wrap the code in a for-loop. Example: for (i=0; i<10; ++i) {}', 'You\'ll also need to use the variable "i" in the code within the for-loop.', 'Here is one complete solution:<br/>\n<br/>\nfor (var i=1; i<=15; ++i) {<br/>\n&nbsp; &nbsp; var number = document.createElement(\'DIV\');<br/>\n&nbsp; &nbsp; number.innerHTML = Math.pow(i, 2);<br/>\n&nbsp; &nbsp; document.getElementById(\'numbers\').appendChild(number);<br/>\n}'],
+        tests: [
+          {
+            description: 'The numbers on the page are the square of each number from 1 to 20.',
+            test: function(_arg) {
+              var cleanHtml, frameBody, i, number, _i;
+              frameBody = _arg.frameBody, cleanHtml = _arg.cleanHtml;
+              for (i = _i = 1; _i <= 15; i = ++_i) {
+                number = frameBody.find('#numbers div')[i];
+                if (!number) {
+                  return false;
+                }
+                if ($(number).html() !== ("" + (Math.pow(i, 2)))) {
+                  return false;
+                }
+              }
+              return true;
+            }
+          }
+        ]
       }
     ]
   }, {

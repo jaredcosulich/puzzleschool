@@ -27,12 +27,12 @@
     a.action {
         .button-color(@darkgreen);
         position: absolute;
-        top: 11px;
+        top: 70px;
         font-weight: normal;
         
         &:active {
             position: absolute;
-            top: 12px;
+            top: 71px;
         }
         
         &.select_level {
@@ -45,9 +45,14 @@
     }
     
 
-    .challenge {        
+    .challenge {
+        border: 1px solid #ccc;
+        .rounded(12px);
+        padding: 12px;
+        margin-bottom: 30px;
+              
         .text {
-            padding: 36px 12px;
+            padding: 12px 0;
             text-align: center;
         }
         

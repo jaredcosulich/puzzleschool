@@ -37,7 +37,7 @@
   text-shadow: 1px 1px 0px #0c8d28;
   margin: auto;
   position: absolute;
-  top: 11px;
+  top: 70px;
   font-weight: normal;
 }
 .code a.action:hover {
@@ -51,7 +51,7 @@
 }
 .code a.action:active {
   position: absolute;
-  top: 12px;
+  top: 71px;
 }
 .code a.action.select_level {
   left: 66px;
@@ -59,8 +59,16 @@
 .code a.action.reset_level {
   right: 66px;
 }
+.code .challenge {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 30px;
+}
 .code .challenge .text {
-  padding: 36px 12px;
+  padding: 12px 0;
   text-align: center;
 }
 .code .challenge .success {
