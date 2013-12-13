@@ -73,6 +73,16 @@ task 'build:circuitous', 'Build the circuitous app', ->
         # 'cp -r apps/circuitous/* ~/workspace/puzzleschoolapps/circuitous/'
     ]
 
+task 'build:code', 'Build the code app', ->
+    execCmds [
+        'cake build:file'
+        # 'coffee --compile --bare --output apps/circuitous/web src/apps/circuitous/js/*.coffee'
+        # 'cp build/common/pages/puzzles/lib/circuitous.js apps/circuitous/web/circuitous.js'
+        # 'cp ender.js apps/circuitous/web/ender.js'
+        # 'cp assets/images/puzzles/circuitous/* apps/circuitous/css/images/'
+        # 'cp -r apps/circuitous/* ~/workspace/puzzleschoolapps/circuitous/'
+    ]
+
 
 task 'build:language_scramble', 'Build the language scramble app', ->
     execCmds [
