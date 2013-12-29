@@ -14,7 +14,8 @@ soma.chunks({
     },
     prepare: function() {
       this.template = this.loadTemplate('/build/common/templates/home.html');
-      return this.emailSubscriptionTemplate = this.loadTemplate('/build/common/templates/_email_subscription.html');
+      this.emailSubscriptionTemplate = this.loadTemplate('/build/common/templates/_email_subscription.html');
+      return this.impossibleLearningTemplate = this.loadTemplate('/build/common/templates/_impossible_learning.html');
     },
     build: function() {
       this.setTitle('The Puzzle School');
@@ -24,7 +25,8 @@ soma.chunks({
       this.setMeta('og:site_name', 'The Puzzle School');
       this.setMeta('og:description', 'An Exploration of Learning Through Puzzles');
       return this.html = wings.renderTemplate(this.template, {
-        emailSubscription: wings.renderTemplate(this.emailSubscriptionTemplate)
+        emailSubscription: wings.renderTemplate(this.emailSubscriptionTemplate),
+        impossibleLearning: wings.renderTemplate(this.impossibleLearningTemplate)
       });
     }
   }

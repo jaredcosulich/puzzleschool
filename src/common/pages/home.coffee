@@ -8,6 +8,7 @@ soma.chunks
         prepare: () ->
             @template = @loadTemplate '/build/common/templates/home.html'
             @emailSubscriptionTemplate = @loadTemplate '/build/common/templates/_email_subscription.html'
+            @impossibleLearningTemplate = @loadTemplate '/build/common/templates/_impossible_learning.html'
 
         build: () ->
             @setTitle('The Puzzle School')
@@ -17,7 +18,10 @@ soma.chunks
             @setMeta('og:site_name', 'The Puzzle School')
             @setMeta('og:description', 'An Exploration of Learning Through Puzzles')
             
-            @html = wings.renderTemplate(@template, emailSubscription: wings.renderTemplate(@emailSubscriptionTemplate))
+            @html = wings.renderTemplate @template, 
+              emailSubscription: wings.renderTemplate(@emailSubscriptionTemplate)
+              impossibleLearning: wings.renderTemplate(@impossibleLearningTemplate)
+            
         
 soma.views
     Home:
