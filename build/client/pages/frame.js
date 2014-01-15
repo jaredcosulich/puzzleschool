@@ -7,7 +7,6 @@ soma.views({
   Frame: {
     selector: 'body',
     create: function() {
-      alert('frame');
       return $(document.body).addClass('frame');
     }
   }
