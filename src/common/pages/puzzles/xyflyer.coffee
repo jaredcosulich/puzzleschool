@@ -12,7 +12,7 @@ soma.chunks
     Xyflyer:
         meta: -> new soma.chunks.Base({ content: @ })
 
-        prepare: ({@classId, @levelId}) ->
+        prepare: ({@classId, @levelId, @frame}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/xyflyer.html"
             
             @loadScript '/assets/third_party/equation_explorer/tokens.js'
@@ -33,6 +33,7 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/equations.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer_objects/index.js'
             @loadScript '/build/common/pages/puzzles/lib/xyflyer.js'
+            @loadScript '/build/client/pages/frame.js' if @frame
             
             @puzzleData = {levels: {}}
 
@@ -133,7 +134,6 @@ soma.views
             @puzzleProgress[@levelId] = {}            
 
             @originalHTML = @dynamicContent.html()
-
         
             @initEncode()
             @initLevelSelector()  
@@ -886,4 +886,11 @@ soma.routes
             levelId: levelId
     
     '/puzzles/xyflyer': -> new soma.chunks.Xyflyer
+
+    '/framepuzzles/xyflyer/:levelId': ({levelId}) -> 
+        new soma.chunks.Xyflyer
+            levelId: levelId
+            frame: true
+    
+    '/framepuzzles/xyflyer': -> new soma.chunks.Xyflyer(frame: true)
 

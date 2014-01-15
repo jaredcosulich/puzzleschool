@@ -35,7 +35,7 @@ soma.chunks({
     prepare: function(_arg) {
       var count, filetype, index, object, _i, _ref,
         _this = this;
-      this.classId = _arg.classId, this.levelId = _arg.levelId;
+      this.classId = _arg.classId, this.levelId = _arg.levelId, this.frame = _arg.frame;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
       this.loadScript('/assets/third_party/equation_explorer/tokens.js');
       this.loadScript('/assets/third_party/raphael-min.js');
@@ -54,6 +54,9 @@ soma.chunks({
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/equations.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer_objects/index.js');
       this.loadScript('/build/common/pages/puzzles/lib/xyflyer.js');
+      if (this.frame) {
+        this.loadScript('/build/client/pages/frame.js');
+      }
       this.puzzleData = {
         levels: {}
       };
@@ -1326,5 +1329,18 @@ soma.routes({
   },
   '/puzzles/xyflyer': function() {
     return new soma.chunks.Xyflyer;
+  },
+  '/framepuzzles/xyflyer/:levelId': function(_arg) {
+    var levelId;
+    levelId = _arg.levelId;
+    return new soma.chunks.Xyflyer({
+      levelId: levelId,
+      frame: true
+    });
+  },
+  '/framepuzzles/xyflyer': function() {
+    return new soma.chunks.Xyflyer({
+      frame: true
+    });
   }
 });
