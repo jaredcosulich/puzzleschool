@@ -6,6 +6,9 @@
   -ms-user-select: none;
   user-select: none;
 }
+.frame .circuitous {
+  margin: 0;
+}
 .circuitous {
   height: 640px;
   width: 960px;

@@ -31,7 +31,9 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      this.classId = _arg.classId, this.levelId = _arg.levelId;
+      var kongregateUserId, _ref, _ref1,
+        _this = this;
+      this.classId = _arg.classId, this.levelId = _arg.levelId, this.frame = _arg.frame;
       this.template = this.loadTemplate("/build/common/templates/puzzles/circuitous.html");
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/animation.js');
       this.loadScript('/build/common/pages/puzzles/lib/common_objects/client.js');
@@ -57,7 +59,26 @@ soma.chunks({
         this.loadScript('/build/common/pages/puzzles/lib/circuitous_editor.js');
       }
       this.loadScript('/build/common/pages/puzzles/lib/circuitous.js');
-      return this.loadStylesheet('/build/client/css/puzzles/circuitous.css');
+      if (this.frame) {
+        this.loadScript('/build/client/pages/frame.js');
+      }
+      this.loadStylesheet('/build/client/css/puzzles/circuitous.css');
+      if ((kongregateUserId = (_ref = this.context) != null ? (_ref1 = _ref.query) != null ? _ref1.kongregate_user_id : void 0 : void 0)) {
+        return this.loadData({
+          url: '/api/third_party_login',
+          data: {
+            user: "kongregate-" + kongregateUserId
+          },
+          success: function() {
+            return _this.loadData({
+              url: '/api/puzzles/circuituous',
+              success: function(data) {
+                return _this.puzzleData = data.puzzle;
+              }
+            });
+          }
+        });
+      }
     },
     build: function() {
       this.setTitle("Circuitous - The Puzzle School");
@@ -706,5 +727,18 @@ soma.routes({
   },
   '/puzzles/circuitous': function() {
     return new soma.chunks.Circuitous;
+  },
+  '/framepuzzles/circuitous/:levelId': function(_arg) {
+    var levelId;
+    levelId = _arg.levelId;
+    return new soma.chunks.Circuitous({
+      levelId: levelId,
+      frame: true
+    });
+  },
+  '/framepuzzles/circuitous': function() {
+    return new soma.chunks.Circuitous({
+      frame: true
+    });
   }
 });

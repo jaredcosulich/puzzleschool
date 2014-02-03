@@ -24,7 +24,7 @@ soma.chunks
     Circuitous:
         meta: -> new soma.chunks.Base({ content: @ })
 
-        prepare: ({@classId, @levelId}) ->
+        prepare: ({@classId, @levelId, @frame}) ->
             @template = @loadTemplate "/build/common/templates/puzzles/circuitous.html"
 
             @loadScript '/build/common/pages/puzzles/lib/common_objects/animation.js'
@@ -52,7 +52,19 @@ soma.chunks
             @loadScript '/build/common/pages/puzzles/lib/circuitous_editor.js' if @levelId == 'editor'
             @loadScript '/build/common/pages/puzzles/lib/circuitous.js'
             
-            @loadStylesheet '/build/client/css/puzzles/circuitous.css'     
+            @loadScript '/build/client/pages/frame.js' if @frame
+            
+            @loadStylesheet '/build/client/css/puzzles/circuitous.css'    
+            
+            if (kongregateUserId = @context?.query?.kongregate_user_id)
+                @loadData 
+                    url: '/api/third_party_login'
+                    data: {user: "kongregate-#{kongregateUserId}"}
+                    success: => 
+                        @loadData
+                            url: '/api/puzzles/circuituous'
+                            success: (data) => @puzzleData = data.puzzle
+             
             
                       
         build: ->
@@ -490,6 +502,12 @@ soma.routes
     
     '/puzzles/circuitous': -> new soma.chunks.Circuitous
     
+    '/framepuzzles/circuitous/:levelId': ({levelId}) -> 
+        new soma.chunks.Circuitous
+            levelId: levelId
+            frame: true
+    
+    '/framepuzzles/circuitous': -> new soma.chunks.Circuitous(frame: true)
     
     
     
