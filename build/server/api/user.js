@@ -38,6 +38,48 @@ soma.routes({
       return _this.send();
     });
   }),
+  '/api/third_party_login': function() {
+    var l,
+      _this = this;
+    return l = new Line({
+      error: function(err) {
+        console.log('Third party login failed:', err);
+        return _this.sendError();
+      }
+    }, function() {
+      return db.get('users', _this.data.user, l.wait());
+    }, function(user) {
+      _this.user = user;
+      if (_this.user != null) {
+        _this.cookies.set('user', _this.user, {
+          signed: true
+        });
+        _this.send({});
+        l.stop();
+        return;
+      }
+      return db.put('users', {
+        id: _this.data.user
+      }, l.wait());
+    }, function(user) {
+      _this.user = user;
+      _this.cookies.set('user', _this.user, {
+        signed: true
+      });
+      return db.update('users', 'data', {
+        count: {
+          add: 1
+        },
+        ids: {
+          add: [_this.user.id]
+        }
+      }, l.wait());
+    }, function() {
+      return email.sendText('The Puzzle School <support@puzzleschool.com>', 'Admin <info@puzzleschool.com>', "New Puzzle School Third Party User", "" + _this.user.id, l.wait());
+    }, function() {
+      return _this.send();
+    });
+  },
   '/api/email': function() {
     var l,
       _this = this;

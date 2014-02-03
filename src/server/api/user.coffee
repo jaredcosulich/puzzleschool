@@ -42,6 +42,37 @@ soma.routes
             (@user) =>
                 @cookies.set('user', @user, { signed: true })
                 @send()
+
+    '/api/third_party_login': ->
+        l = new Line
+            error: (err) => 
+                console.log('Third party login failed:', err)
+                @sendError()
+
+            => db.get 'users', @data.user, l.wait()
+
+            (@user) =>
+                if @user?
+                  @cookies.set('user', @user, { signed: true })
+                  @send({})
+                  l.stop()
+                  return
+                
+                db.put 'users', {id: @data.user}, l.wait()
+            
+            (@user) =>
+                @cookies.set('user', @user, { signed: true })
+                db.update 'users', 'data', {count: {add: 1}, ids: {add: [@user.id]}}, l.wait()
+
+            =>
+                email.sendText 'The Puzzle School <support@puzzleschool.com>', 'Admin <info@puzzleschool.com>',
+                    "New Puzzle School Third Party User",
+                    "#{@user.id}"
+                    l.wait()
+
+            => @send()
+        
+
                 
     '/api/email': ->
         return @sendError(new Error('Email was invalid')) unless @data.email and /.+@.+\..+/.test(@data.email)

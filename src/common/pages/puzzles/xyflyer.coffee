@@ -7,6 +7,8 @@ sortLevels = (levels) ->
         a = level1.difficulty + level1.id
         b = level2.difficulty + level2.id
         return if a == b then 0 else (if a < b then -1 else 1)
+        
+
 
 soma.chunks
     Xyflyer:
@@ -54,15 +56,24 @@ soma.chunks
                     error: () =>
                         if (@user = @cookies.get('user')) and window?.alert
                             alert('We were unable to load the information for this class. Please check your internet connection.')
-                            
-            else
-                if @cookies.get('user')
-                    @loadData 
-                        url: '/api/puzzles/xyflyer'
-                        success: (data) => @puzzleData = data.puzzle
-                        error: () =>
-                            if window?.alert
-                                alert('We were unable to load your account information. Please check your internet connection.')
+            
+            else if (kongregateUserId = @context?.query?.kongregate_user_id)
+                @loadData 
+                    url: '/api/third_party_login'
+                    data: {user: "kongregate-#{kongregateUserId}"}
+                    success: => 
+                        @loadData
+                            url: '/api/puzzles/xyflyer'
+                            success: (data) => @puzzleData = data.puzzle
+                
+                
+            else if @cookies.get('user') 
+                @loadData 
+                    url: '/api/puzzles/xyflyer'
+                    success: (data) => @puzzleData = data.puzzle
+                    error: () =>
+                        if window?.alert
+                            alert('We were unable to load your account information. Please check your internet connection.')
                         
             @objects = []
             for object, count of {person: 4, island: 4, plane: 2, background: 5}

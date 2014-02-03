@@ -33,7 +33,7 @@ soma.chunks({
       });
     },
     prepare: function(_arg) {
-      var count, filetype, index, object, _i, _ref,
+      var count, filetype, index, kongregateUserId, object, _i, _ref, _ref1, _ref2,
         _this = this;
       this.classId = _arg.classId, this.levelId = _arg.levelId, this.frame = _arg.frame;
       this.template = this.loadTemplate("/build/common/templates/puzzles/xyflyer.html");
@@ -87,30 +87,43 @@ soma.chunks({
             }
           }
         });
-      } else {
-        if (this.cookies.get('user')) {
-          this.loadData({
-            url: '/api/puzzles/xyflyer',
-            success: function(data) {
-              return _this.puzzleData = data.puzzle;
-            },
-            error: function() {
-              if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
-                return alert('We were unable to load your account information. Please check your internet connection.');
+      } else if ((kongregateUserId = (_ref = this.context) != null ? (_ref1 = _ref.query) != null ? _ref1.kongregate_user_id : void 0 : void 0)) {
+        this.loadData({
+          url: '/api/third_party_login',
+          data: {
+            user: "kongregate-" + kongregateUserId
+          },
+          success: function() {
+            return _this.loadData({
+              url: '/api/puzzles/xyflyer',
+              success: function(data) {
+                return _this.puzzleData = data.puzzle;
               }
+            });
+          }
+        });
+      } else if (this.cookies.get('user')) {
+        this.loadData({
+          url: '/api/puzzles/xyflyer',
+          success: function(data) {
+            return _this.puzzleData = data.puzzle;
+          },
+          error: function() {
+            if (typeof window !== "undefined" && window !== null ? window.alert : void 0) {
+              return alert('We were unable to load your account information. Please check your internet connection.');
             }
-          });
-        }
+          }
+        });
       }
       this.objects = [];
-      _ref = {
+      _ref2 = {
         person: 4,
         island: 4,
         plane: 2,
         background: 5
       };
-      for (object in _ref) {
-        count = _ref[object];
+      for (object in _ref2) {
+        count = _ref2[object];
         for (index = _i = 1; 1 <= count ? _i <= count : _i >= count; index = 1 <= count ? ++_i : --_i) {
           filetype = (object === 'background' ? 'jpg' : 'png');
           this.objects.push({
