@@ -30,6 +30,7 @@ task 'build:site', 'Build the site files', ->
         'lessc src/client/css/puzzles/code.less build/client/css/puzzles/code.css'
         'lessc src/client/css/puzzles/history.less build/client/css/puzzles/history.css'
         'lessc src/client/css/puzzles/word_problems.less build/client/css/puzzles/word_problems.css'
+        'lessc src/client/css/puzzles/gravity.less build/client/css/puzzles/gravity.css'
 
         'coffee --compile --bare --output build/server/lib src/server/lib/*.coffee'
         'coffee --compile --bare --output build/server/lib/db src/server/lib/db/*.coffee'
@@ -54,10 +55,10 @@ task 'build:file', 'Build a file', ->
     execCmds [
         #'coffee --compile --bare --output build/common/pages src/common/pages/*.coffee'
         # 'coffee --compile --bare --output build/common/pages/puzzles/lib/circuitous_objects src/common/pages/puzzles/lib/circuitous_objects/*.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/code.coffee'
-        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/code.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/gravity.coffee'
+        'coffee --compile --bare --output build/common/pages/puzzles/lib src/common/pages/puzzles/lib/gravity.coffee'
         # 'coffee --compile --bare --output build/common/pages/puzzles src/common/pages/puzzles/xyflyer.coffee'
-        'lessc src/client/css/puzzles/code.less build/client/css/puzzles/code.css'
+        'lessc src/client/css/puzzles/gravity.less build/client/css/puzzles/gravity.css'
         #'coffee --compile --bare --output build/server/api/lib src/server/api/lib/*.coffee'
         'cp -r src/common/templates build/common'
     ]
