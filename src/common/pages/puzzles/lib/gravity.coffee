@@ -22,8 +22,12 @@ class gravity.ViewHelper
       @wells.push(well)        
 
   step: ->
-    well.modify() for well in @wells 
+    for well in @wells when !well.deleted   
+      well.modify() 
+      well.affect(@asteroids)
+
     asteroid.move(new Date() - @lastStep) for asteroid in @asteroids
+
     @lastStep = new Date()     
     setTimeout(( => @step()), 10)
 
@@ -32,6 +36,9 @@ class gravity.ViewHelper
 class gravity.Well
   
   MAX_RADIUS: 25
+  MASS_RATIO: 10
+  GRAVITATIONAL_CONSTANT: 6.67 * Math.pow(10, -11)
+   
   
   constructor: (@container, @x, @y) ->
     @el = $(document.createElement('DIV'))
@@ -40,8 +47,10 @@ class gravity.Well
     @radius = 0
     @container.append(@el)
 
-  delete: -> @el.remove()
-  
+  delete: -> 
+    @el.remove()
+    @deleted = true
+    
   grow: -> @rate = 1
     
   shrink: -> @rate = -1
@@ -62,18 +71,26 @@ class gravity.Well
       
     @el.css(boxShadow: "0px 0 #{@radius*2}px #{@radius}px rgba(255,255,255,0.8)")
     
+  affect: (asteroids) ->
+    for asteroid in asteroids
+      distance = Math.sqrt(Math.pow(@x - asteroid.x, 2) + Math.pow(@y - asteroid.y, 2))
+      force = (@GRAVITATIONAL_CONSTANT * asteroid.mass * (@MASS_RATIO * @radius)) / Math.pow(distance, 2)
+      console.log(distance, force)
     
     
 
 class gravity.Asteroid
   
   constructor: (@container, @x, @y) ->
-    @el = $(document.createElement('DIV'))
-    @el.addClass('asteroid')
+    @mass = 10
     @speed = 0.25    
     @direction = 270
-    @move(1)
+    
+    @el = $(document.createElement('DIV'))
+    @el.addClass('asteroid')
     @container.append(@el)
+
+    @move(1)
     
   move: (time) ->
     distance = @speed * time

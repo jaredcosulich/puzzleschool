@@ -42,7 +42,11 @@ gravity.ViewHelper = (function() {
     _ref = this.wells;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       well = _ref[_i];
+      if (!(!well.deleted)) {
+        continue;
+      }
       well.modify();
+      well.affect(this.asteroids);
     }
     _ref1 = this.asteroids;
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -63,6 +67,10 @@ gravity.Well = (function() {
 
   Well.prototype.MAX_RADIUS = 25;
 
+  Well.prototype.MASS_RATIO = 10;
+
+  Well.prototype.GRAVITATIONAL_CONSTANT = 6.67 * Math.pow(10, -11);
+
   function Well(container, x, y) {
     this.container = container;
     this.x = x;
@@ -78,7 +86,8 @@ gravity.Well = (function() {
   }
 
   Well.prototype["delete"] = function() {
-    return this.el.remove();
+    this.el.remove();
+    return this.deleted = true;
   };
 
   Well.prototype.grow = function() {
@@ -110,6 +119,18 @@ gravity.Well = (function() {
     });
   };
 
+  Well.prototype.affect = function(asteroids) {
+    var asteroid, distance, force, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = asteroids.length; _i < _len; _i++) {
+      asteroid = asteroids[_i];
+      distance = Math.sqrt(Math.pow(this.x - asteroid.x, 2) + Math.pow(this.y - asteroid.y, 2));
+      force = (this.GRAVITATIONAL_CONSTANT * asteroid.mass * (this.MASS_RATIO * this.radius)) / Math.pow(distance, 2);
+      _results.push(console.log(distance, force));
+    }
+    return _results;
+  };
+
   return Well;
 
 })();
@@ -120,12 +141,13 @@ gravity.Asteroid = (function() {
     this.container = container;
     this.x = x;
     this.y = y;
-    this.el = $(document.createElement('DIV'));
-    this.el.addClass('asteroid');
+    this.mass = 10;
     this.speed = 0.25;
     this.direction = 270;
-    this.move(1);
+    this.el = $(document.createElement('DIV'));
+    this.el.addClass('asteroid');
     this.container.append(this.el);
+    this.move(1);
   }
 
   Asteroid.prototype.move = function(time) {
