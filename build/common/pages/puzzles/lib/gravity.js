@@ -5,7 +5,7 @@ gravity = typeof exports !== "undefined" && exports !== null ? exports : provide
 
 gravity.ViewHelper = (function() {
 
-  ViewHelper.prototype.MAX_RADIUS = 40;
+  ViewHelper.prototype.MAX_RADIUS = 25;
 
   function ViewHelper(_arg) {
     this.el = _arg.el;
@@ -18,11 +18,13 @@ gravity.ViewHelper = (function() {
 
   ViewHelper.prototype.initGravityWell = function() {
     var _this = this;
+    this.modifyWells();
     return this.el.bind('mousedown.well', function(e) {
       var well;
       well = _this.createWell(e.offsetX, e.offsetY);
+      _this.growWell(well);
       return _this.el.bind('mouseup.well', function(e) {
-        return _this.stopWell(well);
+        return _this.shrinkWell(well);
       });
     });
   };
@@ -35,30 +37,56 @@ gravity.ViewHelper = (function() {
       left: x,
       top: y
     });
+    well.data('radius', 0);
     $('.wells').append(well);
-    this.modifyWell(well, 0);
     return well;
   };
 
-  ViewHelper.prototype.modifyWell = function(well, radius) {
-    var _this = this;
-    if (well.data('stopped') != null) {
-      return;
+  ViewHelper.prototype.deleteWell = function(well) {
+    return well.remove();
+  };
+
+  ViewHelper.prototype.modifyWells = function() {
+    var grow, radius, well, wellElement, _i, _len, _ref,
+      _this = this;
+    _ref = $('.wells .well');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      wellElement = _ref[_i];
+      well = $(wellElement);
+      radius = parseInt(well.data('radius') || 0);
+      grow = well.data('grow');
+      if (!grow) {
+        continue;
+      }
+      radius += parseInt(grow);
+      if (radius > this.MAX_RADIUS) {
+        this.stopWell(well);
+        continue;
+      }
+      if (radius < 0) {
+        this.deleteWell(well);
+        continue;
+      }
+      well.css({
+        boxShadow: "0px 0 " + (radius * 2) + "px " + radius + "px rgba(255,255,255,0.8)"
+      });
+      well.data('radius', radius);
     }
-    radius += 1;
-    if (radius > this.MAX_RADIUS) {
-      return;
-    }
-    well.css({
-      boxShadow: "0px 0 " + (radius * 2) + "px " + radius + "px rgba(255,255,255,1) invert"
-    });
     return setTimeout((function() {
-      return _this.modifyWell(well, radius);
-    }), radius * 2);
+      return _this.modifyWells();
+    }), 10);
+  };
+
+  ViewHelper.prototype.growWell = function(well) {
+    return well.data('grow', 1);
+  };
+
+  ViewHelper.prototype.shrinkWell = function(well) {
+    return well.data('grow', -1);
   };
 
   ViewHelper.prototype.stopWell = function(well) {
-    return well.data('stopped', true);
+    return well.data('grow', null);
   };
 
   return ViewHelper;
