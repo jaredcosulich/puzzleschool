@@ -37,9 +37,8 @@ class gravity.Well
   
   MAX_RADIUS: 25
   MASS_RATIO: 10
-  GRAVITATIONAL_CONSTANT: 6.67 * Math.pow(10, -11)
+  GRAVITATIONAL_CONSTANT: 6.67 * Math.pow(10, -1)
    
-  
   constructor: (@container, @x, @y) ->
     @el = $(document.createElement('DIV'))
     @el.addClass('well')
@@ -73,18 +72,25 @@ class gravity.Well
     
   affect: (asteroids) ->
     for asteroid in asteroids
-      distance = Math.sqrt(Math.pow(@x - asteroid.x, 2) + Math.pow(@y - asteroid.y, 2))
-      force = (@GRAVITATIONAL_CONSTANT * asteroid.mass * (@MASS_RATIO * @radius)) / Math.pow(distance, 2)
-      console.log(distance, force)
+      distance = Math.sqrt(Math.pow(this.x - asteroid.x, 2) + Math.pow(this.y - asteroid.y, 2));
+      force = (this.GRAVITATIONAL_CONSTANT * asteroid.mass * (this.MASS_RATIO * this.radius)) / Math.pow(distance, 2);
+      
+      xForce = (@x - asteroid.x) * (force / distance)
+      yForce = (@y - asteroid.y) * (force / distance)
+  
+      asteroid.changeSpeed((xForce / asteroid.mass), (yForce / asteroid.mass))
     
+      
     
 
 class gravity.Asteroid
   
+  MAX_SPEED: 1
+  
   constructor: (@container, @x, @y) ->
     @mass = 10
-    @speed = 0.25    
-    @direction = 270
+    @xSpeed = 0   
+    @ySpeed = -0.25    
     
     @el = $(document.createElement('DIV'))
     @el.addClass('asteroid')
@@ -92,13 +98,20 @@ class gravity.Asteroid
 
     @move(1)
     
+  changeSpeed: (xDiff, yDiff) ->
+    @xSpeed += xDiff
+    @ySpeed += yDiff
+    
+    @xSpeed = @MAX_SPEED if @xSpeed > @MAX_SPEED  
+    @ySpeed = @MAX_SPEED if @ySpeed > @MAX_SPEED  
+
+    @xSpeed = @MAX_SPEED * -1 if @xSpeed < @MAX_SPEED * -1  
+    @ySpeed = @MAX_SPEED * -1 if @ySpeed < @MAX_SPEED * -1
+  
   move: (time) ->
-    distance = @speed * time
-    
-    radians = @direction * (Math.PI / 180)
-    
-    @x = @x + (Math.cos(radians) * distance)
-    @y = @y + (Math.sin(radians) * distance)      
+    @x += (@xSpeed * time)
+    @y += (@ySpeed * time)
+
     if @x > @container.width()
       @x = 0
 

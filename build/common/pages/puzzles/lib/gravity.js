@@ -69,7 +69,7 @@ gravity.Well = (function() {
 
   Well.prototype.MASS_RATIO = 10;
 
-  Well.prototype.GRAVITATIONAL_CONSTANT = 6.67 * Math.pow(10, -11);
+  Well.prototype.GRAVITATIONAL_CONSTANT = 6.67 * Math.pow(10, -1);
 
   function Well(container, x, y) {
     this.container = container;
@@ -120,13 +120,15 @@ gravity.Well = (function() {
   };
 
   Well.prototype.affect = function(asteroids) {
-    var asteroid, distance, force, _i, _len, _results;
+    var asteroid, distance, force, xForce, yForce, _i, _len, _results;
     _results = [];
     for (_i = 0, _len = asteroids.length; _i < _len; _i++) {
       asteroid = asteroids[_i];
       distance = Math.sqrt(Math.pow(this.x - asteroid.x, 2) + Math.pow(this.y - asteroid.y, 2));
       force = (this.GRAVITATIONAL_CONSTANT * asteroid.mass * (this.MASS_RATIO * this.radius)) / Math.pow(distance, 2);
-      _results.push(console.log(distance, force));
+      xForce = (this.x - asteroid.x) * (force / distance);
+      yForce = (this.y - asteroid.y) * (force / distance);
+      _results.push(asteroid.changeSpeed(xForce / asteroid.mass, yForce / asteroid.mass));
     }
     return _results;
   };
@@ -137,25 +139,41 @@ gravity.Well = (function() {
 
 gravity.Asteroid = (function() {
 
+  Asteroid.prototype.MAX_SPEED = 1;
+
   function Asteroid(container, x, y) {
     this.container = container;
     this.x = x;
     this.y = y;
     this.mass = 10;
-    this.speed = 0.25;
-    this.direction = 270;
+    this.xSpeed = 0;
+    this.ySpeed = -0.25;
     this.el = $(document.createElement('DIV'));
     this.el.addClass('asteroid');
     this.container.append(this.el);
     this.move(1);
   }
 
+  Asteroid.prototype.changeSpeed = function(xDiff, yDiff) {
+    this.xSpeed += xDiff;
+    this.ySpeed += yDiff;
+    if (this.xSpeed > this.MAX_SPEED) {
+      this.xSpeed = this.MAX_SPEED;
+    }
+    if (this.ySpeed > this.MAX_SPEED) {
+      this.ySpeed = this.MAX_SPEED;
+    }
+    if (this.xSpeed < this.MAX_SPEED * -1) {
+      this.xSpeed = this.MAX_SPEED * -1;
+    }
+    if (this.ySpeed < this.MAX_SPEED * -1) {
+      return this.ySpeed = this.MAX_SPEED * -1;
+    }
+  };
+
   Asteroid.prototype.move = function(time) {
-    var distance, radians;
-    distance = this.speed * time;
-    radians = this.direction * (Math.PI / 180);
-    this.x = this.x + (Math.cos(radians) * distance);
-    this.y = this.y + (Math.sin(radians) * distance);
+    this.x += this.xSpeed * time;
+    this.y += this.ySpeed * time;
     if (this.x > this.container.width()) {
       this.x = 0;
     }
