@@ -30,8 +30,10 @@ class gravity.ViewHelper
       well.modify() 
       well.affect(@asteroids)
 
-    asteroid.move(new Date() - @lastStep) for asteroid in @asteroids
-
+    for asteroid in @asteroids
+      asteroid.move(new Date() - @lastStep) 
+      console.log('touch') if @goal.touching(asteroid)
+      
     @lastStep = new Date()     
     setTimeout(( => @step()), 10)
 
@@ -102,6 +104,11 @@ class gravity.Asteroid
 
     @move(1)
     
+  left: -> @x - (@el.width() / 2)
+  right: -> @x + (@el.width() / 2) 
+  top: -> @y - (@el.height() / 2)
+  bottom: -> @y + (@el.height() / 2)
+    
   changeSpeed: (xDiff, yDiff) ->
     @xSpeed += xDiff
     @ySpeed += yDiff
@@ -139,7 +146,24 @@ class gravity.Goal
     @el.css(left: @x, top: @y)    
     @container.append(@el)
     
+  left: -> @x - (@el.width() / 2)
+  right: -> @x + (@el.width() / 2) 
+  top: -> @y - (@el.height() / 2)
+  bottom: -> @y + (@el.height() / 2)
 
-  
+  touching: (asteroid) ->
+    return true if (
+      (
+        (@left() < asteroid.left() < @right()) or
+        (@left() < asteroid.right() < @right()) or
+        (@left() < asteroid.x < @right())
+      ) and
+      (
+        (@top() < asteroid.top() < @bottom()) or
+        (@top() < asteroid.bottom() < @bottom()) or
+        (@top() < asteroid.y < @bottom())
+      )
+    )
+    return false
       
     

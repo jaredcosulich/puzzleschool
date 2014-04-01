@@ -57,6 +57,9 @@ gravity.ViewHelper = (function() {
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
       asteroid = _ref1[_j];
       asteroid.move(new Date() - this.lastStep);
+      if (this.goal.touching(asteroid)) {
+        console.log('touch');
+      }
     }
     this.lastStep = new Date();
     return setTimeout((function() {
@@ -159,6 +162,22 @@ gravity.Asteroid = (function() {
     this.move(1);
   }
 
+  Asteroid.prototype.left = function() {
+    return this.x - (this.el.width() / 2);
+  };
+
+  Asteroid.prototype.right = function() {
+    return this.x + (this.el.width() / 2);
+  };
+
+  Asteroid.prototype.top = function() {
+    return this.y - (this.el.height() / 2);
+  };
+
+  Asteroid.prototype.bottom = function() {
+    return this.y + (this.el.height() / 2);
+  };
+
   Asteroid.prototype.changeSpeed = function(xDiff, yDiff) {
     this.xSpeed += xDiff;
     this.ySpeed += yDiff;
@@ -215,6 +234,30 @@ gravity.Goal = (function() {
     });
     this.container.append(this.el);
   }
+
+  Goal.prototype.left = function() {
+    return this.x - (this.el.width() / 2);
+  };
+
+  Goal.prototype.right = function() {
+    return this.x + (this.el.width() / 2);
+  };
+
+  Goal.prototype.top = function() {
+    return this.y - (this.el.height() / 2);
+  };
+
+  Goal.prototype.bottom = function() {
+    return this.y + (this.el.height() / 2);
+  };
+
+  Goal.prototype.touching = function(asteroid) {
+    var _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+    if ((((this.left() < (_ref = asteroid.left()) && _ref < this.right())) || ((this.left() < (_ref1 = asteroid.right()) && _ref1 < this.right())) || ((this.left() < (_ref2 = asteroid.x) && _ref2 < this.right()))) && (((this.top() < (_ref3 = asteroid.top()) && _ref3 < this.bottom())) || ((this.top() < (_ref4 = asteroid.bottom()) && _ref4 < this.bottom())) || ((this.top() < (_ref5 = asteroid.y) && _ref5 < this.bottom())))) {
+      return true;
+    }
+    return false;
+  };
 
   return Goal;
 
