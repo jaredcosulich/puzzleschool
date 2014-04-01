@@ -1,9 +1,8 @@
 gravity = exports ? provide('./lib/gravity', {})
 class gravity.ViewHelper
 
-  MAX_RADIUS: 25
-
   constructor: ({@el}) ->
+    @wells = []
     @initGravityWell()
       
   $: (selector) -> $(selector, @el)
@@ -11,45 +10,49 @@ class gravity.ViewHelper
   initGravityWell: ->
     @modifyWells()
     @el.bind 'mousedown.well', (e) =>
-      well = @createWell(e.offsetX, e.offsetY)        
-      @growWell(well)
-      @el.bind 'mouseup.well', (e) => @shrinkWell(well)
+      well = new gravity.Well(@el, e.offsetX, e.offsetY)
+      well.grow()
+      @el.bind 'mouseup.well', (e) => well.shrink()
+      @wells.push(well)        
 
-      
-  createWell: (x, y)->
-    well = $(document.createElement('DIV'))
-    well.addClass('well')
-    well.css(left: x, top: y)
-    well.data('radius', 0)
-    $('.wells').append(well)
-    return well
-    
-  deleteWell: (well) -> well.remove()
-    
   modifyWells: ->
-    for wellElement in $('.wells .well')
-      well = $(wellElement)
-      radius = parseInt(well.data('radius') or 0)
-      
-      grow = well.data('grow')
-      
-      continue unless grow
-      
-      radius += parseInt(grow)
-      if radius > @MAX_RADIUS
-        @stopWell(well)
-        continue
-        
-      if radius < 0
-        @deleteWell(well)
-        continue
-        
-      well.css(boxShadow: "0px 0 #{radius*2}px #{radius}px rgba(255,255,255,0.8)")
-      well.data('radius', radius)
+    well.modify() for well in @wells      
     setTimeout(( => @modifyWells()), 10)
-          
-  growWell: (well) -> well.data('grow', 1)
+
+
+
+class gravity.Well
+  MAX_RADIUS: 25
+  constructor: (@container, @x, @y) ->
+    @el = $(document.createElement('DIV'))
+    @el.addClass('well')
+    @el.css(left: x, top: y)
+    @radius = 0
+    @container.append(@el)
+
+  delete: -> @el.remove()
+  
+  grow: -> @rate = 1
     
-  shrinkWell: (well) -> well.data('grow', -1)    
+  shrink: -> @rate = -1
     
-  stopWell: (well) -> well.data('grow', null)
+  stop: -> delete @rate
+    
+  modify: ->
+    return unless @rate?
+    
+    @radius += @rate
+    
+    if @radius > @MAX_RADIUS
+      @stop()
+      return
+      
+    if @radius < 0
+      @delete()
+      
+    @el.css(boxShadow: "0px 0 #{@radius*2}px #{@radius}px rgba(255,255,255,0.8)")
+    
+    
+    
+    
+    

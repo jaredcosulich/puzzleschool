@@ -5,10 +5,9 @@ gravity = typeof exports !== "undefined" && exports !== null ? exports : provide
 
 gravity.ViewHelper = (function() {
 
-  ViewHelper.prototype.MAX_RADIUS = 25;
-
   function ViewHelper(_arg) {
     this.el = _arg.el;
+    this.wells = [];
     this.initGravityWell();
   }
 
@@ -21,74 +20,83 @@ gravity.ViewHelper = (function() {
     this.modifyWells();
     return this.el.bind('mousedown.well', function(e) {
       var well;
-      well = _this.createWell(e.offsetX, e.offsetY);
-      _this.growWell(well);
-      return _this.el.bind('mouseup.well', function(e) {
-        return _this.shrinkWell(well);
+      well = new gravity.Well(_this.el, e.offsetX, e.offsetY);
+      well.grow();
+      _this.el.bind('mouseup.well', function(e) {
+        return well.shrink();
       });
+      return _this.wells.push(well);
     });
-  };
-
-  ViewHelper.prototype.createWell = function(x, y) {
-    var well;
-    well = $(document.createElement('DIV'));
-    well.addClass('well');
-    well.css({
-      left: x,
-      top: y
-    });
-    well.data('radius', 0);
-    $('.wells').append(well);
-    return well;
-  };
-
-  ViewHelper.prototype.deleteWell = function(well) {
-    return well.remove();
   };
 
   ViewHelper.prototype.modifyWells = function() {
-    var grow, radius, well, wellElement, _i, _len, _ref,
+    var well, _i, _len, _ref,
       _this = this;
-    _ref = $('.wells .well');
+    _ref = this.wells;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      wellElement = _ref[_i];
-      well = $(wellElement);
-      radius = parseInt(well.data('radius') || 0);
-      grow = well.data('grow');
-      if (!grow) {
-        continue;
-      }
-      radius += parseInt(grow);
-      if (radius > this.MAX_RADIUS) {
-        this.stopWell(well);
-        continue;
-      }
-      if (radius < 0) {
-        this.deleteWell(well);
-        continue;
-      }
-      well.css({
-        boxShadow: "0px 0 " + (radius * 2) + "px " + radius + "px rgba(255,255,255,0.8)"
-      });
-      well.data('radius', radius);
+      well = _ref[_i];
+      well.modify();
     }
     return setTimeout((function() {
       return _this.modifyWells();
     }), 10);
   };
 
-  ViewHelper.prototype.growWell = function(well) {
-    return well.data('grow', 1);
-  };
-
-  ViewHelper.prototype.shrinkWell = function(well) {
-    return well.data('grow', -1);
-  };
-
-  ViewHelper.prototype.stopWell = function(well) {
-    return well.data('grow', null);
-  };
-
   return ViewHelper;
+
+})();
+
+gravity.Well = (function() {
+
+  Well.prototype.MAX_RADIUS = 25;
+
+  function Well(container, x, y) {
+    this.container = container;
+    this.x = x;
+    this.y = y;
+    this.el = $(document.createElement('DIV'));
+    this.el.addClass('well');
+    this.el.css({
+      left: x,
+      top: y
+    });
+    this.radius = 0;
+    this.container.append(this.el);
+  }
+
+  Well.prototype["delete"] = function() {
+    return this.el.remove();
+  };
+
+  Well.prototype.grow = function() {
+    return this.rate = 1;
+  };
+
+  Well.prototype.shrink = function() {
+    return this.rate = -1;
+  };
+
+  Well.prototype.stop = function() {
+    return delete this.rate;
+  };
+
+  Well.prototype.modify = function() {
+    if (this.rate == null) {
+      return;
+    }
+    this.radius += this.rate;
+    if (this.radius > this.MAX_RADIUS) {
+      this.stop();
+      return;
+    }
+    if (this.radius < 0) {
+      this["delete"]();
+    }
+    return this.el.css({
+      boxShadow: "0px 0 " + (this.radius * 2) + "px " + this.radius + "px rgba(255,255,255,0.8)"
+    });
+  };
+
+  return Well;
 
 })();
