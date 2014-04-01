@@ -6,11 +6,15 @@ class gravity.ViewHelper
     @asteroids = []
     @initGravityWells()
     @initAsteroids()
+    @initGoal()
     @lastStep = new Date()
     @step()
       
   $: (selector) -> $(selector, @el)
 
+  initGoal: ->
+    @goal = new gravity.Goal(@el, 800, 300)
+  
   initAsteroids: ->
     @asteroids.push(new gravity.Asteroid(@el, 100, 100))
 
@@ -127,6 +131,15 @@ class gravity.Asteroid
     @el.css(left: @x, top: @y)
     
   
+
+class gravity.Goal
+  constructor: (@container, @x, @y) ->
+    @el = $(document.createElement('DIV'))
+    @el.addClass('goal')
+    @el.css(left: @x, top: @y)    
+    @container.append(@el)
+    
+
   
       
     

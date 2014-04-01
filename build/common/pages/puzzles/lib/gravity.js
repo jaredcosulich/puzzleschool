@@ -11,12 +11,17 @@ gravity.ViewHelper = (function() {
     this.asteroids = [];
     this.initGravityWells();
     this.initAsteroids();
+    this.initGoal();
     this.lastStep = new Date();
     this.step();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
+  };
+
+  ViewHelper.prototype.initGoal = function() {
+    return this.goal = new gravity.Goal(this.el, 800, 300);
   };
 
   ViewHelper.prototype.initAsteroids = function() {
@@ -193,5 +198,24 @@ gravity.Asteroid = (function() {
   };
 
   return Asteroid;
+
+})();
+
+gravity.Goal = (function() {
+
+  function Goal(container, x, y) {
+    this.container = container;
+    this.x = x;
+    this.y = y;
+    this.el = $(document.createElement('DIV'));
+    this.el.addClass('goal');
+    this.el.css({
+      left: this.x,
+      top: this.y
+    });
+    this.container.append(this.el);
+  }
+
+  return Goal;
 
 })();
