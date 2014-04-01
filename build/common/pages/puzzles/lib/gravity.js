@@ -8,16 +8,23 @@ gravity.ViewHelper = (function() {
   function ViewHelper(_arg) {
     this.el = _arg.el;
     this.wells = [];
-    this.initGravityWell();
+    this.asteroids = [];
+    this.initGravityWells();
+    this.initAsteroids();
+    this.lastStep = new Date();
+    this.step();
   }
 
   ViewHelper.prototype.$ = function(selector) {
     return $(selector, this.el);
   };
 
-  ViewHelper.prototype.initGravityWell = function() {
+  ViewHelper.prototype.initAsteroids = function() {
+    return this.asteroids.push(new gravity.Asteroid(this.el, 100, 100));
+  };
+
+  ViewHelper.prototype.initGravityWells = function() {
     var _this = this;
-    this.modifyWells();
     return this.el.bind('mousedown.well', function(e) {
       var well;
       well = new gravity.Well(_this.el, e.offsetX, e.offsetY);
@@ -29,16 +36,22 @@ gravity.ViewHelper = (function() {
     });
   };
 
-  ViewHelper.prototype.modifyWells = function() {
-    var well, _i, _len, _ref,
+  ViewHelper.prototype.step = function() {
+    var asteroid, well, _i, _j, _len, _len1, _ref, _ref1,
       _this = this;
     _ref = this.wells;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       well = _ref[_i];
       well.modify();
     }
+    _ref1 = this.asteroids;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      asteroid = _ref1[_j];
+      asteroid.move(new Date() - this.lastStep);
+    }
+    this.lastStep = new Date();
     return setTimeout((function() {
-      return _this.modifyWells();
+      return _this.step();
     }), 10);
   };
 
@@ -57,8 +70,8 @@ gravity.Well = (function() {
     this.el = $(document.createElement('DIV'));
     this.el.addClass('well');
     this.el.css({
-      left: x,
-      top: y
+      left: this.x,
+      top: this.y
     });
     this.radius = 0;
     this.container.append(this.el);
@@ -98,5 +111,47 @@ gravity.Well = (function() {
   };
 
   return Well;
+
+})();
+
+gravity.Asteroid = (function() {
+
+  function Asteroid(container, x, y) {
+    this.container = container;
+    this.x = x;
+    this.y = y;
+    this.el = $(document.createElement('DIV'));
+    this.el.addClass('asteroid');
+    this.speed = 0.25;
+    this.direction = 270;
+    this.move(1);
+    this.container.append(this.el);
+  }
+
+  Asteroid.prototype.move = function(time) {
+    var distance, radians;
+    distance = this.speed * time;
+    radians = this.direction * (Math.PI / 180);
+    this.x = this.x + (Math.cos(radians) * distance);
+    this.y = this.y + (Math.sin(radians) * distance);
+    if (this.x > this.container.width()) {
+      this.x = 0;
+    }
+    if (this.x < 0) {
+      this.x = this.container.width();
+    }
+    if (this.y > this.container.height()) {
+      this.y = 0;
+    }
+    if (this.y < 0) {
+      this.y = this.container.height();
+    }
+    return this.el.css({
+      left: this.x,
+      top: this.y
+    });
+  };
+
+  return Asteroid;
 
 })();
