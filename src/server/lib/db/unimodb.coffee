@@ -4,9 +4,6 @@ db = exports
 
 unimoTable = process.env.UNIMO or 'puzzleschool-dev'
 
-dynodeClient = new dynode.Client
-    accessKeyId: 'AKIAJ4DV2JSOSNOBJFNA'
-    secretAccessKey: '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'
     
 getGuid = (table, id) -> table + '-' + id
 splitGuid = (guid) -> guid.split('-', 2)
