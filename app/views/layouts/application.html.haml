@@ -1,9 +1,26 @@
 !!!
 %html
   %head
-    %title Puzzleschool
+    %title The Puzzle School
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    
     = csrf_meta_tags
+    
+    %link{rel: 'stylesheet', href: 'http://yui.yahooapis.com/pure/0.6.0/pure-min.css'}
+    
+    /[if lte IE 8]
+    %link{:href => 'http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css', :rel => 'stylesheet'}
+    / [if gt IE 8]><!
+    %link{:href => 'http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css', :rel => 'stylesheet'}
+    / <![endif]
+    
+    /[if lte IE 8]
+    %link{:href => '/combo/1.18.13?/css/layouts/marketing-old-ie.css', :rel => 'stylesheet'}/
+    / [if gt IE 8]><!
+    %link{:href => '/combo/1.18.13?/css/layouts/marketing.css', :rel => 'stylesheet'}
+    / <![endif]
+
   %body
     = yield
