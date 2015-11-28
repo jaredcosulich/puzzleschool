@@ -1,0 +1,45 @@
+# Logfile created on 2015-11-28 11:47:20 -0500 by logger.rb/47272
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Starting the New Relic agent in "development" environment.
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : To prevent agent startup add a NEWRELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] WARN : No configuration file found. Working directory = /Users/jcosulich/workspace/puzzleschool
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] WARN : Looked in these locations (based on defaults): /Users/jcosulich/workspace/puzzleschool/config/newrelic.yml, /Users/jcosulich/workspace/puzzleschool/newrelic.yml, /Users/jcosulich/workspace/puzzleschool/config/newrelic.yml, /Users/jcosulich/workspace/puzzleschool/newrelic.yml, /Users/jcosulich/.newrelic/newrelic.yml, /Users/jcosulich/newrelic.yml
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Environment: development
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : No known dispatcher detected.
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Application: development
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing ActiveJob instrumentation
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing ActiveRecord 4 instrumentation
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing Net instrumentation
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing deferred Rack instrumentation
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing Rack::Builder middleware instrumentation
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing Rails 3+ middleware instrumentation
+[2015-11-28 11:47:20 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing Rails 4 Controller instrumentation
+[2015-11-28 11:47:21 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing Rails 4 view instrumentation
+[2015-11-28 11:47:21 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Installing Rails 4 Error instrumentation
+[2015-11-28 11:47:21 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Finished instrumentation
+[2015-11-28 11:47:22 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Doing deferred dependency-detection before Rack startup
+[2015-11-28 11:47:53 -0500 Jared-Cosulich-MacBook-Air.local (73844)] ERROR : Invalid license key, please contact support@newrelic.com
+[2015-11-28 11:47:53 -0500 Jared-Cosulich-MacBook-Air.local (73844)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2015-11-28 11:54:21 -0500 Jared-Cosulich-MacBook-Air.local (73844)] INFO : Starting Agent shutdown
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Starting the New Relic agent in "development" environment.
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : To prevent agent startup add a NEWRELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] WARN : No configuration file found. Working directory = /Users/jcosulich/workspace/puzzleschool
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] WARN : Looked in these locations (based on defaults): /Users/jcosulich/workspace/puzzleschool/config/newrelic.yml, /Users/jcosulich/workspace/puzzleschool/newrelic.yml, /Users/jcosulich/workspace/puzzleschool/config/newrelic.yml, /Users/jcosulich/workspace/puzzleschool/newrelic.yml, /Users/jcosulich/.newrelic/newrelic.yml, /Users/jcosulich/newrelic.yml
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Environment: development
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : No known dispatcher detected.
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Application: development
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing ActiveJob instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing ActiveRecord 4 instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing Net instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing deferred Rack instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing Rack::Builder middleware instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing Rails 3+ middleware instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing Rails 4 Controller instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing Rails 4 view instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Installing Rails 4 Error instrumentation
+[2015-11-28 11:54:25 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Finished instrumentation
+[2015-11-28 11:54:26 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Doing deferred dependency-detection before Rack startup
+[2015-11-28 11:54:35 -0500 Jared-Cosulich-MacBook-Air.local (74164)] ERROR : Invalid license key, please contact support@newrelic.com
+[2015-11-28 11:54:35 -0500 Jared-Cosulich-MacBook-Air.local (74164)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2015-11-28 11:54:56 -0500 Jared-Cosulich-MacBook-Air.local (74164)] INFO : Starting Agent shutdown
