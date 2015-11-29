@@ -9,7 +9,35 @@
     %br
     
     .quote
-      “If you want to build a ship, don't drum up people to collect wood and don't assign them tasks and work, but rather teach them to long for the endless immensity of the sea.”
-      .right
+      %p
+        “If you want to build a ship, don't drum up people to collect wood and don't assign them tasks and work, but rather teach them to long for the endless immensity of the sea.”
+      %p.right
         – Antoine de Saint-Exupery
       
+
+    %br
+    
+    %p 
+      = "Read a brief #{link_to('description of the philosophy', 'https://drive.google.com/file/d/0BycyxB-RgYkOQWxoQVdHSnBLRU0/view?usp=sharing', target: '_blank')}.".html_safe
+      
+    %br
+    
+    .mailing-list
+      = form_for @subscriber, html: {class: 'pure-form pure-form-stacked'} do |f|
+        .fieldset
+          %h5 Sign up for updates:
+          %p
+            = f.label :name, 'Your Name'
+            = f.text_field :name
+          %p
+            = f.label :email, 'Your Email'
+            = f.text_field :email
+          %p
+            = f.label :notes, 'Why are you interested in The Puzzle School?'
+            = f.text_area :notes
+          .actions
+            = f.submit 'Sign up for updates', class: 'pure-button pure-button-active'
+            
+
+
+
