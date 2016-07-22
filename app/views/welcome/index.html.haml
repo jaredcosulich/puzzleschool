@@ -9,11 +9,6 @@
     %br
 
     %p
-      = "Read a #{link_to('description of the school', '/PuzzleSchoolDescription.pdf', target: '_blank')}.".html_safe
-
-    %br
-
-    %p
       “Who in the world am I? Ah, that's the great puzzle.” ~ Lewis Carroll
     %p
       “Math, it's a puzzle to me. I love figuring out puzzles.” ~ Maya Lin
@@ -27,6 +22,26 @@
       “For me, writing a novel is like solving a puzzle.” ~ Mohsin Hamid
     %p
       “The puzzle of solving the murder is what drives him on.” ~ John Thaw
+
+    %br
+
+    %table.pdfs
+      %tbody
+        %tr
+          %td
+            = link_to(image_tag('pdf.png'), '/PuzzleSchoolDescription.pdf', target: '_blank')
+          %td
+            = link_to(image_tag('pdf.png'), '/PuzzleSchoolExperiences.pdf', target: '_blank')
+        %tr
+          %td
+            School
+            %br
+            Description
+          %td
+            Short
+            %br
+            Stories
+
 
     %br
 
