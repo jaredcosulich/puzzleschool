@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
 
-  resources :programs, only: [:show]
+  resources :programs, only: [:index, :show]
 
   root 'welcome#index'
 

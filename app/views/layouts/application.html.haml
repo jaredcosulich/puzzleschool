@@ -3,13 +3,7 @@
   %head
     %title The Puzzle School
 
-    %link{rel: 'stylesheet', href: 'http://yui.yahooapis.com/pure/0.6.0/pure-min.css'}
-
-    /[if lte IE 8]
-    %link{:href => 'http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css', :rel => 'stylesheet'}
-    / [if gt IE 8]><!
-    %link{:href => 'http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css', :rel => 'stylesheet'}
-    / <![endif]
+    %link{href: 'https://fonts.googleapis.com/css?family=Roboto', rel: 'stylesheet'}
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
@@ -19,7 +13,7 @@
 
 
   %body
-    .splash-container
-      .splash
-        = render partial: 'layouts/header'
-        = yield
+    = render partial: 'layouts/header'
+    = render partial: 'layouts/logo'
+    .container.py-3
+      = yield

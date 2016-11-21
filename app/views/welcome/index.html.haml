@@ -1,53 +1,40 @@
-%p
-  “Who in the world am I? Ah, that's the great puzzle.” ~ Lewis Carroll
-%p
-  “Math, it's a puzzle to me. I love figuring out puzzles.” ~ Maya Lin
-%p
-  “Once I get on a puzzle, I can't get off.” ~ Richard Feynman
-%p
-  “Creativity is just connecting things.” ~ Steve Jobs
-%p
-  “For me, writing a novel is like solving a puzzle.” ~ Mohsin Hamid
-%p
-  “The puzzle of solving the murder is what drives him on.” ~ John Thaw
-%p
-  “As a kid, I just got lost in the puzzle of acting, the magic of it.” ~ Michael J. Fox
-
-%br
-
-%table.pdfs
-  %tbody
-    %tr
-      %td
-        = link_to(image_tag('pdf.png'), '/PuzzleSchoolDescription.pdf', target: '_blank')
-      %td
-        = link_to(image_tag('pdf.png'), '/PuzzleSchoolExperiences.pdf', target: '_blank')
-    %tr
-      %td
-        School
-        %br
-        Description
-      %td
-        Short
-        %br
-        Stories
+.row
+  .col-xs-12.text-xs-center
+    %p
+      “Who in the world am I? Ah, that's the great puzzle.” ~ Lewis Carroll
+    %p
+      “Math, it's a puzzle to me. I love figuring out puzzles.” ~ Maya Lin
+    %p
+      “Once I get on a puzzle, I can't get off.” ~ Richard Feynman
+    %p
+      “Creativity is just connecting things.” ~ Steve Jobs
+    %p
+      “For me, writing a novel is like solving a puzzle.” ~ Mohsin Hamid
+    %p
+      “The puzzle of solving the murder is what drives him on.” ~ John Thaw
+    %p
+      “As a kid, I just got lost in the puzzle of acting, the magic of it.” ~ Michael J. Fox
 
 
-%br
+.row.py-3
+  .col-xs-12.text-xs-center
+    = link_to('Learn More', '', class: 'btn btn-outline-primary btn-lg mx-2 px-3')
+    = link_to('Current Programs', programs_path, class: 'btn btn-outline-primary btn-lg mx-2')
 
-.mailing-list
-  %p.splash-subhead Sign Up For Updates
-  = form_for @subscriber, html: {class: 'pure-form pure-form-stacked'} do |f|
-    .fieldset
-      %p
-        = f.label :name, 'Your Name'
-        = f.text_field :name
-      %p
-        = f.label :email, 'Your Email'
-        = f.text_field :email
-    .fieldset
-      %p
-        = f.label :notes, 'Why are you interested?'
-        = f.text_area :notes
-    .actions
-      = f.submit 'Sign up for updates', class: 'pure-button pure-button-active'
+
+.row.py-3
+  .col-xs-12.offset-sm-3.col-sm-6
+    %h5.text-xs-center.py-2 Sign Up For Updates
+    = form_for @subscriber do |f|
+      .form-group.row
+        = f.text_field :name, class: 'form-control col-xs-12', placeholder: 'Name'
+
+      .form-group.row
+        = f.text_field :email, class: 'form-control col-xs-12', placeholder: 'Email', type: 'email'
+
+      .form-group.row
+        = f.text_area :notes, class: 'form-control col-xs-12', placeholder: 'Why are you interested?', rows: 4
+
+      .row
+        .col-xs-12.text-xs-center
+          = f.submit 'Sign Up For Updates', class: 'btn btn-outline-primary '
