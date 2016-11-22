@@ -1,0 +1,78 @@
+.row.text-xs-center.py-3.mt-3
+  .col-xs-12.col-md-6.offset-md-3
+    %h1.py-3.title Programs
+    %p.mt-1
+      We are currently designing and running programs in and around Cambridge.
+    %p
+      With each program we seek to work with the public school district,
+      the after school community, or with a local business partner.
+
+
+.row.py-3
+  .col-xs-12.col-md-5.offset-md-2
+    %h5 Pivotal Mentors "Learn To Code"
+    %p
+      We've partnered up with
+      = link_to('Pivotal Labs', 'https://pivotal.io/labs', target: '_blank')
+      to create a coding program designed to give students from all backgrounds
+      positive experiences with software development.
+    %p
+      The program focuses on connecting students with passionate mentors in an
+      interesting setting and helping them to learn code while they explore interesting
+      challenges, complex math problems, artistic expression, and self expression through code.
+    %p.text-xs-center
+      = link_to('Learn More', '/programs/pivotal_mentors_pilot', class: 'btn btn-outline-primary px-2')
+
+
+  .col-xs-12.col-md-3.text-xs-right
+    = image_tag('programs_thumb.png', class: 'rounded-circle')
+
+
+.row.py-3
+  .col-xs-12.col-md-3.offset-md-2
+    = image_tag('questionaire.png', style: 'border: 1px solid #aaa')
+
+  .col-xs-12.col-md-5
+    %h5 Forge Your Unique Path
+    %p
+      We are developing a program in collaboration with a local youth center
+      to help students think about their interests, their strengths, their future, and
+      problems in the world they want to solve.
+    %p
+      We are currently exploring two areas of focus. The first, more general area, is
+      working with students one-on-one, interviewing them about their interests and brainstorming
+      other areas of interest before exploring different ways to pursue those interests.
+    %p
+      The second area will focus on students who have decided that their only interest is sports;
+      that playing professional sports is their only path toward a successful adult life.
+    %p
+      With both groups the goal will try to help students think through
+      their future and various options. We aren't trying to explicitly change their mind or discourage
+      any path, simply to brainstorm on how to best pursue and potentially expand their goals.
+    %p
+      %b Status:
+      In Development
+
+
+.row.py-3
+  .col-xs-12.col-md-5.offset-md-2
+    %h5 The Innovator's Compass
+    %p
+      One of The Puzzle School's advisors, Ela Ben-Ur, is a 15 year veteran of the world-renowned design firm,
+      = "#{link_to('Ideo', '', target: '_blank')}.".html_safe
+      Drawing on her experiences at IDEO Ela has created the
+      = "#{link_to('Innovator\'s Compass', 'http://innovatorscompass.org/', target: '_blank')}, ".html_safe
+      a simplified
+      framework for engaging in Design Thinking.
+    %p
+      We are working with Ela to design programs that leverage the Innovator's Compass and Design Thinking
+      toward problems that are personally important to students. This may range from choosing a college to
+      a fight with a significant other or family member. In each situation student will be asked to
+      observe their situation, brainstorm on what matters most, think through possible future,
+      think through experiments they could try to achieve their goal, and then repeat.
+    %p
+      %b Status:
+      In Development
+
+  .col-xs-12.col-md-3.text-xs-right
+    = image_tag('innovators_compass.png', style: 'border: 1px solid #aaa')
