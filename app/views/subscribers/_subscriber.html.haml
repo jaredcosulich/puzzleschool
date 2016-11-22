@@ -1,0 +1,16 @@
+.row.py-3
+  .col-xs-12.offset-sm-3.col-sm-6
+    %h5.text-xs-center.py-2 Sign Up For Updates
+    = form_for subscriber do |f|
+      .form-group.row
+        = f.text_field :name, class: 'form-control col-xs-12', placeholder: 'Name'
+
+      .form-group.row
+        = f.text_field :email, class: 'form-control col-xs-12', placeholder: 'Email', type: 'email'
+
+      .form-group.row
+        = f.text_area :notes, class: 'form-control col-xs-12', placeholder: 'Why are you interested?', rows: 4
+
+      .row
+        .col-xs-12.text-xs-center
+          = f.submit 'Sign Up For Updates', class: 'btn btn-outline-primary '

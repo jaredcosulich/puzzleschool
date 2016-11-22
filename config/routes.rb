@@ -1,11 +1,10 @@
 Rails.application.routes.draw do
-  resources :subscribers
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
+  resources :subscribers, only: [:create]
 
   resources :programs, only: [:index, :show]
+
+  get 'learn_more' => 'welcome#learn_more', as: :learn_more
 
   root 'welcome#index'
 

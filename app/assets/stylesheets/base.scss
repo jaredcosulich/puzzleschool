@@ -1,5 +1,5 @@
 html {
-  font-size: 15px;  
+  font-size: 15px;
 }
 
 body {
@@ -10,4 +10,16 @@ body {
 
 .logo-header {
   letter-spacing: 0.05em;
+}
+
+ul {
+  &.no_shift {
+    padding-left: 18px;
+  }
+
+  &.spaced_out {
+    li {
+      margin-bottom: 6px;
+    }
+  }
 }

@@ -1,7 +1,9 @@
 class WelcomeController < ApplicationController
-  
+
   def index
-    @subscriber = Subscriber.new
   end
-  
+
+  def learn_more
+  end
+
 end
