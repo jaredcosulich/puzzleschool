@@ -1,3 +1,5 @@
+= render partial: 'layouts/logo'
+
 .row.py-2
   .col-xs-12.col-md-5.offset-md-2
     %h5 The Innovation School Model
@@ -31,8 +33,8 @@
       This process will inform everything in The Puzzle School, from running the school to the
       student experience to how students approach their own learning.
     %p
-      You can find more details in this
-      = link_to('description', 'PuzzleSchoolDescription.pdf', target: '_blank')
+      You can read more in this
+      = link_to('pdf description', 'PuzzleSchoolDescription.pdf', target: '_blank')
       of The Puzzle School.
 
 
@@ -62,28 +64,45 @@
     %h5 Our Programs
     %p
       We are currently running programs with students in Cambridge.
-
-    %p
-      The programs so far have focused on:
+      Some of the programs we have run or are developing include:
     %ul.no_shift.spaced_out
-      %li Exploring math, art, and self expression through coding.
       %li Exploring student interests, strengths, and problems they are interested in solving in the world.
-      %li Using processes such as Design Thinking to help students solve problems in their own lives.
-
+      %li Exploring math, art, and self expression through coding.
+      %li Helping students think through goals and problems in their own lives using Design Thinking.
+    %p
+      Read more about our
+      = link_to('programs >', programs_path)
 
 .row.py-3
   .col-xs-12.col-md-6.offset-md-2
     %h5 Our Advisors
     %p
-      The Puzzle School will use this process to continuously work toward a school that
-      best helps each individual student. In doing so we hope to:
+      The Puzzle School is working with educational leaders from around Cambridge.
+    %p
+      They represent decades of teaching experience and have started, run, and worked for
+      some of the most innovative and prominent secondary and higher educational schools
+      in the country:
     %ul.no_shift.spaced_out
-      %li Create a healthy environment for all students and teachers.
-      %li Give students greater agency and responsibility over their school.
-      %li
-        Explore student interests and diverse opportunities, such as internships,
-        independent and group projects, and online and community programs.
-      %li Provide teachers autonomy and opportunities for collaboration.
+      %li A faculty member from the Harvard Graduate School of Education
+      %li A co-founder of High Tech High
+      %li A co-executive director of Big Picture Learning
+      %li Adjunct professors from Olin and Boston College
 
-  .col-xs-12.col-md-2.text-xs-right
-    = image_tag 'compass.png'
+  .col-xs-12.col-md-2
+    .row
+      .col-xs-6.pb-1
+        = image_tag('advisors/grotzer.jpg', class: 'rounded')
+      .col-xs-6.pb-1
+        = image_tag('advisors/riordan.jpg', class: 'rounded')
+    .row
+      .col-xs-6.pb-1
+        = image_tag('advisors/patin.jpg', class: 'rounded')
+      .col-xs-6.pb-1
+        = image_tag('advisors/ben-ur.jpg', class: 'rounded')
+    .row
+      .col-xs-6
+        = image_tag('advisors/frishman.jpg', class: 'rounded')
+      .col-xs-6
+        = image_tag('advisors/resnick.jpg', class: 'rounded')
+
+= render Subscriber.new
