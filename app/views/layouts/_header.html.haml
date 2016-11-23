@@ -1,11 +1,14 @@
 %nav.navbar.navbar-fixed-top.navbar-light.bg-faded
   .container
-    %ul.nav.navbar-nav.float-xs-right.text-muted
-      %li.nav-item
-        = link_to 'Home', root_path, class: 'nav-link'
-      %li.nav-item
-        = link_to 'Learn More', learn_more_path, class: 'nav-link'
-      %li.nav-item
-        = link_to 'Programs', programs_path, class: 'nav-link'
+    .float-xs-right.text-xs-right
+      %button.navbar-toggler.hidden-md-up{"aria-controls" => "navbarResponsive", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarResponsive", "data-toggle" => "collapse", :type => "button"}
+      #navbarResponsive.collapse.navbar-toggleable-sm
+        %ul.nav.navbar-nav.text-muted
+          %li.nav-item
+            = link_to 'Home', root_path, class: 'nav-link'
+          %li.nav-item
+            = link_to 'Learn More', learn_more_path, class: 'nav-link'
+          %li.nav-item
+            = link_to 'Programs', programs_path, class: 'nav-link'
 
     = link_to(image_tag('darker_logo_small.png'), root_path)
