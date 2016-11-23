@@ -1,11 +1,18 @@
 html {
   font-size: 15px;
+  padding: 0 30px;
 }
 
 body {
   background-color: #fff;
   color: #333;
   font-family: 'Roboto', verdana, arial, helvetica, sans-serif;
+}
+
+nav {
+  img {
+    margin-top: 3px;
+  }
 }
 
 .footer {
