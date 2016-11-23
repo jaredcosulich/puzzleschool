@@ -3,25 +3,43 @@
 .row
   .col-xs-12.text-xs-center
     %p
-      “Who in the world am I? Ah, that's the great puzzle.” ~ Lewis Carroll
+      “Who in the world am I? Ah, that's the great puzzle.”
+      %br.hidden-sm-up
+      \~ Lewis Carroll
     %p
-      “Math, it's a puzzle to me. I love figuring out puzzles.” ~ Maya Lin
+      “Math, it's a puzzle to me. I love figuring out puzzles.”
+      %br.hidden-sm-up
+      \~ Maya Lin
     %p
-      “Once I get on a puzzle, I can't get off.” ~ Richard Feynman
+      “Once I get on a puzzle, I can't get off.”
+      %br.hidden-sm-up
+      \~ Richard Feynman
     %p
-      “Creativity is just connecting things.” ~ Steve Jobs
+      “Creativity is just connecting things.”
+      %br.hidden-sm-up
+      \~ Steve Jobs
     %p
-      “For me, writing a novel is like solving a puzzle.” ~ Mohsin Hamid
+      “For me, writing a novel is like solving a puzzle.”
+      %br.hidden-sm-up
+      \~ Mohsin Hamid
     %p
-      “The puzzle of solving the murder is what drives him on.” ~ John Thaw
+      “The puzzle of solving the murder
+      %span.hidden-xs-down is what
+      drives him on.”
+      %br.hidden-sm-up
+      \~ John Thaw
     %p
-      “As a kid, I just got lost in the puzzle of acting, the magic of it.” ~ Michael J. Fox
+      “As a kid, I just got lost in the puzzle of
+      %span.hidden-sm-down acting, the magic of it.”
+      %span.hidden-md-up acting.”
+      %br.hidden-sm-up
+      \~ Michael J. Fox
 
 
 .row.py-3
   .col-xs-12.text-xs-center
-    = link_to('Learn More', learn_more_path, class: 'btn btn-outline-primary btn-lg mx-2 px-3')
-    = link_to('Current Programs', programs_path, class: 'btn btn-outline-primary btn-lg mx-2')
+    = link_to('Learn More', learn_more_path, class: 'btn btn-outline-primary btn-lg mx-2 px-3 mb-2')
+    = link_to('Current Programs', programs_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2')
 
 
 = render Subscriber.new
