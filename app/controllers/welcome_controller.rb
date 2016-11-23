@@ -6,4 +6,7 @@ class WelcomeController < ApplicationController
   def learn_more
   end
 
+  def advisors
+  end
+
 end

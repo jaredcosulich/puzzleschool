@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :programs, only: [:index, :show]
 
   get 'learn_more' => 'welcome#learn_more', as: :learn_more
+  get 'advisors' => 'welcome#advisors', as: :advisors
+  get 'contact' => 'welcome#contact', as: :contact
 
   root 'welcome#index'
 

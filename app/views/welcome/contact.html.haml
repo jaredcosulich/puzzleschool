@@ -1,0 +1,13 @@
+= render partial: 'layouts/logo'
+
+.row
+  .col-xs-12.text-xs-center
+    %p We are actively reaching out to families, educators, businesses and community members in the Cambridge area.
+
+    %p
+      If you'd like to contact us please email
+      = mail_to 'info@puzzleschool.com', 'info@puzzleschool.com'
+
+    %p Or provide your information below to receive updates on our progress.
+
+= render Subscriber.new
