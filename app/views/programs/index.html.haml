@@ -9,7 +9,7 @@
 
 
 .row.py-3
-  .col-xs-12.col-md-5.offset-md-2
+  .col-xs-12.col-md-7.col-lg-5.offset-lg-2
     %h5 Pivotal Mentors "Learn To Code"
     %p
       We've partnered up with
@@ -24,15 +24,15 @@
       = link_to('Learn More', '/programs/pivotal_mentors_pilot', class: 'btn btn-outline-primary px-2')
 
 
-  .col-xs-12.col-md-3.text-xs-right
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
     = image_tag('programs_thumb.png', class: 'rounded-circle')
 
 
 .row.py-3
-  .col-xs-12.col-md-3.offset-md-2
+  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down
     = image_tag('questionaire.png', style: 'border: 1px solid #aaa')
 
-  .col-xs-12.col-md-5
+  .col-xs-12.col-md-7.col-lg-5
     %h5 Forge Your Unique Path
     %p
       We are developing a program in collaboration with a local youth center
@@ -53,9 +53,11 @@
       %b Status:
       In Development
 
+  .col-xs-12.text-xs-center.hidden-sm-up
+    = image_tag('questionaire.png', style: 'border: 1px solid #aaa')
 
 .row.py-3
-  .col-xs-12.col-md-5.offset-md-2
+  .col-xs-12.col-md-7.offset-lg-2.col-lg-5
     %h5 The Innovator's Compass
     %p
       One of The Puzzle School's advisors, Ela Ben-Ur, is a 15 year veteran of the world-renowned design firm,
@@ -74,5 +76,5 @@
       %b Status:
       In Development
 
-  .col-xs-12.col-md-3.text-xs-right
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
     = image_tag('innovators_compass.png', style: 'border: 1px solid #aaa')
