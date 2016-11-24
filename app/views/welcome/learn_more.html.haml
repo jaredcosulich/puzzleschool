@@ -1,7 +1,7 @@
 = render partial: 'layouts/logo'
 
 .row.py-2
-  .col-xs-12.col-md-5.offset-md-2
+  .col-xs-12.col-md-8.offset-lg-2.col-lg-5
     %h5 The Innovation School Model
     %p
       The Innovation Schools initiative was signed into law by Governor Patrick in January 2010.
@@ -12,34 +12,36 @@
     %p
       There are not yet any innovation schools in Cambridge.
 
-  .col-xs-12.col-md-3.text-xs-right
+  .col-xs-12.col-md-4.col-lg-3.text-xs-center.text-md-right
     = image_tag 'massachusetts-seal.jpg'
 
 .row.py-3
-  .col-xs-12.col-md-3.offset-md-2
+  .col-md-5.col-lg-3.offset-lg-2.hidden-sm-down
     = link_to(image_tag('puzzleschool_pdf.png'), 'PuzzleSchoolDescription.pdf', target: '_blank')
 
-  .col-xs-12.col-md-5
+  .col-xs-12.col-md-7.col-lg-5
     %h5 The Puzzle School Exploration
     %p
       We are in the early stages of exploring a new upper or alternative high school
       in Cambridge.
     %p
-      The "puzzle" metaphor focuses on a process rather
-      than a specific design. The process consists of deep observations,
-      developing ideas and hypotheses, testing hypotheses and seeking feedback
-      as you make progress toward your goal.
+      The "puzzle" metaphor is about a process rather than a specific design.
+      The process consists of deep observations, developing and testing hypotheses,
+      and seeking feedback as you make progress toward your goal.
     %p
-      This process will inform everything in The Puzzle School, from running the school to the
-      student experience to how students approach their own learning.
+      This process will inform all aspects of The Puzzle School, from how the school is run to the
+      student's day-to-day experience to how students approach their own learning.
     %p
       You can read more in this
       = link_to('pdf description', 'PuzzleSchoolDescription.pdf', target: '_blank')
       of The Puzzle School.
 
+  .col-xs-12.text-xs-center.hidden-md-up
+    = link_to(image_tag('puzzleschool_pdf.png'), 'PuzzleSchoolDescription.pdf', target: '_blank')
+
 
 .row.py-3
-  .col-xs-12.col-md-6.offset-md-2
+  .col-xs-12.col-md-9.col-lg-6.offset-lg-2
     %h5 The Goals Of The Process
     %p
       The Puzzle School will use this process to continuously work toward a school that
@@ -52,15 +54,15 @@
         independent and group projects, and online and community programs.
       %li Provide teachers autonomy and opportunities for collaboration.
 
-  .col-xs-12.col-md-2.text-xs-right
+  .col-xs-12.col-md-3.col-lg-2.text-xs-center.text-md-right
     = image_tag 'compass.png'
 
 
 .row.py-3
-  .col-xs-12.col-md-3.offset-md-2
+  .col-md-5.offset-lg-2.col-lg-3.hidden-sm-down
     = link_to(image_tag('programs_thumb.png', class: 'rounded-circle'), programs_path, target: '_blank')
 
-  .col-xs-12.col-md-5
+  .col-xs-12.col-md-7.col-lg-5
     %h5 Our Programs
     %p
       We are currently running programs with students in Cambridge.
@@ -73,8 +75,11 @@
       Read more about our
       = link_to('programs >', programs_path)
 
+  .col-xs-12.hidden-md-up.text-xs-center
+    = link_to(image_tag('programs_thumb.png', class: 'rounded-circle'), programs_path, target: '_blank')
+
 .row.py-3
-  .col-xs-12.col-md-6.offset-md-2
+  .col-xs-12.col-md-9.col-lg-6.offset-lg-2
     %h5 Our Advisors
     %p
       The Puzzle School is working with educational leaders from around Cambridge.
@@ -90,21 +95,19 @@
       Learn more about our
       = link_to('advisors >', advisors_path)
 
-  .col-xs-12.col-md-2
+  .col-xs-12.col-md-3.col-lg-2
     .row
-      .col-xs-6.pb-1
+      .col-xs-4.col-sm-2.col-md-6.pb-1
         = image_tag('advisors/grotzer-thumb.jpg', class: 'rounded')
-      .col-xs-6.pb-1
+      .col-xs-4.col-sm-2.col-md-6.pb-1
         = image_tag('advisors/riordan-thumb.jpg', class: 'rounded')
-    .row
-      .col-xs-6.pb-1
+      .col-xs-4.col-sm-2.col-md-6.pb-1
         = image_tag('advisors/patin-thumb.jpg', class: 'rounded')
-      .col-xs-6.pb-1
+      .col-xs-4.col-sm-2.col-md-6.pb-1
         = image_tag('advisors/ben-ur-thumb.jpg', class: 'rounded')
-    .row
-      .col-xs-6
+      .col-xs-4.col-sm-2.col-md-6
         = image_tag('advisors/frishman-thumb.jpg', class: 'rounded')
-      .col-xs-6
+      .col-xs-4.col-sm-2.col-md-6
         = image_tag('advisors/resnick-thumb.jpg', class: 'rounded')
 
 = render Subscriber.new
