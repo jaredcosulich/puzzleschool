@@ -1,19 +1,22 @@
 .row.text-xs-center.py-3.mt-3
-  .col-xs-12.col-md-6.offset-md-3
-    %h1.py-3.title Pivotal Mentors "Learn To Code" Pilot Program
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h1.py-3.title
+      Pivotal Mentors "Learn To Code"
+      %br.hidden-sm-down
+      Pilot Program
     %p.mt-1
       Starting in August of 2016 we partnered up with
       = link_to('Pivotal Labs', 'https://pivotal.io/labs', target: '_blank')
       to run our first "Learn To Code" program we dubbed the "Pivotal Mentors Program".
 
 .row.py-2
-  .col-xs-12.col-md-6.offset-md-3
+  .col-xs-12.col-md-8.offset-md-2.col-lg-6.offset-lg-3
     .embed-responsive.embed-responsive-16by9
       %iframe.embed-responsive-item{:allowfullscreen => "", :src => "https://www.youtube.com/embed/wMEgDLaMvU0"}
 
 
 .row.py-2
-  .col-xs-12.col-md-6.offset-md-1
+  .col-xs-12.col-md-10.offset-md-1.col-lg-6.offset-lg-1
     %h5 The Goal
     %p
       The goal for the program was simple. Can we make use of the Pivotal Labs office
@@ -23,18 +26,18 @@
       once the program was over and ensure that all students felt capable of coding if they
       ever did decide they wanted to pursue it later in life.
 
-  .col-xs-12.col-md-4.text-xs-right
-    = image_tag 'programs/pivotal/image1.jpg', class: 'rounded'
+  .col-xs-12.col-lg-4.text-xs-center.text-lg-right
+    = image_tag 'programs/pivotal/image1.jpg', class: 'rounded img-fluid'
 
 
 .row.py-2
 
-  .col-xs-12.col-md-4.offset-md-1
-    = image_tag 'programs/pivotal/image2.jpg', class: 'rounded'
+  .col-lg-4.offset-lg-1.hidden-md-down
+    = image_tag 'programs/pivotal/image2.jpg', class: 'rounded img-fluid'
     .mt-3
-      = image_tag 'programs/pivotal/image3.jpg', class: 'rounded'
+      = image_tag 'programs/pivotal/image3.jpg', class: 'rounded img-fluid'
 
-  .col-xs-12.col-md-6
+  .col-xs-12.col-md-10.offset-md-1.offset-lg-0.col-lg-6
     %h5 The Approach
     %p
       Within this program we would focus on a number of ideas that we want to explore with The Puzzle School:
@@ -66,7 +69,12 @@
       We also developed a number of discrete challenge-based lessons, including a scavenger hunt focused on
       decrypting messages using algorithms.
 
-.row.py-2
+  .col-xs-12.hidden-lg-up.text-xs-center
+    = image_tag 'programs/pivotal/image2.jpg', class: 'rounded img-fluid'
+    .mt-3
+      = image_tag 'programs/pivotal/image3.jpg', class: 'rounded img-fluid'
+
+.row.py-2.hidden-xs-down
   .col-xs-12.col-md-10.offset-md-1
     %blockquote.blockquote.py-2.bordered
       %p
@@ -86,7 +94,7 @@
 
 
 .row.py-2
-  .col-xs-12.col-md-6.offset-md-1
+  .col-xs-12.col-md-10.offset-md-1.col-lg-6.offset-lg-1
     %h5 The Results
     %p
       For most students
@@ -109,16 +117,15 @@
       having them work closely with experienced and empathetic mentors seemed to be a real
       success even as we experimented with the curriculum each week.
 
-  .col-xs-12.col-md-4.text-xs-right
-    = image_tag 'programs/pivotal/image4.jpg', class: 'rounded'
+  .col-xs-12.col-lg-4.text-xs-center.text-lg-right
+    = image_tag 'programs/pivotal/image4.jpg', class: 'rounded img-fluid'
 
 
 .row.py-2
+  .col-md-4.offset-md-1.col-lg-4.hidden-md-down
+    = image_tag 'programs/pivotal/image5.jpg', class: 'rounded img-fluid'
 
-  .col-xs-12.col-md-4.offset-md-1
-    = image_tag 'programs/pivotal/image5.jpg', class: 'rounded'
-
-  .col-xs-12.col-md-6
+  .col-xs-12.col-md-10.offset-md-1.offset-lg-0.col-lg-6
     %h5 Moving Forward
     %p
       We're already in the process of developing ideas for the next program. We have
@@ -130,3 +137,6 @@
       the Kendall area. We were able to bring in a few for this past program and it went
       really well so hopefully the program can grow into more of a club where mentors and
       students can connect around interesting software engineering activities on a regular basis.
+
+  .col-xs-12.text-xs-center.hidden-lg-up
+    = image_tag 'programs/pivotal/image5.jpg', class: 'rounded img-fluid'
