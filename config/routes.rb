@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get 'learn_more' => 'welcome#learn_more', as: :learn_more
   get 'advisors' => 'welcome#advisors', as: :advisors
+  get 'day_in_the_life' => 'welcome#day_in_the_life', as: :day_life
   get 'contact' => 'welcome#contact', as: :contact
 
   root 'welcome#index'

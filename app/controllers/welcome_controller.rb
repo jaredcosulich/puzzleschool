@@ -9,4 +9,7 @@ class WelcomeController < ApplicationController
   def advisors
   end
 
+  def day_in_the_life
+  end
+
 end
