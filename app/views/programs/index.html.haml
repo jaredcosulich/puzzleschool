@@ -21,7 +21,7 @@
       interesting setting and helping them to learn code while they explore interesting
       challenges, complex math problems, artistic expression, and self expression through code.
     %p.text-xs-center
-      = link_to('Learn More', '/programs/pivotal_mentors_pilot', class: 'btn btn-outline-primary px-2')
+      = link_to('Learn More', '/programs/pivotal_mentors', class: 'btn btn-outline-primary px-2')
 
 
   .col-xs-12.col-md-5.col-lg-3.text-xs-center
@@ -29,10 +29,128 @@
 
 
 .row.py-3
-  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down
-    = image_tag('questionaire.png', style: 'border: 1px solid #aaa')
+  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down.text-xs-center
+    = image_tag('programs/studentvoice.png', class: 'rounded-circle')
 
   .col-xs-12.col-md-7.col-lg-5
+    %h5 Student Voice
+    %p
+      We meet with a small group of high school students on a weekly basis to
+      discuss their educational experiences and what an ideal high school
+      experience might look like.
+    %p
+      Topics range from the ideal class to how you can better support discussions
+      of controversial topics to what the ideal schedule might look like
+      to how you might deal with discipline in a school.
+    %p.text-xs-center
+      = link_to('Learn More', '/programs/student_voice', class: 'btn btn-outline-primary px-2')
+
+  .col-xs-12.text-xs-center.hidden-sm-up
+    = image_tag('programs/studentvoice.png', class: 'rounded-circle')
+
+
+.row.py-3
+  .col-xs-12.col-md-7.offset-lg-2.col-lg-5
+    %h5 Moses Youth Center
+    %p
+      We have been running a weekly program at the Moses Youth Center in
+      Cambridge's Port neighborhood. The program has ranged from coding
+      to more active engineering challenges.
+    %p
+      Many of the students at the youth center are interested in athletics
+      so we're hoping to explore program designs that support that passion
+      in the near future.
+
+    %p.text-xs-center
+      = link_to('Learn More', '/programs/moses_youth_center', class: 'btn btn-outline-primary px-2')
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+    = image_tag('programs/moses.png', class: 'rounded-circle')
+
+
+.row.py-3
+  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down
+    = image_tag('programs/thinking.png')
+
+  .col-xs-12.col-md-7.col-lg-5
+    %h5 The Art of Thinking
+    %p
+      Students will explore different frameworks for thinking (e.g. Design Thinking,
+      Computational Thinking, First-Principle Thinking) and
+      will develop their skills for observation through artistic exercises,
+      philosophic discussions, and problem solving challenges.
+    %p
+      Students will use these skills to reframe challenges and goals in their
+      own lives. They will practice observing from different perspectives,
+      developing their ability to empathize more effectively, and question
+      their own assumptions.
+    %p
+      Lastly we'll explore the way these processes and techniques have
+      been used through-out history and continue to be used across all adult
+      professional activities. Students will be supported toward becoming philosophers
+      of their own lives and interests.
+    %p
+      %b Status:
+      In Development
+
+  .col-xs-12.text-xs-center.hidden-sm-up
+    = image_tag('programs/thinking.png')
+
+
+.row.py-3
+  .col-xs-12.col-md-7.offset-lg-2.col-lg-5
+    %h5 Drawing In Code
+    %p
+      The Puzzle School is collaborating with David Ng, the founder of
+      = "#{link_to('Vertical Learning Labs', 'http://www.verticallearning.org', target: '_blank')}, to develop an".html_safe
+      = link_to('online resource', 'https://jaredcosulich.github.io/drawing_code/index.html', target: '_blank')
+      designed to support an exploration of artistic observation and computational thinking.
+      Essentially students will learn how to teach a computer to draw and design games.
+    %p
+      Through a series of challenges students will develop their ability to observe their physical world
+      and translate that into code so that a computer can draw it. From there students
+      will be able to animate their drawing and make them interactive (games).
+    %p
+      The eventual goal is to support students toward projects of their own design that can then
+      be shared with friends and family.
+
+    %p
+      %b Status:
+      In Development
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+    = image_tag('programs/building.png', style: 'border: 1px solid #aaa')
+
+
+.row.py-3
+  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down
+    = image_tag('programs/innovators_compass.png', style: 'border: 1px solid #aaa')
+
+  .col-xs-12.col-md-7.col-lg-5
+    %h5 The Innovator's Compass
+    %p
+      One of The Puzzle School's advisors, Ela Ben-Ur, is a 15 year veteran of the world-renowned design firm,
+      = "#{link_to('Ideo', '', target: '_blank')}.".html_safe
+      Drawing on her experiences at IDEO Ela has created the
+      = "#{link_to('Innovator\'s Compass', 'http://innovatorscompass.org/', target: '_blank')}, ".html_safe
+      a simplified
+      framework for engaging in Design Thinking.
+    %p
+      We are working with Ela to design programs that leverage the Innovator's Compass and Design Thinking
+      toward problems that are personally important to students. This may range from choosing a college to
+      a fight with a significant other or family member. In each situation student will be asked to
+      observe their situation, brainstorm on what matters most, think through possible future,
+      think through experiments they could try to achieve their goal, and then repeat.
+    %p
+      %b Status:
+      In Development
+
+  .col-xs-12.text-xs-center.hidden-sm-up
+    = image_tag('programs/innovators_compass.png', style: 'border: 1px solid #aaa')
+
+
+.row.py-3
+  .col-xs-12.col-md-7.offset-lg-2.col-lg-5
     %h5 Forge Your Unique Path
     %p
       We are developing a program in collaboration with a local youth center
@@ -53,58 +171,5 @@
       %b Status:
       In Development
 
-  .col-xs-12.text-xs-center.hidden-sm-up
-    = image_tag('questionaire.png', style: 'border: 1px solid #aaa')
-
-.row.py-3
-  .col-xs-12.col-md-7.offset-lg-2.col-lg-5
-    %h5 The Innovator's Compass
-    %p
-      One of The Puzzle School's advisors, Ela Ben-Ur, is a 15 year veteran of the world-renowned design firm,
-      = "#{link_to('Ideo', '', target: '_blank')}.".html_safe
-      Drawing on her experiences at IDEO Ela has created the
-      = "#{link_to('Innovator\'s Compass', 'http://innovatorscompass.org/', target: '_blank')}, ".html_safe
-      a simplified
-      framework for engaging in Design Thinking.
-    %p
-      We are working with Ela to design programs that leverage the Innovator's Compass and Design Thinking
-      toward problems that are personally important to students. This may range from choosing a college to
-      a fight with a significant other or family member. In each situation student will be asked to
-      observe their situation, brainstorm on what matters most, think through possible future,
-      think through experiments they could try to achieve their goal, and then repeat.
-    %p
-      %b Status:
-      In Development
-
   .col-xs-12.col-md-5.col-lg-3.text-xs-center
-    = image_tag('innovators_compass.png', style: 'border: 1px solid #aaa')
-
-
-
-
-.row.py-3
-  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down
-    = image_tag('building.png', style: 'border: 1px solid #aaa')
-
-  .col-xs-12.col-md-7.col-lg-5
-    %h5 Drawing In Code
-    %p
-      The Puzzle School is collaborating with David Ng, the founder of
-      = "#{link_to('Vertical Learning Labs', 'http://www.verticallearning.org', target: '_blank')}, to develop an".html_safe
-      = link_to('online resource', 'https://jaredcosulich.github.io/drawing_code/index.html', target: '_blank')
-      designed to support an exploration of artistic observation and computational thinking.
-      Essentially students will learn how to teach a computer to draw and design games.
-    %p
-      Through a series of challenges students will develop their ability to observe their physical world
-      and translate that into code so that a computer can draw it. From there students
-      will be able to animate their drawing and make them interactive (games).
-    %p
-      The eventual goal is to support students toward projects of their own design that can then
-      be shared with friends and family.
-
-    %p
-      %b Status:
-      In Development
-
-  .col-xs-12.text-xs-center.hidden-sm-up
-    = image_tag('questionaire.png', style: 'border: 1px solid #aaa')
+    = image_tag('programs/questionaire.png', style: 'border: 1px solid #aaa')
