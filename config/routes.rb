@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :subscribers, only: [:create]
 
   resources :programs, only: [:index, :show]
+  resources :technologies, only: [:index, :show]
 
   get 'learn_more' => 'welcome#learn_more', as: :learn_more
   get 'advisors' => 'welcome#advisors', as: :advisors
