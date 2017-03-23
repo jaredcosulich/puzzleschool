@@ -1,1 +1,61 @@
-MOSES
+.row.text-xs-center.py-3.mt-3
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h1.py-3.title
+      Moses Youth Center
+    %p.mt-1
+      We have been running weekly programs at the Moses Youth Center in Cambridge's Port neighborhood.
+
+
+.row.pb-3
+  .col-xs-12.col-md-8.offset-md-2.col-lg-6.offset-lg-3
+    .embed-responsive.embed-responsive-16by9
+      %iframe.embed-responsive-item{:allowfullscreen => "", :src => "https://www.youtube.com/embed/iW55C7Dl5V8"}
+
+
+.row.py-2.mt-2
+  .col-xs-12.col-md-10.offset-md-1.col-lg-6.offset-lg-1
+    %h5 The Goal
+    %p
+      The Moses Youth Center has offered us a lot of flexibility in running programs
+      with the students who come to the center after school. We've used this flexibility
+      to explore a variety of experiences with the students:
+    %ul.spaced_out
+      %li Coding with CodeCombat and Scratch
+      %li Robotics with drawing machines being developed at MIT's Media Lab
+      %li Hands-on engineering challenges
+
+  .col-xs-12.col-lg-4.text-xs-center.text-lg-right
+    = image_tag 'programs/moses/image1.jpg', class: 'rounded img-fluid'
+
+
+.row.py-2
+
+  .col-lg-4.offset-lg-1.hidden-md-down
+    = image_tag 'programs/moses/image2.jpg', class: 'rounded img-fluid'
+
+  .col-xs-12.col-md-10.offset-md-1.offset-lg-0.col-lg-6
+    %h5 Moving Forward
+    %p
+      We continue to discuss with the students what they want to do.
+      Some of the students are interested in athletics and have expressed
+      interest in exploring activities that connect their love of basketball
+      (and other sports) with scientific explorations such as those shown
+      in ESPN's show
+      = link_to 'Sports Science', 'http://www.espn.com/espn/sportscience/', target: '_blank'
+    %p
+      Others have expressed their interest in the popular coding/gaming platform
+      = link_to 'Roblox', 'https://www.roblox.com/', target: '_blank'
+      This platform allows for students to build their own games in an environment that
+      looks like Minecraft, but provides ways to explicitly code the environment.
+    %p
+      We are in the process of exploring both of these possibilities for future
+      programs at the Youth Center.
+
+  .col-xs-12.hidden-lg-up.text-xs-center
+    = image_tag 'programs/moses/image2.jpg', class: 'rounded img-fluid'
+
+.row.py-3
+  .col-xs-12.col-md-6.text-xs-center
+    = image_tag 'programs/moses/image3.jpg', class: 'rounded img-fluid'
+  .col-xs-12.col-md-6.text-xs-center
+    = image_tag 'programs/moses/image4.jpg', class: 'rounded img-fluid'
