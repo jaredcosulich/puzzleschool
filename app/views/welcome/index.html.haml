@@ -1,6 +1,6 @@
 = render partial: 'layouts/logo'
 
-.row
+.row.py-1
   .col-xs-12.text-xs-center
     -#
       %p.hidden-xs-down
@@ -13,6 +13,12 @@
       %br.hidden-sm-up
       \~ Maya Lin
     %p
+      “For me, writing
+      %span.hidden-xs-down a novel
+      is like solving a puzzle.”
+      %br.hidden-sm-up
+      \~ Mohsin Hamid
+    %p
       “Once I get on a puzzle, I can't get off.”
       %br.hidden-sm-up
       \~ Richard Feynman
@@ -20,28 +26,52 @@
       %p.hidden-xs-down
         “Creativity is just connecting things.”
         \~ Steve Jobs
-    %p
-      “For me, writing
-      %span.hidden-xs-down a novel
-      is like solving a puzzle.”
-      %br.hidden-sm-up
-      \~ Mohsin Hamid
     -#
       %p.hidden-xs-down
         “The puzzle of solving the murder is what drives him on.”
         \~ John Thaw
-    %p
-      “As a kid, I just got lost in the
-      %br.hidden-sm-up
-      puzzle of acting, the magic of it.”
-      %br.hidden-sm-up
-      \~ Michael J. Fox
+    -#
+      %p
+        “As a kid, I just got lost in the
+        %br.hidden-sm-up
+        puzzle of acting, the magic of it.”
+        %br.hidden-sm-up
+        \~ Michael J. Fox
 
 
-.row.py-3
+.row.pt-3.pb-2
   .col-xs-12.text-xs-center
     = link_to('Learn More', learn_more_path, class: 'btn btn-outline-primary btn-lg mx-2 px-3 mb-2')
     = link_to('Current Programs', programs_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2')
+
+
+.row.py-3.px-3
+  .col-xs-12.col-md-10.offset-md-1.col-lg-8.offset-lg-2.text-xs-center
+    .pb-3
+      %p
+        “So this was the big secret historians keep to themselves:
+        historical research is wildly seductive and fun. There's a
+        thrill in the process of digging, then piecing together details
+        like a puzzle.”
+      %p.text-xs-right
+        \~ Nancy Horan
+
+    .pt-2.pb-3
+      %p
+        “As a kid, I was into music, played guitar in a band.
+        Then I started acting in plays in junior high school and
+        just got lost in the puzzle of acting, the magic of it.
+        I think it was an escape for me.”
+      %p.text-xs-right
+        \~ Michael J. Fox
+
+    .pt-2
+      %p
+        “When you write non-fiction, you sit down at your desk with a pile
+        of notebooks, newspaper clippings, and books and you research and
+        put a book together the way you would a jigsaw puzzle.”
+      %p.text-xs-right
+        \~ Janine di Giovanni
 
 
 = render Subscriber.new
