@@ -1,7 +1,7 @@
-.row.text-xs-center.py-3.mt-3
+.row.py-3.mt-3
   .col-xs-12.col-md-6.offset-md-3
-    %h1.py-3.title Technology
-    %h4.mt-1 Disclaimer
+    %h1.py-3.title.text-xs-center Technology
+    %h4.mt-1.text-xs-center Disclaimer
     %p.mt-1
       People sometimes mistake The Puzzle School for an online learning effort or
       for a school where the curriculum would be delivered online.
@@ -17,7 +17,7 @@
       all more important than the technology listed below, but all can also be benefited
       by technology used in a thoughtful manner.
 
-.row.pt-3.pb-2
+.row.py-3
   .col-xs-12.offset-lg-2.col-lg-8
     %h2.text-xs-center Infrastructure
     %p.mt-2
@@ -26,7 +26,7 @@
       and parents as well as better ways of connecting with the community and exploring
       student interests.
 
-.row.py-3
+.row.py-2
   .col-xs-12.offset-lg-2
     %h5 EdContext
 
@@ -47,12 +47,11 @@
       %b Status:
       Initial pilots in Cambridge and Somerville Public Schools
 
-
   .col-xs-12.col-md-5.col-lg-3.text-xs-center
     = image_tag('technologies/edcontext.png', class: 'rounded-circle', style: 'border: 1px solid black;')
 
 
-.row.py-3
+.row.py-2
   .col-xs-12.offset-md-6.offset-lg-5
     %h5 ThoughtfulRecommendations
 
@@ -85,27 +84,45 @@
     = image_tag('technologies/thoughtfulrecommendations.png', class: 'rounded-circle', style: 'border: 1px solid black;')
 
 
+
 .row.py-3
+  .col-xs-12.offset-lg-2.col-lg-8
+    %h2.text-xs-center Curricular
+    %p.mt-2
+      The following projects are explorations around creating high quality resources that
+      support students in their learning through the puzzle-solving process that The Puzzle
+      School is built around. Each resource is designed to be interactive, iterative, and
+      scaffolded with high quality feedback loops.
+    %p
+      Again it should be stressed that these projects would not be the only learning resources
+      used in The Puzzle School. They simply represent our ongoing exploration around creating
+      high quality
+      = link_to 'programs', programs_path
+      and resources to support students in diverse learning pathways.
+
+
+.row.py-2
   .col-xs-12.offset-lg-2
-    %h5 EdContext
+    %h5 Drawing In Code
 
   .col-xs-12.col-md-7.col-lg-5.offset-lg-2
     %p
-      We've partnered up with Jack Schneider, an assistant professor at Holy Cross and
-      the Director of Research with the Massachusetts Consortium for Innovative Education Assessment
-      to build a text-messaging service that will allow The Puzzle School (and other schools) to
-      collect feedback from students, parents, and teachers throughout the year on a wide-ranging
-      set of questions about their experiences with the school.
+      The Puzzle School is collaborating with David Ng, the founder of
+      = "#{link_to('Vertical Learning Labs', 'http://www.verticallearning.org', target: '_blank')}, to develop an".html_safe
+      online resource designed to support an exploration of artistic observation and computational thinking.
+      Essentially students will learn how to teach a computer to draw and design games. We are currently
+      using the resource as one pathway for students to explore in our
+      = "#{link_to('programs', programs_path)}.".html_safe
     %p
-      We believe this will help The Puzzle School (and other schools) more effectively listen to
-      everyone involved in the school, helping to ensure that the loudest voices are not the only
-      opinions considered. We hope the EdContext tool can help foster a more supportive, communicative,
-      and involved community by collecting feedback from everyone in the community and making that
-      feedback, aggregated to protect privacy, available for everyone else to see and act on.
+      Through a series of challenges students will develop their ability to observe their physical world
+      and translate that into code so that a computer can draw it. From there students
+      will be able to animate their drawing and make them interactive (games).
     %p
-      %b Status:
-      Initial pilots in Cambridge and Somerville Public Schools
-
+      The eventual goal is to support students toward projects of their own design that can then
+      be shared with friends and family.
+    %p
+      %b Visit:
+      = link_to 'Drawing In Code', 'https://jaredcosulich.github.io/drawing_code/index.html', target: '_blank'
 
   .col-xs-12.col-md-5.col-lg-3.text-xs-center
-    = image_tag('technologies/edcontext.png', class: 'rounded-circle', style: 'border: 1px solid black;')
+    = image_tag('programs/building.png', style: 'border: 1px solid #aaa')
