@@ -48,15 +48,15 @@
       Initial pilots in Cambridge and Somerville Public Schools
 
   .col-xs-12.col-md-5.col-lg-3.text-xs-center
-    = image_tag('technologies/edcontext.png', class: 'rounded-circle', style: 'border: 1px solid black;')
+    = image_tag('technologies/edcontext.png', class: 'img-fluid rounded-circle', style: 'border: 1px solid #aaa;')
 
 
 .row.py-2
   .col-xs-12.offset-md-6.offset-lg-5
     %h5 ThoughtfulRecommendations
 
-  .col-xs-12.col-md-6.col-lg-4.text-xs-center.offset-lg-1.hidden-sm-down
-    = image_tag('technologies/thoughtfulrecommendations.png', class: 'rounded-circle', style: 'border: 1px solid black;')
+  .col-xs-12.col-md-6.col-lg-3.text-xs-center.offset-lg-2.hidden-sm-down
+    = image_tag('technologies/thoughtfulrecommendations.png', class: 'img-fluid rounded-circle', style: 'border: 1px solid #aaa;')
 
   .col-xs-12.col-md-6.col-lg-5
     %p
@@ -81,13 +81,13 @@
       = link_to 'ThoughtfulRecommendations.com', 'http://www.thoughtfulrecommendations.com', target: '_blank'
 
   .col-xs-12.col-md-5.col-lg-3.text-xs-center.hidden-md-up
-    = image_tag('technologies/thoughtfulrecommendations.png', class: 'rounded-circle', style: 'border: 1px solid black;')
+    = image_tag('technologies/thoughtfulrecommendations.png', class: 'img-fluid rounded-circle', style: 'border: 1px solid #aaa;')
 
 
 
 .row.py-3
   .col-xs-12.offset-lg-2.col-lg-8
-    %h2.text-xs-center Curricular
+    %h2.text-xs-center Curriculum
     %p.mt-2
       The following projects are explorations around creating high quality resources that
       support students in their learning through the puzzle-solving process that The Puzzle
@@ -99,6 +99,52 @@
       high quality
       = link_to 'programs', programs_path
       and resources to support students in diverse learning pathways.
+
+.row.py-2
+  .col-xs-12.offset-lg-2
+    %h5 Circuitous
+
+  .col-xs-12.col-md-7.col-lg-5.offset-lg-2
+    %p
+      Circuitous is a fully functional circuit simulator. We've layered on top
+      a series of challenges that people can help direct a student's learning,
+      but students can simply play around with the simulator as well.
+    %p
+      Each challenge has a series of hints, an example solution, and a video
+      explanation of the challenge and solution.
+    %p
+      %b Visit:
+      = link_to 'Circuituous', 'http://puzzleschoolapps.herokuapp.com/puzzles/circuitous', target: '_blank'
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+    = image_tag('technologies/circuitous.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+
+.row.py-2
+  .col-xs-12.offset-md-6.offset-lg-5
+    %h5 XYFlyer
+
+  .col-xs-12.col-md-6.col-lg-3.offset-lg-2.text-xs-center.hidden-sm-down
+    = image_tag('technologies/xyflyer.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+  .col-xs-12.col-md-6.col-lg-5
+    %p
+      XYFlyer is a simple puzzle app that provides a series of challenges around constructing
+      equations. With each equation constructed you can immediately see the resulting graph and
+      how different changes to each equation affect the graph.
+    %p
+      We've created over 200 levels that get more and more challenging.
+      They can help students gain a better visual intuition about how equations graph out.
+    %p
+      You can also create your own levels with the
+      = link_to 'Level Editor', 'http://puzzleschoolapps.herokuapp.com/puzzles/xyflyer/editor', target: '_blank'
+    %p
+      %b Visit:
+      = link_to 'XYFlyer', 'http://puzzleschoolapps.herokuapp.com/puzzles/xyflyer', target: '_blank'
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center.hidden-md-up
+    = image_tag('technologies/xyflyer.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
 
 
 .row.py-2
@@ -118,11 +164,110 @@
       and translate that into code so that a computer can draw it. From there students
       will be able to animate their drawing and make them interactive (games).
     %p
-      The eventual goal is to support students toward projects of their own design that can then
-      be shared with friends and family.
+      Drawing In Code is still in development. The eventual goal is to support students toward projects of
+      their own design that can then be shared with friends and family.
     %p
       %b Visit:
       = link_to 'Drawing In Code', 'https://jaredcosulich.github.io/drawing_code/index.html', target: '_blank'
 
   .col-xs-12.col-md-5.col-lg-3.text-xs-center
-    = image_tag('programs/building.png', style: 'border: 1px solid #aaa')
+    = image_tag('programs/building.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+
+.row.py-2
+  .col-xs-12.offset-md-6.offset-lg-5
+    %h5 Peanutty
+
+  .col-xs-12.col-md-6.col-lg-3.offset-lg-2.text-xs-center.hidden-sm-down
+    = image_tag('technologies/peanutty.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+  .col-xs-12.col-md-6.col-lg-5
+    %p
+      %strong Note:
+      Peanutty is currently broken. The level editing feature is not working properly. We are hoping to fix it soon.
+    %p
+      Peanutty provides an interesting physics-based puzzle-solving environment where you can interact
+      with a challenge by dragging, dropping, and drawing, and, with each interaction
+      code is generated. Then you can edit the code to affect the interaction.
+    %p
+      Drop a ball and then change the dimensions of the ball to be much bigger and watch it drop again.
+      Develop creative solutions to puzzles and then develop your own puzzles by tweaking or rewriting
+      the level code.
+
+    %p
+      %b Visit:
+      = link_to 'Peanutty', 'http://peanutty.org', target: '_blank'
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center.hidden-md-up
+    = image_tag('technologies/peanutty.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+
+.row.py-2
+  .col-xs-12.offset-lg-2
+    %h5 Code Puzzles
+
+  .col-xs-12.col-md-7.col-lg-5.offset-lg-2
+    %p
+      Code Puzzles provides a series of puzzles that can help you learn how to code.
+    %p
+      Each puzzle has a lesson and hints to provide guidance, but you can also just
+      mess around with the code and see what the results are. A number of lesson
+      paths have been provided as well, such as creating a calculator in javascript.
+    %p
+      %b Visit:
+      = link_to 'Code Puzzles', 'http://puzzleschoolapps.herokuapp.com/puzzles/code', target: '_blank'
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+    = image_tag('technologies/code.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+
+.row.py-2
+  .col-xs-12.offset-md-6.offset-lg-5
+    %h5 Language Scramble
+
+  .col-xs-12.col-md-6.col-lg-3.offset-lg-2.text-xs-center.hidden-sm-down
+    = image_tag('technologies/language_scramble.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+  .col-xs-12.col-md-6.col-lg-5
+    %p
+      Language Scramble is a simple puzzle meant to help people learn a new language
+      (right now we just have Italian).
+    %p
+      You're presented with a foreign (in this case Italian) word and need to unscramble
+      the letters to form a correct translation in English.
+    %p
+      It's a little limited right now, focusing on traslation of written words, but has
+      the potential to feature images and audio in the future.
+    %p
+      It's also limited in its availability right now. Although it does work on iPhones
+      and iPads, you have to have a connection to the internet for it to work, but we're
+      working on fixing that as well.
+    %p
+      %b Visit:
+      = link_to 'Language Scramble', 'http://puzzleschoolapps.herokuapp.com/puzzles/language_scramble', target: '_blank'
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center.hidden-md-up
+    = image_tag('technologies/language_scramble.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
+
+
+.row.py-2
+  .col-xs-12.offset-lg-2
+    %h5 Light It Up
+
+  .col-xs-12.col-md-7.col-lg-5.offset-lg-2
+    %p
+      Light It Up was inspired by the fractions game, Refraction,
+      developed by the
+      = link_to "University of Washington's Center for Game Science", 'http://centerforgamescience.org/blog/portfolio/refraction/', target: '_blank'
+    %p
+      While we loved Refraction, we wanted to make a few changes.
+    %ul.spaced_out
+      %li We wanted to create puzzles that would teach students fractions more directly, so we reduced the number of obstacles in our levels, making the puzzles more about the fractions than the obstacles.
+      %li We created a level editor that allows teachers to easily create custom levels to teach a specific fraction-based idea. The level editor also allows students to create their own puzzles, improving their mastery of fractions while creating puzzles as well as solving puzzles.
+      %li We wanted to add in a feature that would walk you through the solution to the puzzle if you got stuck. We wanted to make the game more about learning then about solving the puzzles, so we focused on creating more levels with the ability to get help on any level that is too hard.
+    %p
+      %b Visit:
+      = link_to 'Light It Up', 'http://puzzleschoolapps.herokuapp.com/puzzles/code', target: '_blank'
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+    = image_tag('technologies/lightitup.png', class: 'img-fluid', style: 'border: 1px solid #aaa')
