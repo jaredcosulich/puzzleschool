@@ -8,6 +8,16 @@
       the after school community, or with a local business partner.
 
 
+.row.pb-2
+  .col-xs-12.col-md-8.offset-md-2.col-lg-6.offset-lg-3
+    .embed-responsive.embed-responsive-16by9
+      %iframe.embed-responsive-item{:allowfullscreen => "", :src => "https://www.youtube.com/embed/pv7s8AyucyY"}
+    .small.text-xs-center
+      From the
+      = link_to 'Student Voice', '/programs/student_voice'
+      Program. Click 'Learn More' below for more information.
+
+
 .row.py-3
   .col-xs-12.col-md-7.col-lg-5.offset-lg-2
     %h5 Pivotal Mentors "Learn To Code"
@@ -99,6 +109,35 @@
 
 .row.py-3
   .col-xs-12.col-md-7.offset-lg-2.col-lg-5
+    %h5 Adulting 101
+    %p
+      Students will explore different frameworks for thinking (e.g. Design Thinking,
+      Computational Thinking, First-Principle Thinking) and
+      will develop their skills for observation through artistic exercises,
+      philosophic discussions, and problem solving challenges.
+    %p
+      Students will use these skills to reframe challenges and goals in their
+      own lives. They will practice observing from different perspectives,
+      developing their ability to empathize more effectively, and question
+      their own assumptions.
+    %p
+      Lastly we'll explore the way these processes and techniques have
+      been used through-out history and continue to be used across all adult
+      professional activities. Students will be supported toward becoming philosophers
+      of their own lives and interests.
+    %p
+      %b Status:
+      In Development
+
+  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+    = image_tag('programs/thinking.png')
+
+
+.row.py-3
+  .col-md-5.col-lg-3.offset-lg-2.hidden-xs-down
+    = image_tag('programs/building.png')
+
+  .col-xs-12.col-md-7.col-lg-5
     %h5 Drawing In Code
     %p
       The Puzzle School is collaborating with David Ng, the founder of
@@ -118,7 +157,7 @@
       %b Status:
       In Development
 
-  .col-xs-12.col-md-5.col-lg-3.text-xs-center
+  .col-xs-12.text-xs-center.hidden-sm-up
     = image_tag('programs/building.png', style: 'border: 1px solid #aaa')
 
 
