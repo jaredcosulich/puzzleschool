@@ -1,6 +1,30 @@
 = render partial: 'layouts/logo'
 
 .row.py-2
+  .col-md-5.col-lg-3.offset-lg-2.hidden-sm-down
+    = link_to(image_tag('puzzleschool_pdf.png'), 'PuzzleSchoolDescription.pdf', target: '_blank')
+
+  .col-xs-12.col-md-7.col-lg-5
+    %h5 The Puzzle School Exploration
+    %p
+      We are in the early stages of exploring a new public innovation high school or middle school
+      in Cambridge, MA. The innovation school model, described below, works within the local district.
+    %p
+      The "puzzle" metaphor is about a process rather than a specific design.
+      The process consists of deep observations, developing and testing hypotheses,
+      and seeking feedback as you make progress toward your goal.
+    %p
+      This process will inform all aspects of The Puzzle School, from how the school is run to the
+      student's day-to-day experience to how students approach their own learning.
+    %p
+      You can read more in this
+      = link_to('pdf description', 'PuzzleSchoolDescription.pdf', target: '_blank')
+      of The Puzzle School.
+
+  .col-xs-12.text-xs-center.hidden-md-up
+    = link_to(image_tag('puzzleschool_pdf.png'), 'PuzzleSchoolDescription.pdf', target: '_blank')
+
+.row.py-3
   .col-xs-12.col-md-8.offset-lg-2.col-lg-5
     %h5 The Innovation School Model
     %p
@@ -17,47 +41,23 @@
   .col-xs-12.col-md-4.col-lg-3.text-xs-center.text-md-right
     = image_tag 'massachusetts-seal.jpg'
 
-.row.py-3
-  .col-md-5.col-lg-3.offset-lg-2.hidden-sm-down
-    = link_to(image_tag('puzzleschool_pdf.png'), 'PuzzleSchoolDescription.pdf', target: '_blank')
+-#
+  .row.py-3
+    .col-xs-12.col-md-9.col-lg-6.offset-lg-2
+      %h5 The Goals Of The Process
+      %p
+        The Puzzle School will use this process to continuously work toward a school that
+        best helps each individual student. In doing so we hope to:
+      %ul.no_shift.spaced_out
+        %li Create a healthy environment for all students and teachers.
+        %li Give students greater agency and responsibility over their school.
+        %li
+          Explore student interests and diverse opportunities, such as internships,
+          independent and group projects, and online and community programs.
+        %li Provide teachers autonomy and opportunities for collaboration.
 
-  .col-xs-12.col-md-7.col-lg-5
-    %h5 The Puzzle School Exploration
-    %p
-      We are in the early stages of exploring a new upper or alternative high school
-      in Cambridge.
-    %p
-      The "puzzle" metaphor is about a process rather than a specific design.
-      The process consists of deep observations, developing and testing hypotheses,
-      and seeking feedback as you make progress toward your goal.
-    %p
-      This process will inform all aspects of The Puzzle School, from how the school is run to the
-      student's day-to-day experience to how students approach their own learning.
-    %p
-      You can read more in this
-      = link_to('pdf description', 'PuzzleSchoolDescription.pdf', target: '_blank')
-      of The Puzzle School.
-
-  .col-xs-12.text-xs-center.hidden-md-up
-    = link_to(image_tag('puzzleschool_pdf.png'), 'PuzzleSchoolDescription.pdf', target: '_blank')
-
-
-.row.py-3
-  .col-xs-12.col-md-9.col-lg-6.offset-lg-2
-    %h5 The Goals Of The Process
-    %p
-      The Puzzle School will use this process to continuously work toward a school that
-      best helps each individual student. In doing so we hope to:
-    %ul.no_shift.spaced_out
-      %li Create a healthy environment for all students and teachers.
-      %li Give students greater agency and responsibility over their school.
-      %li
-        Explore student interests and diverse opportunities, such as internships,
-        independent and group projects, and online and community programs.
-      %li Provide teachers autonomy and opportunities for collaboration.
-
-  .col-xs-12.col-md-3.col-lg-2.text-xs-center.text-md-right
-    = image_tag 'compass.png'
+    .col-xs-12.col-md-3.col-lg-2.text-xs-center.text-md-right
+      = image_tag 'compass.png'
 
 
 .row.py-3
