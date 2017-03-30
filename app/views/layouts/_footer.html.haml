@@ -48,8 +48,13 @@
         %p= link_to 'Programs', programs_path
         %p= link_to 'Contact', contact_path
       .col-xs-4.py-3.text-xs-center
-        = image_tag('compass_small.png')
+        %p= image_tag('compass_small.png')
       .col-xs-4.py-1.my-1.text-xs-right
         &copy;
         %span.hidden-xs-down Puzzle School
         2017
+        .pt-2.text-xs-right{style: 'padding-right: 27px'}
+          %p Follow Us On
+          = link_to(image_tag('facebook.png'), 'https://www.facebook.com/puzzleschool/', target: '_blank')
+          &nbsp; &nbsp;
+          = link_to(image_tag('twitter.png'), 'https://twitter.com/puzzleschool', target: '_blank', style: 'margin-right: 3px;')
