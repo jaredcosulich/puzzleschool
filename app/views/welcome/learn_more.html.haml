@@ -97,23 +97,32 @@
   .col-xs-12.col-md-3.col-lg-2.text-xs-center.text-md-right
     = link_to(image_tag('programs_thumb.png', class: 'rounded-circle'), programs_path, target: '_blank')
 
-.row.py-3
-  .col-md-5.offset-lg-2.col-lg-2.hidden-sm-down
-    .row
-      .col-xs-4.col-sm-2.col-md-6.pb-1
-        = image_tag('advisors/grotzer-thumb.jpg', class: 'rounded')
-      .col-xs-4.col-sm-2.col-md-6.pb-1
-        = image_tag('advisors/riordan-thumb.jpg', class: 'rounded')
-      .col-xs-4.col-sm-2.col-md-6.pb-1
-        = image_tag('advisors/patin-thumb.jpg', class: 'rounded')
-      .col-xs-4.col-sm-2.col-md-6.pb-1
-        = image_tag('advisors/kuldell-thumb.jpg', class: 'rounded')
-      .col-xs-4.col-sm-2.col-md-6.pb-1
-        = image_tag('advisors/ben-ur-thumb.jpg', class: 'rounded')
-      .col-xs-4.col-sm-2.col-md-6
-        = image_tag('advisors/frishman-thumb.jpg', class: 'rounded')
 
-  .col-xs-12.col-md-7.col-lg-6
+.row.py-3
+  .col-md-5.offset-lg-2.col-lg-3.hidden-sm-down
+    = link_to(image_tag('technologies/thoughtfulrecommendations.png', class: 'img-fluid rounded-circle'), technologies_path, target: '_blank')
+
+  .col-xs-12.col-md-7.col-lg-5
+    %h5 Technology / Research & Development
+    %p
+      The Puzzle School believes that technology can play an effective role in helping schools to:
+    %ul
+      %li Ensure all voices in the school community are heard
+      %li Communicate more effectively with families
+      %li Support students in diverse pathways
+      %li Help students connect with mentors and internships
+      %li Support new and innovative ways to learn
+
+    %p
+      Read more about
+      = link_to('technology >', technologies_path)
+
+  .col-xs-12.hidden-md-up.text-xs-center
+    = link_to(image_tag('technologies/thoughtfulrecommendations.png', class: 'img-fluid rounded-circle'), technologies_path, target: '_blank')
+
+
+.row.py-3
+  .col-xs-12.col-md-9.col-lg-6.offset-lg-2
     %h5 Our Advisors
     %p
       The Puzzle School is working with educational leaders from around Cambridge.
@@ -129,7 +138,7 @@
       Learn more about our
       = link_to('advisors >', advisors_path)
 
-  .col-xs-12.hidden-md-up.text-xs-center
+  .col-xs-12.col-md-3.col-lg-2.text-xs-center
     .row
       .col-xs-4.col-sm-2.col-md-6.pb-1
         = image_tag('advisors/grotzer-thumb.jpg', class: 'rounded')
