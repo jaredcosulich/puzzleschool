@@ -1,6 +1,5 @@
 .logo-header.text-xs-center
-  %h1.pt-3.mt-3= link_to(image_tag('darker_logo.png', class: 'logo img-fluid'), root_path)
-  %p.text-uppercase.py-3
-    A new public innovation school in the exploratory stage
-    %br
-    Based in Cambridge, MA
+  %h1.pt-3.mt-3{style: 'margin-left: -24px;'}= link_to(image_tag('darker_logo.png', class: 'logo img-fluid'), root_path)
+  - if (text = local_assigns[:text]).present?
+    %h5.py-3
+      = text

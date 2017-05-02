@@ -42,14 +42,19 @@
 %footer.footer
   .container
     .row.text-muted
-      .col-xs-4.py-1.my-1
+      .col-xs-4.pt-2
         %p= link_to 'Learn More', learn_more_path
         %p= link_to 'Technology', technologies_path
         %p= link_to 'Programs', programs_path
         %p= link_to 'Contact', contact_path
-      .col-xs-4.py-3.text-xs-center
+      .col-xs-4.text-xs-center.pt-2
+        %p.text-uppercase
+          A new public innovation school in the exploratory stage
+          %br
+          Based in Cambridge, MA
+
         %p= image_tag('compass_small.png')
-      .col-xs-4.py-1.my-1.text-xs-right
+      .col-xs-4.pt-2.text-xs-right
         &copy;
         %span.hidden-xs-down Puzzle School
         2017

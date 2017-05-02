@@ -1,45 +1,111 @@
 = render partial: 'layouts/logo'
 
-.row.py-1
-  .col-xs-12.text-xs-center
-    -#
-      %p.hidden-xs-down
-        “Who in the world am I? Ah, that's the great puzzle.”
-        \~ Lewis Carroll
+.row.py-3
+  .col-xs-12
+    .h4.p-3{style: 'background-color: #ccc; width: 100%; height: 300px;'}
+      How do you untangle a big idea?
+
+.row.pt-2.pb-3
+  .col-xs-12.col-md-5.col-lg-6
+    %p.pt-1 We're on a journey to create a school where students wrestle with big ideas and big questions:
     %p
-      “Math, it's a puzzle to me.
-      %br.hidden-sm-up
-      I love figuring out puzzles.”
-      %br.hidden-sm-up
-      \~ Maya Lin
+      %span.hidden-md-down
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      What problems do you want to solve in the world?
     %p
-      “For me, writing
-      %span.hidden-xs-down a novel
-      is like solving a puzzle.”
-      %br.hidden-sm-up
-      \~ Mohsin Hamid
+      %span.hidden-md-down
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      What will you explore or discover or create?
     %p
-      “Once I get on a puzzle, I can't get off.”
-      %br.hidden-sm-up
-      \~ Richard Feynman
-    -#
-      %p.hidden-xs-down
-        “Creativity is just connecting things.”
-        \~ Steve Jobs
-    -#
-      %p.hidden-xs-down
-        “The puzzle of solving the murder is what drives him on.”
-        \~ John Thaw
-    -#
-      %p
-        “As a kid, I just got lost in the
-        %br.hidden-sm-up
-        puzzle of acting, the magic of it.”
-        %br.hidden-sm-up
-        \~ Michael J. Fox
+      %span.hidden-md-down
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      How are you going to get there?
+
+  .col-xs-12.col-md-7.col-lg-6.text-xs-center.text-md-right
+    %table{style: 'width: 100%'}
+      %td
+        "I see a lot of situations as puzzles."
+        %div{style: 'color: #aaa;'}
+          \~ Valerie Smith
+          %br
+          President, Swarthmore College
+      %td
+        = image_tag('quotes/valerie_smith.jpg')
 
 
-.row.pt-3.pb-2
+
+.row.py-3
+  .col-xs-12
+    .h4.p-3{style: 'background-color: #ccc; width: 100%; height: 300px;'}
+      How do you piece it all together?
+
+.row.pt-2.pb-3
+  .col-xs-12.col-md-5.col-lg-6
+    %p.pt-2
+      Our goal is to give students the skills and knowledge necessary to both ask and answer those questions; to take
+      baby steps toward their goals and the challenges that life presents. Part of that will involve traditional subjects,
+      like math and science, reading and writing, but it wall also involve going deeper, asking better questions,
+      empathizing, ideating, and iterating; thinking critically and creatively about themselves, their community, and the world.
+
+  .col-xs-12.col-md-7.col-lg-6.text-xs-center.text-md-right
+    %table{style: 'width: 100%'}
+      %td
+        "Creativity is just connecting things."
+        %div{style: 'color: #aaa;'}
+          \~ Steve Jobs
+          %br
+          Founder, Apple Computers
+      %td
+        = image_tag('quotes/steve_jobs.jpg')
+
+
+
+.row.py-3
+  .col-xs-12
+    .h4.p-3{style: 'background-color: #ccc; width: 100%; height: 300px;'}
+      What problems do you want to solve?
+      %br
+      %br
+      What are you going to create?
+      %br
+      %br
+      -#
+        Why are you stuck?
+      What's stopping you?
+
+.row.pt-2.pb-3
+  .col-xs-12.col-md-5.col-lg-6
+    %p
+      This journey has just begun and will never end. We want to design a school that never stops asking,
+      "how do we get better?", "how can we better serve diverse students along diverse pathways?". We
+      want to create a school that focuses on experimentation, on exploration, on the journey. A school that helps
+      students develop their ability to navigate creative and sophisticated projects and goals.
+
+    %p
+      We're trying to work with the public school district in Cambridge as an Innovation School. We deeply believe in
+      public education that is accessible to all. You can read more about our work and Innovation
+      Schools by exploring the links below.
+
+    %p
+      Want to join us on this journey? Let us know using the form at the bottom of the page or by contacting us directly
+      = "at #{mail_to('info@puzzleschool.com')}.".html_safe
+
+
+  .col-xs-12.col-md-7.col-lg-6.text-xs-center.text-md-right
+    .pt-1
+      %table{style: 'width: 100%'}
+        %td
+          "Once I get on a puzzle, I can't get off."
+          %div{style: 'color: #aaa;'}
+            \~ Richard Feynman
+            %br
+            Nobel-Prize Winning Physicist
+        %td
+          = image_tag('quotes/richard_feynman.jpg')
+
+
+
+.row.py-3
   .col-xs-12.text-xs-center
     = link_to('Learn More', learn_more_path, class: 'btn btn-outline-primary btn-lg mx-2 px-3 mb-2')
     = link_to('Current Programs', programs_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2')
