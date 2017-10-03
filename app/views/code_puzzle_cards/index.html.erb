@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Code Puzzle Cards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Photo url</th>
+      <th>Code</th>
+      <th>Param</th>
+      <th>Position</th>
+      <th>Code puzzle group</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @code_puzzle_cards.each do |code_puzzle_card| %>
+      <tr>
+        <td><%= code_puzzle_card.photo_url %></td>
+        <td><%= code_puzzle_card.code %></td>
+        <td><%= code_puzzle_card.param %></td>
+        <td><%= code_puzzle_card.position %></td>
+        <td><%= code_puzzle_card.code_puzzle_group_id %></td>
+        <td><%= link_to 'Show', code_puzzle_card %></td>
+        <td><%= link_to 'Edit', edit_code_puzzle_card_path(code_puzzle_card) %></td>
+        <td><%= link_to 'Destroy', code_puzzle_card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Code Puzzle Card', new_code_puzzle_card_path %>

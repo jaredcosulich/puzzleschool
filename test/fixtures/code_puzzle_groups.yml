@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  photo_url: MyString
+  position: 
+  code_puzzle_project_id: 
+
+two:
+  photo_url: MyString
+  position: 
+  code_puzzle_project_id: 

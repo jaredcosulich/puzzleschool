@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Code Puzzle Classes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>Active</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @code_puzzle_classes.each do |code_puzzle_class| %>
+      <tr>
+        <td><%= code_puzzle_class.name %></td>
+        <td><%= code_puzzle_class.slug %></td>
+        <td><%= code_puzzle_class.active %></td>
+        <td><%= link_to 'Show', code_puzzle_class %></td>
+        <td><%= link_to 'Edit', edit_code_puzzle_class_path(code_puzzle_class) %></td>
+        <td><%= link_to 'Destroy', code_puzzle_class, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Code Puzzle Class', new_code_puzzle_class_path %>

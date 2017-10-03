@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Photo url:</strong>
+  <%= @code_puzzle_card.photo_url %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @code_puzzle_card.code %>
+</p>
+
+<p>
+  <strong>Param:</strong>
+  <%= @code_puzzle_card.param %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @code_puzzle_card.position %>
+</p>
+
+<p>
+  <strong>Code puzzle group:</strong>
+  <%= @code_puzzle_card.code_puzzle_group_id %>
+</p>
+
+<%= link_to 'Edit', edit_code_puzzle_card_path(@code_puzzle_card) %> |
+<%= link_to 'Back', code_puzzle_cards_path %>

@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  resources :code_puzzle_classes do
+    resources :code_puzzle_projects do
+      resources :code_puzzle_groups
+    end
+  end
+
+  get 'codepuzzle/:id', to: 'code_puzzle_classes/#show'
+  get 'codepuzzle/:class_id/projects/:id', to: 'code_puzzle_projects/#show'
+
   resources :subscribers, only: [:create]
 
   resources :programs, only: [:index, :show]

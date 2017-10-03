@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Photo url:</strong>
+  <%= @code_puzzle_group.photo_url %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @code_puzzle_group.position %>
+</p>
+
+<p>
+  <strong>Code puzzle project:</strong>
+  <%= @code_puzzle_group.code_puzzle_project_id %>
+</p>
+
+<%= link_to 'Edit', edit_code_puzzle_group_path(@code_puzzle_group) %> |
+<%= link_to 'Back', code_puzzle_groups_path %>

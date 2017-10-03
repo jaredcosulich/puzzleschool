@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  photo_url: MyString
+  code: MyString
+  param: MyString
+  position: 
+  code_puzzle_group_id: 
+
+two:
+  photo_url: MyString
+  code: MyString
+  param: MyString
+  position: 
+  code_puzzle_group_id: 
