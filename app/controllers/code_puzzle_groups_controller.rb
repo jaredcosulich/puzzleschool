@@ -1,4 +1,7 @@
 class CodePuzzleGroupsController < ApplicationController
+  protect_from_forgery with: :null_session
+  before_action :set_code_puzzle_class
+  before_action :set_code_puzzle_project
   before_action :set_code_puzzle_group, only: [:show, :edit, :update, :destroy]
 
   # GET /code_puzzle_groups
@@ -24,12 +27,12 @@ class CodePuzzleGroupsController < ApplicationController
   # POST /code_puzzle_groups
   # POST /code_puzzle_groups.json
   def create
-    @code_puzzle_group = CodePuzzleGroup.new(code_puzzle_group_params)
+    @code_puzzle_group = @code_puzzle_project.code_puzzle_groups.new(code_puzzle_group_params)
 
     respond_to do |format|
       if @code_puzzle_group.save
         format.html { redirect_to @code_puzzle_group, notice: 'Code puzzle group was successfully created.' }
-        format.json { render :show, status: :created, location: @code_puzzle_group }
+        format.json { render :show, status: :created, location: [@code_puzzle_class, @code_puzzle_project, @code_puzzle_group] }
       else
         format.html { render :new }
         format.json { render json: @code_puzzle_group.errors, status: :unprocessable_entity }
@@ -64,11 +67,19 @@ class CodePuzzleGroupsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_code_puzzle_group
-      @code_puzzle_group = CodePuzzleGroup.find(params[:id])
+      @code_puzzle_group = @code_puzzle_project.code_puzzle_groups.find(params[:id])
+    end
+
+    def set_code_puzzle_project
+      @code_puzzle_project = @code_puzzle_class.code_puzzle_projects.find(params[:code_puzzle_project_id])
+    end
+
+    def set_code_puzzle_class
+      @code_puzzle_class = CodePuzzleClass.friendly.find(params[:code_puzzle_class_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def code_puzzle_group_params
-      params.require(:code_puzzle_group).permit(:photo_url, :position, :code_puzzle_project_id)
+      params.require(:code_puzzle_group).permit(:photo_url, :position)
     end
 end
