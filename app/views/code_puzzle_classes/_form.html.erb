@@ -1,0 +1,32 @@
+<%= form_with(model: code_puzzle_class, local: true) do |form| %>
+  <% if code_puzzle_class.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(code_puzzle_class.errors.count, "error") %> prohibited this code_puzzle_class from being saved:</h2>
+
+      <ul>
+      <% code_puzzle_class.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :code_puzzle_class_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :slug %>
+    <%= form.text_field :slug, id: :code_puzzle_class_slug %>
+  </div>
+
+  <div class="field">
+    <%= form.label :active %>
+    <%= form.check_box :active, id: :code_puzzle_class_active %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

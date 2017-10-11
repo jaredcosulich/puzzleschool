@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  code_puzzle_class_id:
+
+two:
+  title: MyString
+  code_puzzle_class_id:

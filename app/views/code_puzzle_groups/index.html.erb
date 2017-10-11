@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Code Puzzle Groups</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Photo url</th>
+      <th>Position</th>
+      <th>Code puzzle project</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @code_puzzle_groups.each do |code_puzzle_group| %>
+      <tr>
+        <td><%= code_puzzle_group.photo_url %></td>
+        <td><%= code_puzzle_group.position %></td>
+        <td><%= code_puzzle_group.code_puzzle_project_id %></td>
+        <td><%= link_to 'Show', code_puzzle_group %></td>
+        <td><%= link_to 'Edit', edit_code_puzzle_group_path(code_puzzle_group) %></td>
+        <td><%= link_to 'Destroy', code_puzzle_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Code Puzzle Group', new_code_puzzle_group_path %>

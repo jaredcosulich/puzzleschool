@@ -1,0 +1,42 @@
+<%= form_with(model: code_puzzle_card, local: true) do |form| %>
+  <% if code_puzzle_card.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(code_puzzle_card.errors.count, "error") %> prohibited this code_puzzle_card from being saved:</h2>
+
+      <ul>
+      <% code_puzzle_card.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :photo_url %>
+    <%= form.text_field :photo_url, id: :code_puzzle_card_photo_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :code %>
+    <%= form.text_field :code, id: :code_puzzle_card_code %>
+  </div>
+
+  <div class="field">
+    <%= form.label :param %>
+    <%= form.text_field :param, id: :code_puzzle_card_param %>
+  </div>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.text_field :position, id: :code_puzzle_card_position %>
+  </div>
+
+  <div class="field">
+    <%= form.label :code_puzzle_group_id %>
+    <%= form.text_field :code_puzzle_group_id, id: :code_puzzle_card_code_puzzle_group_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

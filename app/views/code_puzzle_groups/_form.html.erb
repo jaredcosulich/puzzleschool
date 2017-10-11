@@ -1,0 +1,32 @@
+<%= form_with(model: code_puzzle_group, local: true) do |form| %>
+  <% if code_puzzle_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(code_puzzle_group.errors.count, "error") %> prohibited this code_puzzle_group from being saved:</h2>
+
+      <ul>
+      <% code_puzzle_group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :photo_url %>
+    <%= form.text_field :photo_url, id: :code_puzzle_group_photo_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.text_field :position, id: :code_puzzle_group_position %>
+  </div>
+
+  <div class="field">
+    <%= form.label :code_puzzle_project_id %>
+    <%= form.text_field :code_puzzle_project_id, id: :code_puzzle_group_code_puzzle_project_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

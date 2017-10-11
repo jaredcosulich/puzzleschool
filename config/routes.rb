@@ -1,4 +1,27 @@
+class DomainConstraint
+  def initialize(domain)
+    @domains = [domain].flatten
+  end
+
+  def matches?(request)
+    @domains.include? request.domain
+  end
+end
+
+
+
 Rails.application.routes.draw do
+
+  resources :code_puzzle_classes do
+    resources :code_puzzle_projects do
+      resources :code_puzzle_groups do
+        resources :code_puzzle_cards
+      end
+    end
+  end
+
+  get 'codepuzzle/:id', to: 'code_puzzle_classes/#show'
+  get 'codepuzzle/:class_id/projects/:id', to: 'code_puzzle_projects/#show'
 
   resources :subscribers, only: [:create]
 
@@ -9,6 +32,10 @@ Rails.application.routes.draw do
   get 'advisors' => 'welcome#advisors', as: :advisors
   get 'day_in_the_life' => 'welcome#day_in_the_life', as: :day_life
   get 'contact' => 'welcome#contact', as: :contact
+
+  constraints DomainConstraint.new('thecodepuzzle.com') do
+    root :to => 'code_puzzle_classes#index'
+  end
 
   root 'welcome#index'
 
