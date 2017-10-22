@@ -1,16 +1,65 @@
 
 .row.text-xs-center.py-3.mt-3
-  .col-xs-12.col-md-10.offset-md-1.col-lg-6.offset-lg-3
-    %h1.py-3.title
+  .col-xs-12
+    %h1.title
       = image_tag('technologies/codepuzzle.png', class: 'img-fluid')
 
-    %p.mt-1
-      The Code Puzzle is currently in private beta.
+.row
+  .col-xs-12.col-lg-7.py-1
+    %h3 Demonstration Video
+    .embed-responsive.embed-responsive-16by9
+      %iframe{class: 'embed-responsive-item', allowfullscreen: "", frameborder: "0", height: "315", src: "https://www.youtube.com/embed/8CougKd7VNM?rel=0", width: "560"}
 
+    %h3.mt-3.pb-1 Getting Started
+
+    %h5.mt-1 Download The App
     %p.mt-1
-      If you'd like to join the private beta please email:
+      The app is currently available for iPhones and iPads in the Apple App Store.
+    %p.pb-1
+      = link_to("Download The Code Puzzle App", "https://itunes.apple.com/us/app/the-code-puzzle/id1294002353", target: '_blank', class: 'btn btn-primary')
+
+    %h5.mt-2 Print Out The Cards
     %p
-      = mail_to("jared@puzzleschool.com")
+      Fill out the form below to gain access to the printable cards:
+    = form_for
+
+
+  .col-xs-12.col-lg-5.py-1
+    %h3 What Is It?
+    %p.mt-1
+      The Code Puzzle is an offline/online activity for students to start coding.
+      Using cards you can print yourself students assemble programs. The Code Puzzle app
+      allows you to photograph the physical cards and execute the program, drawing a picture.
+
+    %h3.mt-3 What Makes It Special?
+    %p.mt-1
+      The Code Puzzle combines the benefits of offline coding activities with the
+      benefits of coding on a computer:
+    %ul
+      %li.mt-1
+        It facilitates group work more effectively as everyone can see and interact
+        with the cards rather than being huddled around a computer.
+      %li.mt-1
+        It eliminates having to learn a program to get started. You simply start
+        writing out instructions using the cards.
+      %li.mt-1
+        As students build their programs their progress
+        is more visible as the cards spread out across the table.
+      %li.mt-1
+        It helps students understant the power of the computer when they see their physical
+        instructions create complex drawings.
+
+
+    %h3.mt-3 How Much Does It Cost?
+    %p.mt-1
+      Our goal is to make The Code Puzzle accesible to anyone who wants to use it.
+      The app is free and you can pay what ever you want to access the cards.
+    %p
+      If you are able to support the project you'll make it possible for many people
+      who can not affort to support the project to still use it. If
+      you can't support the project, though, you can use it for free.
+
+
 
 %br
 %br
