@@ -38,8 +38,11 @@
         %br.hidden-sm-up
         \~ Michael J. Fox
 
-
 .row.pt-3.pb-2
+  .col-xs-12.text-xs-center
+    = link_to('Read the Design Details', "PuzzleSchoolDescription.pdf", class: 'btn btn-outline-primary btn-lg mx-2 px-3 mb-2')
+
+.row.pt-2.pb-2
   .col-xs-12.text-xs-center
     = link_to('Learn More', learn_more_path, class: 'btn btn-outline-primary btn-lg mx-2 px-3 mb-2')
     = link_to('Current Programs', programs_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2')
