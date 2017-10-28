@@ -4,6 +4,29 @@
     %h1.title
       = image_tag('technologies/codepuzzle.png', class: 'img-fluid')
 
+.row.py-3
+  .col-xs-3
+    %figure.figure
+      .figure-img.img-fluid.rounded= image_tag('codepuzzle/cards.JPG', class: 'img-fluid')
+      %figcaption.figure-caption.text-xs-center Cards you can print yourself
+
+  .col-xs-1
+    .text-xs-center{style: "font-size: 150px"} +
+
+  .col-xs-3
+    %figure.figure
+      .figure-img.img-fluid.rounded= image_tag('codepuzzle/app.jpeg', class: 'img-fluid')
+      %figcaption.figure-caption.text-xs-center A free app
+
+  .col-xs-1
+    .text-xs-center{style: "font-size: 150px"} =
+
+  .col-xs-4
+    %figure.figure
+      .figure-img.img-fluid.rounded= image_tag('codepuzzle/drawings.gif', class: 'img-fluid')
+      %figcaption.figure-caption.text-xs-center Art + Coding + Math
+
+
 .row
   .col-xs-12.col-lg-7.py-1
     %h3 Demonstration Video
@@ -19,9 +42,9 @@
       = link_to("Download The Code Puzzle App", "https://itunes.apple.com/us/app/the-code-puzzle/id1294002353", target: '_blank', class: 'btn btn-primary')
 
     %h5.mt-2 Print Out The Cards
-    %p
-      Fill out the form below to gain access to the printable cards:
-    = form_for
+    %p.mt-1
+      Decide how much you'd like to contribute to the project and print out the cards.
+    = link_to "Get The Cards", cards_code_puzzle_classes_path, class: 'btn btn-primary'
 
 
   .col-xs-12.col-lg-5.py-1

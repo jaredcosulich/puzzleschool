@@ -13,12 +13,16 @@ end
 Rails.application.routes.draw do
 
   resources :code_puzzle_classes do
+    get 'cards', on: :collection
+
     resources :code_puzzle_projects do
       resources :code_puzzle_groups do
         resources :code_puzzle_cards
       end
     end
   end
+
+  resources :charges
 
   get 'codepuzzle/:id', to: 'code_puzzle_classes/#show'
   get 'codepuzzle/:class_id/projects/:id', to: 'code_puzzle_projects/#show'
