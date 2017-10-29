@@ -1,3 +1,4 @@
+- @noquotesandsubscriber = true
 
 .row.text-xs-center.py-3.mt-3
   .col-xs-12
@@ -27,14 +28,14 @@
   .col-xs-12.col-lg-8.offset-lg-2
     %h3 The Code Puzzle Files
 .row
-  .col-xs-2.offset-lg-2
+  .col-xs-6.col-sm-4.offset.col-lg-2.offset-lg-2
     %figure.figure
-      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/zip.png', class: 'img-fluid'), "/code_puzzle/cards.zip")
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/zip.png', class: 'img-fluid'), "/code_puzzle/cards.zip", target: '_blank')
       %figcaption.figure-caption.text-xs-center Zip of all cards
 
-  .col-xs-2
+  .col-xs-6.col-sm-4.col-lg-2
     %figure.figure
-      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/cheatsheet.png', class: 'img-fluid'), "/code_puzzle/cheatsheet.pdf")
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/cheatsheet.png', class: 'img-fluid'), "/code_puzzle/cheatsheet.pdf", target: '_blank')
       %figcaption.figure-caption.text-xs-center Cheatsheet
 
 
@@ -46,9 +47,9 @@
   .col-xs-12.col-lg-8.offset-lg-2
     .row
       - CodePuzzleCard::CARDS.each do |card|
-        .col-xs-3.text-xs-center
+        .col-xs-6.col-sm-3.text-xs-center
           %figure.figure
-            .figure-img.img-fluid.rounded= link_to(image_tag("codepuzzle/cards/#{card[0]}.png", class: 'img-fluid'), "/code_puzzle/cards/#{card[0]}.pdf")
+            .figure-img.img-fluid.rounded= link_to(image_tag("codepuzzle/cards/#{card[0]}.png", class: 'img-fluid'), "/code_puzzle/cards/#{card[0]}.pdf", target: '_blank')
             %figcaption.figure-caption.text-xs-center= "#{card[1]} (#{card[0]})"
 
 
@@ -60,9 +61,9 @@
       %small (just print and photograph with the app)
 
 .row
-  .col-xs-2.offset-lg-2
+  .col-xs-6.offset-lg-2
     %figure.figure
-      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/simplehouse.png', class: 'img-fluid'), "/code_puzzle/simple_house.pdf")
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/simplehouse.png', class: 'img-fluid'), "/code_puzzle/simple_house.pdf", target: '_blank')
       %figcaption.figure-caption.text-xs-center A simple house
 
 
