@@ -18,18 +18,54 @@
       %li A cheetsheat page that has tips and instructions for each card.
       %li Individual pdfs of cards you can download and print.
       %li Two sample programs you can print out and photograph with the app right away.
+      %li A video walk-through of the app.
 
     %p If you have not already, you can download the app here:
     = link_to("The Code Puzzle App", "https://itunes.apple.com/us/app/the-code-puzzle/id1294002353", target: '_blank', class: 'btn btn-primary')
 
 .row.py-2
   .col-xs-12.col-lg-8.offset-lg-2
-    %h3 Zip of Cards & Cheatsheet
+    %h3 The Code Puzzle Files
+.row
+  .col-xs-2.offset-lg-2
+    %figure.figure
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/zip.png', class: 'img-fluid'), "/code_puzzle/cards.zip")
+      %figcaption.figure-caption.text-xs-center Zip of all cards
+
+  .col-xs-2
+    %figure.figure
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/cheatsheet.png', class: 'img-fluid'), "/code_puzzle/cheatsheet.pdf")
+      %figcaption.figure-caption.text-xs-center Cheatsheet
+
 
 .row.py-2
   .col-xs-12.col-lg-8.offset-lg-2
     %h3 Individual Cards
 
+.row
+  .col-xs-12.col-lg-8.offset-lg-2
+    .row
+      - CodePuzzleCard::CARDS.each do |card|
+        .col-xs-3.text-xs-center
+          %figure.figure
+            .figure-img.img-fluid.rounded= link_to(image_tag("codepuzzle/cards/#{card[0]}.png", class: 'img-fluid'), "/code_puzzle/cards/#{card[0]}.pdf")
+            %figcaption.figure-caption.text-xs-center= "#{card[1]} (#{card[0]})"
+
+
+
 .row.py-2
   .col-xs-12.col-lg-8.offset-lg-2
-    %h3 Self-Container "Programs"
+    %h3
+      Self-Contained Programs
+      %small (just print and photograph with the app)
+
+.row
+  .col-xs-2.offset-lg-2
+    %figure.figure
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/simplehouse.png', class: 'img-fluid'), "/code_puzzle/simple_house.pdf")
+      %figcaption.figure-caption.text-xs-center A simple house
+
+
+.row.py-2
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h3 App Walk-Through
