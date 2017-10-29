@@ -13,26 +13,28 @@ class CodePuzzleFormsController < ApplicationController
   def create
     @code_puzzle_form = CodePuzzleForm.new(code_puzzle_form_params)
 
-    begin
-      customer = Stripe::Customer.create(
-        :email => @code_puzzle_form.email,
-        :source  => @code_puzzle_form.stripe_token
-      )
+    if @code_puzzle_form.payment > -1 || @code_puzzle_form.stripe_token.present?
+      begin
+        customer = Stripe::Customer.create(
+          :email => @code_puzzle_form.email,
+          :source  => @code_puzzle_form.stripe_token
+        )
 
-      charge = Stripe::Charge.create(
-        :customer    => customer.id,
-        :amount      => @code_puzzle_form.payment,
-        :description => 'The Code Puzzle Pay-What-You-Want',
-        :currency    => 'usd'
-      )
-    rescue Stripe::CardError => e
-      flash[:error] = e.message
-      redirect_to cards_code_puzzle_classes_path
-      return
+        charge = Stripe::Charge.create(
+          :customer    => customer.id,
+          :amount      => @code_puzzle_form.payment,
+          :description => 'The Code Puzzle',
+          :currency    => 'usd'
+        )
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to cards_code_puzzle_classes_path
+        return
+      end
+
+      @code_puzzle_form.stripe_customer_id = customer.id
+      @code_puzzle_form.stripe_charge_id = charge.id
     end
-
-    @code_puzzle_form.stripe_customer_id = customer.id
-    @code_puzzle_form.stripe_charge_id = charge.id
 
     respond_to do |format|
       if @code_puzzle_form.save

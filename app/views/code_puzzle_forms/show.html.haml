@@ -4,6 +4,32 @@
     %h1.title
       = image_tag('technologies/codepuzzle.png', class: 'img-fluid')
 
-.row.text-xs-center.py-3.mt-3
-  .col-xs-12
-    %p= @code_puzzle_form.inspect
+- if @code_puzzle_form.access_count == 1 && @code_puzzle_form.payment > -1
+  .row.text-xs-center.py-2
+    .col-xs-12
+      %h4 Thank you so much for your support!
+
+.row.py-2
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h3 Instructions
+    %p Below you'll find:
+    %ol
+      %li A zip file you can download that contains all of the card sheets as pdfs you can print.
+      %li A cheetsheat page that has tips and instructions for each card.
+      %li Individual pdfs of cards you can download and print.
+      %li Two sample programs you can print out and photograph with the app right away.
+
+    %p If you have not already, you can download the app here:
+    = link_to("The Code Puzzle App", "https://itunes.apple.com/us/app/the-code-puzzle/id1294002353", target: '_blank', class: 'btn btn-primary')
+
+.row.py-2
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h3 Zip of Cards & Cheatsheet
+
+.row.py-2
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h3 Individual Cards
+
+.row.py-2
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h3 Self-Container "Programs"
