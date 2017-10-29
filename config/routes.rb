@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :charges
+  resources :code_puzzle_forms
 
   get 'codepuzzle/:id', to: 'code_puzzle_classes/#show'
   get 'codepuzzle/:class_id/projects/:id', to: 'code_puzzle_projects/#show'

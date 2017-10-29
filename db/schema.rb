@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170929021201) do
+ActiveRecord::Schema.define(version: 20171029132403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,19 @@ ActiveRecord::Schema.define(version: 20170929021201) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "code_puzzle_forms", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.integer "source"
+    t.integer "payment"
+    t.string "code"
+    t.integer "access_count", default: 0
+    t.datetime "last_accessed_at"
+    t.string "stripe_token"
+    t.string "stripe_customer_id"
+    t.string "stripe_charge_id"
   end
 
   create_table "code_puzzle_groups", force: :cascade do |t|

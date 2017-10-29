@@ -2,6 +2,7 @@ class CodePuzzleClassesController < ApplicationController
   before_action :set_code_puzzle_class, only: [:show, :edit, :update, :destroy]
 
   def cards
+    @code_puzzle_form = CodePuzzleForm.new(payment: 300)
   end
 
   # GET /code_puzzle_classes

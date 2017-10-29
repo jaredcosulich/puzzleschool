@@ -5,11 +5,106 @@
       = image_tag('technologies/codepuzzle.png', class: 'img-fluid')
 
 .row
-  .col-xs-12.text-xs-center
+  .col-xs-12.col-sm-10.offset-sm-1.col-md-8-offset-md-2.col-lg-6.offset-lg-3.text-xs-center
     %h2 The Code Puzzle Cards
     %p.mt-2
-      Please fill out the form below to gain access to The Code puzzle cards. 
+      Please fill out the form below to gain access to The Code puzzle cards.
     %p You will be able to print out as many cards as you need.
+
+.row.pt-2
+  .col-xs-12.col-sm-10.offset-sm-1.col-md-8-offset-md-2.col-lg-6.offset-lg-3.text-xs-center
+    = form_for @code_puzzle_form do |f|
+      %article
+        - if flash[:error].present?
+          #error_explanation
+            %p{style: "color: 'red'"}= flash[:error]
+
+      = f.hidden_field :stripe_token
+
+      .form-group.pt-2
+        %h4
+          %label{:for => "name"} Your Name
+        = f.text_field("name", placeholder: "Enter name", class: "form-control")
+
+      .form-group.pt-2
+        %h4
+          %label{:for => "email"} Your Email
+        = f.text_field("email", placeholder: "Enter email", class: "form-control")
+        %small#email.form-text.text-muted We'll never share your email with anyone else.
+
+      .form-group.pt-1
+        %h4
+          %label{:for => "source"} How Are You Using The Code Puzzle?
+        = f.select :source, CodePuzzleForm.sources.map { |k, v| [k.humanize, k] }, {}, class: 'form-control'
+
+      .form-group.pt-1
+        %h4
+          %label{:for => "payment"} Payment
+
+        .row.text-xs-left
+          .col-xs-10.offset-xs-1.form-text.text-muted
+            %p
+              If you can't afford to contribute, we still want you to try The Code Puzzle, so you can use it for free.
+            %p
+              If you can afford to support the project, we'd really appreciate it.
+              It helps us make it accessible to as many people as possible.
+            %p
+              You can pay as little as $0.75.
+              %br
+              (below that and the credit card processing takes too much)
+              %br
+              (you can use a credit card or bitcoin)
+
+        = f.select :payment, CodePuzzleForm::PAYMENT_OPTIONS, {}, class: 'form-control'
+
+      .pt-1
+        %script{src: "https://checkout.stripe.com/checkout.js"}
+        %button.btn.btn-primary#stripeButton Next
+        :javascript
+          window.stripeDetails = {
+            name: 'The Code Puzzle',
+            description: 'Pay What You Want',
+            bitcoin: true,
+            amount: $('#code_puzzle_form_payment').val(),
+            email: $('#code_puzzle_form_email').val(),
+            "zip-code": true
+          }
+
+          var handler = StripeCheckout.configure({
+            key: "#{Rails.configuration.stripe[:publishable_key]}",
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            token: function(token) {
+              $('#code_puzzle_form_stripe_token').val(token.id);
+              $('#new_code_puzzle_form').submit();
+            }
+          });
+
+          $('#code_puzzle_form_email').change(function() {
+            window.stripeDetails.email = $('#code_puzzle_form_email').val();
+          });
+
+          $('#code_puzzle_form_payment').change(function() {
+            var value = $('#code_puzzle_form_payment').val();
+            if (value == -1) {
+              window.cancelStripe = true;
+            } else {
+              window.cancelStripe = false;
+              stripeDetails.amount = value;
+            }
+          })
+
+          document.getElementById('stripeButton').addEventListener('click', function(e) {
+            // Open Checkout with further options:
+            if (window.cancelStripe) return;
+            handler.open(stripeDetails);
+            e.preventDefault();
+          });
+
+          // Close Checkout on page navigation:
+          window.addEventListener('popstate', function() {
+            handler.close();
+          });
 
 
 
