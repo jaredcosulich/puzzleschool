@@ -1,6 +1,10 @@
 class CodePuzzleFormsController < ApplicationController
   before_action :set_code_puzzle_form, only: [:show]
 
+  def new
+    @code_puzzle_form = CodePuzzleForm.new(payment: 500)
+  end
+
   def show
     @code_puzzle_form.update(
       access_count: @code_puzzle_form.access_count + 1,
@@ -28,7 +32,7 @@ class CodePuzzleFormsController < ApplicationController
         )
       rescue Stripe::CardError => e
         flash[:error] = e.message
-        redirect_to cards_code_puzzle_classes_path
+        redirect_to new_code_puzzle_form_path
         return
       end
 

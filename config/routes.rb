@@ -13,8 +13,6 @@ end
 Rails.application.routes.draw do
 
   resources :code_puzzle_classes do
-    get 'cards', on: :collection
-
     resources :code_puzzle_projects do
       resources :code_puzzle_groups do
         resources :code_puzzle_cards

@@ -43,10 +43,10 @@
   .container
     .row.text-muted
       .col-xs-4.py-1.my-1
-        %p= link_to 'Learn More', learn_more_path
-        %p= link_to 'Technology', technologies_path
-        %p= link_to 'Programs', programs_path
-        %p= link_to 'Contact', contact_path
+        %p= link_to 'Learn More', learn_more_path(host: 'www.puzzleschool.com')
+        %p= link_to 'Technology', technologies_path(host: 'www.puzzleschool.com')
+        %p= link_to 'Programs', programs_path(host: 'www.puzzleschool.com')
+        %p= link_to 'Contact', contact_path(host: 'www.puzzleschool.com')
       .col-xs-4.py-3.text-xs-center
         %p= image_tag('compass_small.png')
       .col-xs-4.py-1.my-1.text-xs-right

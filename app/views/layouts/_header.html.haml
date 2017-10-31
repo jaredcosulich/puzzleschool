@@ -5,12 +5,12 @@
       #navbarResponsive.collapse.navbar-toggleable-sm
         %ul.nav.navbar-nav.text-muted
           %li.nav-item
-            = link_to 'Home', root_path, class: 'nav-link'
+            = link_to 'Home', root_path(host: 'www.puzzleschool.com'), class: 'nav-link'
           %li.nav-item
-            = link_to 'Learn More', learn_more_path, class: 'nav-link'
+            = link_to 'Learn More', learn_more_path(host: 'www.puzzleschool.com'), class: 'nav-link'
           %li.nav-item
-            = link_to 'Programs', programs_path, class: 'nav-link'
+            = link_to 'Programs', programs_path(host: 'www.puzzleschool.com'), class: 'nav-link'
           %li.nav-item
-            = link_to 'Technology', technologies_path, class: 'nav-link'
+            = link_to 'Technology', technologies_path(host: 'www.puzzleschool.com'), class: 'nav-link'
 
-    = link_to(image_tag('darker_logo_small.png'), root_path)
+    = link_to(image_tag('darker_logo_small.png'), root_path(host: 'www.puzzleschool.com'))
