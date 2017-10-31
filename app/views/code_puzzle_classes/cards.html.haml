@@ -9,7 +9,7 @@
   .col-xs-12.col-sm-10.offset-sm-1.col-md-8-offset-md-2.col-lg-6.offset-lg-3.text-xs-center
     %h2 The Code Puzzle Cards
     %p.mt-2
-      Please fill out the form below to gain access to The Code puzzle cards.
+      Please fill out the form below to access to The Code puzzle cards.
     %p You will be able to print out as many cards as you need.
 
 .row.pt-2
@@ -45,17 +45,14 @@
         .row.text-xs-left
           .col-xs-10.offset-xs-1.form-text.text-muted
             %p
-              If you can't afford to contribute, we still want you to try The Code Puzzle, so you can use it for free.
-            %p
               If you can afford to support the project, we'd really appreciate it.
               It helps us make it accessible to as many people as possible.
             %p
               You can pay as little as $0.75.
               %br
-              (below that and the credit card processing takes too much)
-              %br
               (you can use a credit card or bitcoin)
-
+            %p
+              If you can't afford to contribute, we still want you to try The Code Puzzle, so you can use it for free.
         = f.select :payment, CodePuzzleForm::PAYMENT_OPTIONS, {}, class: 'form-control'
 
       .pt-1

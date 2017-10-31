@@ -5,10 +5,20 @@
     %h1.title
       = image_tag('technologies/codepuzzle.png', class: 'img-fluid')
 
-- if @code_puzzle_form.access_count == 1 && @code_puzzle_form.payment > -1
+- if @code_puzzle_form.access_count == 1
+  - if @code_puzzle_form.payment > -1
+    .row.text-xs-center.py-2
+      .col-xs-12
+        %h4 Thank you so much for your support!
+
   .row.text-xs-center.py-2
     .col-xs-12
-      %h4 Thank you so much for your support!
+      %h5
+        This is your code to access this page:
+      %h5
+        %b= @code_puzzle_form.code
+      %p Please write it down.
+      %p= code_puzzle_form_url(@code_puzzle_form)
 
 .row.py-2
   .col-xs-12.col-lg-8.offset-lg-2
@@ -58,7 +68,8 @@
   .col-xs-12.col-lg-8.offset-lg-2
     %h3
       Self-Contained Programs
-      %small (just print and photograph with the app)
+    %h6
+      (just print and photograph with the app)
 
 .row
   .col-xs-6.offset-lg-2
