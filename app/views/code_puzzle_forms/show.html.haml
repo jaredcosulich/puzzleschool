@@ -72,12 +72,31 @@
       (just print and photograph with the app)
 
 .row
-  .col-xs-6.offset-lg-2
+  .col-xs-6.col-sm-3.offset-lg-2.text-xs-center
     %figure.figure
       .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/simplehouse.png', class: 'img-fluid'), "/code_puzzle/simple_house.pdf", target: '_blank')
-      %figcaption.figure-caption.text-xs-center A simple house
+      %figcaption.figure-caption.text-xs-center A Simple House
+
+  .col-xs-6.col-sm-3.text-xs-center
+    %figure.figure
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/star.png', class: 'img-fluid'), "/code_puzzle/star.pdf", target: '_blank')
+      %figcaption.figure-caption.text-xs-center A Star
+
+  .col-xs-6.col-sm-3.text-xs-center
+    %figure.figure
+      .figure-img.img-fluid.rounded= link_to(image_tag('codepuzzle/spiral.png', class: 'img-fluid'), "/code_puzzle/spiral.pdf", target: '_blank')
+      %figcaption.figure-caption.text-xs-center A Spiral
+
 
 
 .row.py-2
   .col-xs-12.col-lg-8.offset-lg-2
     %h3 App Walk-Through
+    .embed-responsive.embed-responsive-16by9
+      %iframe{class: 'embed-responsive-item', allowfullscreen: "", frameborder: "0", height: "315", src: "https://www.youtube.com/embed/KKvxvYnYck8?rel=0", width: "560"}
+
+.row.py-1
+  .col-xs-12.col-lg-8.offset-lg-2
+    %h3 Video Demonstration
+    .embed-responsive.embed-responsive-16by9
+      %iframe{class: 'embed-responsive-item', allowfullscreen: "", frameborder: "0", height: "315", src: "https://www.youtube.com/embed/vVKEvuCEpEI?rel=0", width: "560"}
