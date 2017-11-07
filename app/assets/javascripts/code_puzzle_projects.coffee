@@ -3,6 +3,17 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 COMMANDS = [
+  ["F1", "1"],
+  ["L1", "6"],
+  ["A1", "50"],
+  ["A3", "90"],
+  ["L2", ""],
+  ["A4", "45"],
+  ["A1", "30"],
+  ["F2", ""],
+  ["L1", "8"],
+  ["F1", "1"],
+  ["L2", ""],
   ["L1", "4"],
   ["L1", "4"],
   ["A1", "50"],
@@ -20,6 +31,7 @@ COMMANDS = [
   ["A1", "10"],
   ["P3", "1"],
   ["P4", "UIExtendedSRGBColorSpace 0 0 0 1"],
+  ["F1", "1"],
   ["L2", ""],
   ["A4", "60"],
   ["A1", "50"],
@@ -141,7 +153,7 @@ init = ->
   initArrow()
 
   executeNextCommand()
-  SETTINGS.executionInterval = setInterval(( ->
+  SETTINGS.executionInterval = setInterval(( =>
     executeNextCommand()
   ), 50)
 
@@ -158,21 +170,24 @@ executeNextCommand = ->
     return
 
   command = COMMANDS[SETTINGS.executionIndex]
-  SETTINGS.executionIndex += 1
-  executeCommand(command[0], command[1])
+  nextIndex = executeCommand(command[0], command[1])
+  if nextIndex > -1
+    SETTINGS.executionIndex = nextIndex
+  else
+    SETTINGS.executionIndex += 1
 
 executeCommand = (code, param) ->
   methodName = FUNCTIONS[code].method
   paramNumber = parseFloat(param)
 
-  # if (SETTINGS.currentFunction?)
-  #   if (methodName == "endFunction")
-  #     SETTINGS.delete('currentFunction')
-  #   else
-  #     SETTINGS.userFunctions[SETTINGS.currentFunction].push( ->
-  #       executeCommand(code, param)
-  #     )
-  #     return 0
+  if SETTINGS.currentFunction?
+    if (methodName == "endFunction")
+      delete SETTINGS['currentFunction']
+    else
+      SETTINGS.userFunctions[SETTINGS.currentFunction].push( =>
+        executeCommand(code, param)
+      )
+    return -1
 
   nextPoint = SETTINGS.currentPoint
   fill = false
@@ -212,7 +227,23 @@ executeCommand = (code, param) ->
       if currentLoop.completed == currentLoop.total
         SETTINGS.loops.pop()
       else
-        SETTINGS.executionIndex = currentLoop.start
+        return currentLoop.start + 1
+    when "function"
+      userFunction =  SETTINGS.userFunctions[param]
+      if userFunction?
+        index = 0
+        while index <= userFunction.length - 1
+          nextIndex = userFunction[index]()
+          if nextIndex > -1
+            index = nextIndex - SETTINGS.executionIndex
+          else
+            index += 1
+
+      else
+        SETTINGS.userFunctions[param] = []
+        SETTINGS.currentFunction = param
+
+
 
       # case "function":
       #     if let functionSteps = userDefinedFunctions[paramNumber] {
@@ -260,6 +291,8 @@ executeCommand = (code, param) ->
     )
 
   SETTINGS.currentPoint = nextPoint
+
+  return -1
 
 drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
   width = 7
