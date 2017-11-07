@@ -5,7 +5,13 @@
 COMMANDS = [
   ["A1", "50"]
   ["A4", "90"],
-  ["A1", "50"]
+  ["A1", "50"],
+  ["P1", ""],
+  ["A1", "50"],
+  ["P2", ""],
+  ["P3", "20"],
+  ["P4", "UIExtendedSRGBColorSpace 0.352941 0.25098 0.380392 1"]
+  ["A1", "20"]
 ]
 
 FUNCTIONS = {
@@ -96,6 +102,9 @@ SETTINGS = {
   startingZoom: 1,
   zoom: 1,
   executionIndex: 0,
+  penSize: 1,
+  penColor: [0, 0, 0],
+  penIsDown: true,
   userFunctions: {}
 }
 
@@ -165,26 +174,17 @@ executeCommand = (code, param) ->
       SETTINGS.currentAngle += paramNumber
     when "rotateLeft"
       SETTINGS.currentAngle -= paramNumber
-      # case "penUp":
-      #     penIsDown = false
-      # case "penDown":
-      #     penIsDown = true
-      # case "penSize":
-      #     penSize = paramNumber
-      #     permanentPathComponents.append(PermanentPathComponent(
-      #         size: penSize,
-      #         color: penColor,
-      #         path: UIBezierPath(),
-      #         fillPoint: nil
-      #     ))
-      # case "penColor":
-      #     penColor = ImageProcessor.colorFrom(text: param)
-      #     permanentPathComponents.append(PermanentPathComponent(
-      #         size: penSize,
-      #         color: penColor,
-      #         path: UIBezierPath(),
-      #         fillPoint: nil
-      #     ))
+    when "penUp"
+        SETTINGS.penIsDown = false
+    when "penDown"
+        SETTINGS.penIsDown = true
+    when "penSize"
+        SETTINGS.penSize = paramNumber
+    when "penColor"
+        SETTINGS.penColor = (
+          Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
+        )
+
       # case "fillColor":
       #     fillColor = ImageProcessor.colorFrom(text: param)
       #     fill = true
@@ -232,12 +232,16 @@ executeCommand = (code, param) ->
 
   drawArrow(nextPoint, SETTINGS.currentAngle)
 
-  if SETTINGS.currentPoint != nextPoint
-    SETTINGS.context.beginPath()
-    SETTINGS.context.moveTo(SETTINGS.currentPoint[0], SETTINGS.currentPoint[1])
-    SETTINGS.context.lineTo(nextPoint[0], nextPoint[1])
-    SETTINGS.currentPoint = nextPoint
-    SETTINGS.context.stroke()
+  if SETTINGS.penIsDown
+    if SETTINGS.currentPoint != nextPoint
+      SETTINGS.context.lineWidth = SETTINGS.penSize
+      SETTINGS.context.strokeStyle = "rgb(#{SETTINGS.penColor.join(',')})"
+      SETTINGS.context.beginPath()
+      SETTINGS.context.moveTo(SETTINGS.currentPoint[0], SETTINGS.currentPoint[1])
+      SETTINGS.context.lineTo(nextPoint[0], nextPoint[1])
+      SETTINGS.context.stroke()
+
+  SETTINGS.currentPoint = nextPoint
 
 drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
   width = 7
