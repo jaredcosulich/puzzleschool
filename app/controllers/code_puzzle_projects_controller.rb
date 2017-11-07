@@ -66,7 +66,7 @@ class CodePuzzleProjectsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_code_puzzle_project
-      @code_puzzle_project = code_puzzle_class.code_puzzle_projects.find(params[:id])
+      @code_puzzle_project = @code_puzzle_class.code_puzzle_projects.find(params[:id])
     end
 
     def set_code_puzzle_class
