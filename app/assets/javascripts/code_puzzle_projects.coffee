@@ -3,19 +3,27 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 COMMANDS = [
-  ["A1", "50"]
+  ["L1", "4"],
+  ["L1", "4"],
+  ["A1", "50"],
   ["A4", "90"],
   ["A1", "50"],
   ["A4", "135"],
   ["A1", "70.72"],
   ["A4", "150"],
   ["P1", ""],
-  ["A1", "100"],
+  ["A1", "30"],
   ["A5", "UIExtendedSRGBColorSpace 0.8 0.25098 0.380392 1"],
   ["P2", ""],
   ["P3", "20"],
   ["P4", "UIExtendedSRGBColorSpace 0.352941 0.25098 0.380392 1"],
-  ["A1", "20"]
+  ["A1", "10"],
+  ["P3", "1"],
+  ["P4", "UIExtendedSRGBColorSpace 0 0 0 1"],
+  ["L2", ""],
+  ["A4", "60"],
+  ["A1", "50"],
+  ["L2", ""]
 ]
 
 FUNCTIONS = {
@@ -109,7 +117,8 @@ SETTINGS = {
   penSize: 1,
   penColor: [0, 0, 0],
   penIsDown: true,
-  userFunctions: {}
+  loops: [],
+  userFunctions: {},
 }
 
 init = ->
@@ -134,7 +143,7 @@ init = ->
   executeNextCommand()
   SETTINGS.executionInterval = setInterval(( ->
     executeNextCommand()
-  ), 500)
+  ), 50)
 
 initArrow = ->
   SETTINGS.arrowContext.restore()
@@ -179,31 +188,32 @@ executeCommand = (code, param) ->
     when "rotateLeft"
       SETTINGS.currentAngle -= paramNumber
     when "penUp"
-        SETTINGS.penIsDown = false
+      SETTINGS.penIsDown = false
     when "penDown"
-        SETTINGS.penIsDown = true
+      SETTINGS.penIsDown = true
     when "penSize"
-        SETTINGS.penSize = paramNumber
+      SETTINGS.penSize = paramNumber
     when "penColor"
-        SETTINGS.penColor = (
-          Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
-        )
+      SETTINGS.penColor = (
+        Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
+      )
     when "fillColor"
-        SETTINGS.fillColor = (
-          Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
-        )
-        fill = true
+      SETTINGS.fillColor = (
+        Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
+      )
+      fill = true
+    when "loop"
+      SETTINGS.loops.push(
+        {start: SETTINGS.executionIndex, completed: 0, total: paramNumber}
+      )
+    when "endLoop"
+      currentLoop = SETTINGS.loops[SETTINGS.loops.length - 1]
+      currentLoop.completed += 1
+      if currentLoop.completed == currentLoop.total
+        SETTINGS.loops.pop()
+      else
+        SETTINGS.executionIndex = currentLoop.start
 
-      #     permanentPathComponents.append(PermanentPathComponent(
-      #         size: penSize,
-      #         color: penColor,
-      #         path: UIBezierPath(),
-      #         fillPoint: nil
-      #     ))
-      # case "loop":
-      #     return Int(paramNumber)
-      # case "endLoop":
-      #     return -1
       # case "function":
       #     if let functionSteps = userDefinedFunctions[paramNumber] {
       #         var loops = [Loop]()
