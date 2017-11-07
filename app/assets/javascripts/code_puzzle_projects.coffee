@@ -90,6 +90,8 @@ FUNCTIONS = {
 }
 
 SETTINGS = {
+  width: 600,
+  height: 400,
   currentAngle: 90,
   startingZoom: 1,
   zoom: 1,
@@ -98,20 +100,35 @@ SETTINGS = {
 }
 
 init = ->
-  canvas = $('#drawing_canvas')[0]
-  SETTINGS.context = canvas.getContext('2d')
+  SETTINGS.width = $('.canvas').width()
+  SETTINGS.height = $('.canvas').height()
 
-  canvas.width = canvas.height * (canvas.clientWidth / canvas.clientHeight)
+  drawingCanvas = $('#drawing_canvas')[0]
+  drawingCanvas.width = SETTINGS.width
+  drawingCanvas.height = SETTINGS.height
+  SETTINGS.context = drawingCanvas.getContext('2d')
 
-  width = canvas.width
-  height = canvas.height
-  SETTINGS.currentPoint = [Math.round(width/2), Math.round(height/2)]
+  arrowCanvas = $('#arrow_canvas')[0]
+  arrowCanvas.width = SETTINGS.width
+  arrowCanvas.height = SETTINGS.height
+  SETTINGS.arrowContext = arrowCanvas.getContext('2d')
+
+  SETTINGS.currentPoint = [Math.round(SETTINGS.width/2), Math.round(SETTINGS.height/2)]
   SETTINGS.context.translate(0.5, 0.5)
+
+  initArrow()
 
   executeNextCommand()
   SETTINGS.executionInterval = setInterval(( ->
     executeNextCommand()
   ), 500)
+
+initArrow = ->
+  SETTINGS.arrowContext.restore()
+  SETTINGS.arrowContext.clearRect(0, 0, SETTINGS.width, SETTINGS.height)
+  SETTINGS.arrowContext.fillStyle = "red"
+  SETTINGS.arrowContext.save()
+  drawArrow()
 
 executeNextCommand = ->
   if SETTINGS.executionIndex >= COMMANDS.length
@@ -213,15 +230,33 @@ executeCommand = (code, param) ->
     else
       print("Method Not Found")
 
-  console.log(nextPoint, SETTINGS.currentAngle)
+  drawArrow(nextPoint, SETTINGS.currentAngle)
 
   if SETTINGS.currentPoint != nextPoint
     SETTINGS.context.beginPath()
     SETTINGS.context.moveTo(SETTINGS.currentPoint[0], SETTINGS.currentPoint[1])
-    console.log(SETTINGS.currentPoint, nextPoint)
     SETTINGS.context.lineTo(nextPoint[0], nextPoint[1])
     SETTINGS.currentPoint = nextPoint
     SETTINGS.context.stroke()
+
+drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
+  width = 7
+  height = 15
+  SETTINGS.arrowContext.restore()
+  SETTINGS.arrowContext.clearRect(0, 0, SETTINGS.width, SETTINGS.height)
+  SETTINGS.arrowContext.save()
+  SETTINGS.arrowContext.translate(point[0], point[1])
+  SETTINGS.arrowContext.rotate((angle - 90) * Math.PI / 180)
+  SETTINGS.arrowContext.translate(width * -1, height * -1)
+  SETTINGS.arrowContext.beginPath()
+  SETTINGS.arrowContext.moveTo(0, height)
+  SETTINGS.arrowContext.lineTo(width, 0)
+  SETTINGS.arrowContext.lineTo(width * 2, height)
+  SETTINGS.arrowContext.closePath()
+  SETTINGS.arrowContext.fill()
+  SETTINGS.arrowContext.stroke()
+
+
 
 calculateXDistance = (distance, angle) ->
   adjustedAngle = angle % 360
