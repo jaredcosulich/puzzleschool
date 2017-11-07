@@ -6,11 +6,15 @@ COMMANDS = [
   ["A1", "50"]
   ["A4", "90"],
   ["A1", "50"],
+  ["A4", "135"],
+  ["A1", "70.72"],
+  ["A4", "150"],
   ["P1", ""],
-  ["A1", "50"],
+  ["A1", "100"],
+  ["A5", "UIExtendedSRGBColorSpace 0.8 0.25098 0.380392 1"],
   ["P2", ""],
   ["P3", "20"],
-  ["P4", "UIExtendedSRGBColorSpace 0.352941 0.25098 0.380392 1"]
+  ["P4", "UIExtendedSRGBColorSpace 0.352941 0.25098 0.380392 1"],
   ["A1", "20"]
 ]
 
@@ -184,16 +188,12 @@ executeCommand = (code, param) ->
         SETTINGS.penColor = (
           Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
         )
+    when "fillColor"
+        SETTINGS.fillColor = (
+          Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
+        )
+        fill = true
 
-      # case "fillColor":
-      #     fillColor = ImageProcessor.colorFrom(text: param)
-      #     fill = true
-      #     permanentPathComponents.append(PermanentPathComponent(
-      #         size: nil,
-      #         color: fillColor,
-      #         path: nil,
-      #         fillPoint: currentPoint
-      #     ))
       #     permanentPathComponents.append(PermanentPathComponent(
       #         size: penSize,
       #         color: penColor,
@@ -241,6 +241,14 @@ executeCommand = (code, param) ->
       SETTINGS.context.lineTo(nextPoint[0], nextPoint[1])
       SETTINGS.context.stroke()
 
+  if fill
+    ImageProcessing.fill(
+      SETTINGS.context.canvas,
+      SETTINGS.fillColor,
+      nextPoint[0],
+      nextPoint[1]
+    )
+
   SETTINGS.currentPoint = nextPoint
 
 drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
@@ -269,22 +277,22 @@ calculateXDistance = (distance, angle) ->
     return 0
   else if adjustedAngle == 0
     return distance * -1
-  else if adjustedAngle == 180.0
+  else if adjustedAngle == 180
     return distance
 
-  return cos(adjustedAngle * (Math.pi / 180.0)) * distance * -1
+  return Math.cos(adjustedAngle * (Math.PI / 180)) * distance * -1
 
 calculateYDistance = (distance, angle) ->
   adjustedAngle = angle % 360
 
-  if adjustedAngle == 0.0 || adjustedAngle == 180.0
+  if adjustedAngle == 0.0 || adjustedAngle == 180
     return 0
-  else if (adjustedAngle == 270.0)
+  else if (adjustedAngle == 270)
     return distance
-  else if (adjustedAngle == 90.0)
+  else if (adjustedAngle == 90)
     return distance * -1
 
-  return sin(adjustedAngle * (Math.pi / 180.0)) * distance * -1
+  return Math.sin(adjustedAngle * (Math.PI / 180)) * distance * -1
 
 calculatePoint = (point, distance, angle) ->
   xDistance = calculateXDistance(distance, angle) / SETTINGS.startingZoom
