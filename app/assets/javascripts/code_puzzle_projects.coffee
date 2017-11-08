@@ -3,38 +3,33 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 COMMANDS = [
-  ["F1", "1"],
-  ["L1", "6"],
-  ["A1", "50"],
-  ["A3", "90"],
-  ["L2", ""],
-  ["A4", "45"],
+  ["P3", "6"],
+  ["P4", "UIExtendedSRGBColorSpace 0.141176 0.415686 0.301961 1"],
+  ["A4", "10"],
   ["A1", "30"],
-  ["F2", ""],
-  ["L1", "8"],
-  ["F1", "1"],
-  ["L2", ""],
-  ["L1", "4"],
-  ["L1", "4"],
-  ["A1", "50"],
-  ["A4", "90"],
-  ["A1", "50"],
-  ["A4", "135"],
-  ["A1", "70.72"],
-  ["A4", "150"],
-  ["P1", ""],
+  ["A3", "20"],
   ["A1", "30"],
-  ["A5", "UIExtendedSRGBColorSpace 0.8 0.25098 0.380392 1"],
-  ["P2", ""],
-  ["P3", "20"],
-  ["P4", "UIExtendedSRGBColorSpace 0.352941 0.25098 0.380392 1"],
-  ["A1", "10"],
+  ["A4", "20"],
+  ["A1", "30"],
   ["P3", "1"],
-  ["P4", "UIExtendedSRGBColorSpace 0 0 0 1"],
-  ["F1", "1"],
+  ["P4", "UIExtendedSRGBColorSpace 0.247059 0.219608 0.196078 1"],
+  ["F1", ""],
+  ["A1", "40"],
+  ["L1", "69"],
+  ["A3", "3"],
+  ["A1", "0.5"],
   ["L2", ""],
-  ["A4", "60"],
-  ["A1", "50"],
+  ["A1", "40"],
+  ["F2", ""],
+  ["L1", "12"],
+  ["F1", ""],
+  ["A4", "13"],
+  ["P1", ""],
+  ["A2", "30"],
+  ["A5", "UIExtendedSRGBColorSpace 0.909804 0.529412 0.113725 1"],
+  ["A1", "30"],
+  ["A3", "196"],
+  ["P2", ""],
   ["L2", ""]
 ]
 
@@ -235,39 +230,13 @@ executeCommand = (code, param) ->
         while index <= userFunction.length - 1
           nextIndex = userFunction[index]()
           if nextIndex > -1
-            index = nextIndex - SETTINGS.executionIndex
+            index = nextIndex - SETTINGS.executionIndex + 1
           else
             index += 1
 
       else
         SETTINGS.userFunctions[param] = []
         SETTINGS.currentFunction = param
-
-
-
-      # case "function":
-      #     if let functionSteps = userDefinedFunctions[paramNumber] {
-      #         var loops = [Loop]()
-      #         var index = -1
-      #         while index < functionSteps.count - 1 {
-      #             index += 1
-      #             let loopCount = functionSteps[index]()
-      #             if loopCount > 0 {
-      #                 loops.append(Loop(startingIndex: index, count: loopCount))
-      #             } else if loopCount < 0 {
-      #                 let loopIndex = loops.last!.increment()
-      #                 if loopIndex == -1 {
-      #                     _ = loops.popLast()
-      #                 } else {
-      #                     index = loopIndex
-      #                 }
-      #             }
-      #         }
-      #     } else {
-      #         userDefinedFunctions[paramNumber] = [() -> Int]()
-      #         currentUserDefinedFunction = paramNumber
-      #     }
-      #     return 0
     else
       print("Method Not Found")
 
