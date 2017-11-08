@@ -1,0 +1,16 @@
+%p#notice= notice
+
+%p
+  %strong Class:
+  = @code_puzzle_class.slug
+
+%p
+  %strong Projects
+
+%ul
+  - @code_puzzle_class.code_puzzle_projects.each do |project|
+    %li= link_to project.title, [@code_puzzle_class, project]
+
+= link_to 'Edit', edit_code_puzzle_class_path(@code_puzzle_class)
+|
+= link_to 'Back', code_puzzle_classes_path

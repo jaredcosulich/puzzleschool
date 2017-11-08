@@ -5,3 +5,8 @@
     .canvas
       %canvas#drawing_canvas
       %canvas#arrow_canvas
+
+    .cards
+      - @code_puzzle_project.code_puzzle_cards.each do |card|
+        .card{data: {code: card.code, param: card.param}}
+          %h5= "#{card.code}: #{card.param}"

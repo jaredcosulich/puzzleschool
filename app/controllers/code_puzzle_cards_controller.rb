@@ -28,10 +28,18 @@ class CodePuzzleCardsController < ApplicationController
   # POST /code_puzzle_cards
   # POST /code_puzzle_cards.json
   def create
-    @code_puzzle_card = @code_puzzle_group.code_puzzle_cards.new(code_puzzle_card_params)
+    success = false
+    @code_puzzle_card = @code_puzzle_group.code_puzzle_cards.where(id: code_puzzle_card_params[:id]).first
+
+    if @code_puzzle_card.present?
+      success = @code_puzzle_card.update(code_puzzle_card_params)
+    else
+      @code_puzzle_card = @code_puzzle_group.code_puzzle_cards.new(code_puzzle_card_params)
+      success = @code_puzzle_card.save
+    end
 
     respond_to do |format|
-      if @code_puzzle_card.save
+      if success
         format.html { redirect_to @code_puzzle_card, notice: 'Code puzzle card was successfully created.' }
         format.json { render :show, status: :created, location: [@code_puzzle_class, @code_puzzle_project, @code_puzzle_group, @code_puzzle_card] }
       else
@@ -86,6 +94,6 @@ class CodePuzzleCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def code_puzzle_card_params
-      params.require(:code_puzzle_card).permit(:photo_url, :code, :param, :position, :code_puzzle_group_id)
+      params.require(:code_puzzle_card).permit(:photo_url, :code, :param, :position, :id, :code_puzzle_group_id)
     end
 end

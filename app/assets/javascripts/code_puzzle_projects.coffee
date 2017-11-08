@@ -2,36 +2,36 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-COMMANDS = [
-  ["P3", "6"],
-  ["P4", "UIExtendedSRGBColorSpace 0.141176 0.415686 0.301961 1"],
-  ["A4", "10"],
-  ["A1", "30"],
-  ["A3", "20"],
-  ["A1", "30"],
-  ["A4", "20"],
-  ["A1", "30"],
-  ["P3", "1"],
-  ["P4", "UIExtendedSRGBColorSpace 0.247059 0.219608 0.196078 1"],
-  ["F1", ""],
-  ["A1", "40"],
-  ["L1", "69"],
-  ["A3", "3"],
-  ["A1", "0.5"],
-  ["L2", ""],
-  ["A1", "40"],
-  ["F2", ""],
-  ["L1", "12"],
-  ["F1", ""],
-  ["A4", "13"],
-  ["P1", ""],
-  ["A2", "30"],
-  ["A5", "UIExtendedSRGBColorSpace 0.909804 0.529412 0.113725 1"],
-  ["A1", "30"],
-  ["A3", "196"],
-  ["P2", ""],
-  ["L2", ""]
-]
+# COMMANDS = [
+#   ["P3", "6"],
+#   ["P4", "UIExtendedSRGBColorSpace 0.141176 0.415686 0.301961 1"],
+#   ["A4", "10"],
+#   ["A1", "30"],
+#   ["A3", "20"],
+#   ["A1", "30"],
+#   ["A4", "20"],
+#   ["A1", "30"],
+#   ["P3", "1"],
+#   ["P4", "UIExtendedSRGBColorSpace 0.247059 0.219608 0.196078 1"],
+#   ["F1", ""],
+#   ["A1", "40"],
+#   ["L1", "69"],
+#   ["A3", "3"],
+#   ["A1", "0.5"],
+#   ["L2", ""],
+#   ["A1", "40"],
+#   ["F2", ""],
+#   ["L1", "12"],
+#   ["F1", ""],
+#   ["A4", "13"],
+#   ["P1", ""],
+#   ["A2", "30"],
+#   ["A5", "UIExtendedSRGBColorSpace 0.909804 0.529412 0.113725 1"],
+#   ["A1", "30"],
+#   ["A3", "196"],
+#   ["P2", ""],
+#   ["L2", ""]
+# ]
 
 FUNCTIONS = {
   "A1": {
@@ -142,6 +142,8 @@ init = ->
   arrowCanvas.height = SETTINGS.height
   SETTINGS.arrowContext = arrowCanvas.getContext('2d')
 
+  SETTINGS.cards = ($(card).data() for card in $('.card'))
+
   SETTINGS.currentPoint = [Math.round(SETTINGS.width/2), Math.round(SETTINGS.height/2)]
   SETTINGS.context.translate(0.5, 0.5)
 
@@ -160,12 +162,12 @@ initArrow = ->
   drawArrow()
 
 executeNextCommand = ->
-  if SETTINGS.executionIndex >= COMMANDS.length
+  if SETTINGS.executionIndex >= SETTINGS.cards.length
     clearInterval(SETTINGS.executionInterval)
     return
 
-  command = COMMANDS[SETTINGS.executionIndex]
-  nextIndex = executeCommand(command[0], command[1])
+  card = SETTINGS.cards[SETTINGS.executionIndex]
+  nextIndex = executeCommand(card.code, card.param)
   if nextIndex > -1
     SETTINGS.executionIndex = nextIndex
   else

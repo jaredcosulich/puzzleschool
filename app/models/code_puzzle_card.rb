@@ -17,4 +17,6 @@ class CodePuzzleCard < ApplicationRecord
     ["L1", "Loop"],
     ["L2", "End Loop"]
   ]
+
+  default_scope { order(position: :asc) }
 end
