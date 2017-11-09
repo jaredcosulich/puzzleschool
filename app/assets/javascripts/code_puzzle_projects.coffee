@@ -191,9 +191,13 @@ executeNextCard = ->
 
 
 highlightCard = (card, instant=false) ->
-  $(".cards .card").css(opacity: 0.2)
+  return if card.highlighted
+
+  $(".cards .card").css(opacity: 0.2).data(highlighted: false)
 
   cardElement = $("#card_#{card.id}")
+  cardElement.data(highlighted: true)
+
   cardElement.animate({
     opacity: 1
   }, (if instant then 0 else SETTINGS.speed / 2))
