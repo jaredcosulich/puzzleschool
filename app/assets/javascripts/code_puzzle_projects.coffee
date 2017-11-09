@@ -207,6 +207,7 @@ executeNextCard = ->
   highlightCard(card)
 
 executeUpTo = (endCard) ->
+  return if endCard.highlighted
   reset()
   for card in SETTINGS.cards
     if card.id == endCard.id
@@ -218,7 +219,6 @@ executeUpTo = (endCard) ->
 
 highlightCard = (card, instant=false) ->
   return if card.highlighted
-
   $(".cards .card").css(opacity: 0.2).data(highlighted: false)
 
   cardElement = $("#card_#{card.id}")
