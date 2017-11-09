@@ -6,7 +6,12 @@
       %canvas#drawing_canvas
       %canvas#arrow_canvas
 
-    .cards
-      - @code_puzzle_project.code_puzzle_cards.each do |card|
-        .card{data: {code: card.code, param: card.param}}
-          %h5= "#{card.code}: #{card.param}"
+    .signature-container
+      .signature
+      .signature-color
+      
+    .cards-container
+      .cards
+        - @code_puzzle_project.code_puzzle_cards.each do |card|
+          .card{id: "card_#{card.id}", data: {id: card.id, code: card.code, param: card.param, photo: card.photo_url}}
+            .image= image_tag(card.photo_url)

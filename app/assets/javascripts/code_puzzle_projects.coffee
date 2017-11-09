@@ -2,36 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-# COMMANDS = [
-#   ["P3", "6"],
-#   ["P4", "UIExtendedSRGBColorSpace 0.141176 0.415686 0.301961 1"],
-#   ["A4", "10"],
-#   ["A1", "30"],
-#   ["A3", "20"],
-#   ["A1", "30"],
-#   ["A4", "20"],
-#   ["A1", "30"],
-#   ["P3", "1"],
-#   ["P4", "UIExtendedSRGBColorSpace 0.247059 0.219608 0.196078 1"],
-#   ["F1", ""],
-#   ["A1", "40"],
-#   ["L1", "69"],
-#   ["A3", "3"],
-#   ["A1", "0.5"],
-#   ["L2", ""],
-#   ["A1", "40"],
-#   ["F2", ""],
-#   ["L1", "12"],
-#   ["F1", ""],
-#   ["A4", "13"],
-#   ["P1", ""],
-#   ["A2", "30"],
-#   ["A5", "UIExtendedSRGBColorSpace 0.909804 0.529412 0.113725 1"],
-#   ["A1", "30"],
-#   ["A3", "196"],
-#   ["P2", ""],
-#   ["L2", ""]
-# ]
 
 FUNCTIONS = {
   "A1": {
@@ -142,17 +112,22 @@ init = ->
   arrowCanvas.height = SETTINGS.height
   SETTINGS.arrowContext = arrowCanvas.getContext('2d')
 
-  SETTINGS.cards = ($(card).data() for card in $('.card'))
+  initCards()
 
   SETTINGS.currentPoint = [Math.round(SETTINGS.width/2), Math.round(SETTINGS.height/2)]
   SETTINGS.context.translate(0.5, 0.5)
 
   initArrow()
 
-  executeNextCommand()
+  executeNextCard()
   SETTINGS.executionInterval = setInterval(( =>
-    executeNextCommand()
-  ), 50)
+    executeNextCard()
+  ), 1000)
+
+initCards = ->
+  SETTINGS.cards = ($(card).data() for card in $('.card'))
+  for card in SETTINGS.cards
+    $("#card_#{card.id}").css(opacity: 0.2)
 
 initArrow = ->
   SETTINGS.arrowContext.restore()
@@ -161,28 +136,56 @@ initArrow = ->
   SETTINGS.arrowContext.save()
   drawArrow()
 
-executeNextCommand = ->
+executeNextCard = ->
   if SETTINGS.executionIndex >= SETTINGS.cards.length
     clearInterval(SETTINGS.executionInterval)
     return
 
   card = SETTINGS.cards[SETTINGS.executionIndex]
-  nextIndex = executeCommand(card.code, card.param)
+  highlightCard(card)
+  nextIndex = executeCard(card)
   if nextIndex > -1
     SETTINGS.executionIndex = nextIndex
   else
     SETTINGS.executionIndex += 1
 
-executeCommand = (code, param) ->
-  methodName = FUNCTIONS[code].method
-  paramNumber = parseFloat(param)
+
+highlightCard = (card) ->
+  $(".cards .card").animate({
+    opacity: 0.2
+  }, 100)
+
+  cardElement = $("#card_#{card.id}")
+  cardElement.animate({
+    opacity: 1
+  }, 100)
+
+  container = cardElement.closest('.cards-container')
+  left = cardElement.offset().left + container.scrollLeft() - (container.width() / 2) - (cardElement.width() * 3 / 4)
+  container.animate({
+      scrollLeft: left
+  }, 100)
+
+  info = FUNCTIONS[card.code]
+  if info.color
+    $(".signature").html(info.name)
+    console.log("rgb(#{colorFromParam(card.param).join(',')})")
+    $(".signature-color").css(backgroundColor: "rgb(#{colorFromParam(card.param).join(',')})")
+    $(".signature-color").show()
+  else
+    $(".signature").html("#{info.name} #{card.param}")
+    $(".signature-color").hide()
+
+executeCard = (card) ->
+  methodName = FUNCTIONS[card.code].method
+  paramNumber = parseFloat(card.param)
 
   if SETTINGS.currentFunction?
     if (methodName == "endFunction")
       delete SETTINGS['currentFunction']
     else
       SETTINGS.userFunctions[SETTINGS.currentFunction].push( =>
-        executeCommand(code, param)
+        executeCard(card)
       )
     return -1
 
@@ -206,13 +209,9 @@ executeCommand = (code, param) ->
     when "penSize"
       SETTINGS.penSize = paramNumber
     when "penColor"
-      SETTINGS.penColor = (
-        Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
-      )
+      SETTINGS.penColor = colorFromParam(card.param)
     when "fillColor"
-      SETTINGS.fillColor = (
-        Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
-      )
+      SETTINGS.fillColor = colorFromParam(card.param)
       fill = true
     when "loop"
       SETTINGS.loops.push(
@@ -226,7 +225,7 @@ executeCommand = (code, param) ->
       else
         return currentLoop.start + 1
     when "function"
-      userFunction =  SETTINGS.userFunctions[param]
+      userFunction =  SETTINGS.userFunctions[card.param]
       if userFunction?
         index = 0
         while index <= userFunction.length - 1
@@ -237,8 +236,8 @@ executeCommand = (code, param) ->
             index += 1
 
       else
-        SETTINGS.userFunctions[param] = []
-        SETTINGS.currentFunction = param
+        SETTINGS.userFunctions[card.param] = []
+        SETTINGS.currentFunction = card.param
     else
       print("Method Not Found")
 
@@ -282,7 +281,8 @@ drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
   SETTINGS.arrowContext.fill()
   SETTINGS.arrowContext.stroke()
 
-
+colorFromParam = (param) ->
+  Math.floor(colorValue * 255) for colorValue in param.split(/\s/)[1..-2]
 
 calculateXDistance = (distance, angle) ->
   adjustedAngle = angle % 360

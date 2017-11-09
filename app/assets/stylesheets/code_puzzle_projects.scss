@@ -13,9 +13,40 @@
   }
 }
 
-.cards {
-  .card {
-    float: left;
-    padding: 0 12px;
+.signature-container {
+  text-align: center;
+
+  .signature, .signature-color {
+    display: inline-block;
+    height: 21px;
+    font-size: 21px;
+  }
+
+  .signature-color {
+    width: 21px;
+    margin-bottom: -3px;
+  }
+}
+
+.cards-container {
+  position: relative;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+
+  .cards {
+    white-space: nowrap;
+    width: 9999px;
+    padding: 0 80%;
+
+    .card {
+      float: left;
+      padding: 0 12px;
+      border: none;
+
+      img {
+        height: 150px;
+      }
+    }
   }
 }
