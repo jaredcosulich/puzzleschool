@@ -85,7 +85,7 @@ FUNCTIONS = {
 }
 
 SETTINGS = {
-  speed: 5000,
+  speed: 500,
   width: 600,
   height: 400,
   cardWidth: 150,
@@ -153,7 +153,8 @@ initCards = ->
     cardElement.css(opacity: 0.2)
     cardElement.on 'dragstart', -> return false
 
-  $('.cards').width(totalWidth * 1.5)
+  totalWidth += $(".buffer").width()
+  $('.cards').width(totalWidth)
 
   container = $('.cards-container')
 
