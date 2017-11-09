@@ -89,10 +89,10 @@ SETTINGS = {
   width: 600,
   height: 400,
   cardWidth: 150,
-  currentAngle: 90,
   startingZoom: 1,
   zoom: 1,
   executionIndex: 0,
+  currentAngle: 90,
   penSize: 1,
   penColor: [0, 0, 0],
   penIsDown: true,
@@ -114,17 +114,34 @@ init = ->
   arrowCanvas.height = SETTINGS.height
   SETTINGS.arrowContext = arrowCanvas.getContext('2d')
 
+  reset()
+
   initCards()
-
-  SETTINGS.currentPoint = [Math.round(SETTINGS.width/2), Math.round(SETTINGS.height/2)]
-  SETTINGS.context.translate(0.5, 0.5)
-
   initArrow()
 
   highlightCard(SETTINGS.cards[0], true)
   SETTINGS.executionInterval = setInterval(( =>
     executeNextCard()
   ), SETTINGS.speed)
+
+reset = ->
+  SETTINGS.context.restore()
+  SETTINGS.context.clearRect(0, 0, SETTINGS.width, SETTINGS.height)
+  SETTINGS.context.save()
+  SETTINGS.currentPoint = [Math.round(SETTINGS.width/2), Math.round(SETTINGS.height/2)]
+  SETTINGS.context.translate(0.5, 0.5)
+  SETTINGS.executionIndex = 0
+  SETTINGS.executionIndex = 0
+  SETTINGS.currentAngle = 90
+  SETTINGS.penSize = 1
+  SETTINGS.penColor = [0, 0, 0]
+  SETTINGS.penIsDown = true
+  SETTINGS.loops = []
+  SETTINGS.userFunctions = {}
+  delete SETTINGS.currentFunction
+  clearInterval(SETTINGS.executionInterval)
+  delete SETTINGS.executionInterval
+
 
 initCards = ->
   SETTINGS.cards = ($(card).data() for card in $('.card'))
@@ -158,12 +175,12 @@ initCards = ->
     mousedownAt = mouseAt(e)
 
   container.on 'click', (e) ->
-    highlightCard(cardAt(mouseAt(e)), true)
+    executeUpTo(cardAt(mouseAt(e)))
 
   container.on 'scroll', ->
     return unless mousedownAt > -1
     center = container.scrollLeft() + (container.width() / 2)
-    highlightCard(cardAt(center), true)
+    executeUpTo(cardAt(center))
 
 cardAt = (xPosition) ->
   container = $('.cards-container')
@@ -188,6 +205,15 @@ executeNextCard = ->
 
   card = SETTINGS.cards[SETTINGS.executionIndex]
   highlightCard(card)
+
+executeUpTo = (endCard) ->
+  reset()
+  for card in SETTINGS.cards
+    if card.id == endCard.id
+      highlightCard(card, true)
+      return
+    else
+      executeCard(card)
 
 
 highlightCard = (card, instant=false) ->
