@@ -15,6 +15,7 @@
 
 .signature-container {
   text-align: center;
+  margin-bottom: 12px;
 
   .signature, .signature-color {
     display: inline-block;
@@ -36,8 +37,7 @@
 
   .cards {
     white-space: nowrap;
-    width: 9999px;
-    padding: 0 80%;
+    margin: 0 80vh;
 
     .card {
       float: left;
