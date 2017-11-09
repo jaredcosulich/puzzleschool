@@ -85,7 +85,7 @@ FUNCTIONS = {
 }
 
 SETTINGS = {
-  speed: 200,
+  speed: 2000,
   width: 600,
   height: 400,
   currentAngle: 90,
@@ -120,7 +120,7 @@ init = ->
 
   initArrow()
 
-  executeNextCard()
+  highlightCard(SETTINGS.cards[0], true)
   SETTINGS.executionInterval = setInterval(( =>
     executeNextCard()
   ), SETTINGS.speed)
@@ -180,14 +180,10 @@ executeNextCard = ->
 
   card = SETTINGS.cards[SETTINGS.executionIndex]
   highlightCard(card)
-  nextIndex = executeCard(card)
-  if nextIndex > -1
-    SETTINGS.executionIndex = nextIndex
-  else
-    SETTINGS.executionIndex += 1
 
 
 highlightCard = (card, instant=false) ->
+  console.log("HIGHLIGHT", card)
   $(".cards .card").animate({
     opacity: 0.2
   }, (if instant then 0 else SETTINGS.speed))
@@ -197,22 +193,28 @@ highlightCard = (card, instant=false) ->
     opacity: 1
   }, (if instant then 0 else SETTINGS.speed))
 
-  unless instant
-    container = cardElement.closest('.cards-container')
-    left = cardElement.offset().left + container.scrollLeft() - (container.width() / 2) - (cardElement.width() / 2) - container.offset().left
-    container.animate({
-        scrollLeft: left
-    }, SETTINGS.speed)
+  container = cardElement.closest('.cards-container')
+  left = container.scrollLeft() + cardElement.position().left - (container.width() / 2) + (cardElement.width() / 2)
+  container.animate({
+      scrollLeft: left
+  }, (if instant then 0 else SETTINGS.speed))
 
+  setTimeout(( ->
+    nextIndex = executeCard(card)
+    if nextIndex > -1
+      SETTINGS.executionIndex = nextIndex
+    else
+      SETTINGS.executionIndex += 1
 
-  info = FUNCTIONS[card.code]
-  if info.color
-    $(".signature").html(info.name)
-    $(".signature-color").css(backgroundColor: "rgb(#{colorFromParam(card.param).join(',')})")
-    $(".signature-color").show()
-  else
-    $(".signature").html("#{info.name} #{card.param}")
-    $(".signature-color").hide()
+    info = FUNCTIONS[card.code]
+    if info.color
+      $(".signature").html(info.name)
+      $(".signature-color").css(backgroundColor: "rgb(#{colorFromParam(card.param).join(',')})")
+      $(".signature-color").show()
+    else
+      $(".signature").html("#{info.name} #{card.param}")
+      $(".signature-color").hide()
+  ), (if instant then 0 else SETTINGS.speed / 2))
 
 
 executeCard = (card) ->
