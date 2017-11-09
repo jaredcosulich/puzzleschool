@@ -85,9 +85,10 @@ FUNCTIONS = {
 }
 
 SETTINGS = {
-  speed: 2000,
+  speed: 5000,
   width: 600,
   height: 400,
+  cardWidth: 150,
   currentAngle: 90,
   startingZoom: 1,
   zoom: 1,
@@ -126,45 +127,52 @@ init = ->
   ), SETTINGS.speed)
 
 initCards = ->
-  cardWidth = 150
-
   SETTINGS.cards = ($(card).data() for card in $('.card'))
 
   totalWidth = 0
   for card in SETTINGS.cards
     cardElement = $("#card_#{card.id}")
-    totalWidth += cardWidth#cardElement.width()
+    totalWidth += SETTINGS.cardWidth#cardElement.width()
     cardElement.css(opacity: 0.2)
     cardElement.on 'dragstart', -> return false
 
   $('.cards').width(totalWidth * 1.5)
 
-  mousedownAt = -1
   container = $('.cards-container')
+
+  mouseAt = (e) ->
+    return e.pageX - container.offset().left + container.scrollLeft()
+
+  mousedownAt = -1
   container.on 'mousedown', (e) ->
     clearInterval(SETTINGS.executionInterval)
     $(".cards-container, .cards, .card").stop()
-    mousedownAt = e.clientX
+    mousedownAt = mouseAt(e)
 
   container.on 'mouseup', ->
     mousedownAt = -1
 
   container.on 'mousemove', (e) ->
     return unless mousedownAt > -1
-    container.scrollLeft(container.scrollLeft() + (mousedownAt - e.clientX))
-    mousedownAt = e.clientX
+    container.scrollLeft(container.scrollLeft() + (mousedownAt - mouseAt(e)))
+    mousedownAt = mouseAt(e)
+
+  container.on 'click', (e) ->
+    highlightCard(cardAt(mouseAt(e)), true)
 
   container.on 'scroll', ->
     return unless mousedownAt > -1
     center = container.scrollLeft() + (container.width() / 2)
-    for cardElement in $('.card')
-      cardElement = $(cardElement)
-      left = container.scrollLeft() + cardElement.offset().left - container.offset().left
-      right = left + cardWidth
-      if left < center && right > center
-        highlightCard(cardElement.data(), (mousedownAt > -1))
-        break
+    highlightCard(cardAt(center), true)
 
+cardAt = (xPosition) ->
+  container = $('.cards-container')
+  for cardElement in container.find('.card')
+    cardElement = $(cardElement)
+    left = container.scrollLeft() + cardElement.offset().left - container.offset().left
+    right = left + SETTINGS.cardWidth
+    if left < xPosition && right > xPosition
+      return cardElement.data()
 
 initArrow = ->
   SETTINGS.arrowContext.restore()
@@ -183,21 +191,18 @@ executeNextCard = ->
 
 
 highlightCard = (card, instant=false) ->
-  console.log("HIGHLIGHT", card)
-  $(".cards .card").animate({
-    opacity: 0.2
-  }, (if instant then 0 else SETTINGS.speed))
+  $(".cards .card").css(opacity: 0.2)
 
   cardElement = $("#card_#{card.id}")
   cardElement.animate({
     opacity: 1
-  }, (if instant then 0 else SETTINGS.speed))
+  }, (if instant then 0 else SETTINGS.speed / 2))
 
   container = cardElement.closest('.cards-container')
-  left = container.scrollLeft() + cardElement.position().left - (container.width() / 2) + (cardElement.width() / 2)
+  left = container.scrollLeft() + cardElement.position().left - (container.width() / 2) + (SETTINGS.cardWidth / 2)
   container.animate({
       scrollLeft: left
-  }, (if instant then 0 else SETTINGS.speed))
+  }, (if instant then 0 else SETTINGS.speed / 2))
 
   setTimeout(( ->
     nextIndex = executeCard(card)
@@ -214,7 +219,7 @@ highlightCard = (card, instant=false) ->
     else
       $(".signature").html("#{info.name} #{card.param}")
       $(".signature-color").hide()
-  ), (if instant then 0 else SETTINGS.speed / 2))
+  ), (if instant then 0 else SETTINGS.speed / 8))
 
 
 executeCard = (card) ->
