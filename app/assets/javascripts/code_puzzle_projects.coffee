@@ -85,7 +85,7 @@ FUNCTIONS = {
 }
 
 SETTINGS = {
-  speed: 500,
+  speed: 0,
   width: 600,
   height: 400,
   cardWidth: 150,
@@ -121,7 +121,14 @@ init = ->
 
   playCard(0, true)
   SETTINGS.executionInterval = setInterval(( =>
-    executeNextCard()
+    if SETTINGS.speed == 0
+      clearInterval(SETTINGS.executionInterval)
+      lastCardIndex = SETTINGS.cards.length - 1
+      executeUpTo(lastCardIndex)
+      highlightCard(lastCardIndex, true)
+      displaySignature(lastCardIndex)
+    else
+      executeNextCard()
   ), SETTINGS.speed)
 
 reset = ->
