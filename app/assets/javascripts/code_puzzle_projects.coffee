@@ -175,7 +175,11 @@ initCards = ->
     mousedownAt = mouseAt(e)
 
   container.on 'click', (e) ->
-    executeUpTo(cardIndexAt(mouseAt(e)))
+    return if scrolling
+    cardIndex = cardIndexAt(mouseAt(e))
+    executeUpTo(cardIndex)
+    highlightCard(cardIndex, true)
+    displaySignature(cardIndex)
 
   scrolling = false
   container.on 'scroll', ->
@@ -183,7 +187,11 @@ initCards = ->
     scrolling = true
     setTimeout(( => scrolling = false), 500)
     center = container.scrollLeft() + (container.width() / 2)
-    executeUpTo(cardIndexAt(center))
+    cardIndex = cardIndexAt(center)
+    executeUpTo(cardIndex)
+    highlightCard(cardIndex, true, false)
+    displaySignature(cardIndex)
+
 
 cardIndexAt = (xPosition) ->
   container = $('.cards-container')
@@ -203,6 +211,7 @@ initArrow = ->
 
 active = (index) ->
   card = SETTINGS.cards[index]
+  return true unless card?
   return true if card.active
   $(".cards .card").data(active: false)
   $("#card_#{card.id}").data(active: true)
@@ -220,35 +229,25 @@ executeUpTo = (endIndex) ->
   reset()
 
   index = 0
-  while index < endIndex
-    nextIndex = executeCard(index)
-    if nextIndex > -1
-      index = nextIndex
-    else
-      index += 1
-    break if SETTINGS.loops.length > 3
-    # console.log(nextIndex, index, endIndex, SETTINGS.cards.length, SETTINGS.loops)
-
-  highlightCard(endIndex, true)
-  displaySignature(endIndex)
-
+  while index <= endIndex
+    index += executeCard(index)
 
 playCard = (index, instant=false) ->
   card = SETTINGS.cards[index]
+  return unless card?
+
   return if active(index)
   highlightCard(index, instant)
 
-  nextIndex = executeCard(index, instant)
-  if nextIndex > -1
-    SETTINGS.executionIndex = nextIndex
-  else
-    SETTINGS.executionIndex += 1
+  SETTINGS.executionIndex += executeCard(index, instant)
 
   displaySignature(index)
 
 
 displaySignature = (index) ->
   card = SETTINGS.cards[index]
+  return unless card?
+
   info = FUNCTIONS[card.code]
   if info.color
     $(".signature").html(info.name)
@@ -259,8 +258,10 @@ displaySignature = (index) ->
     $(".signature-color").hide()
 
 
-highlightCard = (index, instant=false) ->
+highlightCard = (index, instant=false, scroll=true) ->
   card = SETTINGS.cards[index]
+  return unless card?
+
   $(".cards .card").css(opacity: 0.2)
 
   cardElement = $("#card_#{card.id}")
@@ -268,15 +269,18 @@ highlightCard = (index, instant=false) ->
     opacity: 1
   }, (if instant then 0 else SETTINGS.speed / 2))
 
-  container = cardElement.closest('.cards-container')
-  left = container.scrollLeft() + cardElement.position().left - (container.width() / 2) + (SETTINGS.cardWidth / 2)
-  container.animate({
-      scrollLeft: left
-  }, (if instant then 0 else SETTINGS.speed / 2))
+  if scroll
+    container = cardElement.closest('.cards-container')
+    left = container.scrollLeft() + cardElement.position().left - (container.width() / 2) + (SETTINGS.cardWidth / 2)
+    container.animate({
+        scrollLeft: left
+    }, (if instant then 0 else SETTINGS.speed / 2))
 
 
 executeCard = (index, instant=false) ->
   card = SETTINGS.cards[index]
+  return unless card?
+
   methodName = FUNCTIONS[card.code].method
   paramNumber = parseFloat(card.param)
 
@@ -284,10 +288,10 @@ executeCard = (index, instant=false) ->
     if (methodName == "endFunction")
       delete SETTINGS['currentFunction']
     else
-      SETTINGS.userFunctions[SETTINGS.currentFunction].push( =>
+      SETTINGS.userFunctions[SETTINGS.currentFunction].functions.push( =>
         executeCard(index)
       )
-    return index + 1
+    return 1
 
   nextPoint = SETTINGS.currentPoint
   fill = false
@@ -315,7 +319,7 @@ executeCard = (index, instant=false) ->
       fill = true
     when "loop"
       SETTINGS.loops.push(
-        {start: index, completed: 0, total: paramNumber}
+        {start: index + 1, completed: 0, total: paramNumber}
       )
     when "endLoop"
       currentLoop = SETTINGS.loops[SETTINGS.loops.length - 1]
@@ -323,20 +327,16 @@ executeCard = (index, instant=false) ->
       if currentLoop.completed == currentLoop.total
         SETTINGS.loops.pop()
       else
-        return currentLoop.start + 1
+        return currentLoop.start - index
     when "function"
-      userFunction =  SETTINGS.userFunctions[card.param]
+      userFunction = SETTINGS.userFunctions[card.param]
       if userFunction?
         functionIndex = 0
-        while functionIndex <= userFunction.length - 1
-          nextIndex = userFunction[functionIndex]()
-          if nextIndex > -1
-            functionIndex = nextIndex - index + 1
-          else
-            functionIndex += 1
+        while functionIndex <= userFunction.functions.length - 1
+          functionIndex += userFunction.functions[functionIndex]()
 
       else
-        SETTINGS.userFunctions[card.param] = []
+        SETTINGS.userFunctions[card.param] = {start: index, functions: []}
         SETTINGS.currentFunction = card.param
     else
       print("Method Not Found")
@@ -362,7 +362,7 @@ executeCard = (index, instant=false) ->
 
   SETTINGS.currentPoint = nextPoint
 
-  return index + 1
+  return 1
 
 
 drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
