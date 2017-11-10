@@ -119,7 +119,7 @@ init = ->
   initCards()
   initArrow()
 
-  highlightCard(SETTINGS.cards[0], true)
+  playCard(0, true)
   SETTINGS.executionInterval = setInterval(( =>
     executeNextCard()
   ), SETTINGS.speed)
@@ -130,7 +130,6 @@ reset = ->
   SETTINGS.context.save()
   SETTINGS.currentPoint = [Math.round(SETTINGS.width/2), Math.round(SETTINGS.height/2)]
   SETTINGS.context.translate(0.5, 0.5)
-  SETTINGS.executionIndex = 0
   SETTINGS.executionIndex = 0
   SETTINGS.currentAngle = 90
   SETTINGS.penSize = 1
@@ -176,21 +175,24 @@ initCards = ->
     mousedownAt = mouseAt(e)
 
   container.on 'click', (e) ->
-    executeUpTo(cardAt(mouseAt(e)))
+    executeUpTo(cardIndexAt(mouseAt(e)))
 
+  scrolling = false
   container.on 'scroll', ->
     return unless mousedownAt > -1
+    scrolling = true
+    setTimeout(( => scrolling = false), 500)
     center = container.scrollLeft() + (container.width() / 2)
-    executeUpTo(cardAt(center))
+    executeUpTo(cardIndexAt(center))
 
-cardAt = (xPosition) ->
+cardIndexAt = (xPosition) ->
   container = $('.cards-container')
-  for cardElement in container.find('.card')
+  for cardElement, index in container.find('.card')
     cardElement = $(cardElement)
     left = container.scrollLeft() + cardElement.offset().left - container.offset().left
     right = left + SETTINGS.cardWidth
     if left < xPosition && right > xPosition
-      return cardElement.data()
+      return index
 
 initArrow = ->
   SETTINGS.arrowContext.restore()
@@ -199,32 +201,69 @@ initArrow = ->
   SETTINGS.arrowContext.save()
   drawArrow()
 
+active = (index) ->
+  card = SETTINGS.cards[index]
+  return true if card.active
+  $(".cards .card").data(active: false)
+  $("#card_#{card.id}").data(active: true)
+  return false
+
 executeNextCard = ->
   if SETTINGS.executionIndex >= SETTINGS.cards.length
     clearInterval(SETTINGS.executionInterval)
     return
 
-  card = SETTINGS.cards[SETTINGS.executionIndex]
-  highlightCard(card)
+  playCard(SETTINGS.executionIndex)
 
-executeUpTo = (endCard) ->
-  return if endCard.highlighted
+executeUpTo = (endIndex) ->
+  return if active(endIndex)
   reset()
-  for card in SETTINGS.cards
-    if card.id == endCard.id
-      highlightCard(card, true)
-      return
+
+  index = 0
+  while index < endIndex
+    nextIndex = executeCard(index)
+    if nextIndex > -1
+      index = nextIndex
     else
-      executeCard(card)
+      index += 1
+    break if SETTINGS.loops.length > 3
+    # console.log(nextIndex, index, endIndex, SETTINGS.cards.length, SETTINGS.loops)
+
+  highlightCard(endIndex, true)
+  displaySignature(endIndex)
 
 
-highlightCard = (card, instant=false) ->
-  return if card.highlighted
-  $(".cards .card").css(opacity: 0.2).data(highlighted: false)
+playCard = (index, instant=false) ->
+  card = SETTINGS.cards[index]
+  return if active(index)
+  highlightCard(index, instant)
+
+  nextIndex = executeCard(index, instant)
+  if nextIndex > -1
+    SETTINGS.executionIndex = nextIndex
+  else
+    SETTINGS.executionIndex += 1
+
+  displaySignature(index)
+
+
+displaySignature = (index) ->
+  card = SETTINGS.cards[index]
+  info = FUNCTIONS[card.code]
+  if info.color
+    $(".signature").html(info.name)
+    $(".signature-color").css(backgroundColor: "rgb(#{colorFromParam(card.param).join(',')})")
+    $(".signature-color").show()
+  else
+    $(".signature").html("#{info.name} #{card.param}")
+    $(".signature-color").hide()
+
+
+highlightCard = (index, instant=false) ->
+  card = SETTINGS.cards[index]
+  $(".cards .card").css(opacity: 0.2)
 
   cardElement = $("#card_#{card.id}")
-  cardElement.data(highlighted: true)
-
   cardElement.animate({
     opacity: 1
   }, (if instant then 0 else SETTINGS.speed / 2))
@@ -235,25 +274,9 @@ highlightCard = (card, instant=false) ->
       scrollLeft: left
   }, (if instant then 0 else SETTINGS.speed / 2))
 
-  setTimeout(( ->
-    nextIndex = executeCard(card)
-    if nextIndex > -1
-      SETTINGS.executionIndex = nextIndex
-    else
-      SETTINGS.executionIndex += 1
 
-    info = FUNCTIONS[card.code]
-    if info.color
-      $(".signature").html(info.name)
-      $(".signature-color").css(backgroundColor: "rgb(#{colorFromParam(card.param).join(',')})")
-      $(".signature-color").show()
-    else
-      $(".signature").html("#{info.name} #{card.param}")
-      $(".signature-color").hide()
-  ), (if instant then 0 else SETTINGS.speed / 8))
-
-
-executeCard = (card) ->
+executeCard = (index, instant=false) ->
+  card = SETTINGS.cards[index]
   methodName = FUNCTIONS[card.code].method
   paramNumber = parseFloat(card.param)
 
@@ -262,9 +285,9 @@ executeCard = (card) ->
       delete SETTINGS['currentFunction']
     else
       SETTINGS.userFunctions[SETTINGS.currentFunction].push( =>
-        executeCard(card)
+        executeCard(index)
       )
-    return -1
+    return index + 1
 
   nextPoint = SETTINGS.currentPoint
   fill = false
@@ -292,7 +315,7 @@ executeCard = (card) ->
       fill = true
     when "loop"
       SETTINGS.loops.push(
-        {start: SETTINGS.executionIndex, completed: 0, total: paramNumber}
+        {start: index, completed: 0, total: paramNumber}
       )
     when "endLoop"
       currentLoop = SETTINGS.loops[SETTINGS.loops.length - 1]
@@ -304,13 +327,13 @@ executeCard = (card) ->
     when "function"
       userFunction =  SETTINGS.userFunctions[card.param]
       if userFunction?
-        index = 0
-        while index <= userFunction.length - 1
-          nextIndex = userFunction[index]()
+        functionIndex = 0
+        while functionIndex <= userFunction.length - 1
+          nextIndex = userFunction[functionIndex]()
           if nextIndex > -1
-            index = nextIndex - SETTINGS.executionIndex + 1
+            functionIndex = nextIndex - index + 1
           else
-            index += 1
+            functionIndex += 1
 
       else
         SETTINGS.userFunctions[card.param] = []
@@ -339,7 +362,8 @@ executeCard = (card) ->
 
   SETTINGS.currentPoint = nextPoint
 
-  return -1
+  return index + 1
+
 
 drawArrow = (point=SETTINGS.currentPoint, angle=SETTINGS.currentAngle) ->
   width = 7
