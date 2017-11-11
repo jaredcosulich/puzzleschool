@@ -85,7 +85,7 @@ FUNCTIONS = {
 }
 
 SETTINGS = {
-  speed: 0,
+  speed: 500,
   width: 600,
   height: 400,
   cardWidth: 150,
@@ -120,6 +120,18 @@ init = ->
   initArrow()
 
   playCard(0, true)
+  play()
+
+  $('.play').click ->
+    play()
+
+  $('.pause').click ->
+    clearInterval(SETTINGS.executionInterval)
+
+  $('.speed').change ->
+    console.log($('.speed').find(":selected").text())
+
+play = ->
   SETTINGS.executionInterval = setInterval(( =>
     if SETTINGS.speed == 0
       clearInterval(SETTINGS.executionInterval)
@@ -130,6 +142,7 @@ init = ->
     else
       executeNextCard()
   ), SETTINGS.speed)
+
 
 reset = ->
   SETTINGS.context.restore()

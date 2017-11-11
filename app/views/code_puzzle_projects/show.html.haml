@@ -12,8 +12,11 @@
 
       .controls
         .play
+          Play
         .pause
+          Pause
         .speed
+          = select_tag "credit_card", options_for_select([ "Slow", "Fast", "Very Fast", "Immediate" ], "Fast")
 
     .cards-container
       .cards
