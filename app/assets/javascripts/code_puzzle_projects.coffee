@@ -129,7 +129,11 @@ init = ->
     clearInterval(SETTINGS.executionInterval)
 
   $('.speed').change ->
-    console.log($('.speed').find(":selected").text())
+    switch $('.speed').find(":selected").text()
+      when "Slow" then SETTINGS.speed = 1000
+      when "Fast" then SETTINGS.speed = 200
+      when "Very Fast" then SETTINGS.speed = 50
+      else SETTINGS.speed = 0
 
 play = ->
   SETTINGS.executionInterval = setInterval(( =>
