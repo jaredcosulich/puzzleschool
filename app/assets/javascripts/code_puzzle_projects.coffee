@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-
+console.log("HI")
 FUNCTIONS = {
   "A1": {
       name: "Move Forward",
@@ -101,6 +101,8 @@ SETTINGS = {
 }
 
 init = ->
+  console.log("INIT")
+
   SETTINGS.width = $('.canvas').width()
   SETTINGS.height = $('.canvas').height()
 
