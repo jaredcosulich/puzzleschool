@@ -101,6 +101,9 @@ SETTINGS = {
 }
 
 init = ->
+  return if SETTINGS.initialized
+  SETTINGS.initialized = true
+
   console.log("INIT")
 
   SETTINGS.width = $('.canvas').width()
@@ -440,5 +443,5 @@ calculatePoint = (point, distance, angle) ->
   yDistance = calculateYDistance(distance, angle) / SETTINGS.startingZoom
   return [point[0] + xDistance, point[1] + yDistance]
 
-
-$(document).on "turbolinks:load", -> init()
+$(document).ready(init)
+$(document).on "turbolinks:load", init
