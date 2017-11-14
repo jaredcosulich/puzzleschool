@@ -104,7 +104,7 @@ init = ->
   return if SETTINGS.initialized
   SETTINGS.initialized = true
 
-  console.log("INIT")
+  console.log("INIT!!!")
 
   SETTINGS.width = $('.canvas').width()
   SETTINGS.height = $('.canvas').height()
