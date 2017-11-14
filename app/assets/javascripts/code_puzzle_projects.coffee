@@ -2,7 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-console.log("HI")
 FUNCTIONS = {
   "A1": {
       name: "Move Forward",
@@ -100,11 +99,8 @@ SETTINGS = {
   userFunctions: {},
 }
 
-init = ->
-  return if SETTINGS.initialized
-  SETTINGS.initialized = true
-
-  console.log("INIT!!!")
+initCodePuzzle = ->
+  return unless $('.codepuzzle').length
 
   SETTINGS.width = $('.canvas').width()
   SETTINGS.height = $('.canvas').height()
@@ -443,6 +439,4 @@ calculatePoint = (point, distance, angle) ->
   yDistance = calculateYDistance(distance, angle) / SETTINGS.startingZoom
   return [point[0] + xDistance, point[1] + yDistance]
 
-$(document).ready(init)
-$(document).on "turbolinks:load", init
-alert(100101)
+$(document).on "turbolinks:load", initCodePuzzle
