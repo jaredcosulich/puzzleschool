@@ -16,4 +16,5 @@
 //= require turbolinks
 //= require_tree .
 
-alert(0)
+alert(1);
+alert(0);
