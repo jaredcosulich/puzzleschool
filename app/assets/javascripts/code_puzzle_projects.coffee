@@ -85,8 +85,6 @@ FUNCTIONS = {
 
 SETTINGS = {
   speed: 500,
-  width: 800,
-  height: 1000,
   cardWidth: 150,
   startingZoom: 1,
   zoom: 1,
@@ -128,6 +126,7 @@ initCodePuzzle = ->
 
   $('.pause').click ->
     clearInterval(SETTINGS.executionInterval)
+    delete SETTINGS.executionInterval
 
   $('.speed').change ->
     switch $('.speed').find(":selected").text()
@@ -135,11 +134,16 @@ initCodePuzzle = ->
       when "Fast" then SETTINGS.speed = 200
       when "Very Fast" then SETTINGS.speed = 50
       else SETTINGS.speed = 0
+        
+    if SETTINGS.executionInterval?
+      clearInterval(SETTINGS.executionInterval)
+      play()
 
 play = ->
   SETTINGS.executionInterval = setInterval(( =>
     if SETTINGS.speed == 0
       clearInterval(SETTINGS.executionInterval)
+      delete SETTINGS.executionInterval
       lastCardIndex = SETTINGS.cards.length - 1
       executeUpTo(lastCardIndex)
       highlightCard(lastCardIndex, true)
@@ -188,6 +192,7 @@ initCards = ->
   mousedownAt = -1
   container.on 'mousedown', (e) ->
     clearInterval(SETTINGS.executionInterval)
+    delete SETTINGS.executionInterval
     $(".cards-container, .cards, .card").stop()
     mousedownAt = mouseAt(e)
 
@@ -245,6 +250,7 @@ active = (index) ->
 executeNextCard = ->
   if SETTINGS.executionIndex >= SETTINGS.cards.length
     clearInterval(SETTINGS.executionInterval)
+    delete SETTINGS.executionInterval
     return
 
   playCard(SETTINGS.executionIndex)
