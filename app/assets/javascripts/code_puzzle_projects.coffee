@@ -85,8 +85,8 @@ FUNCTIONS = {
 
 SETTINGS = {
   speed: 500,
-  width: 600,
-  height: 400,
+  width: 800,
+  height: 1000,
   cardWidth: 150,
   startingZoom: 1,
   zoom: 1,
