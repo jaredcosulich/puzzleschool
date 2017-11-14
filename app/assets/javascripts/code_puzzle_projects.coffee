@@ -445,3 +445,4 @@ calculatePoint = (point, distance, angle) ->
 
 $(document).ready(init)
 $(document).on "turbolinks:load", init
+alert(100101)
