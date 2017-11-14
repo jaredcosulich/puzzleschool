@@ -16,6 +16,3 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
-
-console.log(0);
-console.log(1);
