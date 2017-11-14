@@ -102,6 +102,8 @@ SETTINGS = {
 initCodePuzzle = ->
   return unless $('.codepuzzle').length
 
+  console.log("INIT!!!")
+
   SETTINGS.width = $('.canvas').width()
   SETTINGS.height = $('.canvas').height()
 

@@ -14,4 +14,6 @@
 //= require bootstrap
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//= require floodfill
+//= require subscribers
+//= require code_puzzle_projects
