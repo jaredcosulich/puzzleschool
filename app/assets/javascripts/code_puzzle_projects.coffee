@@ -194,6 +194,9 @@ initCanvas = ->
   canvasContainer.on 'mouseup', ->
     mousedownAt = {}
 
+  canvasContainer.on 'mouseout', ->
+    mousedownAt = {}
+
   canvasContainer.on 'mousemove', (e) ->
     return unless mousedownAt.x?
     canvasContainer.scrollTop(canvasContainer.scrollTop() + (mousedownAt.y - mouseAt(e).y))
@@ -223,6 +226,9 @@ initCards = ->
     mousedownAt = mouseAt(e)
 
   container.on 'mouseup', ->
+    mousedownAt = -1
+
+  container.on 'mouseout', ->
     mousedownAt = -1
 
   container.on 'mousemove', (e) ->
