@@ -23,6 +23,7 @@
           .speed
             = select_tag "credit_card", options_for_select([ "Slow", "Fast", "Very Fast", "Immediate" ], "Fast"), class: 'custom-select'
 
-      .canvas
-        %canvas#drawing_canvas
-        %canvas#arrow_canvas
+      .canvas-container
+        .canvas
+          %canvas#drawing_canvas
+          %canvas#arrow_canvas

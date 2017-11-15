@@ -105,6 +105,11 @@ initCodePuzzle = ->
   SETTINGS.width = $('.canvas').width()
   SETTINGS.height = $('.canvas').height()
 
+  canvasContainer = $('.canvas-container')
+  canvasContainer.height($(window).height())
+  canvasContainer.scrollLeft((SETTINGS.width - canvasContainer.width()) / 2)
+  canvasContainer.scrollTop((SETTINGS.height - canvasContainer.height()) / 2)
+
   drawingCanvas = $('#drawing_canvas')[0]
   drawingCanvas.width = SETTINGS.width
   drawingCanvas.height = SETTINGS.height

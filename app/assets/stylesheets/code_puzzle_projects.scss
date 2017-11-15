@@ -2,16 +2,22 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.canvas {
-  position: relative;
-  height: 800px;
-  width: 80%;
+.canvas-container {
   float: left;
+  width: 80%;
+  height: 1vh;
+  overflow: hidden;
 
-  #arrow_canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .canvas {
+    position: relative;
+    width: 2000px;
+    height: 2000px;
+
+    #arrow_canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 }
 
