@@ -100,29 +100,11 @@ SETTINGS = {
 initCodePuzzle = ->
   return unless $('.codepuzzle').length
 
-  $('.cards-container').height($(window).height() * 0.7)
-
-  SETTINGS.width = $('.canvas').width()
-  SETTINGS.height = $('.canvas').height()
-
-  canvasContainer = $('.canvas-container')
-  canvasContainer.height($(window).height())
-  canvasContainer.scrollLeft((SETTINGS.width - canvasContainer.width()) / 2)
-  canvasContainer.scrollTop((SETTINGS.height - canvasContainer.height()) / 2)
-
-  drawingCanvas = $('#drawing_canvas')[0]
-  drawingCanvas.width = SETTINGS.width
-  drawingCanvas.height = SETTINGS.height
-  SETTINGS.context = drawingCanvas.getContext('2d')
-
-  arrowCanvas = $('#arrow_canvas')[0]
-  arrowCanvas.width = SETTINGS.width
-  arrowCanvas.height = SETTINGS.height
-  SETTINGS.arrowContext = arrowCanvas.getContext('2d')
+  initCanvas()
+  initCards()
 
   reset()
 
-  initCards()
   initArrow()
 
   playCard(0, true)
@@ -177,8 +159,50 @@ reset = ->
   clearInterval(SETTINGS.executionInterval)
   delete SETTINGS.executionInterval
 
+initCanvas = ->
+  SETTINGS.width = $('.canvas').width()
+  SETTINGS.height = $('.canvas').height()
+
+  canvasContainer = $('.canvas-container')
+  canvasContainer.height($(window).height())
+  canvasContainer.scrollLeft((SETTINGS.width - canvasContainer.width()) / 2)
+  canvasContainer.scrollTop((SETTINGS.height - canvasContainer.height()) / 2)
+
+  drawingCanvas = $('#drawing_canvas')[0]
+  drawingCanvas.width = SETTINGS.width
+  drawingCanvas.height = SETTINGS.height
+  SETTINGS.context = drawingCanvas.getContext('2d')
+
+  arrowCanvas = $('#arrow_canvas')[0]
+  arrowCanvas.width = SETTINGS.width
+  arrowCanvas.height = SETTINGS.height
+  SETTINGS.arrowContext = arrowCanvas.getContext('2d')
+
+  # SETTINGS.context.scale(0.5, 0.5)
+  # SETTINGS.arrowContext.scale(0.5, 0.5)
+
+  mouseAt = (e) ->
+    return {
+      x: e.pageX - canvasContainer.offset().left + canvasContainer.scrollLeft()
+      y: e.pageY - canvasContainer.offset().top + canvasContainer.scrollTop()
+    }
+
+  mousedownAt = {}
+  canvasContainer.on 'mousedown', (e) ->
+    mousedownAt = mouseAt(e)
+
+  canvasContainer.on 'mouseup', ->
+    mousedownAt = {}
+
+  canvasContainer.on 'mousemove', (e) ->
+    return unless mousedownAt.x?
+    canvasContainer.scrollTop(canvasContainer.scrollTop() + (mousedownAt.y - mouseAt(e).y))
+    canvasContainer.scrollLeft(canvasContainer.scrollLeft() + (mousedownAt.x - mouseAt(e).x))
+    mousedownAt = mouseAt(e)
 
 initCards = ->
+  $('.cards-container').height($(window).height() * 0.7)
+
   SETTINGS.cards = ($(card).data() for card in $('.card'))
 
   for card in SETTINGS.cards
