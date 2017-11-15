@@ -260,6 +260,8 @@ executeUpTo = (endIndex) ->
   while index <= endIndex
     index += executeCard(index)
 
+  SETTINGS.executionIndex = endIndex + 1
+
 playCard = (index, instant=false) ->
   card = SETTINGS.cards[index]
   return unless card?
