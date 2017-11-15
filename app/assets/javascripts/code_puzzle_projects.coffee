@@ -191,10 +191,7 @@ initCanvas = ->
   canvasContainer.on 'mousedown', (e) ->
     mousedownAt = mouseAt(e)
 
-  canvasContainer.on 'mouseup', ->
-    mousedownAt = {}
-
-  canvasContainer.on 'mouseout', ->
+  $(window).on 'mouseup', ->
     mousedownAt = {}
 
   canvasContainer.on 'mousemove', (e) ->
@@ -225,10 +222,7 @@ initCards = ->
     $(".cards-container, .cards, .card").stop()
     mousedownAt = mouseAt(e)
 
-  container.on 'mouseup', ->
-    mousedownAt = -1
-
-  container.on 'mouseout', ->
+  $(window).on 'mouseup', ->
     mousedownAt = -1
 
   container.on 'mousemove', (e) ->
