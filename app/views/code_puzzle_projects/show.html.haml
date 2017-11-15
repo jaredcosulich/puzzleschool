@@ -2,26 +2,27 @@
 .codepuzzle
   .row.text-xs-center.py-3.mt-3
     .col-xs-12
+      .sidebar
+        .signature-container
+          .signature
+          .signature-color
+
+        .cards-container
+          .cards
+            - @code_puzzle_project.code_puzzle_cards.each do |card|
+              .card{id: "card_#{card.id}", data: {id: card.id, code: card.code, param: card.param, photo: card.photo_url}}
+                .image= image_tag(card.photo_url)
+            .buffer
+              &nbsp;
+
+        .controls
+          .play.btn.btn-success
+            Play
+          .pause.btn.btn-danger
+            Pause
+          .speed
+            = select_tag "credit_card", options_for_select([ "Slow", "Fast", "Very Fast", "Immediate" ], "Fast"), class: 'custom-select'
+
       .canvas
         %canvas#drawing_canvas
         %canvas#arrow_canvas
-
-      .signature-container
-        .signature
-        .signature-color
-
-        .controls
-          .play
-            Play
-          .pause
-            Pause
-          .speed
-            = select_tag "credit_card", options_for_select([ "Slow", "Fast", "Very Fast", "Immediate" ], "Fast")
-
-      .cards-container
-        .cards
-          - @code_puzzle_project.code_puzzle_cards.each do |card|
-            .card{id: "card_#{card.id}", data: {id: card.id, code: card.code, param: card.param, photo: card.photo_url}}
-              .image= image_tag(card.photo_url)
-          .buffer
-            &nbsp;

@@ -5,6 +5,8 @@
 .canvas {
   position: relative;
   height: 800px;
+  width: 80%;
+  float: left;
 
   #arrow_canvas {
     position: absolute;
@@ -13,57 +15,67 @@
   }
 }
 
-.signature-container {
-  text-align: center;
-  margin-bottom: 12px;
-  position: relative;
+.sidebar {
+  float: left;
+  width: 20%;
 
-  .signature, .signature-color {
-    display: inline-block;
-    height: 21px;
-    font-size: 21px;
+  .signature-container {
+    text-align: center;
+    margin-bottom: 12px;
+    position: relative;
+
+    .signature, .signature-color {
+      display: inline-block;
+      height: 21px;
+      font-size: 21px;
+    }
+
+    .signature-color {
+      width: 21px;
+      margin-bottom: -3px;
+    }
   }
 
-  .signature-color {
-    width: 21px;
-    margin-bottom: -3px;
+  .cards-container {
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .cards {
+      .card {
+        padding: 12px 0;
+        border: none;
+
+        img {
+          height: 180px;
+        }
+      }
+
+      .buffer {
+        float: left;
+        height: 400px;
+      }
+    }
   }
 
   .controls {
-    position: absolute;
-    left: 0;
-    top: 0;
+    padding-top: 12px;
+    text-align: center;
 
-    div {
-      display: inline-block;
-      padding-left: 15px;
+    .play {
+      float: left;
+      margin-bottom: 12px;
+      margin-left: 30px;
+    }
+
+    .pause {
+      float: right;
+      margin-right: 30px;
+    }
+
+    .speed {
+      clear: both;
     }
   }
-}
 
-.cards-container {
-  position: relative;
-  width: 100%;
-  overflow-y: hidden;
-  overflow-x: scroll;
-
-  .cards {
-    white-space: nowrap;
-    margin: 0 80vh;
-
-    .card {
-      float: left;
-      padding: 0 12px;
-      border: none;
-
-      img {
-        height: 150px;
-      }
-    }
-
-    .buffer {
-      float: left;
-      width: 1000px;
-    }
-  }
 }

@@ -85,7 +85,7 @@ FUNCTIONS = {
 
 SETTINGS = {
   speed: 500,
-  cardWidth: 150,
+  cardHeight: 180,
   startingZoom: 1,
   zoom: 1,
   executionIndex: 0,
@@ -99,6 +99,8 @@ SETTINGS = {
 
 initCodePuzzle = ->
   return unless $('.codepuzzle').length
+
+  $('.cards-container').height($(window).height() * 0.7)
 
   SETTINGS.width = $('.canvas').width()
   SETTINGS.height = $('.canvas').height()
@@ -134,7 +136,7 @@ initCodePuzzle = ->
       when "Fast" then SETTINGS.speed = 200
       when "Very Fast" then SETTINGS.speed = 50
       else SETTINGS.speed = 0
-        
+
     if SETTINGS.executionInterval?
       clearInterval(SETTINGS.executionInterval)
       play()
@@ -174,20 +176,15 @@ reset = ->
 initCards = ->
   SETTINGS.cards = ($(card).data() for card in $('.card'))
 
-  totalWidth = 0
   for card in SETTINGS.cards
     cardElement = $("#card_#{card.id}")
-    totalWidth += SETTINGS.cardWidth#cardElement.width()
     cardElement.css(opacity: 0.2)
     cardElement.on 'dragstart', -> return false
-
-  totalWidth += $(".buffer").width()
-  $('.cards').width(totalWidth)
 
   container = $('.cards-container')
 
   mouseAt = (e) ->
-    return e.pageX - container.offset().left + container.scrollLeft()
+    return e.pageY - container.offset().top + container.scrollTop()
 
   mousedownAt = -1
   container.on 'mousedown', (e) ->
@@ -201,7 +198,7 @@ initCards = ->
 
   container.on 'mousemove', (e) ->
     return unless mousedownAt > -1
-    container.scrollLeft(container.scrollLeft() + (mousedownAt - mouseAt(e)))
+    container.scrollTop(container.scrollTop() + (mousedownAt - mouseAt(e)))
     mousedownAt = mouseAt(e)
 
   container.on 'click', (e) ->
@@ -216,20 +213,20 @@ initCards = ->
     return unless mousedownAt > -1
     scrolling = true
     setTimeout(( => scrolling = false), 500)
-    center = container.scrollLeft() + (container.width() / 2)
+    center = container.scrollTop() + (container.height() / 2)
     cardIndex = cardIndexAt(center)
     executeUpTo(cardIndex)
     highlightCard(cardIndex, true, false)
     displaySignature(cardIndex)
 
 
-cardIndexAt = (xPosition) ->
+cardIndexAt = (yPosition) ->
   container = $('.cards-container')
   for cardElement, index in container.find('.card')
     cardElement = $(cardElement)
-    left = container.scrollLeft() + cardElement.offset().left - container.offset().left
-    right = left + SETTINGS.cardWidth
-    if left < xPosition && right > xPosition
+    top = container.scrollTop() + cardElement.offset().top - container.offset().top
+    bottom = top + SETTINGS.cardHeight
+    if top < yPosition && bottom > yPosition
       return index
 
 initArrow = ->
@@ -302,9 +299,9 @@ highlightCard = (index, instant=false, scroll=true) ->
 
   if scroll
     container = cardElement.closest('.cards-container')
-    left = container.scrollLeft() + cardElement.position().left - (container.width() / 2) + (SETTINGS.cardWidth / 2)
+    top = container.scrollTop() + cardElement.position().top - (container.height() / 2) + (SETTINGS.cardHeight / 2)
     container.animate({
-        scrollLeft: left
+        scrollTop: top
     }, (if instant then 0 else SETTINGS.speed / 2))
 
 
