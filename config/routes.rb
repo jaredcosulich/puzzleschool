@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   resources :code_puzzle_forms
 
   get 'codepuzzle/:id' => 'code_puzzle_classes#show'
-  get 'codepuzzle/:class_id/projects/:id' => 'code_puzzle_projects#show'
+  get 'codepuzzle/:code_puzzle_class_id/:id' => 'code_puzzle_projects#show'
 
   resources :subscribers, only: [:create]
 
@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   constraints DomainConstraint.new('thecodepuzzle.com') do
     root :to => 'code_puzzle_classes#index'
     get '/:id' => 'code_puzzle_classes#show'
-    get '/:class_id/projects/:id' => 'code_puzzle_projects#show'
+    get '/:code_puzzle_class_id/:id' => 'code_puzzle_projects#show'
   end
 
   root 'welcome#index'
