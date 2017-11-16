@@ -125,10 +125,10 @@ initCodePuzzle = ->
       else SETTINGS.speed = 0
 
     if SETTINGS.executionInterval?
-      clearInterval(SETTINGS.executionInterval)
       play()
 
 play = ->
+  clearInterval(SETTINGS.executionInterval)
   SETTINGS.executionInterval = setInterval(( =>
     if SETTINGS.speed == 0
       clearInterval(SETTINGS.executionInterval)
