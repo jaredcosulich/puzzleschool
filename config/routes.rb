@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   constraints DomainConstraint.new('thecodepuzzle.com') do
     root :to => 'code_puzzle_classes#index'
     get '/:id' => 'code_puzzle_classes#show'
-    get '/:code_puzzle_class_id/:id' => 'code_puzzle_projects#show'
+    get '/:code_puzzle_class_id/:id' => 'code_puzzle_projects#show', as: :code_puzzle_project_short
   end
 
   root 'welcome#index'

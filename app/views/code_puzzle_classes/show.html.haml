@@ -1,16 +1,21 @@
-%p#notice= notice
+- @noquotesandsubscriber = true
 
-%p
-  %strong Class:
-  = @code_puzzle_class.slug
+.row.text-xs-center.py-3.mt-3
+  .col-xs-12
+    %h1.title
+      = image_tag('technologies/codepuzzle.png', class: 'img-fluid')
+    %br
+    %br
+    %h1.text-xs-center
+      = @code_puzzle_class.slug
 
-%p
-  %strong Projects
+.row
+  .col-xs-6.col-md-4.offset-md-2.col-lg-3.offset-lg-3
 
-%ul
-  - @code_puzzle_class.code_puzzle_projects.each do |project|
-    %li= link_to project.title, [@code_puzzle_class, project]
+    %h3
 
-= link_to 'Edit', edit_code_puzzle_class_path(@code_puzzle_class)
-|
-= link_to 'Back', code_puzzle_classes_path
+      %strong Projects
+
+    %ul
+      - @code_puzzle_class.code_puzzle_projects.each do |project|
+        %li= link_to project.title, code_puzzle_project_short_path(@code_puzzle_class, project)
