@@ -39,7 +39,7 @@
 
   = render Subscriber.new
 
-%footer.footer
+%footer.footer{style: "height: 600px;"}
   .container
     .row.text-muted
       .col-xs-4.py-1.my-1
@@ -52,9 +52,17 @@
       .col-xs-4.py-1.my-1.text-xs-right
         &copy;
         %span.hidden-xs-down Puzzle School
-        2017
+        2018
         .pt-2.text-xs-right{style: 'padding-right: 27px'}
           %p Follow Us On
           = link_to(image_tag('facebook.png'), 'https://www.facebook.com/puzzleschool/', target: '_blank')
           &nbsp; &nbsp;
           = link_to(image_tag('twitter.png'), 'https://twitter.com/puzzleschool', target: '_blank', style: 'margin-right: 3px;')
+
+    .row.text-muted.mt-3
+      .col
+        %p
+          %small * The Puzzle School does not and shall not discriminate on the basis of race, color, religion (creed), gender, gender expression, age, national origin (ancestry), disability, marital status, sexual orientation, or military status, in any of its activities or operations. These activities include, but are not limited to, hiring and firing of staff, selection of volunteers and vendors, and provision of services. We are committed to providing an inclusive and welcoming environment for all members of our staff, clients, volunteers, subcontractors, vendors, and clients.
+
+        %p
+          %small * The Puzzle School is an equal opportunity employer. We will not discriminate and will take affirmative action measures to ensure against discrimination in employment, recruitment, advertisements for employment, compensation, termination, upgrading, promotions, and other conditions of employment against any employee or job applicant on the bases of race, color, gender, national origin, age, religion, creed, disability, veteran's status, sexual orientation, gender identity or gender expression.
