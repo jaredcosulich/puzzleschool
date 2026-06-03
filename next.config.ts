@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
-const isProduction = process.env.NODE_ENV === 'production'
-const repoName = 'puzzleschool'
-
+// The site is served from the custom domain puzzleschool.org at the root path,
+// so no basePath is needed. (GitHub Pages + a CNAME serves the site at "/".)
 const nextConfig: NextConfig = {
-  basePath: isProduction ? `/${repoName}` : '',
   output: "export",
   images: {
     unoptimized: true,

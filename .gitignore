@@ -14,3 +14,8 @@ yarn-error.log*
 # Editor specific
 .vscode/
 .idea/
+# Reference copy of old Rails app (not committed)
+.oldsite/
+
+# Static export output (built fresh by GitHub Actions on deploy)
+/out/
