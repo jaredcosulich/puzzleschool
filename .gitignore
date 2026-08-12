@@ -1,26 +1,101 @@
-# Next.js specific
-.next/
+# build output
+dist/
+.astro/
 
-# Common Node.js project files
+# dependencies
 node_modules/
-.env*.local
+
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# macOS specific
+# environment variables
+.env
+.env.production
+
+# macOS
 .DS_Store
 
-# Editor specific
-.vscode/
+# editor
+.vscode/*
+!.vscode/extensions.json
 .idea/
-# Reference copy of old Rails app (not committed)
-.oldsite/
 
-# Static export output (built fresh by GitHub Actions on deploy)
-/out/
+# test output
+test-results/
 
-# --- CodeYam - local runtime state ---
+# CodeYam - local runtime state
+.codeyam/secrets.json
+.codeyam/setup-connections.json
+.codeyam/session-token
+playwright-report/
+blob-report/
+.codeyam/logs/
+.codeyam/.locks/
+.codeyam/run/
+.codeyam/llm-calls/
+.codeyam/captures/
+.codeyam/uploads/
+.codeyam/results/
+.codeyam/reviews/
+.codeyam/summaries/
+.codeyam/tmp/
+.codeyam/_legacy/
+.codeyam/rules/
+.codeyam/bin/
+.codeyam/build-agent-handoff.md
+.codeyam/build-agent-session.json
+.codeyam/claude-session-id.txt
+.codeyam/editor-mode-context.md
+.codeyam/dev-mode-context.md
+.codeyam/editor-step.json
+.codeyam/editor-step.json.bak
+.codeyam/editor-step.json.preserve
+.codeyam/editor-task-tracking.json
+.codeyam/editor-pending-plan.json
+.codeyam/feature-finalized.json
+.codeyam/editor-user-prompt.txt
+.codeyam/preview-shown.json
+.codeyam/preview-state.json
+.codeyam/preview-env.json
+.codeyam/preview-capture.png
+.codeyam/preview-capture.*.png
+.codeyam/results-shown.json
+.codeyam/server.json
+.codeyam/server-state.json
+.codeyam/queue.json
+.codeyam/active-scenario.json
+.codeyam/armed-wakeups.json
+.codeyam/recent-runs.json
+.codeyam/session-marker.json
+.codeyam/editor.local.json
+.codeyam/cloud.json
+.codeyam/glossary-index.txt
+.codeyam/deps-index.txt
+.codeyam/generated/
+.codeyam/.last-reconcile.json
+.codeyam/.pending-decisions.json
+.codeyam/cache/
+.codeyam/reconciliation-log.jsonl
+.codeyam/runner-timing-history.json
+.codeyam/state/last-advance.txt
+.codeyam/state/provider-auth-verdict.json
+.codeyam/state/dependency-provision.json
+.codeyam/state/session-results-snapshot.json
+.codeyam/state/step-highwater.json
+.codeyam/test-run-marker.json
+.claude/settings.local.json
+.claude/hooks/__pycache__/
+docker-compose.cloud.yml
+
+# codeyam-editor:start
+# Managed by `codeyam-editor init` / `codeyam-editor start`.
+# Do not edit between these markers — your changes will be overwritten.
+# NOT ignored, deliberately: .codeyam/state/finalize-debt.json.
+# `verify-full-finalize` compares the COMMITTED marker against the working
+# tree, so ignoring it makes the gate impossible to ever pass. It is a
+# committed artifact — like a lockfile. Do not add it here.
 .codeyam/secrets.json
 .codeyam/setup-connections.json
 .codeyam/session-token
@@ -84,3 +159,4 @@ blob-report/
 .claude/settings.local.json
 .claude/hooks/__pycache__/
 docker-compose.cloud.yml
+# codeyam-editor:end
