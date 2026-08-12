@@ -1,0 +1,502 @@
+{
+  "$comment": "Per-developer settings (port, provider, proxy ports, startCommand, etc.) belong in editor.local.json. That file is gitignored and is deep-merged on top of this one at load time. Changing `provider` after scaffold does NOT install that agent's surface — re-run `codeyam-editor editor install-hooks` (or `codeyam-editor init --provider <name>`) to install it. See CLAUDE.md or run `codeyam-editor editor config-show` to inspect the effective config.",
+  "apps": [],
+  "audit": {
+    "allowedDocumentationOnlySlugs": [
+      "post-merge-drift-sweep"
+    ],
+    "branchBaseRef": "main",
+    "coverageBootstrap": {
+      "enabled": true
+    },
+    "glossarySkip": [
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "_empty_mode_table",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "_kv_pairs_to_int_dict",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "_no_test_slug_map",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "_string_list",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "cli_command",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "load_step_metadata",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "resolve_mode_table",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_call_args",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_codeyam_verb",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_configured_test_scripts",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_exit_code_preserved",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_gating_subcommand",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_has_inplace_editor",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_in_command_position",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_invokes_configured_script",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_invokes_test_runner",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_is_integration_test_path",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_is_pcre_flag",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_is_redirection_ampersand",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_is_rust_comment",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_is_tee_stage",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_leading_operand",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_module_target",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_path_tokens",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_pipelines",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_preview_hint",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_program_name",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_record_refusal",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_repeat_notice",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_repo_relative",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_shell_c_payload",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_slug_label",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_split_commands",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_split_commands_with_separators",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_string_literal",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_test_run_block_message",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_uses_pcre_grep",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "block",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "discover_lean_contract",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "eligible_pathspecs",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "git_add_paths_are_plans_only",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "inspector_nudge",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "is_inspector_invocation",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "is_read_shaped_command",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "is_test_run_command",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "line_budget_refusal",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "line_budget_violation",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "line_count_limit",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "main",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "matching_inspector",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "merge_in_progress",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "parse_lean_contract",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "piped_gating_command",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "piped_gating_refusal",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "probed_state_path",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "projected_line_count",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "read_event",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "read_rel_skill_path",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_rewrite_refusal",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_source_rewrite_target",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "staged_paths_are_plans_only",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "tracked_source_paths",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "write_targets",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_mark_tool_loading_injected",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_terminal_signal_missing",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_tool_loading_already_injected",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "detect_event",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "label_signals_pre_commit_warning",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "label_signals_user_feedback_phase",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "log_event",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "main",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "resolve_mode",
+        "reason": "derive-generated"
+      }
+    ],
+    "itemShape": {
+      "changeWithoutVerify": "note",
+      "compound": "warning",
+      "vague": "warning"
+    },
+    "scenarioFreshnessDays": 14,
+    "stepBudget": {
+      "maxChecklistItems": 6,
+      "maxLines": 80,
+      "severity": "warning"
+    },
+    "testNamingConventions": {}
+  },
+  "catalogAutoAdd": {
+    "allow": [],
+    "deny": []
+  },
+  "cleanup": {
+    "completedPlanMinAgeDays": 90,
+    "completedPlanRetention": 500,
+    "logCompress": true,
+    "logDeleteDays": 30,
+    "logRotateDays": 7,
+    "screenshotPruneOrphans": true,
+    "tmpDeleteHours": 24
+  },
+  "coverageThresholds": {
+    "global": {
+      "minLinePercent": 90.0
+    }
+  },
+  "database": null,
+  "deviceScaleFactor": 2.0,
+  "env": {},
+  "files": {
+    "eventLogMaxBytes": null,
+    "journalShardEntries": null,
+    "logKeepRotated": null,
+    "textLogMaxBytes": null
+  },
+  "formatters": [],
+  "git": {
+    "commitQueue": {
+      "enabled": true,
+      "headAutoReclaimEnabled": true,
+      "heartbeatIntervalSec": 15,
+      "machineAliveHookTimeoutMs": 5000,
+      "maxHookPrunePerSweep": 10,
+      "maxProgressStallSec": 900,
+      "pollIntervalMs": 2000,
+      "serverHeartbeatIntervalSec": 60,
+      "waitTimeoutSec": 300
+    },
+    "planClaims": {
+      "enabled": true,
+      "fetchIntervalSec": 3
+    }
+  },
+  "hooks": {},
+  "port": 3000,
+  "projectDescription": "I need to build The Puzzle School website as a static website that can be hosted on GitHub pages. I have designs for the first two pages. I'd like to use codeyam-cms to make it easy to change content and add pages without touching the code. Can we explore how best to do this? We control codeyam-cms as well so we can make improvements to it as needed.",
+  "projectTitle": "The Puzzle School",
+  "provider": "claude",
+  "proxy": {
+    "controlPort": 14848,
+    "dbPort": 14750,
+    "httpPort": 14749,
+    "httpsPassthrough": [
+      "crates.io",
+      "static.crates.io",
+      "index.crates.io",
+      "registry.npmjs.org",
+      "pypi.org",
+      "files.pythonhosted.org",
+      "proxy.golang.org",
+      "sum.golang.org",
+      "storage.googleapis.com",
+      "rubygems.org",
+      "github.com",
+      "codeload.github.com",
+      "objects.githubusercontent.com"
+    ],
+    "httpsPreview": false
+  },
+  "runnerTimeout": {
+    "changedFanoutMaxExtraSeconds": 1800,
+    "changedFanoutPerUnitSeconds": 180,
+    "changedFanoutThreshold": 2,
+    "floorSeconds": 900,
+    "headroomSeconds": 90,
+    "mode": "auto"
+  },
+  "scenarios": {
+    "dir": ".codeyam/scenarios"
+  },
+  "screenSizes": {},
+  "server": {
+    "autoRestartOnStaleBinary": true,
+    "maxRssMb": 6144
+  },
+  "setupBrowserEnabled": false,
+  "silenceHookStderr": false,
+  "startCommand": "",
+  "staticChecks": [],
+  "testCacheIgnorePatterns": [],
+  "testParallelism": {
+    "loadGuard": true
+  },
+  "testPartitions": [],
+  "testRunners": [],
+  "toolchainPaths": [],
+  "workflow": {
+    "checkIns": {
+      "hardeningCompleted": {
+        "autoAction": "commit",
+        "pause": true
+      },
+      "planAccepted": {
+        "pause": true
+      },
+      "prototypeCompleted": {
+        "pause": true
+      },
+      "push": {
+        "pause": true
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "//": "Scopes the generated .codeyam/*.js capture helpers to CommonJS so they keep working under projects whose root package.json declares \"type\": \"module\". Managed by codeyam-editor.",
+  "type": "commonjs"
+}

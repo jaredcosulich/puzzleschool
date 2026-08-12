@@ -1,0 +1,14 @@
+[
+  {
+    "description": "The home page design",
+    "filename": "design_handoff_puzzle_school/index.html"
+  },
+  {
+    "description": "An about page design but should be the template for any internal pages",
+    "filename": "design_handoff_puzzle_school/about.html"
+  },
+  {
+    "description": "A readme describing the designs.",
+    "filename": "design_handoff_puzzle_school/README.md"
+  }
+]
