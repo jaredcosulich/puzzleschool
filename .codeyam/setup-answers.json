@@ -3,5 +3,6 @@
     "static"
   ],
   "designApproach": "files",
+  "startingSurface": "landing",
   "techStackId": null
 }

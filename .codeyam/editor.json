@@ -473,7 +473,7 @@
   },
   "setupBrowserEnabled": false,
   "silenceHookStderr": false,
-  "startCommand": "",
+  "startCommand": "npm run dev -- --port 3000 --host 127.0.0.1",
   "staticChecks": [],
   "testCacheIgnorePatterns": [],
   "testParallelism": {
