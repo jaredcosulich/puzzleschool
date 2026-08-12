@@ -1,0 +1,80 @@
+---
+// The internal-page navigation bar. Home deliberately has none — its masthead is
+// the navigation — so this renders only where BaseLayout asks for it.
+//
+// Links come from the editable `nav` singleton, so adding a menu item is a CMS
+// edit rather than a markup change.
+import Mark from '../Mark.astro';
+import type { NavItem } from '../../lib/site';
+
+interface Props {
+  siteTitle: string;
+  items: NavItem[];
+  /** Current path, used to ink and underline the active link. */
+  currentPath: string;
+}
+
+const { siteTitle, items, currentPath } = Astro.props;
+---
+
+<nav class="nav" aria-label="Primary">
+  <a class="nav__brand" href="/">
+    <Mark size={28} />
+    <span>{siteTitle}</span>
+  </a>
+  <ul class="nav__links">
+    {
+      items.map((item) => (
+        <li>
+          <a
+            href={item.url}
+            class:list={['nav__link', { 'is-current': item.url === currentPath }]}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: 20px var(--gutter) 18px;
+    flex-wrap: wrap;
+  }
+
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.03em;
+  }
+
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    font-size: var(--size-meta);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--body-muted);
+  }
+
+  /* The page you are on is inked and underlined in teal; the others stay muted. */
+  .nav__link.is-current {
+    color: var(--ink);
+    border-bottom: 2px solid var(--teal);
+    padding-bottom: 2px;
+  }
+</style>

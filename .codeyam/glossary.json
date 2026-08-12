@@ -1,0 +1,182 @@
+[
+  {
+    "description": "Assembles a mailto: URL from a recipient and optional subject and body, percent-encoding each part.",
+    "filePath": "src/lib/mailto.ts",
+    "name": "buildMailto",
+    "untestabilityReason": {
+      "justification": "assembles a URL string from its arguments with no branching beyond omitting absent optional parts",
+      "kind": "trivial-wrapper"
+    }
+  },
+  {
+    "description": "The dragon curve: a right-angle fold repeated, walked as an orthogonal lattice that never self-intersects.",
+    "filePath": "src/lib/structures.ts",
+    "name": "dragonPoints",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Escapes interpolated values before they reach the worker's HTML responses.",
+    "filePath": "cms-auth-worker/worker.js",
+    "name": "escapeHtml",
+    "untestabilityReason": {
+      "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Builds the Fibonacci square spiral the way the sequence is built: each side is the sum of the previous two, attached to the growing box on a rotating side. Returns the largest square separately so it can be drawn open.",
+    "filePath": "src/lib/structures.ts",
+    "name": "fibonacciTiling",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Reads the editable navigation singleton per call, for the same reason getSettings does.",
+    "filePath": "src/lib/site.ts",
+    "name": "getNav",
+    "untestabilityReason": {
+      "justification": "filesystem read of a JSON singleton; the resolution order it depends on is covered by contentRoot tests",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Reads the editable site-settings singleton per call rather than at module scope, so a scenario that seeds new settings is visible without restarting the dev server.",
+    "filePath": "src/lib/site.ts",
+    "name": "getSettings",
+    "untestabilityReason": {
+      "justification": "filesystem read of a JSON singleton; the resolution order it depends on is covered by contentRoot tests",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Handles the password form POST in the OAuth relay.",
+    "filePath": "cms-auth-worker/worker.js",
+    "name": "handlePasswordSubmit",
+    "untestabilityReason": {
+      "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Renders the OAuth handshake page returned to the popup.",
+    "filePath": "cms-auth-worker/worker.js",
+    "name": "handshakePage",
+    "untestabilityReason": {
+      "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Wraps an HTML string in a Response with the right content type.",
+    "filePath": "cms-auth-worker/worker.js",
+    "name": "htmlResponse",
+    "untestabilityReason": {
+      "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "The Koch curve: every segment becomes four, turning 60 degrees either way.",
+    "filePath": "src/lib/structures.ts",
+    "name": "kochPoints",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Expands an axiom by applying production rules a given number of times. Symbols with no rule pass through unchanged, which is what lets the dragon curve carry its bookkeeping symbols.",
+    "filePath": "src/lib/structures.ts",
+    "name": "lsystem",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Encodes words as morse laid out left to right at classic proportions — dash three units, symbol gap one, letter gap three, word gap seven. Unencodable characters are skipped rather than guessed at.",
+    "filePath": "src/lib/structures.ts",
+    "name": "morseLine",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Draws the three sides of an open square — down the left, across, back up — so the spiral's largest frame never closes.",
+    "filePath": "src/lib/structures.ts",
+    "name": "openRectPath",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Renders the password prompt page for a locked preview.",
+    "filePath": "cms-auth-worker/worker.js",
+    "name": "passwordFormPage",
+    "untestabilityReason": {
+      "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Reads and parses one editable JSON singleton from the resolved data root.",
+    "filePath": "src/lib/site.ts",
+    "name": "readSingleton",
+    "untestabilityReason": {
+      "justification": "a filesystem read; the root-resolution logic it depends on is covered by the contentRoot tests",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "The absolute content root the collections read from — the codeyam sandbox during a session, committed src/content in production.",
+    "filePath": "src/lib/contentRoot.ts",
+    "name": "resolveContentRoot",
+    "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "The absolute data root the settings and nav singletons read from, resolved the same way as the content root.",
+    "filePath": "src/lib/contentRoot.ts",
+    "name": "resolveDataRoot",
+    "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "Resolves a content or data root in precedence order: env override, then the .codeyam/tmp sidecar, then the committed default.",
+    "filePath": "src/lib/contentRoot.ts",
+    "name": "resolveRoot",
+    "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "Trims float noise to two decimals so generated path data stays readable in devtools.",
+    "filePath": "src/lib/structures.ts",
+    "name": "round",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "A deterministic mulberry32 generator. The site is static, so unseeded randomness would redraw every structure on every build and churn every committed screenshot; the same seed gives the same figure forever.",
+    "filePath": "src/lib/structures.ts",
+    "name": "seededRandom",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Samples one sine wave across a width at a fixed phase, so waves of differing amplitude and period share an origin. `fraction` stops the wave short of the frame — the incompleteness dial.",
+    "filePath": "src/lib/structures.ts",
+    "name": "sinePath",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Joins a list of points into an SVG polyline `d` attribute, rounding coordinates to two decimals so generated paths stay readable.",
+    "filePath": "src/lib/structures.ts",
+    "name": "toPath",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Builds the SVG transform string for one puzzle piece: a rotation about the mark's centre, plus an inset and scale for the four diagonal pieces.",
+    "filePath": "src/components/Mark.astro",
+    "name": "transformFor",
+    "untestabilityReason": {
+      "justification": "formats a transform string from two arguments; the geometry it produces is covered by the Mark component scenarios",
+      "kind": "trivial-wrapper"
+    }
+  },
+  {
+    "description": "Grows a branching structure where limbs continue past their own forks, so side branches leave at varying heights rather than only at limb tips. Carries the incompleteness dials: stopChance ends limbs mid-reach and bareLimb names one that grows nothing.",
+    "filePath": "src/lib/structures.ts",
+    "name": "treeSegments",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Walks an L-system string as turtle graphics and returns the points visited. `fraction` walks only part of the forward moves, which is what makes a fragment a fragment.",
+    "filePath": "src/lib/structures.ts",
+    "name": "turtle",
+    "testFile": "src/lib/structures.test.ts"
+  }
+]

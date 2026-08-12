@@ -1,0 +1,13 @@
+{
+  "name": "DragonCurve - Default",
+  "id": "ad0d7eff-afa2-424d-a2f0-f9a29b0c3620",
+  "url": "/isolated-components/DragonCurve",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DragonCurve",
+  "scenarioType": "component",
+  "description": "The orthogonal dragon lattice, cut off before it closes.",
+  "pageFilePath": "src/components/structures/DragonCurve.astro"
+}

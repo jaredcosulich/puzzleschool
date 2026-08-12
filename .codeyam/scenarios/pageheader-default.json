@@ -1,0 +1,13 @@
+{
+  "name": "PageHeader - Default",
+  "id": "0b56662f-6e66-49cc-abae-7e9a9698c425",
+  "url": "/isolated-components/PageHeader",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "PageHeader",
+  "scenarioType": "component",
+  "description": "An internal page header: mark and 76px title left, standfirst opposite.",
+  "pageFilePath": "src/components/page/PageHeader.astro"
+}

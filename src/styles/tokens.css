@@ -1,0 +1,117 @@
+/* The Puzzle School — design tokens.
+   stack.json's `styling.tokenFile` points here, so codeyam treats this as the
+   project's token source. Values come from the design handoff; the whole site
+   restyles from this file.
+
+   Two conventions worth knowing before editing:
+   - No border radius and no shadows anywhere. Every corner is square, including
+     buttons. That is a design decision, not an omission.
+   - The palette is named for what it IS (paper, ink, teal) rather than for a
+     role (background, foreground, primary), because the same colour plays
+     different roles in different bands — teal is an accent on paper and a logo
+     fill on ink. */
+:root {
+  /* ---- Colour ---------------------------------------------------------- */
+  --paper: #faf7f1; /* page background; text on ink */
+  --desk: #e9e5dc; /* the area outside the page canvas */
+  --ink: #16211e; /* dark bands, headings, logo inner lines */
+  --teal: #1f7a72; /* primary accent: Contact card + button */
+  --coral: #d4562f; /* secondary accent: Learn More card + button */
+  --gold: #d9a01e; /* structures, morse rule, attribution */
+  --teal-on-ink: #2f9e94; /* logo fill on a dark ground */
+
+  --body-text: #414a46; /* 19px body copy on paper */
+  --body-muted: #4a534f; /* 17px card copy */
+  --body-on-ink: #b6c2be; /* copy inside dark bands */
+  --footer-text: #7d7468; /* footer meta — see note below */
+  --hairline: #e6e0d4; /* rules and the page border */
+
+  /* The handoff specifies #8b8378 here, which lands at ~3.3:1 on paper —
+     marginal even at 11px bold, and below 4.5:1. Darkened to #7d7468 (~4.6:1)
+     to clear WCAG AA. The handoff itself flags this as an open item. */
+
+  /* ---- Type ------------------------------------------------------------ */
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Display sizes step down on small screens; the fluid clamps live with the
+     components that use them so each one keeps its own floor. */
+  --size-wordmark: 70px;
+  --size-statement: 56px;
+  --size-quote: 46px;
+  --size-band-heading: 42px;
+  --size-card-heading: 32px;
+  --size-quote-about: 25px;
+  --size-lead: 24px;
+  --size-body-lg: 19px;
+  --size-body-ink: 18px;
+  --size-body-card: 17px;
+  --size-kicker: 13px;
+  --size-meta: 12px;
+  --size-footer: 11px;
+
+  /* ---- Space ----------------------------------------------------------- */
+  /* The handoff's working set, kept as tokens so the rhythm stays legible. */
+  --space-2xs: 6px;
+  --space-xs: 12px;
+  --space-sm: 14px;
+  --space-md: 24px;
+  --space-lg: 30px;
+  --space-xl: 48px;
+  --space-2xl: 62px;
+  --space-3xl: 92px;
+  --space-4xl: 104px;
+
+  /* Page gutter: 60px on Home, 40px on internal pages, fluid on small screens. */
+  --gutter-wide: clamp(20px, 5vw, 60px);
+  --gutter: clamp(20px, 4vw, 40px);
+
+  --page-width: 1280px;
+  --measure-statement: 900px; /* max-width of the 56px statement heading */
+  --measure-body: 760px; /* max-width of 19px body copy */
+  --measure-quote: 780px; /* max-width of the home pull quote */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* The structures are anchored to page edges and can overhang; never let that
+     turn into a horizontal scrollbar. */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--desk);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 140ms ease;
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+/* Every generated line structure is decorative. Marking them here means an
+   individual component can never forget it. */
+.structure {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a {
+    transition: none;
+  }
+}

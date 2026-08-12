@@ -1,0 +1,34 @@
+---
+// The home page. Its content is a `pages` collection entry (`home.md`) like
+// every other page on the site — see src/content/config.ts for why that matters.
+// It gets its own route file only because it lives at `/`, not `/home`.
+//
+// Imports and composition only: every visual section is a component.
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/home/Masthead.astro';
+import StatementBlock from '../components/home/StatementBlock.astro';
+import ActionCards from '../components/home/ActionCards.astro';
+import QuoteBand from '../components/home/QuoteBand.astro';
+import SineRule from '../components/structures/SineRule.astro';
+
+const home = await getEntry('pages', 'home');
+if (!home) {
+  throw new Error(
+    'Missing content entry `pages/home`. The home page is content, not markup — ' +
+      'restore src/content/pages/home.md or create it from /admin.',
+  );
+}
+const { Content } = await render(home);
+const { title, description, kicker, heading, lead, cards, quote, quoteAttribution } = home.data;
+---
+
+<BaseLayout title={title} description={description} showNav={false}>
+  <Masthead title={title} kicker={kicker} />
+  <SineRule />
+  <StatementBlock heading={heading} lead={lead}>
+    <Content />
+  </StatementBlock>
+  {cards && cards.length > 0 ? <ActionCards cards={cards} /> : null}
+  {quote ? <QuoteBand quote={quote} attribution={quoteAttribution} /> : null}
+</BaseLayout>

@@ -1,0 +1,13 @@
+{
+  "name": "SiteFooter - Default",
+  "id": "3baf2508-50e4-4967-ac5a-422677f36ece",
+  "url": "/isolated-components/SiteFooter",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SiteFooter",
+  "scenarioType": "component",
+  "description": "The footer in its internal-page variant.",
+  "pageFilePath": "src/components/chrome/SiteFooter.astro"
+}

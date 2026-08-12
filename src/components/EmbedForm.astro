@@ -1,0 +1,52 @@
+---
+// External-form embed for a static site. A static build can't process a form
+// server-side, so "newsletter signup" / "RSVP" is delegated to a third-party
+// service: either a MailChimp-style POST `action` URL (rendered as a real
+// <form> that submits to the provider) or an embedded provider iframe
+// (`embedUrl`, e.g. a Google Form). No backend, no network round-trip at build
+// time — codeyam scenarios render the *states* (configured form, embedded
+// iframe, unconfigured fallback) without ever submitting.
+interface Props {
+  action?: string;
+  embedUrl?: string;
+  title?: string;
+  buttonLabel?: string;
+}
+
+const { action, embedUrl, title = 'Subscribe', buttonLabel = 'Sign up' } = Astro.props;
+---
+
+<section class="embed-form" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-md);">
+  <h3 style="margin-top: 0;">{title}</h3>
+  {
+    embedUrl ? (
+      <iframe
+        src={embedUrl}
+        title={title}
+        loading="lazy"
+        style="width: 100%; min-height: 320px; border: 0;"
+      />
+    ) : action ? (
+      <form action={action} method="post" target="_blank">
+        <label style="display: block; margin-bottom: var(--space-sm);">
+          Email address
+          <input
+            type="email"
+            name="EMAIL"
+            required
+            placeholder="you@example.org"
+            style="display: block; width: 100%; margin-top: var(--space-sm); padding: var(--space-sm);"
+          />
+        </label>
+        <button type="submit" style="padding: var(--space-sm) var(--space-md);">
+          {buttonLabel}
+        </button>
+      </form>
+    ) : (
+      <p style="color: var(--color-muted);">
+        No form configured. Set an <code>action</code> (MailChimp) or{' '}
+        <code>embedUrl</code> (Google Form) prop.
+      </p>
+    )
+  }
+</section>

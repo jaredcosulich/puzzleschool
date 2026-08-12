@@ -1,0 +1,57 @@
+---
+// The quote in an internal page's dark band, pulled up so it begins OVER the
+// dragon curve rather than in line with the heading beside it. That
+// misalignment is the design's one deliberate break from the grid.
+//
+// The pull-up only works because the curve is an in-flow 430px block: it needs
+// something to be pulled up through. If the curve is ever made absolute, this
+// lands above the band's top edge and `overflow: hidden` eats it silently.
+
+interface Props {
+  quote: string;
+  attribution?: string;
+}
+
+const { quote, attribution } = Astro.props;
+---
+
+<div class="band__quote">
+  <p class="quote">{quote}</p>
+  {attribution ? <p class="attribution">{attribution}</p> : null}
+</div>
+
+<style>
+  .band__quote {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    align-self: start;
+    margin-top: -306px;
+  }
+
+  .quote {
+    margin: 0;
+    font-size: clamp(19px, 2.2vw, var(--size-quote-about));
+    line-height: 1.5;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+
+  .attribution {
+    margin: 0;
+    font-weight: 600;
+    font-size: var(--size-meta);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* The curve is dropped at this width, so there is nothing to sit over and the
+     pull-up has nothing to align to. */
+  @media (max-width: 840px) {
+    .band__quote {
+      margin-top: 0;
+    }
+  }
+</style>

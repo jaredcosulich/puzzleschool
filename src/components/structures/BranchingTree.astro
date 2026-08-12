@@ -1,0 +1,151 @@
+---
+// The branching structure standing between the About page's prose columns.
+//
+// Two things about its placement are load-bearing, and getting either wrong is
+// immediately visible:
+//
+//   1. It is ANCHORED TO THE BOTTOM of its column and flipped `scaleY(-1)`. The
+//      generator grows downward from the origin; the flip turns that into a tree
+//      rising from the foot of the column. Un-flipped it reads as a root system
+//      hanging from the ceiling — which is what "upside down" describes, and is
+//      wrong.
+//   2. It lives in its OWN 123px grid column, not floated over the prose. The
+//      design's prose grid is `1fr 123px 1fr` precisely so this has a lane of its
+//      own; dropped into a text column it lands on the words.
+//
+// One limb is left bare: `bareLimb` names which branch stops without spawning
+// children. Pick a mid-depth branch — prune a leaf and nothing visibly changes,
+// prune near the trunk and half the tree disappears.
+import { treeSegments, toPath } from '../../lib/structures';
+
+interface Props {
+  depth?: number;
+  /** Trunk length; each generation is `shrink` times its parent. */
+  length?: number;
+  shrink?: number;
+  /** Half-angle between siblings, in degrees. */
+  spread?: number;
+  /** Which branch (in depth-first order) ends bare. */
+  bareLimb?: number | null;
+  /** Seed for the irregularity — same seed, same tree, every build. */
+  seed?: number;
+  /** How far angles and lengths wander from the ideal, 0–1. */
+  jitter?: number;
+  /** Chance any given limb simply stops, 0–1. */
+  stopChance?: number;
+  segmentsPerLimb?: number;
+  branchChance?: number;
+  wander?: number;
+  baseWidth?: number;
+  taper?: number;
+  width?: number;
+  height?: number;
+}
+
+const {
+  // Only four generations. With side branches leaving part-way along each limb,
+  // four is already plenty of branch points — and few enough lines that each one
+  // can be drawn heavily enough to see.
+  depth = 4,
+  length = 300,
+  shrink = 0.62,
+  spread = 34,
+  bareLimb = 4,
+  seed = 11,
+  jitter = 0.45,
+  stopChance = 0.14,
+  segmentsPerLimb = 5,
+  branchChance = 0.5,
+  wander = 6,
+  baseWidth = 3.2,
+  taper = 0.7,
+  width = 123,
+  height = 365,
+} = Astro.props;
+
+const segments = treeSegments({
+  depth,
+  length,
+  shrink,
+  spread,
+  bareLimb,
+  seed,
+  jitter,
+  stopChance,
+  segmentsPerLimb,
+  branchChance,
+  wander,
+  baseWidth,
+  taper,
+  // Grow downward in SVG coordinates; the CSS flip turns it the right way up.
+  heading: 90,
+  origin: { x: width / 2, y: 0 },
+});
+
+const xs = segments.flatMap((s) => [s.from.x, s.to.x]);
+const ys = segments.flatMap((s) => [s.from.y, s.to.y]);
+const minX = Math.min(...xs);
+const minY = Math.min(...ys);
+const boxWidth = Math.max(...xs) - minX || 1;
+const boxHeight = Math.max(...ys) - minY || 1;
+---
+
+<div class="tree-well">
+  <div class="tree-flip">
+    <!-- `preserveAspectRatio="none"` fills the 123x365 lane exactly, the way the
+         design's own SVG does. With `meet` the figure is letterboxed to whichever
+         axis binds first and lands at about a third of the lane's height —
+         present, but too faint to read as a structure. -->
+    <svg
+      viewBox={`${minX - 1} ${minY - 1} ${boxWidth + 2} ${boxHeight + 2}`}
+      width={width}
+      height={height}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {
+        segments.map((segment) => (
+          <path
+            d={toPath([segment.from, segment.to])}
+            fill="none"
+            stroke="var(--gold)"
+            stroke-width={segment.width}
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+        ))
+      }
+    </svg>
+  </div>
+</div>
+
+<style>
+  /* The 123px grid column the structure occupies. */
+  .tree-well {
+    position: relative;
+    min-height: 365px;
+  }
+
+  .tree-flip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: scaleY(-1);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .tree-flip svg {
+    display: block;
+    overflow: visible;
+  }
+
+  /* Below the prose breakpoint the middle column stops existing, so the well
+     collapses rather than leaving a 365px hole. */
+  @media (max-width: 840px) {
+    .tree-well {
+      display: none;
+    }
+  }
+</style>

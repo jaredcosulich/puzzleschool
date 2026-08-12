@@ -1,0 +1,3 @@
+{"command":"verify-build","elapsed_secs":0,"emitted_at_unix":1786557053,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":20607}
+[PASS] astro-check (6.14s)
+CODEYAM_VERIFY_BUILD: PASS — 1 check(s) passed

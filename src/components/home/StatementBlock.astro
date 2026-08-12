@@ -1,0 +1,62 @@
+---
+// The home statement: the 56px claim, the body copy, and the line that closes
+// it. The body arrives through the default slot because it is rendered markdown
+// from the CMS, not a string.
+
+interface Props {
+  heading?: string;
+  lead?: string;
+}
+
+const { heading, lead } = Astro.props;
+---
+
+<section class="statement">
+  {heading ? <h2>{heading}</h2> : null}
+  <div class="statement__body"><slot /></div>
+  {lead ? <p class="lead">{lead}</p> : null}
+</section>
+
+<style>
+  .statement {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: clamp(52px, 7vw, var(--space-3xl)) var(--gutter-wide) var(--space-2xl);
+    text-align: center;
+  }
+
+  .statement h2 {
+    margin: 0;
+    max-width: var(--measure-statement);
+    font-weight: 600;
+    font-size: clamp(32px, 4.6vw, var(--size-statement));
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+
+  .statement__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    max-width: var(--measure-body);
+  }
+
+  .statement__body :global(p) {
+    margin: 0;
+    font-size: var(--size-body-lg);
+    line-height: 1.7;
+    color: var(--body-text);
+  }
+
+  .lead {
+    margin: 0;
+    font-weight: 600;
+    font-size: var(--size-lead);
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+</style>

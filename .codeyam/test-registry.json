@@ -1,0 +1,383 @@
+{
+  "tests": [
+    {
+      "description": "The curve is generated, non-empty, and respects its cut-off.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "dragonPoints › stops early when fraction is below 1",
+      "line": 166,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Sides follow the sequence itself: each is the sum of the previous two.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "fibonacciTiling › grows each square as the sum of the previous two",
+      "line": 70,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "openLast is the incompleteness: the largest square is drawn as three sides.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "fibonacciTiling › keeps the largest square closed when openLast is false",
+      "line": 91,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The tiling is normalised to the origin, so nothing sits at a negative offset.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "fibonacciTiling › normalises the tiling to the origin",
+      "line": 98,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "This is the geometry the design handoff exported, reproduced from the rule.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "fibonacciTiling › reproduces the handoff geometry for six squares",
+      "line": 76,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Below two squares there is no tiling to build.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "fibonacciTiling › returns nothing for a count under two",
+      "line": 65,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Iteration n replaces each segment with four, so 4^n moves.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "kochPoints › produces four segments per segment per iteration",
+      "line": 159,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Each pass rewrites every matching symbol.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "lsystem › applies the production rule once per iteration",
+      "line": 120,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Symbols with no rule survive verbatim — the dragon's X and Y rely on this.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "lsystem › passes through symbols that have no rule",
+      "line": 125,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Zero iterations is the axiom untouched.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "lsystem › returns the axiom unchanged for zero iterations",
+      "line": 115,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A single dot is one unit wide and starts at the origin.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "morseLine › encodes a single dot at the origin",
+      "line": 265,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A dash is three units wide — the classic proportion.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "morseLine › makes a dash three times a dot",
+      "line": 271,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Letters are separated by three units, wider than the one-unit symbol gap.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "morseLine › separates letters by three units",
+      "line": 277,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Words are separated by seven units, wider still.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "morseLine › separates words by seven units",
+      "line": 284,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Unencodable characters are skipped rather than guessed at.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "morseLine › skips characters with no morse encoding",
+      "line": 290,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Every symbol records the word it came from, for labelling and centring.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "morseLine › tags each symbol with its word",
+      "line": 295,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Three sides only — down the left, across the bottom, back up the right.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "openRectPath › draws three sides and never closes the shape",
+      "line": 108,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "With neither override present (a real production build), the site reads its committed `src/content` — so deploys are unaffected.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "resolveContentRoot › defaults to _projectRoot_/src/content when no override is present",
+      "line": 51,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "With no env var, the sidecar file the editor writes is the load-bearing override for a PTY-launched dev server that didn't inherit the env.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "resolveContentRoot › falls back to the .codeyam/tmp/content-root sidecar",
+      "line": 36,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The env override wins outright — this is the programmatic-launch path where the editor injects the absolute sandbox content dir.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "resolveContentRoot › prefers the CODEYAM_CONTENT_ROOT env override",
+      "line": 29,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The data root resolves with the same env → sidecar → default precedence as the content root, defaulting to committed `src/data` in production.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "resolveDataRoot › defaults to _projectRoot_/src/data when no override is present",
+      "line": 67,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Different seeds diverge, so the seed is a real dial.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "seededRandom › produces a different sequence for a different seed",
+      "line": 183,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Same seed, same sequence — this is what keeps the static build reproducible.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "seededRandom › produces the same sequence for the same seed",
+      "line": 176,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Values stay in the unit interval, which the jitter maths assumes.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "seededRandom › stays within zero and one",
+      "line": 188,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Whatever the step leaves over, the path lands exactly on its endpoint.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "sinePath › lands exactly on the end even when step does not divide the width",
+      "line": 48,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A smaller step samples more finely and yields more points.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "sinePath › samples more densely with a smaller step",
+      "line": 56,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The wave starts on its baseline: sin(0) is 0, so no vertical offset.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "sinePath › starts on the baseline",
+      "line": 35,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "fraction is the incompleteness dial — below 1 the wave stops short of the frame.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "sinePath › stops short of the full width when fraction is below 1",
+      "line": 40,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A single point is a move with no line — the degenerate but valid case.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "toPath › emits only a moveto for one point",
+      "line": 23,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty point list has no path to draw, and must not emit a bare \"M\".",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "toPath › returns an empty string for no points",
+      "line": 18,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Float noise is rounded so generated paths stay readable in devtools.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "toPath › rounds coordinates to two decimals",
+      "line": 28,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The trunk is always walked, so the figure is never empty.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › always draws the trunk",
+      "line": 213,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A different seed grows a visibly different tree.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › grows a different tree for a different seed",
+      "line": 206,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "With no chance of branching, only the trunk exists.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › grows no side branches when branchChance is zero",
+      "line": 236,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Same seed, same tree — otherwise every build would redraw the artwork.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › is deterministic for a given seed",
+      "line": 200,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The named bare limb carries no children — the deliberate missing piece.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › leaves the named limb bare",
+      "line": 242,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Depth bounds the recursion, so a deeper tree is never smaller.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › never shrinks as depth increases",
+      "line": 256,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Limbs taper as they divide, so the trunk reads heavier than its branches.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "treeSegments › tapers stroke width with depth",
+      "line": 220,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Even at fraction zero at least one move is walked, so nothing renders empty.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "turtle › always walks at least one move",
+      "line": 152,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Bookkeeping symbols carry no geometry and must not move the turtle.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "turtle › ignores symbols that are not moves or turns",
+      "line": 142,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Forward moves advance along the heading; +x at heading zero.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "turtle › walks forward along its heading",
+      "line": 132,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "fraction stops the walk partway — this is what makes a fragment a fragment.",
+      "file": "src/lib/structures.test.ts",
+      "format": "vitest",
+      "key": "turtle › walks only part of the moves when fraction is below 1",
+      "line": 147,
+      "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    }
+  ],
+  "version": 2
+}

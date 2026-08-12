@@ -1,0 +1,38 @@
+---
+// Per-page <head> meta: title, description, canonical, Open Graph + Twitter
+// card tags. Defaults come from the editable `settings` singleton so every
+// page is consistent; pages override per-route via props. Rendered inside the
+// base layout's <head>. (Site-level sitemap.xml / robots.txt live in the
+// deploy-hardening stack, not here — this component owns the per-page tags.)
+import { getSettings } from '../lib/site';
+const settings = getSettings();
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+}
+
+const { title, description, image, canonical } = Astro.props;
+
+// A page title becomes "Page · Site"; the bare site title is the home/default.
+const pageTitle = title ? `${title} · ${settings.siteTitle}` : settings.siteTitle;
+const metaDescription = description ?? settings.description;
+const canonicalUrl = canonical ?? Astro.url.href;
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={metaDescription} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={metaDescription} />
+<meta property="og:url" content={canonicalUrl} />
+{image ? <meta property="og:image" content={image} /> : null}
+
+<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={metaDescription} />
+{image ? <meta name="twitter:image" content={image} /> : null}

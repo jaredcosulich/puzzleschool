@@ -1,0 +1,13 @@
+{
+  "name": "SineRule - Default",
+  "id": "2a14b684-d75d-403c-9a63-9dbc54b3b839",
+  "url": "/isolated-components/SineRule",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SineRule",
+  "scenarioType": "component",
+  "description": "Three sine waves over a straight line, the largest cut off at the frame.",
+  "pageFilePath": "src/components/structures/SineRule.astro"
+}

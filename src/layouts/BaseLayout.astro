@@ -1,0 +1,82 @@
+---
+// The site-wide shell: <head> meta via SEO, the page canvas, and the chrome.
+// Header and footer read from `src/data/*.json`, so changing the site title, a
+// menu item, or the footer line is a CMS edit — never a markup change.
+//
+// The design gives the site a literal PAGE: a 1280px paper-coloured canvas with
+// a hairline border, centred on a darker desk. Below 1280 the canvas simply
+// becomes the viewport and the gutters go fluid; the paper never scales down as
+// a shrunken rectangle.
+//
+// `showNav` selects which of the two page shapes this is. Home has no nav bar —
+// its masthead IS the navigation — and its footer sits on the wider gutter.
+import '../styles/tokens.css';
+import SEO from '../components/SEO.astro';
+import SiteNav from '../components/chrome/SiteNav.astro';
+import SiteFooter from '../components/chrome/SiteFooter.astro';
+import { getNav, getSettings } from '../lib/site';
+import { buildMailto } from '../lib/mailto';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** Show the internal-page nav bar. Home passes false. */
+  showNav?: boolean;
+}
+
+const settings = getSettings();
+const nav = getNav();
+const { title, description, image, showNav = true } = Astro.props;
+
+const contactHref = buildMailto({
+  to: settings.contactEmail,
+  subject: `Hello from ${settings.siteTitle}`,
+});
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <SEO title={title} description={description} image={image} />
+  </head>
+  <body>
+    <div class="page">
+      {
+        showNav ? (
+          <SiteNav
+            siteTitle={settings.siteTitle}
+            items={nav.items}
+            currentPath={Astro.url.pathname}
+          />
+        ) : null
+      }
+
+      <slot />
+
+      <SiteFooter
+        text={settings.footerText}
+        contactHref={contactHref}
+        variant={showNav ? 'internal' : 'home'}
+      />
+    </div>
+  </body>
+</html>
+
+<style>
+  .page {
+    width: min(var(--page-width), 100%);
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    color: var(--ink);
+    overflow: hidden;
+  }
+</style>

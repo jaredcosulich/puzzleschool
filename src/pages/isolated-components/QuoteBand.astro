@@ -1,0 +1,35 @@
+---
+import Component from "../../../src/components/home/QuoteBand.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for QuoteBand — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/QuoteBand.
+// TODO: pass real props to <Component quote={QUOTE} attribution="Bertrand Russell" /> below so the capture exercises the
+// component, then register the scenario:
+//   codeyam-editor editor register '{"name":"QuoteBand - Default","componentName":"QuoteBand","url":"/isolated-components/QuoteBand","dimensions":["Desktop"]}'
+// Three rules for a thoughtful capture:
+//   1. CENTERING is handled by the <body> flex rule below — keep it, because
+//      the capture shoots the full viewport with no element clip, so a page
+//      that does not center itself lands in the top-left corner. The
+//      #codeyam-capture wrapper carries the component's own padding, not the
+//      centering; do NOT add a second full-viewport centering wrapper.
+//   2. WIDTH should match the component's real container, read from its usage
+//      site. Bounded card → wrap in a width div, e.g.
+//      <div style="width: 100%; max-width: 384px;">, with the real number.
+//   3. SEED data that exercises the component — empty props render an empty
+//      shell and is a bug; put empty / loading / error in their own pages.
+const QUOTE = '“To teach how to live without certainty, and yet without being paralyzed by hesitation, is perhaps the chief thing that philosophy, in our age, can still do for those who study it.”';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: QuoteBand</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <Component quote={QUOTE} attribution="Bertrand Russell" />
+    </div>
+  </body>
+</html>

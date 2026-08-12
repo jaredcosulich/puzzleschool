@@ -1,0 +1,34 @@
+---
+import Component from "../../../src/components/Mark.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for Mark — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/Mark.
+// TODO: pass real props to <Component /> below so the capture exercises the
+// component, then register the scenario:
+//   codeyam-editor editor register '{"name":"Mark - Default","componentName":"Mark","url":"/isolated-components/Mark","dimensions":["Desktop"]}'
+// Three rules for a thoughtful capture:
+//   1. CENTERING is handled by the <body> flex rule below — keep it, because
+//      the capture shoots the full viewport with no element clip, so a page
+//      that does not center itself lands in the top-left corner. The
+//      #codeyam-capture wrapper carries the component's own padding, not the
+//      centering; do NOT add a second full-viewport centering wrapper.
+//   2. WIDTH should match the component's real container, read from its usage
+//      site. Bounded card → wrap in a width div, e.g.
+//      <div style="width: 100%; max-width: 384px;">, with the real number.
+//   3. SEED data that exercises the component — empty props render an empty
+//      shell and is a bug; put empty / loading / error in their own pages.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: Mark</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <Component />
+    </div>
+  </body>
+</html>

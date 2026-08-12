@@ -1,0 +1,13 @@
+{
+  "name": "Mark - Missing Piece",
+  "id": "77eef81d-d897-4fe9-abc1-bdd7aaf786fe",
+  "url": "/isolated-components/MarkGap",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "Mark",
+  "scenarioType": "component",
+  "description": "The mark with its north piece drawn as a dashed outline — the deliberately missing piece.",
+  "pageFilePath": "src/components/Mark.astro"
+}

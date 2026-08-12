@@ -1,0 +1,21 @@
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786559487,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":55963}
+[refresh-tests --changed] scope: 118 changed path(s) (1 untracked included)
+[refresh-tests --changed]   matched runner(s): tests
+[refresh-tests --changed] narrowing WITHHELD — 2 changed file(s) may declare a test the registry does not know yet:
+[refresh-tests --changed]   src/lib/contentRoot.test.ts — no source walker for this file type, so its tests could not be checked
+[refresh-tests --changed]   src/lib/structures.test.ts — no source walker for this file type, so its tests could not be checked
+[refresh-tests --changed]   the run therefore widens to each owning runner's changedCommand (whole-package scope), so a brand-new test still executes.
+[refresh-tests --changed]   to narrow instead, register the test(s) first: codeyam-editor editor reconcile-registry --auto-apply
+[refresh-tests --changed]   partition scope: all
+Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
+  tests  ::  npx vitest run --reporter=json
+Test refresh triggered. Waiting for results...
+[   2s] Tests completed.
+{"failed":0,"passed":42,"skipped":0,"success":true,"total":42}
+All 42 tests passed.
+
+Partial run — partition caches WERE updated; the full-suite test-cache.json was
+NOT (full-suite hash invariant). If a stale-partition bail sent you here, that
+recovery has landed — re-run the command that bailed.
+Audit gates read the full-suite cache; run `codeyam-editor editor refresh-tests`
+(no flags) to refresh it before `editor audit` or step-5 advance.

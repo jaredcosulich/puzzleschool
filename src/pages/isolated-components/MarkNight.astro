@@ -1,0 +1,25 @@
+---
+import Component from "../../components/Mark.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for MarkNight — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/MarkNight. This stack is a static export,
+// so each STATE gets its own prerendered page: `?s=` query params are empty at
+// build time and would capture the default frame for every state.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Isolated: MarkNight</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; background: #16211e; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="width: 100%;">
+      <div style="display:flex; justify-content:center;"><Component variant="signalNight" size={240} /></div>
+    </div>
+  </body>
+</html>

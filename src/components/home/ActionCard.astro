@@ -1,0 +1,68 @@
+---
+// One action card: a 6px accent rule, a heading, a line of body copy, and a
+// square button in the same accent. Corners are square everywhere, including the
+// button — that is a design decision, not an omission.
+
+interface Props {
+  title: string;
+  body: string;
+  href: string;
+  label: string;
+  accent: 'teal' | 'coral';
+}
+
+const { title, body, href, label, accent } = Astro.props;
+---
+
+<article class="card" data-accent={accent}>
+  <h3>{title}</h3>
+  <p>{body}</p>
+  <a class="button" href={href}>{label}</a>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: 20px 36px 36px;
+    background: var(--paper);
+    border-top: 6px solid var(--teal);
+  }
+
+  .card[data-accent='coral'] {
+    border-top-color: var(--coral);
+  }
+
+  .card h3 {
+    margin: 0;
+    font-weight: 600;
+    font-size: var(--size-card-heading);
+    letter-spacing: -0.03em;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: var(--size-body-card);
+    line-height: 1.6;
+    color: var(--body-muted);
+  }
+
+  .button {
+    margin-top: 8px;
+    align-self: flex-start;
+    padding: 16px 30px;
+    background: var(--teal);
+    color: var(--paper);
+    font-weight: 600;
+    font-size: var(--size-meta);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .card[data-accent='coral'] .button {
+    background: var(--coral);
+  }
+</style>

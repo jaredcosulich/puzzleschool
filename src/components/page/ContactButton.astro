@@ -1,0 +1,32 @@
+---
+// A mailto button, addressed from the editable settings singleton so the address
+// lives in exactly one place and changing it is one CMS edit.
+
+interface Props {
+  href: string;
+  label?: string;
+}
+
+const { href, label = 'Email us' } = Astro.props;
+---
+
+<div class="contact-cta">
+  <a class="button" href={href}>{label}</a>
+</div>
+
+<style>
+  .contact-cta {
+    padding: 0 var(--gutter) var(--space-2xl);
+  }
+
+  .button {
+    display: inline-block;
+    padding: 16px 30px;
+    background: var(--teal);
+    color: var(--paper);
+    font-weight: 600;
+    font-size: var(--size-meta);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+</style>

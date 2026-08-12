@@ -1,0 +1,13 @@
+{
+  "name": "ActionCards - Default",
+  "id": "e1b0d6ea-51d5-466d-8235-b184128c1e72",
+  "url": "/isolated-components/ActionCards",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ActionCards",
+  "scenarioType": "component",
+  "description": "Two cards in a three-column grid, third column deliberately empty, Fibonacci spiral rising from the first card's rule.",
+  "pageFilePath": "src/components/home/ActionCards.astro"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "QuoteBand - Default",
+  "id": "5f017d90-263a-4f36-ad0c-32ec0a0b17a6",
+  "url": "/isolated-components/QuoteBand",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "QuoteBand",
+  "scenarioType": "component",
+  "description": "The home ink band: night mark, Russell pull quote, attribution.",
+  "pageFilePath": "src/components/home/QuoteBand.astro"
+}

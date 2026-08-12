@@ -1,0 +1,13 @@
+{
+  "name": "ActionCard - Default",
+  "id": "bdd098f3-0ebd-4bde-9dc9-0e3c318bc4f2",
+  "url": "/isolated-components/ActionCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ActionCard",
+  "scenarioType": "component",
+  "description": "One action card with its 6px teal accent rule and square button.",
+  "pageFilePath": "src/components/home/ActionCard.astro"
+}

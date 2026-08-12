@@ -1,0 +1,13 @@
+{
+  "name": "ActionCard - Coral Accent",
+  "id": "7408e7c8-ab6e-414b-8738-40422cfa574e",
+  "url": "/isolated-components/ActionCardCoral",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ActionCard",
+  "scenarioType": "component",
+  "description": "The Learn More card, showing the coral accent rule and button.",
+  "pageFilePath": "src/components/home/ActionCard.astro"
+}

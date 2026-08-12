@@ -1,0 +1,74 @@
+---
+// A Koch curve fragment sitting behind the home page's dark band and overlapping
+// its top edge. Stroked in ink on ink at hairline weight, so it reads as texture
+// where it crosses the band and disappears where it does not.
+//
+// Third iteration, stopped partway: `fraction` walks only part of the turtle's
+// forward moves, so the curve ends mid-figure rather than completing.
+import { lsystem, turtle, toPath } from '../../lib/structures';
+
+interface Props {
+  iterations?: number;
+  step?: number;
+  fraction?: number;
+  width?: number;
+}
+
+// `fraction` is the incompleteness dial: how much of the curve's walk is drawn.
+// It trades presence against unresolvedness. Below ~0.4 the figure is too sparse
+// to hold the corner it sits in; at 0.8+ it nearly closes into a recognisable
+// snowflake and reads as finished decoration. ~0.7 fills the space while leaving
+// the figure plainly mid-construction — the rule visible, the end not.
+const { iterations = 3, step = 9, fraction = 0.69, width = 935 } = Astro.props;
+
+// The turn is NEGATIVE because SVG's y axis points down: a `+` must lift the
+// curve off its baseline, not push it below. Heading 0 starts it travelling
+// right along the bottom edge, the way the design's exported path does.
+const points = turtle(lsystem('F', { F: 'F+F--F+F' }, iterations), {
+  angle: -60,
+  step,
+  fraction,
+  heading: 0,
+  origin: { x: 0, y: 120 },
+});
+
+// A FIXED viewBox, matching the design's own SVG rather than a tight bounding
+// box. The drawing deliberately occupies only part of its box — auto-fitting to
+// the curve's extent scales it up by roughly a third and the figure bursts out
+// of the page canvas.
+const height = 479;
+---
+
+<svg
+  class="structure koch"
+  viewBox="-2 -4 246 126"
+  width={width}
+  height={height}
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={toPath(points)} fill="none" stroke="var(--ink)" stroke-width="0.39" />
+</svg>
+
+<style>
+  /* Anchored in the dark band but hanging far above it: the curve crosses the
+     seam, drawn in ink so it is invisible against the band and legible against
+     the paper. The band must NOT clip its overflow. */
+  .koch {
+    top: -471px;
+    left: 573px;
+    overflow: visible;
+  }
+
+  @media (max-width: 1279px) {
+    .koch {
+      display: none;
+    }
+  }
+
+  @media (max-width: 840px) {
+    .koch {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "repo": {
+    "owner": "jaredcosulich",
+    "repo": "puzzleschool",
+    "branch": "puzzle-school-rebuild"
+  },
+  "authEndpoint": "/auth",
+  "auth": {
+    "token": true,
+    "worker": false
+  }
+}

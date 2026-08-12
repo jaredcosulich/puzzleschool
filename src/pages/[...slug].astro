@@ -1,0 +1,87 @@
+---
+// The internal-page template — and the route that makes CMS-authored pages real.
+//
+// Without this route, creating a page in /admin produces a markdown entry that
+// nothing ever puts at a URL: the entry exists, the dashboard lists it, and the
+// site 404s. (That is the state the @codeyam/cms demo site ships in — its own
+// nav.json links to /pages/about while its only routes are index, 404 and
+// blog/[slug].) One dynamic route closes the loop: create a page in /admin, it
+// commits markdown here, the build emits a page for it, and it is live, with no
+// code change. That is the entire promise of running on the CMS.
+//
+// Because every page shares this template, a page created next year gets the
+// same morse rule, the same structure lane, and the same band as the About page
+// written today. The handoff calls About "the template for any internal pages";
+// this is that, enforced.
+//
+// Two filters, and they are NOT interchangeable:
+//   - `routableEntries` decides which pages get BUILT: published entries PLUS
+//     previews, because a shared preview link must resolve even though the page
+//     is unpublished.
+//   - `publishedEntries` is the listing rule, for anywhere pages are enumerated.
+// Filtering the listing but not `getStaticPaths` is the classic failure: the
+// draft vanishes from navigation but stays publicly reachable at its own URL —
+// hidden, not private, which reads as working draft support and is worse than
+// none.
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import { routableEntries } from '@codeyam/cms/content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MorseRule from '../components/structures/MorseRule.astro';
+import SineRule from '../components/structures/SineRule.astro';
+import PageHeader from '../components/page/PageHeader.astro';
+import ProseColumns from '../components/page/ProseColumns.astro';
+import ContactButton from '../components/page/ContactButton.astro';
+import ExploratoryBand from '../components/page/ExploratoryBand.astro';
+import { getSettings } from '../lib/site';
+import { buildMailto } from '../lib/mailto';
+
+export const getStaticPaths = (async () => {
+  const pages = routableEntries(await getCollection('pages'));
+  return pages
+    // `home` is served at `/` by index.astro. Skipping it here keeps one entry
+    // from being reachable at both `/` and `/home`.
+    .filter((page) => page.id !== 'home')
+    .map((page) => ({ params: { slug: page.id }, props: { page } }));
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const {
+  title,
+  description,
+  kicker,
+  intro,
+  heading,
+  bandBody,
+  quote,
+  quoteAttribution,
+  showContactButton,
+} = page.data;
+
+const settings = getSettings();
+const contactHref = buildMailto({
+  to: settings.contactEmail,
+  subject: `Hello from ${settings.siteTitle}`,
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <MorseRule />
+  <PageHeader title={title} kicker={kicker} intro={intro} />
+  <SineRule />
+  <ProseColumns>
+    <Content />
+  </ProseColumns>
+  {showContactButton ? <ContactButton href={contactHref} /> : null}
+  {
+    heading ? (
+      <ExploratoryBand
+        heading={heading}
+        bandBody={bandBody}
+        quote={quote}
+        quoteAttribution={quoteAttribution}
+      />
+    ) : null
+  }
+</BaseLayout>

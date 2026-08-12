@@ -1,0 +1,13 @@
+{
+  "name": "SiteFooter - Home Variant",
+  "id": "cedd3989-68aa-475a-a747-a773bb20fb46",
+  "url": "/isolated-components/SiteFooterHome",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SiteFooter",
+  "scenarioType": "component",
+  "description": "The home footer: wider gutter, deeper foot, top-aligned rows.",
+  "pageFilePath": "src/components/chrome/SiteFooter.astro"
+}

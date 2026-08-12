@@ -1,0 +1,13 @@
+{
+  "name": "Mark - Default",
+  "id": "756f2c84-8078-4d0e-bf03-d0d9e1241dbd",
+  "url": "/isolated-components/Mark",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "Mark",
+  "scenarioType": "component",
+  "description": "The eight-piece compass rose: one puzzle-piece path rotated, teal north-south, coral east-west, gold diagonals.",
+  "pageFilePath": "src/components/Mark.astro"
+}

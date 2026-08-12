@@ -1,0 +1,13 @@
+{
+  "name": "StatementBlock - Default",
+  "id": "04118db2-ffb8-4c37-a318-862392a6ce53",
+  "url": "/isolated-components/StatementBlock",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "StatementBlock",
+  "scenarioType": "component",
+  "description": "The 56px statement, body copy and the line that closes it.",
+  "pageFilePath": "src/components/home/StatementBlock.astro"
+}

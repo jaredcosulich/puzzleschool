@@ -1,0 +1,883 @@
+{
+  "timestamp": "2026-08-12T18:23:18Z",
+  "title": "The Puzzle School rebuilt as an Astro site on codeyam-cms",
+  "type": "feature",
+  "userRequest": "Ok sounds good. Let's resume",
+  "description": "Rebuilt the site as a static Astro app consuming @codeyam/cms, replacing the Next.js placeholder. Three pages — Home, About and Contact — render entirely from markdown in a `pages` content collection, including the home page, so a page created in /admin goes live with no code change via the [...slug] catch-all the CMS demo site lacks. The design's six line structures (Fibonacci spiral, sine field, Koch fragment, dragon curve, branching tree, morse rule) are generated from their mathematical rules in src/lib/structures.ts rather than pasted as path data, so each one's deliberate incompleteness stays a named parameter; the tree's irregularity comes from a seeded PRNG so the static build stays byte-reproducible. Fixed four defects found along the way: @codeyam/cms's integrate CLI was a silent no-op for every consumer (entry guard compared import.meta.url against a non-realpath'd argv[1]); the seed adapter serialised nested content as [object Object]; site settings were frozen until a dev-server restart; and codeyam's capture pipeline flattened every SVG transform. That last fix had to be reverted to pass the audit since it lives in a generated file — see the queued plan `recapture-svg-screenshots-after-the-upstream-capture-fix`, and note the 22 component screenshots in this commit show flattened SVG geometry until it runs.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".github/workflows/nextjs.yml",
+      "status": "deleted"
+    },
+    {
+      "path": "CNAME",
+      "status": "deleted"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "next-env.d.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "next.config.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "out/404.html",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/7py9229exikac3OVMQuRN/_buildManifest.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/7py9229exikac3OVMQuRN/_ssgManifest.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/4bd1b696-80bcaf75e1b4285e.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/517-958b1302d40c72d3.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/970-0f63bc00511eea2a.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/app/_not-found/page-166cc5574e2effea.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/app/layout-6adbc5d7034ffa4d.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/app/page-a211ab407fc0c093.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/framework-0d635b52335dc518.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/main-6b42d74309386f0d.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/main-app-56bb86edfff08260.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/pages/_app-d23763e3e6c904ff.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/pages/_error-9b7125ad1a1e68fa.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/polyfills-42372ed130431b0a.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/chunks/webpack-e47e36c3dde3074d.js",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/css/79ee262941f148be.css",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/media/4473ecc91f70f139-s.p.woff",
+      "status": "deleted"
+    },
+    {
+      "path": "out/_next/static/media/463dafcda517f24f-s.p.woff",
+      "status": "deleted"
+    },
+    {
+      "path": "out/favicon.ico",
+      "status": "deleted"
+    },
+    {
+      "path": "out/file.svg",
+      "status": "deleted"
+    },
+    {
+      "path": "out/globe.svg",
+      "status": "deleted"
+    },
+    {
+      "path": "out/index.html",
+      "status": "deleted"
+    },
+    {
+      "path": "out/index.txt",
+      "status": "deleted"
+    },
+    {
+      "path": "out/next.svg",
+      "status": "deleted"
+    },
+    {
+      "path": "out/vercel.svg",
+      "status": "deleted"
+    },
+    {
+      "path": "out/window.svg",
+      "status": "deleted"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "postcss.config.mjs",
+      "status": "deleted"
+    },
+    {
+      "path": "src/app/favicon.ico",
+      "status": "deleted"
+    },
+    {
+      "path": "src/app/fonts/GeistMonoVF.woff",
+      "status": "deleted"
+    },
+    {
+      "path": "src/app/fonts/GeistVF.woff",
+      "status": "deleted"
+    },
+    {
+      "path": "src/app/globals.css",
+      "status": "deleted"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "status": "deleted"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "status": "deleted"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "tsconfig.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/journal/entries/2026-08-12T17-45-12Z.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/mocks/catalog.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/recapture-svg-screenshots-after-the-upstream-capture-fix.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/about-full-design.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/actioncard-coral-accent.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/actioncard-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/actioncards-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/bandquote-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/branchingtree-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/contact-email-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/contactbutton-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/dragoncurve-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/exploratoryband-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/exploratoryband-without-quote.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/fibonaccistructure-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/home-full-design.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/kochfragment-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/mark-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/mark-missing-piece.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/mark-on-ink.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/masthead-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/morserule-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/page-created-from-the-cms.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/page-minimal-fields.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/pageheader-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/pageheader-title-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/prosecolumns-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/quoteband-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-coral-accent--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncards-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/bandquote-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/branchingtree-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contactbutton-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/fibonaccistructure-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/kochfragment-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/mark-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/mark-missing-piece--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/mark-on-ink--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/masthead-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/morserule-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pageheader-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pageheader-title-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/quoteband-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sinerule-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-home-variant--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/statementblock-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sinerule-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitefooter-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitefooter-home-variant.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitenav-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/statementblock-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/seed-adapter.ts",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/stack.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/change-origin.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/4389b1f36547af17c9b0c71af9a76323e6c6e04c7db02e7517b16da178955f8d.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/8a443049ca4b4f3f5103b7b5fa41ec9b5dbeb14c0baec7de11c6f6a8e7f497c6.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "added"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "added"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "added"
+    },
+    {
+      "path": "DEPLOY_SETUP.md",
+      "status": "added"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "added"
+    },
+    {
+      "path": "cms-auth-worker/worker.js",
+      "status": "added"
+    },
+    {
+      "path": "cms-auth-worker/wrangler.toml",
+      "status": "added"
+    },
+    {
+      "path": "public/.nojekyll",
+      "status": "added"
+    },
+    {
+      "path": "public/CNAME",
+      "status": "added"
+    },
+    {
+      "path": "public/favicon.svg",
+      "status": "added"
+    },
+    {
+      "path": "public/robots.txt",
+      "status": "added"
+    },
+    {
+      "path": "src/components/EmbedForm.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/Mark.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/SEO.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/chrome/SiteFooter.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/chrome/SiteNav.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/home/ActionCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/home/ActionCards.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/home/Masthead.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/home/QuoteBand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/home/StatementBlock.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/page/BandQuote.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/page/ContactButton.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/page/ExploratoryBand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/page/PageHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/page/ProseColumns.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/structures/BranchingTree.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/structures/DragonCurve.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/structures/FibonacciStructure.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/structures/KochFragment.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/structures/MorseRule.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/structures/SineRule.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pages/about.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pages/contact.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pages/home.md",
+      "status": "added"
+    },
+    {
+      "path": "src/data/cms.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/nav.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "added"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/contentRoot.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/contentRoot.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/mailto.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/structures.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/structures.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/404.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/[...slug].astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ActionCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ActionCardCoral.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ActionCards.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/BandQuote.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/BranchingTree.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ContactButton.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DragonCurve.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ExploratoryBand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ExploratoryBandNoQuote.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/FibonacciStructure.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/KochFragment.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/Mark.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MarkGap.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MarkNight.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/Masthead.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MorseRule.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/PageHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/PageHeaderMinimal.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ProseColumns.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/QuoteBand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SineRule.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteFooter.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteFooterHome.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteNav.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/StatementBlock.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "added"
+    },
+    {
+      "path": "vitest.config.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 42,
+    "passed": 39,
+    "failed": 3,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 42,
+        "passed": 39
+      }
+    ]
+  }
+}

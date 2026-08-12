@@ -1,0 +1,76 @@
+---
+// The morse rule across the top of every internal page: a 12px ink strip with a
+// 4px-tall row of gold dots and dashes spelling the school's values.
+//
+// It is a HAIRLINE, not a banner. The strip is 12px tall and the marks are 4px —
+// at any heavier weight it stops reading as a rule and starts competing with the
+// nav above it.
+//
+// The words are content, not decoration: readable by anyone who knows morse,
+// which is the point. `aria-label` names them for anyone who does not.
+import { morseLine } from '../../lib/structures';
+
+interface Props {
+  words?: string[];
+  /** Height of the ink strip. */
+  height?: number;
+  /** Height of a mark; a dash is three units wide, a dot one. */
+  markHeight?: number;
+  /** One dot-width in user units. */
+  unit?: number;
+  /** Left inset before the first mark. */
+  inset?: number;
+}
+
+const {
+  words = [
+    'Respect',
+    'Curiosity',
+    'Empathy',
+    'Creativity',
+    'The Puzzle School',
+    'Ambiguity',
+    'Iteration',
+    'Persistence',
+    'Artistry',
+  ],
+  height = 12,
+  markHeight = 4,
+  unit = 1.5,
+  inset = 33,
+} = Astro.props;
+
+const line = morseLine(words, unit);
+---
+
+<div class="morse" style={`height: ${height}px;`} role="img" aria-label={`In morse code: ${words.join(', ')}`}>
+  <svg
+    width={line.width}
+    height={markHeight}
+    viewBox={`-1 -1 ${line.width + 2} ${markHeight + 2}`}
+    style={`left: ${inset}px;`}
+    focusable="false"
+    aria-hidden="true"
+  >
+    {
+      line.symbols.map((symbol) => (
+        <rect x={symbol.x} y={0} width={symbol.width} height={markHeight} fill="var(--gold)" />
+      ))
+    }
+  </svg>
+</div>
+
+<style>
+  .morse {
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .morse svg {
+    position: absolute;
+    top: 3px;
+    display: block;
+    pointer-events: none;
+  }
+</style>

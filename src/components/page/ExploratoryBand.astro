@@ -1,0 +1,74 @@
+---
+// The ink band that closes an internal page: the dragon curve across its top,
+// the heading and body copy at lower left, and the pulled-up quote opposite.
+import DragonCurve from '../structures/DragonCurve.astro';
+import BandQuote from './BandQuote.astro';
+
+interface Props {
+  heading: string;
+  bandBody?: string;
+  quote?: string;
+  quoteAttribution?: string;
+}
+
+const { heading, bandBody, quote, quoteAttribution } = Astro.props;
+---
+
+<section class="band">
+  <DragonCurve />
+  <div class="band__grid">
+    <div class="band__lead">
+      <h2>{heading}</h2>
+      {bandBody ? <p>{bandBody}</p> : null}
+    </div>
+    {quote ? <BandQuote quote={quote} attribution={quoteAttribution} /> : null}
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0 0 88px;
+    overflow: hidden;
+  }
+
+  .band__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding: 72px var(--gutter) 0;
+  }
+
+  .band__lead {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .band__lead h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: clamp(28px, 3.4vw, var(--size-band-heading));
+    line-height: 1.14;
+    letter-spacing: -0.03em;
+  }
+
+  .band__lead p {
+    margin: 0;
+    font-size: var(--size-body-ink);
+    line-height: 1.7;
+    color: var(--body-on-ink);
+  }
+
+  @media (max-width: 840px) {
+    .band__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+      padding-top: var(--space-xl);
+    }
+  }
+</style>

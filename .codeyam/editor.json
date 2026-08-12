@@ -1,6 +1,16 @@
 {
   "$comment": "Per-developer settings (port, provider, proxy ports, startCommand, etc.) belong in editor.local.json. That file is gitignored and is deep-merged on top of this one at load time. Changing `provider` after scaffold does NOT install that agent's surface — re-run `codeyam-editor editor install-hooks` (or `codeyam-editor init --provider <name>`) to install it. See CLAUDE.md or run `codeyam-editor editor config-show` to inspect the effective config.",
-  "apps": [],
+  "apps": [
+    {
+      "buildCommand": "npm run build",
+      "dir": ".",
+      "name": "The Puzzle School",
+      "outputDir": "dist",
+      "port": 4321,
+      "startCommand": "npm run dev",
+      "type": "web"
+    }
+  ],
   "audit": {
     "allowedDocumentationOnlySlugs": [
       "post-merge-drift-sweep"
@@ -403,6 +413,7 @@
     }
   },
   "database": null,
+  "defaultScreenSize": "Desktop",
   "deviceScaleFactor": 2.0,
   "env": {},
   "files": {
@@ -430,7 +441,7 @@
     }
   },
   "hooks": {},
-  "port": 3000,
+  "port": 4321,
   "projectDescription": "I need to build The Puzzle School website as a static website that can be hosted on GitHub pages. I have designs for the first two pages. I'd like to use codeyam-cms to make it easy to change content and add pages without touching the code. Can we explore how best to do this? We control codeyam-cms as well so we can make improvements to it as needed.",
   "projectTitle": "The Puzzle School",
   "provider": "claude",
@@ -466,21 +477,76 @@
   "scenarios": {
     "dir": ".codeyam/scenarios"
   },
-  "screenSizes": {},
+  "screenSizes": {
+    "Desktop": {
+      "height": 900,
+      "width": 1440
+    },
+    "Laptop": {
+      "height": 800,
+      "width": 1280
+    },
+    "Mobile": {
+      "height": 844,
+      "width": 390
+    },
+    "Tablet": {
+      "height": 1024,
+      "width": 768
+    }
+  },
   "server": {
     "autoRestartOnStaleBinary": true,
     "maxRssMb": 6144
   },
   "setupBrowserEnabled": false,
   "silenceHookStderr": false,
-  "startCommand": "npm run dev -- --port 3000 --host 127.0.0.1",
-  "staticChecks": [],
+  "startCommand": "npm run dev",
+  "staticChecks": [
+    {
+      "command": "npx astro check",
+      "description": "Astro type-check (.astro + .ts + .tsx) — matches the CI build gate",
+      "excludePatterns": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**"
+      ],
+      "filePatterns": [
+        "**/*.astro",
+        "**/*.ts",
+        "**/*.tsx"
+      ],
+      "name": "astro-check"
+    }
+  ],
   "testCacheIgnorePatterns": [],
   "testParallelism": {
     "loadGuard": true
   },
   "testPartitions": [],
-  "testRunners": [],
+  "testRunners": [
+    {
+      "changedCommand": "npx vitest run --changed --reporter=json",
+      "command": "npx vitest run --reporter=json",
+      "excludePatterns": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**"
+      ],
+      "name": "tests",
+      "outputFormat": "vitest-json",
+      "sourceFilePatterns": [
+        "**/*.{ts,tsx,js,jsx}"
+      ],
+      "targetedCommand": "npx vitest run -t \"{test_names}\" --reporter=json",
+      "testFilePatterns": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.test.js",
+        "**/*.test.jsx"
+      ]
+    }
+  ],
   "toolchainPaths": [],
   "workflow": {
     "checkIns": {

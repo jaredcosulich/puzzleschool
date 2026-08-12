@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-08-12T17:45:12Z",
+  "title": "Astro component scenarios cannot resolve their source",
+  "type": "note",
+  "description": "recapture-stale reports source-unresolved for all 25 component scenarios: the .astro entity extractor emits only Props, so componentName never resolves to a source file and staleness detection is inert — editing a component will not mark its screenshot stale. Fix by pinning pageFilePath per scenario, or by teaching the extractor to emit Astro component names."
+}

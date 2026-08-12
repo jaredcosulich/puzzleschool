@@ -1,0 +1,13 @@
+{
+  "name": "ContactButton - Default",
+  "id": "b5fdc0e9-1e02-4562-9310-e8e93599906b",
+  "url": "/isolated-components/ContactButton",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ContactButton",
+  "scenarioType": "component",
+  "description": "The teal square mailto button.",
+  "pageFilePath": "src/components/page/ContactButton.astro"
+}

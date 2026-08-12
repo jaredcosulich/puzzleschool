@@ -1,0 +1,92 @@
+{
+  "capabilities": {
+    "http-mocks": "verified",
+    "interactions-click": "verified",
+    "interactions-touch-gestures": "manual",
+    "layout-web": "verified",
+    "native-clipboard": "not-applicable",
+    "native-geolocation": "not-applicable",
+    "native-haptics": "not-applicable",
+    "native-network": "not-applicable",
+    "native-storage": "not-applicable",
+    "real-device": "not-applicable",
+    "routing": "verified"
+  },
+  "commands": {
+    "dev": "npm run dev",
+    "seedAdapter": "npx tsx .codeyam/seed-adapter.ts",
+    "test": "npx vitest run"
+  },
+  "components": {
+    "fileExtensions": [
+      ".astro",
+      ".tsx",
+      ".jsx"
+    ],
+    "primitives": [
+      "div",
+      "span",
+      "h1",
+      "h2",
+      "h3",
+      "p",
+      "img",
+      "ul",
+      "li",
+      "a",
+      "button",
+      "input",
+      "form"
+    ]
+  },
+  "data": {
+    "contentDir": "src/content",
+    "dataDir": "src/data",
+    "seedAdapterType": "content-collection",
+    "type": "content-collection"
+  },
+  "defaultScreenSize": "Desktop",
+  "framework": "astro",
+  "id": "astro-github-pages",
+  "name": "Astro + GitHub Pages (Static Site + CMS)",
+  "preview": {
+    "defaultPort": 4321,
+    "kind": "iframe"
+  },
+  "routeDataExports": [
+    {
+      "filePattern": "src/pages/**/*.astro",
+      "names": [
+        "getStaticPaths"
+      ]
+    }
+  ],
+  "routing": {
+    "isolationRoute": "src/pages/isolated-components",
+    "pagesDir": "src/pages",
+    "type": "file-based"
+  },
+  "scaffoldedFrom": "astro-github-pages",
+  "screenSizes": {
+    "Desktop": {
+      "height": 900,
+      "width": 1440
+    },
+    "Laptop": {
+      "height": 800,
+      "width": 1280
+    },
+    "Mobile": {
+      "height": 844,
+      "width": 390
+    },
+    "Tablet": {
+      "height": 1024,
+      "width": 768
+    }
+  },
+  "styling": {
+    "tokenFile": "src/styles/tokens.css",
+    "type": "css-custom-properties"
+  }
+}

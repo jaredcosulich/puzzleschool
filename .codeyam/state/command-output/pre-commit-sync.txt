@@ -1,0 +1,3 @@
+{"command":"pre-commit-sync","elapsed_secs":0,"emitted_at_unix":1786559065,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":25506}
+Commit queue: no upstream configured. Tail runs without serialization — normal for fresh projects that haven't pushed yet.
+{"headAcquired":false,"reason":"no upstream configured","skipped":true,"synced":true}

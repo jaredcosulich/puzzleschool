@@ -1,0 +1,48 @@
+---
+// The home masthead: mark, wordmark, kicker. Centred and symmetrical — the one
+// place on the site that is, which is why internal pages set their header to the
+// left instead.
+import Mark from '../Mark.astro';
+
+interface Props {
+  title: string;
+  kicker?: string;
+}
+
+const { title, kicker } = Astro.props;
+---
+
+<header class="masthead">
+  <Mark size={124} />
+  <h1 class="wordmark">{title}</h1>
+  {kicker ? <p class="kicker">{kicker}</p> : null}
+</header>
+
+<style>
+  .masthead {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    padding: clamp(48px, 8vw, 96px) var(--gutter-wide) 44px;
+    text-align: center;
+  }
+
+  .wordmark {
+    margin: 0;
+    font-weight: 600;
+    font-size: clamp(40px, 6vw, var(--size-wordmark));
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .kicker {
+    margin: 0;
+    font-weight: 600;
+    font-size: var(--size-kicker);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+</style>

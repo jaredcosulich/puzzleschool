@@ -1,0 +1,20 @@
+# Cloudflare Worker config for the password-gated CMS auth relay.
+#
+# This is OPTIONAL — only the "Hosted + password" editing path in CMS_SETUP.md
+# uses it. The GitHub OAuth and local paths need no Worker at all.
+#
+# Deploy:
+#   cd cms-auth-worker
+#   npx wrangler deploy
+#   npx wrangler secret put CMS_PASSWORD   # the shared editor password
+#   npx wrangler secret put GITHUB_TOKEN   # fine-grained PAT, Contents R/W on the repo
+#
+# Then set `backend.base_url` in public/admin/config.yml to the deployed
+# https://<name>.<subdomain>.workers.dev URL and `auth_endpoint: auth`.
+
+name = "cms-auth-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# CMS_PASSWORD and GITHUB_TOKEN are set as encrypted secrets (see above), NOT as
+# plaintext [vars] — never commit them to the repo.

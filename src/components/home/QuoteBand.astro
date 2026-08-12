@@ -1,0 +1,58 @@
+---
+// The home page's ink band: night-variant mark, pull quote, attribution — with
+// the Koch fragment anchored inside it but hanging far above.
+//
+// NO overflow clip on this band. The fragment is drawn in ink, so it is
+// invisible against the band itself and only becomes legible where it crosses
+// onto the paper above. Clipping the band erases it completely: the element
+// stays in the DOM with a correct stroke, and nothing renders.
+import Mark from '../Mark.astro';
+import KochFragment from '../structures/KochFragment.astro';
+
+interface Props {
+  quote: string;
+  attribution?: string;
+}
+
+const { quote, attribution } = Astro.props;
+---
+
+<section class="band">
+  <KochFragment />
+  <Mark variant="signalNight" size={104} />
+  <blockquote>{quote}</blockquote>
+  {attribution ? <p class="attribution">{attribution}</p> : null}
+</section>
+
+<style>
+  .band {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    padding: clamp(56px, 8vw, var(--space-4xl)) var(--gutter-wide);
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+  }
+
+  .band blockquote {
+    position: relative;
+    margin: 0;
+    max-width: var(--measure-quote);
+    font-weight: 600;
+    font-size: clamp(28px, 3.6vw, var(--size-quote));
+    line-height: 1.14;
+    letter-spacing: -0.03em;
+  }
+
+  .attribution {
+    position: relative;
+    margin: 0;
+    max-width: 600px;
+    font-size: var(--size-body-ink);
+    line-height: 1.65;
+    color: var(--body-on-ink);
+  }
+</style>

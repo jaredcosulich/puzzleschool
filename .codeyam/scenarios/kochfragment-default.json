@@ -1,0 +1,13 @@
+{
+  "name": "KochFragment - Default",
+  "id": "407d17fd-7ad2-4560-b416-16975921ab5e",
+  "url": "/isolated-components/KochFragment",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "KochFragment",
+  "scenarioType": "component",
+  "description": "A Koch curve stopped partway, drawn as an ink hairline.",
+  "pageFilePath": "src/components/structures/KochFragment.astro"
+}

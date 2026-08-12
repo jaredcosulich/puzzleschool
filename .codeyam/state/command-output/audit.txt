@@ -1,0 +1,2 @@
+{"command":"audit","elapsed_secs":0,"emitted_at_unix":1786558534,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2837}
+{"byInvariant":[],"passed":true,"summary":"audit passed: 0 finding(s).","totalFindings":0,"uniqueInvariantIds":0}

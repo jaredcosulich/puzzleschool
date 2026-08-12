@@ -1,0 +1,13 @@
+{
+  "name": "BranchingTree - Default",
+  "id": "075bd360-8610-4f87-9496-327bc2d02827",
+  "url": "/isolated-components/BranchingTree",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BranchingTree",
+  "scenarioType": "component",
+  "description": "The branching structure: tapered limbs, side branches at varying heights, limbs ending bare.",
+  "pageFilePath": "src/components/structures/BranchingTree.astro"
+}

@@ -1,0 +1,9 @@
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786556192,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":79937}
+analyze-imports: scoped to 59 changed / 39 deleted file(s) since HEAD
+Analyzed 37 files, found 53 import edges, graph has 39 nodes
+{
+  "analyzed": 37,
+  "entityCount": 34,
+  "graphSize": 39,
+  "totalImports": 53
+}

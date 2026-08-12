@@ -1,0 +1,13 @@
+{
+  "name": "ProseColumns - Default",
+  "id": "67750aaf-d298-41b0-9e8c-af26a3999bfe",
+  "url": "/isolated-components/ProseColumns",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ProseColumns",
+  "scenarioType": "component",
+  "description": "Two prose columns with the branching structure standing in the gap.",
+  "pageFilePath": "src/components/page/ProseColumns.astro"
+}

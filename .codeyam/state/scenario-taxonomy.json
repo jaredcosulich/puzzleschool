@@ -1,0 +1,35 @@
+{
+  "views": {
+    "Home": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The home content entry is required; index.astro throws without it, so a zero-content home cannot occur."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "Home renders one fixed composition, not a list; there is no item count that could be one."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Home has no collection to overflow; the card grid is fixed at two cards with an intentionally empty third column."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered to HTML at build time, so there is no pending state to show."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "No client fetches and no user input on this page; nothing can fail at view time."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    }
+  }
+}

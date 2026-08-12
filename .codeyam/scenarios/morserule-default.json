@@ -1,0 +1,13 @@
+{
+  "name": "MorseRule - Default",
+  "id": "0ce1f62b-0413-40d0-896a-9f103a9ebcdd",
+  "url": "/isolated-components/MorseRule",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MorseRule",
+  "scenarioType": "component",
+  "description": "The 12px ink strip spelling the school's values in gold morse.",
+  "pageFilePath": "src/components/structures/MorseRule.astro"
+}

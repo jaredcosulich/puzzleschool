@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-08-12T18:26:23Z",
+  "title": "Full-suite runner discovers zero tests; finalize passes vacuously",
+  "type": "note",
+  "description": "session-finalize Phase 1 ran the configured runner command (npx vitest run --reporter=json) and it reported total=0 while the registry expects 42. The phase was still recorded as passed, so the workflows only full-suite gate is vacuously green on this stack. refresh-tests --changed widens to the runners changedCommand and does discover all 42 (39 pass, 3 inherited base debt), so the tests themselves are fine — the flag-free/--force invocation is what finds nothing. Investigate the runner command in .codeyam/editor.json testRunners against vitest.config.ts include globs."
+}

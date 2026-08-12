@@ -1,0 +1,61 @@
+---
+// The sine field under the home masthead: three waves of different amplitude and
+// period over one straight line, all in gold. Each wave starts on the baseline
+// heading upward, so they share an origin and read as one instrument. The frame
+// truncates the largest one mid-cycle — the first of the page's incomplete
+// structures.
+import { sinePath } from '../../lib/structures';
+
+interface Props {
+  width?: number;
+  height?: number;
+}
+
+const { width = 720, height = 42 } = Astro.props;
+const baseline = height / 2;
+
+// Amplitude and period per wave, smallest first. The largest wave's `fraction`
+// is what stops it short of the right edge.
+const WAVES = [
+  { amplitude: 4.5, period: 180, fraction: 1 },
+  { amplitude: 10, period: 104, fraction: 1 },
+  { amplitude: 17, period: 72, fraction: 0.96 },
+];
+---
+
+<div class="sine-rule">
+  <svg
+    viewBox={`-1 -1 ${width + 2} ${height}`}
+    width={width}
+    height={height}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d={`M0,${baseline} H${width}`} fill="none" stroke="var(--gold)" stroke-width="1.2" />
+    {
+      WAVES.map((wave) => (
+        <path
+          d={sinePath({ width, baseline, ...wave })}
+          fill="none"
+          stroke="var(--gold)"
+          stroke-width="1.2"
+        />
+      ))
+    }
+  </svg>
+</div>
+
+<style>
+  .sine-rule {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0 4px;
+    position: relative;
+  }
+
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+</style>

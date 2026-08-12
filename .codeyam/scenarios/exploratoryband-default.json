@@ -1,0 +1,13 @@
+{
+  "name": "ExploratoryBand - Default",
+  "id": "805d2145-9f6b-4143-93f5-e8c9e82e95cb",
+  "url": "/isolated-components/ExploratoryBand",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ExploratoryBand",
+  "scenarioType": "component",
+  "description": "The internal-page ink band: dragon lattice, heading, body and quote.",
+  "pageFilePath": "src/components/page/ExploratoryBand.astro"
+}

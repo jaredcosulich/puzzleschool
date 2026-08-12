@@ -1,0 +1,12 @@
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786549061,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":85941}
+{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786549071,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":85941}
+{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786549081,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":85941}
+━━━ Preview Diagnostic: / ━━━
+
+  proxy port 4321 — HTTP 200, no Transfer-Encoding, Content-Length: 46818
+  direct port 4322 — HTTP 200, Transfer-Encoding: chunked, no Content-Length
+
+Script tags — proxy: 10, direct: 6
+  No script delta between proxy and direct.
+
+Most likely cause: no HTTP-level anomaly detected between proxy and direct dev port. If the page still won't hydrate, run `editor client-errors` to check for console errors or JavaScript exceptions.

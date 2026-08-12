@@ -1,0 +1,77 @@
+---
+// The curve filling the top of the About page's dark band, full width.
+//
+// It is an ORTHOGONAL lattice walk — right angles on a fixed grid, not a
+// diagonal figure — stretched across the band with `preserveAspectRatio="none"`
+// and held at a true hairline by `vector-effect="non-scaling-stroke"` so the
+// stretch never thickens the line.
+//
+// IN FLOW, unlike the other structures, and that is deliberate: the band's quote
+// is pulled up (`margin-top: -306px`) so it begins over this curve rather than in
+// line with the heading. That pull-up needs something to be pulled up through.
+// Absolutely positioned, the curve contributes no height, the quote lands above
+// the band's top edge, and `overflow: hidden` eats it — the quote silently
+// disappears with no error anywhere.
+//
+// Cut off before it closes: `fraction` stops the walk partway, so the figure runs
+// off the edge rather than resolving.
+import { dragonPoints, toPath } from '../../lib/structures';
+
+interface Props {
+  iterations?: number;
+  step?: number;
+  fraction?: number;
+  /** Height of the band the curve fills. */
+  height?: number;
+}
+
+const { iterations = 12, step = 7, fraction = 0.85, height = 430 } = Astro.props;
+
+const points = dragonPoints(iterations, { step, fraction });
+
+const xs = points.map((p) => p.x);
+const ys = points.map((p) => p.y);
+const minX = Math.min(...xs);
+const minY = Math.min(...ys);
+const boxWidth = Math.max(...xs) - minX || 1;
+const boxHeight = Math.max(...ys) - minY || 1;
+---
+
+<div class="dragon-well" style={`height: ${height}px;`}>
+  <svg
+    width="100%"
+    height={height}
+    viewBox={`${minX} ${minY} ${boxWidth} ${boxHeight}`}
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d={toPath(points)}
+      fill="none"
+      stroke="#33544d"
+      stroke-width="1"
+      vector-effect="non-scaling-stroke"
+    />
+  </svg>
+</div>
+
+<style>
+  .dragon-well {
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .dragon-well svg {
+    display: block;
+  }
+
+  /* Dropped rather than scaled on small screens — and with it gone, the band's
+     quote pull-up is switched off too (see the page's own media query). */
+  @media (max-width: 840px) {
+    .dragon-well {
+      display: none;
+    }
+  }
+</style>

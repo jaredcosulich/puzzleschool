@@ -1,0 +1,13 @@
+{
+  "name": "BandQuote - Default",
+  "id": "a4db974a-9ab4-41be-a037-99ccb5667ab8",
+  "url": "/isolated-components/BandQuote",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BandQuote",
+  "scenarioType": "component",
+  "description": "The band quote pulled up over the curve, with its gold attribution.",
+  "pageFilePath": "src/components/page/BandQuote.astro"
+}

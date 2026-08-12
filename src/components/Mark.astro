@@ -1,0 +1,95 @@
+---
+// The Puzzle School compass rose.
+//
+// Eight interlocking puzzle pieces around a centre: four on the cardinal axes at
+// full size, four on the diagonals at 75%. Every piece is the SAME path — the
+// mark is one shape rotated, so there is exactly one piece geometry to maintain
+// and the "interlocking" reading comes from the rotation, not from eight
+// hand-drawn variants.
+//
+// The design ships six colour variants for different grounds. They differ only
+// in which fill each axis group takes and what the separating stroke is, so they
+// are data here rather than six copies of the markup. One rule holds across all
+// of them: the inner separation lines are the ground colour of the surface the
+// mark sits on, never white — a white-lined mark on paper reads as a different
+// logo.
+//
+// `gap` draws one piece as a dashed outline instead of a filled shape: the
+// missing piece, the same idea the incomplete line structures carry.
+
+interface Props {
+  /** Which colour variant to paint. */
+  variant?: 'signal' | 'signalNight' | 'signalOnGold' | 'signalOnTeal' | 'signalInk';
+  /** Rendered size in px (the mark is square). */
+  size?: number;
+  /** Draw the north piece as a dashed outline — the deliberately missing piece. */
+  gap?: boolean;
+  class?: string;
+}
+
+const { variant = 'signal', size = 124, gap = false, class: className } = Astro.props;
+
+/** Fill per axis group, plus the stroke that separates the pieces. */
+const VARIANTS = {
+  //                cardinal N/S   cardinal E/W   diagonals      separator
+  signal: { ns: '#1f7a72', ew: '#d4562f', dg: '#d9a01e', stroke: '#16211e' },
+  signalNight: { ns: '#2f9e94', ew: '#d4562f', dg: '#d9a01e', stroke: '#16211e' },
+  signalOnGold: { ns: '#1f7a72', ew: '#d4562f', dg: '#faf7f1', stroke: '#d9a01e' },
+  signalOnTeal: { ns: '#faf7f1', ew: '#d4562f', dg: '#d9a01e', stroke: '#1f7a72' },
+  signalInk: { ns: '#1f7a72', ew: '#d4562f', dg: '#d9a01e', stroke: '#16211e' },
+} as const;
+
+const { ns, ew, dg, stroke } = VARIANTS[variant];
+
+/** One puzzle piece: a tapered wedge from the centre with a knob on each flank. */
+const PIECE =
+  'M60,60 L54.6,54.6 A6.5 6.5 0 0 1 45.4,45.4 L43,43 L60,2 L77,43 ' +
+  'L74.6,45.4 A6.5 6.5 0 0 0 65.4,54.6 L60,60 Z';
+
+/** The dashed outline used for the missing piece, keyed to the ground. */
+const GAP_STROKE = variant === 'signalNight' || variant === 'signalInk' ? '#5c6f69' : '#b9b0a0';
+
+/** The eight pieces: cardinals at full size, diagonals inset and scaled to 75%. */
+const PIECES = [
+  { rotate: 45, fill: dg, diagonal: true },
+  { rotate: 135, fill: dg, diagonal: true },
+  { rotate: 225, fill: dg, diagonal: true },
+  { rotate: 315, fill: dg, diagonal: true },
+  { rotate: 0, fill: ns, diagonal: false },
+  { rotate: 180, fill: ns, diagonal: false },
+  { rotate: 90, fill: ew, diagonal: false },
+  { rotate: 270, fill: ew, diagonal: false },
+];
+
+const transformFor = (rotate: number, diagonal: boolean) =>
+  diagonal
+    ? `rotate(${rotate} 60 60) translate(15,15) scale(0.75)`
+    : `rotate(${rotate} 60 60)`;
+---
+
+<svg
+  viewBox="0 0 120 120"
+  width={size}
+  height={size}
+  class={className}
+  role="img"
+  aria-label="The Puzzle School"
+>
+  {
+    PIECES.map(({ rotate, fill, diagonal }) => {
+      // `gap` blanks the north cardinal piece (rotate 0) into a dashed outline.
+      const missing = gap && rotate === 0 && !diagonal;
+      return (
+        <g transform={transformFor(rotate, diagonal)}>
+          <path
+            d={PIECE}
+            fill={missing ? 'none' : fill}
+            stroke={missing ? GAP_STROKE : stroke}
+            stroke-width={missing ? 2 : 2.4}
+            stroke-dasharray={missing ? '5 5' : undefined}
+          />
+        </g>
+      );
+    })
+  }
+</svg>

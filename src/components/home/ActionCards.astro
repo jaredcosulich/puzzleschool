@@ -1,0 +1,50 @@
+---
+// The card grid, and the Fibonacci spiral that grows out of the first card's
+// accent rule.
+//
+// THREE columns holding TWO cards. The empty third column is the design, not a
+// gap waiting to be filled — the same "one piece is always missing" idea the
+// incomplete line structures carry. Do not add a third card, and do not collapse
+// the grid to two columns to "tidy" it.
+import ActionCard from './ActionCard.astro';
+import FibonacciStructure from '../structures/FibonacciStructure.astro';
+
+interface Card {
+  title: string;
+  body: string;
+  href: string;
+  label: string;
+  accent: 'teal' | 'coral';
+}
+
+interface Props {
+  cards: Card[];
+}
+
+const { cards } = Astro.props;
+---
+
+<section class="cards" aria-label="Where to go next">
+  <FibonacciStructure />
+  {cards.map((card) => <ActionCard {...card} />)}
+</section>
+
+<style>
+  .cards {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    padding: 0 var(--gutter-wide) var(--space-4xl);
+  }
+
+  /* Below the card breakpoint the grid becomes one column. The empty third
+     column has no meaning once there are no columns, so it stops existing
+     rather than becoming an empty row. */
+  @media (max-width: 840px) {
+    .cards {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+  }
+</style>

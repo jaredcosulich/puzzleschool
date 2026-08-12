@@ -1,0 +1,13 @@
+{
+  "name": "FibonacciStructure - Default",
+  "id": "4a3bf43c-77ee-49db-ab99-58d4d585363f",
+  "url": "/isolated-components/FibonacciStructure",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "FibonacciStructure",
+  "scenarioType": "component",
+  "description": "The Fibonacci square spiral with its largest square drawn open.",
+  "pageFilePath": "src/components/structures/FibonacciStructure.astro"
+}

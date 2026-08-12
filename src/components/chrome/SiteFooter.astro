@@ -1,0 +1,65 @@
+---
+// The site footer, in the two forms the designs actually use.
+//
+// Home and the internal pages do NOT share a footer, and the differences are
+// small enough to look like drift if you only ever read one of the two design
+// files: Home sits on the wide 60px gutter with a deep 60px foot and top-aligned
+// rows; internal pages use the 40px gutter, an even 30px band, and centred rows.
+// Encoding both here keeps a fix to one page from silently restyling the other.
+import Mark from '../Mark.astro';
+
+interface Props {
+  /** Footer meta line, from the editable settings singleton. */
+  text: string;
+  /** Where the Contact link points — a mailto built from settings. */
+  contactHref: string;
+  variant: 'home' | 'internal';
+}
+
+const { text, contactHref, variant } = Astro.props;
+---
+
+<footer class="footer" data-variant={variant}>
+  <div class="footer__brand">
+    <Mark size={variant === 'home' ? 22 : 20} />
+    <span>{text}</span>
+  </div>
+  <a href={contactHref}>Contact</a>
+</footer>
+
+<style>
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    font-weight: 600;
+    font-size: var(--size-footer);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--footer-text);
+  }
+
+  .footer[data-variant='home'] {
+    align-items: flex-start;
+    padding: 34px var(--gutter-wide) 60px;
+  }
+
+  .footer[data-variant='internal'] {
+    align-items: center;
+    padding: 30px var(--gutter);
+  }
+
+  .footer__brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .footer[data-variant='home'] .footer__brand {
+    gap: 12px;
+  }
+
+  .footer[data-variant='internal'] .footer__brand {
+    gap: 11px;
+  }
+</style>

@@ -1,0 +1,30 @@
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786556103,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":73712}
+## Inherited registry drift (42) — 42 adds referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). These rows were ALREADY APPLIED by this run under the same rules as every other row — `--include-inherited` only re-prints them in the `actions` array, so re-running with it registers nothing further and is not a follow-up step.
+{
+auto-apply: 42 action(s) applied; 0 add(s) skipped.
+  "summary": {
+  recorded per-test evidence for 42 newly-added test(s) from the existing test-cache — no `refresh-tests --force` needed to fill it in.
+    "realOrphans": 0,
+    "stalePhantoms": 0,
+    "adds": 42,
+    "renames": 0,
+    "updateLines": 0,
+    "gateUpdates": 0
+  },
+  "actions": [],
+  "inherited": {
+    "total": 42,
+    "counts": {
+      "realOrphans": 0,
+      "stalePhantoms": 0,
+      "adds": 42,
+      "renames": 0,
+      "updateLines": 0,
+      "gateUpdates": 0
+    },
+    "includedInActions": false,
+    "command": "codeyam-editor editor reconcile-registry --include-inherited"
+  },
+  "platform_gated_absences": [],
+  "runner_gated_absences": []
+}

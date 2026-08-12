@@ -1,0 +1,25 @@
+---
+import Component from "../../components/home/ActionCard.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for ActionCardCoral — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/ActionCardCoral. This stack is a static export,
+// so each STATE gets its own prerendered page: `?s=` query params are empty at
+// build time and would capture the default frame for every state.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Isolated: ActionCardCoral</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="width: 100%;">
+      <div style="max-width:384px; margin:0 auto;"><Component title="Learn More" body="Read more about the design effort" href="/about" label="Learn More" accent="coral" /></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+---
+// An internal page's header: a two-column grid with the title block on the left
+// and the standfirst opposite. Deliberately NOT centred — that shape belongs to
+// the home masthead alone, and the contrast between the two is the design.
+import Mark from '../Mark.astro';
+
+interface Props {
+  title: string;
+  /** Small uppercase line above the title — the long form of the page name. */
+  kicker?: string;
+  /** The one paragraph a reader gets before the columns begin. */
+  intro?: string;
+}
+
+const { title, kicker, intro } = Astro.props;
+---
+
+<header class="page-header">
+  <div class="page-header__title">
+    <Mark size={96} />
+    <div class="page-header__words">
+      {kicker ? <p class="kicker">{kicker}</p> : null}
+      <h1>{title}</h1>
+    </div>
+  </div>
+  {intro ? <p class="intro">{intro}</p> : null}
+</header>
+
+<style>
+  .page-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding: 64px var(--gutter) 56px;
+  }
+
+  .page-header__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+
+  .page-header__words {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .kicker {
+    margin: 0;
+    font-weight: 600;
+    font-size: var(--size-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--footer-text);
+  }
+
+  .page-header h1 {
+    margin: 0;
+    font-weight: 600;
+    font-size: clamp(44px, 6vw, 76px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .intro {
+    margin: 0;
+    font-size: var(--size-body-lg);
+    line-height: 1.7;
+    color: var(--body-text);
+  }
+
+  @media (max-width: 840px) {
+    .page-header {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+      padding-top: var(--space-xl);
+    }
+
+    .page-header__title {
+      justify-content: flex-start;
+    }
+
+    .page-header__words {
+      align-items: flex-start;
+    }
+  }
+</style>

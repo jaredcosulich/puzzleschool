@@ -1,0 +1,13 @@
+{
+  "name": "Masthead - Default",
+  "id": "d3190a69-c6c3-4cd8-8178-5f3945e218cb",
+  "url": "/isolated-components/Masthead",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "Masthead",
+  "scenarioType": "component",
+  "description": "The home masthead: compass-rose mark, wordmark and teal kicker, centred.",
+  "pageFilePath": "src/components/home/Masthead.astro"
+}

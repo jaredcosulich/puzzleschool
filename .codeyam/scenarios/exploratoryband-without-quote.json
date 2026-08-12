@@ -1,0 +1,13 @@
+{
+  "name": "ExploratoryBand - Without Quote",
+  "id": "64606b41-48be-481e-b551-c31bfe678b32",
+  "url": "/isolated-components/ExploratoryBandNoQuote",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ExploratoryBand",
+  "scenarioType": "component",
+  "description": "The band as Contact renders it — heading and body, no quote column.",
+  "pageFilePath": "src/components/page/ExploratoryBand.astro"
+}

@@ -1,0 +1,67 @@
+---
+// Two columns of prose with the branching structure standing in the gap between
+// them.
+//
+// The column gap is the structure's 123px lane plus its two 40px gutters, so the
+// text lands exactly where the design's `1fr 123px 1fr` grid puts it while the
+// body stays ONE markdown blob the CMS can edit. A real grid track would force
+// the body to be split into two separate fields, which would mean a CMS editor
+// could no longer just write a page.
+import BranchingTree from '../structures/BranchingTree.astro';
+---
+
+<div class="prose-grid">
+  <div class="prose"><slot /></div>
+  <BranchingTree />
+</div>
+
+<style>
+  .prose-grid {
+    position: relative;
+    padding: 64px var(--gutter) 0;
+  }
+
+  .prose {
+    columns: 2;
+    column-gap: 203px; /* 123px lane + 2 × 40px gutter */
+    padding-bottom: 72px;
+  }
+
+  /* Each section starts its own column, so a long edit can never split a section
+     across the structure lane. */
+  .prose :global(h3) {
+    margin: 0 0 18px;
+    font-weight: 600;
+    font-size: 30px;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    break-after: avoid;
+  }
+
+  .prose :global(h3:not(:first-child)) {
+    break-before: column;
+  }
+
+  .prose :global(p) {
+    margin: 0 0 18px;
+    font-size: var(--size-body-card);
+    line-height: 1.7;
+    color: var(--body-text);
+  }
+
+  /* The structure stands IN the gap between the columns, centred, sitting on the
+     seam with the section below so it reads as growing out of it. */
+  .prose-grid :global(.tree-well) {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 123px;
+    margin-left: -61.5px;
+  }
+
+  @media (max-width: 840px) {
+    .prose {
+      columns: 1;
+    }
+  }
+</style>

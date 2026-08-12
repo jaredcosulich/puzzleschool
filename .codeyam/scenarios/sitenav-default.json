@@ -1,0 +1,13 @@
+{
+  "name": "SiteNav - Default",
+  "id": "0b5411e1-94dc-4f5b-923e-67e468c4d08c",
+  "url": "/isolated-components/SiteNav",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SiteNav",
+  "scenarioType": "component",
+  "description": "The internal-page nav bar with the current page inked and underlined.",
+  "pageFilePath": "src/components/chrome/SiteNav.astro"
+}

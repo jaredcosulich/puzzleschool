@@ -1,0 +1,13 @@
+{
+  "name": "Mark - On Ink",
+  "id": "25f28d90-6613-46aa-8110-86dde227ebe7",
+  "url": "/isolated-components/MarkNight",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "Mark",
+  "scenarioType": "component",
+  "description": "The night variant, as it appears inside a dark band.",
+  "pageFilePath": "src/components/Mark.astro"
+}
