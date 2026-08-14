@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "postinstall": "playwright install chromium",
-    "dev": "astro dev --host 127.0.0.1",
-    "build": "astro check && astro build",
+    "dev": "NODE_OPTIONS=--preserve-symlinks astro dev --host 127.0.0.1",
+    "dev:cms": "npm link @codeyam/cms && npm run dev",
+    "cms:unlink": "npm unlink @codeyam/cms && npm install @codeyam/cms",
+    "build": "NODE_OPTIONS=--preserve-symlinks astro check && NODE_OPTIONS=--preserve-symlinks astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "NODE_OPTIONS=--preserve-symlinks astro check",
     "test": "vitest run",
     "test:watch": "vitest",
     "setup": "npm install"

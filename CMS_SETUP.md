@@ -101,6 +101,33 @@ template tests keep this honest: one asserts every shipped sample entry is
 saveable under `config.yml`'s required rules, the other asserts every
 `.optional()` schema field is `required: false` in the CMS config.
 
+## Developing against a local codeyam-cms checkout
+
+To test unreleased `@codeyam/cms` changes here instead of the published package:
+
+```sh
+npm run dev:cms     # link the local checkout, then start dev against it
+npm run cms:unlink  # go back to the published package
+```
+
+Register the checkout once with `npm link` from `codeyam-cms/packages/cms`;
+after that `dev:cms` links it here and starts the dev server. There is no CMS
+build step — the package's `exports` point at raw `.ts`/`.tsx`, so the link *is*
+the build.
+
+Everything else is automatic. `astro.config.mjs` turns on local-CMS mode by
+checking whether `node_modules/@codeyam/cms` is a symlink, so `npm run dev`,
+`check` and `build` all behave correctly in whichever state you left
+`node_modules` — `dev:cms` is just `dev` with the link step in front of it.
+
+Edits in the checkout hot-reload here: the `codeyam:live-linked-cms` plugin
+bridges the symlink for Vite's watcher, module graph, and browser cache (see the
+comment there for why all three are needed). The scripts also carry
+`NODE_OPTIONS=--preserve-symlinks`, the Node-side half of
+`vite.resolve.preserveSymlinks`; without it CMS source resolves `react` from the
+checkout's own `node_modules` and the admin islands hydrate against a second
+React copy with no error explaining why.
+
 ## Editing without the CMS
 
 You can always skip the CMS and edit content directly:

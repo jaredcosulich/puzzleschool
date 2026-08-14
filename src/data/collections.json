@@ -1,3 +1,77 @@
 {
-  "collections": []
+  "collections": [],
+  "builtins": {
+    "pages": [
+      {
+        "name": "kicker",
+        "label": "Kicker",
+        "type": "text",
+        "optional": true,
+        "hint": "Small uppercase line above the title. Teal under the home wordmark; muted above an internal page's heading."
+      },
+      {
+        "name": "heading",
+        "label": "Statement heading",
+        "type": "textarea",
+        "optional": true,
+        "hint": "The 56px statement heading. On the home page this also gates the whole dark band — leave it blank and the band, quote and band body do not render."
+      },
+      {
+        "name": "lead",
+        "label": "Lead",
+        "type": "text",
+        "optional": true,
+        "hint": "The 24px line that closes the home statement block. Home page only."
+      },
+      {
+        "name": "intro",
+        "label": "Intro",
+        "type": "textarea",
+        "optional": true,
+        "hint": "Standfirst beside the title in an internal page's two-column header. Internal pages only — the home page ignores it."
+      },
+      {
+        "name": "bandBody",
+        "label": "Band body",
+        "type": "textarea",
+        "optional": true,
+        "hint": "Body copy set beside the heading inside the dark band. Internal pages only."
+      },
+      {
+        "name": "quote",
+        "label": "Pull quote",
+        "type": "textarea",
+        "optional": true,
+        "hint": "Shown in the dark band."
+      },
+      {
+        "name": "quoteAttribution",
+        "label": "Quote attribution",
+        "type": "text",
+        "optional": true,
+        "hint": "Who said it."
+      },
+      {
+        "name": "cards",
+        "label": "Action cards",
+        "type": "list",
+        "optional": true,
+        "hint": "Home page only. The grid is three columns wide and deliberately holds two cards — the empty third column is part of the design, so do not add a filler card.",
+        "fields": [
+          { "name": "title", "label": "Title", "type": "text" },
+          { "name": "body", "label": "Body", "type": "textarea" },
+          { "name": "href", "label": "Link", "type": "text" },
+          { "name": "label", "label": "Button label", "type": "text" },
+          { "name": "accent", "label": "Accent", "type": "select", "options": ["teal", "coral"] }
+        ]
+      },
+      {
+        "name": "showContactButton",
+        "label": "Show contact button",
+        "type": "boolean",
+        "optional": true,
+        "hint": "Renders a mailto button addressed to the contact email in Settings."
+      }
+    ]
+  }
 }
