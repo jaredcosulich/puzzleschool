@@ -33,6 +33,10 @@ The one read-only CLI call this skill makes is `codeyam-editor editor plan-prefi
 
 ### Step 1: Ask what to build or fix
 
+**If the skill was invoked WITH arguments, skip this step entirely.** The Plan tab's "Describe the change you want" textarea seeds the launch as `/codeyam-plan <text>`, so the argument IS the answer to the question below. Re-asking it would make the user type their request a second time. Take the argument as the plan basis and go straight to Step 2.
+
+Only when the skill is invoked with NO argument does the rest of this step apply.
+
 **Do NOT use the AskUserQuestion tool for this step.** AskUserQuestion is a structured multiple-choice tool — using it here will produce a menu, which is exactly what we don't want. Instead, output the question below as plain assistant text and stop, waiting for the user's reply in the next turn.
 
 Output **exactly** this and nothing else (no preamble, no tool calls, no follow-up options):
