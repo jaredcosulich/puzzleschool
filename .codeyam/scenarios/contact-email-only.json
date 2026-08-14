@@ -1,7 +1,7 @@
 {
   "name": "Contact - Email Only",
   "id": "8fb884db-0655-4d36-a69f-e92c56283cfb",
-  "url": "/contact",
+  "url": "/contact?tree=static",
   "dimensions": [
     "Desktop"
   ],

@@ -40,8 +40,32 @@ incomplete**: a limb ends bare, a curve stops before it closes.
 They live in `src/lib/structures.ts` as pure functions, generated from their
 rules rather than pasted as path data, so the incompleteness stays a parameter
 (`fraction`, `openLast`, `bareLimb`, `stopChance`) rather than something frozen
-into an export. The tree's irregularity comes from a *seeded* generator, so the
+into an export. Their irregularity comes from a *seeded* generator, so the
 figures are organic to look at but identical on every build.
+
+The branching tree goes one step further and varies on two axes, because a
+single frozen specimen repeated down every page undercut the idea of something
+grown:
+
+- **Per page**, at build time. The seed is hashed from the page slug, so About,
+  Contact and a page an editor writes next year each grow their own tree with no
+  code change — and the same tree on every build, which is what keeps the
+  committed screenshots from churning.
+- **Per visit**, in the browser. A small script regrows each tree from a fresh
+  random seed after load, so no two visits see quite the same figure. The
+  server-rendered tree has to be valid on its own: it is what a no-JS visitor
+  keeps, and what everyone sees before the script runs.
+
+The variation is bounded by `TREE_ENVELOPE` so every tree stays recognisably the
+same species. That envelope is enforced twice — parameters are *sampled* from
+declared ranges, and the grown result is then *checked* (branch count, segment
+count, proportion, canopy spread, balance, and whether the bare limb actually
+landed) with a bounded resample when it fails. Both halves are needed: a draw
+from inside the ranges can still come out a bald stick.
+
+Append **`?tree=static`** to any URL to suppress the per-visit regrow and keep
+the build-time tree. Every registered scenario URL carries it — without it a
+screenshot would differ on every capture.
 
 ## Project shape
 
@@ -116,4 +140,8 @@ States captured as runnable scenarios with codeyam-editor:
 ### Page - Minimal Fields
 
 <img src=".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png" alt="Page - Minimal Fields" width="280">
+
+### Page - Title Without Body
+
+<img src=".codeyam/scenarios/screenshots/page-title-without-body--desktop.png" alt="Page - Title Without Body" width="280">
 <!-- codeyam:scenario-gallery:end -->

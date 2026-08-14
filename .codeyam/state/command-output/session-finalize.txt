@@ -1,12 +1,12 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bqnihf70q.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bqnihf70q.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786735295,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":203461}
-session-finalize started: 2026-08-14T19:21:35Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 203461)
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/b5118cf7e.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/b5118cf7e.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786740385,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":283919}
+session-finalize started: 2026-08-14T20:46:25Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 283919)
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
 Coverage thresholds … skipped (no runner declares a coverage_path)
 Phase 0/5: session-cleanup …
 Phase 1/5: refresh-tests (no filters) — source Merkle hash changed for partition 'all'
 
-warning: about to run the FULL test suite (~42 tests) — this can take many minutes.
+warning: about to run the FULL test suite (~77 tests) — this can take many minutes.
 warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
@@ -14,33 +14,33 @@ note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
 [   4s] Tests completed.
-All 42 tests passed.
-{"failed":0,"passed":42,"skipped":0,"success":true,"total":42}
+{"failed":0,"passed":77,"skipped":0,"success":true,"total":77}
+All 77 tests passed.
 Phase 2/5: audit (--gate-mode strict, comprehensive) …
 [   0s] audit: running static checks
-[   7s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+[   8s] audit: rebuilding dependency graph (can take a few minutes on a large project)
 {
-  "analyzed": 67,
-Analyzed 67 files, found 96 import edges, graph has 75 nodes
-  "entityCount": 79,
-  "graphSize": 75,
-  "totalImports": 96
+Analyzed 70 files, found 101 import edges, graph has 78 nodes
+  "analyzed": 70,
+  "entityCount": 93,
+  "graphSize": 78,
+  "totalImports": 101
 }
-[  11s] audit: running registry invariant checks
-[  12s] audit: gather complete
+[  12s] audit: running registry invariant checks
+[  13s] audit: gather complete
 Phase 3/5: analyze-imports …
 {
-  "analyzed": 67,
-Analyzed 67 files, found 96 import edges, graph has 75 nodes
-  "entityCount": 79,
+  "analyzed": 70,
+  "entityCount": 93,
+Analyzed 70 files, found 101 import edges, graph has 78 nodes
+  "graphSize": 78,
 Phase 3.5/5: screenshot coverage …
-  "graphSize": 75,
-  "totalImports": 96
+  "totalImports": 101
 }
 Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
 Phase 3.6/5: glossary reconciliation …
 Phase 4/5: verify-build …
-[PASS] astro-check (7.71s)
+[PASS] astro-check (8.11s)
 CODEYAM_VERIFY_BUILD: PASS — 1 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
 Session finalize complete: ready to push.
@@ -48,4 +48,4 @@ Build-config advisory: this branch changes your CI / container build files, so a
 Surface detected:
   - CI / container build files (`.github/workflows/*.yml`, `Dockerfile*`) — the build invocation changed; local build success doesn't prove the CI/image build
 Re-run the affected build before merging — local build success says nothing about the CI/image build invocation that changed.
-session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=28.3s
+session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=29.5s

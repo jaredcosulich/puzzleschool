@@ -1,5 +1,11 @@
 [
   {
+    "description": "Writes a grown tree into an SVG already on the page, reframing the viewBox to match. Lives outside the Astro script tag so it is reachable from vitest: the new tree rarely has the same segment count as the one the server drew, so every call reuses, clones or removes path elements. Surplus paths are cloned from the server's own path, keeping stroke styling defined in exactly one place.",
+    "filePath": "src/lib/tree-dom.ts",
+    "name": "applyTreeGrowth",
+    "testFile": "src/lib/tree-dom.test.ts"
+  },
+  {
     "description": "Assembles a mailto: URL from a recipient and optional subject and body, percent-encoding each part.",
     "filePath": "src/lib/mailto.ts",
     "name": "buildMailto",
@@ -48,6 +54,18 @@
     }
   },
   {
+    "description": "Grows a tree for a seed that passes isAcceptableTree, resampling from a derived seed when it does not. A raw draw only passes about a third of the time, so the budget is 20 rather than a handful. Falls back to the CLOSEST attempt by shortfall rather than throwing, since this runs inside a page render where nobody can catch an exception.",
+    "filePath": "src/lib/structures.ts",
+    "name": "growAcceptableTree",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Grows the branching structure and returns the geometry plus the two facts acceptance needs that the segment list cannot answer: how many limbs grew, and whether the named bare limb was ever reached. treeSegments is now exactly its segments field, so the older signature and its tests are untouched.",
+    "filePath": "src/lib/structures.ts",
+    "name": "growTree",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
     "description": "Handles the password form POST in the OAuth relay.",
     "filePath": "cms-auth-worker/worker.js",
     "name": "handlePasswordSubmit",
@@ -66,6 +84,12 @@
     }
   },
   {
+    "description": "Turns a page slug into a tree seed with FNV-1a. This is what makes the per-page axis free: about, contact and a page written next year each hash to their own number, so each grows its own tree with no code change. Stable across builds and platforms, because an unstable hash would redraw every committed screenshot on every deploy.",
+    "filePath": "src/lib/structures.ts",
+    "name": "hashSeed",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
     "description": "Wraps an HTML string in a Response with the right content type.",
     "filePath": "cms-auth-worker/worker.js",
     "name": "htmlResponse",
@@ -73,6 +97,12 @@
       "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "The envelope enforced on the RESULT, not just the inputs. Sampling within bounded ranges is necessary but not sufficient: inside those ranges a seed can still grow every branch stopped early, a crown combed onto one side, or a bare limb the tree never reached. Checks branch count, segment count, aspect, canopy spread and horizontal balance.",
+    "filePath": "src/lib/structures.ts",
+    "name": "isAcceptableTree",
+    "testFile": "src/lib/structures.test.ts"
   },
   {
     "description": "The Koch curve: every segment becomes four, turning 60 degrees either way.",
@@ -99,6 +129,12 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Distance outside an inclusive range, or zero within it. The primitive every proportion rule in treeShortfall is expressed in, so each rule contributes a comparable magnitude rather than a bare pass or fail — which is what lets the resample loop rank near-misses instead of picking arbitrarily.",
+    "filePath": "src/lib/structures.ts",
+    "name": "outOfBand",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
     "description": "Renders the password prompt page for a locked preview.",
     "filePath": "cms-auth-worker/worker.js",
     "name": "passwordFormPage",
@@ -106,6 +142,12 @@
       "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "A fresh seed for the per-visit regrow, deliberately in the same unsigned 32-bit space hashSeed produces. If the two ranges drifted apart, trees grown in the browser would quietly become a different population from the trees grown at build time from a page slug.",
+    "filePath": "src/lib/structures.ts",
+    "name": "randomTreeSeed",
+    "testFile": "src/lib/structures.test.ts"
   },
   {
     "description": "Reads and parses one editable JSON singleton from the resolved data root.",
@@ -133,6 +175,12 @@
     "filePath": "src/lib/contentRoot.ts",
     "name": "resolveRoot",
     "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "Decides which seed a tree grows from. The precedence is the point: an explicit seed wins so the variations sheet can pin specific trees, otherwise the key is hashed, and a caller naming nothing falls back to one shared default tree rather than a random one, because an unseeded component should be stable across builds.",
+    "filePath": "src/lib/structures.ts",
+    "name": "resolveTreeSeed",
+    "testFile": "src/lib/structures.test.ts"
   },
   {
     "description": "Trims float noise to two decimals so generated path data stays readable in devtools.",
@@ -168,9 +216,33 @@
     }
   },
   {
-    "description": "Grows a branching structure where limbs continue past their own forks, so side branches leave at varying heights rather than only at limb tips. Carries the incompleteness dials: stopChance ends limbs mid-reach and bareLimb names one that grows nothing.",
+    "description": "The bounding box of a grown tree — origin plus width and height, with a floor of one unit so a degenerate figure cannot produce a zero-sized box and divide by zero downstream. Shared by treeViewBox and the acceptance checks so the frame and the proportion rules are measured off exactly the same geometry.",
+    "filePath": "src/lib/structures.ts",
+    "name": "treeBounds",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "The grown geometry alone, for every caller that only ever wanted the lines. Now exactly growTree(options).segments — kept as its own export so the signature the component and the five existing tree tests depend on did not have to move when growTree started returning branch counts alongside the segments.",
     "filePath": "src/lib/structures.ts",
     "name": "treeSegments",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "How far a grown tree is from acceptable, as a single number — zero exactly when it passes every rule. A boolean is what callers want but is not enough to CHOOSE with: when no seed in the resample budget produces an acceptable tree, something still has to be drawn, and ranking the failures needs a magnitude. isAcceptableTree is derived from this, so the predicate and the ranking cannot drift apart.",
+    "filePath": "src/lib/structures.ts",
+    "name": "treeShortfall",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Maps an arbitrary seed onto one bounded parameter set drawn from TREE_ENVELOPE. Free-form randomisation of TreeOptions would eventually produce a bald stick or a shrub; sampling from declared ranges is what makes within some constraints a testable object rather than a hope.",
+    "filePath": "src/lib/structures.ts",
+    "name": "treeVariant",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "The viewBox framing a grown tree, with a one-unit margin so the outermost stroke is not clipped. Extracted because BOTH the server render and the browser regrow need it; left inline in the component the two renders could silently drift into framing the same tree differently.",
+    "filePath": "src/lib/structures.ts",
+    "name": "treeViewBox",
     "testFile": "src/lib/structures.test.ts"
   },
   {

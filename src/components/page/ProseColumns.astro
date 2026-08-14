@@ -7,18 +7,38 @@
 // body stays ONE markdown blob the CMS can edit. A real grid track would force
 // the body to be split into two separate fields, which would mean a CMS editor
 // could no longer just write a page.
+//
+// `seedKey` is passed straight through to the structure: it is what makes each
+// page's tree its own. Forwarded rather than read here because this component
+// does not know what page it is on — the route does.
 import BranchingTree from '../structures/BranchingTree.astro';
+
+interface Props {
+  /** Identifies the page, so its tree is distinct from every other page's. */
+  seedKey?: string;
+}
+
+const { seedKey } = Astro.props;
 ---
 
 <div class="prose-grid">
   <div class="prose"><slot /></div>
-  <BranchingTree />
+  <BranchingTree seedKey={seedKey} />
 </div>
 
 <style>
   .prose-grid {
     position: relative;
     padding: 64px var(--gutter) 0;
+    /* The structure lane is 365px tall and hangs from the BOTTOM of this grid,
+       so on a page with little prose the tree rises past the grid's top edge and
+       crosses the sine rule above it — reading as though it grew through the
+       separator rather than standing under it. Reserving the lane's full height
+       plus a little clearance keeps the whole figure below the rule no matter
+       how little prose sits beside it, without clipping a limb to do it.
+       (365px is the lane height BranchingTree draws at; 123px, its width, is
+       already hardcoded below for the same reason.) */
+    min-height: calc(365px + 24px);
   }
 
   .prose {
@@ -62,6 +82,12 @@ import BranchingTree from '../structures/BranchingTree.astro';
   @media (max-width: 840px) {
     .prose {
       columns: 1;
+    }
+
+    /* Below this breakpoint the lane collapses and the tree is not drawn at all,
+       so the height reserved for it would just be a tall empty gap. */
+    .prose-grid {
+      min-height: 0;
     }
   }
 </style>

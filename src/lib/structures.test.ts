@@ -2,15 +2,25 @@ import { describe, expect, it } from 'vitest';
 import {
   dragonPoints,
   fibonacciTiling,
+  growAcceptableTree,
+  growTree,
+  hashSeed,
+  isAcceptableTree,
   kochPoints,
   lsystem,
   morseLine,
   openRectPath,
+  randomTreeSeed,
+  resolveTreeSeed,
   seededRandom,
   sinePath,
   toPath,
   treeSegments,
+  treeVariant,
+  treeViewBox,
   turtle,
+  TREE_ENVELOPE,
+  type TreeGrowth,
 } from './structures';
 
 describe('toPath', () => {
@@ -257,6 +267,250 @@ describe('treeSegments', () => {
     const shallow = treeSegments({ depth: 2, length: 80, seed: 8, branchChance: 1, stopChance: 0 });
     const deep = treeSegments({ depth: 4, length: 80, seed: 8, branchChance: 1, stopChance: 0 });
     expect(deep.length).toBeGreaterThan(shallow.length);
+  });
+});
+
+describe('hashSeed', () => {
+  // The per-page tree must be the same on every build, so the hash has to be
+  // stable rather than merely unique within one run.
+  it('returns the same number for the same string', () => {
+    expect(hashSeed('about')).toBe(hashSeed('about'));
+  });
+
+  // If two slugs collided, those two pages would grow the identical tree — the
+  // exact thing this feature exists to stop.
+  it('separates the slugs the site actually uses', () => {
+    const seeds = ['about', 'contact', 'a-day-in-the-life', 'notes', 'home'].map(hashSeed);
+    expect(new Set(seeds).size).toBe(seeds.length);
+  });
+
+  // A one-character difference must not land nearby, or neighbouring slugs
+  // would grow near-identical trees.
+  it('separates strings that differ by one character', () => {
+    expect(hashSeed('notes')).not.toBe(hashSeed('note'));
+  });
+
+  // The seed feeds unsigned 32-bit arithmetic downstream.
+  it('stays within unsigned 32-bit range', () => {
+    for (const text of ['', 'a', 'about', 'a-very-long-page-slug-written-by-an-editor']) {
+      const seed = hashSeed(text);
+      expect(Number.isInteger(seed)).toBe(true);
+      expect(seed).toBeGreaterThanOrEqual(0);
+      expect(seed).toBeLessThan(2 ** 32);
+    }
+  });
+});
+
+describe('treeVariant', () => {
+  // The constraint claim of the whole feature: a seed can never sample a
+  // parameter outside the declared envelope. A sweep is the only honest way to
+  // assert it — one seed proves nothing about the range.
+  it('keeps every sampled parameter inside TREE_ENVELOPE', () => {
+    for (let seed = 0; seed < 400; seed += 1) {
+      const options = treeVariant(seed);
+      for (const [key, range] of Object.entries(TREE_ENVELOPE.ranges)) {
+        const value = options[key as keyof typeof options] as number;
+        expect(value).toBeGreaterThanOrEqual(range.min);
+        expect(value).toBeLessThanOrEqual(range.max);
+      }
+    }
+  });
+
+  // depth and bareLimb index things, so a fractional draw would be meaningless.
+  it('rounds the integer ranges to whole numbers', () => {
+    for (let seed = 0; seed < 50; seed += 1) {
+      const { depth, bareLimb } = treeVariant(seed);
+      expect(Number.isInteger(depth)).toBe(true);
+      expect(Number.isInteger(bareLimb)).toBe(true);
+    }
+  });
+
+  // Same seed, same options — this is what makes a page's tree stable.
+  it('is deterministic for a given seed', () => {
+    expect(treeVariant(12345)).toEqual(treeVariant(12345));
+  });
+
+  // The fixed parameters set the figure's weight and scale, not how it grew.
+  it('holds the fixed parameters constant across seeds', () => {
+    const a = treeVariant(1);
+    const b = treeVariant(999);
+    expect(a.length).toBe(TREE_ENVELOPE.fixed.length);
+    expect(b.length).toBe(TREE_ENVELOPE.fixed.length);
+    expect(a.baseWidth).toBe(b.baseWidth);
+    expect(a.segmentsPerLimb).toBe(b.segmentsPerLimb);
+  });
+});
+
+describe('growTree', () => {
+  // Acceptance needs to know the bare limb actually landed, and the segment
+  // list cannot answer that.
+  it('reports bareLimbApplied when the named limb is reached', () => {
+    const growth = growTree({
+      depth: 3,
+      length: 80,
+      seed: 6,
+      branchChance: 1,
+      stopChance: 0,
+      bareLimb: 0,
+    });
+    expect(growth.bareLimbApplied).toBe(true);
+  });
+
+  // A seed that grows fewer branches than the index never reaches it, so the
+  // tree has no bare limb however the options were written.
+  it('reports bareLimbApplied false when the index is past the branches grown', () => {
+    const growth = growTree({
+      depth: 4,
+      length: 80,
+      seed: 4,
+      branchChance: 0,
+      bareLimb: 50,
+    });
+    expect(growth.bareLimbApplied).toBe(false);
+  });
+
+  // Counts limbs grown, not sub-segments walked — a stick and a tree can carry
+  // the same number of segments.
+  it('counts the trunk as the first branch', () => {
+    const growth = growTree({ depth: 4, length: 80, seed: 4, branchChance: 0 });
+    expect(growth.branches).toBe(1);
+  });
+
+  // The compatibility guarantee that keeps the existing treeSegments tests
+  // meaningful after the return type changed.
+  it('returns exactly what treeSegments returns', () => {
+    const options = { depth: 4, length: 100, seed: 3 };
+    expect(treeSegments(options)).toEqual(growTree(options).segments);
+  });
+});
+
+describe('isAcceptableTree', () => {
+  // A single unbranched limb is the degenerate case the whole acceptance layer
+  // exists to reject.
+  it('rejects a single unbranched limb', () => {
+    const growth = growTree({ depth: 4, length: 80, seed: 4, branchChance: 0, bareLimb: 2 });
+    expect(isAcceptableTree(growth)).toBe(false);
+  });
+
+  // A bare limb the tree never reached is not a bare limb.
+  it('rejects a tree that never reached its bare limb', () => {
+    const growth: TreeGrowth = { ...growTree(treeVariant(7)), bareLimbApplied: false };
+    expect(isAcceptableTree(growth)).toBe(false);
+  });
+
+  // Nothing to draw is never acceptable.
+  it('rejects an empty growth', () => {
+    expect(isAcceptableTree({ segments: [], branches: 0, bareLimbApplied: true })).toBe(false);
+  });
+
+  // The tree the site shipped before this feature is the one piece of ground
+  // truth about what reads correctly in the lane, so the window must admit it.
+  it('accepts the originally shipped tree', () => {
+    const growth = growTree({
+      depth: 4,
+      length: 300,
+      shrink: 0.62,
+      spread: 34,
+      bareLimb: 4,
+      seed: 11,
+      jitter: 0.45,
+      stopChance: 0.14,
+      segmentsPerLimb: 5,
+      branchChance: 0.5,
+      wander: 6,
+      baseWidth: 3.2,
+      taper: 0.7,
+    });
+    expect(isAcceptableTree(growth)).toBe(true);
+  });
+});
+
+describe('growAcceptableTree', () => {
+  // The property the entire feature rests on: any seed a page slug can hash to
+  // must end up growing a tree that passes the envelope.
+  it('returns an acceptable tree across a sweep of seeds', () => {
+    for (let seed = 0; seed < 300; seed += 1) {
+      expect(isAcceptableTree(growAcceptableTree(seed))).toBe(true);
+    }
+  });
+
+  // Per-page trees have to survive a rebuild unchanged, or every committed
+  // screenshot churns on every deploy.
+  it('is deterministic for a given seed', () => {
+    expect(growAcceptableTree(4242)).toEqual(growAcceptableTree(4242));
+  });
+
+  // Different pages must not quietly share a tree.
+  it('grows different trees for the slugs the site uses', () => {
+    const shapes = ['about', 'contact', 'a-day-in-the-life', 'notes'].map((slug) =>
+      JSON.stringify(growAcceptableTree(hashSeed(slug)).segments),
+    );
+    expect(new Set(shapes).size).toBe(shapes.length);
+  });
+
+  // A blank lane is worse than a slightly off tree, so exhausting the budget
+  // still has to return something drawable.
+  it('returns a drawable tree even when the attempt budget is exhausted', () => {
+    const growth = growAcceptableTree(1, 1);
+    expect(growth.segments.length).toBeGreaterThan(0);
+  });
+});
+
+describe('treeViewBox', () => {
+  // The frame has to enclose the figure with room for the outermost stroke.
+  it('frames the segments with a one unit margin', () => {
+    expect(
+      treeViewBox([{ from: { x: 0, y: 0 }, to: { x: 10, y: 20 }, depth: 1, width: 2 }]),
+    ).toBe('-1 -1 12 22');
+  });
+
+  // The server render and the browser regrow both call this; if they disagreed
+  // the regrown tree would be framed differently from the one it replaced.
+  it('frames a grown tree identically on repeat calls', () => {
+    const { segments } = growAcceptableTree(77);
+    expect(treeViewBox(segments)).toBe(treeViewBox(segments));
+  });
+});
+
+describe('resolveTreeSeed', () => {
+  // An explicit seed is how the variations sheet pins specific trees.
+  it('prefers an explicit seed over the key', () => {
+    expect(resolveTreeSeed(42, 'about')).toBe(42);
+  });
+
+  // This is the per-page axis: the key decides the tree.
+  it('hashes the key when no seed is given', () => {
+    expect(resolveTreeSeed(undefined, 'about')).toBe(hashSeed('about'));
+  });
+
+  // An unseeded component should be stable across builds, not random.
+  it('falls back to one shared default tree when given nothing', () => {
+    expect(resolveTreeSeed()).toBe(hashSeed('default'));
+    expect(resolveTreeSeed()).toBe(resolveTreeSeed(undefined, undefined));
+  });
+
+  // Zero is a legitimate seed and must not be treated as absent.
+  it('treats a zero seed as explicit', () => {
+    expect(resolveTreeSeed(0, 'about')).toBe(0);
+  });
+});
+
+describe('randomTreeSeed', () => {
+  // Must occupy the same space hashSeed produces, or visit trees would be
+  // drawn from a different population than page trees.
+  it('stays within unsigned 32-bit range', () => {
+    for (let i = 0; i < 200; i += 1) {
+      const seed = randomTreeSeed();
+      expect(Number.isInteger(seed)).toBe(true);
+      expect(seed).toBeGreaterThanOrEqual(0);
+      expect(seed).toBeLessThan(2 ** 32);
+    }
+  });
+
+  // A constant would make every visit grow the same tree, defeating the point.
+  it('varies between calls', () => {
+    const seeds = new Set(Array.from({ length: 50 }, randomTreeSeed));
+    expect(seeds.size).toBeGreaterThan(1);
   });
 });
 

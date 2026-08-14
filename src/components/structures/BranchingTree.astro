@@ -13,81 +13,45 @@
 //      design's prose grid is `1fr 123px 1fr` precisely so this has a lane of its
 //      own; dropped into a text column it lands on the words.
 //
+// TWO SEEDS, TWO MOMENTS. The structure is supposed to read as something grown,
+// and one frozen specimen repeated down every page undercuts that. So it varies
+// on two axes at once:
+//
+//   - PER PAGE, at build time: the seed is hashed from `seedKey` (the page
+//     slug), so About, Contact and a page a CMS editor writes next year each
+//     grow their own tree with no code change — and the SAME tree on every
+//     build, which is what keeps the committed screenshots from churning.
+//   - PER VISIT, in the browser: the script below regrows each tree from a fresh
+//     random seed after load.
+//
+// The server tree and the client tree genuinely differ; that is the point. Which
+// means the SSR tree must be VALID ON ITS OWN, not a placeholder — it is what
+// no-JS visitors keep, and what everyone sees for the frames before the script
+// runs. `?tree=static` suppresses the regrow entirely, so screenshot captures
+// get the deterministic build-time tree with no swap and no race.
+//
 // One limb is left bare: `bareLimb` names which branch stops without spawning
-// children. Pick a mid-depth branch — prune a leaf and nothing visibly changes,
-// prune near the trunk and half the tree disappears.
-import { treeSegments, toPath } from '../../lib/structures';
+// children. That is sampled inside the envelope now rather than passed in, and
+// `growAcceptableTree` rejects a draw where the named limb was never reached.
+import { growAcceptableTree, resolveTreeSeed, treeViewBox, toPath } from '../../lib/structures';
 
 interface Props {
-  depth?: number;
-  /** Trunk length; each generation is `shrink` times its parent. */
-  length?: number;
-  shrink?: number;
-  /** Half-angle between siblings, in degrees. */
-  spread?: number;
-  /** Which branch (in depth-first order) ends bare. */
-  bareLimb?: number | null;
-  /** Seed for the irregularity — same seed, same tree, every build. */
+  /**
+   * What this tree is grown FROM — normally the page slug. Hashed to a seed, so
+   * distinct pages get distinct trees and each page keeps its own across builds.
+   */
+  seedKey?: string;
+  /** An explicit seed, overriding `seedKey`. For the variations sheet. */
   seed?: number;
-  /** How far angles and lengths wander from the ideal, 0–1. */
-  jitter?: number;
-  /** Chance any given limb simply stops, 0–1. */
-  stopChance?: number;
-  segmentsPerLimb?: number;
-  branchChance?: number;
-  wander?: number;
-  baseWidth?: number;
-  taper?: number;
+  /** The lane the figure fills. A layout fact, not a variation axis. */
   width?: number;
   height?: number;
 }
 
-const {
-  // Only four generations. With side branches leaving part-way along each limb,
-  // four is already plenty of branch points — and few enough lines that each one
-  // can be drawn heavily enough to see.
-  depth = 4,
-  length = 300,
-  shrink = 0.62,
-  spread = 34,
-  bareLimb = 4,
-  seed = 11,
-  jitter = 0.45,
-  stopChance = 0.14,
-  segmentsPerLimb = 5,
-  branchChance = 0.5,
-  wander = 6,
-  baseWidth = 3.2,
-  taper = 0.7,
-  width = 123,
-  height = 365,
-} = Astro.props;
+const { seedKey, seed, width = 123, height = 365 } = Astro.props;
 
-const segments = treeSegments({
-  depth,
-  length,
-  shrink,
-  spread,
-  bareLimb,
-  seed,
-  jitter,
-  stopChance,
-  segmentsPerLimb,
-  branchChance,
-  wander,
-  baseWidth,
-  taper,
-  // Grow downward in SVG coordinates; the CSS flip turns it the right way up.
-  heading: 90,
-  origin: { x: width / 2, y: 0 },
-});
-
-const xs = segments.flatMap((s) => [s.from.x, s.to.x]);
-const ys = segments.flatMap((s) => [s.from.y, s.to.y]);
-const minX = Math.min(...xs);
-const minY = Math.min(...ys);
-const boxWidth = Math.max(...xs) - minX || 1;
-const boxHeight = Math.max(...ys) - minY || 1;
+const { segments } = growAcceptableTree(resolveTreeSeed(seed, seedKey));
+const viewBox = treeViewBox(segments);
 ---
 
 <div class="tree-well">
@@ -97,7 +61,8 @@ const boxHeight = Math.max(...ys) - minY || 1;
          axis binds first and lands at about a third of the lane's height —
          present, but too faint to read as a structure. -->
     <svg
-      viewBox={`${minX - 1} ${minY - 1} ${boxWidth + 2} ${boxHeight + 2}`}
+      data-tree
+      viewBox={viewBox}
       width={width}
       height={height}
       preserveAspectRatio="none"
@@ -119,6 +84,37 @@ const boxHeight = Math.max(...ys) - minY || 1;
     </svg>
   </div>
 </div>
+
+<script>
+  import { growAcceptableTree, randomTreeSeed } from '../../lib/structures';
+  import { applyTreeGrowth } from '../../lib/tree-dom';
+
+  // Presence-only flag, and deliberately not a seed. The site is prerendered, so
+  // a query parameter cannot reach the server render at all — it can only tell
+  // the browser what to do afterwards. A value-carrying `?tree=<seed>` would
+  // make the client draw a DIFFERENT tree than the server did, reintroducing
+  // exactly the swap (and the race against the capture) that a screenshot must
+  // not contain. Saying "leave the SSR tree alone" removes the race outright.
+  const frozen = new URLSearchParams(location.search).get('tree') === 'static';
+
+  if (!frozen) {
+    for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-tree]')) {
+      // A failed regrow must leave the server's tree standing rather than an
+      // empty lane — the SSR figure is already correct, this is an enhancement.
+      try {
+        const { segments } = growAcceptableTree(randomTreeSeed());
+
+        // Grow first, write in one frame: reframing the viewBox and rewriting
+        // the paths across separate frames would show the old tree stretched
+        // into the new box.
+        requestAnimationFrame(() => applyTreeGrowth(svg, segments));
+      } catch {
+        // Intentionally silent: an ambient decorative figure is not worth a
+        // console error on a visitor's page.
+      }
+    }
+  }
+</script>
 
 <style>
   /* The 123px grid column the structure occupies. */

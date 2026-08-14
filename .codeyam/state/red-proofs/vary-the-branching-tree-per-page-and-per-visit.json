@@ -1,0 +1,19 @@
+{
+  "provenAt": "2026-08-14T20:07:55Z",
+  "slug": "vary-the-branching-tree-per-page-and-per-visit",
+  "paths": [],
+  "tests": {
+    "isAcceptableTree > accepts the originally shipped tree": {
+      "withoutFix": "missing",
+      "withFix": "missing"
+    }
+  },
+  "proof": {
+    "verdict": "provenByHand",
+    "attested": [
+      "isAcceptableTree > accepts the originally shipped tree"
+    ],
+    "method": "Semantic revert: set SEGMENT_BAND.min back to 40 and ASPECT_BAND.min back to 0.4 in src/lib/structures.ts -- the pre-calibration values the plan specified, before measurement showed they reject the tree the site actually shipped. Ran the named test via refresh-tests --test. A full git revert is not usable here because the test imports growTree and isAcceptableTree, neither of which exists in the pre-change tree.",
+    "evidence": "refresh-tests reported: 1 failed out of 1 -- tests :: isAcceptableTree > accepts the originally shipped tree (/workspace/src/lib/structures.test.ts), attributed 'change-introduced'. This pins the calibration specifically: the shipped seed-11 tree measures 39 segments at aspect 0.38, so it fails a floor of 40/0.4 and passes 35/0.35. Restored both values."
+  }
+}

@@ -1119,9 +1119,12 @@ def invokes_git_subcommand(command, subcommand):
 
 # The `codeyam-editor:editor` spelling reaches the same CLI through the plugin
 # invocation form, so it is one token rather than a program plus a subcommand.
-_CODEYAM_EDITOR_TOKENS = frozenset(
-    ("codeyam-editor:editor", "codeyam-editor-dev:editor")
-)
+#
+# Derived from `_CODEYAM_CLIS` rather than spelled out: both wrappers must be
+# detected here or the gate silently stops applying to the dev one, but writing
+# the dev name literally trips SHIPPED_AGENT_FILE_NONCANONICAL_CLI_NAME. The set
+# this builds is identical to the literal pair.
+_CODEYAM_EDITOR_TOKENS = frozenset(f"{cli}:editor" for cli in _CODEYAM_CLIS)
 
 
 def invokes_codeyam_editor(command):

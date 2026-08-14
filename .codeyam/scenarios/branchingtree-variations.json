@@ -1,0 +1,13 @@
+{
+  "name": "BranchingTree - Variations",
+  "id": "cd617f33-c0a6-432e-883d-1cbe4ac2d299",
+  "url": "/isolated-components/BranchingTreeVariations?tree=static",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BranchingTree",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/structures/BranchingTree.astro",
+  "description": "Eight seeds side by side — the surface where the variation envelope can actually be judged, since one tree cannot show whether the constraints hold."
+}

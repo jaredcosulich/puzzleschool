@@ -1,7 +1,7 @@
 {
   "name": "BranchingTree - Default",
   "id": "075bd360-8610-4f87-9496-327bc2d02827",
-  "url": "/isolated-components/BranchingTree",
+  "url": "/isolated-components/BranchingTree?tree=static",
   "dimensions": [
     "Desktop"
   ],

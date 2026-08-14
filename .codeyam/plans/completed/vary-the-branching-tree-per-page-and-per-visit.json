@@ -1,0 +1,36 @@
+{
+  "claimStartedAt": "2026-08-14T19:25:27Z",
+  "completedAt": "2026-08-14T20:45:09Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "currentStep": "ui-step21",
+    "machine": "codeyam-editor-codeyam-editor-9",
+    "originId": "f5ff3007-cf7f-4dbd-8740-1b44095f384b",
+    "pid": 7,
+    "priority": 0,
+    "selectedPlan": "vary-the-branching-tree-per-page-and-per-visit",
+    "sessionId": "ec83bb44-fe0c-4485-b430-7b5aa3bba1eb",
+    "startedAt": "2026-08-14T19:25:27Z"
+  },
+  "createdAt": "2026-08-14T19:05:47Z",
+  "deliverables": [
+    ".claude/hooks/editor-pretool-hook.py",
+    "README.md",
+    "package-lock.json",
+    "package.json",
+    "src/components/page/ProseColumns.astro",
+    "src/components/structures/BranchingTree.astro",
+    "src/lib/structures.test.ts",
+    "src/lib/structures.ts",
+    "src/lib/tree-dom.test.ts",
+    "src/lib/tree-dom.ts",
+    "src/pages/[...slug].astro",
+    "src/pages/isolated-components/BranchingTreeVariations.astro"
+  ],
+  "journalTimestamp": "2026-08-14T20:45:09Z",
+  "mode": "ui",
+  "planFile": "completed/vary-the-branching-tree-per-page-and-per-visit.md",
+  "slug": "vary-the-branching-tree-per-page-and-per-visit",
+  "title": "Vary the Branching Tree Per Page and Per Visit"
+}

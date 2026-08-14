@@ -1,0 +1,62 @@
+---
+// Eight trees from eight fixed seeds, side by side.
+//
+// This is the only surface where the variation ENVELOPE can actually be judged.
+// A single tree tells you nothing about whether the constraints hold — it either
+// looks fine or it does not. Eight at once makes a degenerate draw obvious at a
+// glance: a bald stick, a shrub, or a crown combed onto one side stands out
+// immediately against seven siblings that read as the same species.
+//
+// The seeds are FIXED and arbitrary, not slugs, because this sheet is about the
+// envelope rather than about any particular page. Register with:
+//   codeyam-editor editor register '{"name":"BranchingTree - Variations","componentName":"BranchingTree","url":"/isolated-components/BranchingTreeVariations?tree=static","dimensions":["Desktop"]}'
+import Component from "../../../src/components/structures/BranchingTree.astro";
+import "../../../src/styles/tokens.css";
+
+const SEEDS = [1, 7, 11, 23, 42, 99, 256, 1024];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BranchingTree — Variations</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div class="sheet">
+        {
+          SEEDS.map((seed) => (
+            <figure class="specimen">
+              <Component seed={seed} />
+              <figcaption>{seed}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  /* Eight lanes at their real 123px width — judging the envelope at any other
+     width would judge a figure the site never renders. */
+  .sheet {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+  }
+
+  .specimen {
+    margin: 0;
+    width: 123px;
+  }
+
+  figcaption {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--body-text, #666);
+  }
+</style>

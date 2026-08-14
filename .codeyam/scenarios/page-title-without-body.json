@@ -1,7 +1,7 @@
 {
-  "name": "Page - Minimal Fields",
-  "id": "2c9a3ea7-d077-41ec-b165-64fa6cddd408",
-  "url": "/notes?tree=static",
+  "name": "Page - Title Without Body",
+  "id": "1b48b6e6-3d0f-40e9-bde0-e2fd89ee259e",
+  "url": "/blank?tree=static",
   "dimensions": [
     "Desktop"
   ],
@@ -67,10 +67,17 @@
         "order": 4,
         "slug": "notes",
         "title": "Notes"
+      },
+      {
+        "body": "",
+        "description": "A page an editor created and has not written yet.",
+        "order": 5,
+        "slug": "blank",
+        "title": "Blank"
       }
     ]
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/[...slug].astro",
-  "description": "The leanest possible page: title and body only, proving every optional field degrades cleanly when a CMS author leaves it blank."
+  "description": "A page an editor created but has not written into yet — title only, no prose at all. The state that proves the structure lane still holds its height and the template does not collapse when there is nothing beside the tree."
 }

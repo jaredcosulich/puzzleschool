@@ -30,6 +30,35 @@
       "key-interaction": {
         "status": "covered"
       }
+    },
+    "InternalPage": {
+      "empty": {
+        "status": "added"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "An internal page has no item collection to overflow — the body is one continuous markdown blob that flows into the two-column grid by design, growing taller rather than truncating, so there is no distinct far-more-than-fits state to show."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Every page is statically prerendered to HTML at build time and fetches nothing at view time, so no pending state exists to capture."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "The page makes no client fetches and takes no user input. The one failure path — the tree regrow throwing — is caught deliberately so the server-rendered tree stands, which renders identically to the static capture and therefore has no distinct visual state."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
     }
   }
 }

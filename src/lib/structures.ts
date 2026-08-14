@@ -266,6 +266,118 @@ export function seededRandom(seed: number): () => number {
   };
 }
 
+/**
+ * FNV-1a, 32-bit — a page slug turned into a tree seed.
+ *
+ * This is what makes the per-page axis free: `about`, `contact` and a page a CMS
+ * editor writes next year each hash to their own number, so each grows its own
+ * tree with no code change. It must be stable across builds and platforms —
+ * hence an explicit algorithm rather than anything host-provided — because an
+ * unstable hash would redraw every committed screenshot on every deploy.
+ */
+export function hashSeed(text: string): number {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
+}
+
+/**
+ * A fresh seed for the per-visit regrow.
+ *
+ * Deliberately the same unsigned 32-bit space `hashSeed` produces, so a tree
+ * grown in the browser is drawn from exactly the same distribution as one grown
+ * at build time from a page slug. If the two ranges drifted apart, the visit
+ * trees would quietly become a different population from the page trees.
+ */
+export function randomTreeSeed(): number {
+  return Math.floor(Math.random() * 2 ** 32);
+}
+
+/**
+ * Which seed a tree should grow from, given what the caller supplied.
+ *
+ * The precedence is the whole point: an explicit `seed` wins (the variations
+ * sheet pins specific ones), otherwise the key is hashed, and a caller that
+ * names nothing falls back to a single shared `'default'` tree rather than a
+ * random one — an unseeded component should be stable across builds, not
+ * different every time.
+ */
+export function resolveTreeSeed(seed?: number, seedKey?: string): number {
+  return seed ?? hashSeed(seedKey ?? 'default');
+}
+
+interface TreeRange {
+  readonly min: number;
+  readonly max: number;
+  /** Rounded to a whole number after sampling. */
+  readonly integer?: boolean;
+}
+
+/**
+ * The bounds every generated tree is drawn from — the variation envelope, as one
+ * readable object.
+ *
+ * The trees vary per page and per visit, but they must stay recognisably the
+ * same species. Free-form randomisation of `TreeOptions` would eventually
+ * produce a bald stick or a shrub; sampling from declared ranges makes "within
+ * some constraints" a testable object rather than a hope.
+ *
+ * `fixed` is held constant deliberately: those four set the WEIGHT and SCALE of
+ * the drawing. Varying them changes how the figure sits in its 123×365 lane
+ * rather than how it grew, which is a layout change wearing a variation costume.
+ */
+export const TREE_ENVELOPE = {
+  ranges: {
+    depth: { min: 4, max: 5, integer: true },
+    spread: { min: 28, max: 40 },
+    shrink: { min: 0.58, max: 0.68 },
+    branchChance: { min: 0.42, max: 0.58 },
+    stopChance: { min: 0.1, max: 0.2 },
+    jitter: { min: 0.35, max: 0.55 },
+    wander: { min: 5, max: 8 },
+    bareLimb: { min: 2, max: 6, integer: true },
+  },
+  fixed: {
+    length: 300,
+    segmentsPerLimb: 5,
+    baseWidth: 3.2,
+    taper: 0.7,
+  },
+} as const satisfies {
+  ranges: Record<string, TreeRange>;
+  fixed: Record<string, number>;
+};
+
+/**
+ * Map an arbitrary seed onto one bounded parameter set — same seed, same
+ * options, forever.
+ */
+export function treeVariant(seed: number): TreeOptions {
+  const rand = seededRandom(seed);
+  const draw = (range: TreeRange): number => {
+    const value = range.min + rand() * (range.max - range.min);
+    return range.integer ? Math.round(value) : value;
+  };
+  const r = TREE_ENVELOPE.ranges;
+
+  // Drawn in a fixed order: the sequence is what makes a seed reproducible.
+  return {
+    depth: draw(r.depth),
+    spread: draw(r.spread),
+    shrink: draw(r.shrink),
+    branchChance: draw(r.branchChance),
+    stopChance: draw(r.stopChance),
+    jitter: draw(r.jitter),
+    wander: draw(r.wander),
+    bareLimb: draw(r.bareLimb),
+    ...TREE_ENVELOPE.fixed,
+    seed,
+  };
+}
+
 export interface TreeOptions {
   /** How many times to branch. */
   depth: number;
@@ -308,11 +420,26 @@ export interface TreeOptions {
   taper?: number;
 }
 
+export interface TreeGrowth {
+  segments: Segment[];
+  /** How many limbs were actually grown — the trunk counts as the first. */
+  branches: number;
+  /**
+   * Whether the limb named by `bareLimb` was ever reached. A seed that grows
+   * fewer branches than that index leaves the tree with no bare limb at all,
+   * which the design asks for — and which is invisible in the segment list.
+   */
+  bareLimbApplied: boolean;
+}
+
 /**
  * A binary tree grown by recursion: each branch spawns two shorter children at
  * ±`spread`, `depth` times over. One limb is deliberately left bare.
+ *
+ * Returns the geometry PLUS the two facts acceptance needs and the segment list
+ * cannot answer: how many limbs grew, and whether the bare limb landed.
  */
-export function treeSegments({
+export function growTree({
   depth,
   length,
   shrink = 0.72,
@@ -328,10 +455,11 @@ export function treeSegments({
   wander = 5,
   baseWidth = 2.6,
   taper = 0.72,
-}: TreeOptions): Segment[] {
+}: TreeOptions): TreeGrowth {
   const segments: Segment[] = [];
   const rand = seededRandom(seed);
   let branchIndex = 0;
+  let bareLimbApplied = false;
 
   /** A multiplier around 1, wandering by up to `jitter` either way. */
   const wobble = () => 1 + (rand() - 0.5) * 2 * jitter;
@@ -351,6 +479,7 @@ export function treeSegments({
     if (level > depth) return;
 
     const isBare = bareLimb !== null && branchIndex === bareLimb;
+    if (isBare) bareLimbApplied = true;
     branchIndex += 1;
 
     const width = Math.max(0.9, baseWidth * taper ** (level - 1));
@@ -390,7 +519,184 @@ export function treeSegments({
   };
 
   grow(origin, heading, length, 1);
-  return segments;
+  return { segments, branches: branchIndex, bareLimbApplied };
+}
+
+/**
+ * The geometry alone, for every caller that only ever wanted the lines.
+ *
+ * Kept exactly as `growTree(...).segments` so the signature the component and
+ * the existing tests depend on does not move.
+ */
+export function treeSegments(options: TreeOptions): Segment[] {
+  return growTree(options).segments;
+}
+
+interface TreeBounds {
+  minX: number;
+  minY: number;
+  width: number;
+  height: number;
+}
+
+function treeBounds(segments: readonly Segment[]): TreeBounds {
+  const xs = segments.flatMap((s) => [s.from.x, s.to.x]);
+  const ys = segments.flatMap((s) => [s.from.y, s.to.y]);
+  const minX = Math.min(...xs);
+  const minY = Math.min(...ys);
+  return {
+    minX,
+    minY,
+    width: Math.max(...xs) - minX || 1,
+    height: Math.max(...ys) - minY || 1,
+  };
+}
+
+/**
+ * The viewBox that frames a grown tree, with a 1-unit margin so the outermost
+ * stroke is not clipped.
+ *
+ * Extracted because BOTH the server render and the client regrow need it. Left
+ * inline in the component it would be duplicated in the browser script, and the
+ * two renders could then silently drift into framing the same tree differently.
+ */
+export function treeViewBox(segments: readonly Segment[]): string {
+  const { minX, minY, width, height } = treeBounds(segments);
+  return `${minX - 1} ${minY - 1} ${width + 2} ${height + 2}`;
+}
+
+/**
+ * The envelope enforced on the RESULT, not just on the inputs.
+ *
+ * Sampling from bounded ranges is necessary but not sufficient: inside those
+ * ranges a particular seed can still grow something degenerate — every branch
+ * stopped early, the whole crown combed onto one side, or a bare limb the tree
+ * never reached. These are the properties a reader would notice, checked on the
+ * geometry that actually came out.
+ */
+export function isAcceptableTree(growth: TreeGrowth): boolean {
+  return treeShortfall(growth) === 0;
+}
+
+/**
+ * Acceptable segment counts: below is a stick, above silts up into a mass.
+ *
+ * The floor is calibrated against the tree the site shipped before this varied
+ * — 39 segments at aspect 0.38. That specimen is the one piece of ground truth
+ * about what reads correctly in this lane, so the window is set to admit it
+ * rather than to a rounder number that would declare the approved design
+ * degenerate.
+ */
+const SEGMENT_BAND = { min: 35, max: 110 };
+const ASPECT_BAND = { min: 0.35, max: 1.1 };
+
+/**
+ * The fewest limbs that still read as a branching structure.
+ *
+ * Calibrated on the variations sheet rather than reasoned from the geometry: a
+ * draw with nine limbs renders as a bare stick with a few twigs on it, while
+ * every specimen with eleven or more reads as a tree. Segment count does not
+ * catch this — the stick and a good sparse tree have nearly the same number of
+ * segments, because a long unbranched limb is walked in just as many pieces.
+ */
+const BRANCH_FLOOR = 11;
+
+/**
+ * HOW FAR a tree is from acceptable, as a single number — 0 exactly when it
+ * passes every rule.
+ *
+ * A boolean is what callers want, but it is not enough to CHOOSE with. When no
+ * seed in the resample budget produces an acceptable tree, something still has
+ * to be drawn, and ranking the failures needs a magnitude. Scoring once and
+ * deriving the predicate from it also keeps the two definitions from drifting.
+ */
+function treeShortfall(growth: TreeGrowth): number {
+  const { segments, branches, bareLimbApplied } = growth;
+  if (segments.length === 0) return Infinity;
+
+  let shortfall = 0;
+
+  // A tree has to actually branch. This is the check the segment band cannot
+  // make: a stick walked in many sub-segments counts the same as a tree.
+  shortfall += Math.max(0, BRANCH_FLOOR - branches) / BRANCH_FLOOR;
+
+  // A tree that never reached its named bare limb has no bare limb, which the
+  // design explicitly asks for. Weighted heavily: it is a missing feature
+  // rather than a proportion being slightly off.
+  if (!bareLimbApplied) shortfall += 1;
+
+  const { minX, minY, width, height } = treeBounds(segments);
+
+  // Each term below is normalised to roughly "fraction of the way out of the
+  // band", so no single rule silently dominates the ranking.
+  shortfall += outOfBand(segments.length, SEGMENT_BAND.min, SEGMENT_BAND.max) / SEGMENT_BAND.max;
+
+  // The lane stretches the figure with `preserveAspectRatio="none"`. Outside
+  // this band that stretch is visible as distortion rather than as fit.
+  shortfall += outOfBand(width / height, ASPECT_BAND.min, ASPECT_BAND.max);
+
+  // The crown — the far half of the growth direction — must actually spread.
+  // Measured against the full width, this is what rejects a narrow spike with
+  // one long low branch setting the bounding box.
+  const canopy = segments
+    .flatMap((s) => [s.from, s.to])
+    .filter((p) => p.y >= minY + height / 2);
+  const canopyWidth = canopy.length
+    ? Math.max(...canopy.map((p) => p.x)) - Math.min(...canopy.map((p) => p.x))
+    : 0;
+  shortfall += Math.max(0, width * 0.6 - canopyWidth) / width;
+
+  // Balance: the mean of every endpoint sits in the middle third. A tree combed
+  // onto one side passes every other check here and still looks wrong.
+  const points = segments.flatMap((s) => [s.from, s.to]);
+  const meanX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+  shortfall += outOfBand(meanX, minX + width / 3, minX + (width * 2) / 3) / width;
+
+  return shortfall;
+}
+
+/** Distance outside `[min, max]`, or 0 within it. */
+function outOfBand(value: number, min: number, max: number): number {
+  if (value < min) return min - value;
+  if (value > max) return value - max;
+  return 0;
+}
+
+/**
+ * Grow a tree for `seed` that passes `isAcceptableTree`, resampling with a
+ * derived seed when it does not.
+ *
+ * `attempts` is 20 rather than a handful because a raw draw from the envelope
+ * only passes about a third of the time — `depth` 4 vs 5 swings the segment
+ * count hard — so a short budget leaves a visible tail of pages rendering a
+ * rejected tree. Twenty attempts takes the fall-through rate to roughly one in
+ * a thousand, and each attempt is a few dozen line segments.
+ *
+ * Falls back to the CLOSEST attempt rather than throwing: this runs inside a
+ * page render where there is nobody to catch an exception, and a slightly-off
+ * tree beats a blank lane. Ranking by shortfall matters — ranking by segment
+ * count would pick the most overgrown tree precisely when overgrowth was the
+ * failure, which is the most common one.
+ */
+export function growAcceptableTree(seed: number, attempts = 20): TreeGrowth {
+  let best: TreeGrowth | null = null;
+  let bestShortfall = Infinity;
+  let current = seed >>> 0;
+
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const growth = growTree(treeVariant(current));
+    const shortfall = treeShortfall(growth);
+    if (shortfall === 0) return growth;
+    if (shortfall < bestShortfall) {
+      best = growth;
+      bestShortfall = shortfall;
+    }
+    // Knuth's multiplicative hash, kept in unsigned 32-bit — a derived seed
+    // rather than `seed + 1`, so a bad seed's neighbours are not tried next.
+    current = (Math.imul(current, 2654435761) + attempt) >>> 0;
+  }
+
+  return best as TreeGrowth;
 }
 
 // ---------------------------------------------------------------------------

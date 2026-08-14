@@ -1,12 +1,11 @@
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786549061,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":85941}
-{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786549071,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":85941}
-{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786549081,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":85941}
-━━━ Preview Diagnostic: / ━━━
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/b6yvjpoia.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/b6yvjpoia.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786736476,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":224084}
+━━━ Preview Diagnostic: /notes ━━━
 
-  proxy port 4321 — HTTP 200, no Transfer-Encoding, Content-Length: 46818
-  direct port 4322 — HTTP 200, Transfer-Encoding: chunked, no Content-Length
+  proxy port 4321 — HTTP 404, no Transfer-Encoding, Content-Length: 35985
+  direct port 4322 — HTTP 404, Transfer-Encoding: chunked, no Content-Length
 
-Script tags — proxy: 10, direct: 6
+Script tags — proxy: 8, direct: 4
   No script delta between proxy and direct.
 
 Most likely cause: no HTTP-level anomaly detected between proxy and direct dev port. If the page still won't hydrate, run `editor client-errors` to check for console errors or JavaScript exceptions.

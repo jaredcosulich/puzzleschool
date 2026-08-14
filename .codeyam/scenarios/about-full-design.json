@@ -1,7 +1,7 @@
 {
   "name": "About - Full Design",
   "id": "0d3ae93c-27b0-475a-8f34-0e666dccf2e6",
-  "url": "/about",
+  "url": "/about?tree=static",
   "dimensions": [
     "Desktop"
   ],

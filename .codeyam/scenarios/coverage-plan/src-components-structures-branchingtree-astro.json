@@ -3,10 +3,10 @@
   "surface_kind": "file",
   "states": [
     {
-      "dimension": "default",
-      "value": "default",
-      "rationale": "source-derived state default=default",
-      "status": "covered"
+      "dimension": "branches",
+      "value": "branch-1",
+      "rationale": "source-derived state branches=branch-1",
+      "status": "planned"
     }
   ]
 }

@@ -70,7 +70,10 @@ const contactHref = buildMailto({
   <MorseRule />
   <PageHeader title={title} kicker={kicker} intro={intro} />
   <SineRule />
-  <ProseColumns>
+  <!-- The page's own id seeds its structure, so every CMS-authored page gets a
+       tree of its own with no code change — the same way it gets the morse rule
+       and the band. -->
+  <ProseColumns seedKey={page.id}>
     <Content />
   </ProseColumns>
   {showContactButton ? <ContactButton href={contactHref} /> : null}
