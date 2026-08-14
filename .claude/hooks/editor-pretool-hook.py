@@ -644,24 +644,43 @@ _GREP_VALUE_FLAGS = frozenset("efmABCDd")
 # pipe gating or long-running `codeyam-editor` commands through `tail` / `grep`
 # / `head`".
 #
-# Deliberately NOT every subcommand. The rule's rationale is about the three
-# things a pipe destroys — a meaningful exit code, a liveness heartbeat, and a
-# tail-safe completion trailer — so it covers the commands that HAVE them: the
-# gates whose exit code is a verdict, and the long ones that heartbeat while
-# they run. Piping a small read-only query (`registry-query … | jq .`) loses
-# nothing, and refusing it would make the rule feel arbitrary rather than
+# Deliberately NOT every subcommand. The rule's rationale is about what a pipe
+# destroys, so it covers the commands that have something to lose. Three of the
+# four are properties of the command's own output — a meaningful exit code, a
+# liveness heartbeat, and a tail-safe completion trailer — which is what the
+# gates whose exit code is a verdict and the long ones that heartbeat while they
+# run all carry. Piping a small read-only query (`registry-query … | jq .`)
+# loses nothing, and refusing it would make the rule feel arbitrary rather than
 # earned.
+#
+# The fourth is stronger and is why the `preview` family is listed: a SIDE
+# EFFECT A LATER GATE DEPENDS ON. `preview`, `preview-flow`, `preview-interact`,
+# and `show-results` each write the preview-shown marker
+# (`.codeyam/preview-shown.json`) that `present-interactive` reads before it will
+# allow an `AskUserQuestion`. A downstream `head -1` closes the pipe and SIGPIPEs
+# the process mid-command, so the loss is invisible: the capture succeeds, the
+# screenshots are correct, the body reports `success=true`, and only the gate
+# stays shut. That cost five VM-13 sessions a wall each. The marker write now
+# precedes every stdout write in those commands, which makes the loss
+# unreachable — this entry is defense in depth, not the fix. `preview-nav`
+# writes no marker; it rides along so the rule is "don't pipe the preview
+# family" rather than a four-of-five exception nobody will remember.
 _GATING_SUBCOMMANDS = frozenset(
     (
         "advance",
         "analyze-imports",
         "audit",
         "pre-commit-sync",
+        "preview",
+        "preview-flow",
+        "preview-interact",
+        "preview-nav",
         "push",
         "reconcile-registry",
         "refresh-tests",
         "session-checkpoint",
         "session-finalize",
+        "show-results",
         "verify-build",
         "verify-full-finalize",
         "verify-test-cache",
@@ -2172,7 +2191,13 @@ def main():
                     "preview-required",
                     f"This step ({_slug_label(state, slug)}) requires showing "
                     f"the live preview before asking the user for confirmation.",
-                    f"run `{hint}`, then call AskUserQuestion.",
+                    f"run `{hint}`, then call AskUserQuestion. If you ALREADY "
+                    f"ran it and it reported success: check whether you piped "
+                    f"it into `head`/`tail`/`grep`. That closes the pipe early "
+                    f"and SIGPIPEs the command, so the capture and the "
+                    f"screenshots succeed but the marker write is lost — the "
+                    f"one failure whose every visible signal says it worked. "
+                    f"Re-run it bare (no pipe).",
                     detail=slug,
                     evidence=(
                         f"{resolved_context(project_dir, marker_path)}; marker "
