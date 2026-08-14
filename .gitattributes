@@ -1,4 +1,3 @@
-.codeyam/test-cache/**/*.json merge=ours
 .codeyam/scenarios/screenshots/*.png.hash merge=ours
 .codeyam/scenarios/screenshots/.capture-pipeline.json merge=ours
 .codeyam/mocks/catalog.json merge=ours linguist-generated
@@ -13,3 +12,6 @@
 .codeyam/state/finalize-debt.json merge=codeyam-finalize-debt
 crates/codeyam-editor/src/scaffold/hook_skip_list.json merge=codeyam-generated-artifact
 crates/codeyam-editor/skills.lock merge=codeyam-generated-artifact
+.codeyam/test-cache/**/*.json merge=codeyam-test-cache-partition
+.codeyam/test-cache/blobs/*.json merge=ours
+.codeyam/state/red-proofs/*.json merge=codeyam-keep-replayed

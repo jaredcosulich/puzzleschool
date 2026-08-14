@@ -149,10 +149,25 @@ first failure:
 codeyam-editor editor audit --format json
 ```
 
-Read every `failures[]` entry and the `attribution[]` array together. Group
-findings by invariant id and by the commit that introduced them. Fixing blind,
-one failure at a time, wastes finalize cycles — each full `session-finalize`
-is the expensive loop you are trying to run *once*.
+Read every `failures[]` entry and the `attribution[]` array together. Each
+attribution row is `{invariantId, item, introducedIn, causedByHead,
+causedByBranchDrift, causedByForeignClone}` and joins back to a finding on
+`(invariantId, item)`. Rows appear only for items whose introducing commit
+resolved, so an item with no row is "not attributable", not "attributed to
+nothing" — the same thing the text renderer means when it omits the `★`
+marker. Note `--findings-only` deliberately omits the array; the default
+`--format json` is what carries it.
+
+Budget for it: resolving attribution walks `git log` per file touched by a
+finding, so on a large repo with accumulated drift this run takes minutes,
+not seconds — the same cost `--format text` and the `advance` audit gate
+already pay. It is a backgrounded long command like any other; wait on the
+completion sentinel rather than assuming it hung. When you only need the
+verdict and the missing-\* arrays, `--findings-only` is the fast path.
+
+Group findings by invariant id and by the commit that introduced them. Fixing
+blind, one failure at a time, wastes finalize cycles — each full
+`session-finalize` is the expensive loop you are trying to run *once*.
 
 ---
 
