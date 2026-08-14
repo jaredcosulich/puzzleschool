@@ -1,0 +1,12 @@
+{
+  "surface": "src/components/home/StatementBlock.astro",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "default",
+      "value": "default",
+      "rationale": "source-derived state default=default",
+      "status": "covered"
+    }
+  ]
+}

@@ -1,29 +1,15 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bp60z6qoo.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bp60z6qoo.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786739599,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":269028}
-[refresh-tests --changed] scope: 10 changed path(s) (14 untracked included)
-[refresh-tests --changed]   matched runner(s): tests
-[refresh-tests --changed] narrowing WITHHELD — 2 changed file(s) may declare a test the registry does not know yet:
-[refresh-tests --changed]   src/lib/structures.test.ts — no source walker for this file type, so its tests could not be checked
-[refresh-tests --changed]   src/lib/tree-dom.test.ts — no source walker for this file type, so its tests could not be checked
-[refresh-tests --changed]   the run therefore widens to each owning runner's changedCommand (whole-package scope), so a brand-new test still executes.
-[refresh-tests --changed]   to narrow instead, register the test(s) first: codeyam-editor editor reconcile-registry --auto-apply
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/brh3k9lvg.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/brh3k9lvg.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786742302,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":310870}
+[refresh-tests --changed] scope: 2 changed path(s) (1 untracked included)
+[refresh-tests --changed]   0 runner(s) matched these paths — nothing to run (no-op, exit 0).
+[refresh-tests --changed] narrowing: every test declared in the changed file(s) is registered — the run narrows to the tests those files own.
 [refresh-tests --changed]   partition scope: all
-
-note: 1 brand-new (untracked) test file(s) were included in this --changed run
-note: their partition's cache file and test-cache.json index entry were updated
-note: together, so the audit gate can see them. The untracked test file(s):
-  src/lib/tree-dom.test.ts
-note: --changed picks partitions from the dependency graph, and a brand-new file
-note: is what a stale graph misses most often. If one of these is still reported
-note: uncovered, refresh just its partition:
-note:   codeyam-editor editor refresh-tests --partition <name>
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
 Test refresh triggered. Waiting for results...
-[   2s] Running runner: tests
-[   4s] Tests completed.
-All 77 tests passed.
-{"failed":0,"passed":77,"skipped":0,"success":true,"total":77}
+[   2s] Tests completed.
+No test files found.
+{"failed":0,"passed":0,"skipped":0,"success":true,"total":0}
 
 Partial run — the partition(s) this run covered were updated, cache file and
 test-cache.json index entry together. Partitions it did NOT cover keep their

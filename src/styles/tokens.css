@@ -60,6 +60,7 @@
   --space-2xl: 62px;
   --space-3xl: 92px;
   --space-4xl: 104px;
+  --space-5xl: 156px; /* the widest band break — statement to cards on Home */
 
   /* Page gutter: 60px on Home, 40px on internal pages, fluid on small screens. */
   --gutter-wide: clamp(20px, 5vw, 60px);

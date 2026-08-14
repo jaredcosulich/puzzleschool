@@ -24,7 +24,16 @@ const { heading, lead } = Astro.props;
     flex-direction: column;
     align-items: center;
     gap: var(--space-lg);
-    padding: clamp(52px, 7vw, var(--space-3xl)) var(--gutter-wide) var(--space-2xl);
+    /* The bottom padding is the statement→cards band break, and it is the widest
+       one on the page — deliberately half again the quote band's 104px so the
+       statement is given room to land before the cards start. Grown here, not as
+       top padding on ActionCards: the Fibonacci spiral is absolutely positioned
+       off the .cards box and would detach from the card's accent rule if that box
+       moved independently. The 12vw slope reaches the cap at the same ~1300px
+       viewport the 8vw/104px pairing did, and the 62px floor keeps narrow screens
+       no tighter than before. */
+    padding: clamp(52px, 7vw, var(--space-3xl)) var(--gutter-wide)
+      clamp(62px, 12vw, var(--space-5xl));
     text-align: center;
   }
 

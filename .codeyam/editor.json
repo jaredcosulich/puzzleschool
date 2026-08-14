@@ -58,7 +58,7 @@
     }
   ],
   "testPartitions": [],
-  "testCacheIgnorePatterns": [],
+  "testCacheIgnorePatterns": ["**/*.astro", "**/*.css"],
   "staticChecks": [
     {
       "name": "astro-check",
