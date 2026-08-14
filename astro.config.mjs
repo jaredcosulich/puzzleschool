@@ -6,6 +6,8 @@ import codeyamCms from '@codeyam/cms';
 import { realpathSync } from 'node:fs';
 import path from 'node:path';
 
+import { linkedPathForRealFile } from './src/lib/linkedCmsPath.ts';
+
 // Local-CMS development mode: on whenever `node_modules/@codeyam/cms` is a
 // symlink to a checkout of the codeyam-cms repo (`npm run dev:cms` makes it
 // one, `npm run cms:unlink` puts the published package back). Detected rather
@@ -60,8 +62,8 @@ async function liveLinkedCms() {
       server.watcher.add(CMS_REAL);
       /** @param {string} file */
       const bridge = (file) => {
-        if (!file.startsWith(CMS_REAL + path.sep)) return;
-        const linked = CMS_LINK + file.slice(CMS_REAL.length);
+        const linked = linkedPathForRealFile(file, CMS_REAL, CMS_LINK);
+        if (linked === null) return;
         const mods = server.moduleGraph.getModulesByFile(linked);
         if (mods) for (const mod of mods) server.moduleGraph.invalidateModule(mod);
         server.ws.send({ type: 'full-reload' });

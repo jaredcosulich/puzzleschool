@@ -111,6 +111,18 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Translates a watcher event under a linked package's real checkout into the symlinked node_modules path the module graph keys under, or null when the file is outside that checkout. The containment check uses a trailing separator so a sibling directory sharing a prefix is not treated as a child.",
+    "filePath": "src/lib/linkedCmsPath.ts",
+    "name": "linkedPathForRealFile",
+    "testFile": "src/lib/linkedCmsPath.test.ts"
+  },
+  {
+    "description": "Vite plugin that makes an edit inside a symlinked @codeyam/cms checkout reach this dev server, defeating the three caches between that file and the browser: it rewrites the immutable node_modules cache header, subscribes the watcher to the real checkout outside the project root, and invalidates the linked module ids that watcher events map to. Only constructed when node_modules/@codeyam/cms is a symlink.",
+    "filePath": "astro.config.mjs",
+    "name": "liveLinkedCms",
+    "testFile": "src/lib/linkedCmsPath.test.ts"
+  },
+  {
     "description": "Expands an axiom by applying production rules a given number of times. Symbols with no rule pass through unchanged, which is what lets the dragon curve carry its bookkeeping symbols.",
     "filePath": "src/lib/structures.ts",
     "name": "lsystem",

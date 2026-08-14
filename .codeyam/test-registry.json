@@ -271,6 +271,51 @@
       "runner": "tests"
     },
     {
+      "description": "A prefix match is not containment. `…/codeyam-cms-fork` starts with `…/codeyam-cms`, and without the separator guard its files would be rewritten onto the linked root and invalidate modules that do not exist.",
+      "file": "src/lib/linkedCmsPath.test.ts",
+      "format": "vitest",
+      "key": "linkedPathForRealFile › does not match a sibling directory that shares a prefix",
+      "line": 39,
+      "registeredAt": "2026-08-14T10:27:20.585298+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Nested paths must survive whole. An early version that took a basename would collapse two same-named files in different directories onto one module, invalidating the wrong one.",
+      "file": "src/lib/linkedCmsPath.test.ts",
+      "format": "vitest",
+      "key": "linkedPathForRealFile › preserves the full subpath, not just the file name",
+      "line": 23,
+      "registeredAt": "2026-08-14T10:27:20.585298+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Every other file in the project also reaches the watcher. Returning a path for those would invalidate unrelated modules and full-reload the browser on every save anywhere in the repo.",
+      "file": "src/lib/linkedCmsPath.test.ts",
+      "format": "vitest",
+      "key": "linkedPathForRealFile › returns null for a file outside the real checkout",
+      "line": 32,
+      "registeredAt": "2026-08-14T10:27:20.585298+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The root directory is not a module. chokidar reports directory events too, and treating one as a file would trigger a full-reload for a change the module graph has nothing to invalidate for.",
+      "file": "src/lib/linkedCmsPath.test.ts",
+      "format": "vitest",
+      "key": "linkedPathForRealFile › returns null for the real root itself",
+      "line": 46,
+      "registeredAt": "2026-08-14T10:27:20.585298+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The core translation: a watcher event under the real checkout has to come back as the node_modules path, because that is the only identity the module graph holds under preserveSymlinks. Get this wrong and the lookup silently misses — the edit is served stale with no error anywhere.",
+      "file": "src/lib/linkedCmsPath.test.ts",
+      "format": "vitest",
+      "key": "linkedPathForRealFile › rewrites a file under the real checkout onto the linked root",
+      "line": 14,
+      "registeredAt": "2026-08-14T10:27:20.585298+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "Each pass rewrites every matching symbol.",
       "file": "src/lib/structures.test.ts",
       "format": "vitest",
