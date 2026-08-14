@@ -1,10 +1,15 @@
 {
   "dragonPoints › stops early when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -29,10 +34,15 @@
   },
   "fibonacciTiling › grows each square as the sum of the previous two": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -57,10 +67,15 @@
   },
   "fibonacciTiling › keeps the largest square closed when openLast is false": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -85,10 +100,15 @@
   },
   "fibonacciTiling › normalises the tiling to the origin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -113,10 +133,15 @@
   },
   "fibonacciTiling › reproduces the handoff geometry for six squares": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -141,10 +166,15 @@
   },
   "fibonacciTiling › returns nothing for a count under two": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -169,10 +199,15 @@
   },
   "kochPoints › produces four segments per segment per iteration": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -197,10 +232,15 @@
   },
   "lsystem › applies the production rule once per iteration": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -225,10 +265,15 @@
   },
   "lsystem › passes through symbols that have no rule": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -253,10 +298,15 @@
   },
   "lsystem › returns the axiom unchanged for zero iterations": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -281,10 +331,15 @@
   },
   "morseLine › encodes a single dot at the origin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -309,10 +364,15 @@
   },
   "morseLine › makes a dash three times a dot": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -337,10 +397,15 @@
   },
   "morseLine › separates letters by three units": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -365,10 +430,15 @@
   },
   "morseLine › separates words by seven units": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -393,10 +463,15 @@
   },
   "morseLine › skips characters with no morse encoding": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -421,10 +496,15 @@
   },
   "morseLine › tags each symbol with its word": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -449,10 +529,15 @@
   },
   "openRectPath › draws three sides and never closes the shape": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -477,10 +562,15 @@
   },
   "resolveContentRoot › defaults to _projectRoot_/src/content when no override is present": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -505,10 +595,15 @@
   },
   "resolveContentRoot › falls back to the .codeyam/tmp/content-root sidecar": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -533,10 +628,15 @@
   },
   "resolveContentRoot › prefers the CODEYAM_CONTENT_ROOT env override": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -561,10 +661,15 @@
   },
   "resolveDataRoot › defaults to _projectRoot_/src/data when no override is present": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -589,10 +694,15 @@
   },
   "seededRandom › produces a different sequence for a different seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -617,10 +727,15 @@
   },
   "seededRandom › produces the same sequence for the same seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -645,10 +760,15 @@
   },
   "seededRandom › stays within zero and one": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -673,10 +793,15 @@
   },
   "sinePath › lands exactly on the end even when step does not divide the width": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -701,10 +826,15 @@
   },
   "sinePath › samples more densely with a smaller step": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -729,10 +859,15 @@
   },
   "sinePath › starts on the baseline": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -757,10 +892,15 @@
   },
   "sinePath › stops short of the full width when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -785,10 +925,15 @@
   },
   "toPath › emits only a moveto for one point": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -813,10 +958,15 @@
   },
   "toPath › returns an empty string for no points": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -841,10 +991,15 @@
   },
   "toPath › rounds coordinates to two decimals": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -869,10 +1024,15 @@
   },
   "treeSegments › always draws the trunk": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -897,10 +1057,15 @@
   },
   "treeSegments › grows a different tree for a different seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -925,10 +1090,15 @@
   },
   "treeSegments › grows no side branches when branchChance is zero": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -953,10 +1123,15 @@
   },
   "treeSegments › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -981,10 +1156,15 @@
   },
   "treeSegments › leaves the named limb bare": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -1009,10 +1189,15 @@
   },
   "treeSegments › never shrinks as depth increases": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -1037,10 +1222,15 @@
   },
   "treeSegments › tapers stroke width with depth": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -1065,10 +1255,15 @@
   },
   "turtle › always walks at least one move": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -1093,10 +1288,15 @@
   },
   "turtle › ignores symbols that are not moves or turns": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -1121,10 +1321,15 @@
   },
   "turtle › walks forward along its heading": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",
@@ -1149,10 +1354,15 @@
   },
   "turtle › walks only part of the moves when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-12T18:31:30.368005+00:00",
-    "lastRunKind": "changed",
+    "lastRunAt": "2026-08-14T19:21:40.658402778+00:00",
+    "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-14T19:21:40.658402778+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-12T18:31:30.368005+00:00",
         "kind": "changed",

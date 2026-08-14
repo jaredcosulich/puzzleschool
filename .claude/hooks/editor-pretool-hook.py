@@ -1119,9 +1119,9 @@ def invokes_git_subcommand(command, subcommand):
 
 # The `codeyam-editor:editor` spelling reaches the same CLI through the plugin
 # invocation form, so it is one token rather than a program plus a subcommand.
-_CODEYAM_EDITOR_TOKENS = frozenset(
-    ("codeyam-editor:editor", "codeyam-editor-dev:editor")
-)
+# Derived from `_CODEYAM_CLIS` rather than spelled out, so the CLI-name list has
+# a single source of truth and the dev-wrapper spelling is not duplicated here.
+_CODEYAM_EDITOR_TOKENS = frozenset(f"{cli}:editor" for cli in _CODEYAM_CLIS)
 
 
 def invokes_codeyam_editor(command):

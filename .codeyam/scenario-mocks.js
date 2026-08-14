@@ -1,5 +1,5 @@
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: b262a66f67cd1702efda2d271ba97d9f0c7228ad5d97d3de67d65e83b0717123
+// codeyam-editor: 0.1.7  source-sha256: d8b013d0cb4c1a686f889f66d9fd682b4a6b31458bc618ab492231594c7370d3
 // Route matcher for the capture harness — one of THREE implementations of a
 // single semantic. The authority is the Rust engine
 // (crates/mock-engine/src/route_parser.rs), where the contract is written down;
@@ -144,7 +144,11 @@ function splitMockKey(key) {
   return { method: key.slice(0, spaceIdx), route: key.slice(spaceIdx + 1) };
 }
 
-function findHttpMock(httpMocks, request) {
+// The matching mock together with the KEY that declared it, or null. The key is
+// what the usage tally counts — reporting "which declared mock fired" needs the
+// declaration's identity, not just its body, since two keys can carry
+// structurally identical mocks.
+function findHttpMockEntry(httpMocks, request) {
   const method = request.method().toUpperCase();
   const url = request.url();
   for (const [key, mock] of Object.entries(httpMocks)) {
@@ -152,9 +156,14 @@ function findHttpMock(httpMocks, request) {
     if (!parsed) continue;
     // Method stays an exact check; only the route is matched by pattern.
     if (parsed.method.toUpperCase() !== method) continue;
-    if (matchUrl(parsed.route, url)) return mock;
+    if (matchUrl(parsed.route, url)) return { key, mock };
   }
   return null;
+}
+
+function findHttpMock(httpMocks, request) {
+  const entry = findHttpMockEntry(httpMocks, request);
+  return entry ? entry.mock : null;
 }
 
 // The set of path/URL route patterns declared by the mock keys. A key is
@@ -183,8 +192,134 @@ function requestTargetsMock(targets, url) {
   return false;
 }
 
-async function attachHttpMocks(page, httpMocks) {
-  if (!httpMocks || Object.keys(httpMocks).length === 0) return;
+// The origin half of a URL, or the raw string when it will not parse. Grouping
+// by origin is what turns twenty tile URLs into one readable line.
+function originOf(url) {
+  try {
+    return new URL(url).origin;
+  } catch {
+    return url;
+  }
+}
+
+// Which declared mock keys actually served a response.
+//
+// This exists because a declared mock whose key never matches any request is
+// silently inert: the capture still reports success, and the frame that lands
+// is the healthy state under a name promising a degraded one. The declared keys
+// were always known; nothing ever compared them against what fired.
+function createMockUsageTally(httpMocks) {
+  const declared = Object.keys(httpMocks || {});
+  const usedKeys = new Set();
+  return {
+    recordFulfilled(key) {
+      usedKeys.add(key);
+    },
+    // Declared order is preserved in both lists so the reported set reads the
+    // same way the scenario's mock block does.
+    get used() {
+      return declared.filter((key) => usedKeys.has(key));
+    },
+    get unused() {
+      return declared.filter((key) => !usedKeys.has(key));
+    },
+  };
+}
+
+// Every request the page made, collapsed to one row per `(origin, mocked)` pair.
+// A full URL list is noise (twenty tile URLs); origin + count + a representative
+// URL is the line that ends a "why is this page blank" misdiagnosis.
+function createRequestInventory(appOrigin) {
+  // Keyed by `origin|mocked` rather than origin alone: an origin serving both a
+  // mocked API call and unmocked sub-resources would otherwise collapse into one
+  // row whose `mocked` flag is a coin toss.
+  const groups = new Map();
+
+  function groupFor(url, mocked) {
+    const origin = originOf(url);
+    const groupKey = `${origin}|${mocked ? "mocked" : "unmocked"}`;
+    let row = groups.get(groupKey);
+    if (!row) {
+      row = {
+        origin,
+        count: 0,
+        sampleUrl: url,
+        mocked: !!mocked,
+        failed: false,
+        // `false` when the capture URL did not parse — the caller then has no
+        // origin to compare against, and treating everything as cross-origin
+        // over-reports rather than hiding a request.
+        sameOrigin: !!appOrigin && origin === appOrigin,
+      };
+      groups.set(groupKey, row);
+    }
+    return row;
+  }
+
+  return {
+    recordRequest(url, mocked) {
+      groupFor(url, mocked).count += 1;
+    },
+    recordFailure(url, mocked) {
+      groupFor(url, mocked).failed = true;
+    },
+    // Busiest origin first — the one worth explaining leads the report.
+    get groups() {
+      return [...groups.values()].sort(
+        (a, b) => b.count - a.count || a.origin.localeCompare(b.origin),
+      );
+    },
+  };
+}
+
+// Composes the two independent halves above into the single handle the capture
+// harness threads through.
+//
+// Purely observational. Nothing here changes which requests are intercepted:
+// `attachHttpMocks` scopes `page.route` to declared targets so unmocked requests
+// load natively, and that scoping is load-bearing (a blanket catch-all route
+// predicate breaks Vite ESM module loading and blanks the SPA).
+function createMockObserver(httpMocks, appOrigin) {
+  const usage = createMockUsageTally(httpMocks);
+  const inventory = createRequestInventory(appOrigin);
+  return {
+    recordFulfilled: (key) => usage.recordFulfilled(key),
+    recordRequest: (url, mocked) => inventory.recordRequest(url, mocked),
+    recordFailure: (url, mocked) => inventory.recordFailure(url, mocked),
+    get used() {
+      return usage.used;
+    },
+    get unused() {
+      return usage.unused;
+    },
+    get externalRequests() {
+      return inventory.groups;
+    },
+  };
+}
+
+// Passive request inventory. `page.on` observes; it never routes, so attaching
+// this cannot change what the page loads.
+function attachRequestInventory(page, observer, httpMocks) {
+  const targets = mockedTargets(httpMocks || {});
+  page.on("request", (request) => {
+    const url = request.url();
+    observer.recordRequest(url, requestTargetsMock(targets, url));
+  });
+  page.on("requestfailed", (request) => {
+    const url = request.url();
+    observer.recordFailure(url, requestTargetsMock(targets, url));
+  });
+}
+
+// Returns the capture's mock observer (see `createMockObserver`). Always returns
+// one, including for a scenario that declares no mocks at all — that is exactly
+// the case where an unexplained third-party fetch is hardest to account for.
+async function attachHttpMocks(page, httpMocks, options = {}) {
+  const observer = createMockObserver(httpMocks, options.appOrigin);
+  attachRequestInventory(page, observer, httpMocks);
+
+  if (!httpMocks || Object.keys(httpMocks).length === 0) return observer;
 
   // Intercept ONLY requests whose path matches a declared mock — not every
   // request. A blanket `page.route("**/*")` intercepts the dev server's ESM
@@ -196,11 +331,15 @@ async function attachHttpMocks(page, httpMocks) {
   await page.route(
     (url) => requestTargetsMock(targets, url),
     async (route) => {
-      const mock = findHttpMock(httpMocks, route.request());
-      if (!mock) {
+      const entry = findHttpMockEntry(httpMocks, route.request());
+      if (!entry) {
         await route.continue();
         return;
       }
+      const { key, mock } = entry;
+      // Counted at the fulfil branch, not at match time: a key is "used" only
+      // when it actually served a response.
+      observer.recordFulfilled(key);
 
       const headers = { ...(mock.headers || {}) };
       let body;
@@ -237,6 +376,8 @@ async function attachHttpMocks(page, httpMocks) {
       body: "[]",
     });
   });
+
+  return observer;
 }
 
 
@@ -284,8 +425,13 @@ module.exports = {
   matchPath,
   matchQuerySpec,
   findHttpMock,
+  findHttpMockEntry,
   mockedTargets,
   requestTargetsMock,
+  originOf,
+  createMockUsageTally,
+  createRequestInventory,
+  createMockObserver,
   attachHttpMocks,
   isDeclaredErrorMock,
   unmockedRouteFrom,

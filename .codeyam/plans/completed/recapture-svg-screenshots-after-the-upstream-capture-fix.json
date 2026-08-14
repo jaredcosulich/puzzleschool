@@ -1,0 +1,24 @@
+{
+  "claimStartedAt": "2026-08-14T17:51:04Z",
+  "completedAt": "2026-08-14T19:04:30Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "currentStep": "ui-step22",
+    "machine": "codeyam-editor-codeyam-editor-9",
+    "pid": 7,
+    "priority": 0,
+    "selectedPlan": "recapture-svg-screenshots-after-the-upstream-capture-fix",
+    "sessionId": "ec83bb44-fe0c-4485-b430-7b5aa3bba1eb",
+    "startedAt": "2026-08-14T17:51:04Z"
+  },
+  "createdAt": "2026-08-12T18:18:45Z",
+  "deliverables": [
+    ".claude/hooks/editor-pretool-hook.py"
+  ],
+  "journalTimestamp": "2026-08-14T19:04:30Z",
+  "mode": "ui",
+  "planFile": "completed/recapture-svg-screenshots-after-the-upstream-capture-fix.md",
+  "slug": "recapture-svg-screenshots-after-the-upstream-capture-fix",
+  "title": "Recapture SVG screenshots after the upstream capture fix"
+}
