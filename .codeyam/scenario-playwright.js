@@ -1,5 +1,5 @@
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: 5138e61a7b2ddc8e4f2d51115e7fa19642220747ac98c985ab3ce176b43dd4a5
+// codeyam-editor: 0.1.7  source-sha256: b4c5dd5ba71c482b235f84e869d3e0d05ee4e62936386646d7910e726a9979a8
 const {
   hasLoadingMarkers,
   shouldStopWaitingForImages,
@@ -336,16 +336,36 @@ async function collectVisibleTextLength(target) {
 }
 
 // Inject a capture-only stylesheet that snaps entrance animations to their
-// FINAL frame: remove animation/transition timing and force the common
-// "hidden until revealed" symptoms (`opacity:0`, an entrance `transform`) back
-// to their resting values. This is the belt to `scrollThroughDocument`'s
-// suspenders — it covers pure-CSS keyframe entrances that are mid-flight or
-// stuck at an `opacity:0` start state even after the observers fired. It
-// targets the generic CSS symptom, not any framework's reveal class, so it
-// works for any stack. The caller gates this OFF when a scenario declares an
-// interactive state, so an intentionally animated/collapsed interactive frame
-// is never clobbered. Idempotent (a single injected style id) and best-effort.
-// Returns true when the style is present after the call.
+// FINAL frame: remove animation/transition timing, then reveal the elements an
+// entrance animation left INVISIBLE. This is the belt to
+// `scrollThroughDocument`'s suspenders — it covers pure-CSS keyframe entrances
+// that are mid-flight or stuck at an `opacity:0` start state even after the
+// observers fired. It targets the generic CSS symptom, not any framework's
+// reveal class, so it works for any stack. The caller gates this OFF when a
+// scenario declares an interactive state, so an intentionally animated /
+// collapsed interactive frame is never clobbered. Idempotent (a single injected
+// style id) and best-effort. Returns true when the style is present after the
+// call.
+//
+// The reveal is per-element and conditional ON THE ELEMENT BEING INVISIBLE,
+// never a blanket `opacity: 1 !important` / `transform: none !important` over
+// `*`. A blanket rule cannot tell an entrance animation's `opacity: 0` from
+// DELIBERATE, resting state — a disabled control's dim, a muted row, a
+// collapsed chevron's rotation — so it silently flattened every one of them out
+// of every screenshot the capture pipeline produced. Two scenarios differing
+// only in such a state then captured byte-identically and collided in the
+// distinct-capture gate, and the collision was unfixable in the component: the
+// state rendered correctly in a real browser (verified: computed opacity 0.4 vs
+// 1) and was erased only at capture time. Anything already visible is now left
+// exactly as the app rendered it.
+//
+// The reveal's TRANSFORM half additionally stops at the SVG boundary, because a
+// CSS `transform` overrides the SVG `transform` presentation attribute: inside
+// an `<svg>` it erases the static geometry that CONSTRUCTS the drawing instead
+// of neutralizing an entrance animation, so a revealed SVG node lands on the
+// origin. Invisible SVG nodes are therefore revealed in place — opacity forced,
+// transform left alone. See the loop below for why the boundary is
+// `ownerSVGElement` rather than `closest("svg")`.
 async function forceFinalVisualState(target) {
   return target.evaluate(() => {
     const STYLE_ID = "__codeyam_force_final_state";
@@ -358,16 +378,54 @@ async function forceFinalVisualState(target) {
     if (typeof document.createElement !== "function") return false;
     const style = document.createElement("style");
     style.id = STYLE_ID;
+    // Temporal properties only — these carry no resting state, so removing
+    // them cannot erase anything the app meant to show.
     style.textContent =
       "*, *::before, *::after {" +
       "animation: none !important;" +
       "transition: none !important;" +
-      "opacity: 1 !important;" +
-      "transform: none !important;" +
       "}";
     const head = document.head || document.documentElement;
     if (!head || typeof head.appendChild !== "function") return false;
     head.appendChild(style);
+
+    // With animations disabled above, an element held back by an entrance
+    // animation now computes to its pre-animation resting state — typically
+    // `opacity: 0`, often paired with a translate/scale that parks it offscreen.
+    // Reveal exactly those, and only those: a fully transparent element shows
+    // nothing either way, so forcing it can hide no real state, while an element
+    // at any visible opacity is left untouched.
+    //
+    // The transform half of the reveal STOPS at the SVG boundary. A CSS
+    // `transform` overrides the SVG `transform` presentation attribute, so
+    // inside an `<svg>` a forced `transform: none` does not neutralize an
+    // entrance animation — it erases the static rotate/translate/scale that
+    // CONSTRUCTS the drawing, revealing the node collapsed on the origin. The
+    // opacity half is still right there (a node at ~0 shows nothing either
+    // way), so an invisible SVG node is revealed IN PLACE. The boundary test is
+    // `ownerSVGElement` and NOT `closest("svg")`: HTML inside a
+    // `<foreignObject>` is a real HTMLElement with no `ownerSVGElement`, so it
+    // keeps the full reveal — `closest("svg")` would silently strand its
+    // genuine CSS entrance transform.
+    if (typeof document.querySelectorAll !== "function") return true;
+    const INVISIBLE_EPSILON = 0.01;
+    for (const el of document.querySelectorAll("*")) {
+      let computed = null;
+      try {
+        computed = getComputedStyle(el);
+      } catch (_) {
+        continue;
+      }
+      if (!computed) continue;
+      const opacity = parseFloat(computed.opacity);
+      if (!Number.isFinite(opacity) || opacity > INVISIBLE_EPSILON) continue;
+      if (!el.style || typeof el.style.setProperty !== "function") continue;
+      const inSvg =
+        el.ownerSVGElement != null ||
+        (typeof el.tagName === "string" && el.tagName.toLowerCase() === "svg");
+      el.style.setProperty("opacity", "1", "important");
+      if (!inSvg) el.style.setProperty("transform", "none", "important");
+    }
     return true;
   });
 }

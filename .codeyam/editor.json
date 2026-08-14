@@ -1,24 +1,121 @@
 {
   "$comment": "Per-developer settings (port, provider, proxy ports, startCommand, etc.) belong in editor.local.json. That file is gitignored and is deep-merged on top of this one at load time. Changing `provider` after scaffold does NOT install that agent's surface — re-run `codeyam-editor editor install-hooks` (or `codeyam-editor init --provider <name>`) to install it. See CLAUDE.md or run `codeyam-editor editor config-show` to inspect the effective config.",
-  "apps": [
+  "projectTitle": "The Puzzle School",
+  "projectDescription": "I need to build The Puzzle School website as a static website that can be hosted on GitHub pages. I have designs for the first two pages. I'd like to use codeyam-cms to make it easy to change content and add pages without touching the code. Can we explore how best to do this? We control codeyam-cms as well so we can make improvements to it as needed.",
+  "provider": "claude",
+  "startCommand": "npm run dev",
+  "port": 4321,
+  "env": {},
+  "toolchainPaths": [],
+  "proxy": {
+    "httpPort": 14749,
+    "dbPort": 14750,
+    "controlPort": 14848,
+    "httpsPassthrough": [
+      "crates.io",
+      "static.crates.io",
+      "index.crates.io",
+      "registry.npmjs.org",
+      "pypi.org",
+      "files.pythonhosted.org",
+      "proxy.golang.org",
+      "sum.golang.org",
+      "storage.googleapis.com",
+      "rubygems.org",
+      "github.com",
+      "codeload.github.com",
+      "objects.githubusercontent.com"
+    ],
+    "httpsPreview": false
+  },
+  "database": null,
+  "scenarios": {
+    "dir": ".codeyam/scenarios"
+  },
+  "hooks": {},
+  "testRunners": [
     {
-      "buildCommand": "npm run build",
-      "dir": ".",
-      "name": "The Puzzle School",
-      "outputDir": "dist",
-      "port": 4321,
-      "startCommand": "npm run dev",
-      "type": "web"
+      "name": "tests",
+      "command": "npx vitest run --reporter=json",
+      "outputFormat": "vitest-json",
+      "testFilePatterns": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.test.js",
+        "**/*.test.jsx"
+      ],
+      "sourceFilePatterns": [
+        "**/*.{ts,tsx,js,jsx}"
+      ],
+      "excludePatterns": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**"
+      ],
+      "coverageExcludePaths": [],
+      "changedCommand": "npx vitest run --changed --reporter=json",
+      "targetedCommand": "npx vitest run -t \"{test_names}\" --reporter=json"
     }
   ],
-  "audit": {
-    "allowedDocumentationOnlySlugs": [
-      "post-merge-drift-sweep"
-    ],
-    "branchBaseRef": "main",
-    "coverageBootstrap": {
-      "enabled": true
+  "testPartitions": [],
+  "testCacheIgnorePatterns": [],
+  "staticChecks": [
+    {
+      "name": "astro-check",
+      "command": "npx astro check",
+      "filePatterns": [
+        "**/*.astro",
+        "**/*.ts",
+        "**/*.tsx"
+      ],
+      "excludePatterns": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**"
+      ],
+      "description": "Astro type-check (.astro + .ts + .tsx) — matches the CI build gate"
+    }
+  ],
+  "formatters": [],
+  "screenSizes": {
+    "Laptop": {
+      "width": 1280,
+      "height": 800
     },
+    "Mobile": {
+      "width": 390,
+      "height": 844
+    },
+    "Tablet": {
+      "width": 768,
+      "height": 1024
+    },
+    "Desktop": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "deviceScaleFactor": 2.0,
+  "defaultScreenSize": "Desktop",
+  "apps": [
+    {
+      "name": "The Puzzle School",
+      "type": "web",
+      "dir": ".",
+      "port": 4321,
+      "startCommand": "npm run dev",
+      "buildCommand": "npm run build",
+      "outputDir": "dist"
+    }
+  ],
+  "files": {
+    "textLogMaxBytes": null,
+    "eventLogMaxBytes": null,
+    "logKeepRotated": null,
+    "journalShardEntries": null
+  },
+  "audit": {
+    "testNamingConventions": {},
     "glossarySkip": [
       {
         "filePath": ".claude/hooks/_step_metadata.py",
@@ -379,120 +476,157 @@
         "filePath": ".claude/hooks/editor-step-hook.py",
         "name": "resolve_mode",
         "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_emit_verdict",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_git_subcommand",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_heredoc_consumer",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_heredoc_delimiter",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_heredoc_openers",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_offending_stage",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "allow",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "classify_write_target",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "compound_stage_evidence",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "describe_call",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "elide_heredoc_bodies",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "explain_requested",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "invokes_codeyam_editor",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "invokes_git_subcommand",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "preview_marker_state",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "resolved_context",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_rewrite_stage",
+        "reason": "derive-generated"
       }
     ],
-    "itemShape": {
-      "changeWithoutVerify": "note",
-      "compound": "warning",
-      "vague": "warning"
-    },
-    "scenarioFreshnessDays": 14,
     "stepBudget": {
-      "maxChecklistItems": 6,
       "maxLines": 80,
+      "maxChecklistItems": 6,
       "severity": "warning"
     },
-    "testNamingConventions": {}
-  },
-  "catalogAutoAdd": {
-    "allow": [],
-    "deny": []
-  },
-  "cleanup": {
-    "completedPlanMinAgeDays": 90,
-    "completedPlanRetention": 500,
-    "logCompress": true,
-    "logDeleteDays": 30,
-    "logRotateDays": 7,
-    "screenshotPruneOrphans": true,
-    "tmpDeleteHours": 24
+    "itemShape": {
+      "compound": "warning",
+      "vague": "warning",
+      "changeWithoutVerify": "note"
+    },
+    "allowedDocumentationOnlySlugs": [
+      "post-merge-drift-sweep"
+    ],
+    "scenarioFreshnessDays": 14,
+    "branchBaseRef": "main",
+    "coverageBootstrap": {
+      "enabled": true
+    }
   },
   "coverageThresholds": {
     "global": {
       "minLinePercent": 90.0
     }
   },
-  "database": null,
-  "defaultScreenSize": "Desktop",
-  "deviceScaleFactor": 2.0,
-  "env": {},
-  "files": {
-    "eventLogMaxBytes": null,
-    "journalShardEntries": null,
-    "logKeepRotated": null,
-    "textLogMaxBytes": null
+  "catalogAutoAdd": {
+    "allow": [],
+    "deny": []
   },
-  "formatters": [],
+  "testParallelism": {
+    "loadGuard": true
+  },
+  "cleanup": {
+    "logRotateDays": 7,
+    "logDeleteDays": 30,
+    "logCompress": true,
+    "tmpDeleteHours": 24,
+    "screenshotPruneOrphans": true,
+    "completedPlanRetention": 500,
+    "completedPlanMinAgeDays": 90
+  },
+  "runnerTimeout": {
+    "mode": "auto",
+    "headroomSeconds": 90,
+    "floorSeconds": 900,
+    "changedFanoutThreshold": 2,
+    "changedFanoutPerUnitSeconds": 180,
+    "changedFanoutMaxExtraSeconds": 1800
+  },
+  "silenceHookStderr": false,
   "git": {
     "commitQueue": {
       "enabled": true,
-      "headAutoReclaimEnabled": true,
+      "pollIntervalMs": 2000,
+      "waitTimeoutSec": 300,
       "heartbeatIntervalSec": 15,
+      "serverHeartbeatIntervalSec": 60,
       "machineAliveHookTimeoutMs": 5000,
       "maxHookPrunePerSweep": 10,
       "maxProgressStallSec": 900,
-      "pollIntervalMs": 2000,
-      "serverHeartbeatIntervalSec": 60,
-      "waitTimeoutSec": 300
+      "headAutoReclaimEnabled": true
     },
     "planClaims": {
       "enabled": true,
       "fetchIntervalSec": 3
-    }
-  },
-  "hooks": {},
-  "port": 4321,
-  "projectDescription": "I need to build The Puzzle School website as a static website that can be hosted on GitHub pages. I have designs for the first two pages. I'd like to use codeyam-cms to make it easy to change content and add pages without touching the code. Can we explore how best to do this? We control codeyam-cms as well so we can make improvements to it as needed.",
-  "projectTitle": "The Puzzle School",
-  "provider": "claude",
-  "proxy": {
-    "controlPort": 14848,
-    "dbPort": 14750,
-    "httpPort": 14749,
-    "httpsPassthrough": [
-      "crates.io",
-      "static.crates.io",
-      "index.crates.io",
-      "registry.npmjs.org",
-      "pypi.org",
-      "files.pythonhosted.org",
-      "proxy.golang.org",
-      "sum.golang.org",
-      "storage.googleapis.com",
-      "rubygems.org",
-      "github.com",
-      "codeload.github.com",
-      "objects.githubusercontent.com"
-    ],
-    "httpsPreview": false
-  },
-  "runnerTimeout": {
-    "changedFanoutMaxExtraSeconds": 1800,
-    "changedFanoutPerUnitSeconds": 180,
-    "changedFanoutThreshold": 2,
-    "floorSeconds": 900,
-    "headroomSeconds": 90,
-    "mode": "auto"
-  },
-  "scenarios": {
-    "dir": ".codeyam/scenarios"
-  },
-  "screenSizes": {
-    "Desktop": {
-      "height": 900,
-      "width": 1440
-    },
-    "Laptop": {
-      "height": 800,
-      "width": 1280
-    },
-    "Mobile": {
-      "height": 844,
-      "width": 390
-    },
-    "Tablet": {
-      "height": 1024,
-      "width": 768
     }
   },
   "server": {
@@ -500,65 +634,17 @@
     "maxRssMb": 6144
   },
   "setupBrowserEnabled": false,
-  "silenceHookStderr": false,
-  "startCommand": "npm run dev",
-  "staticChecks": [
-    {
-      "command": "npx astro check",
-      "description": "Astro type-check (.astro + .ts + .tsx) — matches the CI build gate",
-      "excludePatterns": [
-        "**/node_modules/**",
-        "**/dist/**",
-        "**/build/**"
-      ],
-      "filePatterns": [
-        "**/*.astro",
-        "**/*.ts",
-        "**/*.tsx"
-      ],
-      "name": "astro-check"
-    }
-  ],
-  "testCacheIgnorePatterns": [],
-  "testParallelism": {
-    "loadGuard": true
-  },
-  "testPartitions": [],
-  "testRunners": [
-    {
-      "changedCommand": "npx vitest run --changed --reporter=json",
-      "command": "npx vitest run --reporter=json",
-      "excludePatterns": [
-        "**/node_modules/**",
-        "**/dist/**",
-        "**/build/**"
-      ],
-      "name": "tests",
-      "outputFormat": "vitest-json",
-      "sourceFilePatterns": [
-        "**/*.{ts,tsx,js,jsx}"
-      ],
-      "targetedCommand": "npx vitest run -t \"{test_names}\" --reporter=json",
-      "testFilePatterns": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.test.js",
-        "**/*.test.jsx"
-      ]
-    }
-  ],
-  "toolchainPaths": [],
   "workflow": {
     "checkIns": {
-      "hardeningCompleted": {
-        "autoAction": "commit",
-        "pause": true
-      },
       "planAccepted": {
         "pause": true
       },
       "prototypeCompleted": {
         "pause": true
+      },
+      "hardeningCompleted": {
+        "pause": true,
+        "autoAction": "commit"
       },
       "push": {
         "pause": true
