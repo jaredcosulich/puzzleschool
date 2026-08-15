@@ -50,3 +50,10 @@ Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
 Warning: 1 tracked source file(s) are modified but not committed. The `chore: update codeyam state` commit below will record a registry, evidence rows and caches describing source that is NOT in committed history — a fresh checkout of HEAD would claim coverage for tests it does not contain:
   - package-lock.json
 Commit the source first, then re-run `codeyam-editor editor session-finalize` so the committed state describes the committed tree.
+Committed finalize state as `chore: update codeyam state` (847d7dc) — HEAD is push-safe.
+Session finalize complete: ready to push.
+Build-config advisory: this branch changes your CI / container build files, so a green local build does NOT prove the CI or image build still succeeds.
+Surface detected:
+  - CI / container build files (`.github/workflows/*.yml`, `Dockerfile*`) — the build invocation changed; local build success doesn't prove the CI/image build
+Re-run the affected build before merging — local build success says nothing about the CI/image build invocation that changed.
+session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=25.9s
