@@ -1,40 +1,40 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bqrme7lk3.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bqrme7lk3.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786743185,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":325079}
-session-finalize started: 2026-08-14T21:33:05Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 325079)
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786754542,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":20267}
+session-finalize started: 2026-08-15T00:42:22Z, output: /Users/jaredcosulich/workspace/puzzleschool/.codeyam/logs/session-finalize.log (PID 20267)
+The final workflow step ('Finalize', step 0) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to 60574b5b. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
+
+Re-run the final step to resume: `codeyam-editor editor advance` (or `codeyam-editor editor feature-complete` if advance reports the terminal step).
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
 Coverage thresholds … skipped (no runner declares a coverage_path)
 Phase 0/5: session-cleanup …
-Phase 1/5: reusing 1 green partition cache(s) from 2026-08-14T21:18:24.707130517+00:00; full re-run skipped (per-partition Merkle + registry digest match)
+Phase 1/5: skipped (--start-from-phase 2)
 Phase 2/5: audit (--gate-mode strict, comprehensive) …
 [   0s] audit: running static checks
-[   7s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+[   4s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+Analyzed 72 files, found 103 import edges, graph has 80 nodes
 {
-  "analyzed": 70,
-Analyzed 70 files, found 101 import edges, graph has 78 nodes
-  "entityCount": 93,
-  "graphSize": 78,
-  "totalImports": 101
+  "analyzed": 72,
+  "entityCount": 97,
+  "graphSize": 80,
+  "totalImports": 103
 }
-[  12s] audit: running registry invariant checks
-[  12s] audit: gather complete
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786754552,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":20267,"progress":"Phase 2/5: audit (--gate-mode strict, comprehensive) …"}
+[   9s] audit: running registry invariant checks
+[  10s] audit: gather complete
 Phase 3/5: analyze-imports …
 {
-  "analyzed": 70,
-  "entityCount": 93,
-  "graphSize": 78,
-  "totalImports": 101
-}
-Analyzed 70 files, found 101 import edges, graph has 78 nodes
+Analyzed 72 files, found 103 import edges, graph has 80 nodes
+  "analyzed": 72,
 Phase 3.5/5: screenshot coverage …
+  "entityCount": 97,
+  "graphSize": 80,
+  "totalImports": 103
+}
 Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
 Phase 3.6/5: glossary reconciliation …
 Phase 4/5: verify-build …
-[PASS] astro-check (8.01s)
+[PASS] astro-check (3.65s)
 CODEYAM_VERIFY_BUILD: PASS — 1 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
-Session finalize complete: ready to push.
-Build-config advisory: this branch changes your CI / container build files, so a green local build does NOT prove the CI or image build still succeeds.
-Surface detected:
-  - CI / container build files (`.github/workflows/*.yml`, `Dockerfile*`) — the build invocation changed; local build success doesn't prove the CI/image build
-Re-run the affected build before merging — local build success says nothing about the CI/image build invocation that changed.
-session-finalize finished: status=ok, phase1=passed (reusing 1 green partition cache(s) from 2026-08-14T21:18:24.707130517+00:00), phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=24.5s
+Warning: 1 tracked source file(s) are modified but not committed. The `chore: update codeyam state` commit below will record a registry, evidence rows and caches describing source that is NOT in committed history — a fresh checkout of HEAD would claim coverage for tests it does not contain:
+  - package-lock.json
+Commit the source first, then re-run `codeyam-editor editor session-finalize` so the committed state describes the committed tree.

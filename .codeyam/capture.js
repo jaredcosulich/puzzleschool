@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: 7002e1b0b433d9ff1d33433c5cef2948dd79906f9f4a48e6922d6000f2308c94
+// codeyam-editor: 0.1.7  source-sha256: ef6a93a53c3713f399320bd8f89b4481cac2ebdd6359057e89d6b79c9a53808f
 
 // Render environment (colorScheme, deviceScaleFactor, userAgent, locale,
 // timezoneId, reduceMotion, forcedColors) is read from config when present
@@ -968,11 +968,7 @@ async function runScenarioCheck(
   // wait out an in-flight fetch that would otherwise be screenshotted as a
   // loading skeleton.
   const networkTracker = createNetworkTracker(page);
-  // The observer tallies which declared mocks actually fulfilled and inventories
-  // every request the page made, grouped by origin. `appOrigin` lets it split
-  // same-origin from cross-origin — a third-party host the scenario has no
-  // opinion about becomes visible rather than inferred.
-  const mockObserver = await attachHttpMocks(page, httpMocks, { appOrigin });
+  await attachHttpMocks(page, httpMocks);
 
   page.on("pageerror", (error) => {
     pushIssue(issues, handlePageError(error));
@@ -1384,8 +1380,6 @@ async function runScenarioCheck(
       outputPath,
       url: frame.url() || url,
       unmockedRoutes,
-      mockUsage: { used: mockObserver.used, unused: mockObserver.unused },
-      externalRequests: mockObserver.externalRequests,
     });
 
     if (config.interaction) {
@@ -1429,10 +1423,6 @@ async function runScenarioCheck(
       outputPath,
       url,
       unmockedRoutes,
-      // A capture that threw still made requests; the inventory it collected up
-      // to the failure is often exactly what explains the failure.
-      mockUsage: { used: mockObserver.used, unused: mockObserver.unused },
-      externalRequests: mockObserver.externalRequests,
     });
   } finally {
     await browser.close();
