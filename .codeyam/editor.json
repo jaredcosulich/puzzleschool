@@ -45,7 +45,12 @@
         "**/*.test.jsx"
       ],
       "sourceFilePatterns": [
-        "**/*.{ts,tsx,js,jsx}"
+        "**/*.{ts,tsx,js,jsx}",
+        "astro.config.mjs",
+        "tsconfig.json",
+        "package.json",
+        "package-lock.json",
+        "src/data/**/*.json"
       ],
       "excludePatterns": [
         "**/node_modules/**",
@@ -58,7 +63,17 @@
     }
   ],
   "testPartitions": [],
-  "testCacheIgnorePatterns": ["**/*.astro", "**/*.css"],
+  "testCacheIgnorePatterns": [
+    "**/*.astro",
+    "**/*.css",
+    ".claude/**",
+    ".github/**",
+    "public/**",
+    "**/*.md",
+    "**/*.toml",
+    ".gitignore",
+    ".gitattributes"
+  ],
   "staticChecks": [
     {
       "name": "astro-check",

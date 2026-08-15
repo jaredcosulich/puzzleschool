@@ -1,11 +1,15 @@
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786754304,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":6249}
-
-warning: about to run the FULL test suite (~77 tests) — this can take many minutes.
-warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786790899,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":76108}
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
-note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
-[   2s] Tests completed.
-{"failed":0,"passed":82,"skipped":0,"success":true,"total":82}
+[   2s] Running runner: tests
+[   4s] Tests completed.
 All 82 tests passed.
+{"failed":0,"passed":82,"skipped":0,"success":true,"total":82}
+
+Partial run — the partition(s) this run covered were updated, cache file and
+test-cache.json index entry together. Partitions it did NOT cover keep their
+previous hash, so a whole-suite gate can still report those stale.
+If a stale-partition bail sent you here, that recovery HAS landed — re-run the
+command that bailed. To cover the remaining partitions, run
+`codeyam-editor editor refresh-tests` (no flags) before `editor audit`.
