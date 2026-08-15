@@ -35,3 +35,10 @@ Phase 4/5: verify-build …
 [PASS] astro-check (3.75s)
 CODEYAM_VERIFY_BUILD: PASS — 1 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
+Committed finalize state as `chore: update codeyam state` (eb14921) — HEAD is push-safe.
+Session finalize complete: ready to push.
+Build-config advisory: this branch changes your CI / container build files, so a green local build does NOT prove the CI or image build still succeeds.
+Surface detected:
+  - CI / container build files (`.github/workflows/*.yml`, `Dockerfile*`) — the build invocation changed; local build success doesn't prove the CI/image build
+Re-run the affected build before merging — local build success says nothing about the CI/image build invocation that changed.
+session-finalize finished: status=ok, phase1=skipped, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=13.0s
