@@ -1,59 +1,37 @@
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786791108,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":87114}
-session-finalize started: 2026-08-15T10:51:48Z, output: /Users/jaredcosulich/workspace/puzzleschool/.codeyam/logs/session-finalize.log (PID 87114)
-The final workflow step ('Finalize', step 0) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to 8cece42a. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786791156,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":90641}
+session-finalize started: 2026-08-15T10:52:36Z, output: /Users/jaredcosulich/workspace/puzzleschool/.codeyam/logs/session-finalize.log (PID 90641)
+The final workflow step ('Finalize', step 0) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to e008a3c2. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
 
 Re-run the final step to resume: `codeyam-editor editor advance` (or `codeyam-editor editor feature-complete` if advance reports the terminal step).
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
 Coverage thresholds … skipped (no runner declares a coverage_path)
 Phase 0/5: session-cleanup …
-Phase 1/5: refresh-tests (no filters) — source Merkle hash changed for partition 'all'
-
-warning: about to run the FULL test suite (~82 tests) — this can take many minutes.
-warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
-Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
-  tests  ::  npx vitest run --reporter=json
-note: full re-run requested; merkle-hash optimization skipped
-Test refresh triggered. Waiting for results...
-[   2s] Running runner: tests
-[   4s] Tests completed.
-{"failed":0,"passed":82,"skipped":0,"success":true,"total":82}
-All 82 tests passed.
+Phase 1/5: reusing 1 green partition cache(s) from 2026-08-15T10:51:54.457800+00:00; full re-run skipped (per-partition Merkle + registry digest match)
 Phase 2/5: audit (--gate-mode strict, comprehensive) …
 [   0s] audit: running static checks
-{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786791118,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":87114,"progress":"Phase 2/5: audit (--gate-mode strict, comprehensive) …"}
-[   7s] audit: rebuilding dependency graph (can take a few minutes on a large project)
-Analyzed 72 files, found 103 import edges, graph has 80 nodes
+[   6s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786791166,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":90641,"progress":"Phase 2/5: audit (--gate-mode strict, comprehensive) …"}
 {
+Analyzed 72 files, found 103 import edges, graph has 80 nodes
   "analyzed": 72,
   "entityCount": 97,
   "graphSize": 80,
   "totalImports": 103
 }
-[   9s] audit: running registry invariant checks
-[  10s] audit: gather complete
+[   8s] audit: running registry invariant checks
+[   9s] audit: gather complete
 Phase 3/5: analyze-imports …
 {
 Analyzed 72 files, found 103 import edges, graph has 80 nodes
   "analyzed": 72,
+Phase 3.5/5: screenshot coverage …
   "entityCount": 97,
   "graphSize": 80,
   "totalImports": 103
 }
-Phase 3.5/5: screenshot coverage …
 Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
 Phase 3.6/5: glossary reconciliation …
 Phase 4/5: verify-build …
-{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1786791128,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":87114,"progress":"Phase 4/5: verify-build …"}
-[PASS] astro-check (5.92s)
+[PASS] astro-check (6.03s)
 CODEYAM_VERIFY_BUILD: PASS — 1 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
-Warning: 1 tracked source file(s) are modified but not committed. The `chore: update codeyam state` commit below will record a registry, evidence rows and caches describing source that is NOT in committed history — a fresh checkout of HEAD would claim coverage for tests it does not contain:
-  - package-lock.json
-Commit the source first, then re-run `codeyam-editor editor session-finalize` so the committed state describes the committed tree.
-Committed finalize state as `chore: update codeyam state` (847d7dc) — HEAD is push-safe.
-Session finalize complete: ready to push.
-Build-config advisory: this branch changes your CI / container build files, so a green local build does NOT prove the CI or image build still succeeds.
-Surface detected:
-  - CI / container build files (`.github/workflows/*.yml`, `Dockerfile*`) — the build invocation changed; local build success doesn't prove the CI/image build
-Re-run the affected build before merging — local build success says nothing about the CI/image build invocation that changed.
-session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=25.9s
