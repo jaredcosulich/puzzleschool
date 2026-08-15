@@ -1,84 +1,79 @@
-{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786754312,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228}
-  ▶ 32 scenario(s) to recapture (budget 300s)
+{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786755986,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051}
+  ▶ Pass 1/3: 32 scenario(s) to recapture (budget 300s)
   → Warming dev server at http://127.0.0.1:4321/
   → Capturing: about-full-design
-  ⧉ Visual change: about-full-design — 2% of pixels differ vs. the prior frame
+  ⧉ Visual change: about-full-design — 14% of pixels differ vs. the prior frame
   ✓ Recaptured: about-full-design
   → Capturing: actioncard-coral-accent
-  ✓ Recaptured: actioncard-coral-accent
+  ⟲ Unchanged: actioncard-coral-accent — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: actioncard-default
-{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786754322,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing actioncard-default (3/32)"}
-  ✓ Recaptured: actioncard-default
+  ⟲ Unchanged: actioncard-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: actioncards-default
-  ✓ Recaptured: actioncards-default
+{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786755996,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing actioncards-default (4/32)"}
+  ⟲ Unchanged: actioncards-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: bandquote-default
-  ✓ Recaptured: bandquote-default
+  ⟲ Unchanged: bandquote-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: branchingtree-default
-{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786754332,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing branchingtree-default (6/32)"}
   ⟲ Unchanged: branchingtree-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: branchingtree-variations
-  ✓ Recaptured: branchingtree-variations
+{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786756006,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing branchingtree-variations (7/32)"}
+  ⟲ Unchanged: branchingtree-variations — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: contact-email-only
-  ✓ Recaptured: contact-email-only
+  ⟲ Unchanged: contact-email-only — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: contactbutton-default
-{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786754342,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing contactbutton-default (9/32)"}
-  ✓ Recaptured: contactbutton-default
+{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786756016,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing contactbutton-default (9/32)"}
+  ⟲ Unchanged: contactbutton-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: dragoncurve-default
   ⟲ Unchanged: dragoncurve-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: exploratoryband-default
-  ⧉ Visual change: exploratoryband-default — 2% of pixels differ vs. the prior frame
-  ✓ Recaptured: exploratoryband-default
+  ⟲ Unchanged: exploratoryband-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: exploratoryband-without-quote
-  ✓ Recaptured: exploratoryband-without-quote
+  ⟲ Unchanged: exploratoryband-without-quote — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: fibonaccistructure-default
-{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786754352,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing fibonaccistructure-default (13/32)"}
+{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786756026,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing fibonaccistructure-default (13/32)"}
   ⟲ Unchanged: fibonaccistructure-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: home-full-design
-  ⧉ Visual change: home-full-design — 2% of pixels differ vs. the prior frame
-  ✓ Recaptured: home-full-design
+  ⟲ Unchanged: home-full-design — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: kochfragment-default
   ⟲ Unchanged: kochfragment-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: mark-default
-{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786754362,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing mark-default (16/32)"}
+{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786756036,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing mark-default (16/32)"}
   ⟲ Unchanged: mark-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: mark-missing-piece
   ⟲ Unchanged: mark-missing-piece — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: mark-on-ink
   ⟲ Unchanged: mark-on-ink — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: masthead-default
-{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786754372,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing masthead-default (19/32)"}
-  ✓ Recaptured: masthead-default
+  ⟲ Unchanged: masthead-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: morserule-default
+{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786756046,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing morserule-default (20/32)"}
   ⟲ Unchanged: morserule-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: page-created-from-the-cms
-{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786754382,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing page-created-from-the-cms (21/32)"}
-  ✓ Recaptured: page-created-from-the-cms
+  ⟲ Unchanged: page-created-from-the-cms — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: page-minimal-fields
-  ✓ Recaptured: page-minimal-fields
+{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786756056,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing page-minimal-fields (22/32)"}
+  ⟲ Unchanged: page-minimal-fields — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: page-title-without-body
-{"command":"recapture-stale","elapsed_secs":80,"emitted_at_unix":1786754392,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing page-title-without-body (23/32)"}
-  ✓ Recaptured: page-title-without-body
+{"command":"recapture-stale","elapsed_secs":80,"emitted_at_unix":1786756066,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing page-title-without-body (23/32)"}
+  ⟲ Unchanged: page-title-without-body — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: pageheader-default
-  ✓ Recaptured: pageheader-default
+  ⟲ Unchanged: pageheader-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: pageheader-title-only
-{"command":"recapture-stale","elapsed_secs":90,"emitted_at_unix":1786754402,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing pageheader-title-only (25/32)"}
-  ✓ Recaptured: pageheader-title-only
+  ⟲ Unchanged: pageheader-title-only — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: prosecolumns-default
-  ✓ Recaptured: prosecolumns-default
+  ⟲ Unchanged: prosecolumns-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: quoteband-default
-  ⧉ Visual change: quoteband-default — 4% of pixels differ vs. the prior frame
-  ✓ Recaptured: quoteband-default
+{"command":"recapture-stale","elapsed_secs":90,"emitted_at_unix":1786756076,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing quoteband-default (27/32)"}
+  ⟲ Unchanged: quoteband-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: sinerule-default
   ⟲ Unchanged: sinerule-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: sitefooter-default
-{"command":"recapture-stale","elapsed_secs":100,"emitted_at_unix":1786754412,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing sitefooter-default (29/32)"}
-  ✓ Recaptured: sitefooter-default
+  ⟲ Unchanged: sitefooter-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: sitefooter-home-variant
-  ✓ Recaptured: sitefooter-home-variant
+{"command":"recapture-stale","elapsed_secs":100,"emitted_at_unix":1786756086,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2051,"progress":"Capturing sitefooter-home-variant (30/32)"}
+  ⟲ Unchanged: sitefooter-home-variant — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: sitenav-default
-  ✓ Recaptured: sitenav-default
+  ⟲ Unchanged: sitenav-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: statementblock-default
-{"command":"recapture-stale","elapsed_secs":110,"emitted_at_unix":1786754422,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":7228,"progress":"Capturing statementblock-default (32/32)"}
-  ⧉ Visual change: statementblock-default — 2% of pixels differ vs. the prior frame
-  ✓ Recaptured: statementblock-default
-{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":23,"resolution_changes":[],"restored_identical":9,"seed_ignored":null,"shared_failure_cause":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":32,"unrecapturable":[],"unrecapturable_project_total":0,"visual_diffs":[{"kind":"raster","magnitude":0.021727430555555555,"resolution_change":null,"screenshot":"about-full-design--desktop.png","slug":"about-full-design"},{"kind":"raster","magnitude":0.023485725308641976,"resolution_change":null,"screenshot":"exploratoryband-default--desktop.png","slug":"exploratoryband-default"},{"kind":"raster","magnitude":0.023521797839506173,"resolution_change":null,"screenshot":"home-full-design--desktop.png","slug":"home-full-design"},{"kind":"raster","magnitude":0.03843132716049383,"resolution_change":null,"screenshot":"quoteband-default--desktop.png","slug":"quoteband-default"},{"kind":"raster","magnitude":0.023822916666666666,"resolution_change":null,"screenshot":"statementblock-default--desktop.png","slug":"statementblock-default"}]}
+  ⟲ Unchanged: statementblock-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":1,"resolution_changes":[],"restored_identical":31,"seed_ignored":null,"shared_failure_cause":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":32,"unrecapturable":[],"unrecapturable_project_total":0,"visual_diffs":[{"kind":"raster","magnitude":0.1400246913580247,"resolution_change":null,"screenshot":"about-full-design--desktop.png","slug":"about-full-design"}]}
