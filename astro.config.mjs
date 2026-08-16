@@ -90,8 +90,9 @@ async function liveLinkedCms() {
 // - For a default project site (e.g., user.github.io/repo), use base: '/<repo-name>/'
 export default defineConfig({
   output: 'static',
-  // site: 'https://<user>.github.io',
-  // base: '/',
+  // Custom domain (public/CNAME), so the site lives at the domain root and
+  // `base` stays at its default '/'.
+  site: 'https://puzzleschool.org',
   integrations: [codeyamCms(), react(), sitemap()],
   vite: {
     plugins: CMS_LOCAL ? [await liveLinkedCms()] : [],
