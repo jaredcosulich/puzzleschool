@@ -1,15 +1,21 @@
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786790899,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":76108}
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bfkbxlmkj.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/291dbe83-4440-4241-b50d-050ddc68e834/tasks/bfkbxlmkj.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786879584,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1391845}
+[refresh-tests --changed] scope: 7 changed path(s) (16 untracked included)
+[refresh-tests --changed]   0 runner(s) matched these paths — nothing to run (no-op, exit 0).
+[refresh-tests --changed] narrowing: every test declared in the changed file(s) is registered — the run narrows to the tests those files own.
+[refresh-tests --changed]   partition scope: none — the run is bounded by the matched runner's own command, not by a partition.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
 Test refresh triggered. Waiting for results...
-[   2s] Running runner: tests
-[   4s] Tests completed.
-All 82 tests passed.
-{"failed":0,"passed":82,"skipped":0,"success":true,"total":82}
+[   2s] Tests completed.
+{"failed":0,"passed":0,"skipped":0,"success":true,"total":0}
+WARNING: no test runners are configured in .codeyam/editor.json (testRunners is empty).
+refresh-tests cannot find or run any tests until a runner is added, even if test files exist on disk.
+Add a runner entry with `command`, `outputFormat`, and `testFilePatterns`, or re-scaffold from a stack template.
 
 Partial run — the partition(s) this run covered were updated, cache file and
 test-cache.json index entry together. Partitions it did NOT cover keep their
 previous hash, so a whole-suite gate can still report those stale.
 If a stale-partition bail sent you here, that recovery HAS landed — re-run the
-command that bailed. To cover the remaining partitions, run
-`codeyam-editor editor refresh-tests` (no flags) before `editor audit`.
+command that bailed. To cover the remaining partitions (e.g. for brand-new
+tests elsewhere), run: codeyam-editor editor refresh-tests --force

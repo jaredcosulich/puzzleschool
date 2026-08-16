@@ -125,6 +125,10 @@ States captured as runnable scenarios with codeyam-editor:
 
 <img src=".codeyam/scenarios/screenshots/about-full-design--desktop.png" alt="About - Full Design" width="280">
 
+### Home - Narrow Viewport
+
+<img src=".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png" alt="Home - Narrow Viewport" width="280">
+
 ### Contact - Email Only
 
 <img src=".codeyam/scenarios/screenshots/contact-email-only--desktop.png" alt="Contact - Email Only" width="280">

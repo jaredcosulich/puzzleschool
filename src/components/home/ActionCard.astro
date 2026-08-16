@@ -25,7 +25,8 @@ const { title, body, href, label, accent } = Astro.props;
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     gap: var(--space-sm);
     padding: 20px 36px 36px;
     background: var(--paper);
@@ -52,7 +53,7 @@ const { title, body, href, label, accent } = Astro.props;
 
   .button {
     margin-top: 8px;
-    align-self: flex-start;
+    align-self: center;
     padding: 16px 30px;
     background: var(--teal);
     color: var(--paper);

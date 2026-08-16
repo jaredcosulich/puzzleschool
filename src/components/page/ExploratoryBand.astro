@@ -14,9 +14,9 @@ interface Props {
 const { heading, bandBody, quote, quoteAttribution } = Astro.props;
 ---
 
-<section class="band">
+<section class="band bleed">
   <DragonCurve />
-  <div class="band__grid">
+  <div class="band__grid measure">
     <div class="band__lead">
       <h2>{heading}</h2>
       {bandBody ? <p>{bandBody}</p> : null}
@@ -35,6 +35,9 @@ const { heading, bandBody, quote, quoteAttribution } = Astro.props;
   }
 
   .band__grid {
+    /* `measure` (tokens.css) caps this to the page's reading width — without
+       it the two columns spread to the full screen and stop lining up with
+       the prose above them. */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 56px;

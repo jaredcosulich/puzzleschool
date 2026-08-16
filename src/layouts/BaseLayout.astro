@@ -3,10 +3,14 @@
 // Header and footer read from `src/data/*.json`, so changing the site title, a
 // menu item, or the footer line is a CMS edit — never a markup change.
 //
-// The design gives the site a literal PAGE: a 1280px paper-coloured canvas with
-// a hairline border, centred on a darker desk. Below 1280 the canvas simply
-// becomes the viewport and the gutters go fluid; the paper never scales down as
-// a shrunken rectangle.
+// The site is full-width: paper runs edge to edge, and the dark bands bleed to
+// the viewport via the `.bleed` utility in tokens.css. `.page` survives only as
+// a 1280px reading measure that keeps content centred — it paints nothing, so
+// there is no canvas edge and no desk behind it.
+//
+// It used to be a literal page: a 1280px paper canvas with a hairline border on
+// a darker desk. That framing read as dated at wide viewports, mostly because
+// the ink bands stopped at 1280 too.
 //
 // `showNav` selects which of the two page shapes this is. Home has no nav bar —
 // its masthead IS the navigation — and its footer sits on the wider gutter.
@@ -72,11 +76,12 @@ const contactHref = buildMailto({
 
 <style>
   .page {
+    /* No background, border or overflow clip: the body is paper, so this is a
+       reading measure rather than a visible canvas. The clip in particular had
+       to go — it would clip the `.bleed` bands back to this width. Horizontal
+       overhang is contained by `overflow-x: clip` on html/body in tokens.css. */
     width: min(var(--page-width), 100%);
     margin: 0 auto;
-    background: var(--paper);
-    border: 1px solid var(--hairline);
     color: var(--ink);
-    overflow: hidden;
   }
 </style>

@@ -13,7 +13,11 @@
 :root {
   /* ---- Colour ---------------------------------------------------------- */
   --paper: #faf7f1; /* page background; text on ink */
-  --desk: #e9e5dc; /* the area outside the page canvas */
+  --desk: #e9e5dc; /* the area outside the page canvas — NOT PAINTED since the
+                      site went full-width; the body is paper and there is no
+                      longer an outside. Kept because the handoff's palette
+                      names it, so deleting it would put the token file and the
+                      design document out of step. */
   --ink: #16211e; /* dark bands, headings, logo inner lines */
   --teal: #1f7a72; /* primary accent: Contact card + button */
   --coral: #d4562f; /* secondary accent: Learn More card + button */
@@ -76,15 +80,22 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
   /* The structures are anchored to page edges and can overhang; never let that
-     turn into a horizontal scrollbar. */
+     turn into a horizontal scrollbar.
+
+     `clip` rather than `hidden`: `hidden` makes the element a scroll container,
+     which would clip the full-bleed bands back to the content column and stop
+     `100vw` from measuring the real viewport. `clip` contains the overhang
+     without that side effect. `hidden` stays as the fallback for older engines. */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
-  background: var(--desk);
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
   line-height: 1.6;
@@ -100,6 +111,28 @@ a {
 
 a:hover {
   opacity: 0.7;
+}
+
+/* Lets a band break out of the centred `.page` canvas and span the viewport,
+   without a wrapper element and without disturbing its own padding, grid or
+   structure anchoring. Only the dark bands need it — paper-on-paper already
+   reads as full width now that the body is paper.
+
+   Global rather than per-component because Astro scopes component styles and
+   three components in two directories share it. */
+.bleed {
+  margin-inline: calc(50% - 50vw);
+  width: 100vw;
+}
+
+/* The other half of `.bleed`, and almost always used with it: pulls content
+   back onto the page's reading measure inside a band that spans the viewport.
+   A bled band without this lets its contents spread to the full screen —
+   which is how the exploratory band and the morse rule first went wrong.
+   Treat the two as a pair: `.bleed` on the band, `.measure` on what's inside. */
+.measure {
+  max-width: var(--page-width);
+  margin-inline: auto;
 }
 
 /* Every generated line structure is decorative. Marking them here means an

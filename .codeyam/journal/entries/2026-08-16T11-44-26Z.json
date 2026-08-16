@@ -1,0 +1,315 @@
+{
+  "timestamp": "2026-08-16T11:44:26Z",
+  "title": "Full-Bleed Layout for the Site Container",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe site renders as a literal page: a 1280px paper canvas with a hairline\nborder, centred on a darker `--desk` background. Above 1280px the desk shows as\ncolour strips down both sides, and — the part that actually dates it — the ink\nbands stop at 1280px too, so the dark quote band reads as a dark rectangle\ninside a page rather than a band across a website.\n\nMake the site full-width: drop the desk and the page border so paper runs edge\nto edge, and let the ink bands bleed to the viewport while their content stays\non today's 1280px measure.\n\nThis is the container only. Type scale, spacing tokens, palette, the generated\nline structures and the deliberately empty third card column are all unchanged.\nChosen from a six-option design round (`.codeyam/design/rounds/round-1/`,\noption 1) because it preserves every proportion already approved — the 56px\nstatement against its 900px measure, the 3-column card grid, the Fibonacci\nspiral growing out of the Contact card's rule — while changing the one thing\nthat reads as dated.\n\n## Key Decisions\n\n- **Paper becomes the body background; the canvas keeps its 1280px cap.** With\n  `body` painted paper, the page no longer sits *on* anything, so the canvas\n  cap stops being visible as an edge and becomes what it should be — a reading\n  measure. That means most components need no change at all: their existing\n  `padding: X var(--gutter)` already centres content at 1280.\n\n- **Only the ink bands actually need to escape the container.** Paper-on-paper\n  needs no bleed. The dark bands are the only elements whose background must\n  reach the viewport edge, so a single `.bleed` utility applied to three\n  components does the whole job. This is why the change is small rather than a\n  rewrite of every band into wrapper + inner.\n\n- **`.bleed` uses the margin-inline escape, not a restructure.**\n  `margin-inline: calc(50% - 50vw); width: 100vw` lets a band break out of its\n  centred parent without adding a wrapper element or touching the inner\n  layout — so each band's existing padding, grid and structure anchoring keep\n  working exactly as they do now.\n\n- **Horizontal overflow moves to `overflow-x: clip` on `html, body`.** `.page`\n  currently carries `overflow: hidden`, which is what stops the overhanging\n  structures from producing a scrollbar — but it would also clip a full-bleed\n  child, defeating the change. `clip` contains the overhang without creating a\n  scroll container, so a bled band still measures a true 100vw. Declared as\n  `overflow-x: hidden; overflow-x: clip` so the older keyword remains the\n  fallback.\n\n- **`QuoteBand` must stay unclipped.** Its own comment records why: the Koch\n  fragment is stroked in ink, invisible against the band, and only legible\n  where it crosses onto the paper above. `.bleed` adds no clip, so this holds —\n  but it is the one thing to re-check visually after the change.\n\n- **`--desk` stays in `tokens.css`, unused, with a note.** It is part of the\n  documented palette in the design handoff. Deleting the token would make the\n  handoff and the code disagree; marking it as no longer applied records the\n  decision where the next reader will find it.\n\n## Implementation\n\n### 1. Repaint the ground and move the overflow guard\n\n**File**: `src/styles/tokens.css`\n\n- `body` background `var(--desk)` → `var(--paper)`.\n- Replace `html { overflow-x: hidden }` with `html, body { overflow-x: hidden;\n  overflow-x: clip }`, keeping the existing comment about structures\n  overhanging and extending it to say why `clip` rather than `hidden`.\n- Leave `--desk` defined; update its comment to record that nothing paints it\n  since the site went full-width.\n\n### 2. Unframe the canvas\n\n**File**: `src/layouts/BaseLayout.astro`\n\nIn the `.page` rule: drop `border: 1px solid var(--hairline)` and\n`overflow: hidden`; keep `width: min(var(--page-width), 100%)` and\n`margin: 0 auto`. Update the component comment — it currently describes \"a\n1280px paper-coloured canvas with a hairline border, centred on a darker desk\",\nwhich is exactly what stops being true.\n\nAdd the shared `.bleed` utility to `src/styles/tokens.css` (global, since three\ncomponents in two directories use it and Astro component styles are scoped):\n\n```css\n.bleed {\n  margin-inline: calc(50% - 50vw);\n  width: 100vw;\n}\n```\n\n### 3. Bleed the three ink bands\n\n- **`src/components/home/QuoteBand.astro`** — add `bleed` to `section.band`.\n  Confirm the Koch fragment still crosses onto the paper above and is not\n  clipped.\n- **`src/components/page/ExploratoryBand.astro`** — add `bleed` to\n  `section.band`. It keeps its own `overflow: hidden` (the dragon curve is\n  clipped to the band deliberately); that clip is on the band, not the page, so\n  it is unaffected by the bleed.\n- **`src/components/structures/MorseRule.astro`** — add `bleed` to the ink\n  strip so the 12px rule spans the viewport rather than stopping at 1280.\n\nBecause `.bleed` is a global utility and Astro scopes component styles, apply it\nas a plain class in the markup; no `:global` escape hatch is needed in the\ncomponent `<style>` blocks.\n\n### 4. Check the internal-page hairline\n\n**File**: `src/pages/[...slug].astro`\n\nThe internal template has a hairline rule between the prose columns and the\nband (`margin: 0 40px` in the handoff). Confirm whether it should stay on the\ncontent measure or bleed with the bands; keep it on the measure unless it reads\nas orphaned once the bands are full-width.\n\n### Explicitly out of scope\n\n- Type scale, spacing tokens, palette, border radius — unchanged.\n- The generated structures and where they anchor — they stay anchored to the\n  content column, not the viewport edge (that was option 4 in the round).\n- The empty third card column stays empty.\n- Content, copy and CMS wiring — untouched.\n\n## Reused existing code\n\n**Existing-implementation survey.** Grepped `src/` for `bleed`, `100vw`,\n`margin-inline` and `50vw`: **no full-bleed helper exists today.** The only\nviewport-relative sizing in the codebase is the `clamp()` fluid type and gutter\ntokens, which are unrelated. `.bleed` is genuinely new.\n\n- `--page-width`, `--gutter`, `--gutter-wide`, `--paper`, `--ink`, `--hairline`\n  from `src/styles/tokens.css` — the change re-points which of these paint the\n  ground; it introduces no new colour or measure.\n- The eight existing `@media (max-width: 840px)` blocks across\n  `ProseColumns`, `PageHeader`, `BandQuote`, `ExploratoryBand`, `ActionCards`,\n  `FibonacciStructure`, `BranchingTree`, `DragonCurve` and `KochFragment` —\n  all continue to apply unchanged; the bleed is a container change above that\n  breakpoint's concerns.\n\n## Scenarios to Demonstrate\n\n- **Home at 1280 — the design width.** Identical to today except the desk\n  strips and page border are gone and the quote band reaches both edges.\n- **Home at 1920 — the case that motivated this.** Paper and the ink band run\n  edge to edge; the statement, cards and Fibonacci spiral hold their 1280\n  measure and stay centred.\n- **Home at 1280 with the Koch fragment checked.** The fragment still crosses\n  from the band onto the paper above — the regression `.bleed` could plausibly\n  cause.\n- **Internal page (About) at 1920.** The morse rule and the exploratory band\n  both span the viewport; the three prose columns and the branching structure\n  between them stay on the content measure.\n- **Narrow viewport (below 840).** The existing breakpoints still collapse the\n  card grid to one column and drop the structures; no horizontal scrollbar\n  appears despite the bled bands — the `overflow-x: clip` check.\n\nEvery scenario captured today is Desktop-only, so the narrow-viewport case\nneeds a new capture rather than a re-capture.",
+  "description": "The site no longer renders as a page on a desk. `body` is painted paper instead of `--desk`, and `.page` drops its background, border and overflow clip — surviving only as a 1280px reading measure that keeps content centred. A new `.bleed` utility (margin-inline: calc(50% - 50vw); width: 100vw) lets the three ink bands — QuoteBand on home, ExploratoryBand and MorseRule on internal pages — span the viewport, and its counterpart `.measure` pulls their contents back onto the page width. The two are a matched pair by design: a band that bleeds without measuring lets its contents spread to the full screen, which is exactly how the exploratory band and the morse rule first went wrong mid-session.\n\nThe overflow guard moved with it. `.page`'s `overflow: hidden` was what stopped the overhanging structures from producing a scrollbar, but it would also clip a full-bleed child back to the content column, so it became `overflow-x: clip` on `html, body` — `clip` rather than `hidden` because `hidden` makes the element a scroll container and stops 100vw from measuring the real viewport. Verified no horizontal scrollbar at 1920 / 1280 / 820 / 390 on both home and about.\n\nTwo follow-on corrections. The Koch fragment positions itself with a `left` offset that assumes the page canvas; once QuoteBand bled, that offset counted from the SCREEN edge and the figure drifted left by half the difference (320px at 1920). Fixed at the anchor — QuoteBand gained a `.band__inner measure` wrapper matching `.page`'s geometry — rather than with vw math that would drift by half the scrollbar width. Its peak now lands on the centre of the empty third card column to within 0.5px at 1920, 1440 and 1280 (measured: peak 1362 vs column centre 1362.5). And ActionCard's contents were centred (`align-items: center`, `text-align: center`, button `align-self: center`).\n\nChosen from a six-option design round in `.codeyam/design/rounds/round-1/` — option 1, the treatment that preserves every approved proportion (the 56px statement against its 900px measure, the 3-column grid with its deliberately empty third column, the Fibonacci spiral rising from the Contact card's rule) while changing only where the paper and bands end. `--desk` is kept in tokens.css, annotated as no longer painted, so the token file and the design handoff's palette stay in step.\n\nScenario coverage gained `home-narrow-viewport` (390x844), closing a real gap: every scenario was Desktop-only while this feature is specifically about width behaviour. Twelve existing scenarios were recaptured — and a bare `recapture-stale` had reported all twelve as fresh, which is recorded separately as a defect with the measured diffs.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/plans/completed/full-bleed-layout-for-the-site-container.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-coral-accent--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-coral-accent--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncards-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncards-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/kochfragment-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/morserule-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/morserule-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-title-without-body--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-title-without-body--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/quoteband-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/quoteband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/home/ActionCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/home/QuoteBand.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/page/ExploratoryBand.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/structures/KochFragment.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/structures/MorseRule.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/active_tab.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/.active",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/01-fullbleed-capped-mockup.html",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/02-fullbleed-wide-mockup.html",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/03-fluid-measures-mockup.html",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/04-editorial-grid-mockup.html",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/05-ink-hero-mockup.html",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/06-offcatalog-mockup.html",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/current-state.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/round.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/rounds/round-1/target.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/journal/entries/2026-08-15T19-50-05Z.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/journal/entries/2026-08-15T19-50-18Z.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/journal/entries/2026-08-15T19-50-35Z.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/journal/entries/2026-08-16T11-23-12Z.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/journal/entries/2026-08-16T11-31-36Z.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/completed/full-bleed-layout-for-the-site-container.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/home-narrow-viewport.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "Page - Title Without Body",
+      "screenshotPath": "page-title-without-body--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 82,
+    "passed": 82,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 82,
+        "passed": 82
+      }
+    ]
+  }
+}

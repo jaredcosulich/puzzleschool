@@ -17,23 +17,38 @@ interface Props {
 const { quote, attribution } = Astro.props;
 ---
 
-<section class="band">
-  <KochFragment />
-  <Mark variant="signalNight" size={104} />
-  <blockquote>{quote}</blockquote>
-  {attribution ? <p class="attribution">{attribution}</p> : null}
+<section class="band bleed">
+  <div class="band__inner measure">
+    <KochFragment />
+    <Mark variant="signalNight" size={104} />
+    <blockquote>{quote}</blockquote>
+    {attribution ? <p class="attribution">{attribution}</p> : null}
+  </div>
 </section>
 
 <style>
+  /* The ink reaches the viewport edge; everything inside it stays on the same
+     1280 measure as the rest of the page. */
   .band {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* The positioning origin for the Koch fragment, and the reason this wrapper
+     exists. `KochFragment` places itself with a `left` offset that assumes the
+     page canvas — once the band bled to 100vw, that offset started counting
+     from the SCREEN edge and the figure drifted left by half the difference.
+     Matching `.page`'s own geometry (max-width capped, auto-centred, padding
+     inside) puts the origin back on the canvas, so the curve's peak lands on
+     the centre of the empty third card column at any width. */
+  .band__inner {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 26px;
     padding: clamp(56px, 8vw, var(--space-4xl)) var(--gutter-wide);
-    background: var(--ink);
-    color: var(--paper);
     text-align: center;
   }
 

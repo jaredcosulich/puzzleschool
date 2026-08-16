@@ -53,7 +53,13 @@ const height = 479;
 <style>
   /* Anchored in the dark band but hanging far above it: the curve crosses the
      seam, drawn in ink so it is invisible against the band and legible against
-     the paper. The band must NOT clip its overflow. */
+     the paper. The band must NOT clip its overflow.
+
+     `left` is measured from the page canvas, not the viewport — QuoteBand's
+     `.band__inner` provides that origin. 573px puts the curve's peak (which
+     sits 469px into this 935px box) at 1042px, the centre of the empty third
+     card column. That column is deliberately empty, so the figure fills it
+     without colliding with anything. */
   .koch {
     top: -471px;
     left: 573px;

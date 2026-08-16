@@ -43,21 +43,28 @@ const {
 const line = morseLine(words, unit);
 ---
 
-<div class="morse" style={`height: ${height}px;`} role="img" aria-label={`In morse code: ${words.join(', ')}`}>
-  <svg
-    width={line.width}
-    height={markHeight}
-    viewBox={`-1 -1 ${line.width + 2} ${markHeight + 2}`}
-    style={`left: ${inset}px;`}
-    focusable="false"
-    aria-hidden="true"
-  >
-    {
-      line.symbols.map((symbol) => (
-        <rect x={symbol.x} y={0} width={symbol.width} height={markHeight} fill="var(--gold)" />
-      ))
-    }
-  </svg>
+<div
+  class="morse bleed"
+  style={`height: ${height}px;`}
+  role="img"
+  aria-label={`In morse code: ${words.join(', ')}`}
+>
+  <div class="morse__inner measure">
+    <svg
+      width={line.width}
+      height={markHeight}
+      viewBox={`-1 -1 ${line.width + 2} ${markHeight + 2}`}
+      style={`left: ${inset}px;`}
+      focusable="false"
+      aria-hidden="true"
+    >
+      {
+        line.symbols.map((symbol) => (
+          <rect x={symbol.x} y={0} width={symbol.width} height={markHeight} fill="var(--gold)" />
+        ))
+      }
+    </svg>
+  </div>
 </div>
 
 <style>
@@ -65,6 +72,14 @@ const line = morseLine(words, unit);
     position: relative;
     background: var(--ink);
     overflow: hidden;
+  }
+
+  /* The ink strip bleeds to the viewport, but the marks are positioned from
+     `inset` — so they need to start at the content column's edge, not the
+     screen's, or they drift away from everything they sit above. */
+  .morse__inner {
+    position: relative;
+    height: 100%;
   }
 
   .morse svg {
