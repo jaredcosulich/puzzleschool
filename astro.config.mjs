@@ -93,7 +93,15 @@ export default defineConfig({
   // Custom domain (public/CNAME), so the site lives at the domain root and
   // `base` stays at its default '/'.
   site: 'https://puzzleschool.org',
-  integrations: [codeyamCms(), react(), sitemap()],
+  integrations: [
+    codeyamCms(),
+    react(),
+    // Keep the sitemap to the actual public site. The build also emits the CMS
+    // admin app and one harness page per component (codeyam's isolated-component
+    // scenarios); both are real routes, but advertising them to search engines
+    // would bury the three pages that matter under ~40 that don't.
+    sitemap({ filter: (page) => !/\/(admin|isolated-components)\//.test(page) }),
+  ],
   vite: {
     plugins: CMS_LOCAL ? [await liveLinkedCms()] : [],
     server: CMS_LOCAL

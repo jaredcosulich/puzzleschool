@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /isolated-components/
 
 Sitemap: https://puzzleschool.org/sitemap-index.xml

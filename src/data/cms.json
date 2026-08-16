@@ -2,7 +2,7 @@
   "repo": {
     "owner": "jaredcosulich",
     "repo": "puzzleschool",
-    "branch": "puzzle-school-rebuild"
+    "branch": "main"
   },
   "authEndpoint": "/auth",
   "auth": {
