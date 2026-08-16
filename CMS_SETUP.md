@@ -1,105 +1,87 @@
 # Content Management Setup
 
-This site stores content as typed markdown in `src/content/`. A friendly,
-browser-based editing UI — **Sveltia CMS**, a modern Decap-compatible editor —
-is wired in at **`/admin`**. It commits markdown straight to your content
-collections, so editors never touch code and the static-hosting model is
+This site stores content as typed markdown in `src/content/`. A browser-based
+editing UI is wired in at **`/admin`**. It commits markdown straight to your
+content collections, so editors never touch code and the static-hosting model is
 unchanged: GitHub Pages still serves plain HTML, and codeyam can still seed the
 same files per scenario through the `content-collection` seed adapter.
 
-> **Build agent: ask first.** Before wiring auth, ask the user **which editing
-> path(s) they want** — the three below can coexist (e.g. local for yourself +
-> hosted OAuth for a teammate). Only the "Hosted + password" path adds a service
-> outside GitHub Pages. Wire exactly what they pick; don't assume.
-
 ## The admin app
 
-- `public/admin/index.html` loads Sveltia from its CDN and auto-mounts at
-  `/admin` (Astro serves `public/` verbatim — works live and locally).
-- `public/admin/config.yml` is the Decap/Sveltia config. Its `collections`
-  block mirrors `src/content/config.ts`; see **Keeping the schema honest** below.
+The dashboard is **injected from `node_modules` by the `codeyamCms()` Astro
+integration** in `astro.config.mjs` — there are no admin files in this repo to
+maintain, and `npm update @codeyam/cms` picks up improvements. It builds to
+static routes under `/admin` like any other page, so it works on GitHub Pages
+with no server.
 
-## Choosing an editing path
+> The package can optionally scaffold a Decap/Sveltia bridge at `public/admin/`
+> (`npx codeyam-cms integrate --with-sveltia`). **This project does not use it** —
+> there is no `public/admin/`, and no `config.yml`. Ignore Sveltia/Decap docs;
+> the fields the dashboard renders come from `src/data/collections.json` (below).
 
-| Path | Editors need | Extra service | Best for |
-| --- | --- | --- | --- |
-| **GitHub OAuth** | a GitHub account with repo write | an OAuth relay (free) | teammates; per-user commit attribution |
-| **Password** | the shared password | one free Cloudflare Worker | non-technical editors, no GitHub account |
-| **Local** | the repo cloned locally | none | yourself / quick edits |
+## Configuration — `src/data/cms.json`
 
-### 1. Hosted + GitHub OAuth
+```json
+{
+  "repo": { "owner": "jaredcosulich", "repo": "puzzleschool", "branch": "main" },
+  "siteUrl": "https://puzzleschool.org/",
+  "authEndpoint": "/auth",
+  "auth": { "token": true, "worker": false }
+}
+```
 
-Editors visit `/admin` on the live site and click "Sign in with GitHub". GitHub
-Pages can't run the OAuth callback itself, so point the CMS at an OAuth relay.
+- **`repo.branch` must be the branch that actually deploys** (`main` — see
+  `.github/workflows/deploy.yml`). Point it at a non-deploying branch and the CMS
+  keeps reporting successful saves for edits that can never go live.
+- **`siteUrl` is required here because this site uses a custom domain.** Without
+  it the CMS assumes `https://<owner>.github.io/<repo>/`. That URL does redirect
+  to `puzzleschool.org`, but the redirect carries no `Access-Control-Allow-Origin`
+  header, so the admin's cross-origin fetch of `/deploy-status.json` fails and
+  publish verification silently degrades to "unverifiable". Same-origin, it
+  actually confirms a change went **Live**.
 
-**Pre-flight:** a GitHub account with write access to this repo.
+## Signing in
 
-1. Register a GitHub OAuth App (Settings → Developer settings → OAuth Apps).
-   Set the callback URL to your relay's callback (Sveltia's hosted helper, or a
-   self-hosted relay such as `sveltia/sveltia-cms-auth` on Cloudflare Workers).
-2. In `public/admin/config.yml`, under `backend:` add:
-   ```yaml
-   base_url: https://<your-oauth-relay>
-   auth_endpoint: oauth/authorize   # match your relay's route
-   ```
-3. Store the OAuth App's **client secret** wherever the relay expects it (a
-   Worker secret for the self-hosted relay) — never in this repo.
+**Token (what this project uses).** `auth.token: true` — an editor pastes a
+GitHub token at `/admin` and it is stored only in their own browser's
+`localStorage`. Nothing is deployed, and **no credential ships in the build**.
+Anyone can load `/admin`, but committing requires a token with write access to
+this repo, so the gate is GitHub's own permissions.
 
-### 2. Hosted + password
+Editors should create a **fine-grained personal access token** at
+<https://github.com/settings/personal-access-tokens/new>, scoped to **only this
+repo** with **Contents: Read & Write**.
 
-The exact "password at the same domain" UX, backed by the minimal Cloudflare
-Worker shipped in **`cms-auth-worker/`**. This is the one path that adds a
-non-GitHub free service.
-
-**Pre-flight:** a free Cloudflare account; a fine-grained GitHub PAT scoped to
-**Contents: Read & Write on this repo only**.
-
-1. Deploy the Worker:
-   ```bash
-   cd cms-auth-worker
-   npx wrangler deploy
-   npx wrangler secret put CMS_PASSWORD   # the shared editor password
-   npx wrangler secret put GITHUB_TOKEN   # the fine-grained PAT
-   ```
-2. In `public/admin/config.yml`, under `backend:` add:
-   ```yaml
-   base_url: https://<name>.<subdomain>.workers.dev
-   auth_endpoint: auth
-   ```
-3. Editors visit `/admin`, get a password prompt, and commit as the PAT's
-   identity. See the security trade-off documented at the top of
-   `cms-auth-worker/worker.js` (one shared identity, no per-user attribution).
-
-### 3. Local
-
-Always available, no auth, no server.
-
-**Pre-flight:** the repo cloned locally.
-
-1. `local_backend: true` is already set in `public/admin/config.yml`.
-2. Run `npm run dev`, open `/admin`, and choose **"Work with Local Repository"**.
-3. Edit posts; Sveltia writes straight to `src/content/`. Commit and push
-   yourself — the change goes live on the next GitHub Pages deploy.
+**Worker (scaffolded, currently off).** `cms-auth-worker/` holds a Cloudflare
+Worker giving a shared-password or "Sign in with GitHub" popup instead. It is
+**not deployed and not in use** (`auth.worker: false`) — nothing needs to run for
+the CMS to work today. To enable it, deploy the Worker, set its secrets, and flip
+`auth.worker` to `true`. Note the trade-off documented at the top of
+`cms-auth-worker/worker.js`: every editor commits as one shared identity, with no
+per-user attribution.
 
 ## Keeping the schema honest
 
-`public/admin/config.yml` and `src/content/config.ts` describe the **same**
-markdown files and must stay in sync: every field `name` in a collection must
-exist in the matching Astro schema (the reserved `body` field is the markdown
-body, not frontmatter, so it has no schema counterpart). codeyam's template test
-`astro_cms_config_fields_subset_of_content_schema` enforces this for the shipped
-template. When you add a content field, add it in **both** files.
+Two files describe the same markdown and must stay in sync:
 
-**Required by default.** Sveltia/Decap treat every field as required unless you
-set `required: false`. A field that is `.optional()` in `src/content/config.ts`
-must be `required: false` in `config.yml`, and the reserved `body` markdown field
-must be `required: false` on any collection whose entries can exist without prose
-(e.g. a name-and-role-only `team` member, or a bare save-the-date `event`).
-Leave a supplemental field implicitly required and saving a body-less entry fails
-with a generic, hard-to-diagnose **"One field has an error"**. Two codeyam
-template tests keep this honest: one asserts every shipped sample entry is
-saveable under `config.yml`'s required rules, the other asserts every
-`.optional()` schema field is `required: false` in the CMS config.
+- **`src/content/config.ts`** — the Zod schema. The build validates against it,
+  and a Zod object **strips keys it does not declare**, so a field missing here is
+  silently thrown away rather than failing loudly.
+- **`src/data/collections.json`** — the field registry the admin UI renders
+  (`builtins.pages` for the `pages` collection: label, type, `optional`, hint).
+
+When you add a content field, add it in **both**. A field in the schema but not
+the registry is invisible to editors; a field in the registry but not the schema
+is discarded on the next build.
+
+Mark optional fields consistently: `.optional()` in `config.ts` ↔
+`"optional": true` in `collections.json`.
+
+## Publishing
+
+Edits commit to `repo.branch` (`main`), which triggers
+`.github/workflows/deploy.yml`. The build writes `deploy-status.json` carrying
+the commit SHA and run id; the admin polls it to report a change as **Live**.
 
 ## Developing against a local codeyam-cms checkout
 
@@ -132,7 +114,6 @@ React copy with no error explaining why.
 
 You can always skip the CMS and edit content directly:
 
-1. Create or edit a `.md` file under `src/content/blog/`.
-2. Give it frontmatter matching `src/content/config.ts` (`title`, `date`,
-   optional `summary`, optional `coverImage`).
-3. Run `npm run dev`; the post appears on the index automatically.
+1. Create or edit a `.md` file under `src/content/pages/`.
+2. Give it frontmatter matching `src/content/config.ts`.
+3. Run `npm run dev`; the page renders through the `[...slug]` catch-all.

@@ -4,6 +4,7 @@
     "repo": "puzzleschool",
     "branch": "main"
   },
+  "siteUrl": "https://puzzleschool.org/",
   "authEndpoint": "/auth",
   "auth": {
     "token": true,
