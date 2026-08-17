@@ -27,6 +27,9 @@ const { seedKey } = Astro.props;
       innerHTML, and the grid also holds BranchingTree — marking it would
       delete the structure SVG on every staged body edit. */}
   <div class="prose" {...cmsBody()}><slot /></div>
+  {/* Anything a page wants between its prose and the section below goes HERE,
+      not after `<ProseColumns>` — see the `.tree-well` note below for why. */}
+  <div class="prose-foot"><slot name="foot" /></div>
   <BranchingTree seedKey={seedKey} />
 </div>
 
@@ -41,8 +44,20 @@ const { seedKey } = Astro.props;
        plus a little clearance keeps the whole figure below the rule no matter
        how little prose sits beside it, without clipping a limb to do it.
        (365px is the lane height BranchingTree draws at; 123px, its width, is
-       already hardcoded below for the same reason.) */
+       already hardcoded below for the same reason.)
+       This is a floor for the prose block INCLUDING its `foot` slot: a taller
+       block only pushes the tree further below the sine rule, never above it,
+       so the guard still holds when a page slots a CTA in. */
     min-height: calc(365px + 24px);
+  }
+
+  /* Slotted content is bled back out of the grid's own gutter so it keeps the
+     exact geometry it would have had as a sibling of `.prose-grid` — a CTA that
+     pads by `--gutter` itself lines up with the prose's left edge rather than
+     indenting twice. Collapses to zero height when the slot is empty, so a page
+     with no foot renders identically to before the slot existed. */
+  .prose-foot {
+    margin: 0 calc(var(--gutter) * -1);
   }
 
   .prose {
@@ -74,7 +89,12 @@ const { seedKey } = Astro.props;
   }
 
   /* The structure stands IN the gap between the columns, centred, sitting on the
-     seam with the section below so it reads as growing out of it. */
+     seam with the section below so it reads as growing out of it.
+     The foot is measured from THIS element's bottom edge, which is why anything
+     a page puts between the prose and the section below has to go in the `foot`
+     slot: rendered as a sibling AFTER `<ProseColumns>` it pushes that section
+     down while leaving the tree's anchor where it was, and the trunk ends in
+     mid-air by exactly the sibling's height. */
   .prose-grid :global(.tree-well) {
     position: absolute;
     left: 50%;

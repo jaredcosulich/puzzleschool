@@ -1,10 +1,10 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/f2576ad4-1439-4975-954e-1c004f0c4467/tasks/bdhfpju78.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/f2576ad4-1439-4975-954e-1c004f0c4467/tasks/bdhfpju78.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786974107,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":657952}
-analyze-imports: scoped to 19 changed / 3 deleted file(s) since HEAD
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/f2576ad4-1439-4975-954e-1c004f0c4467/tasks/bee5y7pra.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/f2576ad4-1439-4975-954e-1c004f0c4467/tasks/bee5y7pra.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786978792,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":719861}
+analyze-imports: scoped to 9 changed / 1 deleted file(s) since HEAD
 {
-  "analyzed": 6,
-  "entityCount": 100,
-Analyzed 6 files, found 16 import edges, graph has 84 nodes
+Analyzed 2 files, found 11 import edges, graph has 84 nodes
+  "analyzed": 2,
+  "entityCount": 101,
   "graphSize": 84,
-  "totalImports": 16
+  "totalImports": 11
 }

@@ -59,6 +59,35 @@
       "key-interaction": {
         "status": "covered"
       }
+    },
+    "src/pages/[...slug].astro": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "An internal page has no item collection to overflow - the body is one continuous markdown blob that flows into the two-column grid by design, growing taller rather than truncating, so there is no distinct far-more-than-fits state. About - Full Design is the longest-prose case and is claimed under 'typical'/'edge' rather than here. Matches the existing InternalPage record for this same template."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Astro static export. Every page in this template is prerendered at build time and served as finished HTML with no client-side data fetch, so there is no pending state the user can ever observe on this view."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "getStaticPaths enumerates the routable entries at build time, so a page either exists as prerendered HTML or is never emitted and 404s at 404.astro. There is no in-page failure branch on this template to render."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
     }
   }
 }

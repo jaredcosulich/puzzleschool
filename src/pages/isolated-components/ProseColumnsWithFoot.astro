@@ -1,0 +1,48 @@
+---
+import Component from "../../components/page/ProseColumns.astro";
+import ContactButton from "../../components/page/ContactButton.astro";
+import ExploratoryBand from "../../components/page/ExploratoryBand.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for ProseColumnsWithFoot — codeyam screenshots the
+// #codeyam-capture wrapper by navigating to /isolated-components/ProseColumnsWithFoot.
+// This stack is a static export, so each STATE gets its own prerendered page:
+// `?s=` query params are empty at build time and would capture the default frame
+// for every state.
+//
+// The band is rendered here deliberately. The whole point of the `foot` slot is
+// WHERE the prose block ends relative to the section below it, and that is not
+// observable with nothing underneath — this page is the one place the seam
+// guarantee can be seen in isolation rather than inferred from a whole page.
+//
+// The prose is deliberately SHORT, so `min-height` is what sets the block's
+// height rather than the copy. That is the case the slot is easiest to get
+// wrong: the CTA has to fit inside the reserved lane without pushing the band
+// down or letting the trunk stop short of it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Isolated: ProseColumnsWithFoot</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; background: var(--paper);">
+    <div id="codeyam-capture" style="width: 100%;">
+      <Component seedKey="isolated-foot">
+        <h3>Who we want to hear from</h3>
+        <p>Families thinking about what their children will need. Teachers who have taught into ambiguity on purpose.</p>
+        <h3>What happens next</h3>
+        <p>We read everything that comes in, and we answer.</p>
+        <ContactButton href="mailto:hello@example.com" slot="foot" />
+      </Component>
+      <ExploratoryBand
+        heading="The Puzzle School is currently in an exploratory phase."
+        bandBody="We do not yet have any opening date. We read everything that comes in, and we answer."
+      />
+    </div>
+  </body>
+</html>

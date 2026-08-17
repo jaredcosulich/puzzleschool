@@ -34,7 +34,7 @@
     ]
   },
   {
-    "description": "Two columns of prose with the branching structure standing in the gap. The body marker sits on the inner prose element rather than the grid, because patching sets innerHTML and marking the grid would delete the structure SVG on every staged body edit.",
+    "description": "Two columns of prose with the branching structure standing in the gap. The body marker sits on the inner prose element rather than the grid, because patching sets innerHTML and marking the grid would delete the structure SVG on every staged body edit. The tree is bottom-anchored to the prose grid, so anything a page wants between its prose and the section below must go in the named foot slot rather than after the component: rendered as a sibling it pushes that section down while leaving the tree's anchor behind, and the trunk ends in mid-air by exactly the sibling's height. The foot wrapper bleeds back out of the grid's own gutter so slotted content keeps the geometry it would have had as a sibling, and collapses to zero height when the slot is empty.",
     "filePath": "src/components/page/ProseColumns.astro",
     "name": "ProseColumns",
     "scenarios": [

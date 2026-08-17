@@ -73,10 +73,15 @@ const contactHref = buildMailto({
   <!-- The page's own id seeds its structure, so every CMS-authored page gets a
        tree of its own with no code change — the same way it gets the morse rule
        and the band. -->
+  <!-- The CTA goes in the `foot` slot rather than after `<ProseColumns>`: the
+       tree hangs from the bottom of the prose block, so a sibling here would
+       push the band down and leave the trunk ending in mid-air. `<Content />`
+       must stay in the DEFAULT slot — it is the CMS body target, and moving it
+       would break staged preview patching. -->
   <ProseColumns seedKey={page.id}>
     <Content />
+    {showContactButton ? <ContactButton href={contactHref} slot="foot" /> : null}
   </ProseColumns>
-  {showContactButton ? <ContactButton href={contactHref} /> : null}
   {
     heading ? (
       <ExploratoryBand

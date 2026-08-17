@@ -1,0 +1,175 @@
+{
+  "timestamp": "2026-08-17T15:11:38Z",
+  "title": "Keep the branching structure on the seam with the band",
+  "type": "feature",
+  "userRequest": "## Summary\n\nOn the Contact page the branching structure stops roughly 97px above the black\n`ExploratoryBand`, instead of landing on the seam the way it does on About. The\ntree is absolutely positioned at `bottom: 0` of `.prose-grid` inside\n`ProseColumns`, and its foot therefore lands wherever that element ends. On\nAbout, `.prose-grid` is the last thing before the band, so the trunk sits exactly\non the black edge. On Contact, `[...slug].astro` renders `<ContactButton>` as a\n*sibling* between `ProseColumns` and `ExploratoryBand`, which pushes the band\ndown by the button's own height and bottom padding while leaving the tree's\nanchor where it was — the visible gap. Fix it structurally rather than with an\noffset: give `ProseColumns` a named `foot` slot rendered *inside* `.prose-grid`,\nand move the contact CTA into it. The tree then hangs from the true bottom edge\nof the paper block, so it meets the band on Contact, on About, and on any future\npage that puts something between the prose and the band.\n\n## Key Decisions\n\n- **Reparent the CTA, do not offset the tree.** A `bottom: 97px` (or a\n  `--tree-foot-offset` variable set per page) would fix Contact and break the\n  next page that adds anything below the prose. Making `.prose-grid` own\n  everything that sits between the sine rule and the band means the anchor is\n  correct by construction — this is what makes it \"always connect\" rather than\n  \"connect on Contact\".\n- **The figure moves down; its height does not change.** Chosen over stretching\n  the lane to reach the band. `height = 365px` is a design fact stated in both\n  `BranchingTree.astro` and `ProseColumns.astro`, and `preserveAspectRatio=\"none\"`\n  means a variable height would silently restretch the generated geometry — the\n  tree would read as a different specimen on every page depending on how much\n  furniture sat below the prose. Anchoring keeps one figure at one scale and just\n  puts its foot in the right place.\n- **A generic `foot` slot, not a `contactHref` prop on `ProseColumns`.**\n  `ProseColumns` should not learn what a contact button is. A slot keeps the CTA's\n  ownership in the route, where the `showContactButton` field is already read,\n  and makes the seam guarantee available to whatever the next page needs there.\n- **Cancel the doubled gutter with a negative margin on the slot wrapper, not by\n  editing `ContactButton`.** `.prose-grid` already pads `var(--gutter)`\n  horizontally, and `.contact-cta` pads the same amount — nested naively the\n  button shifts 40px right and stops aligning with the prose's left edge.\n  Bleeding the wrapper back out by `calc(var(--gutter) * -1)` restores the exact\n  geometry the CTA had as a sibling, and leaves `ContactButton` itself untouched\n  so its isolated scenario (`ContactButton - Default`) does not change.\n- **No band means nothing to connect to.** On a page with no `heading` (e.g. the\n  `Page - Minimal Fields` scenario at `/notes`) the tree lands on the bottom of\n  the paper block above the paper-coloured footer. That is unchanged and correct\n  — there is no black section there to meet.\n\n## Implementation\n\n### 1. Add a `foot` slot inside the prose grid\n\n**File**: `src/components/page/ProseColumns.astro`\n\nRender a named slot after `.prose` but still inside `.prose-grid`:\n\n```astro\n<div class=\"prose-grid\">\n  <div class=\"prose\" {...{ [CMS_BODY_ATTR]: '' }}><slot /></div>\n  <div class=\"prose-foot\"><slot name=\"foot\" /></div>\n  <BranchingTree seedKey={seedKey} />\n</div>\n```\n\nStyle the wrapper so slotted content keeps the full-bleed context it had as a\nsibling of `.prose-grid`:\n\n```css\n.prose-foot {\n  margin: 0 calc(var(--gutter) * -1);\n}\n```\n\nThe wrapper collapses to zero height when the slot is empty, so About and every\npage without a CTA render byte-identically.\n\nUpdate the existing comment on `.prose-grid :global(.tree-well)` — which already\nsays the structure \"sits on the seam with the section below\" — to record *why*\nthat is now true: anything rendered between the prose and the band belongs in the\n`foot` slot, because the tree's foot is measured from this element's bottom edge.\nA sibling placed after `ProseColumns` reintroduces the gap.\n\nAlso note on `min-height: calc(365px + 24px)` that the reservation is now a floor\nfor the prose block *including* its foot; a taller block only pushes the tree\nfurther below the sine rule, so the guard still holds.\n\n### 2. Move the contact CTA into the slot\n\n**File**: `src/pages/[...slug].astro`\n\nMove the conditional `<ContactButton>` from between `<ProseColumns>` and\n`<ExploratoryBand>` into the `ProseColumns` children, carrying `slot=\"foot\"`:\n\n```astro\n<ProseColumns seedKey={page.id}>\n  <Content />\n  {showContactButton ? <ContactButton href={contactHref} slot=\"foot\" /> : null}\n</ProseColumns>\n```\n\nNote that `<Content />` must stay in the default slot — it is the CMS body target\nmarked with `CMS_BODY_ATTR`, and moving it would break staged preview patching.\n\nVertical rhythm is preserved exactly: the same boxes in the same DOM order, only\nreparented, so the black band starts at the same y position it does today and\nonly the tree's anchor moves.\n\n### 3. Recapture the affected scenario\n\n**File**: `.codeyam/scenarios/contact-email-only.json` (capture only, no edit)\n\n`Contact - Email Only` is the scenario that pins this bug. Its screenshot will\nchange — the trunk moves down ~97px to land on the band's top edge. `About - Full\nDesign`, `ProseColumns - Default` and `ContactButton - Default` should all be\nbyte-identical; if any of them moves, the slot wrapper is leaking layout and that\nis the thing to fix, not the baseline.\n\nConsider adding a scenario for a page that has *both* a contact button and a\nband under a short body, so the seam guarantee is pinned for the short-prose case\nwhere `min-height` is what sets the block's height.\n\n## Reused existing code\n\n- `BranchingTree` from `src/components/structures/BranchingTree.astro` — the\n  `.tree-well` / `.tree-flip` bottom-anchoring is already correct and is not\n  touched; only the box it measures against changes.\n- `ContactButton` from `src/components/page/ContactButton.astro` — reused\n  verbatim, including its `padding: 0 var(--gutter) var(--space-2xl)`. The\n  negative margin on the slot wrapper exists specifically so this file needs no\n  change.\n- `ExploratoryBand` from `src/components/page/ExploratoryBand.astro` — the black\n  band the tree must meet; unchanged.\n- `growAcceptableTree` / `treeViewBox` from `src/lib/structures.ts` (glossary\n  entries: `growAcceptableTree`, `treeViewBox`) — the generated geometry is\n  untouched, which is what keeps the fix from disturbing any tree unit test.\n- `--gutter`, `--space-2xl` from `src/styles/tokens.css` — the offset is\n  expressed in the existing gutter token, not a literal 40px.\n\n**Existing-implementation survey**: `src/components/page/ProseColumns.astro` has no named slots today\n(only the default `<slot />`), and no offset/anchor prop or CSS variable exists on\neither `ProseColumns` or `BranchingTree` that already parameterises the tree's\nfoot position. Searching for `bottom:` across `src/components` finds the anchor only in\n`src/components/structures/BranchingTree.astro` (its `.tree-flip` rule) and the\n`.tree-well` override in `src/components/page/ProseColumns.astro`. Nothing\nequivalent is already implemented.\n\n## Reproduction Test\n\nNo unit-level reproduction is writable: this is a pure layout regression that\nlives in the DOM parenting and CSS box geometry of two `.astro` components, with\nno pure function to assert against. The tree generator in `src/lib/structures.ts`\nis already fully tested and is not implicated — it produces the same geometry\neither way; only where that geometry is anchored is wrong.\n\nDemonstrate and verify visually instead, via the `Contact - Email Only` scenario:\nbefore the fix its screenshot shows the trunk ending ~97px above the black band's\ntop edge; after, the trunk terminates on that edge, matching `About - Full\nDesign`.\n\n## Scenarios to Demonstrate\n\n- **Contact as it ships** (`/contact`) — prose, the \"Email us\" button, and the\n  band with no quote. The trunk lands on the black edge.\n- **About, unchanged** (`/about`) — no contact button; the tree still meets the\n  band exactly as it does today, proving the empty slot costs nothing.\n- **Short body with a CTA and a band** — a page whose prose is shorter than the\n  365px lane, so `min-height` drives the block height. The tree must still sit on\n  the seam and stay clear of the sine rule above.\n- **Page with a CTA but no band** — `heading` left blank, so the paper block runs\n  into the footer. The tree rests on the bottom of the block; nothing black to\n  meet, and no gap artefact.\n- **Narrow viewport (≤840px)** — the structure lane collapses and the tree is not\n  drawn; the CTA must still render in the right place with the correct gutter and\n  no reserved empty height.",
+  "description": "On Contact the branching structure stopped roughly 97px above the black ExploratoryBand instead of landing on the seam the way it does on About. The tree is absolutely positioned at the bottom of .prose-grid, so its foot lands wherever that element ends -- and [...slug].astro rendered ContactButton as a SIBLING between ProseColumns and the band, pushing the band down while leaving the tree's anchor where it was. Fixed structurally rather than with an offset: ProseColumns gained a named `foot` slot rendered inside .prose-grid, the contact CTA moved into it, and a negative margin on the slot wrapper cancels the grid's own gutter so the button keeps the exact left alignment it had as a sibling. The tree now hangs from the true bottom edge of the paper block, so it meets the band on Contact, on About, and on any future page that puts something between the prose and the band. ContactButton and BranchingTree were not touched.\n\nONE VISIBLE SIDE EFFECT, called out at the approval gate and accepted: the Contact page is now shorter than before. The CTA fits inside the 389px lane reservation that min-height already held, rather than adding height below it, so the band starts higher and the formerly-empty gap above the button absorbed the change. The tree itself is the same figure at the same scale -- only its anchor moved.\n\nVERIFICATION. No unit reproduction was writable and the plan records why: this is pure CSS box geometry and DOM parenting across two .astro components, with no pure function to assert against; src/lib/structures.ts (growAcceptableTree, treeViewBox) is untouched and already covered, and it produces identical geometry either way. The fix is pinned visually instead. Contact - Email Only changed 13% of pixels and About - Footer Contact Link Followed 14% (its landing frame IS the Contact page); About - Full Design, ProseColumns - Default, Page - Minimal Fields, Page - Title Without Body and Page - Created From The CMS all recaptured PIXEL-IDENTICAL, which was the plan's own stated check that the empty slot leaks no layout. A new component scenario, ProseColumns - With Foot, isolates the slot with the band directly beneath -- the only place the seam guarantee is observable rather than inferred -- using deliberately short prose so min-height, not the copy, sets the block height. verify-build (astro-check) PASS, client-errors clean, scenario-review clean (0 duplicate / 0 obsolete / 0 stale), audit passed with 0 findings.\n\nDEMO EXCEPTION. The behavioral-demo gate fired on the word 'collapse' in the plan's narrow-viewport scenario, but that is a CSS media-query breakpoint at max-width 840px, not an interaction -- the page's only interactive elements are the nav links and the mailto anchor, none of which trigger it. Recorded via demo-skip with that reason; the state is still captured, as a Mobile-dimension frame showing the lane collapsed and the tree undrawn.\n\nSCOPE VERDICT. This cycle delivered no project deliverable and deferred none -- all five were already resolved in earlier cycles, and this was a targeted layout regression fix outside that set. One deliverable remains DEFERRED from a prior cycle and is still owed: 'Improvements made to codeyam-cms itself where needed to support static-site authoring', deferred by user decision during CMS Staged-Preview Markers because the two diagnosed upstream defects (parseEntry lacking YAML block-scalar support, and the editor capture guard mis-scoping seed sentinels) were worked around in this repo with follow-up plans queued rather than fixed in @codeyam/cms. No deferral on this branch was decided by the agent alone.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/keep-the-branching-structure-on-the-seam-with-the-band.md\t.codeyam/plans/completed/keep-the-branching-structure-on-the-seam-with-the-band.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/contact-email-only.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-title-without-body--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/page/ProseColumns.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/[...slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/prosecolumns.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/prosecolumns-with-foot.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ProseColumnsWithFoot.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "Page - Title Without Body",
+      "screenshotPath": "page-title-without-body--desktop.png"
+    },
+    {
+      "name": "ProseColumns - Default",
+      "screenshotPath": "prosecolumns-default--desktop.png"
+    },
+    {
+      "name": "ProseColumns - With Foot",
+      "screenshotPath": "prosecolumns-with-foot--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 108,
+    "passed": 108,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 108,
+        "passed": 108
+      }
+    ]
+  }
+}

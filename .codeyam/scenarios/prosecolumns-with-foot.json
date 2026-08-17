@@ -1,0 +1,12 @@
+{
+  "name": "ProseColumns - With Foot",
+  "id": "6d6bb2be-b3c7-46c7-a3af-a5f5605761fc",
+  "url": "/isolated-components/ProseColumnsWithFoot",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ProseColumns",
+  "scenarioType": "component",
+  "description": "The prose block with its foot slot filled and the black band directly beneath, which is the only place the seam guarantee is visible rather than inferred: the branching structure hangs from the bottom of the prose grid, so the slotted CTA has to sit INSIDE that grid or the band gets pushed down and the trunk ends in mid-air. The prose is deliberately short, so min-height sets the block's height and the button has to fit within the reserved lane."
+}

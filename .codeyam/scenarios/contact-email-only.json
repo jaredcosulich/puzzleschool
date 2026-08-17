@@ -52,5 +52,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/[...slug].astro",
-  "description": "Contact as it ships: prose, a mailto button addressed from site settings, and a band with no quote column."
+  "description": "Contact as it ships: prose, a mailto button addressed from site settings, and a band with no quote column. This is also the page that pins the seam guarantee at app level — the only shipping page that puts something between the prose and the band, so it is where the branching structure would end in mid-air if that content were rendered outside the prose block's foot slot."
 }
