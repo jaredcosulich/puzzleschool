@@ -2,6 +2,7 @@
 // The home statement: the 56px claim, the body copy, and the line that closes
 // it. The body arrives through the default slot because it is rendered markdown
 // from the CMS, not a string.
+import { cmsBody, cmsField } from '../../lib/cmsMarkers';
 
 interface Props {
   heading?: string;
@@ -12,9 +13,9 @@ const { heading, lead } = Astro.props;
 ---
 
 <section class="statement">
-  {heading ? <h2>{heading}</h2> : null}
-  <div class="statement__body"><slot /></div>
-  {lead ? <p class="lead">{lead}</p> : null}
+  {heading ? <h2 {...cmsField('heading')}>{heading}</h2> : null}
+  <div class="statement__body" {...cmsBody()}><slot /></div>
+  {lead ? <p class="lead" {...cmsField('lead')}>{lead}</p> : null}
 </section>
 
 <style>

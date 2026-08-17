@@ -6,6 +6,7 @@
 // The pull-up only works because the curve is an in-flow 430px block: it needs
 // something to be pulled up through. If the curve is ever made absolute, this
 // lands above the band's top edge and `overflow: hidden` eats it silently.
+import { cmsField } from '../../lib/cmsMarkers';
 
 interface Props {
   quote: string;
@@ -16,8 +17,14 @@ const { quote, attribution } = Astro.props;
 ---
 
 <div class="band__quote">
-  <p class="quote">{quote}</p>
-  {attribution ? <p class="attribution">{attribution}</p> : null}
+  <p class="quote" {...cmsField('quote')}>{quote}</p>
+  {
+    attribution ? (
+      <p class="attribution" {...cmsField('quoteAttribution')}>
+        {attribution}
+      </p>
+    ) : null
+  }
 </div>
 
 <style>

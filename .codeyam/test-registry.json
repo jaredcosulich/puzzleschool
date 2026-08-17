@@ -64,6 +64,159 @@
       "runner": "tests"
     },
     {
+      "description": "the attribute must be PRESENT, since the selector matches on presence alone",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsBody › emits the attribute rather than omitting it",
+      "line": 73,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the body marker is valueless in the contract, so it emits the empty string",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsBody › returns the body attribute with an empty value",
+      "line": 68,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "spreading the no-key result must add nothing to an element's attributes",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsEntry › adds no attributes when spread with no key",
+      "line": 44,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "an empty-string key is still \"no entry\" — it must not emit an empty attribute",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsEntry › returns an empty object for an empty key rather than an empty attribute",
+      "line": 39,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a page that renders no single entry must emit no attribute at all",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsEntry › returns an empty object when no key is supplied",
+      "line": 34,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "marks the entry root with the collection/slug key it was given",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsEntry › returns the entry attribute keyed by collection and slug",
+      "line": 29,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the frontmatter key differs from the prop name for the quote attribution",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsField › carries the frontmatter key even when it differs from the prop name",
+      "line": 56,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every call is a fresh object, so spreading one cannot mutate another site",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsField › returns a new object on each call",
+      "line": 61,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "marks a field element with the frontmatter key the patcher looks up",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsField › returns the field attribute valued with the frontmatter key",
+      "line": 51,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every marker is a distinct data-cms-* attribute, so no two helpers collide",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsMarkers attribute naming › gives each helper its own data-cms attribute",
+      "line": 123,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the site root is a legitimate nav url and must not be treated as empty",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsNavItem › marks a root url",
+      "line": 85,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "never stringify a missing url into the attribute value",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsNavItem › never emits the literal string undefined as a url",
+      "line": 96,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a NavItem that only groups children has no url, and the url IS the match key — so it gets no marker rather than one valued \"undefined\"",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsNavItem › returns an empty object for an item with no url",
+      "line": 91,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "nav items are keyed by url so reordering the menu does not break the match",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsNavItem › returns the nav-item attribute valued with the url",
+      "line": 80,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a link whose href comes from a setting while its label stays fixed",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsSetting and cmsSettingHref › marks a link whose href is derived from a setting",
+      "line": 108,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a setting rendered as visible text",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsSetting and cmsSettingHref › marks an element whose text is a setting value",
+      "line": 103,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the text and href markers must stay distinct — collapsing them would let a staged contact-email edit overwrite the visible \"Contact\" label with a URL",
+      "file": "src/lib/cmsMarkers.test.ts",
+      "format": "vitest",
+      "key": "cmsSetting and cmsSettingHref › uses different attributes for the text and href cases",
+      "line": 114,
+      "registeredAt": "2026-08-17T11:15:02Z",
+      "runner": "tests"
+    },
+    {
       "description": "The curve is generated, non-empty, and respects its cut-off.",
       "file": "src/lib/structures.test.ts",
       "format": "vitest",

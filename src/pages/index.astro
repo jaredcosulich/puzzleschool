@@ -23,7 +23,12 @@ const { Content } = await render(home);
 const { title, description, kicker, heading, lead, cards, quote, quoteAttribution } = home.data;
 ---
 
-<BaseLayout title={title} description={description} showNav={false}>
+<BaseLayout
+  title={title}
+  description={description}
+  showNav={false}
+  entryKey={`pages/${home.id}`}
+>
   <Masthead title={title} kicker={kicker} />
   <SineRule />
   <StatementBlock heading={heading} lead={lead}>

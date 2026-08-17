@@ -3,15 +3,10 @@ title: Contact
 kicker: Get in touch
 description: Get in touch with The Puzzle School.
 order: 2
-intro: >-
-  We are still designing the school, which means the most useful conversations
-  right now are the early ones. There is no form here — write to us directly and
-  a person will read it.
+intro: We are still designing the school, which means the most useful conversations right now are the early ones. There is no form here — write to us directly and a person will read it.
 showContactButton: true
 heading: The Puzzle School is currently in an exploratory phase.
-bandBody: >-
-  We do not yet have any opening date. We read everything that comes in, and we
-  answer.
+bandBody: We do not yet have any opening date. We read everything that comes in, and we answer.
 ---
 
 ### Who we want to hear from

@@ -20,6 +20,7 @@ import SiteNav from '../components/chrome/SiteNav.astro';
 import SiteFooter from '../components/chrome/SiteFooter.astro';
 import { getNav, getSettings } from '../lib/site';
 import { buildMailto } from '../lib/mailto';
+import { cmsEntry } from '../lib/cmsMarkers';
 
 interface Props {
   title?: string;
@@ -27,11 +28,19 @@ interface Props {
   image?: string;
   /** Show the internal-page nav bar. Home passes false. */
   showNav?: boolean;
+  /**
+   * The `<collection>/<slug>` identity of the entry this page renders, e.g.
+   * `pages/about`. Marks `.page` as the staged-preview entry root, so the CMS
+   * patches the marked fields below it exactly instead of guessing by shape.
+   * Pages that render no single entry (the isolated-component pages) omit it
+   * and emit no attribute at all.
+   */
+  entryKey?: string;
 }
 
 const settings = getSettings();
 const nav = getNav();
-const { title, description, image, showNav = true } = Astro.props;
+const { title, description, image, showNav = true, entryKey } = Astro.props;
 
 const contactHref = buildMailto({
   to: settings.contactEmail,
@@ -52,7 +61,7 @@ const contactHref = buildMailto({
     <SEO title={title} description={description} image={image} />
   </head>
   <body>
-    <div class="page">
+    <div class="page" {...cmsEntry(entryKey)}>
       {
         showNav ? (
           <SiteNav

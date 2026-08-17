@@ -3,6 +3,7 @@
 // the heading and body copy at lower left, and the pulled-up quote opposite.
 import DragonCurve from '../structures/DragonCurve.astro';
 import BandQuote from './BandQuote.astro';
+import { cmsField } from '../../lib/cmsMarkers';
 
 interface Props {
   heading: string;
@@ -18,8 +19,8 @@ const { heading, bandBody, quote, quoteAttribution } = Astro.props;
   <DragonCurve />
   <div class="band__grid measure">
     <div class="band__lead">
-      <h2>{heading}</h2>
-      {bandBody ? <p>{bandBody}</p> : null}
+      <h2 {...cmsField('heading')}>{heading}</h2>
+      {bandBody ? <p {...cmsField('bandBody')}>{bandBody}</p> : null}
     </div>
     {quote ? <BandQuote quote={quote} attribution={quoteAttribution} /> : null}
   </div>

@@ -3,20 +3,10 @@ title: About
 kicker: About the school
 description: Thirteen years of practice at recognising ambiguity, staying in it without panic, and finding a way through.
 order: 1
-intro: >-
-  School is unusually good at problems with known answers and unusually quiet
-  about everything else. We are building the other half: thirteen years of
-  practice at recognising ambiguity, staying in it without panic, and finding a
-  way through.
+intro: "School is unusually good at problems with known answers and unusually quiet about everything else. We are building the other half: thirteen years of practice at recognising ambiguity, staying in it without panic, and finding a way through."
 heading: The Puzzle School is currently in an exploratory phase.
-bandBody: >-
-  We do not yet have any opening date. Please contact us if you are interested in
-  learning more about the effort.
-quote: >-
-  “The test of a first-rate intelligence is the ability to hold two opposed ideas
-  in mind at the same time and still retain the ability to function. One should,
-  for example, be able to see that things are hopeless and yet be determined to
-  make them otherwise.”
+bandBody: We do not yet have any opening date. Please contact us if you are interested in learning more about the effort.
+quote: “The test of a first-rate intelligence is the ability to hold two opposed ideas in mind at the same time and still retain the ability to function. One should, for example, be able to see that things are hopeless and yet be determined to make them otherwise.”
 quoteAttribution: F. Scott Fitzgerald
 ---
 

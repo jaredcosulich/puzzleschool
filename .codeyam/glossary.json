@@ -1,5 +1,80 @@
 [
   {
+    "description": "The quote inside an internal page's dark band, pulled up so it begins over the dragon curve. Marks quote and quoteAttribution against their frontmatter keys.",
+    "filePath": "src/components/page/BandQuote.astro",
+    "name": "BandQuote",
+    "scenarios": [
+      "bandquote-default"
+    ]
+  },
+  {
+    "description": "The ink band closing an internal page — dragon curve, heading and body copy, with the pulled-up quote opposite. Marks heading and bandBody; the Without Quote scenario shows the band as Contact renders it.",
+    "filePath": "src/components/page/ExploratoryBand.astro",
+    "name": "ExploratoryBand",
+    "scenarios": [
+      "exploratoryband-default",
+      "exploratoryband-without-quote"
+    ]
+  },
+  {
+    "description": "The home masthead — compass-rose mark, wordmark and kicker, centred. Carries the staged-preview field markers for the home entry's title and kicker; the kicker stays conditional, so a field the page does not render is one the preview leaves alone.",
+    "filePath": "src/components/home/Masthead.astro",
+    "name": "Masthead",
+    "scenarios": [
+      "masthead-default"
+    ]
+  },
+  {
+    "description": "An internal page's two-column header — mark and title left, standfirst opposite. Marks kicker, title and intro; the Title Only scenario shows the optional fields and their markers dropping together.",
+    "filePath": "src/components/page/PageHeader.astro",
+    "name": "PageHeader",
+    "scenarios": [
+      "pageheader-default",
+      "pageheader-title-only"
+    ]
+  },
+  {
+    "description": "Two columns of prose with the branching structure standing in the gap. The body marker sits on the inner prose element rather than the grid, because patching sets innerHTML and marking the grid would delete the structure SVG on every staged body edit.",
+    "filePath": "src/components/page/ProseColumns.astro",
+    "name": "ProseColumns",
+    "scenarios": [
+      "prosecolumns-default"
+    ]
+  },
+  {
+    "description": "The home ink band — night-variant mark, pull quote and attribution over a Koch fragment. The attribution marker carries the frontmatter key quoteAttribution rather than the component's attribution prop name.",
+    "filePath": "src/components/home/QuoteBand.astro",
+    "name": "QuoteBand",
+    "scenarios": [
+      "quoteband-default"
+    ]
+  },
+  {
+    "description": "The site footer in its home and internal variants. The footer line is marked as setting text while the Contact link is marked href-only, so a staged contact-address change rebuilds the mailto without overwriting the visible label.",
+    "filePath": "src/components/chrome/SiteFooter.astro",
+    "name": "SiteFooter",
+    "scenarios": [
+      "sitefooter-default",
+      "sitefooter-home-variant"
+    ]
+  },
+  {
+    "description": "The internal-page navigation bar. Each menu item is marked on its li keyed by url, so a staged reorder matches by link rather than position and a removal takes the whole row; the site-title marker sits on the span so patching its text cannot delete the mark beside it.",
+    "filePath": "src/components/chrome/SiteNav.astro",
+    "name": "SiteNav",
+    "scenarios": [
+      "sitenav-default"
+    ]
+  },
+  {
+    "description": "The home statement — heading, rendered markdown body and the closing lead line. Marks heading and lead as frontmatter fields and the body wrapper as the entry's markdown body, so a staged home edit patches each in place.",
+    "filePath": "src/components/home/StatementBlock.astro",
+    "name": "StatementBlock",
+    "scenarios": [
+      "statementblock-default"
+    ]
+  },
+  {
     "description": "Writes a grown tree into an SVG already on the page, reframing the viewBox to match. Lives outside the Astro script tag so it is reachable from vitest: the new tree rarely has the same segment count as the one the server drew, so every call reuses, clones or removes path elements. Surplus paths are cloned from the server's own path, keeping stroke styling defined in exactly one place.",
     "filePath": "src/lib/tree-dom.ts",
     "name": "applyTreeGrowth",
@@ -13,6 +88,42 @@
       "justification": "assembles a URL string from its arguments with no branching beyond omitting absent optional parts",
       "kind": "trivial-wrapper"
     }
+  },
+  {
+    "description": "Returns the spreadable data-cms-body attribute marking the element that renders an entry's rendered markdown body. Valueless in the CMS contract, so it emits the empty string, which Astro renders as a bare attribute that the presence selector still matches.",
+    "filePath": "src/lib/cmsMarkers.ts",
+    "name": "cmsBody",
+    "testFile": "src/lib/cmsMarkers.test.ts"
+  },
+  {
+    "description": "Returns the spreadable data-cms-entry attribute marking the element that renders one CMS entry, valued <collection>/<slug>. Returns an empty object for a missing or empty key, so pages that render no single entry emit no attribute at all rather than an empty one that would still match the patcher's [data-cms-entry] selector.",
+    "filePath": "src/lib/cmsMarkers.ts",
+    "name": "cmsEntry",
+    "testFile": "src/lib/cmsMarkers.test.ts"
+  },
+  {
+    "description": "Returns the spreadable data-cms-field attribute marking an element that renders one frontmatter field. The value is the FRONTMATTER key the CMS looks up, not the component's prop name — the two differ where a prop called attribution renders the quoteAttribution field.",
+    "filePath": "src/lib/cmsMarkers.ts",
+    "name": "cmsField",
+    "testFile": "src/lib/cmsMarkers.test.ts"
+  },
+  {
+    "description": "Returns the spreadable data-cms-nav-item attribute marking one menu entry, keyed by the url it points at so reordering the menu does not break the match. A NavItem whose url is absent — an item that only groups children — gets no attribute, since the url is the match key and a stringified undefined would read as a marker while matching nothing.",
+    "filePath": "src/lib/cmsMarkers.ts",
+    "name": "cmsNavItem",
+    "testFile": "src/lib/cmsMarkers.test.ts"
+  },
+  {
+    "description": "Returns the spreadable data-cms-setting attribute marking an element whose visible TEXT is one settings.json value. The CMS patcher sets textContent on the marked element, so it belongs on the element holding only that text.",
+    "filePath": "src/lib/cmsMarkers.ts",
+    "name": "cmsSetting",
+    "testFile": "src/lib/cmsMarkers.test.ts"
+  },
+  {
+    "description": "Returns the spreadable data-cms-setting-href attribute marking a link whose HREF is derived from a setting while its visible label stays fixed. Kept separate from cmsSetting because collapsing the two would let a staged contact-email edit overwrite the visible Contact label with a URL.",
+    "filePath": "src/lib/cmsMarkers.ts",
+    "name": "cmsSettingHref",
+    "testFile": "src/lib/cmsMarkers.test.ts"
   },
   {
     "description": "The dragon curve: a right-angle fold repeated, walked as an orthogonal lattice that never self-intersects.",

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: 7002e1b0b433d9ff1d33433c5cef2948dd79906f9f4a48e6922d6000f2308c94
+// codeyam-editor: 0.1.7  source-sha256: 62cecd4e6ac116e1d65b28096b0841ebb2c58ddfba500bfd4f1044bdd8942031
 
 // Render environment (colorScheme, deviceScaleFactor, userAgent, locale,
 // timezoneId, reduceMotion, forcedColors) is read from config when present
@@ -612,6 +612,12 @@ function pushRedirectMismatchIssue(issues, requestedUrl, frame, response, config
   );
 }
 
+// How many visible text nodes `dumpPageState` samples. Named because two
+// callers must agree on it: the sampler itself, and `verifyProbeSeedLanded`,
+// which can only treat "probe not found" as proof of absence when the sample
+// did NOT hit this cap.
+const PAGE_STATE_TEXT_NODE_CAP = 40;
+
 // Read-only page-state snapshot for `capture-state`: the full localStorage
 // map, a bounded sample of visible text nodes (document order), and — when a
 // selector is given — that element's text. Evaluated in-page against the
@@ -620,7 +626,7 @@ function pushRedirectMismatchIssue(issues, requestedUrl, frame, response, config
 // individually guarded so a sandboxed/cross-origin localStorage never throws
 // the whole capture; the worst case is an empty section, not a failure.
 async function dumpPageState(frame, selector) {
-  return frame.evaluate((sel) => {
+  return frame.evaluate(([sel, textNodeCap]) => {
     const localStorage = {};
     try {
       for (let i = 0; i < window.localStorage.length; i++) {
@@ -660,7 +666,7 @@ async function dumpPageState(frame, selector) {
         },
       );
       let node;
-      while ((node = walker.nextNode()) && visibleText.length < 40) {
+      while ((node = walker.nextNode()) && visibleText.length < textNodeCap) {
         const text = (node.textContent || "").replace(/\s+/g, " ").trim();
         if (text) visibleText.push(text);
       }
@@ -679,21 +685,41 @@ async function dumpPageState(frame, selector) {
     }
 
     return { localStorage, visibleText, selectorText };
-  }, selector || null);
+  }, [selector || null, PAGE_STATE_TEXT_NODE_CAP]);
 }
 
-// Landed-state verification: assert the localStorage the capture INJECTED
-// (`config.browserState.localStorage`, which already carries the seed-session
-// overlay the editor merged in) actually reached the capture browser after the
-// page settled. The core promise of a seeded scenario is remote control of the
-// app — a seed that silently doesn't land produces an empty screenshot that
-// looks like a successful capture of an empty app, which is exactly the
-// failure this guards. Returns a loud `seed-not-landed` issue (which fails the
-// capture, since `ok` requires zero issues) when a non-empty injected seed is
-// missing/empty on read-back, or `null` when there was nothing to verify, the
-// seed landed, or storage is unavailable (sandboxed/opaque origin — never fail
-// the capture over the verifier itself).
-async function verifySeededStorageLanded(frame, config) {
+// Landed-state verification, across every transport a seed can travel: prove
+// the seed reached the frame before the capture is blessed. The core promise of
+// a seeded scenario is remote control of the app — a seed that silently doesn't
+// land produces a screenshot that looks like a successful capture of a
+// different state entirely, which is exactly the failure this guards.
+//
+// Two halves, because a seed reaches the app two structurally different ways:
+//   - storage — the localStorage the capture INJECTED
+//     (`config.browserState.localStorage`, already carrying the seed-session
+//     overlay the editor merged in) is read back from the settled page.
+//   - probes — `config.seedProbes` carries strings the editor derived by
+//     diffing the seeded sandbox against the production tree it was reset from
+//     (see `seed_landing.rs`), so at least one must appear in the rendered
+//     text. This is the half a filesystem-seeded (content-collection) stack
+//     needs: it injects nothing into storage, so the storage half alone
+//     declared every such capture clean no matter what actually rendered.
+//
+// Returns a loud `seed-not-landed` issue (which fails the capture, since `ok`
+// requires zero issues) when a declared seed is missing from the frame, or
+// `null` when NEITHER half had anything to verify, the seed landed, or the
+// read-back itself was unavailable — never fail a capture over the verifier.
+async function verifySeedLanded(frame, config) {
+  const storageIssue = await verifyStorageSeedLanded(frame, config);
+  if (storageIssue) return storageIssue;
+  return await verifyProbeSeedLanded(frame, config);
+}
+
+// The storage half of `verifySeedLanded`, unchanged in behavior: assert every
+// non-empty injected localStorage key is present on read-back. `null` when no
+// storage was seeded — which no longer means "clean", only "this transport had
+// nothing to verify"; the probe half below answers for the filesystem one.
+async function verifyStorageSeedLanded(frame, config) {
   const expected =
     (config && config.browserState && config.browserState.localStorage) || {};
   const expectedKeys = Object.keys(expected);
@@ -738,6 +764,58 @@ async function verifySeededStorageLanded(frame, config) {
       `overlay was stale or empty (re-run the seed adapter to refresh it), (2) the ` +
       `adapter's stdout localStorage map failed to parse, or (3) the injection ` +
       `path is down (the seeded origin differs from the captured page's origin).`,
+    { url: (frame && frame.url && frame.url()) || (config && config.url) },
+  );
+}
+
+// The probe half of `verifySeedLanded`: assert at least one discriminating
+// string the editor derived from the seeded sandbox appears in the rendered
+// text. Each probe exists in the seeded content and nowhere in committed
+// content, so finding one proves the frame shows the SEED; finding none means
+// it shows COMMITTED content.
+//
+// Existence, not coverage — a seed writes many strings and rendering may show
+// only some, so requiring all of them would fail correct captures.
+//
+// The probes are scoped by the editor before they reach here: only a capture
+// whose OWN merged seed wrote to the sandbox carries any, and a component
+// scenario never does. So the empty short-circuit below is the whole gate this
+// side needs — an unseeded or isolated-component capture simply sends none.
+async function verifyProbeSeedLanded(frame, config) {
+  const probes = (config && config.seedProbes) || [];
+  if (probes.length === 0) return null; // nothing derived — nothing to verify.
+
+  let state;
+  try {
+    state = await dumpPageState(frame, null);
+  } catch (_) {
+    return null; // read-back failed — never fail a capture over the verifier.
+  }
+  if (!state) return null;
+
+  const visibleText = state.visibleText || [];
+  const haystack = visibleText.concat(state.selectorText || []).join(" ");
+  if (probes.some((probe) => haystack.includes(probe))) return null; // landed.
+
+  // `dumpPageState` samples a bounded number of text nodes. When it came back
+  // at the cap, "not found" cannot be distinguished from "past the sample", so
+  // the honest answer is inconclusive rather than a failure — same rule the
+  // storage half follows for unavailable storage.
+  if (visibleText.length >= PAGE_STATE_TEXT_NODE_CAP) return null;
+
+  return createIssue(
+    "seed-not-landed",
+    `This scenario's own seed did not reach the captured frame: expected at least one of ` +
+      `[${probes.join(", ")}] in the rendered text, but none appeared. Each of those ` +
+      `strings was written by THIS scenario's merged seed and is absent from committed ` +
+      `content, so this screenshot shows COMMITTED/UNSEEDED state — fix the seed; do not ` +
+      `delete the scenario. Check, in order: (1) the seed's tables/files target the ` +
+      `collection this route actually renders, (2) the app cached a content index built ` +
+      `before the seed landed, (3) the seed adapter wrote somewhere the served app does ` +
+      `not read, or (4) the dev server was not launched by the editor, so it resolves ` +
+      `committed source instead of CODEYAM_CONTENT_ROOT/CODEYAM_DATA_ROOT (those roots ` +
+      `travel through the spawned process's environment — there are no ` +
+      `.codeyam/tmp/*-root sidecar files to look for, and their absence is not the fault).`,
     { url: (frame && frame.url && frame.url()) || (config && config.url) },
   );
 }
@@ -1274,7 +1352,7 @@ async function runScenarioCheck(
     // and BEFORE any interaction can legitimately mutate storage. A non-empty
     // seed that didn't reach localStorage means the screenshot will show
     // default/empty state — fail loudly instead of emitting a misleading frame.
-    const seedNotLandedIssue = await verifySeededStorageLanded(frame, config);
+    const seedNotLandedIssue = await verifySeedLanded(frame, config);
     if (seedNotLandedIssue) {
       pushIssue(issues, seedNotLandedIssue);
     }
@@ -1464,7 +1542,7 @@ module.exports = {
   mergeVisibleTextLength,
   runFlowSteps,
   dumpPageState,
-  verifySeededStorageLanded,
+  verifySeedLanded,
   readStackLoadingMarkers,
   scenarioScriptsLiveSocket,
   applyBrowserState,

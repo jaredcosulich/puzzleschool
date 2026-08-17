@@ -3,6 +3,7 @@
 // and the standfirst opposite. Deliberately NOT centred — that shape belongs to
 // the home masthead alone, and the contrast between the two is the design.
 import Mark from '../Mark.astro';
+import { cmsField } from '../../lib/cmsMarkers';
 
 interface Props {
   title: string;
@@ -19,11 +20,11 @@ const { title, kicker, intro } = Astro.props;
   <div class="page-header__title">
     <Mark size={96} />
     <div class="page-header__words">
-      {kicker ? <p class="kicker">{kicker}</p> : null}
-      <h1>{title}</h1>
+      {kicker ? <p class="kicker" {...cmsField('kicker')}>{kicker}</p> : null}
+      <h1 {...cmsField('title')}>{title}</h1>
     </div>
   </div>
-  {intro ? <p class="intro">{intro}</p> : null}
+  {intro ? <p class="intro" {...cmsField('intro')}>{intro}</p> : null}
 </header>
 
 <style>

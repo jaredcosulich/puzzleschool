@@ -3,6 +3,7 @@
 // place on the site that is, which is why internal pages set their header to the
 // left instead.
 import Mark from '../Mark.astro';
+import { cmsField } from '../../lib/cmsMarkers';
 
 interface Props {
   title: string;
@@ -14,8 +15,8 @@ const { title, kicker } = Astro.props;
 
 <header class="masthead">
   <Mark size={124} />
-  <h1 class="wordmark">{title}</h1>
-  {kicker ? <p class="kicker">{kicker}</p> : null}
+  <h1 class="wordmark" {...cmsField('title')}>{title}</h1>
+  {kicker ? <p class="kicker" {...cmsField('kicker')}>{kicker}</p> : null}
 </header>
 
 <style>

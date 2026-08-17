@@ -8,6 +8,7 @@
 // stays in the DOM with a correct stroke, and nothing renders.
 import Mark from '../Mark.astro';
 import KochFragment from '../structures/KochFragment.astro';
+import { cmsField } from '../../lib/cmsMarkers';
 
 interface Props {
   quote: string;
@@ -21,8 +22,14 @@ const { quote, attribution } = Astro.props;
   <div class="band__inner measure">
     <KochFragment />
     <Mark variant="signalNight" size={104} />
-    <blockquote>{quote}</blockquote>
-    {attribution ? <p class="attribution">{attribution}</p> : null}
+    <blockquote {...cmsField('quote')}>{quote}</blockquote>
+    {
+      attribution ? (
+        <p class="attribution" {...cmsField('quoteAttribution')}>
+          {attribution}
+        </p>
+      ) : null
+    }
   </div>
 </section>
 

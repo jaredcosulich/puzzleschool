@@ -97,6 +97,10 @@
       "width": 1280,
       "height": 800
     },
+    "Desktop": {
+      "width": 1440,
+      "height": 900
+    },
     "Mobile": {
       "width": 390,
       "height": 844
@@ -104,10 +108,6 @@
     "Tablet": {
       "width": 768,
       "height": 1024
-    },
-    "Desktop": {
-      "width": 1440,
-      "height": 900
     }
   },
   "deviceScaleFactor": 2.0,
@@ -575,6 +575,31 @@
       {
         "filePath": ".claude/hooks/editor-pretool-hook.py",
         "name": "scripted_rewrite_stage",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "is_recursive_rm_flag",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "recursive_rm_operands",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "recursive_rm_refusal",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "tracked_file_count",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "tracked_recursive_rm",
         "reason": "derive-generated"
       }
     ],

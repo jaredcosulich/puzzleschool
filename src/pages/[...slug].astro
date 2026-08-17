@@ -66,7 +66,7 @@ const contactHref = buildMailto({
 });
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} entryKey={`pages/${page.id}`}>
   <MorseRule />
   <PageHeader title={title} kicker={kicker} intro={intro} />
   <SineRule />

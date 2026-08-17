@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "derivedFromHash": "7b2943f5dfaff0c53d76178e142b26aa2657808a302bf03d4761938b2c4ccc9e",
+  "derivedAt": "2026-08-17T01:15:15.199883371+00:00",
+  "deliverables": [
+    {
+      "id": "a-static-the-puzzle-school-website-that-builds",
+      "text": "A static The Puzzle School website that builds to plain HTML/CSS/JS and can be hosted on GitHub Pages",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "the-first-two-designed-pages-implemented",
+      "text": "The first two designed pages implemented faithfully to the supplied designs",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "codeyam-cms-integrated-so-site-content-can-be",
+      "text": "codeyam-cms integrated so site content can be edited without touching code",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "new-pages-can-be-added-through-the-cms-without",
+      "text": "New pages can be added through the CMS without writing code",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "improvements-made-to-codeyam-cms-itself-where",
+      "text": "Improvements made to codeyam-cms itself where needed to support static-site authoring",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    }
+  ]
+}

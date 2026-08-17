@@ -6,6 +6,7 @@
 // edit rather than a markup change.
 import Mark from '../Mark.astro';
 import type { NavItem } from '../../lib/site';
+import { cmsNavItem, cmsSetting } from '../../lib/cmsMarkers';
 
 interface Props {
   siteTitle: string;
@@ -20,12 +21,17 @@ const { siteTitle, items, currentPath } = Astro.props;
 <nav class="nav" aria-label="Primary">
   <a class="nav__brand" href="/">
     <Mark size={28} />
-    <span>{siteTitle}</span>
+    {/* The marker goes on the span, not the brand anchor: patchSettings sets
+        textContent, which on the anchor would delete the Mark beside it. */}
+    <span {...cmsSetting('siteTitle')}>{siteTitle}</span>
   </a>
   <ul class="nav__links">
     {
+      /* The <li> carries the marker, not the <a>: a removed nav item calls
+         .remove() on the marked element, and marking the anchor would leave an
+         empty bullet behind. patchNav resolves the link inside it either way. */
       items.map((item) => (
-        <li>
+        <li {...cmsNavItem(item.url)}>
           <a
             href={item.url}
             class:list={['nav__link', { 'is-current': item.url === currentPath }]}

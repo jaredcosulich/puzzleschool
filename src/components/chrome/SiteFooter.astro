@@ -7,6 +7,7 @@
 // rows; internal pages use the 40px gutter, an even 30px band, and centred rows.
 // Encoding both here keeps a fix to one page from silently restyling the other.
 import Mark from '../Mark.astro';
+import { cmsSetting, cmsSettingHref } from '../../lib/cmsMarkers';
 
 interface Props {
   /** Footer meta line, from the editable settings singleton. */
@@ -22,9 +23,11 @@ const { text, contactHref, variant } = Astro.props;
 <footer class="footer" data-variant={variant}>
   <div class="footer__brand">
     <Mark size={variant === 'home' ? 22 : 20} />
-    <span>{text}</span>
+    <span {...cmsSetting('footerText')}>{text}</span>
   </div>
-  <a href={contactHref}>Contact</a>
+  {/* href-only: the visible label stays "Contact". Marking this with the plain
+      setting attribute would overwrite that label with the mailto URL. */}
+  <a href={contactHref} {...cmsSettingHref('contactEmail')}>Contact</a>
 </footer>
 
 <style>

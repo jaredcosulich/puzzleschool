@@ -16,10 +16,7 @@ cards:
     href: /about
     label: Learn More
     accent: coral
-quote: >-
-  “To teach how to live without certainty, and yet without being paralyzed by
-  hesitation, is perhaps the chief thing that philosophy, in our age, can still
-  do for those who study it.”
+quote: “To teach how to live without certainty, and yet without being paralyzed by hesitation, is perhaps the chief thing that philosophy, in our age, can still do for those who study it.”
 quoteAttribution: Bertrand Russell
 ---
 

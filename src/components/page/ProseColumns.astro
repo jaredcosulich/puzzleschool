@@ -12,6 +12,7 @@
 // page's tree its own. Forwarded rather than read here because this component
 // does not know what page it is on — the route does.
 import BranchingTree from '../structures/BranchingTree.astro';
+import { cmsBody } from '../../lib/cmsMarkers';
 
 interface Props {
   /** Identifies the page, so its tree is distinct from every other page's. */
@@ -22,7 +23,10 @@ const { seedKey } = Astro.props;
 ---
 
 <div class="prose-grid">
-  <div class="prose"><slot /></div>
+  {/* The body marker goes on `.prose`, not `.prose-grid`: patching sets
+      innerHTML, and the grid also holds BranchingTree — marking it would
+      delete the structure SVG on every staged body edit. */}
+  <div class="prose" {...cmsBody()}><slot /></div>
   <BranchingTree seedKey={seedKey} />
 </div>
 
