@@ -26,6 +26,15 @@ const canonicalUrl = canonical ?? Astro.url.href;
 <meta name="description" content={metaDescription} />
 <link rel="canonical" href={canonicalUrl} />
 
+{/* The compass mark, on the ink ground so it holds shape at 16px — the paper
+    variant dissolves into speckle at tab size. `.svg` is what modern browsers
+    take; `.ico` is the fallback they probe for by name when SVG is unsupported,
+    and it must stay listed so Safari < 17 and feed readers find it. */}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
 <meta property="og:type" content="website" />
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={metaDescription} />
