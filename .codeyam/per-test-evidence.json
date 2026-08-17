@@ -1,10 +1,15 @@
 {
   "applyTreeGrowth › clones extra paths, carrying the styling, when the tree grew": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -47,11 +52,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -59,10 +59,15 @@
   },
   "applyTreeGrowth › leaves the element untouched and reports false with no template path": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -105,11 +110,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -117,10 +117,15 @@
   },
   "applyTreeGrowth › reframes the viewBox around the new segments": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -163,11 +168,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -175,10 +175,15 @@
   },
   "applyTreeGrowth › removes surplus paths when the tree shrank": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -221,11 +226,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -233,10 +233,15 @@
   },
   "applyTreeGrowth › reports false and changes nothing when there are no segments": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -279,11 +284,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -291,10 +291,15 @@
   },
   "applyTreeGrowth › reuses the existing path elements when the counts match": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -337,11 +342,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -349,10 +349,15 @@
   },
   "applyTreeGrowth › writes each segment stroke width": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -397,20 +402,20 @@
         "at": "2026-08-15T00:44:17.192373+00:00",
         "kind": "full",
         "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
-        "kind": "full",
-        "status": "pass"
       }
     ]
   },
   "cmsBody › emits the attribute rather than omitting it": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -425,10 +430,15 @@
   },
   "cmsBody › returns the body attribute with an empty value": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -443,10 +453,15 @@
   },
   "cmsEntry › adds no attributes when spread with no key": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -461,10 +476,15 @@
   },
   "cmsEntry › returns an empty object for an empty key rather than an empty attribute": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -479,10 +499,15 @@
   },
   "cmsEntry › returns an empty object when no key is supplied": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -497,10 +522,15 @@
   },
   "cmsEntry › returns the entry attribute keyed by collection and slug": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -515,10 +545,15 @@
   },
   "cmsField › carries the frontmatter key even when it differs from the prop name": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -533,10 +568,15 @@
   },
   "cmsField › returns a new object on each call": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -551,10 +591,15 @@
   },
   "cmsField › returns the field attribute valued with the frontmatter key": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -569,10 +614,15 @@
   },
   "cmsMarkers attribute naming › gives each helper its own data-cms attribute": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -587,10 +637,15 @@
   },
   "cmsNavItem › marks a root url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -605,10 +660,15 @@
   },
   "cmsNavItem › never emits the literal string undefined as a url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -623,10 +683,15 @@
   },
   "cmsNavItem › returns an empty object for an item with no url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -641,10 +706,15 @@
   },
   "cmsNavItem › returns the nav-item attribute valued with the url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -659,10 +729,15 @@
   },
   "cmsSetting and cmsSettingHref › marks a link whose href is derived from a setting": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -677,10 +752,15 @@
   },
   "cmsSetting and cmsSettingHref › marks an element whose text is a setting value": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -695,10 +775,15 @@
   },
   "cmsSetting and cmsSettingHref › uses different attributes for the text and href cases": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -713,10 +798,15 @@
   },
   "dragonPoints › stops early when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -759,11 +849,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -771,10 +856,15 @@
   },
   "fibonacciTiling › grows each square as the sum of the previous two": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -817,11 +907,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -829,10 +914,15 @@
   },
   "fibonacciTiling › keeps the largest square closed when openLast is false": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -875,11 +965,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -887,10 +972,15 @@
   },
   "fibonacciTiling › normalises the tiling to the origin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -933,11 +1023,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -945,10 +1030,15 @@
   },
   "fibonacciTiling › reproduces the handoff geometry for six squares": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -991,11 +1081,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1003,10 +1088,15 @@
   },
   "fibonacciTiling › returns nothing for a count under two": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1049,11 +1139,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1061,10 +1146,15 @@
   },
   "growAcceptableTree › grows different trees for the slugs the site uses": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1107,11 +1197,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1119,10 +1204,15 @@
   },
   "growAcceptableTree › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1165,11 +1255,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1177,10 +1262,15 @@
   },
   "growAcceptableTree › returns a drawable tree even when the attempt budget is exhausted": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1223,11 +1313,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1235,10 +1320,15 @@
   },
   "growAcceptableTree › returns an acceptable tree across a sweep of seeds": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1281,11 +1371,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1293,10 +1378,15 @@
   },
   "growTree › counts the trunk as the first branch": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1339,11 +1429,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1351,10 +1436,15 @@
   },
   "growTree › reports bareLimbApplied false when the index is past the branches grown": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1397,11 +1487,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1409,10 +1494,15 @@
   },
   "growTree › reports bareLimbApplied when the named limb is reached": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1455,11 +1545,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1467,10 +1552,15 @@
   },
   "growTree › returns exactly what treeSegments returns": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1513,11 +1603,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1525,10 +1610,15 @@
   },
   "hashSeed › returns the same number for the same string": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1571,11 +1661,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1583,10 +1668,15 @@
   },
   "hashSeed › separates strings that differ by one character": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1629,11 +1719,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1641,10 +1726,15 @@
   },
   "hashSeed › separates the slugs the site actually uses": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1687,11 +1777,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1699,10 +1784,15 @@
   },
   "hashSeed › stays within unsigned 32-bit range": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1745,11 +1835,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1757,10 +1842,15 @@
   },
   "isAcceptableTree › accepts the originally shipped tree": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1803,11 +1893,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1815,10 +1900,15 @@
   },
   "isAcceptableTree › rejects a single unbranched limb": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1861,11 +1951,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1873,10 +1958,15 @@
   },
   "isAcceptableTree › rejects a tree that never reached its bare limb": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1919,11 +2009,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1931,10 +2016,15 @@
   },
   "isAcceptableTree › rejects an empty growth": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -1977,11 +2067,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -1989,10 +2074,15 @@
   },
   "kochPoints › produces four segments per segment per iteration": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2035,11 +2125,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2047,10 +2132,15 @@
   },
   "linkedPathForRealFile › does not match a sibling directory that shares a prefix": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2093,11 +2183,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2105,10 +2190,15 @@
   },
   "linkedPathForRealFile › preserves the full subpath, not just the file name": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2151,11 +2241,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2163,10 +2248,15 @@
   },
   "linkedPathForRealFile › returns null for a file outside the real checkout": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2209,11 +2299,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2221,10 +2306,15 @@
   },
   "linkedPathForRealFile › returns null for the real root itself": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2267,11 +2357,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2279,10 +2364,15 @@
   },
   "linkedPathForRealFile › rewrites a file under the real checkout onto the linked root": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2325,11 +2415,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2337,10 +2422,15 @@
   },
   "lsystem › applies the production rule once per iteration": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2383,11 +2473,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2395,10 +2480,15 @@
   },
   "lsystem › passes through symbols that have no rule": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2441,11 +2531,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2453,10 +2538,15 @@
   },
   "lsystem › returns the axiom unchanged for zero iterations": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2499,11 +2589,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2511,10 +2596,15 @@
   },
   "morseLine › encodes a single dot at the origin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2557,11 +2647,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2569,10 +2654,15 @@
   },
   "morseLine › makes a dash three times a dot": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2615,11 +2705,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2627,10 +2712,15 @@
   },
   "morseLine › separates letters by three units": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2673,11 +2763,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2685,10 +2770,15 @@
   },
   "morseLine › separates words by seven units": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2731,11 +2821,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2743,10 +2828,15 @@
   },
   "morseLine › skips characters with no morse encoding": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2789,11 +2879,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2801,10 +2886,15 @@
   },
   "morseLine › tags each symbol with its word": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2847,11 +2937,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2859,10 +2944,15 @@
   },
   "openRectPath › draws three sides and never closes the shape": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2905,11 +2995,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2917,10 +3002,15 @@
   },
   "randomTreeSeed › stays within unsigned 32-bit range": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -2963,11 +3053,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -2975,10 +3060,15 @@
   },
   "randomTreeSeed › varies between calls": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3023,20 +3113,182 @@
         "at": "2026-08-15T00:44:17.192373+00:00",
         "kind": "full",
         "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › falls back to matching on the url when the label was reworded": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
       },
       {
-        "at": "2026-08-15T00:40:58.190145+00:00",
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › falls back to the contact page for an empty nav": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
         "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › falls back to the contact page when no nav item matches": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › finds a Contact item nested under a dropdown parent": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › follows a Contact item that has been moved to a different url": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › matches the label case-insensitively": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › prefers the label match over a url match when the nav contains both": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › resolves the default About + Contact nav to the contact page": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveContactUrl › skips a url-less dropdown parent rather than returning undefined": {
+    "file": "src/lib/contactUrl.test.ts",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-08-17T13:41:24.542486539+00:00",
+        "kind": "changed",
         "status": "pass"
       }
     ]
   },
   "resolveContentRoot › defaults to _projectRoot_/src/content when no override is present": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3079,11 +3331,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3091,10 +3338,15 @@
   },
   "resolveContentRoot › falls back to the .codeyam/tmp/content-root sidecar": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3137,11 +3389,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3149,10 +3396,15 @@
   },
   "resolveContentRoot › prefers the CODEYAM_CONTENT_ROOT env override": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3195,11 +3447,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3207,10 +3454,15 @@
   },
   "resolveDataRoot › defaults to _projectRoot_/src/data when no override is present": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3253,11 +3505,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3265,10 +3512,15 @@
   },
   "resolveTreeSeed › falls back to one shared default tree when given nothing": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3311,11 +3563,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3323,10 +3570,15 @@
   },
   "resolveTreeSeed › hashes the key when no seed is given": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3369,11 +3621,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3381,10 +3628,15 @@
   },
   "resolveTreeSeed › prefers an explicit seed over the key": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3427,11 +3679,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3439,10 +3686,15 @@
   },
   "resolveTreeSeed › treats a zero seed as explicit": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3485,11 +3737,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3497,10 +3744,15 @@
   },
   "seededRandom › produces a different sequence for a different seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3543,11 +3795,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3555,10 +3802,15 @@
   },
   "seededRandom › produces the same sequence for the same seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3601,11 +3853,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3613,10 +3860,15 @@
   },
   "seededRandom › stays within zero and one": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3659,11 +3911,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3671,10 +3918,15 @@
   },
   "sinePath › lands exactly on the end even when step does not divide the width": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3717,11 +3969,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3729,10 +3976,15 @@
   },
   "sinePath › samples more densely with a smaller step": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3775,11 +4027,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3787,10 +4034,15 @@
   },
   "sinePath › starts on the baseline": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3833,11 +4085,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3845,10 +4092,15 @@
   },
   "sinePath › stops short of the full width when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3891,11 +4143,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3903,10 +4150,15 @@
   },
   "toPath › emits only a moveto for one point": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -3949,11 +4201,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -3961,10 +4208,15 @@
   },
   "toPath › returns an empty string for no points": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4007,11 +4259,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4019,10 +4266,15 @@
   },
   "toPath › rounds coordinates to two decimals": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4065,11 +4317,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4077,10 +4324,15 @@
   },
   "treeSegments › always draws the trunk": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4123,11 +4375,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4135,10 +4382,15 @@
   },
   "treeSegments › grows a different tree for a different seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4181,11 +4433,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4193,10 +4440,15 @@
   },
   "treeSegments › grows no side branches when branchChance is zero": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4239,11 +4491,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4251,10 +4498,15 @@
   },
   "treeSegments › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4297,11 +4549,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4309,10 +4556,15 @@
   },
   "treeSegments › leaves the named limb bare": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4355,11 +4607,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4367,10 +4614,15 @@
   },
   "treeSegments › never shrinks as depth increases": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4413,11 +4665,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4425,10 +4672,15 @@
   },
   "treeSegments › tapers stroke width with depth": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4471,11 +4723,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4483,10 +4730,15 @@
   },
   "treeVariant › holds the fixed parameters constant across seeds": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4529,11 +4781,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4541,10 +4788,15 @@
   },
   "treeVariant › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4587,11 +4839,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4599,10 +4846,15 @@
   },
   "treeVariant › keeps every sampled parameter inside TREE_ENVELOPE": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4645,11 +4897,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4657,10 +4904,15 @@
   },
   "treeVariant › rounds the integer ranges to whole numbers": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4703,11 +4955,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4715,10 +4962,15 @@
   },
   "treeViewBox › frames a grown tree identically on repeat calls": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4761,11 +5013,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4773,10 +5020,15 @@
   },
   "treeViewBox › frames the segments with a one unit margin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4819,11 +5071,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4831,10 +5078,15 @@
   },
   "turtle › always walks at least one move": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4877,11 +5129,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4889,10 +5136,15 @@
   },
   "turtle › ignores symbols that are not moves or turns": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4935,11 +5187,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -4947,10 +5194,15 @@
   },
   "turtle › walks forward along its heading": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -4993,11 +5245,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -5005,10 +5252,15 @@
   },
   "turtle › walks only part of the moves when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-08-17T13:11:55.941752204+00:00",
+    "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-08-17T13:55:01.246320016+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
       {
         "at": "2026-08-17T13:11:55.941752204+00:00",
         "kind": "full",
@@ -5051,11 +5303,6 @@
       },
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-08-15T00:40:58.190145+00:00",
         "kind": "full",
         "status": "pass"
       }

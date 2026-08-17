@@ -7,17 +7,22 @@
 // rows; internal pages use the 40px gutter, an even 30px band, and centred rows.
 // Encoding both here keeps a fix to one page from silently restyling the other.
 import Mark from '../Mark.astro';
-import { cmsSetting, cmsSettingHref } from '../../lib/cmsMarkers';
+import { cmsSetting } from '../../lib/cmsMarkers';
 
 interface Props {
   /** Footer meta line, from the editable settings singleton. */
   text: string;
-  /** Where the Contact link points — a mailto built from settings. */
-  contactHref: string;
+  /**
+   * Where the Contact link points — the Contact page's url, resolved from the
+   * nav singleton by `resolveContactUrl`. It was a `mailto:` built from
+   * `settings.contactEmail`; the mailto now lives only on the Contact page's
+   * own button, so the footer link goes to the page like every other link.
+   */
+  contactUrl: string;
   variant: 'home' | 'internal';
 }
 
-const { text, contactHref, variant } = Astro.props;
+const { text, contactUrl, variant } = Astro.props;
 ---
 
 <footer class="footer" data-variant={variant}>
@@ -25,9 +30,13 @@ const { text, contactHref, variant } = Astro.props;
     <Mark size={variant === 'home' ? 22 : 20} />
     <span {...cmsSetting('footerText')}>{text}</span>
   </div>
-  {/* href-only: the visible label stays "Contact". Marking this with the plain
-      setting attribute would overwrite that label with the mailto URL. */}
-  <a href={contactHref} {...cmsSettingHref('contactEmail')}>Contact</a>
+  {/* Deliberately unmarked. This carried `cmsSettingHref('contactEmail')` back
+      when the href WAS that setting; now it is a page url resolved from the nav,
+      and leaving the marker would let the staged preview patch a real email
+      address in over `/contact` the moment an editor touched contactEmail —
+      quietly restoring the exact bug this link was changed to fix. There is no
+      nav-derived-href marker in the contract to replace it with. */}
+  <a href={contactUrl}>Contact</a>
 </footer>
 
 <style>

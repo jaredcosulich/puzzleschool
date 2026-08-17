@@ -50,7 +50,7 @@
     ]
   },
   {
-    "description": "The site footer in its home and internal variants. The footer line is marked as setting text while the Contact link is marked href-only, so a staged contact-address change rebuilds the mailto without overwriting the visible label.",
+    "description": "The site footer in its home and internal variants, which differ by gutter, foot depth and row alignment because the two designs genuinely differ — encoding both here keeps a fix to one page from restyling the other. The footer line is marked as setting text. The Contact link carries NO cms marker: its href is now a page url resolved from the nav singleton by resolveContactUrl, not a mailto built from settings.contactEmail, so the old href-only setting marker would let a staged contact-address edit patch a raw email address back over /contact.",
     "filePath": "src/components/chrome/SiteFooter.astro",
     "name": "SiteFooter",
     "scenarios": [
@@ -145,6 +145,12 @@
     "filePath": "src/lib/structures.ts",
     "name": "fibonacciTiling",
     "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Flattens a nav item tree depth-first, each parent immediately before its own children, so resolveContactUrl can scan the whole menu in one pass instead of recursing per match pass. Url-less items are KEPT rather than filtered: a dropdown parent can never itself be the answer, but its children still can, and dropping the parent here would drop the subtree with it. The caller decides what a url-less item means. Exercised through resolveContactUrl's nested-dropdown and url-less-parent cases.",
+    "filePath": "src/lib/contactUrl.ts",
+    "name": "flatten",
+    "testFile": "src/lib/contactUrl.test.ts"
   },
   {
     "description": "Reads the editable navigation singleton per call, for the same reason getSettings does.",
@@ -280,6 +286,12 @@
       "justification": "a filesystem read; the root-resolution logic it depends on is covered by the contentRoot tests",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "Resolves where the site footer's Contact link should point by reading the CMS-editable nav singleton, so moving or renaming the Contact page in the menu retargets the footer with it. Walks the nav depth-first and matches in two passes: first any item whose label contains 'contact' case-insensitively, then any item whose url starts with /contact. Items without a url — dropdown parents that only group children — are skipped so the footer never emits href=undefined. Falls back to /contact when nothing matches, which is always a live route because the page is not nav-gated. Pure by design: it takes the already-loaded nav rather than reading src/data itself, unlike site.ts which resolves the data root with fs at module scope.",
+    "filePath": "src/lib/contactUrl.ts",
+    "name": "resolveContactUrl",
+    "testFile": "src/lib/contactUrl.test.ts"
   },
   {
     "description": "The absolute content root the collections read from — the codeyam sandbox during a session, committed src/content in production.",

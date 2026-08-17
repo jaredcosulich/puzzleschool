@@ -14,11 +14,18 @@
 // it adds an attribute and nothing else — no styling, no behaviour, no element
 // added, moved or removed.
 //
-// The setting text/href split is deliberate and mirrors the contract's own: the
-// nav's site-title renders a setting as its TEXT, while the footer's contact
-// link renders fixed text over a setting-derived HREF. One helper taking a flag
-// would re-open exactly the guess the CMS split the attributes to prevent —
-// guessing wrong overwrites a visible label with a URL.
+// The setting text/href split is deliberate and mirrors the contract's own: some
+// elements render a setting as their TEXT (the nav's site title, the footer
+// line), others render fixed text over a setting-derived HREF. One helper taking
+// a flag would re-open exactly the guess the CMS split the attributes to prevent
+// — guessing wrong overwrites a visible label with a URL.
+//
+// `cmsSettingHref` currently has no call site in markup. It used to mark the
+// footer's Contact link, back when that href was a mailto built from
+// `settings.contactEmail`; the link now points at the Contact PAGE, resolved
+// from the nav, so marking it would let a staged contact-email edit patch a raw
+// address back over `/contact`. The helper stays because the attribute is part
+// of the CMS's contract, not because this site happens to use it today.
 import {
   CMS_BODY_ATTR,
   CMS_ENTRY_ATTR,

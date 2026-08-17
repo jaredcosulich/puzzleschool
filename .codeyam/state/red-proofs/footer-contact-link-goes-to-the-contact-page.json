@@ -1,0 +1,24 @@
+{
+  "provenAt": "2026-08-17T13:40:10Z",
+  "slug": "footer-contact-link-goes-to-the-contact-page",
+  "paths": [],
+  "tests": {
+    "resolveContactUrl": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "attestedByHand",
+        "method": "Semantic revert rather than file revert: resolveContactUrl is a NEW exported symbol, so reverting src/lib/contactUrl.ts deletes the symbol the test imports and the reverted world cannot compile (the documented UNPROVABLE case). Instead I collapsed the resolver body to the hardcoded 'return FALLBACK_CONTACT_URL' that the plan explicitly rejected — the pre-change behaviour expressed in the post-change interface — ran refresh-tests --changed, then restored the real body from a scratchpad copy and re-ran.",
+        "evidence": "Faulted: {failed:3, passed:6, total:9}. The three that flipped red are exactly the nav-derivation assertions: 'follows a Contact item that has been moved to a different url', 'prefers the label match over a url match when the nav contains both', and 'matches the label case-insensitively'. Restored: {failed:0, passed:9}. The six that stayed green are fallback/default-nav survival guards that legitimately hold under both worlds."
+      }
+    }
+  },
+  "proof": {
+    "verdict": "provenByHand",
+    "attested": [
+      "resolveContactUrl"
+    ],
+    "method": "Semantic revert rather than file revert: resolveContactUrl is a NEW exported symbol, so reverting src/lib/contactUrl.ts deletes the symbol the test imports and the reverted world cannot compile (the documented UNPROVABLE case). Instead I collapsed the resolver body to the hardcoded 'return FALLBACK_CONTACT_URL' that the plan explicitly rejected — the pre-change behaviour expressed in the post-change interface — ran refresh-tests --changed, then restored the real body from a scratchpad copy and re-ran.",
+    "evidence": "Faulted: {failed:3, passed:6, total:9}. The three that flipped red are exactly the nav-derivation assertions: 'follows a Contact item that has been moved to a different url', 'prefers the label match over a url match when the nav contains both', and 'matches the label case-insensitively'. Restored: {failed:0, passed:9}. The six that stayed green are fallback/default-nav survival guards that legitimately hold under both worlds."
+  }
+}

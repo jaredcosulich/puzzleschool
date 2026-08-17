@@ -1,7 +1,10 @@
 ---
 // The site-wide shell: <head> meta via SEO, the page canvas, and the chrome.
 // Header and footer read from `src/data/*.json`, so changing the site title, a
-// menu item, or the footer line is a CMS edit — never a markup change.
+// menu item, the footer line, or where the footer's Contact link points is a
+// CMS edit — never a markup change. That last one is indirect: the footer link
+// resolves out of the nav singleton, so moving the Contact page in the menu
+// moves the footer link too.
 //
 // The site is full-width: paper runs edge to edge, and the dark bands bleed to
 // the viewport via the `.bleed` utility in tokens.css. `.page` survives only as
@@ -19,7 +22,7 @@ import SEO from '../components/SEO.astro';
 import SiteNav from '../components/chrome/SiteNav.astro';
 import SiteFooter from '../components/chrome/SiteFooter.astro';
 import { getNav, getSettings } from '../lib/site';
-import { buildMailto } from '../lib/mailto';
+import { resolveContactUrl } from '../lib/contactUrl';
 import { cmsEntry } from '../lib/cmsMarkers';
 
 interface Props {
@@ -42,10 +45,11 @@ const settings = getSettings();
 const nav = getNav();
 const { title, description, image, showNav = true, entryKey } = Astro.props;
 
-const contactHref = buildMailto({
-  to: settings.contactEmail,
-  subject: `Hello from ${settings.siteTitle}`,
-});
+// Resolved from the nav singleton, so an editor who moves or renames the
+// Contact page in the CMS retargets the footer link with it. The mailto still
+// exists, but it belongs to the Contact page's own button — not to the one
+// link on every page that says "Contact" and ought to go to that page.
+const contactUrl = resolveContactUrl(nav);
 ---
 
 <html lang="en">
@@ -76,7 +80,7 @@ const contactHref = buildMailto({
 
       <SiteFooter
         text={settings.footerText}
-        contactHref={contactHref}
+        contactUrl={contactUrl}
         variant={showNav ? 'internal' : 'home'}
       />
     </div>

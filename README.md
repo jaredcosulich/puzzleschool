@@ -28,7 +28,9 @@ the markdown directly.
 Creating a page in `/admin` publishes it with no code change: `[...slug].astro`
 emits a route for every published entry, so a new markdown file becomes a live
 page. `src/data/settings.json` and `src/data/nav.json` hold the site title,
-contact address, footer line, and menu.
+contact address, footer line, and menu. The menu does double duty: the footer's
+Contact link resolves out of `nav.json`, so moving or renaming the Contact entry
+there moves the footer link with it.
 
 ## The line structures
 
@@ -121,9 +123,9 @@ codeyam-editor start
 
 States captured as runnable scenarios with codeyam-editor:
 
-### About - Full Design
+### About - Footer Contact Link Followed
 
-<img src=".codeyam/scenarios/screenshots/about-full-design--desktop.png" alt="About - Full Design" width="280">
+<img src=".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png" alt="About - Footer Contact Link Followed" width="280">
 
 ### Home - Narrow Viewport
 
@@ -140,6 +142,10 @@ States captured as runnable scenarios with codeyam-editor:
 ### Page - Created From The CMS
 
 <img src=".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png" alt="Page - Created From The CMS" width="280">
+
+### About - Full Design
+
+<img src=".codeyam/scenarios/screenshots/about-full-design--desktop.png" alt="About - Full Design" width="280">
 
 ### Page - Minimal Fields
 

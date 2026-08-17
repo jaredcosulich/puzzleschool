@@ -1,0 +1,315 @@
+{
+  "timestamp": "2026-08-17T13:54:01Z",
+  "title": "Footer Contact link goes to the contact page",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe footer's \"Contact\" link opens the visitor's mail client instead of going to\nthe site's Contact page. `BaseLayout.astro` builds the href with\n`buildMailto({ to: settings.contactEmail, ... })` and hands it to `SiteFooter`,\nso every page footer emits `<a href=\"mailto:hello@puzzleschool.org?subject=...\">`.\nThe `/contact` page already exists (`src/content/pages/contact.md`, listed in\n`src/data/nav.json`) and carries the real \"write to us\" call to action, so the\nfooter should point at that page and let the page own the mailto. This is not\nfixable from the CMS: the Settings singleton's editable fields are fixed by the\n`@codeyam/cms` package (siteTitle, siteUrl, description, contactEmail,\nfooterText, socials) and `src/data/collections.json` can only shape the `pages`\ncollection — there is no field anywhere that controls where the footer link\npoints.\n\nRather than hardcode `/contact` in the layout, resolve the destination from the\neditable nav singleton, so an editor who renames or moves the Contact page in\nthe CMS retargets the footer with it.\n\n## Key Decisions\n\n- **Derive the destination from `src/data/nav.json`, not a literal path.** The\n  nav singleton is already CMS-editable and already holds `{ label: \"Contact\",\n  url: \"/contact\" }`. Reading it keeps the footer link and the nav entry from\n  drifting apart, and gives the CMS indirect control over the footer link\n  without needing a new settings field the CMS package does not support.\n- **Fall back to the literal `/contact`.** If an editor removes the Contact nav\n  item, the footer must still link somewhere real rather than render an empty\n  `href`. The page itself is not nav-gated, so the fallback is always valid.\n- **Put the lookup in a new pure module, not in `src/lib/site.ts`.** `site.ts`\n  resolves the data root at module scope via `fs`, which makes it awkward to\n  unit test in isolation. A pure `resolveContactUrl(nav)` mirrors the existing\n  `buildMailto` / `linkedCmsPath` pattern — a small pure helper with its own\n  vitest file — and is directly testable.\n- **Leave `buildMailto` and the page-level contact button alone.** The mailto\n  is still correct where it belongs: `src/pages/[...slug].astro` builds it for\n  `ContactButton`, which is what the Contact page renders via\n  `showContactButton: true`. Only the footer changes.\n- **Match the nav item case-insensitively by label, then by url prefix.** The\n  label is what an editor sees and edits; matching on the url as a second pass\n  keeps the link working if the label is reworded to something like \"Get in\n  touch\".\n\n## Implementation\n\n### 1. Add the nav-to-contact-url helper\n\n**New file**: `src/lib/contactUrl.ts`\n\nExport `resolveContactUrl(nav: SiteNav): string`. Walk the nav items (top level\nand any `children`), and return the first `url` whose item either has a label\nmatching `contact` case-insensitively, or whose `url` starts with `/contact`.\nIgnore items with no `url` (dropdown parents). Return `'/contact'` when nothing\nmatches. Import the `SiteNav` / `NavItem` types from `src/lib/site.ts` so there\nis one definition of nav shape.\n\nKeep the module free of `fs` and of any `src/data` import so it stays pure and\ntestable — the caller passes the already-loaded nav.\n\n### 2. Cover the helper with unit tests\n\n**New file**: `src/lib/contactUrl.test.ts`\n\nFollow the shape of `src/lib/linkedCmsPath.test.ts`. Each test needs the\nmandatory `//` description comment above it. Cases:\n\n- the default nav (About + Contact) resolves to `/contact`\n- a relabelled item (\"Get in touch\" → `/contact`) still resolves via its url\n- a Contact item moved to a different url (`/get-in-touch`) resolves to that url\n- a nested Contact item under a dropdown parent resolves\n- a nav with no contact entry falls back to `/contact`\n- a dropdown parent with no `url` is skipped rather than returning `undefined`\n\n### 3. Point the footer at the contact page\n\n**File**: `src/layouts/BaseLayout.astro`\n\nReplace the `buildMailto` call (currently at lines 45-48) with\n`resolveContactUrl(nav)`, and drop the now-unused `buildMailto` import. Update\nthe file's header comment, which currently promises that header and footer are\nCMS data edits — that stays true, and the footer link now joins it.\n\n### 4. Correct the footer prop documentation\n\n**File**: `src/components/chrome/SiteFooter.astro`\n\nThe `contactHref` prop doc (line 15) says \"a mailto built from settings\" — that\nis no longer what it receives. Reword to describe a page url resolved from the\nnav singleton. The markup at line 27 is unchanged: the component still just\nrenders whatever href it is handed. Consider renaming the prop to `contactUrl`\nfor clarity; if renamed, update all three call sites listed below in the same\nchange.\n\n### 5. Update the isolated-component capture pages\n\n**File**: `src/pages/isolated-components/SiteFooter.astro`\n\n**File**: `src/pages/isolated-components/SiteFooterHome.astro`\n\nBoth pass `contactHref=\"mailto:hello@puzzleschool.org\"` literally, so the\nSiteFooter scenarios would keep screenshotting the old shape. Change both to\n`contactHref=\"/contact\"` so the captures exercise the real value. While in\n`src/pages/isolated-components/SiteFooter.astro`, the stale TODO comment at the\ntop referencing the mailto prop can be dropped — the props are real now.\n\n## Reused existing code\n\n- `getNav` from `src/lib/site.ts` — already loaded in `src/layouts/BaseLayout.astro`;\n  no new data read is needed, the nav object is already in scope.\n- `SiteNav` / `NavItem` types from `src/lib/site.ts` — reused by the new helper\n  rather than redeclared.\n- `SiteFooter` from `src/components/chrome/SiteFooter.astro` — unchanged markup;\n  only its prop doc (and optionally its prop name) moves.\n- `buildMailto` from `src/lib/mailto.ts` (glossary entry: `buildMailto`) — kept,\n  and still used by `src/pages/[...slug].astro` for the page-level contact\n  button. Not deleted.\n- `linkedPathForRealFile` from `src/lib/linkedCmsPath.ts` — the structural model\n  for the new helper: a small pure function with a colocated vitest file.\n\n**Existing-implementation survey.** There is no existing footer-link or\ncontact-url field anywhere to extend. `src/data/settings.json` has no link\nfield; the CMS settings form is hardcoded in\n`node_modules/@codeyam/cms/src/lib/settingsEditor.ts` to siteTitle, siteUrl,\ndescription, contactEmail, footerText and socials, and `src/data/collections.json`\ndeclares builtins only for the `pages` collection. Nothing equivalent to\n`resolveContactUrl` exists in `src/lib/` today — `buildMailto` is the only\nlink-construction helper and it builds mailto URLs only.\n\n## Reproduction Test\n\nThe buggy behavior is that the footer's Contact anchor emits a mailto: URL\ninstead of the /contact page path.\n\nNo unit-level reproduction is writable: the defect lives in the .astro layout\nwiring, and this project's vitest setup only covers pure modules under\nsrc/lib/ (there is no Astro component render harness — the four existing test\nfiles are all lib helpers). The new helper tests in step 2 are forward coverage\non new code, not a red-first repro of the current bug.\n\nDemonstrate the fix through the scenario captures instead: the SiteFooter\nisolated-component scenarios and any full-page scenario show the anchor's\ndestination, and the contact-email-only scenario confirms the page-level mailto\nbutton is untouched.\n\n## Scenarios to Demonstrate\n\n- `SiteFooter - Default` — internal-variant footer, Contact link resolving to `/contact`\n- `SiteFooter - Home Variant` — home-variant footer, same destination on the wide gutter\n- `home-full-design` — footer in place on the home page\n- `about-full-design` — footer in place on an internal page\n- `contact-email-only` — the Contact page itself, confirming the page-level mailto button still opens the mail client\n- Nav with the Contact item relabelled (\"Get in touch\") — footer still resolves to the page\n- Nav with the Contact item removed entirely — footer falls back to `/contact`",
+  "description": "Fixed the footer's Contact link, which opened the visitor's mail client instead of going to the Contact page: BaseLayout built its href with buildMailto(settings.contactEmail), so every page footer emitted a mailto. The destination is now resolved from the CMS-editable nav singleton by a new pure helper, resolveContactUrl(nav) in src/lib/contactUrl.ts, rather than hardcoded — so an editor who renames or moves the Contact page in the menu retargets the footer with it. Matching runs label-first then url-prefix, skips url-less dropdown parents, and falls back to /contact. buildMailto is untouched and still powers the Contact page's own EMAIL US button, which is where a mailto belongs.\n\nBeyond the plan: the footer anchor carried cmsSettingHref('contactEmail'), which told the CMS staged preview to patch that href from the contact-email setting. Left in place, an editor touching contactEmail would have silently restored the exact bug. The marker was removed and the reasoning recorded in the component, in cmsMarkers.ts, and in the SiteFooter glossary description (which still described the old marker behaviour).\n\nSCOPE VERDICT: this cycle delivered NONE of the five project deliverables and deferred none of them — it is a bug fix outside that set, and all five were already resolved by the CMS Staged-Preview Markers cycle. One project-level deferral still stands from that cycle and is unchanged here: 'Improvements made to codeyam-cms itself where needed to support static-site authoring' remains deferred (decidedBy: user) — the parseEntry YAML block-scalar gap and the capture-guard mis-scoping are still owed upstream. No deferral on this branch was agent-decided.\n\nCoverage: 9 unit tests in src/lib/contactUrl.test.ts (default nav, moved page, reworded label, label-beats-url precedence, nested dropdown, url-less parent, no match, empty nav, case insensitivity). Redness is AGENT-ATTESTED, not tool-measured: prove-red cannot revert a brand-new exported symbol because the reverted world will not compile the test importing it, so redness was established by a semantic revert to the hardcoded /contact the plan rejected — 3 of 9 went red, exactly the nav-derivation assertions. One new scenario, About - Footer Contact Link Followed, drives the click from /about and captures the Contact page, because an href change is invisible in a resting frame and all 19 recaptures came back pixel-identical.\n\nKnown tooling gap, not worked around: .codeyam/seed-adapter.ts documents object-valued singleton keys for seeding nav/settings per scenario and names the 'minimal nav' case explicitly, but register's seed validator rejects any non-array seed table, making that capability unreachable. It blocked a scenario showing the nav with Contact relabelled; that scenario was skipped rather than routed around with a bespoke seed.command, since a reworded nav label is a data variation of an already-covered display state.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/footer-contact-link-goes-to-the-contact-page.md\t.codeyam/plans/completed/footer-contact-link-goes-to-the-contact-page.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/bandquote-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/masthead-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-title-without-body--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pageheader-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pageheader-title-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/quoteband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-home-variant--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/statementblock-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/91e93f84cafeeebfcdb97e7b700d6d0e64e7075bce4ed4e70e9cec7606cc1b73.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/a933843134f462f35fc69925e3b217053853c61b7e4c2a2bb76aa8c2f53f8fd1.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/chrome/SiteFooter.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/cmsMarkers.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteFooter.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteFooterHome.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/about-footer-contact-link-followed.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/sitefooter.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/footer-contact-link-goes-to-the-contact-page.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/789d3b99d6401af52db048b4f2ef7c8904ae064901bdfca2326e06013f8329d2.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/f23377f0663482d53026a7e4f815fcd9117456b4ea0d46bdcc5afbb09885f633.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/contactUrl.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/contactUrl.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "Page - Title Without Body",
+      "screenshotPath": "page-title-without-body--desktop.png"
+    },
+    {
+      "name": "BandQuote - Default",
+      "screenshotPath": "bandquote-default--desktop.png"
+    },
+    {
+      "name": "ExploratoryBand - Default",
+      "screenshotPath": "exploratoryband-default--desktop.png"
+    },
+    {
+      "name": "ExploratoryBand - Without Quote",
+      "screenshotPath": "exploratoryband-without-quote--desktop.png"
+    },
+    {
+      "name": "Masthead - Default",
+      "screenshotPath": "masthead-default--desktop.png"
+    },
+    {
+      "name": "PageHeader - Default",
+      "screenshotPath": "pageheader-default--desktop.png"
+    },
+    {
+      "name": "PageHeader - Title Only",
+      "screenshotPath": "pageheader-title-only--desktop.png"
+    },
+    {
+      "name": "ProseColumns - Default",
+      "screenshotPath": "prosecolumns-default--desktop.png"
+    },
+    {
+      "name": "QuoteBand - Default",
+      "screenshotPath": "quoteband-default--desktop.png"
+    },
+    {
+      "name": "SiteFooter - Default",
+      "screenshotPath": "sitefooter-default--desktop.png"
+    },
+    {
+      "name": "SiteFooter - Home Variant",
+      "screenshotPath": "sitefooter-home-variant--desktop.png"
+    },
+    {
+      "name": "SiteNav - Default",
+      "screenshotPath": "sitenav-default--desktop.png"
+    },
+    {
+      "name": "StatementBlock - Default",
+      "screenshotPath": "statementblock-default--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 9,
+        "passed": 9
+      }
+    ]
+  }
+}

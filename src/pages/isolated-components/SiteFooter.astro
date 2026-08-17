@@ -4,9 +4,11 @@ import "../../../src/styles/tokens.css";
 
 // Isolation page for SiteFooter — codeyam screenshots the #codeyam-capture
 // wrapper by navigating to /isolated-components/SiteFooter.
-// TODO: pass real props to <Component text="THE PUZZLE SCHOOL · K–12 · 2027" contactHref="mailto:hello@puzzleschool.org" variant="internal" /> below so the capture exercises the
-// component, then register the scenario:
-//   codeyam-editor editor register '{"name":"SiteFooter - Default","componentName":"SiteFooter","url":"/isolated-components/SiteFooter","dimensions":["Desktop"]}'
+//
+// `contactUrl` mirrors what `BaseLayout` now resolves out of the nav singleton,
+// so the capture exercises the real value. It used to be a literal
+// `mailto:hello@puzzleschool.org`, which meant these scenarios kept
+// screenshotting the old shape after the footer stopped emitting it.
 // Three rules for a thoughtful capture:
 //   1. CENTERING is handled by the <body> flex rule below — keep it, because
 //      the capture shoots the full viewport with no element clip, so a page
@@ -28,7 +30,7 @@ import "../../../src/styles/tokens.css";
   </head>
   <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
     <div id="codeyam-capture" style="padding: var(--space-lg);">
-      <Component text="THE PUZZLE SCHOOL · K–12 · 2027" contactHref="mailto:hello@puzzleschool.org" variant="internal" />
+      <Component text="THE PUZZLE SCHOOL · K–12 · 2027" contactUrl="/contact" variant="internal" />
     </div>
   </body>
 </html>

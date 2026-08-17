@@ -577,6 +577,87 @@
       "runner": "tests"
     },
     {
+      "description": "The opposite edit — the page stays put but the label is reworded. The label pass misses it, so the url pass has to catch it or the footer falls back to a path that happens to be right for the wrong reason.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › falls back to matching on the url when the label was reworded",
+      "line": 39,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The degenerate singleton — an editor who cleared the menu entirely. Same fallback, but it exercises the empty-array path rather than the no-match one.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › falls back to the contact page for an empty nav",
+      "line": 107,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Removing the nav item must not empty the href. The page is not nav-gated, so '/contact' is still a live route even with nothing in the menu.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › falls back to the contact page when no nav item matches",
+      "line": 101,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Menus nest. A Contact page filed under an \"About\" dropdown is an ordinary shape, and a resolver that only walked the top level would silently fall back and point the footer somewhere the editor did not choose.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › finds a Contact item nested under a dropdown parent",
+      "line": 67,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole reason this reads the nav instead of hardcoding a path: an editor who moves the page in the CMS must move the footer link with it. Hardcoding '/contact' passes every other test here and fails this one.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › follows a Contact item that has been moved to a different url",
+      "line": 25,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Case is the editor's business, not ours: \"CONTACT\" in a shouty menu and \"contact\" in a lowercase one both mean the same page.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › matches the label case-insensitively",
+      "line": 113,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Label beats url, and only a nav containing BOTH kinds of edit can prove it. A single-pass implementation in item order would return '/contact' here, which is the entry the editor renamed AWAY from the contact page.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › prefers the label match over a url match when the nav contains both",
+      "line": 53,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The shipped nav. This is the case the footer hits on every page of the real site, so if it ever stops resolving, every footer link breaks at once.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › resolves the default About + Contact nav to the contact page",
+      "line": 11,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A dropdown parent has no url, so a naive `find` on the label would return it and put href=\"undefined\" in every footer. The parent is a heading; the answer is the child beneath it.",
+      "file": "src/lib/contactUrl.test.ts",
+      "format": "vitest",
+      "key": "resolveContactUrl › skips a url-less dropdown parent rather than returning undefined",
+      "line": 86,
+      "registeredAt": "2026-08-17T13:40:36Z",
+      "runner": "tests"
+    },
+    {
       "description": "With neither override present (a real production build), the site reads its committed `src/content` — so deploys are unaffected.",
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
