@@ -91,6 +91,31 @@ Restore each seed's `pages` array to the pre-trim set — the scenario's own ent
 plus `home`, `about` and `contact` — recovered from the trim commit. Keep each
 scenario's own entry exactly as it is today; only the sibling entries come back.
 
+**What actually shipped differs from this plan's original description in two
+ways — both discovered while applying the trim, and both must be undone here.**
+
+1. **`home` was NOT trimmed out.** Trimming to a single entry broke the site:
+   `src/pages/index.astro` deliberately throws when `pages/home` is missing, so a
+   one-page world made `/` return HTTP 500, and `recapture-stale`'s own pre-flight
+   probes `/` — no capture could run at all. The shipped trim therefore keeps
+   `home` plus each scenario's own entry, and only `about` / `contact` were
+   dropped. Restoring means adding `about` and `contact` back, not `home`.
+
+2. **`page-title-without-body`'s TITLE was changed**, from `Blank` to
+   `A page nobody has written into yet`. This was not cosmetic: the guard samples
+   sentinels from *rendered text*, and that scenario's only long distinctive value
+   was `description`, which `src/components/SEO.astro` renders solely into
+   `<meta>` tags — never visible text. With `body` empty by design and a title too
+   short to be sampled, the check was unsatisfiable by construction. Lengthening
+   the title gave the guard a visible sentinel while leaving the demonstrated
+   state (title, no body) identical. Restore the title to `Blank` once the guard
+   samples only rendered fields.
+
+That second point is a distinct facet of the upstream bug worth fixing alongside
+the entry-scoping one: **the sentinel sampler does not distinguish rendered
+fields from metadata-only fields**, so it can select a string that cannot
+possibly appear in rendered text and then report the seed as not landed.
+
 ### 3. Recapture and inspect the frames
 
 Run `codeyam-editor editor recapture-stale`, then LOOK at each of the four
