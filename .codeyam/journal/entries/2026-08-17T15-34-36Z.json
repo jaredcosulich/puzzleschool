@@ -1,0 +1,195 @@
+{
+  "timestamp": "2026-08-17T15:34:36Z",
+  "title": "Stop duplicating the site title in the home page tab title",
+  "type": "feature",
+  "userRequest": "## Summary\n\nEvery page's `<title>` is composed in `src/components/SEO.astro` as `` `${title} · ${settings.siteTitle}` ``, with the bare site title used only when a page passes no `title` at all. The home page does pass one — `src/content/pages/home.md` has `title: The Puzzle School`, which is character-for-character the `siteTitle` in `src/data/settings.json` — so the browser tab, the OG title, and the Twitter card title all read **\"The Puzzle School · The Puzzle School\"**. The suffix exists to give a page context (\"About · The Puzzle School\"); when the page title already *is* the site title there is no context to add and the suffix is pure duplication. Fix it by making the composition itself dedupe: extract the rule into a small pure helper, `src/lib/pageTitle.ts` (new), and have `src/components/SEO.astro` call it. Doing it in the composition rather than at the home page's call site means it also holds when a CMS editor renames the site or titles some other page to match — neither of which is a source change anyone would think to re-check.\n\n## Key Decisions\n\n- **Dedupe inside the title composition, not at the home page's call site.** The alternative — dropping the `title` prop from `src/pages/index.astro` so `src/components/SEO.astro` falls back to the bare site title — is a smaller diff but fixes exactly one page. Both titles involved are CMS-editable content (`home.md` frontmatter and `settings.json`), so the collision can reappear from a pure data edit with no code review in the loop. Home keeps passing `title`, which also keeps it available for `og:title`/`twitter:title`.\n- **Extract to `src/lib/pageTitle.ts` (new) rather than inlining the condition in the `.astro` frontmatter.** The project's vitest setup covers `src/lib/*.ts` only; there is no component-rendering test harness, so logic left inside `src/components/SEO.astro` is untestable by construction. `src/lib/mailto.ts` is the established precedent — a pure string-building helper pulled out of a component and consumed from the layout.\n- **Compare trimmed and case-insensitively.** `title: the puzzle school` or a stray trailing space in the CMS is the same collision to a reader, and an exact `===` would miss it. Whitespace-only and absent titles collapse to the bare site title through the same path.\n- **Separator stays `·` and stays in the helper.** It is the only place the site composes a title, so the character lives with the rule instead of being duplicated at the call site.\n- **No visual change.** `Masthead` on home and `PageHeader` on inner pages receive `title` directly from their page's frontmatter and are untouched — this is a `<head>` fix only.\n\n## Implementation\n\n### 1. Add the title-composition helper\n\n**New file**: `src/lib/pageTitle.ts`\n\nExport `composePageTitle(pageTitle: string | undefined, siteTitle: string): string`:\n\n- Return `siteTitle` when `pageTitle` is `undefined`, empty, or whitespace-only.\n- Return `siteTitle` when the two match after `trim()` + case-insensitive compare — the deduplication case.\n- Otherwise return `` `${pageTitle} · ${siteTitle}` ``, using the trimmed page title.\n\nHead-comment it in the register the rest of `src/lib` uses: say what the suffix is *for* (per-page context in a tab strip / search result), and that home hits the dedupe branch because its content title and the site title are the same editable string.\n\n### 2. Use the helper in the SEO component\n\n**File**: `src/components/SEO.astro`\n\nImport `composePageTitle` and replace the inline `pageTitle` expression:\n\n```ts\nconst pageTitle = composePageTitle(title, settings.siteTitle);\n```\n\n`pageTitle` already feeds `<title>`, `og:title`, and `twitter:title`, so all three are corrected by this one substitution. The existing comment above the expression documents the old `\"Page · Site\"` rule — update it to name the dedupe branch too.\n\n## Reused existing code\n\n- `getSettings` from `src/lib/site.ts` — already imported by `src/components/SEO.astro`; supplies `siteTitle`. Read per call by design (see that file's comment), so scenario seeding that varies `siteTitle` flows through the new helper without extra wiring.\n- `src/lib/mailto.ts` (`buildMailto`) — the structural precedent this change follows: a pure, dependency-free string builder in `src/lib`, consumed from a layout/component. The new helper should match its shape and comment density.\n- `src/lib/linkedCmsPath.test.ts` — the test-file convention to mirror: `describe` named for the function, a `//` comment above each `it` explaining what would break if the case regressed.\n- Existing-implementation survey: no title-composition helper exists anywhere in `src/lib` today, and `codeyam-editor editor glossary-find SEO --substring` returns zero entries — the composition lives only as the inline expression in `src/components/SEO.astro`, which is the single site-wide `<title>` seam. `src/pages/index.astro` and the bracketed catch-all route file beside it (the dynamic slug route under src/pages/) are its only two upstream callers (both via `BaseLayout`).\n\n## Reproduction Test\n\nPins the head-title composition so a page whose title equals the site title renders one title, not two.\n\n**Target**: `src/lib/pageTitle.test.ts` (new) — run with `codeyam-editor editor refresh-tests --test composePageTitle`.\n\n```ts\nimport { describe, expect, it } from 'vitest';\n\nimport { composePageTitle } from './pageTitle';\n\ndescribe('composePageTitle', () => {\n  // The bug: home's content title IS the site title, so the generic\n  // \"Page · Site\" rule rendered \"The Puzzle School · The Puzzle School\" in the\n  // tab, the OG card, and the Twitter card. There is no context to add when the\n  // page already names the site.\n  it('does not append the site title when the page title already is it', () => {\n    expect(composePageTitle('The Puzzle School', 'The Puzzle School')).toBe('The Puzzle School');\n  });\n\n  // The suffix has to survive for every other page — that is what makes a tab\n  // strip readable when several pages of the site are open at once.\n  it('appends the site title for an ordinary page', () => {\n    expect(composePageTitle('About', 'The Puzzle School')).toBe('About · The Puzzle School');\n  });\n\n  // Both titles are CMS-editable, so the collision can arrive with different\n  // casing or a stray trailing space from a content edit no reviewer sees.\n  it('treats a differently-cased or padded match as the same title', () => {\n    expect(composePageTitle('  the puzzle school ', 'The Puzzle School')).toBe('The Puzzle School');\n  });\n\n  // A page that passes no title at all falls back to the bare site title —\n  // the behavior the old `title ? ... : siteTitle` ternary already had.\n  it('falls back to the site title when the page passes none', () => {\n    expect(composePageTitle(undefined, 'The Puzzle School')).toBe('The Puzzle School');\n    expect(composePageTitle('   ', 'The Puzzle School')).toBe('The Puzzle School');\n  });\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: `src/lib/pageTitle.ts` does not exist yet, so the suite fails to resolve the import before any assertion runs. Once the helper exists but before the dedupe branch is added, the first and third cases fail with `\"The Puzzle School · The Puzzle School\"` received where `\"The Puzzle School\"` was expected.\n\n## Scenarios to Demonstrate\n\n- **Home page** — the fix in place: one \"The Puzzle School\" in the tab title and in the OG/Twitter title tags.\n- **An inner page (`/about`)** — the suffix still applied: \"About · The Puzzle School\".\n- **Site title renamed via settings** — seed `settings.json` with a different `siteTitle` while `home.md` keeps `title: The Puzzle School`; home should now legitimately read \"The Puzzle School · <new site title>\", proving the dedupe is a match test rather than a hardcoded home-page exception.\n- **A CMS-authored collision on an inner page** — a page whose frontmatter title matches the site title renders the bare site title, no suffix.\n- **Page with no title** — falls back to the bare site title, unchanged from today.",
+  "description": "Home's browser tab, OG card, and Twitter card all read \"The Puzzle School · The Puzzle School\", because home.md's content title is character-for-character the siteTitle in settings.json and SEO.astro appended the suffix unconditionally. Extracted the composition into a new pure helper, composePageTitle in src/lib/pageTitle.ts, which returns the bare site title when the page title is absent, blank, or equal to it (trimmed, case-insensitive) and otherwise composes \"Page · Site\"; SEO.astro now calls it, correcting all three tags in one substitution. Deduping in the composition rather than at home's call site is deliberate: both strings are CMS-editable, so the collision can reappear from a content edit with no code review in the loop — and the rule stays a match test, not a home-page exception, so renaming the site brings the suffix back. No visual change; verified from the served HTML (GET / returns one title, /about and /contact keep theirs). Five vitest cases pin the rule. prove-red could NOT bisect this change — pageTitle.ts is both the file carrying the fix and the module under test, so reverting it left the test unable to resolve its import (did-not-build, an unknown rather than a negative). Redness was instead established by a semantic revert (restoring the old ternary inside the helper body): 3 of the 5 went red, including the whitespace-only-title case, and the record is AGENT-ATTESTED via prove-red-attest, not tool-measured. SCOPE VERDICT: this cycle is a bug fix outside the project's deliverable set — it delivered none of the five deliverables and deferred none. All five were already resolved in earlier cycles, every one decided by the user; the single pre-existing deferral (upstream codeyam-cms improvements) is unchanged by this cycle and still owed.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/stop-duplicating-the-site-title-in-the-home-page-tab-title.md\t.codeyam/plans/completed/stop-duplicating-the-site-title-in-the-home-page-tab-title.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-title-without-body--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/1c73029e7c79030765ac645b4ffed5b297e3f1b69cdd6906163134d67fb4cb71.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/27e50e5b787cf7b71f4ec4bc34cfc135490bc2b0ed2fc8fdaea9afc0f4231a31.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/SEO.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-seo-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/stop-duplicating-the-site-title-in-the-home-page-tab-title.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/658470acdcd294991099f5c9d466a7a73995a1ca7781f5a65ecf1b5c9764c934.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/98207429c829e026210b3498c2ab7d9e26b37764b34185a52ca6cd397eeb165e.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/pageTitle.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/pageTitle.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "Page - Title Without Body",
+      "screenshotPath": "page-title-without-body--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 5,
+        "passed": 5
+      }
+    ]
+  }
+}

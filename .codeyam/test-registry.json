@@ -217,6 +217,51 @@
       "runner": "tests"
     },
     {
+      "description": "This is a match test, not a hardcoded home-page exception. Rename the site in settings and home's title stops colliding, so the suffix comes back — which is what keeps the rule correct after a CMS edit no one re-checks.",
+      "file": "src/lib/pageTitle.test.ts",
+      "format": "vitest",
+      "key": "composePageTitle › appends again once the site is renamed out of the collision",
+      "line": 36,
+      "registeredAt": "2026-08-17T15:28:55Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The suffix has to survive for every other page — that is what makes a tab strip readable when several pages of the site are open at once.",
+      "file": "src/lib/pageTitle.test.ts",
+      "format": "vitest",
+      "key": "composePageTitle › appends the site title for an ordinary page",
+      "line": 16,
+      "registeredAt": "2026-08-17T15:28:55Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The bug: home's content title IS the site title, so the generic \"Page · Site\" rule rendered \"The Puzzle School · The Puzzle School\" in the tab, the OG card, and the Twitter card. There is no context to add when the page already names the site.",
+      "file": "src/lib/pageTitle.test.ts",
+      "format": "vitest",
+      "key": "composePageTitle › does not append the site title when the page title already is it",
+      "line": 10,
+      "registeredAt": "2026-08-17T15:28:55Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A page that passes no title at all falls back to the bare site title — the behavior the old `title ? ... : siteTitle` ternary already had.",
+      "file": "src/lib/pageTitle.test.ts",
+      "format": "vitest",
+      "key": "composePageTitle › falls back to the site title when the page passes none",
+      "line": 28,
+      "registeredAt": "2026-08-17T15:28:55Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Both titles are CMS-editable, so the collision can arrive with different casing or a stray trailing space from a content edit no reviewer sees.",
+      "file": "src/lib/pageTitle.test.ts",
+      "format": "vitest",
+      "key": "composePageTitle › treats a differently-cased or padded match as the same title",
+      "line": 22,
+      "registeredAt": "2026-08-17T15:28:55Z",
+      "runner": "tests"
+    },
+    {
       "description": "The curve is generated, non-empty, and respects its cut-off.",
       "file": "src/lib/structures.test.ts",
       "format": "vitest",

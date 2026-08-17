@@ -1,0 +1,31 @@
+{
+  "provenAt": "2026-08-17T15:28:32Z",
+  "slug": "stop-duplicating-the-site-title-in-the-home-page-tab-title",
+  "paths": [
+    "src/lib/pageTitle.ts",
+    "src/components/SEO.astro"
+  ],
+  "runScope": [
+    "src/lib/pageTitle.ts",
+    "src/components/SEO.astro"
+  ],
+  "tests": {
+    "composePageTitle": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "attestedByHand",
+        "method": "Semantic revert instead of file revert. prove-red could not bisect this change: src/lib/pageTitle.ts is both the file carrying the fix and the module the test imports, so reverting it leaves the test unable to resolve its import — it reported did-not-build/missing, an UNKNOWN, not a negative. The paths cannot be separated, so I restored the pre-fix RULE inside the helper body instead of removing the file: composePageTitle temporarily returned the old ternary 'pageTitle ? `${pageTitle} · ${siteTitle}` : siteTitle', leaving the file, its exports and the test fixture untouched, then ran refresh-tests --test composePageTitle in both worlds.",
+        "evidence": "With the pre-fix rule in place: 3 of 5 failed (2 passed) — 'does not append the site title when the page title already is it' (got 'The Puzzle School · The Puzzle School'), 'treats a differently-cased or padded match as the same title', and 'falls back to the site title when the page passes none' (the whitespace-only title is truthy under the old ternary, so it produced '    · The Puzzle School'). With the dedupe rule restored: 5/5 passed. The two survivors — the ordinary-page suffix case and the renamed-site case — are intentional survival guards pinning the behavior the fix must NOT change. The fix was restored immediately after the measurement and re-verified green."
+      }
+    }
+  },
+  "proof": {
+    "verdict": "provenByHand",
+    "attested": [
+      "composePageTitle"
+    ],
+    "method": "Semantic revert instead of file revert. prove-red could not bisect this change: src/lib/pageTitle.ts is both the file carrying the fix and the module the test imports, so reverting it leaves the test unable to resolve its import — it reported did-not-build/missing, an UNKNOWN, not a negative. The paths cannot be separated, so I restored the pre-fix RULE inside the helper body instead of removing the file: composePageTitle temporarily returned the old ternary 'pageTitle ? `${pageTitle} · ${siteTitle}` : siteTitle', leaving the file, its exports and the test fixture untouched, then ran refresh-tests --test composePageTitle in both worlds.",
+    "evidence": "With the pre-fix rule in place: 3 of 5 failed (2 passed) — 'does not append the site title when the page title already is it' (got 'The Puzzle School · The Puzzle School'), 'treats a differently-cased or padded match as the same title', and 'falls back to the site title when the page passes none' (the whitespace-only title is truthy under the old ternary, so it produced '    · The Puzzle School'). With the dedupe rule restored: 5/5 passed. The two survivors — the ordinary-page suffix case and the renamed-site case — are intentional survival guards pinning the behavior the fix must NOT change. The fix was restored immediately after the measurement and re-verified green."
+  }
+}

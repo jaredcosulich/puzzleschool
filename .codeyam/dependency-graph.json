@@ -1,18 +1,12 @@
 {
   "files": {
-    "src/pages/isolated-components/KochFragment.astro": {
+    ".codeyam/scenario-playwright.js": {
       "imports": [
-        "src/components/structures/KochFragment.astro",
-        "src/styles/tokens.css"
+        ".codeyam/scenario-metrics.js"
       ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/SiteFooterHome.astro": {
-      "imports": [
-        "src/components/chrome/SiteFooter.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
+      "importedBy": [
+        ".codeyam/capture.js"
+      ]
     },
     ".claude/skills/review-session/scripts/extract-session.mjs": {
       "imports": [
@@ -20,11 +14,227 @@
       ],
       "importedBy": []
     },
-    ".codeyam/scenario-mocks.js": {
+    "src/lib/structures.test.ts": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/BandQuote.astro": {
+      "imports": [
+        "src/components/page/BandQuote.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/lib/tree-dom.ts": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": [
+        "src/lib/tree-dom.test.ts"
+      ]
+    },
+    "src/pages/isolated-components/PageHeader.astro": {
+      "imports": [
+        "src/components/page/PageHeader.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/lib/mailto.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/[...slug].astro"
+      ]
+    },
+    "src/components/page/PageHeader.astro": {
+      "imports": [
+        "src/components/Mark.astro",
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/PageHeader.astro",
+        "src/pages/isolated-components/PageHeaderMinimal.astro",
+        "src/pages/[...slug].astro"
+      ]
+    },
+    "src/components/structures/FibonacciStructure.astro": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/FibonacciStructure.astro",
+        "src/components/home/ActionCards.astro"
+      ]
+    },
+    "src/pages/isolated-components/QuoteBand.astro": {
+      "imports": [
+        "src/components/home/QuoteBand.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/components/home/ActionCards.astro": {
+      "imports": [
+        "src/components/home/ActionCard.astro",
+        "src/components/structures/FibonacciStructure.astro"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/ActionCards.astro"
+      ]
+    },
+    "src/components/SEO.astro": {
+      "imports": [
+        "src/lib/pageTitle.ts",
+        "src/lib/site.ts"
+      ],
+      "importedBy": [
+        "src/layouts/BaseLayout.astro"
+      ]
+    },
+    "src/pages/isolated-components/BranchingTreeVariations.astro": {
+      "imports": [
+        "src/components/structures/BranchingTree.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "cms-auth-worker/worker.js": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/structures/MorseRule.astro": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/MorseRule.astro",
+        "src/pages/[...slug].astro"
+      ]
+    },
+    "src/lib/pageTitle.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/SEO.astro",
+        "src/lib/pageTitle.test.ts"
+      ]
+    },
+    "src/lib/cmsMarkers.test.ts": {
+      "imports": [
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": []
+    },
+    ".codeyam/scenario-issues.js": {
       "imports": [],
       "importedBy": [
         ".codeyam/capture.js"
       ]
+    },
+    ".claude/hooks/_step_metadata.py": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/structures/BranchingTree.astro": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/BranchingTree.astro",
+        "src/pages/isolated-components/BranchingTreeVariations.astro",
+        "src/components/page/ProseColumns.astro"
+      ]
+    },
+    "src/pages/isolated-components/Masthead.astro": {
+      "imports": [
+        "src/components/home/Masthead.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/DragonCurve.astro": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/DragonCurve.astro",
+        "src/components/page/ExploratoryBand.astro"
+      ]
+    },
+    "src/lib/structures.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/structures/BranchingTree.astro",
+        "src/components/structures/FibonacciStructure.astro",
+        "src/components/structures/SineRule.astro",
+        "src/components/structures/DragonCurve.astro",
+        "src/components/structures/KochFragment.astro",
+        "src/components/structures/MorseRule.astro",
+        "src/lib/tree-dom.ts",
+        "src/lib/tree-dom.test.ts",
+        "src/lib/structures.test.ts"
+      ]
+    },
+    "src/pages/isolated-components/MorseRule.astro": {
+      "imports": [
+        "src/components/structures/MorseRule.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    ".codeyam/scenario-interactivity.js": {
+      "imports": [],
+      "importedBy": [
+        ".codeyam/capture.js"
+      ]
+    },
+    "src/components/home/QuoteBand.astro": {
+      "imports": [
+        "src/components/Mark.astro",
+        "src/components/structures/KochFragment.astro",
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/QuoteBand.astro"
+      ]
+    },
+    "src/lib/contentRoot.test.ts": {
+      "imports": [
+        "src/lib/contentRoot.ts"
+      ],
+      "importedBy": []
+    },
+    "src/content/config.ts": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ExploratoryBandNoQuote.astro": {
+      "imports": [
+        "src/components/page/ExploratoryBand.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/components/home/ActionCard.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/isolated-components/ActionCard.astro",
+        "src/pages/isolated-components/ActionCardCoral.astro",
+        "src/components/home/ActionCards.astro"
+      ]
+    },
+    "astro.config.mjs": {
+      "imports": [
+        "src/lib/linkedCmsPath.ts"
+      ],
+      "importedBy": []
+    },
+    ".claude/hooks/editor-step-hook.py": {
+      "imports": [],
+      "importedBy": []
     },
     "src/layouts/BaseLayout.astro": {
       "imports": [
@@ -41,6 +251,85 @@
         "src/pages/[...slug].astro"
       ]
     },
+    ".codeyam/scenario-metrics.js": {
+      "imports": [],
+      "importedBy": [
+        ".codeyam/scenario-playwright.js",
+        ".codeyam/capture.js"
+      ]
+    },
+    ".codeyam/scenario-mocks.js": {
+      "imports": [],
+      "importedBy": [
+        ".codeyam/capture.js"
+      ]
+    },
+    "src/pages/isolated-components/ActionCard.astro": {
+      "imports": [
+        "src/components/home/ActionCard.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/lib/pageTitle.test.ts": {
+      "imports": [
+        "src/lib/pageTitle.ts"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ActionCardCoral.astro": {
+      "imports": [
+        "src/components/home/ActionCard.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/MarkGap.astro": {
+      "imports": [
+        "src/components/Mark.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/pages/index.astro": {
+      "imports": [
+        "src/layouts/BaseLayout.astro",
+        "src/components/home/Masthead.astro",
+        "src/components/home/StatementBlock.astro",
+        "src/components/home/ActionCards.astro",
+        "src/components/home/QuoteBand.astro",
+        "src/components/structures/SineRule.astro"
+      ],
+      "importedBy": []
+    },
+    "src/pages/404.astro": {
+      "imports": [
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/FibonacciStructure.astro": {
+      "imports": [
+        "src/components/structures/FibonacciStructure.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/components/EmbedForm.astro": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/chrome/SiteNav.astro": {
+      "imports": [
+        "src/components/Mark.astro",
+        "src/lib/site.ts",
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/SiteNav.astro",
+        "src/layouts/BaseLayout.astro"
+      ]
+    },
     "src/components/page/ProseColumns.astro": {
       "imports": [
         "src/components/structures/BranchingTree.astro",
@@ -50,122 +339,6 @@
         "src/pages/isolated-components/ProseColumns.astro",
         "src/pages/isolated-components/ProseColumnsWithFoot.astro",
         "src/pages/[...slug].astro"
-      ]
-    },
-    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs": {
-      "imports": [],
-      "importedBy": [
-        ".claude/skills/review-session/scripts/find-last-session.mjs"
-      ]
-    },
-    ".claude/hooks/editor-pretool-hook.py": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/MarkNight.astro": {
-      "imports": [
-        "src/components/Mark.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/components/structures/SineRule.astro": {
-      "imports": [
-        "src/lib/structures.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/SineRule.astro",
-        "src/pages/[...slug].astro"
-      ]
-    },
-    "src/components/EmbedForm.astro": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/SEO.astro": {
-      "imports": [
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/layouts/BaseLayout.astro"
-      ]
-    },
-    "astro.config.mjs": {
-      "imports": [
-        "src/lib/linkedCmsPath.ts"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/extract-session-helpers.mjs": {
-      "imports": [],
-      "importedBy": [
-        ".claude/skills/review-session/scripts/extract-session.mjs"
-      ]
-    },
-    ".codeyam/scenario-handlers.js": {
-      "imports": [],
-      "importedBy": [
-        ".codeyam/capture.js"
-      ]
-    },
-    "src/components/home/Masthead.astro": {
-      "imports": [
-        "src/components/Mark.astro",
-        "src/lib/cmsMarkers.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/Masthead.astro"
-      ]
-    },
-    ".codeyam/scenario-metrics.js": {
-      "imports": [],
-      "importedBy": [
-        ".codeyam/scenario-playwright.js",
-        ".codeyam/capture.js"
-      ]
-    },
-    "src/components/home/ActionCard.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/isolated-components/ActionCard.astro",
-        "src/pages/isolated-components/ActionCardCoral.astro",
-        "src/components/home/ActionCards.astro"
-      ]
-    },
-    "src/lib/linkedCmsPath.test.ts": {
-      "imports": [
-        "src/lib/linkedCmsPath.ts"
-      ],
-      "importedBy": []
-    },
-    ".claude/hooks/editor-step-hook.py": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/structures/MorseRule.astro": {
-      "imports": [
-        "src/lib/structures.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/MorseRule.astro",
-        "src/pages/[...slug].astro"
-      ]
-    },
-    "src/lib/cmsMarkers.test.ts": {
-      "imports": [
-        "src/lib/cmsMarkers.ts"
-      ],
-      "importedBy": []
-    },
-    "src/components/structures/FibonacciStructure.astro": {
-      "imports": [
-        "src/lib/structures.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/FibonacciStructure.astro",
-        "src/components/home/ActionCards.astro"
       ]
     },
     ".codeyam/capture.js": {
@@ -179,30 +352,9 @@
       ],
       "importedBy": []
     },
-    "src/pages/isolated-components/DragonCurve.astro": {
+    "src/pages/isolated-components/SineRule.astro": {
       "imports": [
-        "src/components/structures/DragonCurve.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/lib/tree-dom.test.ts": {
-      "imports": [
-        "src/lib/tree-dom.ts",
-        "src/lib/structures.ts"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/SiteNav.astro": {
-      "imports": [
-        "src/components/chrome/SiteNav.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/StatementBlock.astro": {
-      "imports": [
-        "src/components/home/StatementBlock.astro",
+        "src/components/structures/SineRule.astro",
         "src/styles/tokens.css"
       ],
       "importedBy": []
@@ -220,18 +372,17 @@
         "src/components/chrome/SiteNav.astro"
       ]
     },
-    "src/components/structures/DragonCurve.astro": {
+    "src/pages/isolated-components/ExploratoryBand.astro": {
       "imports": [
-        "src/lib/structures.ts"
+        "src/components/page/ExploratoryBand.astro",
+        "src/styles/tokens.css"
       ],
-      "importedBy": [
-        "src/pages/isolated-components/DragonCurve.astro",
-        "src/components/page/ExploratoryBand.astro"
-      ]
+      "importedBy": []
     },
-    "src/lib/contentRoot.test.ts": {
+    "src/pages/isolated-components/ProseColumns.astro": {
       "imports": [
-        "src/lib/contentRoot.ts"
+        "src/components/page/ProseColumns.astro",
+        "src/styles/tokens.css"
       ],
       "importedBy": []
     },
@@ -242,315 +393,39 @@
       ],
       "importedBy": []
     },
-    "src/components/chrome/SiteFooter.astro": {
+    "src/pages/isolated-components/StatementBlock.astro": {
       "imports": [
-        "src/components/Mark.astro",
-        "src/lib/cmsMarkers.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/SiteFooter.astro",
-        "src/pages/isolated-components/SiteFooterHome.astro",
-        "src/layouts/BaseLayout.astro"
-      ]
-    },
-    "src/pages/isolated-components/ActionCards.astro": {
-      "imports": [
-        "src/components/home/ActionCards.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contactUrl.ts": {
-      "imports": [
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/layouts/BaseLayout.astro",
-        "src/lib/contactUrl.test.ts"
-      ]
-    },
-    "src/pages/isolated-components/ExploratoryBandNoQuote.astro": {
-      "imports": [
-        "src/components/page/ExploratoryBand.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/components/page/BandQuote.astro": {
-      "imports": [
-        "src/lib/cmsMarkers.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/BandQuote.astro",
-        "src/components/page/ExploratoryBand.astro"
-      ]
-    },
-    "src/pages/[...slug].astro": {
-      "imports": [
-        "src/layouts/BaseLayout.astro",
-        "src/components/structures/MorseRule.astro",
-        "src/components/structures/SineRule.astro",
-        "src/components/page/PageHeader.astro",
-        "src/components/page/ProseColumns.astro",
-        "src/components/page/ContactButton.astro",
-        "src/components/page/ExploratoryBand.astro",
-        "src/lib/site.ts",
-        "src/lib/mailto.ts"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contactUrl.test.ts": {
-      "imports": [
-        "src/lib/contactUrl.ts",
-        "src/lib/site.ts"
-      ],
-      "importedBy": []
-    },
-    ".codeyam/scenario-issues.js": {
-      "imports": [],
-      "importedBy": [
-        ".codeyam/capture.js"
-      ]
-    },
-    ".claude/hooks/_step_metadata.py": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/pages/index.astro": {
-      "imports": [
-        "src/layouts/BaseLayout.astro",
-        "src/components/home/Masthead.astro",
         "src/components/home/StatementBlock.astro",
-        "src/components/home/ActionCards.astro",
-        "src/components/home/QuoteBand.astro",
-        "src/components/structures/SineRule.astro"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/Masthead.astro": {
-      "imports": [
-        "src/components/home/Masthead.astro",
         "src/styles/tokens.css"
       ],
       "importedBy": []
     },
-    "src/pages/404.astro": {
+    "src/lib/linkedCmsPath.test.ts": {
       "imports": [
-        "src/styles/tokens.css"
+        "src/lib/linkedCmsPath.ts"
       ],
       "importedBy": []
     },
-    "src/components/home/StatementBlock.astro": {
+    "src/pages/isolated-components/KochFragment.astro": {
       "imports": [
-        "src/lib/cmsMarkers.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/StatementBlock.astro"
-      ]
-    },
-    ".claude/skills/review-session/scripts/find-last-session.mjs": {
-      "imports": [
-        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs"
-      ],
-      "importedBy": []
-    },
-    "src/lib/site.ts": {
-      "imports": [
-        "src/lib/contentRoot.ts"
-      ],
-      "importedBy": [
-        "src/pages/[...slug].astro",
-        "src/layouts/BaseLayout.astro",
-        "src/components/SEO.astro",
-        "src/components/chrome/SiteNav.astro",
-        "src/lib/contactUrl.test.ts",
-        "src/lib/contactUrl.ts"
-      ]
-    },
-    "src/pages/isolated-components/ActionCard.astro": {
-      "imports": [
-        "src/components/home/ActionCard.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/QuoteBand.astro": {
-      "imports": [
-        "src/components/home/QuoteBand.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "cms-auth-worker/worker.js": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/SiteFooter.astro": {
-      "imports": [
-        "src/components/chrome/SiteFooter.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    ".codeyam/scenario-interactivity.js": {
-      "imports": [],
-      "importedBy": [
-        ".codeyam/capture.js"
-      ]
-    },
-    "src/lib/cmsMarkers.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/layouts/BaseLayout.astro",
-        "src/components/page/PageHeader.astro",
-        "src/components/page/ExploratoryBand.astro",
-        "src/components/page/ProseColumns.astro",
-        "src/components/page/BandQuote.astro",
-        "src/components/home/StatementBlock.astro",
-        "src/components/home/Masthead.astro",
-        "src/components/home/QuoteBand.astro",
-        "src/components/chrome/SiteFooter.astro",
-        "src/components/chrome/SiteNav.astro",
-        "src/lib/cmsMarkers.test.ts"
-      ]
-    },
-    "src/lib/contentRoot.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/lib/contentRoot.test.ts",
-        "src/lib/site.ts"
-      ]
-    },
-    "src/pages/isolated-components/PageHeader.astro": {
-      "imports": [
-        "src/components/page/PageHeader.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/MarkGap.astro": {
-      "imports": [
-        "src/components/Mark.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/lib/mailto.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/[...slug].astro"
-      ]
-    },
-    "src/lib/structures.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/structures/BranchingTree.astro",
-        "src/components/structures/FibonacciStructure.astro",
-        "src/components/structures/SineRule.astro",
-        "src/components/structures/DragonCurve.astro",
         "src/components/structures/KochFragment.astro",
-        "src/components/structures/MorseRule.astro",
-        "src/lib/tree-dom.ts",
-        "src/lib/tree-dom.test.ts",
-        "src/lib/structures.test.ts"
-      ]
-    },
-    "src/pages/isolated-components/BranchingTreeVariations.astro": {
-      "imports": [
-        "src/components/structures/BranchingTree.astro",
         "src/styles/tokens.css"
       ],
       "importedBy": []
     },
-    "src/pages/isolated-components/SineRule.astro": {
+    "src/pages/isolated-components/SiteNav.astro": {
       "imports": [
-        "src/components/structures/SineRule.astro",
+        "src/components/chrome/SiteNav.astro",
         "src/styles/tokens.css"
       ],
       "importedBy": []
     },
-    "src/pages/isolated-components/ActionCardCoral.astro": {
-      "imports": [
-        "src/components/home/ActionCard.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/lib/tree-dom.ts": {
-      "imports": [
-        "src/lib/structures.ts"
-      ],
-      "importedBy": [
-        "src/lib/tree-dom.test.ts"
-      ]
-    },
-    "src/lib/structures.test.ts": {
-      "imports": [
-        "src/lib/structures.ts"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/MorseRule.astro": {
-      "imports": [
-        "src/components/structures/MorseRule.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/components/chrome/SiteNav.astro": {
+    "src/pages/isolated-components/MarkNight.astro": {
       "imports": [
         "src/components/Mark.astro",
-        "src/lib/site.ts",
-        "src/lib/cmsMarkers.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/SiteNav.astro",
-        "src/layouts/BaseLayout.astro"
-      ]
-    },
-    "src/components/home/ActionCards.astro": {
-      "imports": [
-        "src/components/home/ActionCard.astro",
-        "src/components/structures/FibonacciStructure.astro"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/ActionCards.astro"
-      ]
-    },
-    "src/components/structures/BranchingTree.astro": {
-      "imports": [
-        "src/lib/structures.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/BranchingTree.astro",
-        "src/pages/isolated-components/BranchingTreeVariations.astro",
-        "src/components/page/ProseColumns.astro"
-      ]
-    },
-    "src/pages/isolated-components/ProseColumns.astro": {
-      "imports": [
-        "src/components/page/ProseColumns.astro",
         "src/styles/tokens.css"
       ],
       "importedBy": []
-    },
-    "src/components/page/ContactButton.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/isolated-components/ContactButton.astro",
-        "src/pages/isolated-components/ProseColumnsWithFoot.astro",
-        "src/pages/[...slug].astro"
-      ]
-    },
-    ".codeyam/scenario-playwright.js": {
-      "imports": [
-        ".codeyam/scenario-metrics.js"
-      ],
-      "importedBy": [
-        ".codeyam/capture.js"
-      ]
     },
     "src/styles/tokens.css": {
       "imports": [],
@@ -586,40 +461,33 @@
         "src/layouts/BaseLayout.astro"
       ]
     },
-    "src/components/home/QuoteBand.astro": {
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs"
+      ]
+    },
+    "src/components/home/Masthead.astro": {
       "imports": [
         "src/components/Mark.astro",
-        "src/components/structures/KochFragment.astro",
         "src/lib/cmsMarkers.ts"
       ],
       "importedBy": [
         "src/pages/index.astro",
-        "src/pages/isolated-components/QuoteBand.astro"
+        "src/pages/isolated-components/Masthead.astro"
       ]
     },
-    "src/pages/isolated-components/FibonacciStructure.astro": {
+    "src/lib/contactUrl.ts": {
       "imports": [
-        "src/components/structures/FibonacciStructure.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/components/page/PageHeader.astro": {
-      "imports": [
-        "src/components/Mark.astro",
-        "src/lib/cmsMarkers.ts"
+        "src/lib/site.ts"
       ],
       "importedBy": [
-        "src/pages/isolated-components/PageHeader.astro",
-        "src/pages/isolated-components/PageHeaderMinimal.astro",
-        "src/pages/[...slug].astro"
+        "src/layouts/BaseLayout.astro",
+        "src/lib/contactUrl.test.ts"
       ]
     },
-    "src/pages/isolated-components/ContactButton.astro": {
-      "imports": [
-        "src/components/page/ContactButton.astro",
-        "src/styles/tokens.css"
-      ],
+    ".claude/hooks/editor-pretool-hook.py": {
+      "imports": [],
       "importedBy": []
     },
     "src/pages/isolated-components/BranchingTree.astro": {
@@ -629,32 +497,103 @@
       ],
       "importedBy": []
     },
-    "src/content/config.ts": {
+    "src/components/page/ContactButton.astro": {
       "imports": [],
-      "importedBy": []
+      "importedBy": [
+        "src/pages/isolated-components/ContactButton.astro",
+        "src/pages/isolated-components/ProseColumnsWithFoot.astro",
+        "src/pages/[...slug].astro"
+      ]
     },
-    "src/pages/isolated-components/ExploratoryBand.astro": {
-      "imports": [
-        "src/components/page/ExploratoryBand.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/BandQuote.astro": {
-      "imports": [
-        "src/components/page/BandQuote.astro",
-        "src/styles/tokens.css"
-      ],
-      "importedBy": []
-    },
-    "vitest.config.ts": {
+    ".codeyam/scenario-handlers.js": {
       "imports": [],
-      "importedBy": []
+      "importedBy": [
+        ".codeyam/capture.js"
+      ]
     },
-    "src/pages/isolated-components/PageHeaderMinimal.astro": {
-      "imports": [
+    "src/lib/linkedCmsPath.ts": {
+      "imports": [],
+      "importedBy": [
+        "astro.config.mjs",
+        "src/lib/linkedCmsPath.test.ts"
+      ]
+    },
+    "src/lib/cmsMarkers.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/layouts/BaseLayout.astro",
         "src/components/page/PageHeader.astro",
+        "src/components/page/ExploratoryBand.astro",
+        "src/components/page/ProseColumns.astro",
+        "src/components/page/BandQuote.astro",
+        "src/components/home/StatementBlock.astro",
+        "src/components/home/Masthead.astro",
+        "src/components/home/QuoteBand.astro",
+        "src/components/chrome/SiteFooter.astro",
+        "src/components/chrome/SiteNav.astro",
+        "src/lib/cmsMarkers.test.ts"
+      ]
+    },
+    "src/pages/isolated-components/SiteFooter.astro": {
+      "imports": [
+        "src/components/chrome/SiteFooter.astro",
         "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ActionCards.astro": {
+      "imports": [
+        "src/components/home/ActionCards.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/KochFragment.astro": {
+      "imports": [
+        "src/lib/structures.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/KochFragment.astro",
+        "src/components/home/QuoteBand.astro"
+      ]
+    },
+    "src/pages/isolated-components/DragonCurve.astro": {
+      "imports": [
+        "src/components/structures/DragonCurve.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/lib/site.ts": {
+      "imports": [
+        "src/lib/contentRoot.ts"
+      ],
+      "importedBy": [
+        "src/pages/[...slug].astro",
+        "src/layouts/BaseLayout.astro",
+        "src/components/SEO.astro",
+        "src/components/chrome/SiteNav.astro",
+        "src/lib/contactUrl.test.ts",
+        "src/lib/contactUrl.ts"
+      ]
+    },
+    "src/pages/[...slug].astro": {
+      "imports": [
+        "src/layouts/BaseLayout.astro",
+        "src/components/structures/MorseRule.astro",
+        "src/components/structures/SineRule.astro",
+        "src/components/page/PageHeader.astro",
+        "src/components/page/ProseColumns.astro",
+        "src/components/page/ContactButton.astro",
+        "src/components/page/ExploratoryBand.astro",
+        "src/lib/site.ts",
+        "src/lib/mailto.ts"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session.mjs": {
+      "imports": [
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs"
       ],
       "importedBy": []
     },
@@ -671,20 +610,52 @@
         "src/pages/[...slug].astro"
       ]
     },
-    "src/components/structures/KochFragment.astro": {
+    "src/components/chrome/SiteFooter.astro": {
+      "imports": [
+        "src/components/Mark.astro",
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/SiteFooter.astro",
+        "src/pages/isolated-components/SiteFooterHome.astro",
+        "src/layouts/BaseLayout.astro"
+      ]
+    },
+    "src/lib/tree-dom.test.ts": {
+      "imports": [
+        "src/lib/tree-dom.ts",
+        "src/lib/structures.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/SineRule.astro": {
       "imports": [
         "src/lib/structures.ts"
       ],
       "importedBy": [
-        "src/pages/isolated-components/KochFragment.astro",
-        "src/components/home/QuoteBand.astro"
+        "src/pages/index.astro",
+        "src/pages/isolated-components/SineRule.astro",
+        "src/pages/[...slug].astro"
       ]
     },
-    "src/lib/linkedCmsPath.ts": {
+    "src/lib/contentRoot.ts": {
       "imports": [],
       "importedBy": [
-        "astro.config.mjs",
-        "src/lib/linkedCmsPath.test.ts"
+        "src/lib/contentRoot.test.ts",
+        "src/lib/site.ts"
+      ]
+    },
+    "src/pages/isolated-components/SiteFooterHome.astro": {
+      "imports": [
+        "src/components/chrome/SiteFooter.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs"
       ]
     },
     "src/pages/isolated-components/ProseColumnsWithFoot.astro": {
@@ -695,15 +666,152 @@
         "src/styles/tokens.css"
       ],
       "importedBy": []
+    },
+    "src/pages/isolated-components/PageHeaderMinimal.astro": {
+      "imports": [
+        "src/components/page/PageHeader.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
+    },
+    "src/lib/contactUrl.test.ts": {
+      "imports": [
+        "src/lib/contactUrl.ts",
+        "src/lib/site.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/page/BandQuote.astro": {
+      "imports": [
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/BandQuote.astro",
+        "src/components/page/ExploratoryBand.astro"
+      ]
+    },
+    "src/components/home/StatementBlock.astro": {
+      "imports": [
+        "src/lib/cmsMarkers.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/StatementBlock.astro"
+      ]
+    },
+    "vitest.config.ts": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ContactButton.astro": {
+      "imports": [
+        "src/components/page/ContactButton.astro",
+        "src/styles/tokens.css"
+      ],
+      "importedBy": []
     }
   },
   "entities": {
-    "src/components/home/ActionCards.astro::__file_root__": {
-      "filePath": "src/components/home/ActionCards.astro",
+    "src/pages/isolated-components/SiteNav.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/SiteNav.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/home/ActionCard.astro::__file_root__",
-        "src/components/structures/FibonacciStructure.astro::__file_root__"
+        "src/components/chrome/SiteNav.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/StatementBlock.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/StatementBlock.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/home/StatementBlock.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/cmsMarkers.ts::cmsSettingHref": {
+      "filePath": "src/lib/cmsMarkers.ts",
+      "name": "cmsSettingHref",
+      "imports": [],
+      "importedBy": [
+        "src/lib/cmsMarkers.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/[...slug].astro::__file_root__": {
+      "filePath": "src/pages/[...slug].astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/components/structures/MorseRule.astro::__file_root__",
+        "src/components/structures/SineRule.astro::__file_root__",
+        "src/components/page/PageHeader.astro::__file_root__",
+        "src/components/page/ProseColumns.astro::__file_root__",
+        "src/components/page/ContactButton.astro::__file_root__",
+        "src/components/page/ExploratoryBand.astro::__file_root__",
+        "src/lib/site.ts::getSettings",
+        "src/lib/mailto.ts::buildMailto"
+      ],
+      "importedBy": []
+    },
+    "src/lib/cmsMarkers.ts::cmsNavItem": {
+      "filePath": "src/lib/cmsMarkers.ts",
+      "name": "cmsNavItem",
+      "imports": [],
+      "importedBy": [
+        "src/lib/cmsMarkers.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/ExploratoryBandNoQuote.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ExploratoryBandNoQuote.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/page/ExploratoryBand.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/page/ProseColumns.astro::__file_root__": {
+      "filePath": "src/components/page/ProseColumns.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/BranchingTree.astro::__file_root__",
+        "src/lib/cmsMarkers.ts::cmsBody"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/KochFragment.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/KochFragment.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/KochFragment.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/BranchingTreeVariations.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/BranchingTreeVariations.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/BranchingTree.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/SineRule.astro::__file_root__": {
+      "filePath": "src/components/structures/SineRule.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/structures.ts::sinePath"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/SiteFooter.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/SiteFooter.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/chrome/SiteFooter.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
       ],
       "importedBy": []
     },
@@ -715,8 +823,130 @@
         "src/lib/structures.test.ts::__file_root__"
       ]
     },
-    "src/pages/isolated-components/SiteFooter.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/SiteFooter.astro",
+    "src/lib/linkedCmsPath.ts::linkedPathForRealFile": {
+      "filePath": "src/lib/linkedCmsPath.ts",
+      "name": "linkedPathForRealFile",
+      "imports": [],
+      "importedBy": [
+        "src/lib/linkedCmsPath.test.ts::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::buildConversationTurns",
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat",
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::fibonacciTiling": {
+      "filePath": "src/lib/structures.ts",
+      "name": "fibonacciTiling",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/structures.ts::__file_root__": {
+      "filePath": "src/lib/structures.ts",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/ContactButton.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ContactButton.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/page/ContactButton.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/cmsMarkers.ts::cmsEntry": {
+      "filePath": "src/lib/cmsMarkers.ts",
+      "name": "cmsEntry",
+      "imports": [],
+      "importedBy": [
+        "src/lib/cmsMarkers.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/PageHeader.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/PageHeader.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/page/PageHeader.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/Mark.astro::__file_root__": {
+      "filePath": "src/components/Mark.astro",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/components/home/Masthead.astro::__file_root__",
+        "src/components/home/QuoteBand.astro::__file_root__",
+        "src/components/chrome/SiteFooter.astro::__file_root__",
+        "src/components/chrome/SiteNav.astro::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/Mark.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/Mark.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Mark.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ProseColumns.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ProseColumns.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/page/ProseColumns.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::treeVariant": {
+      "filePath": "src/lib/structures.ts",
+      "name": "treeVariant",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "name": "detectFormatFromPath",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/MorseRule.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/MorseRule.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/MorseRule.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/SiteFooterHome.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/SiteFooterHome.astro",
       "name": "__file_root__",
       "imports": [
         "src/components/chrome/SiteFooter.astro::__file_root__",
@@ -724,42 +954,43 @@
       ],
       "importedBy": []
     },
-    "src/lib/structures.test.ts::__file_root__": {
-      "filePath": "src/lib/structures.test.ts",
+    "src/pages/isolated-components/BandQuote.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/BandQuote.astro",
       "name": "__file_root__",
       "imports": [
-        "src/lib/structures.ts::TreeGrowth",
-        "src/lib/structures.ts::__file_root__",
-        "src/lib/structures.ts::dragonPoints",
-        "src/lib/structures.ts::fibonacciTiling",
-        "src/lib/structures.ts::growAcceptableTree",
-        "src/lib/structures.ts::growTree",
-        "src/lib/structures.ts::hashSeed",
-        "src/lib/structures.ts::isAcceptableTree",
-        "src/lib/structures.ts::kochPoints",
-        "src/lib/structures.ts::lsystem",
-        "src/lib/structures.ts::morseLine",
-        "src/lib/structures.ts::openRectPath",
-        "src/lib/structures.ts::randomTreeSeed",
-        "src/lib/structures.ts::resolveTreeSeed",
-        "src/lib/structures.ts::seededRandom",
-        "src/lib/structures.ts::sinePath",
-        "src/lib/structures.ts::toPath",
-        "src/lib/structures.ts::treeSegments",
-        "src/lib/structures.ts::treeVariant",
-        "src/lib/structures.ts::treeViewBox",
-        "src/lib/structures.ts::turtle"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/DragonCurve.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/DragonCurve.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/structures/DragonCurve.astro::__file_root__",
+        "src/components/page/BandQuote.astro::__file_root__",
         "src/styles/tokens.css::__file_root__"
       ],
       "importedBy": []
+    },
+    "src/pages/index.astro::__file_root__": {
+      "filePath": "src/pages/index.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/components/home/Masthead.astro::__file_root__",
+        "src/components/home/StatementBlock.astro::__file_root__",
+        "src/components/home/ActionCards.astro::__file_root__",
+        "src/components/home/QuoteBand.astro::__file_root__",
+        "src/components/structures/SineRule.astro::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::dragonPoints": {
+      "filePath": "src/lib/structures.ts",
+      "name": "dragonPoints",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/structures.ts::growAcceptableTree": {
+      "filePath": "src/lib/structures.ts",
+      "name": "growAcceptableTree",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
     },
     "src/styles/tokens.css::__file_root__": {
       "filePath": "src/styles/tokens.css",
@@ -797,27 +1028,28 @@
         "src/layouts/BaseLayout.astro::__file_root__"
       ]
     },
-    "src/lib/structures.ts::sinePath": {
+    "src/lib/structures.ts::randomTreeSeed": {
       "filePath": "src/lib/structures.ts",
-      "name": "sinePath",
+      "name": "randomTreeSeed",
       "imports": [],
       "importedBy": [
         "src/lib/structures.test.ts::__file_root__"
       ]
     },
-    "src/pages/isolated-components/BranchingTree.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/BranchingTree.astro",
+    "src/pages/isolated-components/MarkGap.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/MarkGap.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/structures/BranchingTree.astro::__file_root__",
+        "src/components/Mark.astro::__file_root__",
         "src/styles/tokens.css::__file_root__"
       ],
       "importedBy": []
     },
-    "src/pages/404.astro::__file_root__": {
-      "filePath": "src/pages/404.astro",
+    "src/pages/isolated-components/ExploratoryBand.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ExploratoryBand.astro",
       "name": "__file_root__",
       "imports": [
+        "src/components/page/ExploratoryBand.astro::__file_root__",
         "src/styles/tokens.css::__file_root__"
       ],
       "importedBy": []
@@ -830,96 +1062,12 @@
         "src/lib/structures.test.ts::__file_root__"
       ]
     },
-    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::buildConversationTurns": {
-      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
-      "name": "buildConversationTurns",
-      "imports": [],
-      "importedBy": [
-        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/MarkGap.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/MarkGap.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/StatementBlock.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/StatementBlock.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/home/StatementBlock.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/ActionCard.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ActionCard.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/home/ActionCard.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
     "src/lib/site.ts::NavItem": {
       "filePath": "src/lib/site.ts",
       "name": "NavItem",
       "imports": [],
       "importedBy": [
         "src/lib/contactUrl.ts::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/ProseColumns.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ProseColumns.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/page/ProseColumns.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/cmsMarkers.ts::cmsField": {
-      "filePath": "src/lib/cmsMarkers.ts",
-      "name": "cmsField",
-      "imports": [],
-      "importedBy": [
-        "src/lib/cmsMarkers.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/structures.ts::isAcceptableTree": {
-      "filePath": "src/lib/structures.ts",
-      "name": "isAcceptableTree",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/structures.ts::fibonacciTiling": {
-      "filePath": "src/lib/structures.ts",
-      "name": "fibonacciTiling",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "astro.config.mjs::__file_root__": {
-      "filePath": "astro.config.mjs",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/linkedCmsPath.ts::linkedPathForRealFile"
-      ],
-      "importedBy": []
-    },
-    "src/lib/cmsMarkers.ts::cmsSettingHref": {
-      "filePath": "src/lib/cmsMarkers.ts",
-      "name": "cmsSettingHref",
-      "imports": [],
-      "importedBy": [
-        "src/lib/cmsMarkers.test.ts::__file_root__"
       ]
     },
     "src/lib/cmsMarkers.ts::cmsBody": {
@@ -930,6 +1078,67 @@
         "src/lib/cmsMarkers.test.ts::__file_root__"
       ]
     },
+    "src/pages/isolated-components/PageHeaderMinimal.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/PageHeaderMinimal.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/page/PageHeader.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/tree-dom.ts::applyTreeGrowth": {
+      "filePath": "src/lib/tree-dom.ts",
+      "name": "applyTreeGrowth",
+      "imports": [],
+      "importedBy": [
+        "src/lib/tree-dom.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/structures.ts::isAcceptableTree": {
+      "filePath": "src/lib/structures.ts",
+      "name": "isAcceptableTree",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/site.ts::SiteNav": {
+      "filePath": "src/lib/site.ts",
+      "name": "SiteNav",
+      "imports": [],
+      "importedBy": [
+        "src/lib/contactUrl.test.ts::__file_root__",
+        "src/lib/contactUrl.ts::__file_root__"
+      ]
+    },
+    "src/lib/tree-dom.ts::__file_root__": {
+      "filePath": "src/lib/tree-dom.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/structures.ts::Segment",
+        "src/lib/structures.ts::toPath",
+        "src/lib/structures.ts::treeViewBox"
+      ],
+      "importedBy": []
+    },
+    "src/lib/site.ts::__file_root__": {
+      "filePath": "src/lib/site.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/contentRoot.ts::resolveDataRoot"
+      ],
+      "importedBy": []
+    },
+    "src/lib/contentRoot.ts::resolveDataRoot": {
+      "filePath": "src/lib/contentRoot.ts",
+      "name": "resolveDataRoot",
+      "imports": [],
+      "importedBy": [
+        "src/lib/contentRoot.test.ts::__file_root__",
+        "src/lib/site.ts::__file_root__"
+      ]
+    },
     ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath": {
       "filePath": ".claude/skills/review-session/scripts/find-last-session-helpers.mjs",
       "name": "claudeProjectHashFromPath",
@@ -938,20 +1147,221 @@
         ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__"
       ]
     },
-    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath": {
+    "src/lib/structures.ts::TreeGrowth": {
+      "filePath": "src/lib/structures.ts",
+      "name": "TreeGrowth",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/tree-dom.test.ts::__file_root__": {
+      "filePath": "src/lib/tree-dom.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/tree-dom.ts::applyTreeGrowth",
+        "src/lib/structures.ts::Segment"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/SineRule.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/SineRule.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/SineRule.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/MorseRule.astro::__file_root__": {
+      "filePath": "src/components/structures/MorseRule.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/structures.ts::morseLine"
+      ],
+      "importedBy": []
+    },
+    "src/lib/contactUrl.ts::__file_root__": {
+      "filePath": "src/lib/contactUrl.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/site.ts::NavItem",
+        "src/lib/site.ts::SiteNav"
+      ],
+      "importedBy": []
+    },
+    "src/lib/cmsMarkers.test.ts::__file_root__": {
+      "filePath": "src/lib/cmsMarkers.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/cmsMarkers.ts::cmsBody",
+        "src/lib/cmsMarkers.ts::cmsEntry",
+        "src/lib/cmsMarkers.ts::cmsField",
+        "src/lib/cmsMarkers.ts::cmsNavItem",
+        "src/lib/cmsMarkers.ts::cmsSetting",
+        "src/lib/cmsMarkers.ts::cmsSettingHref"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/MarkNight.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/MarkNight.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Mark.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/chrome/SiteFooter.astro::__file_root__": {
+      "filePath": "src/components/chrome/SiteFooter.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Mark.astro::__file_root__",
+        "src/lib/cmsMarkers.ts::cmsSetting"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::morseLine": {
+      "filePath": "src/lib/structures.ts",
+      "name": "morseLine",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/structures.ts::resolveTreeSeed": {
+      "filePath": "src/lib/structures.ts",
+      "name": "resolveTreeSeed",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/contactUrl.test.ts::__file_root__": {
+      "filePath": "src/lib/contactUrl.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/contactUrl.ts::resolveContactUrl",
+        "src/lib/site.ts::SiteNav"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/BranchingTree.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/BranchingTree.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/BranchingTree.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/KochFragment.astro::__file_root__": {
+      "filePath": "src/components/structures/KochFragment.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/structures.ts::lsystem",
+        "src/lib/structures.ts::toPath",
+        "src/lib/structures.ts::turtle"
+      ],
+      "importedBy": []
+    },
+    "src/pages/404.astro::__file_root__": {
+      "filePath": "src/pages/404.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/linkedCmsPath.test.ts::__file_root__": {
+      "filePath": "src/lib/linkedCmsPath.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/linkedCmsPath.ts::linkedPathForRealFile"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::openRectPath": {
+      "filePath": "src/lib/structures.ts",
+      "name": "openRectPath",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/ActionCard.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ActionCard.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/home/ActionCard.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ActionCards.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ActionCards.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/home/ActionCards.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/Masthead.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/Masthead.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/home/Masthead.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat": {
       "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
-      "name": "detectFormatFromPath",
+      "name": "detectFormat",
       "imports": [],
       "importedBy": [
         ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
       ]
     },
-    "src/pages/isolated-components/MorseRule.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/MorseRule.astro",
+    "src/lib/structures.ts::kochPoints": {
+      "filePath": "src/lib/structures.ts",
+      "name": "kochPoints",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/pageTitle.test.ts::__file_root__": {
+      "filePath": "src/lib/pageTitle.test.ts",
       "name": "__file_root__",
       "imports": [
-        "src/components/structures/MorseRule.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
+        "src/lib/pageTitle.ts::composePageTitle"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::toPath": {
+      "filePath": "src/lib/structures.ts",
+      "name": "toPath",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/structures.ts::turtle": {
+      "filePath": "src/lib/structures.ts",
+      "name": "turtle",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/contentRoot.test.ts::__file_root__": {
+      "filePath": "src/lib/contentRoot.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/contentRoot.ts::resolveContentRoot",
+        "src/lib/contentRoot.ts::resolveDataRoot"
       ],
       "importedBy": []
     },
@@ -970,252 +1380,6 @@
       ],
       "importedBy": []
     },
-    "src/components/page/ProseColumns.astro::__file_root__": {
-      "filePath": "src/components/page/ProseColumns.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/structures/BranchingTree.astro::__file_root__",
-        "src/lib/cmsMarkers.ts::cmsBody"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::treeVariant": {
-      "filePath": "src/lib/structures.ts",
-      "name": "treeVariant",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/QuoteBand.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/QuoteBand.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/home/QuoteBand.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/[...slug].astro::__file_root__": {
-      "filePath": "src/pages/[...slug].astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/layouts/BaseLayout.astro::__file_root__",
-        "src/components/structures/MorseRule.astro::__file_root__",
-        "src/components/structures/SineRule.astro::__file_root__",
-        "src/components/page/PageHeader.astro::__file_root__",
-        "src/components/page/ProseColumns.astro::__file_root__",
-        "src/components/page/ContactButton.astro::__file_root__",
-        "src/components/page/ExploratoryBand.astro::__file_root__",
-        "src/lib/site.ts::getSettings",
-        "src/lib/mailto.ts::buildMailto"
-      ],
-      "importedBy": []
-    },
-    "src/components/page/BandQuote.astro::__file_root__": {
-      "filePath": "src/components/page/BandQuote.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/cmsMarkers.ts::cmsField"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/SiteFooterHome.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/SiteFooterHome.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/chrome/SiteFooter.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contactUrl.test.ts::__file_root__": {
-      "filePath": "src/lib/contactUrl.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/contactUrl.ts::resolveContactUrl",
-        "src/lib/site.ts::SiteNav"
-      ],
-      "importedBy": []
-    },
-    "src/components/Mark.astro::__file_root__": {
-      "filePath": "src/components/Mark.astro",
-      "name": "__file_root__",
-      "imports": [],
-      "importedBy": [
-        "src/components/home/Masthead.astro::__file_root__",
-        "src/components/home/QuoteBand.astro::__file_root__",
-        "src/components/chrome/SiteFooter.astro::__file_root__",
-        "src/components/chrome/SiteNav.astro::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/KochFragment.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/KochFragment.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/structures/KochFragment.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/tree-dom.test.ts::__file_root__": {
-      "filePath": "src/lib/tree-dom.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/tree-dom.ts::applyTreeGrowth",
-        "src/lib/structures.ts::Segment"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::growAcceptableTree": {
-      "filePath": "src/lib/structures.ts",
-      "name": "growAcceptableTree",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/structures.ts::growTree": {
-      "filePath": "src/lib/structures.ts",
-      "name": "growTree",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/linkedCmsPath.test.ts::__file_root__": {
-      "filePath": "src/lib/linkedCmsPath.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/linkedCmsPath.ts::linkedPathForRealFile"
-      ],
-      "importedBy": []
-    },
-    "src/components/home/QuoteBand.astro::__file_root__": {
-      "filePath": "src/components/home/QuoteBand.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/components/structures/KochFragment.astro::__file_root__",
-        "src/lib/cmsMarkers.ts::cmsField"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/PageHeaderMinimal.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/PageHeaderMinimal.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/page/PageHeader.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat": {
-      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
-      "name": "detectFormat",
-      "imports": [],
-      "importedBy": [
-        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
-      ]
-    },
-    "src/components/home/StatementBlock.astro::__file_root__": {
-      "filePath": "src/components/home/StatementBlock.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/cmsMarkers.ts::cmsBody",
-        "src/lib/cmsMarkers.ts::cmsField"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/Masthead.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/Masthead.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/home/Masthead.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/SiteNav.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/SiteNav.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/chrome/SiteNav.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contentRoot.test.ts::__file_root__": {
-      "filePath": "src/lib/contentRoot.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/contentRoot.ts::resolveContentRoot",
-        "src/lib/contentRoot.ts::resolveDataRoot"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contentRoot.ts::resolveContentRoot": {
-      "filePath": "src/lib/contentRoot.ts",
-      "name": "resolveContentRoot",
-      "imports": [],
-      "importedBy": [
-        "src/lib/contentRoot.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/cmsMarkers.test.ts::__file_root__": {
-      "filePath": "src/lib/cmsMarkers.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/cmsMarkers.ts::cmsBody",
-        "src/lib/cmsMarkers.ts::cmsEntry",
-        "src/lib/cmsMarkers.ts::cmsField",
-        "src/lib/cmsMarkers.ts::cmsNavItem",
-        "src/lib/cmsMarkers.ts::cmsSetting",
-        "src/lib/cmsMarkers.ts::cmsSettingHref"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/BranchingTreeVariations.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/BranchingTreeVariations.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/structures/BranchingTree.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/site.ts::__file_root__": {
-      "filePath": "src/lib/site.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/contentRoot.ts::resolveDataRoot"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::resolveTreeSeed": {
-      "filePath": "src/lib/structures.ts",
-      "name": "resolveTreeSeed",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/structures.ts::treeSegments": {
-      "filePath": "src/lib/structures.ts",
-      "name": "treeSegments",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/structures.ts::turtle": {
-      "filePath": "src/lib/structures.ts",
-      "name": "turtle",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
     "src/pages/isolated-components/FibonacciStructure.astro::__file_root__": {
       "filePath": "src/pages/isolated-components/FibonacciStructure.astro",
       "name": "__file_root__",
@@ -1225,132 +1389,31 @@
       ],
       "importedBy": []
     },
-    "src/pages/isolated-components/ExploratoryBand.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ExploratoryBand.astro",
+    "src/lib/structures.test.ts::__file_root__": {
+      "filePath": "src/lib/structures.test.ts",
       "name": "__file_root__",
       "imports": [
-        "src/components/page/ExploratoryBand.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::seededRandom": {
-      "filePath": "src/lib/structures.ts",
-      "name": "seededRandom",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/ActionCards.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ActionCards.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/home/ActionCards.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::dragonPoints": {
-      "filePath": "src/lib/structures.ts",
-      "name": "dragonPoints",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/BandQuote.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/BandQuote.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/page/BandQuote.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::TreeGrowth": {
-      "filePath": "src/lib/structures.ts",
-      "name": "TreeGrowth",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/tree-dom.ts::__file_root__": {
-      "filePath": "src/lib/tree-dom.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/structures.ts::Segment",
-        "src/lib/structures.ts::toPath",
-        "src/lib/structures.ts::treeViewBox"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::toPath": {
-      "filePath": "src/lib/structures.ts",
-      "name": "toPath",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/contentRoot.ts::resolveDataRoot": {
-      "filePath": "src/lib/contentRoot.ts",
-      "name": "resolveDataRoot",
-      "imports": [],
-      "importedBy": [
-        "src/lib/contentRoot.test.ts::__file_root__",
-        "src/lib/site.ts::__file_root__"
-      ]
-    },
-    "src/lib/linkedCmsPath.ts::linkedPathForRealFile": {
-      "filePath": "src/lib/linkedCmsPath.ts",
-      "name": "linkedPathForRealFile",
-      "imports": [],
-      "importedBy": [
-        "src/lib/linkedCmsPath.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/tree-dom.ts::applyTreeGrowth": {
-      "filePath": "src/lib/tree-dom.ts",
-      "name": "applyTreeGrowth",
-      "imports": [],
-      "importedBy": [
-        "src/lib/tree-dom.test.ts::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/ExploratoryBandNoQuote.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ExploratoryBandNoQuote.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/page/ExploratoryBand.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/ContactButton.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ContactButton.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/page/ContactButton.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::randomTreeSeed": {
-      "filePath": "src/lib/structures.ts",
-      "name": "randomTreeSeed",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/components/structures/DragonCurve.astro::__file_root__": {
-      "filePath": "src/components/structures/DragonCurve.astro",
-      "name": "__file_root__",
-      "imports": [
+        "src/lib/structures.ts::TreeGrowth",
+        "src/lib/structures.ts::__file_root__",
         "src/lib/structures.ts::dragonPoints",
-        "src/lib/structures.ts::toPath"
+        "src/lib/structures.ts::fibonacciTiling",
+        "src/lib/structures.ts::growAcceptableTree",
+        "src/lib/structures.ts::growTree",
+        "src/lib/structures.ts::hashSeed",
+        "src/lib/structures.ts::isAcceptableTree",
+        "src/lib/structures.ts::kochPoints",
+        "src/lib/structures.ts::lsystem",
+        "src/lib/structures.ts::morseLine",
+        "src/lib/structures.ts::openRectPath",
+        "src/lib/structures.ts::randomTreeSeed",
+        "src/lib/structures.ts::resolveTreeSeed",
+        "src/lib/structures.ts::seededRandom",
+        "src/lib/structures.ts::sinePath",
+        "src/lib/structures.ts::toPath",
+        "src/lib/structures.ts::treeSegments",
+        "src/lib/structures.ts::treeVariant",
+        "src/lib/structures.ts::treeViewBox",
+        "src/lib/structures.ts::turtle"
       ],
       "importedBy": []
     },
@@ -1363,29 +1426,14 @@
       ],
       "importedBy": []
     },
-    "src/pages/isolated-components/MarkNight.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/MarkNight.astro",
+    "src/components/chrome/SiteNav.astro::__file_root__": {
+      "filePath": "src/components/chrome/SiteNav.astro",
       "name": "__file_root__",
       "imports": [
         "src/components/Mark.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/components/home/Masthead.astro::__file_root__": {
-      "filePath": "src/components/home/Masthead.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/lib/cmsMarkers.ts::cmsField"
-      ],
-      "importedBy": []
-    },
-    "src/components/structures/SineRule.astro::__file_root__": {
-      "filePath": "src/components/structures/SineRule.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/structures.ts::sinePath"
+        "src/lib/site.ts::NavItem",
+        "src/lib/cmsMarkers.ts::cmsNavItem",
+        "src/lib/cmsMarkers.ts::cmsSetting"
       ],
       "importedBy": []
     },
@@ -1393,13 +1441,42 @@
       "filePath": "src/components/SEO.astro",
       "name": "__file_root__",
       "imports": [
+        "src/lib/pageTitle.ts::composePageTitle",
         "src/lib/site.ts::getSettings"
       ],
       "importedBy": []
     },
-    "src/lib/structures.ts::morseLine": {
+    "src/components/home/StatementBlock.astro::__file_root__": {
+      "filePath": "src/components/home/StatementBlock.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/cmsMarkers.ts::cmsBody",
+        "src/lib/cmsMarkers.ts::cmsField"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::treeSegments": {
       "filePath": "src/lib/structures.ts",
-      "name": "morseLine",
+      "name": "treeSegments",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/ProseColumnsWithFoot.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ProseColumnsWithFoot.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/page/ProseColumns.astro::__file_root__",
+        "src/components/page/ContactButton.astro::__file_root__",
+        "src/components/page/ExploratoryBand.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::sinePath": {
+      "filePath": "src/lib/structures.ts",
+      "name": "sinePath",
       "imports": [],
       "importedBy": [
         "src/lib/structures.test.ts::__file_root__"
@@ -1413,194 +1490,12 @@
         "src/lib/cmsMarkers.test.ts::__file_root__"
       ]
     },
-    "src/lib/structures.ts::__file_root__": {
-      "filePath": "src/lib/structures.ts",
-      "name": "__file_root__",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/pages/isolated-components/PageHeader.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/PageHeader.astro",
+    "src/components/structures/DragonCurve.astro::__file_root__": {
+      "filePath": "src/components/structures/DragonCurve.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/page/PageHeader.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/index.astro::__file_root__": {
-      "filePath": "src/pages/index.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/layouts/BaseLayout.astro::__file_root__",
-        "src/components/home/Masthead.astro::__file_root__",
-        "src/components/home/StatementBlock.astro::__file_root__",
-        "src/components/home/ActionCards.astro::__file_root__",
-        "src/components/home/QuoteBand.astro::__file_root__",
-        "src/components/structures/SineRule.astro::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::lsystem": {
-      "filePath": "src/lib/structures.ts",
-      "name": "lsystem",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/site.ts::SiteNav": {
-      "filePath": "src/lib/site.ts",
-      "name": "SiteNav",
-      "imports": [],
-      "importedBy": [
-        "src/lib/contactUrl.test.ts::__file_root__",
-        "src/lib/contactUrl.ts::__file_root__"
-      ]
-    },
-    "src/lib/structures.ts::openRectPath": {
-      "filePath": "src/lib/structures.ts",
-      "name": "openRectPath",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/components/structures/MorseRule.astro::__file_root__": {
-      "filePath": "src/components/structures/MorseRule.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/structures.ts::morseLine"
-      ],
-      "importedBy": []
-    },
-    "src/components/page/PageHeader.astro::__file_root__": {
-      "filePath": "src/components/page/PageHeader.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/lib/cmsMarkers.ts::cmsField"
-      ],
-      "importedBy": []
-    },
-    "src/lib/cmsMarkers.ts::cmsNavItem": {
-      "filePath": "src/lib/cmsMarkers.ts",
-      "name": "cmsNavItem",
-      "imports": [],
-      "importedBy": [
-        "src/lib/cmsMarkers.test.ts::__file_root__"
-      ]
-    },
-    "src/components/chrome/SiteNav.astro::__file_root__": {
-      "filePath": "src/components/chrome/SiteNav.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/lib/site.ts::NavItem",
-        "src/lib/cmsMarkers.ts::cmsNavItem",
-        "src/lib/cmsMarkers.ts::cmsSetting"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contactUrl.ts::__file_root__": {
-      "filePath": "src/lib/contactUrl.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/site.ts::NavItem",
-        "src/lib/site.ts::SiteNav"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/SineRule.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/SineRule.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/structures/SineRule.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/cmsMarkers.ts::cmsEntry": {
-      "filePath": "src/lib/cmsMarkers.ts",
-      "name": "cmsEntry",
-      "imports": [],
-      "importedBy": [
-        "src/lib/cmsMarkers.test.ts::__file_root__"
-      ]
-    },
-    "src/components/chrome/SiteFooter.astro::__file_root__": {
-      "filePath": "src/components/chrome/SiteFooter.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/lib/cmsMarkers.ts::cmsSetting"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__": {
-      "filePath": ".claude/skills/review-session/scripts/find-last-session.mjs",
-      "name": "__file_root__",
-      "imports": [
-        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__": {
-      "filePath": ".claude/skills/review-session/scripts/extract-session.mjs",
-      "name": "__file_root__",
-      "imports": [
-        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::buildConversationTurns",
-        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat",
-        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath"
-      ],
-      "importedBy": []
-    },
-    "src/lib/structures.ts::kochPoints": {
-      "filePath": "src/lib/structures.ts",
-      "name": "kochPoints",
-      "imports": [],
-      "importedBy": [
-        "src/lib/structures.test.ts::__file_root__"
-      ]
-    },
-    "src/components/structures/BranchingTree.astro::__file_root__": {
-      "filePath": "src/components/structures/BranchingTree.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/structures.ts::growAcceptableTree",
-        "src/lib/structures.ts::resolveTreeSeed",
-        "src/lib/structures.ts::toPath",
-        "src/lib/structures.ts::treeViewBox"
-      ],
-      "importedBy": []
-    },
-    "src/components/structures/KochFragment.astro::__file_root__": {
-      "filePath": "src/components/structures/KochFragment.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/structures.ts::lsystem",
-        "src/lib/structures.ts::toPath",
-        "src/lib/structures.ts::turtle"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/ActionCardCoral.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ActionCardCoral.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/home/ActionCard.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/pages/isolated-components/Mark.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/Mark.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Mark.astro::__file_root__",
-        "src/styles/tokens.css::__file_root__"
+        "src/lib/structures.ts::dragonPoints",
+        "src/lib/structures.ts::toPath"
       ],
       "importedBy": []
     },
@@ -1614,17 +1509,153 @@
       ],
       "importedBy": []
     },
-    "src/pages/isolated-components/ProseColumnsWithFoot.astro::__file_root__": {
-      "filePath": "src/pages/isolated-components/ProseColumnsWithFoot.astro",
+    "src/lib/contentRoot.ts::resolveContentRoot": {
+      "filePath": "src/lib/contentRoot.ts",
+      "name": "resolveContentRoot",
+      "imports": [],
+      "importedBy": [
+        "src/lib/contentRoot.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/pageTitle.ts::composePageTitle": {
+      "filePath": "src/lib/pageTitle.ts",
+      "name": "composePageTitle",
+      "imports": [],
+      "importedBy": [
+        "src/lib/pageTitle.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/isolated-components/QuoteBand.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/QuoteBand.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/page/ProseColumns.astro::__file_root__",
-        "src/components/page/ContactButton.astro::__file_root__",
-        "src/components/page/ExploratoryBand.astro::__file_root__",
+        "src/components/home/QuoteBand.astro::__file_root__",
         "src/styles/tokens.css::__file_root__"
       ],
       "importedBy": []
+    },
+    "src/components/page/PageHeader.astro::__file_root__": {
+      "filePath": "src/components/page/PageHeader.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Mark.astro::__file_root__",
+        "src/lib/cmsMarkers.ts::cmsField"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::buildConversationTurns": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "name": "buildConversationTurns",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    "src/lib/structures.ts::lsystem": {
+      "filePath": "src/lib/structures.ts",
+      "name": "lsystem",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "astro.config.mjs::__file_root__": {
+      "filePath": "astro.config.mjs",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/linkedCmsPath.ts::linkedPathForRealFile"
+      ],
+      "importedBy": []
+    },
+    "src/components/structures/BranchingTree.astro::__file_root__": {
+      "filePath": "src/components/structures/BranchingTree.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/structures.ts::growAcceptableTree",
+        "src/lib/structures.ts::resolveTreeSeed",
+        "src/lib/structures.ts::toPath",
+        "src/lib/structures.ts::treeViewBox"
+      ],
+      "importedBy": []
+    },
+    "src/components/page/BandQuote.astro::__file_root__": {
+      "filePath": "src/components/page/BandQuote.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/cmsMarkers.ts::cmsField"
+      ],
+      "importedBy": []
+    },
+    "src/components/home/QuoteBand.astro::__file_root__": {
+      "filePath": "src/components/home/QuoteBand.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Mark.astro::__file_root__",
+        "src/components/structures/KochFragment.astro::__file_root__",
+        "src/lib/cmsMarkers.ts::cmsField"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/DragonCurve.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/DragonCurve.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/structures/DragonCurve.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/pages/isolated-components/ActionCardCoral.astro::__file_root__": {
+      "filePath": "src/pages/isolated-components/ActionCardCoral.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/home/ActionCard.astro::__file_root__",
+        "src/styles/tokens.css::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::seededRandom": {
+      "filePath": "src/lib/structures.ts",
+      "name": "seededRandom",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/components/home/Masthead.astro::__file_root__": {
+      "filePath": "src/components/home/Masthead.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Mark.astro::__file_root__",
+        "src/lib/cmsMarkers.ts::cmsField"
+      ],
+      "importedBy": []
+    },
+    "src/lib/structures.ts::growTree": {
+      "filePath": "src/lib/structures.ts",
+      "name": "growTree",
+      "imports": [],
+      "importedBy": [
+        "src/lib/structures.test.ts::__file_root__"
+      ]
+    },
+    "src/components/home/ActionCards.astro::__file_root__": {
+      "filePath": "src/components/home/ActionCards.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/home/ActionCard.astro::__file_root__",
+        "src/components/structures/FibonacciStructure.astro::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/cmsMarkers.ts::cmsField": {
+      "filePath": "src/lib/cmsMarkers.ts",
+      "name": "cmsField",
+      "imports": [],
+      "importedBy": [
+        "src/lib/cmsMarkers.test.ts::__file_root__"
+      ]
     }
   },
-  "lastUpdated": "2026-08-17T15:12:52Z"
+  "lastUpdated": "2026-08-17T15:35:19Z"
 }

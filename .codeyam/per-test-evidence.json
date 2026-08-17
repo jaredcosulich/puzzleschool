@@ -796,6 +796,71 @@
       }
     ]
   },
+  "composePageTitle › appends again once the site is renamed out of the collision": {
+    "file": "src/lib/pageTitle.test.ts",
+    "lastRunAt": "2026-08-17T15:29:23.513394248+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T15:29:23.513394248+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "composePageTitle › appends the site title for an ordinary page": {
+    "file": "src/lib/pageTitle.test.ts",
+    "lastRunAt": "2026-08-17T15:29:23.513394248+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T15:29:23.513394248+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "composePageTitle › does not append the site title when the page title already is it": {
+    "file": "src/lib/pageTitle.test.ts",
+    "lastRunAt": "2026-08-17T15:29:23.513394248+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T15:29:23.513394248+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "composePageTitle › falls back to the site title when the page passes none": {
+    "file": "src/lib/pageTitle.test.ts",
+    "lastRunAt": "2026-08-17T15:29:23.513394248+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T15:29:23.513394248+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "composePageTitle › treats a differently-cased or padded match as the same title": {
+    "file": "src/lib/pageTitle.test.ts",
+    "lastRunAt": "2026-08-17T15:29:23.513394248+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T15:29:23.513394248+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "dragonPoints › stops early when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
     "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",

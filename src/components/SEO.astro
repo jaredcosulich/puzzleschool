@@ -4,6 +4,7 @@
 // page is consistent; pages override per-route via props. Rendered inside the
 // base layout's <head>. (Site-level sitemap.xml / robots.txt live in the
 // deploy-hardening stack, not here — this component owns the per-page tags.)
+import { composePageTitle } from '../lib/pageTitle';
 import { getSettings } from '../lib/site';
 const settings = getSettings();
 
@@ -16,8 +17,10 @@ interface Props {
 
 const { title, description, image, canonical } = Astro.props;
 
-// A page title becomes "Page · Site"; the bare site title is the home/default.
-const pageTitle = title ? `${title} · ${settings.siteTitle}` : settings.siteTitle;
+// A page title becomes "Page · Site"; a page that passes no title — or one
+// whose title already IS the site title, as home's does — gets the bare site
+// title instead of it twice over. Feeds <title>, og:title and twitter:title.
+const pageTitle = composePageTitle(title, settings.siteTitle);
 const metaDescription = description ?? settings.description;
 const canonicalUrl = canonical ?? Astro.url.href;
 ---

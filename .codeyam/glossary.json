@@ -126,6 +126,12 @@
     "testFile": "src/lib/cmsMarkers.test.ts"
   },
   {
+    "description": "Composes a page's head title as \"Page · Site\", returning the bare site title when the page passes no title or when its title already IS the site title — compared trimmed and case-insensitively, since both strings are CMS-editable. Feeds <title>, og:title and twitter:title from SEO.astro; the dedupe branch is what stops home rendering \"The Puzzle School · The Puzzle School\".",
+    "filePath": "src/lib/pageTitle.ts",
+    "name": "composePageTitle",
+    "testFile": "src/lib/pageTitle.test.ts"
+  },
+  {
     "description": "The dragon curve: a right-angle fold repeated, walked as an orthogonal lattice that never self-intersects.",
     "filePath": "src/lib/structures.ts",
     "name": "dragonPoints",
