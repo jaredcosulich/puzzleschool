@@ -14,17 +14,6 @@ cards: []
 showContactButton: true
 ---
 
-### Who we want to hear from
+### Reach out
 
-Families thinking about what their children will need, and what they are not
-getting now. Tell us the ages and what you are weighing.
-
-Teachers who have taught into ambiguity on purpose, and know what it costs and
-what it takes.
-
-### What happens next
-
-We read everything that comes in, and we answer. There is no mailing list and
-nothing automated behind this address.
-
-If you would rather talk than write, say so and we will find a time.
+If what we are exploring is of interest please email us at contact@puzzleschool.org. We have no firm opening date and are not accepting any students at this time, but are happy to chat about the process we are going through and love to hear what resonates with people.
