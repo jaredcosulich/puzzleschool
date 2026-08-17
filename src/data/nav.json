@@ -1,6 +1,12 @@
 {
   "items": [
-    { "label": "About", "url": "/about" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "About",
+      "url": "/about"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ]
 }
