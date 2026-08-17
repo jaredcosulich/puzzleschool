@@ -35,6 +35,7 @@ import ContactButton from '../components/page/ContactButton.astro';
 import ExploratoryBand from '../components/page/ExploratoryBand.astro';
 import { getSettings } from '../lib/site';
 import { buildMailto } from '../lib/mailto';
+import { proseLayoutFor } from '../lib/proseLayout';
 
 export const getStaticPaths = (async () => {
   const pages = routableEntries(await getCollection('pages'));
@@ -46,7 +47,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
-const { Content } = await render(page);
+const { Content, headings } = await render(page);
 const {
   title,
   description,
@@ -58,6 +59,13 @@ const {
   quoteAttribution,
   showContactButton,
 } = page.data;
+
+// Which prose shape this page gets — two columns with the branching structure in
+// the gap, or a centred single column flanked by two others — derived from the
+// body's own section count rather than declared in frontmatter. The rule and the
+// reasoning behind deriving it live in `proseLayoutFor`, where they are
+// unit-testable; `render()` hands back `headings` for free, so the route asks.
+const proseLayout = proseLayoutFor(headings);
 
 const settings = getSettings();
 const contactHref = buildMailto({
@@ -78,7 +86,7 @@ const contactHref = buildMailto({
        push the band down and leave the trunk ending in mid-air. `<Content />`
        must stay in the DEFAULT slot — it is the CMS body target, and moving it
        would break staged preview patching. -->
-  <ProseColumns seedKey={page.id}>
+  <ProseColumns seedKey={page.id} layout={proseLayout}>
     <Content />
     {showContactButton ? <ContactButton href={contactHref} slot="foot" /> : null}
   </ProseColumns>

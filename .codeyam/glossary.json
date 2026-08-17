@@ -17,6 +17,15 @@
     ]
   },
   {
+    "description": "The harmonograph standing in the left lane of a one-section internal page. Varies on two axes like the branching tree — per page at build time from a hashed seedKey, per visit in the browser — with the shared tree=static flag freezing both so captures stay deterministic. Unlike the tree it frames with meet rather than none, because the figure's whole subject is the ratio between two frequencies and an anisotropic stretch would silently rewrite that ratio on the way to the screen; the alignment is YMax so any residual letterboxing is taken off the top and the figure stays flush with the seam below.",
+    "filePath": "src/components/structures/Harmonograph.astro",
+    "name": "Harmonograph",
+    "scenarios": [
+      "harmonograph-default",
+      "harmonograph-variations"
+    ]
+  },
+  {
     "description": "The home masthead — compass-rose mark, wordmark and kicker, centred. Carries the staged-preview field markers for the home entry's title and kicker; the kicker stays conditional, so a field the page does not render is one the preview leaves alone.",
     "filePath": "src/components/home/Masthead.astro",
     "name": "Masthead",
@@ -34,11 +43,13 @@
     ]
   },
   {
-    "description": "Two columns of prose with the branching structure standing in the gap. The body marker sits on the inner prose element rather than the grid, because patching sets innerHTML and marking the grid would delete the structure SVG on every staged body edit. The tree is bottom-anchored to the prose grid, so anything a page wants between its prose and the section below must go in the named foot slot rather than after the component: rendered as a sibling it pushes that section down while leaving the tree's anchor behind, and the trunk ends in mid-air by exactly the sibling's height. The foot wrapper bleeds back out of the grid's own gutter so slotted content keeps the geometry it would have had as a sibling, and collapses to zero height when the slot is empty.",
+    "description": "The prose block of an internal page, in either of two shapes chosen by the route from the body's own section count. The default 'columns' shape is two columns with the branching structure standing in the gap; 'single' is one centred column with a harmonograph in a lane to its left and a Voronoi field to its right, for a page that only says one thing and would otherwise leave a half-empty second column with the tree stranded beside it. Both shapes are held here behind a layout prop rather than split into two components, because the CMS body marker has to sit on the inner prose element in both and the foot slot's gutter bleed is shared; splitting would duplicate both and give the CMS two patch targets for one body field. The body marker sits on the inner prose element rather than the grid, because patching sets innerHTML and marking the grid would delete the structure SVGs on every staged body edit. Structures are bottom-anchored to the prose grid, so anything a page wants between its prose and the section below must go in the named foot slot rather than after the component: rendered as a sibling it pushes that section down while leaving the anchors behind, and the figures end in mid-air by exactly the sibling's height. In the single shape the lanes are grid items spanning both rows with the rows declared explicitly, since grid-row 1 / -1 resolves against the explicit grid and would otherwise collapse to the first row. Known limit: staged CMS preview patches the prose innerHTML in place, so editing a body from two sections down to one does not re-pick the layout until the next build — the layout is a build-time fact.",
     "filePath": "src/components/page/ProseColumns.astro",
     "name": "ProseColumns",
     "scenarios": [
-      "prosecolumns-default"
+      "prosecolumns-default",
+      "prosecolumns-with-foot",
+      "prosecolumns-single-section"
     ]
   },
   {
@@ -75,10 +86,31 @@
     ]
   },
   {
+    "description": "The Voronoi field standing in the right lane of a one-section internal page, following the same two-axis pattern as the branching tree. The partition is computed across a rectangle a quarter larger than the lane while the viewBox is the lane itself, so the straight edges where clipping happened fall outside what is drawn and cells run off the top and bottom unresolved. preserveAspectRatio is none here and correct, because the field is generated at the lane's own 123x365 and there is no distortion to accept.",
+    "filePath": "src/components/structures/VoronoiField.astro",
+    "name": "VoronoiField",
+    "scenarios": [
+      "voronoifield-default",
+      "voronoifield-variations"
+    ]
+  },
+  {
+    "description": "Rewrites an on-page SVG to draw a freshly generated figure, reusing existing path elements, cloning the first as a template for extras and removing the surplus, so the styling stays defined only in the component's markup. The general form of what applyTreeGrowth did alone; three structures now regrow per visit and the Voronoi field genuinely changes path count between draws.",
+    "filePath": "src/lib/figure-dom.ts",
+    "name": "applyFigure",
+    "testFile": "src/lib/figure-dom.test.ts"
+  },
+  {
     "description": "Writes a grown tree into an SVG already on the page, reframing the viewBox to match. Lives outside the Astro script tag so it is reachable from vitest: the new tree rarely has the same segment count as the one the server drew, so every call reuses, clones or removes path elements. Surplus paths are cloned from the server's own path, keeping stroke styling defined in exactly one place.",
     "filePath": "src/lib/tree-dom.ts",
     "name": "applyTreeGrowth",
     "testFile": "src/lib/tree-dom.test.ts"
+  },
+  {
+    "description": "Displacement of one harmonograph axis at time t — two damped sinusoids summed, which is what the four-pendulum machine does mechanically. The unit of physics the whole figure is built from.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "axisAt",
+    "testFile": "src/lib/harmonograph.test.ts"
   },
   {
     "description": "Assembles a mailto: URL from a recipient and optional subject and body, percent-encoding each part.",
@@ -88,6 +120,24 @@
       "justification": "assembles a URL string from its arguments with no branching beyond omitting absent optional parts",
       "kind": "trivial-wrapper"
     }
+  },
+  {
+    "description": "One site's Voronoi cell: the frame cut back by the perpendicular bisector against every other site. The bisector is where the two squared distances are equal, and that difference is LINEAR in the point because the quadratic terms cancel — which is why successive half-plane clips are enough and no curve fitting is involved.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "cellFor",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "A Voronoi cell's outline. A closed cell is a polygon; the open one is the same corners rotated so the missing edge is the closing one, then left unclosed, following openRectPath's three-sided square at the scale of a territory. Rotating rather than splicing keeps every drawn edge intact and removes exactly one.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "cellPath",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "Clips a convex polygon to the half-plane where a linear edge function is negative, cutting new corners where the boundary crosses the line (Sutherland-Hodgman). The single geometric primitive the whole Voronoi partition is built from.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "clipHalfPlane",
+    "testFile": "src/lib/voronoi.test.ts"
   },
   {
     "description": "Returns the spreadable data-cms-body attribute marking the element that renders an entry's rendered markdown body. Valueless in the CMS contract, so it emits the empty string, which Astro renders as a bare attribute that the presence selector still matches.",
@@ -130,6 +180,12 @@
     "filePath": "src/lib/pageTitle.ts",
     "name": "composePageTitle",
     "testFile": "src/lib/pageTitle.test.ts"
+  },
+  {
+    "description": "Direction reversals on either axis along a harmonograph trace — a cheap proxy for how intricate the figure is. Feeds the acceptance band that separates a lazy oval from a ball of thread.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "countTurningPoints",
+    "testFile": "src/lib/harmonograph.test.ts"
   },
   {
     "description": "The dragon curve: a right-angle fold repeated, walked as an orthogonal lattice that never self-intersects.",
@@ -177,10 +233,22 @@
     }
   },
   {
+    "description": "Draws a harmonograph for a seed that passes acceptance, resampling from a derived seed when it does not, and falling back to the closest attempt rather than throwing. Sixty attempts because a raw draw passes about a fifth of the time against four independent checks; this runs inside a page render where a slightly-off figure beats a blank lane.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "growAcceptableHarmonograph",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
     "description": "Grows a tree for a seed that passes isAcceptableTree, resampling from a derived seed when it does not. A raw draw only passes about a third of the time, so the budget is 20 rather than a handful. Falls back to the CLOSEST attempt by shortfall rather than throwing, since this runs inside a page render where nobody can catch an exception.",
     "filePath": "src/lib/structures.ts",
     "name": "growAcceptableTree",
     "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Builds a Voronoi field for a seed that passes acceptance, resampling from a derived seed when it does not and falling back to the closest attempt rather than throwing, the way growAcceptableTree does.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "growAcceptableVoronoi",
+    "testFile": "src/lib/voronoi.test.ts"
   },
   {
     "description": "Grows the branching structure and returns the geometry plus the two facts acceptance needs that the segment list cannot answer: how many limbs grew, and whether the named bare limb was ever reached. treeSegments is now exactly its segments field, so the older signature and its tests are untouched.",
@@ -207,6 +275,36 @@
     }
   },
   {
+    "description": "Serialises a harmonograph trace as the single continuous SVG stroke the pen drew.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "harmonographPath",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
+    "description": "Samples the pen path of a four-pendulum harmonograph: two damped sinusoids summed per axis. The pen lifts at duration times fraction, so what comes back is a stroke stopped mid-swing with its envelope still open rather than a figure settled into a dot.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "harmonographPoints",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
+    "description": "How far a harmonograph is from acceptable as a single number, zero exactly when it passes every rule. Scores aspect against the lane, busyness, the visible open end, the degenerate collapse to a diagonal line, and the density of the figure's middle. A magnitude rather than a boolean, because the resample loop has to rank failures when no seed qualifies.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "harmonographShortfall",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
+    "description": "Maps one seed onto one bounded harmonograph option set, drawn in a fixed order so a seed is reproducible. Frequency ratios come from a small set of small-integer intervals including unison, and the second pendulum on each axis is always detuned from the first, because that detune is what makes each pass land rotated from the last.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "harmonographVariant",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
+    "description": "Frames a harmonograph trace with a margin proportional to the figure, where the tree's is a flat unit. A harmonograph is drawn at amplitudes near 1, so a flat unit would add most of a box width and change the aspect the acceptance band had just checked.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "harmonographViewBox",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
     "description": "Turns a page slug into a tree seed with FNV-1a. This is what makes the per-page axis free: about, contact and a page written next year each hash to their own number, so each grows its own tree with no code change. Stable across builds and platforms, because an unstable hash would redraw every committed screenshot on every deploy.",
     "filePath": "src/lib/structures.ts",
     "name": "hashSeed",
@@ -222,16 +320,34 @@
     }
   },
   {
+    "description": "Whether a harmonograph passes every rule in the envelope, enforced on the geometry that came out rather than on the inputs that went in. Derived from the shortfall score so the two definitions cannot drift.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "isAcceptableHarmonograph",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
     "description": "The envelope enforced on the RESULT, not just the inputs. Sampling within bounded ranges is necessary but not sufficient: inside those ranges a seed can still grow every branch stopped early, a crown combed onto one side, or a bare limb the tree never reached. Checks branch count, segment count, aspect, canopy spread and horizontal balance.",
     "filePath": "src/lib/structures.ts",
     "name": "isAcceptableTree",
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Whether a Voronoi field passes every rule in the envelope, enforced on the geometry that came out rather than the inputs that went in.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "isAcceptableVoronoi",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
     "description": "Whether a nav item points at the page being rendered. Compares both sides through normalizeNavPath rather than by string equality, because nav.json stores hand-written urls like '/about' while Astro's default directory build renders the pathname as '/about/' — a strict compare never matches in the built site, which is why no header link was ever inked. Normalizing both sides also covers the mirror case, where a CMS author types the trailing slash and the dev server does not. A NavItem with no url of its own is a dropdown parent and is never current.",
     "filePath": "src/lib/site.ts",
     "name": "isCurrentNavPath",
     "testFile": "src/lib/site.test.ts"
+  },
+  {
+    "description": "A stratified scatter of Voronoi sites: one point jittered inside each box of a grid, never leaving its own box. Uniform random points clump, and a clump produces the sliver cell that reads as a drawing mistake rather than as a boundary.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "jitteredSites",
+    "testFile": "src/lib/voronoi.test.ts"
   },
   {
     "description": "The Koch curve: every segment becomes four, turning 60 degrees either way.",
@@ -256,6 +372,18 @@
     "filePath": "src/lib/structures.ts",
     "name": "lsystem",
     "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "The share of a harmonograph's sampled points falling in the middle fifth of its bounding box — how much ink piles up at the centre. Damping pulls every pass inward, so a pen left running spirals to a point and lays pass on pass in one small area; the aspect, the turn count and the coverage all still pass while the figure reads as a blot with loops around it. Nothing that reasons about the OUTLINE can see that, so the middle is measured on its own.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "measureCoreDensity",
+    "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
+    "description": "How many cells of a coarse grid over its own bounding box a harmonograph's stroke visits, as a fraction. This is the degeneracy test: a collapsed draw is a diagonal LINE, which fills its bounding box corner to corner and passes every aspect check while looking nothing like a harmonograph. Only occupancy tells a line from a rosette — a straight draw measures about 0.04 against a healthy 0.4 or more.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "measureCoverage",
+    "testFile": "src/lib/harmonograph.test.ts"
   },
   {
     "description": "Encodes words as morse laid out left to right at classic proportions — dash three units, symbol gap one, letter gap three, word gap seven. Unencodable characters are skipped rather than guessed at.",
@@ -289,6 +417,24 @@
       "justification": "Cloudflare Worker OAuth relay scaffolded by the CMS CLI; runs only on Workers and is unused here (auth.worker is false)",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "The bounding box of a set of points, shared by every structure that frames itself to its own extent. A zero extent collapses to 1 rather than 0 deliberately: callers divide by these to normalise, and a figure drawn perfectly flat on one axis is the degenerate case acceptance exists to reject, so it must arrive as a bad score rather than a NaN.",
+    "filePath": "src/lib/structures.ts",
+    "name": "pointBounds",
+    "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Area of a simple polygon by the shoelace formula. Exported because it is how the partition's defining property is checked, that the cells tile the frame exactly; counting cells instead would pass a slivered field just as happily as a good one.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "polygonArea",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "Chooses an internal page's prose shape from its body: two or more sections keep the two-column layout with the branching structure in the gap, one or none get the centred single column flanked by a harmonograph and a Voronoi field. Derived from the body rather than declared in frontmatter, so a page written from the CMS gets the right layout by writing, with no field to remember and no code change.",
+    "filePath": "src/lib/proseLayout.ts",
+    "name": "proseLayoutFor",
+    "testFile": "src/lib/proseLayout.test.ts"
   },
   {
     "description": "A fresh seed for the per-visit regrow, deliberately in the same unsigned 32-bit space hashSeed produces. If the two ranges drifted apart, trees grown in the browser would quietly become a different population from the trees grown at build time from a page slug.",
@@ -342,6 +488,12 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Counts the depth-3 headings in a rendered body. Counting that specific depth rather than any heading is load-bearing: the page title is rendered by the header, and a sub-heading inside one section must not promote the page to two.",
+    "filePath": "src/lib/proseLayout.ts",
+    "name": "sectionCount",
+    "testFile": "src/lib/proseLayout.test.ts"
+  },
+  {
     "description": "A deterministic mulberry32 generator. The site is static, so unseeded randomness would redraw every structure on every build and churn every committed screenshot; the same seed gives the same figure forever.",
     "filePath": "src/lib/structures.ts",
     "name": "seededRandom",
@@ -354,10 +506,22 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Builds one Voronoi field: places the sites, sets one or two aside unresolved, partitions what is left, and opens one cell. The unresolved sites are removed BEFORE the partition rather than hidden after it, so the surrounding cells are computed as though those points were never there and genuinely overrun where a boundary should be.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "tessellate",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
     "description": "Joins a list of points into an SVG polyline `d` attribute, rounding coordinates to two decimals so generated paths stay readable.",
     "filePath": "src/lib/structures.ts",
     "name": "toPath",
     "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Samples a harmonograph and measures the four things acceptance asks about it that the point list cannot answer at a glance: turning points, how much of its own bounding box the stroke visits, how far apart its two ends are, and how much ink piles up in the middle.",
+    "filePath": "src/lib/harmonograph.ts",
+    "name": "traceHarmonograph",
+    "testFile": "src/lib/harmonograph.test.ts"
   },
   {
     "description": "Builds the SVG transform string for one puzzle piece: a rotation about the mark's centre, plus an inset and scale for the four diagonal pieces.",
@@ -403,5 +567,41 @@
     "filePath": "src/lib/structures.ts",
     "name": "turtle",
     "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "A small cross marking a site the partition has no cell for yet, the way an unplotted point gets noted.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "unresolvedMarkPath",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "Partitions a frame by nearest neighbour, each cell being the frame cut back by the perpendicular bisector against every other site. Built by half-plane clipping rather than triangulation, which keeps the module free of a Delaunay dependency; the clip rectangle is larger than the visible lane, so cells run off its edges unresolved instead of being tidied into a box.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "voronoiCells",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "Every stroke of a Voronoi field in draw order, cells first then the unresolved marks. Shared by the server render and the per-visit redraw so the two cannot drift into drawing the same field differently.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "voronoiPaths",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "How far a Voronoi field is from acceptable as a single number, zero exactly when it passes. Scores cell count against a band, rejects slivers by area against the mean, and penalises a field that lost either deliberate incompleteness, since a feature that silently failed to apply is invisible in a geometry list.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "voronoiShortfall",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "Maps one seed onto one bounded Voronoi option set. The grid is deliberately tall and narrow, because the lane is 123 by 365 and cells that are roughly square need about three times as many rows as columns to fill it without stretching.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "voronoiVariant",
+    "testFile": "src/lib/voronoi.test.ts"
+  },
+  {
+    "description": "Frames a Voronoi field at the lane it was generated for, so preserveAspectRatio has no distortion to apply and the cells run off the lane's own edges.",
+    "filePath": "src/lib/voronoi.ts",
+    "name": "voronoiViewBox",
+    "testFile": "src/lib/voronoi.test.ts"
   }
 ]

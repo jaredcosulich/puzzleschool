@@ -1,0 +1,12 @@
+{
+  "name": "Harmonograph - Default",
+  "id": "0c07fd33-ee6e-4f62-af45-9badc4597049",
+  "url": "/isolated-components/Harmonograph?tree=static",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "Harmonograph",
+  "scenarioType": "component",
+  "description": "The trace of two coupled pendulums, drawn at the 123x365 lane it stands in. The pen lifts before friction brings the swing to rest, so the stroke stops mid-swing with its envelope still open and a visible tail — the incompleteness this site's structures all carry, here as a drawing somebody put down while it was still going somewhere."
+}

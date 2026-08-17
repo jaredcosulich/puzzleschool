@@ -1,0 +1,12 @@
+{
+  "name": "VoronoiField - Variations",
+  "id": "eb7a7d8c-57c8-414d-baf6-7aa9b2904711",
+  "url": "/isolated-components/VoronoiFieldVariations?tree=static",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VoronoiField",
+  "scenarioType": "component",
+  "description": "Eight seeds side by side, the envelope sheet. What it watches for is the sliver — the long thin shard between two sites that landed too close, which reads as a drawing mistake rather than as a boundary, and is the reason sites are placed on a jittered grid instead of at random. Each caption carries the two facts that are invisible in the geometry: how many sites were left unresolved, and whether a cell was actually opened. A deliberate feature that silently failed to apply looks exactly like one that was never asked for."
+}

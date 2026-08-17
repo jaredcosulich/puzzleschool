@@ -1,0 +1,12 @@
+{
+  "name": "VoronoiField - Default",
+  "id": "e7b8b9ea-32b8-4793-8b73-0399bf52bacc",
+  "url": "/isolated-components/VoronoiField?tree=static",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VoronoiField",
+  "scenarioType": "component",
+  "description": "Space partitioned by nearest neighbour, drawn at the 123x365 lane it stands in. Two deliberate incompletenesses have to be legible here: one cell drawn an edge short, and one or two small crosses marking sites the partition has not accounted for at all. The lane's own frame is not stroked, so cells run off the top and bottom unresolved rather than being tidied into a box."
+}

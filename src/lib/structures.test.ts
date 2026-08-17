@@ -10,6 +10,8 @@ import {
   lsystem,
   morseLine,
   openRectPath,
+  outOfBand,
+  pointBounds,
   randomTreeSeed,
   resolveTreeSeed,
   seededRandom,
@@ -469,6 +471,71 @@ describe('treeViewBox', () => {
   it('frames a grown tree identically on repeat calls', () => {
     const { segments } = growAcceptableTree(77);
     expect(treeViewBox(segments)).toBe(treeViewBox(segments));
+  });
+});
+
+describe('pointBounds', () => {
+  // The ordinary case: the box that encloses a scatter of points.
+  it('encloses every point', () => {
+    expect(
+      pointBounds([
+        { x: 2, y: -3 },
+        { x: 10, y: 4 },
+        { x: -5, y: 1 },
+      ]),
+    ).toEqual({ minX: -5, minY: -3, width: 15, height: 7 });
+  });
+
+  // Three structures frame themselves from this, so it has to be exact rather
+  // than padded — each adds its own margin, and the tree's is a different size
+  // from the harmonograph's.
+  it('adds no margin of its own', () => {
+    expect(
+      pointBounds([
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+      ]),
+    ).toEqual({ minX: 0, minY: 0, width: 1, height: 1 });
+  });
+
+  // A single point has no extent at all, and every caller DIVIDES by these to
+  // normalise something. Collapsing to 1 rather than 0 is what keeps a flat
+  // figure reaching the acceptance checks as a bad score instead of as a NaN
+  // that poisons the comparison it was supposed to lose.
+  it('reports a unit extent for a degenerate figure rather than zero', () => {
+    expect(pointBounds([{ x: 5, y: 5 }])).toEqual({ minX: 5, minY: 5, width: 1, height: 1 });
+  });
+
+  // A figure perfectly flat on ONE axis is the realistic degenerate case — a
+  // collapsed harmonograph — and only that axis should be substituted.
+  it('substitutes only the axis that collapsed', () => {
+    expect(
+      pointBounds([
+        { x: 0, y: 7 },
+        { x: 12, y: 7 },
+      ]),
+    ).toEqual({ minX: 0, minY: 7, width: 12, height: 1 });
+  });
+});
+
+describe('outOfBand', () => {
+  // Inside the band there is nothing to answer for.
+  it('reports zero within the band', () => {
+    expect(outOfBand(5, 1, 10)).toBe(0);
+  });
+
+  // The band is inclusive at both ends, so a value sitting exactly on a limit
+  // is acceptable rather than marginally out.
+  it('treats both limits as inside', () => {
+    expect(outOfBand(1, 1, 10)).toBe(0);
+    expect(outOfBand(10, 1, 10)).toBe(0);
+  });
+
+  // Distance below, and distance above — the magnitude is what lets a shortfall
+  // score RANK its failures rather than merely detect them.
+  it('reports how far outside the band a value fell', () => {
+    expect(outOfBand(0.5, 1, 10)).toBeCloseTo(0.5, 10);
+    expect(outOfBand(13, 1, 10)).toBe(3);
   });
 });
 

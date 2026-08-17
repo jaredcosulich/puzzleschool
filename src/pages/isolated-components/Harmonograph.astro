@@ -1,0 +1,28 @@
+---
+// Isolation page for Harmonograph — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/Harmonograph.
+//
+// `?tree=static` is in the registered URL so the capture records the build-time
+// figure with no client redraw and no race against the screenshot. Register with:
+//   codeyam-editor editor register '{"name":"Harmonograph - Default","componentName":"Harmonograph","url":"/isolated-components/Harmonograph?tree=static","dimensions":["Desktop"]}'
+//
+// The lane is shown at its real 123x365 — the component's own default — because
+// a figure judged at any other size is a figure the site never renders.
+import Component from "../../components/structures/Harmonograph.astro";
+import "../../styles/tokens.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: Harmonograph</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--paper);">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div style="width: 123px;">
+        <Component seedKey="contact" />
+      </div>
+    </div>
+  </body>
+</html>

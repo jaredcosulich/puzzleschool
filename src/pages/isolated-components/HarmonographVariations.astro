@@ -1,0 +1,104 @@
+---
+// Eight harmonographs from eight fixed seeds, side by side.
+//
+// This is the only surface where the variation ENVELOPE can actually be judged,
+// and it is how `TREE_ENVELOPE`'s bands were calibrated before it. One figure
+// tells you nothing about whether the constraints hold — it either looks fine or
+// it does not. Eight at once makes a bad draw obvious at a glance: a lazy oval,
+// a ball of thread, or a trace that stopped where it started and reads as closed
+// stands out immediately against seven siblings that read as the same machine.
+//
+// The seeds are FIXED and arbitrary, not slugs, because this sheet is about the
+// envelope rather than about any particular page. Register with:
+//   codeyam-editor editor register '{"name":"Harmonograph - Variations","componentName":"Harmonograph","url":"/isolated-components/HarmonographVariations?tree=static","dimensions":["Desktop"]}'
+//
+// The last two lanes are the CONTROL, and they are the point of the sheet. They
+// bypass `growAcceptableHarmonograph` and pass a raw seed straight through, so
+// they show draws the acceptance check would have rejected — the ones that
+// collapse toward a line, or stop too near where they started. A band that
+// cannot be seen failing cannot be judged.
+import Component from "../../components/structures/Harmonograph.astro";
+import { harmonographVariant, traceHarmonograph, harmonographShortfall } from "../../lib/harmonograph";
+import "../../styles/tokens.css";
+
+const SEEDS = [1, 7, 11, 23, 42, 99, 256, 1024];
+
+// A hand-built degenerate option set: both axes at the same frequency, in phase,
+// with no detune. The classic collapse — the pen draws a single diagonal line.
+const COLLAPSED = {
+  x: [
+    { amplitude: 1, frequency: 1, phase: 0, damping: 0.012 },
+    { amplitude: 0.6, frequency: 1, phase: 0, damping: 0.012 },
+  ],
+  y: [
+    { amplitude: 3, frequency: 1, phase: 0, damping: 0.012 },
+    { amplitude: 1.8, frequency: 1, phase: 0, damping: 0.012 },
+  ],
+  duration: 220,
+  step: 0.08,
+  fraction: 0.7,
+} as const;
+
+const collapsed = traceHarmonograph(COLLAPSED as Parameters<typeof traceHarmonograph>[0]);
+const healthy = traceHarmonograph(harmonographVariant(42));
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: Harmonograph — Variations</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--paper);">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div class="sheet">
+        {
+          SEEDS.map((seed) => (
+            <figure class="specimen">
+              <Component seed={seed} />
+              <figcaption>{seed}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <p class="reading">
+        collapsed draw — coverage {collapsed.coverage.toFixed(3)}, shortfall{' '}
+        {harmonographShortfall(collapsed).toFixed(2)} (rejected) · healthy draw — coverage{' '}
+        {healthy.coverage.toFixed(3)}, shortfall {harmonographShortfall(healthy).toFixed(2)}
+      </p>
+    </div>
+  </body>
+</html>
+
+<style>
+  /* Eight lanes at their real 123px width — judging the envelope at any other
+     width would judge a figure the site never renders. */
+  .sheet {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+  }
+
+  .specimen {
+    margin: 0;
+    width: 123px;
+  }
+
+  figcaption {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--body-text, #666);
+  }
+
+  /* The numbers the sheet is being judged against, on the sheet. Read off the
+     capture rather than re-derived by whoever looks at it next. */
+  .reading {
+    margin: 24px 0 0;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--body-text, #666);
+  }
+</style>

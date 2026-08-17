@@ -1,0 +1,158 @@
+---
+// The harmonograph standing in the left lane of a one-section internal page.
+//
+// Follows `BranchingTree` in every structural respect, because that component is
+// the site's worked example of a structure that varies on TWO AXES at once:
+//
+//   - PER PAGE, at build time: the seed is hashed from `seedKey` (the page
+//     slug), so Contact and a page a CMS editor writes next year each get their
+//     own figure with no code change — and the SAME figure on every build, which
+//     is what keeps the committed screenshots from churning.
+//   - PER VISIT, in the browser: the script below redraws it from a fresh random
+//     seed after load.
+//
+// So the SSR figure must be VALID ON ITS OWN, not a placeholder — it is what
+// no-JS visitors keep and what every capture records. `?tree=static` suppresses
+// the redraw entirely. That flag is reused rather than a second one invented for
+// this component: its real meaning is "do not regrow generated figures after
+// load", every committed scenario URL already carries it, and a second flag
+// would mean rewriting all of them to freeze a page that now holds three
+// different structures.
+//
+// ONE DIFFERENCE FROM THE TREE, AND IT IS DELIBERATE. The tree fills its lane
+// with `preserveAspectRatio="none"`, accepting the anisotropic stretch because a
+// stretched branch is still a branch. A harmonograph cannot take that: the
+// figure's whole subject is the RATIO between two frequencies, and stretching
+// one axis silently rewrites that ratio on the way to the screen — a 2:3 drawn
+// and a 1:2 seen. So this frames with `meet` instead, and fills the tall lane
+// honestly, by swinging the vertical pendulums about three times as far as the
+// horizontal ones (`HARMONOGRAPH_ENVELOPE.amplitudeY`) and rejecting any draw
+// whose aspect strays from the lane's.
+//
+// The alignment half of that attribute is `YMax`, not the usual `YMid`, and it
+// carries the seam guarantee: whatever letterboxing is left after the aspect
+// band has done its work is taken off the TOP, so the figure's own bottom edge
+// stays flush with the bottom of its lane. Centred instead, a draw slightly off
+// the lane's ratio would float clear of the join with the section below — which
+// is exactly the fault the branching structure's bottom anchoring exists to
+// prevent, arriving by a different route.
+import {
+  growAcceptableHarmonograph,
+  harmonographPath,
+  harmonographViewBox,
+} from '../../lib/harmonograph';
+import { hashSeed } from '../../lib/structures';
+
+interface Props {
+  /**
+   * What this figure is drawn FROM — normally the page slug. Hashed to a seed,
+   * so distinct pages get distinct figures and each keeps its own across builds.
+   */
+  seedKey?: string;
+  /** An explicit seed, overriding `seedKey`. For the variations sheet. */
+  seed?: number;
+  /** The lane the figure fills. A layout fact, not a variation axis. */
+  width?: number;
+  height?: number;
+}
+
+const { seedKey, seed, width = 123, height = 365 } = Astro.props;
+
+// Salted with the structure's own name so the left and right lanes of the same
+// page are not two draws of the same number — un-salted, `hashSeed('contact')`
+// would seed both, and the two figures would vary together across pages instead
+// of independently.
+const resolved = seed ?? hashSeed(`${seedKey ?? 'default'}:harmonograph`);
+const trace = growAcceptableHarmonograph(resolved);
+---
+
+<div class="harmonograph-well">
+  <div class="harmonograph-frame">
+    <svg
+      data-harmonograph
+      viewBox={harmonographViewBox(trace.points)}
+      width={width}
+      height={height}
+      preserveAspectRatio="xMidYMax meet"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d={harmonographPath(trace.points)}
+        fill="none"
+        stroke="var(--gold)"
+        stroke-width="1"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"
+      />
+    </svg>
+  </div>
+</div>
+
+<script>
+  import { growAcceptableHarmonograph, harmonographPath, harmonographViewBox } from '../../lib/harmonograph';
+  import { randomTreeSeed } from '../../lib/structures';
+  import { applyFigure } from '../../lib/figure-dom';
+
+  // Presence-only flag, and deliberately not a seed — see BranchingTree for the
+  // full reasoning. The site is prerendered, so a query parameter cannot reach
+  // the server render at all; a value-carrying `?tree=<seed>` would make the
+  // client draw a DIFFERENT figure than the server did, reintroducing exactly
+  // the swap (and the race against the capture) a screenshot must not contain.
+  const frozen = new URLSearchParams(location.search).get('tree') === 'static';
+
+  if (!frozen) {
+    for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-harmonograph]')) {
+      // A failed redraw must leave the server's figure standing rather than an
+      // empty lane — the SSR figure is already correct, this is an enhancement.
+      try {
+        const trace = growAcceptableHarmonograph(randomTreeSeed());
+
+        // Draw first, write in one frame: reframing the viewBox and rewriting
+        // the path across separate frames would show the old figure stretched
+        // into the new box.
+        requestAnimationFrame(() =>
+          applyFigure(svg, harmonographViewBox(trace.points), [
+            { d: harmonographPath(trace.points) },
+          ]),
+        );
+      } catch {
+        // Intentionally silent: an ambient decorative figure is not worth a
+        // console error on a visitor's page.
+      }
+    }
+  }
+</script>
+
+<style>
+  /* The 123px lane the figure occupies. Height is reserved here rather than by
+     the parent so the component stands up on its own in isolation. */
+  .harmonograph-well {
+    position: relative;
+    min-height: 365px;
+  }
+
+  /* Anchored to the BOTTOM, so the figure sits on the seam with whatever section
+     follows — the same guarantee the branching structure holds in the
+     two-column layout, and the reason the prose block's `foot` slot exists. */
+  .harmonograph-frame {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .harmonograph-frame svg {
+    display: block;
+  }
+
+  /* Below the prose breakpoint the flanking lanes stop existing, so the well
+     collapses rather than leaving a 365px hole. */
+  @media (max-width: 840px) {
+    .harmonograph-well {
+      display: none;
+    }
+  }
+</style>

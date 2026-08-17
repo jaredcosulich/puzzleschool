@@ -26,12 +26,12 @@
             "title": "Learn More"
           }
         ],
-        "description": "An experimental K\u201312 school whose subject is ambiguity.",
+        "description": "An experimental K–12 school whose subject is ambiguity.",
         "heading": "A K-12 educational experience focused on ambiguity.",
-        "kicker": "An experimental K\u201312 school",
+        "kicker": "An experimental K–12 school",
         "lead": "Welcome to The Puzzle School",
         "order": 0,
-        "quote": "\u201cTo teach how to live without certainty, and yet without being paralyzed by hesitation, is perhaps the chief thing that philosophy, in our age, can still do for those who study it.\u201d",
+        "quote": "“To teach how to live without certainty, and yet without being paralyzed by hesitation, is perhaps the chief thing that philosophy, in our age, can still do for those who study it.”",
         "quoteAttribution": "Bertrand Russell",
         "slug": "home",
         "title": "The Puzzle School"
@@ -47,5 +47,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/[...slug].astro",
-  "description": "The leanest possible page: title and body only, proving every optional field degrades cleanly when a CMS author leaves it blank."
+  "description": "The leanest possible page: title and body only, proving every optional field degrades cleanly when a CMS author leaves it blank. It is also the written-next-year demonstration of the layout rule — its body has exactly one section, so it picks up the flanked single-column shape with no code change and no content change, purely because of how it was written."
 }

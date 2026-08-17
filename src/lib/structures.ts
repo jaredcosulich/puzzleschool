@@ -26,8 +26,15 @@ export function toPath(points: readonly Point[]): string {
     .join('')}`;
 }
 
-/** Trim float noise so generated paths stay readable in devtools. */
-function round(n: number): number {
+/**
+ * Trim float noise so generated paths stay readable in devtools.
+ *
+ * Exported because every structure that serialises its own geometry needs the
+ * same trimming, at the same precision — the Voronoi field writes cell outlines
+ * and site marks without going through `toPath`, and a second copy of this
+ * would be two definitions of how precise a path is.
+ */
+export function round(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
@@ -532,16 +539,27 @@ export function treeSegments(options: TreeOptions): Segment[] {
   return growTree(options).segments;
 }
 
-interface TreeBounds {
+export interface Bounds {
   minX: number;
   minY: number;
   width: number;
   height: number;
 }
 
-function treeBounds(segments: readonly Segment[]): TreeBounds {
-  const xs = segments.flatMap((s) => [s.from.x, s.to.x]);
-  const ys = segments.flatMap((s) => [s.from.y, s.to.y]);
+/**
+ * The bounding box of a set of points.
+ *
+ * A zero extent collapses to 1 rather than 0 deliberately: every caller divides
+ * by these to normalise something, and a figure drawn perfectly flat on one axis
+ * is exactly the degenerate case the acceptance checks exist to REJECT — it must
+ * reach them as a bad score, not as a NaN that poisons the comparison.
+ *
+ * Shared by every structure that frames itself to its own extent: the tree, the
+ * harmonograph and the Voronoi field all need the same box.
+ */
+export function pointBounds(points: readonly Point[]): Bounds {
+  const xs = points.map((p) => p.x);
+  const ys = points.map((p) => p.y);
   const minX = Math.min(...xs);
   const minY = Math.min(...ys);
   return {
@@ -550,6 +568,10 @@ function treeBounds(segments: readonly Segment[]): TreeBounds {
     width: Math.max(...xs) - minX || 1,
     height: Math.max(...ys) - minY || 1,
   };
+}
+
+function treeBounds(segments: readonly Segment[]): Bounds {
+  return pointBounds(segments.flatMap((s) => [s.from, s.to]));
 }
 
 /**
@@ -655,8 +677,14 @@ function treeShortfall(growth: TreeGrowth): number {
   return shortfall;
 }
 
-/** Distance outside `[min, max]`, or 0 within it. */
-function outOfBand(value: number, min: number, max: number): number {
+/**
+ * Distance outside `[min, max]`, or 0 within it.
+ *
+ * Exported because it is the shared vocabulary of every structure's acceptance
+ * check: "how far out of the band is this" is the term each shortfall score is
+ * built from, and three generators now state their bands in it.
+ */
+export function outOfBand(value: number, min: number, max: number): number {
   if (value < min) return min - value;
   if (value > max) return value - max;
   return 0;

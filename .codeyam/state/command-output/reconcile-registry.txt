@@ -1,31 +1,15 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/f2576ad4-1439-4975-954e-1c004f0c4467/tasks/b76qiycj2.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/f2576ad4-1439-4975-954e-1c004f0c4467/tasks/b76qiycj2.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786984319,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":813938}
-## Inherited registry drift (17) — 17 line updates referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). These rows were ALREADY APPLIED by this run under the same rules as every other row — `--include-inherited` only re-prints them in the `actions` array, so re-running with it registers nothing further and is not a follow-up step.
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b2024ceb-c46f-4c1c-b529-7714ec71c7ce/tasks/bkk1vnown.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b2024ceb-c46f-4c1c-b529-7714ec71c7ce/tasks/bkk1vnown.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786995751,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":945360}
 {
   "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 17,
+    "updateLines": 0,
     "gateUpdates": 0
-auto-apply: 17 action(s) applied; 0 add(s) skipped.
   },
   "actions": [],
-  "inherited": {
-    "total": 17,
-    "counts": {
-      "realOrphans": 0,
-      "stalePhantoms": 0,
-      "adds": 0,
-      "renames": 0,
-      "updateLines": 17,
-      "gateUpdates": 0
-    },
-    "includedInActions": false,
-    "command": "codeyam-editor editor reconcile-registry --include-inherited"
-  },
   "platformGatedAbsences": [],
   "runnerGatedAbsences": []
 }
-  backfilled 17 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

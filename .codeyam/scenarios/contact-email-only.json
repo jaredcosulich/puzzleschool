@@ -26,22 +26,22 @@
             "title": "Learn More"
           }
         ],
-        "description": "An experimental K\u201312 school whose subject is ambiguity.",
+        "description": "An experimental K–12 school whose subject is ambiguity.",
         "heading": "A K-12 educational experience focused on ambiguity.",
-        "kicker": "An experimental K\u201312 school",
+        "kicker": "An experimental K–12 school",
         "lead": "Welcome to The Puzzle School",
         "order": 0,
-        "quote": "\u201cTo teach how to live without certainty, and yet without being paralyzed by hesitation, is perhaps the chief thing that philosophy, in our age, can still do for those who study it.\u201d",
+        "quote": "“To teach how to live without certainty, and yet without being paralyzed by hesitation, is perhaps the chief thing that philosophy, in our age, can still do for those who study it.”",
         "quoteAttribution": "Bertrand Russell",
         "slug": "home",
         "title": "The Puzzle School"
       },
       {
         "bandBody": "We read everything that comes in, and we answer.",
-        "body": "### Who we want to hear from\n\nFamilies thinking about what their children will need. Teachers who have taught into ambiguity on purpose.\n\n### What happens next\n\nWe read everything that comes in, and we answer.\n",
+        "body": "### Who we want to hear from\n\nFamilies thinking about what their children will need. Teachers who have taught into ambiguity on purpose.\n\nWe read everything that comes in, and we answer.\n",
         "description": "Get in touch with The Puzzle School.",
         "heading": "The Puzzle School is currently in an exploratory phase.",
-        "intro": "We are still designing the school, so the most useful conversations right now are the early ones. There is no form here \u2014 write to us directly.",
+        "intro": "We are still designing the school, so the most useful conversations right now are the early ones. There is no form here — write to us directly.",
         "kicker": "Get in touch",
         "order": 2,
         "showContactButton": true,
@@ -52,5 +52,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/[...slug].astro",
-  "description": "Contact as it ships: prose, a mailto button addressed from site settings, and a band with no quote column. This is also the page that pins the seam guarantee at app level — the only shipping page that puts something between the prose and the band, so it is where the branching structure would end in mid-air if that content were rendered outside the prose block's foot slot."
+  "description": "Contact as it ships, and the shipping page that demonstrates the one-section prose shape: its body says one thing, so the prose centres to a readable measure with a harmonograph standing in a lane to its left and a Voronoi field in a lane to its right, a mailto button addressed from site settings, and a band with no quote column. It also pins the seam guarantee at app level — the only shipping page that puts something between the prose and the band, and now the case where TWO figures can each break that guarantee independently: both must sit on the join with the band rather than floating above it, which is what the foot slot exists to preserve."
 }

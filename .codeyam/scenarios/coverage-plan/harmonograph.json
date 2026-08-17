@@ -1,0 +1,12 @@
+{
+  "surface": "Harmonograph",
+  "surface_kind": "component",
+  "states": [
+    {
+      "dimension": "branches",
+      "value": "branch-1",
+      "rationale": "source-derived state branches=branch-1",
+      "status": "planned"
+    }
+  ]
+}

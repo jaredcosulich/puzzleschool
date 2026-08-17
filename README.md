@@ -150,8 +150,4 @@ States captured as runnable scenarios with codeyam-editor:
 ### Page - Minimal Fields
 
 <img src=".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png" alt="Page - Minimal Fields" width="280">
-
-### Page - Title Without Body
-
-<img src=".codeyam/scenarios/screenshots/page-title-without-body--desktop.png" alt="Page - Title Without Body" width="280">
 <!-- codeyam:scenario-gallery:end -->

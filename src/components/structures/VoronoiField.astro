@@ -1,0 +1,124 @@
+---
+// The Voronoi field standing in the right lane of a one-section internal page.
+//
+// Follows `BranchingTree`'s two-axis pattern exactly — per page at build time
+// from `seedKey`, per visit in the browser, `?tree=static` freezing both — and
+// the reasoning for each of those is written out in `Harmonograph.astro` rather
+// than repeated a third time here.
+//
+// What is specific to this figure is the FRAMING. The partition is computed
+// across a rectangle a quarter larger than the lane on every side, but the
+// viewBox is the lane itself, so the straight edges where the clipping actually
+// happened fall outside what is drawn. The result is cells running off the top
+// and bottom unresolved rather than a tessellation tidied into a box — which is
+// why `preserveAspectRatio="none"` is correct here and wrong for the
+// harmonograph: this figure is GENERATED at the lane's own 123×365, so there is
+// no distortion to accept. The attribute is only doing the last pixel of fit.
+import { growAcceptableVoronoi, voronoiPaths, voronoiViewBox } from '../../lib/voronoi';
+import { hashSeed } from '../../lib/structures';
+
+interface Props {
+  /**
+   * What this figure is drawn FROM — normally the page slug. Hashed to a seed,
+   * so distinct pages get distinct fields and each keeps its own across builds.
+   */
+  seedKey?: string;
+  /** An explicit seed, overriding `seedKey`. For the variations sheet. */
+  seed?: number;
+  /** The lane the figure fills. A layout fact, not a variation axis. */
+  width?: number;
+  height?: number;
+}
+
+const { seedKey, seed, width = 123, height = 365 } = Astro.props;
+
+// Salted with the structure's own name, so this lane and the harmonograph
+// opposite it are not two draws of the same number.
+const resolved = seed ?? hashSeed(`${seedKey ?? 'default'}:voronoi`);
+const field = growAcceptableVoronoi(resolved);
+const paths = voronoiPaths(field);
+---
+
+<div class="voronoi-well">
+  <div class="voronoi-frame">
+    <svg
+      data-voronoi
+      viewBox={voronoiViewBox(field)}
+      width={width}
+      height={height}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {
+        paths.map((path) => (
+          <path
+            d={path.d}
+            fill="none"
+            stroke="var(--gold)"
+            stroke-width="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vector-effect="non-scaling-stroke"
+          />
+        ))
+      }
+    </svg>
+  </div>
+</div>
+
+<script>
+  import { growAcceptableVoronoi, voronoiPaths, voronoiViewBox } from '../../lib/voronoi';
+  import { randomTreeSeed } from '../../lib/structures';
+  import { applyFigure } from '../../lib/figure-dom';
+
+  const frozen = new URLSearchParams(location.search).get('tree') === 'static';
+
+  if (!frozen) {
+    for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-voronoi]')) {
+      // A failed redraw must leave the server's field standing rather than an
+      // empty lane — the SSR figure is already correct, this is an enhancement.
+      try {
+        const field = growAcceptableVoronoi(randomTreeSeed());
+        // The cell count genuinely changes between draws, so this is the case
+        // `applyFigure` exists for: paths are reused, cloned or removed to match.
+        requestAnimationFrame(() => applyFigure(svg, voronoiViewBox(field), voronoiPaths(field)));
+      } catch {
+        // Intentionally silent: an ambient decorative figure is not worth a
+        // console error on a visitor's page.
+      }
+    }
+  }
+</script>
+
+<style>
+  /* The 123px lane the figure occupies. Height is reserved here rather than by
+     the parent so the component stands up on its own in isolation. */
+  .voronoi-well {
+    position: relative;
+    min-height: 365px;
+  }
+
+  /* Anchored to the BOTTOM, so the field sits on the seam with whatever section
+     follows — the same guarantee the branching structure holds in the
+     two-column layout. */
+  .voronoi-frame {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .voronoi-frame svg {
+    display: block;
+  }
+
+  /* Below the prose breakpoint the flanking lanes stop existing, so the well
+     collapses rather than leaving a 365px hole. */
+  @media (max-width: 840px) {
+    .voronoi-well {
+      display: none;
+    }
+  }
+</style>

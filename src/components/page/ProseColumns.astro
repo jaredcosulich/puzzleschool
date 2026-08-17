@@ -11,26 +11,60 @@
 // `seedKey` is passed straight through to the structure: it is what makes each
 // page's tree its own. Forwarded rather than read here because this component
 // does not know what page it is on — the route does.
+//
+// TWO PROSE SHAPES, and which one a page gets is decided by the route from the
+// page's own section count — not declared here and not declared in frontmatter.
+//
+//   - `columns`: two columns with the branching structure standing in the gap.
+//     Right for a page with two or more sections, and the default, so every
+//     existing caller renders exactly as it did before this prop existed.
+//   - `single`: ONE centred column with a different structure standing in a lane
+//     to its left and another to its right. Right for a page that only wants to
+//     say one thing, where the two-column shape leaves a half-empty second
+//     column with the tree stranded beside it.
+//
+// KNOWN LIMIT, worth writing down rather than leaving to be discovered: staged
+// CMS preview patches `.prose`'s innerHTML in place, so editing a body from two
+// sections down to one does NOT re-pick the layout until the next build. That is
+// acceptable — the layout is a build-time fact, decided where the markdown is
+// rendered — but it means the preview of such an edit shows the old shape.
 import BranchingTree from '../structures/BranchingTree.astro';
+import Harmonograph from '../structures/Harmonograph.astro';
+import VoronoiField from '../structures/VoronoiField.astro';
 import { cmsBody } from '../../lib/cmsMarkers';
 
 interface Props {
-  /** Identifies the page, so its tree is distinct from every other page's. */
+  /** Identifies the page, so its structures are distinct from every other page's. */
   seedKey?: string;
+  /**
+   * Which prose shape to render. Defaults to the two-column form, so a caller
+   * that says nothing keeps the layout it already had.
+   */
+  layout?: 'columns' | 'single';
 }
 
-const { seedKey } = Astro.props;
+const { seedKey, layout = 'columns' } = Astro.props;
+const single = layout === 'single';
 ---
 
-<div class="prose-grid">
+<div class:list={['prose-grid', single && 'prose-grid--single']}>
   {/* The body marker goes on `.prose`, not `.prose-grid`: patching sets
-      innerHTML, and the grid also holds BranchingTree — marking it would
-      delete the structure SVG on every staged body edit. */}
+      innerHTML, and the grid also holds the structures — marking it would
+      delete their SVGs on every staged body edit. */}
   <div class="prose" {...cmsBody()}><slot /></div>
   {/* Anything a page wants between its prose and the section below goes HERE,
       not after `<ProseColumns>` — see the `.tree-well` note below for why. */}
   <div class="prose-foot"><slot name="foot" /></div>
-  <BranchingTree seedKey={seedKey} />
+  {
+    single ? (
+      <>
+        <Harmonograph seedKey={seedKey} />
+        <VoronoiField seedKey={seedKey} />
+      </>
+    ) : (
+      <BranchingTree seedKey={seedKey} />
+    )
+  }
 </div>
 
 <style>
@@ -103,6 +137,59 @@ const { seedKey } = Astro.props;
     margin-left: -61.5px;
   }
 
+  /* ------------------------------------------------------------------------
+     The one-section shape: prose centred, a structure in a lane either side.
+     ------------------------------------------------------------------------ */
+
+  /* A real grid here, where the two-column shape uses CSS columns, and the
+     difference is not stylistic. Columns work there because the body must stay
+     ONE markdown blob the CMS can edit — a grid would force it into two fields.
+     Here the body is a single column anyway, so the grid costs nothing and buys
+     the thing hand-positioning could not: the browser computes the lane offsets,
+     so the 40px gutters hold exactly at every width instead of being derived
+     from a percentage that resolves against a different box than the prose's. */
+  .prose-grid--single {
+    display: grid;
+    grid-template-columns: 123px minmax(0, var(--measure-body)) 123px;
+    /* The rows are declared EXPLICITLY, and that is load-bearing rather than
+       tidy: `grid-row: 1 / -1` on the lanes below resolves `-1` against the
+       EXPLICIT grid, so with rows left implicit `-1` collapses back to line 1
+       and each lane is auto-placed into the first row instead of spanning to the
+       bottom. The figures then hang from the bottom of the prose row and float
+       above the seam by exactly the height of the foot. */
+    grid-template-rows: 1fr auto;
+    column-gap: 40px; /* the same 40px the two-column gap is built from */
+    justify-content: center;
+  }
+
+  .prose-grid--single .prose {
+    columns: 1;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .prose-grid--single .prose-foot {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* Both lanes span BOTH rows and stretch, so their bottom edge is the bottom of
+     the foot row — which is the whole prose block's bottom, and therefore the
+     seam with the section below. Each figure is anchored to the bottom of its
+     own well, so this is what puts them ON that seam rather than floating above
+     it, exactly as `.tree-well` is bottom-anchored in the two-column shape.
+     Positioning lives here rather than in the components so each of those owns
+     only its own geometry. */
+  .prose-grid--single :global(.harmonograph-well) {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+
+  .prose-grid--single :global(.voronoi-well) {
+    grid-column: 3;
+    grid-row: 1 / -1;
+  }
+
   @media (max-width: 840px) {
     .prose {
       columns: 1;
@@ -112,6 +199,12 @@ const { seedKey } = Astro.props;
        so the height reserved for it would just be a tall empty gap. */
     .prose-grid {
       min-height: 0;
+    }
+
+    /* Both flanking lanes are `display: none` at this width, so the three-track
+       grid would leave their two 123px columns standing empty. Back to flow. */
+    .prose-grid--single {
+      display: block;
     }
   }
 </style>
