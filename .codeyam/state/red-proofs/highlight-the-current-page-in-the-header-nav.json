@@ -1,0 +1,87 @@
+{
+  "provenAt": "2026-08-17T16:31:15Z",
+  "slug": "highlight-the-current-page-in-the-header-nav",
+  "paths": [
+    "src/lib/site.ts",
+    "src/components/chrome/SiteNav.astro"
+  ],
+  "runScope": [
+    "src/lib/site.ts",
+    "src/components/chrome/SiteNav.astro"
+  ],
+  "tests": {
+    "does not mark the site root current on an inner page": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "does not match a page whose path merely starts the same way": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "isCurrentNavPath": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "isCurrentNavPath > treats /about and /about/ as the same page": {
+      "withoutFix": "didNotBuild",
+      "withFix": "didNotBuild",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "keeps the site root as a single slash": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "normalizeNavPath": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "strips a trailing slash": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "treats /about and /about/ as the same page": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    },
+    "treats a stored trailing slash as the same page too": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    }
+  },
+  "proof": {
+    "verdict": "proven",
+    "flipped": [
+      "treats a stored trailing slash as the same page too",
+      "does not match a page whose path merely starts the same way",
+      "does not mark the site root current on an inner page",
+      "strips a trailing slash",
+      "keeps the site root as a single slash"
+    ]
+  }
+}

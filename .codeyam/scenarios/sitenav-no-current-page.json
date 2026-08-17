@@ -1,0 +1,13 @@
+{
+  "name": "SiteNav - No Current Page",
+  "id": "20ec8e16-4e00-480e-b82f-ab166afa8989",
+  "url": "/isolated-components/SiteNavNoCurrent",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SiteNav",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/chrome/SiteNav.astro",
+  "description": "The nav on a page that is not in the menu at all — a CMS-authored page like /a-day-in-the-life, which the site already ships several of. Every link stays muted and none carries aria-current. This is the negative half of the current-page match and the state an over-matching comparison breaks: collapsing the site root to an empty string, or degrading the match into a prefix test, would ink a link on a page the visitor is not on. The Default scenario proves the highlight appears; this one proves it stays away."
+}

@@ -5,7 +5,7 @@
 // Links come from the editable `nav` singleton, so adding a menu item is a CMS
 // edit rather than a markup change.
 import Mark from '../Mark.astro';
-import type { NavItem } from '../../lib/site';
+import { isCurrentNavPath, type NavItem } from '../../lib/site';
 import { cmsNavItem, cmsSetting } from '../../lib/cmsMarkers';
 
 interface Props {
@@ -30,16 +30,21 @@ const { siteTitle, items, currentPath } = Astro.props;
       /* The <li> carries the marker, not the <a>: a removed nav item calls
          .remove() on the marked element, and marking the anchor would leave an
          empty bullet behind. patchNav resolves the link inside it either way. */
-      items.map((item) => (
-        <li {...cmsNavItem(item.url)}>
-          <a
-            href={item.url}
-            class:list={['nav__link', { 'is-current': item.url === currentPath }]}
-          >
-            {item.label}
-          </a>
-        </li>
-      ))
+      items.map((item) => {
+        // Computed once so the visual mark and the semantic one cannot drift.
+        const isCurrent = isCurrentNavPath(item.url, currentPath);
+        return (
+          <li {...cmsNavItem(item.url)}>
+            <a
+              href={item.url}
+              class:list={['nav__link', { 'is-current': isCurrent }]}
+              aria-current={isCurrent ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })
     }
   </ul>
 </nav>
@@ -77,7 +82,10 @@ const { siteTitle, items, currentPath } = Astro.props;
     color: var(--body-muted);
   }
 
-  /* The page you are on is inked and underlined in teal; the others stay muted. */
+  /* The page you are on is inked and underlined in teal; the others stay muted.
+     Which link gets this is decided by `isCurrentNavPath`, which compares paths
+     insensitive to trailing slashes — a strict `===` here never matches in the
+     built site, where the pathname is `/about/` and the nav item is `/about`. */
   .nav__link.is-current {
     color: var(--ink);
     border-bottom: 2px solid var(--teal);

@@ -1,0 +1,32 @@
+---
+import Component from "../../../src/components/chrome/SiteNav.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for SiteNavNoCurrent — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/SiteNavNoCurrent. This stack is a
+// static export, so each STATE gets its own prerendered page: `?s=` query params
+// are empty at build time and would capture the default frame for every state.
+//
+// The state where NOTHING should be inked. A CMS author can create a page that is
+// not in the menu at all (the site already ships several, e.g. /a-day-in-the-life),
+// and the nav then has no current item. This is the state an over-matching
+// comparison breaks: normalizing the site root to the empty string, or degrading
+// the match into a prefix test, would light up a link on a page the visitor is not
+// on. The sibling SiteNav - Default scenario proves the highlight APPEARS; this one
+// proves it stays away, and neither is meaningful without the other.
+const ITEMS = [{ label: "About", url: "/about" }, { label: "Contact", url: "/contact" }];
+const CURRENT_PATH = "/a-day-in-the-life/";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: SiteNavNoCurrent</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <Component siteTitle="The Puzzle School" items={ITEMS} currentPath={CURRENT_PATH} />
+    </div>
+  </body>
+</html>

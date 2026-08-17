@@ -59,7 +59,7 @@
     ]
   },
   {
-    "description": "The internal-page navigation bar. Each menu item is marked on its li keyed by url, so a staged reorder matches by link rather than position and a removal takes the whole row; the site-title marker sits on the span so patching its text cannot delete the mark beside it.",
+    "description": "The internal-page navigation bar. Each menu item is marked on its li keyed by url, so a staged reorder matches by link rather than position and a removal takes the whole row; the site-title marker sits on the span so patching its text cannot delete the mark beside it. The current page is inked and teal-underlined and carries aria-current='page', so the highlight is announced as well as drawn; which item is current is decided by isCurrentNavPath rather than a string compare, because the stored nav url and the rendered pathname disagree about trailing slashes.",
     "filePath": "src/components/chrome/SiteNav.astro",
     "name": "SiteNav",
     "scenarios": [
@@ -228,6 +228,12 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Whether a nav item points at the page being rendered. Compares both sides through normalizeNavPath rather than by string equality, because nav.json stores hand-written urls like '/about' while Astro's default directory build renders the pathname as '/about/' — a strict compare never matches in the built site, which is why no header link was ever inked. Normalizing both sides also covers the mirror case, where a CMS author types the trailing slash and the dev server does not. A NavItem with no url of its own is a dropdown parent and is never current.",
+    "filePath": "src/lib/site.ts",
+    "name": "isCurrentNavPath",
+    "testFile": "src/lib/site.test.ts"
+  },
+  {
     "description": "The Koch curve: every segment becomes four, turning 60 degrees either way.",
     "filePath": "src/lib/structures.ts",
     "name": "kochPoints",
@@ -256,6 +262,12 @@
     "filePath": "src/lib/structures.ts",
     "name": "morseLine",
     "testFile": "src/lib/structures.test.ts"
+  },
+  {
+    "description": "Reduces a path to a canonical form for comparison: query string and hash dropped, one trailing slash stripped, whitespace trimmed, lowercased. The site root is deliberately preserved as '/' rather than collapsing to the empty string, which would otherwise let a Home nav item match every page on the site.",
+    "filePath": "src/lib/site.ts",
+    "name": "normalizeNavPath",
+    "testFile": "src/lib/site.test.ts"
   },
   {
     "description": "Draws the three sides of an open square — down the left, across, back up — so the spiral's largest frame never closes.",

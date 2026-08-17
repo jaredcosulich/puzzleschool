@@ -523,6 +523,87 @@
       "runner": "tests"
     },
     {
+      "description": "The guard that makes the root special-case worth having: if `/` normalized to the empty string, a Home item would be marked current on every page of the site.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › does not mark the site root current on an inner page",
+      "line": 110,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary miss. Every nav renders more than one item, so getting this wrong would ink every link at once.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › does not match a different page",
+      "line": 84,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Normalizing must not turn the comparison into a prefix test. `/about-us` shares an opening with `/about` but is a different page, and a sloppy startsWith implementation would light up both.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › does not match a page whose path merely starts the same way",
+      "line": 91,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Case differences between a CMS-authored url and the rendered pathname are invisible to the visitor, so they must not decide the highlight.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › matches regardless of case",
+      "line": 116,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The root has to match itself once a Home item exists in the menu.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › matches the site root against itself",
+      "line": 103,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary hit — both sides already written the same way.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › matches two identical paths",
+      "line": 78,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A NavItem may be a dropdown parent carrying only children and no url of its own. There is no page to be on, so it can never be current — and a naive compare would risk matching it against an empty pathname.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › returns false for a nav item that has no url",
+      "line": 98,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE REPRODUCTION. `nav.json` stores `/about` while Astro's default directory build renders the pathname as `/about/`. Under the old strict equality this returned false, so About and Contact were both left muted on the live site. This is the case the whole fix exists for.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › treats /about and /about/ as the same page",
+      "line": 65,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The mirror image, and the reason both sides are normalized rather than just stripping the pathname: a CMS author can equally type `/about/` into nav.json, which would break the match in dev where the pathname is `/about`. Stripping only one side fixes one direction and not the other.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "isCurrentNavPath › treats a stored trailing slash as the same page too",
+      "line": 73,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
       "description": "Iteration n replaces each segment with four, so 4^n moves.",
       "file": "src/lib/structures.test.ts",
       "format": "vitest",
@@ -655,6 +736,78 @@
       "key": "morseLine › tags each symbol with its word",
       "line": 549,
       "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Astro hands us `Astro.url.pathname`, but a hand-written nav url can carry a fragment for an on-page anchor. The fragment picks a place within the page; it does not change which page you are on.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › drops a hash fragment",
+      "line": 36,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same reasoning for a query string: tracking parameters and filters do not make it a different page, so they must not defeat the match.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › drops a query string",
+      "line": 42,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The site root is the one path where stripping the slash would be wrong: it would collapse to the empty string, which compares equal to nothing useful and would make a future Home item match every page.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › keeps the site root as a single slash",
+      "line": 22,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A path with no trailing slash is already canonical and must survive untouched — otherwise normalizing twice would keep eating characters.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › leaves a path without a trailing slash alone",
+      "line": 15,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Urls are case-insensitive in practice and a CMS author may capitalize a path. Comparing case-sensitively would leave the link muted for a difference the visitor cannot see.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › lowercases the path",
+      "line": 49,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The single transformation the whole fix rests on. `nav.json` stores `/about`; the built site renders `/about/`. Both have to land on the same string or no nav link is ever marked current.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › strips a trailing slash",
+      "line": 9,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A NavItem written with an empty url, or a pathname that arrives blank, should read as the root rather than as an empty string that silently matches another empty string.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › treats an empty path as the site root",
+      "line": 29,
+      "registeredAt": "2026-08-17T16:31:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Stray whitespace is exactly the kind of thing that survives a copy-paste into a CMS text field, and it is invisible in the editing UI.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "normalizeNavPath › trims surrounding whitespace",
+      "line": 55,
+      "registeredAt": "2026-08-17T16:31:54Z",
       "runner": "tests"
     },
     {

@@ -1,6 +1,6 @@
 {
   "name": "SiteNav - Default",
-  "id": "0b5411e1-94dc-4f5b-923e-67e468c4d08c",
+  "id": "7a8b3b34-c466-47fb-bc01-46ce1df5f093",
   "url": "/isolated-components/SiteNav",
   "dimensions": [
     "Desktop"
@@ -8,6 +8,6 @@
   "mocks": {},
   "componentName": "SiteNav",
   "scenarioType": "component",
-  "description": "The internal-page nav bar with the current page inked and underlined.",
-  "pageFilePath": "src/components/chrome/SiteNav.astro"
+  "pageFilePath": "src/components/chrome/SiteNav.astro",
+  "description": "The internal-page nav bar with the current page inked and underlined. The isolation page passes currentPath as '/about/' WITH a trailing slash while the nav item stores '/about' without one — the exact mismatch Astro's directory build produces, and the state that used to leave every link muted on the live site. It previously passed '/about', which matched even under the bug and so hid the regression from this capture. About is inked and teal-underlined; Contact stays muted, which is what proves the match is not lighting up every item."
 }

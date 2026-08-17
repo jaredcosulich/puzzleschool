@@ -2228,6 +2228,123 @@
       }
     ]
   },
+  "isCurrentNavPath › does not mark the site root current on an inner page": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › does not match a different page": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › does not match a page whose path merely starts the same way": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › matches regardless of case": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › matches the site root against itself": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › matches two identical paths": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › returns false for a nav item that has no url": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › treats /about and /about/ as the same page": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isCurrentNavPath › treats a stored trailing slash as the same page too": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "kochPoints › produces four segments per segment per iteration": {
     "file": "src/lib/structures.test.ts",
     "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
@@ -3094,6 +3211,110 @@
       {
         "at": "2026-08-15T00:44:17.192373+00:00",
         "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › drops a hash fragment": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › drops a query string": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › keeps the site root as a single slash": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › leaves a path without a trailing slash alone": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › lowercases the path": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › strips a trailing slash": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › treats an empty path as the site root": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "normalizeNavPath › trims surrounding whitespace": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-08-17T16:33:03.299868265+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:33:03.299868265+00:00",
+        "kind": "changed",
         "status": "pass"
       }
     ]

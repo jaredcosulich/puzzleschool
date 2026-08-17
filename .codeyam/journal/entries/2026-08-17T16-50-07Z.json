@@ -1,0 +1,235 @@
+{
+  "timestamp": "2026-08-17T16:50:07Z",
+  "title": "Highlight the current page in the header nav",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe header nav is supposed to highlight the page you are on — `SiteNav.astro`\nalready carries an `.is-current` rule that inks the label and draws a 2px teal\nunderline — but the highlight never appears on the live site. The active-link\ntest is a raw string equality, `item.url === currentPath`, and the two sides\ndisagree about trailing slashes: `nav.json` stores `/about`, while Astro's\ndefault `build.format: 'directory'` emits `dist/about/index.html`, so at render\ntime `Astro.url.pathname` is `/about/`. The comparison fails and both links stay\nmuted. Confirmed in the built output: `dist/about/index.html` and\n`dist/contact/index.html` both render `class=\"nav__link\"` with no `is-current`\non either link. Fix the comparison (not the styling) by normalizing both sides\nbefore matching, and add `aria-current=\"page\"` so the active item is announced\nto screen readers, not only drawn.\n\n## Key Decisions\n\n- **Normalize both sides, don't just strip one.** The mismatch can appear from\n  either direction: a CMS editor could equally type `/about/` into `nav.json`\n  and break the match in dev (where the pathname is `/about`). A shared\n  normalizer makes the comparison insensitive to how either value is written.\n- **Put the comparison in a pure, tested helper in `src/lib/site.ts`.**\n  `.astro` files are not imported by vitest (see the note in `vitest.config.ts`)\n  — they are covered by captured scenarios. Extracting the predicate is what\n  makes this bug unit-testable at all, and `site.ts` already owns the `NavItem`\n  type the helper operates on.\n- **Keep the existing visual treatment.** The ink + teal underline already in\n  `SiteNav.astro` is the intended design; the bug is that it never applies. No\n  style change.\n- **Add `aria-current=\"page\"` alongside the class.** The visual highlight and\n  the semantic one should land together; a purely visual current-page marker is\n  an accessibility gap, and adding it costs one attribute.\n- **Treat the site root specially.** Normalizing `/` must not collapse it to the\n  empty string, or a future `Home` nav item would match every path.\n\n## Implementation\n\n### 1. Add a tested current-path predicate\n\n**File**: `src/lib/site.ts`\n\nAdd two exports beside the existing `getNav` / `getSettings`:\n\n- `normalizeNavPath(path: string): string` — trim whitespace, drop any query\n  string or hash, strip a single trailing `/` unless the result would be empty\n  (so `/` stays `/`), and lowercase the result. Returns `'/'` for an empty or\n  missing input.\n- `isCurrentNavPath(itemUrl: string | undefined, currentPath: string): boolean`\n  — `false` when `itemUrl` is undefined (a `NavItem` may be a parent with only\n  `children`), otherwise `normalizeNavPath(itemUrl) === normalizeNavPath(currentPath)`.\n\nKeep both pure — no `fs`, no Astro globals — so they are unit-testable.\n\n### 2. Use the predicate in the nav, and mark it semantically\n\n**File**: `src/components/chrome/SiteNav.astro`\n\n- Import `isCurrentNavPath` from `../../lib/site`.\n- Replace the inline `item.url === currentPath` in the `class:list` with\n  `isCurrentNavPath(item.url, currentPath)`.\n- Compute the flag once per item and use it for both the class and a new\n  `aria-current={isCurrent ? 'page' : undefined}` on the `<a>`.\n- Update the comment above the `.is-current` CSS rule to note that matching is\n  trailing-slash insensitive, so the next reader doesn't reintroduce a strict\n  compare.\n\nNo change to the `.is-current` CSS block itself.\n\n### 3. Cover the isolation page for the \"no match\" state\n\n**File**: `src/pages/isolated-components/SiteNav.astro`\n\nThe existing isolation page passes `currentPath=\"/about\"`, which matched even\nunder the bug, so the captured `SiteNav - Default` scenario looks correct and\nhid the regression. Change it to pass `currentPath=\"/about/\"` — the trailing-slash\nform the real build actually produces — so the captured scenario exercises the\npath that was broken. The scenario `.codeyam/scenarios/sitenav-default.json`\nneeds no edit; only the props change.\n\n## Reused existing code\n\n- `getNav` and `NavItem` from `src/lib/site.ts` (glossary entries: `getNav`,\n  `readSingleton`) — the new helpers live in this same module and operate on\n  the `NavItem` shape it already exports.\n- The existing `.is-current` CSS rule and `class:list` binding in\n  `src/components/chrome/SiteNav.astro` — reused as-is; only the boolean feeding\n  them changes.\n- The current pathname, already threaded from `src/layouts/BaseLayout.astro`\n  into `SiteNav` as `currentPath` — no new plumbing needed.\n- The `SiteNav - Default` scenario (`.codeyam/scenarios/sitenav-default.json`)\n  and its isolation page — reused to demonstrate the fix visually.\n- **Existing-implementation survey**: grepped `src/` for any other\n  active/current-link logic. There is none — `src/components/chrome/SiteFooter.astro`\n  renders links with no current-page state, and the home masthead\n  (`src/components/home/Masthead.astro`) has no nav. The strict equality on\n  line 31 of `src/components/chrome/SiteNav.astro` is the only such comparison\n  in the repo, so there is no\n  existing normalizer to reuse and nothing this duplicates.\n\n## Reproduction Test\n\nPins that a nav item whose stored URL has no trailing slash is still recognized\nas current when the rendered pathname has one — the exact mismatch that leaves\nAbout and Contact unhighlighted in the built site.\n\n**Target**: `src/lib/site.test.ts` (new file) — run with\n`codeyam-editor editor refresh-tests --test isCurrentNavPath`.\n\n```ts\nimport { describe, it, expect } from 'vitest';\nimport { isCurrentNavPath, normalizeNavPath } from './site';\n\ndescribe('isCurrentNavPath', () => {\n  // Matches a nav URL stored without a trailing slash against the trailing-slash\n  // pathname Astro's directory build actually renders.\n  it('treats /about and /about/ as the same page', () => {\n    expect(isCurrentNavPath('/about', '/about/')).toBe(true);\n  });\n\n  // The mismatch can come from either side: a CMS editor may store the slashed form.\n  it('matches when the stored nav URL is the slashed form', () => {\n    expect(isCurrentNavPath('/contact/', '/contact')).toBe(true);\n  });\n\n  // Different pages must not collide once slashes are normalized away.\n  it('does not mark a different page as current', () => {\n    expect(isCurrentNavPath('/about', '/contact/')).toBe(false);\n  });\n\n  // A parent nav item with only children carries no URL and is never current.\n  it('is false for a nav item with no url', () => {\n    expect(isCurrentNavPath(undefined, '/about/')).toBe(false);\n  });\n\n  // The site root must not normalize to the empty string, or it would match everything.\n  it('keeps the site root as /', () => {\n    expect(normalizeNavPath('/')).toBe('/');\n    expect(isCurrentNavPath('/', '/about/')).toBe(false);\n  });\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: the module has no\n`isCurrentNavPath` or `normalizeNavPath` export yet, so the import fails and the\nwhole file errors before any assertion runs. If the helpers are stubbed first,\nthe first case fails with `expected false to be true`.\n\n## Scenarios to Demonstrate\n\n- On `/about/`: the About link inked with the teal underline, Contact muted.\n- On `/contact/`: the Contact link inked, About muted.\n- On `/` (home): no nav bar at all — home passes `showNav={false}`, so the fix\n  must not introduce one.\n- A nav item pointing at a path not currently rendered (e.g. a third CMS-added\n  page while on About): nothing highlighted but the one true current item.\n- Nav data stored with trailing slashes (`/about/` in `nav.json`) against a\n  non-slashed pathname: still highlights, proving the match is symmetric.",
+  "description": "The header nav never inked the page you were on. The `.is-current` styling was already there — ink plus a 2px teal underline — but the test that applied it was raw string equality, `item.url === currentPath`, and the two sides disagreed about trailing slashes: `nav.json` stores `/about`, while Astro's default `build.format: 'directory'` renders the pathname as `/about/`. The comparison never matched, so on the built site About and Contact both stayed muted. Fixed by extracting the predicate into two pure, tested helpers in `src/lib/site.ts` — `normalizeNavPath` (drops query and hash, strips one trailing slash, trims, lowercases, and deliberately keeps the site root as `/` rather than collapsing it to an empty string that would match every page) and `isCurrentNavPath` (compares both sides normalized; a url-less dropdown parent is never current). `SiteNav.astro` now computes the flag once per item and feeds it to both the `is-current` class and a new `aria-current=\"page\"`, so the highlight is announced as well as drawn. No styling changed.\n\nBoth sides are normalized rather than just stripping the rendered pathname, because the mismatch can come from either direction — a CMS author can equally type `/about/` into nav.json and break the match in dev, where the pathname has no trailing slash.\n\nVerified in the real build output, which is where the bug actually lived: `dist/about/index.html` now carries `class=\"nav__link is-current\" aria-current=\"page\"` on About only, and `dist/contact/index.html` on Contact only, where previously neither page had either. Note the dev server serves `/about` without a trailing slash, so the live preview looked correct even before the fix — which is also why the old `SiteNav - Default` scenario passed `currentPath=\"/about\"` and hid the regression. That scenario now passes `/about/`, the form the build emits, so it exercises the state that was broken.\n\nTests: 17 new in `src/lib/site.test.ts`, all passing. Six are recorded fault-pinning by `prove-red` — tool-measured, not hand-attested: each went FAIL with the fix stashed and pass with it restored. Coverage includes the reproduction (`/about` vs `/about/`), the mirror case, a prefix guard so `/about` cannot match `/about-us`, and a root guard so `/` is not marked current on an inner page.\n\nScenarios: `sitenav-default` edited in place to pin the trailing-slash input, and one new component scenario, `sitenav-no-current-page`, showing a CMS page absent from the menu with nothing inked — the negative half an over-matching comparison would break. Audit passed clean, 0 findings.\n\nSCOPE VERDICT: this cycle delivered the planned fix in full — the tested predicate, the SiteNav wiring with aria-current, and the isolation-page change — with nothing from the plan deferred. Project deliverables were unchanged by this cycle: all 5 were already resolved before it began (4 delivered, 1 deferred — 'improvements made to codeyam-cms itself where needed'), and every one of those decisions carries decidedBy=user, so there are no agent-decided deferrals outstanding.\n\nTwo pre-existing issues were found and deliberately NOT fixed here, as both are unrelated to this feature and would have been scope creep. First, the `page-title-without-body` scenario reports 'seed-not-landed' during recapture, but the seed does land: `/blank` returns 200 and renders its seeded title. The checker searches visible text for four strings, three of which belong to the seed's `home` entry (they render on `/`) and one of which is that page's `description`, emitted only into `<meta>`; the one seeded string that is visible, the title, is not in its list. The scenario's point is an empty body, so it has almost no visible seeded text by design. Second, `about-footer-contact-link-followed` recaptures differently on every run: it starts at `/about?tree=static` and clicks through to `/contact`, dropping the `tree=static` param, so the generated branching tree reseeds each capture. It recaptured as changed even with this branch's source stashed, confirming it is not caused by this change.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/highlight-the-current-page-in-the-header-nav.md\t.codeyam/plans/completed/highlight-the-current-page-in-the-header-nav.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-title-without-body--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/sitenav-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/d65dba0c805881c60c2ce132b7047cb6f4e089bd42011b5d5b31baaec8a37a83.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/e22d3851fb7f74323092810e5086c102d99c08ac34b03cdb47f860ebcddc622a.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/chrome/SiteNav.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteNav.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/sitenav.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-no-current-page--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-no-current-page--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitenav-no-current-page.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/highlight-the-current-page-in-the-header-nav.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/bdfe6750ab13bcf57c7ebfd95ad2370e8eb58ff943eeaaf10d824642031f8c25.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/dc8f1693f2b317d7ade77fff202aafe0781b30e2092a2bab1e9c1ca79667beb2.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/site.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteNavNoCurrent.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "Page - Title Without Body",
+      "screenshotPath": "page-title-without-body--desktop.png"
+    },
+    {
+      "name": "SiteNav - Default",
+      "screenshotPath": "sitenav-default--desktop.png"
+    },
+    {
+      "name": "SiteNav - No Current Page",
+      "screenshotPath": "sitenav-no-current-page--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 17,
+        "passed": 17
+      }
+    ]
+  }
+}

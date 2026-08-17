@@ -70,3 +70,36 @@ export function getSettings(): SiteSettings {
 export function getNav(): SiteNav {
   return readSingleton<SiteNav>('nav');
 }
+
+// Matching a nav item against the current page is not string equality, because
+// the two sides come from different places and disagree about trailing slashes.
+// `nav.json` is hand-edited content — an author writes `/about`. Astro's default
+// `build.format: 'directory'` emits `dist/about/index.html`, so the rendered
+// `Astro.url.pathname` is `/about/`. A strict compare fails and no link is ever
+// marked current in the built site. Normalizing BOTH sides (rather than
+// stripping one) also covers the mirror case, where a CMS author types
+// `/about/` and the dev server renders `/about`.
+
+/**
+ * Reduce a path to a canonical form for comparison: no query string or hash, no
+ * trailing slash, lowercased. The site root stays `/` rather than collapsing to
+ * the empty string, which would otherwise match every path.
+ */
+export function normalizeNavPath(path: string): string {
+  const withoutSuffix = (path ?? '').trim().split(/[?#]/, 1)[0];
+  const trimmed = withoutSuffix.replace(/\/$/, '');
+  return (trimmed === '' ? '/' : trimmed).toLowerCase();
+}
+
+/**
+ * Whether a nav item points at the page currently being rendered. A `NavItem`
+ * may be a parent with only `children` and no `url` of its own; such an item is
+ * never current.
+ */
+export function isCurrentNavPath(
+  itemUrl: string | undefined,
+  currentPath: string,
+): boolean {
+  if (itemUrl === undefined) return false;
+  return normalizeNavPath(itemUrl) === normalizeNavPath(currentPath);
+}

@@ -19,6 +19,13 @@ import "../../../src/styles/tokens.css";
 //   3. SEED data that exercises the component — empty props render an empty
 //      shell and is a bug; put empty / loading / error in their own pages.
 const ITEMS = [{ label: "About", url: "/about" }, { label: "Contact", url: "/contact" }];
+
+// currentPath is the TRAILING-SLASH form on purpose. Astro's default
+// `build.format: 'directory'` renders `/about/` in the built site, while
+// `nav.json` stores `/about` — the mismatch that used to leave every link
+// muted. Passing `/about` here matched even under the bug, so the capture
+// looked correct and hid the regression. This is the state worth pinning.
+const CURRENT_PATH = "/about/";
 ---
 
 <html lang="en">
@@ -29,7 +36,7 @@ const ITEMS = [{ label: "About", url: "/about" }, { label: "Contact", url: "/con
   </head>
   <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
     <div id="codeyam-capture" style="padding: var(--space-lg);">
-      <Component siteTitle="The Puzzle School" items={ITEMS} currentPath="/about" />
+      <Component siteTitle="The Puzzle School" items={ITEMS} currentPath={CURRENT_PATH} />
     </div>
   </body>
 </html>
