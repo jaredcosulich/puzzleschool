@@ -1,0 +1,133 @@
+{
+  "timestamp": "2026-08-17T16:07:42Z",
+  "title": "Restore Content Form After CMS Block-Scalar Fix",
+  "type": "feature",
+  "userRequest": "## Summary\n\n`@codeyam/cms@0.7.0`'s `parseEntry` has no support for YAML block scalars\n(`>-`, `>`, `|`, `|-`). Because this repo's page entries were hand-authored with\nfolded scalars for their long fields, every CMS code path that reads them —\nstaged preview and the admin's save path — sees corrupted data. We are landing a\ntemporary workaround now: normalizing `src/content/pages/*.md` frontmatter to the\nCMS's canonical single-line serialization so `parseEntry` round-trips it\nlosslessly. This plan is the follow-up to run **once a fixed `@codeyam/cms` is\npublished**: confirm the upstream fix, bump the dependency, decide whether to\nkeep the normalized frontmatter or restore readable block scalars, and leave a\nregression guard behind so a future CMS version that reintroduces the bug is\ncaught here rather than in production content.\n\nThe defect, precisely. `parseEntry` walks the frontmatter line by line and treats\nany non-empty text after the first `:` as the value. On `intro: >-` that value is\nthe literal string `\">-\"`, and the folded continuation lines beneath it are then\nre-read as top-level lines — so one containing a colon becomes a bogus key.\nParsing `src/content/pages/about.md` today yields `intro`, `bandBody` and `quote`\nall equal to `\">-\"`, plus a synthesized key\n`\"about everything else. We are building the other half\": \"thirteen years of\"`.\n`src/content/pages/home.md` loses `quote` the same way.\n\nIt is not merely a display bug. `serializeEntry(parseEntry(raw))` is not an\nidentity: it emits `intro: \">-\"` and the three field bodies are gone.\n`EntryEditor.tsx:131` builds the saved content with exactly that call, so saving\nany entry containing a block scalar from `/admin` writes the mangled version back\nto disk. The published site is unaffected throughout, because Astro's own content\nloader parses the YAML correctly — which is precisely why this stayed invisible.\n\nIt surfaced while adding staged-preview markers to the site templates. Before the\nmarkers, internal pages had no `<article>` or `<main>`, so `applyStagedContent`\nreturned `fidelity: 'none'` and patched nothing; the bad values were parsed but\nnever displayed. With the markers in place the patch lands and the standfirst\nrenders the literal `>-`.\n\n## Key Decisions\n\n- **This plan is gated on an upstream release, and the gate is a test rather\n  than a changelog.** The `## Reproduction Test` below asserts that `parseEntry`\n  handles a folded scalar. It is RED against 0.7.0 and turns green only when a\n  fixed version is installed, so running it is the check for \"has the fix\n  shipped yet?\". Do not start the rest of this plan until it goes green with the\n  dependency bumped.\n\n- **Default to KEEPING the normalized single-line frontmatter, even after the\n  fix.** The tempting move once both parsers agree is to restore the readable\n  folded scalars. Resist it unless the upstream fix also taught `serializeEntry`\n  to *emit* block scalars, because of the failure mode commit `1bd3a70f` already\n  fixed for the site singletons: the CMS's drift check compares its staged\n  baseline (which is `serializeEntry` output) against the raw file on the branch.\n  A file that is not a fixed point of `serializeEntry` is never byte-equal to its\n  own baseline, so every publish reports a phantom \"changed on the site since you\n  started editing it\" conflict. Restoring block scalars against a serializer that\n  emits single-line values would reintroduce exactly that bug for page entries —\n  trading a parse defect for a publish defect. Only restore them if round-tripping\n  the restored file through `parseEntry` → `serializeEntry` is verified to be an\n  identity.\n\n- **The regression guard lives in this repo, not just upstream.** Even after the\n  CMS is fixed, this repo's content is the thing that gets damaged when it\n  regresses. A test here that round-trips the real `src/content/pages/*.md` files\n  through the CMS's own parser and serializer is cheap, reads as a contract\n  against the dependency, and fails loudly on a bad version bump.\n\n- **Guard the real content files, not a synthetic fixture.** The bug only bit\n  because the actual entries used a construct the parser did not cover. A guard\n  over a hand-written fixture would have passed while `about.md` was broken.\n  Globbing the real entries means any future entry an author writes is covered\n  the moment it lands.\n\n## Implementation\n\n### 1. Confirm the upstream fix is available\n\n**File**: `package.json`\n\nCheck the published `@codeyam/cms` versions for one carrying the `parseEntry`\nblock-scalar fix. Bump the `@codeyam/cms` dependency (currently `^0.7.0`) to it\nand reinstall.\n\nBefore touching anything else, re-run the two probes that characterized the bug\n(they were left in `.codeyam/tmp/` during the original investigation and are\ngitignored; recreate them if pruned):\n\n- parse `src/content/pages/about.md` with `parseEntry` and confirm `intro`,\n  `bandBody` and `quote` come back as their real prose, with no synthesized\n  `\"about everything else…\"` key\n- confirm `serializeEntry(parseEntry(raw))` is byte-identical to `raw` for a file\n  that still contains block scalars\n\nIf either still fails, stop — the fix has not shipped and the rest of this plan\ndoes not apply yet.\n\n### 2. Decide the frontmatter form\n\n**File**: `src/content/pages/about.md`\n\n**File**: `src/content/pages/home.md`\n\nApply the second Key Decision. Keep the normalized single-line frontmatter\nunless the upstream fix also made `serializeEntry` emit block scalars for long\nvalues. If it did, restoring the folded form is safe and more readable — but only\nafter verifying that each restored file round-trips through `parseEntry` →\n`serializeEntry` unchanged, so it stays a fixed point of the serializer and the\npublish drift check stays quiet.\n\nWhichever way this lands, record the reason in the commit message. The next\nperson to open these files will wonder why the frontmatter looks the way it does.\n\n### 3. Add the regression guard\n\n**New file**: `src/lib/cmsFrontmatterRoundTrip.test.ts`\n\nA vitest suite that, for every file matched by `src/content/pages/*.md`:\n\n- parses it with the CMS's `parseEntry` and asserts no key or value is the bare\n  block-scalar indicator (`>-`, `>`, `|`, `|-`) — the signature of the 0.7.0 bug\n- asserts every key in the parsed frontmatter is a known field name from\n  `src/data/collections.json`, which catches the synthesized-key half of the\n  defect\n- asserts `serializeEntry(parseEntry(raw))` equals `raw`, pinning each entry as a\n  fixed point of the serializer and so guarding the publish drift check\n\nRead the files from disk with `fs` and resolve their directory the way\n`src/lib/contentRoot.ts` already does, rather than hardcoding a path.\n\n### 4. Remove the workaround note\n\n**File**: `src/content/pages/about.md`\n\nIf the workaround left an explanatory comment or note in the content or nearby\ndocs pointing at this plan, remove it once the guard is in place — the test now\ncarries the constraint, so a stale comment claiming a workaround is active would\nbe misleading.\n\n## Reused existing code\n\n- `parseEntry` and `serializeEntry` from\n  `node_modules/@codeyam/cms/src/lib/frontmatter.ts` — the exact functions under\n  test. The guard imports them through the package's export map\n  (`\"./lib/*\": \"./src/lib/*.ts\"`), the same seam\n  `src/layouts/BaseLayout.astro` already uses for the staged-preview attribute\n  names.\n- `resolveContentRoot` from `src/lib/contentRoot.ts`, already covered by\n  `src/lib/contentRoot.test.ts` — use it to locate the entries directory instead\n  of hardcoding `src/content/pages`.\n- `src/data/collections.json` — the field descriptors it declares for the pages\n  collection are the authoritative list of valid field names, so the guard's \"no\n  synthesized keys\" assertion reads from it rather than duplicating a list.\n- Existing vitest setup — `npm test` runs `vitest run`, and\n  `src/lib/contentRoot.test.ts` is the nearest example of a suite that touches\n  the filesystem.\n- No existing test covers CMS frontmatter parsing in this repo today; this is\n  genuinely new coverage, not a duplicate.\n\n## Reproduction Test\n\nPins the `@codeyam/cms` parser defect that makes a folded YAML scalar parse as\nthe literal block indicator instead of its content.\n\n**Target**: `src/lib/cmsFrontmatterRoundTrip.test.ts` — run with\n`codeyam-editor editor refresh-tests --test cmsFrontmatterRoundTrip`.\n\n```ts\n// parseEntry reads a folded block scalar as its content, not the \">-\" indicator\nit('parses a folded block scalar into its folded text', () => {\n  const raw = ['---', 'intro: >-', '  first line', '  second line', '---', '', 'body'].join('\\n');\n  expect(parseEntry(raw).data.intro).toBe('first line second line');\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Against `@codeyam/cms@0.7.0` this\nfails with `parseEntry(raw).data.intro` equal to `\">-\"` rather than\n`\"first line second line\"`. Unlike an ordinary reproduction test, it does not go\ngreen by editing this repo — it goes green only when a fixed `@codeyam/cms` is\ninstalled, which is what makes it this plan's readiness gate.\n\n## Scenarios to Demonstrate\n\n- **The gate, before the fix.** On `@codeyam/cms@0.7.0`, the reproduction test is\n  red and reports `\">-\"` — the signal that this plan is not yet actionable.\n- **The gate, after the bump.** With the fixed version installed, the same test\n  passes untouched.\n- **Round-trip over the real entries.** The guard parses and re-serializes every\n  `src/content/pages/*.md` and gets each file back byte-for-byte.\n- **A regression is caught.** Pinning the dependency back to `0.7.0` turns the\n  guard red on `about.md`, proving it actually watches the dependency rather than\n  the content.\n- **Staged preview of an internal page, exact.** Stage a `kicker` + `intro` +\n  body change on `about`, open `/about?cms-preview=1`. All three update, the\n  standfirst shows real prose rather than `>-`, the branching structure between\n  the prose columns survives, and the banner carries no approximation note.\n- **Staged preview of the home quote.** Stage a `quote` change on `home` and\n  view it via `/?cms-preview=1&as=pages/home`; the pull quote shows the staged\n  text rather than `>-`.\n- **Admin save preserves content.** Edit one field of `about` in `/admin` and\n  publish; the other long fields are unchanged on disk — the data-loss path is\n  closed.\n- **Publish reports no phantom drift.** Editing and publishing a page entry does\n  not raise \"has changed on the site since you started editing it\", confirming\n  the entries are fixed points of the serializer.",
+  "description": "Bumped @codeyam/cms from 0.7.0 to 0.7.1, whose parseEntry now understands YAML block scalars and whose serializeEntry re-emits each untouched block verbatim from the new ParsedEntry.blockScalars map. On that footing the workaround from commit cf54e912 was reverted: src/content/pages/about.md and home.md are restored byte-identically to their original folded (>-) frontmatter, recovering the readability that the single-line normalization gave up. A new seven-case contract test, src/lib/cmsFrontmatterRoundTrip.test.ts, round-trips every real src/content/pages/*.md entry through the CMS's own parser and serializer and fails loudly on a bad version bump.\n\nThe fix closes a content-loss path, not just a display bug. Under 0.7.0, serializeEntry(parseEntry(raw)) was not an identity for a file containing block scalars, and EntryEditor.tsx:131 builds its saved content from exactly that call - so saving any single field of about.md from /admin wrote back an entry whose intro, bandBody and quote had each been replaced by the literal string \">-\", plus a synthesized key \"about everything else. We are building the other half\". The demo drives that surface directly: the CMS entry editor at /admin/pages/about now shows all three fields as real prose, and editing the Kicker leaves them untouched.\n\nTwo departures from the plan, both deliberate. Plan section 3 said to locate the entries via resolveContentRoot(), but that helper honours CODEYAM_CONTENT_ROOT, which a codeyam session injects so the app reads its seeded sandbox - the guard would have asserted against scenario seed data during every in-session run and been vacuous exactly where it runs most often, so it names src/content/pages directly. Section 3 also said to read valid field names from src/data/collections.json alone, but that file declares only the nine site-specific fields; title, description and order are CMS universal builtins in COLLECTION_FIELDS.pages, so reading one source would have failed all three files on the first run. The guard unions both. Section 4 (remove the workaround note) was a no-op - no such note existed outside the commit message.\n\nRedness is AGENT-ATTESTED, not tool-measured, and the record says so. prove-red reverts source paths by stash, but the fix here is a dependency version: stashing package.json/package-lock.json leaves node_modules at 0.7.1, an identical world that would report VACUOUS while pinning nothing. Instead the dependency was reverted for real (npm install @codeyam/cms@0.7.0 --no-save): 5 of 7 tests went red, and all 7 returned green on restore. The two that hold in both worlds are the glob-non-empty guard and the single-field-edit case, which pass because the committed entries also round-trip in single-line form; they are survival guards, not fault-pinning assertions.\n\nNo scenario covers the CMS editor surface, and that is a known gap rather than an oversight. The seed adapter writes single-line frontmatter, so a registered scenario cannot reproduce the folded-scalar state the bug needs - the demo filmstrip required hand-editing the sandbox copy of about.md. The round-trip guard, which runs against the real committed entries, is the durable coverage for this fix.\n\nSCOPE VERDICT - DELIVERED: none of the project's five deliverables were closed by this cycle; all five were already resolved before it began (four delivered, one deferred). DEFERRED: none newly deferred, and no deferral in the store carries decidedBy=agent - all five were decided by the user. One recorded status is now STALE and worth the user's attention: deliverable \"Improvements made to codeyam-cms itself where needed to support static-site authoring\" is marked deferred with the note that the upstream parseEntry block-scalar fix \"remains owed\". That fix has since shipped in @codeyam/cms 0.7.1 and is consumed by this cycle, so the block-scalar half of that deliverable is now met upstream. The note's second defect - the codeyam-editor capture guard mis-scoping seed sentinels - is a different tool and remains genuinely owed under the queued restore-coherent-world-scenario-seeds plan. The deliverable's status was left unchanged rather than flipped, because it is a user-decided record.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/restore-content-form-after-cms-block-scalar-fix.md\t.codeyam/plans/completed/restore-content-form-after-cms-block-scalar-fix.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/658470acdcd294991099f5c9d466a7a73995a1ca7781f5a65ecf1b5c9764c934.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/98207429c829e026210b3498c2ab7d9e26b37764b34185a52ca6cd397eeb165e.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/pages/about.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/pages/home.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/bandquote.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/exploratoryband.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/pageheader.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/quoteband.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/restore-content-form-after-cms-block-scalar-fix.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/d65dba0c805881c60c2ce132b7047cb6f4e089bd42011b5d5b31baaec8a37a83.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/e22d3851fb7f74323092810e5086c102d99c08ac34b03cdb47f860ebcddc622a.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 7,
+        "passed": 7
+      }
+    ]
+  }
+}

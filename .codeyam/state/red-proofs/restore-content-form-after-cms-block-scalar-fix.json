@@ -1,0 +1,24 @@
+{
+  "provenAt": "2026-08-17T16:00:27Z",
+  "slug": "restore-content-form-after-cms-block-scalar-fix",
+  "paths": [],
+  "tests": {
+    "cmsFrontmatterRoundTrip": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "attestedByHand",
+        "method": "prove-red's --path stash cannot revert this fix: the fix is the @codeyam/cms dependency version (0.7.0 -> 0.7.1), not a source file. Stashing package.json/package-lock.json leaves node_modules at 0.7.1, so the reverted world is identical to the fixed one and the verdict would read VACUOUS while pinning nothing. Instead reverted the dependency for real: 'npm install @codeyam/cms@0.7.0 --no-save', ran 'codeyam-editor editor refresh-tests --test cmsFrontmatterRoundTrip', then restored 0.7.1 via 'npm install' and re-ran the same command.",
+        "evidence": "Against 0.7.0: 5 of 7 failed (passed=2, failed=5) — 'parses every page entry without leaving a bare block-scalar indicator', 'parses no frontmatter key outside the declared field set', 'round-trips every page entry through parse and serialize unchanged', 'parses a folded block scalar into its folded text', 'parses a literal block scalar keeping its line breaks'. Against restored 0.7.1: all 7 passed (passed=7, failed=0). The two that stay green in both worlds are the glob-non-empty guard and the single-field-edit preservation case, which hold because the committed entries also round-trip in single-line form; they are survival guards, not the fault-pinning assertions."
+      }
+    }
+  },
+  "proof": {
+    "verdict": "provenByHand",
+    "attested": [
+      "cmsFrontmatterRoundTrip"
+    ],
+    "method": "prove-red's --path stash cannot revert this fix: the fix is the @codeyam/cms dependency version (0.7.0 -> 0.7.1), not a source file. Stashing package.json/package-lock.json leaves node_modules at 0.7.1, so the reverted world is identical to the fixed one and the verdict would read VACUOUS while pinning nothing. Instead reverted the dependency for real: 'npm install @codeyam/cms@0.7.0 --no-save', ran 'codeyam-editor editor refresh-tests --test cmsFrontmatterRoundTrip', then restored 0.7.1 via 'npm install' and re-ran the same command.",
+    "evidence": "Against 0.7.0: 5 of 7 failed (passed=2, failed=5) — 'parses every page entry without leaving a bare block-scalar indicator', 'parses no frontmatter key outside the declared field set', 'round-trips every page entry through parse and serialize unchanged', 'parses a folded block scalar into its folded text', 'parses a literal block scalar keeping its line breaks'. Against restored 0.7.1: all 7 passed (passed=7, failed=0). The two that stay green in both worlds are the glob-non-empty guard and the single-field-edit preservation case, which hold because the committed entries also round-trip in single-line form; they are survival guards, not the fault-pinning assertions."
+  }
+}

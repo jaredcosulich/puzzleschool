@@ -145,6 +145,69 @@
       "runner": "tests"
     },
     {
+      "description": "Guards against a regression producing an empty glob, which would make every other case in this file pass by iterating over nothing.",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › finds the committed page entries to check",
+      "line": 69,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The parser-level reproduction, isolated from this repo's content: a folded scalar must yield its folded text. Red against 0.7.0, where it yields \">-\".",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › parses a folded block scalar into its folded text",
+      "line": 137,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The literal form is the other block style an author may reach for, and it keeps its newlines where the folded form collapses them.",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › parses a literal block scalar keeping its line breaks",
+      "line": 146,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The direct signature of the 0.7.0 defect: a field whose value is the block indicator itself rather than the prose the indicator introduces.",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › parses every page entry without leaving a bare block-scalar indicator",
+      "line": 77,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other half of the defect: folded continuation lines re-read as top-level entries synthesize keys that were never in the file, e.g. \"about everything else. We are building the other half\".",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › parses no frontmatter key outside the declared field set",
+      "line": 97,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Editing one field must not disturb the others. This is the data-loss path itself: `EntryEditor` saves `serializeEntry` output, so under 0.7.0 saving any single field wrote back an entry whose other block-scalar fields had been replaced by \">-\".",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › preserves untouched block scalars when one other field is edited",
+      "line": 121,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pins each entry as a fixed point of the serializer. This is what keeps the publish drift check quiet: the CMS compares its staged baseline (which is `serializeEntry` output) against the raw file on the branch, so a file that is not byte-equal to its own baseline reports a phantom \"changed on the site since you started editing it\" conflict on every publish.",
+      "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+      "format": "vitest",
+      "key": "cmsFrontmatterRoundTrip › round-trips every page entry through parse and serialize unchanged",
+      "line": 111,
+      "registeredAt": "2026-08-17T16:00:42Z",
+      "runner": "tests"
+    },
+    {
       "description": "every marker is a distinct data-cms-* attribute, so no two helpers collide",
       "file": "src/lib/cmsMarkers.test.ts",
       "format": "vitest",

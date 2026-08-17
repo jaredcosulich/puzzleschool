@@ -1,0 +1,12 @@
+{
+  "surface": "BandQuote",
+  "surface_kind": "component",
+  "states": [
+    {
+      "dimension": "default",
+      "value": "default",
+      "rationale": "source-derived state default=default",
+      "status": "covered"
+    }
+  ]
+}

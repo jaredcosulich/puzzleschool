@@ -612,6 +612,97 @@
       }
     ]
   },
+  "cmsFrontmatterRoundTrip › finds the committed page entries to check": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "cmsFrontmatterRoundTrip › parses a folded block scalar into its folded text": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "cmsFrontmatterRoundTrip › parses a literal block scalar keeping its line breaks": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "cmsFrontmatterRoundTrip › parses every page entry without leaving a bare block-scalar indicator": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "cmsFrontmatterRoundTrip › parses no frontmatter key outside the declared field set": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "cmsFrontmatterRoundTrip › preserves untouched block scalars when one other field is edited": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "cmsFrontmatterRoundTrip › round-trips every page entry through parse and serialize unchanged": {
+    "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
+    "lastRunAt": "2026-08-17T16:01:48.739416587+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-17T16:01:48.739416587+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "cmsMarkers attribute naming › gives each helper its own data-cms attribute": {
     "file": "src/lib/cmsMarkers.test.ts",
     "lastRunAt": "2026-08-17T13:55:01.246320016+00:00",
