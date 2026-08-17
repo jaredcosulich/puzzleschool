@@ -1,6 +1,6 @@
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786926253,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":43280}
-session-finalize started: 2026-08-17T00:24:13Z, output: /Users/jaredcosulich/workspace/puzzleschool/.codeyam/logs/session-finalize.log (PID 43280)
-The final workflow step ('Finalize', step 0) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to 961f0159. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786927667,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":50194}
+session-finalize started: 2026-08-17T00:47:47Z, output: /Users/jaredcosulich/workspace/puzzleschool/.codeyam/logs/session-finalize.log (PID 50194)
+The final workflow step ('Finalize', step 0) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to 1bd3a70f. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
 
 Re-run the final step to resume: `codeyam-editor editor advance` (or `codeyam-editor editor feature-complete` if advance reports the terminal step).
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
@@ -12,6 +12,11 @@ warning: about to run the FULL test suite (~82 tests) — this can take many min
 warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
+Note: full suite already ran at 00:24:16 (~23 min ago). If you are
+running this to recover from a poisoned cache or stale partition,
+proceed; otherwise, the existing cache matches your current source.
+Continue? (Press Ctrl+C to abort, or run `codeyam-editor editor
+verify-test-cache` to check cache validity first.)
 note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
@@ -21,6 +26,7 @@ All 82 tests passed.
 Phase 2/5: audit (--gate-mode strict, comprehensive) …
 [   0s] audit: running static checks
 [   0s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786927677,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":50194,"progress":"Phase 2/5: audit (--gate-mode strict, comprehensive) …"}
 {
 Analyzed 72 files, found 103 import edges, graph has 80 nodes
   "analyzed": 72,
@@ -28,10 +34,10 @@ Analyzed 72 files, found 103 import edges, graph has 80 nodes
   "graphSize": 80,
   "totalImports": 103
 }
-{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786926263,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":43280,"progress":"Phase 2/5: audit (--gate-mode strict, comprehensive) …"}
 [   9s] audit: running registry invariant checks
 [  10s] audit: gather complete
 Phase 3/5: analyze-imports …
+{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1786927687,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":50194,"progress":"Phase 3/5: analyze-imports …"}
 {
 Analyzed 72 files, found 103 import edges, graph has 80 nodes
   "analyzed": 72,
@@ -46,6 +52,9 @@ Phase 4/5: verify-build …
 [SKIP] astro-check — no matching files
 CODEYAM_VERIFY_BUILD: PASS — 0 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
-Committed finalize state as `chore: update codeyam state` (c53ab4a) — HEAD is push-safe.
+Warning: 1 tracked source file(s) are modified but not committed. The `chore: update codeyam state` commit below will record a registry, evidence rows and caches describing source that is NOT in committed history — a fresh checkout of HEAD would claim coverage for tests it does not contain:
+  - crates/codeyam-editor/src/scaffold/hook_skip_list.json
+Commit the source first, then re-run `codeyam-editor editor session-finalize` so the committed state describes the committed tree.
+Committed finalize state as `chore: update codeyam state` (0753347) — HEAD is push-safe.
 Session finalize complete: ready to push.
-session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=19.0s
+session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=21.0s
