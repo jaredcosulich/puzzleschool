@@ -1119,9 +1119,14 @@ def invokes_git_subcommand(command, subcommand):
 
 # The `codeyam-editor:editor` spelling reaches the same CLI through the plugin
 # invocation form, so it is one token rather than a program plus a subcommand.
-_CODEYAM_EDITOR_TOKENS = frozenset(
-    ("codeyam-editor:editor", "codeyam-editor-dev:editor")
-)
+# Derived from _CODEYAM_CLIS rather than spelled out. commands::apply_cli_name
+# rewrites the canonical plugin-form token into the dev-wrapper one at install
+# time, so a hardcoded pair collapses to a single element on a -dev install and
+# recognition of the canonical spelling is silently lost. Deriving the set keeps
+# the CLI-name list single-sourced, survives that rewrite, and leaves no
+# non-canonical literal for the SHIPPED_AGENT_FILE_NONCANONICAL_CLI_NAME audit
+# invariant to flag — which is why this file needs no allowlist entry.
+_CODEYAM_EDITOR_TOKENS = frozenset(f"{cli}:editor" for cli in _CODEYAM_CLIS)
 
 
 def invokes_codeyam_editor(command):
@@ -1786,6 +1791,208 @@ def scripted_rewrite_refusal(path, append_only=False):
     )
 
 
+# --- Recursive-delete guard ------------------------------------------------
+#
+# A recursive delete is the most destructive thing an agent can do to a working
+# tree and the one whose damage is invisible until something else surfaces it.
+# `rm -rf crates/codeyam-editor/.codeyam` was issued in the belief that it was
+# stray generated output; it was 12 git-TRACKED fixture files, and nothing said
+# so until a later `git status`.
+#
+# The mistake was reasonable. `.codeyam/` at the repo root IS internal cache
+# state (it is in `ALWAYS_EXCLUDED_DIRS`), and the same directory name one level
+# down inside a crate is a tracked test fixture. That ambiguity is not going
+# away — which is exactly why the guard keys on git-tracked-ness rather than on
+# a denylist of directories that "look like cache". A denylist is the reasoning
+# that caused the loss. Whether git tracks a file is the fact that actually
+# matters, it is cheap to ask, and it generalizes to every fixture directory in
+# every client project.
+#
+# There is deliberately no bypass flag. A rule an agent can wave away under time
+# pressure is not a guard, and a genuinely intended deletion of tracked files
+# already has a reversible, reviewable spelling: `git rm`.
+#
+# Scope is recursive deletes only. A single `rm <file>` names exactly what it
+# removes and is visible in the transcript; `-r` against a directory is the
+# shape whose blast radius the author cannot see.
+
+_RM_LONG_RECURSIVE = "--recursive"
+
+# The shortest unambiguous abbreviation GNU `rm` accepts for `--recursive`.
+# `--recursive` is the only long option of `rm` beginning with `r`, so getopt
+# resolves `--r` to it.
+_RM_LONG_RECURSIVE_MIN = len("--r")
+
+# Textual last resort when a segment cannot be tokenized. Matches `rm` only in
+# command position (start of segment, or after a separator) so a mention inside
+# an unterminated string is not one.
+_RM_TEXTUAL = re.compile(r"(?:^|[\s;|&(])(?:[^\s;|&]*/)?rm(?=\s)")
+_RM_TEXTUAL_RECURSIVE = re.compile(r"(?:^|\s)-(?:-r|[A-Za-z]*[rR])")
+
+
+def is_recursive_rm_flag(token):
+    """True when `token` is `rm`'s recursive flag in any spelling it accepts:
+    `-r`, `-R`, a short cluster containing either (`-rf`, `-fr`, `-Rf`), or
+    `--recursive` and its unambiguous abbreviations.
+
+    Clustering needs no value-flag stop list the way grep's `-P` does: none of
+    `rm`'s short options takes a value, so every letter in a cluster is a flag
+    and `r` anywhere in one means recursive."""
+    if token.startswith("--"):
+        return (
+            len(token) >= _RM_LONG_RECURSIVE_MIN
+            and _RM_LONG_RECURSIVE.startswith(token)
+        )
+    if not token.startswith("-") or token == "-":
+        return False
+    return any(ch in "rR" for ch in token[1:])
+
+
+def recursive_rm_operands(tokens):
+    """The paths a recursive `rm` in one already-split command would delete, or
+    `[]` when this command is not a recursive `rm`.
+
+    `_in_command_position` is what keeps `grep -rn "rm -rf" .claude/` and
+    `git commit -m "drop rm -rf from the script"` from reading as deletions —
+    in both, `rm` is an argument, and in the second it is not even a token of
+    its own. Everything after a `--` terminator is an operand, including a path
+    that begins with a dash."""
+    for index, tok in enumerate(tokens):
+        if _program_name(tok) != "rm":
+            continue
+        if not _in_command_position(tokens, index):
+            continue
+        recursive = False
+        operands = []
+        end_of_flags = False
+        for arg in tokens[index + 1:]:
+            if end_of_flags:
+                operands.append(arg)
+            elif arg == "--":
+                end_of_flags = True
+            elif arg.startswith("-") and arg != "-":
+                recursive = recursive or is_recursive_rm_flag(arg)
+            else:
+                operands.append(arg)
+        if recursive and operands:
+            return operands
+    return []
+
+
+def tracked_file_count(path, project_dir):
+    """How many git-tracked files live AT or UNDER `path`.
+
+    Deliberately not `tracked_source_paths`: that filters to source suffixes,
+    and the files actually lost here were `.json` fixtures. A delete does not
+    care what a reviewer reads as a diff — every tracked file it removes counts.
+
+    Asked as TWO pathspecs, which is not redundancy. Git's directory-prefix
+    rule — the thing that makes the bare path `fixtures/.codeyam` match every
+    file beneath it — applies only to a LITERAL pathspec. The moment the
+    operand carries a glob the pattern is fnmatched instead, and
+    `crates/*/.codeyam` matches no file at all, because the real entries carry
+    a `/editor.json` tail the pattern does not cover. That is exactly the shape
+    that would wipe the fixture out of every crate at once, so it cannot be the
+    one shape that slips through. Appending `/*` gives the glob case a pattern
+    that does match, and costs the literal case nothing (`ls-files` reports
+    each index entry once however many pathspecs select it).
+
+    Returns 0 when the path escapes the repo, is not pathspec-safe, or git
+    cannot answer. Those are all "this guard has nothing to say", not "this is
+    safe": a path outside the repo is not git's to protect, and a guard that
+    blocked on an unanswerable question would refuse ordinary `rm -rf /tmp/…`
+    and `rm -rf node_modules` on every project where git happens to be
+    unavailable.
+
+    Two shapes are statically undecidable and therefore NOT covered, by
+    construction rather than by oversight: an unexpanded variable
+    (`rm -rf "$BUILD_DIR"`) and a `find … -exec rm -rf {} +` placeholder. In
+    both the operand names no path until the shell or `find` produces one, and
+    refusing on unknowability would refuse the legitimate majority of both
+    shapes. This is the same best-effort boundary `_has_inplace_editor` and
+    `_uses_pcre_grep` draw."""
+    rel = _repo_relative(path, project_dir)
+    if rel is None or not _PATHSPEC_SAFE.match(rel):
+        return 0
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", "-z", "--", rel, f"{rel.rstrip('/')}/*"],
+            cwd=project_dir,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except Exception:
+        return 0
+    if result.returncode != 0:
+        return 0
+    return len([p for p in result.stdout.split("\0") if p])
+
+
+def tracked_recursive_rm(command, project_dir):
+    """`(path, tracked_count)` for the first recursive-`rm` target in `command`
+    that git tracks, else None. `tracked_count` is None when the segment could
+    not be tokenized.
+
+    Scoped per split command, so a delete buried in an `&&` chain is seen on its
+    own, and re-entered for a `bash -c` payload — the two shapes that would
+    otherwise hide the operand inside a single opaque token.
+
+    Fails closed on a malformed quote, but only for a segment that textually
+    looks like a recursive `rm`. The blanket fail-closed its sibling predicates
+    use (`_has_inplace_editor` returns True for any untokenizable command) would
+    refuse every mistyped quote in every session; narrowing it to the shape this
+    guard is about keeps the evasion path shut without that cost."""
+    for segment in _split_commands(command):
+        try:
+            tokens = shlex.split(segment, posix=True)
+        except ValueError:
+            if _RM_TEXTUAL.search(segment) and _RM_TEXTUAL_RECURSIVE.search(segment):
+                return (segment.strip(), None)
+            continue
+        for operand in recursive_rm_operands(tokens):
+            count = tracked_file_count(operand, project_dir)
+            if count:
+                return (operand, count)
+        payload = _shell_c_payload(tokens)
+        if payload is not None:
+            nested = tracked_recursive_rm(payload, project_dir)
+            if nested:
+                return nested
+    return None
+
+
+def recursive_rm_refusal(path, tracked_count):
+    """The `(reason, next_action)` pair for a refused recursive delete.
+
+    Names the path, the count, and `git rm -r` — the count is what turns "this
+    looked like build output" into a fact the author can check, and `git rm` is
+    the same deletion in a form that is staged, reviewable, and undoable."""
+    if tracked_count is None:
+        return (
+            f"this command could not be parsed, and it looks like a recursive "
+            f"`rm`: `{path}`. The hook cannot tell whether it would delete "
+            f"git-tracked files, and a recursive delete is not recoverable from "
+            f"the transcript.",
+            "fix the quoting and re-run, so the target can be checked against "
+            "git. If the delete is genuinely aimed at tracked files, run "
+            "`git rm -r <path>` instead.",
+        )
+    return (
+        f"this command recursively deletes `{path}`, which holds "
+        f"{tracked_count} git-tracked file(s). Tracked files are not build "
+        f"output — a directory that looks like cache can be a committed test "
+        f"fixture (`crates/*/.codeyam/` is exactly that, while `.codeyam/` at "
+        f"the repo root is real internal state). Nothing surfaces the loss "
+        f"until a later `git status`.",
+        f"if you mean to delete it, run `git rm -r {path}` — the same removal, "
+        f"staged and reversible (`git restore --staged {path}` then "
+        f"`git checkout -- {path}`) and visible in review. If you meant to clear "
+        f"generated output, name the untracked path directly; untracked paths "
+        f"(`target/`, `node_modules/`, scratch dirs) are not guarded.",
+    )
+
+
 def read_event():
     """The PreToolUse event from stdin, or None when it is absent or
     unparseable — in which case the hook allows rather than blocks."""
@@ -2076,6 +2283,31 @@ def main():
                     f"`{piped}` is in the gating-subcommand set; exit code "
                     f"{'preserved' if preserved else 'NOT preserved'} by this "
                     f"command; `| tee` not present"
+                ),
+                call=call,
+            )
+
+    # Recursive-delete guard. Neither step-scoped nor editor-mode-scoped, for
+    # the same reason as the two above: `rm -rf` over tracked files is a loss in
+    # any session, and the damage does not surface until a later `git status`.
+    if tool_name == "Bash":
+        deletion = tracked_recursive_rm(tool_input.get("command", ""), project_dir)
+        if deletion:
+            target, tracked_count = deletion
+            reason, next_action = recursive_rm_refusal(target, tracked_count)
+            block(
+                project_dir,
+                "recursive-delete",
+                reason,
+                next_action,
+                detail=target,
+                evidence=(
+                    f"{resolved_context(project_dir, 'git ls-files')}; "
+                    + (
+                        "segment could not be tokenized"
+                        if tracked_count is None
+                        else f"`git ls-files -- {target}` reports {tracked_count} tracked file(s)"
+                    )
                 ),
                 call=call,
             )

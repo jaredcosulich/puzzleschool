@@ -155,6 +155,7 @@ blob-report/
 .codeyam/state/dependency-provision.json
 .codeyam/state/session-results-snapshot.json
 .codeyam/state/step-highwater.json
+.codeyam/state/merge-drivers-version
 .codeyam/test-run-marker.json
 .claude/settings.local.json
 .claude/hooks/__pycache__/

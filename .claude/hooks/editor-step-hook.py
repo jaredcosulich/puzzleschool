@@ -329,10 +329,16 @@ def main():
 
     restriction = step_restrictions.get(step, "")
     _cli = cli_command()
+    # In-cycle, the next step is simply the next step. At the END of a cycle
+    # the next USER REQUEST is not necessarily a build, so route it through
+    # triage rather than booting the build flow: "deploy it and give me the
+    # live URL" is a config/hosting request that a `step 1` fallback drags
+    # through the whole 28-step UI workflow. `assist-triage` classifies it and
+    # hands off to the build flow itself when it really is one.
     next_cmd = (
         f"{_cli} editor step {step + 1}"
         if total_steps and step < total_steps
-        else f"{_cli} editor step 1"
+        else f"{_cli} editor step --slug assist-triage --mode assist"
     )
 
     # ── UserPromptSubmit: inject step context ──────────────────────────

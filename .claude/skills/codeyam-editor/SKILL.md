@@ -36,7 +36,7 @@ Only proceed past step 1 once `projectDescription` is a real, multi-word descrip
 
 You MUST follow a step-by-step workflow driven by `codeyam-editor editor step` commands. Each command tells you exactly what to do next. **You do NOT have all the instructions upfront** — the commands provide them incrementally.
 
-**Your first action:** If this request may not be a build — a config change, a walkthrough, design exploration, or external-service setup — run `codeyam-editor editor step --slug assist-triage --mode assist` to triage it; otherwise run `codeyam-editor editor step 1`.
+**For EVERY new request — at session start and mid-session alike, including the one after a cycle completes:** if it may not be a build — deploying/publishing/hosting/DNS, a config change, a walkthrough, design exploration, or external-service setup — run `codeyam-editor editor step --slug assist-triage --mode assist` to triage it; otherwise run `codeyam-editor editor step 1`.
 
 **The rule:** After completing what a command tells you to do, run the NEXT command it specifies. The commands are your instructions — follow them one at a time.
 
