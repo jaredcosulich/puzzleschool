@@ -1,0 +1,12 @@
+{
+  "name": "SiteFooter - Narrow Viewport",
+  "id": "622b5cda-e6f6-4dbb-971a-5deaa9f76265",
+  "url": "/isolated-components/SiteFooter",
+  "dimensions": [
+    "Mobile"
+  ],
+  "mocks": {},
+  "componentName": "SiteFooter",
+  "scenarioType": "component",
+  "description": "The internal footer at phone width, where the row runs out of horizontal space. The footer sets flex-wrap, so the Contact link and the copyright notice drop to a second row together as one footer__end group rather than the copyright separating from the link or the brand line being crushed — and the copyright itself never breaks between the glyph and the year."
+}

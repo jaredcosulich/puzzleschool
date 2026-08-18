@@ -1,0 +1,36 @@
+{
+  "provenAt": "2026-08-18T00:19:49Z",
+  "slug": "current-year-copyright-in-the-footer",
+  "paths": [
+    "src/lib/copyright.ts"
+  ],
+  "runScope": [
+    "src/lib/copyright.ts"
+  ],
+  "tests": {
+    "copyrightLabel": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "attestedByHand",
+        "method": "Fault injection rather than revert. copyrightLabel is a NEW export, so the without-fix world cannot compile src/lib/copyright.test.ts at all — prove-red returned did-not-build for exactly that reason. Instead the implementation body was neutered in place to the pre-feature behaviour it must beat: return a copyright string built from new Date().getUTCFullYear(), i.e. ignoring the argument and reading UTC off the clock. The test file and its assertions were left completely untouched, then restored to the real body afterwards.",
+        "evidence": "With the neutered body, codeyam-editor editor refresh-tests --test copyrightLabel reported failed=3 passed=1 of 4: 'reads the year from the date it is given rather than the clock', 'changes label across the New Year boundary one second apart', and 'reads the local calendar year rather than the UTC one' all went red; only the plain formatting case stayed green, which is correct since it asserts the current year on a UTC machine. After restoring the real body, refresh-tests --changed reported failed=0 passed=4."
+      }
+    },
+    "copyrightLabel > reads the year from the date it is given rather than the clock": {
+      "withoutFix": "didNotBuild",
+      "withFix": "didNotBuild",
+      "established": {
+        "kind": "measured"
+      }
+    }
+  },
+  "proof": {
+    "verdict": "provenByHand",
+    "attested": [
+      "copyrightLabel"
+    ],
+    "method": "Fault injection rather than revert. copyrightLabel is a NEW export, so the without-fix world cannot compile src/lib/copyright.test.ts at all — prove-red returned did-not-build for exactly that reason. Instead the implementation body was neutered in place to the pre-feature behaviour it must beat: return a copyright string built from new Date().getUTCFullYear(), i.e. ignoring the argument and reading UTC off the clock. The test file and its assertions were left completely untouched, then restored to the real body afterwards.",
+    "evidence": "With the neutered body, codeyam-editor editor refresh-tests --test copyrightLabel reported failed=3 passed=1 of 4: 'reads the year from the date it is given rather than the clock', 'changes label across the New Year boundary one second apart', and 'reads the local calendar year rather than the UTC one' all went red; only the plain formatting case stayed green, which is correct since it asserts the current year on a UTC machine. After restoring the real body, refresh-tests --changed reported failed=0 passed=4."
+  }
+}

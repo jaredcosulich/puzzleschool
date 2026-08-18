@@ -8,6 +8,7 @@
 // Encoding both here keeps a fix to one page from silently restyling the other.
 import Mark from '../Mark.astro';
 import { cmsSetting } from '../../lib/cmsMarkers';
+import { copyrightLabel } from '../../lib/copyright';
 
 interface Props {
   /** Footer meta line, from the editable settings singleton. */
@@ -23,6 +24,11 @@ interface Props {
 }
 
 const { text, contactUrl, variant } = Astro.props;
+
+// The build machine's year. Rendered server-side so the served HTML is already
+// complete — the script below only has work to do once the calendar has moved
+// past the last deploy.
+const copyright = copyrightLabel(new Date());
 ---
 
 <footer class="footer" data-variant={variant}>
@@ -30,14 +36,42 @@ const { text, contactUrl, variant } = Astro.props;
     <Mark size={variant === 'home' ? 22 : 20} />
     <span {...cmsSetting('footerText')}>{text}</span>
   </div>
-  {/* Deliberately unmarked. This carried `cmsSettingHref('contactEmail')` back
-      when the href WAS that setting; now it is a page url resolved from the nav,
-      and leaving the marker would let the staged preview patch a real email
-      address in over `/contact` the moment an editor touched contactEmail —
-      quietly restoring the exact bug this link was changed to fix. There is no
-      nav-derived-href marker in the contract to replace it with. */}
-  <a href={contactUrl}>Contact</a>
+  {/* The link and the notice are ONE child, not two. `.footer` is
+      `space-between`, so a third direct child would redistribute the row into
+      three evenly-spaced items and pull the brand line off the left edge; both
+      designs specify a two-ended row. */}
+  <div class="footer__end">
+    {/* Deliberately unmarked. This carried `cmsSettingHref('contactEmail')` back
+        when the href WAS that setting; now it is a page url resolved from the nav,
+        and leaving the marker would let the staged preview patch a real email
+        address in over `/contact` the moment an editor touched contactEmail —
+        quietly restoring the exact bug this link was changed to fix. There is no
+        nav-derived-href marker in the contract to replace it with. */}
+    <a href={contactUrl}>Contact</a>
+    {/* Also unmarked, for the opposite reason: this is DERIVED from the clock,
+        not stored. A `cmsSetting` marker would let a staged edit write a literal
+        year over a self-updating one. */}
+    <span class="footer__copyright" data-current-year>{copyright}</span>
+  </div>
 </footer>
+
+<script>
+  import { copyrightLabel } from '../../lib/copyright';
+
+  // Correct the build-time year against the visitor's own clock. The site
+  // deploys on push only, so between the last deploy and the first push of a new
+  // year the served HTML carries last year's notice; this is what fixes it
+  // without waiting for a rebuild.
+  //
+  // No equality check before assigning: on every day except an actual rollover
+  // this writes back the exact string the server wrote, which is a no-op. That
+  // is deliberate, not an oversight — and it is why this needs no `?static`
+  // escape hatch the way the branching tree does. There is no different figure
+  // here for a screenshot to race.
+  for (const el of document.querySelectorAll<HTMLElement>('[data-current-year]')) {
+    el.textContent = copyrightLabel(new Date());
+  }
+</script>
 
 <style>
   .footer {
@@ -73,5 +107,22 @@ const { text, contactUrl, variant } = Astro.props;
 
   .footer[data-variant='internal'] .footer__brand {
     gap: 11px;
+  }
+
+  /* Wider than the brand side's 11–12px on purpose: that gap pairs a mark with
+     its own wordmark, this one separates two independent items. The same value
+     in both variants — the separation reads the same at either gutter. */
+  .footer__end {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  /* Inherits the footer's size, weight, tracking, uppercase and colour — the
+     notice is the same meta type as everything else on this row. Only the
+     no-break rule is its own, so `flex-wrap` can drop the whole group to a
+     second row but never break between the © and the year. */
+  .footer__copyright {
+    white-space: nowrap;
   }
 </style>

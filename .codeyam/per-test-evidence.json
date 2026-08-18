@@ -1331,6 +1331,58 @@
       }
     ]
   },
+  "copyrightLabel › changes label across the New Year boundary one second apart": {
+    "file": "src/lib/copyright.test.ts",
+    "lastRunAt": "2026-08-18T00:20:49.600411424+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-18T00:20:49.600411424+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "copyrightLabel › formats the year of the given date as a copyright notice": {
+    "file": "src/lib/copyright.test.ts",
+    "lastRunAt": "2026-08-18T00:20:49.600411424+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-18T00:20:49.600411424+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "copyrightLabel › reads the local calendar year rather than the UTC one": {
+    "file": "src/lib/copyright.test.ts",
+    "lastRunAt": "2026-08-18T00:20:49.600411424+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-18T00:20:49.600411424+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "copyrightLabel › reads the year from the date it is given rather than the clock": {
+    "file": "src/lib/copyright.test.ts",
+    "lastRunAt": "2026-08-18T00:20:49.600411424+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-08-18T00:20:49.600411424+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "dragonPoints › stops early when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
     "lastRunAt": "2026-08-17T23:23:50.907350819+00:00",

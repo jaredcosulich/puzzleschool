@@ -61,7 +61,7 @@
     ]
   },
   {
-    "description": "The site footer in its home and internal variants, which differ by gutter, foot depth and row alignment because the two designs genuinely differ — encoding both here keeps a fix to one page from restyling the other. The footer line is marked as setting text. The Contact link carries NO cms marker: its href is now a page url resolved from the nav singleton by resolveContactUrl, not a mailto built from settings.contactEmail, so the old href-only setting marker would let a staged contact-address edit patch a raw email address back over /contact.",
+    "description": "The site footer in its home and internal variants, which differ by gutter, foot depth and row alignment because the two designs genuinely differ — encoding both here keeps a fix to one page from restyling the other. The footer line is marked as setting text. The row is deliberately two-ended: the Contact link and the copyright notice are wrapped in a single footer__end child rather than sitting as separate children, because the footer is justify-content space-between and a third direct child would redistribute the row into three evenly-spaced items and pull the brand line off the left edge. Neither item in that group carries a cms marker, for opposite reasons. The Contact link's href is now a page url resolved from the nav singleton by resolveContactUrl, not a mailto built from settings.contactEmail, so the old href-only setting marker would let a staged contact-address edit patch a raw email address back over /contact. The copyright notice is DERIVED from the clock rather than stored, so a marker would let a staged edit write a literal year over a self-updating one. That notice is rendered at build time by copyrightLabel in the frontmatter and corrected on load by a bundled client script that calls the same function against the visitor's own clock, since the site is static and deploys only on push.",
     "filePath": "src/components/chrome/SiteFooter.astro",
     "name": "SiteFooter",
     "scenarios": [
@@ -180,6 +180,12 @@
     "filePath": "src/lib/pageTitle.ts",
     "name": "composePageTitle",
     "testFile": "src/lib/pageTitle.test.ts"
+  },
+  {
+    "description": "Formats the site footer's copyright notice for a given date, returning the copyright glyph followed by that date's four-digit year. The date is a PARAMETER rather than read from the clock inside the function, which is what lets the unit tests pin a New Year rollover without mocking a global clock, and what lets the two callers differ only in which Date they hand in: SiteFooter.astro renders the build machine's year into the served HTML so the first paint and no-JS visitors get a real year, and the component's bundled client script rewrites the same element from new Date on load. That second path is why the function exists at all — the site is output static and deploys only on push to main, so a build-time-only year would be frozen from the last deploy until the first push of the new year. Reads local time via getFullYear rather than getUTCFullYear on purpose: the year the visitor is living in is the year their footer should show. Pure by design, with no fs and no src/data import, the same shape as resolveContactUrl in src/lib/contactUrl.ts.",
+    "filePath": "src/lib/copyright.ts",
+    "name": "copyrightLabel",
+    "testFile": "src/lib/copyright.test.ts"
   },
   {
     "description": "Direction reversals on either axis along a harmonograph trace — a cheap proxy for how intricate the figure is. Feeds the acceptance band that separates a lazy oval from a ball of thread.",

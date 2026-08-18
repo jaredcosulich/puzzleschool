@@ -1,0 +1,251 @@
+{
+  "timestamp": "2026-08-18T00:26:53Z",
+  "title": "Current-Year Copyright in the Footer",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe site footer currently ends at the \"Contact\" link. Add a `© <year>` notice to\nthe right of that link, in both footer variants, showing the **current** year\nrather than a literal. The site is `output: 'static'` and deploys only on push to\n`main` (`.github/workflows/deploy.yml`), so a build-time year would be frozen at\nthe last deploy — correct today, wrong for however long January runs without a\npush. The year is therefore rendered at build time (so no-JS visitors and the\nfirst paint both get a real year) and corrected on load by a small client script\nwhen the visitor's year differs, using one shared pure helper so the two paths\ncan never format the label differently.\n\n## Key Decisions\n\n- **Build-time render + client correction**, chosen over build-time alone and\n  over a scheduled CI rebuild. Build-time alone goes stale (the deploy workflow\n  fires on `push` and `workflow_dispatch` only — there is no `schedule`); a cron\n  rebuild fixes staleness but makes the footer's correctness depend on CI\n  running on time, and still leaves a window. The client correction makes the\n  year right for the visitor, whenever they visit, with no deploy.\n- **One pure helper, `copyrightLabel(now: Date)`, used by both paths.** The\n  server frontmatter and the browser script call the same function, so the\n  format (`© 2026`) is stated once. This is also what makes the behaviour\n  testable — the same shape as `resolveContactUrl` in `src/lib/contactUrl.ts`\n  and `applyTreeGrowth` in `src/lib/tree-dom.ts`: a pure function in `src/lib`\n  with a colocated vitest file, no `fs` and no `src/data` import.\n- **The date is a parameter, not read inside the helper.** `copyrightLabel` takes\n  a `Date`; the callers pass `new Date()`. That is what lets the unit tests pin a\n  year boundary without mocking a global clock.\n- **The notice is derived, not CMS-editable.** `settings.footerText` stays exactly\n  as it is and keeps its `cmsSetting('footerText')` marker. The copyright is\n  computed from the clock, so giving it a marker would let a staged edit write a\n  literal year over a self-updating one — the same failure mode the Contact link\n  was deliberately left unmarked to avoid (see the comment at\n  `src/components/chrome/SiteFooter.astro:33`).\n- **The link and the notice become one right-hand group.** `.footer` is\n  `justify-content: space-between`, so adding a third direct child would\n  redistribute the row into three evenly-spaced items and move the brand line.\n  Wrapping the link and the notice in a single element keeps the row a\n  two-ended layout, which is what both designs specify.\n- **No capture-freeze escape hatch.** The branching tree needs `?tree=static`\n  because its client script draws a *different* figure than the server did. This\n  script writes the same string the server wrote in every case except an actual\n  year rollover, so there is no swap for a screenshot to race.\n\n## Implementation\n\n### 1. The pure helper\n\n**New file**: `src/lib/copyright.ts`\n\nExport `copyrightLabel(now: Date): string` returning `` `© ${now.getFullYear()}` ``.\nDocument why the date is a parameter (testability, and one formatting site shared\nby the server render and the browser correction) and that `getFullYear` is\ndeliberately local-time: the visitor's own year is the one their footer should\nshow, and the build machine's local year is the right default to ship.\n\n### 2. Unit tests for the helper\n\n**New file**: `src/lib/copyright.test.ts`\n\nColocated vitest, matching `src/lib/contactUrl.test.ts` in shape — each `it()`\npreceded by a `//` description comment explaining what the case proves, not\nrestating the assertion. Cover:\n\n- formats the year of the given date as `© 2026`\n- reads the year from the date it is given, not from the clock (pass a date in a\n  different year and assert the label follows it)\n- a New Year's Eve date and a New Year's Day date one second apart produce\n  different labels — the rollover this whole feature exists for\n- uses local time rather than UTC, so a visitor in a timezone where it is already\n  next year sees next year\n\nRegister the tests with `codeyam-editor editor refresh-tests` so they land in\n`.codeyam/test-registry.json` alongside the other `src/lib` suites.\n\n### 3. Render the notice in the footer\n\n**File**: `src/components/chrome/SiteFooter.astro`\n\n- Import `copyrightLabel` from the helper module added in step 1 and compute the\n  build-time label in the frontmatter.\n- Wrap the existing `<a href={contactUrl}>Contact</a>` and a new\n  `<span class=\"footer__copyright\" data-current-year>{label}</span>` in a\n  `<div class=\"footer__end\">`, preserving the existing comment above the link\n  that explains why it carries no CMS marker.\n- Add a `<script>` (a bundled Astro script with a real import, the idiom used by\n  `src/components/structures/BranchingTree.astro:88`, not `is:inline`) that\n  imports `copyrightLabel`, finds `[data-current-year]`, and rewrites\n  `textContent` from `new Date()`. Guard on the element existing. Assigning the\n  same string when nothing changed is a no-op, so no equality check is needed —\n  but say so in a comment rather than leaving it looking accidental.\n- Styles: give `.footer__end` `display: flex; align-items: center;` with a gap\n  that matches each variant's existing rhythm — the variant rules already set\n  `.footer__brand` gaps of `12px` (home) and `11px` (internal); use\n  `var(--space-xs)` (12px) for the end group in both, which reads as a\n  deliberate separation between two distinct items rather than the tight\n  mark-to-text pairing on the brand side. `.footer__copyright` inherits the\n  footer's `--size-footer`, weight, tracking, uppercase and `--footer-text`\n  colour, so it needs no colour or type rules of its own. The `<footer>` already\n  sets `flex-wrap: wrap`; keep it, so the group drops to a second row at narrow\n  viewports instead of crushing the brand line.\n\n### 4. Re-capture the footer scenarios\n\n**File**: `src/pages/isolated-components/SiteFooter.astro`\n**File**: `src/pages/isolated-components/SiteFooterHome.astro`\n\nNo prop changes: the label is computed inside the component, so both isolation\npages keep their current `text` / `contactUrl` / `variant` props verbatim. They\nare listed here because their captures will change — both scenarios need\nre-screenshotting so the stored frames show the new right-hand group rather than\nthe bare link.\n\n## Reused existing code\n\n- `resolveContactUrl` from `src/lib/contactUrl.ts` (glossary entry:\n  `resolveContactUrl`) — not called by this change, but its module comment states\n  the pure-function-with-colocated-test convention the new helper follows.\n- `SiteFooter` from `src/components/chrome/SiteFooter.astro` (glossary entry:\n  `SiteFooter`) — the component being extended; its two-variant structure and\n  `cmsSetting('footerText')` marker are preserved as-is.\n- `cmsSetting` from `src/lib/cmsMarkers.ts` (glossary entry: `cmsSetting`) —\n  deliberately NOT applied to the new element; noted so the omission reads as a\n  decision rather than an oversight.\n- `applyTreeGrowth` from `src/lib/tree-dom.ts` (glossary entry: `applyTreeGrowth`)\n  — the precedent for a pure `src/lib` function that a client script imports;\n  `src/components/structures/BranchingTree.astro` is the precedent for the\n  bundled-`<script>`-with-imports idiom itself.\n- Design tokens `--size-footer`, `--footer-text` and `--space-xs` from\n  `src/styles/tokens.css`.\n- **Existing-implementation survey**: nothing in the repo formats or renders a\n  year today. `src/data/settings.json` has no year field, and `footerText` is the\n  literal `\"THE PUZZLE SCHOOL · K–12\"`. There is no `src/lib` date or copyright\n  helper — greps for year, copyright and the © glyph across `src/` and\n  `.codeyam/glossary-index.txt` return nothing. This is genuinely new code, not a\n  duplicate of an existing seam.\n\n## Scenarios to Demonstrate\n\n- Internal-page footer (`/isolated-components/SiteFooter`) — brand line left,\n  `Contact  © <year>` right, on the 40px gutter and 30px band.\n- Home footer (`/isolated-components/SiteFooterHome`) — same pairing on the wide\n  gutter with the deeper foot and top-aligned rows.\n- A full internal page (`/about`) and Home (`/`) so the footer is seen in the\n  page it actually terminates, at the real page width.\n- Narrow viewport (~380px) — `flex-wrap` drops the `Contact  © <year>` group to\n  its own row without crushing the brand line or breaking between the `©` and\n  the year.\n- Year rollover — the build-time render says one year and the client script\n  corrects it to the next; demonstrable by pointing the helper at a date one\n  second either side of midnight on Dec 31.\n- No-JS render — the build-time year is present in the served HTML, so the\n  footer is complete before (and without) the script.",
+  "description": "The site footer now ends with a copyright notice to the right of the Contact link, in both the home and internal variants. The link and the notice are wrapped in a single footer__end child rather than added as a third direct child, because the footer is justify-content space-between and a third child would have redistributed the row into three evenly-spaced items and pulled the brand line off the left edge; wrapping keeps the two-ended row both designs specify. At phone width the whole group drops to a second row together via the footer's existing flex-wrap, and the copyright never breaks between the glyph and the year.\n\nThe year is rendered TWICE by design, and that is the substance of the change rather than an implementation detail. The site is output static and its deploy workflow fires only on push to main and workflow_dispatch - there is no schedule - so a build-time-only year would be correct on the day it ships and wrong for however long January runs without a push. So the build machine's year is rendered into the served HTML, which keeps the first paint and no-JS visitors complete, and a small bundled client script rewrites the same element from the visitor's own clock on load. Both paths call one pure helper, copyrightLabel(now: Date) in src/lib/copyright.ts, so the two can never disagree about the format. The date is a parameter rather than read from the clock inside the helper, which is what lets the tests pin a New Year rollover without mocking a global clock. The notice is deliberately left without a cmsSetting marker: it is derived from the clock, not stored, and a marker would let a staged edit write a literal year over a self-updating one - the mirror of why the Contact link beside it is also unmarked.\n\nCoverage: 4 colocated vitest cases in src/lib/copyright.test.ts (format, argument-not-clock, a New Year boundary one second apart, and local-vs-UTC calendar), plus a new SiteFooter - Narrow Viewport component scenario at Mobile for the wrap. The existing footer and full-page scenarios were recaptured in place rather than duplicated. The red proof for copyrightLabel is an AGENT ATTESTATION, not a tool measurement: prove-red cannot bisect a brand-new export because the without-fix world will not compile the test that imports it, so redness was established by fault injection - neutering the body to ignore its argument and read getUTCFullYear off the clock took 3 of the 4 tests red, and the real body was then restored and re-verified green.\n\nSCOPE VERDICT. This cycle delivered no project deliverable and deferred none: all 5 were already resolved by earlier cycles, and this is an increment on top of them. The standing deferral is unchanged - 'Improvements made to codeyam-cms itself where needed to support static-site authoring' remains deferred, decidedBy user, with the two diagnosed upstream defects (parseEntry lacking YAML block-scalar support, and the editor capture guard mis-scoping seed sentinels) still owed. No deliverable row on this project currently carries a decidedBy of agent.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/current-year-copyright-in-the-footer.md\t.codeyam/plans/completed/current-year-copyright-in-the-footer.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-home-variant--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-home-variant--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/09d7582203fae8ada0f0a32855e13f2e4407ef83e17242205bf8da6c790a34b5.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/46268ba4380ddef211ffa589427cbc530602ddfc23e886f4211a1832a68e821b.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/6b5a6c35c0073dfccbbec53c13f89671af9c0b84dfeba9411b85a13a8ae0a829.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/6d29e55e0a0b2a73a74767f94fd73a968fdcfcc78eefc340193ccefd023a1a05.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/chrome/SiteFooter.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-narrow-viewport--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-narrow-viewport--mobile.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitefooter-narrow-viewport.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/current-year-copyright-in-the-footer.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/1325353d81e4caf7248667a94d905ecb138e1a6c86bd13c01e1d0d01bc6c562b.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/6185ad873e93aa2a6f783f5c80826fa1b049c53645b72350314c45693b424e15.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/copyright.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/copyright.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "SiteFooter - Default",
+      "screenshotPath": "sitefooter-default--desktop.png"
+    },
+    {
+      "name": "SiteFooter - Home Variant",
+      "screenshotPath": "sitefooter-home-variant--desktop.png"
+    },
+    {
+      "name": "SiteFooter - Narrow Viewport",
+      "screenshotPath": "sitefooter-narrow-viewport--mobile.png"
+    }
+  ],
+  "testResults": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 4,
+        "passed": 4
+      }
+    ]
+  }
+}
