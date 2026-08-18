@@ -1,0 +1,30 @@
+{
+  "claimStartedAt": "2026-08-18T01:27:10Z",
+  "completedAt": "2026-08-18T10:59:54Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "currentStep": "ui-step22",
+    "machine": "codeyam-editor-codeyam-editor-9",
+    "originId": "f5ff3007-cf7f-4dbd-8740-1b44095f384b",
+    "pid": 7,
+    "priority": 0,
+    "selectedPlan": "a-dragon-curve-that-restructures-per-page-and-per-visit",
+    "sessionId": "6f1de73c-9f6a-40d7-895c-c527d2d4ec3f",
+    "startedAt": "2026-08-18T01:27:10Z"
+  },
+  "createdAt": "2026-08-18T01:25:13Z",
+  "deliverables": [
+    "src/components/page/ExploratoryBand.astro",
+    "src/components/structures/DragonCurve.astro",
+    "src/lib/dragon.test.ts",
+    "src/lib/dragon.ts",
+    "src/pages/[...slug].astro",
+    "src/pages/isolated-components/DragonCurveVariations.astro"
+  ],
+  "journalTimestamp": "2026-08-18T10:59:54Z",
+  "mode": "ui",
+  "planFile": "completed/a-dragon-curve-that-restructures-per-page-and-per-visit.md",
+  "slug": "a-dragon-curve-that-restructures-per-page-and-per-visit",
+  "title": "A Dragon Curve That Restructures Per Page and Per Visit"
+}

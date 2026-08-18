@@ -1,5 +1,5 @@
 ---
-// The curve filling the top of the About page's dark band, full width.
+// The curve filling the top of an internal page's dark band, full width.
 //
 // It is an ORTHOGONAL lattice walk — right angles on a fixed grid, not a
 // diagonal figure — stretched across the band with `preserveAspectRatio="none"`
@@ -11,37 +11,64 @@
 // line with the heading. That pull-up needs something to be pulled up through.
 // Absolutely positioned, the curve contributes no height, the quote lands above
 // the band's top edge, and `overflow: hidden` eats it — the quote silently
-// disappears with no error anywhere.
+// disappears with no error anywhere. The well's height stays set by the `height`
+// prop for the same reason, so a redraw can never move the quote.
 //
 // Cut off before it closes: `fraction` stops the walk partway, so the figure runs
 // off the edge rather than resolving.
-import { dragonPoints, toPath } from '../../lib/structures';
+//
+// TWO AXES, like the tree, the harmonograph and the Voronoi field: a different
+// curve per page at build time from `seedKey`, a different one again per visit in
+// the browser, both frozen by `?tree=static`. What varies is not the dragon's
+// parameters but its FOLD WORD, so each draw is a genuinely different curve of
+// the same species rather than the same fractal rotated — see `lib/dragon.ts`.
+import { growAcceptableDragon, dragonViewBox } from '../../lib/dragon';
+import { hashSeed, toPath } from '../../lib/structures';
+import type { Point } from '../../lib/structures';
 
 interface Props {
-  iterations?: number;
-  step?: number;
-  fraction?: number;
-  /** Height of the band the curve fills. */
+  /**
+   * What this curve is drawn FROM — normally the page slug. Hashed to a seed, so
+   * distinct pages get distinct curves and each keeps its own across builds.
+   */
+  seedKey?: string;
+  /** An explicit seed, overriding `seedKey`. For the variations sheet. */
+  seed?: number;
+  /**
+   * A curve to draw AS GIVEN, bypassing the acceptance loop entirely.
+   *
+   * Exists for the variations sheet's control lanes, which have to show what
+   * `growAcceptableDragon` REJECTS — and there is no seed that produces a
+   * rejected curve, because the whole job of the acceptance loop is to not
+   * return one. Without this the sheet has to restate the markup below to draw
+   * its controls, which puts the stroke colour, the hairline treatment and
+   * `preserveAspectRatio` in two places and lets the controls silently drift
+   * out of step with the figure they are a control for.
+   */
+  points?: readonly Point[];
+  /** Height of the band the curve fills. A layout fact, not a variation axis. */
   height?: number;
 }
 
-const { iterations = 12, step = 7, fraction = 0.85, height = 430 } = Astro.props;
+const { seedKey, seed, points: given, height = 430 } = Astro.props;
 
-const points = dragonPoints(iterations, { step, fraction });
-
-const xs = points.map((p) => p.x);
-const ys = points.map((p) => p.y);
-const minX = Math.min(...xs);
-const minY = Math.min(...ys);
-const boxWidth = Math.max(...xs) - minX || 1;
-const boxHeight = Math.max(...ys) - minY || 1;
+// Salted with the structure's own name, so this band and the flanking figures on
+// the same page are not three draws of the same number.
+const resolved = seed ?? hashSeed(`${seedKey ?? 'default'}:dragon`);
+const points = given ?? growAcceptableDragon(resolved);
 ---
 
 <div class="dragon-well" style={`height: ${height}px;`}>
+  <!-- `data-dragon` is what the per-visit script redraws, so a caller-supplied
+       curve deliberately does NOT carry it: the one reason to pass `points` is
+       to pin a specific figure, and redrawing it would erase exactly what the
+       caller asked to show. Leaving the hook on and relying on the sheet's
+       `?tree=static` would make the control correct only by URL accident. -->
   <svg
+    data-dragon={given ? undefined : true}
     width="100%"
     height={height}
-    viewBox={`${minX} ${minY} ${boxWidth} ${boxHeight}`}
+    viewBox={dragonViewBox(points)}
     preserveAspectRatio="none"
     aria-hidden="true"
     focusable="false"
@@ -55,6 +82,33 @@ const boxHeight = Math.max(...ys) - minY || 1;
     />
   </svg>
 </div>
+
+<script>
+  import { growAcceptableDragon, dragonViewBox } from '../../lib/dragon';
+  import { randomTreeSeed, toPath } from '../../lib/structures';
+  import { applyFigure } from '../../lib/figure-dom';
+
+  const frozen = new URLSearchParams(location.search).get('tree') === 'static';
+
+  if (!frozen) {
+    for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-dragon]')) {
+      // A failed redraw must leave the server's curve standing rather than an
+      // empty band — the SSR figure is already correct, this is an enhancement.
+      try {
+        const points = growAcceptableDragon(randomTreeSeed());
+        // One path, always — the simple case `applyFigure` handles by reusing the
+        // server's element, which is what keeps the stroke and vector-effect
+        // defined only in the markup above.
+        requestAnimationFrame(() =>
+          applyFigure(svg, dragonViewBox(points), [{ d: toPath(points) }]),
+        );
+      } catch {
+        // Intentionally silent: an ambient decorative figure is not worth a
+        // console error on a visitor's page.
+      }
+    }
+  }
+</script>
 
 <style>
   .dragon-well {

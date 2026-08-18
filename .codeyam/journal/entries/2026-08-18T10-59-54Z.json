@@ -1,0 +1,283 @@
+{
+  "timestamp": "2026-08-18T10:59:54Z",
+  "title": "A Dragon Curve That Restructures Per Page and Per Visit",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe dark band that closes every internal page carries a dragon curve across its\ntop, and that curve is the one structure on the site that never changes: it takes\nno seed, has no client script, and `dragonPoints(12, { step: 7, fraction: 0.85 })`\ndraws the identical figure on every page and every visit. The branching tree, the\nharmonograph and the Voronoi field all vary on two axes — per page at build time\nfrom a hashed `seedKey`, per visit in the browser, both frozen by `?tree=static`.\nBring the dragon curve onto that same footing. Because the Heighway dragon is a\nsingle fixed fractal with nothing to sample, the figure is generalised to its\nFOLD-WORD family: the curve is a sequence of right-angle folds, and the classic\ndragon is the word where every fold turns the same way. Drawing each fold from the\nseed makes every load a genuinely different lattice curve of the same species,\nwith the shipped dragon still a member of the family. Rotation, iteration depth\nand the cut-off point are sampled alongside it, and — as with the other three\nstructures — the result is checked against an acceptance envelope rather than\ntrusted, because a random fold word can retrace its own edges into a blot.\n\n## Key Decisions\n\n- **Generalise to the fold word, not just the parameters.** A dragon curve is\n  built by repeated folding: `turns(k+1) = turns(k) ++ [d(k)] ++ reverse(negate(turns(k)))`.\n  Fixing every `d` at right gives the Heighway dragon; drawing each `d` from the\n  seed gives 2^n curves that are all still orthogonal lattice walks at the same\n  complexity. This is what makes the change a RESTRUCTURE rather than the same\n  fractal rotated — which is the thing the tree does and the reason it reads as\n  grown rather than printed.\n- **The all-right fold word must reproduce `dragonPoints` exactly, and a test\n  asserts it.** That is the fidelity check that the generalisation is faithful,\n  the same role `applyTreeGrowth`'s seven pre-existing tests played when\n  `applyFigure` was extracted out from under them. `dragonPoints` therefore stays\n  in `src/lib/structures.ts` unchanged — it is not dead code after this, it is the\n  reference specimen the new generator is measured against.\n- **A new `src/lib/dragon.ts`, not more of `structures.ts`.** The harmonograph and\n  the Voronoi field each got their own module the moment they carried an envelope,\n  a variant sampler, a shortfall score and an acceptance loop; this figure now\n  carries the same four. The L-system primitives (`lsystem`, `turtle`,\n  `kochPoints`, `dragonPoints`) stay where they are, because `KochFragment` still\n  uses them and they are shared vocabulary rather than this figure's own.\n- **Walk the folds through the existing `turtle`.** The turn sequence is emitted\n  as a turtle command string and walked by `turtle(..., { angle: 90 })`, so\n  `fraction`, `heading` and `origin` keep exactly the semantics they already have\n  and the cut-off behaviour stays the one that is already tested. Writing a second\n  walker would fork that.\n- **Self-overlap is the acceptance term this figure needs and no other has.** The\n  Heighway dragon famously never crosses itself; a random fold word often does,\n  and a retraced edge draws twice as a visibly heavier line — the blot failure\n  mode, arriving by a different route than the harmonograph's. So the shortfall\n  score measures the fraction of lattice edges walked more than once and bands it\n  near zero, alongside aspect and coverage terms of the kind the other three\n  structures already use.\n- **The envelope is calibrated to ADMIT the figure shipping today**, exactly as\n  `SEGMENT_BAND`'s floor was set to admit the 39-segment tree that predated\n  variation. The current curve is the one piece of ground truth about what reads\n  correctly in this band, so `dragonShortfall` must score it 0; any band that\n  rejects it is wrong, not the specimen.\n- **`?tree=static` is reused, not joined by a fourth flag.** Its real meaning is\n  already \"do not regrow generated figures after load\", every frozen scenario URL\n  carries it, and a `?dragon=static` would mean rewriting all of them to freeze a\n  page that would then hold four different structures.\n- **The curve stays IN FLOW and its well keeps its fixed height.** The band's\n  quote is pulled up through this figure (`margin-top: -306px`), so the redraw\n  rewrites `d` and the viewBox inside a well whose height is still set by the\n  `height` prop — no layout shift, and the pull-up keeps something to be pulled\n  up through.\n- **Per-page seed reaches the curve through the band, salted `:dragon`.**\n  `ExploratoryBand` gains a pass-through `seedKey` and the route hands it\n  `page.id`, so About, Contact and a page a CMS editor writes next year each get\n  their own curve with no code change — and the salt keeps this figure from being\n  the same draw as the harmonograph or the field on the same page.\n\n## Implementation\n\n### 1. The generator, its envelope and its acceptance check\n\n**New file**: `src/lib/dragon.ts`\n\n- `foldTurns(folds)` — build the turn sequence from a fold word by the recurrence\n  above, returning `+1`/`-1` per turn. `2^n` folds give `2^n - 1` turns.\n- `foldCommands(turns)` — the turtle string: `F`, then `+F` or `-F` per turn.\n- `dragonTrace(options)` — `turtle(foldCommands(foldTurns(folds)), { angle: 90, step, fraction, heading, origin })`.\n- `DRAGON_ENVELOPE` — the sampled ranges as one readable object, mirroring\n  `TREE_ENVELOPE`'s `ranges`/`fixed` split: `iterations` 11–13 (integer),\n  `fraction` 0.6–0.95, `quarterTurn` 0–3 (integer, multiplied to 0/90/180/270 for\n  `heading`), plus one fold direction drawn per iteration. `step` is FIXED —\n  the viewBox is derived from the walk's own bounds and stretched to the band\n  with `preserveAspectRatio=\"none\"`, so `step` is invisible in the output and\n  varying it would be a variation costume over nothing.\n- `dragonVariant(seed)` — maps a seed onto one bounded option set via\n  `seededRandom`, drawing in a FIXED order so a seed is reproducible; the fold\n  word is drawn last, one bit per iteration.\n- `dragonViewBox(points)` — `pointBounds` plus a 1-unit margin, extracted for the\n  same reason `treeViewBox` was: both the server render and the client redraw need\n  it, and duplicating it lets the two frame the same curve differently.\n- `dragonShortfall(points)` / `isAcceptableDragon` / `growAcceptableDragon(seed, attempts = 20)` —\n  the same shape as `growAcceptableTree`: score, return the first draw that scores\n  0, otherwise fall back to the closest attempt rather than throwing, because this\n  runs inside a page render with nobody to catch an exception and a slightly-off\n  curve beats an empty band.\n\nShortfall terms, each normalised to roughly \"fraction of the way out of band\" so\nnone dominates:\n\n- **Retrace** — lattice edges walked more than once, as a fraction of edges\n  walked. Keyed on the rounded endpoint pair so an edge and its reverse are the\n  same edge. Banded near 0; this is the term that rejects the blot.\n- **Aspect** — `width / height` of the walk's bounds, banded so the band's\n  anisotropic stretch reads as fit rather than distortion. Calibrate the band\n  against the currently shipped figure.\n- **Coverage** — occupied lattice cells over bounding-box cells, in the spirit of\n  `measureCoverage` in `src/lib/harmonograph.ts`. Rejects a sparse spike or a walk\n  that is mostly one long straight run.\n- **Openness** — the distance between first and last point, as a fraction of the\n  bounding diagonal, floored. The figure's stated character is \"cut off before it\n  closes\"; a draw that ends where it started reads as resolved, which is the one\n  thing it must not be.\n\n### 2. Tests for the generator\n\n**New file**: `src/lib/dragon.test.ts`\n\n- The all-right fold word reproduces `dragonPoints(n, ...)` point for point — the\n  fidelity check.\n- `foldTurns` length and symmetry: `2^n - 1` turns, and the second half is the\n  reversed negation of the first.\n- `fraction` below 1 stops the walk early (mirroring the existing `dragonPoints`\n  test).\n- `dragonVariant` is deterministic per seed and lands inside `DRAGON_ENVELOPE` for\n  a sweep of seeds.\n- `dragonShortfall` scores the currently shipped figure 0 (the ground-truth\n  specimen), and scores a hand-built degenerate control — a fold word chosen to\n  retrace heavily — materially higher.\n- Zero fall-through: `growAcceptableDragon` returns an acceptable curve for a\n  sweep of 3000 seeds, the bar the harmonograph and the field were held to.\n- `dragonViewBox` frames the drawn points with the margin.\n\n### 3. The component: two seeds, two moments\n\n**File**: `src/components/structures/DragonCurve.astro`\n\n- Add `seedKey` and `seed` props, resolving as the other two do:\n  `seed ?? hashSeed(`${seedKey ?? 'default'}:dragon`)`.\n- Draw with `growAcceptableDragon(resolved)`; frame with `dragonViewBox`; mark the\n  `<svg>` `data-dragon`.\n- Add the `<script>` block: read the presence-only `?tree=static` flag, and when\n  not frozen redraw each `svg[data-dragon]` from `randomTreeSeed()` inside a\n  single `requestAnimationFrame` via `applyFigure(svg, dragonViewBox(points), [{ d: toPath(points) }])`,\n  wrapped in a `try` that silently keeps the server's curve on failure. Copy the\n  reasoning structure of the harmonograph's script rather than inventing a\n  different one.\n- Keep the header comment's existing load-bearing notes (in flow, not absolute;\n  `preserveAspectRatio=\"none\"`; hairline via `vector-effect`) and add the\n  two-axes note.\n\n### 4. The band passes the page's identity down\n\n**File**: `src/components/page/ExploratoryBand.astro`\n\nAdd an optional `seedKey` prop and forward it to `<DragonCurve seedKey={seedKey} />`.\nNothing else changes; a band rendered without one falls back to the shared\n`default` curve, which is what the isolation pages want.\n\n### 5. The route names the seed\n\n**File**: `src/pages/[...slug].astro`\n\nPass `seedKey={page.id}` to `<ExploratoryBand>`, alongside the `seedKey` already\nhanded to `<ProseColumns>`. This is the whole per-page axis: a page created in\n`/admin` next year gets its own curve with no code change.\n\n### 6. A variations sheet, so the envelope can be judged\n\n**New file**: `src/pages/isolated-components/DragonCurveVariations.astro`\n\nEight fixed seeds side by side, plus a CONTROL lane or two that bypass\n`growAcceptableDragon` and pass a raw degenerate fold word straight through, so\nthe retrace guard can be SEEN failing rather than trusted — the pattern\n`src/pages/isolated-components/HarmonographVariations.astro` and\n`src/pages/isolated-components/VoronoiFieldVariations.astro` already establish.\nBecause the curve is drawn full-width, lay the specimens out stacked rather than\nin a row. Register with:\n\n`codeyam-editor editor register '{\"name\":\"DragonCurve - Variations\",\"componentName\":\"DragonCurve\",\"url\":\"/isolated-components/DragonCurveVariations?tree=static\",\"dimensions\":[\"Desktop\"]}'`\n\n### 7. Freeze the scenarios that now hold a redrawing figure\n\n**File**: `.codeyam/scenarios/dragoncurve-default.json`\n\n**File**: `.codeyam/scenarios/exploratoryband-default.json`\n\n**File**: `.codeyam/scenarios/exploratoryband-without-quote.json`\n\n**File**: `.codeyam/scenarios/prosecolumns-with-foot.json`\n\nAdd `?tree=static` to each `url`. These four render a structure that will now\nredraw after load, and an unfrozen capture races the swap. `prosecolumns-with-foot`\nis worth calling out: it already renders a `BranchingTree` through `ProseColumns`\nand already lacked the flag, so this closes a pre-existing gap on the same\nsurface rather than only the one this change opens.\n\nEvery committed screenshot containing the band changes, because the build-time\nfigure is now sampled from the envelope rather than fixed at\n`dragonPoints(12, { step: 7, fraction: 0.85 })`: `about-full-design`,\n`about-footer-contact-link-followed`, `contact-email-only`,\n`page-created-from-the-cms`, `page-minimal-fields`, `prosecolumns-single-section`,\nthe two `exploratoryband-*` scenarios, `prosecolumns-with-foot` and\n`dragoncurve-default`. Recapture them; the change is expected, not drift.\n\n## Reused existing code\n\n- `turtle`, `lsystem` and `dragonPoints` from `src/lib/structures.ts` (glossary\n  entries: `dragonPoints`) — the walker the fold word is emitted into, and the\n  reference specimen the generalisation is tested against.\n- `toPath`, `pointBounds`, `outOfBand`, `seededRandom`, `hashSeed`,\n  `randomTreeSeed` from `src/lib/structures.ts` (glossary entries: `outOfBand`,\n  `randomTreeSeed`, `hashSeed`) — the shared vocabulary of every structure's\n  seeding and acceptance scoring.\n- `applyFigure` from `src/lib/figure-dom.ts` (glossary entry: `applyFigure`) — the\n  per-visit rewrite. This is a one-path figure, the case the function's own surplus-and-shortfall handling already covers, so nothing there changes.\n- `growAcceptableTree` / `treeShortfall` / `TREE_ENVELOPE` in\n  `src/lib/structures.ts` (glossary entries: `growAcceptableTree`,\n  `treeShortfall`, `treeVariant`) — the shape the new dragon module copies:\n  envelope object, variant sampler, shortfall score, resample-with-derived-seed\n  loop, closest-attempt fallback.\n- `measureCoverage` from `src/lib/harmonograph.ts` (glossary entry:\n  `measureCoverage`) — the precedent for a MEASURED acceptance term rather than an\n  outline-based one, which is what the coverage and retrace terms are.\n- `growAcceptableVoronoi` / `voronoiViewBox` in `src/lib/voronoi.ts` (glossary\n  entries: `growAcceptableVoronoi`, `voronoiViewBox`) and the `<script>` block of\n  `src/components/structures/VoronoiField.astro` — the closest existing template\n  for the component-side change.\n\n**Existing-implementation survey.** Nothing equivalent exists today: grepping\n`src/` for `dragonPoints` finds exactly two call sites (the component and its\ntest), `src/components/structures/DragonCurve.astro` has no `<script>` block, no seed prop and no\n`data-` hook, and the only per-visit redraw machinery in the tree is the three\ncomponents listed in `src/lib/figure-dom.ts`'s header — the dragon is not among\nthem. `?tree=static` already exists and is read identically by all three, so no\nnew flag or config field is introduced by this plan.\n\n## Scenarios to Demonstrate\n\n- **The band on a real internal page, frozen** — `/about?tree=static`: the\n  build-time curve for the `about` seed, the state a no-JS visitor keeps and the\n  state every capture records.\n- **A different page, a different curve** — `/contact?tree=static` beside About:\n  the per-page axis, visible as two unmistakably different lattice walks in the\n  same band.\n- **The variations sheet** — eight seeds stacked, showing the family stays one\n  species across the envelope.\n- **The degenerate control** — a raw fold word that retraces heavily, drawn beside\n  a healthy one on the same sheet, so the retrace guard can be seen rejecting\n  something rather than trusted.\n- **The one-section page** — `/notes?tree=static`: the flanked layout, where the\n  band's curve now varies alongside the harmonograph and the Voronoi field, and\n  the three must read as three different figures rather than one repeated idea.\n- **The band with no quote** — `/isolated-components/ExploratoryBandNoQuote?tree=static`:\n  the pull-up is switched off, so this is where a curve that changed the well's\n  height would show as a gap.",
+  "description": "The dark band's dragon curve was the one structure on the site that never changed. It now varies on the same two axes as the tree, the harmonograph and the Voronoi field - per page at build time from a seedKey hashed off the page id and salted `:dragon`, per visit in the browser - with `?tree=static` freezing both. It varies by drawing a different FOLD WORD rather than different parameters: a new `src/lib/dragon.ts` generalises the Heighway dragon to its whole paperfolding family, so every load is a genuinely different lattice curve of the same species rather than the same fractal rotated. `dragonPoints` stays in `structures.ts` untouched as the reference specimen, and a test asserts the all-right fold word still reproduces it point for point. `ExploratoryBand` gains a pass-through `seedKey` and `[...slug].astro` hands it `page.id`, so a page a CMS editor writes next year gets its own curve with no code change.\n\nThree things the plan got wrong, all caught by measuring or by looking at a render rather than by reasoning. (1) The plan's premise for the self-overlap guard was false: an exhaustive check of all 1024 fold words at depth 10 found ZERO retraced edges, because non-self-intersection is a property of the entire paperfolding family and not just the classic dragon. The term is kept, but re-aimed as a structural invariant on the fold recurrence - a broken recurrence retraces 99.9% of its edges, a non-fold-word turn sequence 43% - which is the more valuable of the two jobs. (2) Calibrating the envelope to ADMIT the shipped figure was necessary and NOT sufficient: an aspect floor of 0.55 admitted a curve the band's full-width stretch flattened into horizontal bars. (3) The variations sheet then rejected the next envelope too - accepted draws spanned a solid hatch at coverage 0.65 and a sparse mound at 0.36 - so coverage was drawn close around the specimen and a per-axis balance term was added last, after it cleanly separated every specimen that read correctly (0.44-0.55 on both axes) from every one that did not (0.31, 0.39, 0.67, 0.69).\n\nThe first test pass was VACUOUS on exactly those calibration decisions: reverting the aspect floor and both coverage bounds left all 39 tests green, so the corrections were pinned by nothing. Four gap specimens now pin them - seed 5 (aspect 1.00), seed 86 (coverage 0.577), seed 50 (coverage 0.344), seed 8 (balanceY 0.297) - each sitting between an old bound and its replacement with every other term clean, so reverting any one correction turns exactly one test red and no others. Recorded via prove-red-attest rather than a measurement, because a brand-new module cannot be revert-proven (reverting it deletes the symbols the tests import). 42 tests, all green.\n\nTwo smaller plan inaccuracies, neither blocking, both corrected in place: the plan cited a 3000-seed fall-through sweep as \"the bar the harmonograph and the field were held to\", but those suites sweep 60 and 400 - the committed test uses 500 with an explicit 30s timeout, since 3000 takes 45s and blows vitest's 5s default (a 3000-seed sweep was still run offline and also fell through zero times). And the plan named `/notes` as the page where the band's curve varies alongside the harmonograph and the Voronoi field; `/notes` has no `heading` frontmatter so it renders no band at all. Contact is the page that actually carries all three, and they read as three clearly distinct figures - smooth loops, straight-edged cells, orthogonal lattice.\n\nSCOPE VERDICT. This cycle delivered NONE of the project's five deliverables and deferred none: all five were already resolved before it began (4 delivered, 1 deferred), and every one carries `decidedBy: user` - there is no agent-decided deferral to surface. This was refinement of an existing surface rather than progress against an open deliverable. The one standing deferral is unchanged and not touched by this work: \"Improvements made to codeyam-cms itself\", deferred by the user in the CMS Staged-Preview Markers cycle because the two diagnosed upstream defects were worked around in this repo with follow-up plans queued; those upstream fixes remain owed.\n\nOne piece of unrelated drift found and cleared with the user's approval: a plan-claim ref for `upgrade-astro-5-to-6` was held by a dead session on this machine (last heartbeat 9.5h stale, stuck at step 2). The audit's own fix command would have archived that plan into completed/, but astro is still 5.18.2 so the upgrade has NOT shipped - archiving it would have marked un-built work as done and dropped it from the queue. The claim was released instead and the plan correctly left queued.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/a-dragon-curve-that-restructures-per-page-and-per-visit.md\t.codeyam/plans/completed/a-dragon-curve-that-restructures-per-page-and-per-visit.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/about-full-design.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/dragoncurve-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/exploratoryband-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/exploratoryband-without-quote.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/prosecolumns-with-foot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/wait-for.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c05d09a1ad3431a348504d034253bc0d50b71bb0f62557444b8347207db6d151.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c235cb4310291be42b63b55eb87e448897010ee04e9964b39c3336caebb536a7.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/page/ExploratoryBand.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/structures/DragonCurve.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/[...slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/dragoncurve.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/dragoncurve-variations.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-variations--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-variations--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/a-dragon-curve-that-restructures-per-page-and-per-visit.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/15b812c28fdd2ef1f1eb90e725c6cf6d37b65a2bcfb9418842238d47a19859b9.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7592555b52607172a42cbd8c93ef54fece229d02fb768411cffb122c60c96028.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/dragon.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/dragon.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DragonCurveVariations.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "DragonCurve - Default",
+      "screenshotPath": "dragoncurve-default--desktop.png"
+    },
+    {
+      "name": "DragonCurve - Variations",
+      "screenshotPath": "dragoncurve-variations--desktop.png"
+    },
+    {
+      "name": "ExploratoryBand - Default",
+      "screenshotPath": "exploratoryband-default--desktop.png"
+    },
+    {
+      "name": "ExploratoryBand - Without Quote",
+      "screenshotPath": "exploratoryband-without-quote--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 42,
+    "passed": 42,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 42,
+        "passed": 42
+      }
+    ]
+  }
+}

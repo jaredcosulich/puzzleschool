@@ -1,13 +1,13 @@
 {
   "name": "ExploratoryBand - Without Quote",
   "id": "64606b41-48be-481e-b551-c31bfe678b32",
-  "url": "/isolated-components/ExploratoryBandNoQuote",
+  "url": "/isolated-components/ExploratoryBandNoQuote?tree=static",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "ExploratoryBand",
   "scenarioType": "component",
-  "description": "The band as Contact renders it — heading and body, no quote column.",
-  "pageFilePath": "src/components/page/ExploratoryBand.astro"
+  "pageFilePath": "src/components/page/ExploratoryBand.astro",
+  "description": "The band as Contact renders it — heading and body, no quote column. With the pull-up switched off, this is where a curve that changed the well's height would show as a gap between the figure and the heading rather than by moving a quote."
 }

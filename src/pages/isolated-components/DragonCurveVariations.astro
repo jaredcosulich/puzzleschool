@@ -1,0 +1,143 @@
+---
+// Eight dragon curves from eight fixed seeds, stacked.
+//
+// This is the surface where the variation ENVELOPE can actually be judged, the
+// same role `HarmonographVariations` and `VoronoiFieldVariations` play for their
+// figures. One curve tells you nothing about whether the constraints hold — it
+// either looks fine or it does not. Eight at once makes a bad draw obvious: a
+// curve smeared into horizontal streaks, or one so dense it greys out, stands
+// out immediately against seven siblings that read as the same species.
+//
+// STACKED rather than in a row, because this figure is drawn full-bleed across
+// the band rather than in a 200px lane. The specimens are shown at half the
+// site's scale but at the band's exact 3.3:1 PROPORTION, which is the thing that
+// matters: `preserveAspectRatio="none"` means the distortion a curve suffers
+// depends only on the destination's aspect, not its size. Judging these in a
+// square would judge a figure the site never renders.
+//
+// The seeds are FIXED and arbitrary, not slugs, because this sheet is about the
+// envelope rather than about any particular page. Register with:
+//   codeyam-editor editor register '{"name":"DragonCurve - Variations","componentName":"DragonCurve","url":"/isolated-components/DragonCurveVariations?tree=static","dimensions":["Desktop"]}'
+//
+// The last two lanes are the CONTROL, and they are the point of the sheet: a
+// band that cannot be seen failing cannot be judged. Both go through the SAME
+// component as the eight specimens, handing it a pinned `points` array so the
+// acceptance loop is bypassed without the sheet restating the figure's markup.
+import Component from "../../components/structures/DragonCurve.astro";
+import {
+  dragonShortfall,
+  dragonTrace,
+  dragonVariant,
+  foldCommands,
+  measureRetrace,
+  type Fold,
+} from "../../lib/dragon";
+import { pointBounds, turtle } from "../../lib/structures";
+import "../../styles/tokens.css";
+
+const SEEDS = [1, 7, 11, 23, 42, 99, 256, 1024];
+
+/** The band's own proportion, at half scale. See the note above. */
+const LANE = { width: 620, height: 186 };
+
+/**
+ * `foldTurns` with its recurrence BROKEN — the mirrored half is reversed but not
+ * negated. Deliberately wrong code, kept here rather than in `lib/dragon.ts`
+ * because its only purpose is to be rejected.
+ *
+ * This is what the retrace term actually guards against. No real fold word
+ * retraces a single edge (that is a property of the whole paperfolding family,
+ * not just the classic dragon), so a control built from a "bad fold word" would
+ * be indistinguishable from a good one. A broken RECURRENCE is the failure that
+ * is really available here, and it retraces almost every edge it walks.
+ */
+function brokenFoldTurns(folds: readonly Fold[]): Fold[] {
+  let turns: Fold[] = [];
+  for (const fold of folds) turns = [...turns, fold, ...[...turns].reverse()];
+  return turns;
+}
+
+const BROKEN_WORD: Fold[] = [1, -1, 1, 1, -1, -1, 1, -1, 1, 1, -1, 1];
+const retraced = turtle(foldCommands(brokenFoldTurns(BROKEN_WORD)), {
+  angle: 90,
+  step: 7,
+  fraction: 0.85,
+});
+
+// Seed 2's raw draw is a real fold word with nothing wrong with it except its
+// PROPORTION: 0.57 wide-to-tall, which the band then has to stretch nearly 6x to
+// fill. Every vertical run flattens into a horizontal streak. This is the draw
+// that shipped in an early pass of this feature, and the reason the aspect floor
+// is set just under the shipped specimen rather than merely below the family.
+const smeared = dragonTrace(dragonVariant(2));
+
+const reading = (label: string, points: readonly { x: number; y: number }[]) => {
+  const box = pointBounds(points);
+  return `${label} — aspect ${(box.width / box.height).toFixed(2)}, retrace ${measureRetrace(
+    points,
+  ).toFixed(2)}, shortfall ${dragonShortfall(points).toFixed(2)}`;
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DragonCurve — Variations</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--paper);">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div class="sheet">
+        {
+          SEEDS.map((seed) => (
+            <figure class="specimen">
+              <Component seed={seed} height={LANE.height} />
+              <figcaption>{seed}</figcaption>
+            </figure>
+          ))
+        }
+
+        <figure class="specimen specimen--control">
+          <Component points={retraced} height={LANE.height} />
+          <figcaption>CONTROL · {reading('broken recurrence', retraced)} · rejected</figcaption>
+        </figure>
+
+        <figure class="specimen specimen--control">
+          <Component points={smeared} height={LANE.height} />
+          <figcaption>CONTROL · {reading('raw seed 2, too tall', smeared)} · rejected</figcaption>
+        </figure>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style define:vars={{ laneWidth: `${LANE.width}px` }}>
+  /* Two columns of five. A single stack of ten at the band's proportion is
+     taller than any viewport, so the sheet would be judged three specimens at a
+     time — which defeats the whole point of putting them side by side. */
+  .sheet {
+    display: grid;
+    grid-template-columns: repeat(2, var(--laneWidth));
+    justify-content: center;
+    gap: 14px 20px;
+  }
+
+  .specimen {
+    margin: 0;
+    width: var(--laneWidth);
+    background: var(--ink);
+  }
+
+  .specimen--control {
+    outline: 1px solid var(--coral, #d9503f);
+  }
+
+  figcaption {
+    padding: 6px 4px;
+    background: var(--paper);
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--body-text, #666);
+  }
+</style>

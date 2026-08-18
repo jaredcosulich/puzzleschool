@@ -487,6 +487,159 @@
       "runner": "tests"
     },
     {
+      "description": "The hatch. A real fold word at a density this band cannot carry — the hairlines merge and no line stays legible. Passes the original 0.65 ceiling.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › rejects a curve that silts into a solid hatch",
+      "line": 369,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The mound. Sparse enough that it reads as a low ridge on a baseline with the top of the band empty. Passes the original 0.2 floor by a wide margin.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › rejects a curve too sparse to fill the band",
+      "line": 380,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The smear. Its own proportions are fine in isolation — square, in fact — but a full-width band has to stretch it 3.3x sideways, and every vertical run in the lattice flattens into a bar. Passes the original 0.55 floor.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › rejects a curve too tall for the band to stretch",
+      "line": 358,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The void. Clean on aspect, coverage, openness and retrace — its ink is just all in the top third of the box, leaving a hole where the band's quote sits. This is the term the variations sheet asked for last, and the only test that pins it: remove the balance term from the score and this is the one that goes red.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › rejects a curve whose mass is piled at one end",
+      "line": 394,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The blot: a broken recurrence retraces almost every edge and inks the box solid.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › scores a broken fold recurrence materially worse than the specimen",
+      "line": 333,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A walk with nothing in it cannot be ranked against one that has something.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › scores a degenerate walk as infinitely short",
+      "line": 409,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE CALIBRATION ASSERTION. The shipped figure is the one piece of ground truth about what reads correctly in this band, so any envelope that rejects it is wrong — the specimen is not.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonShortfall › scores the shipped specimen exactly zero",
+      "line": 327,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE FIDELITY CHECK. The generalisation is only faithful if the all-right fold word reproduces the shipped `dragonPoints` exactly — this is what makes `dragonPoints` a reference specimen rather than dead code.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonTrace › reproduces dragonPoints point for point from the all-right fold word",
+      "line": 85,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Rotation is a whole-figure transform, so the walk must stay congruent.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonTrace › rotates the whole figure with heading, preserving its extent",
+      "line": 111,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every heading in the envelope is a quarter turn, so the walk never leaves the lattice — which is what makes retrace and coverage measurable at all.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonTrace › stays on an axis-aligned lattice at every sampled heading",
+      "line": 120,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Cutting the walk short is what makes the figure a fragment rather than a resolved emblem, and it is the behaviour `turtle` already owns.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonTrace › stops the walk early when fraction is below 1",
+      "line": 103,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Both fold directions have to actually appear, or the sampler is drawing the Heighway dragon every time under a different name.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonVariant › draws both fold directions across a sweep of seeds",
+      "line": 166,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same seed, same curve, forever — the property the whole static-site seeding model depends on.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonVariant › is deterministic for a given seed",
+      "line": 136,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Free-form randomisation would eventually draw something that is not this figure; the envelope is what makes \"within some constraints\" checkable.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonVariant › lands inside DRAGON_ENVELOPE for a sweep of seeds",
+      "line": 150,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Different seeds must actually diverge, or the per-page axis is decorative.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonVariant › produces different curves for different seeds",
+      "line": 142,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Both the server render and the client redraw call this, so a real curve has to come back framed to its own extent — not to a fixed box.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonViewBox › frames a grown curve to its own bounds",
+      "line": 461,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A 1-unit margin on each side, so the outermost stroke is not clipped.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "dragonViewBox › frames the drawn points with a one-unit margin",
+      "line": 450,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
       "description": "Sides follow the sequence itself: each is the sum of the previous two.",
       "file": "src/lib/structures.test.ts",
       "format": "vitest",
@@ -529,6 +682,95 @@
       "key": "fibonacciTiling › returns nothing for a count under two",
       "line": 77,
       "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "One forward move, then a turn and a forward move per crease.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldCommands › emits a leading forward move and one turn-plus-move per crease",
+      "line": 67,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The forward-move count is what `fraction` is a fraction OF, so it has to track the fold depth exactly.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldCommands › emits one forward move per straight run",
+      "line": 75,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A mixed word is still a valid fold word — it just is not the Heighway dragon.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldTurns › honours each fold direction at its own step",
+      "line": 59,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The structural property the whole family rests on: the far half of the strip arrives at each old crease from the other side, so it repeats the near half backwards AND inverted. Getting either transform wrong is the failure the retrace guard exists to catch.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldTurns › mirrors the second half as the reversed negation of the first",
+      "line": 50,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The recurrence: n folds produce 2^n - 1 creases, and so 2^n straight runs.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldTurns › produces 2^n - 1 turns for n folds",
+      "line": 33,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No folds is no creases — the strip is still flat.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldTurns › returns no turns for an empty fold word",
+      "line": 28,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The classic dragon's turn sequence, by hand: R, then R R L, then R R L R R L L.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "foldTurns › unfolds the all-right word into the regular paperfolding sequence",
+      "line": 40,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same seed, same curve, forever — the property the whole static-site seeding model depends on.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "growAcceptableDragon › is deterministic for a given seed",
+      "line": 136,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Sweeps 500 page seeds through growAcceptableDragon and asserts every returned curve passes isAcceptableDragon, so no page can render a figure the envelope rejects. Carries an explicit 30s timeout because the sweep genuinely outruns vitest default.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "growAcceptableDragon › returns an acceptable curve for a sweep of 500 seeds",
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Falls back to the closest attempt rather than throwing: this runs inside a page render with nobody to catch an exception, and a slightly-off curve beats an empty band.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "growAcceptableDragon › returns the closest attempt rather than throwing when the budget runs out",
+      "line": 441,
+      "registeredAt": "2026-08-18T10:36:25Z",
       "runner": "tests"
     },
     {
@@ -1087,6 +1329,141 @@
       "key": "lsystem › returns the axiom unchanged for zero iterations",
       "line": 127,
       "registeredAt": "2026-08-12T17:35:04.178797+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A symmetric walk sits dead centre on both axes.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureBalance › reports a symmetric walk as centred",
+      "line": 288,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure it was added for: ink piled into one end of the box, leaving a void the band cannot hide. Aspect and coverage both read fine here.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureBalance › reports a walk massed at one end as off-centre",
+      "line": 301,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degenerate input must not produce NaN and poison the comparison.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureBalance › reports the centre for an empty walk rather than NaN",
+      "line": 318,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The shipped specimen is what the band was calibrated to.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureBalance › reports the shipped specimen as balanced on both axes",
+      "line": 308,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The shipped figure is the one density known to read correctly in this band.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureLatticeCoverage › places the shipped specimen inside the accepted band",
+      "line": 249,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every site in the box visited is full coverage — the ink-out the ceiling rejects.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureLatticeCoverage › reports a fully visited box as complete coverage",
+      "line": 242,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A straight run is FULL coverage, not sparse — its bounding box collapses onto the run itself, so every cell in the box is visited. Coverage therefore catches the degenerate line at its CEILING, the same end that catches the ink-out; the floor never sees it. Worth pinning, because the obvious intuition (a line is sparse, so the floor rejects it) is backwards, and a future tightening of the ceiling that \"looks safe\" would quietly stop rejecting the one shape everyone assumes it catches.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureLatticeCoverage › reports a single straight run as fully covered rather than sparse",
+      "line": 235,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A walk that ends where it began reads as a closed emblem — the one thing this figure must not be.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureOpenness › reports a closed loop as zero",
+      "line": 260,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Corner to opposite corner is the whole diagonal.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureOpenness › reports opposite corners as a full diagonal",
+      "line": 271,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The shipped figure is cut off before it closes, and comfortably so.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureOpenness › reports the shipped specimen as open",
+      "line": 280,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The invariant this term exists to assert: every paperfolding curve is a simple curve, not just the classic dragon. Checked exhaustively rather than sampled, because the claim is about the whole family.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureRetrace › is zero for every fold word at depth 10",
+      "line": 179,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A walk that goes out and straight back has retraced every edge it took.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureRetrace › reports a fully doubled-back walk as retracing half its edges",
+      "line": 187,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degenerate inputs must not divide by zero.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureRetrace › reports no retracing for a walk with fewer than two points",
+      "line": 221,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure the guard is really aimed at: a BROKEN fold recurrence, which no valid fold word can produce but a bug in `foldTurns` would.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureRetrace › scores a broken fold recurrence far above the acceptable band",
+      "line": 212,
+      "registeredAt": "2026-08-18T10:36:25Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An edge and its reverse are the SAME edge — walking a corridor back out is exactly the retracing being measured, not a second distinct edge.",
+      "file": "src/lib/dragon.test.ts",
+      "format": "vitest",
+      "key": "measureRetrace › treats an edge and its reverse as one edge",
+      "line": 200,
+      "registeredAt": "2026-08-18T10:36:25Z",
       "runner": "tests"
     },
     {

@@ -1,5 +1,67 @@
 {
   "views": {
+    "DragonCurve": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The component always draws a curve. growAcceptableDragon falls back to the closest attempt rather than returning nothing, deliberately, because it runs inside a page render with nobody to catch an exception — so a zero-item state cannot occur. The page-level absence of the figure is a real state and is covered by page-minimal-fields, where a page with no heading renders no band at all."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "There is no item count to vary — the figure is one continuous path, always exactly one. The empty-to-many boundary this archetype exists to probe does not exist on this view."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Server-rendered SVG with no fetch and no async boundary. The per-visit redraw replaces an already-correct figure inside a single requestAnimationFrame, so there is no pending state a capture could ever land on."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "covered"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "pointer-events are none and the component binds no handlers — it is ambient decoration. Its only dynamic behaviour is the automatic per-visit redraw, which takes no user action and is demonstrated by the Demo filmstrip rather than by an interaction scenario."
+      }
+    },
+    "ExploratoryBand": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The band is all-or-nothing at the page level: without a heading the route does not render it at all, which page-minimal-fields covers. With a heading it always has content, so a rendered-but-empty band cannot occur."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "No collection to count. The band is a fixed composition — curve, heading, optional body, optional quote — so the empty-to-many boundary does not apply."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "No list or repeated element to overflow. The band renders at most one heading, one body and one quote by construction."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically rendered at build time with no fetch. The curve it contains redraws in one requestAnimationFrame over an already-correct figure, so nothing is ever pending."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "No data fetch, no user input, no failure path. The one failure it could have — the per-visit redraw throwing — is caught in the curve and deliberately leaves the server-rendered figure standing, so the band is visually identical to its normal state and there is nothing distinct to capture."
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "The band is a closing statement with no controls; its only interactive descendant is the footer below it, covered by about-footer-contact-link-followed."
+      }
+    },
     "Home": {
       "empty": {
         "status": "n-a",

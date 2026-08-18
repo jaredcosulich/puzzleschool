@@ -1,13 +1,13 @@
 {
   "name": "DragonCurve - Default",
   "id": "ad0d7eff-afa2-424d-a2f0-f9a29b0c3620",
-  "url": "/isolated-components/DragonCurve",
+  "url": "/isolated-components/DragonCurve?tree=static",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "DragonCurve",
   "scenarioType": "component",
-  "description": "The orthogonal dragon lattice, cut off before it closes.",
-  "pageFilePath": "src/components/structures/DragonCurve.astro"
+  "pageFilePath": "src/components/structures/DragonCurve.astro",
+  "description": "One curve from the fold-word family the band draws from, frozen — the shared `default` seed, which is what an isolation page gets when no page id is handed down. No longer THE Heighway dragon: the classic curve is now just the member whose every fold turns the same way, and this draw is a different one at the same complexity. Cut off before it closes."
 }

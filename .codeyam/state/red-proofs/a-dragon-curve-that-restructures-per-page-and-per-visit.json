@@ -1,0 +1,24 @@
+{
+  "provenAt": "2026-08-18T10:34:56Z",
+  "slug": "a-dragon-curve-that-restructures-per-page-and-per-visit",
+  "paths": [],
+  "tests": {
+    "rejects a curve too tall for the band to stretch": {
+      "withoutFix": "missing",
+      "withFix": "missing",
+      "established": {
+        "kind": "attestedByHand",
+        "method": "Semantic revert rather than file revert: dragon.ts is a NEW module, so reverting the source deletes every symbol the tests import and the suite fails to compile — an uninformative red. Instead I reverted only the four calibration decisions in place (ASPECT_BAND 1.1/3.0 -> 0.55/2.4, COVERAGE_BAND 0.4/0.56 -> 0.2/0.65, and removed the two balance terms from dragonShortfall), leaving the mechanism and every import intact, then ran the suite.",
+        "evidence": "Before adding these four tests the reverted world was fully GREEN — 39/39 passed with the pre-correction bands restored, so the corrections were unpinned. Specimens were then chosen to sit in the gap between each old band and its replacement with every other term clean: seed 5 (aspect 1.000, in the 0.55-1.1 gap), seed 86 (coverage 0.577, in the 0.56-0.65 gap), seed 50 (coverage 0.344, in the 0.2-0.4 gap), seed 8 (balanceY 0.297, aspect/coverage/openness/retrace all clean). With all four corrections reverted exactly these four tests now go red and no others; with them restored the suite is green."
+      }
+    }
+  },
+  "proof": {
+    "verdict": "provenByHand",
+    "attested": [
+      "rejects a curve too tall for the band to stretch"
+    ],
+    "method": "Semantic revert rather than file revert: dragon.ts is a NEW module, so reverting the source deletes every symbol the tests import and the suite fails to compile — an uninformative red. Instead I reverted only the four calibration decisions in place (ASPECT_BAND 1.1/3.0 -> 0.55/2.4, COVERAGE_BAND 0.4/0.56 -> 0.2/0.65, and removed the two balance terms from dragonShortfall), leaving the mechanism and every import intact, then ran the suite.",
+    "evidence": "Before adding these four tests the reverted world was fully GREEN — 39/39 passed with the pre-correction bands restored, so the corrections were unpinned. Specimens were then chosen to sit in the gap between each old band and its replacement with every other term clean: seed 5 (aspect 1.000, in the 0.55-1.1 gap), seed 86 (coverage 0.577, in the 0.56-0.65 gap), seed 50 (coverage 0.344, in the 0.2-0.4 gap), seed 8 (balanceY 0.297, aspect/coverage/openness/retrace all clean). With all four corrections reverted exactly these four tests now go red and no others; with them restored the suite is green."
+  }
+}

@@ -65,5 +65,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/[...slug].astro",
-  "description": "The internal-page template at full richness: two-column header, three prose sections, the branching structure, and the quote pulled up over the dragon curve."
+  "description": "The internal-page template at full richness: two-column header, three prose sections, the branching structure, and the quote pulled up over the dragon curve. The band's curve is now hashed from this page's own id, so it is specifically About's curve — compare it against Contact's to see the per-page axis, which costs no code per page."
 }

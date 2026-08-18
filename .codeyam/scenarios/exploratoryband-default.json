@@ -1,13 +1,13 @@
 {
   "name": "ExploratoryBand - Default",
   "id": "805d2145-9f6b-4143-93f5-e8c9e82e95cb",
-  "url": "/isolated-components/ExploratoryBand",
+  "url": "/isolated-components/ExploratoryBand?tree=static",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "ExploratoryBand",
   "scenarioType": "component",
-  "description": "The internal-page ink band: dragon lattice, heading, body and quote.",
-  "pageFilePath": "src/components/page/ExploratoryBand.astro"
+  "pageFilePath": "src/components/page/ExploratoryBand.astro",
+  "description": "The internal-page ink band: dragon lattice, heading, body and quote. The curve is now seeded and frozen with ?tree=static — unfrozen it redraws in the browser on every visit, which would race the capture. Watch the quote: it is pulled up 306px so it begins over the curve, so this is where a curve that changed the well's height would shove it."
 }

@@ -10,13 +10,19 @@ interface Props {
   bandBody?: string;
   quote?: string;
   quoteAttribution?: string;
+  /**
+   * The page this band closes, passed straight through to the curve so each page
+   * gets its own. A band rendered without one falls back to the shared `default`
+   * curve, which is what the isolation pages want — pinned, not random.
+   */
+  seedKey?: string;
 }
 
-const { heading, bandBody, quote, quoteAttribution } = Astro.props;
+const { heading, bandBody, quote, quoteAttribution, seedKey } = Astro.props;
 ---
 
 <section class="band bleed">
-  <DragonCurve />
+  <DragonCurve seedKey={seedKey} />
   <div class="band__grid measure">
     <div class="band__lead">
       <h2 {...cmsField('heading')}>{heading}</h2>

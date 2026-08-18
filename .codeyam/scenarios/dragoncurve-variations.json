@@ -1,0 +1,16 @@
+{
+  "name": "DragonCurve - Variations",
+  "id": "c305cecf-7a2d-430d-80c9-4b1b0f55cdef",
+  "url": "/isolated-components/DragonCurveVariations?tree=static",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DragonCurve",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/structures/DragonCurve.astro",
+  "description": "Eight seeds stacked at the band's own 3.3:1 proportion, plus two controls. The envelope sheet: what it watches for is the streak — a curve too tall for the band, which the full-width stretch flattens into horizontal bars — and the off-centre mass that leaves a hole where the quote sits.",
+  "demonstratesState": {
+    "branches": "branch-1"
+  }
+}

@@ -8,7 +8,16 @@
     ]
   },
   {
-    "description": "The ink band closing an internal page — dragon curve, heading and body copy, with the pulled-up quote opposite. Marks heading and bandBody; the Without Quote scenario shows the band as Contact renders it.",
+    "description": "The orthogonal lattice curve across the top of an internal page's ink band, full width and stretched with preserveAspectRatio none, held at a hairline by vector-effect. In flow rather than absolute, deliberately: the band's quote is pulled up 306px so it begins over this curve, and an absolutely-positioned curve would contribute no height and let overflow hidden eat the quote silently. Varies on two axes like the tree, the harmonograph and the field — per page at build time from a seedKey hashed and salted with :dragon, per visit in the browser — with ?tree=static freezing both. What varies is the FOLD WORD rather than the parameters, so each draw is a different curve of the same species rather than the same fractal rotated. The points prop bypasses the acceptance loop entirely and also opts the svg out of the per-visit redraw, which is how the variations sheet draws rejected specimens without restating this component's markup.",
+    "filePath": "src/components/structures/DragonCurve.astro",
+    "name": "DragonCurve",
+    "scenarios": [
+      "dragoncurve-default",
+      "dragoncurve-variations"
+    ]
+  },
+  {
+    "description": "The ink band closing an internal page — dragon curve, heading and body copy, with the pulled-up quote opposite. Marks heading and bandBody; the Without Quote scenario shows the band as Contact renders it. Passes an optional seedKey straight through to the curve so each page gets its own, which is the whole per-page axis: a page a CMS editor writes next year gets a distinct curve with no code change. A band rendered without one falls back to the shared default curve, which is what the isolation pages want — pinned, not random.",
     "filePath": "src/components/page/ExploratoryBand.astro",
     "name": "ExploratoryBand",
     "scenarios": [
@@ -200,6 +209,30 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "How far a curve is from acceptable as a single number, 0 exactly when it passes every rule. Sums four terms — retrace, aspect, lattice coverage and per-axis balance — each normalised to roughly fraction-of-the-way-out-of-band so none dominates the ranking. A magnitude rather than a boolean because growAcceptableDragon has to rank failures when no seed in the budget passes. Calibrated so the figure that shipped before this varied scores exactly 0.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "dragonShortfall",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "Walks a fold word into points: creases to turns, turns to turtle commands, commands to a lattice walk at 90 degrees. The all-right fold word reproduces dragonPoints exactly, which is the fidelity check that this generalisation is faithful.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "dragonTrace",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "Maps a seed onto one bounded option set from DRAGON_ENVELOPE — same seed, same curve, forever. Draws iteration depth, cut-off fraction and quarter-turn rotation in a fixed order, then one fold direction per iteration last, so the three scalars land identically whatever depth was chosen. step is deliberately not sampled: the viewBox is derived from the walk's own bounds and stretched to the band, so step cancels out entirely.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "dragonVariant",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "The viewBox framing a drawn curve to its own bounds with a 1-unit margin so the outermost stroke is not clipped. Extracted for the reason treeViewBox was: both the server render and the client redraw need it, and leaving it inline would duplicate it into the browser script where the two could drift into framing the same curve differently.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "dragonViewBox",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
     "description": "Escapes interpolated values before they reach the worker's HTML responses.",
     "filePath": "cms-auth-worker/worker.js",
     "name": "escapeHtml",
@@ -221,6 +254,18 @@
     "testFile": "src/lib/contactUrl.test.ts"
   },
   {
+    "description": "Emits a turn sequence as a turtle command string — a forward move, then a turn and a move per crease. Emitted for the existing turtle rather than walked here, so fraction, heading and origin keep the semantics they already have instead of being forked into a second walker.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "foldCommands",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "Unfolds a fold word into the turn sequence it creases into: each new fold repeats every existing crease, adds its own, then repeats them backwards AND inverted, because the far half of the strip meets each old crease from the other side. n folds give 2^n - 1 turns. With every fold the same direction this is the regular paperfolding sequence and the walk is the Heighway dragon.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "foldTurns",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
     "description": "Reads the editable navigation singleton per call, for the same reason getSettings does.",
     "filePath": "src/lib/site.ts",
     "name": "getNav",
@@ -237,6 +282,12 @@
       "justification": "filesystem read of a JSON singleton; the resolution order it depends on is covered by contentRoot tests",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "Draws a curve for a seed that passes isAcceptableDragon, resampling from a derived seed when it does not, the way growAcceptableTree does. 40 attempts rather than the tree's 20 because this envelope is tighter — aspect and coverage are both drawn close around the one specimen known to read correctly — and together they admit roughly a quarter of raw draws. Falls back to the closest attempt rather than throwing, since this runs inside a page render where a slightly-off curve beats an empty band.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "growAcceptableDragon",
+    "testFile": "src/lib/dragon.test.ts"
   },
   {
     "description": "Draws a harmonograph for a seed that passes acceptance, resampling from a derived seed when it does not, and falling back to the closest attempt rather than throwing. Sixty attempts because a raw draw passes about a fifth of the time against four independent checks; this runs inside a page render where a slightly-off figure beats a blank lane.",
@@ -326,6 +377,12 @@
     }
   },
   {
+    "description": "Whether a drawn curve passes every acceptance rule. Derived from dragonShortfall rather than restated, so the predicate and the score cannot drift apart.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "isAcceptableDragon",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
     "description": "Whether a harmonograph passes every rule in the envelope, enforced on the geometry that came out rather than on the inputs that went in. Derived from the shortfall score so the two definitions cannot drift.",
     "filePath": "src/lib/harmonograph.ts",
     "name": "isAcceptableHarmonograph",
@@ -362,6 +419,12 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "A lattice point as a string key, rounded off the float noise so that points which ARE the same lattice site always collide and points which are not never do. Math.cos of a right angle is 6.1e-17 rather than 0, so an axis-aligned walk accumulates a few picounits of drift over 8192 steps; two decimals sits orders of magnitude above that drift and orders of magnitude below the step size. Shared by measureRetrace and measureLatticeCoverage, which must agree on what counts as one site.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "latticeKey",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
     "description": "Translates a watcher event under a linked package's real checkout into the symlinked node_modules path the module graph keys under, or null when the file is outside that checkout. The containment check uses a trailing separator so a sibling directory sharing a prefix is not treated as a child.",
     "filePath": "src/lib/linkedCmsPath.ts",
     "name": "linkedPathForRealFile",
@@ -380,6 +443,12 @@
     "testFile": "src/lib/structures.test.ts"
   },
   {
+    "description": "Where the walk's centre of mass sits inside its bounding box, as x and y fractions. A walk always fills its bounding box by definition, so aspect and coverage both read healthy on a curve whose ink is piled into one corner with a large void opposite — in the band that void is a visible hole where the quote sits. Every specimen that read correctly measured between 0.44 and 0.55 on both axes; every one that read wrong had an axis outside.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "measureBalance",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
     "description": "The share of a harmonograph's sampled points falling in the middle fifth of its bounding box — how much ink piles up at the centre. Damping pulls every pass inward, so a pen left running spirals to a point and lays pass on pass in one small area; the aspect, the turn count and the coverage all still pass while the figure reads as a blot with loops around it. Nothing that reasons about the OUTLINE can see that, so the middle is measured on its own.",
     "filePath": "src/lib/harmonograph.ts",
     "name": "measureCoreDensity",
@@ -390,6 +459,24 @@
     "filePath": "src/lib/harmonograph.ts",
     "name": "measureCoverage",
     "testFile": "src/lib/harmonograph.test.ts"
+  },
+  {
+    "description": "Distinct lattice sites visited over the sites the bounding box contains — measured on the figure's own grid rather than an arbitrary sampling resolution, since this walk really is on a lattice. Catches what aspect and retrace both miss: a walk packed so tightly the hairlines merge into a grey field, and one so sparse it reads as a ridge on a baseline. Note a straight run scores 1, not 0, because its bounding box collapses onto the run itself.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "measureLatticeCoverage",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "How far apart the two ends of the walk are, as a fraction of the bounding diagonal. 0 is a closed loop, 1 is opposite corners. Guards the figure's stated character — cut off before it closes — since a draw that ends where it started reads as a resolved emblem rather than a fragment running off the edge.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "measureOpenness",
+    "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "The fraction of walked edges that had already been walked, keyed on the unordered endpoint pair so an edge and its reverse are one edge. Added expecting it to filter the sampler, but measurement disproved that: all 1024 fold words at depth 10 retrace exactly zero edges, because non-self-intersection belongs to the whole paperfolding family and not just the classic dragon. Kept instead as a structural invariant guard — a broken fold recurrence retraces 99.9 percent of its edges and a turn sequence that is not a fold word retraces 43 percent, and both draw as an overinked blot.",
+    "filePath": "src/lib/dragon.ts",
+    "name": "measureRetrace",
+    "testFile": "src/lib/dragon.test.ts"
   },
   {
     "description": "Encodes words as morse laid out left to right at classic proportions — dash three units, symbol gap one, letter gap three, word gap seven. Unencodable characters are skipped rather than guessed at.",
