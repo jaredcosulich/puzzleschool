@@ -1,0 +1,27 @@
+{
+  "provenAt": "2026-08-18T00:58:27Z",
+  "slug": "give-the-one-section-page-s-flanking-structures-room",
+  "paths": [
+    "src/lib/harmonograph.ts",
+    "src/lib/structures.ts"
+  ],
+  "runScope": [
+    "src/lib/harmonograph.ts",
+    "src/lib/structures.ts"
+  ],
+  "tests": {
+    "accepts only harmonographs that fill the flank lane's full height": {
+      "withoutFix": "fail",
+      "withFix": "pass",
+      "established": {
+        "kind": "measured"
+      }
+    }
+  },
+  "proof": {
+    "verdict": "proven",
+    "flipped": [
+      "accepts only harmonographs that fill the flank lane's full height"
+    ]
+  }
+}

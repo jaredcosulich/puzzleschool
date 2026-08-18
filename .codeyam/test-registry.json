@@ -149,7 +149,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "cellPath › closes an ordinary cell",
-      "line": 167,
+      "line": 170,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -158,7 +158,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "cellPath › draws nothing for a degenerate cell",
-      "line": 212,
+      "line": 215,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -167,7 +167,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "cellPath › draws the open cell one edge short",
-      "line": 181,
+      "line": 184,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -176,7 +176,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "cellPath › keeps every remaining corner when it opens a cell",
-      "line": 198,
+      "line": 201,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -532,6 +532,15 @@
       "runner": "tests"
     },
     {
+      "description": "The arithmetic behind \"the structure on the left is too low\". The lane frames this figure with `meet`, which scales by whichever axis binds first, so a figure only fills the lane's full HEIGHT when its own aspect is at or below the lane's. Above that it binds on width instead, and `xMidYMax` banks the entire height shortfall as empty air ABOVE the figure — which is exactly what made the harmonograph sit visibly lower than the Voronoi field opposite it. Every accepted draw must clear that bar, or",
+      "file": "src/lib/harmonograph.test.ts",
+      "format": "vitest",
+      "key": "growAcceptableHarmonograph › accepts only harmonographs that fill the flank lane's full height",
+      "line": 212,
+      "registeredAt": "2026-08-18T01:00:13Z",
+      "runner": "tests"
+    },
+    {
       "description": "Same seed, same figure, forever — this is what keeps a page's build-time figure fixed across deploys and the committed screenshots from churning.",
       "file": "src/lib/harmonograph.test.ts",
       "format": "vitest",
@@ -599,7 +608,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "growAcceptableVoronoi › draws one path per cell plus one per unresolved mark",
-      "line": 303,
+      "line": 308,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -608,7 +617,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "growAcceptableVoronoi › frames the field at the lane it was generated for",
-      "line": 298,
+      "line": 301,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -617,7 +626,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "growAcceptableVoronoi › returns an acceptable field across a spread of seeds",
-      "line": 279,
+      "line": 282,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -626,7 +635,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "growAcceptableVoronoi › returns the closest attempt rather than throwing when none qualifies",
-      "line": 290,
+      "line": 293,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -797,7 +806,7 @@
       "file": "src/lib/harmonograph.test.ts",
       "format": "vitest",
       "key": "harmonographViewBox › adds a margin proportional to the figure rather than a fixed unit",
-      "line": 210,
+      "line": 228,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -806,7 +815,7 @@
       "file": "src/lib/harmonograph.test.ts",
       "format": "vitest",
       "key": "harmonographViewBox › preserves the figure aspect it was measured at",
-      "line": 225,
+      "line": 243,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -968,7 +977,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "jitteredSites › is reproducible for a seed",
-      "line": 60,
+      "line": 63,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -977,7 +986,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "jitteredSites › keeps every site inside its own grid box",
-      "line": 43,
+      "line": 46,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -986,7 +995,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "jitteredSites › places exactly one site per grid box",
-      "line": 37,
+      "line": 40,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -995,7 +1004,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "jitteredSites › places sites on the exact grid centres at zero jitter",
-      "line": 65,
+      "line": 68,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1607,7 +1616,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "tessellate › gives different seeds different fields",
-      "line": 158,
+      "line": 161,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1616,7 +1625,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "tessellate › is reproducible for a seed",
-      "line": 60,
+      "line": 63,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1625,7 +1634,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "tessellate › leaves the unresolved sites out of the partition entirely",
-      "line": 118,
+      "line": 121,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1634,7 +1643,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "tessellate › lets a cell overrun the ground an unresolved site would have owned",
-      "line": 128,
+      "line": 131,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1643,7 +1652,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "tessellate › opens exactly one cell",
-      "line": 144,
+      "line": 147,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1832,7 +1841,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "unresolvedMarkPath › draws a cross centred on the site",
-      "line": 219,
+      "line": 222,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1841,7 +1850,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiCells › cuts the partition beyond the visible frame",
-      "line": 106,
+      "line": 109,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1850,7 +1859,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiCells › gives a lone site the entire frame",
-      "line": 99,
+      "line": 102,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1859,7 +1868,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiCells › gives every cell the territory nearest its own site",
-      "line": 76,
+      "line": 79,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1868,7 +1877,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiCells › tiles the whole clipped frame without gaps or overlaps",
-      "line": 91,
+      "line": 94,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1877,7 +1886,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiShortfall › penalises a field that lost its open cell",
-      "line": 228,
+      "line": 231,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1886,7 +1895,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiShortfall › penalises a field with no unresolved sites",
-      "line": 239,
+      "line": 242,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1895,7 +1904,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiShortfall › rejects a field containing a sliver",
-      "line": 248,
+      "line": 251,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     },
@@ -1904,7 +1913,7 @@
       "file": "src/lib/voronoi.test.ts",
       "format": "vitest",
       "key": "voronoiShortfall › reports a field with no drawable cells as infinitely short",
-      "line": 271,
+      "line": 274,
       "registeredAt": "2026-08-17T19:42:19Z",
       "runner": "tests"
     }

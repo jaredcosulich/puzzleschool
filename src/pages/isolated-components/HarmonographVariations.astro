@@ -19,6 +19,7 @@
 // cannot be seen failing cannot be judged.
 import Component from "../../components/structures/Harmonograph.astro";
 import { harmonographVariant, traceHarmonograph, harmonographShortfall } from "../../lib/harmonograph";
+import { FLANK_LANE } from "../../lib/structures";
 import "../../styles/tokens.css";
 
 const SEEDS = [1, 7, 11, 23, 42, 99, 256, 1024];
@@ -70,18 +71,28 @@ const healthy = traceHarmonograph(harmonographVariant(42));
   </body>
 </html>
 
-<style>
-  /* Eight lanes at their real 123px width — judging the envelope at any other
-     width would judge a figure the site never renders. */
+<style define:vars={{ laneWidth: `${FLANK_LANE.width}px` }}>
+  /* Eight lanes at their real width, read from `FLANK_LANE` rather than restated
+     — judging the envelope at any other width would judge a figure the site never
+     renders, and a literal here would silently stop matching the day the lane
+     moves. This sheet is where the tightened aspect ceiling is checked: every
+     specimen should reach the top of its lane, and they should still read as
+     eight different figures. */
+  /* WRAPS rather than shrinking. Eight 200px lanes plus their gaps are wider than
+     the page, and the one thing this sheet may not do is show the figures at a
+     width the site never renders — so the row breaks onto a second line instead
+     of squeezing the specimens or clipping the outer ones. */
   .sheet {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: flex-end;
-    gap: 24px;
+    gap: 32px 24px;
   }
 
   .specimen {
     margin: 0;
-    width: 123px;
+    width: var(--laneWidth);
   }
 
   figcaption {

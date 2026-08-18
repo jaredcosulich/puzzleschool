@@ -41,7 +41,7 @@ import {
   harmonographPath,
   harmonographViewBox,
 } from '../../lib/harmonograph';
-import { hashSeed } from '../../lib/structures';
+import { FLANK_LANE, hashSeed } from '../../lib/structures';
 
 interface Props {
   /**
@@ -56,7 +56,7 @@ interface Props {
   height?: number;
 }
 
-const { seedKey, seed, width = 123, height = 365 } = Astro.props;
+const { seedKey, seed, width = FLANK_LANE.width, height = FLANK_LANE.height } = Astro.props;
 
 // Salted with the structure's own name so the left and right lanes of the same
 // page are not two draws of the same number — un-salted, `hashSeed('contact')`
@@ -126,8 +126,9 @@ const trace = growAcceptableHarmonograph(resolved);
 </script>
 
 <style>
-  /* The 123px lane the figure occupies. Height is reserved here rather than by
-     the parent so the component stands up on its own in isolation. */
+  /* The 200×365 lane the figure occupies — `FLANK_LANE` in lib/structures.ts,
+     restated here because CSS cannot read it. Height is reserved here rather
+     than by the parent so the component stands up on its own in isolation. */
   .harmonograph-well {
     position: relative;
     min-height: 365px;
@@ -149,8 +150,11 @@ const trace = growAcceptableHarmonograph(resolved);
   }
 
   /* Below the prose breakpoint the flanking lanes stop existing, so the well
-     collapses rather than leaving a 365px hole. */
-  @media (max-width: 840px) {
+     collapses rather than leaving a 365px hole. 960px, not the site's usual
+     840px: two 200px lanes plus two 64px gutters cost 528px, so below roughly
+     this width the prose measure would be squeezed under 400px — worse than no
+     lanes at all. Kept in step with `.prose-grid--single` in ProseColumns.astro. */
+  @media (max-width: 960px) {
     .harmonograph-well {
       display: none;
     }

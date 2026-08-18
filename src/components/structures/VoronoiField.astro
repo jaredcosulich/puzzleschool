@@ -12,10 +12,11 @@
 // happened fall outside what is drawn. The result is cells running off the top
 // and bottom unresolved rather than a tessellation tidied into a box — which is
 // why `preserveAspectRatio="none"` is correct here and wrong for the
-// harmonograph: this figure is GENERATED at the lane's own 123×365, so there is
-// no distortion to accept. The attribute is only doing the last pixel of fit.
+// harmonograph: this figure is GENERATED at the lane's own 200×365 (`FLANK_LANE`),
+// so there is no distortion to accept. The attribute is only doing the last pixel
+// of fit — which is also why `VORONOI_ENVELOPE.fixed` must track the lane exactly.
 import { growAcceptableVoronoi, voronoiPaths, voronoiViewBox } from '../../lib/voronoi';
-import { hashSeed } from '../../lib/structures';
+import { FLANK_LANE, hashSeed } from '../../lib/structures';
 
 interface Props {
   /**
@@ -30,7 +31,7 @@ interface Props {
   height?: number;
 }
 
-const { seedKey, seed, width = 123, height = 365 } = Astro.props;
+const { seedKey, seed, width = FLANK_LANE.width, height = FLANK_LANE.height } = Astro.props;
 
 // Salted with the structure's own name, so this lane and the harmonograph
 // opposite it are not two draws of the same number.
@@ -92,8 +93,9 @@ const paths = voronoiPaths(field);
 </script>
 
 <style>
-  /* The 123px lane the figure occupies. Height is reserved here rather than by
-     the parent so the component stands up on its own in isolation. */
+  /* The 200×365 lane the figure occupies — `FLANK_LANE` in lib/structures.ts,
+     restated here because CSS cannot read it. Height is reserved here rather
+     than by the parent so the component stands up on its own in isolation. */
   .voronoi-well {
     position: relative;
     min-height: 365px;
@@ -115,8 +117,11 @@ const paths = voronoiPaths(field);
   }
 
   /* Below the prose breakpoint the flanking lanes stop existing, so the well
-     collapses rather than leaving a 365px hole. */
-  @media (max-width: 840px) {
+     collapses rather than leaving a 365px hole. 960px, not the site's usual
+     840px: two 200px lanes plus two 64px gutters cost 528px, so below roughly
+     this width the prose measure would be squeezed under 400px — worse than no
+     lanes at all. Kept in step with `.prose-grid--single` in ProseColumns.astro. */
+  @media (max-width: 960px) {
     .voronoi-well {
       display: none;
     }

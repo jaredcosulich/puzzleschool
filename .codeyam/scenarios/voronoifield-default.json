@@ -1,6 +1,6 @@
 {
   "name": "VoronoiField - Default",
-  "id": "e7b8b9ea-32b8-4793-8b73-0399bf52bacc",
+  "id": "999bfca8-de3e-4cdf-b96f-28a2f8a53010",
   "url": "/isolated-components/VoronoiField?tree=static",
   "dimensions": [
     "Desktop"
@@ -8,5 +8,5 @@
   "mocks": {},
   "componentName": "VoronoiField",
   "scenarioType": "component",
-  "description": "Space partitioned by nearest neighbour, drawn at the 123x365 lane it stands in. Two deliberate incompletenesses have to be legible here: one cell drawn an edge short, and one or two small crosses marking sites the partition has not accounted for at all. The lane's own frame is not stroked, so cells run off the top and bottom unresolved rather than being tidied into a box."
+  "description": "Space partitioned by nearest neighbour, drawn at the 200x365 flank lane it stands in (FLANK_LANE). Unlike the harmonograph this field is GENERATED at the lane and rendered with preserveAspectRatio=\"none\", so the frame IS the lane: a mismatch here would not letterbox, it would smear every cell horizontally. At 3-4 columns against 5-7 rows the cells should read as roughly square rather than stretched wide. Two deliberate incompletenesses have to be legible: one cell drawn an edge short, and one or two small crosses marking sites the partition has not accounted for at all."
 }

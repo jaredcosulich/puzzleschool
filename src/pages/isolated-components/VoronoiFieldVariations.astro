@@ -18,6 +18,7 @@
 // apply looks exactly like one that was never asked for.
 import Component from "../../components/structures/VoronoiField.astro";
 import { growAcceptableVoronoi } from "../../lib/voronoi";
+import { FLANK_LANE } from "../../lib/structures";
 import "../../styles/tokens.css";
 
 const SEEDS = [1, 7, 11, 23, 42, 99, 256, 1024];
@@ -52,18 +53,29 @@ const FIELDS = SEEDS.map((seed) => ({ seed, field: growAcceptableVoronoi(seed) }
   </body>
 </html>
 
-<style>
-  /* Eight lanes at their real 123px width — judging the envelope at any other
-     width would judge a figure the site never renders. */
+<style define:vars={{ laneWidth: `${FLANK_LANE.width}px` }}>
+  /* Eight lanes at their real width, read from `FLANK_LANE` rather than restated
+     — judging the envelope at any other width would judge a field the site never
+     renders, and doubly so here: this figure is GENERATED at the lane and drawn
+     with `preserveAspectRatio="none"`, so a mismatched box would stretch every
+     cell rather than letterbox it. What this sheet watches for is the sliver, and
+     now also the stretch: at 3–4 columns against 5–7 rows the cells should read
+     as roughly square, not wide. */
+  /* WRAPS rather than shrinking. Eight 200px lanes plus their gaps are wider than
+     the page, and the one thing this sheet may not do is show the fields at a
+     width the site never renders — so the row breaks onto a second line instead
+     of squeezing the specimens or clipping the outer ones. */
   .sheet {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: flex-end;
-    gap: 24px;
+    gap: 32px 24px;
   }
 
   .specimen {
     margin: 0;
-    width: 123px;
+    width: var(--laneWidth);
   }
 
   figcaption {

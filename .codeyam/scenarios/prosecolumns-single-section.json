@@ -1,6 +1,6 @@
 {
   "name": "ProseColumns - Single Section",
-  "id": "5255e0a8-8a27-40ca-a134-5e861e2e37d4",
+  "id": "1d262ed5-96c7-406b-95f5-91293a70ae72",
   "url": "/isolated-components/ProseColumnsSingle?tree=static",
   "dimensions": [
     "Desktop"
@@ -8,5 +8,5 @@
   "mocks": {},
   "componentName": "ProseColumns",
   "scenarioType": "component",
-  "description": "The one-section shape: prose centred to a readable measure with a harmonograph in a lane to its left and a Voronoi field to its right. The band is rendered beneath deliberately, because the seam guarantee is not observable with nothing underneath and this shape has TWO figures that can each break it independently — both must sit ON the join rather than floating above it. The foot slot is filled for the same reason: the CTA has to sit inside the prose grid, or the band is pushed down and both figures end in mid-air. The prose is deliberately short so min-height sets the block's height rather than the copy."
+  "description": "The one-section shape: prose centred to its own 600px measure with a harmonograph in a 200px lane to its left and a Voronoi field in one to its right. Two things are observable here that a resting page shot cannot show. First the seam guarantee: the band is rendered beneath deliberately, because the guarantee is not observable with nothing underneath and this shape has TWO figures that can each break it independently — both must sit ON the join rather than floating above it. The foot slot is filled for the same reason: the CTA has to sit inside the prose grid, or the band is pushed down and both figures end in mid-air. Second, both figures must reach the TOP of their lanes together. The lane's aspect is the ceiling on what the harmonograph's acceptance band will accept, so under meet the figure binds on height; when that ceiling is wrong the shortfall is banked above the figure by YMax and it hangs visibly lower than the Voronoi field opposite. The prose is deliberately short so min-height sets the block's height rather than the copy."
 }

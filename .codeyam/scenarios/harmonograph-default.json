@@ -1,6 +1,6 @@
 {
   "name": "Harmonograph - Default",
-  "id": "0c07fd33-ee6e-4f62-af45-9badc4597049",
+  "id": "6bd72e9c-ded1-4eef-8c7e-d406f80a685f",
   "url": "/isolated-components/Harmonograph?tree=static",
   "dimensions": [
     "Desktop"
@@ -8,5 +8,5 @@
   "mocks": {},
   "componentName": "Harmonograph",
   "scenarioType": "component",
-  "description": "The trace of two coupled pendulums, drawn at the 123x365 lane it stands in. The pen lifts before friction brings the swing to rest, so the stroke stops mid-swing with its envelope still open and a visible tail — the incompleteness this site's structures all carry, here as a drawing somebody put down while it was still going somewhere."
+  "description": "The trace of two coupled pendulums, drawn at the 200x365 flank lane it stands in (FLANK_LANE). The lane's own aspect is the ceiling on what the acceptance band will accept, so under preserveAspectRatio=\"meet\" the figure is scaled by HEIGHT and fills the lane top to bottom — what is left over is horizontal, where xMid centres it and nobody can see it. Watch that the figure reaches the top of its lane: when it does not, the shortfall is banked above it by YMax and the structure reads as sitting too low beside whatever stands opposite. The pen lifts before friction brings the swing to rest, so the stroke stops mid-swing with its envelope still open and a visible tail — the incompleteness this site's structures all carry, here as a drawing somebody put down while it was still going somewhere."
 }

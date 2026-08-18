@@ -26,7 +26,7 @@
 //     nearby are simply wrong, and they are wrong in a way you can check.
 //
 // Everything here is pure: numbers in, geometry out. No DOM, no Astro.
-import { outOfBand, round, seededRandom, type Point } from './structures';
+import { FLANK_LANE, outOfBand, round, seededRandom, type Point } from './structures';
 import type { FigurePath } from './figure-dom';
 
 /** The rectangle the partition is cut out of. */
@@ -223,20 +223,31 @@ export interface VoronoiOptions {
  * The bounds every field is drawn from — the variation envelope, in the shape
  * `TREE_ENVELOPE` established.
  *
- * The grid is deliberately tall and narrow: the lane is 123×365, and a partition
- * whose cells are roughly square needs about three times as many rows as
- * columns to fill it without stretching.
+ * The grid is deliberately tall and narrow: the lane is `FLANK_LANE`, 200×365,
+ * and a partition whose cells are roughly square needs close to twice as many
+ * rows as columns to fill it without stretching.
+ *
+ * `fixed` is the LANE ITSELF, not a frame that merely resembles it. This field
+ * renders with `preserveAspectRatio="none"`, so the generated frame is stretched
+ * onto whatever box the component gives it — quoting a width narrower than the
+ * lane would not letterbox, it would smear every cell horizontally by the ratio
+ * between the two. That coupling is why the width here reads from `FLANK_LANE`
+ * rather than restating a literal: the lane and the frame cannot drift apart.
+ *
+ * `columns` is calibrated against that width. At 3–4 columns to 5–7 rows the
+ * cells land near square at the lane's 0.548 aspect; keeping the old 2–3 after
+ * the lane widened would have stretched each cell wide instead.
  */
 export const VORONOI_ENVELOPE = {
   ranges: {
-    columns: { min: 2, max: 3, integer: true },
+    columns: { min: 3, max: 4, integer: true },
     rows: { min: 5, max: 7, integer: true },
     jitter: { min: 0.5, max: 0.85 },
     unresolvedCount: { min: 1, max: 2, integer: true },
   },
   fixed: {
-    width: 123,
-    height: 365,
+    width: FLANK_LANE.width,
+    height: FLANK_LANE.height,
   },
 } as const satisfies {
   ranges: Record<string, Range>;

@@ -38,6 +38,24 @@ export function round(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
+/**
+ * The lane the one-section page's two flanking structures stand in.
+ *
+ * This is NOT the branching tree's lane. The two-column shape stands its tree in
+ * a 123px gap between the columns and stretches it with `preserveAspectRatio="none"`;
+ * the one-section shape stands a harmonograph and a Voronoi field in the margins
+ * either side of the prose, and frames them with `meet`, which letterboxes rather
+ * than distorts. Under `meet` a lane's aspect is a HARD CEILING on the figures it
+ * can hold without vertical dead space, so this lane's `200 / 365 = 0.548` is
+ * quoted directly by `ASPECT_BAND` in `harmonograph.ts` and by
+ * `VORONOI_ENVELOPE.fixed` in `voronoi.ts`. Widening the lane here is therefore a
+ * change to what those two generators are allowed to draw, not just a layout tweak.
+ *
+ * `ProseColumns.astro` restates these as CSS literals with a comment pointing
+ * back here — the same convention the file already uses for the tree's lane.
+ */
+export const FLANK_LANE = { width: 200, height: 365 } as const;
+
 // ---------------------------------------------------------------------------
 // Sine field — the rule under the home masthead
 // ---------------------------------------------------------------------------

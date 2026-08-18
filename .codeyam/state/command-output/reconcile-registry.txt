@@ -1,31 +1,279 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1041dd80-e19f-43e7-a798-80aa275f1931/tasks/b9swwbjm7.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/1041dd80-e19f-43e7-a798-80aa275f1931/tasks/b9swwbjm7.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787012409,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1136872}
-## Inherited registry drift (4) — 4 line updates referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). These rows were ALREADY APPLIED by this run under the same rules as every other row — `--include-inherited` only re-prints them in the `actions` array, so re-running with it registers nothing further and is not a follow-up step.
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1041dd80-e19f-43e7-a798-80aa275f1931/tasks/b4d27j53k.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/1041dd80-e19f-43e7-a798-80aa275f1931/tasks/b4d27j53k.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787014825,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1181630}
 {
   "summary": {
-auto-apply: 4 action(s) applied; 0 add(s) skipped.
+auto-apply: 29 action(s) applied; 0 add(s) skipped.
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 4,
+    "updateLines": 29,
     "gateUpdates": 0
   },
-  "actions": [],
-  "inherited": {
-    "total": 4,
-    "counts": {
-      "realOrphans": 0,
-      "stalePhantoms": 0,
-      "adds": 0,
-      "renames": 0,
-      "updateLines": 4,
-      "gateUpdates": 0
+  "actions": [
+    {
+      "kind": "updateLine",
+      "key": "cellPath › closes an ordinary cell",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 167,
+      "new_line": 170,
+      "classification": "change-introduced"
     },
-    "includedInActions": false,
-    "command": "codeyam-editor editor reconcile-registry --include-inherited"
-  },
+    {
+      "kind": "updateLine",
+      "key": "cellPath › draws nothing for a degenerate cell",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 212,
+      "new_line": 215,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "cellPath › draws the open cell one edge short",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 181,
+      "new_line": 184,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "cellPath › keeps every remaining corner when it opens a cell",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 198,
+      "new_line": 201,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "growAcceptableHarmonograph › accepts only harmonographs that fill the flank lane's full height",
+      "file": "src/lib/harmonograph.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 212,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "growAcceptableVoronoi › draws one path per cell plus one per unresolved mark",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 303,
+      "new_line": 308,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "growAcceptableVoronoi › frames the field at the lane it was generated for",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 298,
+      "new_line": 301,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "growAcceptableVoronoi › returns an acceptable field across a spread of seeds",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 279,
+      "new_line": 282,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "growAcceptableVoronoi › returns the closest attempt rather than throwing when none qualifies",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 290,
+      "new_line": 293,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "harmonographViewBox › adds a margin proportional to the figure rather than a fixed unit",
+      "file": "src/lib/harmonograph.test.ts",
+      "runner": "tests",
+      "old_line": 210,
+      "new_line": 228,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "harmonographViewBox › preserves the figure aspect it was measured at",
+      "file": "src/lib/harmonograph.test.ts",
+      "runner": "tests",
+      "old_line": 225,
+      "new_line": 243,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "jitteredSites › is reproducible for a seed",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 60,
+      "new_line": 63,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "jitteredSites › keeps every site inside its own grid box",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 43,
+      "new_line": 46,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "jitteredSites › places exactly one site per grid box",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 37,
+      "new_line": 40,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "jitteredSites › places sites on the exact grid centres at zero jitter",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 65,
+      "new_line": 68,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tessellate › gives different seeds different fields",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 158,
+      "new_line": 161,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tessellate › is reproducible for a seed",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 60,
+      "new_line": 63,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tessellate › leaves the unresolved sites out of the partition entirely",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 118,
+      "new_line": 121,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tessellate › lets a cell overrun the ground an unresolved site would have owned",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 128,
+      "new_line": 131,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tessellate › opens exactly one cell",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 144,
+      "new_line": 147,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "unresolvedMarkPath › draws a cross centred on the site",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 219,
+      "new_line": 222,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiCells › cuts the partition beyond the visible frame",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 106,
+      "new_line": 109,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiCells › gives a lone site the entire frame",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 99,
+      "new_line": 102,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiCells › gives every cell the territory nearest its own site",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 76,
+      "new_line": 79,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiCells › tiles the whole clipped frame without gaps or overlaps",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 91,
+      "new_line": 94,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiShortfall › penalises a field that lost its open cell",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 228,
+      "new_line": 231,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiShortfall › penalises a field with no unresolved sites",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 239,
+      "new_line": 242,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiShortfall › rejects a field containing a sliver",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 248,
+      "new_line": 251,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "voronoiShortfall › reports a field with no drawable cells as infinitely short",
+      "file": "src/lib/voronoi.test.ts",
+      "runner": "tests",
+      "old_line": 271,
+      "new_line": 274,
+      "classification": "change-introduced"
+    }
+  ],
   "platformGatedAbsences": [],
   "runnerGatedAbsences": []
 }
-  backfilled 4 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.
+  backfilled 1 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

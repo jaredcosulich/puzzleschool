@@ -10,7 +10,7 @@ import {
   traceHarmonograph,
   type HarmonographOptions,
 } from './harmonograph';
-import { hashSeed, pointBounds } from './structures';
+import { FLANK_LANE, hashSeed, pointBounds } from './structures';
 
 /**
  * A hand-built option set, so a test can name the exact physics it is about
@@ -200,6 +200,24 @@ describe('growAcceptableHarmonograph', () => {
     const a = growAcceptableHarmonograph(hashSeed('contact:harmonograph'));
     const b = growAcceptableHarmonograph(hashSeed('contact:harmonograph'));
     expect(harmonographPath(a.points)).toBe(harmonographPath(b.points));
+  });
+
+  // The arithmetic behind "the structure on the left is too low". The lane frames
+  // this figure with `meet`, which scales by whichever axis binds first, so a
+  // figure only fills the lane's full HEIGHT when its own aspect is at or below
+  // the lane's. Above that it binds on width instead, and `xMidYMax` banks the
+  // entire height shortfall as empty air ABOVE the figure — which is exactly what
+  // made the harmonograph sit visibly lower than the Voronoi field opposite it.
+  // Every accepted draw must clear that bar, or the fault returns for some seeds.
+  it("accepts only harmonographs that fill the flank lane's full height", () => {
+    const laneAspect = FLANK_LANE.width / FLANK_LANE.height;
+
+    for (let seed = 1; seed <= 60; seed += 1) {
+      const box = pointBounds(growAcceptableHarmonograph(seed).points);
+      const scale = Math.min(FLANK_LANE.width / box.width, FLANK_LANE.height / box.height);
+      expect(box.height * scale).toBeCloseTo(FLANK_LANE.height, 0);
+      expect(box.width / box.height).toBeLessThanOrEqual(laneAspect);
+    }
   });
 });
 

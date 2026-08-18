@@ -74,6 +74,14 @@
   --measure-statement: 900px; /* max-width of the 56px statement heading */
   --measure-body: 760px; /* max-width of 19px body copy */
   --measure-quote: 780px; /* max-width of the home pull quote */
+  /* max-width of the one-section page's centred prose column. Narrower than
+     --measure-body on purpose: that shape flanks the prose with two 200px
+     structures, and at 760px they are squeezed against the page edges with no
+     air around them. The figures need the width more than the text does — 600px
+     is still a comfortable measure for 19px copy. Its own token rather than a
+     narrowed --measure-body, which is site-wide and would drag the page header's
+     intro in with it. */
+  --measure-prose-single: 600px;
 }
 
 * {

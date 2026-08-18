@@ -14,9 +14,12 @@ import {
   voronoiViewBox,
   type Frame,
 } from './voronoi';
-import { hashSeed, type Point } from './structures';
+import { FLANK_LANE, hashSeed, type Point } from './structures';
 
-const FRAME: Frame = { width: 123, height: 365 };
+// Read from the shared lane rather than restated: this field is generated AT the
+// lane and drawn with `preserveAspectRatio="none"`, so a test frame that drifted
+// from the real one would be asserting about a field the site never renders.
+const FRAME: Frame = { width: FLANK_LANE.width, height: FLANK_LANE.height };
 
 /** The clip rectangle `voronoiCells` actually partitions — the frame plus bleed. */
 const BLEED_AREA = FRAME.width * 1.5 * (FRAME.height * 1.5);
@@ -296,7 +299,9 @@ describe('growAcceptableVoronoi', () => {
   // The lane the figure is generated at, so `preserveAspectRatio="none"` has
   // nothing to distort.
   it('frames the field at the lane it was generated for', () => {
-    expect(voronoiViewBox(growAcceptableVoronoi(1))).toBe('0 0 123 365');
+    expect(voronoiViewBox(growAcceptableVoronoi(1))).toBe(
+      `0 0 ${FLANK_LANE.width} ${FLANK_LANE.height}`,
+    );
   });
 
   // Every cell plus every unresolved mark gets a stroke, and nothing else does.

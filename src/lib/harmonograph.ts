@@ -22,6 +22,7 @@
 //
 // Everything here is pure: numbers in, points out. No DOM, no Astro.
 import {
+  FLANK_LANE,
   outOfBand,
   pointBounds,
   seededRandom,
@@ -144,11 +145,11 @@ interface Range {
  * intervals — an octave, a fifth, a fourth, a major sixth.
  *
  * `amplitude` is deliberately ANISOTROPIC: the lane this figure stands in is
- * 123×365, so a figure drawn square would be letterboxed to a third of the
- * lane's height (the exact problem `BranchingTree` documents). Swinging the
- * vertical pendulums roughly three times as far as the horizontal ones draws a
- * genuinely tall figure instead of stretching a square one, which is the honest
- * way to fill a tall lane.
+ * `FLANK_LANE`, 200×365, so a figure drawn square would be letterboxed to just
+ * over half the lane's height (the same problem `BranchingTree` documents).
+ * Swinging the vertical pendulums roughly twice as far as the horizontal ones
+ * draws a genuinely tall figure instead of stretching a square one, which is the
+ * honest way to fill a tall lane.
  */
 export const HARMONOGRAPH_ENVELOPE = {
   /**
@@ -207,12 +208,14 @@ export const HARMONOGRAPH_ENVELOPE = {
      *
      * A harmonograph is naturally isotropic — the rosette is legible precisely
      * because the pen has comparable room on both axes. Swinging vertically ~3×
-     * the horizontal, which is what filling a 123×365 lane edge-to-edge would
-     * demand, squeezes every pass into a column narrower than the gaps between
-     * them and the figure reads as a scribble. So the lane wins on WIDTH and the
-     * figure wins on SHAPE: a roughly 1:2 draw, bottom-anchored, occupying the
-     * lower two-thirds of the lane. The empty air above it is the same air above
-     * the branching tree's crown, and costs nothing.
+     * the horizontal, which is what filling the OLD 123×365 lane edge-to-edge
+     * would have demanded, squeezes every pass into a column narrower than the
+     * gaps between them and the figure reads as a scribble. That is why the lane
+     * was widened to `FLANK_LANE` instead: at 200×365 a roughly 1:2 draw — which
+     * is where this range puts it, and where the figure is at its most legible —
+     * now sits at or under the lane's own 0.548 aspect, so it fills the lane top
+     * to bottom without being flattened to do it. The figure keeps its shape AND
+     * the lane keeps its height; before, one had to pay for the other.
      */
     amplitudeY: { min: 1.6, max: 2.2 },
     /**
@@ -266,10 +269,11 @@ export function harmonographVariant(seed: number): HarmonographOptions {
   // SHAPE; the absolute frequency sets how many times the pen goes round before
   // damping stops it, which is the figure's DENSITY — and density is the whole
   // problem in a lane this narrow. Calibrated against the lane rather than
-  // reasoned: at a third, the pen makes some forty passes across 123px, which is
-  // three pixels apart and reads as a scribble however good the maths is. A
-  // sixth puts it around ten passes, which is what lets the eye follow one pass
-  // to the next and see the figure precess.
+  // reasoned: at a third, the pen makes some forty passes across the lane's
+  // width, which is a few pixels apart and reads as a scribble however good the
+  // maths is. A sixth puts it around ten passes, which is what lets the eye
+  // follow one pass to the next and see the figure precess. The widened
+  // `FLANK_LANE` gives each of those passes more room, not more passes.
   const baseX = numerator / 6;
   const baseY = denominator / 6;
 
@@ -374,13 +378,26 @@ const TURNING_BAND = { min: 14, max: 60 };
 /**
  * Framed with `meet`, which never distorts — it letterboxes — and anchored to
  * the bottom of the lane, so this band decides how much of the lane's HEIGHT the
- * figure claims, never how stretched it is. Around 1:2 it fills the 123px width
- * and rises through roughly the lower two-thirds, which is the tallest a
- * harmonograph goes while its passes stay far enough apart to read as separate
- * strokes. Chasing the lane's own 0.34 buys the last third of the height at the
- * cost of the figure, which is the trade the first version of this made.
+ * figure claims, never how stretched it is.
+ *
+ * THE CEILING IS ARITHMETIC, NOT TASTE. Under `meet` the figure is scaled by
+ * whichever axis binds first, so it fills the lane's full height exactly when its
+ * own aspect is at or below the LANE's. At or under `FLANK_LANE.width / .height`
+ * every accepted draw is height-bound and the vertical dead space is gone by
+ * construction; the letterboxing that remains is horizontal, where `xMid` centres
+ * it and nobody can see it. Above the ceiling the figure is width-bound instead,
+ * and `xMidYMax` banks the entire height shortfall as a band of empty air ABOVE
+ * the figure — which is precisely how the old 0.62 ceiling left harmonographs
+ * sitting visibly lower than the Voronoi field opposite them.
+ *
+ * So the ceiling is not a number to tune: it is whatever the lane's aspect is,
+ * and it moves when the lane moves. The FLOOR is still a judgement — below ~0.42
+ * the passes crowd into a column narrower than the gaps between them and the
+ * figure reads as a scribble. That is the trade the earlier version described:
+ * chasing the old lane's 0.34 bought the last third of the height at the cost of
+ * the figure. The answer was to widen the lane, not to flatten the figure.
  */
-const ASPECT_BAND = { min: 0.42, max: 0.62 };
+const ASPECT_BAND = { min: 0.42, max: FLANK_LANE.width / FLANK_LANE.height };
 
 /**
  * Below this the stroke is a line or a thin ellipse, not a figure.

@@ -6,11 +6,14 @@
 // field with no client redraw and no race against the screenshot. Register with:
 //   codeyam-editor editor register '{"name":"VoronoiField - Default","componentName":"VoronoiField","url":"/isolated-components/VoronoiField?tree=static","dimensions":["Desktop"]}'
 //
-// The lane is shown at its real 123x365 — the component's own default. This is
+// The lane is shown at its real 200x365 (`FLANK_LANE`) — the component's own
+// default, and the width the field is GENERATED at, so the capture shows cells at
+// their true proportions rather than stretched by a mismatched box. This is
 // also the frame where the two deliberate incompletenesses have to be legible:
 // one cell drawn an edge short, and one or two crosses marking sites the
 // partition has not accounted for at all.
 import Component from "../../components/structures/VoronoiField.astro";
+import { FLANK_LANE } from "../../lib/structures";
 import "../../styles/tokens.css";
 ---
 
@@ -22,7 +25,7 @@ import "../../styles/tokens.css";
   </head>
   <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--paper);">
     <div id="codeyam-capture" style="padding: var(--space-lg);">
-      <div style="width: 123px;">
+      <div style={`width: ${FLANK_LANE.width}px;`}>
         <Component seedKey="contact" />
       </div>
     </div>

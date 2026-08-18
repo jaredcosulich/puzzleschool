@@ -1,0 +1,375 @@
+{
+  "timestamp": "2026-08-18T01:13:36Z",
+  "title": "Give the One-Section Page's Flanking Structures Room",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe one-section internal page shipped in `ce4da69f` reads badly: the harmonograph\nin the left lane sits noticeably lower than the Voronoi field opposite it, and\nthe prose between them runs so wide that both figures are squeezed against the\npage edges with no air around them. The low harmonograph is not a taste call, it\nis arithmetic — the flank lane is `123 × 365` (aspect `0.337`) while\n`ASPECT_BAND` in `src/lib/harmonograph.ts` only accepts figures between `0.42`\nand `0.62`, so under `preserveAspectRatio=\"xMidYMax meet\"` the figure is always\nscaled to fit the lane's WIDTH and can only ever claim `123 / 0.62 ≈ 198px` to\n`123 / 0.42 ≈ 293px` of the lane's 365px height. `YMax` then dumps every pixel of\nthat shortfall at the TOP, which is exactly the 70–170px of dead space above the\nfigure that reads as \"too low\". The fix is to make the lane fit the figure rather\nthan the other way round: widen both flank lanes to `200 × 365`, cap the accepted\naspect at the lane's own ratio so `meet` binds on HEIGHT for every draw, and pay\nfor the wider lanes by narrowing the single-column measure from 760px to 600px —\nwhich is the same change the \"text column is too wide\" complaint asks for.\n\n## Key Decisions\n\n- **Widen the lane instead of flattening the figure.** `harmonograph.ts` already\n  argues, in the `ASPECT_BAND` comment, that chasing the lane's 0.34 aspect\n  \"buys the last third of the height at the cost of the figure\". That reasoning\n  stands — so the lane moves, not the figure. At `200 × 365` the lane's aspect is\n  `0.548`, which sits inside the band the figure already draws at.\n- **Cap `ASPECT_BAND.max` at the lane's aspect (`0.62 → 0.548`).** Under `meet`,\n  a figure fills its lane's full height exactly when its aspect is at or below\n  the lane's. With the cap, every accepted draw is height-bound, the vertical\n  dead space is gone by construction, and the residual letterboxing moves to the\n  HORIZONTAL — where `xMid` centres it and nobody can see it. This is the change\n  that actually fixes \"too low\"; the widened lane alone would only shrink the gap.\n- **Keep `YMax`, keep the bottom anchor.** Both are the seam guarantee, and the\n  fix must not cost it. With the cap in place there is no vertical slack left for\n  `YMax` to place anyway, so it becomes belt-and-braces rather than the thing\n  producing the fault.\n- **New `--measure-prose-single` token rather than editing `--measure-body`.**\n  `--measure-body: 760px` is the site-wide body measure; the single prose column\n  is the only place that wants 600px, and narrowing the shared token would pull\n  the page header's intro and everything else in with it.\n- **The two-column shape is untouched.** About renders correctly today — the\n  branching tree's 123px lane, the 203px column gap and `preserveAspectRatio=\"none\"`\n  all stay exactly as they are. This plan only moves geometry that the\n  `single` layout owns.\n- **Raise the single shape's collapse breakpoint to 960px.** Two 200px lanes plus\n  two 64px gutters cost 528px of the 1200px content box. Below roughly 960px\n  viewport the 600px measure would be squeezed under 400px, which is worse than\n  no lanes at all — so below that width the flanked shape collapses to the plain\n  block flow it already falls back to at 840px.\n\n## Implementation\n\n### 1. Publish the flank lane as one shared geometry fact\n\n**File**: `src/lib/structures.ts`\n\nExport `FLANK_LANE = { width: 200, height: 365 }` alongside the existing shared\ngeometry helpers, with a comment saying what it is: the lane the one-section\npage's two flanking structures stand in, distinct from the branching tree's\n123px lane in the two-column shape. Both flank components and the Voronoi\nenvelope read it, so the number exists once in TypeScript. The CSS side\n(`ProseColumns.astro`) restates it as a literal with a comment pointing here —\nthe same convention the file already uses for `123px` / `365px`.\n\n### 2. Cap the accepted harmonograph aspect at the lane's aspect\n\n**File**: `src/lib/harmonograph.ts`\n\nChange `ASPECT_BAND` from `{ min: 0.42, max: 0.62 }` to\n`{ min: 0.42, max: 0.548 }` (`FLANK_LANE.width / FLANK_LANE.height`), and rewrite\nthe comment above it to say why the ceiling is that number and not a taste\njudgement: at or below the lane's aspect, `meet` scales the figure by HEIGHT, so\nthe figure fills the lane top to bottom and the letterboxing that is left is\nhorizontal. Update the `123×365` references in the surrounding comments\n(lines ~147, ~210, ~269, ~377) to the new lane.\n\nThe band is now `0.13` wide where it was `0.20`, so the raw accept rate drops.\n`growAcceptableHarmonograph` already falls back to the closest attempt rather\nthan throwing, so nothing breaks — but at execution, check the fallback rate the\nway the existing 60-attempt number was checked and raise `attempts` to 80 if\ndraws start landing off-band.\n\n### 3. Draw the Voronoi field at the new lane\n\n**File**: `src/lib/voronoi.ts`\n\n`VORONOI_ENVELOPE.fixed.width` goes `123 → 200` (from `FLANK_LANE`). Because the\nfield renders with `preserveAspectRatio=\"none\"`, the generated frame IS the lane\n— keeping 123 here would stretch every cell horizontally by 1.6×. The\n`columns` range moves from `{ min: 2, max: 3 }` to `{ min: 3, max: 4 }` so cells\nstay roughly square against the unchanged `rows: { min: 5, max: 7 }` at the new\n`0.548` aspect, and the \"deliberately tall and narrow\" comment above the envelope\nis updated with the new numbers.\n\n### 4. Default both flank components to the new lane\n\n**File**: `src/components/structures/Harmonograph.astro`\n\nDefault `width` from `123` to `FLANK_LANE.width` (import it), leaving `height` at\n`FLANK_LANE.height`. Update the `.harmonograph-well` comment and its `min-height`\nto match, and move the `@media (max-width: 840px)` collapse to `960px`.\n\n**File**: `src/components/structures/VoronoiField.astro`\n\nThe same three changes: default width from the shared constant, updated\n`.voronoi-well` comment, collapse breakpoint `840px → 960px`.\n\n### 5. Rebalance the one-section grid\n\n**File**: `src/components/page/ProseColumns.astro`\n\nIn `.prose-grid--single`:\n\n- `grid-template-columns: 123px minmax(0, var(--measure-body)) 123px` becomes\n  `200px minmax(0, var(--measure-prose-single)) 200px`.\n- `column-gap: 40px` becomes `64px` — the extra air between the text and each\n  figure is half of what \"space to breathe\" is asking for.\n- Add a comment recording the arithmetic, so the next reader does not have to\n  re-derive it: `200 + 64 + 600 + 64 + 200 = 1128` inside the 1200px content box\n  (`--page-width: 1280px` less two 40px gutters), leaving 36px of slack each side.\n- Add a `@media (max-width: 960px)` rule setting `.prose-grid--single { display: block }`,\n  matching the components' new collapse width. The existing `840px` block stays\n  as-is; it governs the two-column shape.\n\nLeave the `columns` shape, the `.tree-well` rule, the `min-height` floor and the\n`prose-foot` bleed untouched.\n\n### 6. Add the single-column measure token\n\n**File**: `src/styles/tokens.css`\n\nAdd `--measure-prose-single: 600px;` next to the existing measures, commented as\nthe measure of the one-section page's centred prose column — narrower than\n`--measure-body` because the two flanking structures need the width more than the\ntext does.\n\n### 7. Show the components at their real lane in isolation\n\n**File**: `src/pages/isolated-components/Harmonograph.astro`\n\n**File**: `src/pages/isolated-components/VoronoiField.astro`\n\n**File**: `src/pages/isolated-components/HarmonographVariations.astro`\n\n**File**: `src/pages/isolated-components/VoronoiFieldVariations.astro`\n\nEach of these hardcodes `width: 123px` (and says so in a comment) precisely so the\ncapture judges the envelope at the real lane. All four move to `200px` with their\ncomments updated. `BranchingTreeVariations.astro` keeps `123px` — that is the\ntree's lane and it has not changed.\n\n### 8. Update the tests that pin the old geometry\n\n**File**: `src/lib/voronoi.test.ts`\n\n`FRAME` at line 19 and the `'0 0 123 365'` viewBox expectation at line 299 both\nencode the old lane and will fail; move them to `200`.\n\n**File**: `src/lib/harmonograph.test.ts`\n\nAdd the reproduction test below, and update any existing expectation that\nencodes the `0.62` ceiling.\n\n## Reused existing code\n\n- The new lane constant (new) sits beside `hashSeed`, `pointBounds`, `outOfBand`\n  and `toPath` in `src/lib/structures.ts` (glossary entries: `hashSeed`,\n  `pointBounds`) — the module both flank components already import from.\n- `growAcceptableHarmonograph` and `harmonographShortfall` from\n  `src/lib/harmonograph.ts` (glossary entries: `growAcceptableHarmonograph`,\n  `harmonographShortfall`) — the fallback-to-closest-attempt behaviour is what\n  makes tightening `ASPECT_BAND` safe, so no new resilience is written.\n- `voronoiVariant`, `growAcceptableVoronoi` and `voronoiViewBox` from\n  `src/lib/voronoi.ts` (glossary entries: `voronoiVariant`,\n  `growAcceptableVoronoi`, `voronoiViewBox`) — all three read the frame from\n  `VORONOI_ENVELOPE`, so changing the envelope is the whole of the Voronoi change.\n- `Harmonograph` and `VoronoiField` from `src/components/structures/` (glossary\n  entries: `Harmonograph`, `VoronoiField`) — both already take `width`/`height`\n  props, so no new prop surface is needed.\n- `ProseColumns` from `src/components/page/ProseColumns.astro` (glossary entry:\n  `ProseColumns`) — the `layout: 'columns' | 'single'` prop and the\n  `proseLayoutFor` rule that drives it are unchanged; this plan only edits the\n  CSS of the shape that already exists.\n\n**Existing-implementation survey.** Before proposing `--measure-prose-single` and\n`FLANK_LANE`, both were grepped for. `src/styles/tokens.css` has\n`--measure-statement: 900px`, `--measure-body: 760px` and `--measure-quote: 780px`\n— there is no existing single-column prose measure, and `--measure-body` is used\nelsewhere so it cannot be repurposed. There is no shared lane constant anywhere:\n`123` is currently a literal in eleven places across the component, library and\ntest files (`grep -rn \"123\" src`), of which the six listed above belong to the\nflank lane and the rest belong to the branching tree.\n\n## Reproduction Test\n\nPins the arithmetic behind \"the structure on the left is too low\": with the\ncurrent `ASPECT_BAND` ceiling, accepted harmonographs are wider than their own\nlane, so `meet` scales them by width and they cannot reach the top of it.\n\n**Target**: `src/lib/harmonograph.test.ts` — run with\n`codeyam-editor editor refresh-tests --test harmonograph`.\n\n```ts\n// A figure only fills its lane's full height under `meet` when its aspect is at\n// or below the lane's. Every accepted draw must clear that bar, or the lane\n// letterboxes vertically and `YMax` banks the whole shortfall above the figure.\nit(\"accepts only harmonographs that fill the flank lane's full height\", () => {\n  // Must match FLANK_LANE in src/lib/structures.ts once that constant exists.\n  const LANE = { width: 200, height: 365 };\n  const laneAspect = LANE.width / LANE.height;\n\n  for (let seed = 1; seed <= 60; seed += 1) {\n    const box = pointBounds(growAcceptableHarmonograph(seed).points);\n    const scale = Math.min(LANE.width / box.width, LANE.height / box.height);\n    expect(box.height * scale).toBeCloseTo(LANE.height, 0);\n    expect(box.width / box.height).toBeLessThanOrEqual(laneAspect);\n  }\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: `ASPECT_BAND.max`\nis `0.62` today, so seeds drawing above `0.548` are accepted and the\n`toBeLessThanOrEqual(0.5479…)` assertion fails (with the `toBeCloseTo` height\nassertion failing on the same seeds, reporting a height well short of 365).\n\n## Scenarios to Demonstrate\n\n- **Contact as it ships** — the real one-section page, harmonograph and Voronoi\n  field both filling their lanes to the same height, 600px of prose between them.\n  (`contact-email-only` recapture.)\n- **The isolated one-section shape with a foot** — `ProseColumnsSingle`, where\n  the seam guarantee is observable: both figures still land on the join with the\n  band even though the CTA sits in the `foot` slot.\n- **A blank page** — no sections at all, so the two structures stand at full\n  height with nothing between them and the new measure has no copy to size it.\n- **Harmonograph variations sheet** — eight draws at the 200px lane, all reaching\n  the top of the lane, which is the sheet that proves the tightened band did not\n  cost the figures their character.\n- **Voronoi variations sheet** — eight fields at the 200px lane with 3–4 columns,\n  confirming cells read as roughly square rather than stretched.\n- **Narrow viewport (≤960px)** — the flanked shape collapsed to plain block flow,\n  no empty lanes, prose at full width.\n- **About, unchanged** — the two-column page, as the control that this plan did\n  not move the branching tree's geometry.",
+  "description": "The one-section internal page's two flanking figures now stand in a 200x365 lane, published once as FLANK_LANE in src/lib/structures.ts and read by both flank components, the Voronoi envelope, the isolated-component pages and the tests. The harmonograph used to sit 70-170px lower than the Voronoi field opposite it, and that was arithmetic rather than taste: the old lane was 123x365 (aspect 0.337) while ASPECT_BAND accepted figures up to 0.62, so under preserveAspectRatio=meet every accepted draw was scaled by WIDTH and could never claim the lane's full height, with xMidYMax banking the whole shortfall as dead air above the figure. The fix moves the lane to the figure instead of flattening the figure to the lane: the aspect ceiling is now FLANK_LANE.width / FLANK_LANE.height, so every accepted draw is height-bound by construction and the residual letterboxing moves to the horizontal where xMid hides it. The prose between them narrowed from the site-wide --measure-body (760px) to a new --measure-prose-single (600px) with 64px gutters, which is what buys both figures air instead of pressing them against the page edges, and the flanked shape now collapses at 960px rather than 840px because two 200px lanes plus two 64px gutters cost 528px of the 1200px content box.\n\nMEASURED, NOT ASSUMED: tightening the band dropped the raw accept rate to 8.5%, but with the existing 60-attempt resample the fallback rate is 0.2% and 99.8% of draws now fill the lane's full height, so the plan's contingency to raise attempts to 80 was not needed. The reproduction test 'accepts only harmonographs that fill the flank lane's full height' is prove-red PROVEN: it was re-measured narrowed to src/lib/harmonograph.ts alone so FLANK_LANE stayed defined in both worlds, making the failure a genuine assertion against the old 0.62 ceiling rather than a missing-symbol import error that would have proven nothing.\n\nTWO CHANGES BEYOND THE PLAN'S LETTER, both surfaced to the user before commit. First, splitting the collapse breakpoint exposed a gap the plan did not anticipate: .prose-grid reserves a 389px floor for the branching tree's lane and only the 840px block released it, so between 840 and 960px the collapsed single shape would have shown plain-flow prose over a tall empty gap; the new 960px rule releases it. Second, both variations sheets were clipping their outer specimens, because eight 200px lanes plus seven 24px gaps need 1768px; they now wrap to a second row rather than shrinking the lanes, since showing a figure at a width the site never renders would defeat the sheet's entire purpose.\n\nSCOPE VERDICT: this cycle delivered no project deliverable and deferred none. All five deliverables were already resolved before it began (4 delivered, 1 deferred), every one decidedBy user; there are no agent-decided deferrals to surface. This was a visual-correctness cycle on top of already-delivered work. One scenario named in the plan could NOT be delivered: the blank-page demo, which would show both structures at full height with no copy between them, requires the page-title-without-body scenario at /blank. That scenario was removed in an earlier cycle because codeyam-editor's capture-time seed-landed check cannot be satisfied by a page whose seeded body is empty, and its restoration is owned by the committed plan restore-the-blank-page-scenario-and-its-screenshot, which is explicitly gated on that upstream tool fix. Six of the plan's seven named demo surfaces are covered. Separately, the 840-960px band this change introduces is not capturable by any registered dimension (1440/1280/768/390), so the collapse was demonstrated at Tablet 768 and a structural demo-skip was recorded naming why a CSS media query has no interaction to drive.\n\nControls held: about-full-design, branchingtree-default, branchingtree-variations, prosecolumns-default and home-full-design all recaptured pixel-identical, confirming the branching tree's own 123px lane and the two-column shape did not move. 126 tests pass; audit clean at 0 findings.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/give-the-one-section-page-s-flanking-structures-room.md\t.codeyam/plans/completed/give-the-one-section-page-s-flanking-structures-room.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harmonograph-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/prosecolumns-single-section.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncards-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/branchingtree-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/branchingtree-variations--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/fibonaccistructure-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harmonograph-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harmonograph-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harmonograph-variations--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harmonograph-variations--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/kochfragment-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/morserule-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-single-section--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-single-section--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/quoteband-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sinerule-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/voronoifield-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/voronoifield-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/voronoifield-variations--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/voronoifield-variations--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/voronoifield-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/1325353d81e4caf7248667a94d905ecb138e1a6c86bd13c01e1d0d01bc6c562b.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/6185ad873e93aa2a6f783f5c80826fa1b049c53645b72350314c45693b424e15.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/page/ProseColumns.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/structures/Harmonograph.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/structures/VoronoiField.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/harmonograph.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/harmonograph.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/structures.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/voronoi.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/voronoi.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/Harmonograph.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/HarmonographVariations.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VoronoiField.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VoronoiFieldVariations.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/red-proofs/give-the-one-section-page-s-flanking-structures-room.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c05d09a1ad3431a348504d034253bc0d50b71bb0f62557444b8347207db6d151.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c235cb4310291be42b63b55eb87e448897010ee04e9964b39c3336caebb536a7.json",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "About - Footer Contact Link Followed",
+      "screenshotPath": "about-footer-contact-link-followed--desktop.png"
+    },
+    {
+      "name": "About - Full Design",
+      "screenshotPath": "about-full-design--desktop.png"
+    },
+    {
+      "name": "Contact - Email Only",
+      "screenshotPath": "contact-email-only--desktop.png"
+    },
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    },
+    {
+      "name": "Page - Created From The CMS",
+      "screenshotPath": "page-created-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Page - Minimal Fields",
+      "screenshotPath": "page-minimal-fields--desktop.png"
+    },
+    {
+      "name": "ExploratoryBand - Default",
+      "screenshotPath": "exploratoryband-default--desktop.png"
+    },
+    {
+      "name": "ExploratoryBand - Without Quote",
+      "screenshotPath": "exploratoryband-without-quote--desktop.png"
+    },
+    {
+      "name": "Harmonograph - Default",
+      "screenshotPath": "harmonograph-default--desktop.png"
+    },
+    {
+      "name": "Harmonograph - Variations",
+      "screenshotPath": "harmonograph-variations--desktop.png"
+    },
+    {
+      "name": "ProseColumns - Default",
+      "screenshotPath": "prosecolumns-default--desktop.png"
+    },
+    {
+      "name": "ProseColumns - Single Section",
+      "screenshotPath": "prosecolumns-single-section--desktop.png"
+    },
+    {
+      "name": "ProseColumns - With Foot",
+      "screenshotPath": "prosecolumns-with-foot--desktop.png"
+    },
+    {
+      "name": "QuoteBand - Default",
+      "screenshotPath": "quoteband-default--desktop.png"
+    },
+    {
+      "name": "VoronoiField - Default",
+      "screenshotPath": "voronoifield-default--desktop.png"
+    },
+    {
+      "name": "VoronoiField - Variations",
+      "screenshotPath": "voronoifield-variations--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 126,
+    "passed": 126,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 126,
+        "passed": 126
+      }
+    ]
+  }
+}
