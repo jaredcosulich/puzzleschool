@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: 146df6fb2b3f8a13b0d16a2d50969b506cb91f6ae854d66dfb657a0646b69ea8
+// codeyam-editor: 0.1.7  source-sha256: 972a1dd991d63d6279213fec7b6ddbb8e55ed5c07f61bf8a276e7b71d5bbf3b6
 
 // Render environment (colorScheme, deviceScaleFactor, userAgent, locale,
 // timezoneId, reduceMotion, forcedColors) is read from config when present
@@ -618,8 +618,36 @@ function pushRedirectMismatchIssue(issues, requestedUrl, frame, response, config
 // did NOT hit this cap.
 const PAGE_STATE_TEXT_NODE_CAP = 40;
 
+// Fallback for how long `verifyProbeSeedLanded` re-reads a frame that is still
+// showing committed content. Mirrors `SEED_LANDING_BUDGET` in
+// `seed_landing.rs`, and is used ONLY when the editor did not send
+// `config.seedLandingBudgetMs` — a capture request from a binary that predates
+// the field. Degrading to today's constant is deliberate: degrading to zero
+// would fail on the first read, which is exactly the bug being fixed.
+const SEED_LANDING_BUDGET_MS = 10000;
+
+// Gap between frame re-reads. Mirrors `SEED_LANDING_POLL_INTERVAL` in
+// `seed_landing.rs` for the same reason the budget does — the two halves of one
+// gate should not sample at visibly different rates when a report compares
+// their logs.
+const SEED_LANDING_RETRY_INTERVAL_MS = 250;
+
+// The re-read budget this capture applies, in milliseconds.
+//
+// A non-finite, negative, or absent value falls back to the constant above; a
+// zero is treated as absent for the same reason the Rust resolver does it, so a
+// config typo cannot turn the gate into "fail on the first read" across a whole
+// corpus.
+function readSeedLandingBudgetMs(config) {
+  const raw = config && config.seedLandingBudgetMs;
+  return typeof raw === "number" && Number.isFinite(raw) && raw > 0
+    ? raw
+    : SEED_LANDING_BUDGET_MS;
+}
+
 // Read-only page-state snapshot for `capture-state`: the full localStorage
-// map, a bounded sample of visible text nodes (document order), and — when a
+// map, a bounded sample of visible text nodes (document order), the page's
+// head metadata (`<title>` plus every named `<meta>`'s content), and — when a
 // selector is given — that element's text. Evaluated in-page against the
 // settled frame so it reflects exactly what a real capture saw (the proxy
 // already injected the scenario's seed into the served HTML). Every read is
@@ -674,6 +702,38 @@ async function dumpPageState(frame, selector) {
       /* no body / detached document */
     }
 
+    // Head metadata, deliberately its OWN field rather than more `visibleText`.
+    // `capture-state` consumers read `visibleText` as "text a reader sees on
+    // the page", and a `<title>` is not that. But a page that renders its
+    // seeded values only into `<title>` / `<meta content>` — a title-only page
+    // is exactly the reported case — still received the seed, and the Rust
+    // poll already counts it: matching the raw response body, head markup is
+    // in its haystack. Collecting the same surface here is what lets the two
+    // halves of one gate agree about what counts as the render.
+    const headMetadata = [];
+    try {
+      const title = (document.title || "").replace(/\s+/g, " ").trim();
+      if (title) headMetadata.push(title);
+    } catch (_) {
+      /* detached document */
+    }
+    try {
+      // `name` or `property` only: a bare `<meta charset>` or an
+      // `http-equiv` carries no authored content, and requiring one of the two
+      // naming attributes keeps the haystack to metadata someone declared.
+      const metas = document.querySelectorAll(
+        "meta[name][content], meta[property][content]",
+      );
+      for (let i = 0; i < metas.length && headMetadata.length < textNodeCap; i++) {
+        const content = (metas[i].getAttribute("content") || "")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (content) headMetadata.push(content);
+      }
+    } catch (_) {
+      /* no head / detached document */
+    }
+
     let selectorText = null;
     if (sel) {
       try {
@@ -684,7 +744,7 @@ async function dumpPageState(frame, selector) {
       }
     }
 
-    return { localStorage, visibleText, selectorText };
+    return { localStorage, visibleText, headMetadata, selectorText };
   }, [selector || null, PAGE_STATE_TEXT_NODE_CAP]);
 }
 
@@ -783,18 +843,57 @@ function normalizeForMatch(text) {
     .toLowerCase();
 }
 
-// One entry of `config.seedProbes`, normalized to `{ value, committed }`.
+// Does an already-normalized surface carry `value`?
+//
+// One line, and named anyway, because the probe half asks it of TWO surfaces
+// — the reader-visible body text and the page's head metadata — for both a
+// probe's seeded value and its committed counterpart. Four inline copies of
+// "normalize the needle, then substring-test the haystack" are four chances
+// for one of them to drift, and `normalizeForMatch` exists precisely because
+// this comparison rule drifting is the bug class that keeps recurring here.
+//
+// The haystack is normalized by the caller, once per surface, rather than per
+// probe: it is the long side, and re-normalizing it inside a `.some()` would
+// redo that work for every probe.
+function surfaceCarries(haystack, value) {
+  return haystack.includes(normalizeForMatch(value));
+}
+
+// One entry of `config.seedProbes`, normalized to
+// `{ value, committed, removed }`.
 //
 // A bare string is tolerated as `{ value }` so a version-skewed capture script
 // paired with an older editor degrades to the two-way behavior rather than
 // throwing — an unpaired probe simply can never witness the committed case.
+//
+// `removed` mirrors `ProbeSense` in `seed_landing.rs`: false (the default, and
+// the shape of every probe the editor sent before the removing kind existed)
+// means the seed INTRODUCED `value` and it must appear; true means the seed
+// DELETED it and it must be gone. An unrecognized `sense` string reads as
+// introduced rather than throwing — the same degrade-don't-fail rule the bare
+// string above follows, and never failing a capture over the verifier.
 function readSeedProbe(entry) {
-  if (typeof entry === "string") return { value: entry, committed: null };
+  if (typeof entry === "string")
+    return { value: entry, committed: null, removed: false };
   if (!entry || typeof entry.value !== "string") return null;
   return {
     value: entry.value,
     committed: typeof entry.committed === "string" ? entry.committed : null,
+    removed: entry.sense === "removed",
   };
+}
+
+// Describe an unreadable probe entry precisely enough to name the contract that
+// broke. `typeof` alone answers "object" for the shape that actually matters, so
+// the keys carry the diagnosis: a payload of `{ text, prior }` is a renamed
+// field, `{}` is an empty row, and a nested array is a serialization bug.
+function describeProbeShape(entry) {
+  if (entry === null) return "null";
+  const kind = typeof entry;
+  if (kind !== "object") return kind;
+  if (Array.isArray(entry)) return `array(length ${entry.length})`;
+  const keys = Object.keys(entry);
+  return keys.length === 0 ? "object with no keys" : `object with keys [${keys.join(", ")}]`;
 }
 
 // The probe half of `verifySeedLanded`, classifying the frame three ways rather
@@ -819,60 +918,199 @@ function readSeedProbe(entry) {
 // Existence, not coverage — a seed writes many strings and rendering may show
 // only some, so requiring all of them would fail correct captures.
 //
+// "Appears" spans two surfaces, checked in that order: the reader-visible body
+// text, then the page's head metadata. A title-only page renders its seeded
+// title into `<h1>` and its seeded description into `<meta>` and nothing else,
+// so a body-only haystack calls that seed missing while the Rust poll — which
+// matches the raw response body — calls it landed. One gate cannot hold two
+// definitions of the render, and the poll's is the shipped, more permissive
+// one, so this side matches it rather than the other way round.
+//
 // The probes are scoped by the editor before they reach here: only a capture
 // whose OWN merged seed wrote to the sandbox carries any, and a component
 // scenario never does. So the empty short-circuit below is the whole gate this
 // side needs — an unseeded or isolated-component capture simply sends none.
 async function verifyProbeSeedLanded(frame, config) {
-  const probes = ((config && config.seedProbes) || [])
-    .map(readSeedProbe)
-    .filter(Boolean);
+  const rawProbes = (config && config.seedProbes) || [];
+  const probes = rawProbes.map(readSeedProbe).filter(Boolean);
+
+  // An EMPTY `seedProbes` is a legitimate no-op — an unseeded or
+  // isolated-component capture sends none, and there is nothing to verify. A
+  // NON-EMPTY set whose every entry is unreadable is a different animal: it
+  // means this script and the binary that invoked it disagree about the probe
+  // contract, and silently filtering those entries turns "I cannot check the
+  // seed" into "the seed is fine" — a capture that asserts nothing while
+  // reporting success. Say so instead, and name the shape received so the
+  // diagnosis lands on the script/binary contract rather than on the app.
+  if (rawProbes.length > 0 && probes.length === 0) {
+    const shapes = rawProbes.map(describeProbeShape).join("; ");
+    throw new Error(
+      `capture.js does not understand this scenario's seedProbes: received ${rawProbes.length} ` +
+        `entry/entries, none readable as a string or { value: string } — [${shapes}]. This is a ` +
+        `capture-script/binary contract break, not a scenario failure: the seed was never ` +
+        `verified either way. Run \`codeyam-editor editor sync-capture-scripts\` to bring ` +
+        `.codeyam/capture.js up to date with the running binary.`,
+    );
+  }
+
   if (probes.length === 0) return null; // nothing derived — nothing to verify.
 
+  // The committed value showing is a TRANSIENT state, not a verdict: on a
+  // content-collection stack the seed adapter writes the sandbox and the
+  // content layer re-globs asynchronously, so the first frame read can
+  // legitimately still be rendering what the seed replaced. Reading once and
+  // failing turned that race into false `seed-not-landed` failures on captures
+  // whose seeded string was visibly present seconds later — one scenario failed
+  // while its seeded "Protected preview" appeared twice in the rendered text.
+  //
+  // So only THIS arm gains patience. Every other arm still returns on the first
+  // read, because each is already a settled answer: a seeded value found is a
+  // landing, a capped text sample is inconclusive, and neither-value-present
+  // means the route does not render these fields at all. Re-reading those would
+  // buy nothing and cost the budget.
+  const budgetMs = readSeedLandingBudgetMs(config);
+  const startedAt = Date.now();
+  for (;;) {
+    const verdict = await readSeedVerdict(frame, probes);
+    if (verdict.kind !== "committed-showing") return null;
+    const waitedMs = Date.now() - startedAt;
+    if (waitedMs >= budgetMs) {
+      return seedNotLandedIssue(frame, config, verdict.showing, waitedMs);
+    }
+    await new Promise((r) => setTimeout(r, SEED_LANDING_RETRY_INTERVAL_MS));
+  }
+}
+
+// One read of the frame, classified. The READ half only: it owns the page
+// access and the never-fail-over-the-verifier rule, and delegates every verdict
+// to the pure classifier below.
+//
+// An unreadable frame is `inconclusive`, never a failure — the verifier must
+// not be what fails a capture.
+async function readSeedVerdict(frame, probes) {
   let state;
   try {
     state = await dumpPageState(frame, null);
   } catch (_) {
-    return null; // read-back failed — never fail a capture over the verifier.
+    return { kind: "inconclusive" }; // read-back failed.
   }
-  if (!state) return null;
+  if (!state) return { kind: "inconclusive" };
+  return classifySeedFrameState(state, probes);
+}
 
+// Classify one already-read page state against a probe set, the same three ways
+// `classify_served_body` classifies one served response — so the poll and this
+// assertion cannot drift into two definitions of "landed", which is the bug
+// class that keeps recurring here.
+//
+// Returns `{ kind: "landed" | "inconclusive" | "committed-showing", showing }`.
+// Only `committed-showing` is worth re-reading for; the other two are settled.
+//
+// Pure and synchronous, and split from the read above for exactly the reason
+// `classify_served_body` was lifted out of the Rust polling loop: every verdict
+// this gate can reach becomes reachable in a test from a plain state object,
+// with no fake frame and no waiting out a retry budget. The decision used to be
+// expressible only through an async page read.
+function classifySeedFrameState(state, probes) {
+  // First surface: the text a reader actually sees in the capture.
   const visibleText = state.visibleText || [];
   const haystack = normalizeForMatch(
     visibleText.concat(state.selectorText || []).join(" "),
   );
-  if (probes.some((probe) => haystack.includes(normalizeForMatch(probe.value)))) {
-    return null; // landed.
+
+  // Second surface: a page whose seeded value renders only into `<title>` or a
+  // `<meta content>` still received the seed. The Rust poll already reads it
+  // that way — it matches the raw response body, head markup included — so a
+  // refusal here would leave the two halves of one gate disagreeing about what
+  // counts as the render, which is the reported bug: the poll reports landed
+  // and the frame assertion reports the seed missing, for one served page.
+  //
+  // Deliberately NOT folded into `haystack` above: the two are separate
+  // questions (did the reader see it / did the render receive it), and the cap
+  // rule below applies to the body sample only.
+  const headHaystack = normalizeForMatch((state.headMetadata || []).join(" "));
+  const carries = (value) =>
+    surfaceCarries(haystack, value) || surfaceCarries(headHaystack, value);
+
+  const introduced = probes.filter((probe) => !probe.removed);
+  const removed = probes.filter((probe) => probe.removed);
+
+  if (introduced.some((probe) => carries(probe.value))) {
+    return { kind: "landed" }; // a seeded value reached the render.
+  }
+
+  // A removing probe still on the page is the defect, and a stronger
+  // observation than the committed sweep below: the value is one the seed
+  // explicitly deleted, so the route rendering it cannot be explained away by
+  // the route simply not showing the field. Mirrors the same-ordered arm in
+  // `classify_served_body`.
+  const stillRemoved = removed.find((probe) => carries(probe.value));
+  if (stillRemoved) {
+    return {
+      kind: "committed-showing",
+      showing: { value: stillRemoved.value, committed: stillRemoved.value },
+    };
   }
 
   // `dumpPageState` samples a bounded number of text nodes. When it came back
   // at the cap, "not found" cannot be distinguished from "past the sample", so
   // the honest answer is inconclusive rather than a failure — same rule the
-  // storage half follows for unavailable storage.
-  if (visibleText.length >= PAGE_STATE_TEXT_NODE_CAP) return null;
+  // storage half follows for unavailable storage. It bounds the BODY sample
+  // only; the metadata read above is complete, so a metadata match is
+  // conclusive regardless of where the text walk stopped.
+  //
+  // Below the two match arms above deliberately: a match is conclusive however
+  // the walk ended, and only a MISS needs the sample to have been complete.
+  if (visibleText.length >= PAGE_STATE_TEXT_NODE_CAP) {
+    return { kind: "inconclusive" };
+  }
 
+  // Both surfaces again, and for the same reason: a route emitting the
+  // COMMITTED value into its `<meta description>` demonstrably renders that
+  // field and demonstrably is not rendering the seed. Widening where a seed
+  // counts as landed without widening where its committed counterpart counts
+  // as showing would turn the real defect into a silent pass.
   const showing = probes.find(
-    (probe) =>
-      probe.committed && haystack.includes(normalizeForMatch(probe.committed)),
+    (probe) => probe.committed && carries(probe.committed),
   );
+  if (showing) return { kind: "committed-showing", showing };
+
+  // Every removing probe is gone, which is exactly what the seed set out to
+  // achieve — and the only landing a purely-deleting seed can demonstrate.
+  // Last, because absence is the weakest of the three claims: it is also what
+  // an unrelated route looks like, so it must not pre-empt a positive landing
+  // or a still-showing observation.
+  if (removed.length > 0) return { kind: "landed" };
+
   // Neither the seed nor what it replaced is on this page: the route does not
   // render these fields, and demanding one is asserting a fact about a page
   // that has nothing to say.
-  if (!showing) return null;
+  return { kind: "inconclusive" };
+}
 
+// The loud `seed-not-landed` issue, built once the re-read budget has elapsed
+// with the render still showing what the seed replaced.
+//
+// `waitedMs` is named in the message because a reader who sees "the seed did
+// not land" needs to know the gate was patient before concluding it — and,
+// when a project has raised `seedLandingBudgetMs`, that the raised budget is
+// the one that actually elapsed.
+function seedNotLandedIssue(frame, config, showing, waitedMs) {
   return createIssue(
     "seed-not-landed",
-    `The captured frame showed "${showing.committed}" where this scenario's own seed ` +
-      `wrote "${showing.value}" — the served app is rendering COMMITTED content, not the ` +
-      `seed. This route demonstrably renders that field, so its committed value appearing ` +
-      `is direct evidence the seed did not reach the frame — fix the seed; do not delete ` +
-      `the scenario. Check, in order: (1) the seed's tables/files target the collection ` +
-      `this route actually renders, (2) the app cached a content index built before the ` +
-      `seed landed, (3) the seed adapter wrote somewhere the served app does not read, or ` +
-      `(4) the dev server was not launched by the editor, so it resolves committed source ` +
-      `instead of CODEYAM_CONTENT_ROOT/CODEYAM_DATA_ROOT (those roots travel through the ` +
-      `spawned process's environment — there are no .codeyam/tmp/*-root sidecar files to ` +
-      `look for, and their absence is not the fault).`,
+    `The captured frame still showed "${showing.committed}" where this scenario's own seed ` +
+      `wrote "${showing.value}" after ${Math.round(waitedMs / 1000)}s of re-reading — the ` +
+      `served app is rendering COMMITTED content, not the seed. This route demonstrably ` +
+      `renders that field, so its committed value appearing is direct evidence the seed did ` +
+      `not reach the frame — fix the seed; do not delete the scenario. Check, in order: ` +
+      `(1) the seed's tables/files target the collection this route actually renders, ` +
+      `(2) the app cached a content index built before the seed landed, (3) the seed ` +
+      `adapter wrote somewhere the served app does not read, or (4) the dev server was not ` +
+      `launched by the editor, so it resolves committed source instead of ` +
+      `CODEYAM_CONTENT_ROOT/CODEYAM_DATA_ROOT (those roots travel through the spawned ` +
+      `process's environment — there are no .codeyam/tmp/*-root sidecar files to look for, ` +
+      `and their absence is not the fault). If this content layer is simply slow to ` +
+      `rebuild, raise "seedLandingBudgetMs" in .codeyam/editor.json.`,
     { url: (frame && frame.url && frame.url()) || (config && config.url) },
   );
 }
@@ -1600,6 +1838,11 @@ module.exports = {
   runFlowSteps,
   dumpPageState,
   verifySeedLanded,
+  verifyProbeSeedLanded,
+  classifySeedFrameState,
+  readSeedLandingBudgetMs,
+  surfaceCarries,
+  describeProbeShape,
   readStackLoadingMarkers,
   scenarioScriptsLiveSocket,
   applyBrowserState,

@@ -12,8 +12,8 @@
     // unless told otherwise — so `@codeyam/cms/content`'s `astro/loaders` and
     // `astro/zod` came from the *checkout's* Astro rather than this project's.
     // Those are different majors on purpose (the CMS supports Astro 5, 6 and 7
-    // and develops against 7; this site is on 5), and zod v4 vs v3 made every
-    // collection schema in `src/content/config.ts` a type error. Keeping the
+    // and develops against 7; this site is on 6), and a zod-major mismatch made
+    // every collection schema in `src/content.config.ts` a type error. Keeping the
     // resolution on the `node_modules` path gives the whole program one Astro.
     // Unconditional like the Node flag: with no linked package there are no
     // symlinks to preserve, so it costs nothing and both states just work.

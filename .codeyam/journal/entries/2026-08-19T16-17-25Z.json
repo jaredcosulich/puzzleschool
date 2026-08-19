@@ -1,0 +1,351 @@
+{
+  "timestamp": "2026-08-19T16:17:25Z",
+  "title": "Upgrade Astro 5 to 6",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe repo is on `astro@5.18.2`, which is the newest 5.x that will ever exist —\nevery fix for the eight open Astro Dependabot alerts landed in 6.x or later, so\nthere is no patch-in-place available and the only route off them is the major\nupgrade. This plan does the first half: Astro 5 → 6. Landing on **6.4.6 or\nnewer clears five of the eight alerts, including both highs** (#118 host-header\nSSRF, #117 slot-name XSS, plus #119, #115, #114); the remaining three need 7.x\nand are the follow-up plan's job. None of the eight is exploitable against the\ndeployed site today — it is `output: 'static'` on GitHub Pages with no adapter,\nno SSR route and no server island, so there is no request-time render to inject\ninto — which is why this is scheduled work rather than an incident.\n\nThe v6 surface that actually touches this repo is small and known: the content\nconfig file must move and stop importing `z` from `astro:content`, Zod goes to\n4, Vite goes to 7 (which is where the linked-CMS dev plugin in\n`astro.config.mjs` is at risk), and Node 22.12+ must be pinned in CI.\n\n**This plan is blocked on a `@codeyam/cms` release that supports Astro 6** —\nsee the prerequisite section below. Do not start it until that release is\npublished; the peer range alone is not enough.\n\n## Prerequisite: what @codeyam/cms must ship first\n\nRecorded here because the CMS work is happening in parallel, and these are the\nexact things this repo will break on otherwise. Verified against the installed\n`@codeyam/cms@0.8.0`:\n\n1. **Peer range widened.** `package.json` currently declares\n   `\"astro\": \"^5.2.0\"`. Needs `^6` (and ideally `^6 || ^7`, so the follow-up\n   plan does not need a second CMS release).\n2. **`z` must stop coming from `astro:content`.**\n   `node_modules/@codeyam/cms/src/content-helpers.ts:31` does\n   `import { z } from 'astro:content'`, and v6 removed that export. It has to\n   become `import { z } from 'astro/zod'`. This is a hard build failure, not a\n   warning — and it is in the module this repo's content config imports\n   `collectionLoader`, `draftField`, `previewFields` and `seoFields` from.\n3. **Zod 4 compatibility for the shared field groups.** `draftField`,\n   `previewFields` and `seoFields` are spread into this repo's schema, so any\n   Zod-3-only idiom in them (`.default()` semantics, top-level string formats)\n   surfaces here as a schema error on a page that did not change.\n4. **Integration hooks confirmed on v6.** The integration uses\n   `astro:config:setup` with `injectRoute` / `injectScript` / `updateConfig` /\n   `logger`, all of which survive v6. What was removed is the `routes` param on\n   `astro:build:done` and `entryPoints` on `astro:build:ssr` — worth a grep on\n   the CMS side before release.\n5. **`astro/loaders` `glob` still used by `collectionLoader`** — unchanged in\n   v6, but v6 removed the loader *schema function* signature in favour of a\n   `createSchema()` property. `collectionLoader` passes a plain schema object\n   through, so this should be a no-op; confirm rather than assume.\n\n## Key Decisions\n\n- **One major at a time, two plans.** This is Astro's own upgrade guidance and\n  it keeps the blast radii separate: v6 is content collections + Zod 4 + Vite 7,\n  while v7 is a new Rust compiler, a new markdown engine and Vite 8. Landing v6\n  on its own is independently shippable, clears both high-severity alerts, and\n  gives the v7 work a known-good starting point instead of one twelve-variable\n  debugging session.\n- **Use `npx @astrojs/upgrade` rather than hand-pinning versions.** It resolves\n  `astro`, `@astrojs/react`, `@astrojs/sitemap` and `@astrojs/check` as a\n  compatible set. Hand-picking majors across four packages is how you end up\n  with a peer-dep tree that installs but does not build.\n- **Verification is the scenario captures, not the test suite.** `vitest.config.ts`\n  deliberately excludes `.astro` files — the unit tests cover pure library code\n  (`structures`, `harmonograph`, `voronoi`, `proseLayout`, `site`, `mailto`) and\n  will pass whether or not the site renders correctly. Every regression this\n  upgrade can cause is a rendering regression, so the codeyam screenshot diff\n  across all ~37 scenarios is the actual gate.\n- **Expect the captures to churn, and read every diff.** v6 stabilises\n  `preserveScriptOrder` (scoped `<style>` blocks now emit in declaration order),\n  which can reorder the cascade on a site built almost entirely from scoped\n  component styles. A screenshot diff here is signal, not noise.\n- **`sharp` (#87, high) is explicitly out of scope.** It is an *optional*\n  dependency of astro that this site never invokes — there is no `astro:assets`,\n  `<Image>`, `<Picture>` or `getImage()` anywhere in `src/`. It is one line of\n  `overrides` and should not be held behind a two-major upgrade. Re-check it\n  after the bump anyway: v6 may widen astro's own `sharp` range to `^0.35` and\n  close it for free.\n\n## Implementation\n\n### 1. Bump the toolchain\n\n**File**: `package.json`\n\n**File**: `package-lock.json`\n\nRun `npx @astrojs/upgrade` and let it resolve `astro` to latest 6.x (must be\n≥ 6.4.6 for the security fixes), along with `@astrojs/react`,\n`@astrojs/sitemap` and `@astrojs/check`. Then re-run `npm install` so the\nlockfile is the resolver's, not a hand-edit.\n\nConfirm the resolved `astro` version is ≥ 6.4.6 before going further — an\nupgrade that lands on 6.2 does the work without collecting the payoff.\n\n### 2. Move the content config to its v6 location\n\n**File**: `src/content/config.ts` → `src/content.config.ts` (new path)\n\nv6 removed the legacy content-collections API entirely and requires the config\nat `src/content.config.ts`. This is a pure `git mv` — the collection itself\nalready uses the modern API (an explicit `loader:` via `collectionLoader`, and\nthe route already calls the standalone `render()` and reads `page.id` rather\nthan the removed `entry.render()` / `entry.slug`), so nothing inside the file\nchanges for this step.\n\nTwo references to fix afterwards:\n\n- `src/pages/index.astro:3` — a comment pointing at `src/content/config.ts`.\n- `.codeyam/deps-index.txt:47` — carries the old path; regenerates on the next\n  codeyam reindex rather than being hand-edited.\n\n### 3. Import `z` from `astro/zod` and check the schema against Zod 4\n\n**File**: `src/content.config.ts` (new)\n\nv6 removed the `z` re-export from `astro:content`, so\n`import { defineCollection, z } from 'astro:content'` becomes\n`import { defineCollection } from 'astro:content'` plus\n`import { z } from 'astro/zod'`.\n\nThen audit the schema for the Zod 4 changes. The locally-declared fields are\n`z.string()`, `z.number()`, `z.boolean()`, `z.enum()`, `z.array()`, `z.object()`\nand `.optional()` — none of which moved — so the exposure is entirely in the\nthree spread field groups from `@codeyam/cms/content`, which is why they are\nprerequisite item 3.\n\n### 4. Bring the linked-CMS dev plugin onto Vite 7\n\n**File**: `astro.config.mjs`\n\n`liveLinkedCms()` is the most upgrade-fragile code in the repo, because it\nreaches into Vite server internals rather than using a public plugin API. Three\nthings to check against Vite 7:\n\n- **`server.moduleGraph`** (in `bridge()`) — deprecated when Vite 6 introduced\n  the Environment API, in favour of `server.environments.client.moduleGraph`.\n  If the back-compat shim is gone in 7, the linked-CMS module invalidation\n  silently stops working: the watcher still fires and the page still\n  full-reloads, so the failure looks like \"my edit needs two saves\" rather than\n  an error. Move to the environment-scoped graph.\n- **`server.middlewares` / `server.watcher` / `server.ws.send`** — expected to\n  be stable, but exercise them: `npm run dev:cms`, edit a file in the linked\n  checkout, confirm one save lands.\n- **`optimizeDeps.include` / `exclude` and `resolve.preserveSymlinks`** — the\n  `debug` / `micromark` pre-bundling workaround exists because of how Vite's\n  scanner reaches the CMS's raw-TS exports. Vite 7's scanner may make it\n  unnecessary or may need it adjusted; verify the `/admin` EntryEditor island\n  still accepts keystrokes, which is the symptom that workaround fixes.\n\nThis is dev-mode-only code — it cannot affect the deployed site — so if it\nproves stubborn, ship the upgrade and fix it in a follow-up rather than blocking\nthe security fixes on it.\n\n### 5. Pin Node 22.12+ in CI\n\n**File**: `.github/workflows/deploy.yml`\n\nv6 requires Node ≥ 22.12.0 and drops 18 and 20. The workflow currently uses\n`withastro/action@v3` with `node-version` commented out at line 33, so the build\nruns on whatever default that action ships. Uncomment it and pin `node-version: 22`\nso a change in the action's default cannot silently drop the build onto an\nunsupported runtime. (Local dev is already fine — Node 22.21.1.)\n\n### 6. Re-verify the rendered site and recapture\n\nRun `codeyam-editor editor refresh-tests` and the scenario capture pass, then\nread every screenshot diff. Specific things v6 changes that this site can show:\n\n- **Scoped style/script declaration order** — see Key Decisions.\n- **Markdown heading IDs keep trailing hyphens** now. Page bodies use `h3`\n  section headings; nothing links to those anchors today, so this should be\n  invisible, but it will show up in captured HTML.\n- **Endpoints with a file extension reject a trailing slash** — the site emits\n  `sitemap-index.xml` via `@astrojs/sitemap`. Fetch it both ways after the\n  build and confirm the canonical form still resolves.\n\n### 7. Confirm the alerts actually closed\n\nRe-run `gh api repos/jaredcosulich/puzzleschool/dependabot/alerts` after the\nmerge deploys. Expect #114, #115, #117, #118 and #119 to close. #120, #121 and\n#122 will remain — they need 7.x and belong to the follow-up plan. If #116\n(esbuild) is still open, check whether astro 6 resolves esbuild ≥ 0.28.1; if\nnot, note it for the v7 plan rather than forcing an override here.\n\n## Reused existing code\n\nThis is a dependency upgrade, so the \"reuse\" is mostly *not changing* things\nthat already sit on the modern API:\n\n- `routableEntries` from `@codeyam/cms/content`, used in\n  `src/pages/[...slug].astro` — v6-safe as written; the CMS side is prerequisite\n  item 2.\n- `getCollection` / `getEntry` / `render` from `astro:content` in\n  `src/pages/[...slug].astro` and `src/pages/index.astro` — already the v6 shape\n  (standalone `render()`, `entry.id`), so no call-site changes.\n- `GetStaticPaths` in `src/pages/[...slug].astro` (glossary entry: the internal\n  page route) — its `getStaticPaths` returns string `params` and does not touch\n  the `Astro` global, so both v6 `getStaticPaths` restrictions are already\n  satisfied.\n- `proseLayoutFor` and `sectionCount` from `src/lib/proseLayout.ts` (glossary\n  entries: `proseLayoutFor`, `sectionCount`) — pure functions over Astro's\n  `headings`, unaffected by the upgrade, and their tests are the one part of the\n  suite that would catch a `render()` contract change.\n\n**Existing-implementation survey.** Grepped before writing this. The repo's\nentire Astro API surface is four import sites: `astro:content` in\n`src/content/config.ts`, `src/pages/index.astro` and `src/pages/[...slug].astro`,\nplus `import type { GetStaticPaths } from 'astro'`. There is no `Astro.glob()`,\nno `<ViewTransitions />`, no `import.meta.env` usage anywhere in `src/`, no\nContainer API, no `astro:assets`, no `experimental` block in `astro.config.mjs`,\nno `.cjs`/`.cts` config, and no server islands or `prerender = false` routes —\nso the large majority of the v6 breaking-change list does not apply here. What\ndoes apply is enumerated above.\n\n## Scenarios to Demonstrate\n\n- **Home, About and Contact at full design** — the three real pages, proving\n  content collections still load and the markdown bodies still render through\n  the same templates.\n- **A CMS-created page and a minimal-fields page** — the dynamic `[...slug]`\n  route, which is where a `getStaticPaths` or loader regression would surface.\n- **The one-section page (Contact) and the blank page** — `proseLayoutFor`\n  reading `render()`'s `headings`, the one place this repo depends on the shape\n  of an `astro:content` return value.\n- **/admin dashboard and the EntryEditor island** — the React island plus the\n  `debug`/`micromark` pre-bundling path, under both `npm run dev` and\n  `npm run dev:cms`.\n- **A linked-CMS edit landing in one save** — the `liveLinkedCms()` plugin on\n  Vite 7, which no capture can prove and has to be exercised by hand.\n- **Narrow viewport (mobile) home** — the responsive shape, as the control that\n  the style-order stabilisation did not reorder the cascade.",
+  "description": "Upgraded the site from astro@5.18.2 to 6.4.8, with @astrojs/react 4.2.0 to 5.0.7, @astrojs/sitemap to 3.7.3 and @astrojs/check to 0.9.10. Pinned by hand rather than via npx @astrojs/upgrade, which ignores a major argument and resolves straight to astro@7 — that would have collapsed the deliberate one-major-at-a-time split into the follow-up plan. Moved src/content/config.ts to src/content.config.ts for the v6 content-collections API and switched z from astro:content to astro/zod; the Zod 4 schema, including the three spread field groups from @codeyam/cms, type-checks clean. Brought the liveLinkedCms dev plugin onto Vite 7 by reading the module graph through server.environments.client rather than the deprecated top-level shim, and pinned node-version: 22 in CI. Landing on 6.4.8 clears five of the eight Dependabot alerts including both highs (host-header SSRF and slot-name XSS). The remaining three — astro core XSS, esbuild, and sharp — all require 7.x. sharp specifically did NOT close for free: Astro 6 still declares sharp ^0.34.0, so the plan guess that v6 might widen it is disproven and it stays scoped to the follow-up plan. Two defects surfaced while reading the capture diffs and were fixed here. First, astro dev and astro build shared node_modules/.vite, and because React jsx-dev-runtime branches on NODE_ENV with the production half setting jsxDEV to undefined, running a build then a dev server left every /admin React island dead at hydration with jsxDEV is not a function — the dashboard renders and silently ignores every click. The two commands now get separate cache directories. Second, 26 of 34 isolated-component pages carried no Google Fonts link and rendered in a fallback face on v6 even though their v5 screenshots show the brand typeface; all 34 now link it, which restored correct typography across the component captures. Verification is the scenario set, as the plan specified: 41 of 42 screenshots recapture pixel-identical on the new toolchain. The single exception, about-footer-contact-link-followed, was proven nondeterministic independently of the upgrade — two consecutive captures on the same build differ, because its BranchingTree draws a fresh seed per load. 255/255 unit tests pass, astro check is clean, and the static build emits 51 pages with sitemap-index.xml. SCOPE VERDICT: this cycle delivered none of the five project deliverables directly and deferred none of them. It is security and maintenance work that keeps the four already-delivered deliverables building; the fifth (improvements to codeyam-cms itself) remains deferred by an earlier user decision, unchanged by this cycle. No deferral on this project is agent-decided — all five statuses were set by the user. NOT VERIFIED: no linked codeyam-cms checkout exists on this machine, so npm run dev:cms and the linked-CMS edit-lands-in-one-save check could not be exercised. The liveLinkedCms module-graph change is therefore unexercised at runtime; it only activates when CMS_LOCAL is true, which never occurs here.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/capture.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/upgrade-astro-5-to-6.md\t.codeyam/plans/completed/upgrade-astro-5-to-6.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-footer-contact-link-followed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/about-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-coral-accent--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncard-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/actioncards-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/bandquote-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/branchingtree-variations--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contact-email-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contactbutton-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dragoncurve-variations--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/exploratoryband-without-quote--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harmonograph-variations--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-full-design--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-narrow-viewport--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/masthead-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-created-from-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/page-minimal-fields--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pageheader-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pageheader-title-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-single-section--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/prosecolumns-with-foot--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/quoteband-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-home-variant--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitefooter-narrow-viewport--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitenav-no-current-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/statementblock-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/voronoifield-variations--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/change-origin.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/0bba6865cf1195e123faca5d64287b93a2fbfe2f8dc2a788afe5dd62eaeaf2db.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts\tsrc/content.config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/ActionCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/ActionCards.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/BandQuote.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/BranchingTree.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/BranchingTreeVariations.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/ContactButton.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/DragonCurve.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/DragonCurveVariations.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/ExploratoryBand.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/FibonacciStructure.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/Harmonograph.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/HarmonographVariations.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/KochFragment.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/Mark.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/Masthead.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/MorseRule.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/PageHeader.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/ProseColumns.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/QuoteBand.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SineRule.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteFooter.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteNav.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/SiteNavNoCurrent.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/StatementBlock.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VoronoiField.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VoronoiFieldVariations.astro",
+      "status": "modified"
+    },
+    {
+      "path": "tsconfig.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/2270d46ce95b59c6beec4e9d326d05446513088738602ca97ba3df9c88f3b877.json",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Home - Full Design",
+      "screenshotPath": "home-full-design--desktop.png"
+    },
+    {
+      "name": "Home - Narrow Viewport",
+      "screenshotPath": "home-narrow-viewport--mobile.png"
+    }
+  ],
+  "testResults": {
+    "total": 255,
+    "passed": 255,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 255,
+        "passed": 255
+      }
+    ]
+  }
+}

@@ -97,13 +97,13 @@
       "width": 390,
       "height": 844
     },
-    "Laptop": {
-      "width": 1280,
-      "height": 800
-    },
     "Desktop": {
       "width": 1440,
       "height": 900
+    },
+    "Laptop": {
+      "width": 1280,
+      "height": 800
     },
     "Tablet": {
       "width": 768,
@@ -701,6 +701,21 @@
         "filePath": ".claude/hooks/test_step_metadata.py",
         "name": "test_unknown_mode_titlecases_itself_rather_than_claiming_ui",
         "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_capture_available",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "notice",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "piped_gating_notice",
+        "reason": "derive-generated"
       }
     ],
     "stepBudget": {

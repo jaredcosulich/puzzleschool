@@ -46,7 +46,14 @@ const CMS_LOCAL = CMS_REAL !== CMS_LINK;
 //  3. The MODULE GRAPH. Watcher events arrive under the real checkout path,
 //     while `preserveSymlinks` keys every module under the `node_modules` path,
 //     so Vite's own invalidation misses. We translate real → linked, invalidate
-//     the matching modules by hand, and full-reload.
+//     the matching modules by hand, and full-reload. The graph is reached through
+//     `server.environments.client`, not the top-level `server.moduleGraph`: since
+//     Vite 6's Environment API the latter is a back-compat shim that merges the
+//     client and SSR graphs, and it is deprecated. It still resolves on Vite 7,
+//     so this is not a fix for a live break — it is the form that survives Vite 8.
+//     The failure it forecloses is silent: invalidation stops matching, the
+//     watcher still fires and the page still full-reloads, so the symptom is
+//     "my edit needs two saves" rather than an error anyone would see.
 //
 // A first reload that still looks broken is a browser holding the old
 // `immutable` entry — `immutable` is reused WITHOUT revalidation even on an
@@ -73,8 +80,9 @@ async function liveLinkedCms() {
       const bridge = (file) => {
         const linked = linkedPathForRealFile(file, CMS_REAL, CMS_LINK);
         if (linked === null) return;
-        const mods = server.moduleGraph.getModulesByFile(linked);
-        if (mods) for (const mod of mods) server.moduleGraph.invalidateModule(mod);
+        const graph = server.environments.client.moduleGraph;
+        const mods = graph.getModulesByFile(linked);
+        if (mods) for (const mod of mods) graph.invalidateModule(mod);
         server.ws.send({ type: 'full-reload' });
       };
       server.watcher.on('change', bridge);
@@ -105,6 +113,26 @@ export default defineConfig({
   integrations: [
     codeyamCms(),
     react(),
+    // Give `astro dev` and `astro build` separate Vite dep caches.
+    //
+    // Both default to `node_modules/.vite`, and the pre-bundled output is
+    // mode-dependent: React's `jsx-dev-runtime` branches on NODE_ENV, and the
+    // production half sets `exports.jsxDEV = void 0` on purpose. So a build
+    // overwrites the dev cache's copy with one that has no `jsxDEV`, and the
+    // next `npm run dev` serves it — every React island on /admin dies at
+    // hydration with "jsxDEV is not a function", while the SSR HTML still
+    // renders. The symptom is a dashboard that looks right and ignores every
+    // click, from a cache written by a command you ran earlier, so nothing in
+    // the failing session points at the cause. Ordinary build-then-dev is
+    // enough to trigger it; splitting the directories makes it unreachable.
+    {
+      name: 'codeyam:split-vite-cache',
+      hooks: {
+        'astro:config:setup': ({ command, updateConfig }) => {
+          updateConfig({ vite: { cacheDir: `node_modules/.vite-${command}` } });
+        },
+      },
+    },
     // Keep the sitemap to the actual public site. The build also emits the CMS
     // admin app and one harness page per component (codeyam's isolated-component
     // scenarios); both are real routes, but advertising them to search engines
@@ -181,7 +209,25 @@ export default defineConfig({
       // ("optimized dependencies changed. reloading"), which invalidates
       // already-loaded island module URLs. Optimizing up front keeps the dep hash
       // stable for the life of the dev server.
-      include: ['debug', 'micromark', 'micromark-extension-gfm'],
+      //
+      // `@codeyam/cms/client/stagedPreview` is the same problem again, and it
+      // only became visible on Astro 6 / Vite 7: the integration injects it as a
+      // bare specifier, so nothing in the scanner's static entry graph mentions
+      // it and it is discovered on first render instead. The re-optimization it
+      // triggers restarts the dep bundle mid-flight, and every `.vite/deps/*`
+      // request already in the air during that window hangs rather than 404s —
+      // through the editor's proxy that surfaces as a 504 on the dev-toolbar
+      // chunks, which is a confusing place to land for a cause that has nothing
+      // to do with the toolbar. Naming it up front keeps the hash stable.
+      // Only when the published package is in use: under `npm run dev:cms` the
+      // same specifier is deliberately EXCLUDED just below, so listing it in
+      // both places would be a direct contradiction.
+      include: [
+        'debug',
+        'micromark',
+        'micromark-extension-gfm',
+        ...(CMS_LOCAL ? [] : ['@codeyam/cms/client/stagedPreview']),
+      ],
       // Bare-specifier CMS modules (the integration injects the staged-preview
       // gate as `import '@codeyam/cms/client/stagedPreview'`) are dependencies by
       // definition, so Vite pre-bundles them into `.vite/deps/` — a cache neither

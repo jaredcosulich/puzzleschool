@@ -1,1 +1,0 @@
-[{"fingerprint": "piped-gating-command\u0000push\u0000Bash: npx codeyam-editor editor push 2>&1 | tail -30\u0000`push` is in the gating-subcommand set; exit code NOT preserved by this command; `| tee` not present", "at": 1787141898.023556}]

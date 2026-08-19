@@ -64,7 +64,7 @@ per-user attribution.
 
 Two files describe the same markdown and must stay in sync:
 
-- **`src/content/config.ts`** — the Zod schema. The build validates against it,
+- **`src/content.config.ts`** — the Zod schema. The build validates against it,
   and a Zod object **strips keys it does not declare**, so a field missing here is
   silently thrown away rather than failing loudly.
 - **`src/data/collections.json`** — the field registry the admin UI renders
@@ -124,5 +124,5 @@ React copy with no error explaining why.
 You can always skip the CMS and edit content directly:
 
 1. Create or edit a `.md` file under `src/content/pages/`.
-2. Give it frontmatter matching `src/content/config.ts`.
+2. Give it frontmatter matching `src/content.config.ts`.
 3. Run `npm run dev`; the page renders through the `[...slug]` catch-all.
