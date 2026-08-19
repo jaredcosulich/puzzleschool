@@ -138,22 +138,6 @@ def _slug_label(state, slug):
     return f"slug={slug}"
 
 
-def _commit_gate_phrase(commit_slugs):
-    """Name the slug(s) a refusal should steer the agent toward, rendered
-    for prose ("`commit`", "`assist-wrap`", "`a` / `b`").
-
-    Derived from the active mode's own `commitSlugs` rather than written
-    out, because the literal `commit` is the BUILD flow's gate. An assist
-    session's one approval gate is `assist-wrap`, so a hard-coded
-    "advance until the `commit` slug" told that session to walk toward a
-    slug its 4-step track does not contain. For the build flow the set is
-    `["commit"]` and this renders exactly the previous wording."""
-    slugs = sorted(s for s in (commit_slugs or []) if isinstance(s, str))
-    if not slugs:
-        return "`commit`"
-    return " / ".join(f"`{s}`" for s in slugs)
-
-
 _REFUSAL_LOG = os.path.join(".codeyam", "state", "refusal-fingerprints.json")
 
 # How long a refusal stays "recent" for repeat detection. Long enough to
@@ -2594,7 +2578,7 @@ def main():
                     f"git commit is only allowed at slug(s): {allowed}. "
                     f"You are at {_slug_label(state, slug)}.",
                     "keep following the workflow — `codeyam-editor editor advance` "
-                    f"until the {_commit_gate_phrase(commit_slugs)} slug, which commits for you. To read what "
+                    "until the `commit` slug, which commits for you. To read what "
                     "a later slug requires without moving the workflow pointer, run "
                     "`codeyam-editor editor step --show --slug <slug>`.",
                     reference="Plan-file commits (.codeyam/plans/*.md) are allowed at any step.",
@@ -2619,7 +2603,7 @@ def main():
                     "git-add",
                     f"git add is only allowed at slug(s): {allowed}. "
                     f"You are at {_slug_label(state, slug)}.",
-                    f"leave staging to the workflow — the {_commit_gate_phrase(commit_slugs)} slug runs "
+                    "leave staging to the workflow — the `commit` slug runs "
                     "`codeyam-editor editor stage-feature`, which stages this for you.",
                     reference="Plan-file commits (.codeyam/plans/*.md) are allowed at any step, "
                     "and `git add` is permitted while a rebase/merge is paused mid-operation.",
