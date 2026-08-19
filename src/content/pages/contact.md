@@ -17,4 +17,4 @@ showContactButton: true
 
 ### Reach out
 
-If what we are exploring is of interest please email us at contact@puzzleschool.org. We have no firm opening date and are not accepting any students at this time, but are happy to chat about the process we are going through and love to hear what resonates with people.
+If what we are exploring is of interest please email us at contact@puzzleschool.org. We are happy to chat about the process we are going through and love to hear what resonates with people.
