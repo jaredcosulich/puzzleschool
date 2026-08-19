@@ -138,6 +138,22 @@ def _slug_label(state, slug):
     return f"slug={slug}"
 
 
+def _commit_gate_phrase(commit_slugs):
+    """Name the slug(s) a refusal should steer the agent toward, rendered
+    for prose ("`commit`", "`assist-wrap`", "`a` / `b`").
+
+    Derived from the active mode's own `commitSlugs` rather than written
+    out, because the literal `commit` is the BUILD flow's gate. An assist
+    session's one approval gate is `assist-wrap`, so a hard-coded
+    "advance until the `commit` slug" told that session to walk toward a
+    slug its 4-step track does not contain. For the build flow the set is
+    `["commit"]` and this renders exactly the previous wording."""
+    slugs = sorted(s for s in (commit_slugs or []) if isinstance(s, str))
+    if not slugs:
+        return "`commit`"
+    return " / ".join(f"`{s}`" for s in slugs)
+
+
 _REFUSAL_LOG = os.path.join(".codeyam", "state", "refusal-fingerprints.json")
 
 # How long a refusal stays "recent" for repeat detection. Long enough to
@@ -254,6 +270,25 @@ def allow(reason):
     reason string is never printed, so it costs a normal call nothing."""
     if _EXPLAIN_MODE:
         _emit_verdict("ALLOWED", "", "", reason)
+    sys.exit(0)
+
+
+def notice(rule, message):
+    """Let the call through, but say something first — exit 0 with the text on
+    stderr.
+
+    The middle verdict between `allow` and `block`, for a call that is safe but
+    costs the caller something they should know about. It is deliberately NOT a
+    refusal: there is no `Next valid action:` contract to satisfy, because
+    nothing needs recovering.
+
+    stderr rather than stdout, and no JSON permission decision: an exit-0 hook
+    that prints a `permissionDecision` would also be *granting* permission for
+    the call, which is a much bigger claim than "here is a pointer" and would
+    silently bypass a prompt the user might otherwise see."""
+    if _EXPLAIN_MODE:
+        _emit_verdict("NOTICE", rule, "", message)
+    print(message, file=sys.stderr)
     sys.exit(0)
 
 
@@ -673,6 +708,7 @@ _GATING_SUBCOMMANDS = frozenset(
         "pre-commit-sync",
         "preview",
         "preview-flow",
+        "preview-html",
         "preview-interact",
         "preview-nav",
         "push",
@@ -1232,39 +1268,16 @@ def _is_tee_stage(stage):
     return bool(tokens) and tokens[0].rsplit("/", 1)[-1] == "tee"
 
 
-def _exit_code_preserved(command):
-    """True when `command` keeps the child's exit code across a pipe.
+def _capture_available():
+    """True when the liveness bracket's stream capture is available on this
+    host, which is what makes piping a gating command lossless.
 
-    `set -o pipefail` makes the pipeline report its first failing stage, and a
-    `${PIPESTATUS[0]}` read recovers the first stage's status explicitly.
-
-    This is no longer an EXEMPTION for a gating subcommand — it is an input to
-    the refusal's wording. A pipe destroys three things and these two rescue
-    exactly one of them: the exit code. The heartbeat still block-buffers and
-    the completion trailer still gets sliced. One session added
-    `echo "RECONCILE_EXIT=${PIPESTATUS[0]}"` to a `| tail`, was allowed through
-    on the strength of it, and lost ten minutes to a run it could not see was
-    still alive. Knowing WHICH harm the author already defended against is what
-    lets the refusal answer the objection instead of restating the rule.
-
-    Whole-command scoped on purpose: `set -o pipefail` is usually a separate
-    statement ahead of the pipeline, and the `PIPESTATUS` read necessarily
-    comes after it. The `set` itself is still matched in COMMAND POSITION, so
-    `echo remember to set -o pipefail` does not count — otherwise any command
-    could opt out of the rule by mentioning the word."""
-    if "PIPESTATUS" in command:
-        return True
-    for segment in _split_commands(command):
-        try:
-            tokens = shlex.split(segment, posix=True)
-        except ValueError:
-            continue
-        for index, tok in enumerate(tokens):
-            if tok != "set" or not _in_command_position(tokens, index):
-                continue
-            if "pipefail" in tokens[index + 1:]:
-                return True
-    return False
+    The capture is Unix descriptor surgery (`stream_capture.rs`, `#[cfg(unix)]`).
+    Elsewhere `TranscriptGuard::install` returns `None`, so a piped command
+    writes straight to the caller's pipe: its `println!` sites see EPIPE, panic,
+    and the run dies mid-flight with no transcript and no status document to
+    recover from. On those hosts the old refusal is still the right answer."""
+    return os.name == "posix"
 
 
 def piped_gating_command(command):
@@ -1302,44 +1315,32 @@ def piped_gating_command(command):
     return None
 
 
-def piped_gating_refusal(subcommand, exit_code_preserved=False):
-    """The `(reason, next_action)` pair for a refused pipe. Names what wanting a
-    shorter output should reach for instead, because that want is why agents
-    reach for `| tail` and the refusal has to answer it.
+def piped_gating_notice(subcommand):
+    """The advisory text for a piped gating command — allowed, not refused.
 
-    When the author already wrote `set -o pipefail` or a `${PIPESTATUS[0]}`
-    check, the reason SAYS SO and narrows to the two harms that defence does not
-    cover. Repeating all three at someone who visibly defended against one reads
-    as a rule that was not looking."""
-    if exit_code_preserved:
-        harms = (
-            f"Your `set -o pipefail` / `${{PIPESTATUS[0]}}` check does rescue the "
-            f"exit code — but it is one of three things the pipe destroys, and "
-            f"the other two remain. `tail`/`grep` block-buffer to EOF, hiding "
-            f"the `CODEYAM_CMD_RUNNING` heartbeat so a healthy long command "
-            f"reads as wedged, and they slice off the completion trailer "
-            f"carrying the hand-off and the `CODEYAM_CMD_COMPLETE` sentinel."
-        )
-    else:
-        harms = (
-            f"A pipeline's exit code is its LAST stage's, so the filter's "
-            f"success masks the command's failure — a false green on a gate "
-            f"that actually failed. `tail`/`grep` also block-buffer to EOF, "
-            f"hiding the `CODEYAM_CMD_RUNNING` heartbeat so a healthy long "
-            f"command reads as wedged, and they slice off the completion "
-            f"trailer carrying the hand-off and the `CODEYAM_CMD_COMPLETE` "
-            f"sentinel."
-        )
+    The pipe used to be refused because it destroyed four things. Three are now
+    recovered from disk and the fourth cannot happen: every subcommand in
+    `_GATING_SUBCOMMANDS` runs inside the liveness bracket, where stdout is a
+    pipe the command's own process owns, so a departed filter can no longer
+    SIGPIPE it mid-run. What a pipe still costs is the terminal DISPLAY and the
+    shell-level exit code, and this names where both were written instead.
+
+    Saying it at all — rather than allowing silently — is the point. The
+    pipeline's `$?` is the filter's, and an agent that reads it will believe a
+    failed gate passed. The notice has to arrive BEFORE the command runs,
+    because afterwards the misleading exit code is already in hand."""
     return (
-        f"this pipes `{cli_command()} editor {subcommand}` into a filter. {harms}",
-        f"run it BARE and read the verdict off its own terminal line "
-        f"(`CODEYAM_VERIFY_BUILD: PASS|FAIL`, the `CODEYAM_CMD_COMPLETE` "
-        f"`status`). Output too long is not a reason to pipe — the command "
-        f"prints a `CODEYAM_FULL_OUTPUT` line naming a file with the complete "
-        f"output, and a backgrounded run writes a one-line `.heartbeat` sidecar "
-        f"when the question is just whether it is still alive. If you genuinely "
-        f"need a filter on THIS command, `| tee out.txt` is the one that keeps "
-        f"all three.",
+        f"NOTE: `{cli_command()} editor {subcommand}` is piped into a filter. "
+        f"That is allowed — the command runs to completion and every side "
+        f"effect lands — but your shell reports the FILTER's exit code, not the "
+        f"command's, so do not read `$?` as the verdict.\n"
+        f"  Real verdict: .codeyam/state/command-output/{subcommand}.status.json "
+        f"(the `status` field — the same document the "
+        f"`CODEYAM_CMD_COMPLETE` line carries).\n"
+        f"  Full output:  .codeyam/state/command-output/{subcommand}.txt "
+        f"(complete stdout + stderr, unsliced).\n"
+        f"  Still alive?  a backgrounded run's one-line `.heartbeat` sidecar.\n"
+        f"`| tee out.txt` remains the filter that costs you nothing."
     )
 
 
@@ -2263,29 +2264,42 @@ def main():
             )
 
     # Piped-gating-command guard. Neither step-scoped nor editor-mode-scoped,
-    # for the same reason as the guard above: the no-piping rule holds in every
-    # session. It also has to fire before the "always allow codeyam-editor
-    # editor" short-circuit further down, which would otherwise exit 0 on the
-    # very commands this refuses.
+    # for the same reason as the guard above: the rule holds in every session.
+    # It also has to fire before the "always allow codeyam-editor editor"
+    # short-circuit further down, which would otherwise exit 0 silently and
+    # skip the pointer.
+    #
+    # This is an ADVISORY now, not a refusal. Every gating subcommand runs
+    # inside the liveness bracket, which makes a pipe cost the terminal display
+    # and the shell exit code — both recoverable from the two sidecars the
+    # notice names — instead of costing the command. Where the bracket's capture
+    # does not exist, the original harms are all still live and so is the block.
     if tool_name == "Bash":
         command = tool_input.get("command", "")
         piped = piped_gating_command(command)
         if piped:
-            preserved = _exit_code_preserved(command)
-            reason, next_action = piped_gating_refusal(piped, preserved)
-            block(
-                project_dir,
-                "piped-gating-command",
-                reason,
-                next_action,
-                detail=piped,
-                evidence=(
-                    f"`{piped}` is in the gating-subcommand set; exit code "
-                    f"{'preserved' if preserved else 'NOT preserved'} by this "
-                    f"command; `| tee` not present"
-                ),
-                call=call,
-            )
+            if not _capture_available():
+                block(
+                    project_dir,
+                    "piped-gating-command",
+                    f"this pipes `{cli_command()} editor {piped}` into a filter "
+                    f"on a host with no stream capture, so the command writes "
+                    f"straight to your pipe. A filter that stops reading kills "
+                    f"it mid-run, and there is no transcript or status document "
+                    f"to recover the output or the verdict from.",
+                    f"run it BARE and read the verdict off its own terminal line "
+                    f"(`CODEYAM_VERIFY_BUILD: PASS|FAIL`, the "
+                    f"`CODEYAM_CMD_COMPLETE` `status`). `| tee out.txt` is the "
+                    f"one filter that costs nothing.",
+                    detail=piped,
+                    evidence=(
+                        f"`{piped}` is in the gating-subcommand set; "
+                        f"os.name={os.name!r} has no `#[cfg(unix)]` stream "
+                        f"capture; `| tee` not present"
+                    ),
+                    call=call,
+                )
+            notice("piped-gating-command", piped_gating_notice(piped))
 
     # Recursive-delete guard. Neither step-scoped nor editor-mode-scoped, for
     # the same reason as the two above: `rm -rf` over tracked files is a loss in
@@ -2578,7 +2592,7 @@ def main():
                     f"git commit is only allowed at slug(s): {allowed}. "
                     f"You are at {_slug_label(state, slug)}.",
                     "keep following the workflow — `codeyam-editor editor advance` "
-                    "until the `commit` slug, which commits for you. To read what "
+                    f"until the {_commit_gate_phrase(commit_slugs)} slug, which commits for you. To read what "
                     "a later slug requires without moving the workflow pointer, run "
                     "`codeyam-editor editor step --show --slug <slug>`.",
                     reference="Plan-file commits (.codeyam/plans/*.md) are allowed at any step.",
@@ -2603,7 +2617,7 @@ def main():
                     "git-add",
                     f"git add is only allowed at slug(s): {allowed}. "
                     f"You are at {_slug_label(state, slug)}.",
-                    "leave staging to the workflow — the `commit` slug runs "
+                    f"leave staging to the workflow — the {_commit_gate_phrase(commit_slugs)} slug runs "
                     "`codeyam-editor editor stage-feature`, which stages this for you.",
                     reference="Plan-file commits (.codeyam/plans/*.md) are allowed at any step, "
                     "and `git add` is permitted while a rebase/merge is paused mid-operation.",

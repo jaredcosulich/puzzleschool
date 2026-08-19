@@ -36,7 +36,7 @@ Only proceed past step 1 once `projectDescription` is a real, multi-word descrip
 
 You MUST follow a step-by-step workflow driven by `codeyam-editor editor step` commands. Each command tells you exactly what to do next. **You do NOT have all the instructions upfront** — the commands provide them incrementally.
 
-**For EVERY new request — at session start and mid-session alike, including the one after a cycle completes:** if it may not be a build — deploying/publishing/hosting/DNS, a config change, a walkthrough, design exploration, or external-service setup — run `codeyam-editor editor step --slug assist-triage --mode assist` to triage it; otherwise run `codeyam-editor editor step 1`.
+**EVERY new request enters at triage — at session start and mid-session alike, including the one after a cycle completes.** Run `codeyam-editor editor step --slug assist-triage --mode assist`. Do not judge build-vs-not yourself: triage classifies it against a written rubric and hands off to the build flow itself when it is one. A prompt-initiated session (the user typed into the launch modal) is already positioned there by the launch — follow the step it gives you. Queued plans are exempt: a plan is already a classified build, so `Run` lands it at its own Plan step.
 
 **The rule:** After completing what a command tells you to do, run the NEXT command it specifies. The commands are your instructions — follow them one at a time.
 

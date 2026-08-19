@@ -57,6 +57,59 @@ def cli_command():
     return "codeyam-editor"
 
 
+# How each shipped mode names its flow in the banner the user reads every
+# turn. `ui` and `backend` are builds and say "Flow"; `assist` and `design`
+# are not, and saying "Flow" for them would re-assert the very thing the
+# tracks exist to avoid.
+_MODE_DISPLAY_PREFIXES = {
+    "ui": "UI Flow",
+    "backend": "Backend Flow",
+    "assist": "Assist",
+    "design": "Design Round",
+}
+
+
+def mode_display_prefix(mode):
+    """The banner prefix for `mode` — `Assist` for an assist session,
+    `Backend Flow` for a backend build, and so on.
+
+    An unrecognized mode renders as its own title-cased name rather than
+    defaulting to `UI Flow`. The default was a lie the user read on every
+    prompt: an assist session announced itself as `UI Flow Step 1/28
+    (Plan)` and then told the agent "Do NOT skip ahead" on a track that
+    has four steps and no plan. A mode the emitter ships tomorrow should
+    misspell its own name at worst, never claim to be a different
+    workflow."""
+    if not isinstance(mode, str) or not mode.strip():
+        return _MODE_DISPLAY_PREFIXES["ui"]
+    known = _MODE_DISPLAY_PREFIXES.get(mode)
+    if known:
+        return known
+    return mode.replace("-", " ").replace("_", " ").title()
+
+
+# The modes that are NOT builds. `assist` triages a non-build request and
+# `design` explores mockups; neither is walking a build to completion, so
+# build-flow framing ("do not skip ahead") is a false statement about the
+# session rather than a useful guardrail.
+#
+# Enumerated as the NON-build set, not the build set, so the default for an
+# unrecognized mode is "build" — see `mode_is_build`.
+_NON_BUILD_MODES = frozenset(("assist", "design"))
+
+
+def mode_is_build(mode):
+    """True when `mode` walks a build flow to completion.
+
+    Unknown modes count as builds. That is the conservative direction: the
+    guardrail copy is kept rather than dropped for a mode this hook copy
+    has never heard of, so a newer emitter can never silently relax a real
+    build flow's framing against an older shipped hook."""
+    if not isinstance(mode, str) or not mode.strip():
+        return True
+    return mode not in _NON_BUILD_MODES
+
+
 def _empty_mode_table():
     return {
         "total": 0,
@@ -122,9 +175,18 @@ def _no_test_slug_map(raw):
 
 def load_step_metadata(project_dir):
     """Load the per-mode step metadata cache. Returns
-    {"ui": <mode_table>, "backend": <mode_table>} where each
-    mode_table carries label/description/restriction dicts plus
-    slug-keyed capability arrays.
+    {<mode name>: <mode_table>} — one entry per mode the cache
+    actually carries — where each mode_table carries label/
+    description/restriction dicts plus slug-keyed capability arrays.
+
+    The mode set is ENUMERATED FROM THE DOCUMENT, not hard-coded. The
+    Rust emitter ships `assist` and `design` tables alongside `ui` and
+    `backend`, and a hard-coded `("ui", "backend")` pair dropped them on
+    the floor — which is what made an assist session load the UI table,
+    be labeled `UI Flow Step 1/28`, and have its commit refused at
+    `assist-wrap` because the UI table's `commitSlugs` is `["commit"]`.
+    Reading the keys off the document means the next mode the emitter
+    ships is picked up with no edit here.
 
     Falls back to empty tables on any read/parse error so the hook
     keeps firing (just without labels and with no slug allowlists)
@@ -142,8 +204,13 @@ def load_step_metadata(project_dir):
     if not isinstance(raw, dict) or raw.get("schemaVersion") not in SUPPORTED_SCHEMA_VERSIONS:
         return fallback
     out = {}
-    for mode_key in ("ui", "backend"):
-        mode_raw = raw.get(mode_key) or {}
+    for mode_key, mode_raw in raw.items():
+        # `schemaVersion` is the one non-mode top-level key. Guarding on
+        # the VALUE's type rather than a name denylist means any future
+        # scalar sibling is skipped too, instead of being normalized into
+        # a bogus mode table.
+        if mode_key == "schemaVersion" or not isinstance(mode_raw, dict):
+            continue
         out[mode_key] = {
             "total": int(mode_raw.get("total", 0) or 0),
             "labels": _kv_pairs_to_int_dict(mode_raw.get("labels", [])),
@@ -169,11 +236,21 @@ def load_step_metadata(project_dir):
 
 
 def resolve_mode_table(state, metadata):
-    """Pick the mode table (ui or backend) matching the active state.
-    Defaults to UI when `mode` is missing — matches the legacy
-    behavior where state files predating multi-mode support are
-    treated as UI sessions."""
+    """Pick the mode table matching the active state, by name.
+
+    Defaults to UI when `mode` is MISSING — matches the legacy behavior
+    where state files predating multi-mode support are treated as UI
+    sessions.
+
+    A mode that is named but has no table in the cache returns an EMPTY
+    table, not the UI one. Substituting UI was the previous behavior and
+    it is the bug this fixes in miniature: it does not degrade to "no
+    gating", it silently applies a DIFFERENT workflow's gates — the UI
+    flow's 28 steps, restrictions, and `commitSlugs` — to a session that
+    is not a UI build. An empty table means "no gating", which is the
+    documented degrade-to-allow contract."""
     mode = (state.get("mode") or "ui") if isinstance(state, dict) else "ui"
-    if mode == "backend":
-        return mode, metadata.get("backend", _empty_mode_table())
-    return mode, metadata.get("ui", _empty_mode_table())
+    table = metadata.get(mode)
+    if isinstance(table, dict):
+        return mode, table
+    return mode, _empty_mode_table()

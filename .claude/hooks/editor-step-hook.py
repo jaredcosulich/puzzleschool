@@ -24,7 +24,13 @@ from datetime import datetime, timezone
 # sys.path so the shared loader is importable regardless of the cwd
 # the hook runner launches from.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _step_metadata import cli_command, load_step_metadata, resolve_mode_table  # noqa: E402
+from _step_metadata import (  # noqa: E402
+    cli_command,
+    load_step_metadata,
+    mode_display_prefix,
+    mode_is_build,
+    resolve_mode_table,
+)
 
 
 def resolve_mode(state, metadata):
@@ -246,6 +252,25 @@ def main():
                     pass
 
     if not os.path.exists(state_path):
+        # No editor-step.json — a stateless session entry. This is the exact
+        # moment the routing decision gets made AND the request is in hand, so
+        # name triage as the entry rather than leaving it to a self-judged
+        # build-vs-not call made before the request has been read. Advisory,
+        # like every other directive this hook emits, and scoped to a real
+        # user prompt: slash commands carry their own routing.
+        if event_type == "user_prompt":
+            entry_prompt = event_data.get("prompt", "").strip()
+            if entry_prompt and not entry_prompt.startswith("/"):
+                print("<user-prompt-submit-hook>")
+                print(
+                    "Editor Mode — no cycle in flight. Enter this request at triage, not "
+                    "at the build flow: run "
+                    f"`{cli_command()} editor step --slug assist-triage --mode assist`. "
+                    "Triage classifies the request against a written rubric (and defaults "
+                    "to `build` when ambiguous), then hands off to the build flow itself "
+                    "when it really is one — so do not judge build-vs-not yourself here."
+                )
+                print("</user-prompt-submit-hook>")
         return
 
     try:
@@ -261,7 +286,7 @@ def main():
     step_labels = mode_table["labels"]
     step_restrictions = mode_table["restrictions"]
     label = step_labels.get(step, "Unknown")
-    mode_prefix = "Backend Flow" if mode == "backend" else "UI Flow"
+    mode_prefix = mode_display_prefix(mode)
 
     if not step:
         return
@@ -400,10 +425,20 @@ def main():
                 "make the changes, re-register affected scenarios, and update the journal. "
                 "Then continue from the current step."
             )
-        else:
+        elif mode_is_build(mode):
             lines.append(
                 f"You are on step {step}. Follow the `{_cli} editor` workflow. "
                 f"Do NOT skip ahead or make changes outside the current step."
+            )
+        else:
+            # A non-build track (assist, design) is not walking a build to
+            # completion, so "do not skip ahead" asserts something untrue
+            # about the session on every single prompt — the exact framing
+            # these tracks exist to avoid. Point at the current step without
+            # claiming the session is mid-build.
+            lines.append(
+                f"You are on step {step} of the `{mode}` track. "
+                f"Follow the `{_cli} editor` steps for this track."
             )
         if restriction:
             lines.append(restriction)
