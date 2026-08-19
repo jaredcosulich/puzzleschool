@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { defaultClientConditions, defaultServerConditions } from 'vite';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import codeyamCms from '@codeyam/cms';
@@ -12,8 +13,16 @@ import { linkedPathForRealFile } from './src/lib/linkedCmsPath.ts';
 // symlink to a checkout of the codeyam-cms repo (`npm run dev:cms` makes it
 // one, `npm run cms:unlink` puts the published package back). Detected rather
 // than flagged so every command — dev, check, build — does the right thing in
-// whichever state node_modules happens to be in, with nothing to remember. The
-// package ships raw TS through its `exports`, so linking is the entire job;
+// whichever state node_modules happens to be in, with nothing to remember.
+//
+// Since @codeyam/cms@0.9.0 the package ships in two halves: `./components/*`,
+// `./layouts/*`, `./pages/*`, `./styles/*` and `./content` stay raw TS (this
+// build compiles them), while `.`, `./lib/*`, `./client/*` and `./server/*`
+// resolve to a prebuilt `dist/`. For an installed consumer that is strictly
+// better, but for a *linked* checkout it would mean editing `src/lib/*.ts` and
+// seeing nothing until the CMS is rebuilt. The package keeps the old behaviour
+// reachable through a `codeyam-source` export condition, which the `conditions`
+// lists below opt into while linked — so linking is still the entire job, and
 // there is no CMS build step to run first.
 const CMS_LINK = path.resolve('node_modules/@codeyam/cms');
 const CMS_REAL = realpathSync(CMS_LINK);
@@ -136,6 +145,26 @@ export default defineConfig({
           // two commands and so repeats it — a `VAR=x a && b` prefix applies
           // only to `a`.)
           preserveSymlinks: true,
+          // Resolve the compiled half of @codeyam/cms (`.`, `./lib/*`,
+          // `./client/*`, `./server/*`) to its TypeScript source instead of the
+          // checkout's `dist/`, so an edit to a lib module hot-reloads like
+          // every other CMS edit rather than waiting on a CMS rebuild. Appended
+          // to Vite's defaults rather than replacing them — this key overrides
+          // wholesale, and dropping `module`/`browser`/`development` would
+          // repoint ordinary dependencies. Ordering within the list does not
+          // matter: conditions are matched in the order the *package* declares
+          // them, and `codeyam-source` is declared first in every CMS export.
+          conditions: [...defaultClientConditions, 'codeyam-source'],
+        }
+      : {},
+    ssr: CMS_LOCAL
+      ? {
+          // The same opt-in for the SSR graph. Astro renders every page — and
+          // the injected /admin routes — on the server at build time, and that
+          // pass resolves through `ssr.resolve.conditions`, not the client list
+          // above. Setting only one leaves half the module graph on `dist/` and
+          // half on source, which is the same module under two identities.
+          resolve: { conditions: [...defaultServerConditions, 'codeyam-source'] },
         }
       : {},
     optimizeDeps: {

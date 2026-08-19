@@ -94,8 +94,17 @@ npm run cms:unlink  # go back to the published package
 
 Register the checkout once with `npm link` from `codeyam-cms/packages/cms`;
 after that `dev:cms` links it here and starts the dev server. There is no CMS
-build step — the package's `exports` point at raw `.ts`/`.tsx`, so the link *is*
-the build.
+build step — the link *is* the build.
+
+Since `@codeyam/cms@0.9.0` that last part takes one line of config to stay true.
+The package now ships half of itself prebuilt: `./components/*`, `./layouts/*`,
+`./pages/*`, `./styles/*` and `./content` are still raw `.ts`/`.tsx`, but `.`,
+`./lib/*`, `./client/*` and `./server/*` resolve to a compiled `dist/`. Left
+alone, a linked checkout would serve that stale `dist/` and an edit to a lib
+module would show up only after rebuilding the CMS. The package keeps the source
+reachable behind a `codeyam-source` export condition, and `astro.config.mjs`
+opts into it (client *and* SSR) whenever local-CMS mode is on — so raw source
+still wins while linked, and installed builds still get the compiled half.
 
 Everything else is automatic. `astro.config.mjs` turns on local-CMS mode by
 checking whether `node_modules/@codeyam/cms` is a symlink, so `npm run dev`,
