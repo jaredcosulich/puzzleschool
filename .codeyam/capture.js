@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: 62cecd4e6ac116e1d65b28096b0841ebb2c58ddfba500bfd4f1044bdd8942031
+// codeyam-editor: 0.1.7  source-sha256: 146df6fb2b3f8a13b0d16a2d50969b506cb91f6ae854d66dfb657a0646b69ea8
 
 // Render environment (colorScheme, deviceScaleFactor, userAgent, locale,
 // timezoneId, reduceMotion, forcedColors) is read from config when present
@@ -768,11 +768,53 @@ async function verifyStorageSeedLanded(frame, config) {
   );
 }
 
-// The probe half of `verifySeedLanded`: assert at least one discriminating
-// string the editor derived from the seeded sandbox appears in the rendered
-// text. Each probe exists in the seeded content and nowhere in committed
-// content, so finding one proves the frame shows the SEED; finding none means
-// it shows COMMITTED content.
+// The comparison form both sides of a probe match are reduced to: whitespace
+// collapsed, then lowercased. Mirrors `normalize_for_match` in
+// `seed_landing.rs` — the poll and this frame assertion must agree, or one bug
+// becomes a differently-worded one.
+//
+// Rendering already reflows whitespace. Case-folding is the same argument one
+// step further: an app that lowercases a value before putting it on the page
+// has still put the value on the page.
+function normalizeForMatch(text) {
+  return String(text == null ? "" : text)
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+// One entry of `config.seedProbes`, normalized to `{ value, committed }`.
+//
+// A bare string is tolerated as `{ value }` so a version-skewed capture script
+// paired with an older editor degrades to the two-way behavior rather than
+// throwing — an unpaired probe simply can never witness the committed case.
+function readSeedProbe(entry) {
+  if (typeof entry === "string") return { value: entry, committed: null };
+  if (!entry || typeof entry.value !== "string") return null;
+  return {
+    value: entry.value,
+    committed: typeof entry.committed === "string" ? entry.committed : null,
+  };
+}
+
+// The probe half of `verifySeedLanded`, classifying the frame three ways rather
+// than two. Each probe carries a discriminating string the editor derived from
+// the seeded sandbox, plus the committed value it replaced at the same file and
+// field:
+//
+//   - a seeded value appears        → the seed reached the render. Clean.
+//   - only a committed counterpart  → this route renders the field and is
+//     appears                         showing UNSEEDED content. The real defect,
+//                                     and a stronger claim than the old one.
+//   - neither appears               → the route does not render these fields at
+//                                     all, so their absence proves nothing. Not
+//                                     an issue; the Rust half already recorded
+//                                     the unverifiable advisory.
+//
+// The two-way reading answered the third case with the second case's loud
+// failure, which blocked correct captures whose route simply had nothing to say
+// about the seeded field — a collection-picker page asserted against a blog
+// post body, or a preview page whose whole purpose is withholding the content.
 //
 // Existence, not coverage — a seed writes many strings and rendering may show
 // only some, so requiring all of them would fail correct captures.
@@ -782,7 +824,9 @@ async function verifyStorageSeedLanded(frame, config) {
 // scenario never does. So the empty short-circuit below is the whole gate this
 // side needs — an unseeded or isolated-component capture simply sends none.
 async function verifyProbeSeedLanded(frame, config) {
-  const probes = (config && config.seedProbes) || [];
+  const probes = ((config && config.seedProbes) || [])
+    .map(readSeedProbe)
+    .filter(Boolean);
   if (probes.length === 0) return null; // nothing derived — nothing to verify.
 
   let state;
@@ -794,8 +838,12 @@ async function verifyProbeSeedLanded(frame, config) {
   if (!state) return null;
 
   const visibleText = state.visibleText || [];
-  const haystack = visibleText.concat(state.selectorText || []).join(" ");
-  if (probes.some((probe) => haystack.includes(probe))) return null; // landed.
+  const haystack = normalizeForMatch(
+    visibleText.concat(state.selectorText || []).join(" "),
+  );
+  if (probes.some((probe) => haystack.includes(normalizeForMatch(probe.value)))) {
+    return null; // landed.
+  }
 
   // `dumpPageState` samples a bounded number of text nodes. When it came back
   // at the cap, "not found" cannot be distinguished from "past the sample", so
@@ -803,19 +851,28 @@ async function verifyProbeSeedLanded(frame, config) {
   // storage half follows for unavailable storage.
   if (visibleText.length >= PAGE_STATE_TEXT_NODE_CAP) return null;
 
+  const showing = probes.find(
+    (probe) =>
+      probe.committed && haystack.includes(normalizeForMatch(probe.committed)),
+  );
+  // Neither the seed nor what it replaced is on this page: the route does not
+  // render these fields, and demanding one is asserting a fact about a page
+  // that has nothing to say.
+  if (!showing) return null;
+
   return createIssue(
     "seed-not-landed",
-    `This scenario's own seed did not reach the captured frame: expected at least one of ` +
-      `[${probes.join(", ")}] in the rendered text, but none appeared. Each of those ` +
-      `strings was written by THIS scenario's merged seed and is absent from committed ` +
-      `content, so this screenshot shows COMMITTED/UNSEEDED state — fix the seed; do not ` +
-      `delete the scenario. Check, in order: (1) the seed's tables/files target the ` +
-      `collection this route actually renders, (2) the app cached a content index built ` +
-      `before the seed landed, (3) the seed adapter wrote somewhere the served app does ` +
-      `not read, or (4) the dev server was not launched by the editor, so it resolves ` +
-      `committed source instead of CODEYAM_CONTENT_ROOT/CODEYAM_DATA_ROOT (those roots ` +
-      `travel through the spawned process's environment — there are no ` +
-      `.codeyam/tmp/*-root sidecar files to look for, and their absence is not the fault).`,
+    `The captured frame showed "${showing.committed}" where this scenario's own seed ` +
+      `wrote "${showing.value}" — the served app is rendering COMMITTED content, not the ` +
+      `seed. This route demonstrably renders that field, so its committed value appearing ` +
+      `is direct evidence the seed did not reach the frame — fix the seed; do not delete ` +
+      `the scenario. Check, in order: (1) the seed's tables/files target the collection ` +
+      `this route actually renders, (2) the app cached a content index built before the ` +
+      `seed landed, (3) the seed adapter wrote somewhere the served app does not read, or ` +
+      `(4) the dev server was not launched by the editor, so it resolves committed source ` +
+      `instead of CODEYAM_CONTENT_ROOT/CODEYAM_DATA_ROOT (those roots travel through the ` +
+      `spawned process's environment — there are no .codeyam/tmp/*-root sidecar files to ` +
+      `look for, and their absence is not the fault).`,
     { url: (frame && frame.url && frame.url()) || (config && config.url) },
   );
 }

@@ -1,39 +1,56 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/a19b6100-5d28-463c-9707-fb6d44eb8c47/tasks/ba4h7g59s.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/a19b6100-5d28-463c-9707-fb6d44eb8c47/tasks/ba4h7g59s.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1787051432,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1594958}
-session-finalize started: 2026-08-18T11:10:32Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 1594958)
-The final workflow step ('Finalize', step 25) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to 341a2535. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1787142758,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":80136}
+session-finalize started: 2026-08-19T12:32:38Z, output: /Users/jaredcosulich/workspace/puzzleschool/.codeyam/logs/session-finalize.log (PID 80136)
+The final workflow step ('Finalize', step 0) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to 3e9ae35f. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
 
 Re-run the final step to resume: `codeyam-editor editor advance` (or `codeyam-editor editor feature-complete` if advance reports the terminal step).
+Commit queue: tenure pid refreshed to server pid 44925
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
 Coverage thresholds … skipped (no runner declares a coverage_path)
 Phase 0/5: session-cleanup …
-Phase 1/5: skipped (--start-from-phase 2)
+Phase 1/5: refresh-tests (no filters) — source Merkle hash changed for partition 'all'
+
+warning: about to run the FULL test suite (~255 tests) — this can take many minutes.
+warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
+  tests  ::  npx vitest run --reporter=json
+Note: full suite already ran at 12:18:53 (~13 min ago). If you are
+running this to recover from a poisoned cache or stale partition,
+proceed; otherwise, the existing cache matches your current source.
+Continue? (Press Ctrl+C to abort, or run `codeyam-editor editor
+verify-test-cache` to check cache validity first.)
+note: full re-run requested; merkle-hash optimization skipped
+Test refresh triggered. Waiting for results...
+[   2s] Running runner: tests
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1787142768,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":80136,"progress":"[   2s] Running runner: tests"}
+[  12s] Tests completed.
+{"failed":0,"passed":255,"skipped":0,"success":true,"total":255}
+All 255 tests passed.
 Phase 2/5: audit (--gate-mode strict, comprehensive) …
 [   0s] audit: running static checks
-[   8s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+[   0s] audit: rebuilding dependency graph (can take a few minutes on a large project)
 {
-  "analyzed": 102,
-  "entityCount": 137,
-  "graphSize": 110,
+Analyzed 103 files, found 172 import edges, graph has 111 nodes
+  "analyzed": 103,
+  "entityCount": 134,
+  "graphSize": 111,
   "totalImports": 172
 }
-Analyzed 102 files, found 172 import edges, graph has 110 nodes
-[  14s] audit: running registry invariant checks
-[  14s] audit: gather complete
+{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1787142778,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":80136,"progress":"Phase 2/5: audit (--gate-mode strict, comprehensive) …"}
+[  10s] audit: running registry invariant checks
+[  11s] audit: gather complete
 Phase 3/5: analyze-imports …
+{"command":"session-finalize","elapsed_secs":30,"emitted_at_unix":1787142788,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":80136,"progress":"Phase 3/5: analyze-imports …"}
 {
-Analyzed 102 files, found 172 import edges, graph has 110 nodes
-  "analyzed": 102,
-  "entityCount": 137,
-  "graphSize": 110,
+Analyzed 103 files, found 172 import edges, graph has 111 nodes
+  "analyzed": 103,
+  "entityCount": 134,
+  "graphSize": 111,
   "totalImports": 172
-}
 Phase 3.5/5: screenshot coverage …
+}
 Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
 Phase 3.6/5: glossary reconciliation …
 Phase 4/5: verify-build …
-[PASS] astro-check (8.91s)
-CODEYAM_VERIFY_BUILD: PASS — 1 check(s) passed
+[SKIP] astro-check — no matching files
+CODEYAM_VERIFY_BUILD: PASS — 0 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
-Session finalize complete: ready to push.
-session-finalize finished: status=ok, phase1=skipped, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=27.5s

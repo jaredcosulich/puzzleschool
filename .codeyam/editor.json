@@ -93,6 +93,10 @@
   ],
   "formatters": [],
   "screenSizes": {
+    "Mobile": {
+      "width": 390,
+      "height": 844
+    },
     "Laptop": {
       "width": 1280,
       "height": 800
@@ -100,10 +104,6 @@
     "Desktop": {
       "width": 1440,
       "height": 900
-    },
-    "Mobile": {
-      "width": 390,
-      "height": 844
     },
     "Tablet": {
       "width": 768,
@@ -601,6 +601,106 @@
         "filePath": ".claude/hooks/editor-pretool-hook.py",
         "name": "tracked_recursive_rm",
         "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "mode_display_prefix",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "mode_is_build",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_commit_gate_phrase",
+        "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "CommitGatePhraseTest",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "ModeDisplayPrefixTest",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "ModeIsBuildTest",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_absent_mode_counts_as_a_build",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_absent_mode_falls_back_to_ui",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_agrees_with_the_prefix_table",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_assist_flow_names_its_own_gate",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_build_flow_single_slug",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_empty_falls_back_to_commit",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_every_shipped_mode_renders_its_own_prefix",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_multiple_slugs_are_joined_and_sorted",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_non_string_entries_are_dropped",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_only_builds_say_flow",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_shipped_build_modes",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_shipped_non_build_modes",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_unknown_mode_counts_as_a_build",
+        "reason": "test-fixture"
+      },
+      {
+        "filePath": ".claude/hooks/test_step_metadata.py",
+        "name": "test_unknown_mode_titlecases_itself_rather_than_claiming_ui",
+        "reason": "test-fixture"
       }
     ],
     "stepBudget": {

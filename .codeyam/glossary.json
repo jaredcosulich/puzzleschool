@@ -104,6 +104,16 @@
     ]
   },
   {
+    "description": "Renders the slug or slugs a commit refusal should steer the agent toward, formatted for prose (\"`commit`\", \"`assist-wrap`\", \"`a` / `b`\"). Derived from the active mode's own `commitSlugs` rather than hard-coded, because the literal `commit` is only the BUILD flow's gate — an assist session's single approval gate is `assist-wrap`, and the previous fixed wording pointed that session at a slug its four-step track does not contain. Non-string entries are dropped and an empty set falls back to `commit`, so a malformed cache cannot crash a refusal already reporting another problem.",
+    "filePath": ".claude/hooks/editor-pretool-hook.py",
+    "name": "_commit_gate_phrase",
+    "tags": [
+      "hooks",
+      "refusal-copy"
+    ],
+    "testFile": ".claude/hooks/test_step_metadata.py"
+  },
+  {
     "description": "Rewrites an on-page SVG to draw a freshly generated figure, reusing existing path elements, cloning the first as a template for extras and removing the surplus, so the styling stays defined only in the component's markup. The general form of what applyTreeGrowth did alone; three structures now regrow per visit and the Voronoi field genuinely changes path count between draws.",
     "filePath": "src/lib/figure-dom.ts",
     "name": "applyFigure",
@@ -477,6 +487,22 @@
     "filePath": "src/lib/dragon.ts",
     "name": "measureRetrace",
     "testFile": "src/lib/dragon.test.ts"
+  },
+  {
+    "description": "Returns the banner prefix a workflow mode announces itself with on every turn — `Assist` for an assist session, `Backend Flow` for a backend build. An unrecognized mode title-cases its own name rather than falling back to `UI Flow`, so a mode shipped by a newer emitter can at worst misspell itself instead of impersonating a different workflow; only an absent mode takes the `ui` default. Lives in the shared step-metadata module because both the PreToolUse and PostToolUse hooks render the same banner from the same emitted field.",
+    "filePath": ".claude/hooks/_step_metadata.py",
+    "name": "mode_display_prefix",
+    "testFile": ".claude/hooks/test_step_metadata.py"
+  },
+  {
+    "description": "Reports whether a workflow mode walks a build flow to completion, deciding whether build-flow guardrail copy (\"do not skip ahead\") applies to the session at all. The non-build modes are enumerated rather than the build ones so an unrecognized mode defaults to `build`: that keeps the guardrail for a mode this hook copy has never heard of, since a shipped hook is routinely older than the binary emitting the mode and the inverse default would let a newer emitter silently relax a real build flow.",
+    "filePath": ".claude/hooks/_step_metadata.py",
+    "name": "mode_is_build",
+    "tags": [
+      "hooks",
+      "workflow-mode"
+    ],
+    "testFile": ".claude/hooks/test_step_metadata.py"
   },
   {
     "description": "Encodes words as morse laid out left to right at classic proportions — dash three units, symbol gap one, letter gap three, word gap seven. Unencodable characters are skipped rather than guessed at.",

@@ -1,4 +1,116 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/a19b6100-5d28-463c-9707-fb6d44eb8c47/tasks/bq5m2ovew.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/a19b6100-5d28-463c-9707-fb6d44eb8c47/tasks/bq5m2ovew.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1787051360,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1593105}
-recapture-stale: skipped — scenario-coverage reports 0 stale, 0 missing (matches finalize Phase 3.5; nothing to recapture)
-{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":0,"resolution_changes":[],"restored_identical":0,"seed_ignored":null,"shared_failure_cause":null,"sidecars_cleaned":1,"skipped":[],"skipped_clean":true,"skipped_count":0,"skipped_cross_target":[],"total":0,"unrecapturable":[],"unrecapturable_project_total":0,"visual_diffs":[]}
+{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1787142492,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291}
+  ▶ Pass 1/3: 42 scenario(s) to recapture (budget 600s)
+  → Warming dev server at http://127.0.0.1:4331/
+  → Capturing: about-footer-contact-link-followed
+{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1787142502,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing about-footer-contact-link-followed (1/42)"}
+  ⧉ Visual change: about-footer-contact-link-followed — 4% of pixels differ vs. the prior frame
+  ✓ Recaptured: about-footer-contact-link-followed
+  → Capturing: about-full-design
+{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1787142512,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing about-full-design (2/42)"}
+  ⧉ Visual change: about-full-design — 2% of pixels differ vs. the prior frame
+  ✓ Recaptured: about-full-design
+  → Capturing: actioncard-coral-accent
+  ✓ Recaptured: actioncard-coral-accent
+  → Capturing: actioncard-default
+{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1787142522,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing actioncard-default (4/42)"}
+  ✓ Recaptured: actioncard-default
+  → Capturing: actioncards-default
+  ✓ Recaptured: actioncards-default
+  → Capturing: bandquote-default
+  ✓ Recaptured: bandquote-default
+  → Capturing: branchingtree-default
+{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1787142532,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing branchingtree-default (7/42)"}
+  ⟲ Unchanged: branchingtree-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: branchingtree-variations
+  ✓ Recaptured: branchingtree-variations
+  → Capturing: contact-email-only
+{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1787142542,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing contact-email-only (9/42)"}
+  ✓ Recaptured: contact-email-only
+  → Capturing: contactbutton-default
+  ✓ Recaptured: contactbutton-default
+  → Capturing: dragoncurve-default
+  ⟲ Unchanged: dragoncurve-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: dragoncurve-variations
+{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1787142552,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing dragoncurve-variations (12/42)"}
+  ✓ Recaptured: dragoncurve-variations
+  → Capturing: exploratoryband-default
+  ⧉ Visual change: exploratoryband-default — 2% of pixels differ vs. the prior frame
+  ✓ Recaptured: exploratoryband-default
+  → Capturing: exploratoryband-without-quote
+{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1787142562,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing exploratoryband-without-quote (14/42)"}
+  ✓ Recaptured: exploratoryband-without-quote
+  → Capturing: fibonaccistructure-default
+  ⟲ Unchanged: fibonaccistructure-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: harmonograph-default
+  ✓ Recaptured: harmonograph-default
+  → Capturing: harmonograph-variations
+{"command":"recapture-stale","elapsed_secs":80,"emitted_at_unix":1787142572,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing harmonograph-variations (17/42)"}
+  ✓ Recaptured: harmonograph-variations
+  → Capturing: home-full-design
+{"command":"recapture-stale","elapsed_secs":90,"emitted_at_unix":1787142582,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing home-full-design (18/42)"}
+  ⧉ Visual change: home-full-design — 2% of pixels differ vs. the prior frame
+  ✓ Recaptured: home-full-design
+  → Capturing: home-narrow-viewport
+{"command":"recapture-stale","elapsed_secs":100,"emitted_at_unix":1787142592,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing home-narrow-viewport (19/42)"}
+{"command":"recapture-stale","elapsed_secs":110,"emitted_at_unix":1787142602,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing home-narrow-viewport (19/42)"}
+  ⧉ Visual change: home-narrow-viewport — 6% of pixels differ vs. the prior frame
+  ✓ Recaptured: home-narrow-viewport
+  → Capturing: kochfragment-default
+  ⟲ Unchanged: kochfragment-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: mark-default
+  ⟲ Unchanged: mark-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: mark-missing-piece
+{"command":"recapture-stale","elapsed_secs":120,"emitted_at_unix":1787142612,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing mark-missing-piece (22/42)"}
+  ⟲ Unchanged: mark-missing-piece — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: mark-on-ink
+  ⟲ Unchanged: mark-on-ink — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: masthead-default
+  ✓ Recaptured: masthead-default
+  → Capturing: morserule-default
+{"command":"recapture-stale","elapsed_secs":130,"emitted_at_unix":1787142622,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing morserule-default (25/42)"}
+  ⟲ Unchanged: morserule-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: page-created-from-the-cms
+  ✓ Recaptured: page-created-from-the-cms
+  → Capturing: page-minimal-fields
+{"command":"recapture-stale","elapsed_secs":140,"emitted_at_unix":1787142632,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing page-minimal-fields (27/42)"}
+  ✓ Recaptured: page-minimal-fields
+  → Capturing: pageheader-default
+  ✓ Recaptured: pageheader-default
+  → Capturing: pageheader-title-only
+{"command":"recapture-stale","elapsed_secs":150,"emitted_at_unix":1787142642,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing pageheader-title-only (29/42)"}
+  ✓ Recaptured: pageheader-title-only
+  → Capturing: prosecolumns-default
+  ✓ Recaptured: prosecolumns-default
+  → Capturing: prosecolumns-single-section
+{"command":"recapture-stale","elapsed_secs":160,"emitted_at_unix":1787142652,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing prosecolumns-single-section (31/42)"}
+  ⧉ Visual change: prosecolumns-single-section — 8% of pixels differ vs. the prior frame
+  ✓ Recaptured: prosecolumns-single-section
+  → Capturing: prosecolumns-with-foot
+  ✓ Recaptured: prosecolumns-with-foot
+  → Capturing: quoteband-default
+  ⧉ Visual change: quoteband-default — 4% of pixels differ vs. the prior frame
+  ✓ Recaptured: quoteband-default
+  → Capturing: sinerule-default
+{"command":"recapture-stale","elapsed_secs":170,"emitted_at_unix":1787142662,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing sinerule-default (34/42)"}
+  ⟲ Unchanged: sinerule-default — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: sitefooter-default
+  ✓ Recaptured: sitefooter-default
+  → Capturing: sitefooter-home-variant
+  ✓ Recaptured: sitefooter-home-variant
+  → Capturing: sitefooter-narrow-viewport
+{"command":"recapture-stale","elapsed_secs":180,"emitted_at_unix":1787142672,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing sitefooter-narrow-viewport (37/42)"}
+  ✓ Recaptured: sitefooter-narrow-viewport
+  → Capturing: sitenav-default
+  ✓ Recaptured: sitenav-default
+  → Capturing: sitenav-no-current-page
+  ✓ Recaptured: sitenav-no-current-page
+  → Capturing: statementblock-default
+{"command":"recapture-stale","elapsed_secs":190,"emitted_at_unix":1787142682,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing statementblock-default (40/42)"}
+  ⧉ Visual change: statementblock-default — 2% of pixels differ vs. the prior frame
+  ✓ Recaptured: statementblock-default
+  → Capturing: voronoifield-default
+  ✓ Recaptured: voronoifield-default
+  → Capturing: voronoifield-variations
+{"command":"recapture-stale","elapsed_secs":200,"emitted_at_unix":1787142693,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":48291,"progress":"Capturing voronoifield-variations (42/42)"}
+  ✓ Recaptured: voronoifield-variations
+{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":33,"resolution_changes":[],"restored_identical":9,"seed_ignored":null,"shared_failure_cause":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":42,"unrecapturable":[],"unrecapturable_project_total":0,"visual_diffs":[{"kind":"raster","magnitude":0.037223186728395065,"resolution_change":null,"screenshot":"about-footer-contact-link-followed--desktop.png","slug":"about-footer-contact-link-followed"},{"kind":"raster","magnitude":0.021727430555555555,"resolution_change":null,"screenshot":"about-full-design--desktop.png","slug":"about-full-design"},{"kind":"raster","magnitude":0.023348186728395063,"resolution_change":null,"screenshot":"exploratoryband-default--desktop.png","slug":"exploratoryband-default"},{"kind":"raster","magnitude":0.02355594135802469,"resolution_change":null,"screenshot":"home-full-design--desktop.png","slug":"home-full-design"},{"kind":"raster","magnitude":0.05770218131000122,"resolution_change":null,"screenshot":"home-narrow-viewport--mobile.png","slug":"home-narrow-viewport"},{"kind":"raster","magnitude":0.0845108024691358,"resolution_change":null,"screenshot":"prosecolumns-single-section--desktop.png","slug":"prosecolumns-single-section"},{"kind":"raster","magnitude":0.03843132716049383,"resolution_change":null,"screenshot":"quoteband-default--desktop.png","slug":"quoteband-default"},{"kind":"raster","magnitude":0.02391743827160494,"resolution_change":null,"screenshot":"statementblock-default--desktop.png","slug":"statementblock-default"}]}
