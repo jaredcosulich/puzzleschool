@@ -17,9 +17,9 @@ npm run setup     # installs dependencies
 npm run dev       # http://127.0.0.1:4321
 ```
 
-Requires Node 22.12 or newer. Astro 6 dropped 18 and 20 outright, so 20 does not
-build — the `engines` field in package.json will stop `npm install` rather than
-let it fail later.
+Requires Node 22.12 or newer. Astro 6 dropped 18 and 20 outright and Astro 7
+keeps that floor, so 20 does not build — the `engines` field in package.json will
+stop `npm install` rather than let it fail later.
 
 ## Editing the site
 
