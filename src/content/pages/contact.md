@@ -4,7 +4,7 @@ description: Get in touch with The Puzzle School.
 order: 2
 kicker: Get in touch
 heading: The Puzzle School is currently in an exploratory phase.
-intro: The Puzzle School is in an exploratory phase with no firm opening date as of yet. Still we would love to hear from you if these ideas resonate in any capacity.
+intro: The Puzzle School is in an exploratory phase modeling the philosophy through programming, writing, partnerships, and tooling. Stay tuned on this website for more or reach out if these ideas resonate in any capacity.
 bandBody: Please contact us if you are interested in learning more about the effort.
 quote: |-
   Their work becomes one continuous adventure as long as they manage to keep discovering new challenges in it. Difficulties and setbacks never quell their curiosity. A swarm of new questions emerges from every problem they solve. 
