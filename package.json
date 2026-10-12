@@ -8,7 +8,7 @@
   },
   "scripts": {
     "postinstall": "playwright install chromium",
-    "dev": "NODE_OPTIONS=--preserve-symlinks astro dev --host 127.0.0.1",
+    "dev": "ASTRO_DEV_BACKGROUND=1 NODE_OPTIONS=--preserve-symlinks astro dev --host 127.0.0.1",
     "dev:cms": "npm link @codeyam/cms && npm run dev",
     "cms:unlink": "npm unlink @codeyam/cms && npm install @codeyam/cms",
     "build": "NODE_OPTIONS=--preserve-symlinks astro check && NODE_OPTIONS=--preserve-symlinks astro build",
