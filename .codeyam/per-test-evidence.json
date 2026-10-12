@@ -1,10 +1,11 @@
 {
   "applyFigure › clones extra paths, carrying the styling, when the figure grew": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -13,16 +14,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › leaves the element untouched and reports false with no template path": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -31,16 +32,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › leaves the markup stroke width alone when a path omits one": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -49,16 +50,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › removes surplus paths when the figure shrank": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -67,16 +68,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › reports false and changes nothing when there are no paths": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -85,16 +86,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › reports true when it drew": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -103,16 +104,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › reuses the existing path elements when the counts match": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -121,16 +122,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › writes stroke width when a path supplies one": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -139,16 +140,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyFigure › writes the viewBox it is given": {
     "file": "src/lib/figure-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -157,16 +158,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › clones extra paths, carrying the styling, when the tree grew": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -175,16 +176,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › leaves the element untouched and reports false with no template path": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -193,16 +194,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › reframes the viewBox around the new segments": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -211,16 +212,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › removes surplus paths when the tree shrank": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -229,16 +230,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › reports false and changes nothing when there are no segments": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -247,16 +248,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › reuses the existing path elements when the counts match": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -265,16 +266,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "applyTreeGrowth › writes each segment stroke width": {
     "file": "src/lib/tree-dom.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -283,16 +284,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cellPath › closes an ordinary cell": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -301,16 +302,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cellPath › draws nothing for a degenerate cell": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -319,16 +320,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cellPath › draws the open cell one edge short": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -337,16 +338,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cellPath › keeps every remaining corner when it opens a cell": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -355,16 +356,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsBody › emits the attribute rather than omitting it": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -373,16 +374,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsBody › returns the body attribute with an empty value": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -391,16 +392,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsEntry › adds no attributes when spread with no key": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -409,16 +410,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsEntry › returns an empty object for an empty key rather than an empty attribute": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -427,16 +428,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsEntry › returns an empty object when no key is supplied": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -445,16 +446,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsEntry › returns the entry attribute keyed by collection and slug": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -463,16 +464,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsField › carries the frontmatter key even when it differs from the prop name": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -481,16 +482,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsField › returns a new object on each call": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -499,16 +500,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsField › returns the field attribute valued with the frontmatter key": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -517,16 +518,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › finds the committed page entries to check": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -535,16 +536,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › parses a folded block scalar into its folded text": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -553,16 +554,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › parses a literal block scalar keeping its line breaks": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -571,16 +572,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › parses every page entry without leaving a bare block-scalar indicator": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -589,16 +590,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › parses no frontmatter key outside the declared field set": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -607,16 +608,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › preserves untouched block scalars when one other field is edited": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -625,16 +626,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsFrontmatterRoundTrip › round-trips every page entry through parse and serialize unchanged": {
     "file": "src/lib/cmsFrontmatterRoundTrip.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -643,16 +644,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsMarkers attribute naming › gives each helper its own data-cms attribute": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -661,16 +662,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsNavItem › marks a root url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -679,16 +680,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsNavItem › never emits the literal string undefined as a url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -697,16 +698,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsNavItem › returns an empty object for an item with no url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -715,16 +716,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsNavItem › returns the nav-item attribute valued with the url": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -733,16 +734,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsSetting and cmsSettingHref › marks a link whose href is derived from a setting": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -751,16 +752,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsSetting and cmsSettingHref › marks an element whose text is a setting value": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -769,16 +770,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "cmsSetting and cmsSettingHref › uses different attributes for the text and href cases": {
     "file": "src/lib/cmsMarkers.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -787,16 +788,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "composePageTitle › appends again once the site is renamed out of the collision": {
     "file": "src/lib/pageTitle.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -805,16 +806,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "composePageTitle › appends the site title for an ordinary page": {
     "file": "src/lib/pageTitle.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -823,16 +824,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "composePageTitle › does not append the site title when the page title already is it": {
     "file": "src/lib/pageTitle.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -841,16 +842,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "composePageTitle › falls back to the site title when the page passes none": {
     "file": "src/lib/pageTitle.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -859,16 +860,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "composePageTitle › treats a differently-cased or padded match as the same title": {
     "file": "src/lib/pageTitle.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -877,16 +878,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "copyrightLabel › changes label across the New Year boundary one second apart": {
     "file": "src/lib/copyright.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -895,16 +896,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T00:20:49.600Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "copyrightLabel › formats the year of the given date as a copyright notice": {
     "file": "src/lib/copyright.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -913,16 +914,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T00:20:49.600Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "copyrightLabel › reads the local calendar year rather than the UTC one": {
     "file": "src/lib/copyright.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -931,16 +932,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T00:20:49.600Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "copyrightLabel › reads the year from the date it is given rather than the clock": {
     "file": "src/lib/copyright.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -949,16 +950,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T00:20:49.600Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "dragonPoints › stops early when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -967,16 +968,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "dragonShortfall › rejects a curve that silts into a solid hatch": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -990,10 +991,11 @@
   },
   "dragonShortfall › rejects a curve too sparse to fill the band": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1007,10 +1009,11 @@
   },
   "dragonShortfall › rejects a curve too tall for the band to stretch": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1024,10 +1027,11 @@
   },
   "dragonShortfall › rejects a curve whose mass is piled at one end": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1041,10 +1045,11 @@
   },
   "dragonShortfall › scores a broken fold recurrence materially worse than the specimen": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1058,10 +1063,11 @@
   },
   "dragonShortfall › scores a degenerate walk as infinitely short": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1075,10 +1081,11 @@
   },
   "dragonShortfall › scores the shipped specimen exactly zero": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1092,10 +1099,11 @@
   },
   "dragonTrace › reproduces dragonPoints point for point from the all-right fold word": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1109,10 +1117,11 @@
   },
   "dragonTrace › rotates the whole figure with heading, preserving its extent": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1126,10 +1135,11 @@
   },
   "dragonTrace › stays on an axis-aligned lattice at every sampled heading": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1143,10 +1153,11 @@
   },
   "dragonTrace › stops the walk early when fraction is below 1": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1160,10 +1171,11 @@
   },
   "dragonVariant › draws both fold directions across a sweep of seeds": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1177,10 +1189,11 @@
   },
   "dragonVariant › is deterministic for a given seed": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1194,10 +1207,11 @@
   },
   "dragonVariant › lands inside DRAGON_ENVELOPE for a sweep of seeds": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1211,10 +1225,11 @@
   },
   "dragonVariant › produces different curves for different seeds": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1228,10 +1243,11 @@
   },
   "dragonViewBox › frames a grown curve to its own bounds": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1245,10 +1261,11 @@
   },
   "dragonViewBox › frames the drawn points with a one-unit margin": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1262,10 +1279,11 @@
   },
   "fibonacciTiling › grows each square as the sum of the previous two": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1274,16 +1292,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "fibonacciTiling › keeps the largest square closed when openLast is false": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1292,16 +1310,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "fibonacciTiling › normalises the tiling to the origin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1310,16 +1328,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "fibonacciTiling › reproduces the handoff geometry for six squares": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1328,16 +1346,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "fibonacciTiling › returns nothing for a count under two": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1346,16 +1364,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "foldCommands › emits a leading forward move and one turn-plus-move per crease": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1369,10 +1387,11 @@
   },
   "foldCommands › emits one forward move per straight run": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1386,10 +1405,11 @@
   },
   "foldTurns › honours each fold direction at its own step": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1403,10 +1423,11 @@
   },
   "foldTurns › mirrors the second half as the reversed negation of the first": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1420,10 +1441,11 @@
   },
   "foldTurns › produces 2^n - 1 turns for n folds": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1437,10 +1459,11 @@
   },
   "foldTurns › returns no turns for an empty fold word": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1454,10 +1477,11 @@
   },
   "foldTurns › unfolds the all-right word into the regular paperfolding sequence": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1471,10 +1495,11 @@
   },
   "growAcceptableDragon › is deterministic for a given seed": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1488,10 +1513,11 @@
   },
   "growAcceptableDragon › returns an acceptable curve for a sweep of 500 seeds": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1505,10 +1531,11 @@
   },
   "growAcceptableDragon › returns the closest attempt rather than throwing when the budget runs out": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1522,10 +1549,11 @@
   },
   "growAcceptableHarmonograph › accepts only harmonographs that fill the flank lane's full height": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1534,16 +1562,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableHarmonograph › is reproducible for a seed": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1552,16 +1580,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableHarmonograph › returns an acceptable figure across a spread of seeds": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1570,16 +1598,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableHarmonograph › returns the closest attempt rather than throwing when none qualifies": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1588,16 +1616,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableTree › grows different trees for the slugs the site uses": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1606,16 +1634,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableTree › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1624,16 +1652,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableTree › returns a drawable tree even when the attempt budget is exhausted": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1642,16 +1670,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableTree › returns an acceptable tree across a sweep of seeds": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1660,16 +1688,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableVoronoi › draws one path per cell plus one per unresolved mark": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1678,16 +1706,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableVoronoi › frames the field at the lane it was generated for": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1696,16 +1724,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableVoronoi › returns an acceptable field across a spread of seeds": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1714,16 +1742,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growAcceptableVoronoi › returns the closest attempt rather than throwing when none qualifies": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1732,16 +1760,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growTree › counts the trunk as the first branch": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1750,16 +1778,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growTree › reports bareLimbApplied false when the index is past the branches grown": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1768,16 +1796,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growTree › reports bareLimbApplied when the named limb is reached": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1786,16 +1814,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "growTree › returns exactly what treeSegments returns": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1804,16 +1832,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographPoints › does not retrace its own path when the pendulums are detuned": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1822,16 +1850,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographPoints › draws a shorter stroke for a smaller fraction": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1840,16 +1868,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographPoints › draws later passes smaller than earlier ones": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1858,16 +1886,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographPoints › leaves the ends apart when the pen lifts early": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1876,16 +1904,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographPoints › returns a degenerate but valid trace at fraction zero": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1894,16 +1922,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographPoints › samples the whole allowed swing": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1912,16 +1940,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographShortfall › penalises a trace whose ends have met": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1930,16 +1958,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographShortfall › reports an unusable trace as infinitely short": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1948,16 +1976,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographShortfall › scores a collapsed in-phase draw far worse than a healthy one": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1966,16 +1994,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographShortfall › scores a figure whose ink piles up in the middle worse than one that stops": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -1984,16 +2012,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographVariant › always detunes the second pendulum on each axis": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2002,16 +2030,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographVariant › draws every value from inside the envelope": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2020,16 +2048,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographVariant › gives different seeds different figures": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2038,16 +2066,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographVariant › is reproducible for a seed": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2056,16 +2084,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographViewBox › adds a margin proportional to the figure rather than a fixed unit": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2074,16 +2102,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "harmonographViewBox › preserves the figure aspect it was measured at": {
     "file": "src/lib/harmonograph.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2092,16 +2120,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "hashSeed › returns the same number for the same string": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2110,16 +2138,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "hashSeed › separates strings that differ by one character": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2128,16 +2156,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "hashSeed › separates the slugs the site actually uses": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2146,16 +2174,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "hashSeed › stays within unsigned 32-bit range": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2164,16 +2192,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isAcceptableTree › accepts the originally shipped tree": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2182,16 +2210,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isAcceptableTree › rejects a single unbranched limb": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2200,16 +2228,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isAcceptableTree › rejects a tree that never reached its bare limb": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2218,16 +2246,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isAcceptableTree › rejects an empty growth": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2236,16 +2264,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › does not mark the site root current on an inner page": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2254,16 +2282,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › does not match a different page": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2272,16 +2300,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › does not match a page whose path merely starts the same way": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2290,16 +2318,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › matches regardless of case": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2308,16 +2336,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › matches the site root against itself": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2326,16 +2354,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › matches two identical paths": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2344,16 +2372,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › returns false for a nav item that has no url": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2362,16 +2390,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › treats /about and /about/ as the same page": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2380,16 +2408,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "isCurrentNavPath › treats a stored trailing slash as the same page too": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2398,16 +2426,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "jitteredSites › is reproducible for a seed": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2416,16 +2444,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "jitteredSites › keeps every site inside its own grid box": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2434,16 +2462,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "jitteredSites › places exactly one site per grid box": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2452,16 +2480,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "jitteredSites › places sites on the exact grid centres at zero jitter": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2470,16 +2498,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "kochPoints › produces four segments per segment per iteration": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2488,16 +2516,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "linkedPathForRealFile › does not match a sibling directory that shares a prefix": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2506,16 +2534,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "linkedPathForRealFile › preserves the full subpath, not just the file name": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2524,16 +2552,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "linkedPathForRealFile › returns null for a file outside the real checkout": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2542,16 +2570,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "linkedPathForRealFile › returns null for the real root itself": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2560,16 +2588,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "linkedPathForRealFile › rewrites a file under the real checkout onto the linked root": {
     "file": "src/lib/linkedCmsPath.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2578,16 +2606,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "lsystem › applies the production rule once per iteration": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2596,16 +2624,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "lsystem › passes through symbols that have no rule": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2614,16 +2642,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "lsystem › returns the axiom unchanged for zero iterations": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2632,16 +2660,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "measureBalance › reports a symmetric walk as centred": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2655,10 +2683,11 @@
   },
   "measureBalance › reports a walk massed at one end as off-centre": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2672,10 +2701,11 @@
   },
   "measureBalance › reports the centre for an empty walk rather than NaN": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2689,10 +2719,11 @@
   },
   "measureBalance › reports the shipped specimen as balanced on both axes": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2706,10 +2737,11 @@
   },
   "measureLatticeCoverage › places the shipped specimen inside the accepted band": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2723,10 +2755,11 @@
   },
   "measureLatticeCoverage › reports a fully visited box as complete coverage": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2740,10 +2773,11 @@
   },
   "measureLatticeCoverage › reports a single straight run as fully covered rather than sparse": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2757,10 +2791,11 @@
   },
   "measureOpenness › reports a closed loop as zero": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2774,10 +2809,11 @@
   },
   "measureOpenness › reports opposite corners as a full diagonal": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2791,10 +2827,11 @@
   },
   "measureOpenness › reports the shipped specimen as open": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2808,10 +2845,11 @@
   },
   "measureRetrace › is zero for every fold word at depth 10": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2825,10 +2863,11 @@
   },
   "measureRetrace › reports a fully doubled-back walk as retracing half its edges": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2842,10 +2881,11 @@
   },
   "measureRetrace › reports no retracing for a walk with fewer than two points": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2859,10 +2899,11 @@
   },
   "measureRetrace › scores a broken fold recurrence far above the acceptable band": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2876,10 +2917,11 @@
   },
   "measureRetrace › treats an edge and its reverse as one edge": {
     "file": "src/lib/dragon.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2893,10 +2935,11 @@
   },
   "morseLine › encodes a single dot at the origin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2905,16 +2948,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "morseLine › makes a dash three times a dot": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2923,16 +2966,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "morseLine › separates letters by three units": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2941,16 +2984,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "morseLine › separates words by seven units": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2959,16 +3002,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "morseLine › skips characters with no morse encoding": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2977,16 +3020,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "morseLine › tags each symbol with its word": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -2995,16 +3038,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › drops a hash fragment": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3013,16 +3056,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › drops a query string": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3031,16 +3074,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › keeps the site root as a single slash": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3049,16 +3092,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › leaves a path without a trailing slash alone": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3067,16 +3110,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › lowercases the path": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3085,16 +3128,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › strips a trailing slash": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3103,16 +3146,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › treats an empty path as the site root": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3121,16 +3164,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "normalizeNavPath › trims surrounding whitespace": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3139,16 +3182,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "openRectPath › draws three sides and never closes the shape": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3157,16 +3200,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "outOfBand › reports how far outside the band a value fell": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3175,16 +3218,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "outOfBand › reports zero within the band": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3193,16 +3236,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "outOfBand › treats both limits as inside": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3211,16 +3254,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "pointBounds › adds no margin of its own": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3229,16 +3272,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "pointBounds › encloses every point": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3247,16 +3290,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "pointBounds › reports a unit extent for a degenerate figure rather than zero": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3265,16 +3308,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "pointBounds › substitutes only the axis that collapsed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3283,16 +3326,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "proseLayoutFor › gives many sections the two-column shape": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3301,16 +3344,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "proseLayoutFor › gives one section the flanked single-column shape": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3319,16 +3362,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "proseLayoutFor › gives two sections the two-column shape": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3337,16 +3380,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "proseLayoutFor › keeps a single section flanked even when it has sub-headings": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3355,16 +3398,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "proseLayoutFor › switches shape exactly between one section and two": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3373,16 +3416,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "proseLayoutFor › treats a body with no sections as one": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3391,16 +3434,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "randomTreeSeed › stays within unsigned 32-bit range": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3409,16 +3452,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "randomTreeSeed › varies between calls": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3427,16 +3470,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › falls back to matching on the url when the label was reworded": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3445,16 +3488,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › falls back to the contact page for an empty nav": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3463,16 +3506,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › falls back to the contact page when no nav item matches": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3481,16 +3524,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › finds a Contact item nested under a dropdown parent": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3499,16 +3542,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › follows a Contact item that has been moved to a different url": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3517,16 +3560,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › matches the label case-insensitively": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3535,16 +3578,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › prefers the label match over a url match when the nav contains both": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3553,16 +3596,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › resolves the default About + Contact nav to the contact page": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3571,16 +3614,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContactUrl › skips a url-less dropdown parent rather than returning undefined": {
     "file": "src/lib/contactUrl.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3589,16 +3632,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContentRoot › defaults to _projectRoot_/src/content when no override is present": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3607,16 +3650,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContentRoot › falls back to the .codeyam/tmp/content-root sidecar": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3625,16 +3668,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveContentRoot › prefers the CODEYAM_CONTENT_ROOT env override": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3643,16 +3686,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveDataRoot › defaults to _projectRoot_/src/data when no override is present": {
     "file": "src/lib/contentRoot.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3661,16 +3704,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveTreeSeed › falls back to one shared default tree when given nothing": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3679,16 +3722,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveTreeSeed › hashes the key when no seed is given": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3697,16 +3740,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveTreeSeed › prefers an explicit seed over the key": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3715,16 +3758,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "resolveTreeSeed › treats a zero seed as explicit": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3733,16 +3776,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sectionCount › counts only the section depth in a mixed body": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3751,16 +3794,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sectionCount › counts the depth-3 headings": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3769,16 +3812,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sectionCount › ignores headings at other depths": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3787,16 +3830,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sectionCount › reports zero for a body with no headings at all": {
     "file": "src/lib/proseLayout.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3805,16 +3848,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|full|2026-08-17T23:23:50.907Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "seededRandom › produces a different sequence for a different seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3823,16 +3866,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "seededRandom › produces the same sequence for the same seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3841,16 +3884,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "seededRandom › stays within zero and one": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3859,16 +3902,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sinePath › lands exactly on the end even when step does not divide the width": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3877,16 +3920,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sinePath › samples more densely with a smaller step": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3895,16 +3938,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sinePath › starts on the baseline": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3913,16 +3956,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "sinePath › stops short of the full width when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3931,16 +3974,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "tessellate › gives different seeds different fields": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3949,16 +3992,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "tessellate › is reproducible for a seed": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3967,16 +4010,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "tessellate › leaves the unresolved sites out of the partition entirely": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -3985,16 +4028,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "tessellate › lets a cell overrun the ground an unresolved site would have owned": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4003,16 +4046,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "tessellate › opens exactly one cell": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4021,16 +4064,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "toPath › emits only a moveto for one point": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4039,16 +4082,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "toPath › returns an empty string for no points": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4057,16 +4100,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "toPath › rounds coordinates to two decimals": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4075,16 +4118,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › always draws the trunk": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4093,16 +4136,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › grows a different tree for a different seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4111,16 +4154,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › grows no side branches when branchChance is zero": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4129,16 +4172,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4147,16 +4190,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › leaves the named limb bare": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4165,16 +4208,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › never shrinks as depth increases": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4183,16 +4226,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeSegments › tapers stroke width with depth": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4201,16 +4244,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeVariant › holds the fixed parameters constant across seeds": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4219,16 +4262,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeVariant › is deterministic for a given seed": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4237,16 +4280,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeVariant › keeps every sampled parameter inside TREE_ENVELOPE": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4255,16 +4298,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeVariant › rounds the integer ranges to whole numbers": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4273,16 +4316,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeViewBox › frames a grown tree identically on repeat calls": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4291,16 +4334,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "treeViewBox › frames the segments with a one unit margin": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4309,16 +4352,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "turtle › always walks at least one move": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4327,16 +4370,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "turtle › ignores symbols that are not moves or turns": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4345,16 +4388,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "turtle › walks forward along its heading": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4363,16 +4406,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "turtle › walks only part of the moves when fraction is below 1": {
     "file": "src/lib/structures.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4381,16 +4424,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "unresolvedMarkPath › draws a cross centred on the site": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4399,16 +4442,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiCells › cuts the partition beyond the visible frame": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4417,16 +4460,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiCells › gives a lone site the entire frame": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4435,16 +4478,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiCells › gives every cell the territory nearest its own site": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4453,16 +4496,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiCells › tiles the whole clipped frame without gaps or overlaps": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4471,16 +4514,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiShortfall › penalises a field that lost its open cell": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4489,16 +4532,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiShortfall › penalises a field with no unresolved sites": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4507,16 +4550,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiShortfall › rejects a field containing a sliver": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4525,16 +4568,16 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   },
   "voronoiShortfall › reports a field with no drawable cells as infinitely short": {
     "file": "src/lib/voronoi.test.ts",
-    "lastRunAt": "2026-10-12T11:22:42.274Z",
+    "lastRunAt": "2026-10-12T11:40:53.738Z",
     "lastRunKind": "full",
     "lastStatus": "pass",
     "statusRing": [
+      "pass|full|2026-10-12T11:40:53.738Z",
       "pass|full|2026-10-12T11:22:42.274Z",
       "pass|changed|2026-10-12T11:21:57.815Z",
       "pass|full|2026-08-19T18:48:19.800Z",
@@ -4543,8 +4586,7 @@
       "pass|changed|2026-08-19T14:14:41.778Z",
       "pass|full|2026-08-19T12:32:54.593Z",
       "pass|full|2026-08-19T12:19:04.334Z",
-      "pass|changed|2026-08-18T10:26:11.372Z",
-      "pass|changed|2026-08-18T01:00:38.139Z"
+      "pass|changed|2026-08-18T10:26:11.372Z"
     ]
   }
 }
