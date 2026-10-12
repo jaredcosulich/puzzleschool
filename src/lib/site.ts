@@ -35,6 +35,15 @@ export interface SiteSettings {
   contactEmail: string;
   footerText: string;
   socials: SocialLink[];
+  /**
+   * The organization's registered details. Shown in the footer of every page
+   * because nonprofit verification (Google for Nonprofits) requires the site to
+   * display the legal name and Charity ID (EIN); the street address it also
+   * requires lives in the About page's content. The CMS does not model these
+   * keys, so they pass through `settings.json` untouched on save.
+   */
+  legalName?: string;
+  ein?: string;
 }
 
 export interface NavItem {

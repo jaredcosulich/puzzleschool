@@ -21,9 +21,20 @@ interface Props {
    */
   contactUrl: string;
   variant: 'home' | 'internal';
+  /** Registered nonprofit details, from the settings singleton. */
+  legalName?: string;
+  ein?: string;
 }
 
-const { text, contactUrl, variant } = Astro.props;
+const { text, contactUrl, variant, legalName, ein } = Astro.props;
+
+// Each part is optional so a missing setting drops out of the line rather than
+// leaving a dangling "EIN" label; with none set, the line does not render. The
+// street address is deliberately absent — it lives on the About page only.
+const legalParts = [
+  legalName ? `${legalName} is a 501(c)(3) nonprofit organization` : null,
+  ein ? `EIN ${ein}` : null,
+].filter((part): part is string => part !== null);
 
 // The build machine's year. Rendered server-side so the served HTML is already
 // complete — the script below only has work to do once the calendar has moved
@@ -53,6 +64,16 @@ const copyright = copyrightLabel(new Date());
         year over a self-updating one. */}
     <span class="footer__copyright" data-current-year>{copyright}</span>
   </div>
+  {/* A third child, but one that cannot disturb the two-ended row above:
+      `flex-basis: 100%` forces it onto its own line, so `space-between` still
+      distributes only the brand and the end group. */}
+  {legalParts.length > 0 ? (
+    <address class="footer__legal">
+      {legalParts.map((part, i) => (
+        <span>{i > 0 ? ' · ' : ''}{part}</span>
+      ))}
+    </address>
+  ) : null}
 </footer>
 
 <script>
@@ -123,6 +144,22 @@ const copyright = copyrightLabel(new Date());
      no-break rule is its own, so `flex-wrap` can drop the whole group to a
      second row but never break between the © and the year. */
   .footer__copyright {
+    white-space: nowrap;
+  }
+
+  /* Sentence case and regular weight: this is a statement to be read, not a
+     label, and the address and EIN must stay legible exactly as registered. */
+  .footer__legal {
+    flex-basis: 100%;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  /* The EIN and the address must never break mid-value on a narrow screen;
+     the line wraps between parts instead. */
+  .footer__legal span:not(:first-child) {
     white-space: nowrap;
   }
 </style>

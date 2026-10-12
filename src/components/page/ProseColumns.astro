@@ -100,8 +100,12 @@ const single = layout === 'single';
     padding-bottom: 72px;
   }
 
-  /* Each section starts its own column, so a long edit can never split a section
-     across the structure lane. */
+  /* The column break falls before the MIDDLE section, so the first half of the
+     sections fills the left column and the rest the right. It used to fall
+     before every section after the first, which is right for exactly two: with
+     three or more, `columns: 2` sends each extra section into a third, fourth…
+     column laid out off the right edge of the page — invisible, and a
+     horizontal scroll. */
   .prose :global(h3) {
     margin: 0 0 18px;
     font-weight: 600;
@@ -111,7 +115,17 @@ const single = layout === 'single';
     break-after: avoid;
   }
 
-  .prose :global(h3:not(:first-child)) {
+  /* For n sections the break goes before section floor(n/2) + 1, which counted
+     from the end is section ceil(n/2). CSS cannot compare the two indices, so
+     the pairs are listed for two to eight sections; a longer body gets no forced
+     break and the browser balances it across the two columns on its own. */
+  .prose :global(h3:nth-of-type(2):nth-last-of-type(1)),
+  .prose :global(h3:nth-of-type(2):nth-last-of-type(2)),
+  .prose :global(h3:nth-of-type(3):nth-last-of-type(2)),
+  .prose :global(h3:nth-of-type(3):nth-last-of-type(3)),
+  .prose :global(h3:nth-of-type(4):nth-last-of-type(3)),
+  .prose :global(h3:nth-of-type(4):nth-last-of-type(4)),
+  .prose :global(h3:nth-of-type(5):nth-last-of-type(4)) {
     break-before: column;
   }
 

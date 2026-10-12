@@ -11,6 +11,10 @@ quoteAttribution: F. Scott Fitzgerald
 cards: []
 ---
 
+### Our Mission
+
+The Puzzle School is a nonprofit organization developing a K–12 educational program that helps young people recognize, live with, and navigate ambiguity. These metacognitive skills provide a foundation for navigating the ambiguity of learning, understanding oneself, collaborating with others, and thriving in an increasingly complex and ambiguous world.
+
 ### Why Ambiguity
 
 We believe that, while understanding or memorizing known facts is incredibly valuable, most schools do not effectively support young people in developing a quality relationship with ambiguity. The world is an incredibly ambiguous environment and is becoming more ambiguous every day. Our lives, our work, our communities, and our societies are all increasingly ambiguous and we need to better support young people in this challenge.
@@ -22,3 +26,10 @@ This does demean more traditional learning. In fact learning itself is an exerci
 Puzzles are a high quality distillation of an ambiguous challenge. The Puzzle School not only focuses on navigating ambiguity. It's also about recognizing and living with ambiguity. For example, art is ambiguous in a manner that can not be resolved. Many people struggle to live with ambiguity and many societal issues arise from people being uncomfortable with ambiguity.
 
 Those considerations aside, learning is fundamentally an ambiguous challenge, and The Puzzle School wants to support as much learning in each student as possible. The puzzle metaphor helps students approach their learning not as an exercise in memorization but in navigating ambiguity. Much like a scientist, detective, entrepreneur, politician, writer, or mathematician might describe their work like they are trying to solve a puzzle, we want young people to feel comfortable recognizing, living with, and navigating ambiguity.
+
+### Organization
+
+The Puzzle School is a 501(c)(3) nonprofit organization.
+
+EIN: 81-0698688<br>
+94 Brattle St, Cambridge, MA 02138

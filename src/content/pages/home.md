@@ -30,3 +30,9 @@ how we can add value to them, how they are structured, and how we can go about
 influencing that.
 
 Puzzles represent structured exercises in navigating ambiguity.
+
+**Our mission:** The Puzzle School is a nonprofit organization developing a K–12
+educational program that helps young people recognize, live with, and navigate
+ambiguity. These metacognitive skills provide a foundation for navigating the
+ambiguity of learning, understanding oneself, collaborating with others, and
+thriving in an increasingly complex and ambiguous world.
