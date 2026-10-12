@@ -4,13 +4,79 @@
 // `now` and `maxAgeMs` are factored as parameters or have explicit defaults
 // to keep eligibleStat deterministic across the test boundary.
 
-import { readdir, stat } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { createInterface } from "node:readline";
 import { join } from "node:path";
 
 export const MAX_AGE_DAYS = 30;
 export const MAX_AGE_MS = MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+
+/**
+ * Where the editor records which of a project's sessions were unattended
+ * Build runs, relative to the project root. Written by control-api's
+ * `build_session_transcript` module beside the broker's `session-exits.jsonl`.
+ */
+export const BUILD_SESSION_TRANSCRIPTS_PATH = join(
+  ".codeyam",
+  "run",
+  "build-session-transcripts.jsonl"
+);
+
+/**
+ * Extract the provider session ids recorded as Build runs from the raw
+ * contents of `build-session-transcripts.jsonl`.
+ *
+ * Pure and deliberately forgiving: the file is appended to by a process that
+ * can be killed mid-write, so a truncated or malformed line is skipped rather
+ * than discarding the rows around it. A row with no `providerSessionId` is
+ * ignored — labelling is a nicety, and a bad row must never cost the caller
+ * its session list.
+ */
+export function buildSessionIdsFromJsonl(text) {
+  const ids = new Set();
+  for (const line of String(text ?? "").split("\n")) {
+    if (line.trim() === "") continue;
+    let row;
+    try {
+      row = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    if (row && typeof row.providerSessionId === "string" && row.providerSessionId !== "") {
+      ids.add(row.providerSessionId);
+    }
+  }
+  return ids;
+}
+
+/**
+ * The set of session ids that were unattended Build runs for `projectDir`.
+ *
+ * A project that has never run one — or is not a codeyam project at all —
+ * has no such file, and an empty set is the correct answer for it: every
+ * session then lists exactly as it does today.
+ */
+export async function readBuildSessionIds(projectDir) {
+  if (!projectDir) return new Set();
+  try {
+    return buildSessionIdsFromJsonl(
+      await readFile(join(projectDir, BUILD_SESSION_TRANSCRIPTS_PATH), "utf8")
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+/**
+ * The source tag shown for a session. A Build run is labelled `build` rather
+ * than by its provider, because "which of these did the editor drive
+ * unattended?" is the question the label has to answer — the provider is
+ * already implied by the project it sits under.
+ */
+export function sessionSourceLabel(session) {
+  return session.build ? "build" : session.source;
+}
 
 /**
  * Convert Claude's flat-encoded project directory name (e.g.

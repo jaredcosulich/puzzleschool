@@ -59,7 +59,7 @@ Pick **one** slice candidate, in priority order:
 3. else the file behind `untestedSample[0]` — exported logic to cover TDD-style.
 4. if the codebase is already clean (no hotspots, no untested), pick a representative route/component to register scenarios for so the user still sees the loop end-to-end.
 
-Resolve the slice's blast radius — the candidate file plus its direct test and the files that import it — into an explicit list. Then present via `AskUserQuestion`:
+Resolve the slice's blast radius — the candidate file plus its direct test and the files that import it — into an explicit list. Then present it with your harness's structured-question tool (on Claude, `AskUserQuestion`), or as plain text listing the options if it has none:
 
 > Proposed slice: **`<file>`** — `<one-line rationale from assess: fan-in N, untested, or M lines>`.
 >
@@ -119,7 +119,10 @@ Do **NOT** `git add` / `git commit` the plan — the editor's feature-commit ste
 
 ## Allowed tools
 
-- `Bash` — `assess`, `config-show`, file ops.
-- `AskUserQuestion` — the slice/scope confirmation gate.
-- `Read` — to inspect candidate files when resolving the slice's blast radius.
-- `Write` — only to write the plan file under `.codeyam/plans/`.
+- Running shell commands — `assess`, `config-show`, file ops. (On Claude: `Bash`.)
+- Asking the user a structured question — the slice/scope confirmation gate.
+  (On Claude: `AskUserQuestion`; plain text listing the options works too.)
+- Reading files — to inspect candidate files when resolving the slice's blast
+  radius. (On Claude: `Read`.)
+- Creating a file — only to write the plan file under `.codeyam/plans/`.
+  (On Claude: `Write`.)

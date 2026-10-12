@@ -29,7 +29,7 @@ Parse the slug from `$ARGUMENTS`. If `$ARGUMENTS` is empty or contains anything 
 
 Then stop — do not touch any files.
 
-Otherwise, use the Read tool to load `.codeyam/plans/<slug>.md`. If the file does not exist, output:
+Otherwise, read `.codeyam/plans/<slug>.md`. If the file does not exist, output:
 
 > No plan found at `.codeyam/plans/<slug>.md`.
 
@@ -39,7 +39,7 @@ If the read succeeds, output a one-line confirmation that includes the plan's `t
 
 ### Step 2: Ask what to change
 
-**Do NOT use the AskUserQuestion tool.** Output exactly this prompt as plain assistant text and stop, waiting for the user's freeform reply:
+**Do NOT open a structured multiple-choice menu** — on Claude that means the `AskUserQuestion` tool; on any harness it means whatever presents the user a fixed set of options to pick from. Output exactly this prompt as plain assistant text and stop, waiting for the user's freeform reply:
 
 > **What would you like to change about this plan?**
 
@@ -47,7 +47,7 @@ End your turn here.
 
 ### Step 3: Apply the edits
 
-When the user replies, write the updated plan back with the Write tool. **Copy the existing frontmatter block through byte-for-byte, except for the fields the user actually asked to change.** In particular, `createdAt` records when the plan was created and is stamped by the tooling — never re-type, regenerate, or "refresh" it. You have no reliable clock, so any value you type there is a guess, and the audit will flag it. `dependsOn` (a bracket array of prerequisite plan slugs, e.g. `dependsOn: ["session-recovery-ux"]`) likewise survives edits unless the user explicitly asks to add or remove a dependency.
+When the user replies, write the updated plan back to the same path. **Copy the existing frontmatter block through byte-for-byte, except for the fields the user actually asked to change.** In particular, `createdAt` records when the plan was created and is stamped by the tooling — never re-type, regenerate, or "refresh" it. You have no reliable clock, so any value you type there is a guess, and the audit will flag it. `dependsOn` (a bracket array of prerequisite plan slugs, e.g. `dependsOn: ["session-recovery-ux"]`) likewise survives edits unless the user explicitly asks to add or remove a dependency.
 
 **Assets:** if the edit adds a new asset (a screenshot, mockup, reference
 image), write it into the plan's own asset directory

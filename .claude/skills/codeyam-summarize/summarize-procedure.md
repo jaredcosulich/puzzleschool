@@ -30,8 +30,9 @@ the whole window for no benefit.
 
 ## Phase 2 — Pick the destination
 
-Ask, with `AskUserQuestion`. Never assume — the whole point is that the
-user can find the file afterward.
+Ask — with your harness's structured-question tool (on Claude,
+`AskUserQuestion`), or as plain text listing the options if it has none.
+Never assume — the whole point is that the user can find the file afterward.
 
 - **Desktop** — recommended default. It is the first place a mail client's
   attachment picker opens to.

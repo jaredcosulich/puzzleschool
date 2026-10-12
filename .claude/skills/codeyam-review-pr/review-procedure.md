@@ -28,8 +28,9 @@ to drift.
 
 ## Phase 2 — Consent gate
 
-Reviewing runs the contributor's code. Present three choices via
-`AskUserQuestion`:
+Reviewing runs the contributor's code. Present three choices with your
+harness's structured-question tool (on Claude, `AskUserQuestion`), or as plain
+text listing them if it has none:
 
 - **Full digest** — checks out the PR and runs its tests + scenario capture.
 - **Static-only** — digests the diff + context with no checkout, no

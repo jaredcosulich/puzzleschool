@@ -75,7 +75,9 @@ is where you are and here is the safest first thing to try."
 
 ## Phase 3 — Present the options menu
 
-Present the menu via `AskUserQuestion`. **Order it so the assessment's
+Present the menu with your harness's structured-question tool (on Claude,
+`AskUserQuestion`), or as plain text listing the options if it has none.
+**Order it so the assessment's
 `recommendedAction` is the first (recommended) option**, then list the rest. For
 each option, the copy must carry the risk framing — name what it does *and* that
 it is additive and reversible. The options:
@@ -101,6 +103,11 @@ it is additive and reversible. The options:
 - **E. Spin up a new companion app** — scaffold a fresh, codeyam-native app
   alongside the existing repo, leaving the current code entirely untouched.
   *Default when `recommendedAction` is `scaffold-app` / the repo is empty.*
+- **F. Open it in GitHub Codespaces** — offer only when `git remote get-url
+  origin` is a GitHub remote. Adds one file, `.devcontainer/devcontainer.json`,
+  so a new codespace installs the editor and opens it running, plus a README
+  badge snippet to paste. Never rewrites an existing devcontainer file; undo by
+  deleting the file. Never the default.
 
 Always make the additive-and-reversible framing first-class in the copy, not a
 footnote — lowering felt risk is the whole point of this skill.
@@ -124,6 +131,9 @@ a route exists that doesn't, and never silently drop a choice:
 - **E. Spin up a new companion app** → backed by a dedicated scaffold flow
   (`onramp-new-companion-app`). If not installed yet, explain what it will do and
   that the guided flow is coming.
+- **F. Open it in GitHub Codespaces** → run `codeyam-editor editor
+  devcontainer-setup` and relay its output: the file it wrote (or the keys to
+  merge into an existing one), the badge, and any notes.
 
 Routes light up as their backing plans land. This skill is shippable before
 them: it names every option and explains what each does, so the menu is honest

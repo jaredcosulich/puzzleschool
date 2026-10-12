@@ -27,7 +27,7 @@ The only files you may write are:
 - `.codeyam/plans/<slug>.md` (the plan itself)
 - `git add` / `git commit` of that plan file (and **only** that plan file — never `git add -A`, never a bare `git commit` that would sweep in unrelated staged work). This is the plan-creation commit specifically — it must contain only the plan file. The feature-commit step at the end of the editor workflow has a different rule: it auto-commits all non-gitignored leftovers.
 
-The one read-only CLI call this skill makes is `codeyam-editor editor plan-prefixes` in Step 2 (to offer every prefix used before as a one-click option). It prints to stdout and changes nothing — it is not an "implementation" command.
+The one read-only CLI call this skill makes is `codeyam-editor editor plan-prefixes` in Step 2 (to read the prefixes already in use so you can derive one). It prints to stdout and changes nothing — it is not an "implementation" command.
 
 ## Workflow
 
@@ -37,7 +37,7 @@ The one read-only CLI call this skill makes is `codeyam-editor editor plan-prefi
 
 Only when the skill is invoked with NO argument does the rest of this step apply.
 
-**Do NOT use the AskUserQuestion tool for this step.** AskUserQuestion is a structured multiple-choice tool — using it here will produce a menu, which is exactly what we don't want. Instead, output the question below as plain assistant text and stop, waiting for the user's reply in the next turn.
+**Do NOT open a structured multiple-choice menu for this step** — on Claude that means the `AskUserQuestion` tool; on any harness it means whatever presents the user a fixed set of options to pick from. A menu is exactly what we don't want here. Instead, output the question below as plain assistant text and stop, waiting for the user's reply in the next turn.
 
 Output **exactly** this and nothing else (no preamble, no tool calls, no follow-up options):
 
@@ -47,25 +47,24 @@ Output **exactly** this and nothing else (no preamble, no tool calls, no follow-
 
 Then end your turn. The user will reply with a freeform description.
 
-Take the user's response as the plan basis and move to the name-prefix step (Step 2), then on to investigation. Only ask a follow-up question if the response is genuinely ambiguous (e.g., you can't tell which part of the codebase is involved). Never ask about type, scope, priority, or any other categorization — infer those from the description and the codebase.
+Take the user's response as the plan basis and move to the prefix-derivation step (Step 2), then on to investigation. Only ask a follow-up question if the response is genuinely ambiguous (e.g., you can't tell which part of the codebase is involved). Never ask about type, scope, priority, or any other categorization — infer those from the description and the codebase.
 
-### Step 2: Ask about a name prefix
+### Step 2: Derive a name prefix — do NOT ask for one
 
-A prefix tags the plan's filename and title by author or work item — developer initials (`jc`), a feature code (`auth`), or a ticket number (`PROJ-123`). The question is **always** a one-click `AskUserQuestion` menu, so the user never has to type a prefix to answer it:
+A prefix tags the plan's filename and title by author or work item — developer initials (`jc`), a feature code (`auth`), or a ticket number (`PROJ-123`). **Never open a structured multiple-choice menu for it** (on Claude, `AskUserQuestion`). The prefix is an organisational convention internal to `.codeyam/plans/`; nothing the user sees or does changes based on the answer, so the question asks them to adjudicate a filename with no stated consequence — the exact shape of an unanswerable gate. Choosing it is a routine judgment call, which is the standard for deciding and reporting rather than asking.
 
 1. Run `codeyam-editor editor plan-prefixes` and capture its trimmed, newline-delimited stdout as `priorPrefixes` (an ordered list, most-recent-first). It prints every distinct prefix any plan has used (scanning both the queue and `.codeyam/plans/completed/`), de-duplicated, or nothing when no plan carries a prefix — or there are no plans yet. The first line equals the legacy `last-plan-prefix` output.
 
-2. **Always** use `AskUserQuestion` — there is no plain-text fallback branch:
-   - Question: "Would you like to prefix the plan's filename and title?"
-   - One option per entry in `priorPrefixes`, in order, **capped at the 3 most-recent** (an `AskUserQuestion` menu allows at most 4 options and the last slot is reserved for "None"). Mark the **first** option "(Recommended)" with description = "Reuse the prefix from your most recent plan."; give the rest description = "Reuse a prefix you've used before."
-   - A final option: label = "None", description = "No prefix — derive the filename and title from the description alone."
-   - The auto-injected **Other** field lets the user type any prefix not shown (including one beyond the 3-most-recent cap).
-
-   When `priorPrefixes` is empty, the menu still renders with just the "None" option (plus the **Other** field) — so the question is always answerable with a single click and the user is never forced to type.
-
-   Interpret the answer: a listed prefix → that prefix; "None" → no prefix; an **Other** reply → the trimmed typed value as the prefix.
+2. Pick the prefix yourself, in this precedence order:
+   - **The user volunteered one** — in the invocation argument or anywhere in the conversation ("call this one `fleet-…`", "tag it PROJ-123"). Honour it verbatim; a volunteered prefix always wins.
+   - **A `priorPrefixes` entry matches the plan's subject** — the vocabulary already in use describes areas of the project (`build`, `audit`, `fleet`, `testing`, `fix`, `git`, `workflows`). Choose the one whose subject the plan is about, not the most recent one; recency is not evidence of fit.
+   - **Nothing fits, or `priorPrefixes` is empty** — use no prefix. The filename and title derive from the description alone, which is a perfectly good outcome and the common one.
 
 3. Strip any double-quote (`"`) characters from the resulting prefix before carrying it into the "Write the plan file" step (Step 5), so both the `title:` and the new `prefix:` frontmatter lines stay valid YAML.
+
+4. Do not announce the choice mid-flow — it is reported once, with the finished plan, in Step 6.
+
+A caller that wants a specific prefix passes `plan-create --prefix` directly; that override is unchanged. What is gone is the unprompted modal.
 
 Then move on to investigation (Step 3).
 
@@ -90,7 +89,7 @@ what produces generic "look at the codebase" plans the editor workflow has
 to re-research at the `explore` slug:
 
 - `codeyam-editor editor glossary-find <name>` (flags: `--prefix`,
-  `--substring`, `--feature`, `--format`) — look up named entries
+  `--substring`, `--names-only`, `--fields`, `--format`) — look up named entries
 - `codeyam-editor editor glossary-list` / `glossary-untested` /
   `glossary-by-tag <tag>` — projections across the whole table
 - `.codeyam/glossary-index.txt` — line-oriented, greppable sidecar; safe to
@@ -104,12 +103,13 @@ to re-research at the `explore` slug:
   call into the area you're touching, and what already exists nearby
   that you might reuse
 
-NEVER `Read` `.codeyam/glossary.json` directly — it exceeds the Read tool
-limit. Use the CLI / index sidecar.
+NEVER read `.codeyam/glossary.json` whole — the file is far too large to
+take into context (~71k tokens). Use the CLI / index sidecar.
 
-After the registry/glossary pass, use the Explore agent or direct
-Glob/Grep/Read tools to investigate code the indexes pointed you at. Be
-thorough — the plan quality depends on understanding the codebase.
+After the registry/glossary pass, use your harness's code-search and
+file-reading tools to investigate code the indexes pointed you at (on Claude:
+the Explore agent, or Glob / Grep / Read directly). Be thorough — the plan
+quality depends on understanding the codebase.
 
 **Existing-implementation survey (config field / gate dimension plans).** If
 the plan will add a config field, threshold, or gate dimension, grep the
@@ -189,16 +189,25 @@ Surfacing these at plan time avoids the costly discover-at-edit-time cycle —
 a full test run to reveal a lean-limit failure, plus a confusing self-mod
 denial mid-implementation.
 
-**Reminder: investigation means reading, not changing.** Use only Read, Grep, Glob, and Explore tools here. Do not edit any files during investigation.
+**Reminder: investigation means reading, not changing.** Use only your harness's read-only search and file-reading capabilities here (on Claude: Read, Grep, Glob, and the Explore agent). Do not edit any files during investigation.
 
 ### Step 4: Clarify scope
 
-Based on what you found in investigation, ask 1-2 targeted clarifying questions using AskUserQuestion. These should be **specific questions that emerged from reading the code**, not generic planning questions.
+Based on what you found in investigation, ask 1-2 targeted clarifying questions — with your harness's structured-question tool (on Claude, `AskUserQuestion`), or as plain text listing the options if it has none. These should be **specific questions that emerged from reading the code**, not generic planning questions.
 
 Good questions:
-- "I found that X and Y are tightly coupled — should both be in scope, or just X?"
-- "The current implementation uses pattern A, but pattern B would be simpler here. Which do you prefer?"
-- "This change touches the API layer — should we include backend changes, or keep it frontend-only?"
+- "Changing how X works also changes Y — should this plan fix both (a bigger change, touching screens you use daily), or just X?"
+- "There are two ways to build this: one ships sooner, the other is easier to change later. Which matters more here?"
+- "This change could stay on screen or also change how saved data is stored. Should it include the storage change (more work, and older saved data gets converted)?"
+
+These questions come from code you just read, so they drift into that code's vocabulary — config keys, route paths, internal design names. The person answering may never have seen any of it. Say what each option changes for them (what they get, lose, or wait for), define any project term the first time it appears, and make each option lead to a different result. Before asking, run the draft through the checker, passing the exact options you will offer:
+
+```bash
+echo '{"questions":[{"question":"…","options":[{"label":"…","description":"…"}]}]}' \
+  | codeyam-editor editor check-question-copy --structured
+```
+
+It is advisory: it never blocks, but fix what it reports — an option that says what it operates on instead of what happens, or two options with no difference the reader can weigh.
 
 **Skip this step entirely** if the request is unambiguous and investigation answered all questions. Don't ask questions for the sake of asking — only when the answer genuinely affects the plan.
 
@@ -255,7 +264,7 @@ for review or scheduling reasons.
 
 ### Step 5: Write the plan file
 
-**Do not create the plan file with the Write tool, and never hand-author its
+**Do not create the plan file by writing it directly, and never hand-author its
 YAML frontmatter.** Write the plan **body** to a scratch file, then hand it to
 `plan-create`, which derives the slug, writes the frontmatter, stamps
 `createdAt`, and validates the result:
@@ -268,10 +277,10 @@ codeyam-editor editor plan-create \
   --body-file .codeyam/tmp/plan-body.md
 ```
 
-Omit `--prefix` when Step 2 produced no prefix. The command prints the path it
+Omit `--prefix` when Step 2 derived no prefix. The command prints the path it
 wrote, and refuses rather than clobbering an existing slug.
 
-**Why a command and not the Write tool:** `createdAt` has to be a real
+**Why a command and not a direct file write:** `createdAt` has to be a real
 timestamp, and you have no reliable clock — anything you type there is a guess
 that the Plan tab then renders as fact. `plan-create` stamps it from the system
 clock, so the field is not on your authoring surface at all. There is nothing to
@@ -344,10 +353,11 @@ returns [[1, 3], [2, 5]], so the `toEqual([[1, 5]])` assertion fails.
   separately via `--prefix`; do not fold it into the title yourself.
 - `--mode` (required) — `ui` or `backend`. Default to `ui` unless the change is
   purely backend.
-- `--prefix` (optional) — The author/work-item prefix from Step 2, **verbatim**
-  as the user typed it. It is stored as the canonical record of the prefix —
-  `editor plan-prefixes` (and `editor last-plan-prefix`) read it back to seed the
-  next plan's options. **Omit the flag entirely when no prefix was chosen.**
+- `--prefix` (optional) — The author/work-item prefix derived in Step 2 — or,
+  when the user volunteered one, **verbatim** as they typed it. It is stored as
+  the canonical record of the prefix; `editor plan-prefixes` (and `editor
+  last-plan-prefix`) read it back as the vocabulary the next plan derives from.
+  **Omit the flag entirely when no prefix was derived.**
 - `--body-file` (required in practice) — Path to the body markdown. Reads stdin
   when omitted.
 - `--depends-on <slug>` (optional, repeatable) — A prerequisite plan. The Plan
@@ -451,6 +461,11 @@ editor workflow a red-first reproduction it can materialize verbatim. Shape:
   SKILL.md" for a lean file at its limit — name the step `.txt` file the
   guidance should live in instead, and call out any authorized agent-config
   edit explicitly so the editor workflow isn't surprised by the self-mod guard
+- Guidance written into a shipped skill body installs verbatim into **every**
+  harness's config tree, so name the capability and keep the tool name as a
+  parenthetical example ("your harness's structured-question tool — on Claude,
+  `AskUserQuestion`"). A bare tool name is an unfollowable instruction to an
+  agent that has no such tool.
 
 **Co-locating plan assets (screenshots, mockups, reference images):** when the
 user uploaded or provided an asset the plan should carry, write it into the
@@ -477,11 +492,29 @@ Run `codeyam-editor editor plans` to verify the plan is parseable and shows up c
 
 Show the user a brief summary of the plan. When Step 4b produced more than two
 or three plans, lead with the grouping: how many there are, and one line per
-merge you made and per merge you considered and declined. Then use
-AskUserQuestion with these options:
+merge you made and per merge you considered and declined.
+
+**Report the Step 2 prefix here**, in one clause — the tag you put on the
+filename and title, and why that one ("filed under `fleet`, since it's a
+roster change") or that there is none. This is the decide-and-report half of
+not asking: the user still learns what was chosen and can say "call it
+something else", which loops through "I want changes" like any other revision.
+
+Present the menu with your harness's structured-question tool (on Claude,
+`AskUserQuestion`), or as plain text listing the options in this order only on
+a harness that has no such tool — the first option is the recommended one
+either way:
 - **"Looks good, commit it" (Recommended)** — Commit the plan and finish
 - **"I want changes"** — User describes changes, you revise the plan, then re-present
 - **"Discard and start over"** — Delete the plan file and go back to Step 1
+
+The menu is required here even though the first option is marked
+(Recommended). A general convention says not to open a picker for a choice
+that has a conventional default, and that convention does not apply to this
+gate: this is where the user accepts the plan and triggers the commit, so the
+recommendation is about *which* answer is likely right, never about whether to
+ask. Rendering these three as prose leaves the user typing "commit it" by hand
+— which is the exact failure this wording exists to prevent.
 
 ### Step 7: Act on response
 
@@ -498,7 +531,7 @@ AskUserQuestion with these options:
   (and any asset files) are listed; if anything else appears, run `git reset
   --soft HEAD~1` and retry with the pathspec form.
 
-  **Always append `[skip ci]` to the commit message.** Plan files don't change source or tests, so CI must not be triggered. This is non-optional — apply it on the initial commit and on any amend.
+  **Append `[skip ci]` only when this commit targets `main`.** A plan file changes no source or tests, so a plan commit landing directly on `main` must not trigger CI. On a branch, OMIT it: GitHub honors the token for the open PR's run, so a plan commit carrying it silently suppresses that PR's CI. The condition is the target, not the token — same rule on the initial commit and on any amend.
 
   The plan file is brand-new and untracked, so it must be staged before the
   pathspec commit — `git commit -- <pathspec>` only commits *already-tracked*
@@ -511,13 +544,20 @@ AskUserQuestion with these options:
   # Add the asset dir pathspec too when the plan co-located assets:
   #   git add .codeyam/plans/<slug>.md .codeyam/plans/assets/<slug>
   git add .codeyam/plans/<slug>.md
-  git commit -m "plan: <short description of the feature/fix> [skip ci]" -- .codeyam/plans/<slug>.md
+  # On a branch (the usual case) — no [skip ci]; it would suppress the open PR's run.
+  # Committing directly on main? Append " [skip ci]" to the message.
+  git commit -m "plan: <short description of the feature/fix>" -- .codeyam/plans/<slug>.md
   git show --stat --name-only HEAD   # verify only the plan file (and any assets) are in the commit
   codeyam-editor editor plan-complete
   ```
   After the commit succeeds, `plan-complete` triggers a confirmation modal
   in the Plan tab offering to start another plan or return to the queued
-  changes list. Only run `plan-complete` on this branch — not on "I want
+  changes list. Its first line says whether an editor tab actually took the
+  signal (`DELIVERED`), is about to (`QUEUED`), or none is connected
+  (`QUEUED, NOT DELIVERED` — the modal appears when a tab next connects); tell
+  the user which. If asked later why the modal did not appear, answer from
+  `codeyam-editor editor plan-complete-status` rather than from the code.
+  Only run `plan-complete` on this branch — not on "I want
   changes" (which loops back to Step 6) or "Discard" (which returns to
   Step 1 with no plan saved).
 - **I want changes** — Make the requested changes to the plan file, then go back to Step 6

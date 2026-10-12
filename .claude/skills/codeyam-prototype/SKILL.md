@@ -25,6 +25,26 @@ Output **exactly** this and nothing else:
 
 Then end your turn. The user replies with a freeform description.
 
+## Before your first edit
+
+Name the files the brief will touch, then run:
+
+```
+codeyam-editor editor prototype-preflight --path <file> --path <file>
+```
+
+It reports whether upstream commits you don't have touch those files, and
+whether another in-flight session holds a claimed plan citing them. Both are
+invisible to you otherwise: prototyping edits before a plan exists, so the
+Confirm-gate guards that would catch this cannot fire yet.
+
+If it reports drift or overlap, tell the user what it found and offer to sync
+first — `git pull --rebase` on a still-clean tree is one command, while the
+same collision found after the edits costs a stash/pull/pop and hand-resolved
+conflicts, and may reveal a sibling already shipped the work. It is advisory:
+proceeding on a named collision is a fine choice, discovering it three hours
+later is not.
+
 ## During prototyping
 
 - **Get the current scenario right before changing scenarios.** Changing
@@ -41,11 +61,12 @@ Then end your turn. The user replies with a freeform description.
   edge-case variants) until the user has confirmed the scenario currently
   on screen looks right. Use `codeyam-editor editor register` for the
   scenarios you do create.
-- Use `AskUserQuestion` to confirm direction when there are multiple
-  reasonable approaches; otherwise iterate freely.
+- Confirm direction when there are multiple reasonable approaches — with
+  your harness's structured-question tool (on Claude, `AskUserQuestion`) or
+  as plain text listing the options; otherwise iterate freely.
 - Do **NOT** run `codeyam-editor editor advance` or `codeyam-editor editor
   step`. Those belong to the formalized Build workflow. While the
-  Prototype sub-tab is active there is no advance gate.
+  Build tab's Prototype activity is running there is no advance gate.
 - Do **NOT** run `git add` or `git commit`. The prototype's source
   changes ride into the feature-commit step at the end of the editor
   workflow alongside the plan.
@@ -87,10 +108,35 @@ you built". Treat every batch of edits as a demo cue.
   the view where it's visible, the user has to find it themselves —
   that is the failure mode this section exists to prevent.
 
-## End-of-prototype: writing the plan
+## Two ways a prototype ends
 
-When the user clicks "Finish and Formalize in Build", the chat receives
-this exact instruction string:
+The Prototype activity has **two** exits, and they mean different things.
+Read which instruction arrived before you act — treating one as the other
+either loses the user's work or writes a plan they did not ask for.
+
+| The user clicked | You should |
+|---|---|
+| **"Finish and Formalize in Build"** | Write the plan and hand the work to Build (below). |
+| **"I'm done"** | Stop. Write no plan. Leave the edits in the working tree. |
+
+### "I'm done"
+
+The chat receives this exact instruction string:
+
+> The user has clicked "I'm done". Stop the current activity now. Do NOT
+> start anything new, do NOT write a plan file, do NOT commit, and do NOT run
+> any `codeyam-editor editor advance`/`step` command. Leave any edits you made
+> in the working tree exactly as they are. Summarize what happened in ONE
+> line, then stop.
+
+Do exactly that: one line, then stop. Ending an activity is neither a
+decision to formalize the work nor a decision to discard it, so do not
+offer to do either — the user is returned to the Build tab's activity
+chooser and can pick again from there.
+
+### "Finish and Formalize in Build": writing the plan
+
+The chat receives this exact instruction string:
 
 > The user has clicked "Finish and Formalize in Build". Stop prototyping.
 > Write the plan BODY describing what was prototyped to a scratch file, then
@@ -146,10 +192,15 @@ When you receive that message:
 
 ## Allowed tools
 
-- `Read`, `Edit`, `Write` — for any file the prototype needs.
-- `Bash` — for dev-server commands, scenario CLI calls, file ops.
-- `AskUserQuestion` — for direction-confirming choices.
-- `WebSearch` / `WebFetch` — for researching APIs or libraries.
+- Reading, editing, and creating files — for any file the prototype needs.
+  (On Claude: `Read`, `Edit`, `Write`.)
+- Running shell commands — for dev-server commands, scenario CLI calls, file
+  ops. (On Claude: `Bash`.)
+- Asking the user a structured question — for direction-confirming choices.
+  (On Claude: `AskUserQuestion`; plain text listing the options works too.)
+- Web search / fetch, **if your harness has them** — for researching APIs or
+  libraries. Optional; skip this if it does not. (On Claude: `WebSearch` /
+  `WebFetch`.)
 
 ## Disallowed during the prototype phase
 

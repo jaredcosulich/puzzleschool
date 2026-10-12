@@ -4,6 +4,12 @@
 // Sources both Claude Code (~/.claude/projects/<hash>/<uuid>.jsonl) and
 // Gemini CLI (~/.gemini/tmp/<project>/chats/session-*.jsonl) sessions.
 //
+// A session the codeyam editor drove unattended is labelled [build] rather
+// than [claude]. Those runs are ordinary transcripts in the same place; what
+// marks them is the project's own
+// .codeyam/run/build-session-transcripts.jsonl, written at launch. A project
+// with no such file lists exactly as before.
+//
 // Usage:
 //   node find-last-session.mjs                          # Most recent session for cwd's Claude project
 //   node find-last-session.mjs --list-projects          # All projects with recent sessions (both sources)
@@ -24,7 +30,11 @@ import { createReadStream } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
-import { claudeProjectHashFromPath } from './find-last-session-helpers.mjs';
+import {
+  claudeProjectHashFromPath,
+  readBuildSessionIds,
+  sessionSourceLabel,
+} from './find-last-session-helpers.mjs';
 
 const claudeRoot = join(homedir(), '.claude', 'projects');
 const geminiRoot = join(homedir(), '.gemini', 'tmp');
@@ -224,6 +234,12 @@ if (args.listProjects) {
 // ── Resolve candidate sessions ───────────────────────────────────────────
 let candidateSessions = [];
 let resolvedLabel = null;
+// The project root whose `.codeyam/` says which sessions were Build runs.
+// Only set on the branches that actually know a filesystem path — a
+// `--project=` substring match knows only a slug-derived approximation, and
+// guessing there would mislabel sessions in a project whose path contains a
+// dash.
+let resolvedProjectDir = null;
 
 if (args.projectDirOverride) {
   // Exact path: Claude only (Gemini doesn't use a path-derived hash)
@@ -231,6 +247,7 @@ if (args.projectDirOverride) {
     const projectHash = claudeProjectHashFromPath(args.projectDirOverride);
     candidateSessions = await findClaudeSessionsInDir(join(claudeRoot, projectHash));
     resolvedLabel = `[claude] ${args.projectDirOverride}`;
+    resolvedProjectDir = args.projectDirOverride;
   }
 } else if (args.projectFilter) {
   const filter = args.projectFilter.toLowerCase();
@@ -265,6 +282,7 @@ if (args.projectDirOverride) {
     const projectHash = claudeProjectHashFromPath(projectDir);
     candidateSessions = await findClaudeSessionsInDir(join(claudeRoot, projectHash));
     resolvedLabel = `[claude] ${projectDir}`;
+    resolvedProjectDir = projectDir;
   }
   if (args.source === 'gemini') {
     // No --project filter and explicit --source=gemini — search all Gemini projects
@@ -289,6 +307,15 @@ if (candidateSessions.length === 0) {
 
 candidateSessions.sort((a, b) => b.mtimeMs - a.mtimeMs);
 
+// Mark the sessions the editor drove unattended, so a Build run is
+// distinguishable from a session someone sat and typed into. Purely additive:
+// a project with no Build runs (or no `.codeyam/` at all) marks nothing and
+// lists exactly what it lists today.
+const buildSessionIds = await readBuildSessionIds(resolvedProjectDir);
+for (const s of candidateSessions) {
+  s.build = s.source === 'claude' && buildSessionIds.has(s.uuid);
+}
+
 // ── --contains ───────────────────────────────────────────────────────────
 if (args.contains) {
   if (resolvedLabel) process.stderr.write(`Searching ${resolvedLabel} (${candidateSessions.length} sessions)\n`);
@@ -306,7 +333,7 @@ if (args.contains) {
   for (const s of matches) {
     const date = new Date(s.mtimeMs).toISOString().replace('T', ' ').slice(0, 19);
     const sizeKb = Math.round(s.size / 1024);
-    process.stderr.write(`  [${s.source}] ${s.uuid}  (${sizeKb}KB, ${date})\n    ${s.path}\n\n`);
+    process.stderr.write(`  [${sessionSourceLabel(s)}] ${s.uuid}  (${sizeKb}KB, ${date})\n    ${s.path}\n\n`);
     process.stdout.write(`${s.path}\n`);
   }
   process.exit(0);
@@ -325,7 +352,7 @@ if (args.listSessions) {
     const sizeKb = Math.round(s.size / 1024);
     const date = new Date(s.mtimeMs).toISOString().replace('T', ' ').slice(0, 19);
     const label = labels[i] ? ` — "${labels[i]}"` : '';
-    process.stdout.write(`  ${i + 1}. [${s.source}] ${s.uuid}${label}\n`);
+    process.stdout.write(`  ${i + 1}. [${sessionSourceLabel(s)}] ${s.uuid}${label}\n`);
     process.stdout.write(`     Size: ${sizeKb}KB, Last modified: ${date}\n`);
     process.stdout.write(`     Path: ${s.path}\n\n`);
   }
@@ -338,4 +365,4 @@ const sizeKb = Math.round(target.size / 1024);
 const date = new Date(target.mtimeMs).toISOString().replace('T', ' ').slice(0, 19);
 
 process.stdout.write(`${target.path}\n`);
-process.stderr.write(`Session: [${target.source}] ${target.uuid} (${sizeKb}KB, last modified ${date})\n`);
+process.stderr.write(`Session: [${sessionSourceLabel(target)}] ${target.uuid} (${sizeKb}KB, last modified ${date})\n`);

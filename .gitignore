@@ -96,9 +96,14 @@ docker-compose.cloud.yml
 # `verify-full-finalize` compares the COMMITTED marker against the working
 # tree, so ignoring it makes the gate impossible to ever pass. It is a
 # committed artifact — like a lockfile. Do not add it here.
+# NOT ignored, deliberately: .codeyam/manual-tests/.
+# Manual tests and their completion state ride in the repo alongside the
+# code they verify — that is the whole point of the store. Do not add a
+# broader `.codeyam/manual-tests/` rule here.
 .codeyam/secrets.json
 .codeyam/setup-connections.json
 .codeyam/session-token
+.codeyam/agent-home/
 test-results/
 playwright-report/
 blob-report/
@@ -133,6 +138,7 @@ blob-report/
 .codeyam/editor-pending-plan.json
 .codeyam/pending-build-launch
 .codeyam/feature-finalized.json
+.codeyam/cycle-closed.json
 .codeyam/editor-user-prompt.txt
 .codeyam/preview-shown.json
 .codeyam/preview-state.json
@@ -153,6 +159,7 @@ blob-report/
 .codeyam/recent-runs.json
 .codeyam/session-marker.json
 .codeyam/editor.local.json
+.codeyam/stack.local.json
 .codeyam/cloud.json
 .codeyam/glossary-index.txt
 .codeyam/deps-index.txt
@@ -163,18 +170,40 @@ blob-report/
 .codeyam/reconciliation-log.jsonl
 .codeyam/runner-timing-history.json
 .codeyam/state/last-advance.txt
+.codeyam/state/last-step-show.txt
+.codeyam/state/handoff-sections/
 .codeyam/state/provider-auth-verdict.json
 .codeyam/state/dependency-provision.json
+.codeyam/state/setup-provision.json
+.codeyam/state/provisioning-lockfile-rewrites.jsonl
+.codeyam/state/npm-pin-shim/
 .codeyam/state/session-results-snapshot.json
+.codeyam/state/pre-commit-sync-rebase-gate.json
+.codeyam/state/pre-commit-sync-orphan-bail.json
 .codeyam/state/step-highwater.json
+.codeyam/state/finalize-phase-fingerprints.json
 .codeyam/state/merge-drivers-version
 .codeyam/state/command-output/
 .codeyam/state/needs-login.json
+.codeyam/state/check-in-grant.json
+.codeyam/state/check-in-offer-decline.json
+.codeyam/remote-backup-preference.json
+.codeyam/state/harness-tasks-dir
 .codeyam/state/tool-loading-injected.json
 .codeyam/state/refusal-fingerprints.json
 .codeyam/state/rebase-heal.json
+.codeyam/state/rebuild-self-restart.json
+.codeyam/state/push-auto-amend.json
+.codeyam/state/change-origin.json
+.codeyam/state/audit-split.json
+.codeyam/state/claude-launch-provenance.json
+.codeyam/state/build-requests/
+.codeyam/state/credential-store-durability.json
+.codeyam/state/finalize-snapshot.json
 .codeyam/test-run-marker.json
 .claude/settings.local.json
 .claude/hooks/__pycache__/
+*.waits
+*.heartbeat
 docker-compose.cloud.yml
 # codeyam-editor:end

@@ -297,3 +297,4 @@ If any of these are zero, the editor UI for this project will not show component
 - **Do not edit `.codeyam/_legacy/`** after archiving — it's a frozen reference.
 - **One log line per phase boundary** so the user can follow progress. Skip narration during a phase.
 - **No tests written during onboarding.** Test registration is part of the per-feature workflow, not this skill.
+- **Codespaces is offered, never applied.** When `origin` is a GitHub remote, list `codeyam-editor editor devcontainer-setup` under Pending as an optional, reversible step that makes the repo open in GitHub Codespaces with the editor running.
