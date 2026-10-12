@@ -235,8 +235,12 @@ const single = layout === 'single';
   /* 840px governs the TWO-COLUMN shape only — the single shape is already
      collapsed by the rule above. */
   @media (max-width: 840px) {
+    /* `auto`, not `1`: a one-column multicol container still honours the
+       section's `break-before: column`, and lays everything after it in a
+       second column off the right edge of the screen. Leaving multicol entirely
+       is what makes the break a no-op. */
     .prose {
-      columns: 1;
+      columns: auto;
     }
 
     /* Below this breakpoint the lane collapses and the tree is not drawn at all,
